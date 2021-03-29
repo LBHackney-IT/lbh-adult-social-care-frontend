@@ -1,58 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { Route, Switch } from "react-router-dom";
+import DayCare from "./features/CarePackages/DayCare/DayCare";
+import HomeCare from "./features/CarePackages/HomeCare/HomeCare";
+import NursingCare from "./features/CarePackages/NursingCare/NursingCare";
+import ResidentialCare from "./features/CarePackages/ResidentialCare/ResidentialCare";
+import ClientHistory from "./features/ClientHistory/ClientHistory";
+import PrivateRoute from "./routes/PrivateRoute";
+import Login from "./features/User/Login";
+import * as RouteConstants from "./routes/RouteConstants";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <>
+      <Switch>
+        <Route path={RouteConstants.LOGIN} component={Login} />
+        <PrivateRoute
+          path={RouteConstants.CLIENT_HISTORY}
+          component={ClientHistory}
+        />
+        <PrivateRoute path={RouteConstants.HOME_CARE} component={HomeCare} />
+        <PrivateRoute
+          path={RouteConstants.NURSING_CARE}
+          component={NursingCare}
+        />
+        <PrivateRoute
+          path={RouteConstants.RESIDENTIAL_CARE}
+          component={ResidentialCare}
+        />
+        <PrivateRoute path={RouteConstants.DAY_CARE} component={DayCare} />
+      </Switch>
+    </>
   );
-}
+};
 
 export default App;

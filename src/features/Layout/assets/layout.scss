@@ -1,0 +1,12 @@
+@import "../../../assets/css/variables.scss";
+
+.navigation-item {
+    background-color: $lbh-green1;
+    color: white;
+    min-height: 45px;
+    padding: 13px 8px;
+
+    svg {
+        margin-left: 8px;
+    }
+}
