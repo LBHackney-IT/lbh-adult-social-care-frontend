@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
 import { selectUser } from "../features/User/userSlice";
+import { CARE_PACKAGE } from "./RouteConstants";
 
 const PrivateRoute = ({ component: Component, ...props }) => {
   const user = useSelector(selectUser);
@@ -11,7 +12,9 @@ const PrivateRoute = ({ component: Component, ...props }) => {
     authed === true ? (
       <Component {...props} />
     ) : (
-      <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+      <Redirect
+        to={{ pathname: CARE_PACKAGE, state: { from: props.location } }}
+      />
     );
 
   return <Route render={Render} {...props} />;

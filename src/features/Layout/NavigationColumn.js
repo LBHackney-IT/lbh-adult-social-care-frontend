@@ -34,7 +34,7 @@ const NavigationColumn = () => {
       <NavItem>Mental Capacity Assessment</NavItem>
       <NavItem>Carer</NavItem>
       <NavItem>Risk Assessment</NavItem>
-      <NavItem>Care Package</NavItem>
+      <NavItem to={RouteConstants.CARE_PACKAGE}>Care Package</NavItem>
       <NavItem>Review</NavItem>
     </>
   );

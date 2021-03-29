@@ -8,7 +8,7 @@ const assessmentTypes = [
   { text: "Type Two", value: 2 },
 ];
 
-const ClientHistory = () => {
+const CarePackage = () => {
   return (
     <Layout headerTitle="Rapid D2A">
       <ClientSummary
@@ -18,7 +18,7 @@ const ClientHistory = () => {
         dateOfBirth="09/12/1972"
         postcode="E9 6EY"
       >
-        Client History
+        Care Package
       </ClientSummary>
       <div className="mt-5 mb-5">
         <Dropdown
@@ -30,4 +30,4 @@ const ClientHistory = () => {
   );
 };
 
-export default ClientHistory;
+export default CarePackage;
