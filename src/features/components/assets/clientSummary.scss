@@ -1,0 +1,35 @@
+@import "../../../assets/css/variables.scss";
+
+.client-summary-cont {
+    padding: 27px 0 16px 0;
+    border-bottom: 2px solid $lbh-green1;
+
+    .column {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .client-summary-title {
+        color: $lbh-green1;
+        font-size: 27px;
+        line-height: 30px;
+        font-weight: bold;
+    }
+
+    .client-prop {
+        label {
+            color: $lbh-green1;
+            font-weight: bold;
+            font-size: 12px;
+            line-height: 30px;
+        }
+
+        div {
+            font-size: 14px;
+            line-height: 30px;
+            color: #0b0c0c;
+            width: 100%;
+        }
+    }
+}

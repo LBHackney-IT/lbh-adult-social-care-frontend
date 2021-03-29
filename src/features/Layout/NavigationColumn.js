@@ -1,17 +1,31 @@
-import { CaretRightIcon } from "../components/Icons";
+import { NavLink } from "react-router-dom";
+import { CaretRightIcon, CaretRightHighlightIcon } from "../components/Icons";
+import * as RouteConstants from "../../routes/RouteConstants";
 
-const NavItem = ({ children, to }) => {
+const NavItem = ({ children, to = "/xyz" }) => {
   return (
-    <div className="navigation-item">
-      {children} <CaretRightIcon />
-    </div>
+    <NavLink
+      className="navigation-item is-clickable"
+      activeClassName="is-active"
+      to={to}
+    >
+      <div>
+        {children}
+        <span className="caret">
+          <CaretRightIcon />
+        </span>
+        <span className="caret-highlight">
+          <CaretRightHighlightIcon />
+        </span>
+      </div>
+    </NavLink>
   );
 };
 
 const NavigationColumn = () => {
   return (
-    <div>
-      <NavItem>Client History</NavItem>
+    <>
+      <NavItem to={RouteConstants.CLIENT_HISTORY}>Client History</NavItem>
       <NavItem>Client details</NavItem>
       <NavItem>Medical history</NavItem>
       <NavItem>Important to me</NavItem>
@@ -22,7 +36,7 @@ const NavigationColumn = () => {
       <NavItem>Risk Assessment</NavItem>
       <NavItem>Care Package</NavItem>
       <NavItem>Review</NavItem>
-    </div>
+    </>
   );
 };
 

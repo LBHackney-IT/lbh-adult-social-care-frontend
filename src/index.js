@@ -1,4 +1,5 @@
 import "bulma/css/bulma.css";
+import "./assets/css/index.scss";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
