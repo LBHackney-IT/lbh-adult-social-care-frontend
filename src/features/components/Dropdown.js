@@ -4,7 +4,7 @@ import { useState } from "react";
 const Dropdown = ({ options, selectedValue, onOptionSelect }) => {
   const initialSelectedOption =
     selectedValue !== undefined
-      ? options.find((item) => item.value === selectedValue).first()
+      ? options.filter((item) => item.value === selectedValue)[0]
       : options[0];
 
   const [isActive, setIsActive] = useState(false);

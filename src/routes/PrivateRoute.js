@@ -3,7 +3,7 @@ import { Redirect, Route } from "react-router-dom";
 import { selectUser } from "../features/User/userSlice";
 import { CARE_PACKAGE } from "./RouteConstants";
 
-const PrivateRoute = ({ component: Component, ...props }) => {
+const PrivateRoute = ({ exact = false, component: Component, ...props }) => {
   const user = useSelector(selectUser);
   // TODO fix
   const authed = true || user !== null;
@@ -17,7 +17,7 @@ const PrivateRoute = ({ component: Component, ...props }) => {
       />
     );
 
-  return <Route render={Render} {...props} />;
+  return <Route exact={exact} render={Render} {...props} />;
 };
 
 export default PrivateRoute;

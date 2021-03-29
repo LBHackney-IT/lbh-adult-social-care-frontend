@@ -1,0 +1,10 @@
+@import "../../../assets/css/variables.scss";
+
+.button.button-base {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    color: #ffffff;
+    background-color: $lbh-green1;
+}
