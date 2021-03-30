@@ -6,11 +6,12 @@ import DatePick from "../components/DatePick";
 import Dropdown from "../components/Dropdown";
 import RadioButton from "../components/RadioButton";
 import Layout from "../Layout/Layout";
-import { getPersonalCare } from "../../routes/RouteConstants";
+import getBaseParams from "./CarePackageRouteHelper";
+import { HOME_CARE } from "../../routes/RouteConstants";
 
 // TODO remove
 const careTypes = [
-  { text: "Personal care", value: 1 },
+  { text: "Home care", value: 1 },
   { text: "Type Two", value: 2 },
 ];
 
@@ -23,18 +24,21 @@ const CarePackage = ({ history }) => {
   const [isFixedPeriod, setIsFixedPeriod] = useState(1);
 
   const buildPackage = () => {
-    alert("Build Package");
+    // Get the parameters for the care package route
+    const routeParams = getBaseParams(
+      isImmediate,
+      isS117,
+      isFixedPeriod === 1,
+      startDate,
+      endDate
+    );
+
+    // Home care
+    // TODO use switch
+    history.push(HOME_CARE + routeParams);
+
     switch (selectedCareType) {
       case 1: {
-        history.push(
-          getPersonalCare(
-            isImmediate,
-            isS117,
-            isFixedPeriod === 1,
-            startDate,
-            endDate
-          )
-        );
         break;
       }
       default: {

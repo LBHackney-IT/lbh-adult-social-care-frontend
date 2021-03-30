@@ -1,6 +1,8 @@
 import { useState } from "react";
+import BaseField from "./baseComponents/BaseField";
 
 const RadioButton = ({
+  label,
   name,
   trueText = "Yes",
   trueValue = "1",
@@ -18,7 +20,7 @@ const RadioButton = ({
   };
 
   return (
-    <div className="control">
+    <BaseField label={label}>
       <label className="radio">
         <input
           type="radio"
@@ -39,7 +41,7 @@ const RadioButton = ({
         />
         {falseText}
       </label>
-    </div>
+    </BaseField>
   );
 };
 

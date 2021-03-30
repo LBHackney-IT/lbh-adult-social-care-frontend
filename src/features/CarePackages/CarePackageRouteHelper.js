@@ -1,5 +1,4 @@
-import { PERSONAL_CARE } from "../../routes/RouteConstants";
-
+// Creates the parameter listing for care package pages
 const getBaseParams = (
   isImmediate,
   isS117,
@@ -8,20 +7,4 @@ const getBaseParams = (
   endDate
 ) => `/${isImmediate}/${isS117}/${isFixedPeriod}/${startDate}/${endDate}`;
 
-// Method used to get route to personal care
-const getPersonalCare = (
-  isImmediate,
-  isS117,
-  isFixedPeriod,
-  startDate,
-  endDate
-) => {
-  // startDate = format(startDate, "yyyy-MM-dd");
-  // endDate = format(endDate, "yyyy-MM-dd");
-  return (
-    PERSONAL_CARE +
-    `/${isImmediate}/${isS117}/${isFixedPeriod}/${startDate}/${endDate}`
-  );
-};
-
-export { getPersonalCare };
+export default getBaseParams;

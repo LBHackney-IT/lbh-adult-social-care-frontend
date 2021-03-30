@@ -2,10 +2,10 @@ import Header from "./Header";
 import NavigationColumn from "./NavigationColumn";
 import "./assets/layout.scss";
 
-const Layout = ({ headerTitle, children }) => {
+const Layout = ({ headerTitle, subTitle, children }) => {
   return (
     <>
-      <Header subTitle="Assessment">{headerTitle}</Header>
+      <Header subTitle={subTitle}>{headerTitle}</Header>
       <div className="columns">
         <div className="column is-2">
           <NavigationColumn />

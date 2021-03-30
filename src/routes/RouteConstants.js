@@ -2,11 +2,10 @@
 
 const LOGIN = "/login";
 const CARE_PACKAGE = "/care-package";
-const HOME_CARE = "/home-care";
-const NURSING_CARE = "/nursing-care";
-const RESIDENTIAL_CARE = "/residential-care";
-const PERSONAL_CARE = `${CARE_PACKAGE}/personal-care`;
-const DAY_CARE = "/day-care";
+const HOME_CARE = `${CARE_PACKAGE}/home-care`;
+const NURSING_CARE = `${CARE_PACKAGE}/nursing-care`;
+const RESIDENTIAL_CARE = `${CARE_PACKAGE}/residential-care`;
+const DAY_CARE = `${CARE_PACKAGE}/day-care`;
 const CLIENT_HISTORY = "/client-history";
 
 export {
@@ -17,5 +16,4 @@ export {
   RESIDENTIAL_CARE,
   CLIENT_HISTORY,
   CARE_PACKAGE,
-  PERSONAL_CARE,
 };

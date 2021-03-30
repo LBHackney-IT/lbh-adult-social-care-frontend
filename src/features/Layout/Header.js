@@ -24,7 +24,7 @@ const Header = ({ children, subTitle }) => {
           Back
         </NavLink>
         <div className="header-title">
-          <h5>{subTitle}</h5>
+          {subTitle !== undefined ? <h5>{subTitle}</h5> : null}
           <h3>
             <strong>{children}</strong>
           </h3>
