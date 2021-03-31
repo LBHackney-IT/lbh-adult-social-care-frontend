@@ -1,0 +1,229 @@
+@import "../../../../assets/css/variables.scss";
+
+$personalHomeCare: #f2f7f6;
+$domestic: #fce8f4;
+$liveInCarer: #fff7e3;
+$escort: #f5e1e1;
+
+.personal-home-care {
+    background-color: $personalHomeCare;
+}
+
+.domestic-home-care {
+    background-color: $domestic;
+}
+
+.live-in-home-care {
+    background-color: $liveInCarer;
+}
+
+.escort-home-care {
+    background-color: $escort;
+}
+
+.home-care-title {
+    display: flex;
+    align-items: flex-end;
+    color: $lbh-green1;
+    margin-bottom: 32px;
+
+    label {
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 30px;
+        margin-right: 38px;
+    }
+
+    .home-care-date-range {
+        display: flex;
+        align-items: center;
+
+        .date-entry {
+            color: $lbh-green1;
+            font-weight: bold;
+            font-size: 19px;
+            line-height: 25px;
+        }
+    }
+}
+
+.home-care-options {
+    .home-care-option {
+        margin-right: 20px;
+    }
+}
+
+.legend-items {
+    display: flex;
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+
+        .legend-colour {
+            width: 15px;
+            height: 15px;
+            margin-right: 10px;
+            border: 1px solid #dee0e2;
+        }
+    }
+}
+
+.week-care-picker {
+    .header-columns {
+        margin-bottom: 0;
+
+        .week-care-picker-day {
+            label {
+                display: block;
+                text-align: center;
+            }
+        }
+    }
+
+    .time-slot-cont {
+        border-bottom: thin solid #dee0e2;
+        padding-bottom: 10px;
+        padding-top: 10px;
+
+        .week-slot-labels {
+            label {
+                width: 100%;
+                font-weight: bold;
+                display: block;
+            }
+        }
+
+        .care-picker {
+            .pickers-cont {
+                display: flex;
+                justify-content: center;
+                margin-right: -2px;
+                height: 44px;
+
+                .picker-item {
+                    height: 100%;
+                    width: 100%;
+                    border: 1px solid #dee0e2;
+                    margin-right: 2px;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 14px;
+                    line-height: 20px;
+                }
+            }
+
+            .pickers-cont-2 {
+                margin-top: 2px;
+            }
+        }
+
+        .care-checkbox {
+            background: rgba(222, 224, 226, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .care-picker,
+        .care-checkbox {
+            border: thin solid transparent;
+
+            &:hover {
+                border-color: $lbh-blue-highlight;
+            }
+        }
+    }
+}
+
+.day-summary {
+    .columns {
+        margin-bottom: 0;
+    }
+
+    .day-summary-title {
+        display: flex;
+        align-items: center;
+        margin-top: 32px;
+        margin-bottom: 16px;
+
+        label {
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 30px;
+            color: black;
+            margin-right: 23px;
+        }
+
+        .day-summary-line {
+            border-bottom: 4px solid #bfc1c3;
+            height: 0px;
+            width: 100%;
+        }
+    }
+
+    .day-summary-time-slot {
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 30px;
+        border-bottom: 2px dashed #bfc1c3;
+        padding-bottom: 8px;
+        margin-bottom: 24px;
+    }
+
+    .care-label {
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 30px;
+        color: $lbh-green1;
+    }
+
+    .care-time-breakdown {
+        .breakdown-item {
+            margin-left: 27px;
+
+            label {
+                display: block;
+                text-align: center;
+
+                &:not(.time-entry) {
+                    margin-bottom: 0;
+                    font-size: 12px;
+                    line-height: 14px;
+                    color: $lbh-secondary;
+                }
+            }
+
+            .time-entry {
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 48px;
+            }
+
+            &.total-breakdown label {
+                color: $lbh-green1 !important;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .additional-detail-summaries {
+        label {
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 30px;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 20px;
+            color: $lbh-black-1;
+        }
+    }
+}
