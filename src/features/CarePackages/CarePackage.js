@@ -62,26 +62,30 @@ const CarePackage = ({ history }) => {
         <div className="level"></div>
         <div className="columns">
           <div className="column is-5">
-            <label>
-              <strong>Select package</strong>
-            </label>
             <Dropdown
+              label="Select package"
               options={careTypes}
               selectedValue={selectedCareType}
               onOptionSelect={(option) => setSelectedCareType(option.value)}
             />
           </div>
           <div className="column">
-            <RadioButton
-              name="isFixedPeriodRadBtn"
-              trueText="Fixed period"
-              falseText="Ongoing"
-              onChange={setIsFixedPeriod}
-              trueIsChecked={isFixedPeriod === 1}
-            />
+            <div style={{ marginBottom: "5px" }}>
+              <RadioButton
+                name="isFixedPeriodRadBtn"
+                trueText="Fixed period"
+                falseText="Ongoing"
+                onChange={setIsFixedPeriod}
+                trueIsChecked={isFixedPeriod === 1}
+              />
+            </div>
             <div>
-              <DatePick dateValue={startDate} setDate={setStartDate} />
-              <DatePick dateValue={endDate} setDate={setEndDate} />
+              <span className="mr-3">
+                <DatePick dateValue={startDate} setDate={setStartDate} />
+              </span>
+              <span>
+                <DatePick dateValue={endDate} setDate={setEndDate} />
+              </span>
             </div>
           </div>
         </div>
@@ -103,7 +107,7 @@ const CarePackage = ({ history }) => {
             Is this user under S117 of the Mental Health Act?
           </Checkbox>
         </div>
-        <div className="mt-2">
+        <div className="mt-4">
           <Button onClick={buildPackage}>Build package</Button>
         </div>
       </div>

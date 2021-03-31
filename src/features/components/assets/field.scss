@@ -1,8 +1,11 @@
+@import "../../../assets/css/variables.scss";
+
 .control.field-container {
     label:not(.radio) {
         width: 100%;
         font-weight: bold;
         margin-bottom: 5px;
+        display: block;
 
         input {
             width: 100%;
@@ -15,7 +18,10 @@
         }
     }
 
-    input {
+    input,
+    textarea {
+        border: 2px solid $lbh-black-1;
+        border-radius: unset !important;
     }
 
     textarea {

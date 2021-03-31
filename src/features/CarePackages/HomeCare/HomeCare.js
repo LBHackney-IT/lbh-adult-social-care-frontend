@@ -1,16 +1,14 @@
 import { useState } from "react";
-import { HOME_CARE } from "../../../routes/RouteConstants";
 import { Button } from "../../components/Button";
-import Checkbox from "../../components/Checkbox";
 import ClientSummary from "../../components/ClientSummary";
 import Dropdown from "../../components/Dropdown";
 import TextArea from "../../components/TextArea";
-import Layout from "../../Layout/Layout";
-import getBaseParams from "../CarePackageRouteHelper";
-import "./assets/homeCare.scss";
-import LegendItem from "./components/LegendItem";
-import WeekCarePicker from "./components/WeekCarePicker";
 import TitleHeader from "../../components/TitleHeader";
+import Layout from "../../Layout/Layout";
+import "./assets/homeCare.scss";
+import WeekCarePicker from "./components/WeekCarePicker";
+import { getHomeCareSummaryData } from "../../../api/CarePackages/HomeCareApi";
+import SummaryDataList from "./components/SummaryDataList";
 
 // TODO remove
 const serviceTypes = [
@@ -18,34 +16,12 @@ const serviceTypes = [
   { text: "Type Two", value: 2 },
 ];
 
-const HomeCare = ({ history }) => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+const HomeCare = () => {
   const [selectedCareType, setSelectedCareType] = useState(1);
-  const [isImmediate, setIsImmediate] = useState(false);
-  const [isS117, setIsS117] = useState(false);
-  const [isFixedPeriod, setIsFixedPeriod] = useState(1);
+  const [homeCareSummaryData, setHomeCareSummaryData] = useState(undefined);
 
-  const buildPackage = () => {
-    // Get the parameters for the care package route
-    const routeParams = getBaseParams(
-      isImmediate,
-      isS117,
-      isFixedPeriod === 1,
-      startDate,
-      endDate
-    );
-
-    switch (selectedCareType) {
-      case 1: {
-        // Home care
-        history.push(HOME_CARE + routeParams);
-        break;
-      }
-      default: {
-        break;
-      }
-    }
+  const addToPackageClick = () => {
+    setHomeCareSummaryData(getHomeCareSummaryData());
   };
 
   return (
@@ -63,10 +39,8 @@ const HomeCare = ({ history }) => {
         <div className="is-flex is-justify-content-flex-start home-care-options">
           <div className="home-care-option">
             <div>
-              <label>
-                <strong>Select Service</strong>
-              </label>
               <Dropdown
+                label="Select Service"
                 options={serviceTypes}
                 selectedValue={selectedCareType}
                 onOptionSelect={(option) => setSelectedCareType(option.value)}
@@ -75,10 +49,8 @@ const HomeCare = ({ history }) => {
           </div>
           <div className="home-care-option">
             <div>
-              <label>
-                <strong>Primary Carer</strong>
-              </label>
               <Dropdown
+                label="Primary Carer"
                 options={serviceTypes}
                 selectedValue={selectedCareType}
                 onOptionSelect={(option) => setSelectedCareType(option.value)}
@@ -87,10 +59,8 @@ const HomeCare = ({ history }) => {
           </div>
           <div className="home-care-option">
             <div>
-              <label>
-                <strong>Secondary Carer</strong>
-              </label>
               <Dropdown
+                label="Secondary Carer"
                 options={serviceTypes}
                 selectedValue={selectedCareType}
                 onOptionSelect={(option) => setSelectedCareType(option.value)}
@@ -119,18 +89,15 @@ const HomeCare = ({ history }) => {
         </div>
         <div className="level mt-4">
           <div className="level-item level-right">
-            <Button
-              onClick={() => {
-                alert("Add to package");
-              }}
-            >
-              Add to package
-            </Button>
+            <Button onClick={addToPackageClick}>Add to package</Button>
           </div>
         </div>
-        <div className="mt-4 mb-4">
-          <TitleHeader>Package Details</TitleHeader>
-        </div>
+        {homeCareSummaryData !== undefined ? (
+          <div className="mt-4 mb-4">
+            <TitleHeader>Package Details</TitleHeader>
+            <SummaryDataList summaryData={homeCareSummaryData} />
+          </div>
+        ) : null}
       </div>
     </Layout>
   );

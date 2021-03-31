@@ -1,6 +1,8 @@
 import { useState } from "react";
+import "./assets/checkbox.scss";
+import { CheckIcon } from "./Icons";
 
-const Checkbox = ({ id, children, checked = false, onChange = () => {} }) => {
+const Checkbox = ({ children, checked = false, onChange = () => {} }) => {
   const [isChecked, setIsChecked] = useState(checked);
 
   const onCheckedChange = () => {
@@ -9,13 +11,8 @@ const Checkbox = ({ id, children, checked = false, onChange = () => {} }) => {
   };
 
   return (
-    <label className="checkbox">
-      <input
-        id={id}
-        type="checkbox"
-        checked={isChecked}
-        onChange={onCheckedChange}
-      />
+    <label className="checkbox" onClick={onCheckedChange}>
+      <div className="checkbox-check">{checked ? <CheckIcon /> : null}</div>
       {children}
     </label>
   );

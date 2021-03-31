@@ -1,10 +1,13 @@
-import OutsideTrigger from "./OutsideTrigger";
 import { useState } from "react";
+import "./assets/dropdown.scss";
+import BaseField from "./baseComponents/BaseField";
+import OutsideTrigger from "./OutsideTrigger";
+import { CaretDownIcon } from "./Icons";
 
-const Dropdown = ({ options, selectedValue, onOptionSelect }) => {
+const Dropdown = ({ label, options, selectedValue, onOptionSelect }) => {
   const initialSelectedOption =
     selectedValue !== undefined
-      ? options.filter((item) => item.value === selectedValue)[0]
+      ? options.find((item) => item.value === selectedValue)
       : options[0];
 
   const [isActive, setIsActive] = useState(false);
@@ -23,41 +26,43 @@ const Dropdown = ({ options, selectedValue, onOptionSelect }) => {
 
   return (
     <OutsideTrigger onClick={() => setIsActive(false)}>
-      <div
-        data-selected-value={selectedOption.value}
-        className={"dropdown" + isActive ? " is-active" : ""}
-      >
+      <BaseField label={label}>
         <div
-          className="dropdown-trigger"
-          onClick={(event) => onTriggerClick(event)}
+          data-selected-value={selectedOption.value}
+          className={"dropdown" + (isActive ? " is-active" : "")}
         >
-          <button
-            className="button"
-            aria-haspopup="true"
-            aria-controls="dropdown-menu"
+          <div
+            className="dropdown-trigger"
+            onClick={(event) => onTriggerClick(event)}
           >
-            <span>{selectedOption.text}</span>
-            <span className="icon is-small">
-              <i className="fas fa-angle-down" aria-hidden="true"></i>
-            </span>
-          </button>
-        </div>
-        <div className="dropdown-menu" id="dropdown-menu" role="menu">
-          <div className="dropdown-content">
-            {options.map((optionItem) => {
-              return (
-                <div
-                  key={optionItem.value}
-                  className="dropdown-item"
-                  onClick={(event) => onOptionClick(event, optionItem)}
-                >
-                  {optionItem.text}
-                </div>
-              );
-            })}
+            <button
+              className="button"
+              aria-haspopup="true"
+              aria-controls="dropdown-menu"
+            >
+              <span>{selectedOption.text}</span>
+              <span className="icon">
+                <CaretDownIcon />
+              </span>
+            </button>
+          </div>
+          <div className="dropdown-menu" id="dropdown-menu" role="menu">
+            <div className="dropdown-content">
+              {options.map((optionItem) => {
+                return (
+                  <div
+                    key={optionItem.value}
+                    className="dropdown-item"
+                    onClick={(event) => onOptionClick(event, optionItem)}
+                  >
+                    {optionItem.text}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
+      </BaseField>
     </OutsideTrigger>
   );
 };

@@ -10,6 +10,7 @@ import { CheckGreenIcon } from "../../../components/Icons";
 
 const getCarePickerStateValues = () => {
   return {
+    hours: 0,
     selected: false,
     person: false,
     domestic: false,
@@ -27,28 +28,43 @@ const CarePicker = ({ dayId, onChange }) => {
   const { selectedValues } = pickerState;
   const { person, domestic, liveIn, escort } = selectedValues;
 
+  // Handle a picker click
   const onPickerClick = (selectedValues) => {
-    setPickerState({
+    const newPickerState = {
       dayId: pickerState.dayId,
       selectedValues,
-    });
+    };
 
-    onChange(pickerState);
+    setPickerState(newPickerState);
+    onChange(newPickerState);
   };
+
+  // Get the current hours + returning the additional value if true
+  const getHours = (get) => selectedValues.hours + (get ? 2 : -2);
 
   return (
     <div className="care-picker">
       <div className="pickers-cont">
         <div
           className="personal-home-care picker-item"
-          onClick={() => onPickerClick({ ...selectedValues, person: !person })}
+          onClick={() =>
+            onPickerClick({
+              ...selectedValues,
+              person: !person,
+              hours: getHours(!person),
+            })
+          }
         >
           {person ? "2" : ""}
         </div>
         <div
           className="domestic-home-care picker-item"
           onClick={() =>
-            onPickerClick({ ...selectedValues, domestic: !domestic })
+            onPickerClick({
+              ...selectedValues,
+              domestic: !domestic,
+              hours: getHours(!domestic),
+            })
           }
         >
           {domestic ? "2" : ""}
@@ -57,13 +73,25 @@ const CarePicker = ({ dayId, onChange }) => {
       <div className="pickers-cont pickers-cont-2">
         <div
           className="live-in-home-care picker-item"
-          onClick={() => onPickerClick({ ...selectedValues, liveIn: !liveIn })}
+          onClick={() =>
+            onPickerClick({
+              ...selectedValues,
+              liveIn: !liveIn,
+              hours: getHours(!liveIn),
+            })
+          }
         >
           {liveIn ? "2" : ""}
         </div>
         <div
           className="escort-home-care picker-item"
-          onClick={() => onPickerClick({ ...selectedValues, escort: !escort })}
+          onClick={() =>
+            onPickerClick({
+              ...selectedValues,
+              escort: !escort,
+              hours: getHours(!escort),
+            })
+          }
         >
           {escort ? "2" : ""}
         </div>
@@ -89,6 +117,9 @@ const CareCheckbox = ({ dayId, onChange }) => {
 
     onChange(checkBoxState);
   };
+
+  // Get the current hours + returning the additional value if true
+  const getHours = (get) => selectedValues.hours + (get ? 2 : -2);
 
   return (
     <div className="care-checkbox" onClick={onCheckboxClick}>

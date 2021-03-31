@@ -45,6 +45,17 @@ $escort: #f5e1e1;
 }
 
 .week-care-picker {
+    .header-columns {
+        margin-bottom: 0;
+
+        .week-care-picker-day {
+            label {
+                display: block;
+                text-align: center;
+            }
+        }
+    }
+
     .time-slot-cont {
         border-bottom: thin solid #dee0e2;
         padding-bottom: 10px;
@@ -101,6 +112,92 @@ $escort: #f5e1e1;
             &:hover {
                 border-color: $lbh-blue-highlight;
             }
+        }
+    }
+}
+
+.day-summary {
+    .columns {
+        margin-bottom: 0;
+    }
+
+    .day-summary-title {
+        display: flex;
+        align-items: center;
+        margin-top: 32px;
+        margin-bottom: 16px;
+
+        label {
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 30px;
+            color: black;
+            margin-right: 23px;
+        }
+
+        .day-summary-line {
+            border-bottom: 4px solid #bfc1c3;
+            height: 0px;
+            width: 100%;
+        }
+    }
+
+    .day-summary-time-slot {
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 30px;
+        border-bottom: 2px dashed #bfc1c3;
+        padding-bottom: 8px;
+        margin-bottom: 24px;
+    }
+
+    .care-label {
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 30px;
+        color: $lbh-green1;
+    }
+
+    .care-time-breakdown {
+        .breakdown-item {
+            margin-left: 27px;
+
+            label {
+                display: block;
+                text-align: center;
+
+                &:not(.time-entry) {
+                    margin-bottom: 0;
+                    font-size: 12px;
+                    line-height: 14px;
+                    color: $lbh-secondary;
+                }
+            }
+
+            .time-entry {
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 48px;
+            }
+
+            &.total-breakdown {
+                color: $lbh-green1;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .additional-detail-summaries {
+        label {
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 30px;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 20px;
+            color: $lbh-black-1;
         }
     }
 }
