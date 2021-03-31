@@ -148,7 +148,10 @@ const WeekCarePicker = () => {
           <div className="column"></div>
           {weekDaysValue.map((weekDayItem) => {
             return (
-              <div className="column week-care-picker-day" key={weekDayItem.id}>
+              <div
+                className="column week-care-picker-day"
+                key={weekDayItem.name}
+              >
                 <label>
                   <strong>{weekDayItem.name}</strong>
                 </label>
@@ -159,7 +162,7 @@ const WeekCarePicker = () => {
         </div>
         {weekSlotsValue.map((weekSlotItem) => {
           return (
-            <div className="time-slot-cont" key={weekSlotItem.Id}>
+            <div className="time-slot-cont" key={weekSlotItem.id}>
               <CarePickerTimeSlot
                 weekSlotItem={weekSlotItem}
                 onChange={onTimeSlotChange}
