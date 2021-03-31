@@ -37,6 +37,8 @@ const HomeCare = () => {
 
   // State
   const [selectedCareType, setSelectedCareType] = useState(1);
+  const [selectedPrimaryCareTime, setSelectedPrimaryCareTime] = useState(1);
+  const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] = useState(0);
   const [homeCareSummaryData, setHomeCareSummaryData] = useState(undefined);
 
   const addToPackageClick = () => {
@@ -82,7 +84,7 @@ const HomeCare = () => {
               <Dropdown
                 label="Primary Carer"
                 options={primaryCareTimes}
-                selectedValue={selectedCareType}
+                selectedValue={selectedPrimaryCareTime}
                 onOptionSelect={(option) => setSelectedCareType(option.value)}
                 buttonStyle={{ minWidth: "200px" }}
               />
@@ -93,7 +95,7 @@ const HomeCare = () => {
               <Dropdown
                 label="Secondary Carer"
                 options={primaryCareTimes}
-                selectedValue={selectedCareType}
+                selectedValue={selectedSecondaryCareTime}
                 onOptionSelect={(option) => setSelectedCareType(option.value)}
                 buttonStyle={{ minWidth: "200px" }}
               />
