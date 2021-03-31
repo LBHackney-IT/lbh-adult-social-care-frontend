@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getHomeCareSummaryData } from "../../../api/CarePackages/HomeCareApi";
 import { Button } from "../../components/Button";
@@ -11,24 +11,7 @@ import Layout from "../../Layout/Layout";
 import "./assets/homeCare.scss";
 import SummaryDataList from "./components/SummaryDataList";
 import WeekCarePicker from "./components/WeekCarePicker";
-
-// TODO remove
-const serviceTypes = [
-  { text: "Personal care", value: 1 },
-  { text: "Type Two", value: 2 },
-];
-
-// TODO remove
-const primaryCareTimes = [
-  { text: "N/A", value: 0 },
-  { text: "30 minutes", value: 1 },
-  { text: "45 minutes", value: 2 },
-  { text: "1 hour", value: 3 },
-  { text: "1 hour 15 minutes", value: 4 },
-  { text: "1 hour 30 minutes", value: 5 },
-  { text: "1 hour 45 minutes", value: 6 },
-  { text: "2 hours", value: 7 },
-];
+import { serviceTypes, getServiceTypeCareTimes } from "./HomeCareServiceHelper";
 
 const HomeCare = () => {
   // Parameters
@@ -40,6 +23,8 @@ const HomeCare = () => {
   const [selectedPrimaryCareTime, setSelectedPrimaryCareTime] = useState(1);
   const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] = useState(0);
   const [homeCareSummaryData, setHomeCareSummaryData] = useState(undefined);
+
+  const serviceCareTimes = getServiceTypeCareTimes(selectedCareType);
 
   const addToPackageClick = () => {
     setHomeCareSummaryData(getHomeCareSummaryData());
@@ -74,7 +59,7 @@ const HomeCare = () => {
                 label="Select Service"
                 options={serviceTypes}
                 selectedValue={selectedCareType}
-                onOptionSelect={(option) => setSelectedCareType(option.value)}
+                onOptionSelect={(option) => setSelectedCareType(option)}
                 buttonStyle={{ minWidth: "239px" }}
               />
             </div>
@@ -83,7 +68,7 @@ const HomeCare = () => {
             <div>
               <Dropdown
                 label="Primary Carer"
-                options={primaryCareTimes}
+                options={serviceCareTimes}
                 selectedValue={selectedPrimaryCareTime}
                 onOptionSelect={(option) => setSelectedCareType(option.value)}
                 buttonStyle={{ minWidth: "200px" }}
@@ -94,7 +79,7 @@ const HomeCare = () => {
             <div>
               <Dropdown
                 label="Secondary Carer"
-                options={primaryCareTimes}
+                options={serviceCareTimes}
                 selectedValue={selectedSecondaryCareTime}
                 onOptionSelect={(option) => setSelectedCareType(option.value)}
                 buttonStyle={{ minWidth: "200px" }}
