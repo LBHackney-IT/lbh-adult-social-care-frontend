@@ -1,0 +1,173 @@
+version: 2.1
+
+orbs:
+  aws-s3: circleci/aws-s3@1.0.11
+  aws-cli: circleci/aws-cli@0.1.9
+  aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
+
+references:
+  workspace_root: &workspace_root "~/repo"
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
+executors:
+  mtfh-executor:
+    docker:
+      - image: circleci/node:12.9.1-browsers
+    working_directory: *workspace_root
+
+commands:
+  assume-role-and-persist-workspace:
+    description: "Assumes deployment role and persists credentials across jobs"
+    parameters:
+      aws-account:
+        type: string
+    steps:
+      - checkout
+      - aws_assume_role/assume_role:
+          account: <<parameters.aws-account>>
+          profile_name: default
+          role: "LBH_Circle_CI_Deployment_Role"
+      - persist_to_workspace:
+          root: "~"
+          paths:
+            - .aws
+jobs:
+  install-dependencies:
+    executor: mtfh-executor
+    working_directory: *workspace_root
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - persist_to_workspace:
+          root: "~/repo"
+          paths: .
+
+  assume-role-development:
+    executor: mtfh-executor
+    steps:
+      - assume-role-and-persist-workspace:
+          aws-account: $AWS_ACCOUNT_DEVELOPMENT
+
+  assume-role-staging:
+    executor: mtfh-executor
+    steps:
+      - assume-role-and-persist-workspace:
+          aws-account: $AWS_ACCOUNT_STAGING
+
+  assume-role-production:
+    executor: mtfh-executor
+    steps:
+      - assume-role-and-persist-workspace:
+          aws-account: $AWS_ACCOUNT_PRODUCTION
+
+  build-deploy-development:
+    executor: mtfh-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: build
+          command: |
+            export REACT_APP_ENV=staging
+            yarn run build
+      - aws-s3/sync:
+          from: build
+          to: 's3://lbh-adult-social-care-frontend-development.hackney.gov.uk/'
+          arguments: |
+            --cache-control "max-age=86400"
+          overwrite: true
+
+  build-deploy-staging:
+    executor: mtfh-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: build
+          command: |
+            export REACT_APP_ENV=staging
+            yarn run build
+      - aws-s3/sync:
+          from: build
+          to: 's3://lbh-adult-social-care-frontend-staging.hackney.gov.uk/'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: true
+
+  build-deploy-production:
+    executor: mtfh-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: build
+          command: |
+            export REACT_APP_ENV=production
+            yarn run build
+      - aws-s3/sync:
+          from: build
+          to: 's3://lbh-adult-social-care-frontend.hackney.gov.uk/'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: true
+
+workflows:
+  version: 2
+  continuous-delivery:
+    jobs:
+      - install-dependencies
+      - assume-role-development:
+          context: api-assume-role-housing-development-context
+          requires:
+            - install-dependencies
+          filters:
+            branches:
+              only:
+                - development
+      - build-deploy-development:
+          context: api-assume-role-housing-development-context
+          requires:
+            - assume-role-development
+          filters:
+            branches:
+              only:
+                - development
+      # - assume-role-staging:
+      #     context: api-assume-role-housing-staging-context
+      #     requires:
+      #       - install-dependencies
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
+      # - build-deploy-staging:
+      #     context: api-assume-role-housing-staging-context
+      #     requires:
+      #       - assume-role-staging
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
+      # - permit-deploy-production:
+      #     type: approval
+      #     requires:
+      #       - build-deploy-staging
+      # - assume-role-production:
+      #     context: api-assume-role-housing-production-context
+      #     requires:
+      #       - permit-deploy-production
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
+      # - build-deploy-production:
+      #     context: api-assume-role-housing-production-context
+      #     requires:
+      #       - assume-role-production
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master

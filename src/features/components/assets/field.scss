@@ -1,0 +1,34 @@
+@import "../../../assets/css/variables.scss";
+
+.control.field-container {
+    label {
+        width: 100%;
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+
+        input {
+            width: 100%;
+        }
+    }
+
+    input,
+    textarea {
+        border: 2px solid $lbh-black-1;
+        border-radius: unset !important;
+        outline: unset !important;
+    }
+
+    textarea {
+        width: 100%;
+        resize: none;
+        padding: 10px;
+    }
+
+    &.has-label {
+        input,
+        textarea {
+            margin-top: 5px;
+        }
+    }
+}

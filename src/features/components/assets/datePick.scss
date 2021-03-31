@@ -1,0 +1,12 @@
+@import "../../../assets/css/variables.scss";
+
+.react-date-picker__wrapper {
+    border: 2px solid $lbh-black-1 !important;
+    height: 40px;
+    padding-left: 10px;
+    padding-right: 34px;
+
+    .react-date-picker__inputGroup {
+        cursor: pointer;
+    }
+}
