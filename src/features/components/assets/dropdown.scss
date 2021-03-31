@@ -7,6 +7,8 @@
         box-shadow: unset !important;
         border: 2px solid $lbh-black-1 !important;
         height: 40px;
+        display: flex;
+        justify-content: space-between;
     }
 
     .dropdown-item {

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import BaseField from "./baseComponents/BaseField";
+import "./assets/radioButton.scss";
 
 const RadioButton = ({
   label,
@@ -13,34 +14,38 @@ const RadioButton = ({
 }) => {
   const [trueIsCheckedValue, setTrueIsChecked] = useState(trueIsChecked);
 
-  const radioChange = (event) => {
-    event.stopPropagation();
-    onChange(!trueIsCheckedValue);
-    setTrueIsChecked(!trueIsCheckedValue);
+  const radioChange = (checked) => {
+    onChange(checked);
+    setTrueIsChecked(checked);
   };
 
   return (
     <BaseField label={label}>
-      <label className="radio">
-        <input
-          type="radio"
-          value={trueValue}
-          name={name}
-          onChange={radioChange}
-          checked={trueIsCheckedValue}
-        />
-        {trueText}
-      </label>
-      <label className="radio">
-        <input
-          type="radio"
-          value={falseValue}
-          name={name}
-          onChange={radioChange}
-          checked={!trueIsCheckedValue}
-        />
-        {falseText}
-      </label>
+      <div className="radio-cont">
+        <label
+          className="radio-item is-first"
+          onClick={() => radioChange(true)}
+        >
+          <div
+            className={
+              "radio-select-cont" + (trueIsCheckedValue ? " is-active" : "")
+            }
+          >
+            <div className="radio-item-selected"></div>
+          </div>
+          {trueText}
+        </label>
+        <label className="radio-item" onClick={() => radioChange(false)}>
+          <div
+            className={
+              "radio-select-cont" + (trueIsCheckedValue ? "" : " is-active")
+            }
+          >
+            <div className="radio-item-selected"></div>
+          </div>
+          {falseText}
+        </label>
+      </div>
     </BaseField>
   );
 };

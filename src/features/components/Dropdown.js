@@ -4,7 +4,13 @@ import BaseField from "./baseComponents/BaseField";
 import OutsideTrigger from "./OutsideTrigger";
 import { CaretDownIcon } from "./Icons";
 
-const Dropdown = ({ label, options, selectedValue, onOptionSelect }) => {
+const Dropdown = ({
+  label,
+  options,
+  selectedValue,
+  onOptionSelect,
+  buttonStyle = {},
+}) => {
   const initialSelectedOption =
     selectedValue !== undefined
       ? options.find((item) => item.value === selectedValue)
@@ -25,45 +31,49 @@ const Dropdown = ({ label, options, selectedValue, onOptionSelect }) => {
   };
 
   return (
-    <OutsideTrigger onClick={() => setIsActive(false)}>
-      <BaseField label={label}>
+    <BaseField label={label}>
+      <div
+        data-selected-value={selectedOption.value}
+        className={"dropdown" + (isActive ? " is-active" : "")}
+      >
         <div
-          data-selected-value={selectedOption.value}
-          className={"dropdown" + (isActive ? " is-active" : "")}
+          className="dropdown-trigger"
+          onClick={(event) => onTriggerClick(event)}
         >
-          <div
-            className="dropdown-trigger"
-            onClick={(event) => onTriggerClick(event)}
+          <button
+            className="button"
+            aria-haspopup="true"
+            aria-controls="dropdown-menu"
+            style={buttonStyle}
           >
-            <button
-              className="button"
-              aria-haspopup="true"
-              aria-controls="dropdown-menu"
-            >
-              <span>{selectedOption.text}</span>
-              <span className="icon">
-                <CaretDownIcon />
-              </span>
-            </button>
-          </div>
-          <div className="dropdown-menu" id="dropdown-menu" role="menu">
-            <div className="dropdown-content">
-              {options.map((optionItem) => {
-                return (
-                  <div
-                    key={optionItem.value}
-                    className="dropdown-item"
-                    onClick={(event) => onOptionClick(event, optionItem)}
-                  >
-                    {optionItem.text}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+            <span>{selectedOption.text}</span>
+            <span className="icon">
+              <CaretDownIcon />
+            </span>
+          </button>
         </div>
-      </BaseField>
-    </OutsideTrigger>
+        <OutsideTrigger
+          onClick={() => setIsActive(false)}
+          className="dropdown-menu"
+          id="dropdown-menu"
+          role="menu"
+        >
+          <div className="dropdown-content">
+            {options.map((optionItem) => {
+              return (
+                <div
+                  key={optionItem.value}
+                  className="dropdown-item"
+                  onClick={(event) => onOptionClick(event, optionItem)}
+                >
+                  {optionItem.text}
+                </div>
+              );
+            })}
+          </div>
+        </OutsideTrigger>
+      </div>
+    </BaseField>
   );
 };
 
