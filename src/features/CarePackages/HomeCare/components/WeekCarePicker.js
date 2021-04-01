@@ -2,121 +2,114 @@ import { useState } from "react";
 import CarePickerTimeSlot from "./CarePickerTimeSlot";
 import LegendItem from "./LegendItem";
 import RadioButton from "../../../components/RadioButton";
+import { getWeekSlots, weekDays } from "../HomeCarePickerHelper";
+import {
+  PERSONAL_CARE_MODE,
+  DOMESTIC_CARE_MODE,
+  LIVE_IN_CARE_MODE,
+  ESCORT_CARE_MODE,
+} from "../HomeCarePickerHelper";
 
-const weekSlots = [
-  {
-    id: 1,
-    label: "Morning",
-    careBreakdown: true,
-    timeLabel: "08:00 - 10:00",
-    days: [],
-  },
-  {
-    id: 2,
-    label: "Mid Morning",
-    careBreakdown: true,
-    timeLabel: "10:00 - 12:00",
-    days: [],
-  },
-  {
-    id: 3,
-    label: "Lunch",
-    careBreakdown: true,
-    timeLabel: "12:00 - 14:00",
-    days: [],
-  },
-  {
-    id: 4,
-    label: "Afternoon",
-    careBreakdown: true,
-    timeLabel: "14:00 - 17:00",
-    days: [],
-  },
-  {
-    id: 5,
-    label: "Evening",
-    careBreakdown: true,
-    timeLabel: "17:00 - 20:00",
-    days: [],
-  },
-  {
-    id: 6,
-    label: "Night",
-    careBreakdown: true,
-    timeLabel: "20:00 - 22:00",
-    days: [],
-  },
-  { id: 7, label: "Night Owl", careBreakdown: false, days: [] },
-  { id: 8, label: "Waking Nights", careBreakdown: false, days: [] },
-  { id: 9, label: "Sleeping Nights", careBreakdown: false, days: [] },
-];
-
-const weekDays = [
-  { id: 1, name: "MON", hours: 0 },
-  { id: 2, name: "TUE", hours: 0 },
-  { id: 3, name: "WED", hours: 0 },
-  { id: 4, name: "THU", hours: 0 },
-  { id: 5, name: "FRI", hours: 0 },
-  { id: 6, name: "SAT", hours: 0 },
-  { id: 7, name: "SUN", hours: 0 },
-];
-
-const WeekCarePicker = () => {
-  const [weekSlotsValue, setWeekSlotsValue] = useState(weekSlots);
+const WeekCarePicker = ({
+  currentMode,
+  primaryCareTimes,
+  selectedPrimaryCareTypeId,
+  secondaryCareTimes,
+  selectedSecondaryCareTypeId,
+}) => {
+  const [weekSlotsValue, setWeekSlotsValue] = useState(getWeekSlots());
   const [weekDaysValue, setWeekDaysValue] = useState(weekDays);
 
-  const onTimeSlotChange = (weekSlotId, dayId, values) => {
-    const weekSlotEntry = weekSlotsValue.find((item) => item.id === weekSlotId);
+  const onCarePickerClick = (weekSlotId, dayId) => {
+    const weekSlot = weekSlotsValue.find((item) => item.id === weekSlotId);
+    const weekSlotDayItem = weekSlot.days.find((item) => item.id === dayId);
 
-    // Attempt to find existing day entry
-    let daySlot = weekSlotEntry.days.find((item) => item.id === dayId);
-    const hadDaySlot = daySlot !== undefined;
+    const primaryCareTimeItem = primaryCareTimes.find(
+      (item) => item.value === selectedPrimaryCareTypeId
+    );
 
-    if (!hadDaySlot) {
-      daySlot = {
-        id: dayId,
-        values,
-      };
+    const setPrimaryTime = (primaryTimeProperty) => {
+      // Determine primary care time
+      const hasPrimary = primaryTimeProperty > 0;
+      return hasPrimary ? 0 : primaryCareTimeItem.mins;
+    };
 
-      // Add new day slot
-      weekSlotEntry.days.push(daySlot);
-    } else {
-      daySlot = { ...daySlot, values };
+    switch (currentMode) {
+      case PERSONAL_CARE_MODE: {
+        // Determine primary care time
+        weekSlotDayItem.values.person.primary = setPrimaryTime(
+          weekSlotDayItem.values.person.primary
+        );
 
-      // Overwrite existing day slot
-      weekSlotEntry.days = weekSlotEntry.days.map((item) =>
-        item.id === dayId ? daySlot : item
-      );
+        // Determine secondary care time
+        const secondaryCareTimeItem = secondaryCareTimes.find(
+          (item) => item.value === selectedSecondaryCareTypeId
+        );
+        const hasSecondary = weekSlotDayItem.values.person.secondary > 0;
+        weekSlotDayItem.values.person.secondary = hasSecondary
+          ? 0
+          : secondaryCareTimeItem.mins;
+        break;
+      }
+      case DOMESTIC_CARE_MODE: {
+        // Determine primary care time
+        weekSlotDayItem.values.domestic = setPrimaryTime(
+          weekSlotDayItem.values.domestic
+        );
+        break;
+      }
+      case LIVE_IN_CARE_MODE: {
+        // Determine primary care time
+        weekSlotDayItem.values.liveIn = setPrimaryTime(
+          weekSlotDayItem.values.liveIn
+        );
+        break;
+      }
+      case ESCORT_CARE_MODE: {
+        // Determine primary care time
+        weekSlotDayItem.values.escort = setPrimaryTime(
+          weekSlotDayItem.values.escort
+        );
+        break;
+      }
+      default: {
+        break;
+      }
     }
 
-    // Set week slots with new week slot value
-    const newWeekSlotsValue = weekSlotsValue.map((item) =>
-      item.id === weekSlotEntry.id ? weekSlotEntry : item
-    );
-    setWeekSlotsValue(newWeekSlotsValue);
+    weekSlot.days = weekSlot.days.map((dayItem) => {
+      return dayItem.id === dayId ? weekSlotDayItem : dayItem;
+    });
+    const newWeekSlotsValue = weekSlotsValue.map((weekSlotItem) => {
+      return weekSlotItem.id === weekSlotId ? weekSlot : weekSlotItem;
+    });
 
-    // Calculate the total hours for each day
-    calculateDayTotalHours(newWeekSlotsValue);
+    setWeekSlotsValue(newWeekSlotsValue);
+    calculateTotalTimePerDay(newWeekSlotsValue);
   };
 
-  const calculateDayTotalHours = (newWeekSlotsValue) => {
+  const calculateTotalTimePerDay = (newWeekSlotsValue) => {
     setWeekDaysValue(
       weekDays.map((weekDayItem) => {
-        let hours = 0;
+        let minutes = 0;
 
-        // For each week slot, get the hours for this day
+        // For each week slot, get the minutes for this day
         newWeekSlotsValue.forEach((weekSlotItem) => {
           const weekSlotItemDayEntry = weekSlotItem.days.find(
             (item) => item.id === weekDayItem.id
           );
 
           if (weekSlotItemDayEntry !== undefined) {
-            hours += weekSlotItemDayEntry.values.hours;
+            minutes += weekSlotItemDayEntry.values.person.primary;
+            minutes += weekSlotItemDayEntry.values.person.secondary;
+            minutes += weekSlotItemDayEntry.values.domestic;
+            minutes += weekSlotItemDayEntry.values.liveIn;
+            minutes += weekSlotItemDayEntry.values.escort;
           }
         });
 
-        // Overwrite the hours
-        return { ...weekDayItem, hours };
+        // Overwrite the minutes
+        return { ...weekDayItem, minutes };
       })
     );
   };
@@ -155,7 +148,7 @@ const WeekCarePicker = () => {
                 <label>
                   <strong>{weekDayItem.name}</strong>
                 </label>
-                <label>({weekDayItem.hours} Hrs)</label>
+                <label>({weekDayItem.minutes / 60} Hrs)</label>
               </div>
             );
           })}
@@ -164,8 +157,9 @@ const WeekCarePicker = () => {
           return (
             <div className="time-slot-cont" key={weekSlotItem.id}>
               <CarePickerTimeSlot
+                currentMode={currentMode}
                 weekSlotItem={weekSlotItem}
-                onChange={onTimeSlotChange}
+                onClick={onCarePickerClick}
               />
             </div>
           );

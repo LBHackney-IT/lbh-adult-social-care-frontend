@@ -1,67 +1,93 @@
+import {
+  PERSONAL_CARE_MODE,
+  DOMESTIC_CARE_MODE,
+  LIVE_IN_CARE_MODE,
+  ESCORT_CARE_MODE,
+} from "./HomeCarePickerHelper";
+
 const serviceTypes = [
-  { text: "Personal care", value: 1 },
-  { text: "Domestic care", value: 2 },
-  { text: "Live in care", value: 3 },
-  { text: "Escort care", value: 4 },
+  { text: "Personal care", value: PERSONAL_CARE_MODE },
+  { text: "Domestic care", value: DOMESTIC_CARE_MODE },
+  { text: "Live in care", value: LIVE_IN_CARE_MODE },
+  { text: "Escort care", value: ESCORT_CARE_MODE },
 ];
 
 const careTimes = [
   {
-    serviceTypeId: 1,
+    serviceTypeId: PERSONAL_CARE_MODE,
     times: [
-      { text: "N/A", value: 0 },
-      { text: "30 minutes", value: 1 },
-      { text: "45 minutes", value: 2 },
-      { text: "1 hour", value: 3 },
-      { text: "1 hour 15 minutes", value: 4 },
-      { text: "1 hour 30 minutes", value: 5 },
-      { text: "1 hour 45 minutes", value: 6 },
-      { text: "2 hours", value: 7 },
+      { text: "30 minutes", value: 1, mins: 30 },
+      { text: "45 minutes", value: 2, mins: 45 },
+      { text: "1 hour", value: 3, mins: 60 },
+      { text: "1 hour 15 minutes", value: 4, mins: 75 },
+      { text: "1 hour 30 minutes", value: 5, mins: 90 },
+      { text: "1 hour 45 minutes", value: 6, mins: 105 },
+      { text: "2 hours", value: 7, mins: 120 },
+    ],
+    secondaryTimes: [
+      { text: "N/A", value: 0, mins: 0 },
+      { text: "30 minutes", value: 1, mins: 30 },
+      { text: "45 minutes", value: 2, mins: 45 },
+      { text: "1 hour", value: 3, mins: 60 },
+      { text: "1 hour 15 minutes", value: 4, mins: 75 },
+      { text: "1 hour 30 minutes", value: 5, mins: 90 },
+      { text: "1 hour 45 minutes", value: 6, mins: 105 },
+      { text: "2 hours", value: 7, mins: 120 },
     ],
   },
   {
-    serviceTypeId: 2,
+    serviceTypeId: DOMESTIC_CARE_MODE,
     times: [
-      { text: "N/A", value: 0 },
-      { text: "30 @@ minutes", value: 1 },
-      { text: "45 minutes", value: 2 },
-      { text: "1 hour", value: 3 },
-      { text: "1 hour 15 minutes", value: 4 },
-      { text: "1 hour 30 minutes", value: 5 },
-      { text: "1 hour 45 minutes", value: 6 },
-      { text: "2 hours", value: 7 },
+      { text: "30 minutes", value: 1, mins: 30 },
+      { text: "45 minutes", value: 2, mins: 45 },
+      { text: "1 hour", value: 3, mins: 60 },
+      { text: "1 hour 15 minutes", value: 4, mins: 75 },
+      { text: "1 hour 30 minutes", value: 5, mins: 90 },
+      { text: "1 hour 45 minutes", value: 6, mins: 105 },
+      { text: "2 hours", value: 7, mins: 120 },
     ],
   },
   {
-    serviceTypeId: 3,
+    serviceTypeId: LIVE_IN_CARE_MODE,
     times: [
-      { text: "N/A", value: 0 },
-      { text: "30 @@@ minutes", value: 1 },
-      { text: "45 minutes", value: 2 },
-      { text: "1 hour", value: 3 },
-      { text: "1 hour 15 minutes", value: 4 },
-      { text: "1 hour 30 minutes", value: 5 },
-      { text: "1 hour 45 minutes", value: 6 },
-      { text: "2 hours", value: 7 },
+      { text: "30 minutes", value: 1, mins: 30 },
+      { text: "45 minutes", value: 2, mins: 45 },
+      { text: "1 hour", value: 3, mins: 60 },
+      { text: "1 hour 15 minutes", value: 4, mins: 75 },
+      { text: "1 hour 30 minutes", value: 5, mins: 90 },
+      { text: "1 hour 45 minutes", value: 6, mins: 105 },
+      { text: "2 hours", value: 7, mins: 120 },
     ],
   },
   {
-    serviceTypeId: 4,
+    serviceTypeId: ESCORT_CARE_MODE,
     times: [
-      { text: "N/A", value: 0 },
-      { text: "30 @@@@ minutes", value: 1 },
-      { text: "45 minutes", value: 2 },
-      { text: "1 hour", value: 3 },
-      { text: "1 hour 15 minutes", value: 4 },
-      { text: "1 hour 30 minutes", value: 5 },
-      { text: "1 hour 45 minutes", value: 6 },
-      { text: "2 hours", value: 7 },
+      { text: "30 minutes", value: 1, mins: 30 },
+      { text: "45 minutes", value: 2, mins: 45 },
+      { text: "1 hour", value: 3, mins: 60 },
+      { text: "1 hour 15 minutes", value: 4, mins: 75 },
+      { text: "1 hour 30 minutes", value: 5, mins: 90 },
+      { text: "1 hour 45 minutes", value: 6, mins: 105 },
+      { text: "2 hours", value: 7, mins: 120 },
     ],
   },
 ];
 
 const getServiceTypeCareTimes = (serviceTypeId) => {
-  return careTimes.find((item) => item.serviceTypeId === serviceTypeId).times;
+  const careTimeItem = careTimes.find(
+    (item) => item.serviceTypeId === serviceTypeId
+  );
+
+  if (serviceTypeId === PERSONAL_CARE_MODE) {
+    return {
+      times: careTimeItem.times,
+      secondaryTimes: careTimeItem.secondaryTimes,
+    };
+  } else {
+    return {
+      times: careTimeItem.times,
+    };
+  }
 };
 
 export { serviceTypes, getServiceTypeCareTimes };

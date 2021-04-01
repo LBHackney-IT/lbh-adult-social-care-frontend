@@ -105,7 +105,6 @@ $escort: #f5e1e1;
                 .picker-item {
                     height: 100%;
                     width: 100%;
-                    border: 1px solid #dee0e2;
                     margin-right: 2px;
                     cursor: pointer;
                     display: flex;
@@ -113,6 +112,25 @@ $escort: #f5e1e1;
                     align-items: center;
                     font-size: 14px;
                     line-height: 20px;
+                    border: 1px solid #dee0e2;
+
+                    &.is-split {
+                        border: none;
+                        flex-direction: column;
+                        justify-content: space-between;
+
+                        span {
+                            display: block;
+                            width: 100%;
+                            text-align: center;
+                            border: 1px solid #dee0e2;
+                            height: 48%;
+
+                            &.is-final {
+                                margin-top: 2px;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -135,7 +153,8 @@ $escort: #f5e1e1;
         .care-checkbox {
             border: thin solid transparent;
 
-            &:hover {
+            &:hover,
+            &.is-active {
                 border-color: $lbh-blue-highlight;
             }
         }

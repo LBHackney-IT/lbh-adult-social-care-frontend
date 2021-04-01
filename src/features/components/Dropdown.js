@@ -9,7 +9,9 @@ const Dropdown = ({
   options,
   selectedValue,
   onOptionSelect,
+  children,
   buttonStyle = {},
+  buttonClassName = "",
 }) => {
   const initialSelectedOption =
     selectedValue !== undefined
@@ -28,6 +30,7 @@ const Dropdown = ({
     event.stopPropagation();
     setSelectedOption(option);
     onOptionSelect(option.value);
+    setIsActive(false);
   };
 
   return (
@@ -41,15 +44,21 @@ const Dropdown = ({
           onClick={(event) => onTriggerClick(event)}
         >
           <button
-            className="button"
+            className={"button " + buttonClassName}
             aria-haspopup="true"
             aria-controls="dropdown-menu"
             style={buttonStyle}
           >
-            <span>{selectedOption.text}</span>
-            <span className="icon">
-              <CaretDownIcon />
-            </span>
+            {children !== undefined ? (
+              children
+            ) : (
+              <>
+                <span>{selectedOption.text}</span>
+                <span className="icon">
+                  <CaretDownIcon />
+                </span>
+              </>
+            )}
           </button>
         </div>
         <OutsideTrigger
