@@ -11,6 +11,7 @@ const RadioButton = ({
   label,
   options,
   selectedValue,
+  inline = true,
   onChange = () => {},
 }) => {
   const [radioValue, setRadioValue] = useState(selectedValue);
@@ -23,7 +24,7 @@ const RadioButton = ({
 
   return (
     <BaseField label={label}>
-      <div className="radio-cont">
+      <div className={"radio-cont" + (inline ? "" : " not-inline")}>
         {options.map((radioItem, index) => {
           return (
             <label

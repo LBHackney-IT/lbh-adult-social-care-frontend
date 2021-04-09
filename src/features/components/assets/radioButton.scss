@@ -45,4 +45,12 @@
             margin-right: 16px;
         }
     }
+
+    &.not-inline {
+        flex-wrap: wrap;
+
+        label.radio-item {
+            width: 100%;
+        }
+    }
 }
