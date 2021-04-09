@@ -1,13 +1,18 @@
 import { format } from "date-fns";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getHomeCareSummaryData } from "../../../api/CarePackages/HomeCareApi";
+import {
+  createHomeCarePackage,
+  getHomeCareServices,
+  getHomeCareSummaryData,
+} from "../../../api/CarePackages/HomeCareApi";
 import { Button } from "../../components/Button";
 import ClientSummary from "../../components/ClientSummary";
 import Dropdown from "../../components/Dropdown";
 import TextArea from "../../components/TextArea";
 import TitleHeader from "../../components/TitleHeader";
 import Layout from "../../Layout/Layout";
+import CareTitle from "../components/CareTitle";
 import "./assets/homeCare.scss";
 import SummaryDataList from "./components/SummaryDataList";
 import WeekCarePicker from "./components/WeekCarePicker";
@@ -17,18 +22,49 @@ import { getServiceTypeCareTimes, serviceTypes } from "./HomeCareServiceHelper";
 const HomeCare = () => {
   // Parameters
   const params = useParams();
-  const { startDate, endDate } = params;
+  const { startDate, endDate, isImmediate, isS117, isFixedPeriod } = params;
 
   // State
   const [selectedCareType, setSelectedCareType] = useState(PERSONAL_CARE_MODE);
   const [selectedPrimaryCareTime, setSelectedPrimaryCareTime] = useState(1);
   const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] = useState(1);
   const [homeCareSummaryData, setHomeCareSummaryData] = useState(undefined);
+  const [homeCareServices, setHomeCareServices] = useState(undefined);
+  const [carePackageId, setCarePackageId] = useState(undefined);
+
+  // Init home care package via API
+  useEffect(
+    (startDate, endDate, isImmediate, isS117, isFixedPeriod) => {
+      async function createHomeCarePackageAsync() {
+        const carePackageCreateResult = await createHomeCarePackage(
+          startDate,
+          endDate,
+          isImmediate,
+          isS117,
+          isFixedPeriod
+        );
+
+        setCarePackageId(carePackageCreateResult);
+      }
+
+      createHomeCarePackageAsync();
+    },
+    [startDate, endDate, isImmediate, isS117, isFixedPeriod]
+  );
+
+  useEffect(() => {
+    // Home care services
+    async function getHomeCareServicesAsync() {
+      setHomeCareServices(await getHomeCareServices());
+    }
+    getHomeCareServicesAsync();
+  }, []);
 
   const { times, secondaryTimes } = getServiceTypeCareTimes(selectedCareType);
 
   const addToPackageClick = () => {
     setHomeCareSummaryData(getHomeCareSummaryData());
+    //window.scrollTo(0, 200);
   };
 
   return (
@@ -43,16 +79,12 @@ const HomeCare = () => {
         Care Package
       </ClientSummary>
       <div className="mt-5 mb-5">
-        <div className="home-care-title">
-          <label>Homecare Care</label>
-          <div className="home-care-date-range">
-            <div className="date-entry">
-              {format(new Date(startDate), "dd/MM/yyyy")}
-              {" - "}
-              {format(new Date(endDate), "dd/MM/yyyy")}
-            </div>
-          </div>
-        </div>
+        <CareTitle
+          startDate={format(new Date(startDate), "dd/MM/yyyy")}
+          endDate={format(new Date(endDate), "dd/MM/yyyy")}
+        >
+          Homecare Care
+        </CareTitle>
         <div className="is-flex is-justify-content-flex-start home-care-options">
           <div className="home-care-option">
             <div>

@@ -5,7 +5,6 @@
 //     timeLabel: "08:00 - 10:00",
 //     days: [],
 //   },
-import { useState } from "react";
 import { CheckGreenIcon } from "../../../components/Icons";
 import {
   PERSONAL_CARE_MODE,
@@ -13,6 +12,8 @@ import {
   LIVE_IN_CARE_MODE,
   ESCORT_CARE_MODE,
 } from "../HomeCarePickerHelper";
+import Dropdown from "../../../components/Dropdown";
+import { nightOwlOptions, allNightOptions } from "../HomeCarePickerHelper";
 
 const isPickerActive = (currentMode, { person, domestic, liveIn, escort }) => {
   switch (currentMode) {
@@ -81,17 +82,49 @@ const CarePicker = ({ currentMode, dayId, onClick, selectedValues }) => {
   );
 };
 
-const CareCheckbox = ({ dayId, onChange, selectedValues }) => {
-  const { selected } = selectedValues;
+const CareTimeDropdown = ({ weekSlotId, dayId, onChange, selectedValue }) => {
+  let careDropdownOptions;
+  switch (weekSlotId) {
+    case 7: {
+      careDropdownOptions = nightOwlOptions;
+      break;
+    }
+    default: {
+      careDropdownOptions = allNightOptions;
+      break;
+    }
+  }
+
+  const onDropdownChange = (option) => {
+    onChange(dayId, option);
+  };
 
   return (
-    <div className="care-checkbox">{selected ? <CheckGreenIcon /> : null}</div>
+    <div className="care-checkbox">
+      <Dropdown
+        isUp={true}
+        options={careDropdownOptions}
+        onOptionSelect={onChange}
+        selectedValue={selectedValue}
+      >
+        {" "}
+      </Dropdown>
+    </div>
   );
 };
 
-const CarePickerTimeSlot = ({ currentMode, weekSlotItem, onClick }) => {
+const CarePickerTimeSlot = ({
+  currentMode,
+  weekSlotItem,
+  onClick,
+  onCareDropdownSelect,
+}) => {
   const onCarePickerClick = (dayId) => {
     onClick(weekSlotItem.id, dayId);
+  };
+
+  const onCarePickerDropdownSelect = (dayId, selectedValue) => {
+    onCareDropdownSelect(weekSlotItem.id, dayId, selectedValue);
   };
 
   return (
@@ -111,10 +144,11 @@ const CarePickerTimeSlot = ({ currentMode, weekSlotItem, onClick }) => {
                 selectedValues={weekSlotDayItem.values}
               />
             ) : (
-              <CareCheckbox
+              <CareTimeDropdown
+                weekSlotId={weekSlotItem.id}
                 dayId={weekSlotDayItem.id}
-                onChange={onCarePickerClick}
-                selectedValues={weekSlotDayItem.values}
+                onChange={onCarePickerDropdownSelect}
+                selectedValue={weekSlotDayItem.value}
               />
             )}
           </div>

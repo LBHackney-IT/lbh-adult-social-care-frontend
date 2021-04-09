@@ -14,7 +14,7 @@
 
     input,
     textarea {
-        border: 2px solid $lbh-black-1;
+        border: 2px solid $lbh-black1;
         border-radius: unset !important;
         outline: unset !important;
     }
@@ -23,12 +23,5 @@
         width: 100%;
         resize: none;
         padding: 10px;
-    }
-
-    &.has-label {
-        input,
-        textarea {
-            margin-top: 5px;
-        }
     }
 }

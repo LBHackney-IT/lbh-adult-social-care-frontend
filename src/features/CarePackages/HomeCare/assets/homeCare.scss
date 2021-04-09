@@ -21,32 +21,6 @@ $escort: #f5e1e1;
     background-color: $escort;
 }
 
-.home-care-title {
-    display: flex;
-    align-items: flex-end;
-    color: $lbh-green1;
-    margin-bottom: 32px;
-
-    label {
-        font-weight: bold;
-        font-size: 24px;
-        line-height: 30px;
-        margin-right: 38px;
-    }
-
-    .home-care-date-range {
-        display: flex;
-        align-items: center;
-
-        .date-entry {
-            color: $lbh-green1;
-            font-weight: bold;
-            font-size: 19px;
-            line-height: 25px;
-        }
-    }
-}
-
 .home-care-options {
     .home-care-option {
         margin-right: 20px;
@@ -140,13 +114,28 @@ $escort: #f5e1e1;
         }
 
         .care-checkbox {
-            background: rgba(222, 224, 226, 0.25);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 40px;
             width: 100%;
             cursor: pointer;
+
+            .control.field-container {
+                width: 100%;
+
+                .dropdown,
+                .dropdown .dropdown-trigger,
+                button.button {
+                    width: 100%;
+                }
+
+                button.button {
+                    justify-content: center;
+                    border: 0 !important;
+                    background: rgba(222, 224, 226, 0.25);
+                }
+            }
         }
 
         .care-picker,
@@ -242,7 +231,7 @@ $escort: #f5e1e1;
         p {
             font-size: 14px;
             line-height: 20px;
-            color: $lbh-black-1;
+            color: $lbh-black1;
         }
     }
 }

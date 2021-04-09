@@ -2,52 +2,55 @@ import { useState } from "react";
 import BaseField from "./baseComponents/BaseField";
 import "./assets/radioButton.scss";
 
+const yesNoValues = [
+  { text: "Yes", value: true },
+  { text: "No", value: false },
+];
+
 const RadioButton = ({
   label,
-  name,
-  trueText = "Yes",
-  trueValue = "1",
-  falseText = "No",
-  falseValue = "0",
-  trueIsChecked = true,
+  options,
+  selectedValue,
   onChange = () => {},
 }) => {
-  const [trueIsCheckedValue, setTrueIsChecked] = useState(trueIsChecked);
+  const [radioValue, setRadioValue] = useState(selectedValue);
+  const hasSelectedValue = radioValue !== undefined;
 
-  const radioChange = (checked) => {
-    onChange(checked);
-    setTrueIsChecked(checked);
+  const radioChange = (radioItemValue) => {
+    onChange(radioItemValue);
+    setRadioValue(radioItemValue);
   };
 
   return (
     <BaseField label={label}>
       <div className="radio-cont">
-        <label
-          className="radio-item is-first"
-          onClick={() => radioChange(true)}
-        >
-          <div
-            className={
-              "radio-select-cont" + (trueIsCheckedValue ? " is-active" : "")
-            }
-          >
-            <div className="radio-item-selected"></div>
-          </div>
-          {trueText}
-        </label>
-        <label className="radio-item" onClick={() => radioChange(false)}>
-          <div
-            className={
-              "radio-select-cont" + (trueIsCheckedValue ? "" : " is-active")
-            }
-          >
-            <div className="radio-item-selected"></div>
-          </div>
-          {falseText}
-        </label>
+        {options.map((radioItem, index) => {
+          return (
+            <label
+              key={radioItem.value}
+              className={
+                "radio-item" + (index !== options.length ? " is-first" : "")
+              }
+              onClick={() => radioChange(radioItem.value)}
+            >
+              <div
+                className={
+                  "radio-select-cont" +
+                  (hasSelectedValue && radioValue === radioItem.value
+                    ? " is-active"
+                    : "")
+                }
+              >
+                <div className="radio-item-selected"></div>
+              </div>
+              {radioItem.text}
+            </label>
+          );
+        })}
       </div>
     </BaseField>
   );
 };
 
+export { yesNoValues };
 export default RadioButton;

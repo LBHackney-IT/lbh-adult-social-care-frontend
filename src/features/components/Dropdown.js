@@ -10,6 +10,7 @@ const Dropdown = ({
   selectedValue,
   onOptionSelect,
   children,
+  isUp = false,
   buttonStyle = {},
   buttonClassName = "",
 }) => {
@@ -37,7 +38,9 @@ const Dropdown = ({
     <BaseField label={label}>
       <div
         data-selected-value={selectedOption.value}
-        className={"dropdown" + (isActive ? " is-active" : "")}
+        className={
+          "dropdown" + (isActive ? " is-active" : "") + (isUp ? " is-up" : "")
+        }
       >
         <div
           className="dropdown-trigger"

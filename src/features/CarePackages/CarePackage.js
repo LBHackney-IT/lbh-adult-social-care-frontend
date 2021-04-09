@@ -15,13 +15,19 @@ const careTypes = [
   { text: "Type Two", value: 2 },
 ];
 
+// TODO remove
+const fixedPeriodOptions = [
+  { text: "Fixed period", value: 1 },
+  { text: "Ongoing", value: 2 },
+];
+
 const CarePackage = ({ history }) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [selectedCareType, setSelectedCareType] = useState(1);
   const [isImmediate, setIsImmediate] = useState(false);
   const [isS117, setIsS117] = useState(false);
-  const [isFixedPeriod, setIsFixedPeriod] = useState(1);
+  const [isFixedPeriod, setIsFixedPeriod] = useState(undefined);
 
   const buildPackage = () => {
     // Get the parameters for the care package route
@@ -72,11 +78,9 @@ const CarePackage = ({ history }) => {
           <div className="column">
             <div style={{ marginBottom: "5px" }}>
               <RadioButton
-                name="isFixedPeriodRadBtn"
-                trueText="Fixed period"
-                falseText="Ongoing"
+                options={fixedPeriodOptions}
                 onChange={setIsFixedPeriod}
-                trueIsChecked={isFixedPeriod === 1}
+                selectedValue={isFixedPeriod}
               />
             </div>
             <div>

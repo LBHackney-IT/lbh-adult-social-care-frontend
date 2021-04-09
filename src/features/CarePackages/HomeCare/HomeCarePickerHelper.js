@@ -60,55 +60,48 @@ const weekDays = [
 const getWeekSlots = () => {
   return weekSlots.map((weekSlotItem) => {
     if (weekSlotItem.days.length <= 0) {
-      for (let i = 1; i <= 7; i++) {
-        weekSlotItem.days.push({
-          id: i,
-          values: {
-            person: {
-              primary: 0,
-              secondary: 0,
+      if (weekSlotItem.id < 7) {
+        for (let i = 1; i <= 7; i++) {
+          weekSlotItem.days.push({
+            id: i,
+            values: {
+              person: {
+                primary: 0,
+                secondary: 0,
+              },
+              domestic: 0,
+              liveIn: 0,
+              escort: 0,
             },
-            domestic: 0,
-            liveIn: 0,
-            escort: 0,
-          },
-        });
+          });
+        }
+      } else {
+        for (let i = 1; i <= 7; i++) {
+          weekSlotItem.days.push({
+            id: i,
+            value: undefined,
+          });
+        }
       }
-      // switch (weekSlotItem.id) {
-      //   default: {
-      //     for (let i = 1; i <= 7; i++) {
-      //       weekSlotItem.days.push({
-      //         id: i,
-      //         values: {
-      //           person: {
-      //             primary: 0,
-      //             secondary: 0,
-      //           },
-      //           domestic: 0,
-      //           liveIn: 0,
-      //           escort: 0,
-      //         },
-      //       });
-      //     }
-      //     break;
-      //   }
-      //   case 7: {
-      //     for (let i = 1; i <= 7; i++) {
-      //       weekSlotItem.days.push({
-      //         id: i,
-      //         values: [
-      //           { text: "30 minutes", value: 30 },
-      //           { text: "30 minutes", value: 30 },
-      //         ],
-      //       });
-      //     }
-      //     break;
-      //   }
-      // }
     }
     return weekSlotItem;
   });
 };
+
+const nightOwlOptions = [
+  { text: "30 minutes", value: 30 },
+  { text: "45 minutes", value: 45 },
+  { text: "1 hour", value: 60 },
+  { text: "1 hour 15 minutes", value: 75 },
+  { text: "1 hour 30 minutes", value: 90 },
+  { text: "1 hour 45 minutes", value: 105 },
+  { text: "2 hours", value: 120 },
+];
+
+const allNightOptions = [
+  { text: "6 hours", value: 360 },
+  { text: "12 hours", value: 720 },
+];
 
 const PERSONAL_CARE_MODE = "PERSONAL_CARE_MODE";
 const DOMESTIC_CARE_MODE = "DOMESTIC_CARE_MODE";
@@ -118,6 +111,8 @@ const ESCORT_CARE_MODE = "ESCORT_CARE_MODE";
 export {
   getWeekSlots,
   weekDays,
+  nightOwlOptions,
+  allNightOptions,
   PERSONAL_CARE_MODE,
   DOMESTIC_CARE_MODE,
   LIVE_IN_CARE_MODE,

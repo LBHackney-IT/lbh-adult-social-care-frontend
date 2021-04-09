@@ -10,6 +10,11 @@ import {
   ESCORT_CARE_MODE,
 } from "../HomeCarePickerHelper";
 
+const minutesOrHoursOptions = [
+  { text: "Minutes", value: 1 },
+  { text: "Hours", value: 2 },
+];
+
 const WeekCarePicker = ({
   currentMode,
   primaryCareTimes,
@@ -100,11 +105,15 @@ const WeekCarePicker = ({
           );
 
           if (weekSlotItemDayEntry !== undefined) {
-            minutes += weekSlotItemDayEntry.values.person.primary;
-            minutes += weekSlotItemDayEntry.values.person.secondary;
-            minutes += weekSlotItemDayEntry.values.domestic;
-            minutes += weekSlotItemDayEntry.values.liveIn;
-            minutes += weekSlotItemDayEntry.values.escort;
+            if (weekSlotItemDayEntry.values !== undefined) {
+              minutes += weekSlotItemDayEntry.values.person.primary;
+              minutes += weekSlotItemDayEntry.values.person.secondary;
+              minutes += weekSlotItemDayEntry.values.domestic;
+              minutes += weekSlotItemDayEntry.values.liveIn;
+              minutes += weekSlotItemDayEntry.values.escort;
+            } else {
+              // Dropdown
+            }
           }
         });
 
@@ -112,6 +121,10 @@ const WeekCarePicker = ({
         return { ...weekDayItem, minutes };
       })
     );
+  };
+
+  const onCarePickerDropdownSelect = (weekSlotId, dayId, selectedValue) => {
+    alert("onCarePickerDropdownSelect");
   };
 
   return (
@@ -128,12 +141,7 @@ const WeekCarePicker = ({
           </div>
         </div>
         <div className="level-item level-right">
-          <RadioButton
-            label="Display Time"
-            name="minutesOrHoursRadioBtn"
-            trueText="Minutes"
-            falseText="Hours"
-          />
+          <RadioButton label="Display Time" options={minutesOrHoursOptions} />
         </div>
       </div>
       <div className="week-care-picker mt-4">
@@ -160,6 +168,7 @@ const WeekCarePicker = ({
                 currentMode={currentMode}
                 weekSlotItem={weekSlotItem}
                 onClick={onCarePickerClick}
+                onCareDropdownSelect={onCarePickerDropdownSelect}
               />
             </div>
           );

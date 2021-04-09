@@ -2,8 +2,8 @@ import { NavLink } from "react-router-dom";
 import "./assets/button.scss";
 
 // Get/build the passed class name
-const getClassName = (className = "") => {
-  return `button button-base ${className}`;
+const getClassName = (className = "", linkBtn = false) => {
+  return linkBtn ? "link-button" : `button button-base ${className}`;
 };
 
 // Gets the inner content of a button for the given values
@@ -22,10 +22,11 @@ const Button = ({
   onClick = () => {},
   className,
   disabled = false,
+  linkBtn = false,
   Icon,
   ...props
 }) => {
-  const classNameValue = getClassName(className);
+  const classNameValue = getClassName(className, linkBtn);
   const buttonContent = getButtonContent(Icon, props.children);
 
   return (
