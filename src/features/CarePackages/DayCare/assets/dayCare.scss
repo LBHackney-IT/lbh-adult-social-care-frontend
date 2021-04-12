@@ -1,0 +1,32 @@
+.day-care-day-cbxs {
+    .column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        label:not(.checkbox) {
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 20px;
+            margin-bottom: 7px;
+            display: block;
+        }
+
+        .checkbox-check {
+            margin-right: unset !important;
+        }
+    }
+}
+
+.day-care-opportunity {
+    .opportunity-dropdown-options {
+        flex-wrap: wrap;
+        align-items: center;
+
+        .opportunity-dropdown-cont,
+        .dropdown,
+        .dropdown-trigger {
+            width: 100%;
+        }
+    }
+}

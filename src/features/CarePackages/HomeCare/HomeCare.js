@@ -1,48 +1,70 @@
 import { format } from "date-fns";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getHomeCareSummaryData } from "../../../api/CarePackages/HomeCareApi";
+import {
+  createHomeCarePackage,
+  getHomeCareServices,
+  getHomeCareSummaryData,
+} from "../../../api/CarePackages/HomeCareApi";
 import { Button } from "../../components/Button";
 import ClientSummary from "../../components/ClientSummary";
 import Dropdown from "../../components/Dropdown";
 import TextArea from "../../components/TextArea";
 import TitleHeader from "../../components/TitleHeader";
 import Layout from "../../Layout/Layout";
+import CareTitle from "../components/CareTitle";
 import "./assets/homeCare.scss";
 import SummaryDataList from "./components/SummaryDataList";
 import WeekCarePicker from "./components/WeekCarePicker";
-
-// TODO remove
-const serviceTypes = [
-  { text: "Personal care", value: 1 },
-  { text: "Type Two", value: 2 },
-];
-
-// TODO remove
-const primaryCareTimes = [
-  { text: "N/A", value: 0 },
-  { text: "30 minutes", value: 1 },
-  { text: "45 minutes", value: 2 },
-  { text: "1 hour", value: 3 },
-  { text: "1 hour 15 minutes", value: 4 },
-  { text: "1 hour 30 minutes", value: 5 },
-  { text: "1 hour 45 minutes", value: 6 },
-  { text: "2 hours", value: 7 },
-];
+import { PERSONAL_CARE_MODE } from "./HomeCarePickerHelper";
+import { getServiceTypeCareTimes, serviceTypes } from "./HomeCareServiceHelper";
 
 const HomeCare = () => {
   // Parameters
   const params = useParams();
-  const { startDate, endDate } = params;
+  const { startDate, endDate, isImmediate, isS117, isFixedPeriod } = params;
 
   // State
-  const [selectedCareType, setSelectedCareType] = useState(1);
+  const [selectedCareType, setSelectedCareType] = useState(PERSONAL_CARE_MODE);
   const [selectedPrimaryCareTime, setSelectedPrimaryCareTime] = useState(1);
-  const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] = useState(0);
+  const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] = useState(1);
   const [homeCareSummaryData, setHomeCareSummaryData] = useState(undefined);
+  const [homeCareServices, setHomeCareServices] = useState(undefined);
+  const [carePackageId, setCarePackageId] = useState(undefined);
+
+  // Init home care package via API
+  useEffect(
+    (startDate, endDate, isImmediate, isS117, isFixedPeriod) => {
+      async function createHomeCarePackageAsync() {
+        const carePackageCreateResult = await createHomeCarePackage(
+          startDate,
+          endDate,
+          isImmediate,
+          isS117,
+          isFixedPeriod
+        );
+
+        setCarePackageId(carePackageCreateResult);
+      }
+
+      createHomeCarePackageAsync();
+    },
+    [startDate, endDate, isImmediate, isS117, isFixedPeriod]
+  );
+
+  useEffect(() => {
+    // Home care services
+    async function getHomeCareServicesAsync() {
+      setHomeCareServices(await getHomeCareServices());
+    }
+    getHomeCareServicesAsync();
+  }, []);
+
+  const { times, secondaryTimes } = getServiceTypeCareTimes(selectedCareType);
 
   const addToPackageClick = () => {
     setHomeCareSummaryData(getHomeCareSummaryData());
+    //window.scrollTo(0, 200);
   };
 
   return (
@@ -57,16 +79,12 @@ const HomeCare = () => {
         Care Package
       </ClientSummary>
       <div className="mt-5 mb-5">
-        <div className="home-care-title">
-          <label>Homecare Care</label>
-          <div className="home-care-date-range">
-            <div className="date-entry">
-              {format(new Date(startDate), "dd/MM/yyyy")}
-              {" - "}
-              {format(new Date(endDate), "dd/MM/yyyy")}
-            </div>
-          </div>
-        </div>
+        <CareTitle
+          startDate={format(new Date(startDate), "dd/MM/yyyy")}
+          endDate={format(new Date(endDate), "dd/MM/yyyy")}
+        >
+          Homecare Care
+        </CareTitle>
         <div className="is-flex is-justify-content-flex-start home-care-options">
           <div className="home-care-option">
             <div>
@@ -74,7 +92,7 @@ const HomeCare = () => {
                 label="Select Service"
                 options={serviceTypes}
                 selectedValue={selectedCareType}
-                onOptionSelect={(option) => setSelectedCareType(option.value)}
+                onOptionSelect={(option) => setSelectedCareType(option)}
                 buttonStyle={{ minWidth: "239px" }}
               />
             </div>
@@ -83,24 +101,28 @@ const HomeCare = () => {
             <div>
               <Dropdown
                 label="Primary Carer"
-                options={primaryCareTimes}
+                options={times}
                 selectedValue={selectedPrimaryCareTime}
-                onOptionSelect={(option) => setSelectedCareType(option.value)}
+                onOptionSelect={(option) => setSelectedPrimaryCareTime(option)}
                 buttonStyle={{ minWidth: "200px" }}
               />
             </div>
           </div>
-          <div className="home-care-option">
-            <div>
-              <Dropdown
-                label="Secondary Carer"
-                options={primaryCareTimes}
-                selectedValue={selectedSecondaryCareTime}
-                onOptionSelect={(option) => setSelectedCareType(option.value)}
-                buttonStyle={{ minWidth: "200px" }}
-              />
+          {secondaryTimes !== undefined ? (
+            <div className="home-care-option">
+              <div>
+                <Dropdown
+                  label="Secondary Carer"
+                  options={secondaryTimes}
+                  selectedValue={selectedSecondaryCareTime}
+                  onOptionSelect={(option) =>
+                    setSelectedSecondaryCareTime(option)
+                  }
+                  buttonStyle={{ minWidth: "200px" }}
+                />
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
         <div className="columns mt-2">
           <div className="column">
@@ -119,7 +141,13 @@ const HomeCare = () => {
           </div>
         </div>
         <div className="mt-2">
-          <WeekCarePicker />
+          <WeekCarePicker
+            currentMode={selectedCareType}
+            primaryCareTimes={times}
+            secondaryCareTimes={secondaryTimes}
+            selectedPrimaryCareTypeId={selectedPrimaryCareTime}
+            selectedSecondaryCareTypeId={selectedSecondaryCareTime}
+          />
         </div>
         <div className="level mt-4">
           <div className="level-item level-right">

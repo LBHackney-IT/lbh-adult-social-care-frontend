@@ -1,16 +1,19 @@
 import DatePicker from "react-date-picker";
 import "./assets/datePick.scss";
+import BaseField from "./baseComponents/BaseField";
 import { CalendarIcon } from "./Icons";
 
-const DatePick = ({ setDate, dateValue }) => {
+const DatePick = ({ label, setDate, dateValue }) => {
   return (
-    <DatePicker
-      clearIcon={null}
-      calendarIcon={<CalendarIcon />}
-      onChange={setDate}
-      value={dateValue}
-      format="dd/MM/y"
-    />
+    <BaseField label={label} noInputStyle={true}>
+      <DatePicker
+        clearIcon={null}
+        calendarIcon={<CalendarIcon />}
+        onChange={setDate}
+        value={dateValue}
+        format="dd/MM/y"
+      />
+    </BaseField>
   );
 };
 

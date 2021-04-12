@@ -25,7 +25,8 @@ const NavItem = ({ children, to = "/xyz" }) => {
 const NavigationColumn = () => {
   return (
     <div className="nav-column-cont">
-      <NavItem to={RouteConstants.CLIENT_HISTORY}>Client History</NavItem>
+      <NavItem to={RouteConstants.CARE_PACKAGE}>Care Package</NavItem>
+      {/* <NavItem to={RouteConstants.CLIENT_HISTORY}>Client History</NavItem>
       <NavItem>Client details</NavItem>
       <NavItem>Medical history</NavItem>
       <NavItem>Important to me</NavItem>
@@ -34,8 +35,7 @@ const NavigationColumn = () => {
       <NavItem>Mental Capacity Assessment</NavItem>
       <NavItem>Carer</NavItem>
       <NavItem>Risk Assessment</NavItem>
-      <NavItem to={RouteConstants.CARE_PACKAGE}>Care Package</NavItem>
-      <NavItem>Review</NavItem>
+      <NavItem>Review</NavItem> */}
     </div>
   );
 };

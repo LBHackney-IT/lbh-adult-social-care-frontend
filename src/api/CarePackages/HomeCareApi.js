@@ -1,3 +1,33 @@
+import { BASE_URL } from "../BaseApi";
+import axios from "axios";
+
+const HOME_CARE_URL = `${BASE_URL}/v1/homeCarePackage`;
+const HOME_CARE_SERVICE_URL = `${BASE_URL}/v1/homeCareService`;
+
+const createHomeCarePackage = async (
+  startDate,
+  endDate,
+  isImmediate,
+  isS117,
+  isFixedPeriod
+) => {
+  const response = await axios.post(HOME_CARE_URL, {
+    IsThisuserUnderS117: isS117,
+    IsThisAnImmediateService: isImmediate,
+    IsFixedPeriod: isFixedPeriod,
+    IsOngoingPeriod: !isFixedPeriod,
+    StartDate: startDate,
+    EndDate: endDate,
+  });
+
+  return response.data;
+};
+
+const getHomeCareServices = async () => {
+  const response = await axios.get(`${HOME_CARE_SERVICE_URL}/getall`);
+  return response.data;
+};
+
 const getHomeCareSummaryData = () => {
   return [
     {
@@ -53,4 +83,4 @@ const getHomeCareSummaryData = () => {
   ];
 };
 
-export { getHomeCareSummaryData };
+export { createHomeCarePackage, getHomeCareServices, getHomeCareSummaryData };
