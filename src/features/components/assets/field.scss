@@ -12,11 +12,13 @@
         }
     }
 
-    input,
-    textarea {
-        border: 2px solid $lbh-black1;
-        border-radius: unset !important;
-        outline: unset !important;
+    &:not(.no-input-style) {
+        input,
+        textarea {
+            border: 2px solid $lbh-black1;
+            border-radius: unset !important;
+            outline: unset !important;
+        }
     }
 
     textarea {

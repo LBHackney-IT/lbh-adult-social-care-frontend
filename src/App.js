@@ -10,9 +10,6 @@ import PrivateRoute from "./routes/PrivateRoute";
 import * as RouteConstants from "./routes/RouteConstants";
 
 const App = () => {
-  const carePackageParams =
-    "/:isImmediate/:isS117/:isFixedPeriod/:startDate/:endDate";
-
   return (
     <>
       <Switch>
@@ -24,22 +21,28 @@ const App = () => {
         />
         <PrivateRoute
           exact
-          path={`${RouteConstants.HOME_CARE}${carePackageParams}`}
+          path={`${RouteConstants.HOME_CARE}/:isImmediate/:isS117/:isFixedPeriod/:startDate/:endDate`}
           component={HomeCare}
         />
         <PrivateRoute
           exact
-          path={RouteConstants.DAY_CARE}
+          path={`${RouteConstants.DAY_CARE}/:isImmediate/:isS117/:isFixedPeriod/:startDate`}
           component={DayCare}
         />
         <PrivateRoute
           exact
-          path={RouteConstants.RESIDENTIAL_CARE}
+          path={
+            `${RouteConstants.RESIDENTIAL_CARE}/:isRespiteCare/:isDischargePackage/` +
+            `:isImmediateOrReEnablement/:expectedOver52Weeks/:isS117/:startDate/:endDate`
+          }
           component={ResidentialCare}
         />
         <PrivateRoute
           exact
-          path={RouteConstants.NURSING_CARE}
+          path={
+            `${RouteConstants.NURSING_CARE}/:isRespiteCare/:isDischargePackage/` +
+            `:isImmediateOrReEnablement/:expectedOver52Weeks/:isS117/:startDate/:endDate`
+          }
           component={NursingCare}
         />
         <PrivateRoute
