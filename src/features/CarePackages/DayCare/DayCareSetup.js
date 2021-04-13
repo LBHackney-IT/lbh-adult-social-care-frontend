@@ -29,6 +29,7 @@ const DayCareSetup = ({
       `${DAY_CARE}/${isImmediate}/${isS117}/${isFixedPeriod}/${startDate}`
     );
   };
+
   return (
     <CarePackageSetup onBuildClick={onBuildClick}>
       <div className="level"></div>
@@ -48,7 +49,7 @@ const DayCareSetup = ({
               selectedValue={isFixedPeriod}
             />
           </div>
-          <div>
+          <div className="is-flex">
             <span className="mr-3">
               <DatePick dateValue={startDate} setDate={setStartDate} />
             </span>

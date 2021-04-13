@@ -6,7 +6,6 @@ import HomeCareSetup from "./HomeCare/HomeCareSetup";
 import ResidentialCareSetup from "./ResidentialCare/ResidentialCareSetup";
 import NursingCareSetup from "./NursingCare/NursingCareSetup";
 
-// TODO remove
 const careTypes = [
   { text: "Home care", value: 1 },
   { text: "Day care", value: 2 },
@@ -19,6 +18,7 @@ const CarePackage = ({ history }) => {
 
   const ComponentForCareType = () => {
     switch (selectedCareType) {
+      default:
       case 1: {
         return (
           <HomeCareSetup
@@ -58,9 +58,6 @@ const CarePackage = ({ history }) => {
             selectedCareType={selectedCareType}
           />
         );
-      }
-      default: {
-        return <></>;
       }
     }
   };

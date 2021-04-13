@@ -33,24 +33,21 @@ const HomeCare = () => {
   const [carePackageId, setCarePackageId] = useState(undefined);
 
   // Init home care package via API
-  useEffect(
-    (startDate, endDate, isImmediate, isS117, isFixedPeriod) => {
-      async function createHomeCarePackageAsync() {
-        const carePackageCreateResult = await createHomeCarePackage(
-          startDate,
-          endDate,
-          isImmediate,
-          isS117,
-          isFixedPeriod
-        );
+  useEffect(() => {
+    async function createHomeCarePackageAsync() {
+      const carePackageCreateResult = await createHomeCarePackage(
+        new Date(startDate),
+        new Date(endDate),
+        isImmediate === "true",
+        isS117 === "true",
+        isFixedPeriod === "true"
+      );
 
-        setCarePackageId(carePackageCreateResult);
-      }
+      setCarePackageId(carePackageCreateResult);
+    }
 
-      createHomeCarePackageAsync();
-    },
-    [startDate, endDate, isImmediate, isS117, isFixedPeriod]
-  );
+    createHomeCarePackageAsync();
+  });
 
   useEffect(() => {
     // Home care services

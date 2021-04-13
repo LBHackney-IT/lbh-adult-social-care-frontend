@@ -7,8 +7,8 @@ import CareSelectDropdown from "../components/CareSelectDropdown";
 
 // TODO remove
 const fixedPeriodOptions = [
-  { text: "Fixed period", value: 1 },
-  { text: "Ongoing", value: 2 },
+  { text: "Fixed period", value: true },
+  { text: "Ongoing", value: false },
 ];
 
 const HomeCareSetup = ({
