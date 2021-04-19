@@ -21,8 +21,44 @@ const getOpportunityTimesPerMonthOptions = () => {
     .catch(handleError);
 }
 
+const createDayCarePackage = (dayCarePackageForCreation) => {
+  return fetch(`${DAY_CARE_URL}`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(dayCarePackageForCreation)
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+const updateDayCarePackage = (dayCarePackageId, dayCarePackageForUpdate) => {
+  return fetch(`${DAY_CARE_URL}/${dayCarePackageId}`, {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(dayCarePackageForUpdate)
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+const getDayCarePackageList = () => {
+  return fetch(`${DAY_CARE_URL}`)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+const getSingleDayCarePackage = (dayCarePackageId) => {
+  return fetch(`${DAY_CARE_URL}/${dayCarePackageId}`)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
 export {
   getTermTimeConsiderationOptions,
   getOpportunitiesLengthOptions,
-  getOpportunityTimesPerMonthOptions
+  getOpportunityTimesPerMonthOptions,
+  createDayCarePackage,
+  updateDayCarePackage,
+  getDayCarePackageList,
+  getSingleDayCarePackage
 };
