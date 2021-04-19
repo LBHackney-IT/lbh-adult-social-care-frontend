@@ -10,12 +10,10 @@ const getTermTimeConsiderationOptions = () => {
 }
 
 const getOpportunitiesLengthOptions = () => {
-  return [
-    { text: "45 minutes", value: 45 },
-    { text: "1 hour", value: 60 },
-    { text: "1 hour 15 minutes", value: 75 },
-  ];
-};
+  return fetch(`${DAY_CARE_URL}/opportunity-length-options`)
+    .then(handleResponse)
+    .catch(handleError);
+}
 
 const getOpportunitiesTimePerMonthOptions = () => {
   return [
@@ -27,6 +25,6 @@ const getOpportunitiesTimePerMonthOptions = () => {
 
 export {
   getTermTimeConsiderationOptions,
-  getOpportunitiesLengthOptions,
   getOpportunitiesTimePerMonthOptions,
+  getOpportunitiesLengthOptions
 };

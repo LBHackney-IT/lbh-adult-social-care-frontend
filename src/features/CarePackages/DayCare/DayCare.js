@@ -18,10 +18,11 @@ import DayCareOpportunities from "./components/DayCareOpportunities";
 const DayCare = () => {
   // Parameters
   const params = useParams();
-  //const { startDate, endDate, isImmediate, isS117, isFixedPeriod } = params;
+  // const { startDate, endDate, isImmediate, isS117, isFixedPeriod } = params;
 
   const [errors, setErrors] = useState([]);
   const [termTimeConsiderationOptions, setTermTimeConsiderationOptions] = useState([]);
+  const [opportunitiesLengthOptions, setOpportunitiesLengthOptions] = useState([]);
   const [transportNeeded, setTransportIsNeeded] = useState(undefined);
   const [escortNeeded, setEscortIsNeeded] = useState(undefined);
   const [termTimeConsideration, setTermTimeConsideration] = useState(undefined);
@@ -31,6 +32,7 @@ const DayCare = () => {
 
   useEffect(() => {
     retrieveTermTimeConsiderationOptions();
+    retrieveOpportunitiesLengthOptions();
   }, []);
 
   // Setup days state using base days value
@@ -42,6 +44,7 @@ const DayCare = () => {
 
   // Adding a new opportunity entry
   const onAddOpportunityEntry = () => {
+    retrieveOpportunitiesLengthOptions();
     setOpportunityEntries([
       ...opportunityEntries,
       {
@@ -72,6 +75,16 @@ const DayCare = () => {
     })
       .catch(error => {
         setErrors([...errors, `Retrieve term time considerations failed. ${error.message}`]);
+      });
+  };
+
+  const retrieveOpportunitiesLengthOptions =() => {
+    getOpportunitiesLengthOptions().then(res => {
+      let options = res.map(option => ({ text: option.optionName, value: option.opportunityLengthOptionId, valueInMinutes: option.timeInMinutes}))
+      setOpportunitiesLengthOptions(options);
+    })
+      .catch(error => {
+        setErrors([...errors, `Retrieve opportunity length options failed. ${error.message}`]);
       });
   };
 
@@ -146,7 +159,7 @@ const DayCare = () => {
         <div className="mt-4">
           <DayCareOpportunities
             entries={opportunityEntries}
-            lengthOptions={getOpportunitiesLengthOptions()}
+            lengthOptions={opportunitiesLengthOptions}
             timesPerMonthOptions={getOpportunitiesTimePerMonthOptions()}
             addEntry={onAddOpportunityEntry}
           />
