@@ -15,16 +15,14 @@ const getOpportunitiesLengthOptions = () => {
     .catch(handleError);
 }
 
-const getOpportunitiesTimePerMonthOptions = () => {
-  return [
-    { text: "Daily", value: 1 },
-    { text: "Weekly", value: 2 },
-    { text: "Monthly", value: 3 },
-  ];
-};
+const getOpportunityTimesPerMonthOptions = () => {
+  return fetch(`${DAY_CARE_URL}/opportunity-times-per-month-options`)
+    .then(handleResponse)
+    .catch(handleError);
+}
 
 export {
   getTermTimeConsiderationOptions,
-  getOpportunitiesTimePerMonthOptions,
-  getOpportunitiesLengthOptions
+  getOpportunitiesLengthOptions,
+  getOpportunityTimesPerMonthOptions
 };

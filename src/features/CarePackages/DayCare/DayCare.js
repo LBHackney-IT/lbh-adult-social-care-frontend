@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import RadioButton, { yesNoValues } from "../../components/RadioButton";
 import {
   getOpportunitiesLengthOptions,
-  getOpportunitiesTimePerMonthOptions,
+  getOpportunityTimesPerMonthOptions,
   getTermTimeConsiderationOptions
 } from "../../../api/CarePackages/DayCareApi";
 import DayCareOpportunities from "./components/DayCareOpportunities";
@@ -23,6 +23,7 @@ const DayCare = () => {
   const [errors, setErrors] = useState([]);
   const [termTimeConsiderationOptions, setTermTimeConsiderationOptions] = useState([]);
   const [opportunitiesLengthOptions, setOpportunitiesLengthOptions] = useState([]);
+  const [opportunityTimesPerMonthOptions, setOpportunityTimesPerMonthOptions] = useState([]);
   const [transportNeeded, setTransportIsNeeded] = useState(undefined);
   const [escortNeeded, setEscortIsNeeded] = useState(undefined);
   const [termTimeConsideration, setTermTimeConsideration] = useState(undefined);
@@ -33,6 +34,7 @@ const DayCare = () => {
   useEffect(() => {
     retrieveTermTimeConsiderationOptions();
     retrieveOpportunitiesLengthOptions();
+    retrieveOpportunityTimesPerMonthOptions();
   }, []);
 
   // Setup days state using base days value
@@ -85,6 +87,16 @@ const DayCare = () => {
     })
       .catch(error => {
         setErrors([...errors, `Retrieve opportunity length options failed. ${error.message}`]);
+      });
+  };
+
+  const retrieveOpportunityTimesPerMonthOptions =() => {
+    getOpportunityTimesPerMonthOptions().then(res => {
+      let options = res.map(option => ({ text: option.optionName, value: option.opportunityTimePerMonthOptionId}))
+      setOpportunityTimesPerMonthOptions(options);
+    })
+      .catch(error => {
+        setErrors([...errors, `Retrieve opportunity times per month options failed. ${error.message}`]);
       });
   };
 
@@ -160,7 +172,7 @@ const DayCare = () => {
           <DayCareOpportunities
             entries={opportunityEntries}
             lengthOptions={opportunitiesLengthOptions}
-            timesPerMonthOptions={getOpportunitiesTimePerMonthOptions()}
+            timesPerMonthOptions={opportunityTimesPerMonthOptions}
             addEntry={onAddOpportunityEntry}
           />
         </div>
