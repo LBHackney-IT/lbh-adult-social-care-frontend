@@ -27,3 +27,5 @@ yarn-error.log*
 /.vs/slnx.sqllite
 /.vs/suo
 /.vs
+
+/.idea
