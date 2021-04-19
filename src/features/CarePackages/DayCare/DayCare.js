@@ -6,12 +6,12 @@ import CareTitle from "../components/CareTitle";
 import TextArea from "../../components/TextArea";
 import { days } from "../../components/daysData";
 import Checkbox from "../../components/Checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RadioButton, { yesNoValues } from "../../components/RadioButton";
 import {
-  getTermTimeConsiderationOptions,
   getOpportunitiesLengthOptions,
   getOpportunitiesTimePerMonthOptions,
+  getTermTimeConsiderationOptions
 } from "../../../api/CarePackages/DayCareApi";
 import DayCareOpportunities from "./components/DayCareOpportunities";
 
@@ -20,12 +20,25 @@ const DayCare = () => {
   const params = useParams();
   //const { startDate, endDate, isImmediate, isS117, isFixedPeriod } = params;
 
+  const [errors, setErrors] = useState([]);
+  const [termTimeConsiderationOptions, setTermTimeConsiderationOptions] = useState([]);
   const [transportNeeded, setTransportIsNeeded] = useState(undefined);
   const [escortNeeded, setEscortIsNeeded] = useState(undefined);
   const [termTimeConsideration, setTermTimeConsideration] = useState(undefined);
   const [opportunityEntries, setOpportunityEntries] = useState([
     { id: 1, howLongValue: 45, perMonthValue: 1, needToAddress: undefined },
   ]);
+
+  useEffect(() => {
+    retrieveTermTimeConsiderationOptions();
+  }, []);
+
+  // Setup days state using base days value
+  const [daysSelected, setDaysSelected] = useState(
+    days.map((dayItem) => {
+      return { ...dayItem, checked: false };
+    })
+  );
 
   // Adding a new opportunity entry
   const onAddOpportunityEntry = () => {
@@ -40,13 +53,6 @@ const DayCare = () => {
     ]);
   };
 
-  // Setup days state using base days value
-  const [daysSelected, setDaysSelected] = useState(
-    days.map((dayItem) => {
-      return { ...dayItem, checked: false };
-    })
-  );
-
   // Handle a day checkbox change
   const onDayCheckboxChange = (dayId, isChecked) => {
     const dayEntry = daysSelected.find((item) => item.id === dayId);
@@ -57,6 +63,18 @@ const DayCare = () => {
       )
     );
   };
+
+
+  const retrieveTermTimeConsiderationOptions =() => {
+    getTermTimeConsiderationOptions().then(res => {
+      let options = res.map(option => ({ text: option.optionName, value: option.optionId }))
+      setTermTimeConsiderationOptions(options);
+    })
+      .catch(error => {
+        setErrors([...errors, `Retrieve term time considerations failed. ${error.message}`]);
+      });
+  };
+
 
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
@@ -121,7 +139,7 @@ const DayCare = () => {
           <RadioButton
             label="Term Time Consideration"
             onChange={setTermTimeConsideration}
-            options={getTermTimeConsiderationOptions()}
+            options={termTimeConsiderationOptions}
             selectedValue={termTimeConsideration}
           />
         </div>

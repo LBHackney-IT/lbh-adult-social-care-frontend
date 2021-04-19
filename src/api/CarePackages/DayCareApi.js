@@ -1,10 +1,13 @@
+import { BASE_URL } from '../BaseApi';
+import { handleError, handleResponse } from '../Utils/ApiUtils';
+
+const DAY_CARE_URL = `${BASE_URL}/v1/day-care-packages`;
+
 const getTermTimeConsiderationOptions = () => {
-  return [
-    { text: "N/A", value: 1 },
-    { text: "Term Time", value: 2 },
-    { text: "Holiday", value: 3 },
-  ];
-};
+  return fetch(`${DAY_CARE_URL}/term-time-considerations`)
+    .then(handleResponse)
+    .catch(handleError);
+}
 
 const getOpportunitiesLengthOptions = () => {
   return [
