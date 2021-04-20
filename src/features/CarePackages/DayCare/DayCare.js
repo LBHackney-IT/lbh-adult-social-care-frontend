@@ -161,8 +161,7 @@ const DayCare = ({history}) => {
     }));
 
     const dayCarePackageToCreate = {
-      packageId: "33ed381b-32b6-4b41-0fb7-08d900eacb75",
-      clientId: "aa872631-02db-474b-42c5-08d900e9e51a",
+      clientId: "aee45700-af9b-4ab5-bb43-535adbdcfb80",
       isFixedPeriodOrOngoing: isFixedPeriod,
       startDate: startDate ? new Date(startDate).toJSON() : null,
       endDate: endDate ? new Date(endDate).toJSON() : null,
@@ -180,8 +179,7 @@ const DayCare = ({history}) => {
       escortNeeded: escortNeeded,
       termTimeConsiderationOptionId: termTimeConsideration,
       dayCarePackageOpportunities: dayCarePackageOpportunities,
-      creatorId: "ffd65af6-8cec-420f-f71d-08d900ea14f0",
-      statusId: "380a0e08-eb8a-473f-aaa0-08d900ea3333"
+      creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8"
     };
     console.log(dayCarePackageToCreate);
 
