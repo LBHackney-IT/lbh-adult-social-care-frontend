@@ -18,7 +18,6 @@ import DayCareOpportunities from "./components/DayCareOpportunities";
 import { Button } from '../../components/Button';
 import { CARE_PACKAGE } from '../../../routes/RouteConstants';
 import TitleHeader from '../../components/TitleHeader';
-import SummaryDataList from '../HomeCare/components/SummaryDataList';
 import DayCareSummary from './components/DayCareSummary';
 
 const DayCare = ({history}) => {
@@ -31,8 +30,8 @@ const DayCare = ({history}) => {
   isImmediate = isTrueSet(isImmediate) || false;
   isS117 = isTrueSet(isS117) || false;
   isFixedPeriod = checkFixedPeriod(isFixedPeriod) || false;
-  startDate  = startDate ?? null;
-  endDate  = endDate ?? null;
+  startDate = startDate ?? null;
+  endDate = endDate ?? null;
 
   const [errors, setErrors] = useState([]);
   const [termTimeConsiderationOptions, setTermTimeConsiderationOptions] = useState([]);
@@ -72,6 +71,11 @@ const DayCare = ({history}) => {
       },
     ]);
   };
+
+  const handleDeleteOpportunityEntry = (id) => {
+    const newList = opportunityEntries.filter(entry => entry.id !== id);
+    setOpportunityEntries(newList);
+  }
 
   const handleNeedToUpdateChange = (event) => {
     setNeedToAddress(event);
@@ -212,7 +216,8 @@ const DayCare = ({history}) => {
             <TextArea
               label="Need to Address"
               rows={5}
-              placeholder="Add details... NB - where half days are needed please specify" onChange={handleNeedToUpdateChange}
+              placeholder="Add details... NB - where half days are needed please specify"
+              onChange={handleNeedToUpdateChange}
             />
           </div>
           <div className="column columns day-care-day-cbxs">
@@ -271,8 +276,12 @@ const DayCare = ({history}) => {
         </div>
         <div className="mt-4 mb-4">
           <TitleHeader>Package Details</TitleHeader>
-          <DayCareSummary></DayCareSummary>
-          {/*<SummaryDataList summaryData={homeCareSummaryData} />*/}
+          <DayCareSummary
+            opportunityEntries={opportunityEntries}
+            needToAddress={needToAddress}
+            transportNeeded={transportNeeded}
+            daysSelected={daysSelected}
+            deleteOpportunity={handleDeleteOpportunityEntry}/>
         </div>
         <div className="level mt-4">
           <div className="level-item level-right">
