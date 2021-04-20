@@ -9,27 +9,49 @@ import Checkbox from "../../components/Checkbox";
 import { useEffect, useState } from "react";
 import RadioButton, { yesNoValues } from "../../components/RadioButton";
 import {
+  createDayCarePackage,
   getOpportunitiesLengthOptions,
   getOpportunityTimesPerMonthOptions,
   getTermTimeConsiderationOptions
 } from "../../../api/CarePackages/DayCareApi";
 import DayCareOpportunities from "./components/DayCareOpportunities";
+import { Button } from '../../components/Button';
+import { CARE_PACKAGE } from '../../../routes/RouteConstants';
+import TitleHeader from '../../components/TitleHeader';
+import SummaryDataList from '../HomeCare/components/SummaryDataList';
+import DayCareSummary from './components/DayCareSummary';
 
-const DayCare = () => {
+const DayCare = ({history}) => {
+  const isTrueSet = (myValue) => (myValue === 'true');
+  const checkFixedPeriod = (myValue) => (myValue === '1');
+
   // Parameters
   const params = useParams();
-  // const { startDate, endDate, isImmediate, isS117, isFixedPeriod } = params;
+  let {startDate, endDate, isImmediate, isS117, isFixedPeriod} = params;
+  isImmediate = isTrueSet(isImmediate) || false;
+  isS117 = isTrueSet(isS117) || false;
+  isFixedPeriod = checkFixedPeriod(isFixedPeriod) || false;
+  startDate  = startDate ?? null;
+  endDate  = endDate ?? null;
 
   const [errors, setErrors] = useState([]);
   const [termTimeConsiderationOptions, setTermTimeConsiderationOptions] = useState([]);
   const [opportunitiesLengthOptions, setOpportunitiesLengthOptions] = useState([]);
   const [opportunityTimesPerMonthOptions, setOpportunityTimesPerMonthOptions] = useState([]);
+
+  const [needToAddress, setNeedToAddress] = useState(undefined);
   const [transportNeeded, setTransportIsNeeded] = useState(undefined);
   const [escortNeeded, setEscortIsNeeded] = useState(undefined);
   const [termTimeConsideration, setTermTimeConsideration] = useState(undefined);
   const [opportunityEntries, setOpportunityEntries] = useState([
-    { id: 1, howLongValue: 45, perMonthValue: 1, needToAddress: undefined },
+    {id: 1, howLongValue: 1, timesPerMonthValue: 1, needToAddress: undefined},
   ]);
+  // Setup days state using base days value
+  const [daysSelected, setDaysSelected] = useState(
+    days.map((dayItem) => {
+      return {...dayItem, checked: false};
+    })
+  );
 
   useEffect(() => {
     retrieveTermTimeConsiderationOptions();
@@ -37,26 +59,38 @@ const DayCare = () => {
     retrieveOpportunityTimesPerMonthOptions();
   }, []);
 
-  // Setup days state using base days value
-  const [daysSelected, setDaysSelected] = useState(
-    days.map((dayItem) => {
-      return { ...dayItem, checked: false };
-    })
-  );
 
   // Adding a new opportunity entry
   const onAddOpportunityEntry = () => {
-    retrieveOpportunitiesLengthOptions();
     setOpportunityEntries([
       ...opportunityEntries,
       {
         id: opportunityEntries.length + 1,
-        howLongValue: 45,
-        perMonthValue: 1,
+        howLongValue: 1,
+        timesPerMonthValue: 1,
         needToAddress: undefined,
       },
     ]);
   };
+
+  const handleNeedToUpdateChange = (event) => {
+    setNeedToAddress(event);
+  };
+
+  const handleOpportunityChange = (opportunity) => {
+    const newList = opportunityEntries.map((item) => {
+      if (item.id === opportunity.id) {
+        return {
+          ...item,
+          ...opportunity,
+        };
+      }
+
+      return item;
+    });
+
+    setOpportunityEntries(newList);
+  }
 
   // Handle a day checkbox change
   const onDayCheckboxChange = (dayId, isChecked) => {
@@ -70,9 +104,9 @@ const DayCare = () => {
   };
 
 
-  const retrieveTermTimeConsiderationOptions =() => {
+  const retrieveTermTimeConsiderationOptions = () => {
     getTermTimeConsiderationOptions().then(res => {
-      let options = res.map(option => ({ text: option.optionName, value: option.optionId }))
+      let options = res.map(option => ({text: option.optionName, value: option.optionId}))
       setTermTimeConsiderationOptions(options);
     })
       .catch(error => {
@@ -80,9 +114,13 @@ const DayCare = () => {
       });
   };
 
-  const retrieveOpportunitiesLengthOptions =() => {
+  const retrieveOpportunitiesLengthOptions = () => {
     getOpportunitiesLengthOptions().then(res => {
-      let options = res.map(option => ({ text: option.optionName, value: option.opportunityLengthOptionId, valueInMinutes: option.timeInMinutes}))
+      let options = res.map(option => ({
+        text: option.optionName,
+        value: option.opportunityLengthOptionId,
+        valueInMinutes: option.timeInMinutes
+      }))
       setOpportunitiesLengthOptions(options);
     })
       .catch(error => {
@@ -90,9 +128,9 @@ const DayCare = () => {
       });
   };
 
-  const retrieveOpportunityTimesPerMonthOptions =() => {
+  const retrieveOpportunityTimesPerMonthOptions = () => {
     getOpportunityTimesPerMonthOptions().then(res => {
-      let options = res.map(option => ({ text: option.optionName, value: option.opportunityTimePerMonthOptionId}))
+      let options = res.map(option => ({text: option.optionName, value: option.opportunityTimePerMonthOptionId}))
       setOpportunityTimesPerMonthOptions(options);
     })
       .catch(error => {
@@ -100,6 +138,59 @@ const DayCare = () => {
       });
   };
 
+  const formIsValid = () => {
+    const errors = [];
+
+    setErrors(errors);
+    // Form is valid if the errors array has no items
+    return errors.length === 0;
+  }
+
+  const savePackageClick = (event) => {
+    event.preventDefault();
+    if (!formIsValid()) return;
+
+    const dayCarePackageOpportunities = opportunityEntries.map(item => ({
+      howLongId: item.howLongValue,
+      howManyTimesPerMonthId: item.timesPerMonthValue,
+      opportunitiesNeedToAddress: item.needToAddress
+    }));
+
+    const dayCarePackageToCreate = {
+      packageId: "33ed381b-32b6-4b41-0fb7-08d900eacb75",
+      clientId: "aa872631-02db-474b-42c5-08d900e9e51a",
+      isFixedPeriodOrOngoing: isFixedPeriod,
+      startDate: startDate ? new Date(startDate).toJSON() : null,
+      endDate: endDate ? new Date(endDate).toJSON() : null,
+      isThisAnImmediateService: isImmediate,
+      isThisUserUnderS117: isS117,
+      needToAddress: needToAddress,
+      monday: daysSelected[0].checked,
+      tuesday: daysSelected[1].checked,
+      wednesday: daysSelected[2].checked,
+      thursday: daysSelected[3].checked,
+      friday: daysSelected[4].checked,
+      saturday: daysSelected[5].checked,
+      sunday: daysSelected[6].checked,
+      transportNeeded: transportNeeded,
+      escortNeeded: escortNeeded,
+      termTimeConsiderationOptionId: termTimeConsideration,
+      dayCarePackageOpportunities: dayCarePackageOpportunities,
+      creatorId: "ffd65af6-8cec-420f-f71d-08d900ea14f0",
+      statusId: "380a0e08-eb8a-473f-aaa0-08d900ea3333"
+    };
+    console.log(dayCarePackageToCreate);
+
+    createDayCarePackage(dayCarePackageToCreate)
+      .then(() => {
+        alert("Package saved.");
+        history.push(`${CARE_PACKAGE}`);
+      })
+      .catch(error => {
+        alert(`Create package failed. ${error.message}`)
+        setErrors([...errors, `Create package failed. ${error.message}`]);
+      });
+  };
 
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
@@ -121,7 +212,7 @@ const DayCare = () => {
             <TextArea
               label="Need to Address"
               rows={5}
-              placeholder="Add details... NB - where half days are needed please specify"
+              placeholder="Add details... NB - where half days are needed please specify" onChange={handleNeedToUpdateChange}
             />
           </div>
           <div className="column columns day-care-day-cbxs">
@@ -173,8 +264,20 @@ const DayCare = () => {
             entries={opportunityEntries}
             lengthOptions={opportunitiesLengthOptions}
             timesPerMonthOptions={opportunityTimesPerMonthOptions}
+            setOpportunityEntries={setOpportunityEntries}
+            onOpportunityUpdate={handleOpportunityChange}
             addEntry={onAddOpportunityEntry}
           />
+        </div>
+        <div className="mt-4 mb-4">
+          <TitleHeader>Package Details</TitleHeader>
+          <DayCareSummary></DayCareSummary>
+          {/*<SummaryDataList summaryData={homeCareSummaryData} />*/}
+        </div>
+        <div className="level mt-4">
+          <div className="level-item level-right">
+            <Button onClick={savePackageClick}>Confirm Package</Button>
+          </div>
         </div>
       </div>
     </Layout>
