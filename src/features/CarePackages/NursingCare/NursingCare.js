@@ -9,6 +9,9 @@ import AdditionalNeeds, {
 } from "../components/AdditionalNeedsEntries";
 import CareTitle from "../components/CareTitle";
 import "./assets/nursingCare.scss";
+import TitleHeader from '../../components/TitleHeader';
+import NursingCareSummary from './components/NursingCareSummary';
+import { Button } from '../../components/Button';
 
 // TODO remove
 const careHomeTypes = [
@@ -73,6 +76,17 @@ const NursingCare = () => {
           entries={additionalNeedsEntries}
           setAdditionalNeedsState={setAdditionalNeedsEntries}
         />
+      </div>
+
+      <div className="mt-4 mb-4">
+        <TitleHeader>Package Details</TitleHeader>
+        <NursingCareSummary/>
+      </div>
+
+      <div className="level mt-4">
+        <div className="level-item level-right">
+          <Button>Confirm Package</Button>
+        </div>
       </div>
     </Layout>
   );
