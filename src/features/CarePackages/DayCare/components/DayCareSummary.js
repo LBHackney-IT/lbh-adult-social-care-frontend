@@ -8,13 +8,11 @@ const DayCareSummary = ({
                           daysSelected = [],
                           deleteOpportunity
                         }) => {
-  console.log(daysSelected);
   const handleOpportunityDelete = (opportunity) => {
     deleteOpportunity(opportunity.id);
   }
 
   const dayActiveClass = (index) => {
-    console.log(daysSelected[index].checked)
     if (daysSelected.length === 0) return 'text-faded';
     return daysSelected[index].checked === true ? 'text-black' : 'text-faded';
   }

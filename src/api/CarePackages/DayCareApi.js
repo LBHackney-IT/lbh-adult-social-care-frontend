@@ -1,54 +1,65 @@
 import { BASE_URL } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
+import axios from 'axios';
 
 const DAY_CARE_URL = `${BASE_URL}/v1/day-care-packages`;
 
 const getTermTimeConsiderationOptions = () => {
-  return fetch(`${DAY_CARE_URL}/term-time-considerations`)
+  return axios.get(`${DAY_CARE_URL}/term-time-considerations`)
     .then(handleResponse)
     .catch(handleError);
 }
 
 const getOpportunitiesLengthOptions = () => {
-  return fetch(`${DAY_CARE_URL}/opportunity-length-options`)
+  return axios.get(`${DAY_CARE_URL}/opportunity-length-options`)
     .then(handleResponse)
     .catch(handleError);
 }
 
 const getOpportunityTimesPerMonthOptions = () => {
-  return fetch(`${DAY_CARE_URL}/opportunity-times-per-month-options`)
+  return axios.get(`${DAY_CARE_URL}/opportunity-times-per-month-options`)
     .then(handleResponse)
     .catch(handleError);
 }
 
 const createDayCarePackage = (dayCarePackageForCreation) => {
-  return fetch(`${DAY_CARE_URL}`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(dayCarePackageForCreation)
-  })
+  const options = {
+    url: `${DAY_CARE_URL}`,
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: dayCarePackageForCreation
+  };
+  return axios(options)
     .then(handleResponse)
     .catch(handleError);
 }
 
 const updateDayCarePackage = (dayCarePackageId, dayCarePackageForUpdate) => {
-  return fetch(`${DAY_CARE_URL}/${dayCarePackageId}`, {
-    method: "PUT",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(dayCarePackageForUpdate)
-  })
+  const options = {
+    url: `${DAY_CARE_URL}/${dayCarePackageId}`,
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: dayCarePackageForUpdate
+  };
+  return axios(options)
     .then(handleResponse)
     .catch(handleError);
 }
 
 const getDayCarePackageList = () => {
-  return fetch(`${DAY_CARE_URL}`)
+  return axios.get(`${DAY_CARE_URL}`)
     .then(handleResponse)
     .catch(handleError);
 }
 
 const getSingleDayCarePackage = (dayCarePackageId) => {
-  return fetch(`${DAY_CARE_URL}/${dayCarePackageId}`)
+  return axios.get(`${DAY_CARE_URL}/${dayCarePackageId}`)
     .then(handleResponse)
     .catch(handleError);
 }

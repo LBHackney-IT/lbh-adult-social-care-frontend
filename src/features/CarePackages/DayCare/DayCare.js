@@ -53,9 +53,15 @@ const DayCare = ({history}) => {
   );
 
   useEffect(() => {
-    retrieveTermTimeConsiderationOptions();
-    retrieveOpportunitiesLengthOptions();
-    retrieveOpportunityTimesPerMonthOptions();
+    if (termTimeConsiderationOptions.length === 0){
+      retrieveTermTimeConsiderationOptions();
+    }
+    if (opportunitiesLengthOptions.length === 0 || opportunitiesLengthOptions.length === 1){
+      retrieveOpportunitiesLengthOptions();
+    }
+    if (opportunityTimesPerMonthOptions.length === 0 || opportunityTimesPerMonthOptions.length === 1){
+      retrieveOpportunityTimesPerMonthOptions();
+    }
   }, []);
 
 
@@ -181,7 +187,6 @@ const DayCare = ({history}) => {
       dayCarePackageOpportunities: dayCarePackageOpportunities,
       creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8"
     };
-    console.log(dayCarePackageToCreate);
 
     createDayCarePackage(dayCarePackageToCreate)
       .then(() => {
