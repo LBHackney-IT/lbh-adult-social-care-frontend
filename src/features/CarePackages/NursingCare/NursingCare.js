@@ -26,9 +26,20 @@ const additionalNeedsCostOptions = [
 ];
 
 const NursingCare = () => {
+
+  const isTrueParse = (myValue) => (myValue === 'true');
+  const checkFixedPeriod = (myValue) => (myValue === '1');
+
   // Parameters
   const params = useParams();
-  //const { startDate, endDate, isImmediate, isS117, isFixedPeriod } = params;
+  let { startDate, endDate, isImmediate, isS117, isFixedPeriod } = params;
+  isImmediate = isTrueParse(isImmediate) || false;
+  isS117 = isTrueParse(isS117) || false;
+  isFixedPeriod = checkFixedPeriod(isFixedPeriod) || false;
+  startDate = startDate ?? null;
+  endDate = endDate ?? null;
+
+  console.log(startDate, endDate, isImmediate, isS117, isFixedPeriod)
 
   // State
   const [selectedNursingHomeType, setSelectedNursingHomeType] = useState(1);

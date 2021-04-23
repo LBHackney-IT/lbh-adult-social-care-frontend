@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NURSING_CARE } from "../../../routes/RouteConstants";
 import DatePick from "../../components/DatePick";
 import RadioButton, { yesNoValues } from "../../components/RadioButton";
@@ -6,6 +6,8 @@ import CarePackageSetup from "../components/CarePackageSetup";
 import CareSelectDropdown from "../components/CareSelectDropdown";
 import { getFixedPeriodOptions } from '../../../api/Utils/CommonOptions';
 import { useLocation } from 'react-router-dom';
+import { getOpportunitiesLengthOptions } from '../../../api/CarePackages/DayCareApi';
+import { getNursingCareTypeOfStayOptions } from '../../../api/CarePackages/NursingCareApi';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -23,6 +25,9 @@ const NursingCareSetup = ({
   // let query = useQuery();
   // let name = query.get("name");
 
+  const [nursingCareTypeOfStayOptions, setNursingCareTypeOfStayOptions] = useState([]);
+  const [errors, setErrors] = useState([]);
+
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [isRespiteCare, setIsRespiteCare] = useState(undefined);
@@ -30,17 +35,40 @@ const NursingCareSetup = ({
   const [isImmediateOrReEnablement, setIsImmediateOrReEnablement] = useState(
     undefined
   );
-  const [expectedOver52Weeks, setExpectedOver52Weeks] = useState(undefined);
+  const [typeOfStayId, setTypeOfStayId] = useState(undefined);
   const [isS117, setIsS117] = useState(undefined);
 
   const [isFixedPeriod, setIsFixedPeriod] = useState(true);
 
+  useEffect(() => {
+    if (nursingCareTypeOfStayOptions.length === 0){
+      retrieveNursingCareTypeOfStayOptions();
+    }
+  })
+
+
+  const retrieveNursingCareTypeOfStayOptions = () => {
+    getNursingCareTypeOfStayOptions().then(res => {
+      let options = res.map(option => ({
+        text: `${option.optionName} (${option.optionPeriod})`,
+        value: option.typeOfStayOptionId
+      }))
+      setNursingCareTypeOfStayOptions(options);
+    })
+      .catch(error => {
+        setErrors([...errors, `Retrieve nursing care type of stay options failed. ${error.message}`]);
+      });
+  };
+
   // Handle build click
   const onBuildClick = () => {
     // Get the parameters for the residential care package route
+    /*path={
+        `${RouteConstants.NURSING_CARE}/:isFixedPeriod/:startDate/:typeOfStayId/` +
+      `:hasRespiteCare/:hasDischargePackage/:isThisAnImmediateService/:isThisUserUnderS117/:endDate`*/
     history.push(
-      `${NURSING_CARE}/${isRespiteCare}/${isDischargePackage}/` +
-      `${isImmediateOrReEnablement}/${expectedOver52Weeks}/${isS117}/${startDate}/${endDate}`
+      `${NURSING_CARE}/${isFixedPeriod}/${startDate}/${startDate}/` +
+      `${isRespiteCare}/${isDischargePackage}/${isImmediateOrReEnablement}/${isS117}/${endDate}`
     );
   };
 
@@ -124,10 +152,10 @@ const NursingCareSetup = ({
       </div>
       <div className="mt-2">
         <RadioButton
-          label="Expected stay over 52 weeks?"
-          options={yesNoValues}
-          onChange={setExpectedOver52Weeks}
-          selectedValue={expectedOver52Weeks}
+          label="What type of stay is this?"
+          options={nursingCareTypeOfStayOptions}
+          onChange={setTypeOfStayId}
+          selectedValue={typeOfStayId}
         />
       </div>
       <div className="mt-2">

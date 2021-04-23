@@ -40,8 +40,8 @@ const App = () => {
         <PrivateRoute
           exact
           path={
-            `${RouteConstants.NURSING_CARE}/:isRespiteCare/:isDischargePackage/` +
-            `:isImmediateOrReEnablement/:expectedOver52Weeks/:isS117/:startDate/:endDate`
+            `${RouteConstants.NURSING_CARE}/:isFixedPeriod/:startDate/:typeOfStayId/` +
+            `:hasRespiteCare/:hasDischargePackage/:isThisAnImmediateService/:isThisUserUnderS117/:endDate`
           }
           component={NursingCare}
         />
