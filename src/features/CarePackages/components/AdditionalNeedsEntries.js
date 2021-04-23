@@ -11,7 +11,8 @@ const AdditionalNeedEntry = ({
   removeEntry = () => {},
 }) => {
   const onRadioBtnChange = (value) => {
-    onEdit({ ...entry, selectedCost: value });
+    const selectedCostText = costOptions.find(x => x.value === value).text;
+    onEdit({ ...entry, selectedCost: value, selectedCostText });
   };
 
   const onTextAreaChange = (value) => {
@@ -64,6 +65,7 @@ const AdditionalNeeds = ({
       {
         id: entries.length + 1,
         selectedCost: undefined,
+        selectedCostText: undefined,
         needToAddress: undefined,
       },
     ]);
@@ -110,6 +112,7 @@ const getInitialAdditionalNeedsArray = () => {
     {
       id: 1,
       selectedCost: undefined,
+      selectedCostText: undefined,
       needToAddress: undefined,
     },
   ];
