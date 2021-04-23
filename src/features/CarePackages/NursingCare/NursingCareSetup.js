@@ -44,7 +44,7 @@ const NursingCareSetup = ({
     if (nursingCareTypeOfStayOptions.length === 0){
       retrieveNursingCareTypeOfStayOptions();
     }
-  })
+  }, [])
 
 
   const retrieveNursingCareTypeOfStayOptions = () => {
@@ -63,11 +63,8 @@ const NursingCareSetup = ({
   // Handle build click
   const onBuildClick = () => {
     // Get the parameters for the residential care package route
-    /*path={
-        `${RouteConstants.NURSING_CARE}/:isFixedPeriod/:startDate/:typeOfStayId/` +
-      `:hasRespiteCare/:hasDischargePackage/:isThisAnImmediateService/:isThisUserUnderS117/:endDate`*/
     history.push(
-      `${NURSING_CARE}/${isFixedPeriod}/${startDate}/${startDate}/` +
+      `${NURSING_CARE}/${isFixedPeriod}/${startDate}/${typeOfStayId}/` +
       `${isRespiteCare}/${isDischargePackage}/${isImmediateOrReEnablement}/${isS117}/${endDate}`
     );
   };

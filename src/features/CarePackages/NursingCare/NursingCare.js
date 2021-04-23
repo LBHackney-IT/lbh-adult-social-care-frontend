@@ -1,23 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ClientSummary from "../../components/ClientSummary";
 import Dropdown from "../../components/Dropdown";
 import TextArea from "../../components/TextArea";
 import Layout from "../../Layout/Layout";
-import AdditionalNeeds, {
-  getInitialAdditionalNeedsArray,
-} from "../components/AdditionalNeedsEntries";
+import AdditionalNeeds, { getInitialAdditionalNeedsArray, } from "../components/AdditionalNeedsEntries";
 import CareTitle from "../components/CareTitle";
 import "./assets/nursingCare.scss";
 import TitleHeader from '../../components/TitleHeader';
 import NursingCareSummary from './components/NursingCareSummary';
 import { Button } from '../../components/Button';
-
-// TODO remove
-const careHomeTypes = [
-  { text: "Nursing Home", value: 1 },
-  { text: "Assisted Home", value: 2 },
-];
+import { getTypeOfNursingHomeOptions } from '../../../api/CarePackages/NursingCareApi';
 
 // TODO remove
 const additionalNeedsCostOptions = [
@@ -32,20 +25,45 @@ const NursingCare = () => {
 
   // Parameters
   const params = useParams();
-  let { startDate, endDate, isImmediate, isS117, isFixedPeriod } = params;
-  isImmediate = isTrueParse(isImmediate) || false;
-  isS117 = isTrueParse(isS117) || false;
+  let { startDate, endDate, isThisAnImmediateService, isThisUserUnderS117, isFixedPeriod, typeOfStayId, hasRespiteCare, hasDischargePackage } = params;
+  isThisAnImmediateService = isTrueParse(isThisAnImmediateService) || false;
+  isThisUserUnderS117 = isTrueParse(isThisUserUnderS117) || false;
   isFixedPeriod = checkFixedPeriod(isFixedPeriod) || false;
   startDate = startDate ?? null;
   endDate = endDate ?? null;
+  typeOfStayId = parseInt(typeOfStayId) ?? null;
+  hasRespiteCare = isTrueParse(hasRespiteCare) || false;
+  hasDischargePackage = isTrueParse(hasDischargePackage) || false;
 
-  console.log(startDate, endDate, isImmediate, isS117, isFixedPeriod)
+  console.log(startDate, endDate, isThisAnImmediateService, isThisUserUnderS117, isFixedPeriod, typeOfStayId, hasRespiteCare, hasDischargePackage);
 
   // State
+  const [careHomeTypes, setCareHomeTypes] = useState([]);
+  const [errors, setErrors] = useState([]);
+
   const [selectedNursingHomeType, setSelectedNursingHomeType] = useState(1);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(
     getInitialAdditionalNeedsArray()
   );
+
+  const retrieveTypeOfNursingHomeOptions = () => {
+    getTypeOfNursingHomeOptions().then(res => {
+      let options = res.map(option => ({
+        text: option.typeOfCareHomeName,
+        value: option.typeOfCareHomeId
+      }))
+      setCareHomeTypes(options);
+    })
+      .catch(error => {
+        setErrors([...errors, `Retrieve nursing care home type options failed. ${error.message}`]);
+      });
+  };
+
+  useEffect(() => {
+    if(careHomeTypes.length === 0 || careHomeTypes.length === 1) {
+      retrieveTypeOfNursingHomeOptions();
+    }
+  }, [])
 
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
