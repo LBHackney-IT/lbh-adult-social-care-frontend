@@ -10,12 +10,12 @@ import "./assets/nursingCare.scss";
 import TitleHeader from '../../components/TitleHeader';
 import NursingCareSummary from './components/NursingCareSummary';
 import { Button } from '../../components/Button';
-import { getTypeOfNursingHomeOptions } from '../../../api/CarePackages/NursingCareApi';
+import { createNursingCarePackage, getTypeOfNursingHomeOptions } from '../../../api/CarePackages/NursingCareApi';
+import { CARE_PACKAGE } from '../../../routes/RouteConstants';
 
-const NursingCare = () => {
+const NursingCare = ({history}) => {
 
   const isTrueParse = (myValue) => (myValue === 'true');
-  const checkFixedPeriod = (myValue) => (myValue === '1');
   const notNullString = (myValue) => (myValue !== 'null' && myValue !== 'undefined');
 
   // TODO remove
@@ -29,14 +29,12 @@ const NursingCare = () => {
   let { startDate, endDate, isThisAnImmediateService, isThisUserUnderS117, isFixedPeriod, typeOfStayId, hasRespiteCare, hasDischargePackage } = params;
   isThisAnImmediateService = isTrueParse(isThisAnImmediateService) || false;
   isThisUserUnderS117 = isTrueParse(isThisUserUnderS117) || false;
-  isFixedPeriod = checkFixedPeriod(isFixedPeriod) || false;
+  isFixedPeriod = isTrueParse(isFixedPeriod) || false;
   startDate = startDate ?? null;
   endDate = endDate && notNullString(endDate) ? endDate : undefined;
   typeOfStayId = parseInt(typeOfStayId) ?? null;
   hasRespiteCare = isTrueParse(hasRespiteCare) || false;
   hasDischargePackage = isTrueParse(hasDischargePackage) || false;
-
-  // console.log(startDate, endDate, isThisAnImmediateService, isThisUserUnderS117, isFixedPeriod, typeOfStayId, hasRespiteCare, hasDischargePackage);
 
   // State
   const [careHomeTypes, setCareHomeTypes] = useState([]);
@@ -67,6 +65,51 @@ const NursingCare = () => {
     }
   }, [])
 
+  const formIsValid = () => {
+    const errors = [];
+
+    setErrors(errors);
+    // Form is valid if the errors array has no items
+    return errors.length === 0;
+  }
+
+  const handleSavePackage = (event) => {
+    event.preventDefault();
+    if (!formIsValid()) return;
+
+    const nursingCareAdditionalNeeds = additionalNeedsEntries.map(item => ({
+      isWeeklyCost: item.selectedCost === 1,
+      isOneOffCost: item.selectedCost === 2,
+      needToAddress: item.needToAddress,
+      creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8"
+    }))
+
+    const nursingCarePackageToCreate = {
+      isFixedPeriod: isFixedPeriod,
+      clientId: "aee45700-af9b-4ab5-bb43-535adbdcfb80",
+      startDate: startDate ? new Date(startDate).toJSON() : null,
+      endDate: endDate ? new Date(endDate).toJSON() : null,
+      hasRespiteCare: hasRespiteCare,
+      hasDischargePackage: hasDischargePackage,
+      isThisAnImmediateService: isThisAnImmediateService,
+      isThisUserUnderS117: isThisUserUnderS117,
+      typeOfStayId: typeOfStayId,
+      needToAddress: needToAddress,
+      typeOfNursingCareHomeId: selectedNursingHomeType,
+      creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
+      nursingCareAdditionalNeeds
+    }
+
+    createNursingCarePackage(nursingCarePackageToCreate)
+      .then(() => {
+        alert("Package saved.");
+        history.push(`${CARE_PACKAGE}`);
+      })
+      .catch(error => {
+        alert(`Create package failed. ${error.message}`)
+        setErrors([...errors, `Create package failed. ${error.message}`]);
+      });
+  };
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
       <ClientSummary
@@ -122,7 +165,7 @@ const NursingCare = () => {
 
       <div className="level mt-4">
         <div className="level-item level-right">
-          <Button>Confirm Package</Button>
+          <Button onClick={handleSavePackage}>Confirm Package</Button>
         </div>
       </div>
     </Layout>

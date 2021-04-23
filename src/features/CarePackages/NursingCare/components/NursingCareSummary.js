@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button } from '../../../components/Button';
-
-// selectedCost
 
 const NursingCareSummary = ({
                               startDate,
