@@ -14,6 +14,14 @@ const Dropdown = ({
   buttonStyle = {},
   buttonClassName = "",
 }) => {
+  if(options.length === 0 || !options.some(option => option.value === null)){
+    options.unshift({ text: "Select", value: null });
+  }
+
+  if(!options.some(option => option.value === selectedValue)){
+    selectedValue = null;
+  }
+
   const initialSelectedOption =
     selectedValue !== undefined
       ? options.find((item) => item.value === selectedValue)

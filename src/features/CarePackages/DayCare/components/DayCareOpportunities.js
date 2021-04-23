@@ -2,12 +2,38 @@ import Dropdown from "../../../components/Dropdown";
 import SectionHeading from "../../../components/SectionHeading";
 import TextArea from "../../../components/TextArea";
 import { Button } from "../../../components/Button";
+import { useEffect, useState } from 'react';
 
 const DayCareOpportunityEntry = ({
   lengthOptions,
   timesPerMonthOptions,
+  handleOpportunityChange,
   entry,
 }) => {
+  const [opportunityItem, setOpportunityItem] = useState({...entry});
+
+  useEffect(() => {
+    updateParent();
+  }, [opportunityItem])
+
+  const handleHowLongChange = (option) => {
+    setOpportunityItem({...opportunityItem, howLongValue: option});
+  }
+
+  const handleTimesPerMonthChange = (option) => {
+    setOpportunityItem({...opportunityItem, timesPerMonthValue: option})
+  }
+
+  const handleNeedToAddressChange = (val) => {
+    setOpportunityItem({...opportunityItem, needToAddress: val})
+  };
+
+  const updateParent = () => {
+    setTimeout(handleOpportunityChange(opportunityItem), 1000);
+  }
+
+
+
   return (
     <div className="columns day-care-opportunity mt-3">
       <div className="column is-3 opportunity-dropdown-options">
@@ -16,7 +42,7 @@ const DayCareOpportunityEntry = ({
             label="How long"
             options={lengthOptions}
             selectedValue={entry.howLongValue}
-            onOptionSelect={(option) => alert("Option change")}
+            onOptionSelect={(option) => handleHowLongChange(option)}
             buttonStyle={{ width: "100%" }}
           />
         </div>
@@ -24,14 +50,14 @@ const DayCareOpportunityEntry = ({
           <Dropdown
             label="How many times per month?"
             options={timesPerMonthOptions}
-            selectedValue={entry.perMonthValue}
-            onOptionSelect={(option) => alert("Option change")}
+            selectedValue={entry.timesPerMonthValue}
+            onOptionSelect={(option) => handleTimesPerMonthChange(option)}
             buttonStyle={{ width: "100%" }}
           />
         </div>
       </div>
       <div className="column">
-        <TextArea label="Need to Address" rows={5} placeholder="Add details...">
+        <TextArea label="Need to Address" rows={5} placeholder="Add details..." onChange={handleNeedToAddressChange}>
           {entry.needToAddress}
         </TextArea>
       </div>
@@ -43,6 +69,7 @@ const DayCareOpportunityEntry = ({
 const DayCareOpportunities = ({
   lengthOptions,
   timesPerMonthOptions,
+  onOpportunityUpdate,
   entries,
   addEntry = () => {},
 }) => {
@@ -56,6 +83,7 @@ const DayCareOpportunities = ({
               key={entryItem.id}
               lengthOptions={lengthOptions}
               timesPerMonthOptions={timesPerMonthOptions}
+              handleOpportunityChange={onOpportunityUpdate}
               entry={entryItem}
             />
           );
