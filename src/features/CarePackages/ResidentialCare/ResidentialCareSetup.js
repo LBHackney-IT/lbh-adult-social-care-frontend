@@ -1,9 +1,10 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RESIDENTIAL_CARE } from "../../../routes/RouteConstants";
 import DatePick from "../../components/DatePick";
 import RadioButton, { yesNoValues } from "../../components/RadioButton";
 import CarePackageSetup from "../components/CarePackageSetup";
 import CareSelectDropdown from "../components/CareSelectDropdown";
+import { getResidentialCareTypeOfStayOptions } from "../../../api/CarePackages/ResidentialCareApi";
 
 const ResidentialCareSetup = ({
   history,
@@ -11,28 +12,44 @@ const ResidentialCareSetup = ({
   selectedCareType,
   setSelectedCareType,
 }) => {
+  const [
+    residentialCareTypeOfStayOptions,
+    setResidentialCareTypeOfStayOptions,
+  ] = useState([]);
+
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [isRespiteCare, setIsRespiteCare] = useState(undefined);
-  const [isDischargePackage, setIsDischargePackage] = useState(undefined);
+  const [hasRespiteCare, setHasRespiteCare] = useState(undefined);
+  const [hasDischargePackage, setHasDischargePackage] = useState(undefined);
   const [isImmediateOrReEnablement, setIsImmediateOrReEnablement] = useState(
     undefined
   );
-  const [expectedOver52Weeks, setExpectedOver52Weeks] = useState(undefined);
+  const [typeOfStayId, setTypeOfStayId] = useState(undefined);
   const [isS117, setIsS117] = useState(undefined);
+
+  const retrieveResidentialCareTypeOfStayOptions = () => {
+    const options = getResidentialCareTypeOfStayOptions();
+    setResidentialCareTypeOfStayOptions(options);
+  };
+
+  useEffect(() => {
+    if (residentialCareTypeOfStayOptions.length === 0) {
+      retrieveResidentialCareTypeOfStayOptions();
+    }
+  }, []);
 
   // Handle build click
   const onBuildClick = () => {
     // Get the parameters for the residential care package route
     history.push(
-      `${RESIDENTIAL_CARE}/${isRespiteCare}/${isDischargePackage}/` +
-        `${isImmediateOrReEnablement}/${expectedOver52Weeks}/${isS117}/${startDate}/${endDate}`
+      `${RESIDENTIAL_CARE}/${hasRespiteCare}/${hasDischargePackage}/` +
+        `${isImmediateOrReEnablement}/${typeOfStayId}/${isS117}/${startDate}/${endDate}`
     );
   };
 
   return (
     <CarePackageSetup onBuildClick={onBuildClick}>
-      <div className="level"></div>
+      <div className="level" />
       <div className="columns">
         <div className="column is-5">
           <CareSelectDropdown
@@ -64,16 +81,16 @@ const ResidentialCareSetup = ({
         <RadioButton
           label="Respite care?"
           options={yesNoValues}
-          onChange={setIsRespiteCare}
-          selectedValue={isRespiteCare}
+          onChange={setHasRespiteCare}
+          selectedValue={hasRespiteCare}
         />
       </div>
       <div className="mt-2">
         <RadioButton
           label="Discharge package?"
           options={yesNoValues}
-          onChange={setIsDischargePackage}
-          selectedValue={isDischargePackage}
+          onChange={setHasDischargePackage}
+          selectedValue={hasDischargePackage}
         />
       </div>
       <div className="mt-2">
@@ -86,10 +103,10 @@ const ResidentialCareSetup = ({
       </div>
       <div className="mt-2">
         <RadioButton
-          label="Expected stay over 52 weeks?"
-          options={yesNoValues}
-          onChange={setExpectedOver52Weeks}
-          selectedValue={expectedOver52Weeks}
+          label="What type of stay is this?"
+          options={residentialCareTypeOfStayOptions}
+          onChange={setTypeOfStayId}
+          selectedValue={typeOfStayId}
         />
       </div>
       <div className="mt-2">

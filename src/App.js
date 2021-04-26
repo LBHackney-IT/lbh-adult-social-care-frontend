@@ -8,6 +8,7 @@ import ClientHistory from "./features/ClientHistory/ClientHistory";
 import Login from "./features/User/Login";
 import PrivateRoute from "./routes/PrivateRoute";
 import * as RouteConstants from "./routes/RouteConstants";
+import React from "react";
 
 const App = () => {
   return (
@@ -32,8 +33,8 @@ const App = () => {
         <PrivateRoute
           exact
           path={
-            `${RouteConstants.RESIDENTIAL_CARE}/:isRespiteCare/:isDischargePackage/` +
-            `:isImmediateOrReEnablement/:expectedOver52Weeks/:isS117/:startDate/:endDate`
+            `${RouteConstants.RESIDENTIAL_CARE}/:hasRespiteCare/:hasDischargePackage/` +
+            `:isImmediateOrReEnablement/:typeOfStayId/:isS117/:startDate/:endDate`
           }
           component={ResidentialCare}
         />

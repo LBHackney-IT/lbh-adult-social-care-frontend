@@ -6,20 +6,41 @@ import CareTitle from "../components/CareTitle";
 import "./assets/residentialCare.scss";
 import TextArea from "../../components/TextArea";
 import Dropdown from "../../components/Dropdown";
-import AdditionalNeeds, { getInitialAdditionalNeedsArray, } from "../components/AdditionalNeedsEntries";
+import AdditionalNeeds, {
+  getInitialAdditionalNeedsArray,
+} from "../components/AdditionalNeedsEntries";
 import {
   getResidentialCareAdditionalNeedsCostOptions,
-  getTypeOfResidentialCareHomeOptions
-} from '../../../api/CarePackages/ResidentialCareApi';
+  getTypeOfResidentialCareHomeOptions,
+} from "../../../api/CarePackages/ResidentialCareApi";
 
 const ResidentialCare = () => {
   // Parameters
   const params = useParams();
-  //const { startDate, endDate, isImmediate, isS117, isFixedPeriod } = params;
+  const {
+    hasRespiteCare,
+    hasDischargePackage,
+    isImmediateOrReEnablement,
+    typeOfStayId,
+    isS117,
+    startDate,
+    endDate,
+  } = params;
+  console.log(
+    hasRespiteCare,
+    hasDischargePackage,
+    isImmediateOrReEnablement,
+    typeOfStayId,
+    isS117,
+    startDate,
+    endDate
+  );
 
   // State
   const [careHomeTypes, setCareHomeTypes] = useState([]);
-  const [additionalNeedsCostOptions, setAdditionalNeedsCostOptions] = useState([]);
+  const [additionalNeedsCostOptions, setAdditionalNeedsCostOptions] = useState(
+    []
+  );
   const [errors, setErrors] = useState([]);
 
   const [selectedCareHomeType, setSelectedCareHomeType] = useState(1);
@@ -38,13 +59,16 @@ const ResidentialCare = () => {
   };
 
   useEffect(() => {
-    if(careHomeTypes.length === 0 || careHomeTypes.length === 1) {
+    if (careHomeTypes.length === 0 || careHomeTypes.length === 1) {
       retrieveTypeOfResidentialCareHomeOptions();
     }
-    if(additionalNeedsCostOptions.length === 0 || additionalNeedsCostOptions.length === 1) {
+    if (
+      additionalNeedsCostOptions.length === 0 ||
+      additionalNeedsCostOptions.length === 1
+    ) {
       retrieveResidentialCareAdditionalNeedsCostOptions();
     }
-  }, [])
+  }, []);
 
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
