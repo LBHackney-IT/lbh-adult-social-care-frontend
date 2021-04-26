@@ -24,5 +24,8 @@ yarn-error.log*
 /.vs/VSWorkspaceState.json
 /.vs/slnx.sqlite-journal
 /.vs/lbh-adult-social-care-frontend/v16/.suo
+/.vs/slnx.sqllite
+/.vs/suo
+/.vs
 
-.idea
+/.idea

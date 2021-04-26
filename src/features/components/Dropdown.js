@@ -9,8 +9,19 @@ const Dropdown = ({
   options,
   selectedValue,
   onOptionSelect,
+  children,
+  isUp = false,
   buttonStyle = {},
+  buttonClassName = "",
 }) => {
+  if(options.length === 0 || !options.some(option => option.value === null)){
+    options.unshift({ text: "Select", value: null });
+  }
+
+  if(!options.some(option => option.value === selectedValue)){
+    selectedValue = null;
+  }
+
   const initialSelectedOption =
     selectedValue !== undefined
       ? options.find((item) => item.value === selectedValue)
@@ -28,28 +39,37 @@ const Dropdown = ({
     event.stopPropagation();
     setSelectedOption(option);
     onOptionSelect(option.value);
+    setIsActive(false);
   };
 
   return (
     <BaseField label={label}>
       <div
         data-selected-value={selectedOption.value}
-        className={"dropdown" + (isActive ? " is-active" : "")}
+        className={
+          "dropdown" + (isActive ? " is-active" : "") + (isUp ? " is-up" : "")
+        }
       >
         <div
           className="dropdown-trigger"
           onClick={(event) => onTriggerClick(event)}
         >
           <button
-            className="button"
+            className={"button " + buttonClassName}
             aria-haspopup="true"
             aria-controls="dropdown-menu"
             style={buttonStyle}
           >
-            <span>{selectedOption.text}</span>
-            <span className="icon">
-              <CaretDownIcon />
-            </span>
+            {children !== undefined ? (
+              children
+            ) : (
+              <>
+                <span>{selectedOption.text}</span>
+                <span className="icon">
+                  <CaretDownIcon />
+                </span>
+              </>
+            )}
           </button>
         </div>
         <OutsideTrigger

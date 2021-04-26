@@ -13,7 +13,7 @@ const Checkbox = ({ children, checked = false, onChange = () => {} }) => {
   return (
     <label className="checkbox" onClick={onCheckedChange}>
       <div className="checkbox-check">{checked ? <CheckIcon /> : null}</div>
-      {children}
+      {children !== undefined ? children : null}
     </label>
   );
 };

@@ -19,7 +19,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px solid $lbh-black-1;
+            border: 2px solid $lbh-black1;
 
             .radio-item-selected {
                 display: none;
@@ -43,6 +43,14 @@
 
         &.is-first {
             margin-right: 16px;
+        }
+    }
+
+    &.not-inline {
+        flex-wrap: wrap;
+
+        label.radio-item {
+            width: 100%;
         }
     }
 }
