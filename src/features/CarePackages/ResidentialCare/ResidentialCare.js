@@ -1,26 +1,16 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ClientSummary from "../../components/ClientSummary";
 import Layout from "../../Layout/Layout";
 import CareTitle from "../components/CareTitle";
 import "./assets/residentialCare.scss";
 import TextArea from "../../components/TextArea";
 import Dropdown from "../../components/Dropdown";
-import AdditionalNeeds, {
-  getInitialAdditionalNeedsArray,
-} from "../components/AdditionalNeedsEntries";
-
-// TODO remove
-const careHomeTypes = [
-  { text: "Assisted Home", value: 1 },
-  { text: "XYZ Home", value: 2 },
-];
-
-// TODO remove
-const additionalNeedsCostOptions = [
-  { text: "Weekly", value: 1 },
-  { text: "One off", value: 2 },
-];
+import AdditionalNeeds, { getInitialAdditionalNeedsArray, } from "../components/AdditionalNeedsEntries";
+import {
+  getResidentialCareAdditionalNeedsCostOptions,
+  getTypeOfResidentialCareHomeOptions
+} from '../../../api/CarePackages/ResidentialCareApi';
 
 const ResidentialCare = () => {
   // Parameters
@@ -28,10 +18,33 @@ const ResidentialCare = () => {
   //const { startDate, endDate, isImmediate, isS117, isFixedPeriod } = params;
 
   // State
+  const [careHomeTypes, setCareHomeTypes] = useState([]);
+  const [additionalNeedsCostOptions, setAdditionalNeedsCostOptions] = useState([]);
+  const [errors, setErrors] = useState([]);
+
   const [selectedCareHomeType, setSelectedCareHomeType] = useState(1);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(
     getInitialAdditionalNeedsArray()
   );
+
+  const retrieveTypeOfResidentialCareHomeOptions = () => {
+    const types = getTypeOfResidentialCareHomeOptions();
+    setCareHomeTypes(types);
+  };
+
+  const retrieveResidentialCareAdditionalNeedsCostOptions = () => {
+    const options = getResidentialCareAdditionalNeedsCostOptions();
+    setAdditionalNeedsCostOptions(options);
+  };
+
+  useEffect(() => {
+    if(careHomeTypes.length === 0 || careHomeTypes.length === 1) {
+      retrieveTypeOfResidentialCareHomeOptions();
+    }
+    if(additionalNeedsCostOptions.length === 0 || additionalNeedsCostOptions.length === 1) {
+      retrieveResidentialCareAdditionalNeedsCostOptions();
+    }
+  }, [])
 
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
