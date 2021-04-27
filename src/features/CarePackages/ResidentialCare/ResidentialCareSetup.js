@@ -40,10 +40,14 @@ const ResidentialCareSetup = ({
 
   // Handle build click
   const onBuildClick = () => {
+    const typeOfStay = residentialCareTypeOfStayOptions.find(
+      (opt) => opt.value === typeOfStayId
+    );
+    const typeOfStayText = typeOfStay ? typeOfStay.text : null;
     // Get the parameters for the residential care package route
     history.push(
       `${RESIDENTIAL_CARE}/${hasRespiteCare}/${hasDischargePackage}/` +
-        `${isImmediateOrReEnablement}/${typeOfStayId}/${isS117}/${startDate}/${endDate}`
+        `${isImmediateOrReEnablement}/${typeOfStayId}/${isS117}/${startDate}/${endDate}?typeOfStayText=${typeOfStayText}`
     );
   };
 

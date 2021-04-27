@@ -3,6 +3,8 @@ import { Button } from "../../components/Button";
 import TextArea from "../../components/TextArea";
 import RadioButton from "../../components/RadioButton";
 import "../assets/additionalNeeds.scss";
+import React, { useEffect, useState } from "react";
+import DatePick from "../../components/DatePick";
 
 const AdditionalNeedEntry = ({
   costOptions,
@@ -10,14 +12,50 @@ const AdditionalNeedEntry = ({
   onEdit = () => {},
   removeEntry = () => {},
 }) => {
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [isFixedPeriodCost, setIsFixedPeriodCost] = useState(false);
+
   const onRadioBtnChange = (value) => {
-    const selectedCostText = costOptions.find(x => x.value === value).text;
-    onEdit({ ...entry, selectedCost: value, selectedCostText });
+    const selectedCostText = costOptions.find((x) => x.value === value).text;
+    let selectedPeriod = undefined;
+    if (selectedCostText.toLowerCase().includes("fixed")) {
+      setIsFixedPeriodCost(true);
+      selectedPeriod = {
+        startDate,
+        endDate,
+      };
+    } else {
+      setIsFixedPeriodCost(false);
+    }
+    onEdit({ ...entry, selectedCost: value, selectedCostText, selectedPeriod });
+  };
+
+  const onStartDateChange = (value) => {
+    setStartDate(value);
+  };
+
+  const onEndDateChange = (value) => {
+    setEndDate(value);
+  };
+
+  const updateDateSelection = () => {
+    const selectedPeriod = {
+      startDate,
+      endDate,
+    };
+    console.log(selectedPeriod);
+    onEdit({ ...entry, selectedPeriod });
   };
 
   const onTextAreaChange = (value) => {
     onEdit({ ...entry, needToAddress: value });
   };
+
+  useEffect(() => {
+    console.log("Values changed. Here now");
+    updateDateSelection();
+  }, [startDate, endDate]);
 
   return (
     <>
@@ -33,6 +71,26 @@ const AdditionalNeedEntry = ({
             selectedValue={entry.selectedCost}
             onChange={onRadioBtnChange}
           />
+          {isFixedPeriodCost && (
+            <div className="mb-3">
+              <div className="is-flex">
+                <span className="mr-3">
+                  <DatePick
+                    label="Start date"
+                    dateValue={startDate}
+                    setDate={onStartDateChange}
+                  />
+                </span>
+                <span>
+                  <DatePick
+                    label="End date"
+                    dateValue={endDate}
+                    setDate={onEndDateChange}
+                  />
+                </span>
+              </div>
+            </div>
+          )}
           <Button onClick={() => removeEntry(entry.id)} linkBtn={true}>
             Remove Need
           </Button>
@@ -47,7 +105,7 @@ const AdditionalNeedEntry = ({
             {entry.needToAddress}
           </TextArea>
         </div>
-        <div className="column is-2"></div>
+        <div className="column is-2" />
       </div>
     </>
   );
@@ -67,6 +125,7 @@ const AdditionalNeeds = ({
         selectedCost: undefined,
         selectedCostText: undefined,
         needToAddress: undefined,
+        selectedPeriod: undefined,
       },
     ]);
   };
@@ -113,6 +172,7 @@ const getInitialAdditionalNeedsArray = () => {
       id: 1,
       selectedCost: undefined,
       selectedCostText: undefined,
+      selectedPeriod: undefined,
       needToAddress: undefined,
     },
   ];
