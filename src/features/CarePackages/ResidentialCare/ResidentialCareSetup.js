@@ -17,6 +17,8 @@ const ResidentialCareSetup = ({
     setResidentialCareTypeOfStayOptions,
   ] = useState([]);
 
+  const [errors, setErrors] = useState([]);
+
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [hasRespiteCare, setHasRespiteCare] = useState(undefined);
@@ -28,8 +30,20 @@ const ResidentialCareSetup = ({
   const [isS117, setIsS117] = useState(undefined);
 
   const retrieveResidentialCareTypeOfStayOptions = () => {
-    const options = getResidentialCareTypeOfStayOptions();
-    setResidentialCareTypeOfStayOptions(options);
+    getResidentialCareTypeOfStayOptions()
+      .then((res) => {
+        let options = res.map((option) => ({
+          text: `${option.optionName} (${option.optionPeriod})`,
+          value: option.typeOfStayOptionId,
+        }));
+        setResidentialCareTypeOfStayOptions(options);
+      })
+      .catch((error) => {
+        setErrors([
+          ...errors,
+          `Retrieve residential care type of stay options failed. ${error.message}`,
+        ]);
+      });
   };
 
   useEffect(() => {

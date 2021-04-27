@@ -44,7 +44,6 @@ const AdditionalNeedEntry = ({
       startDate,
       endDate,
     };
-    console.log(selectedPeriod);
     onEdit({ ...entry, selectedPeriod });
   };
 
@@ -53,7 +52,6 @@ const AdditionalNeedEntry = ({
   };
 
   useEffect(() => {
-    console.log("Values changed. Here now");
     updateDateSelection();
   }, [startDate, endDate]);
 

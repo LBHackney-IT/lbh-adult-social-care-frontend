@@ -10,18 +10,20 @@ import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
 } from "../components/AdditionalNeedsEntries";
 import {
+  createResidentialCarePackage,
   getResidentialCareAdditionalNeedsCostOptions,
   getTypeOfResidentialCareHomeOptions,
 } from "../../../api/CarePackages/ResidentialCareApi";
 import TitleHeader from "../../components/TitleHeader";
 import ResidentialCareSummary from "./components/ResidentialCareSummary";
 import { Button } from "../../components/Button";
+import { CARE_PACKAGE } from "../../../routes/RouteConstants";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
-const ResidentialCare = () => {
+const ResidentialCare = ({ history }) => {
   const isTrueParse = (myValue) => myValue === "true";
   const notNullString = (myValue) =>
     myValue !== "null" && myValue !== "undefined";
@@ -48,17 +50,6 @@ const ResidentialCare = () => {
   // get query params
   let query = useQuery();
   let typeOfStayText = query.get("typeOfStayText");
-  console.log(typeOfStayText);
-
-  console.log(
-    hasRespiteCare,
-    hasDischargePackage,
-    isImmediateOrReEnablement,
-    typeOfStayId,
-    isS117,
-    startDate,
-    endDate
-  );
 
   // State
   const [careHomeTypes, setCareHomeTypes] = useState([]);
@@ -74,8 +65,20 @@ const ResidentialCare = () => {
   );
 
   const retrieveTypeOfResidentialCareHomeOptions = () => {
-    const types = getTypeOfResidentialCareHomeOptions();
-    setCareHomeTypes(types);
+    getTypeOfResidentialCareHomeOptions()
+      .then((res) => {
+        let options = res.map((option) => ({
+          text: option.typeOfCareHomeName,
+          value: option.typeOfCareHomeId,
+        }));
+        setCareHomeTypes(options);
+      })
+      .catch((error) => {
+        setErrors([
+          ...errors,
+          `Retrieve residential care home type options failed. ${error.message}`,
+        ]);
+      });
   };
 
   const retrieveResidentialCareAdditionalNeedsCostOptions = () => {
@@ -140,7 +143,15 @@ const ResidentialCare = () => {
       residentialCareAdditionalNeeds,
     };
 
-    console.log(residentialCarePackageToCreate);
+    createResidentialCarePackage(residentialCarePackageToCreate)
+      .then(() => {
+        alert("Package saved.");
+        history.push(`${CARE_PACKAGE}`);
+      })
+      .catch((error) => {
+        alert(`Create package failed. ${error.message}`);
+        setErrors([...errors, `Create package failed. ${error.message}`]);
+      });
   };
 
   return (

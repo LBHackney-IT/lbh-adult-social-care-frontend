@@ -9,12 +9,10 @@ const ResidentialCareSummary = ({
   additionalNeedsEntries = [],
   setAdditionalNeedsEntries = () => {},
 }) => {
-  console.log(additionalNeedsEntries);
   startDate = new Date(startDate).toLocaleDateString("en-GB");
   endDate = endDate && new Date(endDate).toLocaleDateString("en-GB");
 
   const renderDate = (dateString) => {
-    console.log(dateString);
     return dateString && new Date(dateString).toLocaleDateString("en-GB");
   };
 
