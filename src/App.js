@@ -9,6 +9,7 @@ import Login from "./features/User/Login";
 import PrivateRoute from "./routes/PrivateRoute";
 import * as RouteConstants from "./routes/RouteConstants";
 import React from "react";
+import HomeCareApproval from "./features/CarePackages/HomeCare/HomeCareApproval";
 
 const App = () => {
   return (
@@ -19,6 +20,11 @@ const App = () => {
           exact
           path={RouteConstants.CARE_PACKAGE}
           component={CarePackage}
+        />
+        <PrivateRoute
+          exact
+          path={RouteConstants.HOME_CARE_APPROVAL}
+          component={HomeCareApproval}
         />
         <PrivateRoute
           exact
