@@ -1,19 +1,20 @@
-import Layout from "../../Layout/Layout";
-import React from "react";
-import TextArea from "../../components/TextArea";
-import WeekCarePicker from "./components/WeekCarePicker";
 import { getServiceTypeCareTimes } from "./HomeCareServiceHelper";
 import { PERSONAL_CARE_MODE } from "./HomeCarePickerHelper";
+import Layout from "../../Layout/Layout";
+import React from "react";
 import HomeCareApprovalTitle from "./components/HomeCareApprovalTitle";
 import ApprovalClientSummary from "../../components/ApprovalClientSummary";
 import HomeCarePackageBreakdown from "./components/HomeCarePackageBreakdown";
+import HomeCarePackageElementCostings from "./components/HomeCarePackageElementCostings";
 import PackageApprovalHistorySummary from "../../components/PackageApprovalHistorySummary";
 import HomeCarePackageDetails from "./components/HomeCarePackageDetails";
+import WeekCarePicker from "./components/WeekCarePicker";
+import TextArea from "../../components/TextArea";
 
 const approvalHistoryEntries = [
   {
     eventDate: "03/12/2021",
-    eventMessage: "Package requested by Martin Workman · Social Worker ",
+    eventMessage: "Package requested by Martin Workman · Social Worker",
     eventSubMessage: null,
   },
   {
@@ -27,10 +28,22 @@ const approvalHistoryEntries = [
     eventMessage: "Package re-submitted by Martin Workman · Social Worker ",
     eventSubMessage: null,
   },
+  {
+    eventDate: "14/12/2021",
+    eventMessage:
+      "Care Package Approved for brokerage by  Amecie Steadman · Approver",
+    eventSubMessage: null,
+  },
+  {
+    eventDate: "14/12/2021",
+    eventMessage: "Care Package brokered STA by  Derek Knightman · Broker",
+    eventSubMessage: null,
+  },
 ];
 
-const HomeCareApprovePackage = ({ history }) => {
+const HomeCareApproveBrokered = () => {
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
+
   return (
     <Layout headerTitle="HOME CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
@@ -62,7 +75,7 @@ const HomeCareApprovePackage = ({ history }) => {
                     </p>
                     <p className="font-size-14px">£1,982</p>
                     <p className="font-weight-bold hackney-text-green">
-                      ESTIMATE
+                      ACTUAL
                     </p>
                   </div>
                 </div>
@@ -75,6 +88,8 @@ const HomeCareApprovePackage = ({ history }) => {
         </div>
 
         <HomeCarePackageBreakdown />
+
+        <HomeCarePackageElementCostings />
 
         <PackageApprovalHistorySummary
           approvalHistoryEntries={approvalHistoryEntries}
@@ -104,7 +119,7 @@ const HomeCareApprovePackage = ({ history }) => {
                 </div>
                 <div className="level-item  mr-2">
                   <button className="button hackney-btn-green">
-                    Approve to be brokered
+                    Approve contracting
                   </button>
                 </div>
               </div>
@@ -126,4 +141,4 @@ const HomeCareApprovePackage = ({ history }) => {
   );
 };
 
-export default HomeCareApprovePackage;
+export default HomeCareApproveBrokered;
