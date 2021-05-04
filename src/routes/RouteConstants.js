@@ -2,6 +2,7 @@
 
 const LOGIN = "/login";
 const CARE_PACKAGE = "/care-package";
+const PROPOSED_PACKAGES = "/proposed-packages";
 const HOME_CARE = `${CARE_PACKAGE}/home-care`;
 const NURSING_CARE = `${CARE_PACKAGE}/nursing-care`;
 const RESIDENTIAL_CARE = `${CARE_PACKAGE}/residential-care`;
@@ -16,4 +17,5 @@ export {
   RESIDENTIAL_CARE,
   CLIENT_HISTORY,
   CARE_PACKAGE,
+  PROPOSED_PACKAGES,
 };

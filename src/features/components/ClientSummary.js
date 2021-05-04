@@ -5,12 +5,15 @@ const ClientSummary = ({
   client,
   hackneyId,
   age,
+  packagesCount = null,
+  preferredContact = null,
+  canSpeakEnglish = null,
   dateOfBirth,
   postcode,
 }) => {
   return (
     <div className="client-summary-cont">
-      <div className="columns">
+      <div className="columns is-flex-wrap-wrap">
         <div className="column is-5 client-summary-title">{children}</div>
         <div className="column client-prop">
           <label>Client</label>
@@ -28,6 +31,23 @@ const ClientSummary = ({
           <label>Postcode</label>
           <div>{postcode}</div>
         </div>
+        {
+          (packagesCount !== null || preferredContact !== null || canSpeakEnglish !== null) &&
+          <div className='more-info is-flex is-justify-content-space-between'>
+            <p className='column is-5 package-count'>
+              <span className='font-weight-bold'>{packagesCount}</span>
+              {`${packagesCount > 1 ? 'Packages' : 'Package'} to action`}
+            </p>
+            <div className="column client-prop">
+              <label>PREFERRED CONTACT</label>
+              <div>{preferredContact}</div>
+            </div>
+            <div className="column client-prop">
+              <label>CAN SPEAK ENGLISH</label>
+              <div>{canSpeakEnglish}</div>
+            </div>
+          </div>
+        }
       </div>
       {/* TODO Green Divider */}
     </div>

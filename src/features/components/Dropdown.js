@@ -9,13 +9,14 @@ const Dropdown = ({
   options,
   selectedValue,
   onOptionSelect,
+  initialText = 'Select',
   children,
   isUp = false,
   buttonStyle = {},
   buttonClassName = "",
 }) => {
   if(options.length === 0 || !options.some(option => option.value === null)){
-    options.unshift({ text: "Select", value: null });
+    options.unshift({ text: initialText, value: null });
   }
 
   if(!options.some(option => option.value === selectedValue)){

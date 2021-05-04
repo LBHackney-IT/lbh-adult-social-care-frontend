@@ -1,12 +1,14 @@
 import { useSelector } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
-import { selectUser } from "../features/User/userSlice";
+import { selectUser } from "../reducers/userReducer";
 import { CARE_PACKAGE } from "./RouteConstants";
 
 const PrivateRoute = ({ exact = false, component: Component, ...props }) => {
   const user = useSelector(selectUser);
   // TODO fix
   const authed = true || user !== null;
+
+  console.log(props);
 
   const Render = (props) =>
     authed === true ? (

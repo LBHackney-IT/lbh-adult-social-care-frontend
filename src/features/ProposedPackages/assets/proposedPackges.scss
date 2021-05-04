@@ -1,0 +1,21 @@
+@import "./src/assets/css/variables";
+
+.container-title {
+  font-size: 24px;
+  color: $lbh-black1;
+  font-weight: 700;
+}
+
+.proposed-packages__header {
+  width: 100%;
+
+  .dropdown-menu {
+    left: initial;
+    right: 0;
+  }
+}
+
+
+.person-care {
+  border: 1px solid $lbg-gray;
+}
