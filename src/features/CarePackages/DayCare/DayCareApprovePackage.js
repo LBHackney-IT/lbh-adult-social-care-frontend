@@ -1,5 +1,5 @@
 import Layout from "../../Layout/Layout";
-import React, { useState } from "react";
+import React from "react";
 import DayCareApprovalTitle from "./components/DayCareApprovalTitle";
 import ApprovalClientSummary from "../../components/ApprovalClientSummary";
 import PackageCostBox from "./components/PackageCostBox";
