@@ -1,0 +1,32 @@
+.hackney-package-cost-light-yellow-box {
+  background: rgba(248, 224, 142, 0.1);
+  border: 1px solid #f8e08e;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.hackney-package-cost-yellow-box {
+  background: #f8e08e;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  padding: 10px;
+
+  .hackney-text-green {
+    color: #000000;
+  }
+}
+
+.hackney-package-cost-light-green-box {
+  background: rgba(0, 102, 79, 0.03);
+  border: 1px solid #00664f;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.hackney-package-cost-green-box {
+  background: rgba(0, 102, 79, 0.9);
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  color: #fafafa;
+  padding: 10px;
+}
