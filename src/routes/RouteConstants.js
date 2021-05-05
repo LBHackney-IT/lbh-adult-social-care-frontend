@@ -8,6 +8,8 @@ const HOME_CARE_APPROVE_BROKERED = `${HOME_CARE}/approve-brokered`;
 const NURSING_CARE = `${CARE_PACKAGE}/nursing-care`;
 const RESIDENTIAL_CARE = `${CARE_PACKAGE}/residential-care`;
 const DAY_CARE = `${CARE_PACKAGE}/day-care`;
+const DAY_CARE_APPROVE_PACKAGE = `${DAY_CARE}/approve-package`;
+const DAY_CARE_APPROVE_BROKERED = `${DAY_CARE}/approve-brokered`;
 const CLIENT_HISTORY = "/client-history";
 
 export {
@@ -16,6 +18,8 @@ export {
   HOME_CARE_APPROVE_PACKAGE,
   HOME_CARE_APPROVE_BROKERED,
   DAY_CARE,
+  DAY_CARE_APPROVE_PACKAGE,
+  DAY_CARE_APPROVE_BROKERED,
   NURSING_CARE,
   RESIDENTIAL_CARE,
   CLIENT_HISTORY,

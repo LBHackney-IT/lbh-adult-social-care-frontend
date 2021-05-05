@@ -11,6 +11,8 @@ import * as RouteConstants from "./routes/RouteConstants";
 import React from "react";
 import HomeCareApprovePackage from "./features/CarePackages/HomeCare/HomeCareApprovePackage";
 import HomeCareApproveBrokered from "./features/CarePackages/HomeCare/HomeCareApproveBrokered";
+import DayCareApprovePackage from "./features/CarePackages/DayCare/DayCareApprovePackage";
+import DayCareApproveBrokered from "./features/CarePackages/DayCare/DayCareApproveBrokered";
 
 const App = () => {
   return (
@@ -41,6 +43,16 @@ const App = () => {
           exact
           path={`${RouteConstants.DAY_CARE}/:isImmediate/:isS117/:isFixedPeriod/:startDate`}
           component={DayCare}
+        />
+        <PrivateRoute
+          exact
+          path={RouteConstants.DAY_CARE_APPROVE_PACKAGE}
+          component={DayCareApprovePackage}
+        />
+        <PrivateRoute
+          exact
+          path={RouteConstants.DAY_CARE_APPROVE_BROKERED}
+          component={DayCareApproveBrokered}
         />
         <PrivateRoute
           exact
