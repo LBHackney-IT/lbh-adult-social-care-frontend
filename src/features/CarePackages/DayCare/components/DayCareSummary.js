@@ -13,10 +13,10 @@ const DayCareSummary = ({
   };
 
   const dayActiveClass = (index) => {
-    if (daysSelected.length === 0) return "hackney-text-secondary";
+    if (daysSelected.length === 0) return "text-faded";
     return daysSelected[index].checked === true
       ? "hackney-text-black"
-      : "hackney-text-secondary";
+      : "text-faded";
   };
   return (
     // <div className="container is-fluid">
@@ -65,7 +65,7 @@ const DayCareSummary = ({
                       className={`${
                         transportNeeded
                           ? "hackney-text-green"
-                          : "hackney-text-secondary"
+                          : "hackney-text-faded"
                       } is-uppercase has-text-weight-bold is-size-5`}
                     >
                       Transport needed
