@@ -1,4 +1,10 @@
+import React from "react";
 import "./assets/clientSummary.scss";
+import hackney_logo from '../../assets/icons/hackney_logo.png';
+
+const sourcingCareImages = {
+  hackney: hackney_logo
+};
 
 const ClientSummary = ({
   children,
@@ -9,12 +15,13 @@ const ClientSummary = ({
   preferredContact = null,
   canSpeakEnglish = null,
   dateOfBirth,
+  sourcingCare,
   postcode,
 }) => {
   return (
     <div className="client-summary-cont">
       <div className="columns is-flex-wrap-wrap">
-        <div className="column is-5 client-summary-title">{children}</div>
+        {children && <div className="column is-5 client-summary-title">{children}</div>}
         <div className="column client-prop">
           <label>Client</label>
           <div>{client}</div>
@@ -31,6 +38,13 @@ const ClientSummary = ({
           <label>Postcode</label>
           <div>{postcode}</div>
         </div>
+        {
+          sourcingCare &&
+            <div className="column client-prop">
+              <label>WHO IS SOURCING CARE</label>
+              <img src={sourcingCareImages[sourcingCare]} alt='' />
+            </div>
+        }
         {
           (packagesCount !== null || preferredContact !== null || canSpeakEnglish !== null) &&
           <div className='more-info is-flex is-justify-content-space-between'>

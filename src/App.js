@@ -13,6 +13,7 @@ import ProposedPackages from "./features/ProposedPackages/ProposedPackages";
 
 const App = () => {
   const user = useSelector(selectUser);
+  console.log('test user {}');
 
   return (
     <>

@@ -1,5 +1,6 @@
 import React from "react";
 import BaseField from "./baseComponents/BaseField";
+import './assets/input.scss';
 
 const Input = ({
   label,
@@ -26,7 +27,6 @@ const Input = ({
         onChange={onChangeInput}
         value={`${preSign}${value}${postSign}`}
         type={type}
-
       />
     </BaseField>
   );

@@ -234,4 +234,20 @@ $escort: #f5e1e1;
             color: $lbh-black1;
         }
     }
+
+    p.day-summary__action-button,
+    span.day-summary__action-button {
+        color: $lbh-blue-highlight;
+        text-decoration: underline;
+        font-size: 12px;
+        text-decoration-color: $lbh-blue-highlight;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:first-of-type {
+            margin-right: 10px;
+        }
+    }
 }
