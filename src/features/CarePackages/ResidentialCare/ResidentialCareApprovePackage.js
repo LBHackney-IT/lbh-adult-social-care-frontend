@@ -43,7 +43,7 @@ const ResidentialCareApprovePackage = () => {
     initialNeedEntries
   );
   return (
-    <Layout headerTitle="DAY CARE APPROVAL">
+    <Layout headerTitle="RESIDENTIAL CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
         <ResidentialCareApprovalTitle />
         <ApprovalClientSummary />
