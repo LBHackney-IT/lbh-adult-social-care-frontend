@@ -1,14 +1,29 @@
 import React from 'react';
 import { Button } from '../../../components/Button';
 
-const NursingCareSummary = ({}) => {
+const NursingCareSummary = ({
+                              startDate,
+                              endDate,
+                              needToAddress = "",
+                              additionalNeedsEntries = [],
+                              setAdditionalNeedsEntries = () => {}
+                            }) => {
+  startDate = new Date(startDate).toLocaleDateString('en-GB');
+  endDate = endDate && new Date(endDate).toLocaleDateString('en-GB');
+
+  // Remove additional need entry
+  const removeAdditionalNeedEntry = (entryId) => {
+    const newEntries = additionalNeedsEntries.filter((entryItem) => entryItem.id !== entryId);
+    setAdditionalNeedsEntries([...newEntries]);
+  };
+
   return (
     <div className="day-summary has-text-black">
       <div className="columns is-mobile">
         <div className="column">
           <div>
             <span className="has-text-weight-bold mr-2 package-summary-title">Nursing Care</span>
-            <span>03/07/2021 - 03/09/2021</span>
+            <span>{startDate} {endDate ? ` - ${endDate}` : null}</span>
           </div>
         </div>
       </div>
@@ -23,7 +38,7 @@ const NursingCareSummary = ({}) => {
         <div className="column">
           <p className="has-text-weight-bold package-summary-sub-title mb-2">Need Addressing</p>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor. Aliquam suscipit laoreet pharetra. Aenean vestibulum ullamcorper enim, sed rhoncus sem tempor vitae. Sed dignissim ornare metus eu faucibus. Sed vel diam mi. Aenean a auctor felis, sit amet lacinia urna. Pellentesque bibendum dui a nulla faucibus, vel dignissim mi rutrum.
+            {needToAddress}
           </p>
         </div>
       </div>
@@ -41,39 +56,26 @@ const NursingCareSummary = ({}) => {
           <div className="mb-3">
             <div className="columns is-multiline">
 
-              <div className="column is-half">
-                <p
-                  className="has-text-weight-bold additional-need-title mb-2">3 Hours per week</p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor. Aliquam suscipit laoreet pharetra. Aenean vestibulum ullamcorper enim, sed rhoncus sem tempor vitae.
-                </p>
-                <div>
-                  <Button linkBtn={true} className="mr-2">
-                    Edit
-                  </Button>
+              {additionalNeedsEntries.map((entry) => {
+                return (
+                  <div className="column is-half" key={entry.id}>
+                    <p
+                      className="has-text-weight-bold additional-need-title mb-2">{entry.selectedCostText} cost</p>
+                    <p>
+                      {entry.needToAddress}
+                    </p>
+                    <div>
+                      <Button linkBtn={true} className="mr-2">
+                        Edit
+                      </Button>
 
-                  <Button linkBtn={true}>
-                    Remove
-                  </Button>
-                </div>
-              </div>
-
-              <div className="column is-half">
-                <h4
-                  className="has-text-weight-bold additional-need-title mb-2">3 Hours per week</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor. Aliquam suscipit laoreet pharetra. Aenean vestibulum ullamcorper enim, sed rhoncus sem tempor vitae.
-                </p>
-                <div>
-                  <Button linkBtn={true} className="mr-2">
-                    Edit
-                  </Button>
-
-                  <Button linkBtn={true}>
-                    Remove
-                  </Button>
-                </div>
-              </div>
+                      <Button onClick={() => removeAdditionalNeedEntry(entry.id)} linkBtn={true}>
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                )
+              })}
 
             </div>
           </div>

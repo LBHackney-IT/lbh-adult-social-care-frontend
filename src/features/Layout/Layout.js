@@ -11,7 +11,8 @@ const Layout = ({ headerTitle, subTitle, children }) => {
           <NavigationColumn />
         </div>
         <div className="column pb-0 mb-0">
-          <div className="container pr-3">{children}</div>
+          {/*<div className="container pr-3">{children}</div>*/}
+          <div className="pr-3">{children}</div>
         </div>
       </div>
     </>

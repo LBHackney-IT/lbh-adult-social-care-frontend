@@ -8,6 +8,9 @@ import ClientHistory from "./features/ClientHistory/ClientHistory";
 import Login from "./features/User/Login";
 import PrivateRoute from "./routes/PrivateRoute";
 import * as RouteConstants from "./routes/RouteConstants";
+import React from "react";
+import HomeCareApprovePackage from "./features/CarePackages/HomeCare/HomeCareApprovePackage";
+import HomeCareApproveBrokered from "./features/CarePackages/HomeCare/HomeCareApproveBrokered";
 
 const App = () => {
   return (
@@ -18,6 +21,16 @@ const App = () => {
           exact
           path={RouteConstants.CARE_PACKAGE}
           component={CarePackage}
+        />
+        <PrivateRoute
+          exact
+          path={RouteConstants.HOME_CARE_APPROVE_PACKAGE}
+          component={HomeCareApprovePackage}
+        />
+        <PrivateRoute
+          exact
+          path={RouteConstants.HOME_CARE_APPROVE_BROKERED}
+          component={HomeCareApproveBrokered}
         />
         <PrivateRoute
           exact
@@ -32,16 +45,16 @@ const App = () => {
         <PrivateRoute
           exact
           path={
-            `${RouteConstants.RESIDENTIAL_CARE}/:isRespiteCare/:isDischargePackage/` +
-            `:isImmediateOrReEnablement/:expectedOver52Weeks/:isS117/:startDate/:endDate`
+            `${RouteConstants.RESIDENTIAL_CARE}/:hasRespiteCare/:hasDischargePackage/` +
+            `:isImmediateOrReEnablement/:typeOfStayId/:isS117/:startDate/:endDate`
           }
           component={ResidentialCare}
         />
         <PrivateRoute
           exact
           path={
-            `${RouteConstants.NURSING_CARE}/:isRespiteCare/:isDischargePackage/` +
-            `:isImmediateOrReEnablement/:expectedOver52Weeks/:isS117/:startDate/:endDate`
+            `${RouteConstants.NURSING_CARE}/:isFixedPeriod/:startDate/:typeOfStayId/` +
+            `:hasRespiteCare/:hasDischargePackage/:isThisAnImmediateService/:isThisUserUnderS117/:endDate`
           }
           component={NursingCare}
         />
