@@ -15,6 +15,8 @@ import DayCareApprovePackage from "./features/CarePackages/DayCare/DayCareApprov
 import DayCareApproveBrokered from "./features/CarePackages/DayCare/DayCareApproveBrokered";
 import ResidentialCareApprovePackage from "./features/CarePackages/ResidentialCare/ResidentialCareApprovePackage";
 import ResidentialCareApproveBrokered from "./features/CarePackages/ResidentialCare/ResidentialCareApproveBrokered";
+import NursingCareApprovePackage from "./features/CarePackages/NursingCare/NursingCareApprovePackage";
+import NursingCareApproveBrokered from "./features/CarePackages/NursingCare/NursingCareApproveBrokered";
 
 const App = () => {
   return (
@@ -81,6 +83,16 @@ const App = () => {
             `:hasRespiteCare/:hasDischargePackage/:isThisAnImmediateService/:isThisUserUnderS117/:endDate`
           }
           component={NursingCare}
+        />
+        <PrivateRoute
+          exact
+          path={RouteConstants.NURSING_CARE_APPROVE_PACKAGE}
+          component={NursingCareApprovePackage}
+        />
+        <PrivateRoute
+          exact
+          path={RouteConstants.NURSING_CARE_APPROVE_BROKERED}
+          component={NursingCareApproveBrokered}
         />
         <PrivateRoute
           path={RouteConstants.CLIENT_HISTORY}
