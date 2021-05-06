@@ -182,37 +182,6 @@
   }
 }
 
-
-.package-reclaim {
-  h1 {
-    color: $lbh-green1;
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 15px;
-  }
-
-  textarea {
-    color: $lbh-black1;
-
-    &::placeholder {
-      color: $lbh-black1;
-    }
-  }
-}
-
-.package-reclaim__dropdowns {
-  margin-bottom: 21px;
-
-  & > .control:first-of-type {
-    margin-right: 27px;
-  }
-}
-
-.package-reclaim__notes {
-  max-width: 357px;
-  margin-bottom: 30px;
-}
-
 .horizontal-delimiter {
   margin: 32px 0;
 }
