@@ -13,6 +13,8 @@ import HomeCareApprovePackage from "./features/CarePackages/HomeCare/HomeCareApp
 import HomeCareApproveBrokered from "./features/CarePackages/HomeCare/HomeCareApproveBrokered";
 import DayCareApprovePackage from "./features/CarePackages/DayCare/DayCareApprovePackage";
 import DayCareApproveBrokered from "./features/CarePackages/DayCare/DayCareApproveBrokered";
+import ResidentialCareApprovePackage from "./features/CarePackages/ResidentialCare/ResidentialCareApprovePackage";
+import ResidentialCareApproveBrokered from "./features/CarePackages/ResidentialCare/ResidentialCareApproveBrokered";
 
 const App = () => {
   return (
@@ -61,6 +63,16 @@ const App = () => {
             `:isImmediateOrReEnablement/:typeOfStayId/:isS117/:startDate/:endDate`
           }
           component={ResidentialCare}
+        />
+        <PrivateRoute
+          exact
+          path={RouteConstants.RESIDENTIAL_CARE_APPROVE_PACKAGE}
+          component={ResidentialCareApprovePackage}
+        />
+        <PrivateRoute
+          exact
+          path={RouteConstants.RESIDENTIAL_CARE_APPROVE_BROKERED}
+          component={ResidentialCareApproveBrokered}
         />
         <PrivateRoute
           exact
