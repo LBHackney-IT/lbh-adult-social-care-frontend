@@ -27,14 +27,14 @@ const ResidentialCareSummary = ({
   };
 
   return (
-    <div className="day-summary has-text-black">
+    <div className="day-summary hackney-text-black font-size-14px">
       <div className="columns is-multiline">
         <div className="column">
           <div>
-            <span className="has-text-weight-bold mr-2 package-summary-title">
+            <span className="font-weight-bold font-size-24px mr-2">
               Residential Care
             </span>
-            <span>
+            <span className="font-size-16px">
               {startDate} {endDate ? ` - ${endDate}` : null}
             </span>
           </div>
@@ -42,7 +42,7 @@ const ResidentialCareSummary = ({
         <div className="column">
           <div className="level">
             <div className="level-item level-right">
-              <span className="text-green is-uppercase has-text-weight-bold is-size-5">
+              <span className="hackney-text-green is-uppercase font-weight-bold font-size-12px pt-2">
                 {typeOfStayText}
               </span>
             </div>
@@ -58,7 +58,7 @@ const ResidentialCareSummary = ({
 
       <div className="columns is-mobile mb-3">
         <div className="column">
-          <p className="has-text-weight-bold package-summary-sub-title mb-2">
+          <p className="font-weight-bold font-size-16px mb-2">
             Need Addressing
           </p>
           <p>{needToAddress}</p>
@@ -67,7 +67,7 @@ const ResidentialCareSummary = ({
 
       <div className="columns">
         <div className="column">
-          <p className="font-weight-bold package-summary-sub-title mb-2">
+          <p className="font-weight-bold font-size-16px mb-2">
             Additional needs
           </p>
           <div className="border-bottom" />
@@ -81,7 +81,7 @@ const ResidentialCareSummary = ({
               {additionalNeedsEntries.map((entry) => {
                 return (
                   <div className="column mb-3 is-full" key={entry.id}>
-                    <p className="has-text-weight-bold additional-need-title mb-2">
+                    <p className="font-weight-bold mb-2">
                       {entry.selectedCostText} cost
                     </p>
                     {entry.selectedPeriod && (
