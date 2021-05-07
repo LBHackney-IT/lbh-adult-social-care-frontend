@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import ClientSummary from "../../components/ClientSummary";
 import Layout from "../../Layout/Layout";
 import CareTitle from "../components/CareTitle";
@@ -9,29 +9,150 @@ import Dropdown from "../../components/Dropdown";
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
 } from "../components/AdditionalNeedsEntries";
+import {
+  createResidentialCarePackage,
+  getResidentialCareAdditionalNeedsCostOptions,
+  getTypeOfResidentialCareHomeOptions,
+} from "../../../api/CarePackages/ResidentialCareApi";
+import TitleHeader from "../../components/TitleHeader";
+import ResidentialCareSummary from "./components/ResidentialCareSummary";
+import { Button } from "../../components/Button";
+import { CARE_PACKAGE } from "../../../routes/RouteConstants";
 
-// TODO remove
-const careHomeTypes = [
-  { text: "Assisted Home", value: 1 },
-  { text: "XYZ Home", value: 2 },
-];
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+};
 
-// TODO remove
-const additionalNeedsCostOptions = [
-  { text: "Weekly", value: 1 },
-  { text: "One off", value: 2 },
-];
+const ResidentialCare = ({ history }) => {
+  const isTrueParse = (myValue) => myValue === "true";
+  const notNullString = (myValue) =>
+    myValue !== "null" && myValue !== "undefined";
 
-const ResidentialCare = () => {
   // Parameters
   const params = useParams();
-  //const { startDate, endDate, isImmediate, isS117, isFixedPeriod } = params;
+  let {
+    hasRespiteCare,
+    hasDischargePackage,
+    isImmediateOrReEnablement,
+    typeOfStayId,
+    isS117,
+    startDate,
+    endDate,
+  } = params;
+  hasRespiteCare = isTrueParse(hasRespiteCare) || false;
+  hasDischargePackage = isTrueParse(hasDischargePackage) || false;
+  isImmediateOrReEnablement = isTrueParse(isImmediateOrReEnablement) || false;
+  typeOfStayId = parseInt(typeOfStayId) ?? null;
+  isS117 = isTrueParse(isS117) || false;
+  startDate = startDate ?? null;
+  endDate = endDate && notNullString(endDate) ? endDate : undefined;
+
+  // get query params
+  let query = useQuery();
+  let typeOfStayText = query.get("typeOfStayText");
 
   // State
+  const [careHomeTypes, setCareHomeTypes] = useState([]);
+  const [additionalNeedsCostOptions, setAdditionalNeedsCostOptions] = useState(
+    []
+  );
+  const [errors, setErrors] = useState([]);
+
+  const [needToAddress, setNeedToAddress] = useState(undefined);
   const [selectedCareHomeType, setSelectedCareHomeType] = useState(1);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(
     getInitialAdditionalNeedsArray()
   );
+
+  const retrieveTypeOfResidentialCareHomeOptions = () => {
+    getTypeOfResidentialCareHomeOptions()
+      .then((res) => {
+        let options = res.map((option) => ({
+          text: option.typeOfCareHomeName,
+          value: option.typeOfCareHomeId,
+        }));
+        setCareHomeTypes(options);
+      })
+      .catch((error) => {
+        setErrors([
+          ...errors,
+          `Retrieve residential care home type options failed. ${error.message}`,
+        ]);
+      });
+  };
+
+  const retrieveResidentialCareAdditionalNeedsCostOptions = () => {
+    const options = getResidentialCareAdditionalNeedsCostOptions();
+    setAdditionalNeedsCostOptions(options);
+  };
+
+  useEffect(() => {
+    if (careHomeTypes.length === 0 || careHomeTypes.length === 1) {
+      retrieveTypeOfResidentialCareHomeOptions();
+    }
+    if (
+      additionalNeedsCostOptions.length === 0 ||
+      additionalNeedsCostOptions.length === 1
+    ) {
+      retrieveResidentialCareAdditionalNeedsCostOptions();
+    }
+  }, []);
+
+  const formIsValid = () => {
+    const errors = [];
+
+    setErrors(errors);
+    // Form is valid if the errors array has no items
+    return errors.length === 0;
+  };
+
+  const handleSavePackage = (event) => {
+    event.preventDefault();
+    if (!formIsValid()) return;
+
+    const residentialCareAdditionalNeeds = additionalNeedsEntries.map(
+      (item) => ({
+        isWeeklyCost: item.selectedCost === 1,
+        isOneOffCost: item.selectedCost === 2,
+        isFixedPeriod: item.selectedCost === 3,
+        startDate:
+          item.selectedCost === 3
+            ? new Date(item.selectedPeriod.startDate).toJSON()
+            : null,
+        endDate:
+          item.selectedCost === 3
+            ? new Date(item.selectedPeriod.endDate).toJSON()
+            : null,
+        needToAddress: item.needToAddress,
+        creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
+      })
+    );
+
+    const residentialCarePackageToCreate = {
+      clientId: "aee45700-af9b-4ab5-bb43-535adbdcfb80",
+      startDate: startDate ? new Date(startDate).toJSON() : null,
+      endDate: endDate ? new Date(endDate).toJSON() : null,
+      hasRespiteCare: hasRespiteCare,
+      hasDischargePackage: hasDischargePackage,
+      isThisAnImmediateService: isImmediateOrReEnablement,
+      isThisUserUnderS117: isS117,
+      residentialCareTypeOfStayId: typeOfStayId,
+      needToAddress: needToAddress,
+      typeOfResidentialCareHomeId: selectedCareHomeType,
+      creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
+      residentialCareAdditionalNeeds,
+    };
+
+    createResidentialCarePackage(residentialCarePackageToCreate)
+      .then(() => {
+        alert("Package saved.");
+        history.push(`${CARE_PACKAGE}`);
+      })
+      .catch((error) => {
+        alert(`Create package failed. ${error.message}`);
+        setErrors([...errors, `Create package failed. ${error.message}`]);
+      });
+  };
 
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
@@ -45,7 +166,7 @@ const ResidentialCare = () => {
         Care Package
       </ClientSummary>
       <div className="mt-5 mb-5">
-        <CareTitle startDate="27/11/1997" endDate="03/09/2021">
+        <CareTitle startDate={startDate} endDate={endDate}>
           Residential Care
         </CareTitle>
       </div>
@@ -55,6 +176,7 @@ const ResidentialCare = () => {
             label="Need to Address"
             rows={5}
             placeholder="Add details..."
+            onChange={setNeedToAddress}
           />
         </div>
         <div className="column">
@@ -73,6 +195,24 @@ const ResidentialCare = () => {
           entries={additionalNeedsEntries}
           setAdditionalNeedsState={setAdditionalNeedsEntries}
         />
+      </div>
+
+      <div className="mt-4 mb-4">
+        <TitleHeader>Package Details</TitleHeader>
+        <ResidentialCareSummary
+          startDate={startDate}
+          endDate={endDate}
+          typeOfStayText={typeOfStayText}
+          needToAddress={needToAddress}
+          additionalNeedsEntries={additionalNeedsEntries}
+          setAdditionalNeedsEntries={setAdditionalNeedsEntries}
+        />
+      </div>
+
+      <div className="level mt-4">
+        <div className="level-item level-right">
+          <Button onClick={handleSavePackage}>Confirm Package</Button>
+        </div>
       </div>
     </Layout>
   );

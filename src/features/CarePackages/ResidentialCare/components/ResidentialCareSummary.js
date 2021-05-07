@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "../../../components/Button";
 
-const NursingCareSummary = ({
+const ResidentialCareSummary = ({
   startDate,
   endDate,
-  needToAddress = "",
+  typeOfStayText,
+  needToAddress,
   additionalNeedsEntries = [],
   setAdditionalNeedsEntries = () => {},
 }) => {
   startDate = new Date(startDate).toLocaleDateString("en-GB");
   endDate = endDate && new Date(endDate).toLocaleDateString("en-GB");
+
+  const renderDate = (dateString) => {
+    return dateString && new Date(dateString).toLocaleDateString("en-GB");
+  };
+
+  useEffect(() => {}, [additionalNeedsEntries]);
 
   // Remove additional need entry
   const removeAdditionalNeedEntry = (entryId) => {
@@ -21,15 +28,24 @@ const NursingCareSummary = ({
 
   return (
     <div className="day-summary hackney-text-black font-size-14px">
-      <div className="columns is-mobile">
+      <div className="columns is-multiline">
         <div className="column">
           <div>
-            <span className="font-weight-bold mr-2 font-size-16px">
-              Nursing Care
+            <span className="font-weight-bold font-size-24px mr-2">
+              Residential Care
             </span>
             <span className="font-size-16px">
               {startDate} {endDate ? ` - ${endDate}` : null}
             </span>
+          </div>
+        </div>
+        <div className="column">
+          <div className="level">
+            <div className="level-item level-right">
+              <span className="hackney-text-green is-uppercase font-weight-bold font-size-12px pt-2">
+                {typeOfStayText}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -56,7 +72,6 @@ const NursingCareSummary = ({
           </p>
           <div className="border-bottom" />
         </div>
-        <div className="column" />
       </div>
 
       <div className="columns">
@@ -65,10 +80,16 @@ const NursingCareSummary = ({
             <div className="columns is-multiline">
               {additionalNeedsEntries.map((entry) => {
                 return (
-                  <div className="column is-half" key={entry.id}>
+                  <div className="column mb-3 is-full" key={entry.id}>
                     <p className="font-weight-bold mb-2">
                       {entry.selectedCostText} cost
                     </p>
+                    {entry.selectedPeriod && (
+                      <p>
+                        {renderDate(entry.selectedPeriod.startDate)}-{" "}
+                        {renderDate(entry.selectedPeriod.endDate)}
+                      </p>
+                    )}
                     <p>{entry.needToAddress}</p>
                     <div>
                       <Button linkBtn={true} className="mr-2">
@@ -93,4 +114,4 @@ const NursingCareSummary = ({
   );
 };
 
-export default NursingCareSummary;
+export default ResidentialCareSummary;
