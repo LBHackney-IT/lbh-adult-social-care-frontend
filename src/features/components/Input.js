@@ -24,6 +24,7 @@ const Input = ({
   return (
     <BaseField classes={classes} label={label}>
       <input
+        className='custom-input'
         placeholder={placeholder}
         onChange={onChangeInput}
         value={`${preSign}${value}${postSign}`}

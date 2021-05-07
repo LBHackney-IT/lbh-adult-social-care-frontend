@@ -55,6 +55,12 @@ const approvalHistory = [
   },
 ];
 
+const costCards = [
+  {id: 1, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE'},
+  {id: 2, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE'},
+  {id: 3, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE'},
+];
+
 const ProposedPackages = () => {
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState('approvalHistory');
@@ -104,7 +110,7 @@ const ProposedPackages = () => {
       {/*addPackageReclaim={addPackageReclaim}*/}
       {/*removePackageReclaim={removePackageReclaim}*/}
       {/*packagesReclaimed={packagesReclaimed}*/}
-      changePackageReclaim={changePackageReclaim}
+      {/*changePackageReclaim={changePackageReclaim}*/}
       {/*  changeTab={changeTab}*/}
       {/*/>*/}
       <PackagesDayCare
@@ -117,7 +123,7 @@ const ProposedPackages = () => {
         changeTab={changeTab}
       />
       {tab === 'approvalHistory' ?
-          <ApprovalHistory status='(Ongoing)' history={approvalHistory} />
+          <ApprovalHistory costCards={costCards} status='(Ongoing)' history={approvalHistory} />
           : !!summaryData.length &&
           <SummaryDataList
             edit={(item) => console.log('edit', item)}

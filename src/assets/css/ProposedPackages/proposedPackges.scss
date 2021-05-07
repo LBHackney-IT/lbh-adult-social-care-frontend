@@ -199,3 +199,29 @@
     font-size: 14px;
   }
 }
+
+.day-care__min-space {
+  min-width: 161px;
+}
+
+.day-care__min-input-space {
+  min-width: 241px;
+
+  input {
+    width: 100%;
+  }
+}
+
+.day-care__total-cost {
+  width: 200px;
+  margin-left: auto;
+}
+
+.row-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid $lbh-gray;
+}

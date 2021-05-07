@@ -1,3 +1,4 @@
+import React from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import CarePackage from "./features/CarePackages/CarePackage";
 import DayCare from "./features/CarePackages/DayCare/DayCare";
@@ -13,12 +14,11 @@ import ProposedPackages from "./features/ProposedPackages/ProposedPackages";
 
 const App = () => {
   const user = useSelector(selectUser);
-  console.log('test user {}');
 
   return (
     <>
       <Switch>
-        {user === null ?
+        {!!user?.user ?
             <Route path={RouteConstants.LOGIN} component={Login} />
             :
             <>

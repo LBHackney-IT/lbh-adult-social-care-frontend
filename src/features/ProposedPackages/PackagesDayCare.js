@@ -44,26 +44,40 @@ const supplierOptions = [
 ];
 
 const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changePackageReclaim, removePackageReclaim, addPackageReclaim }) => {
-  const [elementsData, setElementsData] = useState({
-    '30mCall': 25,
-    '45mCall': 22,
-    '60m+Call': 20,
-    secondaryCarer: 'XX',
-    domesticCare: 'XX',
-    escortServices: 'XX',
-    sleepingNight: 'XX',
-    wakingNight: 'XX',
-    nightOwl: 'XX',
+  const [coreCost, setCoreCost] = useState({
+    costPerDay: 'XX',
+  });
+
+  const [transport, setTransport] = useState({
+    supplier: '',
+    costPerDay: 'XXXX',
+  });
+
+  const [transportEscort, setTransportEscort] = useState({
+    supplier: '',
+    hoursPerWeek: 'XXXX',
+    costPerWeek: 'XXXX',
+  });
+
+  const [dayCareOpportunities, setDayCareOpportunities] = useState({
+    supplier: '',
+    hoursPerWeek: 'XXXX',
+    costPerWeek: 'XXXX',
+  });
+
+  const [escort, setEscort] = useState({
+    supplier: '',
+    hoursPerWeek: 'XXXX',
+    costPerWeek: 'XXXX',
   });
 
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
-  const changeElementsData = (field, data) => {
-    setElementsData({...elementsData, [field]: data});
+  const changeElementsData = (setter, getter, field, data) => {
+    setter({...getter, [field]: data});
   };
 
   return (
@@ -102,14 +116,20 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
       </div>
       <div className='proposed-packages__elements column'>
         <div className='mb-4'>
-          <div className='is-flex is-flex-wrap-wrap is-justify-content-space-between'>
+          <div className='day-care__core-cost is-flex is-flex-wrap-wrap is-justify-content-space-between'>
             <h2 className='text-title'>Core cost</h2>
-            <EuroInput classes='default-label' label='Amount' value=' 88888888'/>
+            <EuroInput
+              onChange={(value => changeElementsData(setCoreCost, coreCost, 'costPerDay', value))}
+              classes='default-label day-care__min-input-space'
+              label='Cost per day'
+              value={coreCost.costPerDay}
+            />
+            <BaseField classes='day-care__min-space' />
             <BaseField label='Days per week'><p>4</p></BaseField>
             <BaseField label='Cost / week'><p>{currency.euro}240</p></BaseField>
           </div>
           <hr className='horizontal-delimiter'/>
-          <div className='is-flex is-flex-wrap-wrap is-justify-content-space-between'>
+          <div className='row-container day-care__transport'>
             <Dropdown
               classes='label-bold'
               label='Transport'
@@ -118,11 +138,15 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
               onOptionSelect={setSelectedSupplierType}
               selectedValue={selectedSupplierType}
             />
-            <BaseField label='Days per week'><p>4</p></BaseField>
-            <Input label='Cost per week' />
+            <BaseField classes='day-care__min-space' label='Days per week'><p>4</p></BaseField>
+            <Input
+              value={transport.costPerDay}
+              onChange={value => changeElementsData(setTransport, transport, 'costPerDay', value)}
+              label='Cost per week'
+            />
             <p>{currency.euro}89</p>
           </div>
-          <div className='is-flex is-flex-wrap-wrap is-justify-content-space-between'>
+          <div className='row-container day-care__transport-escort'>
             <Dropdown
               classes='label-bold'
               label='Transport escort'
@@ -135,7 +159,7 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
             <Input label='Hours per week' value='XXXX' />
             <p>{currency.euro}89</p>
           </div>
-          <div className='is-flex is-flex-wrap-wrap is-justify-content-space-between'>
+          <div className='row-container day-care__opportunities'>
             <Dropdown
               classes='label-bold'
               label='Dare care opportunities'
@@ -148,7 +172,7 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
             <Input label='Hours per week' value='XXXX' />
             <p>{currency.euro}89</p>
           </div>
-          <div className='is-flex is-flex-wrap-wrap is-justify-content-space-between'>
+          <div className='row-container day-care__escort'>
             <Dropdown
               classes='label-bold'
               label='Escort'
@@ -162,7 +186,7 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
             <p>{currency.euro}89</p>
           </div>
         </div>
-        <div className='proposed-packages__total-cost'>
+        <div className='proposed-packages__total-cost day-care__total-cost'>
           <p>Total <span>{currency.euro}XXXX</span></p>
         </div>
         {
