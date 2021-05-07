@@ -6,7 +6,6 @@ import {Button} from "../components/Button";
 import React, {useState} from "react";
 import BaseField from "../components/baseComponents/BaseField";
 import Input from "../components/Input";
-import {uniqueID} from "../../service/helpers";
 import PackageReclaim from "../components/PackageReclaim";
 
 const stageOptions = [
@@ -16,24 +15,6 @@ const stageOptions = [
   { text: "Supplier Sourced", value: 4 },
   { text: "Pricing agreed", value: 5 },
   { text: "Submitted For Approval", value: 6 },
-];
-
-const categoryOptions = [
-  { text: "Category type 1", value: 1 },
-  { text: "Category type 2", value: 2 },
-  { text: "Category type 3", value: 3 },
-];
-
-const reclaimFromOptions = [
-  { text: "Reclaim from 1", value: 1 },
-  { text: "Reclaim from 2", value: 2 },
-  { text: "Reclaim from 3", value: 3 },
-];
-
-const packageReclaimTypes = [
-  {value: 'percentage', text: 'Percentage'},
-  {value: 'fixedOneOff', text: 'Fixed amount - one off'},
-  {value: 'fixedWeekly', text: 'Fixed amount - weekly'},
 ];
 
 const supplierOptions = [
@@ -107,11 +88,22 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
             />
           </div>
           <span className="mr-3">
-              <DatePick label='Start Date' dateValue={startDate} setDate={setStartDate} />
-            </span>
+              <DatePick
+                label='Start Date'
+                dateValue={startDate}
+                setDate={setStartDate}
+              />
+          </span>
           <span className="mr-3">
-              <DatePick label='End Date' dateValue={endDate} setDate={setEndDate} />
-            </span>
+              <DatePick
+                disabledLabel='Ongoing'
+                classes='datepicker-disabled datepicker-ongoing'
+                label='End Date'
+                disabled={true}
+                dateValue={endDate}
+                setDate={setEndDate}
+              />
+          </span>
         </div>
       </div>
       <div className='proposed-packages__elements column'>
@@ -124,19 +116,19 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
               label='Cost per day'
               value={coreCost.costPerDay}
             />
+            <BaseField label='Days per week' classes='day-care__min-space'><p>4</p></BaseField>
             <BaseField classes='day-care__min-space' />
-            <BaseField label='Days per week'><p>4</p></BaseField>
-            <BaseField label='Cost / week'><p>{currency.euro}240</p></BaseField>
+            <BaseField classes='day-care__cost-week' label='Cost / week'><p>{currency.euro}240</p></BaseField>
           </div>
           <hr className='horizontal-delimiter'/>
           <div className='row-container day-care__transport'>
             <Dropdown
-              classes='label-bold'
+              classes='day-care__fixed-dropdown-width'
               label='Transport'
               initialText='Supplier (please select)'
               options={supplierOptions}
-              onOptionSelect={setSelectedSupplierType}
-              selectedValue={selectedSupplierType}
+              selectedValue={transport.supplier}
+              onOptionSelect={value => changeElementsData(setTransport, transport, 'supplier', value)}
             />
             <BaseField classes='day-care__min-space' label='Days per week'><p>4</p></BaseField>
             <Input
@@ -144,7 +136,7 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
               onChange={value => changeElementsData(setTransport, transport, 'costPerDay', value)}
               label='Cost per week'
             />
-            <p>{currency.euro}89</p>
+            <BaseField label='Cost'><p>{currency.euro}89</p></BaseField>
           </div>
           <div className='row-container day-care__transport-escort'>
             <Dropdown
@@ -152,12 +144,20 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
               label='Transport escort'
               initialText='Select Supplier'
               options={supplierOptions}
-              onOptionSelect={setSelectedSupplierType}
-              selectedValue={selectedSupplierType}
+              selectedValue={transportEscort.supplier}
+              onOptionSelect={value => changeElementsData(setTransportEscort, transportEscort, 'supplier', value)}
             />
-            <Input label='Hours per week' value='XXXX' />
-            <Input label='Hours per week' value='XXXX' />
-            <p>{currency.euro}89</p>
+            <Input
+              value={transportEscort.hoursPerWeek}
+              label='Hours per week'
+              onChange={value => changeElementsData(setTransportEscort, transportEscort, 'hoursPerWeek', value)}
+            />
+            <Input
+              value={transportEscort.costPerWeek}
+              label='Cost per week'
+              onChange={value => changeElementsData(setTransportEscort, transportEscort, 'costPerWeek', value)}
+            />
+            <BaseField label='Cost'><p>{currency.euro}89</p></BaseField>
           </div>
           <div className='row-container day-care__opportunities'>
             <Dropdown
@@ -165,12 +165,20 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
               label='Dare care opportunities'
               initialText='Select Supplier'
               options={supplierOptions}
-              onOptionSelect={setSelectedSupplierType}
-              selectedValue={selectedSupplierType}
+              onOptionSelect={value => changeElementsData(setDayCareOpportunities, dayCareOpportunities, 'supplier', value)}
+              selectedValue={dayCareOpportunities.supplier}
             />
-            <Input label='Hours per week' value='XXXX' />
-            <Input label='Hours per week' value='XXXX' />
-            <p>{currency.euro}89</p>
+            <Input
+              label='Hours per week'
+              value={dayCareOpportunities.hoursPerWeek}
+              onChange={value => changeElementsData(setTransportEscort, transportEscort, 'hoursPerWeek', value)}
+            />
+            <Input
+              label='Cost per week'
+              value={dayCareOpportunities.costPerWeek}
+              onChange={value => changeElementsData(setTransportEscort, transportEscort, 'costPerWeek', value)}
+            />
+            <BaseField label='Cost'><p>{currency.euro}89</p></BaseField>
           </div>
           <div className='row-container day-care__escort'>
             <Dropdown
@@ -178,30 +186,35 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
               label='Escort'
               initialText='Select Supplier'
               options={supplierOptions}
-              onOptionSelect={setSelectedSupplierType}
-              selectedValue={selectedSupplierType}
+              onOptionSelect={value => changeElementsData(setEscort, escort, 'supplier', value)}
+              selectedValue={escort.supplier}
             />
-            <Input label='Hours per week' value='XXXX' />
-            <Input label='Hours per week' value='XXXX' />
-            <p>{currency.euro}89</p>
+            <Input
+              value={escort.hoursPerWeek}
+              label='Hours per week'
+              onChange={value => changeElementsData(setEscort, escort, 'hoursPerWeek', value)}
+            />
+            <Input
+              value={escort.costPerWeek}
+              label='Cost per week'
+              onChange={value => changeElementsData(setEscort, escort, 'costPerWeek', value)}
+            />
+            <BaseField label='Cost'><p>{currency.euro}89</p></BaseField>
           </div>
         </div>
         <div className='proposed-packages__total-cost day-care__total-cost'>
           <p>Total <span>{currency.euro}XXXX</span></p>
         </div>
-        {
-          tab === 'approvalHistory' &&
-          <div>
-            <div className='mt-4 is-flex is-align-items-center is-justify-content-space-between'>
-              <p className='package-reclaim__text'>Should the cost of this package be reclaimed in
-                part or full from another body, e.g. NHS, CCG, another LA ?
-              </p>
-              <Button onClick={addPackageReclaim} className='outline'>Add reclaim</Button>
-            </div>
-            <hr className='horizontal-delimiter'/>
+        <div>
+          <div className='mt-4 is-flex is-align-items-center is-justify-content-space-between'>
+            <p className='package-reclaim__text'>Should the cost of this package be reclaimed in
+              part or full from another body, e.g. NHS, CCG, another LA ?
+            </p>
+            <Button onClick={addPackageReclaim} className='outline'>Add reclaim</Button>
           </div>
-        }
-        {!!packagesReclaimed.length && tab === 'approvalHistory' &&
+          <hr className='horizontal-delimiter'/>
+        </div>
+        {!!packagesReclaimed.length &&
           <div>
             {packagesReclaimed.map(item => {
               return (
