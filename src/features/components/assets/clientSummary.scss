@@ -17,6 +17,17 @@
         font-weight: bold;
     }
 
+    .more-info {
+        width: 100%;
+    }
+
+    .package-count {
+        color: $lbh-black1;
+        span {
+            margin-right: 10px;
+        }
+    }
+
     .client-prop {
         label {
             color: $lbh-green1;

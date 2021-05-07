@@ -1,0 +1,91 @@
+.approval-history {
+  padding: 40px 10px;
+  background: $lbh-light-gray;
+
+  .client-summary-cont {
+    border-bottom: none;
+  }
+
+  h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: $lbh-black1;
+
+    span {
+      font-size: 19px;
+      margin-left: 30px;
+    }
+  }
+
+  .total-container {
+    padding: 10px;
+    width: 145px;
+    background: $lbh-light-yellow;
+    border: 1px solid $lbh-yellow;
+    margin-bottom: 41px;
+
+    .title {
+      font-size: 12px;
+      color: $lbh-green1;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .price {
+      font-weight: bold;
+      color: $lbh-black1;
+      font-size: 19px;
+      margin-bottom: 4px;
+    }
+
+    .status {
+      font-size: 12px;
+      color: $lbh-green1;
+      font-weight: bold;
+    }
+  }
+
+  .care-info {
+    display: flex;
+    margin-bottom: 14px;
+
+    & > div {
+      margin-right: 32px;
+
+      p:first-of-type {
+        color: $lbh-green1;
+        font-weight: bold;
+        font-size: 12px;
+      }
+
+      p:last-of-type {
+        font-size: 14px;
+        color: $lbh-black1;
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+.approval-history__title {
+  font-size: 12px;
+  font-weight: bold;
+  color: $lbh-green1;
+  margin-bottom: 10px;
+}
+
+.approval-history__text {
+  font-size: 14px;
+  margin-bottom: 5px;
+  display: flex;
+
+  a {
+    color: $lbh-green1;
+    text-decoration: underline;
+    text-decoration-color: $lbh-green1;
+  }
+
+  .date {
+    font-weight: bold;
+  }
+}

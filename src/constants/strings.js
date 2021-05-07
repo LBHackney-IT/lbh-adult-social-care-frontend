@@ -1,0 +1,5 @@
+const euroSign = '£';
+
+export {
+  euroSign,
+};
