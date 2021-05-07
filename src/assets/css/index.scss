@@ -2,6 +2,9 @@
 @import "./borders.scss";
 @import "./typography.scss";
 @import "../fonts/fonts.scss";
+@import "./ProposedPackages/approval-history";
+@import "./ProposedPackages/proposedPackges";
+@import "./PackageReclaim/package-reclaim";
 
 * {
   font-family: "OpenSans", sans-serif !important;

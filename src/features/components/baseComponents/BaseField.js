@@ -1,6 +1,6 @@
 import "../assets/field.scss";
 
-const BaseField = ({ label, noInputStyle = false, children }) => {
+const BaseField = ({ classes = '', label, noInputStyle = false, children }) => {
   const hasLabel = label !== undefined;
   let className = "control field-container" + (hasLabel ? " has-label" : "");
 
@@ -9,7 +9,7 @@ const BaseField = ({ label, noInputStyle = false, children }) => {
   }
 
   return (
-    <div className={className}>
+    <div className={`${className} ${classes}`}>
       {hasLabel ? <label>{label}</label> : null}
       {children}
     </div>

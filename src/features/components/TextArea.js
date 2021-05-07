@@ -1,3 +1,4 @@
+import React from "react";
 import BaseField from "./baseComponents/BaseField";
 
 const TextArea = ({
@@ -5,6 +6,7 @@ const TextArea = ({
   label,
   placeholder = "",
   onChange = () => {},
+  classes = '',
   children,
 }) => {
   const onTextAreaChange = (event) => {
@@ -13,7 +15,7 @@ const TextArea = ({
   };
 
   return (
-    <BaseField label={label}>
+    <BaseField label={label} classes={classes}>
       <textarea
         rows={rows}
         placeholder={placeholder}

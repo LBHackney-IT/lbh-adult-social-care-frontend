@@ -25,6 +25,7 @@ const NavItem = ({ children, to = "/xyz" }) => {
 const NavigationColumn = () => {
   return (
     <div className="nav-column-cont">
+      <NavItem to={RouteConstants.PROPOSED_PACKAGES}>Proposed Packages</NavItem>
       <NavItem to={RouteConstants.CARE_PACKAGE}>Care Package</NavItem>
       {/* <NavItem to={RouteConstants.CLIENT_HISTORY}>Client History</NavItem>
       <NavItem>Client details</NavItem>

@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
-import { selectUser } from "../features/User/userSlice";
+import { selectUser } from "../reducers/userReducer";
 import { CARE_PACKAGE } from "./RouteConstants";
 
 const PrivateRoute = ({ exact = false, component: Component, ...props }) => {
