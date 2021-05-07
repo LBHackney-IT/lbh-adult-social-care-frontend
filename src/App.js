@@ -36,36 +36,54 @@ const App = () => {
               />
               <Route
                 exact
-                path={RouteConstants.CARE_PACKAGE} component={CarePackage}
-              />
-              <Route exact
-                path={`${RouteConstants.HOME_CARE}/:isImmediate/:isS117/:isFixedPeriod/:startDate/:endDate`}
-                component={HomeCare}
+                path={RouteConstants.CARE_PACKAGE}
+                component={CarePackage}
               />
               <Route
                 exact
                 path={RouteConstants.PROPOSED_PACKAGES}
                 component={ProposedPackages}
               />
-              <Route exact
+              <Route
+                exact
+                path={RouteConstants.HOME_CARE_APPROVE_PACKAGE}
+                component={HomeCareApprovePackage}
+              />
+              <Route
+                exact
+                path={RouteConstants.HOME_CARE_APPROVE_BROKERED}
+                component={HomeCareApproveBrokered}
+              />
+              <Route
+                exact
+                path={`${RouteConstants.HOME_CARE}/:isImmediate/:isS117/:isFixedPeriod/:startDate/:endDate`}
+                component={HomeCare}
+              />
+              <Route
+                exact
                 path={`${RouteConstants.DAY_CARE}/:isImmediate/:isS117/:isFixedPeriod/:startDate`}
                 component={DayCare}
               />
-              <Route exact
+              <Route
+                exact
                 path={
-                  `${RouteConstants.RESIDENTIAL_CARE}/:isRespiteCare/:isDischargePackage/` +
-                  `:isImmediateOrReEnablement/:expectedOver52Weeks/:isS117/:startDate/:endDate`
+                `${RouteConstants.RESIDENTIAL_CARE}/:hasRespiteCare/:hasDischargePackage/` +
+                `:isImmediateOrReEnablement/:typeOfStayId/:isS117/:startDate/:endDate`
                 }
                 component={ResidentialCare}
               />
-              <Route exact
+              <Route
+                exact
                 path={
-                  `${RouteConstants.NURSING_CARE}/:isRespiteCare/:isDischargePackage/` +
-                  `:isImmediateOrReEnablement/:expectedOver52Weeks/:isS117/:startDate/:endDate`
+                `${RouteConstants.NURSING_CARE}/:isFixedPeriod/:startDate/:typeOfStayId/` +
+                `:hasRespiteCare/:hasDischargePackage/:isThisAnImmediateService/:isThisUserUnderS117/:endDate`
                 }
                 component={NursingCare}
               />
-              <Route path={RouteConstants.CLIENT_HISTORY} component={ClientHistory}/>
+              <Route
+                path={RouteConstants.CLIENT_HISTORY}
+                component={ClientHistory}
+              />
             </>
         }
       </Switch>
