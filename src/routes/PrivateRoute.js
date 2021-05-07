@@ -8,8 +8,6 @@ const PrivateRoute = ({ exact = false, component: Component, ...props }) => {
   // TODO fix
   const authed = true || user !== null;
 
-  console.log(props);
-
   const Render = (props) =>
     authed === true ? (
       <Component {...props} />

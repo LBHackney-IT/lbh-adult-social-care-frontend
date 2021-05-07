@@ -16,15 +16,24 @@ import ProposedPackages from "./features/ProposedPackages/ProposedPackages";
 
 const App = () => {
   const user = useSelector(selectUser);
-  console.log('test user {}');
 
   return (
     <>
       <Switch>
-        {
-          user === null ? <Route path={RouteConstants.LOGIN} component={Login} />
-          :
+        {user === null ?
+            <Route path={RouteConstants.LOGIN} component={Login} />
+            :
             <>
+              <Route
+                exact
+                path={RouteConstants.HOME_CARE_APPROVE_PACKAGE}
+                component={HomeCareApprovePackage}
+              />
+              <Route
+                exact
+                path={RouteConstants.HOME_CARE_APPROVE_BROKERED}
+                component={HomeCareApproveBrokered}
+              />
               <Route
                 exact
                 path={RouteConstants.CARE_PACKAGE}
