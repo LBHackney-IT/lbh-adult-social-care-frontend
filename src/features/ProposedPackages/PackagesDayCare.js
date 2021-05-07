@@ -1,0 +1,217 @@
+import Dropdown from "../components/Dropdown";
+import DatePick from "../components/DatePick";
+import {currency} from "../../constants/strings";
+import EuroInput from "../components/EuroInput";
+import {Button} from "../components/Button";
+import React, {useState} from "react";
+import BaseField from "../components/baseComponents/BaseField";
+import Input from "../components/Input";
+import {uniqueID} from "../../service/helpers";
+import PackageReclaim from "../components/PackageReclaim";
+
+const stageOptions = [
+  { text: "New", value: 1 },
+  { text: "Assigned", value: 2 },
+  { text: "Querying", value: 3 },
+  { text: "Supplier Sourced", value: 4 },
+  { text: "Pricing agreed", value: 5 },
+  { text: "Submitted For Approval", value: 6 },
+];
+
+const categoryOptions = [
+  { text: "Category type 1", value: 1 },
+  { text: "Category type 2", value: 2 },
+  { text: "Category type 3", value: 3 },
+];
+
+const reclaimFromOptions = [
+  { text: "Reclaim from 1", value: 1 },
+  { text: "Reclaim from 2", value: 2 },
+  { text: "Reclaim from 3", value: 3 },
+];
+
+const packageReclaimTypes = [
+  {value: 'percentage', text: 'Percentage'},
+  {value: 'fixedOneOff', text: 'Fixed amount - one off'},
+  {value: 'fixedWeekly', text: 'Fixed amount - weekly'},
+];
+
+const supplierOptions = [
+  { text: "Supplier type 1", value: 1 },
+  { text: "Supplier type 2", value: 2 },
+  { text: "Supplier type 3", value: 3 },
+  { text: "Supplier type 4", value: 4 },
+];
+
+const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changePackageReclaim, removePackageReclaim, addPackageReclaim }) => {
+  const [elementsData, setElementsData] = useState({
+    '30mCall': 25,
+    '45mCall': 22,
+    '60m+Call': 20,
+    secondaryCarer: 'XX',
+    domesticCare: 'XX',
+    escortServices: 'XX',
+    sleepingNight: 'XX',
+    wakingNight: 'XX',
+    nightOwl: 'XX',
+  });
+
+  const [selectedStageType, setSelectedStageType] = useState(0);
+  const [selectedSupplierType, setSelectedSupplierType] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState(0);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
+  const changeElementsData = (field, data) => {
+    setElementsData({...elementsData, [field]: data});
+  };
+
+  return (
+    <div className="mt-5 mb-5 person-care">
+      <div className="column proposed-packages__header is-flex is-justify-content-space-between">
+        <div>
+          <h1 className='container-title'>Day Care</h1>
+          <h3>ID: <span>{brokerage?.homeCare?.id || ''}</span></h3>
+        </div>
+        <Dropdown
+          label=''
+          initialText='Stage'
+          options={stageOptions}
+          selectedValue={selectedStageType}
+          onOptionSelect={(option) => setSelectedStageType(option)}
+        />
+      </div>
+      <div className="column">
+        <div className="is-flex is-flex-wrap-wrap">
+          <div className="mr-3 is-flex is-align-items-flex-end">
+            <Dropdown
+              label=''
+              initialText='Supplier (please select)'
+              options={supplierOptions}
+              onOptionSelect={setSelectedSupplierType}
+              selectedValue={selectedSupplierType}
+            />
+          </div>
+          <span className="mr-3">
+              <DatePick label='Start Date' dateValue={startDate} setDate={setStartDate} />
+            </span>
+          <span className="mr-3">
+              <DatePick label='End Date' dateValue={endDate} setDate={setEndDate} />
+            </span>
+        </div>
+      </div>
+      <div className='proposed-packages__elements column'>
+        <div className='mb-4'>
+          <div className='is-flex is-flex-wrap-wrap is-justify-content-space-between'>
+            <h2 className='text-title'>Core cost</h2>
+            <EuroInput classes='default-label' label='Amount' value=' 88888888'/>
+            <BaseField label='Days per week'><p>4</p></BaseField>
+            <BaseField label='Cost / week'><p>{currency.euro}240</p></BaseField>
+          </div>
+          <hr className='horizontal-delimiter'/>
+          <div className='is-flex is-flex-wrap-wrap is-justify-content-space-between'>
+            <Dropdown
+              classes='label-bold'
+              label='Transport'
+              initialText='Supplier (please select)'
+              options={supplierOptions}
+              onOptionSelect={setSelectedSupplierType}
+              selectedValue={selectedSupplierType}
+            />
+            <BaseField label='Days per week'><p>4</p></BaseField>
+            <Input label='Cost per week' />
+            <p>{currency.euro}89</p>
+          </div>
+          <div className='is-flex is-flex-wrap-wrap is-justify-content-space-between'>
+            <Dropdown
+              classes='label-bold'
+              label='Transport escort'
+              initialText='Select Supplier'
+              options={supplierOptions}
+              onOptionSelect={setSelectedSupplierType}
+              selectedValue={selectedSupplierType}
+            />
+            <Input label='Hours per week' value='XXXX' />
+            <Input label='Hours per week' value='XXXX' />
+            <p>{currency.euro}89</p>
+          </div>
+          <div className='is-flex is-flex-wrap-wrap is-justify-content-space-between'>
+            <Dropdown
+              classes='label-bold'
+              label='Dare care opportunities'
+              initialText='Select Supplier'
+              options={supplierOptions}
+              onOptionSelect={setSelectedSupplierType}
+              selectedValue={selectedSupplierType}
+            />
+            <Input label='Hours per week' value='XXXX' />
+            <Input label='Hours per week' value='XXXX' />
+            <p>{currency.euro}89</p>
+          </div>
+          <div className='is-flex is-flex-wrap-wrap is-justify-content-space-between'>
+            <Dropdown
+              classes='label-bold'
+              label='Escort'
+              initialText='Select Supplier'
+              options={supplierOptions}
+              onOptionSelect={setSelectedSupplierType}
+              selectedValue={selectedSupplierType}
+            />
+            <Input label='Hours per week' value='XXXX' />
+            <Input label='Hours per week' value='XXXX' />
+            <p>{currency.euro}89</p>
+          </div>
+        </div>
+        <div className='proposed-packages__total-cost'>
+          <p>Total <span>{currency.euro}XXXX</span></p>
+        </div>
+        {
+          tab === 'approvalHistory' &&
+          <div>
+            <div className='mt-4 is-flex is-align-items-center is-justify-content-space-between'>
+              <p className='package-reclaim__text'>Should the cost of this package be reclaimed in
+                part or full from another body, e.g. NHS, CCG, another LA ?
+              </p>
+              <Button onClick={addPackageReclaim} className='outline'>Add reclaim</Button>
+            </div>
+            <hr className='horizontal-delimiter'/>
+          </div>
+        }
+        {!!packagesReclaimed.length && tab === 'approvalHistory' &&
+          <div>
+            {packagesReclaimed.map(item => {
+              return (
+                <PackageReclaim
+                  remove={() => removePackageReclaim(item.id)}
+                  key={item.id}
+                  packageReclaim={item}
+                  setPackageReclaim={changePackageReclaim(item.id)}
+                />
+              )
+            })}
+            <p onClick={addPackageReclaim} className='action-button-text'>+ Add another reclaim</p>
+          </div>
+        }
+      </div>
+      <div className='proposed-packages__tabs column'>
+        {[{text: 'Approval history', value: 'approvalHistory'},
+          {text: 'Package details', value: 'packageDetails'}]
+          .map(item => {
+            return (
+              <div
+                key={item.value}
+                onClick={() => changeTab(item.value)}
+                className={`tab${tab === item.value ? ' active-tab' : ''}`}>
+                <p>{item.text}</p>
+                <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0.808608 0L11.1914 0C11.9104 0 12.2704 0.766375 11.762 1.21457L6.57063 5.79162C6.2555 6.06946 5.74452 6.06946 5.42939 5.79162L0.23799 1.21457C-0.270409 0.766375 0.0896673 0 0.808608 0Z" fill="#00664F"/>
+                </svg>
+              </div>)}
+          )
+        }
+      </div>
+    </div>
+  )
+}
+
+export default PackagesDayCare;

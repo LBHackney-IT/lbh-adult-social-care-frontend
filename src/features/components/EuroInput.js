@@ -1,10 +1,10 @@
 import React from "react";
 import Input from "./Input";
-import {euroSign} from "../../constants/strings";
+import {currency} from "../../constants/strings";
 
 const EuroInput = props => {
   return (
-    <Input preSign={euroSign} {...props} />
+    <Input preSign={currency.euro} {...props} />
   )
 };
 

@@ -66,6 +66,7 @@
 }
 
 .elements-row {
+  display: flex;
   align-items: center;
   margin-bottom: 8px;
 }
@@ -184,4 +185,17 @@
 
 .horizontal-delimiter {
   margin: 32px 0;
+}
+
+.text-title {
+  flex-basis: 100%;
+  font-weight: bold;
+  color: $lbh-black1;
+}
+
+.default-label.control.field-container {
+  label {
+    font-weight: initial;
+    font-size: 14px;
+  }
 }

@@ -1,5 +1,7 @@
-const euroSign = '£';
+const currency = {
+  euro: '£',
+};
 
 export {
-  euroSign,
+  currency,
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import ClientSummary from "../../components/ClientSummary";
-import {euroSign} from "../../../constants/strings";
+import {currency} from "../../../constants/strings";
 
 const ApprovalHistory = ({ status = '', history }) => {
   return (
@@ -30,7 +30,7 @@ const ApprovalHistory = ({ status = '', history }) => {
       </div>
       <div className='total-container'>
         <p className='title'>TOTAL / WK</p>
-        <p className='price'>{euroSign}1892</p>
+        <p className='price'>{currency.euro}1892</p>
         <p className='status'>ESTIMATE</p>
       </div>
       <div className='approval-history__history'>
