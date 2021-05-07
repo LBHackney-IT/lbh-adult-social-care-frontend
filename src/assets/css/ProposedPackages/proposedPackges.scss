@@ -66,6 +66,7 @@
 }
 
 .elements-row {
+  display: flex;
   align-items: center;
   margin-bottom: 8px;
 }
@@ -184,4 +185,60 @@
 
 .horizontal-delimiter {
   margin: 32px 0;
+}
+
+.text-title {
+  flex-basis: 100%;
+  font-weight: bold;
+  color: $lbh-black1;
+}
+
+.default-label.control.field-container {
+  label {
+    font-weight: initial;
+    font-size: 14px;
+  }
+}
+
+.day-care__min-space {
+  min-width: 161px;
+}
+
+.day-care__min-input-space {
+  min-width: 251px;
+
+  input {
+    width: 100%;
+  }
+}
+
+.day-care__total-cost {
+  width: 200px;
+  margin-left: auto;
+}
+
+.day-care__cost-week {
+  p {
+    text-align: right;
+  }
+}
+
+.row-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid $lbh-gray;
+}
+
+.day-care__fixed-dropdown-width {
+  width: 251px;
+
+  .dropdown {
+    width: 100%;
+    button {
+      width: 251px;
+    }
+  }
 }

@@ -1,3 +1,4 @@
+import React from "react";
 import { format } from "date-fns";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -194,7 +195,6 @@ const HomeCare = () => {
           isReclaimed &&
             <div>
               {packagesReclaimed.map((item, index) => {
-                console.log(item.id);
                 return (
                   <PackageReclaim
                     remove={index !== 0 ? () => removePackageReclaim(item.id) : undefined}

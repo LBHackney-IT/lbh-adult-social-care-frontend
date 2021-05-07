@@ -1,8 +1,8 @@
 import React from "react";
 import ClientSummary from "../../components/ClientSummary";
-import {euroSign} from "../../../constants/strings";
+import CostCard from "../../components/CostCard";
 
-const ApprovalHistory = ({ status = '', history }) => {
+const ApprovalHistory = ({ status = '', history, costCards = [] }) => {
   return (
     <div className='approval-history'>
       <h2>Home Care <span>{status}</span></h2>
@@ -28,11 +28,15 @@ const ApprovalHistory = ({ status = '', history }) => {
           <p>3</p>
         </div>
       </div>
-      <div className='total-container'>
-        <p className='title'>TOTAL / WK</p>
-        <p className='price'>{euroSign}1892</p>
-        <p className='status'>ESTIMATE</p>
-      </div>
+      {
+        !!costCards.length &&
+        <div className='is-flex is-flex-wrap-wrap'>
+          {costCards.map(item => {
+              return (<CostCard key={item.id} />)
+            }
+          )}
+        </div>
+      }
       <div className='approval-history__history'>
         <p className='approval-history__title'>APPROVAL HISTORY</p>
         {history.map(item => (

@@ -1,3 +1,4 @@
+import React from "react";
 import "../assets/field.scss";
 
 const BaseField = ({ classes = '', label, noInputStyle = false, children }) => {

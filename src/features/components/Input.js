@@ -6,6 +6,7 @@ const Input = ({
   label,
   placeholder = "",
   onChange = () => {},
+  classes = '',
   value = '',
   preSign = '',
   postSign = '',
@@ -21,8 +22,9 @@ const Input = ({
   };
 
   return (
-    <BaseField label={label}>
+    <BaseField classes={classes} label={label}>
       <input
+        className='custom-input'
         placeholder={placeholder}
         onChange={onChangeInput}
         value={`${preSign}${value}${postSign}`}
