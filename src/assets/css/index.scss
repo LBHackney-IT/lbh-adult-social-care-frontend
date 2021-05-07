@@ -6,6 +6,26 @@
 @import "./ProposedPackages/proposedPackges";
 
 * {
-    font-family: "OpenSans", sans-serif !important;
-    letter-spacing: 0.15px;
+  font-family: "OpenSans", sans-serif !important;
+  letter-spacing: 0.15px;
+}
+
+button {
+  padding-left: 0px;
+}
+
+// Small devices (landscape phones, 576px and smaller)
+@media screen and (max-width: 576px) {
+  .level-item {
+    align-items: start;
+    justify-content: left;
+  }
+}
+
+// Medium devices (tablets, 768px and small)
+@media screen and (max-width: 768px) {
+  .level-item {
+    align-items: start;
+    justify-content: left;
+  }
 }
