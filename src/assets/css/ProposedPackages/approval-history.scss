@@ -19,6 +19,15 @@
 
   .cost-card {
     margin-right: 20px;
+
+    &.cost-card_selected {
+      background: $lbh-yellow;
+      border-color: $lbh-black1;
+
+      p {
+        color: $lbh-black1;
+      }
+    }
   }
 
   .total-container {
