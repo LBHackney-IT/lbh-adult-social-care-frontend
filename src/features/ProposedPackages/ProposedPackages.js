@@ -9,6 +9,7 @@ import PackagesDayCare from "./PackagesDayCare";
 import {uniqueID} from "../../service/helpers";
 import PackagesResidentialCare from "./PackagesResidentialCare";
 import PackagesHomeCare from "./PackagesHomeCare";
+import PackagesNursingCare from "./PackagesNursingCare";
 
 const initialPackageReclaim = {
   type: '',
@@ -65,6 +66,12 @@ const residentialCards = [
   {id: 1, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE'},
   {id: 2, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE'},
   {id: 3, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE', selected: true},
+  {id: 4, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE', selected: true},
+];
+
+const nursingCards = [
+  {id: 1, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE'},
+  {id: 2, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE'},
   {id: 3, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE', selected: true},
 ];
 
@@ -111,8 +118,22 @@ const ProposedPackages = () => {
       >
         Proposed Packages
       </ClientSummary>
+      <PackagesNursingCare
+        tab={tab}
+        careType='home care'
+        addPackageReclaim={addPackageReclaim}
+        removePackageReclaim={removePackageReclaim}
+        costCards={nursingCards}
+        summaryData={summaryData}
+        approvalHistory={approvalHistory}
+        packagesReclaimed={packagesReclaimed}
+        changePackageReclaim={changePackageReclaim}
+        brokerage={brokerage}
+        changeTab={changeTab}
+      />
       <PackagesResidentialCare
         tab={tab}
+      careType='home care'
         addPackageReclaim={addPackageReclaim}
         removePackageReclaim={removePackageReclaim}
         costCards={residentialCards}
@@ -123,30 +144,30 @@ const ProposedPackages = () => {
         brokerage={brokerage}
         changeTab={changeTab}
       />
-      {/*<PackagesDayCare*/}
-      {/*  tab={tab}*/}
-      {/*  addPackageReclaim={addPackageReclaim}*/}
-      {/*  removePackageReclaim={removePackageReclaim}*/}
-      {/*  packagesReclaimed={packagesReclaimed}*/}
-      {/*  changePackageReclaim={changePackageReclaim}*/}
-      {/*  brokerage={brokerage}*/}
-      {/*  changeTab={changeTab}*/}
-      {/*  costCards={costCards}*/}
-      {/*  summaryData={summaryData}*/}
-      {/*  approvalHistory={approvalHistory}*/}
-      {/*/>*/}
-      {/*<PackagesHomeCare*/}
-      {/*  tab={tab}*/}
-      {/*  brokerage={brokerage}*/}
-      {/*  addPackageReclaim={addPackageReclaim}*/}
-      {/*  removePackageReclaim={removePackageReclaim}*/}
-      {/*  packagesReclaimed={packagesReclaimed}*/}
-      {/*  changePackageReclaim={changePackageReclaim}*/}
-      {/*  changeTab={changeTab}*/}
-      {/*  costCards={costCards}*/}
-      {/*  summaryData={summaryData}*/}
-      {/*  approvalHistory={approvalHistory}*/}
-      {/*/>*/}
+      <PackagesDayCare
+        tab={tab}
+        addPackageReclaim={addPackageReclaim}
+        removePackageReclaim={removePackageReclaim}
+        packagesReclaimed={packagesReclaimed}
+        changePackageReclaim={changePackageReclaim}
+        brokerage={brokerage}
+        changeTab={changeTab}
+        costCards={costCards}
+        summaryData={summaryData}
+        approvalHistory={approvalHistory}
+      />
+      <PackagesHomeCare
+        tab={tab}
+        brokerage={brokerage}
+        addPackageReclaim={addPackageReclaim}
+        removePackageReclaim={removePackageReclaim}
+        packagesReclaimed={packagesReclaimed}
+        changePackageReclaim={changePackageReclaim}
+        changeTab={changeTab}
+        costCards={costCards}
+        summaryData={summaryData}
+        approvalHistory={approvalHistory}
+      />
     </Layout>
   );
 };
