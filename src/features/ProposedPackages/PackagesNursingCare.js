@@ -25,7 +25,7 @@ const supplierOptions = [
   { text: "Supplier type 4", value: 4 },
 ];
 
-const PackagesResidentialCare = ({
+const PackagesNursingCare = ({
   tab,
   brokerage,
   changeTab,
@@ -64,7 +64,7 @@ const PackagesResidentialCare = ({
     <div className="mt-5 mb-5 person-care">
       <div className="column proposed-packages__header is-flex is-justify-content-space-between">
         <div>
-          <h1 className='container-title'>Residential Care {careType && <span className='person-care__care-type'>({careType})</span>}</h1>
+          <h1 className='container-title'>Nursing Care {careType && <span className='person-care__care-type'>({careType})</span>}</h1>
           <h3>ID: <span>{brokerage?.homeCare?.id || ''}</span></h3>
         </div>
         <Dropdown
@@ -206,4 +206,4 @@ const PackagesResidentialCare = ({
   )
 }
 
-export default PackagesResidentialCare;
+export default PackagesNursingCare;
