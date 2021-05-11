@@ -3,10 +3,10 @@ import DatePick from "../components/DatePick";
 import {currency} from "../../constants/strings";
 import EuroInput from "../components/EuroInput";
 import {Button} from "../components/Button";
-import TextArea from "../components/TextArea";
-import RadioButton from "../components/RadioButton";
 import React, {useState} from "react";
 import PackageReclaim from "../components/PackageReclaim";
+import ApprovalHistory from "./components/ApprovalHistory";
+import SummaryDataList from "../CarePackages/HomeCare/components/SummaryDataList";
 
 const stageOptions = [
   { text: "New", value: 1 },
@@ -17,24 +17,6 @@ const stageOptions = [
   { text: "Submitted For Approval", value: 6 },
 ];
 
-const categoryOptions = [
-  { text: "Category type 1", value: 1 },
-  { text: "Category type 2", value: 2 },
-  { text: "Category type 3", value: 3 },
-];
-
-const reclaimFromOptions = [
-  { text: "Reclaim from 1", value: 1 },
-  { text: "Reclaim from 2", value: 2 },
-  { text: "Reclaim from 3", value: 3 },
-];
-
-const packageReclaimTypes = [
-  {value: 'percentage', text: 'Percentage'},
-  {value: 'fixedOneOff', text: 'Fixed amount - one off'},
-  {value: 'fixedWeekly', text: 'Fixed amount - weekly'},
-];
-
 const supplierOptions = [
   { text: "Supplier type 1", value: 1 },
   { text: "Supplier type 2", value: 2 },
@@ -42,7 +24,18 @@ const supplierOptions = [
   { text: "Supplier type 4", value: 4 },
 ];
 
-const PackagesHomeCare = ({ tab, brokerage, changeTab, }) => {
+const PackagesHomeCare = ({
+  tab,
+  brokerage,
+  changeTab,
+  packagesReclaimed,
+  changePackageReclaim,
+  removePackageReclaim,
+  addPackageReclaim,
+  approvalHistory,
+  summaryData,
+  costCards,
+}) => {
   const [elementsData, setElementsData] = useState({
     '30mCall': 25,
     '45mCall': 22,
@@ -55,24 +48,8 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab, }) => {
     nightOwl: 'XX',
   });
 
-  const [packageReclaim, setPackageReclaim] = useState({
-    type: 'percentage',
-    notes: '',
-    from: ['NHS Bristol'],
-    categoryTypes: ['Category 1', 'Category 2'],
-    amount: '888888',
-  });
-
-  const changePackageType = (option) => {
-    setPackageReclaim({
-      ...packageReclaim,
-      type: option.value,
-    });
-  };
-
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
@@ -81,6 +58,7 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab, }) => {
   };
 
   return (
+    <>
     <div className="mt-5 mb-5 person-care">
       <div className="column proposed-packages__header is-flex is-justify-content-space-between">
         <div>
@@ -232,34 +210,31 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab, }) => {
         <div className='proposed-packages__total-cost'>
           <p>Total Cost /WK <span>{currency.euro}XXXX</span></p>
         </div>
-        {
-          tab === 'packageDetails' &&
-          <div>
-            <div className='mt-4 is-flex is-align-items-center is-justify-content-space-between'>
-              <p className='package-reclaim__text'>Should the cost of this package be reclaimed in
-                part or full from another body, e.g. NHS, CCG, another LA ?
-              </p>
-              <Button className='outline'>Add reclaim</Button>
-            </div>
-            <hr className='horizontal-delimiter'/>
+        <div>
+          <div className='mt-4 is-flex is-align-items-center is-justify-content-space-between'>
+            <p className='package-reclaim__text'>Should the cost of this package be reclaimed in
+              part or full from another body, e.g. NHS, CCG, another LA ?
+            </p>
+            <Button onClick={addPackageReclaim} className='outline'>Add reclaim</Button>
           </div>
+          <hr className='horizontal-delimiter'/>
+        </div>
+        {!!packagesReclaimed.length &&
+        <div>
+          {packagesReclaimed.map(item => {
+            return (
+              <PackageReclaim
+                remove={() => removePackageReclaim(item.id)}
+                key={item.id}
+                packageReclaim={item}
+                setPackageReclaim={changePackageReclaim(item.id)}
+              />
+            )
+          })}
+          <p onClick={addPackageReclaim} className='action-button-text'>+ Add another reclaim</p>
+        </div>
         }
       </div>
-      {!!packagesReclaimed.length && tab === 'approvalHistory' &&
-      <div>
-        {packagesReclaimed.map(item => {
-          return (
-            <PackageReclaim
-              remove={() => removePackageReclaim(item.id)}
-              key={item.id}
-              packageReclaim={item}
-              setPackageReclaim={changePackageReclaim(item.id)}
-            />
-          )
-        })}
-        <p onClick={addPackageReclaim} className='action-button-text'>+ Add another reclaim</p>
-      </div>
-      }
       <div className='proposed-packages__tabs column'>
         {[{text: 'Approval history', value: 'approvalHistory'},
           {text: 'Package details', value: 'packageDetails'}]
@@ -278,6 +253,18 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab, }) => {
         }
       </div>
     </div>
+  {tab === 'approvalHistory' ?
+    <ApprovalHistory costCards={costCards} status='(Ongoing)' history={approvalHistory} />
+    : !!summaryData.length &&
+    <SummaryDataList
+      edit={(item) => console.log('edit', item)}
+      remove={(item) => console.log('remove', item)}
+      confirmPackage={false}
+      slicedText={true}
+      summaryData={summaryData}
+    />
+  }
+</>
   )
 }
 

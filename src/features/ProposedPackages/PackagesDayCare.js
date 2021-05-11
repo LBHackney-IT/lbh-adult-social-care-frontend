@@ -7,6 +7,8 @@ import React, {useState} from "react";
 import BaseField from "../components/baseComponents/BaseField";
 import Input from "../components/Input";
 import PackageReclaim from "../components/PackageReclaim";
+import ApprovalHistory from "./components/ApprovalHistory";
+import SummaryDataList from "../CarePackages/HomeCare/components/SummaryDataList";
 
 const stageOptions = [
   { text: "New", value: 1 },
@@ -24,7 +26,18 @@ const supplierOptions = [
   { text: "Supplier type 4", value: 4 },
 ];
 
-const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changePackageReclaim, removePackageReclaim, addPackageReclaim }) => {
+const PackagesDayCare = ({
+  tab,
+  brokerage,
+  changeTab,
+  packagesReclaimed,
+  changePackageReclaim,
+  removePackageReclaim,
+  addPackageReclaim,
+  approvalHistory,
+  summaryData,
+  costCards,
+}) => {
   const [coreCost, setCoreCost] = useState({
     costPerDay: 'XX',
   });
@@ -62,6 +75,7 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
   };
 
   return (
+    <>
     <div className="mt-5 mb-5 person-care">
       <div className="column proposed-packages__header is-flex is-justify-content-space-between">
         <div>
@@ -248,6 +262,18 @@ const PackagesDayCare = ({ tab, brokerage, changeTab, packagesReclaimed, changeP
         }
       </div>
     </div>
+  {tab === 'approvalHistory' ?
+    <ApprovalHistory costCards={costCards} status='(Ongoing)' history={approvalHistory} />
+    : !!summaryData.length &&
+    <SummaryDataList
+      edit={(item) => console.log('edit', item)}
+      remove={(item) => console.log('remove', item)}
+      confirmPackage={false}
+      slicedText={true}
+      summaryData={summaryData}
+    />
+  }
+</>
   )
 }
 

@@ -9,6 +9,8 @@ import SummaryDataList from "../CarePackages/HomeCare/components/SummaryDataList
 import {getHomeCareSummaryData} from "../../api/CarePackages/HomeCareApi";
 import PackagesDayCare from "./PackagesDayCare";
 import {uniqueID} from "../../service/helpers";
+import PackagesResidentialCare from "./PackagesResidentialCare";
+import PackagesHomeCare from "./PackagesHomeCare";
 
 const initialPackageReclaim = {
   type: '',
@@ -61,6 +63,13 @@ const costCards = [
   {id: 3, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE'},
 ];
 
+const residentialCards = [
+  {id: 1, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE'},
+  {id: 2, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE'},
+  {id: 3, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE', selected: true},
+  {id: 3, title: 'TOTAL / WK', cost: '1892', status: 'ESTIMATE', selected: true},
+];
+
 const ProposedPackages = () => {
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState('approvalHistory');
@@ -104,35 +113,42 @@ const ProposedPackages = () => {
       >
         Proposed Packages
       </ClientSummary>
-      {/*<PackagesHomeCare*/}
-      {/*  tab={tab}*/}
-      {/*  brokerage={brokerage}*/}
-      {/*addPackageReclaim={addPackageReclaim}*/}
-      {/*removePackageReclaim={removePackageReclaim}*/}
-      {/*packagesReclaimed={packagesReclaimed}*/}
-      {/*changePackageReclaim={changePackageReclaim}*/}
-      {/*  changeTab={changeTab}*/}
-      {/*/>*/}
-      <PackagesDayCare
+      <PackagesResidentialCare
         tab={tab}
         addPackageReclaim={addPackageReclaim}
         removePackageReclaim={removePackageReclaim}
+        costCards={residentialCards}
+        summaryData={summaryData}
+        approvalHistory={approvalHistory}
         packagesReclaimed={packagesReclaimed}
         changePackageReclaim={changePackageReclaim}
         brokerage={brokerage}
         changeTab={changeTab}
       />
-      {tab === 'approvalHistory' ?
-          <ApprovalHistory costCards={costCards} status='(Ongoing)' history={approvalHistory} />
-          : !!summaryData.length &&
-          <SummaryDataList
-            edit={(item) => console.log('edit', item)}
-            remove={(item) => console.log('remove', item)}
-            confirmPackage={false}
-            slicedText={true}
-            summaryData={summaryData}
-          />
-      }
+      {/*<PackagesDayCare*/}
+      {/*  tab={tab}*/}
+      {/*  addPackageReclaim={addPackageReclaim}*/}
+      {/*  removePackageReclaim={removePackageReclaim}*/}
+      {/*  packagesReclaimed={packagesReclaimed}*/}
+      {/*  changePackageReclaim={changePackageReclaim}*/}
+      {/*  brokerage={brokerage}*/}
+      {/*  changeTab={changeTab}*/}
+      {/*  costCards={costCards}*/}
+      {/*  summaryData={summaryData}*/}
+      {/*  approvalHistory={approvalHistory}*/}
+      {/*/>*/}
+      {/*<PackagesHomeCare*/}
+      {/*  tab={tab}*/}
+      {/*  brokerage={brokerage}*/}
+      {/*  addPackageReclaim={addPackageReclaim}*/}
+      {/*  removePackageReclaim={removePackageReclaim}*/}
+      {/*  packagesReclaimed={packagesReclaimed}*/}
+      {/*  changePackageReclaim={changePackageReclaim}*/}
+      {/*  changeTab={changeTab}*/}
+      {/*  costCards={costCards}*/}
+      {/*  summaryData={summaryData}*/}
+      {/*  approvalHistory={approvalHistory}*/}
+      {/*/>*/}
     </Layout>
   );
 };

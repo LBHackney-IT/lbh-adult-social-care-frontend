@@ -242,3 +242,21 @@
     }
   }
 }
+
+.weekly-total-card {
+  margin-left: auto;
+  flex-basis: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 32px;
+  p {
+    color: $lbh-black1;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $lbh-card-gray;
+    width: 207px;
+    height: 65px;
+  }
+}
