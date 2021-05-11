@@ -4,8 +4,6 @@ import Layout from "../Layout/Layout";
 import {useState} from "react";
 import {useSelector} from "react-redux";
 import {selectBrokerage} from "../../reducers/brokerageReducer";
-import ApprovalHistory from "./components/ApprovalHistory";
-import SummaryDataList from "../CarePackages/HomeCare/components/SummaryDataList";
 import {getHomeCareSummaryData} from "../../api/CarePackages/HomeCareApi";
 import PackagesDayCare from "./PackagesDayCare";
 import {uniqueID} from "../../service/helpers";
