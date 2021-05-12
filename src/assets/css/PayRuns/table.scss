@@ -1,0 +1,27 @@
+.pay-runs__table {
+  overflow: auto;
+}
+
+.pay-runs__table-row {
+  display: flex;
+}
+
+.pay-runs__sort-table {
+  display: flex;
+}
+
+.pay-runs__sort {
+  display: flex;
+  align-items: center;
+
+  .sort__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    svg:first-of-type {
+      transform: rotate(180deg);
+      margin-bottom: 2px;
+    }
+  }
+}

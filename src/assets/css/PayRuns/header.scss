@@ -1,0 +1,24 @@
+.pay-runs__new-pay {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.pay-runs__filters {
+  display: flex;
+  flex-wrap: wrap;
+
+  .custom-input__search {
+    min-width: 231px;
+  }
+
+  .dropdown-container {
+    .button {
+      width: 157px;
+    }
+  }
+}
+
+.pay-runs__filters-title {
+  flex-basis: 100%;
+}

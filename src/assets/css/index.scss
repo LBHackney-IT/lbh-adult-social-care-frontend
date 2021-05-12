@@ -5,6 +5,10 @@
 @import "./ProposedPackages/approval-history";
 @import "./ProposedPackages/proposedPackges";
 @import "./PackageReclaim/package-reclaim";
+@import "./Payments/payments-header";
+@import "./PayRuns/header";
+@import "./PayRuns/tabs";
+@import "./PayRuns/table";
 
 * {
   font-family: "OpenSans", sans-serif !important;

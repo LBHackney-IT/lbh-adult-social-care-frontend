@@ -19,14 +19,17 @@ import NursingCareApproveBrokered from "./features/CarePackages/NursingCare/Nurs
 import { useSelector } from "react-redux";
 import { selectUser } from "./reducers/userReducer";
 import ProposedPackages from "./features/ProposedPackages/ProposedPackages";
+import PaymentsHeader from "./features/Payments/components/PaymentsHeader";
+import PayRuns from "./features/PayRuns/PayRuns";
 
 const App = () => {
   const user = useSelector(selectUser);
 
   return (
     <>
+      <PaymentsHeader />
       <Switch>
-        {user === null ? (
+        {user !== null ? (
           <Route path={RouteConstants.LOGIN} component={Login} />
         ) : (
           <>
@@ -34,6 +37,11 @@ const App = () => {
               exact
               path={RouteConstants.HOME_CARE_APPROVE_PACKAGE}
               component={HomeCareApprovePackage}
+            />
+            <Route
+              exact
+              path={RouteConstants.PAYMENTS_PAY_RUNS_ROUTE}
+              component={PayRuns}
             />
             <Route
               exact

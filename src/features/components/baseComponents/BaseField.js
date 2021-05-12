@@ -1,7 +1,7 @@
 import React from "react";
 import "../assets/field.scss";
 
-const BaseField = ({ classes = '', label, noInputStyle = false, children }) => {
+const BaseField = ({ onClick = () => {}, classes = '', label, noInputStyle = false, children }) => {
   const hasLabel = label !== undefined;
   let className = "control field-container" + (hasLabel ? " has-label" : "");
 
@@ -10,7 +10,7 @@ const BaseField = ({ classes = '', label, noInputStyle = false, children }) => {
   }
 
   return (
-    <div className={`${className} ${classes}`}>
+    <div onClick={onClick} className={`${className} ${classes}`}>
       {hasLabel ? <label>{label}</label> : null}
       {children}
     </div>

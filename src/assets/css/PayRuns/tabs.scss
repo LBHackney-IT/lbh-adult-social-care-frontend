@@ -1,0 +1,29 @@
+.pay-runs__tabs {
+  display: flex;
+  border-bottom: 1px solid $lbh-gray;
+  padding: 0 12px;
+}
+
+.pay-runs__tabs-inactive-tab {
+  background: $lbh-gray;
+  margin-bottom: 3px;
+}
+
+.pay-runs__tabs-tab {
+  margin-right: 12px;
+  min-width: 134px;
+  padding: 6px 12px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.pay-runs__tabs-active-tab {
+  border-bottom: 2px solid white;
+  border-left: 1px solid $lbh-gray;
+  border-top: 1px solid $lbh-gray;
+  border-right: 1px solid $lbh-gray;
+  position: relative;
+  bottom: -2px;
+}
