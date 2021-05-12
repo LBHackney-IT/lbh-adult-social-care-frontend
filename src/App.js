@@ -26,7 +26,7 @@ const App = () => {
   return (
     <>
       <Switch>
-        {user === null ? (
+        {user !== null ? (
           <Route path={RouteConstants.LOGIN} component={Login} />
         ) : (
           <>
