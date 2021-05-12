@@ -13,7 +13,7 @@ const RESIDENTIAL_CARE = `${CARE_PACKAGE}/residential-care`;
 const RESIDENTIAL_CARE_APPROVE_PACKAGE = `${RESIDENTIAL_CARE}/approve-package`;
 const RESIDENTIAL_CARE_APPROVE_BROKERED = `${RESIDENTIAL_CARE}/approve-brokered`;
 const DAY_CARE = `${CARE_PACKAGE}/day-care`;
-const DAY_CARE_APPROVE_PACKAGE = `${DAY_CARE}/approve-package`;
+const DAY_CARE_APPROVE_PACKAGE = `${DAY_CARE}/approve-package/:dayCarePackageId`;
 const DAY_CARE_APPROVE_BROKERED = `${DAY_CARE}/approve-brokered`;
 const CLIENT_HISTORY = "/client-history";
 
