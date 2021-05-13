@@ -6,6 +6,7 @@ import PayRunTabs from "./components/PayRunTabs";
 import PayRunTable from "./components/PayRunTable";
 import Pagination from "./components/Pagination";
 import {payRunsTableDate} from "../../testData/PayRuns";
+import PopupCreatePayRun from "./components/PopupCreatePayRun";
 
 const sorts = [
   {name: 'id', text: 'ID'},
@@ -24,7 +25,23 @@ const tabsClasses = {
 
 const PayRuns = () => {
   const location = useLocation();
-  const pushRoute = useHistory();
+  const pushRoute = useHistory().push;
+  const [openedPopup, setOpenedPopup] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [hocAndRelease, changeHocAndRelease] = useState('');
+  const [regularCycles, changeRegularCycles] = useState('');
+
+  const [headerOptions, setHeaderOptions] = useState({
+    actionButtonText: 'Pay Runs',
+    clickActionButton: () => {
+      console.log('asd');
+      setOpenedPopup('create-pay-run');
+    },
+  });
+
+  useEffect(() => {
+    pushRoute(`${location.pathname}?page=1`);
+  }, []);
 
   const [breadcrumbs, setBreadcrumbs] = useState([]);
   const [tab, changeTab] = useState('pay-runs');
@@ -35,11 +52,16 @@ const PayRuns = () => {
 
   const sortBy = (field, value) => {
     setSort({value, name: field});
-    console.log('sort by', field, value);
+  };
+
+  const closeCreatePayRun = () => {
+    setOpenedPopup('');
+    changeHocAndRelease('');
+    changeRegularCycles('');
+    setDate(new Date());
   };
 
   useEffect(() => {
-    console.log(location);
     if(location?.query?.id) {
       setBreadcrumbs([
         {text: 'payments', route: '/payments/pay-runs', onClick: (value) => pushRoute(`${value.route}`)},
@@ -50,8 +72,22 @@ const PayRuns = () => {
 
   return (
     <div className='pay-runs'>
+      {openedPopup === 'create-pay-run' &&
+        <PopupCreatePayRun
+          changeHocAndRelease={changeHocAndRelease}
+          changeRegularCycles={changeRegularCycles}
+          hocAndRelease={hocAndRelease}
+          regularCycles={regularCycles}
+          closePopup={closeCreatePayRun}
+          date={date}
+          setDate={setDate}
+        />
+      }
       {!!breadcrumbs.length && <Breadcrumbs values={breadcrumbs} />}
-      <PayRunsHeader  />
+      <PayRunsHeader
+        actionButtonText={headerOptions.actionButtonText}
+        clickActionButton={headerOptions.clickActionButton}
+      />
       <PayRunTabs
         tab={tab}
         changeTab={changeTab}
@@ -67,7 +103,7 @@ const PayRuns = () => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination from={1} to={10} currentPage={1} itemsCount={10} totalCount={30} />
+      <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
       <div className='pay-runs__footer'>
         <div className='pay-runs__footer-info'>
           <p>Hackney Adult Social Care Services  ·  2021</p>

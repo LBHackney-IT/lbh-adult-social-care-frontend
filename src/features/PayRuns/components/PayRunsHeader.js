@@ -16,6 +16,8 @@ const PayRunsHeader = ({
   cadenceOptions = [],
   statusOptions = [],
   dateOptions = [],
+  actionButtonText = '',
+  clickActionButton = () => {},
 }) => {
   const [filters, setFilters] = useState({...initialFilters});
 
@@ -38,15 +40,11 @@ const PayRunsHeader = ({
     });
   };
 
-  const newPayRun = () => {
-    console.log('new pay run');
-  };
-
   return (
     <div className='pay-runs__header p-3'>
       <div className='pay-runs__new-pay'>
         <p className='title'>Pay Runs</p>
-        <Button onClick={newPayRun}>New Pay Run</Button>
+        <Button onClick={clickActionButton}>{actionButtonText}</Button>
       </div>
       <div className='pay-runs__filters'>
         <p className='pay-runs__filters-title'>Filter by</p>

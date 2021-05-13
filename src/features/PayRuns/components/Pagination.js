@@ -4,12 +4,13 @@ import {Button} from "../../components/Button";
 import {uniqueID} from "../../../service/helpers";
 
 const Pagination = ({ itemsCount, from, to, currentPage, totalCount }) => {
-  const pushRoute = useHistory().push;
   const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const pushRoute = useHistory().push;
+  const finalPage = currentPage !== undefined ? currentPage : query.get('page');
 
   //NOTTESTEDCODE
   const changePagination = page => {
-    console.log(location);
     pushRoute(`${location.pathname}?page=${page}`);
   };
 
@@ -18,7 +19,7 @@ const Pagination = ({ itemsCount, from, to, currentPage, totalCount }) => {
       <p className='pay-runs__table-pagination-info'>Showing {itemsCount === 0 ? 0 : `${from}-${itemsCount} of ${totalCount}`}</p>
       <div className='pay-runs__table-pagination-actions'>
         {[...Array(totalCount / to).keys()].map(item => {
-          const currentPageClass = item === currentPage ? ' pay-runs__table-pagination-item-active' : '';
+          const currentPageClass = item+1 == finalPage ? ' pay-runs__table-pagination-item-active' : '';
           return (
             <Button
               key={uniqueID()}
