@@ -93,7 +93,7 @@ const approveDayCarePackageContents = (dayCarePackageId) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-const dayCarePackageApproveBrokeredDeal = (dayCarePackageId) => {
+const dayCarePackageApproveCommercials = (dayCarePackageId) => {
   const options = {
     url: `${DAY_CARE_URL}/${dayCarePackageId}/change-status/approve-brokered-deal`,
     method: "PUT",
@@ -176,7 +176,7 @@ export {
   getDayCarePackageApprovalDetails,
   changeDayCarePackageStatus,
   approveDayCarePackageContents,
-  dayCarePackageApproveBrokeredDeal,
+  dayCarePackageApproveCommercials,
   dayCarePackageContentsRequestClarification,
   dayCarePackageCommercialsRequestClarification,
   dayCarePackageRejectContents,

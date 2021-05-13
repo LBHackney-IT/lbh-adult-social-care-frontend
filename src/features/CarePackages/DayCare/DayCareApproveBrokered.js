@@ -1,70 +1,187 @@
 import Layout from "../../Layout/Layout";
 import DayCareApprovalTitle from "./components/DayCareApprovalTitle";
 import ApprovalClientSummary from "../../components/ApprovalClientSummary";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PackageCostBox from "./components/PackageCostBox";
 import PackageApprovalHistorySummary from "../../components/PackageApprovalHistorySummary";
 import TitleHeader from "../../components/TitleHeader";
 import DayCareSummary from "./components/DayCareSummary";
 import TextArea from "../../components/TextArea";
+import { useParams } from "react-router-dom";
+import {
+  dayCarePackageApproveCommercials,
+  dayCarePackageCommercialsRequestClarification,
+  dayCarePackageRejectCommercials,
+  getDayCarePackageApprovalDetails,
+} from "../../../api/CarePackages/DayCareApi";
 
-const approvalHistoryEntries = [
-  {
-    eventDate: "03/12/2021",
-    eventMessage: "Package requested by Martin Workman · Social Worker",
-    eventSubMessage: null,
-  },
-  {
-    eventDate: "05/12/2021",
-    eventMessage: "Futher information requested by Amecie Steadman · Approver",
-    eventSubMessage:
-      '"There appears to be more support than needed in the morning for Mr Stephens, please amend or call me to discuss" More',
-  },
-  {
-    eventDate: "06/12/2021",
-    eventMessage: "Package re-submitted by Martin Workman · Social Worker ",
-    eventSubMessage: null,
-  },
-  {
-    eventDate: "14/12/2021",
-    eventMessage:
-      "Care Package Approved for brokerage by  Amecie Steadman · Approver",
-    eventSubMessage: null,
-  },
-  {
-    eventDate: "14/12/2021",
-    eventMessage: "Care Package brokered STA by  Derek Knightman · Broker",
-    eventSubMessage: null,
-  },
-];
-
-// Package summary
-const opportunityEntries = [
-  {
-    id: 1,
-    howLongValue: 1,
-    timesPerMonthValue: 1,
-    needToAddress:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor. " +
-      "Aliquam suscipit laoreet pharetra. Aenean vestibulum ullamcorper enim, sed rhoncus sem tempor vitae. ",
-  },
-];
-
-const daysSelected = [
-  { id: 1, short: "Mon", long: "Monday", checked: true },
+const initDaysSelected = [
+  { id: 1, short: "Mon", long: "Monday", checked: false },
   { id: 2, short: "Tue", long: "Tuesday", checked: false },
-  { id: 3, short: "Wed", long: "Wednesday", checked: true },
+  { id: 3, short: "Wed", long: "Wednesday", checked: false },
   { id: 4, short: "Thu", long: "Thursday", checked: false },
-  { id: 5, short: "Fri", long: "Friday", checked: true },
+  { id: 5, short: "Fri", long: "Friday", checked: false },
   { id: 6, short: "Sat", long: "Saturday", checked: false },
-  { id: 7, short: "Sun", long: "Sunday", checked: true },
+  { id: 7, short: "Sun", long: "Sunday", checked: false },
 ];
 
-const DayCareApproveBrokered = () => {
+const DayCareApproveBrokered = ({ history }) => {
+  // Parameters
+  const params = useParams();
+  let { dayCarePackageId } = params;
+
+  const [errors, setErrors] = useState([]);
+  const [dayCarePackage, setDayCarePackage] = useState(null);
+  const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
+  const [opportunityEntries, setOpportunityEntries] = useState([]);
+  const [daysSelected, setDaysSelected] = useState(initDaysSelected);
+  const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
+  const [requestInformationText, setRequestInformationText] = useState(
+    undefined
+  );
+
+  useEffect(() => {
+    retrieveDayCarePackageDetails(dayCarePackageId);
+  }, [history]);
+
+  const retrieveDayCarePackageDetails = (dayCarePackageId) => {
+    // Call to api to get package
+    getDayCarePackageApprovalDetails(dayCarePackageId)
+      .then((res) => {
+        setDayCarePackage(res);
+
+        // Update package state
+        const newApprovalHistoryItems = res.packageApprovalHistory.map(
+          (historyItem) => ({
+            eventDate: new Date(historyItem.dateCreated).toLocaleDateString(
+              "en-GB"
+            ),
+            eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
+            eventSubMessage: historyItem.logSubText,
+          })
+        );
+
+        const newOpportunityEntries = res.packageDetails.dayCareOpportunities.map(
+          (opportunityItem) => ({
+            id: opportunityItem.dayCarePackageOpportunityId,
+            howLongValue: opportunityItem.howLong.optionName,
+            timesPerMonthValue: opportunityItem.howManyTimesPerMonth.optionName,
+            needToAddress: opportunityItem.opportunitiesNeedToAddress,
+          })
+        );
+
+        setApprovalHistoryEntries([...newApprovalHistoryItems]);
+        setOpportunityEntries([...newOpportunityEntries]);
+
+        // Set days selected
+        let currentDaysSelected = [...daysSelected];
+        let monday = {
+          ...currentDaysSelected.find(
+            (dayObj) => dayObj.long.toLowerCase() === "monday"
+          ),
+          checked: res.packageDetails.monday,
+        };
+        let tuesday = {
+          ...currentDaysSelected.find(
+            (dayObj) => dayObj.long.toLowerCase() === "tuesday"
+          ),
+          checked: res.packageDetails.tuesday,
+        };
+        let wednesday = {
+          ...currentDaysSelected.find(
+            (dayObj) => dayObj.long.toLowerCase() === "wednesday"
+          ),
+          checked: res.packageDetails.wednesday,
+        };
+        let thursday = {
+          ...currentDaysSelected.find(
+            (dayObj) => dayObj.long.toLowerCase() === "thursday"
+          ),
+          checked: res.packageDetails.thursday,
+        };
+        let friday = {
+          ...currentDaysSelected.find(
+            (dayObj) => dayObj.long.toLowerCase() === "friday"
+          ),
+          checked: res.packageDetails.friday,
+        };
+        let saturday = {
+          ...currentDaysSelected.find(
+            (dayObj) => dayObj.long.toLowerCase() === "saturday"
+          ),
+          checked: res.packageDetails.saturday,
+        };
+        let sunday = {
+          ...currentDaysSelected.find(
+            (dayObj) => dayObj.long.toLowerCase() === "sunday"
+          ),
+          checked: res.packageDetails.sunday,
+        };
+        currentDaysSelected = [
+          monday,
+          tuesday,
+          wednesday,
+          thursday,
+          friday,
+          saturday,
+          sunday,
+        ];
+
+        setDaysSelected([...currentDaysSelected]);
+      })
+      .catch((error) => {
+        setErrors([
+          ...errors,
+          `Retrieve day care package details failed. ${error.message}`,
+        ]);
+      });
+  };
+
+  const handleRejectPackage = () => {
+    dayCarePackageRejectCommercials(dayCarePackageId)
+      .then(() => {
+        // history.push(`${CARE_PACKAGE}`);
+      })
+      .catch((error) => {
+        alert(`Status change failed. ${error.message}`);
+        setErrors([...errors, `Status change failed. ${error.message}`]);
+      });
+  };
+  const handleRequestMoreInformation = () => {
+    dayCarePackageCommercialsRequestClarification(
+      dayCarePackageId,
+      requestInformationText
+    )
+      .then(() => {
+        setDisplayMoreInfoForm(false);
+        // history.push(`${CARE_PACKAGE}`);
+      })
+      .catch((error) => {
+        alert(`Status change failed. ${error.message}`);
+        setErrors([...errors, `Status change failed. ${error.message}`]);
+      });
+  };
+  const handleApprovePackageCommercials = () => {
+    dayCarePackageApproveCommercials(dayCarePackageId)
+      .then(() => {
+        // history.push(`${CARE_PACKAGE}`);
+      })
+      .catch((error) => {
+        alert(`Status change failed. ${error.message}`);
+        setErrors([...errors, `Status change failed. ${error.message}`]);
+      });
+  };
   return (
     <Layout headerTitle="DAY CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
-        <DayCareApprovalTitle />
+        <DayCareApprovalTitle
+          termTimeConsiderationOption={
+            dayCarePackage?.packageDetails.termTimeConsiderationOptionName
+          }
+          isFixedPeriodOrOngoing={
+            dayCarePackage?.packageDetails.isFixedPeriodOrOngoing
+          }
+        />
         <ApprovalClientSummary />
 
         <div className="columns">
@@ -76,7 +193,11 @@ const DayCareApproveBrokered = () => {
                     <p className="font-weight-bold hackney-text-green">
                       STARTS
                     </p>
-                    <p className="font-size-14px">03/07/2021</p>
+                    <p className="font-size-14px">
+                      {new Date(
+                        dayCarePackage?.packageDetails.startDate
+                      ).toLocaleDateString("en-GB")}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -88,7 +209,11 @@ const DayCareApproveBrokered = () => {
                 <div className="level-item">
                   <div>
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
-                    <p className="font-size-14px">Ongoing</p>
+                    <p className="font-size-14px">
+                      {dayCarePackage?.packageDetails.endDate !== null
+                        ? dayCarePackage?.packageDetails.endDate
+                        : "Ongoing"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -117,7 +242,7 @@ const DayCareApproveBrokered = () => {
             <PackageCostBox
               boxClass="hackney-package-cost-light-green-box"
               title="COST OF CARE / WK"
-              cost="£60"
+              cost={`£${dayCarePackage?.costSummary.costOfCarePerWeek}`}
               costType="ACTUAL"
             />
           </div>
@@ -125,7 +250,7 @@ const DayCareApproveBrokered = () => {
             <PackageCostBox
               boxClass="hackney-package-cost-light-green-box"
               title="ANP / WK"
-              cost="£43"
+              cost={`£${dayCarePackage?.costSummary.anpPerWeek}`}
               costType="ACTUAL"
             />
           </div>
@@ -133,7 +258,7 @@ const DayCareApproveBrokered = () => {
             <PackageCostBox
               boxClass="hackney-package-cost-light-green-box"
               title="TRANSPORT / WK"
-              cost="£15"
+              cost={`£${dayCarePackage?.costSummary.transportCostPerWeek}`}
               costType="ACTUAL"
             />
           </div>
@@ -141,7 +266,7 @@ const DayCareApproveBrokered = () => {
             <PackageCostBox
               boxClass="hackney-package-cost-green-box"
               title="TOTAL / WK"
-              cost="£500"
+              cost={`£${dayCarePackage?.costSummary.totalCostPerWeek}`}
               costType="ACTUAL"
             />
           </div>
@@ -157,8 +282,8 @@ const DayCareApproveBrokered = () => {
               <TitleHeader>Package Details</TitleHeader>
               <DayCareSummary
                 opportunityEntries={opportunityEntries}
-                needToAddress="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor. Aliquam suscipit laoreet pharetra. Aenean vestibulum ullamcorper enim, sed rhoncus sem tempor vitae. Sed dignissim ornare metus eu faucibus.  Sed vel diam mi. Aenean a auctor felis, sit amet lacinia urna. Pellentesque bibendum dui a nulla faucibus, vel dignissim mi rutrum."
-                transportNeeded={true}
+                needToAddress={dayCarePackage?.packageDetails.needToAddress}
+                transportNeeded={dayCarePackage?.packageDetails.transportNeeded}
                 daysSelected={daysSelected}
                 deleteOpportunity={() => {}}
               />
@@ -172,15 +297,28 @@ const DayCareApproveBrokered = () => {
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Deny</button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">
-                    Request more information
+                  <button
+                    className="button hackney-btn-light"
+                    onClick={handleRejectPackage}
+                  >
+                    Deny
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green">
+                  <button
+                    onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
+                    className="button hackney-btn-light"
+                  >
+                    {displayMoreInfoForm
+                      ? "Hide Request more information"
+                      : "Request More Information"}
+                  </button>
+                </div>
+                <div className="level-item  mr-2">
+                  <button
+                    className="button hackney-btn-green"
+                    onClick={handleApprovePackageCommercials}
+                  >
                     Approve Commercials
                   </button>
                 </div>
@@ -189,19 +327,29 @@ const DayCareApproveBrokered = () => {
           </div>
         </div>
 
-        <div className="columns">
-          <div className="column">
-            <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">
-                Request more information
-              </p>
-              <TextArea label="" rows={5} placeholder="Add details..." />
-              <button className="button hackney-btn-green">
-                Request more information
-              </button>
+        {displayMoreInfoForm && (
+          <div className="columns">
+            <div className="column">
+              <div className="mt-1">
+                <p className="font-size-16px font-weight-bold">
+                  Request more information
+                </p>
+                <TextArea
+                  label=""
+                  rows={5}
+                  placeholder="Add details..."
+                  onChange={setRequestInformationText}
+                />
+                <button
+                  className="button hackney-btn-green"
+                  onClick={handleRequestMoreInformation}
+                >
+                  Request more information
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </Layout>
   );
