@@ -1,0 +1,14 @@
+.pay-runs__table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px;
+
+  .button {
+    border-radius: 0;
+  }
+}
+
+.pay-runs__table-pagination-info {
+  margin-right: 15px;
+}

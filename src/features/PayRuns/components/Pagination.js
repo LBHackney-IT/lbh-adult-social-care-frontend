@@ -15,7 +15,7 @@ const Pagination = ({ itemsCount, from, to, currentPage, totalCount }) => {
 
   return (
     <div className='pay-runs__table-pagination'>
-      <p>Showing {itemsCount === 0 ? 0 : `${from}-${itemsCount} of ${totalCount}`}</p>
+      <p className='pay-runs__table-pagination-info'>Showing {itemsCount === 0 ? 0 : `${from}-${itemsCount} of ${totalCount}`}</p>
       <div className='pay-runs__table-pagination-actions'>
         {[...Array(totalCount / to).keys()].map(item => {
           const currentPageClass = item === currentPage ? ' pay-runs__table-pagination-item-active' : '';

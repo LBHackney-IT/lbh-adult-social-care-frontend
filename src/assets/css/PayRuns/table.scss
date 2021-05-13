@@ -1,13 +1,26 @@
 .pay-runs__table {
   overflow: auto;
+  padding: 16px;
 }
 
 .pay-runs__table-row {
   display: flex;
+  border-bottom: 1px solid $lbh-gray2;
+
+  padding-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .pay-runs__sort-table {
   display: flex;
+
+  margin-bottom: 35px;
+}
+
+.sort__sort-name {
+  margin-right: 6px;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .pay-runs__sort {
@@ -22,6 +35,96 @@
     svg:first-of-type {
       transform: rotate(180deg);
       margin-bottom: 2px;
+    }
+  }
+}
+
+.pay-runs__table-row-item-status {
+  padding: 5px;
+  font-size: 12px;
+  border-radius: 4px;
+
+  color: $lbh-black1;
+  &.awaiting-approval {
+    background: $lbh-orange;
+  }
+
+  &.paid, &.paid-with-holds {
+    background: $lbh-green1;
+    color: white;
+  }
+
+  &.draft {
+    background: $lbh-gray;
+  }
+}
+
+.pay-runs__tab-class {
+  .pay-runs__table-row-item:not(.pay-runs__table-row-item:last-of-type) {
+    margin-right: 40px;
+  }
+
+  .pay-runs__sort-table {
+    .pay-runs__sort:not(.pay-runs__sort:last-of-type) {
+      margin-right: 40px;
+    }
+
+    .pay-runs__sort:first-of-type {
+      width: 110px;
+    }
+
+    .pay-runs__sort:nth-of-type(2) {
+      width: 63px;
+    }
+
+    .pay-runs__sort:nth-of-type(3) {
+      width: 178px;
+    }
+
+    .pay-runs__sort:nth-of-type(4) {
+      width: 116px;
+    }
+
+    .pay-runs__sort:nth-of-type(5) {
+      width: 82px;
+    }
+
+    .pay-runs__sort:nth-of-type(6) {
+      width: 73px;
+    }
+
+    .pay-runs__sort:nth-of-type(7) {
+      width: 124px;
+    }
+  }
+
+  .pay-runs__table-row {
+    .pay-runs__table-row-item:first-of-type {
+      width: 110px;
+    }
+
+    .pay-runs__table-row-item:nth-of-type(2) {
+      width: 63px;
+    }
+
+    .pay-runs__table-row-item:nth-of-type(3) {
+      width: 178px;
+    }
+
+    .pay-runs__table-row-item:nth-of-type(4) {
+      width: 116px;
+    }
+
+    .pay-runs__table-row-item:nth-of-type(5) {
+      width: 82px;
+    }
+
+    .pay-runs__table-row-item:nth-of-type(6) {
+      width: 73px;
+    }
+
+    .pay-runs__table-row-item:nth-of-type(7) {
+      width: 124px;
     }
   }
 }

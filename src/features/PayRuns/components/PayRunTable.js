@@ -3,7 +3,7 @@ import Dropdown from "../../components/Dropdown";
 import {formatDateWithSlash} from "../../../service/helpers";
 import PayRunSortTable from "./PayRunSortTable";
 
-const PayRunTable = ({ rows, isStatusDropDown = false, canCollapseRows = false, careType, sortBy, sorts }) => {
+const PayRunTable = ({ rows, isStatusDropDown = false, classes = '', canCollapseRows = false, careType, sortBy, sorts }) => {
   const [collapsedRows, setCollapsedRows] = useState([]);
 
   const collapseRows = id => {
@@ -14,18 +14,31 @@ const PayRunTable = ({ rows, isStatusDropDown = false, canCollapseRows = false, 
     }
   }
   return (
-    <div className='pay-runs__table'>
+    <div className={`pay-runs__table ${classes}`}>
       <PayRunSortTable sortBy={sortBy} sorts={sorts} />
       {rows.map(item => (
           <div key={item.id} onClick={() => canCollapseRows && collapseRows(item.id)} className='pay-runs__table-row'>
             {Object.getOwnPropertyNames(item).map(rowItemName => {
               const value = rowItemName === 'date' ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
-              const statusItemClass = rowItemName === 'status' ? ' pay-runs__table-row-item-status' : '';
-              if(isStatusDropDown && rowItemName === 'status') {
-                return <Dropdown key={`${rowItemName}${item.id}`} options={['Accepted', 'Held']} initialText='Status' />;
+              const isStatus = rowItemName === 'status';
+              const formattedStatus = isStatus && item[rowItemName].split('-').map(text => text.slice(0, 1).toUpperCase() + text.slice(1,text.length)).join(' ');
+              const statusItemClass = isStatus ? ` pay-runs__table-row-item-status ${item[rowItemName]}` : '';
+              if(isStatusDropDown && isStatus) {
+                return (
+                  <Dropdown key={`${rowItemName}${item.id}`}
+                    className={`pay-runs__table-row-item${statusItemClass}`}
+                    options={['Accepted', 'Held']}
+                    initialText='Status'
+                  />
+                );
               }
 
-              return <p key={`${rowItemName}${item.id}`} className={`pay-runs__table-row-item${statusItemClass}`}>{value}</p>;
+              return (
+                <p key={`${rowItemName}${item.id}`}
+                  className={`pay-runs__table-row-item${statusItemClass}`}>
+                    {isStatus ? formattedStatus : value}
+                </p>
+              );
             })}
             {collapsedRows.includes(item.id) &&
               <div className='pay-runs__table-row-collapsed'>
