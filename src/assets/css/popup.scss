@@ -18,6 +18,12 @@
   width: 70%;
 }
 
+.popup__close-button {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .popup__header {
   display: flex;
   justify-content: space-between;

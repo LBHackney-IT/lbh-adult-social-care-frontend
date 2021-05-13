@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 import Breadcrumbs from "./components/Breadcrumbs";
 import { useLocation, useHistory } from 'react-router-dom';
-import PayRunsHeader from "./components/PayRunsHeader";
-import PayRunTabs from "./components/PayRunTabs";
 import PayRunTable from "./components/PayRunTable";
 import Pagination from "./components/Pagination";
 import {payRunsTableDate} from "../../testData/PayRuns";
 import PopupCreatePayRun from "./components/PopupCreatePayRun";
+import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
+import PayRunHeader from "./components/PayRunHeader";
 
 const sorts = [
   {name: 'id', text: 'ID'},
@@ -18,22 +18,19 @@ const sorts = [
   {name: 'status', text: 'Status'},
 ];
 
-const tabsClasses = {
-  'pay-runs': 'pay-runs__tab-class',
-  'held-payments': 'pay-runs__held-payments-class',
-};
-
-const PayRuns = () => {
+const PayRun = () => {
   const location = useLocation();
   const pushRoute = useHistory().push;
   const [openedPopup, setOpenedPopup] = useState('');
   const [date, setDate] = useState(new Date());
   const [hocAndRelease, changeHocAndRelease] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
+  const id = location.pathname.replace('/payments/pay-runs/', '');
 
   const [headerOptions, setHeaderOptions] = useState({
     actionButtonText: 'Pay Runs',
     clickActionButton: () => {
+      console.log('asd');
       setOpenedPopup('create-pay-run');
     },
   });
@@ -42,7 +39,10 @@ const PayRuns = () => {
     pushRoute(`${location.pathname}?page=1`);
   }, []);
 
-  const [tab, changeTab] = useState('pay-runs');
+  const [breadcrumbs, setBreadcrumbs] = useState([
+    {text: 'Payments', onClick: () => pushRoute('/payments/pay-runs')},
+    {text: `Pay Run ${id}`}
+  ]);
   const [sort, setSort] = useState({
     value: 'increase',
     name: 'id',
@@ -59,12 +59,17 @@ const PayRuns = () => {
     setDate(new Date());
   };
 
-  const onClickTableRow = (rowItems) => {
-    pushRoute(`${location.pathname}/${rowItems.id}`)
-  };
+  useEffect(() => {
+    if(location?.query?.id) {
+      setBreadcrumbs([
+        {text: 'payments', route: '/payments/pay-runs', onClick: (value) => pushRoute(`${value.route}`)},
+        {text: `Pay Run ${location.query.id}`}
+      ]);
+    }
+  }, [location]);
 
   return (
-    <div className='pay-runs'>
+    <div className='pay-runs pay-run'>
       {openedPopup === 'create-pay-run' &&
         <PopupCreatePayRun
           changeHocAndRelease={changeHocAndRelease}
@@ -76,27 +81,21 @@ const PayRuns = () => {
           setDate={setDate}
         />
       }
-      <PayRunsHeader
+      {!!breadcrumbs.length && <Breadcrumbs classes='p-3' values={breadcrumbs} />}
+      <PayRunHeader
         actionButtonText={headerOptions.actionButtonText}
         clickActionButton={headerOptions.clickActionButton}
       />
-      <PayRunTabs
-        tab={tab}
-        changeTab={changeTab}
-        tabs={[
-          {text: 'Pay Runs', value: 'pay-runs'},
-          {text: 'Held Payments', value: 'held-payments'}
-        ]}
-      />
       <PayRunTable
-        classes={tabsClasses[tab]}
-        onClickTableRow={onClickTableRow}
         rows={payRunsTableDate}
         careType='Residential'
+        isStatusDropDown={true}
+        canCollapseRows={true}
         sortBy={sortBy}
         sorts={sorts}
       />
       <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
+      <PayRunsLevelInsight />
       <div className='pay-runs__footer'>
         <div className='pay-runs__footer-info'>
           <p>Hackney Adult Social Care Services  ·  2021</p>
@@ -106,4 +105,4 @@ const PayRuns = () => {
   )
 };
 
-export default PayRuns;
+export default PayRun;

@@ -1,7 +1,7 @@
 .payments__header {
   background: $lbh-black1;
-  height: 77px;
   padding: 16px;
+  overflow: auto;
 
   display: flex;
   justify-content: space-between;

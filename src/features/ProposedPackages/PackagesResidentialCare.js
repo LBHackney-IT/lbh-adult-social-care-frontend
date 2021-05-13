@@ -153,7 +153,7 @@ const PackagesResidentialCare = ({
             <p className='package-reclaim__text'>Should the cost of this package be reclaimed in
               part or full from another body, e.g. NHS, CCG, another LA ?
             </p>
-            <Button onClick={addPackageReclaim} className='outline'>Add reclaim</Button>
+            <Button onClick={addPackageReclaim} className='outline green'>Add reclaim</Button>
           </div>
           <hr className='horizontal-delimiter'/>
         </div>

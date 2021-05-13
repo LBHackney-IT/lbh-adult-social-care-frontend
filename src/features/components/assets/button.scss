@@ -10,10 +10,16 @@
     padding: 12px 16px;
     height: 42px;
 
-    &.outline {
+    &.outline.green {
         color: $lbh-green1;
         background: white;
         border-color: $lbh-green1;
+    }
+
+    &.outline.red {
+        color: red;
+        background: white;
+        border-color: red;
     }
 }
 

@@ -22,3 +22,41 @@
 .pay-runs__filters-title {
   flex-basis: 100%;
 }
+
+.pay-run__filter-item {
+  width: 220px;
+
+  .dropdown {
+    button {
+      width: 220px;
+      padding-left: 10px;
+      padding-right: 10px;
+
+      span {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.pay-run__searches {
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 100%;
+
+  .button.button-base {
+    background: white;
+    border: none;
+
+    svg {
+      path {
+        fill: $lbh-gray;
+      }
+    }
+  }
+}
+
+.pay-run__dropdowns {
+  display: flex;
+  flex-wrap: wrap;
+}

@@ -3,19 +3,19 @@ import { useHistory, useLocation } from 'react-router-dom';
 import {Button} from "../../components/Button";
 import {uniqueID} from "../../../service/helpers";
 
-const Pagination = ({ itemsCount, from, to, currentPage, totalCount }) => {
+const Pagination = ({ classes, actionButton, itemsCount, from, to, currentPage, totalCount }) => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const pushRoute = useHistory().push;
   const finalPage = currentPage !== undefined ? currentPage : query.get('page');
 
-  //NOTTESTEDCODE
   const changePagination = page => {
     pushRoute(`${location.pathname}?page=${page}`);
   };
 
   return (
-    <div className='pay-runs__table-pagination'>
+    <div className={`pay-runs__table-pagination${classes ? ` ${classes}` : ''}`}>
+      {actionButton && <Button className={actionButton.classes} onClick={actionButton.click}>{actionButton.text}</Button> }
       <p className='pay-runs__table-pagination-info'>Showing {itemsCount === 0 ? 0 : `${from}-${itemsCount} of ${totalCount}`}</p>
       <div className='pay-runs__table-pagination-actions'>
         {[...Array(totalCount / to).keys()].map(item => {

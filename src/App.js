@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Route, Switch, useHistory, useLocation} from "react-router-dom";
 import CarePackage from "./features/CarePackages/CarePackage";
 import DayCare from "./features/CarePackages/DayCare/DayCare";
 import HomeCare from "./features/CarePackages/HomeCare/HomeCare";
@@ -21,6 +21,7 @@ import { selectUser } from "./reducers/userReducer";
 import ProposedPackages from "./features/ProposedPackages/ProposedPackages";
 import PaymentsHeader from "./features/Payments/components/PaymentsHeader";
 import PayRuns from "./features/PayRuns/PayRuns";
+import PayRun from "./features/PayRuns/PayRun";
 
 const App = () => {
   const user = useSelector(selectUser);
@@ -42,6 +43,11 @@ const App = () => {
               exact
               path={RouteConstants.PAYMENTS_PAY_RUNS_ROUTE}
               component={PayRuns}
+            />
+            <Route
+              exact
+              path={RouteConstants.PAYMENTS_PAY_RUN_ROUTE}
+              component={PayRun}
             />
             <Route
               exact

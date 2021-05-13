@@ -5,14 +5,22 @@
 
 .pay-runs__table-row {
   display: flex;
+  justify-content: space-between;
   border-bottom: 1px solid $lbh-gray2;
 
   padding-bottom: 16px;
-  margin-bottom: 20px;
+  padding-top: 20px;
+
+  transition: 0.2s ease;
+
+  &:hover {
+    background: $lbh-gray;
+  }
 }
 
 .pay-runs__sort-table {
   display: flex;
+  justify-content: space-between;
 
   margin-bottom: 35px;
 }

@@ -24,7 +24,7 @@ const PaymentsHeader = () => {
       pushRoute('/');
       console.log('logout');
     } else {
-      pushRoute(route);
+      pushRoute(`/payments/${route}`);
     }
   };
 

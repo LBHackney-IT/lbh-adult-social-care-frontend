@@ -6,13 +6,14 @@
 @import "./ProposedPackages/proposedPackges";
 @import "./PackageReclaim/package-reclaim";
 @import "./Payments/payments-header";
+@import "./Payments/breadcrumbs";
 @import "./PayRuns/header";
 @import "./PayRuns/tabs";
 @import "./PayRuns/table";
-@import "PayRuns/pagination";
-@import "PayRuns/footer";
-@import "PayRuns/create-pay-run";
-@import "popup";
+@import "./PayRuns/pagination";
+@import "./PayRuns/footer";
+@import "./PayRuns/create-pay-run";
+@import "./popup";
 
 * {
   font-family: "OpenSans", sans-serif !important;
