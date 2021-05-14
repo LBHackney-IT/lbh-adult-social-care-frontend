@@ -4,26 +4,24 @@ import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 
 const initialFilters = {
-  id: '',
+  serviceUser: '',
+  invoiceNo: '',
+  packageId: '',
+  supplier: '',
   type: '',
-  cadence: '',
   status: '',
-  date: '',
+  dateRange: '',
 };
 
 const PayRunHeader = ({
+  supplierOptions = [],
+  dateRangeOptions = [],
   typeOptions = [],
-  cadenceOptions = [],
   statusOptions = [],
-  dateOptions = [],
   actionButtonText = '',
   clickActionButton = () => {},
 }) => {
   const [filters, setFilters] = useState({...initialFilters});
-
-  const resetFilters = () => {
-    setFilters({...initialFilters});
-  };
 
   const applyFilters = () => {
     console.log('make an apply filters request');
@@ -72,6 +70,20 @@ const PayRunHeader = ({
         </div>
         <div className='pay-run__dropdowns'>
           <Dropdown
+            initialText='Supplier'
+            classes='pay-run__filter-item mr-3'
+            options={supplierOptions}
+            selectedValue={filters.supplier}
+            onOptionSelect={(option) => changeFilter('supplier', option)}
+          />
+          <Dropdown
+            initialText='Type'
+            classes='pay-run__filter-item mr-3'
+            options={typeOptions}
+            selectedValue={filters.type}
+            onOptionSelect={(option) => changeFilter('type', option)}
+          />
+          <Dropdown
             initialText='Status'
             classes='pay-run__filter-item mr-3'
             options={statusOptions}
@@ -79,25 +91,11 @@ const PayRunHeader = ({
             onOptionSelect={(option) => changeFilter('status', option)}
           />
           <Dropdown
-            initialText='Date'
+            initialText='Date range'
             classes='pay-run__filter-item mr-3'
-            options={dateOptions}
-            selectedValue={filters.date}
-            onOptionSelect={(option) => changeFilter('date', option)}
-          />
-          <Dropdown
-            initialText='Date'
-            classes='pay-run__filter-item mr-3'
-            options={dateOptions}
-            selectedValue={filters.date}
-            onOptionSelect={(option) => changeFilter('date', option)}
-          />
-          <Dropdown
-            initialText='Date'
-            classes='pay-run__filter-item mr-3'
-            options={dateOptions}
-            selectedValue={filters.date}
-            onOptionSelect={(option) => changeFilter('date', option)}
+            options={dateRangeOptions}
+            selectedValue={filters.dateRange}
+            onOptionSelect={(option) => changeFilter('dateRange', option)}
           />
           <Button onClick={applyFilters}>Filter</Button>
         </div>

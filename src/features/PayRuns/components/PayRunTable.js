@@ -2,8 +2,10 @@ import React, {useState} from "react";
 import Dropdown from "../../components/Dropdown";
 import {formatDateWithSlash} from "../../../service/helpers";
 import PayRunSortTable from "./PayRunSortTable";
+import {shortMonths} from "../../../constants/strings";
+import Checkbox from "../../components/Checkbox";
 
-const PayRunTable = ({ onClickTableRow, rows, isStatusDropDown = false, classes = '', canCollapseRows = false, careType, sortBy, sorts }) => {
+const PayRunTable = ({ onClickTableRow, checkedRows, setCheckedRows, rows, isIgnoreId = false, isStatusDropDown = false, classes = '', canCollapseRows = false, careType, sortBy, sorts }) => {
   const [collapsedRows, setCollapsedRows] = useState([]);
 
   const collapseRows = id => {
@@ -24,12 +26,24 @@ const PayRunTable = ({ onClickTableRow, rows, isStatusDropDown = false, classes 
 
   return (
     <div className={`pay-runs__table ${classes}`}>
-      <PayRunSortTable sortBy={sortBy} sorts={sorts} />
+      <PayRunSortTable checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
       {rows.map(item => {
         const collapsedRow = collapsedRows.includes(item.id);
+        const rowStatus = item.status ? ` ${item.status}` : '';
         return (
-          <div key={item.id} onClick={() => clickRow(item)} className={`pay-runs__table-row${collapsedRow ? ' collapsed' : ''}`}>
+          <div key={item.id} onClick={() => clickRow(item)} className={`pay-runs__table-row${collapsedRow ? ' collapsed' : ''}${rowStatus}`}>
+            {checkedRows &&
+              <div className='pay-runs__table-row-item pay-runs__table-row-item-checkbox'>
+                <Checkbox checked={checkedRows.includes(item.id)} onChange={(value, event) => {
+                  event.stopPropagation();
+                  setCheckedRows(item.id)
+                }} />
+              </div>
+            }
             {Object.getOwnPropertyNames(item).map(rowItemName => {
+              if(typeof item[rowItemName] === 'object' || (isIgnoreId && rowItemName === 'id')) {
+                return <></>;
+              }
               const value = rowItemName === 'date' ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
               const isStatus = rowItemName === 'status';
               const formattedStatus = isStatus && item[rowItemName].split('-').map(text => text.slice(0, 1).toUpperCase() + text.slice(1,text.length)).join(' ');
@@ -37,9 +51,16 @@ const PayRunTable = ({ onClickTableRow, rows, isStatusDropDown = false, classes 
               if(isStatusDropDown && isStatus) {
                 return (
                   <Dropdown key={`${rowItemName}${item.id}`}
-                            className={`pay-runs__table-row-item${statusItemClass}`}
-                            options={['Accepted', 'Held']}
-                            initialText='Status'
+                    classes={`pay-runs__table-row-item${statusItemClass}`}
+                    options={[
+                      {text: 'Accepted', value: 'accepted'},
+                      {text: 'Held', value: 'held'},
+                      {text: 'Rejected', value: 'rejected'},
+                      {text: 'In dispute', value: 'in-dispute'}
+                    ]}
+                    selectedValue={value}
+                    onOptionSelect={(value) => console.log(value)}
+                    initialText='Status'
                   />
                 );
               }
@@ -53,30 +74,45 @@ const PayRunTable = ({ onClickTableRow, rows, isStatusDropDown = false, classes 
             })}
             {collapsedRow &&
             <div className='pay-runs__table-row-collapsed'>
-              <div className='pay-runs__table-row-collapsed-header'>
-                <p>{item.name}</p>
-                <p>{item.supplier}</p>
-                <p>{item.id}</p>
-              </div>
-              {item.cares.map(care => (
-                <div className='pay-runs__table-row-collapsed-main'>
-                  <div className='pay-runs__table-row-collapsed-main-header'>
-                    <p>Item</p>
-                    <p>Cost</p>
-                    <p>Qty</p>
-                    <p>Service User</p>
-                  </div>
-                  {care.items.map(personsInfo => (
-                    <div key={care.id} className='pay-runs__table-row-collapsed-main-item'>
-                      <p>{careType} care per week <br/> {new Date(personsInfo.date).getDate()}</p>
-                      <p>{personsInfo.cost}</p>
-                      <p>{personsInfo.qty}</p>
-                      <p>{personsInfo.serviceUser}</p>
+              {item.cares.map(care => {
+                return (
+                  <div key={care.id} className='pay-runs__table-row-collapsed-container'>
+                    <div className='pay-runs__table-row-collapsed-header'>
+                      <div className='pay-runs__table-row-collapsed-header-left'>
+                        <p>{care.userName}</p>
+                        <p>{care.supplier}</p>
+                      </div>
+                      <p>{care.id}</p>
                     </div>
-                  ))}
-                </div>
-              ))
-              }
+                    <div className='pay-runs__table-row-collapsed-main'>
+                      <div className='pay-runs__table-row-collapsed-main-header'>
+                        <p>Item</p>
+                        <p>Cost</p>
+                        <p>Qty</p>
+                        <p>Service User</p>
+                      </div>
+                      {care.items.map(personInfo => {
+                        const dateFrom = new Date(personInfo.dateFrom);
+                        const dateTo = new Date(personInfo.dateTo);
+                        return (
+                          <div key={personInfo.id} className='pay-runs__table-row-collapsed-main-item'>
+                            <p>
+                              {careType} care per week
+                              <br/>
+                              {dateFrom.getDate()} {shortMonths[dateFrom.getMonth()]}
+                              -
+                              {dateTo.getDate()} {shortMonths[dateTo.getMonth()]} {dateTo.getFullYear()}
+                            </p>
+                            <p>{personInfo.cost}</p>
+                            <p>{personInfo.qty}</p>
+                            <p>{personInfo.serviceUser}</p>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
             }
           </div>

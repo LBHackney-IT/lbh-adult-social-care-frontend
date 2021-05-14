@@ -15,7 +15,7 @@ const Pagination = ({ classes, actionButton, itemsCount, from, to, currentPage, 
 
   return (
     <div className={`pay-runs__table-pagination${classes ? ` ${classes}` : ''}`}>
-      {actionButton && <Button className={actionButton.classes} onClick={actionButton.click}>{actionButton.text}</Button> }
+      {actionButton && <Button className={actionButton.classes} onClick={actionButton.onClick}>{actionButton.text}</Button> }
       <p className='pay-runs__table-pagination-info'>Showing {itemsCount === 0 ? 0 : `${from}-${itemsCount} of ${totalCount}`}</p>
       <div className='pay-runs__table-pagination-actions'>
         {[...Array(totalCount / to).keys()].map(item => {

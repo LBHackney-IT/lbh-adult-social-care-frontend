@@ -3,18 +3,17 @@ import Breadcrumbs from "./components/Breadcrumbs";
 import { useLocation, useHistory } from 'react-router-dom';
 import PayRunTable from "./components/PayRunTable";
 import Pagination from "./components/Pagination";
-import {payRunsTableDate} from "../../testData/PayRuns";
+import {payRunTableDate} from "../../testData/TestDataPayRuns";
 import PopupCreatePayRun from "./components/PopupCreatePayRun";
 import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
 import PayRunHeader from "./components/PayRunHeader";
 
 const sorts = [
-  {name: 'id', text: 'ID'},
-  {name: 'date', text: 'Date'},
-  {name: 'type', text: 'Type'},
-  {name: 'cadence', text: 'Cadence'},
-  {name: 'paid', text: 'Paid'},
-  {name: 'held', text: 'Held'},
+  {name: 'serviceUser', text: 'Service User'},
+  {name: 'invId', text: 'INV ID'},
+  {name: 'packageType', text: 'Package Type'},
+  {name: 'supplier', text: 'Supplier'},
+  {name: 'total', text: 'Total'},
   {name: 'status', text: 'Status'},
 ];
 
@@ -22,13 +21,14 @@ const PayRun = () => {
   const location = useLocation();
   const pushRoute = useHistory().push;
   const [openedPopup, setOpenedPopup] = useState('');
+  const [checkedRows, setCheckedRows] = useState([]);
   const [date, setDate] = useState(new Date());
   const [hocAndRelease, changeHocAndRelease] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
   const id = location.pathname.replace('/payments/pay-runs/', '');
 
   const [headerOptions, setHeaderOptions] = useState({
-    actionButtonText: 'Pay Runs',
+    actionButtonText: 'New Pay Run',
     clickActionButton: () => {
       console.log('asd');
       setOpenedPopup('create-pay-run');
@@ -59,6 +59,20 @@ const PayRun = () => {
     setDate(new Date());
   };
 
+  const onCheckRow = (id) => {
+    if(checkedRows.includes(id)) {
+      setCheckedRows(checkedRows.filter(item => item != id));
+    } else {
+      setCheckedRows([...checkedRows, id]);
+    }
+  };
+
+  const actionButton = {
+    classes: 'outline green',
+    onClick: () => console.log('Accept all selected', checkedRows),
+    text: 'Accept all selected',
+  }
+
   useEffect(() => {
     if(location?.query?.id) {
       setBreadcrumbs([
@@ -87,15 +101,18 @@ const PayRun = () => {
         clickActionButton={headerOptions.clickActionButton}
       />
       <PayRunTable
-        rows={payRunsTableDate}
+        rows={payRunTableDate}
         careType='Residential'
         isStatusDropDown={true}
+        checkedRows={checkedRows}
+        setCheckedRows={onCheckRow}
+        isIgnoreId={true}
         canCollapseRows={true}
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
-      <PayRunsLevelInsight />
+      <Pagination actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
+      <PayRunsLevelInsight cost='£42,827' suppliersCount='100' servicesUsersCount='1000' costIncrease='£897' holdsCount='48' holdsPrice='£32,223' />
       <div className='pay-runs__footer'>
         <div className='pay-runs__footer-info'>
           <p>Hackney Adult Social Care Services  ·  2021</p>

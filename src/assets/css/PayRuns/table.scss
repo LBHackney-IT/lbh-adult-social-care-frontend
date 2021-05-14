@@ -6,15 +6,25 @@
 .pay-runs__table-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
   border-bottom: 1px solid $lbh-gray2;
 
   padding-bottom: 16px;
   padding-top: 20px;
 
-  transition: 0.2s ease;
+  transition: background-color 0.2s ease;
 
-  &:hover {
-    background: $lbh-gray;
+  &.rejected {
+    background-color: $lbh-light-red;
+  }
+
+  &:not(.collapsed):hover {
+    background-color: $lbh-gray;
+  }
+
+  &.collapsed {
+    padding-bottom: 0;
   }
 }
 
@@ -23,6 +33,10 @@
   justify-content: space-between;
 
   margin-bottom: 35px;
+}
+
+.pay-runs__sort-checkbox {
+  width: 20px;
 }
 
 .sort__sort-name {
@@ -64,6 +78,68 @@
 
   &.draft {
     background: $lbh-gray;
+  }
+
+  &.dropdown-container {
+    .button {
+      width: 124px;
+      span {
+        font-size: 14px;
+        color: $lbh-black1;
+      }
+    }
+
+    .dropdown-menu {
+      left: initial;
+      right: 0;
+    }
+  }
+
+  &.in-dispute.dropdown-container {
+    .button {
+      background-color: $lbh-blue-highlight;
+    }
+    span {
+      color: white;
+    }
+    .icon path {
+      fill: white;
+    }
+  }
+
+  &.held.dropdown-container {
+    .button {
+      background-color: $lbh-dark-orange;
+    }
+
+    .icon path {
+      fill: $lbh-black1;
+    }
+  }
+
+  &.accepted.dropdown-container {
+    .button {
+      background-color: $lbh-green1;
+    }
+    span {
+      color: white;
+    }
+    .icon path {
+      fill: white;
+    }
+  }
+
+  &.rejected.dropdown-container {
+    .button {
+      background-color: $lbh-red;
+    }
+    span {
+      color: white;
+    }
+
+    .icon path {
+      fill: white;
+    }
   }
 }
 
@@ -134,5 +210,179 @@
     .pay-runs__table-row-item:nth-of-type(7) {
       width: 124px;
     }
+  }
+}
+
+.pay-runs__table-row-collapsed {
+  flex-basis: 100%;
+}
+
+.pay-runs__table-row-collapsed-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-left: 40px;
+
+  p {
+    font-weight: bold;
+    color: $lbh-black1;
+    font-size: 20px;
+  }
+}
+
+.pay-runs__table-row-collapsed-header-left {
+  display: flex;
+
+  p:first-of-type {
+    margin-right: 120px;
+  }
+}
+
+.pay-runs__table-row-collapsed-main-header {
+  display: flex;
+}
+
+.pay-runs__table-row-collapsed-main-item {
+  display: flex;
+}
+
+.pay-runs__table-row-collapsed-container {
+  background: $lbh-light-gray;
+  padding: 17px 10px;
+
+  &:last-of-type {
+    padding-bottom: 30px;
+  }
+
+  &:first-of-type {
+    margin-top: 18px;
+  }
+}
+
+.pay-runs__table-row-collapsed-main {
+  background: white;
+  padding: 15px 40px;
+  border: 1px solid $lbh-gray;
+}
+
+.pay-runs__table-row-collapsed-main-header {
+  margin-bottom: 10px;
+
+  p:first-of-type {
+    width: 223px;
+  }
+
+  p:nth-of-type(2) {
+    width: 70px;
+  }
+
+  p:nth-of-type(3) {
+    width: 70px;
+  }
+
+  p:nth-of-type(4) {
+    width: 170px;
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: bold;
+    color: $lbh-black1;
+  }
+}
+
+.pay-runs__table-row-collapsed-main-item {
+  padding-bottom: 10px;
+
+  &:not(&:last-of-type) {
+    border-bottom: 1px solid $lbh-gray;
+    margin-bottom: 10px;
+  }
+
+  p:first-of-type {
+    width: 223px;
+  }
+
+  p:nth-of-type(2) {
+    width: 70px;
+  }
+
+  p:nth-of-type(3) {
+    width: 70px;
+  }
+
+  p:nth-of-type(4) {
+    width: 170px;
+  }
+}
+
+.pay-runs__table-row-item-checkbox {
+  label.checkbox .checkbox-check {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.pay-run {
+  .pay-runs__table-row {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .pay-runs__table-pagination {
+    & > button {
+      margin-right: auto;
+    }
+  }
+
+  .pay-runs__table-row-item:nth-child(1) {
+    width: 50px;
+  }
+
+  .pay-runs__table-row-item:nth-child(2) {
+    width: 148px;
+  }
+
+  .pay-runs__table-row-item:nth-child(3) {
+    width: 63px;
+  }
+
+  .pay-runs__table-row-item:nth-child(4) {
+    width: 148px;
+  }
+
+  .pay-runs__table-row-item:nth-child(5) {
+    width: 142px;
+  }
+
+  .pay-runs__table-row-item:nth-child(6) {
+    width: 73px;
+  }
+
+  .pay-runs__sort:nth-child(1) {
+    width: 50px;
+  }
+
+  .pay-runs__sort:nth-child(2) {
+    width: 148px;
+  }
+
+  .pay-runs__sort:nth-child(3) {
+    width: 63px;
+  }
+
+  .pay-runs__sort:nth-child(4) {
+    width: 142px;
+  }
+
+  .pay-runs__sort:nth-child(5) {
+    width: 148px;
+  }
+
+  .pay-runs__sort:nth-child(6) {
+    width: 73px;
+  }
+
+  .pay-runs__sort:nth-child(7) {
+    width: 134px;
   }
 }
