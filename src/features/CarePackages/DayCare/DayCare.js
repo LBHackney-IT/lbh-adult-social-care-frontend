@@ -35,6 +35,7 @@ const DayCare = ({ history }) => {
   endDate = endDate ?? null;
 
   const [errors, setErrors] = useState([]);
+  const [termTimeNAId, setTermTimeNaId] = useState(undefined);
   const [
     termTimeConsiderationOptions,
     setTermTimeConsiderationOptions,
@@ -49,8 +50,12 @@ const DayCare = ({ history }) => {
 
   const [needToAddress, setNeedToAddress] = useState(undefined);
   const [transportNeeded, setTransportIsNeeded] = useState(undefined);
+  const [transportEscortNeeded, setTransportEscortIsNeeded] = useState(
+    undefined
+  );
   const [escortNeeded, setEscortIsNeeded] = useState(undefined);
   const [termTimeConsideration, setTermTimeConsideration] = useState(undefined);
+  const [displaySelectCollege, setDisplaySelectCollege] = useState(false);
   const [collegeId, setCollegeId] = useState(undefined);
   const [opportunityEntries, setOpportunityEntries] = useState([
     { id: 1, howLongValue: 1, timesPerMonthValue: 1, needToAddress: undefined },
@@ -131,10 +136,15 @@ const DayCare = ({ history }) => {
   const retrieveTermTimeConsiderationOptions = () => {
     getTermTimeConsiderationOptions()
       .then((res) => {
-        let options = res.map((option) => ({
-          text: option.optionName,
-          value: option.optionId,
-        }));
+        let options = res.map((option) => {
+          if (option.optionName.toLowerCase().trim() === "n/a") {
+            setTermTimeNaId(option.optionId);
+          }
+          return {
+            text: option.optionName,
+            value: option.optionId,
+          };
+        });
         setTermTimeConsiderationOptions(options);
       })
       .catch((error) => {
@@ -214,6 +224,7 @@ const DayCare = ({ history }) => {
       saturday: daysSelected[5].checked,
       sunday: daysSelected[6].checked,
       transportNeeded: transportNeeded,
+      transportEscortNeeded: transportEscortNeeded,
       escortNeeded: escortNeeded,
       termTimeConsiderationOptionId: termTimeConsideration,
       dayCarePackageOpportunities: dayCarePackageOpportunities,
@@ -232,6 +243,17 @@ const DayCare = ({ history }) => {
       });
   };
 
+  const handleTermTimeSelectionChanged = (value) => {
+    setTermTimeConsideration(value);
+    setCollegeId(undefined);
+    if (value !== termTimeNAId) {
+      // Display select college
+      setDisplaySelectCollege(true);
+    } else {
+      // Hide select college
+      setDisplaySelectCollege(false);
+    }
+  };
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
       <ClientSummary
@@ -286,6 +308,14 @@ const DayCare = ({ history }) => {
         </div>
         <div className="mt-4">
           <RadioButton
+            label="Transport escort needed?"
+            onChange={setTransportEscortIsNeeded}
+            options={yesNoValues}
+            selectedValue={transportEscortNeeded}
+          />
+        </div>
+        <div className="mt-4">
+          <RadioButton
             label="Escort needed?"
             onChange={setEscortIsNeeded}
             options={yesNoValues}
@@ -295,20 +325,22 @@ const DayCare = ({ history }) => {
         <div className="mt-4">
           <RadioButton
             label="Term Time Consideration"
-            onChange={setTermTimeConsideration}
+            onChange={handleTermTimeSelectionChanged}
             options={termTimeConsiderationOptions}
             selectedValue={termTimeConsideration}
           />
         </div>
 
-        <div className="mt-4">
-          <DayCareCollegeAsyncSearch
-            classNames="is-3"
-            setSelectedCollege={(collegeItem) => {
-              if (collegeItem) setCollegeId(collegeItem.id);
-            }}
-          />
-        </div>
+        {displaySelectCollege && (
+          <div className="mt-4">
+            <DayCareCollegeAsyncSearch
+              classNames="is-3"
+              setSelectedCollege={(collegeItem) => {
+                if (collegeItem) setCollegeId(collegeItem.id);
+              }}
+            />
+          </div>
+        )}
 
         <div className="mt-4">
           <DayCareOpportunities
