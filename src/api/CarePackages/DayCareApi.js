@@ -25,13 +25,6 @@ const getOpportunityTimesPerMonthOptions = () => {
     .catch(handleError);
 };
 
-const getDayCareColleges = () => {
-  return axios
-    .get(`${DAY_CARE_URL}/colleges`)
-    .then(handleResponse)
-    .catch(handleError);
-};
-
 const createDayCarePackage = (dayCarePackageForCreation) => {
   const options = {
     url: `${DAY_CARE_URL}`,
@@ -172,11 +165,32 @@ const dayCarePackageCommercialsRequestClarification = (
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+// Day care colleges
+const getDayCareColleges = () => {
+  return axios
+    .get(`${DAY_CARE_URL}/colleges`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+const createDayCareCollege = (dayCareCollegeForCreation) => {
+  const options = {
+    url: `${DAY_CARE_URL}/colleges`,
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    data: dayCareCollegeForCreation,
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 export {
   getTermTimeConsiderationOptions,
   getOpportunitiesLengthOptions,
   getOpportunityTimesPerMonthOptions,
   getDayCareColleges,
+  createDayCareCollege,
   createDayCarePackage,
   updateDayCarePackage,
   getDayCarePackageList,

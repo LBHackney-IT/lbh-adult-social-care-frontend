@@ -2,6 +2,8 @@ import Input from "../../../components/Input";
 import DatePick from "../../../components/DatePick";
 import React, { useState } from "react";
 import { Button } from "../../../components/Button";
+import { createDayCareCollege } from "../../../../api/CarePackages/DayCareApi";
+import { CARE_PACKAGE } from "../../../../routes/RouteConstants";
 
 const DayCareCreateCollege = ({
   newName = undefined,
@@ -21,9 +23,13 @@ const DayCareCreateCollege = ({
     };
 
     // Save in api and call onCreated if successful else call onCancelled
-    console.log(collegeToCreate);
-
-    onCreated();
+    createDayCareCollege(collegeToCreate)
+      .then(() => {
+        onCreated();
+      })
+      .catch((error) => {
+        onCancelled();
+      });
   };
   return (
     <div className="columns is-multiline">

@@ -22,7 +22,6 @@ const DayCareCollegeAsyncSearch = ({
 
   useEffect(() => {
     retrieveDayCareColleges();
-    console.log("I have been mounted");
   }, []);
 
   const retrieveDayCareColleges = () => {
@@ -37,21 +36,6 @@ const DayCareCollegeAsyncSearch = ({
 
   // fetch filters search results for dropdown
   const loadOptions = () => {
-    /*return fetch(`http://localhost:3000/collabs?q=${query}`).then((res) =>
-      res.json()
-    );*/
-
-    /*return fetch(`http://localhost:5000/api/v1/day-care-packages/colleges`)
-      .then((res) => res.json())
-      .then((data) => {
-        return data.filter((ele) =>
-          ele.collegeName
-            .toLowerCase()
-            .trim()
-            .includes(query.toLowerCase().trim())
-        );
-      });*/
-
     return new Promise((resolve) => {
       const filteredColleges = allDayCareColleges.filter((ele) =>
         ele.collegeName
