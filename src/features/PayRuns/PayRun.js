@@ -7,6 +7,7 @@ import {payRunTableDate} from "../../testData/TestDataPayRuns";
 import PopupCreatePayRun from "./components/PopupCreatePayRun";
 import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
 import PayRunHeader from "./components/PayRunHeader";
+import PopupHoldPayment from "./components/PopupHoldPayment";
 
 const sorts = [
   {name: 'serviceUser', text: 'Service User'},
@@ -17,21 +18,27 @@ const sorts = [
   {name: 'status', text: 'Status'},
 ];
 
+const popupTypes = {
+  createPayRun: 'create-pay-run',
+  holdPayments: 'hold-payment',
+};
+
 const PayRun = () => {
   const location = useLocation();
   const pushRoute = useHistory().push;
   const [openedPopup, setOpenedPopup] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
+  const [actionRequiredBy, setActionRequiredBy] = useState('');
+  const [reason, setReason] = useState('');
+  const id = location.pathname.replace('/payments/pay-runs/', '');
   const [date, setDate] = useState(new Date());
   const [hocAndRelease, changeHocAndRelease] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
-  const id = location.pathname.replace('/payments/pay-runs/', '');
 
   const [headerOptions, setHeaderOptions] = useState({
     actionButtonText: 'New Pay Run',
     clickActionButton: () => {
-      console.log('asd');
-      setOpenedPopup('create-pay-run');
+      setOpenedPopup(popupTypes.createPayRun);
     },
   });
 
@@ -54,9 +61,8 @@ const PayRun = () => {
 
   const closeCreatePayRun = () => {
     setOpenedPopup('');
-    changeHocAndRelease('');
-    changeRegularCycles('');
-    setDate(new Date());
+    setReason('');
+    setActionRequiredBy('');
   };
 
   const onCheckRow = (id) => {
@@ -84,16 +90,26 @@ const PayRun = () => {
 
   return (
     <div className='pay-runs pay-run'>
-      {openedPopup === 'create-pay-run' &&
-        <PopupCreatePayRun
-          changeHocAndRelease={changeHocAndRelease}
-          changeRegularCycles={changeRegularCycles}
-          hocAndRelease={hocAndRelease}
-          regularCycles={regularCycles}
+      {openedPopup === popupTypes.holdPayments &&
+        <PopupHoldPayment
+          reason={reason}
+          actionRequiredBy={actionRequiredBy}
+          actionRequiredByOptions={[{text: 'Brokerage', value: 'brokerage'}, {text: 'Testage', value: 'testage'}]}
+          changeActionRequiredBy={(value) => setActionRequiredBy(value)}
           closePopup={closeCreatePayRun}
-          date={date}
-          setDate={setDate}
+          changeReason={value => setReason(value)}
         />
+      }
+      {openedPopup === popupTypes.createPayRun &&
+      <PopupCreatePayRun
+        changeHocAndRelease={changeHocAndRelease}
+        changeRegularCycles={changeRegularCycles}
+        hocAndRelease={hocAndRelease}
+        regularCycles={regularCycles}
+        closePopup={closeCreatePayRun}
+        date={date}
+        setDate={setDate}
+      />
       }
       {!!breadcrumbs.length && <Breadcrumbs classes='p-3' values={breadcrumbs} />}
       <PayRunHeader

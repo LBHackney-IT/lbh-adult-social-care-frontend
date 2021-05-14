@@ -1,0 +1,13 @@
+.hold-payment__dropdown {
+  margin-bottom: 32px;
+
+  button {
+    width: 220px;
+    padding: 10px;
+  }
+
+  &.control.field-container label {
+    color: $lbh-black1;
+    font-weight: 400;
+  }
+}
