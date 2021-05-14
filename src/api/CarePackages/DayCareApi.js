@@ -25,6 +25,13 @@ const getOpportunityTimesPerMonthOptions = () => {
     .catch(handleError);
 };
 
+const getDayCareColleges = () => {
+  return axios
+    .get(`${DAY_CARE_URL}/colleges`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 const createDayCarePackage = (dayCarePackageForCreation) => {
   const options = {
     url: `${DAY_CARE_URL}`,
@@ -169,6 +176,7 @@ export {
   getTermTimeConsiderationOptions,
   getOpportunitiesLengthOptions,
   getOpportunityTimesPerMonthOptions,
+  getDayCareColleges,
   createDayCarePackage,
   updateDayCarePackage,
   getDayCarePackageList,

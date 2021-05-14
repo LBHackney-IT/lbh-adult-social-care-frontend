@@ -100,6 +100,25 @@ html {
   font-size: 12px !important;
 }
 
+.max-w-150px {
+  max-width: 150px;
+}
+.max-w-200px {
+  max-width: 200px;
+}
+
+.min-w-150px {
+  min-width: 150px;
+}
+
+.min-w-200px {
+  min-width: 200px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
 .is-underlined {
   text-decoration: underline;
 }
