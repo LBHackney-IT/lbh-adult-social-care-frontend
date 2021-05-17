@@ -15,6 +15,7 @@
   .dropdown-container {
     .button {
       width: 157px;
+      height: 46px;
     }
   }
 }
@@ -59,4 +60,29 @@
 .pay-run__dropdowns {
   display: flex;
   flex-wrap: wrap;
+}
+
+.held-payments__filters {
+  display: flex;
+
+  label.checkbox {
+    align-items: flex-end;
+    .checkbox-check {
+      height: 19px;
+      width: 19px;
+    }
+  }
+
+  .checkbox {
+    p {
+      color: $lbh-black1;
+      font-size: 14px;
+    }
+  }
+}
+
+.held-payments__tab-class {
+  .pay-runs__filters {
+    justify-content: space-between;
+  }
 }

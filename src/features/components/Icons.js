@@ -66,7 +66,7 @@ const CaretRightHighlightIcon = () => {
 const CircleCloseIcon = () => {
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M15.9998 29.3332C23.3636 29.3332 29.3332 23.3636 29.3332 15.9998C29.3332 8.63604 23.3636 2.6665 15.9998 2.6665C8.63604 2.6665 2.6665 8.63604 2.6665 15.9998C2.6665 23.3636 8.63604 29.3332 15.9998 29.3332Z" stroke="#6F777B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M15.9998 29.3332C23.3636 29.3332 29.3332 23.3636 29.3332 15.9998C29.3332 8.63604 23.3636 2.6665 15.9998 2.6665C8.63604 2.6665 2.6665 8.63604 2.6665 15.9998C2.6665 23.3636 8.63604 29.3332 15.9998 29.3332Z" stroke="#6F777B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M20 12L12 20" stroke="#6F777B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M12 12L20 20" stroke="#6F777B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
@@ -79,6 +79,30 @@ const ArrowTopIcon = () => {
       <path d="M12 19V5" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M5 12L12 5L19 12" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
+  );
+};
+
+const ChatIcon = () => {
+  return (
+    <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18.3333 7.59273C18.3333 3.18182 13.9783 0 9.16667 0C4.32575 0 0 3.20545 0 7.59273C0 9.14818 0.56375 10.6755 1.56292 11.8609C1.606 13.2491 0.782833 15.2409 0.0403333 16.69C2.02767 16.3345 4.85467 15.5464 6.13525 14.7673C13.1908 16.4736 18.3333 12.1836 18.3333 7.59273ZM20.9761 16.8373C20.9495 17.7473 21.4876 19.0509 21.9734 20C20.6727 19.7655 18.8219 19.2509 17.9841 18.7409C14.8995 19.4845 12.3796 18.4773 11.0422 16.8318C15.2194 16.2318 18.5964 13.5982 19.7404 10.1573C21.0971 11.0473 22 12.4218 22 14.0427C22 15.0609 21.6306 16.0618 20.9761 16.8373Z" fill="#BE3A34"/>
+    </svg>
+  );
+};
+
+const ChatSettingsIcon = ({onClick = () => {}}) => {
+  return (
+    <div onClick={onClick} className='chat-settings-icon'>
+      <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="3" cy="3" r="3" fill="#525A5B"/>
+      </svg>
+      <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="3" cy="3" r="3" fill="#525A5B"/>
+      </svg>
+      <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="3" cy="3" r="3" fill="#525A5B"/>
+      </svg>
+    </div>
   );
 };
 
@@ -95,4 +119,6 @@ export {
   HackneySearch,
   CircleCloseIcon,
   ArrowTopIcon,
+  ChatIcon,
+  ChatSettingsIcon,
 };

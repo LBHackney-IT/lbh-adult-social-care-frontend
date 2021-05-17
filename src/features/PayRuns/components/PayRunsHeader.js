@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button} from "../../components/Button";
-import Input from "../../components/Input";
-import Dropdown from "../../components/Dropdown";
+import PayRunsFilters from "./PayRunsFilters";
+import HeldPaymentsFilters from "./HeldPaymentsFilters";
 
 const initialFilters = {
   id: '',
@@ -9,15 +9,26 @@ const initialFilters = {
   cadence: '',
   status: '',
   date: '',
+  dateRange: '',
+  serviceType: '',
+  waitingOn: '',
+  serviceUser: '',
+  supplier: '',
+  unread: false,
 };
 
 const PayRunsHeader = ({
   typeOptions = [],
   cadenceOptions = [],
   statusOptions = [],
+  dateRangeOptions = [],
   dateOptions = [],
-  actionButtonText = '',
-  clickActionButton = () => {},
+  serviceTypesOptions = [],
+  serviceUserOptions = [],
+  supplierOptions = [],
+  waitingOnOptions = [],
+  setOpenedPopup,
+  tab,
 }) => {
   const [filters, setFilters] = useState({...initialFilters});
 
@@ -40,44 +51,56 @@ const PayRunsHeader = ({
     });
   };
 
+  const tabInfos = {
+    'pay-runs': {
+      title: 'Pay Runs',
+      actionButtonText: 'New Pay Run',
+      clickActionButton: () => {
+        setOpenedPopup('create-pay-run');
+      },
+      filtersComponent: <PayRunsFilters
+          dateOptions={dateOptions}
+          statusOptions={statusOptions}
+          applyFilters={applyFilters}
+          cadenceOptions={cadenceOptions}
+          changeFilter={changeFilter}
+          filters={filters}
+          searchId={searchId}
+          typeOptions={typeOptions}
+        />,
+    },
+    'held-payments': {
+      title: 'Held Payments',
+      actionButtonText: 'Pay Released Holds',
+      clickActionButton: () => {},
+      filtersComponent: <HeldPaymentsFilters
+          dateRangeOptions={dateRangeOptions}
+          statusOptions={statusOptions}
+          applyFilters={applyFilters}
+          serviceTypesOptions={serviceTypesOptions}
+          serviceUserOptions={serviceUserOptions}
+          supplierOptions={supplierOptions}
+          waitingOnOptions={waitingOnOptions}
+          changeFilter={changeFilter}
+          filters={filters}
+          typeOptions={typeOptions}
+        />,
+    },
+  };
+
+  useEffect(() => {
+    setFilters({...initialFilters});
+  }, [tab]);
+
   return (
     <div className='pay-runs__header p-3'>
       <div className='pay-runs__new-pay'>
-        <p className='title'>Pay Runs</p>
-        <Button onClick={clickActionButton}>{actionButtonText}</Button>
+        <p className='title'>{tabInfos[tab].title}</p>
+        <Button onClick={tabInfos[tab].clickActionButton}>{tabInfos[tab].actionButtonText}</Button>
       </div>
       <div className='pay-runs__filters'>
         <p className='pay-runs__filters-title'>Filter by</p>
-        <Input classes='mr-3' value={filters.id} search={searchId} placeholder='ID' onChange={(value) => changeFilter('id', value)} />
-        <Dropdown
-          initialText='Type'
-          options={typeOptions}
-          classes='pay-runs__dropdown-type mr-3'
-          selectedValue={filters.type}
-          onOptionSelect={(option) => changeFilter('type', option)}
-        />
-        <Dropdown
-          initialText='Cadence'
-          classes='pay-runs__dropdown-cadence mr-3'
-          options={cadenceOptions}
-          selectedValue={filters.cadence}
-          onOptionSelect={(option) => changeFilter('cadence', option)}
-        />
-        <Dropdown
-          initialText='Status'
-          classes='pay-runs__dropdown-status mr-3'
-          options={statusOptions}
-          selectedValue={filters.status}
-          onOptionSelect={(option) => changeFilter('status', option)}
-        />
-        <Dropdown
-          initialText='Date'
-          classes='pay-runs__dropdown-date mr-3'
-          options={dateOptions}
-          selectedValue={filters.date}
-          onOptionSelect={(option) => changeFilter('date', option)}
-        />
-        <Button onClick={applyFilters}>Apply</Button>
+        {tabInfos[tab].filtersComponent}
       </div>
     </div>
   )

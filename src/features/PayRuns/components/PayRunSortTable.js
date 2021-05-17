@@ -1,7 +1,7 @@
 import React from "react";
 import {CaretDownIcon} from "../../components/Icons";
 
-const PayRunSortTable = ({ checkedRows, sorts, sortBy }) => {
+const PayRunSortTable = ({ checkedRows, sorts, sortBy, additionalActions }) => {
   return (
     <div className='pay-runs__sort-table'>
       {checkedRows && <div className='pay-runs__sort pay-runs__sort-checkbox'/> }
@@ -16,6 +16,7 @@ const PayRunSortTable = ({ checkedRows, sorts, sortBy }) => {
           </div>
         );
       })}
+      {additionalActions && additionalActions.map(item => <div key={item.id} className='pay-runs__sort'/>)}
     </div>
   )
 };

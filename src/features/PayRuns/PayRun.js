@@ -128,7 +128,22 @@ const PayRun = () => {
         sorts={sorts}
       />
       <Pagination actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
-      <PayRunsLevelInsight cost='£42,827' suppliersCount='100' servicesUsersCount='1000' costIncrease='£897' holdsCount='48' holdsPrice='£32,223' />
+      <PayRunsLevelInsight
+        firstButton={{
+          text: 'Submit pay run for approval',
+          onClick: () => {}
+        }}
+        secondButton={{
+          text: 'Delete draft pay run',
+          onClick: () => {},
+        }}
+        cost='£42,827'
+        suppliersCount='100'
+        servicesUsersCount='1000'
+        costIncrease='£897'
+        holdsCount='48'
+        holdsPrice='£32,223'
+      />
       <div className='pay-runs__footer'>
         <div className='pay-runs__footer-info'>
           <p>Hackney Adult Social Care Services  ·  2021</p>

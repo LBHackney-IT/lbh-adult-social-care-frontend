@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {Button} from "./Button";
 import {CircleCloseIcon} from "./Icons";
 
-const Popup = ({ mainContent, firstButton, secondButton, title, closePopup }) => {
+const Popup = ({ mainContent, firstButton, classes = '', secondButton, title, closePopup }) => {
 
   useEffect(() => {
     const onClickOutside = (e) => {
@@ -18,7 +18,7 @@ const Popup = ({ mainContent, firstButton, secondButton, title, closePopup }) =>
   }, []);
 
   return (
-    <div className='popup'>
+    <div className={`popup ${classes}`}>
       <div className='popup__inner-content'>
         <div className='popup__header'>
           <p className='popup__header-title'>{title}</p>
@@ -28,8 +28,8 @@ const Popup = ({ mainContent, firstButton, secondButton, title, closePopup }) =>
         </div>
         <div className='popup_main'>{mainContent && mainContent}</div>
         <div className='popup__action-buttons'>
-          {firstButton && <Button >{firstButton.text}</Button>}
-          {secondButton && <Button>{secondButton.text}</Button>}
+          {firstButton && <Button onClick={() => firstButton.onClick ? firstButton.onClick() : console.log(firstButton.text)}>{firstButton.text}</Button>}
+          {secondButton && <Button onClick={() => secondButton.onClick ? secondButton.onClick() : console.log(secondButton.text)}>{secondButton.text}</Button>}
         </div>
       </div>
     </div>

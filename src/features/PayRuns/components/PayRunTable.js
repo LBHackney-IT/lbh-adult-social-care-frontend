@@ -4,8 +4,23 @@ import {formatDateWithSlash} from "../../../service/helpers";
 import PayRunSortTable from "./PayRunSortTable";
 import {shortMonths} from "../../../constants/strings";
 import Checkbox from "../../components/Checkbox";
+import {Button} from "../../components/Button";
 
-const PayRunTable = ({ onClickTableRow, checkedRows, setCheckedRows, rows, isIgnoreId = false, isStatusDropDown = false, classes = '', canCollapseRows = false, careType, sortBy, sorts }) => {
+const PayRunTable = ({
+  onClickTableRow,
+  checkedRows,
+  setCheckedRows,
+  rows,
+  release,
+  additionalActions,
+  isIgnoreId = false,
+  isStatusDropDown = false,
+  classes = '',
+  canCollapseRows = false,
+  careType,
+  sortBy,
+  sorts,
+}) => {
   const [collapsedRows, setCollapsedRows] = useState([]);
 
   const collapseRows = id => {
@@ -26,7 +41,7 @@ const PayRunTable = ({ onClickTableRow, checkedRows, setCheckedRows, rows, isIgn
 
   return (
     <div className={`pay-runs__table ${classes}`}>
-      <PayRunSortTable checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
+      <PayRunSortTable additionalActions={additionalActions} checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
       {rows.map(item => {
         const collapsedRow = collapsedRows.includes(item.id);
         const rowStatus = item.status ? ` ${item.status}` : '';
@@ -41,10 +56,10 @@ const PayRunTable = ({ onClickTableRow, checkedRows, setCheckedRows, rows, isIgn
               </div>
             }
             {Object.getOwnPropertyNames(item).map(rowItemName => {
-              if(typeof item[rowItemName] === 'object' || (isIgnoreId && rowItemName === 'id')) {
+              if(Array.isArray(item[rowItemName]) || (item[rowItemName]?.id !== undefined) || (isIgnoreId && rowItemName === 'id')) {
                 return <></>;
               }
-              const value = rowItemName === 'date' ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
+              const value = rowItemName.toLowerCase().indexOf('date') > -1 ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
               const isStatus = rowItemName === 'status';
               const formattedStatus = isStatus && item[rowItemName].split('-').map(text => text.slice(0, 1).toUpperCase() + text.slice(1,text.length)).join(' ');
               const statusItemClass = isStatus ? ` pay-runs__table-row-item-status ${item[rowItemName]}` : '';
@@ -71,6 +86,17 @@ const PayRunTable = ({ onClickTableRow, checkedRows, setCheckedRows, rows, isIgn
                   {isStatus ? formattedStatus : value}
                 </p>
               );
+            })}
+            {additionalActions && additionalActions.map(action => {
+              const Component = action.Component;
+              return (
+                <div key={`${action.id}`} className={`pay-runs__table-row-item ${action.className}`}>
+                  <Component onClick={(e) => {
+                    e.stopPropagation();
+                    action.onClick(item)
+                  }} />
+                </div>
+              )
             })}
             {collapsedRow &&
             <div className='pay-runs__table-row-collapsed'>
@@ -110,6 +136,10 @@ const PayRunTable = ({ onClickTableRow, checkedRows, setCheckedRows, rows, isIgn
                         )
                       })}
                     </div>
+                    {release && <Button className='outline green pay-runs__table-row-release-button' onClick={(e) => {
+                      e.stopPropagation();
+                      release(item, care);
+                    }}>Release</Button>}
                   </div>
                 )
               })}

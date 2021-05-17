@@ -4,18 +4,33 @@ import PayRunsHeader from "./components/PayRunsHeader";
 import PayRunTabs from "./components/PayRunTabs";
 import PayRunTable from "./components/PayRunTable";
 import Pagination from "./components/Pagination";
-import {payRunsTableDate} from "../../testData/TestDataPayRuns";
+import {payRunsHeldPaymentsTableDate, payRunsTableDate, testDataHelpMessages} from "../../testData/TestDataPayRuns";
 import PopupCreatePayRun from "./components/PopupCreatePayRun";
+import ChatButton from "./components/ChatButton";
+import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
+import PopupHelpChat from "../Chat/components/PopupHelpChat";
 
-const sorts = [
-  {name: 'id', text: 'ID'},
-  {name: 'date', text: 'Date'},
-  {name: 'type', text: 'Type'},
-  {name: 'cadence', text: 'Cadence'},
-  {name: 'paid', text: 'Paid'},
-  {name: 'held', text: 'Held'},
-  {name: 'status', text: 'Status'},
-];
+const sortsTab = {
+  'pay-runs': [
+    {name: 'id', text: 'ID'},
+    {name: 'date', text: 'Date'},
+    {name: 'type', text: 'Type'},
+    {name: 'cadence', text: 'Cadence'},
+    {name: 'paid', text: 'Paid'},
+    {name: 'held', text: 'Held'},
+    {name: 'status', text: 'Status'},
+  ],
+  'held-payments': [
+    {name: 'payRunDate', text: 'Pay run date'},
+    {name: 'payRunId', text: 'Pay run ID'},
+    {name: 'serviceUser', text: 'Service User'},
+    {name: 'packageType', text: 'Package Type'},
+    {name: 'supplier', text: 'Supplier'},
+    {name: 'amount', text: 'Amount'},
+    {name: 'status', text: 'Status'},
+    {name: 'waitingFor', text: 'Waiting for'},
+  ],
+};
 
 const tabsClasses = {
   'pay-runs': 'pay-runs__tab-class',
@@ -27,25 +42,20 @@ const PayRuns = () => {
   const pushRoute = useHistory().push;
   const [openedPopup, setOpenedPopup] = useState('');
   const [date, setDate] = useState(new Date());
+  const [checkedRows, setCheckedRows] = useState([]);
+  const [openedHelpChat, setOpenedHelpChat] = useState({});
   const [hocAndRelease, changeHocAndRelease] = useState('');
+  const [waitingOn, changeWaitingOn] = useState('');
+  const [newMessageText, setNewMessageText] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
-
-  const [headerOptions, setHeaderOptions] = useState({
-    actionButtonText: 'New Pay Run',
-    clickActionButton: () => {
-      setOpenedPopup('create-pay-run');
-    },
-  });
-
-  useEffect(() => {
-    pushRoute(`${location.pathname}?page=1`);
-  }, []);
-
   const [tab, changeTab] = useState('pay-runs');
   const [sort, setSort] = useState({
     value: 'increase',
     name: 'id',
   });
+
+  const isHeldTab = tab === 'held-payments';
+  const isPayRunsTab = tab === 'pay-runs';
 
   const sortBy = (field, value) => {
     setSort({value, name: field});
@@ -58,12 +68,45 @@ const PayRuns = () => {
     setDate(new Date());
   };
 
+  const closeHelpChat = () => {
+    setOpenedPopup('');
+    changeWaitingOn('');
+    setNewMessageText('');
+  };
+
+  const onCheckRows = id => {
+    console.log(id);
+    if(checkedRows.includes(id)) {
+      setCheckedRows(checkedRows.filter(item => item != id));
+    } else {
+      setCheckedRows([...checkedRows, id]);
+    }
+  }
+
+  const release = (item, care) => {
+    console.log('release payment item and care ', item, care);
+  };
+
+  const openChat = item => {
+    console.log('open chat with id: ', item.id);
+    setOpenedPopup('help-chat');
+    setOpenedHelpChat(item);
+  }
+
   const onClickTableRow = (rowItems) => {
     pushRoute(`${location.pathname}/${rowItems.id}`)
   };
 
+  const heldActions = [
+    {id: 'action1', onClick: (item) => openChat(item), className: 'chat-icon', Component: ChatButton}
+  ];
+
+  useEffect(() => {
+    pushRoute(`${location.pathname}?page=1`);
+  }, []);
+
   return (
-    <div className='pay-runs'>
+    <div className={`pay-runs ${tab}__tab-class`}>
       {openedPopup === 'create-pay-run' &&
         <PopupCreatePayRun
           changeHocAndRelease={changeHocAndRelease}
@@ -75,10 +118,19 @@ const PayRuns = () => {
           setDate={setDate}
         />
       }
-      <PayRunsHeader
-        actionButtonText={headerOptions.actionButtonText}
-        clickActionButton={headerOptions.clickActionButton}
-      />
+      {openedPopup === 'help-chat' &&
+        <PopupHelpChat
+          closePopup={closeHelpChat}
+          newMessageText={newMessageText}
+          setNewMessageText={setNewMessageText}
+          waitingOn={waitingOn}
+          changeWaitingOn={changeWaitingOn}
+          currentUserInfo={openedHelpChat}
+          currentUserId={1}
+          messages={testDataHelpMessages}
+        />
+      }
+      <PayRunsHeader tab={tab} setOpenedPopup={setOpenedPopup} />
       <PayRunTabs
         tab={tab}
         changeTab={changeTab}
@@ -88,14 +140,39 @@ const PayRuns = () => {
         ]}
       />
       <PayRunTable
+        tableActionButtons={isHeldTab && <ChatButton onClick={() => setOpenedPopup('chat')} />}
+        checkedRows={isHeldTab && checkedRows}
+        setCheckedRows={onCheckRows}
+        isIgnoreId={isHeldTab}
         classes={tabsClasses[tab]}
-        onClickTableRow={onClickTableRow}
-        rows={payRunsTableDate}
+        additionalActions={isHeldTab && heldActions}
+        canCollapseRows={isHeldTab}
+        release={isHeldTab && release}
+        onClickTableRow={isPayRunsTab && onClickTableRow}
+        rows={isPayRunsTab ? payRunsTableDate : payRunsHeldPaymentsTableDate}
         careType='Residential'
         sortBy={sortBy}
-        sorts={sorts}
+        sorts={sortsTab[tab]}
       />
       <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
+      {
+        <PayRunsLevelInsight
+          firstButton={{
+            text: 'Approve for payment',
+            onClick: () => {}
+          }}
+          secondButton={{
+            text: 'Kick back',
+            onClick: () => {},
+          }}
+          cost='£42,827'
+          suppliersCount='100'
+          servicesUsersCount='1000'
+          costIncrease='£897'
+          holdsCount='48'
+          holdsPrice='£32,223'
+        />
+      }
       <div className='pay-runs__footer'>
         <div className='pay-runs__footer-info'>
           <p>Hackney Adult Social Care Services  ·  2021</p>

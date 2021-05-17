@@ -8,7 +8,7 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  border-bottom: 1px solid $lbh-gray2;
+  border-bottom: 1px solid $lbh-gray3;
 
   padding-bottom: 16px;
   padding-top: 20px;
@@ -65,13 +65,13 @@
   padding: 5px;
   font-size: 12px;
   border-radius: 4px;
-
   color: $lbh-black1;
-  &.awaiting-approval {
+
+  &.awaiting-approval, &.held {
     background: $lbh-orange;
   }
 
-  &.paid, &.paid-with-holds {
+  &.paid, &.paid-with-holds, &.released {
     background: $lbh-green1;
     color: white;
   }
@@ -384,5 +384,27 @@
 
   .pay-runs__sort:nth-child(7) {
     width: 134px;
+  }
+}
+
+.held-payments__tab-class {
+  .pay-runs__table-row-collapsed-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .pay-runs__table-row-collapsed-header {
+    flex-basis: 100%;
+  }
+
+  .pay-runs__table-row-collapsed-main {
+    flex-basis: 85%;
+  }
+}
+
+.chat-button {
+  &:hover {
+    cursor: pointer;
   }
 }

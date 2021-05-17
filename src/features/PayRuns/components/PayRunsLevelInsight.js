@@ -10,8 +10,8 @@ const PayRunsLevelInsight = ({
   holdsPrice,
   cost,
   costIncrease,
-  onClickFirstButton = () => {console.log('click first button')},
-  onClickSecondButton = () => {console.log('click second button')}
+  firstButton,
+  secondButton,
 }) => {
   return (
     <div className='pay-runs__level-insight'>
@@ -34,8 +34,8 @@ const PayRunsLevelInsight = ({
           <p>Holds worth {currency.euro}{holdsPrice}</p>
         </div>
         <div className='pay-runs__level-insight-action-buttons'>
-          <Button onClick={onClickFirstButton}>Submit pay run for approval</Button>
-          <Button onClick={onClickSecondButton} className='outline red'>Delete draft pay run</Button>
+          <Button onClick={firstButton.onClick}>{firstButton.text}</Button>
+          <Button onClick={secondButton.onClick} className='outline red'>{secondButton.text}</Button>
         </div>
       </div>
     </div>

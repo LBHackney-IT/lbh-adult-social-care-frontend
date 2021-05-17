@@ -11,6 +11,150 @@ const payRunsTableDate = [
   {id: 'xxxxxx-10', date: new Date(), type: 'Direct payments', cadence: 'Held releases', paid: '£YY,YYYY', held: '£AA,AAA', status: 'paid'},
 ];
 
+const testDataHelpMessages = [
+  {id: 1, userId: 1000, text: 'There was no allownce for this please resubmit the agreed time', fullName: 'Jhuru Lastname'},
+  {id: 2, userId: 1, text: 'There was no allownce for this please resubmit the agreed time'},
+  {id: 3, userId: 1000, text: 'There was no allownce for this please resubmit the agreed time', fullName: 'Jhuru Lastname'},
+  {id: 4, userId: 1, text: 'There was no allownce for this please resubmit the agreed time'},
+  {id: 5, userId: 1, text: 'There was no allownce for this please resubmit the agreed time', fullName: 'Jhuru Lastname'},
+  {id: 6, userId: 1000, text: 'There was no allownce for this please resubmit the agreed time', fullName: 'Jhuru Lastname'},
+  {id: 7, userId: 1000, text: 'There was no allownce for this please resubmit the agreed time', fullName: 'Jhuru Lastname'},
+  {id: 8, userId: 1, text: 'T'},
+  {id: 9, userId: 1, text: 'There was no allownce for this please resubmit the agreed time'},
+  {id: 10, userId: 1, text: 'There was no allownce for this please resubmit the agreed time There was no allownce for this please resubmit the agreed time'},
+  {id: 11, userId: 1000, text: 'There was no allownce for this please resubmit the agreed time', fullName: 'Jhuru Lastname'},
+  {id: 12, userId: 1000, text: 'There was no allownce for this please resubmit the agreed time', fullName: 'Jhuru Lastname'},
+  {id: 13, userId: 1000, text: 'There was no allownce for this please resubmit the agreed time', fullName: 'Jhuru Lastname'},
+];
+
+const payRunsHeldPaymentsTableDate = [
+  {
+    id: 'xxxxxx-01',
+    payRunDate: new Date(2021,5, 23),
+    payRunId: 'XX-XXXXXX',
+    serviceUser: 'Mr Shah',
+    packageType: 'Residential Care',
+    supplier: 'ABC Homes Ltd',
+    amount: '£4,320.90',
+    status: 'held',
+    waitingFor: 'Brokerage',
+    cares: [
+      {
+        userName: 'Mr Shah',
+        supplier: 'ABC Homes LTD',
+        id: 'INV XXXXXXX-01',
+        items: [
+          {id: 'xxxxxx-01', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£430', qty: '2', serviceUser: '£860'},
+          {id: 'xxxxxx-02', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£50', qty: '2', serviceUser: '£100'},
+        ]
+      },
+      {
+        userName: 'Mr Shah',
+        supplier: 'ABC Homes LTD',
+        id: 'INV XXXXXXX-02',
+        items: [
+          {id: 'xxxxxx-01', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£430', qty: '2', serviceUser: '£860'},
+          {id: 'xxxxxx-02', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£50', qty: '2', serviceUser: '£100'},
+        ]
+      },
+    ]
+  },
+  {
+    id: 'xxxxxx-02',
+    payRunDate: new Date(2021,5, 23),
+    payRunId: 'XX-XXXXXX',
+    serviceUser: 'Mr Shah',
+    packageType: 'Residential Care',
+    supplier: 'ABC Homes Ltd',
+    amount: '£4,320.90',
+    status: 'held',
+    waitingFor: 'Brokerage',
+    cares: [
+      {
+        userName: 'Mr Shah',
+        supplier: 'ABC Homes LTD',
+        id: 'INV XXXXXXX-01',
+        items: [
+          {id: 'xxxxxx-01', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£430', qty: '2', serviceUser: '£860'},
+          {id: 'xxxxxx-02', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£50', qty: '2', serviceUser: '£100'},
+        ]
+      },
+      {
+        userName: 'Mr Shah',
+        supplier: 'ABC Homes LTD',
+        id: 'INV XXXXXXX-02',
+        items: [
+          {id: 'xxxxxx-01', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£430', qty: '2', serviceUser: '£860'},
+          {id: 'xxxxxx-02', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£50', qty: '2', serviceUser: '£100'},
+        ]
+      },
+    ],
+  },
+  {
+    id: 'xxxxxx-03',
+    payRunDate: new Date(2021,5, 23),
+    payRunId: 'XX-XXXXXX',
+    serviceUser: 'Mr Shah',
+    packageType: 'Residential Care',
+    supplier: 'ABC Homes Ltd',
+    amount: '£4,320.90',
+    status: 'held',
+    waitingFor: 'Brokerage',
+    cares: [
+      {
+        userName: 'Mr Shah',
+        supplier: 'ABC Homes LTD',
+        id: 'INV XXXXXXX-01',
+        items: [
+          {id: 'xxxxxx-01', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£430', qty: '2', serviceUser: '£860'},
+          {id: 'xxxxxx-02', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£50', qty: '2', serviceUser: '£100'},
+        ]
+      },
+      {
+        userName: 'Mr Shah',
+        supplier: 'ABC Homes LTD',
+        id: 'INV XXXXXXX-02',
+        items: [
+          {id: 'xxxxxx-01', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£430', qty: '2', serviceUser: '£860'},
+          {id: 'xxxxxx-02', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£50', qty: '2', serviceUser: '£100'},
+        ]
+      },
+    ],
+  },
+  {
+    id: 'xxxxxx-04',
+    payRunDate: new Date(2021,5, 23),
+    payRunId: 'XX-XXXXXX',
+    serviceUser: 'Mr Shah',
+    packageType: 'Residential Care',
+    supplier: 'ABC Homes Ltd',
+    amount: '£4,320.90',
+    status: 'released',
+    waitingFor: 'Brokerage',
+    cares: [
+      {
+        userName: 'Mr Shah',
+        supplier: 'ABC Homes LTD',
+        id: 'INV XXXXXXX-01',
+        items: [
+          {id: 'xxxxxx-01', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£430', qty: '2', serviceUser: '£860'},
+          {id: 'xxxxxx-02', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£50', qty: '2', serviceUser: '£100'},
+        ]
+      },
+      {
+        userName: 'Mr Shah',
+        supplier: 'ABC Homes LTD',
+        id: 'INV XXXXXXX-02',
+        items: [
+          {id: 'xxxxxx-01', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£430', qty: '2', serviceUser: '£860'},
+          {id: 'xxxxxx-02', dateFrom: new Date(), dateTo: new Date(2021, 7, 12), cost: '£50', qty: '2', serviceUser: '£100'},
+        ]
+      },
+    ]
+  },
+];
+
+
 const payRunTableDate = [
   {
     id: 'xxxxxx-01',
@@ -133,4 +277,6 @@ const payRunTableDate = [
 export {
   payRunsTableDate,
   payRunTableDate,
+  payRunsHeldPaymentsTableDate,
+  testDataHelpMessages,
 };
