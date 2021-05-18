@@ -1,15 +1,11 @@
-import React from "react";
-import ClientSummary from "../components/ClientSummary";
-import Layout from "../Layout/Layout";
-import { useState } from "react";
+import PackagesDayCare from "../../ProposedPackages/PackagesDayCare";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { selectBrokerage } from "../../reducers/brokerageReducer";
-import { getHomeCareSummaryData } from "../../api/CarePackages/HomeCareApi";
-import PackagesDayCare from "./PackagesDayCare";
-import { uniqueID } from "../../service/helpers";
-import PackagesResidentialCare from "./PackagesResidentialCare";
-import PackagesHomeCare from "./PackagesHomeCare";
-import PackagesNursingCare from "./PackagesNursingCare";
+import { selectBrokerage } from "../../../reducers/brokerageReducer";
+import { uniqueID } from "../../../service/helpers";
+import { getHomeCareSummaryData } from "../../../api/CarePackages/HomeCareApi";
+import ClientSummary from "../../components/ClientSummary";
+import Layout from "../../Layout/Layout";
 
 const initialPackageReclaim = {
   type: "",
@@ -82,38 +78,7 @@ const costCards = [
   { id: 3, title: "TOTAL / WK", cost: "1892", status: "ESTIMATE" },
 ];
 
-const residentialCards = [
-  { id: 1, title: "TOTAL / WK", cost: "1892", status: "ESTIMATE" },
-  { id: 2, title: "TOTAL / WK", cost: "1892", status: "ESTIMATE" },
-  {
-    id: 3,
-    title: "TOTAL / WK",
-    cost: "1892",
-    status: "ESTIMATE",
-    selected: true,
-  },
-  {
-    id: 4,
-    title: "TOTAL / WK",
-    cost: "1892",
-    status: "ESTIMATE",
-    selected: true,
-  },
-];
-
-const nursingCards = [
-  { id: 1, title: "TOTAL / WK", cost: "1892", status: "ESTIMATE" },
-  { id: 2, title: "TOTAL / WK", cost: "1892", status: "ESTIMATE" },
-  {
-    id: 3,
-    title: "TOTAL / WK",
-    cost: "1892",
-    status: "ESTIMATE",
-    selected: true,
-  },
-];
-
-const ProposedPackages = () => {
+const DayCareBrokering = () => {
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState("approvalHistory");
   const [summaryData, setSummaryData] = useState([]);
@@ -161,39 +126,14 @@ const ProposedPackages = () => {
       >
         Proposed Packages
       </ClientSummary>
-      <PackagesNursingCare
+
+      <PackagesDayCare
         tab={tab}
-        careType="home care"
-        addPackageReclaim={addPackageReclaim}
-        removePackageReclaim={removePackageReclaim}
-        costCards={nursingCards}
-        summaryData={summaryData}
-        approvalHistory={approvalHistory}
-        packagesReclaimed={packagesReclaimed}
-        changePackageReclaim={changePackageReclaim}
-        brokerage={brokerage}
-        changeTab={changeTab}
-      />
-      <PackagesResidentialCare
-        tab={tab}
-        careType="home care"
-        addPackageReclaim={addPackageReclaim}
-        removePackageReclaim={removePackageReclaim}
-        costCards={residentialCards}
-        summaryData={summaryData}
-        approvalHistory={approvalHistory}
-        packagesReclaimed={packagesReclaimed}
-        changePackageReclaim={changePackageReclaim}
-        brokerage={brokerage}
-        changeTab={changeTab}
-      />
-      <PackagesHomeCare
-        tab={tab}
-        brokerage={brokerage}
         addPackageReclaim={addPackageReclaim}
         removePackageReclaim={removePackageReclaim}
         packagesReclaimed={packagesReclaimed}
         changePackageReclaim={changePackageReclaim}
+        brokerage={brokerage}
         changeTab={changeTab}
         costCards={costCards}
         summaryData={summaryData}
@@ -203,4 +143,4 @@ const ProposedPackages = () => {
   );
 };
 
-export default ProposedPackages;
+export default DayCareBrokering;

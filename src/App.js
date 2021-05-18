@@ -19,6 +19,7 @@ import NursingCareApproveBrokered from "./features/CarePackages/NursingCare/Nurs
 import { useSelector } from "react-redux";
 import { selectUser } from "./reducers/userReducer";
 import ProposedPackages from "./features/ProposedPackages/ProposedPackages";
+import DayCareBrokering from "./features/CarePackages/DayCare/DayCareBrokering";
 
 const App = () => {
   const user = useSelector(selectUser);
@@ -69,6 +70,11 @@ const App = () => {
               exact
               path={`${RouteConstants.DAY_CARE}/:isImmediate/:isS117/:isFixedPeriod/:startDate`}
               component={DayCare}
+            />
+            <Route
+              exact
+              path={RouteConstants.DAY_CARE_BROKERING_PACKAGE}
+              component={DayCareBrokering}
             />
             <Route
               exact
