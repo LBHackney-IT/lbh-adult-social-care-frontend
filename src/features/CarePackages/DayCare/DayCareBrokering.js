@@ -6,6 +6,7 @@ import { uniqueID } from "../../../service/helpers";
 import { getHomeCareSummaryData } from "../../../api/CarePackages/HomeCareApi";
 import ClientSummary from "../../components/ClientSummary";
 import Layout from "../../Layout/Layout";
+import { getAgeFromDateString } from "../../../api/Utils/FuncUtils";
 
 const initialPackageReclaim = {
   type: "",
@@ -78,11 +79,21 @@ const costCards = [
   { id: 3, title: "TOTAL / WK", cost: "1892", status: "ESTIMATE" },
 ];
 
+const initClientDetails = {
+  clientName: "Furkan  Kayar",
+  hackneyId: 66666,
+  dateOfBirth: "1990-05-05T00:00:00",
+  postCode: "SW11",
+  preferredContact: "Phone",
+  canSpeakEnglish: "Fluent",
+};
+
 const DayCareBrokering = () => {
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState("approvalHistory");
   const [summaryData, setSummaryData] = useState([]);
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
+  const [clientDetails, setClientDetails] = useState(initClientDetails);
 
   const addPackageReclaim = () => {
     setPackagesReclaimed([
@@ -115,14 +126,16 @@ const DayCareBrokering = () => {
   return (
     <Layout headerTitle="Rapid D2A">
       <ClientSummary
-        client="James Stephens"
-        hackneyId="786288"
-        age="91"
-        preferredContact="Phone"
-        canSpeakEnglish="Fluent"
+        client={clientDetails.clientName}
+        hackneyId={clientDetails.hackneyId}
+        age={getAgeFromDateString(clientDetails.dateOfBirth)}
+        preferredContact={clientDetails.preferredContact}
+        canSpeakEnglish={clientDetails.canSpeakEnglish}
         packagesCount={4}
-        dateOfBirth="09/12/1972"
-        postcode="E9 6EY"
+        dateOfBirth={new Date(clientDetails.dateOfBirth).toLocaleDateString(
+          "en-GB"
+        )}
+        postcode={clientDetails.postCode}
       >
         Proposed Packages
       </ClientSummary>
@@ -138,6 +151,7 @@ const DayCareBrokering = () => {
         costCards={costCards}
         summaryData={summaryData}
         approvalHistory={approvalHistory}
+        clientDetails={clientDetails}
       />
     </Layout>
   );

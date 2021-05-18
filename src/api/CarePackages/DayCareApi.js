@@ -185,6 +185,37 @@ const createDayCareCollege = (dayCareCollegeForCreation) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+// Day care brokerage
+const getDayCareBrokerageStages = () => {
+  return axios
+    .get(`${DAY_CARE_URL}/brokerage/stages`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const getDayCarePackageDetailsForBrokerage = (dayCarePackageId) => {
+  return axios
+    .get(`${DAY_CARE_URL}/${dayCarePackageId}/brokerage`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const createDayCareBrokerageInfo = (
+  dayCarePackageId,
+  dayCareBrokerageInfoForCreation
+) => {
+  const options = {
+    url: `${DAY_CARE_URL}/${dayCarePackageId}/brokerage`,
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    data: dayCareBrokerageInfoForCreation,
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 export {
   getTermTimeConsiderationOptions,
   getOpportunitiesLengthOptions,
@@ -203,4 +234,7 @@ export {
   dayCarePackageCommercialsRequestClarification,
   dayCarePackageRejectContents,
   dayCarePackageRejectCommercials,
+  getDayCareBrokerageStages,
+  getDayCarePackageDetailsForBrokerage,
+  createDayCareBrokerageInfo,
 };
