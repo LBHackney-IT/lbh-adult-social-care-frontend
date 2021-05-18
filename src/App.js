@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Route, Switch, useHistory, useLocation} from "react-router-dom";
+import React from "react";
+import {Route, Switch} from "react-router-dom";
 import CarePackage from "./features/CarePackages/CarePackage";
 import DayCare from "./features/CarePackages/DayCare/DayCare";
 import HomeCare from "./features/CarePackages/HomeCare/HomeCare";
@@ -30,7 +30,7 @@ const App = () => {
     <>
       <PaymentsHeader />
       <Switch>
-        {user !== null ? (
+        {user === null ? (
           <Route path={RouteConstants.LOGIN} component={Login} />
         ) : (
           <>
