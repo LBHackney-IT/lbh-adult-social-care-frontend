@@ -14,17 +14,17 @@ const Pagination = ({ classes, actionButton, itemsCount, from, to, currentPage, 
   };
 
   return (
-    <div className={`pay-runs__table-pagination${classes ? ` ${classes}` : ''}`}>
+    <div className={`table-pagination${classes ? ` ${classes}` : ''}`}>
       {actionButton && <Button className={actionButton.classes} onClick={actionButton.onClick}>{actionButton.text}</Button> }
-      <p className='pay-runs__table-pagination-info'>Showing {itemsCount === 0 ? 0 : `${from}-${itemsCount} of ${totalCount}`}</p>
-      <div className='pay-runs__table-pagination-actions'>
+      <p className='table-pagination-info'>Showing {itemsCount === 0 ? 0 : `${from}-${itemsCount} of ${totalCount}`}</p>
+      <div className='table-pagination-actions'>
         {[...Array(totalCount / to).keys()].map(item => {
-          const currentPageClass = item+1 == finalPage ? ' pay-runs__table-pagination-item-active' : '';
+          const currentPageClass = item+1 == finalPage ? ' table-pagination-item-active' : '';
           return (
             <Button
               key={uniqueID()}
               onClick={() => changePagination(item+1)}
-              className={`pay-runs__table-pagination-button${currentPageClass}`}>
+              className={`table-pagination-button${currentPageClass}`}>
               {item+1}
             </Button>
           );

@@ -1,5 +1,5 @@
 .pay-runs__held-payments-class {
-  .pay-runs__sort-table > div:last-of-type {
+  .sort-table > div:last-of-type {
     &:after {
       content: '';
       width: 22px;
@@ -7,7 +7,7 @@
     }
   }
 
-  .pay-runs__sort {
+  .sort {
     &:nth-child(2) {
      width: 103px;
     }
@@ -40,7 +40,7 @@
     }
   }
 
-  .pay-runs__table-row-item {
+  .table-row-item {
     &:nth-child(2) {
       width: 103px;
     }

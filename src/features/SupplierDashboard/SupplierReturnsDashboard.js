@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 import Breadcrumbs from "../components/Breadcrumbs";
 import { useLocation, useHistory } from 'react-router-dom';
-import PayRunTable from "./components/PayRunTable";
+import SupplierDashboardTable from "./components/SupplierDashboardTable";
 import Pagination from "../Payments/components/Pagination";
 import {payRunTableDate} from "../../testData/TestDataPayRuns";
 import PopupCreatePayRun from "./components/PopupCreatePayRun";
 import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
-import PayRunHeader from "./components/PayRunHeader";
+import SupplierDashboardInnerHeader from "./components/SupplierDashboardInnerHeader";
 import PopupHoldPayment from "./components/PopupHoldPayment";
 
 const sorts = [
@@ -23,7 +23,7 @@ const popupTypes = {
   holdPayments: 'hold-payment',
 };
 
-const PayRun = () => {
+const SupplierReturnsDashboard = () => {
   const location = useLocation();
   const pushRoute = useHistory().push;
   const [openedPopup, setOpenedPopup] = useState('');
@@ -112,11 +112,11 @@ const PayRun = () => {
       />
       }
       {!!breadcrumbs.length && <Breadcrumbs classes='p-3' values={breadcrumbs} />}
-      <PayRunHeader
+      <SupplierDashboardInnerHeader
         actionButtonText={headerOptions.actionButtonText}
         clickActionButton={headerOptions.clickActionButton}
       />
-      <PayRunTable
+      <SupplierDashboardTable
         rows={payRunTableDate}
         careType='Residential'
         isStatusDropDown={true}
@@ -153,4 +153,4 @@ const PayRun = () => {
   )
 };
 
-export default PayRun;
+export default SupplierReturnsDashboard;

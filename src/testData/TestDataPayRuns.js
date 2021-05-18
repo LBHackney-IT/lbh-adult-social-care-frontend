@@ -1,3 +1,16 @@
+const supplierReturnsDashboardTableDate = [
+  {id: 'xxxxxx-01', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'disputes-active'},
+  {id: 'xxxxxx-02', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'disputes-active'},
+  {id: 'xxxxxx-03', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'disputes-active'},
+  {id: 'xxxxxx-04', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'disputes-active'},
+  {id: 'xxxxxx-05', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'disputes-active'},
+  {id: 'xxxxxx-06', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'disputes-active'},
+  {id: 'xxxxxx-07', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'complete'},
+  {id: 'xxxxxx-08', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'complete'},
+  {id: 'xxxxxx-09', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'complete'},
+  {id: 'xxxxxx-10', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'complete'},
+];
+
 const payRunsTableDate = [
   {id: 'xxxxxx-01', date: new Date(), type: 'Residential recurring', cadence: '4-weekly', paid: '£23,872.80', held: '£4,320.90', status: 'draft'},
   {id: 'xxxxxx-02', date: new Date(), type: 'Bills, 4-weekly', cadence: '4-weekly', paid: '£YY,YYYY', held: '£AA,AAA', status: 'awaiting-approval'},
@@ -9,6 +22,33 @@ const payRunsTableDate = [
   {id: 'xxxxxx-08', date: new Date(), type: 'Bills, 4-weekly', cadence: 'ad-hoc', paid: '£YY,YYYY', held: '£AA,AAA', status: 'paid'},
   {id: 'xxxxxx-09', date: new Date(), type: 'Direct payments', cadence: 'Held releases', paid: '£YY,YYYY', held: '£AA,AAA', status: 'paid'},
   {id: 'xxxxxx-10', date: new Date(), type: 'Direct payments', cadence: 'Held releases', paid: '£YY,YYYY', held: '£AA,AAA', status: 'paid'},
+];
+
+const billsTableDate = [
+  {id: 'CH-123', ref: 'CH-123', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£23,872.80', paid: '£4,320.90', status: 'outstanding'},
+  {id: 'CH-124', ref: 'CH-124', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'paid'},
+  {id: 'CH-125', ref: 'CH-125', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'overdue'},
+  {id: 'CH-126', ref: 'CH-126', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'paid'},
+  {id: 'CH-127', ref: 'CH-127', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'outstanding'},
+  {id: 'CH-128', ref: 'CH-128', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'paid'},
+  {id: 'CH-129', ref: 'CH-129', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'overdue'},
+  {id: 'CH-131', ref: 'CH-131', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'outstanding'},
+  {id: 'CH-132', ref: 'CH-132', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'paid'},
+  {id: 'CH-133', ref: 'CH-133', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'overdue'},
+  {id: 'CH-134', ref: 'CH-133', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'paid'},
+];
+
+const billsPayRunsTableDate = [
+  {id: 'BPR-1', brpDd: 'BPR-1', date: new Date(),  invoicesPaid: 'YY', paid: '£23,872.80', held: '£4,320.90'},
+  {id: 'BPR-2', brpDd: 'BPR-2', date: new Date(),  invoicesPaid: 'YY', paid: '£YY,YYYY', held: '£AA,AAA'},
+  {id: 'BPR-3', brpDd: 'BPR-3', date: new Date(),  invoicesPaid: 'YY', paid: '£YY,YYYY', held: '£AA,AAA'},
+  {id: 'BPR-4', brpDd: 'BPR-4', date: new Date(),  invoicesPaid: 'YY', paid: '£YY,YYYY', held: '£AA,AAA'},
+  {id: 'BPR-6', brpDd: 'BPR-6', date: new Date(),  invoicesPaid: 'YY', paid: '£YY,YYYY', held: '£AA,AAA'},
+  {id: 'BPR-7', brpDd: 'BPR-7', date: new Date(),  invoicesPaid: 'YY', paid: '£YY,YYYY', held: '£AA,AAA'},
+  {id: 'BPR-8', brpDd: 'BPR-8', date: new Date(),  invoicesPaid: 'YY', paid: '£YY,YYYY', held: '£AA,AAA' },
+  {id: 'BPR-9', brpDd: 'BPR-9', date: new Date(),  invoicesPaid: 'YY', paid: '£YY,YYYY', held: '£AA,AAA'},
+  {id: 'BPR-10', brpDd: 'BPR-10', date: new Date(),  invoicesPaid: 'YY', paid: '£YY,YYYY', held: '£AA,AAA'},
+  {id: 'BPR-11', brpDd: 'BPR-11', date: new Date(), invoicesPaid: 'YY', paid: '£YY,YYYY', held: '£AA,AAA'},
 ];
 
 const testDataHelpMessages = [
@@ -279,4 +319,7 @@ export {
   payRunTableDate,
   payRunsHeldPaymentsTableDate,
   testDataHelpMessages,
+  billsTableDate,
+  billsPayRunsTableDate,
+  supplierReturnsDashboardTableDate,
 };

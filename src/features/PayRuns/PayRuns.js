@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import { useLocation, useHistory } from 'react-router-dom';
 import PayRunsHeader from "./components/PayRunsHeader";
-import PayRunTabs from "./components/PayRunTabs";
+import PaymentsTabs from "../Payments/components/PaymentsTabs";
 import PayRunTable from "./components/PayRunTable";
-import Pagination from "./components/Pagination";
+import Pagination from "../Payments/components/Pagination";
 import {payRunsHeldPaymentsTableDate, payRunsTableDate, testDataHelpMessages} from "../../testData/TestDataPayRuns";
 import PopupCreatePayRun from "./components/PopupCreatePayRun";
 import ChatButton from "./components/ChatButton";
@@ -75,7 +75,6 @@ const PayRuns = () => {
   };
 
   const onCheckRows = id => {
-    console.log(id);
     if(checkedRows.includes(id)) {
       setCheckedRows(checkedRows.filter(item => item != id));
     } else {
@@ -88,7 +87,6 @@ const PayRuns = () => {
   };
 
   const openChat = item => {
-    console.log('open chat with id: ', item.id);
     setOpenedPopup('help-chat');
     setOpenedHelpChat(item);
   }
@@ -131,7 +129,7 @@ const PayRuns = () => {
         />
       }
       <PayRunsHeader tab={tab} setOpenedPopup={setOpenedPopup} />
-      <PayRunTabs
+      <PaymentsTabs
         tab={tab}
         changeTab={changeTab}
         tabs={[
@@ -155,26 +153,24 @@ const PayRuns = () => {
         sorts={sortsTab[tab]}
       />
       <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
-      {
-        <PayRunsLevelInsight
-          firstButton={{
-            text: 'Approve for payment',
-            onClick: () => {}
-          }}
-          secondButton={{
-            text: 'Kick back',
-            onClick: () => {},
-          }}
-          cost='£42,827'
-          suppliersCount='100'
-          servicesUsersCount='1000'
-          costIncrease='£897'
-          holdsCount='48'
-          holdsPrice='£32,223'
-        />
-      }
-      <div className='pay-runs__footer'>
-        <div className='pay-runs__footer-info'>
+      <PayRunsLevelInsight
+        firstButton={{
+          text: 'Approve for payment',
+          onClick: () => {}
+        }}
+        secondButton={{
+          text: 'Kick back',
+          onClick: () => {},
+        }}
+        cost='£42,827'
+        suppliersCount='100'
+        servicesUsersCount='1000'
+        costIncrease='£897'
+        holdsCount='48'
+        holdsPrice='£32,223'
+      />
+      <div className='payments__footer'>
+        <div className='payments__footer-info'>
           <p>Hackney Adult Social Care Services  ·  2021</p>
         </div>
       </div>

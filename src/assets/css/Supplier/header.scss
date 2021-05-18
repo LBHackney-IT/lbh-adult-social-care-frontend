@@ -1,0 +1,26 @@
+.supplier-dashboard__header {
+  background-color: $lbh-light-gray;
+  padding: 16px 16px 32px 16px;
+  margin-bottom: 50px;
+}
+
+.supplier-dashboard__edit {
+  display: flex;
+  align-items: flex-end;
+
+  .title {
+    margin-bottom: 0;
+    margin-right: 20px;
+    font-weight: 700;
+    font-size: 36px;
+  }
+}
+
+.supplier-dashboard__edit-button {
+  color: $lbh-green1;
+  font-size: 16px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

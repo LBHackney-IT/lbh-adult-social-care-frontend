@@ -2,20 +2,17 @@ import React from "react";
 import { useLocation, useHistory } from 'react-router-dom';
 import {HackneyFullLogo} from "../../components/Icons";
 
-const paymentsRoutes = [
-  {route: 'pay-runs', name: 'Pay Runs'},
-  {route: 'bills', name: 'Bills'},
-  {route: 'care-charges', name: 'Care Charges'},
-  {route: 'reclaims', name: 'Reclaims'},
-  {route: 'supplier-returns', name: 'Supplier Returns'},
-  {route: 'reporting', name: 'Reporting'},
+const supplierRoutes = [
+  {route: '/supplier-dashboard/supplier-returns', name: 'Supplier Returns'},
+  {route: '/active-packages', name: 'Active Packages'},
+  {route: '/payments', name: 'Payments'},
   {route: 'logout', name: 'Log Out'},
 ];
 
-const PaymentsHeader = () => {
+const SupplierDashboardHeader = () => {
   const location = useLocation().pathname;
   const pushRoute = useHistory().push;
-  if(location.indexOf('payments') === -1) {
+  if(location.indexOf('/supplier-dashboard') === -1) {
     return <></>
   }
 
@@ -23,7 +20,7 @@ const PaymentsHeader = () => {
     if(route === 'logout') {
       pushRoute('/');
     } else {
-      pushRoute(`/payments/${route}`);
+      pushRoute(route);
     }
   };
 
@@ -31,7 +28,7 @@ const PaymentsHeader = () => {
     <div className='default-logo-header'>
       <HackneyFullLogo />
       <div className='default-logo-header-navigation'>
-        {paymentsRoutes.map(item => {
+        {supplierRoutes.map(item => {
           const isActiveRoute = location.indexOf(item.route) > -1;
           return (
             <p key={item.name} onClick={() => changeRoute(item.route)} className={`default-logo-header-item${isActiveRoute ? ' default-logo-header-active-item' : ''}`}>
@@ -44,4 +41,4 @@ const PaymentsHeader = () => {
   );
 };
 
-export default PaymentsHeader;
+export default SupplierDashboardHeader;

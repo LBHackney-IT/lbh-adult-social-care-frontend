@@ -17,6 +17,12 @@
 @import "./PayRuns/level-insight";
 @import "./PayRuns/popup-hold-payment";
 @import "./PayRuns/held-payments";
+@import "./Bills/header";
+@import "./Bills/pagination";
+@import "./Bills/filters";
+@import "./Bills/table";
+@import "./Supplier/header";
+@import "./Supplier/table";
 @import "./popup";
 
 * {

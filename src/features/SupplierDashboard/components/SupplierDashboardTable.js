@@ -6,7 +6,7 @@ import {shortMonths} from "../../../constants/strings";
 import Checkbox from "../../components/Checkbox";
 import {Button} from "../../components/Button";
 
-const PayRunTable = ({
+const SupplierDashboardTable = ({
   onClickTableRow,
   checkedRows,
   setCheckedRows,
@@ -59,7 +59,7 @@ const PayRunTable = ({
               if(Array.isArray(item[rowItemName]) || (item[rowItemName]?.id !== undefined) || (isIgnoreId && rowItemName === 'id')) {
                 return <></>;
               }
-              const value = rowItemName.toLowerCase().indexOf('date') > -1 ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
+              const value = rowItemName.indexOf('weekCommencing') > -1 ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
               const isStatus = rowItemName === 'status';
               const formattedStatus = isStatus && item[rowItemName].split('-').map(text => text.slice(0, 1).toUpperCase() + text.slice(1,text.length)).join(' ');
               const statusItemClass = isStatus ? ` table-row-item-status ${item[rowItemName]}` : '';
@@ -152,4 +152,4 @@ const PayRunTable = ({
   )
 };
 
-export default PayRunTable;
+export default SupplierDashboardTable;

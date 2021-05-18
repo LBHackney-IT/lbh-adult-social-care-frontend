@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Route, Switch, useHistory, useLocation} from "react-router-dom";
+import React from "react";
+import {Route, Switch} from "react-router-dom";
 import CarePackage from "./features/CarePackages/CarePackage";
 import DayCare from "./features/CarePackages/DayCare/DayCare";
 import HomeCare from "./features/CarePackages/HomeCare/HomeCare";
@@ -22,6 +22,10 @@ import ProposedPackages from "./features/ProposedPackages/ProposedPackages";
 import PaymentsHeader from "./features/Payments/components/PaymentsHeader";
 import PayRuns from "./features/PayRuns/PayRuns";
 import PayRun from "./features/PayRuns/PayRun";
+import Bills from "./features/Bills/Bills";
+import Bill from "./features/Bills/Bill";
+import SupplierDashboardHeader from "./features/Supplier/components/SupplierDashboardHeader";
+import SupplierDashboard from "./features/SupplierDashboard/SupplierDashboard";
 
 const App = () => {
   const user = useSelector(selectUser);
@@ -29,6 +33,7 @@ const App = () => {
   return (
     <>
       <PaymentsHeader />
+      <SupplierDashboardHeader />
       <Switch>
         {user !== null ? (
           <Route path={RouteConstants.LOGIN} component={Login} />
@@ -38,6 +43,21 @@ const App = () => {
               exact
               path={RouteConstants.HOME_CARE_APPROVE_PACKAGE}
               component={HomeCareApprovePackage}
+            />
+            <Route
+              exact
+              path={RouteConstants.PAYMENTS_BILLS_ROUTE}
+              component={Bills}
+            />
+            <Route
+              exact
+              path={RouteConstants.SUPPLIER_DASHBOARD_ROUTE}
+              component={SupplierDashboard}
+            />
+            <Route
+              exact
+              path={RouteConstants.PAYMENTS_BILL_ROUTE}
+              component={Bill}
             />
             <Route
               exact
