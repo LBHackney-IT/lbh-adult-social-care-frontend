@@ -7,8 +7,14 @@ import React, { useState } from "react";
 import BaseField from "../components/baseComponents/BaseField";
 import Input from "../components/Input";
 import PackageReclaim from "../components/PackageReclaim";
-import ApprovalHistory from "./components/ApprovalHistory";
-import SummaryDataList from "../CarePackages/HomeCare/components/SummaryDataList";
+import ClientSummary from "../components/ClientSummary";
+import {
+  getAgeFromDateString,
+  getEnGBFormattedDate,
+} from "../../api/Utils/FuncUtils";
+import PackageCostBox from "../CarePackages/DayCare/components/PackageCostBox";
+import PackageApprovalHistorySummary from "../components/PackageApprovalHistorySummary";
+import DayCareSummary from "../CarePackages/DayCare/components/DayCareSummary";
 
 const stageOptions = [
   { text: "New", value: 1 },
@@ -35,10 +41,10 @@ const PackagesDayCare = ({
   removePackageReclaim,
   addPackageReclaim,
   approvalHistory,
-  summaryData,
-  costCards,
-  clientDetails,
+  dayCarePackage,
+  dayCareSummary,
 }) => {
+  console.log(dayCareSummary);
   const [coreCost, setCoreCost] = useState({
     costPerDay: "XX",
   });
@@ -358,23 +364,107 @@ const PackagesDayCare = ({
       </div>
       {tab === "approvalHistory" ? (
         <ApprovalHistory
-          costCards={costCards}
-          status="(Ongoing)"
           history={approvalHistory}
-          clientDetails={clientDetails}
+          dayCarePackage={dayCarePackage}
         />
       ) : (
-        !!summaryData.length && (
-          <SummaryDataList
-            edit={(item) => console.log("edit", item)}
-            remove={(item) => console.log("remove", item)}
-            confirmPackage={false}
-            slicedText={true}
-            summaryData={summaryData}
+        dayCareSummary && (
+          <DayCareSummary
+            opportunityEntries={dayCareSummary.opportunityEntries}
+            needToAddress={dayCareSummary.needToAddress}
+            transportNeeded={dayCareSummary.transportNeeded}
+            daysSelected={dayCareSummary.daysSelected}
+            deleteOpportunity={dayCareSummary.deleteOpportunity}
           />
         )
       )}
     </>
+  );
+};
+
+const costSummary = {
+  costOfCarePerWeek: 0.0,
+  anpPerWeek: 0.0,
+  transportCostPerWeek: 0.0,
+  totalCostPerWeek: 0.0,
+};
+
+const ApprovalHistory = ({ history, dayCarePackage = undefined }) => {
+  return (
+    <div className="approval-history">
+      <h2>
+        Day Care{" "}
+        <span>
+          (
+          {dayCarePackage?.packageDetails.isFixedPeriodOrOngoing
+            ? "Fixed Period"
+            : "Ongoing"}{" "}
+          - {dayCarePackage?.packageDetails.termTimeConsiderationOption})
+        </span>
+      </h2>
+      <ClientSummary
+        client={dayCarePackage?.clientDetails.clientName}
+        hackneyId={dayCarePackage?.clientDetails.hackneyId}
+        age={
+          dayCarePackage?.clientDetails &&
+          getAgeFromDateString(dayCarePackage?.clientDetails.dateOfBirth)
+        }
+        sourcingCare="hackney"
+        dateOfBirth={
+          dayCarePackage?.clientDetails &&
+          getEnGBFormattedDate(dayCarePackage?.clientDetails.dateOfBirth)
+        }
+        postcode={dayCarePackage?.clientDetails.postCode}
+      />
+      <div className="care-info">
+        <div>
+          <p>STARTS</p>
+          <p>
+            {getEnGBFormattedDate(dayCarePackage?.packageDetails.startDate)}
+          </p>
+        </div>
+        <div>
+          <p>ENDS</p>
+          <p>
+            {dayCarePackage?.packageDetails.endDate !== null
+              ? getEnGBFormattedDate(dayCarePackage?.packageDetails.endDate)
+              : "Ongoing"}
+          </p>
+        </div>
+        <div>
+          <p>DAYS/WEEK</p>
+          <p>{dayCarePackage?.packageDetails.daysPerWeek}</p>
+        </div>
+      </div>
+      <div className="columns font-size-12px">
+        <div className="column">
+          <div className="is-flex is-flex-wrap-wrap">
+            <PackageCostBox
+              boxClass="hackney-package-cost-light-yellow-box"
+              title="COST OF CARE / WK"
+              cost={`£${costSummary?.costOfCarePerWeek}`}
+              costType="ESTIMATE"
+            />
+
+            <PackageCostBox
+              boxClass="hackney-package-cost-light-yellow-box"
+              title="ANP / WK"
+              cost={`£${costSummary?.anpPerWeek}`}
+              costType="ESTIMATE"
+            />
+
+            <PackageCostBox
+              boxClass="hackney-package-cost-light-yellow-box"
+              title="TRANSPORT / WK"
+              cost={`£${costSummary?.transportCostPerWeek}`}
+              costType="ESTIMATE"
+            />
+          </div>
+        </div>
+      </div>
+
+      <PackageApprovalHistorySummary approvalHistoryEntries={history} />
+    </div>
   );
 };
 

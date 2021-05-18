@@ -1,6 +1,10 @@
 import React from "react";
 import ClientSummary from "../../components/ClientSummary";
 import CostCard from "../../components/CostCard";
+import {
+  getAgeFromDateString,
+  getEnGBFormattedDate,
+} from "../../../api/Utils/FuncUtils";
 
 const ApprovalHistory = ({
   status = "",
@@ -14,12 +18,14 @@ const ApprovalHistory = ({
         Home Care <span>{status}</span>
       </h2>
       <ClientSummary
-        client="James Stephens"
-        hackneyId="786288"
-        age="91"
+        client={clientDetails?.clientName}
+        hackneyId={clientDetails?.hackneyId}
+        age={clientDetails && getAgeFromDateString(clientDetails.dateOfBirth)}
         sourcingCare="hackney"
-        dateOfBirth="09/12/1972"
-        postcode="E9 6EY"
+        dateOfBirth={
+          clientDetails && getEnGBFormattedDate(clientDetails.dateOfBirth)
+        }
+        postcode={clientDetails?.postCode}
       />
       <div className="care-info">
         <div>

@@ -8,16 +8,10 @@ const PackageCostBox = ({
   costType = "",
 }) => {
   return (
-    <div className={`level  ${boxClass}`}>
-      <div className="level-left">
-        <div className="level-item">
-          <div>
-            <p className="font-weight-bold hackney-text-green">{title}</p>
-            <p className="font-size-19px font-weight-bold item-cost">{cost}</p>
-            <p className="font-weight-bold hackney-text-green">{costType}</p>
-          </div>
-        </div>
-      </div>
+    <div className={`font-size-12px font-weight-bold ${boxClass}`}>
+      <p className="hackney-text-green">{title}</p>
+      <p className="font-size-19px item-cost">{cost}</p>
+      <p className="hackney-text-green">{costType}</p>
     </div>
   );
 };

@@ -1,12 +1,19 @@
 import PackagesDayCare from "../../ProposedPackages/PackagesDayCare";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectBrokerage } from "../../../reducers/brokerageReducer";
 import { uniqueID } from "../../../service/helpers";
 import { getHomeCareSummaryData } from "../../../api/CarePackages/HomeCareApi";
 import ClientSummary from "../../components/ClientSummary";
 import Layout from "../../Layout/Layout";
-import { getAgeFromDateString } from "../../../api/Utils/FuncUtils";
+import {
+  getAgeFromDateString,
+  getEnGBFormattedDate,
+} from "../../../api/Utils/FuncUtils";
+import { getDayCarePackageDetailsForBrokerage } from "../../../api/CarePackages/DayCareApi";
+import { useParams } from "react-router-dom";
+import { getInitDaysSelected } from "../../../api/Utils/CommonOptions";
+import { mapDayCarePackageDetailsForBrokerage } from "../../../api/Mappers/DayCareMapper";
 
 const initialPackageReclaim = {
   type: "",
@@ -16,84 +23,142 @@ const initialPackageReclaim = {
   amount: "",
   id: "1",
 };
-
-const approvalHistory = [
-  {
-    date: "03/12/2021",
-    id: 1,
-    text: (
-      <span>
-        Package requested by <a href="">Martin Workman</a> · Social Worker
-      </span>
-    ),
+const initDayCarePackage = {
+  packageDetails: {
+    dayCarePackageId: "4ff66485-75c6-4e5e-b2d0-abb76703c4c6",
+    isFixedPeriodOrOngoing: false,
+    startDate: "2021-04-08T12:50:59.422+03:00",
+    endDate: null,
+    needToAddress: "Details of the need to be addressed",
+    daysPerWeek: 7,
+    dayCareOpportunitiesHoursPerWeek: 5,
+    transportNeeded: true,
+    transportEscortNeeded: true,
+    escortNeeded: true,
+    termTimeConsiderationOptionName: "Term Time",
+    monday: true,
+    tuesday: true,
+    wednesday: true,
+    thursday: true,
+    friday: true,
+    saturday: true,
+    sunday: true,
+    dayCareOpportunities: [
+      {
+        dayCarePackageOpportunityId: "282002e5-4066-4ae8-adf7-9d9ebdf346a9",
+        howLong: {
+          opportunityLengthOptionId: 1,
+          optionName: "45 minutes",
+          timeInMinutes: 45,
+        },
+        howManyTimesPerMonth: {
+          opportunityTimePerMonthOptionId: 1,
+          optionName: "Daily",
+        },
+        opportunitiesNeedToAddress: "Opportunity Need to address",
+        dayCarePackageId: "4ff66485-75c6-4e5e-b2d0-abb76703c4c6",
+      },
+      {
+        dayCarePackageOpportunityId: "71d2883a-672c-48e6-aa0d-e4ac80cfd0dd",
+        howLong: {
+          opportunityLengthOptionId: 1,
+          optionName: "45 minutes",
+          timeInMinutes: 45,
+        },
+        howManyTimesPerMonth: {
+          opportunityTimePerMonthOptionId: 3,
+          optionName: "Monthly",
+        },
+        opportunitiesNeedToAddress: "Opportunity Need to address",
+        dayCarePackageId: "4ff66485-75c6-4e5e-b2d0-abb76703c4c6",
+      },
+    ],
   },
-  {
-    date: "05/12/2021",
-    id: 2,
-    text: (
-      <span>
-        Futher information requested by
-        <a>Amecie Steadman</a> · Approver
-        <br />
-        <em>
-          "There appears to be more support than needed in the morning for Mr
-          Stephens, please amend or call me to discuss"
-          <a href=""> More</a>
-        </em>
-      </span>
-    ),
+  clientDetails: {
+    clientName: "Furkan  Kayar",
+    hackneyId: 66666,
+    dateOfBirth: "1990-05-05T00:00:00",
+    postCode: "SW11",
+    preferredContact: "Phone",
+    canSpeakEnglish: "Fluent",
   },
-  {
-    date: "06/12/2021",
-    id: 3,
-    text: (
-      <span>
-        Package re-submitted by <a href="">Martin Workman</a> · Social Worker
-      </span>
-    ),
-  },
-  {
-    date: "14/12/2021",
-    id: 4,
-    text: (
-      <span>
-        Care Package Approved for brokerage by <a href="">Amecie Steadman</a> ·
-        Approver
-      </span>
-    ),
-  },
-  {
-    date: "14/12/2021",
-    id: 5,
-    text: (
-      <span>
-        Care Package brokered STA by <a href="">Derek Knightman</a> · Broker
-      </span>
-    ),
-  },
-];
-
-const costCards = [
-  { id: 1, title: "TOTAL / WK", cost: "1892", status: "ESTIMATE" },
-  { id: 2, title: "TOTAL / WK", cost: "1892", status: "ESTIMATE" },
-  { id: 3, title: "TOTAL / WK", cost: "1892", status: "ESTIMATE" },
-];
-
-const initClientDetails = {
-  clientName: "Furkan  Kayar",
-  hackneyId: 66666,
-  dateOfBirth: "1990-05-05T00:00:00",
-  postCode: "SW11",
-  preferredContact: "Phone",
-  canSpeakEnglish: "Fluent",
+  packageApprovalHistory: [
+    {
+      historyId: "28c363cc-bd45-4b3b-a93d-e9384bccb545",
+      dayCarePackageId: "4ff66485-75c6-4e5e-b2d0-abb76703c4c6",
+      dateCreated: "2021-05-14T14:16:55.810554+03:00",
+      creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
+      creatorName: "Duncan",
+      packageStatusId: 2,
+      packageStatusName: "Submitted for Approval",
+      logText: "Package submitted for approval by Duncan  Okeno",
+      logSubText: null,
+      creatorRole: "Broker",
+    },
+    {
+      historyId: "d6bc46de-2dd1-4c0d-9e40-7be5561868ef",
+      dayCarePackageId: "4ff66485-75c6-4e5e-b2d0-abb76703c4c6",
+      dateCreated: "2021-05-14T14:16:55.783487+03:00",
+      creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
+      creatorName: "Duncan",
+      packageStatusId: 1,
+      packageStatusName: "New Package",
+      logText: "Package requested by Duncan  Okeno",
+      logSubText: null,
+      creatorRole: "Broker",
+    },
+  ],
 };
+const DayCareBrokering = ({ history }) => {
+  // Parameters
+  const params = useParams();
+  let { dayCarePackageId } = params;
 
-const DayCareBrokering = () => {
+  const [errors, setErrors] = useState([]);
+  const [dayCarePackage, setDayCarePackage] = useState(undefined);
+  const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
+  const [opportunityEntries, setOpportunityEntries] = useState([]);
+  const [daysSelected, setDaysSelected] = useState(getInitDaysSelected());
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState("approvalHistory");
   const [summaryData, setSummaryData] = useState([]);
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
-  const [clientDetails, setClientDetails] = useState(initClientDetails);
+  const [clientDetails, setClientDetails] = useState(
+    initDayCarePackage.clientDetails
+  );
+
+  useEffect(() => {
+    retrieveDayCarePackageDetails(dayCarePackageId);
+  }, [dayCarePackageId]);
+
+  useEffect(() => {
+    console.log(dayCarePackage);
+  }, [dayCarePackage]);
+
+  const retrieveDayCarePackageDetails = (dayCarePackageId) => {
+    // Call to api to get package
+    getDayCarePackageDetailsForBrokerage(dayCarePackageId)
+      .then((response) => {
+        setDayCarePackage(response);
+
+        const {
+          newApprovalHistoryItems,
+          newOpportunityEntries,
+          currentDaysSelected,
+        } = mapDayCarePackageDetailsForBrokerage(response);
+
+        setApprovalHistoryEntries([...newApprovalHistoryItems]);
+        setOpportunityEntries([...newOpportunityEntries]);
+
+        setDaysSelected([...currentDaysSelected]);
+      })
+      .catch((error) => {
+        setErrors([
+          ...errors,
+          `Retrieve day care package details failed. ${error.message}`,
+        ]);
+      });
+  };
 
   const addPackageReclaim = () => {
     setPackagesReclaimed([
@@ -111,7 +176,7 @@ const DayCareBrokering = () => {
 
   const changePackageReclaim = (id) => (updatedPackage) => {
     const newPackage = packagesReclaimed.slice();
-    const packageIndex = packagesReclaimed.findIndex((item) => item.id == id);
+    const packageIndex = packagesReclaimed.findIndex((item) => item.id === id);
     newPackage.splice(packageIndex, 1, updatedPackage);
     setPackagesReclaimed(newPackage);
   };
@@ -126,16 +191,16 @@ const DayCareBrokering = () => {
   return (
     <Layout headerTitle="Rapid D2A">
       <ClientSummary
-        client={clientDetails.clientName}
-        hackneyId={clientDetails.hackneyId}
-        age={getAgeFromDateString(clientDetails.dateOfBirth)}
-        preferredContact={clientDetails.preferredContact}
-        canSpeakEnglish={clientDetails.canSpeakEnglish}
+        client={clientDetails?.clientName}
+        hackneyId={clientDetails?.hackneyId}
+        age={clientDetails && getAgeFromDateString(clientDetails.dateOfBirth)}
+        preferredContact={clientDetails?.preferredContact}
+        canSpeakEnglish={clientDetails?.canSpeakEnglish}
         packagesCount={4}
-        dateOfBirth={new Date(clientDetails.dateOfBirth).toLocaleDateString(
-          "en-GB"
-        )}
-        postcode={clientDetails.postCode}
+        dateOfBirth={
+          clientDetails && getEnGBFormattedDate(clientDetails.dateOfBirth)
+        }
+        postcode={clientDetails?.postCode}
       >
         Proposed Packages
       </ClientSummary>
@@ -148,10 +213,16 @@ const DayCareBrokering = () => {
         changePackageReclaim={changePackageReclaim}
         brokerage={brokerage}
         changeTab={changeTab}
-        costCards={costCards}
         summaryData={summaryData}
-        approvalHistory={approvalHistory}
-        clientDetails={clientDetails}
+        approvalHistory={approvalHistoryEntries}
+        dayCarePackage={dayCarePackage}
+        dayCareSummary={{
+          opportunityEntries: opportunityEntries,
+          needToAddress: dayCarePackage?.packageDetails.needToAddress,
+          transportNeeded: dayCarePackage?.packageDetails.transportNeeded,
+          daysSelected: daysSelected,
+          deleteOpportunity: () => {},
+        }}
       />
     </Layout>
   );
