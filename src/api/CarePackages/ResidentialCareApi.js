@@ -70,7 +70,7 @@ const getSingleResidentialCarePackage = (residentialCarePackageId) => {
 
 const getResidentialCarePackageApprovalPackageContent = (residentialCarePackageId) => {
   return axios
-    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approval-package-contents`)
+    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-package-contents`)
     .then(handleResponse)
     .catch(handleError);
 };

@@ -60,7 +60,7 @@ const getSingleNursingCarePackage = (nursingCarePackageId) => {
 
 const getNursingCarePackageApprovalPackageContent = (nursingCarePackageId) => {
   return axios
-    .get(`${NURSING_CARE_URL}/${nursingCarePackageId}/approval-package-contents`)
+    .get(`${NURSING_CARE_URL}/${nursingCarePackageId}/approve-package-contents`)
     .then(handleResponse)
     .catch(handleError);
 };

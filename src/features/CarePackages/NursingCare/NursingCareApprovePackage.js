@@ -63,10 +63,10 @@ const NursingCareApprovePackage = ({ history }) => {
 
         const newApprovalHistoryItems = res.map(
           (historyItem) => ({
-            eventDate: new Date(historyItem.ApprovedDate).toLocaleDateString(
+            eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
               "en-GB"
             ),
-            eventMessage: historyItem.LogText,
+            eventMessage: historyItem.logText,
             eventSubMessage: undefined
           })
         );
@@ -120,7 +120,12 @@ const NursingCareApprovePackage = ({ history }) => {
   return (
     <Layout headerTitle="NURSING CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
-        <NursingCareApprovalTitle />
+      <NursingCareApprovalTitle 
+        startDate={nursingCarePackage?.nursingCarePackage.startDate}
+        endDate={nursingCarePackage?.nursingCarePackage.endDate !== null
+          ? nursingCarePackage?.nursingCarePackage.endDate
+          : "Ongoing"}
+        />
         <ApprovalClientSummary />
 
         <div className="columns">
@@ -134,7 +139,7 @@ const NursingCareApprovePackage = ({ history }) => {
                     </p>
                     <p className="font-size-14px">
                       {new Date(
-                        nursingCarePackage?.NursingCarePackage.startDate
+                        nursingCarePackage?.nursingCarePackage.startDate
                       ).toLocaleDateString("en-GB")}
                     </p>
                   </div>
@@ -149,8 +154,8 @@ const NursingCareApprovePackage = ({ history }) => {
                   <div>
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
-                      {nursingCarePackage?.NursingCarePackage.endDate !== null
-                        ? nursingCarePackage?.NursingCarePackage.endDate
+                      {nursingCarePackage?.nursingCarePackage.endDate !== null
+                        ? nursingCarePackage?.nursingCarePackage.endDate
                         : "Ongoing"}
                     </p>
                   </div>
@@ -195,17 +200,17 @@ const NursingCareApprovePackage = ({ history }) => {
           </div>
           <div className="column">
             <PackageCostBox
-              boxClass="hackney-package-cost-green-box"
+              boxClass="hackney-package-cost-yellow-box"
               title="ONE OFF COSTS"
-              cost={`£${nursingCarePackage?.CostOfOneOff}`}
-              costType="ACTUAL"
+              cost={`£${nursingCarePackage?.costOfOneOff}`}
+              costType="ESTIMATE"
             />
           </div>
           <div className="column">
             <PackageCostBox
               boxClass="hackney-package-cost-yellow-box"
               title="TOTAL / WK"
-              cost={`£${nursingCarePackage?.TotalPerWeek}`}
+              cost={`£${nursingCarePackage?.totalPerWeek}`}
               costType="ESTIMATE"
             />
           </div>
@@ -220,9 +225,9 @@ const NursingCareApprovePackage = ({ history }) => {
             <div className="mt-4 mb-1">
               <TitleHeader>Package Details</TitleHeader>
               <NursingCareSummary
-                startDate={nursingCarePackage?.NursingCarePackage.startDate}
-                endDate={nursingCarePackage?.NursingCarePackage.endDate !== null
-                  ? nursingCarePackage?.NursingCarePackage.endDate
+                startDate={nursingCarePackage?.nursingCarePackage.startDate}
+                endDate={nursingCarePackage?.nursingCarePackage.endDate !== null
+                  ? nursingCarePackage?.nursingCarePackage.endDate
                   : "Ongoing"}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}

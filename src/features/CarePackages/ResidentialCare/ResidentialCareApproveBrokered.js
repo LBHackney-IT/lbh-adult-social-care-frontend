@@ -122,7 +122,12 @@ const ResidentialCareApproveBrokered = ({ history }) => {
   return (
     <Layout headerTitle="RESIDENTIAL CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
-        <ResidentialCareApprovalTitle />
+        <ResidentialCareApprovalTitle 
+        startDate={residentialCarePackage?.residentialCarePackage.startDate}
+        endDate={residentialCarePackage?.residentialCarePackage.endDate !== null
+          ? residentialCarePackage?.residentialCarePackage.endDate
+          : "Ongoing"}
+        />
         <ApprovalClientSummary />
 
         <div className="columns">
@@ -218,7 +223,7 @@ const ResidentialCareApproveBrokered = ({ history }) => {
                 endDate={residentialCarePackage?.residentialCarePackage.endDate !== null
                   ? residentialCarePackage?.residentialCarePackage.endDate
                   : "Ongoing"}
-                typeOfStayText={residentialCarePackage?.residentialCarePackage.TypeOfStayOptionName}
+                typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
                 needToAddress={residentialCarePackage?.residentialCarePackage.needToAddress}              />

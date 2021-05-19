@@ -122,7 +122,12 @@ const NursingCareApproveBrokered = ({ history }) => {
   return (
     <Layout headerTitle="NURSING CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
-        <NursingCareApprovalTitle />
+        <NursingCareApprovalTitle 
+        startDate={nursingCarePackage?.nursingCarePackage.startDate}
+        endDate={nursingCarePackage?.nursingCarePackage.endDate !== null
+          ? nursingCarePackage?.nursingCarePackage.endDate
+          : "Ongoing"}
+        />
         <ApprovalClientSummary />
 
         <div className="columns">
@@ -136,7 +141,7 @@ const NursingCareApproveBrokered = ({ history }) => {
                     </p>
                     <p className="font-size-14px">
                       {new Date(
-                        nursingCarePackage?.NursingCarePackage.startDate
+                        nursingCarePackage?.nursingCarePackage.startDate
                       ).toLocaleDateString("en-GB")}
                     </p>
                   </div>
@@ -151,8 +156,8 @@ const NursingCareApproveBrokered = ({ history }) => {
                   <div>
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
-                      {nursingCarePackage?.NursingCarePackage.endDate !== null
-                        ? nursingCarePackage?.NursingCarePackage.endDate
+                      {nursingCarePackage?.nursingCarePackage.endDate !== null
+                        ? nursingCarePackage?.nursingCarePackage.endDate
                         : "Ongoing"}
                     </p>
                   </div>
@@ -214,9 +219,9 @@ const NursingCareApproveBrokered = ({ history }) => {
             <div className="mt-4 mb-1">
               <TitleHeader>Package Details</TitleHeader>
               <NursingCareSummary
-                startDate={nursingCarePackage?.NursingCarePackage.startDate}
-                endDate={nursingCarePackage?.NursingCarePackage.endDate !== null
-                  ? nursingCarePackage?.NursingCarePackage.endDate
+                startDate={nursingCarePackage?.nursingCarePackage.startDate}
+                endDate={nursingCarePackage?.nursingCarePackage.endDate !== null
+                  ? nursingCarePackage?.nursingCarePackage.endDate
                   : "Ongoing"}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
