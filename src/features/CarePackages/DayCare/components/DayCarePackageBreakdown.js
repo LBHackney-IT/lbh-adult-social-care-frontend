@@ -1,6 +1,10 @@
 import React from "react";
 
-const DayCarePackageBreakdown = () => {
+const DayCarePackageBreakdown = ({
+  dayCareTime = "12h",
+  transportTime = "4h/week",
+  dayOpportunitiesTotalTime = "3h",
+}) => {
   return (
     <div className="columns is-multiline">
       <div className="column is-full">
@@ -9,12 +13,14 @@ const DayCarePackageBreakdown = () => {
           <div className="level-left">
             <div className="level-item">
               <p className="is-5">
-                <span className="font-weight-bold">Day Care:</span> 12h
+                <span className="font-weight-bold">Day Care:</span>{" "}
+                {dayCareTime}
               </p>
             </div>
             <div className="level-item">
               <p className="is-5">
-                <span className="font-weight-bold">Transport:</span> 4h/week
+                <span className="font-weight-bold">Transport:</span>{" "}
+                {transportTime}
               </p>
             </div>
             <div className="level-item">
@@ -22,7 +28,7 @@ const DayCarePackageBreakdown = () => {
                 <span className="font-weight-bold">
                   Day opportunities (Total):
                 </span>{" "}
-                3h
+                {dayOpportunitiesTotalTime}
               </p>
             </div>
           </div>

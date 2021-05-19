@@ -1,13 +1,17 @@
 import React from "react";
 
-const DayCareApprovalTitle = () => {
+const DayCareApprovalTitle = ({
+  termTimeConsiderationOption = "term time",
+  isFixedPeriodOrOngoing = false,
+}) => {
   return (
     <div className="columns">
       <div className="column">
         <p className="font-weight-bold">
           <span className="font-size-24px mr-4">Day Care</span>
           <span className="font-size-19px">
-            (Ongoing - term time / holiday only)
+            ({isFixedPeriodOrOngoing ? "Fixed Period" : "Ongoing"} -{" "}
+            {termTimeConsiderationOption})
           </span>
         </p>
       </div>

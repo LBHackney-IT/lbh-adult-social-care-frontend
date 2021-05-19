@@ -61,14 +61,17 @@ const DayCareSummary = ({
               <div className="column">
                 <div className="level">
                   <div className="level-item level-right">
+                    <span className="font-weight-bold font-size-12px hackney-text-green is-uppercase mr-2">
+                      Needed:
+                    </span>
                     <span
                       className={`${
                         transportNeeded
-                          ? "hackney-text-green"
-                          : "hackney-text-faded"
-                      } is-uppercase has-text-weight-bold is-size-5`}
+                          ? "font-weight-bold is-underlined"
+                          : "text-faded"
+                      } is-uppercase hackney-text-green font-size-12px`}
                     >
-                      Transport needed
+                      Transport
                     </span>
                   </div>
                 </div>
