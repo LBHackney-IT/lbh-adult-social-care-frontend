@@ -68,6 +68,65 @@ const getSingleResidentialCarePackage = (residentialCarePackageId) => {
     .catch(handleError);
 };
 
+const getResidentialCarePackageApprovalPackageContent = (residentialCarePackageId) => {
+  return axios
+    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approval-package-contents`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const getResidentialCarePackageApproveBrokered = (residentialCarePackageId) => {
+  return axios
+    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-brokered-deal`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const getResidentialCarePackageApprovalHistory = (residentialCarePackageId) => {
+  return axios
+    .get(`${RESIDENTIAL_CARE_URL}/approval-history/${residentialCarePackageId}`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const residentialCareRequestClarification = (
+  residentialCarePackageId,
+  informationText
+) => {
+  const options = {
+    url: `${BASE_URL}/v1/nursing-care-request-more-information`,
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    data: {
+      residentialCarePackageId,
+      informationText,
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+const residentialCareChangeStatus = (
+  residentialCarePackageId,
+  newStatusId
+) => {
+  const options = {
+    url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/change-status/${newStatusId}`,
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    data: {
+      residentialCarePackageId,
+      newStatusId,
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 export {
   getResidentialCareTypeOfStayOptions,
   getResidentialCareAdditionalNeedsCostOptions,
@@ -75,4 +134,9 @@ export {
   createResidentialCarePackage,
   getResidentialCarePackageList,
   getSingleResidentialCarePackage,
+  getResidentialCarePackageApprovalPackageContent,
+  getResidentialCarePackageApproveBrokered,
+  getResidentialCarePackageApprovalHistory,
+  residentialCareRequestClarification,
+  residentialCareChangeStatus
 };

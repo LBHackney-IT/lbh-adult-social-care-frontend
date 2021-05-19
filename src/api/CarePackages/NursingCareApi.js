@@ -58,10 +58,74 @@ const getSingleNursingCarePackage = (nursingCarePackageId) => {
     .catch(handleError);
 }
 
+const getNursingCarePackageApprovalPackageContent = (nursingCarePackageId) => {
+  return axios
+    .get(`${NURSING_CARE_URL}/${nursingCarePackageId}/approval-package-contents`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const getNursingCarePackageApproveCommercial = (nursingCarePackageId) => {
+  return axios
+    .get(`${NURSING_CARE_URL}/${nursingCarePackageId}/approve-commercials`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const getNursingCarePackageApprovalHistory = (nursingCarePackageId) => {
+  return axios
+    .get(`${NURSING_CARE_URL}/approval-history/${nursingCarePackageId}`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const nursingCareRequestClarification = (
+  nursingCarePackageId,
+  informationText
+) => {
+  const options = {
+    url: `${BASE_URL}/v1/nursing-care-request-more-information`,
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    data: {
+      nursingCarePackageId,
+      informationText,
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+const nursingCareChangeStatus = (
+  nursingCarePackageId,
+  newStatusId
+) => {
+  const options = {
+    url: `${NURSING_CARE_URL}/${nursingCarePackageId}/change-status/${newStatusId}`,
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    data: {
+      nursingCarePackageId,
+      newStatusId,
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 export {
   getTypeOfNursingHomeOptions,
   getNursingCareTypeOfStayOptions,
   createNursingCarePackage,
   getNursingCarePackageList,
-  getSingleNursingCarePackage
+  getSingleNursingCarePackage,
+  getNursingCarePackageApprovalPackageContent,
+  getNursingCarePackageApproveCommercial,
+  getNursingCarePackageApprovalHistory,
+  nursingCareRequestClarification,
+  nursingCareChangeStatus
 }
