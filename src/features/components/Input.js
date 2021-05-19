@@ -1,22 +1,23 @@
 import React from "react";
 import BaseField from "./baseComponents/BaseField";
-import './assets/input.scss';
+import "./assets/input.scss";
 
 const Input = ({
   label,
   placeholder = "",
   onChange = () => {},
-  classes = '',
-  value = '',
-  preSign = '',
-  postSign = '',
-  type = 'text',
+  classes = "",
+  value = "",
+  preSign = "",
+  postSign = "",
+  type = "text",
 }) => {
-
   const onChangeInput = (event) => {
-    const {target: {value}} = event;
+    const {
+      target: { value },
+    } = event;
     event.preventDefault();
-    const formattedValue = value.replace(preSign, '').replace(postSign, '');
+    const formattedValue = value.replace(preSign, "").replace(postSign, "");
 
     onChange(formattedValue);
   };
@@ -24,7 +25,7 @@ const Input = ({
   return (
     <BaseField classes={classes} label={label}>
       <input
-        className='custom-input'
+        className="custom-input input"
         placeholder={placeholder}
         onChange={onChangeInput}
         value={`${preSign}${value}${postSign}`}
