@@ -2,8 +2,9 @@ import React, {useEffect, useState} from "react";
 import { useLocation, useHistory } from 'react-router-dom';
 import SupplierDashboardTable from "./components/SupplierDashboardTable";
 import Pagination from "../Payments/components/Pagination";
-import {supplierReturnsDashboardTableDate} from "../../testData/TestDataPayRuns";
+import {supplierDashboardTableData} from "../../testData/TestDataPayRuns";
 import SupplierDashboardInnerHeader from "./components/SupplierDashboardInnerHeader";
+import {formatDateWithSlash} from "../../service/helpers";
 
 const sorts = [
   {name: 'weekCommencing', text: 'Week commencing'},
@@ -25,7 +26,7 @@ const SupplierDashboard = () => {
   });
 
   const onClickTableRow = (rowItems) => {
-    pushRoute(`${location.pathname}/${rowItems.id}`)
+    pushRoute(`${location.pathname}/supplier-returns/${formatDateWithSlash(rowItems.weekCommencing, '.')}`)
   };
 
   const sortBy = (field, value) => {
@@ -42,7 +43,7 @@ const SupplierDashboard = () => {
       <SupplierDashboardTable
         isIgnoreId={true}
         onClickTableRow={onClickTableRow}
-        rows={supplierReturnsDashboardTableDate}
+        rows={supplierDashboardTableData}
         sortBy={sortBy}
         sorts={sorts}
       />

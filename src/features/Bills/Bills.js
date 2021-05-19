@@ -4,7 +4,7 @@ import BillsHeader from "./components/BillsHeader";
 import PayRunTabs from "../Payments/components/PaymentsTabs";
 import BillsTable from "./components/BillsTable";
 import Pagination from "../Payments/components/Pagination";
-import { billsPayRunsTableDate, billsTableDate } from "../../testData/TestDataPayRuns";
+import { billsPayRunsTableData, billsTableData } from "../../testData/TestDataPayRuns";
 import PopupBillsPayDownload from "./components/PopupBillsPayDownload";
 import BillsFilters from "./components/BillsFilters";
 
@@ -113,7 +113,7 @@ const Bills = () => {
         setCheckedRows={onCheckRows}
         isIgnoreId={true}
         classes={tabsClasses[tab]}
-        rows={isBillsTab ? billsTableDate : billsPayRunsTableDate}
+        rows={isBillsTab ? billsTableData : billsPayRunsTableData}
         sortBy={sortBy}
         sorts={sortsTab[tab]}
       />

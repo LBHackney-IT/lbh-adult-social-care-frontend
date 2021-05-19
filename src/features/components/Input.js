@@ -8,6 +8,7 @@ const Input = ({
   label,
   placeholder = "",
   onChange = () => {},
+  onClick,
   classes = '',
   value = '',
   preSign = '',
@@ -24,11 +25,12 @@ const Input = ({
     onChange(formattedValue);
   };
 
-  const focusInput = () => {
+  const focusInput = (e) => {
     if(searchRef?.current) {
       searchRef.current.focus();
     }
-  }
+    return onClick && onClick(e);
+  };
 
   return (
     <BaseField onClick={focusInput} classes={`${classes}${search ? ' custom-input__search' : ''}`} label={label}>

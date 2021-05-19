@@ -60,13 +60,15 @@ const PopupHelpChat = ({
           )})}
       </div>
       <div className='popup-help-chat__inputs'>
-        <Dropdown
-          classes='hold-payment__dropdown'
-          initialText='Change waiting on'
-          onOptionSelect={(value) => changeWaitingOn(value)}
-          options={waitingOnOptions}
-          selectedValue={waitingOn}
-        />
+        {changeWaitingOn &&
+          <Dropdown
+            classes='hold-payment__dropdown'
+            initialText='Change waiting on'
+            onOptionSelect={(value) => changeWaitingOn(value)}
+            options={waitingOnOptions}
+            selectedValue={waitingOn}
+          />
+        }
         <TextArea
           classes='popup-help-chat__textarea'
           rows={8}

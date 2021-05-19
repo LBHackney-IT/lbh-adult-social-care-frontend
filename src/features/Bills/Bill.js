@@ -3,7 +3,7 @@ import Breadcrumbs from "../components/Breadcrumbs";
 import { useLocation, useHistory } from 'react-router-dom';
 import BillsTable from "./components/BillsTable";
 import Pagination from "../Payments/components/Pagination";
-import {payRunTableDate} from "../../testData/TestDataPayRuns";
+import {payRunTableData} from "../../testData/TestDataPayRuns";
 import BillsHeader from "./components/BillsHeader";
 import PopupBillsPayDownload from "./components/PopupBillsPayDownload";
 
@@ -101,7 +101,7 @@ const Bill = () => {
         clickActionButton={headerOptions.clickActionButton}
       />
       <BillsTable
-        rows={payRunTableDate}
+        rows={payRunTableData}
         careType='Residential'
         isStatusDropDown={true}
         checkedRows={checkedRows}

@@ -79,20 +79,20 @@
     padding: 5px;
   }
 
-  &.awaiting-approval, &.held, &.outstanding {
+  &.awaiting-approval, &.held, &.outstanding, &.submitted {
     p {
       background: $lbh-orange;
     }
   }
 
-  &.paid, &.paid-with-holds, &.released, &.complete {
+  &.paid, &.paid-with-holds, &.released, &.complete, &.accepted {
     p, .dropdown {
       background: $lbh-green1;
       color: white;
     }
   }
 
-  &.draft {
+  &.draft, &.not-started {
     p, .dropdown {
       background: $lbh-gray;
     }
@@ -147,7 +147,7 @@
     }
   }
 
-  &.overdue, &.disputes-active {
+  &.overdue, &.disputes-active, &.in-dispute {
     p, .dropdown {
       background-color: $lbh-red;
       color: white;

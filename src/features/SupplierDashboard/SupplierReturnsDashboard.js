@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from "react";
 import Breadcrumbs from "../components/Breadcrumbs";
 import { useLocation, useHistory } from 'react-router-dom';
-import SupplierDashboardTable from "./components/SupplierDashboardTable";
 import Pagination from "../Payments/components/Pagination";
-import {payRunTableDate} from "../../testData/TestDataPayRuns";
-import PopupCreatePayRun from "./components/PopupCreatePayRun";
-import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
-import SupplierDashboardInnerHeader from "./components/SupplierDashboardInnerHeader";
+import {supplierReturnsDashboardTableData, testDataHelpMessages} from "../../testData/TestDataPayRuns";
+import SupplierReturnsLevelInsight from "./components/SupplierReturnsLevelInsight";
 import PopupHoldPayment from "./components/PopupHoldPayment";
+import SupplierReturnDashboardTable from "./components/SupplierReturnsDashboardTable";
+import SupplierReturnsDashboardInnerHeader from "./components/SupplierReturnsDashboardInnerHeader";
+import ChatButton from "../PayRuns/components/ChatButton";
+import PopupHelpChat from "../Chat/components/PopupHelpChat";
 
 const sorts = [
   {name: 'serviceUser', text: 'Service User'},
-  {name: 'invId', text: 'INV ID'},
+  {name: 'packageId', text: 'Package ID'},
   {name: 'packageType', text: 'Package Type'},
-  {name: 'supplier', text: 'Supplier'},
-  {name: 'total', text: 'Total'},
+  {name: 'weeklyValue', text: 'Weekly Value'},
   {name: 'status', text: 'Status'},
 ];
 
@@ -29,11 +29,10 @@ const SupplierReturnsDashboard = () => {
   const [openedPopup, setOpenedPopup] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
   const [actionRequiredBy, setActionRequiredBy] = useState('');
+  const [newMessageText, setNewMessageText] = useState('');
   const [reason, setReason] = useState('');
-  const id = location.pathname.replace('/payments/pay-runs/', '');
-  const [date, setDate] = useState(new Date());
-  const [hocAndRelease, changeHocAndRelease] = useState('');
-  const [regularCycles, changeRegularCycles] = useState('');
+  const [openedHelpChat, setOpenedHelpChat] = useState({});
+  const date = location.pathname.replace('/supplier-dashboard/supplier-returns/', '');
 
   const [headerOptions, setHeaderOptions] = useState({
     actionButtonText: 'New Pay Run',
@@ -47,8 +46,8 @@ const SupplierReturnsDashboard = () => {
   }, []);
 
   const [breadcrumbs, setBreadcrumbs] = useState([
-    {text: 'Payments', onClick: () => pushRoute('/payments/pay-runs')},
-    {text: `Pay Run ${id}`}
+    {text: 'Supplier Returns', onClick: () => pushRoute('/supplier-dashboard')},
+    {text: `Supplier return ${date}`}
   ]);
   const [sort, setSort] = useState({
     value: 'increase',
@@ -74,10 +73,36 @@ const SupplierReturnsDashboard = () => {
   };
 
   const actionButton = {
-    classes: 'outline green',
+    classes: 'outline green mr-auto',
     onClick: () => console.log('Accept all selected', checkedRows),
     text: 'Accept all selected',
-  }
+  };
+
+  const closeHelpChat = () => {
+    setOpenedPopup('');
+    setNewMessageText('');
+  };
+
+  const openChat = item => {
+    setOpenedPopup('help-chat');
+    setOpenedHelpChat(item);
+  };
+
+  const makeServiceAction = (item, service, actionName) => {
+    if(actionName === 'submit') {
+      console.log(`make service action ${actionName} with item: `, item);
+      console.log(`service: `, service);
+    } else if(actionName === 'resubmit') {
+      console.log(`make service action ${actionName} with item: `, item);
+      console.log(`service: `, service);
+    } else {
+      console.log('make service action not found');
+    }
+  };
+
+  const chatActions = [
+    {id: 'action1', onClick: (item) => openChat(item), className: 'chat-icon', Component: ChatButton}
+  ];
 
   useEffect(() => {
     if(location?.query?.id) {
@@ -89,66 +114,40 @@ const SupplierReturnsDashboard = () => {
   }, [location]);
 
   return (
-    <div className='pay-runs pay-run'>
-      {openedPopup === popupTypes.holdPayments &&
-        <PopupHoldPayment
-          reason={reason}
-          actionRequiredBy={actionRequiredBy}
-          actionRequiredByOptions={[{text: 'Brokerage', value: 'brokerage'}, {text: 'Testage', value: 'testage'}]}
-          changeActionRequiredBy={(value) => setActionRequiredBy(value)}
-          closePopup={closeCreatePayRun}
-          changeReason={value => setReason(value)}
-        />
-      }
-      {openedPopup === popupTypes.createPayRun &&
-      <PopupCreatePayRun
-        changeHocAndRelease={changeHocAndRelease}
-        changeRegularCycles={changeRegularCycles}
-        hocAndRelease={hocAndRelease}
-        regularCycles={regularCycles}
-        closePopup={closeCreatePayRun}
-        date={date}
-        setDate={setDate}
+    <div className='supplier-returns supplier-returns-dashboard'>
+      {openedPopup === 'help-chat' &&
+      <PopupHelpChat
+        closePopup={closeHelpChat}
+        newMessageText={newMessageText}
+        setNewMessageText={setNewMessageText}
+        currentUserInfo={openedHelpChat}
+        currentUserId={1}
+        messages={testDataHelpMessages}
       />
       }
       {!!breadcrumbs.length && <Breadcrumbs classes='p-3' values={breadcrumbs} />}
-      <SupplierDashboardInnerHeader
-        actionButtonText={headerOptions.actionButtonText}
-        clickActionButton={headerOptions.clickActionButton}
-      />
-      <SupplierDashboardTable
-        rows={payRunTableDate}
+      <SupplierReturnsDashboardInnerHeader clickActionButton={headerOptions.clickActionButton} />
+      <SupplierReturnDashboardTable
+        rows={supplierReturnsDashboardTableData}
         careType='Residential'
-        isStatusDropDown={true}
         checkedRows={checkedRows}
         setCheckedRows={onCheckRow}
+        openChat={openChat}
+        makeAction={makeServiceAction}
+        additionalActions={chatActions}
         isIgnoreId={true}
         canCollapseRows={true}
         sortBy={sortBy}
         sorts={sorts}
       />
       <Pagination actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
-      <PayRunsLevelInsight
-        firstButton={{
-          text: 'Submit pay run for approval',
-          onClick: () => {}
-        }}
-        secondButton={{
-          text: 'Delete draft pay run',
-          onClick: () => {},
-        }}
-        cost='£42,827'
-        suppliersCount='100'
-        servicesUsersCount='1000'
-        costIncrease='£897'
-        holdsCount='48'
-        holdsPrice='£32,223'
+      <SupplierReturnsLevelInsight
+        packages='832'
+        totalValue='£92,321'
+        returned='700'
+        inDispute='42'
+        accepted='678'
       />
-      <div className='payments__footer'>
-        <div className='payments__footer-info'>
-          <p>Hackney Adult Social Care Services  ·  2021</p>
-        </div>
-      </div>
     </div>
   )
 };

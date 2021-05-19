@@ -1,4 +1,4 @@
-const supplierReturnsDashboardTableDate = [
+const supplierDashboardTableData = [
   {id: 'xxxxxx-01', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'disputes-active'},
   {id: 'xxxxxx-02', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'disputes-active'},
   {id: 'xxxxxx-03', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'disputes-active'},
@@ -11,7 +11,250 @@ const supplierReturnsDashboardTableDate = [
   {id: 'xxxxxx-10', weekCommencing: new Date(), value: '£82,001', totalPackages: 1532, returned: 982, inDispute: 22, accepted: 960, paid: '£64,123', status: 'complete'},
 ];
 
-const payRunsTableDate = [
+const supplierReturnsDashboardTableData = [
+  {
+    id: 'xxxxxx-01',
+    serviceUser: 'Mr B Jones',
+    packageId: 'xx/xx/xx',
+    packageType: 'Home Care',
+    weeklyValue: '£932',
+    status: 'submitted',
+    services: [
+      {
+        serviceName: 'Primary Carer (30m)',
+        packageHrs: 16,
+        hrsDelivered: 16,
+        packageVisits: 3,
+        actualVisits: 3,
+        comments: '',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-01',
+      },
+      {
+        serviceName: 'Primary Carer (45m)',
+        packageHrs: 16,
+        hrsDelivered: 16,
+        packageVisits: 3,
+        actualVisits: 3,
+        comments: '',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-02',
+      },
+      {
+        serviceName: 'Secondary Carer',
+        packageHrs: 4,
+        hrsDelivered: 8,
+        packageVisits: 3,
+        actualVisits: 3,
+        comments: '',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-03',
+      },
+      {
+        serviceName: 'Escort',
+        packageHrs: 16,
+        hrsDelivered: 16,
+        packageVisits: 3,
+        actualVisits: 0,
+        comments: 'Mrs Jones didnt want to go to shop...',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-04',
+      },
+      {
+        serviceName: 'Sleeping Nights',
+        packageHrs: 56,
+        hrsDelivered: 59,
+        packageVisits: 3,
+        actualVisits: 0,
+        comments: '',
+        status: 'disputed',
+        id: 'INV XXXXXXX-05',
+      },
+    ]
+  },
+  {
+    id: 'xxxxxx-02',
+    serviceUser: 'Mr B Jones',
+    packageId: 'xx/xx/xx',
+    packageType: 'Home Care',
+    weeklyValue: '£152',
+    status: 'not-started',
+    services: [
+      {
+        serviceName: 'Primary Carer (30m)',
+        packageHrs: 16,
+        hrsDelivered: 16,
+        packageVisits: 3,
+        actualVisits: 3,
+        comments: '',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-01',
+      },
+      {
+        serviceName: 'Primary Carer (45m)',
+        packageHrs: 16,
+        hrsDelivered: 16,
+        packageVisits: 3,
+        actualVisits: 3,
+        comments: '',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-02',
+      },
+      {
+        serviceName: 'Secondary Carer',
+        packageHrs: 4,
+        hrsDelivered: 8,
+        packageVisits: 3,
+        actualVisits: 3,
+        comments: '',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-03',
+      },
+      {
+        serviceName: 'Escort',
+        packageHrs: 16,
+        hrsDelivered: 16,
+        packageVisits: 3,
+        actualVisits: 0,
+        comments: 'Mrs Jones didnt want to go to shop...',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-04',
+      },
+      {
+        serviceName: 'Sleeping Nights',
+        packageHrs: 56,
+        hrsDelivered: 59,
+        packageVisits: 3,
+        actualVisits: 0,
+        comments: '',
+        status: 'disputed',
+        id: 'INV XXXXXXX-05',
+      },
+    ]
+  },
+  {
+    id: 'xxxxxx-03',
+    serviceUser: 'Mr B Jones',
+    packageId: 'xx/xx/xx',
+    packageType: 'Home Care',
+    weeklyValue: '£152',
+    status: 'accepted',
+    services: [
+      {
+        serviceName: 'Primary Carer (30m)',
+        packageHrs: 16,
+        hrsDelivered: 16,
+        packageVisits: 3,
+        actualVisits: 3,
+        comments: '',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-01',
+      },
+      {
+        serviceName: 'Primary Carer (45m)',
+        packageHrs: 16,
+        hrsDelivered: 16,
+        packageVisits: 3,
+        actualVisits: 3,
+        comments: '',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-02',
+      },
+      {
+        serviceName: 'Secondary Carer',
+        packageHrs: 4,
+        hrsDelivered: 8,
+        packageVisits: 3,
+        actualVisits: 3,
+        comments: '',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-03',
+      },
+      {
+        serviceName: 'Escort',
+        packageHrs: 16,
+        hrsDelivered: 16,
+        packageVisits: 3,
+        actualVisits: 0,
+        comments: 'Mrs Jones didnt want to go to shop...',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-04',
+      },
+      {
+        serviceName: 'Sleeping Nights',
+        packageHrs: 56,
+        hrsDelivered: 59,
+        packageVisits: 3,
+        actualVisits: 0,
+        comments: '',
+        status: 'disputed',
+        id: 'INV XXXXXXX-05',
+      },
+    ]
+  },
+  {
+    id: 'xxxxxx-04',
+    serviceUser: 'Mr B Jones',
+    packageId: 'xx/xx/xx',
+    packageType: 'Home Care',
+    weeklyValue: '£152',
+    status: 'in-dispute',
+    services: [
+      {
+        serviceName: 'Primary Carer (30m)',
+        packageHrs: 16,
+        hrsDelivered: 16,
+        packageVisits: 3,
+        actualVisits: 3,
+        comments: '',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-01',
+      },
+      {
+        serviceName: 'Primary Carer (45m)',
+        packageHrs: 16,
+        hrsDelivered: 16,
+        packageVisits: 3,
+        actualVisits: 3,
+        comments: '',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-02',
+      },
+      {
+        serviceName: 'Secondary Carer',
+        packageHrs: 4,
+        hrsDelivered: 8,
+        packageVisits: 3,
+        actualVisits: 3,
+        comments: '',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-03',
+      },
+      {
+        serviceName: 'Escort',
+        packageHrs: 16,
+        hrsDelivered: 16,
+        packageVisits: 3,
+        actualVisits: 0,
+        comments: 'Mrs Jones didnt want to go to shop...',
+        status: 'not-submitted',
+        id: 'INV XXXXXXX-04',
+      },
+      {
+        serviceName: 'Sleeping Nights',
+        packageHrs: 56,
+        hrsDelivered: 59,
+        packageVisits: 3,
+        actualVisits: 0,
+        comments: '',
+        status: 'disputed',
+        id: 'INV XXXXXXX-05',
+      },
+    ]
+  },
+];
+
+const payRunsTableData = [
   {id: 'xxxxxx-01', date: new Date(), type: 'Residential recurring', cadence: '4-weekly', paid: '£23,872.80', held: '£4,320.90', status: 'draft'},
   {id: 'xxxxxx-02', date: new Date(), type: 'Bills, 4-weekly', cadence: '4-weekly', paid: '£YY,YYYY', held: '£AA,AAA', status: 'awaiting-approval'},
   {id: 'xxxxxx-03', date: new Date(), type: 'Bills, 4-weekly', cadence: 'ad-hoc', paid: '£YY,YYYY', held: '£AA,AAA', status: 'paid'},
@@ -24,7 +267,7 @@ const payRunsTableDate = [
   {id: 'xxxxxx-10', date: new Date(), type: 'Direct payments', cadence: 'Held releases', paid: '£YY,YYYY', held: '£AA,AAA', status: 'paid'},
 ];
 
-const billsTableDate = [
+const billsTableData = [
   {id: 'CH-123', ref: 'CH-123', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£23,872.80', paid: '£4,320.90', status: 'outstanding'},
   {id: 'CH-124', ref: 'CH-124', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'paid'},
   {id: 'CH-125', ref: 'CH-125', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'overdue'},
@@ -38,7 +281,7 @@ const billsTableDate = [
   {id: 'CH-134', ref: 'CH-133', againstPackage: 'xxx-xxx-xxx', from: 'Care Homes Ltd', date: new Date(), dualDate: new Date(), amount: '£YY,YYYY', paid: '£AA,AAA', status: 'paid'},
 ];
 
-const billsPayRunsTableDate = [
+const billsPayRunsTableData = [
   {id: 'BPR-1', brpDd: 'BPR-1', date: new Date(),  invoicesPaid: 'YY', paid: '£23,872.80', held: '£4,320.90'},
   {id: 'BPR-2', brpDd: 'BPR-2', date: new Date(),  invoicesPaid: 'YY', paid: '£YY,YYYY', held: '£AA,AAA'},
   {id: 'BPR-3', brpDd: 'BPR-3', date: new Date(),  invoicesPaid: 'YY', paid: '£YY,YYYY', held: '£AA,AAA'},
@@ -67,7 +310,7 @@ const testDataHelpMessages = [
   {id: 13, userId: 1000, text: 'There was no allownce for this please resubmit the agreed time', fullName: 'Jhuru Lastname'},
 ];
 
-const payRunsHeldPaymentsTableDate = [
+const payRunsHeldPaymentsTableData = [
   {
     id: 'xxxxxx-01',
     payRunDate: new Date(2021,5, 23),
@@ -195,7 +438,7 @@ const payRunsHeldPaymentsTableDate = [
 ];
 
 
-const payRunTableDate = [
+const payRunTableData = [
   {
     id: 'xxxxxx-01',
     serviceUser: 'Mr B Jones',
@@ -315,11 +558,12 @@ const payRunTableDate = [
 ];
 
 export {
-  payRunsTableDate,
-  payRunTableDate,
-  payRunsHeldPaymentsTableDate,
+  payRunsTableData,
+  payRunTableData,
+  payRunsHeldPaymentsTableData,
   testDataHelpMessages,
-  billsTableDate,
-  billsPayRunsTableDate,
-  supplierReturnsDashboardTableDate,
+  billsTableData,
+  billsPayRunsTableData,
+  supplierReturnsDashboardTableData,
+  supplierDashboardTableData
 };

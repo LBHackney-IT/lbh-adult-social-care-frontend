@@ -4,7 +4,7 @@ import PayRunsHeader from "./components/PayRunsHeader";
 import PaymentsTabs from "../Payments/components/PaymentsTabs";
 import PayRunTable from "./components/PayRunTable";
 import Pagination from "../Payments/components/Pagination";
-import {payRunsHeldPaymentsTableDate, payRunsTableDate, testDataHelpMessages} from "../../testData/TestDataPayRuns";
+import {payRunsHeldPaymentsTableData, payRunsTableData, testDataHelpMessages} from "../../testData/TestDataPayRuns";
 import PopupCreatePayRun from "./components/PopupCreatePayRun";
 import ChatButton from "./components/ChatButton";
 import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
@@ -147,7 +147,7 @@ const PayRuns = () => {
         canCollapseRows={isHeldTab}
         release={isHeldTab && release}
         onClickTableRow={isPayRunsTab && onClickTableRow}
-        rows={isPayRunsTab ? payRunsTableDate : payRunsHeldPaymentsTableDate}
+        rows={isPayRunsTab ? payRunsTableData : payRunsHeldPaymentsTableData}
         careType='Residential'
         sortBy={sortBy}
         sorts={sortsTab[tab]}

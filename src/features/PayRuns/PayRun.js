@@ -3,7 +3,7 @@ import Breadcrumbs from "../components/Breadcrumbs";
 import { useLocation, useHistory } from 'react-router-dom';
 import PayRunTable from "./components/PayRunTable";
 import Pagination from "../Payments/components/Pagination";
-import {payRunTableDate} from "../../testData/TestDataPayRuns";
+import {payRunTableData} from "../../testData/TestDataPayRuns";
 import PopupCreatePayRun from "./components/PopupCreatePayRun";
 import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
 import PayRunHeader from "./components/PayRunHeader";
@@ -117,7 +117,7 @@ const PayRun = () => {
         clickActionButton={headerOptions.clickActionButton}
       />
       <PayRunTable
-        rows={payRunTableDate}
+        rows={payRunTableData}
         careType='Residential'
         isStatusDropDown={true}
         checkedRows={checkedRows}
