@@ -15,11 +15,6 @@ import {
 import PackageCostBox from "../CarePackages/DayCare/components/PackageCostBox";
 import PackageApprovalHistorySummary from "../components/PackageApprovalHistorySummary";
 import DayCareSummary from "../CarePackages/DayCare/components/DayCareSummary";
-import {
-  createDayCareBrokerageInfo,
-  createDayCarePackage,
-} from "../../api/CarePackages/DayCareApi";
-import { CARE_PACKAGE } from "../../routes/RouteConstants";
 
 const PackagesDayCare = ({
   tab,
@@ -219,7 +214,7 @@ const PackagesDayCare = ({
             <h3>
               ID:{" "}
               <span>
-                {dayCarePackage?.packageDetails.dayCarePackageId || ""}
+                {dayCarePackage?.packageDetails?.dayCarePackageId || ""}
               </span>
             </h3>
           </div>

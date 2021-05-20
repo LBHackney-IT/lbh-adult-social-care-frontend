@@ -44,7 +44,6 @@ const ApprovalHistory = ({
       {!!costCards.length && (
         <div className="is-flex is-flex-wrap-wrap">
           {costCards.map((item) => {
-            console.log(item);
             return <CostCard selected={item.selected} key={item.id} />;
           })}
         </div>
