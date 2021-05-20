@@ -1,51 +1,132 @@
 import ApprovalClientSummary from "../../components/ApprovalClientSummary";
 import Layout from "../../Layout/Layout";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ResidentialCareApprovalTitle from "./components/ResidentialCareApprovalTitle";
 import PackageCostBox from "../DayCare/components/PackageCostBox";
 import PackageApprovalHistorySummary from "../../components/PackageApprovalHistorySummary";
 import TitleHeader from "../../components/TitleHeader";
 import ResidentialCareSummary from "./components/ResidentialCareSummary";
 import TextArea from "../../components/TextArea";
+import { useParams } from "react-router-dom";
+import {
+  getResidentialCarePackageApprovalPackageContent,
+  getResidentialCarePackageApprovalHistory,
+  residentialCareRequestClarification,
+  residentialCareChangeStatus,
+} from "../../../api/CarePackages/ResidentialCareApi";
 
-const approvalHistoryEntries = [
-  {
-    eventDate: "03/12/2021",
-    eventMessage: "Package requested by Martin Workman · Social Worker ",
-    eventSubMessage: null,
-  },
-  {
-    eventDate: "05/12/2021",
-    eventMessage: "Futher information requested by Amecie Steadman · Approver",
-    eventSubMessage:
-      '"There appears to be more support than needed in the morning for Mr Stephens, please amend or call me to discuss" More',
-  },
-  {
-    eventDate: "06/12/2021",
-    eventMessage: "Package re-submitted by Martin Workman · Social Worker ",
-    eventSubMessage: null,
-  },
-];
+const ResidentialCareApprovePackage = ({ history }) => {
+  const params = useParams();
+  let { residentialCarePackageId } = params;
 
-const initialNeedEntries = [
-  {
-    id: 1,
-    needToAddress:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor. Aliquam suscipit laoreet pharetra. Aenean vestibulum ullamcorper enim, sed rhoncus sem tempor vitae. ",
-    selectedCost: 1,
-    selectedCostText: "Weekly",
-    selectedPeriod: undefined,
-  },
-];
-
-const ResidentialCareApprovePackage = () => {
-  const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(
-    initialNeedEntries
+  const [errors, setErrors] = useState([]);
+  const [residentialCarePackage, setResidentialCarePackage] = useState(null);
+  const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
+  const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
+  const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
+  const [requestInformationText, setRequestInformationText] = useState(
+    undefined
   );
+  useEffect(() => {
+    retrieveResidentialCarePackageDetails(residentialCarePackageId);
+    retrieveResidentialCareApprovalHistory(residentialCarePackageId);
+  }, [history]);
+
+  const retrieveResidentialCarePackageDetails = (residentialCarePackageId) => {
+    getResidentialCarePackageApprovalPackageContent(residentialCarePackageId)
+      .then((res) => {
+        setResidentialCarePackage(res);
+
+        const newAdditionalNeedsEntries = res.residentialCarePackage.residentialCareAdditionalNeeds.map(
+          (additionalneedsItem) => ({
+            id: additionalneedsItem.Id,
+            isWeeklyCost: additionalneedsItem.IsWeeklyCost,
+            isOneOffCost: additionalneedsItem.IsOneOffCost,
+            needToAddress: additionalneedsItem.NeedToAddress,
+          })
+        );
+
+        setAdditionalNeedsEntries([...newAdditionalNeedsEntries]);
+        
+      })
+      .catch((error) => {
+        setErrors([
+          ...errors,
+          `Retrieve residential care package details failed. ${error.message}`,
+        ]);
+      });
+  };
+
+  const retrieveResidentialCareApprovalHistory = (residentialCarePackageId) => {
+    getResidentialCarePackageApprovalHistory(residentialCarePackageId)
+      .then((res) => {
+
+        const newApprovalHistoryItems = res.map(
+          (historyItem) => ({
+            eventDate: new Date(historyItem.ApprovedDate).toLocaleDateString(
+              "en-GB"
+            ),
+            eventMessage: historyItem.LogText,
+            eventSubMessage: undefined
+          })
+        );
+
+        setApprovalHistoryEntries([...newApprovalHistoryItems]);
+      })
+      .catch((error) => {
+        setErrors([
+          ...errors,
+          `Retrieve residential care approval history failed. ${error.message}`,
+        ]);
+      });
+  };
+
+  const handleRejectPackage = () => {
+    residentialCareChangeStatus(residentialCarePackageId, 10)
+      .then(() => {
+        // history.push(`${CARE_PACKAGE}`);
+      })
+      .catch((error) => {
+        alert(`Status change failed. ${error.message}`);
+        setErrors([...errors, `Status change failed. ${error.message}`]);
+      });
+  };
+
+  const handleApprovePackageCommercials = () => {
+    residentialCareChangeStatus(residentialCarePackageId, 8)
+      .then(() => {
+        // history.push(`${CARE_PACKAGE}`);
+      })
+      .catch((error) => {
+        alert(`Status change failed. ${error.message}`);
+        setErrors([...errors, `Status change failed. ${error.message}`]);
+      });
+  };
+
+  const handleRequestMoreInformation = () => {
+    residentialCareRequestClarification(
+      residentialCarePackageId,
+      requestInformationText
+    )
+      .then(() => {
+        setDisplayMoreInfoForm(false);
+        // history.push(`${CARE_PACKAGE}`);
+      })
+      .catch((error) => {
+        alert(`Status change failed. ${error.message}`);
+        setErrors([...errors, `Status change failed. ${error.message}`]);
+      });
+  };
+  
   return (
     <Layout headerTitle="RESIDENTIAL CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
-        <ResidentialCareApprovalTitle />
+      <ResidentialCareApprovalTitle 
+        startDate={residentialCarePackage?.residentialCarePackage.startDate}
+        endDate={residentialCarePackage?.residentialCarePackage.endDate !== null
+          ? residentialCarePackage?.residentialCarePackage.endDate
+          : "Ongoing"}
+        />
         <ApprovalClientSummary />
 
         <div className="columns">
@@ -57,7 +138,11 @@ const ResidentialCareApprovePackage = () => {
                     <p className="font-weight-bold hackney-text-green">
                       STARTS
                     </p>
-                    <p className="font-size-14px">03/07/2021</p>
+                    <p className="font-size-14px">
+                      {new Date(
+                        residentialCarePackage?.residentialCarePackage.startDate
+                      ).toLocaleDateString("en-GB")}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -69,7 +154,11 @@ const ResidentialCareApprovePackage = () => {
                 <div className="level-item">
                   <div>
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
-                    <p className="font-size-14px">Ongoing</p>
+                    <p className="font-size-14px">
+                      {residentialCarePackage?.residentialCarePackage.endDate !== null
+                        ? residentialCarePackage?.residentialCarePackage.endDate
+                        : "Ongoing"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -98,7 +187,7 @@ const ResidentialCareApprovePackage = () => {
             <PackageCostBox
               boxClass="hackney-package-cost-light-yellow-box"
               title="COST OF CARE / WK"
-              cost="£1892"
+              cost={`£${residentialCarePackage?.costOfCare}`}
               costType="ESTIMATE"
             />
           </div>
@@ -106,7 +195,7 @@ const ResidentialCareApprovePackage = () => {
             <PackageCostBox
               boxClass="hackney-package-cost-light-yellow-box"
               title="ANP / WK"
-              cost="£132"
+              cost={`£${residentialCarePackage?.costOfAdditionalNeeds}`}
               costType="ESTIMATE"
             />
           </div>
@@ -114,7 +203,7 @@ const ResidentialCareApprovePackage = () => {
             <PackageCostBox
               boxClass="hackney-package-cost-yellow-box"
               title="ONE OFF COSTS"
-              cost="£500"
+              cost={`£${residentialCarePackage?.costOfOneOff}`}
               costType="ESTIMATE"
             />
           </div>
@@ -122,7 +211,7 @@ const ResidentialCareApprovePackage = () => {
             <PackageCostBox
               boxClass="hackney-package-cost-yellow-box"
               title="TOTAL / WK"
-              cost="£132"
+              cost={`£${residentialCarePackage?.totalPerWeek}`}
               costType="ESTIMATE"
             />
           </div>
@@ -137,12 +226,14 @@ const ResidentialCareApprovePackage = () => {
             <div className="mt-4 mb-1">
               <TitleHeader>Package Details</TitleHeader>
               <ResidentialCareSummary
-                startDate="03/07/2021"
-                endDate={undefined}
-                typeOfStayText="Interim (Under 6 weeks)"
+                startDate={residentialCarePackage?.residentialCarePackage.startDate}
+                endDate={residentialCarePackage?.residentialCarePackage.endDate !== null
+                  ? residentialCarePackage?.residentialCarePackage.endDate
+                  : "Ongoing"}
+                typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
-                needToAddress="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor. Aliquam suscipit laoreet pharetra. Aenean vestibulum ullamcorper enim, sed rhoncus sem tempor vitae. Sed dignissim ornare metus eu faucibus.  Sed vel diam mi. Aenean a auctor felis, sit amet lacinia urna. Pellentesque bibendum dui a nulla faucibus, vel dignissim mi rutrum."
+                needToAddress={residentialCarePackage?.residentialCarePackage.needToAddress}
               />
             </div>
           </div>
@@ -154,16 +245,29 @@ const ResidentialCareApprovePackage = () => {
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Deny</button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">
-                    Request more information
+                <button
+                    className="button hackney-btn-light"
+                    onClick={handleRejectPackage}
+                  >
+                    Deny
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green">
-                    Approve to be brokered
+                <button
+                    onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
+                    className="button hackney-btn-light"
+                  >
+                    {displayMoreInfoForm
+                      ? "Hide Request more information"
+                      : "Request More Information"}
+                  </button>
+                </div>
+                <div className="level-item  mr-2">
+                <button
+                    className="button hackney-btn-green"
+                    onClick={handleApprovePackageCommercials}
+                  >
+                    Approve Commercials
                   </button>
                 </div>
               </div>
@@ -177,10 +281,18 @@ const ResidentialCareApprovePackage = () => {
               <p className="font-size-16px font-weight-bold">
                 Request more information
               </p>
-              <TextArea label="" rows={5} placeholder="Add details..." />
-              <button className="button hackney-btn-green">
-                Request more information
-              </button>
+              <TextArea
+                  label=""
+                  rows={5}
+                  placeholder="Add details..."
+                  onChange={setRequestInformationText}
+                />
+                <button
+                  className="button hackney-btn-green"
+                  onClick={handleRequestMoreInformation}
+                >
+                  Request more information
+                </button>
             </div>
           </div>
         </div>
