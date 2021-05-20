@@ -1,25 +1,32 @@
 import React from "react";
 import {formatDateWithSlash, formatStatus, includeString} from "../../../service/helpers";
-import BillsSortTable from "./BillsSortTable";
+import SupplierSortTable from "./SupplierSortTable";
 import Checkbox from "../../components/Checkbox";
 
-const BillsTable = ({
+const SupplierReturnTable = ({
+  onClickTableRow,
   checkedRows,
   setCheckedRows,
   rows,
+  additionalActions,
   isIgnoreId = false,
   classes = '',
-  clickRow = () => {},
   sortBy,
   sorts,
 }) => {
+  const clickRow = (item) => {
+    if(onClickTableRow) {
+      onClickTableRow(item);
+    }
+  };
+
   return (
     <div className={`table ${classes}`}>
-      <BillsSortTable checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
+      <SupplierSortTable additionalActions={additionalActions} checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
       {rows.map(item => {
         const rowStatus = item.status ? ` ${item.status}` : '';
         return (
-          <div onClick={clickRow} key={item.id} className={`table__row${rowStatus}`}>
+          <div key={item.id} onClick={() => clickRow(item)} className={`table__row${rowStatus}`}>
             {checkedRows &&
               <div className='table__row-item table__row-item-checkbox'>
                 <Checkbox checked={checkedRows.includes(item.id)} onChange={(value, event) => {
@@ -36,6 +43,7 @@ const BillsTable = ({
               const isStatus = rowItemName === 'status';
               const formattedStatus = isStatus && formatStatus(item[rowItemName]);
               const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';
+
               return (
                 <div key={`${rowItemName}${item.id}`}
                    className={`table__row-item${statusItemClass}`}>
@@ -50,4 +58,4 @@ const BillsTable = ({
   )
 };
 
-export default BillsTable;
+export default SupplierReturnTable;

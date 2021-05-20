@@ -21,10 +21,10 @@ const Pagination = ({ classes, actionButton, itemsCount, from, to, currentPage, 
         {[...Array(totalCount / to).keys()].map(item => {
           const currentPageClass = item+1 == finalPage ? ' table-pagination-item-active' : '';
           return (
-            <Button
-              key={uniqueID()}
+            <Button key={uniqueID()}
               onClick={() => changePagination(item+1)}
-              className={`table-pagination-button${currentPageClass}`}>
+              className={`table-pagination-button${currentPageClass}`}
+            >
               {item+1}
             </Button>
           );

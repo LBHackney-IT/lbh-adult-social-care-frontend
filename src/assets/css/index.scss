@@ -1,6 +1,7 @@
 @import "./variables.scss";
 @import "./borders.scss";
 @import "./typography.scss";
+@import "table";
 @import "../fonts/fonts.scss";
 @import "./ProposedPackages/approval-history";
 @import "./ProposedPackages/proposedPackges";
@@ -21,8 +22,12 @@
 @import "./Bills/pagination";
 @import "./Bills/filters";
 @import "./Bills/table";
-@import "./Supplier/header";
-@import "./Supplier/table";
+@import "SupplierDashboard/header";
+@import "SupplierDashboard/table";
+@import "SupplierDashboard/level-insight";
+@import "WeekOfSupplier/breadcrumbs";
+@import "WeekOfSupplier/table";
+@import "./SupplierReturns/table";
 @import "./popup";
 
 * {
@@ -52,4 +57,11 @@ button {
 
 .mr-auto {
   margin-right: auto;
+}
+
+.hide {
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+  cursor: initial;
 }

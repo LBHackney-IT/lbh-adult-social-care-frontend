@@ -1,5 +1,5 @@
 .bills__tab-class {
-  .table-row-item {
+  .table__row-item {
     font-size: 16px;
 
     &:nth-child(2) {
@@ -29,7 +29,7 @@
     }
   }
 
-  .table-row-item-status {
+  .table__row-item-status {
     font-size: 12px;
   }
 
@@ -83,7 +83,7 @@
     }
   }
 
-  .table-row-item {
+  .table__row-item {
     &:nth-child(2) {
       width: 68px;
     }

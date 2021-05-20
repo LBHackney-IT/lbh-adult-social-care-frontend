@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {formatDateWithSlash, formatStatus} from "../../../service/helpers";
-import PayRunSortTable from "./PayRunSortTable";
+import {formatDateWithSlash, formatStatus, includeString, uniqueID} from "../../../service/helpers";
+import SupplierReturnsDashboardSortTable from "./SupplierReturnsDashboardSortTable";
 import Checkbox from "../../components/Checkbox";
 import ChatButton from "./ChatButton";
 import Input from "../../components/Input";
@@ -73,14 +73,14 @@ const SupplierReturnDashboardTable = ({
 
   return (
     <div className={`table ${classes}`}>
-      <PayRunSortTable additionalActions={additionalActions} checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
+      <SupplierReturnsDashboardSortTable additionalActions={additionalActions} checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
       {rows.map(item => {
         const collapsedRow = collapsedRows.includes(item.id);
         const rowStatus = item.status ? ` ${item.status}` : '';
         return (
-          <div key={item.id} onClick={() => clickRow(item)} className={`table-row${collapsedRow ? ' collapsed' : ''}${rowStatus}`}>
+          <div key={item.id} onClick={() => clickRow(item)} className={`table__row${collapsedRow ? ' collapsed' : ''}${rowStatus}`}>
             {checkedRows &&
-              <div className='table-row-item table-row-item-checkbox'>
+              <div className='table__row-item table__row-item-checkbox'>
                 <Checkbox checked={checkedRows.includes(item.id)} onChange={(value, event) => {
                   event.stopPropagation();
                   setCheckedRows(item.id)
@@ -91,14 +91,14 @@ const SupplierReturnDashboardTable = ({
               if(Array.isArray(item[rowItemName]) || (item[rowItemName]?.id !== undefined) || (isIgnoreId && rowItemName === 'id')) {
                 return <></>;
               }
-              const value = rowItemName.toLowerCase().indexOf('date') > -1 ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
+              const value = includeString(rowItemName.toLowerCase(), 'date') ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
               const isStatus = rowItemName === 'status';
               const formattedStatus = isStatus && formatStatus(item[rowItemName]);
-              const statusItemClass = isStatus ? ` table-row-item-status ${item[rowItemName]}` : '';
+              const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';
 
               return (
-                <div key={`${rowItemName}${item.id}`}
-                   className={`table-row-item${statusItemClass}`}>
+                <div key={`${uniqueID()}${item.id}`}
+                   className={`table__row-item${statusItemClass}`}>
                   <p>{isStatus ? formattedStatus : value}</p>
                 </div>
               );
@@ -106,18 +106,21 @@ const SupplierReturnDashboardTable = ({
             {additionalActions && additionalActions.map(action => {
               const Component = action.Component;
               return (
-                <div key={`${action.id}`} className={`table-row-item ${action.className}`}>
-                  <Component onClick={(e) => {
-                    e.stopPropagation();
-                    action.onClick(item)
-                  }} />
+                <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
+                  {
+                    ['in-dispute', 'not-started'].includes(item.status) &&
+                    <Component onClick={(e) => {
+                      e.stopPropagation();
+                      action.onClick(item)
+                    }} />
+                  }
                 </div>
               )
             })}
             {collapsedRow &&
-            <div className='table-row-collapsed'>
-              <div className='table-row-collapsed-container'>
-                <div className='table-row-collapsed-header'>
+            <div className='table__row-collapsed'>
+              <div className='table__row-collapsed-container'>
+                <div className='table__row-collapsed-header'>
                   <p>Service</p>
                   <p>Package Hrs</p>
                   <p>Hrs Delivered</p>
@@ -127,31 +130,45 @@ const SupplierReturnDashboardTable = ({
                   <p>Status</p>
                   <p>Action</p>
                 </div>
-                {item.services.map((service, index) => {
+                {item.services.map(service => {
                   const currentService = serviceValues.find(serviceValue => serviceValue.id === `${item.id}${service.id}`);
                   return (
-                    <div key={`${item.id}${service.id}`} className='table-row-collapsed-main'>
-                        <div  className='table-row-collapsed-main-item'>
-                          <div className='table-row-collapsed-main-item-el'>{service.serviceName}</div>
-                          <div className='table-row-collapsed-main-item-el'>{service.packageHrs}</div>
-                          <div className='table-row-collapsed-main-item-el'>{service.hrsDelivered}</div>
-                          <div className='table-row-collapsed-main-item-el'>{service.packageVisits}</div>
-                          <div className='table-row-collapsed-main-item-el'>{service.actualVisits}</div>
-                          <div className='table-row-collapsed-main-item-el'>
+                    <div key={`${item.id}${service.id}`} className='table__row-collapsed-main'>
+                        <div  className='table__row-collapsed-main-item'>
+                          <div className='table__row-collapsed-main-item-el'>{service.serviceName}</div>
+                          <div className='table__row-collapsed-main-item-el'>{service.packageHrs}</div>
+                          <div className='table__row-collapsed-main-item-el'>
+                            <Input
+                              classes={`${parseInt(currentService?.hrsDelivered) > parseInt(currentService?.packageHrs) ? 'table__row__wrong-input' : ''}`}
+                              value={currentService?.hrsDelivered}
+                              onChange={value => changeServiceValue(value, 'hrsDelivered', `${item.id}${service.id}`)}
+                              onClick={e => e.stopPropagation()}
+                            />
+                          </div>
+                          <div className='table__row-collapsed-main-item-el'>{service.packageVisits}</div>
+                          <div className='table__row-collapsed-main-item-el'>
+                            <Input
+                              classes={`${parseInt(currentService?.actualVisits) === 0 ? 'table__row__wrong-input' : ''}`}
+                              value={currentService?.actualVisits}
+                              onChange={value => changeServiceValue(value, 'actualVisits', `${item.id}${service.id}`)}
+                              onClick={e => e.stopPropagation()}
+                            />
+                          </div>
+                          <div className='table__row-collapsed-main-item-el'>
                             <Input
                               placeholder='Add comment'
                               onClick={e => e.stopPropagation()}
                               value={currentService?.comments || ''}
                               onChange={value => changeServiceValue(value, 'comments', `${item.id}${service.id}`)} />
                           </div>
-                          <div className='table-row-collapsed-main-item-el'>
-                            <span className={`table-row-collapsed-main-item__status ${service.status}`}>{formatStatus(service.status)}</span>
+                          <div className='table__row-collapsed-main-item-el'>
+                            <span className={`table__row-collapsed-main-item__status ${service.status}`}>{formatStatus(service.status)}</span>
                             {chatStatuses.includes(service.status) && <ChatButton onClick={(e) => {
                               e.stopPropagation();
                               openChat(service);
                             }} />}
                           </div>
-                          <div className='table-row-collapsed-main-item-el'
+                          <div className='table__row-collapsed-main-item-el'
                                onClick={(e) => {
                                  e.stopPropagation();
                                  makeAction(item, service, actions[service.status].actionName);

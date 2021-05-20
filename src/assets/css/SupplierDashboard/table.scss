@@ -26,7 +26,7 @@
     }
   }
 
-  .table-row-item {
+  .table__row-item {
     &:nth-child(1) {
       width: 145px;
     }
@@ -80,7 +80,7 @@
     }
   }
 
-  .table-row-item {
+  .table__row-item {
     &:nth-child(2) {
       width: 210px;
     }
@@ -106,13 +106,13 @@
 }
 
 .supplier-returns {
-  .table-row-collapsed-main {
+  .table__row-collapsed-main {
     border: none;
     margin-bottom: 2px;
     padding-right: 8px;
   }
 
-  .table-row-collapsed-header {
+  .table__row-collapsed-header {
     p {
       font-size: 14px;
       font-weight: initial;
@@ -160,30 +160,15 @@
     }
   }
 
-  .table-row-collapsed-main-item {
+  .table__row-collapsed-main-item {
     padding-bottom: 0;
     justify-content: space-between;
     align-items: center;
 
-    .table-row-collapsed-main-item-el {
+    .table__row-collapsed-main-item-el {
       font-size: 14px;
       display: flex;
       align-items: center;
-
-      .table-row-collapsed-main-item__status {
-        padding: 5px;
-        border-radius: 4px;
-
-        &.disputed {
-          background-color: $lbh-red;
-          color: white;
-        }
-
-        &.not-submitted {
-          background-color: $lbh-light-orange;
-          border: 1px solid $lbh-orange;
-        }
-      }
 
       &:nth-child(1) {
         width: 223px;
@@ -199,6 +184,10 @@
         display: flex;
         justify-content: center;
         width: 80px;
+
+        .control input {
+          width: 60px;
+        }
       }
 
       &:nth-child(4) {
@@ -211,10 +200,21 @@
         width: 70px;
         display: flex;
         justify-content: center;
+
+        .control input {
+          width: 60px;
+        }
       }
 
       &:nth-child(6) {
         width: 238px;
+
+        .control {
+          width: 100%;
+          input {
+            width: 100%;
+          }
+        }
       }
 
       &:nth-child(7) {
@@ -239,6 +239,14 @@
           cursor: pointer;
         }
       }
+    }
+  }
+}
+
+.table__row__wrong-input {
+  &.control.field-container {
+    input.custom-input {
+      border-color: $lbh-red;
     }
   }
 }

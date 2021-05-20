@@ -9,6 +9,7 @@ import PopupCreatePayRun from "./components/PopupCreatePayRun";
 import ChatButton from "./components/ChatButton";
 import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
 import PopupHelpChat from "../Chat/components/PopupHelpChat";
+import HackneyFooterInfo from "../components/HackneyFooterInfo";
 
 const sortsTab = {
   'pay-runs': [
@@ -25,7 +26,7 @@ const sortsTab = {
     {name: 'payRunId', text: 'Pay run ID'},
     {name: 'serviceUser', text: 'Service User'},
     {name: 'packageType', text: 'Package Type'},
-    {name: 'supplier', text: 'Supplier'},
+    {name: 'supplier', text: 'SupplierDashboard'},
     {name: 'amount', text: 'Amount'},
     {name: 'status', text: 'Status'},
     {name: 'waitingFor', text: 'Waiting for'},
@@ -169,11 +170,7 @@ const PayRuns = () => {
         holdsCount='48'
         holdsPrice='£32,223'
       />
-      <div className='payments__footer'>
-        <div className='payments__footer-info'>
-          <p>Hackney Adult Social Care Services  ·  2021</p>
-        </div>
-      </div>
+      <HackneyFooterInfo />
     </div>
   )
 };

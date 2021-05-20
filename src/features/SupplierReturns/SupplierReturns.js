@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from "react";
 import { useLocation, useHistory } from 'react-router-dom';
-import SupplierDashboardTable from "./components/SupplierDashboardTable";
+import SupplierReturnsTable from "./components/SupplierReturnsTable";
 import Pagination from "../Payments/components/Pagination";
-import {supplierDashboardTableData} from "../../testData/TestDataPayRuns";
-import SupplierDashboardInnerHeader from "./components/SupplierDashboardInnerHeader";
+import {supplierReturnsTableData} from "../../testData/TestDataPayRuns";
+import SupplierInnerHeader from "./components/SupplierInnerHeader";
 import HackneyFooterInfo from "../components/HackneyFooterInfo";
 import {useDispatch} from "react-redux";
-import { changeSupplierReturnsDashboard } from "../../reducers/supplierDashboardReducer";
+import { changeSupplierReturns } from "../../reducers/supplierReturnsReducer";
 
 const sorts = [
   {name: 'weekCommencing', text: 'Week commencing'},
+  {name: 'suppliers', text: 'Suppliers'},
   {name: 'value', text: 'Value'},
   {name: 'totalPackages', text: 'Total Packages'},
   {name: 'returned', text: 'Returned'},
@@ -19,7 +20,7 @@ const sorts = [
   {name: 'status', text: 'Status'},
 ];
 
-const SupplierDashboard = () => {
+const SupplierReturns = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const pushRoute = useHistory().push;
@@ -29,8 +30,8 @@ const SupplierDashboard = () => {
   });
 
   const onClickTableRow = (rowItems) => {
-    dispatch(changeSupplierReturnsDashboard(rowItems));
-    pushRoute(`${location.pathname}/supplier-returns/${rowItems.id}`)
+    dispatch(changeSupplierReturns(rowItems));
+    pushRoute(`${location.pathname}/${rowItems.id}`)
   };
 
   const sortBy = (field, value) => {
@@ -42,12 +43,13 @@ const SupplierDashboard = () => {
   }, []);
 
   return (
-    <div className='supplier-dashboard'>
-      <SupplierDashboardInnerHeader />
-      <SupplierDashboardTable
+    <div className='supplier-dashboard supplier-returns'>
+      <SupplierInnerHeader />
+      <SupplierReturnsTable
         isIgnoreId={true}
         onClickTableRow={onClickTableRow}
-        rows={supplierDashboardTableData}
+        checkedRows={true}
+        rows={supplierReturnsTableData}
         sortBy={sortBy}
         sorts={sorts}
       />
@@ -57,4 +59,4 @@ const SupplierDashboard = () => {
   )
 };
 
-export default SupplierDashboard;
+export default SupplierReturns;

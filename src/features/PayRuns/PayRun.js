@@ -8,12 +8,13 @@ import PopupCreatePayRun from "./components/PopupCreatePayRun";
 import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
 import PayRunHeader from "./components/PayRunHeader";
 import PopupHoldPayment from "./components/PopupHoldPayment";
+import HackneyFooterInfo from "../components/HackneyFooterInfo";
 
 const sorts = [
   {name: 'serviceUser', text: 'Service User'},
   {name: 'invId', text: 'INV ID'},
   {name: 'packageType', text: 'Package Type'},
-  {name: 'supplier', text: 'Supplier'},
+  {name: 'supplier', text: 'SupplierDashboard'},
   {name: 'total', text: 'Total'},
   {name: 'status', text: 'Status'},
 ];
@@ -144,11 +145,7 @@ const PayRun = () => {
         holdsCount='48'
         holdsPrice='£32,223'
       />
-      <div className='payments__footer'>
-        <div className='payments__footer-info'>
-          <p>Hackney Adult Social Care Services  ·  2021</p>
-        </div>
-      </div>
+      <HackneyFooterInfo />
     </div>
   )
 };

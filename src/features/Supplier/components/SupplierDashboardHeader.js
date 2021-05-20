@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation, useHistory } from 'react-router-dom';
 import {HackneyFullLogo} from "../../components/Icons";
+import {includeString} from "../../../service/helpers";
 
 const supplierRoutes = [
   {route: '/supplier-dashboard/supplier-returns', name: 'Supplier Returns'},
@@ -29,7 +30,7 @@ const SupplierDashboardHeader = () => {
       <HackneyFullLogo />
       <div className='default-logo-header-navigation'>
         {supplierRoutes.map(item => {
-          const isActiveRoute = location.indexOf(item.route) > -1;
+          const isActiveRoute = includeString(location, item.route);
           return (
             <p key={item.name} onClick={() => changeRoute(item.route)} className={`default-logo-header-item${isActiveRoute ? ' default-logo-header-active-item' : ''}`}>
               {item.name}

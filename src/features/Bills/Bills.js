@@ -7,6 +7,7 @@ import Pagination from "../Payments/components/Pagination";
 import { billsPayRunsTableData, billsTableData } from "../../testData/TestDataPayRuns";
 import PopupBillsPayDownload from "./components/PopupBillsPayDownload";
 import BillsFilters from "./components/BillsFilters";
+import HackneyFooterInfo from "../components/HackneyFooterInfo";
 
 const sortsTab = {
   'bills': [
@@ -128,11 +129,7 @@ const Bills = () => {
         itemsCount={10}
         totalCount={30}
       />
-      <div className='payments__footer'>
-        <div className='payments__footer-info'>
-          <p>Hackney Adult Social Care Services  ·  2021</p>
-        </div>
-      </div>
+      <HackneyFooterInfo />
     </div>
   )
 };

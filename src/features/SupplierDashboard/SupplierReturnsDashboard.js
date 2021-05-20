@@ -4,11 +4,13 @@ import { useLocation, useHistory } from 'react-router-dom';
 import Pagination from "../Payments/components/Pagination";
 import {supplierReturnsDashboardTableData, testDataHelpMessages} from "../../testData/TestDataPayRuns";
 import SupplierReturnsLevelInsight from "./components/SupplierReturnsLevelInsight";
-import PopupHoldPayment from "./components/PopupHoldPayment";
 import SupplierReturnDashboardTable from "./components/SupplierReturnsDashboardTable";
 import SupplierReturnsDashboardInnerHeader from "./components/SupplierReturnsDashboardInnerHeader";
 import ChatButton from "../PayRuns/components/ChatButton";
 import PopupHelpChat from "../Chat/components/PopupHelpChat";
+import {useSelector} from "react-redux";
+import {selectSupplierDashboard} from "../../reducers/supplierDashboardReducer";
+import {formatDateWithSlash} from "../../service/helpers";
 
 const sorts = [
   {name: 'serviceUser', text: 'Service User'},
@@ -18,36 +20,22 @@ const sorts = [
   {name: 'status', text: 'Status'},
 ];
 
-const popupTypes = {
-  createPayRun: 'create-pay-run',
-  holdPayments: 'hold-payment',
-};
-
 const SupplierReturnsDashboard = () => {
   const location = useLocation();
   const pushRoute = useHistory().push;
   const [openedPopup, setOpenedPopup] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
-  const [actionRequiredBy, setActionRequiredBy] = useState('');
   const [newMessageText, setNewMessageText] = useState('');
-  const [reason, setReason] = useState('');
   const [openedHelpChat, setOpenedHelpChat] = useState({});
-  const date = location.pathname.replace('/supplier-dashboard/supplier-returns/', '');
-
-  const [headerOptions, setHeaderOptions] = useState({
-    actionButtonText: 'New Pay Run',
-    clickActionButton: () => {
-      setOpenedPopup(popupTypes.createPayRun);
-    },
-  });
+  const { supplierReturnsDashboard: { weekCommencing: date }} = useSelector(selectSupplierDashboard);
 
   useEffect(() => {
     pushRoute(`${location.pathname}?page=1`);
   }, []);
 
   const [breadcrumbs, setBreadcrumbs] = useState([
-    {text: 'Supplier Returns', onClick: () => pushRoute('/supplier-dashboard')},
-    {text: `Supplier return ${date}`}
+    {text: 'Supplier Dashboard Returns', onClick: () => pushRoute('/supplier-dashboard/supplier-returns')},
+    {text: `Supplier return ${formatDateWithSlash(date, '.')}`}
   ]);
   const [sort, setSort] = useState({
     value: 'increase',
@@ -56,12 +44,6 @@ const SupplierReturnsDashboard = () => {
 
   const sortBy = (field, value) => {
     setSort({value, name: field});
-  };
-
-  const closeCreatePayRun = () => {
-    setOpenedPopup('');
-    setReason('');
-    setActionRequiredBy('');
   };
 
   const onCheckRow = (id) => {
@@ -126,7 +108,7 @@ const SupplierReturnsDashboard = () => {
       />
       }
       {!!breadcrumbs.length && <Breadcrumbs classes='p-3' values={breadcrumbs} />}
-      <SupplierReturnsDashboardInnerHeader clickActionButton={headerOptions.clickActionButton} />
+      <SupplierReturnsDashboardInnerHeader />
       <SupplierReturnDashboardTable
         rows={supplierReturnsDashboardTableData}
         careType='Residential'

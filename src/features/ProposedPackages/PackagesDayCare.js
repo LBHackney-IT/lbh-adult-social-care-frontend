@@ -14,16 +14,16 @@ const stageOptions = [
   { text: "New", value: 1 },
   { text: "Assigned", value: 2 },
   { text: "Querying", value: 3 },
-  { text: "Supplier Sourced", value: 4 },
+  { text: "SupplierDashboard Sourced", value: 4 },
   { text: "Pricing agreed", value: 5 },
   { text: "Submitted For Approval", value: 6 },
 ];
 
 const supplierOptions = [
-  { text: "Supplier type 1", value: 1 },
-  { text: "Supplier type 2", value: 2 },
-  { text: "Supplier type 3", value: 3 },
-  { text: "Supplier type 4", value: 4 },
+  { text: "SupplierDashboard type 1", value: 1 },
+  { text: "SupplierDashboard type 2", value: 2 },
+  { text: "SupplierDashboard type 3", value: 3 },
+  { text: "SupplierDashboard type 4", value: 4 },
 ];
 
 const PackagesDayCare = ({

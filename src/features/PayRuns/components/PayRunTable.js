@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import Dropdown from "../../components/Dropdown";
-import {formatDateWithSlash} from "../../../service/helpers";
+import {formatDateWithSlash, formatStatus, includeString} from "../../../service/helpers";
 import PayRunSortTable from "./PayRunSortTable";
 import {shortMonths} from "../../../constants/strings";
 import Checkbox from "../../components/Checkbox";
@@ -46,9 +46,9 @@ const PayRunTable = ({
         const collapsedRow = collapsedRows.includes(item.id);
         const rowStatus = item.status ? ` ${item.status}` : '';
         return (
-          <div key={item.id} onClick={() => clickRow(item)} className={`table-row${collapsedRow ? ' collapsed' : ''}${rowStatus}`}>
+          <div key={item.id} onClick={() => clickRow(item)} className={`table__row${collapsedRow ? ' collapsed' : ''}${rowStatus}`}>
             {checkedRows &&
-              <div className='table-row-item table-row-item-checkbox'>
+              <div className='table__row-item table__row-item-checkbox'>
                 <Checkbox checked={checkedRows.includes(item.id)} onChange={(value, event) => {
                   event.stopPropagation();
                   setCheckedRows(item.id)
@@ -59,14 +59,14 @@ const PayRunTable = ({
               if(Array.isArray(item[rowItemName]) || (item[rowItemName]?.id !== undefined) || (isIgnoreId && rowItemName === 'id')) {
                 return <></>;
               }
-              const value = rowItemName.toLowerCase().indexOf('date') > -1 ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
+              const value = includeString(rowItemName.toLowerCase(),'date') ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
               const isStatus = rowItemName === 'status';
-              const formattedStatus = isStatus && item[rowItemName].split('-').map(text => text.slice(0, 1).toUpperCase() + text.slice(1,text.length)).join(' ');
-              const statusItemClass = isStatus ? ` table-row-item-status ${item[rowItemName]}` : '';
+              const formattedStatus = isStatus && formatStatus(item[rowItemName]);
+              const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';
               if(isStatusDropDown && isStatus) {
                 return (
                   <Dropdown key={`${rowItemName}${item.id}`}
-                    classes={`table-row-item${statusItemClass}`}
+                    classes={`table__row-item${statusItemClass}`}
                     options={[
                       {text: 'Accepted', value: 'accepted'},
                       {text: 'Held', value: 'held'},
@@ -82,7 +82,7 @@ const PayRunTable = ({
 
               return (
                 <div key={`${rowItemName}${item.id}`}
-                   className={`table-row-item${statusItemClass}`}>
+                   className={`table__row-item${statusItemClass}`}>
                   <p>{isStatus ? formattedStatus : value}</p>
                 </div>
               );
@@ -90,7 +90,7 @@ const PayRunTable = ({
             {additionalActions && additionalActions.map(action => {
               const Component = action.Component;
               return (
-                <div key={`${action.id}`} className={`table-row-item ${action.className}`}>
+                <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
                   <Component onClick={(e) => {
                     e.stopPropagation();
                     action.onClick(item)
@@ -99,19 +99,19 @@ const PayRunTable = ({
               )
             })}
             {collapsedRow &&
-            <div className='table-row-collapsed'>
+            <div className='table__row-collapsed'>
               {item.cares.map(care => {
                 return (
-                  <div key={care.id} className='table-row-collapsed-container'>
-                    <div className='table-row-collapsed-header'>
-                      <div className='table-row-collapsed-header-left'>
+                  <div key={care.id} className='table__row-collapsed-container'>
+                    <div className='table__row-collapsed-header'>
+                      <div className='table__row-collapsed-header-left'>
                         <p>{care.userName}</p>
                         <p>{care.supplier}</p>
                       </div>
                       <p>{care.id}</p>
                     </div>
-                    <div className='table-row-collapsed-main'>
-                      <div className='table-row-collapsed-main-header'>
+                    <div className='table__row-collapsed-main'>
+                      <div className='table__row-collapsed-main-header'>
                         <p>Item</p>
                         <p>Cost</p>
                         <p>Qty</p>
@@ -121,7 +121,7 @@ const PayRunTable = ({
                         const dateFrom = new Date(personInfo.dateFrom);
                         const dateTo = new Date(personInfo.dateTo);
                         return (
-                          <div key={personInfo.id} className='table-row-collapsed-main-item'>
+                          <div key={personInfo.id} className='table__row-collapsed-main-item'>
                             <p>
                               {careType} care per week
                               <br/>
@@ -136,7 +136,7 @@ const PayRunTable = ({
                         )
                       })}
                     </div>
-                    {release && <Button className='outline green table-row-release-button' onClick={(e) => {
+                    {release && <Button className='outline green table__row-release-button' onClick={(e) => {
                       e.stopPropagation();
                       release(item, care);
                     }}>Release</Button>}

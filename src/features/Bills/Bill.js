@@ -6,12 +6,13 @@ import Pagination from "../Payments/components/Pagination";
 import {payRunTableData} from "../../testData/TestDataPayRuns";
 import BillsHeader from "./components/BillsHeader";
 import PopupBillsPayDownload from "./components/PopupBillsPayDownload";
+import HackneyFooterInfo from "../components/HackneyFooterInfo";
 
 const sorts = [
   {name: 'serviceUser', text: 'Service User'},
   {name: 'invId', text: 'INV ID'},
   {name: 'packageType', text: 'Package Type'},
-  {name: 'supplier', text: 'Supplier'},
+  {name: 'supplier', text: 'SupplierDashboard'},
   {name: 'total', text: 'Total'},
   {name: 'status', text: 'Status'},
 ];
@@ -112,11 +113,7 @@ const Bill = () => {
         sorts={sorts}
       />
       <Pagination actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
-      <div className='payments__footer'>
-        <div className='payments__footer-info'>
-          <p>Hackney Adult Social Care Services  ·  2021</p>
-        </div>
-      </div>
+      <HackneyFooterInfo />
     </div>
   )
 };

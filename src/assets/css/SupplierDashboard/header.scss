@@ -17,6 +17,11 @@
 }
 
 .supplier-returns {
+  .dropdown {
+    .button {
+      padding: 10px;
+    }
+  }
   .breadcrumbs {
     background-color: $lbh-light-gray;
   }
