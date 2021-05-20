@@ -80,4 +80,22 @@ const mapDayCarePackageDetailsForBrokerage = (dayCarePackage) => {
   };
 };
 
-export { mapDayCarePackageDetailsForBrokerage };
+const mapBrokerageSupplierOptions = (supplierOptions = []) => {
+  return supplierOptions.map((option) => ({
+    text: option?.supplierName,
+    value: option?.id,
+  }));
+};
+
+const mapDayCareStageOptions = (stageOptions = []) => {
+  return stageOptions.map((option) => ({
+    text: option?.packageAction,
+    value: option?.packageStatusId,
+  }));
+};
+
+export {
+  mapDayCarePackageDetailsForBrokerage,
+  mapBrokerageSupplierOptions,
+  mapDayCareStageOptions,
+};

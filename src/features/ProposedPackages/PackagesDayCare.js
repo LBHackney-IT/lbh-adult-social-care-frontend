@@ -3,7 +3,7 @@ import DatePick from "../components/DatePick";
 import { currency } from "../../constants/strings";
 import EuroInput from "../components/EuroInput";
 import { Button } from "../components/Button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BaseField from "../components/baseComponents/BaseField";
 import Input from "../components/Input";
 import PackageReclaim from "../components/PackageReclaim";
@@ -15,26 +15,14 @@ import {
 import PackageCostBox from "../CarePackages/DayCare/components/PackageCostBox";
 import PackageApprovalHistorySummary from "../components/PackageApprovalHistorySummary";
 import DayCareSummary from "../CarePackages/DayCare/components/DayCareSummary";
-
-const stageOptions = [
-  { text: "New", value: 1 },
-  { text: "Assigned", value: 2 },
-  { text: "Querying", value: 3 },
-  { text: "Supplier Sourced", value: 4 },
-  { text: "Pricing agreed", value: 5 },
-  { text: "Submitted For Approval", value: 6 },
-];
-
-const supplierOptions = [
-  { text: "Supplier type 1", value: 1 },
-  { text: "Supplier type 2", value: 2 },
-  { text: "Supplier type 3", value: 3 },
-  { text: "Supplier type 4", value: 4 },
-];
+import {
+  createDayCareBrokerageInfo,
+  createDayCarePackage,
+} from "../../api/CarePackages/DayCareApi";
+import { CARE_PACKAGE } from "../../routes/RouteConstants";
 
 const PackagesDayCare = ({
   tab,
-  brokerage,
   changeTab,
   packagesReclaimed,
   changePackageReclaim,
@@ -43,42 +31,183 @@ const PackagesDayCare = ({
   approvalHistory,
   dayCarePackage,
   dayCareSummary,
+  supplierOptions = [],
+  stageOptions = [],
+  createBrokerageInfo = () => {},
+  changePackageBrokeringStatus = () => {},
 }) => {
-  console.log(dayCareSummary);
   const [coreCost, setCoreCost] = useState({
-    costPerDay: "XX",
+    costPerDay: 0,
   });
 
   const [transport, setTransport] = useState({
     supplier: "",
-    costPerDay: "XXXX",
+    costPerDay: 0,
   });
 
   const [transportEscort, setTransportEscort] = useState({
     supplier: "",
-    hoursPerWeek: "XXXX",
-    costPerWeek: "XXXX",
+    hoursPerWeek: 0,
+    costPerWeek: 0,
   });
 
   const [dayCareOpportunities, setDayCareOpportunities] = useState({
     supplier: "",
-    hoursPerWeek: "XXXX",
-    costPerWeek: "XXXX",
+    hoursPerWeek: 0,
+    costPerHour: 0,
   });
 
   const [escort, setEscort] = useState({
     supplier: "",
-    hoursPerWeek: "XXXX",
-    costPerWeek: "XXXX",
+    hoursPerWeek: 0,
+    costPerHour: 0,
   });
 
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(
+    (dayCarePackage && new Date(dayCarePackage?.packageDetails?.startDate)) ||
+      undefined
+  );
+  const [endDate, setEndDate] = useState(
+    (dayCarePackage && new Date(dayCarePackage?.packageDetails?.endDate)) ||
+      undefined
+  );
+  const [endDateEnabled, setEndDateEnabled] = useState(
+    !dayCarePackage?.packageDetails?.endDate
+  );
+  const [
+    corePackageSelectedDaysPerWeek,
+    setCorePackageSelectedDaysPerWeek,
+  ] = useState(dayCarePackage?.packageDetails?.daysPerWeek ?? 0);
+
+  // Cost calculations
+  const [coreCostTotal, setCoreCostTotal] = useState(0);
+  const [transportCostTotal, setTransportCostTotal] = useState(0);
+  const [transportEscortCostTotal, setTransportEscortCostTotal] = useState(0);
+  const [
+    dayCareOpportunitiesCostTotal,
+    setDayCareOpportunitiesCostTotal,
+  ] = useState(0);
+  const [escortCostTotal, setEscortCostTotal] = useState(0);
+  const [totalPackageCost, setTotalPackageCost] = useState(0);
 
   const changeElementsData = (setter, getter, field, data) => {
     setter({ ...getter, [field]: data });
+  };
+
+  useEffect(() => {
+    setCorePackageSelectedDaysPerWeek(
+      dayCarePackage?.packageDetails?.daysPerWeek ?? 0
+    );
+    setEndDateEnabled(!dayCarePackage?.packageDetails?.endDate);
+
+    setEndDate(
+      (dayCarePackage && new Date(dayCarePackage?.packageDetails?.endDate)) ||
+        undefined
+    );
+
+    setStartDate(
+      (dayCarePackage && new Date(dayCarePackage?.packageDetails?.startDate)) ||
+        undefined
+    );
+  }, [dayCarePackage]);
+
+  useEffect(() => {
+    setCoreCostTotal(
+      Number(corePackageSelectedDaysPerWeek) * Number(coreCost.costPerDay)
+    );
+  }, [coreCost]);
+
+  useEffect(() => {
+    setTransportCostTotal(
+      Number(corePackageSelectedDaysPerWeek) * Number(transport.costPerDay)
+    );
+  }, [transport]);
+
+  useEffect(() => {
+    setTransportEscortCostTotal(Number(transportEscort.costPerWeek));
+  }, [transportEscort]);
+
+  useEffect(() => {
+    setDayCareOpportunitiesCostTotal(
+      Number(dayCareOpportunities.hoursPerWeek) *
+        Number(dayCareOpportunities.costPerHour)
+    );
+  }, [dayCareOpportunities]);
+
+  useEffect(() => {
+    setEscortCostTotal(
+      Number(escort.hoursPerWeek) * Number(escort.costPerHour)
+    );
+  }, [escort]);
+
+  useEffect(() => {
+    setTotalPackageCost(
+      coreCostTotal +
+        +transportCostTotal +
+        transportEscortCostTotal +
+        dayCareOpportunitiesCostTotal +
+        escortCostTotal
+    );
+  }, [
+    coreCostTotal,
+    transportCostTotal,
+    transportEscortCostTotal,
+    dayCareOpportunitiesCostTotal,
+    escortCostTotal,
+  ]);
+
+  const formIsValid = (brokerageInfoForCreation) => {
+    return !!(
+      brokerageInfoForCreation?.corePackageSupplierId &&
+      brokerageInfoForCreation?.corePackageDaysPerWeek &&
+      brokerageInfoForCreation?.corePackageCostPerDay &&
+      !isNaN(Number(brokerageInfoForCreation?.corePackageCostPerDay)) &&
+      brokerageInfoForCreation?.transportSupplierId &&
+      brokerageInfoForCreation?.transportDaysPerWeek &&
+      brokerageInfoForCreation?.transportCostPerDay &&
+      !isNaN(Number(brokerageInfoForCreation?.transportCostPerDay)) &&
+      brokerageInfoForCreation?.creatorId
+    );
+  };
+
+  const handleSaveBrokerage = (event) => {
+    event.preventDefault();
+    const brokerageInfoForCreation = {
+      corePackageSupplierId: selectedSupplierType,
+      corePackageDaysPerWeek: corePackageSelectedDaysPerWeek,
+      corePackageCostPerDay: Number(coreCost.costPerDay),
+      transportSupplierId: transport.supplier,
+      transportDaysPerWeek: corePackageSelectedDaysPerWeek,
+      transportCostPerDay: Number(transport.costPerDay),
+      transportEscortSupplierId: transportEscort.supplier,
+      transportEscortHoursPerWeek: transportEscort.hoursPerWeek,
+      transportEscortCostPerWeek: Number(transportEscort.costPerWeek),
+      dayCareOpportunitiesSupplierId: dayCareOpportunities.supplier,
+      dayCareOpportunitiesHoursPerWeek: dayCareOpportunities.hoursPerWeek,
+      dayCareOpportunitiesCostPerHour: Number(dayCareOpportunities.costPerHour),
+      escortSupplierId: escort.supplier,
+      escortHoursPerWeek: escort.hoursPerWeek,
+      escortCostPerHour: Number(escort.costPerHour),
+      creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
+    };
+    if (formIsValid(brokerageInfoForCreation)) {
+      createBrokerageInfo(
+        dayCarePackage?.packageDetails?.dayCarePackageId,
+        brokerageInfoForCreation
+      );
+    } else {
+      alert("Invalid form. Check to ensure all values are set correctly");
+    }
+  };
+
+  const handleBrokerageStageChange = (option) => {
+    setSelectedStageType(option);
+    changePackageBrokeringStatus(
+      dayCarePackage?.packageDetails?.dayCarePackageId,
+      option
+    );
   };
 
   return (
@@ -88,7 +217,10 @@ const PackagesDayCare = ({
           <div>
             <h1 className="container-title">Day Care</h1>
             <h3>
-              ID: <span>{brokerage?.homeCare?.id || ""}</span>
+              ID:{" "}
+              <span>
+                {dayCarePackage?.packageDetails.dayCarePackageId || ""}
+              </span>
             </h3>
           </div>
           <Dropdown
@@ -96,7 +228,7 @@ const PackagesDayCare = ({
             initialText="Stage"
             options={stageOptions}
             selectedValue={selectedStageType}
-            onOptionSelect={(option) => setSelectedStageType(option)}
+            onOptionSelect={(option) => handleBrokerageStageChange(option)}
           />
         </div>
         <div className="column">
@@ -122,7 +254,7 @@ const PackagesDayCare = ({
                 disabledLabel="Ongoing"
                 classes="datepicker-disabled datepicker-ongoing"
                 label="End Date"
-                disabled={true}
+                disabled={endDateEnabled}
                 dateValue={endDate}
                 setDate={setEndDate}
               />
@@ -142,11 +274,14 @@ const PackagesDayCare = ({
                 value={coreCost.costPerDay}
               />
               <BaseField label="Days per week" classes="day-care__min-space">
-                <p>4</p>
+                <p>{corePackageSelectedDaysPerWeek}</p>
               </BaseField>
               <BaseField classes="day-care__min-space" />
               <BaseField classes="day-care__cost-week" label="Cost / week">
-                <p>{currency.euro}240</p>
+                <p>
+                  {currency.euro}
+                  {coreCostTotal}
+                </p>
               </BaseField>
             </div>
             <hr className="horizontal-delimiter" />
@@ -162,7 +297,7 @@ const PackagesDayCare = ({
                 }
               />
               <BaseField classes="day-care__min-space" label="Days per week">
-                <p>4</p>
+                <p>{corePackageSelectedDaysPerWeek}</p>
               </BaseField>
               <Input
                 value={transport.costPerDay}
@@ -177,7 +312,10 @@ const PackagesDayCare = ({
                 label="Cost per week"
               />
               <BaseField label="Cost">
-                <p>{currency.euro}89</p>
+                <p>
+                  {currency.euro}
+                  {transportCostTotal}
+                </p>
               </BaseField>
             </div>
             <div className="row-container day-care__transport-escort">
@@ -221,7 +359,10 @@ const PackagesDayCare = ({
                 }
               />
               <BaseField label="Cost">
-                <p>{currency.euro}89</p>
+                <p>
+                  {currency.euro}
+                  {transportEscortCostTotal}
+                </p>
               </BaseField>
             </div>
             <div className="row-container day-care__opportunities">
@@ -245,27 +386,30 @@ const PackagesDayCare = ({
                 value={dayCareOpportunities.hoursPerWeek}
                 onChange={(value) =>
                   changeElementsData(
-                    setTransportEscort,
-                    transportEscort,
+                    setDayCareOpportunities,
+                    dayCareOpportunities,
                     "hoursPerWeek",
                     value
                   )
                 }
               />
               <Input
-                label="Cost per week"
-                value={dayCareOpportunities.costPerWeek}
+                label="Cost per hour"
+                value={dayCareOpportunities.costPerHour}
                 onChange={(value) =>
                   changeElementsData(
-                    setTransportEscort,
-                    transportEscort,
-                    "costPerWeek",
+                    setDayCareOpportunities,
+                    dayCareOpportunities,
+                    "costPerHour",
                     value
                   )
                 }
               />
               <BaseField label="Cost">
-                <p>{currency.euro}89</p>
+                <p>
+                  {currency.euro}
+                  {dayCareOpportunitiesCostTotal}
+                </p>
               </BaseField>
             </div>
             <div className="row-container day-care__escort">
@@ -287,20 +431,27 @@ const PackagesDayCare = ({
                 }
               />
               <Input
-                value={escort.costPerWeek}
-                label="Cost per week"
+                value={escort.costPerHour}
+                label="Cost per hour"
                 onChange={(value) =>
-                  changeElementsData(setEscort, escort, "costPerWeek", value)
+                  changeElementsData(setEscort, escort, "costPerHour", value)
                 }
               />
               <BaseField label="Cost">
-                <p>{currency.euro}89</p>
+                <p>
+                  {currency.euro}
+                  {escortCostTotal}
+                </p>
               </BaseField>
             </div>
           </div>
           <div className="proposed-packages__total-cost day-care__total-cost">
             <p>
-              Total <span>{currency.euro}XXXX</span>
+              Total{" "}
+              <span>
+                {currency.euro}
+                {totalPackageCost}
+              </span>
             </p>
           </div>
           <div>
@@ -314,6 +465,14 @@ const PackagesDayCare = ({
               </Button>
             </div>
             <hr className="horizontal-delimiter" />
+          </div>
+          <div className="is-flex is-justify-content-flex-end is-align-content-center is-align-items-center">
+            <Button
+              onClick={handleSaveBrokerage}
+              className="button hackney-btn-green"
+            >
+              Submit for approval
+            </Button>
           </div>
           {!!packagesReclaimed.length && (
             <div>
@@ -366,6 +525,12 @@ const PackagesDayCare = ({
         <ApprovalHistory
           history={approvalHistory}
           dayCarePackage={dayCarePackage}
+          costSummary={{
+            costOfCarePerWeek: coreCostTotal,
+            anpPerWeek: dayCareOpportunitiesCostTotal,
+            transportCostPerWeek: transportCostTotal,
+            totalCostPerWeek: totalPackageCost,
+          }}
         />
       ) : (
         dayCareSummary && (
@@ -382,14 +547,11 @@ const PackagesDayCare = ({
   );
 };
 
-const costSummary = {
-  costOfCarePerWeek: 0.0,
-  anpPerWeek: 0.0,
-  transportCostPerWeek: 0.0,
-  totalCostPerWeek: 0.0,
-};
-
-const ApprovalHistory = ({ history, dayCarePackage = undefined }) => {
+const ApprovalHistory = ({
+  history,
+  dayCarePackage = undefined,
+  costSummary,
+}) => {
   return (
     <div className="approval-history">
       <h2>
@@ -442,21 +604,21 @@ const ApprovalHistory = ({ history, dayCarePackage = undefined }) => {
             <PackageCostBox
               boxClass="hackney-package-cost-light-yellow-box"
               title="COST OF CARE / WK"
-              cost={`£${costSummary?.costOfCarePerWeek}`}
+              cost={`£${costSummary?.costOfCarePerWeek ?? 0.0}`}
               costType="ESTIMATE"
             />
 
             <PackageCostBox
               boxClass="hackney-package-cost-light-yellow-box"
               title="ANP / WK"
-              cost={`£${costSummary?.anpPerWeek}`}
+              cost={`£${costSummary?.anpPerWeek ?? 0.0}`}
               costType="ESTIMATE"
             />
 
             <PackageCostBox
               boxClass="hackney-package-cost-light-yellow-box"
               title="TRANSPORT / WK"
-              cost={`£${costSummary?.transportCostPerWeek}`}
+              cost={`£${costSummary?.transportCostPerWeek ?? 0.0}`}
               costType="ESTIMATE"
             />
           </div>

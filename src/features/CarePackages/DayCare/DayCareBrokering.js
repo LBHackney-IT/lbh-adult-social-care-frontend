@@ -10,10 +10,21 @@ import {
   getAgeFromDateString,
   getEnGBFormattedDate,
 } from "../../../api/Utils/FuncUtils";
-import { getDayCarePackageDetailsForBrokerage } from "../../../api/CarePackages/DayCareApi";
+import {
+  changeDayCarePackageStatus,
+  createDayCareBrokerageInfo,
+  getDayCareBrokerageStages,
+  getDayCarePackageDetailsForBrokerage,
+} from "../../../api/CarePackages/DayCareApi";
 import { useParams } from "react-router-dom";
 import { getInitDaysSelected } from "../../../api/Utils/CommonOptions";
-import { mapDayCarePackageDetailsForBrokerage } from "../../../api/Mappers/DayCareMapper";
+import {
+  mapBrokerageSupplierOptions,
+  mapDayCarePackageDetailsForBrokerage,
+  mapDayCareStageOptions,
+} from "../../../api/Mappers/DayCareMapper";
+import { getSupplierList } from "../../../api/CarePackages/SuppliersApi";
+import { CARE_PACKAGE } from "../../../routes/RouteConstants";
 
 const initialPackageReclaim = {
   type: "",
@@ -123,9 +134,16 @@ const DayCareBrokering = ({ history }) => {
   const [tab, setTab] = useState("approvalHistory");
   const [summaryData, setSummaryData] = useState([]);
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
-  const [clientDetails, setClientDetails] = useState(
-    initDayCarePackage.clientDetails
-  );
+  const [clientDetails, setClientDetails] = useState(undefined);
+  const [supplierOptions, setSupplierOptions] = useState([]);
+  const [stageOptions, setStageOptions] = useState([]);
+
+  useEffect(() => {
+    if (!supplierOptions.length || supplierOptions.length === 1)
+      retrieveSupplierOptions();
+    if (!stageOptions.length || stageOptions.length === 1)
+      retrieveDayCareBrokerageStages();
+  });
 
   useEffect(() => {
     retrieveDayCarePackageDetails(dayCarePackageId);
@@ -149,6 +167,7 @@ const DayCareBrokering = ({ history }) => {
 
         setApprovalHistoryEntries([...newApprovalHistoryItems]);
         setOpportunityEntries([...newOpportunityEntries]);
+        setClientDetails(response.clientDetails);
 
         setDaysSelected([...currentDaysSelected]);
       })
@@ -156,6 +175,64 @@ const DayCareBrokering = ({ history }) => {
         setErrors([
           ...errors,
           `Retrieve day care package details failed. ${error.message}`,
+        ]);
+      });
+  };
+
+  const retrieveSupplierOptions = () => {
+    getSupplierList()
+      .then((response) => {
+        setSupplierOptions(mapBrokerageSupplierOptions(response));
+      })
+      .catch((error) => {
+        setErrors([
+          ...errors,
+          `Retrieve supplier options failed. ${error.message}`,
+        ]);
+      });
+  };
+
+  const retrieveDayCareBrokerageStages = () => {
+    getDayCareBrokerageStages()
+      .then((response) => {
+        setStageOptions(mapDayCareStageOptions(response));
+      })
+      .catch((error) => {
+        setErrors([
+          ...errors,
+          `Retrieve day care brokerage stages failed. ${error.message}`,
+        ]);
+      });
+  };
+
+  const createBrokerageInfo = (dayCarePackageId, brokerageInfoForCreation) => {
+    createDayCareBrokerageInfo(dayCarePackageId, brokerageInfoForCreation)
+      .then(() => {
+        alert("Package saved.");
+        history.push(`${CARE_PACKAGE}`);
+      })
+      .catch((error) => {
+        alert(`Create brokerage info failed. ${error.message}`);
+        setErrors([
+          ...errors,
+          `Create brokerage info failed. ${error.message}`,
+        ]);
+      });
+  };
+
+  const changePackageBrokeringStatus = (
+    dayCarePackageId,
+    brokeringStatusId
+  ) => {
+    changeDayCarePackageStatus(dayCarePackageId, brokeringStatusId)
+      .then(() => {
+        alert("Status changed.");
+      })
+      .catch((error) => {
+        alert(`Change brokerage status failed. ${error.message}`);
+        setErrors([
+          ...errors,
+          `Change package status failed. ${error.message}`,
         ]);
       });
   };
@@ -189,7 +266,7 @@ const DayCareBrokering = ({ history }) => {
   };
 
   return (
-    <Layout headerTitle="Rapid D2A">
+    <Layout headerTitle="Day Care Brokering">
       <ClientSummary
         client={clientDetails?.clientName}
         hackneyId={clientDetails?.hackneyId}
@@ -216,6 +293,8 @@ const DayCareBrokering = ({ history }) => {
         summaryData={summaryData}
         approvalHistory={approvalHistoryEntries}
         dayCarePackage={dayCarePackage}
+        supplierOptions={supplierOptions}
+        stageOptions={stageOptions}
         dayCareSummary={{
           opportunityEntries: opportunityEntries,
           needToAddress: dayCarePackage?.packageDetails.needToAddress,
@@ -223,6 +302,8 @@ const DayCareBrokering = ({ history }) => {
           daysSelected: daysSelected,
           deleteOpportunity: () => {},
         }}
+        createBrokerageInfo={createBrokerageInfo}
+        changePackageBrokeringStatus={changePackageBrokeringStatus}
       />
     </Layout>
   );
