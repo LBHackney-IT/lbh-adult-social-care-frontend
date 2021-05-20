@@ -1,0 +1,177 @@
+.hold-payment__dropdown {
+  margin-bottom: 32px;
+
+  button {
+    width: 220px;
+    padding: 10px;
+  }
+
+  &.control.field-container label {
+    color: $lbh-black1;
+    font-weight: 400;
+  }
+}
+
+
+.popup.held-payments__popup-help-chat {
+  justify-content: flex-end;
+
+  .popup__action-buttons {
+    button {
+      width: 100%;
+      background-color: $lbh-green1;
+      color: white;
+      border-radius: 4px;
+    }
+  }
+
+  .popup__inner-content {
+    background-color: $lbh-light-gray2;
+    width: 40%;
+    height: 100%;
+  }
+
+  .popup-help-chat__messages {
+    overflow: auto;
+    height: 40vh;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .popup-help-chat__message {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .popup__header-title {
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .popup-help-chat__header {
+    margin-bottom: 30px;
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 16px;
+      font-weight: 400;
+      color: $lbh-black1;
+    }
+  }
+
+  .popup-help-chat__message-text {
+    background-color: $lbh-gray;
+    color: $lbh-black1;
+    padding: 12px 12px 12px 6px;
+    border-radius: 5px;
+  }
+
+  .popup-help-chat__message-from {
+    color: $lbh-black1;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 7px;
+  }
+
+  .popup-help-chat__message-from-current-user {
+    .popup-help-chat__message-text-container {
+      margin-left: auto;
+    }
+
+    .popup-help-chat__message-from {
+      text-align: right;
+    }
+
+    .popup-help-chat__message-text {
+      background-color: $lbh-green1;
+
+      &:after {
+        border-bottom-right-radius: 1px;
+      }
+    }
+  }
+
+  .popup-help-chat__message-settings {
+    position: absolute;
+    justify-content: center;
+    z-index: 2;
+    right: -24px;
+
+    .chat-settings-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 24px;
+
+      svg {
+        margin-bottom: 2px;
+      }
+    }
+  }
+
+  .popup-help-chat__message-settings {
+    display: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .popup-help-chat__message-text-container {
+    width: 70%;
+  }
+
+  .popup-help-chat__message-from-someone {
+    .popup-help-chat__message-text-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
+    &.hovered {
+      .popup-help-chat__message-settings {
+        display: flex;
+      }
+    }
+  }
+}
+
+.popup-help-chat__inputs {
+  .dropdown-trigger {
+    width: 100%;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  .hold-payment__dropdown, .dropdown {
+    width: 100%;
+  }
+
+  .hold-payment__dropdown {
+    margin-bottom: 8px;
+  }
+
+  textarea {
+    font-size: 18px;
+  }
+}
+
+.popup-help-chat__message-settings-actions {
+  padding: 10px;
+  background-color: white;
+  position: absolute;
+  bottom: -60px;
+  min-width: 150px;
+  border-radius: 3px;
+
+  p {
+    text-align: center;
+    color: $lbh-blue-highlight;
+  }
+}

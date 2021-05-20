@@ -5,6 +5,19 @@
 @import "./ProposedPackages/approval-history";
 @import "./ProposedPackages/proposedPackges";
 @import "./PackageReclaim/package-reclaim";
+@import "./Payments/payments-header";
+@import "./Payments/breadcrumbs";
+@import "./Payments/popup-download-ceder";
+@import "./PayRuns/header";
+@import "./PayRuns/tabs";
+@import "./PayRuns/table";
+@import "./PayRuns/pagination";
+@import "./PayRuns/footer";
+@import "./PayRuns/create-pay-run";
+@import "./PayRuns/level-insight";
+@import "./PayRuns/popup-hold-payment";
+@import "./PayRuns/held-payments";
+@import "./popup";
 
 * {
   font-family: "OpenSans", sans-serif !important;
