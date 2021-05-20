@@ -5,8 +5,8 @@ import { CheckIcon } from "./Icons";
 const Checkbox = ({ children, checked = false, onChange = () => {} }) => {
   const [isChecked, setIsChecked] = useState(checked);
 
-  const onCheckedChange = () => {
-    onChange(!isChecked);
+  const onCheckedChange = (event) => {
+    onChange(!isChecked, event);
     setIsChecked(!isChecked);
   };
 

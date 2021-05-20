@@ -460,7 +460,7 @@ const PackagesDayCare = ({
                 Should the cost of this package be reclaimed in part or full
                 from another body, e.g. NHS, CCG, another LA ?
               </p>
-              <Button onClick={addPackageReclaim} className="outline">
+              <Button onClick={addPackageReclaim} className="outline green">
                 Add reclaim
               </Button>
             </div>

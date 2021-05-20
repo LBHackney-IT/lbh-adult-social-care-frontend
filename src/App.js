@@ -20,12 +20,16 @@ import { useSelector } from "react-redux";
 import { selectUser } from "./reducers/userReducer";
 import ProposedPackages from "./features/ProposedPackages/ProposedPackages";
 import DayCareBrokering from "./features/CarePackages/DayCare/DayCareBrokering";
+import PaymentsHeader from "./features/Payments/components/PaymentsHeader";
+import PayRuns from "./features/PayRuns/PayRuns";
+import PayRun from "./features/PayRuns/PayRun";
 
 const App = () => {
   const user = useSelector(selectUser);
 
   return (
     <>
+      <PaymentsHeader />
       <Switch>
         {user !== null ? (
           <Route path={RouteConstants.LOGIN} component={Login} />
@@ -35,6 +39,16 @@ const App = () => {
               exact
               path={RouteConstants.HOME_CARE_APPROVE_PACKAGE}
               component={HomeCareApprovePackage}
+            />
+            <Route
+              exact
+              path={RouteConstants.PAYMENTS_PAY_RUNS_ROUTE}
+              component={PayRuns}
+            />
+            <Route
+              exact
+              path={RouteConstants.PAYMENTS_PAY_RUN_ROUTE}
+              component={PayRun}
             />
             <Route
               exact

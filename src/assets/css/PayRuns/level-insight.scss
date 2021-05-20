@@ -1,0 +1,66 @@
+.pay-runs__level-insight {
+  padding: 16px;
+}
+
+.pay-runs__level-insight-container {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  padding: 30px;
+  background-color: $lbh-light-gray;
+}
+
+.pay-runs__level-insight-cost-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: $lbh-black1;
+}
+
+.pay-runs__level-insight-cost-text {
+  font-size: 36px;
+  font-weight: 600;
+  color: $lbh-green1;
+}
+
+.pay-runs__level-insight-cost-increase {
+  display: flex;
+  align-items: center;
+
+  span {
+    color: $lbh-black1;
+    font-weight: bold;
+    margin: 0 5px;
+  }
+}
+
+.pay-runs__level-insight-bordered {
+  padding-left: 30px;
+  border-left: 1px solid $lbh-gray;
+  margin-left: 30px;
+
+  p:first-of-type {
+    color: $lbh-green1;
+    font-size: 36px;
+    font-weight: 600;
+  }
+
+  p:last-of-type {
+    font-weight: 600;
+    font-size: 14px;
+    color: $lbh-black1;
+  }
+}
+
+.pay-runs__level-insight-action-buttons {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+
+  button {
+    border-radius: 0;
+
+    &:first-of-type {
+      margin-bottom: 11px;
+    }
+  }
+}

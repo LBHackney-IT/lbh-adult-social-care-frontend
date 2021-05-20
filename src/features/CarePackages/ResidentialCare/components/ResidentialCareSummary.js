@@ -10,7 +10,6 @@ const ResidentialCareSummary = ({
   setAdditionalNeedsEntries = () => {},
 }) => {
   startDate = new Date(startDate).toLocaleDateString("en-GB");
-  endDate = endDate && new Date(endDate).toLocaleDateString("en-GB");
 
   const renderDate = (dateString) => {
     return dateString && new Date(dateString).toLocaleDateString("en-GB");

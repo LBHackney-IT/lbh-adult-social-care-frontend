@@ -7,6 +7,7 @@ const TextArea = ({
   placeholder = "",
   onChange = () => {},
   classes = '',
+  value,
   children,
 }) => {
   const onTextAreaChange = (event) => {
@@ -17,7 +18,7 @@ const TextArea = ({
   return (
     <BaseField label={label} classes={classes}>
       <textarea
-        rows={rows}
+        rows={rows} value={value}
         placeholder={placeholder}
         onChange={onTextAreaChange}
       >

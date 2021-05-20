@@ -1,0 +1,30 @@
+.payments__header {
+  background: $lbh-black1;
+  padding: 16px;
+  overflow: auto;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.payments__header-navigation {
+  display: flex;
+}
+
+.payments__header-item {
+  color: white;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:not(&:last-of-type) {
+    margin-right: 22px;
+  }
+}
+
+.payments__header-active-item {
+  text-decoration: underline;
+}
