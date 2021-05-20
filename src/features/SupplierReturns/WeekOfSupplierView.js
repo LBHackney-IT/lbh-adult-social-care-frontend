@@ -13,6 +13,7 @@ import {Button} from "../components/Button";
 import WeekOfSupplierViewInnerHeader from "./components/WeekOfSupplierViewInnerHeader";
 import WeeklyOfSupplierTable from "./components/WeeklyOfSupplierTable";
 import HackneyFooterInfo from "../components/HackneyFooterInfo";
+import PopupDocumentUploader from "../components/PopupDocumentUploader";
 
 const sorts = [
   {name: 'serviceUser', text: 'Service User'},
@@ -187,11 +188,14 @@ const WeekOfSupplierView = () => {
         messages={testDataHelpMessages}
       />
       }
+      {openedPopup === 'upload-files' &&
+        <PopupDocumentUploader closePopup={() => setOpenedPopup('')} />
+      }
       <div className='week-of-supplier__breadcrumbs'>
         {!!breadcrumbs.length && <Breadcrumbs values={breadcrumbs} />}
         <Button>{weeklyData.length} Actions Outstanding</Button>
       </div>
-      <WeekOfSupplierViewInnerHeader />
+      <WeekOfSupplierViewInnerHeader clickActionButton={() => setOpenedPopup('upload-files')} />
       <WeeklyOfSupplierTable
         rows={weeklyData}
         actionAllServices={actionAllServices}

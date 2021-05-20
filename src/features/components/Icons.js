@@ -106,6 +106,17 @@ const ChatSettingsIcon = ({onClick = () => {}}) => {
   );
 };
 
+const UploadFilesIcon = ({onClick = () => {}, classes = ''}) => {
+  return (
+    <svg className={classes} onClick={onClick} width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="15" cy="15" r="15" fill="#00664F"/>
+      <path d="M15 22.5C19.1421 22.5 22.5 19.1421 22.5 15C22.5 10.8579 19.1421 7.5 15 7.5C10.8579 7.5 7.5 10.8579 7.5 15C7.5 19.1421 10.8579 22.5 15 22.5Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M15 12V18" stroke="white" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M12 15H18" stroke="white" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+};
+
 export {
   HackneyLogo,
   CheckIcon,
@@ -121,4 +132,5 @@ export {
   ArrowTopIcon,
   ChatIcon,
   ChatSettingsIcon,
+  UploadFilesIcon,
 };
