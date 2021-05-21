@@ -1,6 +1,10 @@
 import React from "react";
 
-const DayCarePackageElementCostings = () => {
+const DayCarePackageElementCostings = ({
+  dayCareCentre = "£16.25/day",
+  transport = "£16.25/h",
+  additionalNeeds = "£16.25/h",
+}) => {
   return (
     <div className="columns is-multiline">
       <div className="column is-full">
@@ -10,18 +14,18 @@ const DayCarePackageElementCostings = () => {
             <div className="level-item">
               <p className="is-5">
                 <span className="font-weight-bold">Day Care Centre:</span>{" "}
-                £16.25/day
+                {dayCareCentre}
               </p>
             </div>
             <div className="level-item">
               <p className="is-5">
-                <span className="font-weight-bold">Transport:</span> £16.25/h
+                <span className="font-weight-bold">Transport:</span> {transport}
               </p>
             </div>
             <div className="level-item">
               <p className="is-5">
                 <span className="font-weight-bold">Additional needs:</span>{" "}
-                £16.25/h
+                {additionalNeeds}
               </p>
             </div>
           </div>

@@ -9,7 +9,6 @@ const NursingCareSummary = ({
   setAdditionalNeedsEntries = () => {},
 }) => {
   startDate = new Date(startDate).toLocaleDateString("en-GB");
-  endDate = endDate && new Date(endDate).toLocaleDateString("en-GB");
 
   // Remove additional need entry
   const removeAdditionalNeedEntry = (entryId) => {

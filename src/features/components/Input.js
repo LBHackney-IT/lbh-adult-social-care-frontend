@@ -35,7 +35,7 @@ const Input = ({
   return (
     <BaseField onClick={focusInput} classes={`${classes}${search ? ' custom-input__search' : ''}`} label={label}>
       <input
-        className='custom-input'
+        className="custom-input input"
         placeholder={placeholder}
         onChange={onChangeInput}
         value={`${preSign}${value}${postSign}`}
