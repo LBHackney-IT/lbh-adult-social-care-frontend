@@ -15,4 +15,15 @@ const getInitDaysSelected = () => [
   { id: 7, short: "Sun", long: "Sunday", checked: true },
 ];
 
-export { getFixedPeriodOptions, getInitDaysSelected };
+const getInitialPackageReclaim = () => {
+  return {
+    type: "",
+    notes: "",
+    from: "",
+    category: "",
+    amount: "",
+    id: "1",
+  };
+};
+
+export { getFixedPeriodOptions, getInitDaysSelected, getInitialPackageReclaim };
