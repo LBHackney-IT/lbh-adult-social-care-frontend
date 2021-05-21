@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import Breadcrumbs from "../components/Breadcrumbs";
 import { useLocation, useHistory } from 'react-router-dom';
 import Pagination from "../Payments/components/Pagination";
-import {supplierReturnsDashboardTableData, testDataHelpMessages} from "../../testData/TestDataPayRuns";
+import {supplierReturnsDashboardTableData, testDataHelpMessages} from "../../testData/testDataPayRuns";
 import SupplierReturnsLevelInsight from "./components/SupplierReturnsLevelInsight";
 import SupplierReturnDashboardTable from "./components/SupplierReturnsDashboardTable";
 import SupplierReturnsDashboardInnerHeader from "./components/SupplierReturnsDashboardInnerHeader";
@@ -10,7 +10,7 @@ import ChatButton from "../PayRuns/components/ChatButton";
 import PopupHelpChat from "../Chat/components/PopupHelpChat";
 import {useSelector} from "react-redux";
 import {selectSupplierDashboard} from "../../reducers/supplierDashboardReducer";
-import {formatDateWithSlash} from "../../service/helpers";
+import {formatDateWithSign} from "../../service/helpers";
 
 const sorts = [
   {name: 'serviceUser', text: 'Service User'},
@@ -29,13 +29,9 @@ const SupplierReturnsDashboard = () => {
   const [openedHelpChat, setOpenedHelpChat] = useState({});
   const { supplierReturnsDashboard: { weekCommencing: date }} = useSelector(selectSupplierDashboard);
 
-  useEffect(() => {
-    pushRoute(`${location.pathname}?page=1`);
-  }, []);
-
   const [breadcrumbs, setBreadcrumbs] = useState([
     {text: 'Supplier Dashboard Returns', onClick: () => pushRoute('/supplier-dashboard/supplier-returns')},
-    {text: `Supplier return ${formatDateWithSlash(date, '.')}`}
+    {text: `Supplier return ${formatDateWithSign(date, '.')}`}
   ]);
   const [sort, setSort] = useState({
     value: 'increase',
@@ -48,7 +44,7 @@ const SupplierReturnsDashboard = () => {
 
   const onCheckRow = (id) => {
     if(checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter(item => item != id));
+      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
     } else {
       setCheckedRows([...checkedRows, id]);
     }
@@ -87,13 +83,21 @@ const SupplierReturnsDashboard = () => {
   ];
 
   useEffect(() => {
+    console.log('change sort', sort);
+  }, [sort]);
+
+  useEffect(() => {
+    pushRoute(`${location.pathname}?page=1`);
+  }, []);
+
+  useEffect(() => {
     if(location?.query?.id) {
       setBreadcrumbs([
         {text: 'payments', route: '/payments/pay-runs', onClick: (value) => pushRoute(`${value.route}`)},
         {text: `Pay Run ${location.query.id}`}
       ]);
     }
-  }, [location]);
+  }, []);
 
   return (
     <div className='supplier-returns supplier-returns-dashboard'>

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {brokerageTestData} from "../testData/brokerage";
+import {brokerageTestData} from "../testData/brokerageTestData";
 
 const { homeCare, nurseCare } = brokerageTestData;
 

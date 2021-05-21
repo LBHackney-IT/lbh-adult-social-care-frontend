@@ -101,3 +101,26 @@
     }
   }
 }
+
+
+.add-bill {
+  .table__row-item {
+    width: 120px;
+  }
+  .sort {
+    width: 120px;
+  }
+
+  .sort-table {
+    margin-bottom: 0;
+  }
+
+  .table__row {
+    padding-top: 16px;
+  }
+
+  .table {
+    padding: 0;
+    margin-top: 30px;
+  }
+}

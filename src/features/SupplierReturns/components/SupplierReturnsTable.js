@@ -1,5 +1,5 @@
 import React from "react";
-import {formatDateWithSlash, formatStatus, includeString} from "../../../service/helpers";
+import {formatDateWithSign, formatStatus, includeString} from "../../../service/helpers";
 import SupplierSortTable from "./SupplierSortTable";
 import Checkbox from "../../components/Checkbox";
 
@@ -36,12 +36,12 @@ const SupplierReturnsTable = ({
             }
             {Object.getOwnPropertyNames(item).map(rowItemName => {
               if(rowItemName === 'disputesCount' && item.status !== 'disputes-active') {
-                return <div className='table__row-item'/>
+                return <div key={`${rowItemName}${item.id}`} className='table__row-item'/>
               }
               if(Array.isArray(item[rowItemName]) || (item[rowItemName]?.id !== undefined) || (isIgnoreId && rowItemName === 'id')) {
-                return <></>;
+                return <React.Fragment key={`${rowItemName}${item.id}`}/>;
               }
-              const value = includeString(rowItemName, 'weekCommencing') ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
+              const value = includeString(rowItemName, 'weekCommencing') ? formatDateWithSign(item[rowItemName]) : item[rowItemName];
               const isStatus = rowItemName === 'status';
               const formattedStatus = isStatus && formatStatus(item[rowItemName]);
               const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';

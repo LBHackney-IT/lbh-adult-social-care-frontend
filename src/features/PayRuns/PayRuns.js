@@ -4,7 +4,7 @@ import PayRunsHeader from "./components/PayRunsHeader";
 import PaymentsTabs from "../Payments/components/PaymentsTabs";
 import PayRunTable from "./components/PayRunTable";
 import Pagination from "../Payments/components/Pagination";
-import {payRunsHeldPaymentsTableData, payRunsTableData, testDataHelpMessages} from "../../testData/TestDataPayRuns";
+import {payRunsHeldPaymentsTableData, payRunsTableData, testDataHelpMessages} from "../../testData/testDataPayRuns";
 import PopupCreatePayRun from "./components/PopupCreatePayRun";
 import ChatButton from "./components/ChatButton";
 import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
@@ -77,7 +77,7 @@ const PayRuns = () => {
 
   const onCheckRows = id => {
     if(checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter(item => item != id));
+      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
     } else {
       setCheckedRows([...checkedRows, id]);
     }
@@ -99,6 +99,10 @@ const PayRuns = () => {
   const heldActions = [
     {id: 'action1', onClick: (item) => openChat(item), className: 'chat-icon', Component: ChatButton}
   ];
+
+  useEffect(() => {
+    console.log('change sort', sort);
+  }, [sort]);
 
   useEffect(() => {
     pushRoute(`${location.pathname}?page=1`);

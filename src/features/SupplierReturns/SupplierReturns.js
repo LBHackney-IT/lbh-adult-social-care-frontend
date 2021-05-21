@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useLocation, useHistory } from 'react-router-dom';
 import SupplierReturnsTable from "./components/SupplierReturnsTable";
 import Pagination from "../Payments/components/Pagination";
-import {supplierReturnsTableData} from "../../testData/TestDataPayRuns";
+import {supplierReturnsTableData} from "../../testData/testDataPayRuns";
 import SupplierInnerHeader from "./components/SupplierInnerHeader";
 import HackneyFooterInfo from "../components/HackneyFooterInfo";
 import {useDispatch} from "react-redux";
@@ -41,6 +41,10 @@ const SupplierReturns = () => {
   useEffect(() => {
     pushRoute(`${location.pathname}?page=1`);
   }, []);
+
+  useEffect(() => {
+    console.log('change sort', sort);
+  }, [sort]);
 
   return (
     <div className='supplier-dashboard supplier-returns'>

@@ -1,0 +1,123 @@
+.add-bill {
+  padding: 16px;
+
+  .breadcrumbs {
+    margin-bottom: 32px;
+  }
+
+  .card-info.invoice-for {
+    margin-right: 32px;
+  }
+
+  .table {
+    flex-basis: 100%;
+  }
+
+  .total-info {
+    display: flex;
+    flex-direction: column;
+    p {
+      font-weight: bold;
+      color: $lbh-black1;
+    }
+
+    span {
+      color: $lbh-blue-highlight
+    }
+  }
+}
+
+.total-info__save-button {
+  margin-top: 30px;
+  align-self: flex-end;
+  width: 132px;
+}
+
+.add-bill__main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card-info {
+  padding: 16px;
+  border: 1px solid $lbh-gray;
+}
+
+.card-info__main {
+  display: flex;
+
+  .invoice-for__datepicker.service-from {
+    margin-right: 16px;
+  }
+
+  .control {
+    label {
+      color: $lbh-black1;
+    }
+  }
+}
+
+.card-info__title {
+  font-weight: bold;
+  font-size: 24px;
+  color: $lbh-black1;
+
+  margin-bottom: 12px;
+}
+
+.invoice-for__datepicker {
+  &:first-of-type {
+    margin-right: 20px;
+  }
+}
+
+.invoice-for__package-id {
+  margin-right: 20px;
+}
+
+.invoice-for__supplier {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-right: 32px;
+
+  p {
+    color: $lbh-black1;
+    font-weight: bold;
+  }
+}
+
+.invoice-details__date {
+  margin-right: 16px;
+}
+
+.invoice-details__due {
+  margin-right: 16px;
+}
+
+.attached-files__title {
+  font-size: 24px;
+  font-weight: bold;
+  color: $lbh-black1;
+}
+
+.attached-files__text {
+  font-weight: bold;
+  color: $lbh-black1;
+  margin-bottom: 6px;
+}
+
+.attached-files__container {
+  width: 500px;
+  height: 300px;
+  border: 1px solid gray;
+  padding: 20px;
+  overflow: auto;
+}
+
+.add-bill__footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useLocation, useHistory } from 'react-router-dom';
 import SupplierDashboardTable from "./components/SupplierDashboardTable";
 import Pagination from "../Payments/components/Pagination";
-import {supplierDashboardTableData} from "../../testData/TestDataPayRuns";
+import {supplierDashboardTableData} from "../../testData/testDataPayRuns";
 import SupplierDashboardInnerHeader from "./components/SupplierDashboardInnerHeader";
 import HackneyFooterInfo from "../components/HackneyFooterInfo";
 import {useDispatch} from "react-redux";
@@ -40,6 +40,10 @@ const SupplierDashboard = () => {
   useEffect(() => {
     pushRoute(`${location.pathname}?page=1`);
   }, []);
+
+  useEffect(() => {
+    console.log('change sort', sort);
+  }, [sort]);
 
   return (
     <div className='supplier-dashboard'>

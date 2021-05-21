@@ -7,7 +7,7 @@ function DropZone({ getFiles }) {
     // Do something with the files
     console.log('do something with the files', acceptedFiles);
     getFiles(acceptedFiles);
-  }, [])
+  }, [getFiles]);
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   return (

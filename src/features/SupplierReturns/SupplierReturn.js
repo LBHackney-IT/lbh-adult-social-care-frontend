@@ -2,12 +2,12 @@ import React, {useEffect, useState} from "react";
 import Breadcrumbs from "../components/Breadcrumbs";
 import { useLocation, useHistory } from 'react-router-dom';
 import Pagination from "../Payments/components/Pagination";
-import {supplierReturnTableData} from "../../testData/TestDataPayRuns";
+import {supplierReturnTableData} from "../../testData/testDataPayRuns";
 import SupplierReturnsLevelInsight from "./components/SupplierReturnsLevelInsight";
 import SupplierReturnsInnerHeader from "./components/SupplierReturnsInnerHeader";
 import SupplierReturnTable from "./components/SupplierReturnTable";
 import HackneyFooterInfo from "../components/HackneyFooterInfo";
-import {formatDateWithSlash} from "../../service/helpers";
+import {formatDateWithSign} from "../../service/helpers";
 import {useDispatch, useSelector} from "react-redux";
 import {selectSupplierReturns} from "../../reducers/supplierReturnsReducer";
 import { changeWeekOfSupplier } from "../../reducers/supplierReturnsReducer";
@@ -29,23 +29,19 @@ const SupplierReturn = () => {
   const [checkedRows, setCheckedRows] = useState([]);
   const {supplierReturns: { weekCommencing: date }} = useSelector(selectSupplierReturns);
 
-  useEffect(() => {
-    pushRoute(`${location.pathname}?page=1`);
-  }, []);
-
   const [breadcrumbs, setBreadcrumbs] = useState([
     {text: 'Supplier Returns', onClick: () => pushRoute('/payments/supplier-returns')},
-    {text: `Return week commencing ${date ? formatDateWithSlash(date, '.') : ''}`}
+    {text: `Return week commencing ${date ? formatDateWithSign(date, '.') : ''}`}
   ]);
 
   const [sort, setSort] = useState({
     value: 'increase',
-    name: 'id',
+    name: 'supplier',
   });
 
   const onClickTableRow = rowItemData => {
     dispatch(changeWeekOfSupplier(rowItemData));
-    pushRoute(`${location.pathname}/week-of-supplier/${rowItemData.id}`);
+    pushRoute(`/payments/supplier-returns/week-of-supplier/${rowItemData.id}`);
   }
 
   const sortBy = (field, value) => {
@@ -54,7 +50,7 @@ const SupplierReturn = () => {
 
   const onCheckRow = (id) => {
     if(checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter(item => item != id));
+      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
     } else {
       setCheckedRows([...checkedRows, id]);
     }
@@ -73,7 +69,15 @@ const SupplierReturn = () => {
         {text: `Pay Run ${location.query.id}`}
       ]);
     }
-  }, [location]);
+  }, []);
+
+  useEffect(() => {
+    pushRoute(`${location.pathname}?page=1`);
+  }, []);
+
+  useEffect(() => {
+    console.log('change sort', sort);
+  }, [sort]);
 
   return (
     <div className='supplier-return supplier-returns-dashboard'>

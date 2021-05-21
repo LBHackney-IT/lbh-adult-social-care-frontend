@@ -1,6 +1,6 @@
 import React from "react";
 import Popup from "./Popup";
-import DropZone from "./dropzone";
+import DropZone from "./DropZone";
 
 const PopupDocumentUploader = ({
   closePopup,

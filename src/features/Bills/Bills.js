@@ -4,7 +4,7 @@ import BillsHeader from "./components/BillsHeader";
 import PayRunTabs from "../Payments/components/PaymentsTabs";
 import BillsTable from "./components/BillsTable";
 import Pagination from "../Payments/components/Pagination";
-import { billsPayRunsTableData, billsTableData } from "../../testData/TestDataPayRuns";
+import { billsPayRunsTableData, billsTableData } from "../../testData/billsTestData";
 import PopupBillsPayDownload from "./components/PopupBillsPayDownload";
 import BillsFilters from "./components/BillsFilters";
 import HackneyFooterInfo from "../components/HackneyFooterInfo";
@@ -46,7 +46,7 @@ const Bills = () => {
   const pushRoute = useHistory().push;
   const [filters, setFilters] = useState({...initialFilters})
   const [openedPopup, setOpenedPopup] = useState('');
-  const [payBills, setPayBills] = useState('');
+  const [payBills] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
   const [tab, changeTab] = useState('bills');
   const [sort, setSort] = useState({
@@ -64,8 +64,9 @@ const Bills = () => {
   const applyFilters = () => console.log('apply filters');
 
   const addBill = () => {
-    setOpenedPopup('add-bill');
+    pushRoute('/payments/bills/add-bill');
   };
+
   const isBillsTab = tab === 'bills';
 
   const sortBy = (field, value) => {
@@ -76,7 +77,7 @@ const Bills = () => {
 
   const onCheckRows = id => {
     if(checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter(item => item != id));
+      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
     } else {
       setCheckedRows([...checkedRows, id]);
     }
@@ -85,6 +86,10 @@ const Bills = () => {
   useEffect(() => {
     pushRoute(`${location.pathname}?page=1`);
   }, []);
+
+  useEffect(() => {
+    console.log('change sort', sort);
+  }, [sort]);
 
   return (
     <div className={`bills ${tab}__tab-class`}>
@@ -121,7 +126,7 @@ const Bills = () => {
       <Pagination
         actionButton={{
           text: 'Pay selected bills',
-          onClick: () => console.log('pay selected bills'),
+          onClick: () => console.log('pay selected bills', checkedRows),
           classes: 'bills__pay-selected-bills'
         }}
         from={1}

@@ -30,6 +30,7 @@ import SupplierReturnsDashboard from "./features/SupplierDashboard/SupplierRetur
 import SupplierReturns from "./features/SupplierReturns/SupplierReturns";
 import SupplierReturn from "./features/SupplierReturns/SupplierReturn";
 import WeekOfSupplierView from "./features/SupplierReturns/WeekOfSupplierView";
+import AddBill from "./features/Bills/AddBill";
 
 const exactRoutes = [
   {path: RouteConstants.SUPPLIER_DASHBOARD_ROUTE, component: SupplierDashboard},
@@ -39,6 +40,7 @@ const exactRoutes = [
   {path: RouteConstants.PAYMENTS_WEEK_OF_SUPPLIER_ROUTE, component: WeekOfSupplierView},
   {path: RouteConstants.PAYMENTS_RECLAIM_ROUTE, component: SupplierReturn},
   {path: RouteConstants.PAYMENTS_BILL_ROUTE, component: Bill},
+  {path: RouteConstants.PAYMENTS_ADD_BILL_ROUTE, component: AddBill},
   {path: RouteConstants.PAYMENTS_BILLS_ROUTE, component: Bills},
   {path: RouteConstants.PAYMENTS_PAY_RUNS_ROUTE, component: PayRuns},
   {path: RouteConstants.PAYMENTS_PAY_RUN_ROUTE, component: PayRun},

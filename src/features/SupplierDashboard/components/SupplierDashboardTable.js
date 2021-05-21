@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {formatDateWithSlash, formatStatus, includeString, uniqueID} from "../../../service/helpers";
+import {formatDateWithSign, formatStatus, includeString} from "../../../service/helpers";
 import SupplierReturnsDashboardSortTable from "./SupplierReturnsDashboardSortTable";
 import Checkbox from "../../components/Checkbox";
 
@@ -18,7 +18,7 @@ const SupplierDashboardTable = ({
 
   const collapseRows = id => {
     if(collapsedRows.includes(id)) {
-      setCollapsedRows(collapsedRows.filter(rowId => rowId != id));
+      setCollapsedRows(collapsedRows.filter(rowId => String(rowId) !== String(id)));
     } else {
       setCollapsedRows([...collapsedRows, id]);
     }
@@ -50,9 +50,9 @@ const SupplierDashboardTable = ({
             }
             {Object.getOwnPropertyNames(item).map(rowItemName => {
               if(Array.isArray(item[rowItemName]) || (item[rowItemName]?.id !== undefined) || (isIgnoreId && rowItemName === 'id')) {
-                return <></>;
+                return <React.Fragment key={`${rowItemName}${item.id}`}/>;
               }
-              const value = includeString(rowItemName, 'weekCommencing') ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
+              const value = includeString(rowItemName, 'weekCommencing') ? formatDateWithSign(item[rowItemName]) : item[rowItemName];
               const isStatus = rowItemName === 'status';
               const formattedStatus = isStatus && formatStatus(item[rowItemName]);
               const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';

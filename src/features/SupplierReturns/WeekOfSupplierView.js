@@ -2,13 +2,13 @@ import React, {useEffect, useState} from "react";
 import Breadcrumbs from "../components/Breadcrumbs";
 import { useLocation, useHistory } from 'react-router-dom';
 import Pagination from "../Payments/components/Pagination";
-import {testDataHelpMessages, weeklyOfSupplierTableData} from "../../testData/TestDataPayRuns";
+import {testDataHelpMessages, weeklyOfSupplierTableData} from "../../testData/testDataPayRuns";
 import SupplierReturnsLevelInsight from "./components/SupplierReturnsLevelInsight";
 import ChatButton from "../PayRuns/components/ChatButton";
 import PopupHelpChat from "../Chat/components/PopupHelpChat";
 import {useSelector} from "react-redux";
 import {selectSupplierReturns} from "../../reducers/supplierReturnsReducer";
-import {formatDateWithSlash} from "../../service/helpers";
+import {formatDateWithSign} from "../../service/helpers";
 import {Button} from "../components/Button";
 import WeekOfSupplierViewInnerHeader from "./components/WeekOfSupplierViewInnerHeader";
 import WeeklyOfSupplierTable from "./components/WeeklyOfSupplierTable";
@@ -34,7 +34,7 @@ const WeekOfSupplierView = () => {
   const [weeklyData, setWeeklyData] = useState([]);
   const [requestsQue, setRequestsQue] = useState([]);
   const [serviceRequestTimer, setServiceRequestTimer] = useState(null);
-  const [supplierRequestTimer, setSupplierRequestTimer] = useState(null);
+  const [supplierRequestTimer] = useState(null);
   const {
     supplierReturns: { weekCommencing: date, id },
     weekOfSupplier: { suppliers }
@@ -43,7 +43,7 @@ const WeekOfSupplierView = () => {
   const [breadcrumbs, setBreadcrumbs] = useState([
     {text: 'Supplier Dashboard Returns', onClick: () => history.push('/payments/supplier-returns')},
     {
-      text: `Return week commencing ${date ? formatDateWithSlash(date, '.') : ''}`,
+      text: `Return week commencing ${date ? formatDateWithSign(date, '.') : ''}`,
       onClick: () => history.push(`/payments/supplier-returns/${id}`)},
     {text: suppliers},
   ]);
@@ -59,7 +59,7 @@ const WeekOfSupplierView = () => {
 
   const onCheckRow = (id) => {
     if(checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter(item => item != id));
+      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
     } else {
       setCheckedRows([...checkedRows, id]);
     }
@@ -167,6 +167,10 @@ const WeekOfSupplierView = () => {
       ]);
     }
   }, [location]);
+
+  useEffect(() => {
+    console.log('change sort', sort);
+  }, [sort]);
 
   useEffect(() => {
     history.push(`${location.pathname}?page=1`);

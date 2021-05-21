@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {formatDateWithSlash, formatStatus, includeString} from "../../../service/helpers";
+import {formatDateWithSign, formatStatus, includeString} from "../../../service/helpers";
 import Checkbox from "../../components/Checkbox";
 import ChatButton from "./ChatButton";
 import {Button} from "../../components/Button";
@@ -28,7 +28,7 @@ const WeeklyOfSupplierTable = ({
 
   const collapseRows = id => {
     if(collapsedRows.includes(id)) {
-      setCollapsedRows(collapsedRows.filter(rowId => rowId != id));
+      setCollapsedRows(collapsedRows.filter(rowId => String(rowId) !== String(id)));
     } else {
       setCollapsedRows([...collapsedRows, id]);
     }
@@ -73,7 +73,7 @@ const WeeklyOfSupplierTable = ({
               if(Array.isArray(supplier[rowItemName]) || (supplier[rowItemName]?.id !== undefined) || (isIgnoreId && rowItemName === 'id')) {
                 return <></>;
               }
-              const value = includeString(rowItemName.toLowerCase(), 'date') ? formatDateWithSlash(supplier[rowItemName]) : supplier[rowItemName];
+              const value = includeString(rowItemName.toLowerCase(), 'date') ? formatDateWithSign(supplier[rowItemName]) : supplier[rowItemName];
               const isStatus = rowItemName === 'status';
               const formattedStatus = isStatus && formatStatus(supplier[rowItemName]);
               const statusItemClass = isStatus ? ` table__row-item-status ${supplier[rowItemName]}` : '';
@@ -87,7 +87,7 @@ const WeeklyOfSupplierTable = ({
             })}
             {additionalActions && additionalActions.map(action => {
               const Component = action.Component;
-              const loading = requestsQue.some(requestId => requestId == supplier.id);
+              const loading = requestsQue.some(requestId => String(requestId) === String(supplier.id));
               return (
                 <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
                   {loading && <p className='text-gray'>(Pending Supplier)</p>}
@@ -123,7 +123,7 @@ const WeeklyOfSupplierTable = ({
                   <p>Action</p>
                 </div>
                 {supplier.services.map(service => {
-                  const loading = requestsQue.some(requestId => requestId == `${supplier.id}${service.id}`);
+                  const loading = requestsQue.some(requestId => String(requestId) === `${supplier.id}${service.id}`);
                   const actionClick = (e, actionType) => {
                     e.stopPropagation();
                     makeAction(supplier, service, actionType);
@@ -160,7 +160,7 @@ const WeeklyOfSupplierTable = ({
                     </div>
                   )
               })}
-              {!supplier.services.some(service => requestsQue.some(item => item == `${supplier.id}${service.id}`))
+              {!supplier.services.some(service => requestsQue.some(item => String(item) === `${supplier.id}${service.id}`))
                 &&
                 <div className='table__row-collapsed-footer-item'>
                   <Button onClick={(e) => {

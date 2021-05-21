@@ -3,7 +3,7 @@ import Breadcrumbs from "../components/Breadcrumbs";
 import { useLocation, useHistory } from 'react-router-dom';
 import BillsTable from "./components/BillsTable";
 import Pagination from "../Payments/components/Pagination";
-import {payRunTableData} from "../../testData/TestDataPayRuns";
+import {payRunTableData} from "../../testData/testDataPayRuns";
 import BillsHeader from "./components/BillsHeader";
 import PopupBillsPayDownload from "./components/PopupBillsPayDownload";
 import HackneyFooterInfo from "../components/HackneyFooterInfo";
@@ -31,21 +31,18 @@ const Bill = () => {
   const [reason, setReason] = useState('');
   const id = location.pathname.replace('/payments/pay-runs/', '');
 
-  const [headerOptions, setHeaderOptions] = useState({
+  const [headerOptions] = useState({
     actionButtonText: 'New Pay Run',
     clickActionButton: () => {
       setOpenedPopup(popupTypes.createPayRun);
     },
   });
 
-  useEffect(() => {
-    pushRoute(`${location.pathname}?page=1`);
-  }, []);
-
   const [breadcrumbs, setBreadcrumbs] = useState([
-    {text: 'Payments', onClick: () => pushRoute('/payments/pay-runs')},
-    {text: `Pay Run ${id}`}
+    {text: 'Bills', onClick: () => pushRoute('/payments/bills')},
+    {text: `Bill ${id}`}
   ]);
+
   const [sort, setSort] = useState({
     value: 'increase',
     name: 'id',
@@ -63,7 +60,7 @@ const Bill = () => {
 
   const onCheckRow = (id) => {
     if(checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter(item => item != id));
+      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
     } else {
       setCheckedRows([...checkedRows, id]);
     }
@@ -82,7 +79,15 @@ const Bill = () => {
         {text: `Pay Run ${location.query.id}`}
       ]);
     }
-  }, [location]);
+  }, []);
+
+  useEffect(() => {
+    pushRoute(`${location.pathname}?page=1`);
+  }, []);
+
+  useEffect(() => {
+    console.log('change sort', sort);
+  }, [sort]);
 
   return (
     <div className='pay-runs pay-run'>

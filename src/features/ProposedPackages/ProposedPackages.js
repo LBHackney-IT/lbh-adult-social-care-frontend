@@ -24,35 +24,35 @@ const approvalHistory = [
   {
     date: '03/12/2021',
     id: 1,
-    text: <span>Package requested by <a href=''>Martin Workman</a> · Social Worker</span>,
+    text: <span>Package requested by <a href="1">Martin Workman</a> · Social Worker</span>,
   },
   {
     date: '05/12/2021',
     id: 2,
     text: <span>
       Futher information requested by
-      <a>Amecie Steadman</a> · Approver
+      <a href="2">Amecie Steadman</a> · Approver
       <br/>
       <em>
         "There appears to be more support than needed in the morning for Mr Stephens, please amend or call me to discuss"
-        <a href=""> More</a>
+        <a href="3"> More</a>
         </em>
       </span>,
   },
   {
     date: '06/12/2021',
     id: 3,
-    text: <span>Package re-submitted by <a href="">Martin Workman</a> · Social Worker</span>,
+    text: <span>Package re-submitted by <a href="4">Martin Workman</a> · Social Worker</span>,
   },
   {
     date: '14/12/2021',
     id: 4,
-    text: <span>Care Package Approved for brokerage by <a href="">Amecie Steadman</a> · Approver</span>,
+    text: <span>Care Package Approved for brokerage by <a href="5">Amecie Steadman</a> · Approver</span>,
   },
   {
     date: '14/12/2021',
     id: 5,
-    text: <span>Care Package brokered STA by <a href="">Derek Knightman</a> · Broker</span>,
+    text: <span>Care Package brokered STA by <a href="6">Derek Knightman</a> · Broker</span>,
   },
 ];
 
@@ -92,7 +92,7 @@ const ProposedPackages = () => {
 
   const changePackageReclaim = (id) => (updatedPackage) => {
     const newPackage = packagesReclaimed.slice();
-    const packageIndex = packagesReclaimed.findIndex(item => item.id == id);
+    const packageIndex = packagesReclaimed.findIndex(item => String(item.id) === String(id));
     newPackage.splice(packageIndex, 1, updatedPackage);
     setPackagesReclaimed(newPackage);
   };

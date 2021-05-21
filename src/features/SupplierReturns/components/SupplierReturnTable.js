@@ -1,5 +1,5 @@
 import React from "react";
-import {formatDateWithSlash, formatStatus, includeString} from "../../../service/helpers";
+import {formatDateWithSign, formatStatus, includeString} from "../../../service/helpers";
 import SupplierSortTable from "./SupplierSortTable";
 import Checkbox from "../../components/Checkbox";
 
@@ -37,9 +37,9 @@ const SupplierReturnTable = ({
             }
             {Object.getOwnPropertyNames(item).map(rowItemName => {
               if(Array.isArray(item[rowItemName]) || (item[rowItemName]?.id !== undefined) || (isIgnoreId && rowItemName === 'id')) {
-                return <></>;
+                return <React.Fragment key={`${rowItemName}${item.id}`}/>;
               }
-              const value = includeString(rowItemName.toLowerCase(), 'date') ? formatDateWithSlash(item[rowItemName]) : item[rowItemName];
+              const value = includeString(rowItemName.toLowerCase(), 'date') ? formatDateWithSign(item[rowItemName]) : item[rowItemName];
               const isStatus = rowItemName === 'status';
               const formattedStatus = isStatus && formatStatus(item[rowItemName]);
               const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';
