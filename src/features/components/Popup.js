@@ -15,7 +15,7 @@ const Popup = ({ mainContent, firstButton, classes = '', secondButton, title, cl
     return () => {
       window.removeEventListener('click', onClickOutside);
     };
-  }, []);
+  }, [closePopup]);
 
   return (
     <div className={`popup ${classes}`}>

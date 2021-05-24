@@ -25,7 +25,6 @@ const PopupHelpChat = ({
     }
   };
 
-
   const createHelpChat = (
     <div className='popup-help-chat__container'>
       <div className='popup-help-chat__header'>
@@ -34,9 +33,9 @@ const PopupHelpChat = ({
       </div>
       <div className='popup-help-chat__messages'>
         {messages.map(item => {
-          const isMessageFromCurrentUser = item.userId == currentUserId;
+          const isMessageFromCurrentUser = String(item.userId) === String(currentUserId);
           const messageFromClasses = isMessageFromCurrentUser ? 'popup-help-chat__message-from-current-user' : 'popup-help-chat__message-from-someone';
-          const hoveredMessageClass = item.id == hoveredMessage ? ' hovered' : '';
+          const hoveredMessageClass = String(item.id) === String(hoveredMessage) ? ' hovered' : '';
           return (<div
               onMouseLeave={() => onMouseLeave(!isMessageFromCurrentUser)}
               onMouseEnter={() => !isMessageFromCurrentUser && setHoveredMessage(item.id)}
@@ -46,7 +45,7 @@ const PopupHelpChat = ({
                 <p className='popup-help-chat__message-text'>{item.text}</p>
                 <div className='popup-help-chat__message-settings'>
                   <ChatSettingsIcon onClick={() => setMessageSettingsId(item.id)} />
-                  {messageSettingsId == item.id && (
+                  {String(messageSettingsId) === String(item.id) && (
                       <div
                         onClick={() => setMessageSettingsId('')}
                         className='popup-help-chat__message-settings-actions'
@@ -60,13 +59,15 @@ const PopupHelpChat = ({
           )})}
       </div>
       <div className='popup-help-chat__inputs'>
-        <Dropdown
-          classes='hold-payment__dropdown'
-          initialText='Change waiting on'
-          onOptionSelect={(value) => changeWaitingOn(value)}
-          options={waitingOnOptions}
-          selectedValue={waitingOn}
-        />
+        {changeWaitingOn &&
+          <Dropdown
+            classes='hold-payment__dropdown'
+            initialText='Change waiting on'
+            onOptionSelect={(value) => changeWaitingOn(value)}
+            options={waitingOnOptions}
+            selectedValue={waitingOn}
+          />
+        }
         <TextArea
           classes='popup-help-chat__textarea'
           rows={8}

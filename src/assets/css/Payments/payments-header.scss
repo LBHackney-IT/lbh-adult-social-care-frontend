@@ -1,4 +1,4 @@
-.payments__header {
+.default-logo-header {
   background: $lbh-black1;
   padding: 16px;
   overflow: auto;
@@ -7,11 +7,11 @@
   justify-content: space-between;
 }
 
-.payments__header-navigation {
+.default-logo-header-navigation {
   display: flex;
 }
 
-.payments__header-item {
+.default-logo-header-item {
   color: white;
   display: flex;
   align-items: center;
@@ -25,6 +25,6 @@
   }
 }
 
-.payments__header-active-item {
+.default-logo-header-active-item {
   text-decoration: underline;
 }

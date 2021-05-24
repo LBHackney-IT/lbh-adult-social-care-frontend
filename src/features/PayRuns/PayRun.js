@@ -1,19 +1,20 @@
 import React, {useEffect, useState} from "react";
-import Breadcrumbs from "./components/Breadcrumbs";
+import Breadcrumbs from "../components/Breadcrumbs";
 import { useLocation, useHistory } from 'react-router-dom';
 import PayRunTable from "./components/PayRunTable";
-import Pagination from "./components/Pagination";
-import {payRunTableDate} from "../../testData/TestDataPayRuns";
+import Pagination from "../Payments/components/Pagination";
+import {payRunTableData} from "../../testData/testDataPayRuns";
 import PopupCreatePayRun from "./components/PopupCreatePayRun";
 import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
 import PayRunHeader from "./components/PayRunHeader";
 import PopupHoldPayment from "./components/PopupHoldPayment";
+import HackneyFooterInfo from "../components/HackneyFooterInfo";
 
 const sorts = [
   {name: 'serviceUser', text: 'Service User'},
   {name: 'invId', text: 'INV ID'},
   {name: 'packageType', text: 'Package Type'},
-  {name: 'supplier', text: 'Supplier'},
+  {name: 'supplier', text: 'SupplierDashboard'},
   {name: 'total', text: 'Total'},
   {name: 'status', text: 'Status'},
 ];
@@ -35,16 +36,12 @@ const PayRun = () => {
   const [hocAndRelease, changeHocAndRelease] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
 
-  const [headerOptions, setHeaderOptions] = useState({
+  const [headerOptions] = useState({
     actionButtonText: 'New Pay Run',
     clickActionButton: () => {
       setOpenedPopup(popupTypes.createPayRun);
     },
   });
-
-  useEffect(() => {
-    pushRoute(`${location.pathname}?page=1`);
-  }, []);
 
   const [breadcrumbs, setBreadcrumbs] = useState([
     {text: 'Payments', onClick: () => pushRoute('/payments/pay-runs')},
@@ -67,7 +64,7 @@ const PayRun = () => {
 
   const onCheckRow = (id) => {
     if(checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter(item => item != id));
+      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
     } else {
       setCheckedRows([...checkedRows, id]);
     }
@@ -80,13 +77,21 @@ const PayRun = () => {
   }
 
   useEffect(() => {
+    pushRoute(`${location.pathname}?page=1`);
+  }, []);
+
+  useEffect(() => {
     if(location?.query?.id) {
       setBreadcrumbs([
         {text: 'payments', route: '/payments/pay-runs', onClick: (value) => pushRoute(`${value.route}`)},
         {text: `Pay Run ${location.query.id}`}
       ]);
     }
-  }, [location]);
+  }, []);
+
+  useEffect(() => {
+    console.log('change sort', sort);
+  }, [sort]);
 
   return (
     <div className='pay-runs pay-run'>
@@ -117,7 +122,7 @@ const PayRun = () => {
         clickActionButton={headerOptions.clickActionButton}
       />
       <PayRunTable
-        rows={payRunTableDate}
+        rows={payRunTableData}
         careType='Residential'
         isStatusDropDown={true}
         checkedRows={checkedRows}
@@ -144,11 +149,7 @@ const PayRun = () => {
         holdsCount='48'
         holdsPrice='£32,223'
       />
-      <div className='pay-runs__footer'>
-        <div className='pay-runs__footer-info'>
-          <p>Hackney Adult Social Care Services  ·  2021</p>
-        </div>
-      </div>
+      <HackneyFooterInfo />
     </div>
   )
 };

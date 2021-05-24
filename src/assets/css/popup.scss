@@ -47,3 +47,20 @@
     color: $lbh-gray2;
   }
 }
+
+.popup-document-uploader {
+  .popup__inner-content {
+    width: initial;
+  }
+  .popup__action-buttons {
+    width: 70%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column-reverse;
+
+    button:first-of-type {
+      margin-right: initial;
+      margin-top: 9px;
+    }
+  }
+}
