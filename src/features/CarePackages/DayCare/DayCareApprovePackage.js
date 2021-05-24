@@ -16,16 +16,8 @@ import {
   getDayCarePackageApprovalDetails,
 } from "../../../api/CarePackages/DayCareApi";
 import { useParams } from "react-router-dom";
-
-const initDaysSelected = [
-  { id: 1, short: "Mon", long: "Monday", checked: true },
-  { id: 2, short: "Tue", long: "Tuesday", checked: false },
-  { id: 3, short: "Wed", long: "Wednesday", checked: true },
-  { id: 4, short: "Thu", long: "Thursday", checked: false },
-  { id: 5, short: "Fri", long: "Friday", checked: true },
-  { id: 6, short: "Sat", long: "Saturday", checked: false },
-  { id: 7, short: "Sun", long: "Sunday", checked: true },
-];
+import { getInitDaysSelected } from "../../../api/Utils/CommonOptions";
+import { getEnGBFormattedDate } from "../../../api/Utils/FuncUtils";
 
 const DayCareApprovePackage = ({ history }) => {
   // Parameters
@@ -36,7 +28,7 @@ const DayCareApprovePackage = ({ history }) => {
   const [dayCarePackage, setDayCarePackage] = useState(null);
   const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
   const [opportunityEntries, setOpportunityEntries] = useState([]);
-  const [daysSelected, setDaysSelected] = useState(initDaysSelected);
+  const [daysSelected, setDaysSelected] = useState(getInitDaysSelected());
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(
     undefined
@@ -196,9 +188,9 @@ const DayCareApprovePackage = ({ history }) => {
                       STARTS
                     </p>
                     <p className="font-size-14px">
-                      {new Date(
+                      {getEnGBFormattedDate(
                         dayCarePackage?.packageDetails.startDate
-                      ).toLocaleDateString("en-GB")}
+                      )}
                     </p>
                   </div>
                 </div>
@@ -213,7 +205,9 @@ const DayCareApprovePackage = ({ history }) => {
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
                       {dayCarePackage?.packageDetails.endDate !== null
-                        ? dayCarePackage?.packageDetails.endDate
+                        ? getEnGBFormattedDate(
+                            dayCarePackage?.packageDetails.endDate
+                          )
                         : "Ongoing"}
                     </p>
                   </div>
@@ -241,36 +235,35 @@ const DayCareApprovePackage = ({ history }) => {
 
         <div className="columns">
           <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
-              title="COST OF CARE / WK"
-              cost={`£${dayCarePackage?.costSummary.costOfCarePerWeek}`}
-              costType="ESTIMATE"
-            />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
-              title="ANP / WK"
-              cost={`£${dayCarePackage?.costSummary.anpPerWeek}`}
-              costType="ESTIMATE"
-            />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
-              title="TRANSPORT / WK"
-              cost={`£${dayCarePackage?.costSummary.transportCostPerWeek}`}
-              costType="ESTIMATE"
-            />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-yellow-box"
-              title="TOTAL / WK"
-              cost={`£${dayCarePackage?.costSummary.totalCostPerWeek}`}
-              costType="ESTIMATE"
-            />
+            <div className="is-flex is-flex-wrap-wrap">
+              <PackageCostBox
+                boxClass="hackney-package-cost-light-yellow-box"
+                title="COST OF CARE / WK"
+                cost={`£${dayCarePackage?.costSummary.costOfCarePerWeek}`}
+                costType="ESTIMATE"
+              />
+
+              <PackageCostBox
+                boxClass="hackney-package-cost-light-yellow-box"
+                title="ANP / WK"
+                cost={`£${dayCarePackage?.costSummary.anpPerWeek}`}
+                costType="ESTIMATE"
+              />
+
+              <PackageCostBox
+                boxClass="hackney-package-cost-light-yellow-box"
+                title="TRANSPORT / WK"
+                cost={`£${dayCarePackage?.costSummary.transportCostPerWeek}`}
+                costType="ESTIMATE"
+              />
+
+              <PackageCostBox
+                boxClass="hackney-package-cost-yellow-box"
+                title="TOTAL / WK"
+                cost={`£${dayCarePackage?.costSummary.totalCostPerWeek}`}
+                costType="ESTIMATE"
+              />
+            </div>
           </div>
         </div>
 
