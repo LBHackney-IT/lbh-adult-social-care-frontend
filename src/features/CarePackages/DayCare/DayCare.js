@@ -83,33 +83,6 @@ const DayCare = ({ history }) => {
   );
   const [reclaimAmountOptions, setReclaimAmountOptions] = useState([]);
 
-  useEffect(() => {
-    if (termTimeConsiderationOptions.length === 0) {
-      retrieveTermTimeConsiderationOptions();
-    }
-    if (
-      opportunitiesLengthOptions.length === 0 ||
-      opportunitiesLengthOptions.length === 1
-    ) {
-      retrieveOpportunitiesLengthOptions();
-    }
-    if (
-      opportunityTimesPerMonthOptions.length === 0 ||
-      opportunityTimesPerMonthOptions.length === 1
-    ) {
-      retrieveOpportunityTimesPerMonthOptions();
-    }
-    if (reclaimFromOptions.length === 0) {
-      retrieveReclaimFromOptions();
-    }
-    if (reclaimFromCategoryOptions.length === 0) {
-      retrieveReclaimFromCategories();
-    }
-    if (reclaimAmountOptions.length === 0) {
-      retrieveReclaimAmountOptions();
-    }
-  });
-
   // Adding a new opportunity entry
   const onAddOpportunityEntry = () => {
     setOpportunityEntries([
@@ -265,6 +238,33 @@ const DayCare = ({ history }) => {
         ]);
       });
   };
+
+  useEffect(() => {
+    if (termTimeConsiderationOptions.length === 0) {
+      retrieveTermTimeConsiderationOptions();
+    }
+    if (
+      opportunitiesLengthOptions.length === 0 ||
+      opportunitiesLengthOptions.length === 1
+    ) {
+      retrieveOpportunitiesLengthOptions();
+    }
+    if (
+      opportunityTimesPerMonthOptions.length === 0 ||
+      opportunityTimesPerMonthOptions.length === 1
+    ) {
+      retrieveOpportunityTimesPerMonthOptions();
+    }
+    if (reclaimFromOptions.length === 0) {
+      retrieveReclaimFromOptions();
+    }
+    if (reclaimFromCategoryOptions.length === 0) {
+      retrieveReclaimFromCategories();
+    }
+    if (reclaimAmountOptions.length === 0) {
+      retrieveReclaimAmountOptions();
+    }
+  }, [history]);
 
   const addDayCarePackageReclaim = () => {
     setPackagesReclaimed([
