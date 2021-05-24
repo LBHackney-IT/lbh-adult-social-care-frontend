@@ -17,14 +17,7 @@ import {
   getTypeOfNursingHomeOptions,
 } from "../../../api/CarePackages/NursingCareApi";
 import { CARE_PACKAGE } from "../../../routes/RouteConstants";
-import { getInitialPackageReclaim } from "../../../api/Utils/CommonOptions";
-import { uniqueID } from "../../../service/helpers";
-import {
-  getReclaimAmountOptions,
-  getReclaimFromCategories,
-  getReclaimFromOptions,
-} from "../../../api/CarePackages/PackageReclaimApi";
-import PackageReclaim from "../../components/PackageReclaim";
+import PackageReclaims from "../components/PackageReclaims";
 
 const NursingCare = ({ history }) => {
   const isTrueParse = (myValue) => myValue === "true";
@@ -70,11 +63,6 @@ const NursingCare = ({ history }) => {
 
   // Package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
-  const [reclaimFromOptions, setReclaimFromOptions] = useState([]);
-  const [reclaimFromCategoryOptions, setReclaimFromCategoryOptions] = useState(
-    []
-  );
-  const [reclaimAmountOptions, setReclaimAmountOptions] = useState([]);
 
   const retrieveTypeOfNursingHomeOptions = () => {
     getTypeOfNursingHomeOptions()
@@ -97,88 +85,7 @@ const NursingCare = ({ history }) => {
     if (careHomeTypes.length === 0 || careHomeTypes.length === 1) {
       retrieveTypeOfNursingHomeOptions();
     }
-    if (reclaimFromOptions.length === 0) {
-      retrieveReclaimFromOptions();
-    }
-    if (reclaimFromCategoryOptions.length === 0) {
-      retrieveReclaimFromCategories();
-    }
-    if (reclaimAmountOptions.length === 0) {
-      retrieveReclaimAmountOptions();
-    }
   }, []);
-
-  const retrieveReclaimFromOptions = () => {
-    getReclaimFromOptions()
-      .then((res) => {
-        let options = res.map((option) => ({
-          text: option.reclaimFromName,
-          value: option.reclaimFromId,
-        }));
-        setReclaimFromOptions(options);
-      })
-      .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve reclaim from options failed. ${error.message}`,
-        ]);
-      });
-  };
-
-  const retrieveReclaimFromCategories = () => {
-    getReclaimFromCategories()
-      .then((res) => {
-        let options = res.map((option) => ({
-          text: option.reclaimCategoryName,
-          value: option.reclaimCategoryId,
-        }));
-        setReclaimFromCategoryOptions(options);
-      })
-      .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve reclaim from categories failed. ${error.message}`,
-        ]);
-      });
-  };
-
-  const retrieveReclaimAmountOptions = () => {
-    getReclaimAmountOptions()
-      .then((res) => {
-        let options = res.map((option) => ({
-          text: option.amountOptionName,
-          value: option.amountOptionId,
-        }));
-        setReclaimAmountOptions(options);
-      })
-      .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve reclaim amount options failed. ${error.message}`,
-        ]);
-      });
-  };
-
-  const addDayCarePackageReclaim = () => {
-    setPackagesReclaimed([
-      ...packagesReclaimed,
-      { ...getInitialPackageReclaim(), id: uniqueID() },
-    ]);
-  };
-
-  const removeDayCarePackageReclaim = (id) => {
-    const newPackagesReclaim = packagesReclaimed.filter(
-      (item) => item.id !== id
-    );
-    setPackagesReclaimed(newPackagesReclaim);
-  };
-
-  const changeDayCarePackageReclaim = (id) => (updatedPackage) => {
-    const newPackage = packagesReclaimed.slice();
-    const packageIndex = packagesReclaimed.findIndex((item) => item.id === id);
-    newPackage.splice(packageIndex, 1, updatedPackage);
-    setPackagesReclaimed(newPackage);
-  };
 
   const formIsValid = () => {
     const errors = [];
@@ -279,57 +186,12 @@ const NursingCare = ({ history }) => {
         />
       </div>
 
-      <div>
-        <div className="mt-4 is-flex is-align-items-center is-justify-content-space-between">
-          <p className="package-reclaim__text">
-            Should the cost of this package be reclaimed in part or full from
-            another body, e.g. NHS, CCG, another LA ?
-          </p>
-          <div className="control radio-list mr-4">
-            <label className="radio">
-              <input
-                type="radio"
-                name="showReclaim"
-                checked={packagesReclaimed.length > 0}
-                onChange={addDayCarePackageReclaim}
-              />
-              Yes
-            </label>
-            <br />
-            <label className="radio">
-              <input
-                type="radio"
-                name="showReclaim"
-                checked={packagesReclaimed.length === 0}
-                onChange={() => setPackagesReclaimed([])}
-              />
-              Not Sure
-            </label>
-          </div>
-        </div>
-        <hr className="horizontal-delimiter" />
-      </div>
-
-      {!!packagesReclaimed.length && (
-        <div>
-          {packagesReclaimed.map((item) => {
-            return (
-              <PackageReclaim
-                remove={() => removeDayCarePackageReclaim(item.id)}
-                key={item.id}
-                packageReclaim={item}
-                setPackageReclaim={changeDayCarePackageReclaim(item.id)}
-                reclaimFromOptions={reclaimFromOptions}
-                reclaimFromCategoryOptions={reclaimFromCategoryOptions}
-                reclaimAmountOptions={reclaimAmountOptions}
-              />
-            );
-          })}
-          <p onClick={addDayCarePackageReclaim} className="action-button-text">
-            + Add another reclaim
-          </p>
-        </div>
-      )}
+      <PackageReclaims
+        errors={errors}
+        setErrors={setErrors}
+        packagesReclaimed={packagesReclaimed}
+        setPackagesReclaimed={setPackagesReclaimed}
+      />
 
       <div className="mt-4 mb-4">
         <TitleHeader>Package Details</TitleHeader>
