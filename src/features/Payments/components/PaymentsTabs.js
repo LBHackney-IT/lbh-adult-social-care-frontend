@@ -1,17 +1,17 @@
 import React from "react";
 
-const PayRunTabs = ({ tabs = [], tab, changeTab, classes = '' }) => {
+const PaymentsTabs = ({ tabs = [], tab, changeTab, classes = '' }) => {
   const onChangeTab = (tabName) => {
     changeTab(tabName);
   };
 
   return (
-    <div className={`pay-runs__tabs ${classes}`}>
+    <div className={`payments__tabs ${classes}`}>
       {tabs.map(item => {
         const activeTab = tab === item.value;
         return (
           <div key={item.text} onClick={() => onChangeTab(item.value)}
-            className={`pay-runs__tabs-tab${activeTab ? ' pay-runs__tabs-active-tab' : ' pay-runs__tabs-inactive-tab'}`}>
+            className={`payments__tabs-tab${activeTab ? ' payments__tabs-active-tab' : ' payments__tabs-inactive-tab'}`}>
               <p>{item.text}</p>
           </div>
         )
@@ -20,4 +20,4 @@ const PayRunTabs = ({ tabs = [], tab, changeTab, classes = '' }) => {
   );
 };
 
-export default PayRunTabs;
+export default PaymentsTabs;

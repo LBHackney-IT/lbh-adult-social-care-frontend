@@ -1,6 +1,7 @@
 @import "./variables.scss";
 @import "./borders.scss";
 @import "./typography.scss";
+@import "table";
 @import "../fonts/fonts.scss";
 @import "./ProposedPackages/approval-history";
 @import "./ProposedPackages/proposedPackges";
@@ -17,7 +18,19 @@
 @import "./PayRuns/level-insight";
 @import "./PayRuns/popup-hold-payment";
 @import "./PayRuns/held-payments";
+@import "./Bills/header";
+@import "./Bills/pagination";
+@import "./Bills/filters";
+@import "./Bills/table";
+@import "./Bills/add-bill";
+@import "SupplierDashboard/header";
+@import "SupplierDashboard/table";
+@import "SupplierDashboard/level-insight";
+@import "WeekOfSupplier/breadcrumbs";
+@import "WeekOfSupplier/table";
+@import "./SupplierReturns/table";
 @import "./popup";
+@import "files-drop-zone";
 
 * {
   font-family: "OpenSans", sans-serif !important;
@@ -42,4 +55,15 @@ button {
     align-items: start;
     justify-content: left;
   }
+}
+
+.mr-auto {
+  margin-right: auto;
+}
+
+.hide {
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+  cursor: initial;
 }

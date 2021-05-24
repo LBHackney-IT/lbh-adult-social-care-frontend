@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation, useHistory } from 'react-router-dom';
 import {HackneyFullLogo} from "../../components/Icons";
+import {includeString} from "../../../service/helpers";
 
 const paymentsRoutes = [
   {route: 'pay-runs', name: 'Pay Runs'},
@@ -22,20 +23,19 @@ const PaymentsHeader = () => {
   const changeRoute = route => {
     if(route === 'logout') {
       pushRoute('/');
-      console.log('logout');
     } else {
       pushRoute(`/payments/${route}`);
     }
   };
 
   return (
-    <div className='payments__header'>
+    <div className='default-logo-header'>
       <HackneyFullLogo />
-      <div className='payments__header-navigation'>
+      <div className='default-logo-header-navigation'>
         {paymentsRoutes.map(item => {
-          const isActiveRoute = location.indexOf(item.route) > -1;
+          const isActiveRoute = includeString(location, item.route);
           return (
-            <p key={item.name} onClick={() => changeRoute(item.route)} className={`payments__header-item${isActiveRoute ? ' payments__header-active-item' : ''}`}>
+            <p key={item.name} onClick={() => changeRoute(item.route)} className={`default-logo-header-item${isActiveRoute ? ' default-logo-header-active-item' : ''}`}>
               {item.name}
             </p>
           );

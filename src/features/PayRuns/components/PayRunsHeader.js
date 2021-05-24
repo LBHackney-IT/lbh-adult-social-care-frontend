@@ -32,10 +32,6 @@ const PayRunsHeader = ({
 }) => {
   const [filters, setFilters] = useState({...initialFilters});
 
-  const resetFilters = () => {
-    setFilters({...initialFilters});
-  };
-
   const applyFilters = () => {
     console.log('make an apply filters request');
   };

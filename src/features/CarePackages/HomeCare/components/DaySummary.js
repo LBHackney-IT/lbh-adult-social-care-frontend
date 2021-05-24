@@ -34,7 +34,7 @@ const DaySummary = ({ daySummaryItem, edit, remove, slicedText = false }) => {
 
   const showMore = (getter, setter, id) => setter([...getter, id]);
 
-  const collapse = (getter, setter, id) => setter(getter.filter(itemId => itemId != id));
+  const collapse = (getter, setter, id) => setter(getter.filter(itemId => String(itemId) !== String(id)));
 
   return (
     <div className="day-summary">
@@ -43,8 +43,8 @@ const DaySummary = ({ daySummaryItem, edit, remove, slicedText = false }) => {
         <div className="day-summary-line"/>
       </div>
       {daySummaryItem.careSummaries.map((careSummary) => {
-        const addressTextCollapsed = !openedAddressText.some(itemId => itemId == careSummary.id);
-        const beDoneTextCollapsed = !openedBeDoneText.some(itemId => itemId == careSummary.id);
+        const addressTextCollapsed = !openedAddressText.some(itemId => String(itemId) === String(careSummary.id));
+        const beDoneTextCollapsed = !openedBeDoneText.some(itemId => String(itemId) === String(careSummary.id));
         return (
           <div key={careSummary.id}>
             <div className="day-summary-time-slot">{careSummary.timeSlot}</div>

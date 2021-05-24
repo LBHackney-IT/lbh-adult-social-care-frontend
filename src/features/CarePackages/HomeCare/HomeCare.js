@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   createHomeCarePackage,
@@ -19,19 +18,7 @@ import SummaryDataList from "./components/SummaryDataList";
 import WeekCarePicker from "./components/WeekCarePicker";
 import { PERSONAL_CARE_MODE } from "./HomeCarePickerHelper";
 import { getServiceTypeCareTimes, serviceTypes } from "./HomeCareServiceHelper";
-import ShouldPackageReclaim from "./components/ShouldPackageReclaim";
-import PackageReclaim from "../../components/PackageReclaim";
-import { uniqueID } from "../../../service/helpers";
 import PackageReclaims from "../components/PackageReclaims";
-
-const initialPackageReclaim = {
-  type: "",
-  notes: "",
-  from: "",
-  category: "",
-  amount: "",
-  id: "1",
-};
 
 const HomeCare = () => {
   // Parameters

@@ -23,6 +23,107 @@ import DayCareBrokering from "./features/CarePackages/DayCare/DayCareBrokering";
 import PaymentsHeader from "./features/Payments/components/PaymentsHeader";
 import PayRuns from "./features/PayRuns/PayRuns";
 import PayRun from "./features/PayRuns/PayRun";
+import Bills from "./features/Bills/Bills";
+import Bill from "./features/Bills/Bill";
+import SupplierDashboardHeader from "./features/Supplier/components/SupplierDashboardHeader";
+import SupplierDashboard from "./features/SupplierDashboard/SupplierDashboard";
+import SupplierReturnsDashboard from "./features/SupplierDashboard/SupplierReturnsDashboard";
+import SupplierReturns from "./features/SupplierReturns/SupplierReturns";
+import SupplierReturn from "./features/SupplierReturns/SupplierReturn";
+import WeekOfSupplierView from "./features/SupplierReturns/WeekOfSupplierView";
+import AddBill from "./features/Bills/AddBill";
+
+const exactRoutes = [
+  {
+    path: RouteConstants.SUPPLIER_DASHBOARD_ROUTE,
+    component: SupplierDashboard,
+  },
+  {
+    path: RouteConstants.SUPPLIER_RETURNS_DASHBOARD_ROUTE,
+    component: SupplierReturnsDashboard,
+  },
+
+  { path: RouteConstants.PAYMENTS_RECLAIMS_ROUTE, component: SupplierReturns },
+  {
+    path: RouteConstants.PAYMENTS_WEEK_OF_SUPPLIER_ROUTE,
+    component: WeekOfSupplierView,
+  },
+  { path: RouteConstants.PAYMENTS_RECLAIM_ROUTE, component: SupplierReturn },
+  { path: RouteConstants.PAYMENTS_BILL_ROUTE, component: Bill },
+  { path: RouteConstants.PAYMENTS_ADD_BILL_ROUTE, component: AddBill },
+  { path: RouteConstants.PAYMENTS_BILLS_ROUTE, component: Bills },
+  { path: RouteConstants.PAYMENTS_PAY_RUNS_ROUTE, component: PayRuns },
+  { path: RouteConstants.PAYMENTS_PAY_RUN_ROUTE, component: PayRun },
+
+  { path: RouteConstants.CARE_PACKAGE, component: CarePackage },
+  { path: RouteConstants.PROPOSED_PACKAGES, component: ProposedPackages },
+
+  {
+    path: RouteConstants.HOME_CARE_APPROVE_BROKERED,
+    component: HomeCareApproveBrokered,
+  },
+  {
+    path: RouteConstants.HOME_CARE_APPROVE_PACKAGE,
+    component: HomeCareApprovePackage,
+  },
+  {
+    path: RouteConstants.HOME_CARE_APPROVE_BROKERED,
+    component: HomeCareApproveBrokered,
+  },
+  {
+    path: `${RouteConstants.HOME_CARE}/:isImmediate/:isS117/:isFixedPeriod/:startDate/:endDate`,
+    component: HomeCare,
+  },
+
+  {
+    path: `${RouteConstants.DAY_CARE}/:isImmediate/:isS117/:isFixedPeriod/:startDate`,
+    component: DayCare,
+  },
+  {
+    path: RouteConstants.DAY_CARE_APPROVE_PACKAGE,
+    component: DayCareApprovePackage,
+  },
+  {
+    path: RouteConstants.DAY_CARE_APPROVE_BROKERED,
+    component: DayCareApproveBrokered,
+  },
+  {
+    path: RouteConstants.DAY_CARE_BROKERING_PACKAGE,
+    component: DayCareBrokering,
+  },
+
+  {
+    path:
+      `${RouteConstants.RESIDENTIAL_CARE}/:hasRespiteCare/:hasDischargePackage/` +
+      `:isImmediateOrReEnablement/:typeOfStayId/:isS117/:startDate/:endDate`,
+    component: ResidentialCare,
+  },
+  {
+    path: RouteConstants.RESIDENTIAL_CARE_APPROVE_PACKAGE,
+    component: ResidentialCareApprovePackage,
+  },
+  {
+    path: RouteConstants.RESIDENTIAL_CARE_APPROVE_BROKERED,
+    component: ResidentialCareApproveBrokered,
+  },
+
+  {
+    path:
+      `${RouteConstants.NURSING_CARE}/:isFixedPeriod/:startDate/:typeOfStayId/` +
+      `:hasRespiteCare/:hasDischargePackage/:isThisAnImmediateService/:isThisUserUnderS117/:endDate`,
+    component: NursingCare,
+  },
+  {
+    path: RouteConstants.NURSING_CARE_APPROVE_PACKAGE,
+    component: NursingCareApprovePackage,
+  },
+  {
+    path: RouteConstants.NURSING_CARE_APPROVE_BROKERED,
+    component: NursingCareApproveBrokered,
+  },
+
+  { path: RouteConstants.CLIENT_HISTORY, component: ClientHistory },
+];
 
 const App = () => {
   const user = useSelector(selectUser);
@@ -30,117 +131,19 @@ const App = () => {
   return (
     <>
       <PaymentsHeader />
+      <SupplierDashboardHeader />
       <Switch>
-        {user !== null ? (
+        {!!user === null ? (
           <Route path={RouteConstants.LOGIN} component={Login} />
         ) : (
-          <>
+          exactRoutes.map((route) => (
             <Route
+              key={route.path}
               exact
-              path={RouteConstants.HOME_CARE_APPROVE_PACKAGE}
-              component={HomeCareApprovePackage}
+              path={route.path}
+              component={route.component}
             />
-            <Route
-              exact
-              path={RouteConstants.PAYMENTS_PAY_RUNS_ROUTE}
-              component={PayRuns}
-            />
-            <Route
-              exact
-              path={RouteConstants.PAYMENTS_PAY_RUN_ROUTE}
-              component={PayRun}
-            />
-            <Route
-              exact
-              path={RouteConstants.HOME_CARE_APPROVE_BROKERED}
-              component={HomeCareApproveBrokered}
-            />
-            <Route
-              exact
-              path={RouteConstants.CARE_PACKAGE}
-              component={CarePackage}
-            />
-            <Route
-              exact
-              path={RouteConstants.PROPOSED_PACKAGES}
-              component={ProposedPackages}
-            />
-            <Route
-              exact
-              path={RouteConstants.HOME_CARE_APPROVE_PACKAGE}
-              component={HomeCareApprovePackage}
-            />
-            <Route
-              exact
-              path={RouteConstants.HOME_CARE_APPROVE_BROKERED}
-              component={HomeCareApproveBrokered}
-            />
-            <Route
-              exact
-              path={`${RouteConstants.HOME_CARE}/:isImmediate/:isS117/:isFixedPeriod/:startDate/:endDate`}
-              component={HomeCare}
-            />
-            <Route
-              exact
-              path={`${RouteConstants.DAY_CARE}/:isImmediate/:isS117/:isFixedPeriod/:startDate`}
-              component={DayCare}
-            />
-            <Route
-              exact
-              path={RouteConstants.DAY_CARE_BROKERING_PACKAGE}
-              component={DayCareBrokering}
-            />
-            <Route
-              exact
-              path={RouteConstants.DAY_CARE_APPROVE_PACKAGE}
-              component={DayCareApprovePackage}
-            />
-            <Route
-              exact
-              path={RouteConstants.DAY_CARE_APPROVE_BROKERED}
-              component={DayCareApproveBrokered}
-            />
-            <Route
-              exact
-              path={
-                `${RouteConstants.RESIDENTIAL_CARE}/:hasRespiteCare/:hasDischargePackage/` +
-                `:isImmediateOrReEnablement/:typeOfStayId/:isS117/:startDate/:endDate`
-              }
-              component={ResidentialCare}
-            />
-            <Route
-              exact
-              path={RouteConstants.RESIDENTIAL_CARE_APPROVE_PACKAGE}
-              component={ResidentialCareApprovePackage}
-            />
-            <Route
-              exact
-              path={RouteConstants.RESIDENTIAL_CARE_APPROVE_BROKERED}
-              component={ResidentialCareApproveBrokered}
-            />
-            <Route
-              exact
-              path={
-                `${RouteConstants.NURSING_CARE}/:isFixedPeriod/:startDate/:typeOfStayId/` +
-                `:hasRespiteCare/:hasDischargePackage/:isThisAnImmediateService/:isThisUserUnderS117/:endDate`
-              }
-              component={NursingCare}
-            />
-            <Route
-              exact
-              path={RouteConstants.NURSING_CARE_APPROVE_PACKAGE}
-              component={NursingCareApprovePackage}
-            />
-            <Route
-              exact
-              path={RouteConstants.NURSING_CARE_APPROVE_BROKERED}
-              component={NursingCareApproveBrokered}
-            />
-            <Route
-              path={RouteConstants.CLIENT_HISTORY}
-              component={ClientHistory}
-            />
-          </>
+          ))
         )}
       </Switch>
     </>

@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from "react";
 import { useLocation, useHistory } from 'react-router-dom';
 import PayRunsHeader from "./components/PayRunsHeader";
-import PayRunTabs from "./components/PayRunTabs";
+import PaymentsTabs from "../Payments/components/PaymentsTabs";
 import PayRunTable from "./components/PayRunTable";
-import Pagination from "./components/Pagination";
-import {payRunsHeldPaymentsTableDate, payRunsTableDate, testDataHelpMessages} from "../../testData/TestDataPayRuns";
+import Pagination from "../Payments/components/Pagination";
+import {payRunsHeldPaymentsTableData, payRunsTableData, testDataHelpMessages} from "../../testData/testDataPayRuns";
 import PopupCreatePayRun from "./components/PopupCreatePayRun";
 import ChatButton from "./components/ChatButton";
 import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
 import PopupHelpChat from "../Chat/components/PopupHelpChat";
+import HackneyFooterInfo from "../components/HackneyFooterInfo";
 
 const sortsTab = {
   'pay-runs': [
@@ -25,7 +26,7 @@ const sortsTab = {
     {name: 'payRunId', text: 'Pay run ID'},
     {name: 'serviceUser', text: 'Service User'},
     {name: 'packageType', text: 'Package Type'},
-    {name: 'supplier', text: 'Supplier'},
+    {name: 'supplier', text: 'SupplierDashboard'},
     {name: 'amount', text: 'Amount'},
     {name: 'status', text: 'Status'},
     {name: 'waitingFor', text: 'Waiting for'},
@@ -75,9 +76,8 @@ const PayRuns = () => {
   };
 
   const onCheckRows = id => {
-    console.log(id);
     if(checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter(item => item != id));
+      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
     } else {
       setCheckedRows([...checkedRows, id]);
     }
@@ -88,7 +88,6 @@ const PayRuns = () => {
   };
 
   const openChat = item => {
-    console.log('open chat with id: ', item.id);
     setOpenedPopup('help-chat');
     setOpenedHelpChat(item);
   }
@@ -100,6 +99,10 @@ const PayRuns = () => {
   const heldActions = [
     {id: 'action1', onClick: (item) => openChat(item), className: 'chat-icon', Component: ChatButton}
   ];
+
+  useEffect(() => {
+    console.log('change sort', sort);
+  }, [sort]);
 
   useEffect(() => {
     pushRoute(`${location.pathname}?page=1`);
@@ -131,7 +134,7 @@ const PayRuns = () => {
         />
       }
       <PayRunsHeader tab={tab} setOpenedPopup={setOpenedPopup} />
-      <PayRunTabs
+      <PaymentsTabs
         tab={tab}
         changeTab={changeTab}
         tabs={[
@@ -149,35 +152,29 @@ const PayRuns = () => {
         canCollapseRows={isHeldTab}
         release={isHeldTab && release}
         onClickTableRow={isPayRunsTab && onClickTableRow}
-        rows={isPayRunsTab ? payRunsTableDate : payRunsHeldPaymentsTableDate}
+        rows={isPayRunsTab ? payRunsTableData : payRunsHeldPaymentsTableData}
         careType='Residential'
         sortBy={sortBy}
         sorts={sortsTab[tab]}
       />
       <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
-      {
-        <PayRunsLevelInsight
-          firstButton={{
-            text: 'Approve for payment',
-            onClick: () => {}
-          }}
-          secondButton={{
-            text: 'Kick back',
-            onClick: () => {},
-          }}
-          cost='£42,827'
-          suppliersCount='100'
-          servicesUsersCount='1000'
-          costIncrease='£897'
-          holdsCount='48'
-          holdsPrice='£32,223'
-        />
-      }
-      <div className='pay-runs__footer'>
-        <div className='pay-runs__footer-info'>
-          <p>Hackney Adult Social Care Services  ·  2021</p>
-        </div>
-      </div>
+      <PayRunsLevelInsight
+        firstButton={{
+          text: 'Approve for payment',
+          onClick: () => {}
+        }}
+        secondButton={{
+          text: 'Kick back',
+          onClick: () => {},
+        }}
+        cost='£42,827'
+        suppliersCount='100'
+        servicesUsersCount='1000'
+        costIncrease='£897'
+        holdsCount='48'
+        holdsPrice='£32,223'
+      />
+      <HackneyFooterInfo />
     </div>
   )
 };

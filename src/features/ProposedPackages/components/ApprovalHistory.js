@@ -41,6 +41,7 @@ const ApprovalHistory = ({
           <p>3</p>
         </div>
       </div>
+
       {!!costCards.length && (
         <div className="is-flex is-flex-wrap-wrap">
           {costCards.map((item) => {

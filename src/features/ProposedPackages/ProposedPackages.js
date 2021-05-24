@@ -135,7 +135,9 @@ const ProposedPackages = () => {
 
   const changePackageReclaim = (id) => (updatedPackage) => {
     const newPackage = packagesReclaimed.slice();
-    const packageIndex = packagesReclaimed.findIndex((item) => item.id == id);
+    const packageIndex = packagesReclaimed.findIndex(
+      (item) => String(item.id) === String(id)
+    );
     newPackage.splice(packageIndex, 1, updatedPackage);
     setPackagesReclaimed(newPackage);
   };

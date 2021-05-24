@@ -1,5 +1,3 @@
-// import { format } from "date-fns";
-
 const LOGIN = "/login";
 const CARE_PACKAGE = "/care-package";
 const PROPOSED_PACKAGES = "/proposed-packages";
@@ -22,10 +20,17 @@ const PAYMENTS_ROUTE = '/payments';
 const PAYMENTS_PAY_RUNS_ROUTE = `${PAYMENTS_ROUTE}/pay-runs`;
 const PAYMENTS_PAY_RUN_ROUTE = `${PAYMENTS_ROUTE}/pay-runs/:id`;
 const PAYMENTS_BILLS_ROUTE = `${PAYMENTS_ROUTE}/bills`;
+const PAYMENTS_ADD_BILL_ROUTE = `${PAYMENTS_ROUTE}/bills/add-bill`;
+const PAYMENTS_BILL_ROUTE = `${PAYMENTS_ROUTE}/bills/bill/:id`;
 const PAYMENTS_CARE_CHARGES_ROUTE = `${PAYMENTS_ROUTE}/care-charges`;
-const PAYMENTS_RECLAIMS_ROUTE = `${PAYMENTS_ROUTE}/reclaims`;
+const PAYMENTS_RECLAIMS_ROUTE = `${PAYMENTS_ROUTE}/supplier-returns`;
+const PAYMENTS_RECLAIM_ROUTE = `${PAYMENTS_ROUTE}/supplier-returns/:id`;
 const PAYMENTS_SUPPLIER_RETURNS_ROUTE = `${PAYMENTS_ROUTE}/supplier-returns`;
+const PAYMENTS_WEEK_OF_SUPPLIER_ROUTE = `${PAYMENTS_ROUTE}/supplier-returns/week-of-supplier/:id`;
 const PAYMENTS_REPORTING_ROUTE = `${PAYMENTS_ROUTE}/reporting`;
+
+const SUPPLIER_DASHBOARD_ROUTE = '/supplier-dashboard/supplier-returns';
+const SUPPLIER_RETURNS_DASHBOARD_ROUTE = `${SUPPLIER_DASHBOARD_ROUTE}/supplier-returns/:id`;
 
 export {
   LOGIN,
@@ -53,4 +58,10 @@ export {
   PAYMENTS_REPORTING_ROUTE,
   PAYMENTS_SUPPLIER_RETURNS_ROUTE,
   PAYMENTS_PAY_RUN_ROUTE,
+  PAYMENTS_BILL_ROUTE,
+  SUPPLIER_DASHBOARD_ROUTE,
+  SUPPLIER_RETURNS_DASHBOARD_ROUTE,
+  PAYMENTS_RECLAIM_ROUTE,
+  PAYMENTS_WEEK_OF_SUPPLIER_ROUTE,
+  PAYMENTS_ADD_BILL_ROUTE,
 };
