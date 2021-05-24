@@ -21,15 +21,16 @@ import { PERSONAL_CARE_MODE } from "./HomeCarePickerHelper";
 import { getServiceTypeCareTimes, serviceTypes } from "./HomeCareServiceHelper";
 import ShouldPackageReclaim from "./components/ShouldPackageReclaim";
 import PackageReclaim from "../../components/PackageReclaim";
-import {uniqueID} from "../../../service/helpers";
+import { uniqueID } from "../../../service/helpers";
+import PackageReclaims from "../components/PackageReclaims";
 
 const initialPackageReclaim = {
-  type: '',
-  notes: '',
-  from: '',
-  category: '',
-  amount: '',
-  id: '1',
+  type: "",
+  notes: "",
+  from: "",
+  category: "",
+  amount: "",
+  id: "1",
 };
 
 const HomeCare = () => {
@@ -44,29 +45,8 @@ const HomeCare = () => {
   const [homeCareSummaryData, setHomeCareSummaryData] = useState(undefined);
   const [homeCareServices, setHomeCareServices] = useState(undefined);
   const [carePackageId, setCarePackageId] = useState(undefined);
-  const [packagesReclaimed, setPackagesReclaimed] = useState([{...initialPackageReclaim}]);
-  const [isReclaimed, setIsReclaimed] = useState(null);
-
-  const addPackageReclaim = () => {
-    setPackagesReclaimed([...packagesReclaimed, {...initialPackageReclaim, id: uniqueID()}]);
-  };
-
-  const removePackageReclaim = id => {
-    const newPackagesReclaim = packagesReclaimed.filter(item => item.id !== id);
-    setPackagesReclaimed(newPackagesReclaim);
-  };
-
-  const changePackageReclaim = (id) => (updatedPackage) => {
-    const newPackage = packagesReclaimed.slice();
-    const packageIndex = packagesReclaimed.findIndex(item => item.id == id);
-    newPackage.splice(packageIndex, 1, updatedPackage);
-    setPackagesReclaimed(newPackage);
-  };
-
-  const changeIsPackageReclaimed = (status) => {
-    setPackagesReclaimed([{...initialPackageReclaim}]);
-    setIsReclaimed(status);
-  };
+  const [errors, setErrors] = useState([]);
+  const [packagesReclaimed, setPackagesReclaimed] = useState([]);
 
   // Init home care package via API
   useEffect(() => {
@@ -80,7 +60,7 @@ const HomeCare = () => {
       );
 
       setCarePackageId(carePackageCreateResult);
-    };
+    }
 
     createHomeCarePackageAsync();
   }, [startDate, endDate, isImmediate, isS117, isFixedPeriod]);
@@ -182,31 +162,19 @@ const HomeCare = () => {
             selectedSecondaryCareTypeId={selectedSecondaryCareTime}
           />
         </div>
+
+        <PackageReclaims
+          errors={errors}
+          setErrors={setErrors}
+          packagesReclaimed={packagesReclaimed}
+          setPackagesReclaimed={setPackagesReclaimed}
+        />
         <div className="level mt-4">
           <div className="level-item level-right">
             <Button onClick={addToPackageClick}>Add to package</Button>
           </div>
         </div>
-        <ShouldPackageReclaim
-          isReclaimed={isReclaimed}
-          setIsReclaimed={changeIsPackageReclaimed}
-        />
-        {
-          isReclaimed &&
-            <div>
-              {packagesReclaimed.map((item, index) => {
-                return (
-                  <PackageReclaim
-                    remove={index !== 0 ? () => removePackageReclaim(item.id) : undefined}
-                    key={item.id}
-                    packageReclaim={item}
-                    setPackageReclaim={changePackageReclaim(item.id)}
-                  />
-                )
-              })}
-              <p onClick={addPackageReclaim} className='action-button-text'>+ Add another reclaim</p>
-            </div>
-        }
+
         {homeCareSummaryData !== undefined ? (
           <div className="mt-4 mb-4">
             <TitleHeader>Package Details</TitleHeader>
