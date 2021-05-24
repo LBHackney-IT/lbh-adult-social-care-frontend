@@ -1,20 +1,33 @@
 import React from "react";
 import ClientSummary from "../../components/ClientSummary";
 import CostCard from "../../components/CostCard";
+import {
+  getAgeFromDateString,
+  getEnGBFormattedDate,
+} from "../../../api/Utils/FuncUtils";
 
-const ApprovalHistory = ({ status = '', history, costCards = [] }) => {
+const ApprovalHistory = ({
+  status = "",
+  history,
+  costCards,
+  clientDetails = [],
+}) => {
   return (
-    <div className='approval-history'>
-      <h2>Home Care <span>{status}</span></h2>
+    <div className="approval-history">
+      <h2>
+        Home Care <span>{status}</span>
+      </h2>
       <ClientSummary
-        client="James Stephens"
-        hackneyId="786288"
-        age="91"
-        sourcingCare='hackney'
-        dateOfBirth="09/12/1972"
-        postcode="E9 6EY"
+        client={clientDetails?.clientName}
+        hackneyId={clientDetails?.hackneyId}
+        age={clientDetails && getAgeFromDateString(clientDetails.dateOfBirth)}
+        sourcingCare="hackney"
+        dateOfBirth={
+          clientDetails && getEnGBFormattedDate(clientDetails.dateOfBirth)
+        }
+        postcode={clientDetails?.postCode}
       />
-      <div className='care-info'>
+      <div className="care-info">
         <div>
           <p>STARTS</p>
           <p>03/07/2021</p>
@@ -28,21 +41,18 @@ const ApprovalHistory = ({ status = '', history, costCards = [] }) => {
           <p>3</p>
         </div>
       </div>
-      {
-        !!costCards.length &&
-        <div className='is-flex is-flex-wrap-wrap'>
-          {costCards.map(item => {
-            console.log(item);
-              return (<CostCard selected={item.selected} key={item.id} />)
-            }
-          )}
+      {!!costCards.length && (
+        <div className="is-flex is-flex-wrap-wrap">
+          {costCards.map((item) => {
+            return <CostCard selected={item.selected} key={item.id} />;
+          })}
         </div>
-      }
-      <div className='approval-history__history'>
-        <p className='approval-history__title'>APPROVAL HISTORY</p>
-        {history.map(item => (
-          <p key={item.id} className='approval-history__text'>
-            <span className='date'>{item.date}</span>
+      )}
+      <div className="approval-history__history">
+        <p className="approval-history__title">APPROVAL HISTORY</p>
+        {history.map((item) => (
+          <p key={item.id} className="approval-history__text">
+            <span className="date">{item.date}</span>
             {item.text}
           </p>
         ))}

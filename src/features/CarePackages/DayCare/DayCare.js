@@ -266,7 +266,7 @@ const DayCare = ({ history }) => {
         Care Package
       </ClientSummary>
       <div className="mt-5 mb-5">
-        <CareTitle startDate="27/11/1997" endDate="Ongoing">
+        <CareTitle startDate={startDate} endDate={endDate}>
           Day Care
         </CareTitle>
         <div className="mt-4 columns">

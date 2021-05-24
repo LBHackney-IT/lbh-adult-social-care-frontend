@@ -14,6 +14,7 @@ const RESIDENTIAL_CARE_APPROVE_PACKAGE = `${RESIDENTIAL_CARE}/approve-package`;
 const RESIDENTIAL_CARE_APPROVE_BROKERED = `${RESIDENTIAL_CARE}/approve-brokered`;
 const DAY_CARE = `${CARE_PACKAGE}/day-care`;
 const DAY_CARE_APPROVE_PACKAGE = `${DAY_CARE}/approve-package/:dayCarePackageId`;
+const DAY_CARE_BROKERING_PACKAGE = `${DAY_CARE}/brokering/:dayCarePackageId`;
 const DAY_CARE_APPROVE_BROKERED = `${DAY_CARE}/approve-brokered/:dayCarePackageId`;
 const CLIENT_HISTORY = "/client-history";
 
@@ -32,6 +33,7 @@ export {
   HOME_CARE_APPROVE_PACKAGE,
   HOME_CARE_APPROVE_BROKERED,
   DAY_CARE,
+  DAY_CARE_BROKERING_PACKAGE,
   DAY_CARE_APPROVE_PACKAGE,
   DAY_CARE_APPROVE_BROKERED,
   NURSING_CARE,
