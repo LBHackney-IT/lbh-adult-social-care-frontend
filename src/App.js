@@ -16,7 +16,7 @@ const App = () => {
       <PaymentsHeader />
       <SupplierDashboardHeader />
       <Switch>
-        {user !== null ?
+        {user === null ?
           <Route path={RouteConstants.LOGIN} component={Login} />
           :
           exactRoutes.map(route => {
