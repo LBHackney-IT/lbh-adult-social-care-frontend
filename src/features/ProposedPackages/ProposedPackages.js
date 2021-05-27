@@ -11,15 +11,6 @@ import PackagesResidentialCare from "./PackagesResidentialCare";
 import PackagesHomeCare from "./PackagesHomeCare";
 import PackagesNursingCare from "./PackagesNursingCare";
 
-const initialPackageReclaim = {
-  type: '',
-  notes: '',
-  from: '',
-  category: '',
-  amount: '',
-  id: '1',
-};
-
 const approvalHistory = [
   {
     date: '03/12/2021',
@@ -76,6 +67,14 @@ const nursingCards = [
 ];
 
 const ProposedPackages = () => {
+  const initialPackageReclaim = useState({
+    type: '',
+    notes: '',
+    from: '',
+    category: '',
+    amount: '',
+    id: '1',
+  });
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState('approvalHistory');
   const [summaryData, setSummaryData] = useState([]);

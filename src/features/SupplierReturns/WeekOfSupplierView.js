@@ -15,16 +15,15 @@ import WeeklyOfSupplierTable from "./components/WeeklyOfSupplierTable";
 import HackneyFooterInfo from "../components/HackneyFooterInfo";
 import PopupDocumentUploader from "../components/PopupDocumentUploader";
 
-const sorts = [
-  {name: 'serviceUser', text: 'Service User'},
-  {name: 'packageType', text: 'Package Type'},
-  {name: 'packageId', text: 'Package ID'},
-  {name: 'weeklyValue', text: 'Weekly Value'},
-  {name: 'status', text: 'Status'},
-  {name: 'action', text: 'Action'},
-];
-
 const WeekOfSupplierView = () => {
+  const [sorts] = useState([
+    {name: 'serviceUser', text: 'Service User'},
+    {name: 'packageType', text: 'Package Type'},
+    {name: 'packageId', text: 'Package ID'},
+    {name: 'weeklyValue', text: 'Weekly Value'},
+    {name: 'status', text: 'Status'},
+    {name: 'action', text: 'Action'},
+  ]);
   const location = useLocation();
   const history = useHistory();
   const [openedPopup, setOpenedPopup] = useState('');
@@ -179,6 +178,9 @@ const WeekOfSupplierView = () => {
   useEffect(() => {
     setWeeklyData(weeklyOfSupplierTableData.slice())
   }, []);
+
+  console.log(sorts);
+  console.log(sort);
 
   return (
     <div className='supplier-returns week-of-supplier supplier-returns-dashboard'>

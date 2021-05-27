@@ -10,21 +10,19 @@ import PayRunHeader from "./components/PayRunHeader";
 import PopupHoldPayment from "./components/PopupHoldPayment";
 import HackneyFooterInfo from "../components/HackneyFooterInfo";
 
-const sorts = [
-  {name: 'serviceUser', text: 'Service User'},
-  {name: 'invId', text: 'INV ID'},
-  {name: 'packageType', text: 'Package Type'},
-  {name: 'supplier', text: 'SupplierDashboard'},
-  {name: 'total', text: 'Total'},
-  {name: 'status', text: 'Status'},
-];
-
-const popupTypes = {
-  createPayRun: 'create-pay-run',
-  holdPayments: 'hold-payment',
-};
-
 const PayRun = () => {
+  const [sorts] = useState([
+    {name: 'serviceUser', text: 'Service User'},
+    {name: 'invId', text: 'INV ID'},
+    {name: 'packageType', text: 'Package Type'},
+    {name: 'supplier', text: 'SupplierDashboard'},
+    {name: 'total', text: 'Total'},
+    {name: 'status', text: 'Status'},
+  ]);
+  const [popupTypes] = useState({
+    createPayRun: 'create-pay-run',
+    holdPayments: 'hold-payment',
+  });
   const location = useLocation();
   const pushRoute = useHistory().push;
   const [openedPopup, setOpenedPopup] = useState('');

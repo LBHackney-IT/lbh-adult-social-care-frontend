@@ -8,7 +8,8 @@ import AddBillInvoiceFor from "./components/AddBillInvoiceFor";
 import AddBillTotalInfo from "./components/AddBillTotalInfo";
 import {addBillPackageInfoTestData} from "../../testData/billsTestData";
 
-const sorts = [
+const AddBill = () => {
+  const [sorts] = useState([
     {name: 'item', text: 'Item'},
     {name: 'description', text: 'Description'},
     {name: 'qty', text: 'Qty'},
@@ -16,9 +17,7 @@ const sorts = [
     {name: 'costCentre', text: 'Cost Centre'},
     {name: 'taxRate', text: 'Tax Rate'},
     {name: 'amountExVAT', text: 'Amount Ex VAT'},
-];
-
-const AddBill = () => {
+  ]);
   const pushRoute = useHistory().push;
   const [addBillInfo, setAddBillInfo] = useState({});
   const [packageIdTimer, setPackageIdTimer] = useState(null);

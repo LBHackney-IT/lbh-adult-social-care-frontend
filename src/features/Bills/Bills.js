@@ -9,39 +9,36 @@ import PopupBillsPayDownload from "./components/PopupBillsPayDownload";
 import BillsFilters from "./components/BillsFilters";
 import HackneyFooterInfo from "../components/HackneyFooterInfo";
 
-const sortsTab = {
-  'bills': [
-    {name: 'red', text: 'Ref'},
-    {name: 'againstPackage', text: 'Against Package'},
-    {name: 'from', text: 'From'},
-    {name: 'date', text: 'Date'},
-    {name: 'dueDate', text: 'Due Date'},
-    {name: 'amount', text: 'Amount'},
-    {name: 'paid', text: 'Paid'},
-    {name: 'status', text: 'Status'},
-  ],
-  'bill-pay-runs': [
-    {name: 'bprId', text: 'BPR ID'},
-    {name: 'date', text: 'Date'},
-    {name: 'invoicesPaid', text: 'Invoices Paid'},
-    {name: 'totalValue', text: 'Total Value'},
-    {name: '', text: ''},
-  ],
-};
-
-const tabsClasses = {
-  'bills': 'bills__tab-class',
-  'bill-pay-runs': 'bill-pay-runs__tab-class',
-};
-
-const initialFilters = {
-  packageId: '',
-  supplier: '',
-  dateRange: '',
-  status: '',
-};
-
 const Bills = () => {
+  const [sortsTab] = useState({
+    'bills': [
+      {name: 'red', text: 'Ref'},
+      {name: 'againstPackage', text: 'Against Package'},
+      {name: 'from', text: 'From'},
+      {name: 'date', text: 'Date'},
+      {name: 'dueDate', text: 'Due Date'},
+      {name: 'amount', text: 'Amount'},
+      {name: 'paid', text: 'Paid'},
+      {name: 'status', text: 'Status'},
+    ],
+    'bill-pay-runs': [
+      {name: 'bprId', text: 'BPR ID'},
+      {name: 'date', text: 'Date'},
+      {name: 'invoicesPaid', text: 'Invoices Paid'},
+      {name: 'totalValue', text: 'Total Value'},
+      {name: '', text: ''},
+    ],
+  });
+  const [tabsClasses] = useState({
+    'bills': 'bills__tab-class',
+    'bill-pay-runs': 'bill-pay-runs__tab-class',
+  });
+  const [initialFilters] = useState({
+    packageId: '',
+    supplier: '',
+    dateRange: '',
+    status: '',
+  });
   const location = useLocation();
   const pushRoute = useHistory().push;
   const [filters, setFilters] = useState({...initialFilters})

@@ -6,14 +6,13 @@ import HomeCareSetup from "./HomeCare/HomeCareSetup";
 import ResidentialCareSetup from "./ResidentialCare/ResidentialCareSetup";
 import NursingCareSetup from "./NursingCare/NursingCareSetup";
 
-const careTypes = [
-  { text: "Home care", value: 1 },
-  { text: "Day care", value: 2 },
-  { text: "Residential care", value: 3 },
-  { text: "Nursing care", value: 4 },
-];
-
 const CarePackage = ({ history }) => {
+  const [careTypes] = useState([
+    { text: "Home care", value: 1 },
+    { text: "Day care", value: 2 },
+    { text: "Residential care", value: 3 },
+    { text: "Nursing care", value: 4 },
+  ]);
   const [selectedCareType, setSelectedCareType] = useState(1);
 
   const ComponentForCareType = () => {
