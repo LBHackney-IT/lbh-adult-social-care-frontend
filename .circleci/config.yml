@@ -38,19 +38,19 @@ jobs:
           root: *workspace_root
           paths: .
 
-  tests:
-    executor: node-executor
-    steps:
-      - *attach_workspace
-      - run:
-          name: Run linter
-          command: yarn lint
-      #- run:
-      #    name: Run typecheck
-      #    command: yarn type-check
-      #- run:
-      #    name: Run tests
-      #    command: yarn test -w 2
+  #tests:
+  #  executor: node-executor
+  #  steps:
+  #    - *attach_workspace
+  #    - run:
+  #        name: Run linter
+  #        command: yarn lint
+  #    - run:
+  #        name: Run typecheck
+  #        command: yarn type-check
+  #    - run:
+  #        name: Run tests
+  #        command: yarn test -w 2
 
   #e2e:
   #  executor: node-executor
@@ -111,16 +111,16 @@ workflows:
   continuous-delivery:
     jobs:
       - install-dependencies
-      - tests:
-          requires:
-            - install-dependencies
+      #- tests:
+      #    requires:
+      #      - install-dependencies
       #- e2e:
       #    requires:
       #      - install-dependencies
       - assume-role-staging:
           context: api-assume-role-staging-context
-          requires:
-            - tests
+          #requires:
+          #  - tests
             #- e2e
           filters:
             branches:
