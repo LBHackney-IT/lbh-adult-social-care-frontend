@@ -8,21 +8,19 @@ import BillsHeader from "./components/BillsHeader";
 import PopupBillsPayDownload from "./components/PopupBillsPayDownload";
 import HackneyFooterInfo from "../components/HackneyFooterInfo";
 
-const sorts = [
-  {name: 'serviceUser', text: 'Service User'},
-  {name: 'invId', text: 'INV ID'},
-  {name: 'packageType', text: 'Package Type'},
-  {name: 'supplier', text: 'SupplierDashboard'},
-  {name: 'total', text: 'Total'},
-  {name: 'status', text: 'Status'},
-];
-
-const popupTypes = {
-  createPayRun: 'create-pay-run',
-  holdPayments: 'hold-payment',
-};
-
 const Bill = () => {
+  const [sorts] = useState([
+    {name: 'serviceUser', text: 'Service User'},
+    {name: 'invId', text: 'INV ID'},
+    {name: 'packageType', text: 'Package Type'},
+    {name: 'supplier', text: 'SupplierDashboard'},
+    {name: 'total', text: 'Total'},
+    {name: 'status', text: 'Status'},
+  ]);
+  const [popupTypes] = useState({
+    createPayRun: 'create-pay-run',
+    holdPayments: 'hold-payment',
+  });
   const location = useLocation();
   const pushRoute = useHistory().push;
   const [openedPopup, setOpenedPopup] = useState('');

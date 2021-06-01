@@ -12,17 +12,16 @@ import {useDispatch, useSelector} from "react-redux";
 import {selectSupplierReturns} from "../../reducers/supplierReturnsReducer";
 import { changeWeekOfSupplier } from "../../reducers/supplierReturnsReducer";
 
-const sorts = [
-  {name: 'supplier', text: 'Supplier'},
-  {name: 'packages', text: 'Packages'},
-  {name: 'returned', text: 'Returned'},
-  {name: 'withVariance', text: 'With Variance'},
-  {name: 'inDispute', text: 'In Dispute'},
-  {name: 'accepted', text: 'Accepted'},
-  {name: 'status', text: 'Status'},
-];
-
 const SupplierReturn = () => {
+  const [sorts] = useState([
+    {name: 'supplier', text: 'Supplier'},
+    {name: 'packages', text: 'Packages'},
+    {name: 'returned', text: 'Returned'},
+    {name: 'withVariance', text: 'With Variance'},
+    {name: 'inDispute', text: 'In Dispute'},
+    {name: 'accepted', text: 'Accepted'},
+    {name: 'status', text: 'Status'},
+  ]);
   const dispatch = useDispatch();
   const location = useLocation();
   const pushRoute = useHistory().push;

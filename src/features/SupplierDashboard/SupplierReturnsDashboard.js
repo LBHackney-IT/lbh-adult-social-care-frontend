@@ -12,15 +12,14 @@ import {useSelector} from "react-redux";
 import {selectSupplierDashboard} from "../../reducers/supplierDashboardReducer";
 import {formatDateWithSign} from "../../service/helpers";
 
-const sorts = [
-  {name: 'serviceUser', text: 'Service User'},
-  {name: 'packageId', text: 'Package ID'},
-  {name: 'packageType', text: 'Package Type'},
-  {name: 'weeklyValue', text: 'Weekly Value'},
-  {name: 'status', text: 'Status'},
-];
-
 const SupplierReturnsDashboard = () => {
+  const [sorts] = useState([
+    {name: 'serviceUser', text: 'Service User'},
+    {name: 'packageId', text: 'Package ID'},
+    {name: 'packageType', text: 'Package Type'},
+    {name: 'weeklyValue', text: 'Weekly Value'},
+    {name: 'status', text: 'Status'},
+  ]);
   const location = useLocation();
   const pushRoute = useHistory().push;
   const [openedPopup, setOpenedPopup] = useState('');

@@ -11,34 +11,32 @@ import PayRunsLevelInsight from "./components/PayRunsLevelInsight";
 import PopupHelpChat from "../Chat/components/PopupHelpChat";
 import HackneyFooterInfo from "../components/HackneyFooterInfo";
 
-const sortsTab = {
-  'pay-runs': [
-    {name: 'id', text: 'ID'},
-    {name: 'date', text: 'Date'},
-    {name: 'type', text: 'Type'},
-    {name: 'cadence', text: 'Cadence'},
-    {name: 'paid', text: 'Paid'},
-    {name: 'held', text: 'Held'},
-    {name: 'status', text: 'Status'},
-  ],
-  'held-payments': [
-    {name: 'payRunDate', text: 'Pay run date'},
-    {name: 'payRunId', text: 'Pay run ID'},
-    {name: 'serviceUser', text: 'Service User'},
-    {name: 'packageType', text: 'Package Type'},
-    {name: 'supplier', text: 'SupplierDashboard'},
-    {name: 'amount', text: 'Amount'},
-    {name: 'status', text: 'Status'},
-    {name: 'waitingFor', text: 'Waiting for'},
-  ],
-};
-
-const tabsClasses = {
-  'pay-runs': 'pay-runs__tab-class',
-  'held-payments': 'pay-runs__held-payments-class',
-};
-
 const PayRuns = () => {
+  const [sortsTab] = useState({
+    'pay-runs': [
+      {name: 'id', text: 'ID'},
+      {name: 'date', text: 'Date'},
+      {name: 'type', text: 'Type'},
+      {name: 'cadence', text: 'Cadence'},
+      {name: 'paid', text: 'Paid'},
+      {name: 'held', text: 'Held'},
+      {name: 'status', text: 'Status'},
+    ],
+    'held-payments': [
+      {name: 'payRunDate', text: 'Pay run date'},
+      {name: 'payRunId', text: 'Pay run ID'},
+      {name: 'serviceUser', text: 'Service User'},
+      {name: 'packageType', text: 'Package Type'},
+      {name: 'supplier', text: 'SupplierDashboard'},
+      {name: 'amount', text: 'Amount'},
+      {name: 'status', text: 'Status'},
+      {name: 'waitingFor', text: 'Waiting for'},
+    ],
+  });
+  const [tabsClasses] = useState({
+    'pay-runs': 'pay-runs__tab-class',
+    'held-payments': 'pay-runs__held-payments-class',
+  });
   const location = useLocation();
   const pushRoute = useHistory().push;
   const [openedPopup, setOpenedPopup] = useState('');

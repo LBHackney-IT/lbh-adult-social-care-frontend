@@ -3,6 +3,7 @@ import {CaretDownIcon} from "../../components/Icons";
 import Checkbox from "../../components/Checkbox";
 
 const WeekOfSupplierSortTable = ({ setCheckedRows, checkedRows = [], rows = [], sorts, sortBy, additionalActions }) => {
+  console.log(sorts);
   return (
     <div className='sort-table'>
       {

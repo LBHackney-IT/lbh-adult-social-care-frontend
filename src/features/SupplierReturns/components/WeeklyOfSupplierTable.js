@@ -24,6 +24,7 @@ const WeeklyOfSupplierTable = ({
   actionAllServices,
   sorts,
 }) => {
+  console.log(sorts);
   const [collapsedRows, setCollapsedRows] = useState([]);
 
   const collapseRows = id => {

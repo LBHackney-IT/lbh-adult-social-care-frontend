@@ -8,19 +8,18 @@ import HackneyFooterInfo from "../components/HackneyFooterInfo";
 import {useDispatch} from "react-redux";
 import { changeSupplierReturns } from "../../reducers/supplierReturnsReducer";
 
-const sorts = [
-  {name: 'weekCommencing', text: 'Week commencing'},
-  {name: 'suppliers', text: 'Suppliers'},
-  {name: 'value', text: 'Value'},
-  {name: 'totalPackages', text: 'Total Packages'},
-  {name: 'returned', text: 'Returned'},
-  {name: 'inDispute', text: 'In Dispute'},
-  {name: 'accepted', text: 'Accepted'},
-  {name: 'paid', text: 'Paid'},
-  {name: 'status', text: 'Status'},
-];
-
 const SupplierReturns = () => {
+  const [sorts] = useState([
+    {name: 'weekCommencing', text: 'Week commencing'},
+    {name: 'suppliers', text: 'Suppliers'},
+    {name: 'value', text: 'Value'},
+    {name: 'totalPackages', text: 'Total Packages'},
+    {name: 'returned', text: 'Returned'},
+    {name: 'inDispute', text: 'In Dispute'},
+    {name: 'accepted', text: 'Accepted'},
+    {name: 'paid', text: 'Paid'},
+    {name: 'status', text: 'Status'},
+  ]);
   const dispatch = useDispatch();
   const location = useLocation();
   const pushRoute = useHistory().push;

@@ -8,21 +8,22 @@ import HackneyFooterInfo from "../components/HackneyFooterInfo";
 import {useDispatch} from "react-redux";
 import { changeSupplierReturnsDashboard } from "../../reducers/supplierDashboardReducer";
 
-const sorts = [
-  {name: 'weekCommencing', text: 'Week commencing'},
-  {name: 'value', text: 'Value'},
-  {name: 'totalPackages', text: 'Total Packages'},
-  {name: 'returned', text: 'Returned'},
-  {name: 'inDispute', text: 'In Dispute'},
-  {name: 'accepted', text: 'Accepted'},
-  {name: 'paid', text: 'Paid'},
-  {name: 'status', text: 'Status'},
-];
-
 const SupplierDashboard = () => {
+  const [sorts] = useState([
+    {name: 'weekCommencing', text: 'Week commencing'},
+    {name: 'value', text: 'Value'},
+    {name: 'totalPackages', text: 'Total Packages'},
+    {name: 'returned', text: 'Returned'},
+    {name: 'inDispute', text: 'In Dispute'},
+    {name: 'accepted', text: 'Accepted'},
+    {name: 'paid', text: 'Paid'},
+    {name: 'status', text: 'Status'},
+  ]);
+
   const dispatch = useDispatch();
   const location = useLocation();
   const pushRoute = useHistory().push;
+  const history = useHistory();
   const [sort, setSort] = useState({
     value: 'increase',
     name: 'id',
@@ -38,7 +39,7 @@ const SupplierDashboard = () => {
   };
 
   useEffect(() => {
-    pushRoute(`${location.pathname}?page=1`);
+    history.replace(`${location.pathname}?page=1`);
   }, []);
 
   useEffect(() => {
