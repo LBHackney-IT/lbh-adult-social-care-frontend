@@ -9,7 +9,7 @@ import SupplierDashboardHeader from "./features/Supplier/components/SupplierDash
 import {exactRoutes} from "./routes/routes";
 
 const App = () => {
-  const user = useSelector(selectUser);
+  const user = {}; // useSelector(selectUser);
 
   return (
     <>

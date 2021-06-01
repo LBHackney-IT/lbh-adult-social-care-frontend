@@ -141,7 +141,11 @@ const WeekCarePicker = ({
           </div>
         </div>
         <div className="level-item level-right">
-          <RadioButton label="Display Time" options={minutesOrHoursOptions} />
+          <RadioButton
+            label="Display Time"
+            options={minutesOrHoursOptions}
+            selectedValue={2}
+          />
         </div>
       </div>
       <div className="week-care-picker mt-4">
