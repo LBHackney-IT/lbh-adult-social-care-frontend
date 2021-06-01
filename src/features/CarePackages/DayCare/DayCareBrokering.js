@@ -17,7 +17,10 @@ import {
   getDayCarePackageDetailsForBrokerage,
 } from "../../../api/CarePackages/DayCareApi";
 import { useParams } from "react-router-dom";
-import { getInitDaysSelected } from "../../../api/Utils/CommonOptions";
+import {
+  getInitDaysSelected,
+  getInitialPackageReclaim,
+} from "../../../api/Utils/CommonOptions";
 import {
   mapBrokerageSupplierOptions,
   mapDayCarePackageDetailsForBrokerage,
@@ -26,14 +29,6 @@ import {
 import { getSupplierList } from "../../../api/CarePackages/SuppliersApi";
 import { CARE_PACKAGE } from "../../../routes/RouteConstants";
 
-const initialPackageReclaim = {
-  type: "",
-  notes: "",
-  from: "",
-  category: "",
-  amount: "",
-  id: "1",
-};
 const DayCareBrokering = ({ history }) => {
   // Parameters
   const params = useParams();
@@ -150,7 +145,7 @@ const DayCareBrokering = ({ history }) => {
   const addPackageReclaim = () => {
     setPackagesReclaimed([
       ...packagesReclaimed,
-      { ...initialPackageReclaim, id: uniqueID() },
+      { ...getInitialPackageReclaim(), id: uniqueID() },
     ]);
   };
 

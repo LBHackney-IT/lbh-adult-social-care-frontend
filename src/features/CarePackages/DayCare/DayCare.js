@@ -20,6 +20,7 @@ import { CARE_PACKAGE } from "../../../routes/RouteConstants";
 import TitleHeader from "../../components/TitleHeader";
 import DayCareSummary from "./components/DayCareSummary";
 import DayCareCollegeAsyncSearch from "./components/DayCareCollegeAsyncSearch";
+import PackageReclaims from "../components/PackageReclaims";
 
 const DayCare = ({ history }) => {
   const isTrueSet = (myValue) => myValue === "true";
@@ -67,23 +68,8 @@ const DayCare = ({ history }) => {
     })
   );
 
-  useEffect(() => {
-    if (termTimeConsiderationOptions.length === 0) {
-      retrieveTermTimeConsiderationOptions();
-    }
-    if (
-      opportunitiesLengthOptions.length === 0 ||
-      opportunitiesLengthOptions.length === 1
-    ) {
-      retrieveOpportunitiesLengthOptions();
-    }
-    if (
-      opportunityTimesPerMonthOptions.length === 0 ||
-      opportunityTimesPerMonthOptions.length === 1
-    ) {
-      retrieveOpportunityTimesPerMonthOptions();
-    }
-  }, []);
+  // package reclaim
+  const [packagesReclaimed, setPackagesReclaimed] = useState([]);
 
   // Adding a new opportunity entry
   const onAddOpportunityEntry = () => {
@@ -190,6 +176,24 @@ const DayCare = ({ history }) => {
       });
   };
 
+  useEffect(() => {
+    if (termTimeConsiderationOptions.length === 0) {
+      retrieveTermTimeConsiderationOptions();
+    }
+    if (
+      opportunitiesLengthOptions.length === 0 ||
+      opportunitiesLengthOptions.length === 1
+    ) {
+      retrieveOpportunitiesLengthOptions();
+    }
+    if (
+      opportunityTimesPerMonthOptions.length === 0 ||
+      opportunityTimesPerMonthOptions.length === 1
+    ) {
+      retrieveOpportunityTimesPerMonthOptions();
+    }
+  }, [history]);
+
   const formIsValid = () => {
     const errors = [];
 
@@ -207,6 +211,16 @@ const DayCare = ({ history }) => {
       howManyTimesPerMonthId: item.timesPerMonthValue,
       opportunitiesNeedToAddress: item.needToAddress,
     }));
+
+    const packageReclaims = packagesReclaimed.map((reclaim) => {
+      return {
+        ReclaimFromId: reclaim.from,
+        ReclaimCategoryId: reclaim.category,
+        ReclaimAmountOptionId: reclaim.type,
+        Notes: reclaim.notes,
+        Amount: reclaim.amount,
+      };
+    });
 
     const dayCarePackageToCreate = {
       clientId: "aee45700-af9b-4ab5-bb43-535adbdcfb80",
@@ -230,6 +244,7 @@ const DayCare = ({ history }) => {
       dayCarePackageOpportunities: dayCarePackageOpportunities,
       creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
       collegeId: collegeId,
+      packageReclaims: packageReclaims,
     };
 
     createDayCarePackage(dayCarePackageToCreate)
@@ -352,6 +367,14 @@ const DayCare = ({ history }) => {
             addEntry={onAddOpportunityEntry}
           />
         </div>
+
+        <PackageReclaims
+          errors={errors}
+          setErrors={setErrors}
+          packagesReclaimed={packagesReclaimed}
+          setPackagesReclaimed={setPackagesReclaimed}
+        />
+
         <div className="mt-4 mb-4">
           <TitleHeader>Package Details</TitleHeader>
           <DayCareSummary

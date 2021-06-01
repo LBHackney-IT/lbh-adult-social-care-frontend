@@ -216,6 +216,22 @@ const createDayCareBrokerageInfo = (
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const createDayCarePackageReclaim = (
+  dayCarePackageId,
+  dayCarePackageReclaimForCreation
+) => {
+  const options = {
+    url: `${DAY_CARE_URL}/${dayCarePackageId}/brokerage`,
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    data: dayCarePackageReclaimForCreation,
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 export {
   getTermTimeConsiderationOptions,
   getOpportunitiesLengthOptions,
@@ -237,4 +253,5 @@ export {
   getDayCareBrokerageStages,
   getDayCarePackageDetailsForBrokerage,
   createDayCareBrokerageInfo,
+  createDayCarePackageReclaim,
 };
