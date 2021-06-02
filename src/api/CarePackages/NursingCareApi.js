@@ -117,6 +117,37 @@ const nursingCareChangeStatus = (
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+// Nursing care brokerage
+const getNursingCareBrokerageStages = () => {
+  return axios
+    .get(`${BASE_URL}/v1/stages`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const getNursingCarePackageDetailsForBrokerage = (nursingCarePackageId) => {
+  return axios
+    .get(`${NURSING_CARE_URL}/${nursingCarePackageId}/brokerage`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const createNursingCareBrokerageInfo = (
+  nursingCarePackageId,
+  nursingCareBrokerageInfoForCreation
+) => {
+  const options = {
+    url: `${NURSING_CARE_URL}/${nursingCarePackageId}/brokerage`,
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    data: nursingCareBrokerageInfoForCreation,
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 export {
   getTypeOfNursingHomeOptions,
   getNursingCareTypeOfStayOptions,
@@ -127,5 +158,8 @@ export {
   getNursingCarePackageApproveCommercial,
   getNursingCarePackageApprovalHistory,
   nursingCareRequestClarification,
-  nursingCareChangeStatus
+  nursingCareChangeStatus,
+  getNursingCareBrokerageStages,
+  getNursingCarePackageDetailsForBrokerage,
+  createNursingCareBrokerageInfo,
 }

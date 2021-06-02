@@ -94,7 +94,7 @@ const residentialCareRequestClarification = (
   informationText
 ) => {
   const options = {
-    url: `${BASE_URL}/v1/nursing-care-request-more-information`,
+    url: `${BASE_URL}/v1/residential-care-request-more-information`,
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -127,6 +127,38 @@ const residentialCareChangeStatus = (
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+// Residential care brokerage
+const getResidentialCareBrokerageStages = () => {
+  return axios
+    .get(`${BASE_URL}/v1/stages`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const getResidentialCarePackageDetailsForBrokerage = (residentialCarePackageId) => {
+  return axios
+    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const createResidentialCareBrokerageInfo = (
+  residentialCarePackageId,
+  residentialCareBrokerageInfoForCreation
+) => {
+  const options = {
+    url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage`,
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    data: residentialCareBrokerageInfoForCreation,
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+
 export {
   getResidentialCareTypeOfStayOptions,
   getResidentialCareAdditionalNeedsCostOptions,
@@ -138,5 +170,8 @@ export {
   getResidentialCarePackageApproveBrokered,
   getResidentialCarePackageApprovalHistory,
   residentialCareRequestClarification,
-  residentialCareChangeStatus
+  residentialCareChangeStatus,
+  getResidentialCareBrokerageStages,
+  getResidentialCarePackageDetailsForBrokerage,
+  createResidentialCareBrokerageInfo,
 };
