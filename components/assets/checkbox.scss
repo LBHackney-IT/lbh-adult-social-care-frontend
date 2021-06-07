@@ -1,0 +1,16 @@
+@import "../../assets/css/variables";
+
+label.checkbox {
+    display: flex;
+    align-items: center;
+
+    .checkbox-check {
+        margin-right: 12px;
+        height: 33px;
+        width: 33px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid $lbh-black1;
+    }
+}

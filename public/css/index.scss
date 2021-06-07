@@ -1,0 +1,69 @@
+@import "variables";
+@import "borders";
+@import "typography";
+@import "table";
+@import "../fonts/fonts";
+@import "ProposedPackages/approval-history";
+@import "ProposedPackages/proposedPackges";
+@import "PackageReclaim/package-reclaim";
+@import "Payments/payments-header";
+@import "Payments/breadcrumbs";
+@import "Payments/popup-download-ceder";
+@import "PayRuns/header";
+@import "PayRuns/tabs";
+@import "PayRuns/table";
+@import "PayRuns/pagination";
+@import "PayRuns/footer";
+@import "PayRuns/create-pay-run";
+@import "PayRuns/level-insight";
+@import "PayRuns/popup-hold-payment";
+@import "PayRuns/held-payments";
+@import "Bills/header";
+@import "Bills/pagination";
+@import "Bills/filters";
+@import "Bills/table";
+@import "Bills/add-bill";
+@import "SupplierDashboard/header";
+@import "SupplierDashboard/table";
+@import "SupplierDashboard/level-insight";
+@import "WeekOfSupplier/breadcrumbs";
+@import "WeekOfSupplier/table";
+@import "SupplierReturns/table";
+@import "popup";
+@import "files-drop-zone";
+
+* {
+  font-family: "OpenSans", sans-serif !important;
+  letter-spacing: 0.15px;
+}
+
+button {
+  padding-left: 0px;
+}
+
+// Small devices (landscape phones, 576px and smaller)
+@media screen and (max-width: 576px) {
+  .level-item {
+    align-items: start;
+    justify-content: left;
+  }
+}
+
+// Medium devices (tablets, 768px and small)
+@media screen and (max-width: 768px) {
+  .level-item {
+    align-items: start;
+    justify-content: left;
+  }
+}
+
+.mr-auto {
+  margin-right: auto;
+}
+
+.hide {
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+  cursor: initial;
+}

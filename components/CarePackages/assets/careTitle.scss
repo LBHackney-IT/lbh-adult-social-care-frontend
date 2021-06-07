@@ -1,0 +1,27 @@
+@import "../../../assets/css/variables";
+
+.care-title {
+    display: flex;
+    align-items: flex-end;
+    color: $lbh-green1;
+    margin-bottom: 32px;
+
+    label {
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 30px;
+        margin-right: 38px;
+    }
+
+    .care-date-range {
+        display: flex;
+        align-items: center;
+
+        .date-entry {
+            color: $lbh-green1;
+            font-weight: bold;
+            font-size: 19px;
+            line-height: 25px;
+        }
+    }
+}
