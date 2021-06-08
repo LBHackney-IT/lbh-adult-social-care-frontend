@@ -1,6 +1,5 @@
 import Header from "./Header";
 import NavigationColumn from "./NavigationColumn";
-import "./assets/layout.scss";
 
 const Layout = ({ headerTitle, subTitle, children }) => {
   return (

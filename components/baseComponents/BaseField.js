@@ -1,5 +1,4 @@
 import React from "react";
-import "../assets/field.scss";
 
 const BaseField = ({ onClick = () => {}, classes = '', label, noInputStyle = false, children }) => {
   const hasLabel = label !== undefined;

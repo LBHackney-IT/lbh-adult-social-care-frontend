@@ -1,11 +1,11 @@
-import { ReactComponent as HackneyLogoSvg } from "../public/images/icons/hackney_logo.svg";
-import { ReactComponent as CalendarIconSvg } from "../public/images/icons/icon_calendar.svg";
-import { ReactComponent as ArrowLeftIconSvg } from "../public/images/icons/icon_arrow_left.svg";
-import { ReactComponent as CheckGreenIconSvg } from "../public/images/icons/icon_check_green.svg";
-import { ReactComponent as CheckIconSvg } from "../public/images/icons/icon_check.svg";
-import { ReactComponent as CaretRightIconSvg } from "../public/images/icons/icon_caret_right.svg";
-import { ReactComponent as CaretDownIconSvg } from "../public/images/icons/icon_caret_down.svg";
-import { ReactComponent as CaretRightHighlightIconSvg } from "../public/images/icons/icon_caret_right_highlight.svg";
+import { ReactComponent as HackneyLogoSvg } from "/images/icons/hackney_logo.svg";
+import { ReactComponent as CalendarIconSvg } from "/images/icons/icon_calendar.svg";
+import { ReactComponent as ArrowLeftIconSvg } from "/images/icons/icon_arrow_left.svg";
+import { ReactComponent as CheckGreenIconSvg } from "/images/icons/icon_check_green.svg";
+import { ReactComponent as CheckIconSvg } from "/images/icons/icon_check.svg";
+import { ReactComponent as CaretRightIconSvg } from "/images/icons/icon_caret_right.svg";
+import { ReactComponent as CaretDownIconSvg } from "/images/icons/icon_caret_down.svg";
+import { ReactComponent as CaretRightHighlightIconSvg } from "/images/icons/icon_caret_right_highlight.svg";
 import React from "react";
 
 const HackneyLogo = () => {

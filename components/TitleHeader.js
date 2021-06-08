@@ -1,5 +1,3 @@
-import "./assets/titleHeader.scss";
-
 const TitleHeader = ({ children }) => {
   return <div className="title-header">{children}</div>;
 };

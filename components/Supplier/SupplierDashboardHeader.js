@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useHistory } from 'react-router-dom';
+import { useRouter } from "next/router";
 import {HackneyFullLogo} from "../Icons";
 import {includeString} from "../../service/helpers";
 
@@ -7,22 +7,17 @@ const supplierRoutes = [
   {route: '/supplier-dashboard/supplier-returns', name: 'Supplier Returns'},
   {route: '/active-packages', name: 'Active Packages'},
   {route: '/payments', name: 'Payments'},
-  {route: 'logout', name: 'Log Out'},
+  {route: '/', name: 'Log Out'},
 ];
 
 const SupplierDashboardHeader = () => {
-  const location = useLocation().pathname;
-  const pushRoute = useHistory().push;
-  if(location.indexOf('/supplier-dashboard') === -1) {
+  const router = useRouter();
+  if(router.pathname.indexOf('/supplier-dashboard') === -1) {
     return <></>
   }
 
   const changeRoute = route => {
-    if(route === 'logout') {
-      pushRoute('/');
-    } else {
-      pushRoute(route);
-    }
+    router.push(route);
   };
 
   return (

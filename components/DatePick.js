@@ -1,6 +1,5 @@
 import React from "react";
 import DatePicker from "react-date-picker";
-import "./assets/datePick.scss";
 import BaseField from "./baseComponents/BaseField";
 import { CalendarIcon } from "./Icons";
 

@@ -1,4 +1,4 @@
-import "./assets/careTitle.scss";
+import React from "react";
 
 const CareTitle = ({ children, startDate, endDate }) => {
   startDate = new Date(startDate).toLocaleDateString('en-GB');

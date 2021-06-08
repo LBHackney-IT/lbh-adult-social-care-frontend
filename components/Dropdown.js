@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./assets/dropdown.scss";
 import BaseField from "./baseComponents/BaseField";
 import OutsideTrigger from "./OutsideTrigger";
 import { CaretDownIcon } from "./Icons";

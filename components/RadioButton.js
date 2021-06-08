@@ -1,6 +1,5 @@
 import { useState } from "react";
 import BaseField from "./baseComponents/BaseField";
-import "./assets/radioButton.scss";
 
 const yesNoValues = [
   { text: "Yes", value: true },

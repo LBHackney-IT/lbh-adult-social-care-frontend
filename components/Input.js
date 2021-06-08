@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import BaseField from "./baseComponents/BaseField";
-import './assets/input.scss';
 import {Button} from "./Button";
 import {HackneySearch} from "./Icons";
 

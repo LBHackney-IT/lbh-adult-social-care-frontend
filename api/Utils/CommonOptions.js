@@ -5,7 +5,7 @@ const getFixedPeriodOptions = () => {
   ];
 };
 
-const getInitDaysSelected = () => [
+const getInitDaysSelected = [
   { id: 1, short: "Mon", long: "Monday", checked: true },
   { id: 2, short: "Tue", long: "Tuesday", checked: false },
   { id: 3, short: "Wed", long: "Wednesday", checked: true },
@@ -15,4 +15,58 @@ const getInitDaysSelected = () => [
   { id: 7, short: "Sun", long: "Sunday", checked: true },
 ];
 
-export { getFixedPeriodOptions, getInitDaysSelected };
+const getSelectedDate = (daysData) => {
+  const monday = {
+    ...getInitDaysSelected.find(
+      (dayObj) => dayObj.long.toLowerCase() === "monday"
+    ),
+    checked: daysData.packageDetails.monday,
+  };
+  const tuesday = {
+    ...getInitDaysSelected.find(
+      (dayObj) => dayObj.long.toLowerCase() === "tuesday"
+    ),
+    checked: daysData.packageDetails.tuesday,
+  };
+  const wednesday = {
+    ...getInitDaysSelected.find(
+      (dayObj) => dayObj.long.toLowerCase() === "wednesday"
+    ),
+    checked: daysData.packageDetails.wednesday,
+  };
+  const thursday = {
+    ...getInitDaysSelected.find(
+      (dayObj) => dayObj.long.toLowerCase() === "thursday"
+    ),
+    checked: daysData.packageDetails.thursday,
+  };
+  const friday = {
+    ...getInitDaysSelected.find(
+      (dayObj) => dayObj.long.toLowerCase() === "friday"
+    ),
+    checked: daysData.packageDetails.friday,
+  };
+  const saturday = {
+    ...getInitDaysSelected.find(
+      (dayObj) => dayObj.long.toLowerCase() === "saturday"
+    ),
+    checked: daysData.packageDetails.saturday,
+  };
+  const sunday = {
+    ...getInitDaysSelected.find(
+      (dayObj) => dayObj.long.toLowerCase() === "sunday"
+    ),
+    checked: daysData.packageDetails.sunday,
+  };
+  return [
+    monday,
+    tuesday,
+    wednesday,
+    thursday,
+    friday,
+    saturday,
+    sunday,
+  ];
+}
+
+export { getFixedPeriodOptions, getInitDaysSelected, getSelectedDate };

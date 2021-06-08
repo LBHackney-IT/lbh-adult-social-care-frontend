@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./assets/checkbox.scss";
 import { CheckIcon } from "./Icons";
 
 const Checkbox = ({ children, checked = false, onChange = () => {} }) => {

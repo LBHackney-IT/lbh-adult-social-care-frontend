@@ -23,9 +23,25 @@ const includeString = (mainString, checkString) => mainString && mainString.inde
 
 const formatStatus = status => status ? status.split('-').map(text => text.slice(0, 1).toUpperCase() + text.slice(1,text.length)).join(' ') : '';
 
+const getUserSession = ({ req }) => {
+  const user = req.session.get('user');
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  } else {
+    return user;
+  }
+};
+
 export {
   uniqueID,
   formatDateWithSign,
   formatStatus,
   includeString,
+  getUserSession,
 };

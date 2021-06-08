@@ -1,10 +1,10 @@
-import { NavLink } from "react-router-dom";
+import Link from "next/link";
 import { CaretRightIcon, CaretRightHighlightIcon } from "../Icons";
 import * as RouteConstants from "../../routes/RouteConstants";
 
 const NavItem = ({ children, to = "/xyz" }) => {
   return (
-    <NavLink
+    <Link
       className="navigation-item is-clickable"
       activeClassName="is-active"
       to={to}
@@ -18,7 +18,7 @@ const NavItem = ({ children, to = "/xyz" }) => {
           <CaretRightHighlightIcon />
         </span>
       </div>
-    </NavLink>
+    </Link>
   );
 };
 

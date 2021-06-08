@@ -1,16 +1,14 @@
 import React from "react";
-import { useHistory, useLocation } from 'react-router-dom';
+import { useRouter } from "next/router";
 import {Button} from "../Button";
 import {uniqueID} from "../../service/helpers";
 
 const Pagination = ({ classes, actionButton, itemsCount, from, to, currentPage, totalCount }) => {
-  const location = useLocation();
-  const query = new URLSearchParams(location.search);
-  const pushRoute = useHistory().push;
-  const finalPage = currentPage !== undefined ? currentPage : query.get('page');
+  const router = useRouter();
+  const finalPage = currentPage !== undefined ? currentPage : router.query.page;
 
   const changePagination = page => {
-    pushRoute(`${location.pathname}?page=${page}`);
+    router.push(`${router.pathname}?page=${page}`);
   };
 
   return (

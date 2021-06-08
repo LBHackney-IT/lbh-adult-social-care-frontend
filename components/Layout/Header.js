@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, HackneyLogo } from "../Icons";
-import { NavLink } from "react-router-dom";
+import Link from "next/link";
 
 const HeaderNav = () => {
   return (
@@ -8,7 +8,7 @@ const HeaderNav = () => {
         <div className="level-item level-left">
           <HackneyLogo />
         </div>
-        <div className="level-item level-right"></div>
+        <div className="level-item level-right"/>
       </div>
     </div>
   );
@@ -19,10 +19,10 @@ const Header = ({ children, subTitle }) => {
     <>
       <HeaderNav />
       <div className="page-header">
-        <NavLink to="/">
+        <Link to="/">
           <ArrowLeftIcon />
           Back
-        </NavLink>
+        </Link>
         <div className="header-title">
           {subTitle !== undefined ? <h5>{subTitle}</h5> : null}
           <h3>

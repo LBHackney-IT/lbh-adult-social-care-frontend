@@ -3,7 +3,7 @@ const brokerageTestData = {
     id: 3141232,
     startDate: new Date(),
     endDate: new Date(),
-    suppliers: ['SupplierDashboard 1', 'SupplierDashboard 2'],
+    suppliers: ['Index 1', 'Index 2'],
     primaryCarrier: {hr: '', hrswk: 3, total: '$XX'},
     '30mCall': {hr: '$20', hrswk: 3, total: '$43'},
     '45mCall': {hr: '$20', hrswk: 3, total: '$43'},

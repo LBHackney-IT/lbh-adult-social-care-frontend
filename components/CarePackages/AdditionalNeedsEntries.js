@@ -2,9 +2,8 @@ import SectionHeading from "../SectionHeading";
 import { Button } from "../Button";
 import TextArea from "../TextArea";
 import RadioButton from "../RadioButton";
-import "./assets/additionalNeeds.scss";
 import React, { useEffect, useState } from "react";
-import DatePick from "../../../components/DatePick";
+import DatePick from "../DatePick";
 
 const AdditionalNeedEntry = ({
   costOptions,

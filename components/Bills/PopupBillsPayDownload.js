@@ -18,7 +18,7 @@ const PopupBillsPayDownload = ({
     <Popup
       closePopup={closePopup}
       mainContent={createPayRun}
-      title='Pay Bills'
+      title='Pay Index'
       firstButton={{text: 'Cancel'}}
       secondButton={{text: 'Pay & Download Export File'}}
     />

@@ -1,10 +1,5 @@
 import React from "react";
-import "./assets/clientSummary.scss";
-import hackney_logo from '../../assets/icons/hackney_logo.png';
-
-const sourcingCareImages = {
-  hackney: hackney_logo
-};
+import Image from "next/image";
 
 const ClientSummary = ({
   children,
@@ -42,7 +37,7 @@ const ClientSummary = ({
           sourcingCare &&
             <div className="column client-prop">
               <label>WHO IS SOURCING CARE</label>
-              <img src={sourcingCareImages[sourcingCare]} alt='' />
+              <Image width="fixed" height="fixed" src='/images/icons/hackney_logo.png' alt='' />
             </div>
         }
         {

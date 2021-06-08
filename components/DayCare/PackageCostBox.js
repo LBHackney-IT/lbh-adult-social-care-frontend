@@ -1,5 +1,4 @@
 import React from "react";
-import "./assets/packageCostBox.scss";
 
 const PackageCostBox = ({
   boxClass = "hackney-package-cost-light-yellow-box",

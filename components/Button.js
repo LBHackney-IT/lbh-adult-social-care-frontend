@@ -1,6 +1,3 @@
-import { NavLink } from "react-router-dom";
-import "./assets/button.scss";
-
 // Get/build the passed class name
 const getClassName = (className = "", linkBtn = false) => {
   return linkBtn ? "link-button" : `button button-base ${className}`;
@@ -36,16 +33,4 @@ const Button = ({
   );
 };
 
-const NavLinkButton = ({ toRoute, className, Icon, ...props }) => {
-  const classNameValue = getClassName(className);
-  const buttonContent = getButtonContent(Icon, props.children);
-  return (
-    <>
-      <NavLink to={toRoute} className={classNameValue}>
-        {buttonContent}
-      </NavLink>
-    </>
-  );
-};
-
-export { Button, NavLinkButton };
+export { Button };
