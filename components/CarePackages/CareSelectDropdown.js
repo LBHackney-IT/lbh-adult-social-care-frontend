@@ -5,7 +5,7 @@ const CareSelectDropdown = ({
   careTypes,
   selectedCareType,
   setSelectedCareType,
-  label = 'Select package',
+  label = 'Select approve-package',
   initialText,
 }) => {
   return (

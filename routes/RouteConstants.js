@@ -29,7 +29,7 @@ const PAYMENTS_SUPPLIER_RETURNS_ROUTE = `${PAYMENTS_ROUTE}/supplier-returns`;
 const PAYMENTS_WEEK_OF_SUPPLIER_ROUTE = `${PAYMENTS_ROUTE}/supplier-returns/week-of-supplier/:id`;
 const PAYMENTS_REPORTING_ROUTE = `${PAYMENTS_ROUTE}/reporting`;
 
-const SUPPLIER_DASHBOARD_ROUTE = '/supplier-dashboard/supplier-returns';
+const SUPPLIER_DASHBOARD_ROUTE = '/supplier-supplier-dashboard/supplier-returns';
 const SUPPLIER_RETURNS_DASHBOARD_ROUTE = `${SUPPLIER_DASHBOARD_ROUTE}/supplier-returns/:id`;
 
 export {

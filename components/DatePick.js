@@ -1,18 +1,16 @@
 import React from "react";
-import DatePicker from "react-date-picker";
+import DatePicker from "react-datepicker";
 import BaseField from "./baseComponents/BaseField";
-import { CalendarIcon } from "./Icons";
+import "react-datepicker/dist/react-datepicker.css";
 
 const DatePick = ({ classes = '', disabled = false, label, setDate, dateValue }) => {
   return (
-    <BaseField classes={classes} label={label} noInputStyle={true}>
+    <BaseField classes={`${classes} react-date-picker`} label={label} noInputStyle={true}>
       <DatePicker
         disabled={disabled}
-        clearIcon={null}
-        calendarIcon={<CalendarIcon />}
         onChange={setDate}
-        value={dateValue}
-        format="dd/MM/y"
+        selected={dateValue}
+        format="dd/MM/YYYY"
       />
     </BaseField>
   );

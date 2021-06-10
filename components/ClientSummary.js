@@ -37,7 +37,7 @@ const ClientSummary = ({
           sourcingCare &&
             <div className="column client-prop">
               <label>WHO IS SOURCING CARE</label>
-              <Image width="fixed" height="fixed" src='/images/icons/hackney_logo.png' alt='' />
+              <Image width="300" height="52" src='/images/icons/hackney_logo.png' alt='' />
             </div>
         }
         {

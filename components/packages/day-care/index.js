@@ -487,7 +487,7 @@ const PackagesDayCare = ({
             </div>
           )}
         </div>
-        <div className="proposed-packages__tabs column">
+        <div className="proposed-packages__tabs">
           {[
             { text: "Approval history", value: "approvalHistory" },
             { text: "Package details", value: "packageDetails" },

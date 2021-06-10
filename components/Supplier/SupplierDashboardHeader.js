@@ -4,7 +4,7 @@ import {HackneyFullLogo} from "../Icons";
 import {includeString} from "../../service/helpers";
 
 const supplierRoutes = [
-  {route: '/supplier-dashboard/supplier-returns', name: 'Supplier Returns'},
+  {route: '/supplier-supplier-dashboard/supplier-returns', name: 'Supplier Returns'},
   {route: '/active-packages', name: 'Active Packages'},
   {route: '/payments', name: 'Payments'},
   {route: '/', name: 'Log Out'},
@@ -12,7 +12,7 @@ const supplierRoutes = [
 
 const SupplierDashboardHeader = () => {
   const router = useRouter();
-  if(router.pathname.indexOf('/supplier-dashboard') === -1) {
+  if(router.pathname.indexOf('/supplier-supplier-dashboard') === -1) {
     return <></>
   }
 

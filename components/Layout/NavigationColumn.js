@@ -1,13 +1,15 @@
-import Link from "next/link";
+import React, {useEffect} from "react";
 import { CaretRightIcon, CaretRightHighlightIcon } from "../Icons";
 import * as RouteConstants from "../../routes/RouteConstants";
+import {useRouter} from "next/router";
 
-const NavItem = ({ children, to = "/xyz" }) => {
+const NavItem = ({ children, to }) => {
+  const router = useRouter();
+  const activeRouteClass = router.pathname.indexOf(to) > - 1 ? " is-active" : '';
   return (
-    <Link
-      className="navigation-item is-clickable"
-      activeClassName="is-active"
-      to={to}
+    <div
+      className={`navigation-item is-clickable${activeRouteClass}`}
+      onClick={() => router.push(to)}
     >
       <div>
         {children}
@@ -18,7 +20,7 @@ const NavItem = ({ children, to = "/xyz" }) => {
           <CaretRightHighlightIcon />
         </span>
       </div>
-    </Link>
+    </div>
   );
 };
 
@@ -27,16 +29,16 @@ const NavigationColumn = () => {
     <div className="nav-column-cont">
       <NavItem to={RouteConstants.PROPOSED_PACKAGES}>Proposed Packages</NavItem>
       <NavItem to={RouteConstants.CARE_PACKAGE}>Care Package</NavItem>
-      {/* <NavItem to={RouteConstants.CLIENT_HISTORY}>Client History</NavItem>
-      <NavItem>Client details</NavItem>
-      <NavItem>Medical history</NavItem>
-      <NavItem>Important to me</NavItem>
-      <NavItem>GP Details</NavItem>
-      <NavItem>Communication Support</NavItem>
-      <NavItem>Mental Capacity Assessment</NavItem>
-      <NavItem>Carer</NavItem>
-      <NavItem>Risk Assessment</NavItem>
-      <NavItem>Review</NavItem> */}
+      <NavItem to={RouteConstants.CLIENT_HISTORY}>Client History</NavItem>
+      <NavItem to="/test">Client details</NavItem>
+      <NavItem to="/test">Medical history</NavItem>
+      <NavItem to="/test">Important to me</NavItem>
+      <NavItem to="/test">GP Details</NavItem>
+      <NavItem to="/test">Communication Support</NavItem>
+      <NavItem to="/test">Mental Capacity Assessment</NavItem>
+      <NavItem to="/test">Carer</NavItem>
+      <NavItem to="/test">Risk Assessment</NavItem>
+      <NavItem to="/test">Review</NavItem>
     </div>
   );
 };

@@ -13,7 +13,7 @@
     "next": "^10.2.3",
     "next-iron-session": "^4.2.0",
     "react": "^17.0.2",
-    "react-date-picker": "^8.1.1",
+    "react-datepicker": "^4.1.1",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.2",
     "react-redux": "^7.1.3",

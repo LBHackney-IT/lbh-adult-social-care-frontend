@@ -5,6 +5,8 @@ import HomeCareSetup from "../../components/Setup/HomeCareSetup";
 import DayCareSetup from "../../components/Setup/DayCareSetup";
 import NursingCareSetup from "../../components/Setup/NursingCareSetup";
 import ResidentialCareSetup from "../../components/Setup/ResidentialCareSetup";
+import withSession from "../../lib/session";
+import {getUserSession} from "../../service/helpers";
 
 const careTypes = [
   { text: "Home care", value: 1 },
@@ -13,7 +15,20 @@ const careTypes = [
   { text: "Nursing care", value: 4 },
 ];
 
-const CarePackage = ({ history }) => {
+export const getServerSideProps = withSession(async function({ req }) {
+  const user = getUserSession({ req });
+  if(user.redirect) {
+    return {
+      props: { user },
+    }
+  }
+
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+});
+
+const CarePackage = (props) => {
   const [selectedCareType, setSelectedCareType] = useState(1);
 
   const ComponentForCareType = () => {
@@ -22,7 +37,6 @@ const CarePackage = ({ history }) => {
       case 1: {
         return (
           <HomeCareSetup
-            history={history}
             careTypes={careTypes}
             setSelectedCareType={setSelectedCareType}
             selectedCareType={selectedCareType}
@@ -32,7 +46,6 @@ const CarePackage = ({ history }) => {
       case 2: {
         return (
           <DayCareSetup
-            history={history}
             careTypes={careTypes}
             setSelectedCareType={setSelectedCareType}
             selectedCareType={selectedCareType}
@@ -42,7 +55,6 @@ const CarePackage = ({ history }) => {
       case 3: {
         return (
           <ResidentialCareSetup
-            history={history}
             careTypes={careTypes}
             setSelectedCareType={setSelectedCareType}
             selectedCareType={selectedCareType}
@@ -52,7 +64,6 @@ const CarePackage = ({ history }) => {
       case 4: {
         return (
           <NursingCareSetup
-            history={history}
             careTypes={careTypes}
             setSelectedCareType={setSelectedCareType}
             selectedCareType={selectedCareType}

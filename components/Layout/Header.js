@@ -1,5 +1,6 @@
+import React from "react";
 import { ArrowLeftIcon, HackneyLogo } from "../Icons";
-import Link from "next/link";
+import { useRouter } from "next/router";
 
 const HeaderNav = () => {
   return (
@@ -15,14 +16,15 @@ const HeaderNav = () => {
 };
 
 const Header = ({ children, subTitle }) => {
+  const router = useRouter();
   return (
     <>
       <HeaderNav />
       <div className="page-header">
-        <Link to="/">
+        <div onClick={() => router.back()}>
           <ArrowLeftIcon />
           Back
-        </Link>
+        </div>
         <div className="header-title">
           {subTitle !== undefined ? <h5>{subTitle}</h5> : null}
           <h3>

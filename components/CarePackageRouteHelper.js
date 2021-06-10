@@ -1,4 +1,4 @@
-// Creates the parameter listing for care package pages
+// Creates the parameter listing for care approve-package pages
 const getBaseParams = (
   isImmediate,
   isS117,

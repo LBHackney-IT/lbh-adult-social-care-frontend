@@ -12,11 +12,10 @@ import {
 import {
   changeDayCarePackageStatus,
   createDayCareBrokerageInfo,
-  getDayCareBrokerageStages, getDayCarePackageApprovalDetails,
+  getDayCareBrokerageStages,
   getDayCarePackageDetailsForBrokerage,
 } from "../../../api/CarePackages/DayCareApi";
 import { useRouter } from "next/router"
-import { getInitDaysSelected } from "../../../api/Utils/CommonOptions";
 import {
   mapBrokerageSupplierOptions,
   mapDayCarePackageDetailsForBrokerage,
@@ -68,21 +67,19 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
 
-  return { props: { data }};
+  return { props: { ...data }};
 });
 
-const DayCareBrokering = ({ data: {
+const DayCareBrokering = ({
   approvalHistoryEntries,
   opportunityEntries,
   clientDetails,
   daysSelected,
   dayCarePackage,
-}}) => {
-  // Parameters
+  errorData,
+}) => {
   const router = useRouter();
-  const { dayCarePackageId } = router.query;
-
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState(errorData);
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState("approvalHistory");
   const [summaryData, setSummaryData] = useState([]);
@@ -95,7 +92,7 @@ const DayCareBrokering = ({ data: {
       retrieveSupplierOptions();
     if (!stageOptions.length || stageOptions.length === 1)
       retrieveDayCareBrokerageStages();
-  });
+  }, [supplierOptions, stageOptions]);
 
   const retrieveSupplierOptions = () => {
     getSupplierList()

@@ -1,0 +1,42 @@
+.react-date-picker__wrapper {
+    border: 2px solid $lbh-black1 !important;
+    height: 40px;
+    padding-left: 10px;
+
+    .react-date-picker__inputGroup {
+        cursor: pointer;
+    }
+}
+
+.datepicker-disabled {
+    label {
+        color: black;
+        opacity: 0.2;
+    }
+
+    button {
+        svg {
+            opacity: 0.2;
+        }
+    }
+
+    .react-date-picker__inputGroup {
+        display: none;
+    }
+
+    .react-date-picker--disabled {
+        background: initial;
+    }
+}
+
+.datepicker-ongoing {
+    .react-date-picker__wrapper {
+        &::before {
+            content: 'Ongoing';
+            margin-right: 10px;
+            color: $lbh-black1;
+            display: flex;
+            align-items: center;
+        }
+    }
+}

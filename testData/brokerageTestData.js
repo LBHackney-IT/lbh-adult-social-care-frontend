@@ -33,7 +33,7 @@ const brokerageTestData = {
       {date: new Date(2021, 3, 12), stage: 'Broker', action: 'Re-submitted for approval'},
       {date: new Date(2021, 3, 12), stage: 'Approval', action: 'Approved'},
       {date: new Date(2021, 3, 12), stage: 'Approval', action: 'PO Send by system'},
-    ]
+    ],
   }
 };
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NURSING_CARE } from "../../routes/RouteConstants";
 import DatePick from "../DatePick";
 import RadioButton, { yesNoValues } from "../RadioButton";
@@ -36,7 +36,6 @@ const NursingCareSetup = ({
       retrieveNursingCareTypeOfStayOptions();
     }
   }, [])
-
 
   const retrieveNursingCareTypeOfStayOptions = () => {
     getNursingCareTypeOfStayOptions().then(res => {
