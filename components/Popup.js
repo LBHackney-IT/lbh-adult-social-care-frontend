@@ -1,6 +1,6 @@
-import React, {useEffect} from "react";
-import {Button} from "./Button";
-import {CircleCloseIcon} from "./Icons";
+import React, { useEffect } from "react";
+import { Button } from "./Button";
+import { CircleCloseIcon } from "./Icons";
 
 const Popup = ({ mainContent, firstButton, classes = '', secondButton, title, closePopup }) => {
 

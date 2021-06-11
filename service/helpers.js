@@ -23,10 +23,13 @@ const includeString = (mainString, checkString) => mainString && mainString.inde
 
 const formatStatus = status => status ? status.split('-').map(text => text.slice(0, 1).toUpperCase() + text.slice(1,text.length)).join(' ') : '';
 
+// check user session
+// if no user, then redirect to Login Page
 const getUserSession = ({ req }) => {
   const user = req.session.get('user');
 
   if (!user) {
+    return {}; // TODO delete after setup login
     return {
       redirect: {
         destination: '/login',

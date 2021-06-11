@@ -2,12 +2,13 @@ import React from "react";
 import Input from "../../components/Input";
 import {Button} from "../../components/Button";
 import {useRouter} from "next/router";
+import { CARE_PACKAGE_ROUTE } from "../../routes/RouteConstants";
 
 const Login = () => {
   const router = useRouter();
 
   const login = () => {
-    router.replace('/care-package');
+    router.replace(CARE_PACKAGE_ROUTE);
   };
 
   return (

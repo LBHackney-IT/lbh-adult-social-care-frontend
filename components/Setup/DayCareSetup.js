@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { DAY_CARE } from "../../routes/RouteConstants";
+import { DAY_CARE_ROUTE } from "../../routes/RouteConstants";
 import DatePick from "../DatePick";
 import RadioButton, { yesNoValues } from "../RadioButton";
 import CarePackageSetup from "../CarePackages/CarePackageSetup";
@@ -28,7 +28,7 @@ const DayCareSetup = ({
   const onBuildClick = () => {
     // Get the parameters for the home care package route
     router.push(
-      `${DAY_CARE}/${isImmediate}/${isS117}/${isFixedPeriod}/${startDate}`
+      `${DAY_CARE_ROUTE}/${isImmediate}/${isS117}/${isFixedPeriod}/${startDate}`
     );
   };
 

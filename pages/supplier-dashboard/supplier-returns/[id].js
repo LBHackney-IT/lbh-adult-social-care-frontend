@@ -16,9 +16,7 @@ import withSession from "../../../lib/session";
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   return {
@@ -28,6 +26,8 @@ export const getServerSideProps = withSession(async function({ req }) {
 
 const SupplierReturnsDashboard = (props) => {
   const router = useRouter();
+  const id = router.query.id;
+  const [pathname] = useState(`/supplier-dashboard/supplier-returns/${id}`);
   const [sorts] = useState([
     {name: 'serviceUser', text: 'Service User'},
     {name: 'packageId', text: 'Package ID'},
@@ -39,7 +39,6 @@ const SupplierReturnsDashboard = (props) => {
   const [checkedRows, setCheckedRows] = useState([]);
   const [newMessageText, setNewMessageText] = useState('');
   const [openedHelpChat, setOpenedHelpChat] = useState({});
-  const { supplierReturnsDashboard: { weekCommencing: date }} = useSelector(selectSupplierDashboard);
 
   const [breadcrumbs] = useState([
     {text: 'Payments', onClick: () => router.push('/payments/pay-runs')},
@@ -100,7 +99,7 @@ const SupplierReturnsDashboard = (props) => {
   }, [sort]);
 
   useEffect(() => {
-    router.replace(`${router.pathname}?page=1`);
+    router.replace(`${pathname}?page=1`);
   }, []);
 
   return (
@@ -130,7 +129,7 @@ const SupplierReturnsDashboard = (props) => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
       <SupplierReturnsLevelInsight
         packages='832'
         totalValue='£92,321'

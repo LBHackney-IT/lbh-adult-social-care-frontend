@@ -2,18 +2,20 @@ import React from "react";
 import { useRouter } from "next/router";
 import {HackneyFullLogo} from "../Icons";
 import {includeString} from "../../service/helpers";
+import {ACTIVE_PACKAGES_ROUTE, PAYMENTS_ROUTE, SUPPLIER_DASHBOARD_ROUTE} from "../../routes/RouteConstants";
 
 const supplierRoutes = [
-  {route: '/supplier-supplier-dashboard/supplier-returns', name: 'Supplier Returns'},
-  {route: '/active-packages', name: 'Active Packages'},
-  {route: '/payments', name: 'Payments'},
+  {route: SUPPLIER_DASHBOARD_ROUTE, name: 'Supplier Returns'},
+  {route: ACTIVE_PACKAGES_ROUTE, name: 'Active Packages'},
+  {route: PAYMENTS_ROUTE, name: 'Payments'},
   {route: '/', name: 'Log Out'},
 ];
 
+
 const SupplierDashboardHeader = () => {
   const router = useRouter();
-  if(router.pathname.indexOf('/supplier-supplier-dashboard') === -1) {
-    return <></>
+  if(router.pathname.indexOf(SUPPLIER_DASHBOARD_ROUTE) === -1) {
+    return <></>;
   }
 
   const changeRoute = route => {

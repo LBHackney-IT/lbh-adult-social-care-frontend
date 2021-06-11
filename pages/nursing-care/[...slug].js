@@ -13,16 +13,14 @@ import {
   createNursingCarePackage,
   getTypeOfNursingHomeOptions,
 } from "../../api/CarePackages/NursingCareApi";
-import { CARE_PACKAGE } from "../../routes/RouteConstants";
+import { CARE_PACKAGE_ROUTE } from "../../routes/RouteConstants";
 import { getUserSession } from "../../service/helpers";
 import withSession from "../../lib/session";
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   return {
@@ -132,7 +130,7 @@ const NursingCare = (props) => {
     createNursingCarePackage(nursingCarePackageToCreate)
       .then(() => {
         alert("Package saved.");
-        router.push(`${CARE_PACKAGE}`);
+        router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Create package failed. ${error.message}`);

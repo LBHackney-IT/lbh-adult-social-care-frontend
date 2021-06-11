@@ -22,7 +22,7 @@ import {
   mapDayCareStageOptions,
 } from "../../../api/Mappers/DayCareMapper";
 import { getSupplierList } from "../../../api/CarePackages/SuppliersApi";
-import { CARE_PACKAGE } from "../../../routes/RouteConstants";
+import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
 import PackagesDayCare from "../../../components/packages/day-care";
 import withSession from "../../../lib/session";
 
@@ -39,9 +39,7 @@ const initialPackageReclaim = {
 export const getServerSideProps = withSession(async function({ req, query: { id: dayCarePackageId } }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   const data = {
@@ -124,7 +122,7 @@ const DayCareBrokering = ({
     createDayCareBrokerageInfo(dayCarePackageId, brokerageInfoForCreation)
       .then(() => {
         alert("Package saved.");
-        router.push(`${CARE_PACKAGE}`);
+        router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Create brokerage info failed. ${error.message}`);

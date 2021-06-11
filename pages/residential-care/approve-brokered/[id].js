@@ -21,9 +21,7 @@ import {getUserSession} from "../../../service/helpers";
 export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   const data = {
@@ -75,8 +73,7 @@ const ResidentialCareApproveBrokered = ({
   errorData,
 }) => {
   const router = useRouter();
-  const params = router.query;
-  let { residentialCarePackageId } = params;
+  const residentialCarePackageId = router.query.id;
 
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
@@ -88,7 +85,7 @@ const ResidentialCareApproveBrokered = ({
   const handleRejectPackage = () => {
     residentialCareChangeStatus(residentialCarePackageId, 10)
       .then(() => {
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
@@ -99,7 +96,7 @@ const ResidentialCareApproveBrokered = ({
   const handleApprovePackageCommercials = () => {
     residentialCareChangeStatus(residentialCarePackageId, 8)
       .then(() => {
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
@@ -114,7 +111,7 @@ const ResidentialCareApproveBrokered = ({
     )
       .then(() => {
         setDisplayMoreInfoForm(false);
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);

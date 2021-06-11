@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-function useOutisdeTrigger(ref, onClick) {
+function useOutsideTrigger(ref, onClick) {
   useEffect(() => {
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {
@@ -15,9 +15,9 @@ function useOutisdeTrigger(ref, onClick) {
   }, [ref, onClick]);
 }
 
-const OutisdeTrigger = ({ children, onClick, className = "" }) => {
+const OutsideTrigger = ({ children, onClick, className = "" }) => {
   const wrapperRef = useRef(null);
-  useOutisdeTrigger(wrapperRef, onClick);
+  useOutsideTrigger(wrapperRef, onClick);
 
   return (
     <span className={className} ref={wrapperRef}>
@@ -26,4 +26,4 @@ const OutisdeTrigger = ({ children, onClick, className = "" }) => {
   );
 };
 
-export default OutisdeTrigger;
+export default OutsideTrigger;

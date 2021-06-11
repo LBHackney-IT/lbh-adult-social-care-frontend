@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NURSING_CARE } from "../../routes/RouteConstants";
+import { NURSING_CARE_ROUTE } from "../../routes/RouteConstants";
 import DatePick from "../DatePick";
 import RadioButton, { yesNoValues } from "../RadioButton";
 import CarePackageSetup from "../CarePackages/CarePackageSetup";
@@ -54,7 +54,7 @@ const NursingCareSetup = ({
   const onBuildClick = () => {
     // Get the parameters for the residential care package route
     router.push(
-      `${NURSING_CARE}/${isFixedPeriod}/${startDate}/${typeOfStayId}/` +
+      `${NURSING_CARE_ROUTE}/${isFixedPeriod}/${startDate}/${typeOfStayId}/` +
       `${isRespiteCare}/${isDischargePackage}/${isImmediateOrReEnablement}/${isS117}/${endDate}`
     );
   };

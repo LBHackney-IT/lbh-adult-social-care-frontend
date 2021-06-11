@@ -7,10 +7,11 @@ const DatePick = ({ classes = '', disabled = false, label, setDate, dateValue })
   return (
     <BaseField classes={`${classes} react-date-picker`} label={label} noInputStyle={true}>
       <DatePicker
+        dateFormat="dd/MM/yyyy"
         disabled={disabled}
         onChange={setDate}
         selected={dateValue}
-        format="dd/MM/YYYY"
+        className='react-date-picker__input'
       />
     </BaseField>
   );

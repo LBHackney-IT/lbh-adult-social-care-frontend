@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { HOME_CARE } from "../../routes/RouteConstants";
+import { HOME_CARE_ROUTE } from "../../routes/RouteConstants";
 import DatePick from "../DatePick";
 import RadioButton, { yesNoValues } from "../RadioButton";
 import CarePackageSetup from "../CarePackages/CarePackageSetup";
@@ -28,7 +28,7 @@ const HomeCareSetup = ({
   const onBuildClick = () => {
     // Get the parameters for the home care package route
     router.push(
-      `${HOME_CARE}/${isImmediate}/${isS117}/${isFixedPeriod}/${startDate}/${endDate}`
+      `${HOME_CARE_ROUTE}/${isImmediate}/${isS117}/${isFixedPeriod}/${startDate}/${endDate}`
     );
   };
 

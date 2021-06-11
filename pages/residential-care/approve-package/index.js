@@ -21,9 +21,7 @@ import withSession from "../../../lib/session";
 export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   const data = {
@@ -78,7 +76,7 @@ const ResidentialCareApprovePackage = ({
   const handleRejectPackage = () => {
     residentialCareChangeStatus(residentialCarePackageId, 10)
       .then(() => {
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
@@ -89,7 +87,7 @@ const ResidentialCareApprovePackage = ({
   const handleApprovePackageCommercials = () => {
     residentialCareChangeStatus(residentialCarePackageId, 8)
       .then(() => {
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
@@ -104,7 +102,7 @@ const ResidentialCareApprovePackage = ({
     )
       .then(() => {
         setDisplayMoreInfoForm(false);
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);

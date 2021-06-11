@@ -45,9 +45,7 @@ const approvalHistoryEntries = [
 export async function getServerSideProps({ req }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   return {

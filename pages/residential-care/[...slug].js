@@ -16,16 +16,14 @@ import {
 import TitleHeader from "../../components/TitleHeader";
 import ResidentialCareSummary from "../../components/ResidentialCare/ResidentialCareSummary";
 import { Button } from "../../components/Button";
-import { CARE_PACKAGE } from "../../routes/RouteConstants";
+import { CARE_PACKAGE_ROUTE } from "../../routes/RouteConstants";
 import {getUserSession} from "../../service/helpers";
 import withSession from "../../lib/session";
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   return {
@@ -153,7 +151,7 @@ const ResidentialCare = (props) => {
     createResidentialCarePackage(residentialCarePackageToCreate)
       .then(() => {
         alert("Package saved.");
-        router.push(`${CARE_PACKAGE}`);
+        router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Create package failed. ${error.message}`);

@@ -3,12 +3,13 @@ import { useRouter } from "next/router";
 import {Button} from "../Button";
 import {uniqueID} from "../../service/helpers";
 
-const Pagination = ({ classes, actionButton, itemsCount, from, to, currentPage, totalCount }) => {
+const Pagination = ({ classes, actionButton, pathname, itemsCount, from, to, currentPage, totalCount }) => {
   const router = useRouter();
   const finalPage = currentPage !== undefined ? currentPage : router.query.page;
 
   const changePagination = page => {
-    router.push(`${router.pathname}?page=${page}`);
+    const pageQuery = `?page=${page}`;
+    router.push(pathname ? `${pathname}${pageQuery}` : `${router.pathname}${pageQuery}`);
   };
 
   return (

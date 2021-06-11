@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import BaseField from "./baseComponents/BaseField";
-import {Button} from "./Button";
-import {HackneySearch} from "./Icons";
+import { Button } from "./Button";
+import { HackneySearch } from "./Icons";
 
 const Input = ({
   label,

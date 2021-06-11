@@ -21,9 +21,7 @@ import {getUserSession} from "../../../service/helpers";
 export const getServerSideProps = withSession(async function({ req, query: { id: nursingCarePackageId } }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   const data = {
@@ -76,8 +74,7 @@ const NursingCareApprovePackage = ({
   errorData,
 }) => {
   const router = useRouter();
-  const params = router.query;
-  let { nursingCarePackageId } = params;
+  const nursingCarePackageId = router.query.id;
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
@@ -88,7 +85,7 @@ const NursingCareApprovePackage = ({
   const handleRejectPackage = () => {
     nursingCareChangeStatus(nursingCarePackageId, 10)
       .then(() => {
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
@@ -99,7 +96,7 @@ const NursingCareApprovePackage = ({
   const handleApprovePackageContents = () => {
     nursingCareChangeStatus(nursingCarePackageId, 4)
       .then(() => {
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
@@ -114,7 +111,7 @@ const NursingCareApprovePackage = ({
     )
       .then(() => {
         setDisplayMoreInfoForm(false);
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);

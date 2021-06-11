@@ -36,9 +36,7 @@ const initialPackageReclaim = {
 export const getServerSideProps = withSession(async function({ req, query: { id: dayCarePackageId } }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   const data = {

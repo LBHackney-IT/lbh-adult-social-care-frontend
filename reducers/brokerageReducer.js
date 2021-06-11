@@ -30,14 +30,12 @@ const brokerageSlice = createSlice({
       sourcingCare: nurseCare.sourcingCare,
       starts: nurseCare.starts,
       ends: nurseCare.ends,
-    }
+    },
   },
   reducers: {
     getBrokerageSuccess: (state, action) => {
       return {
         ...state,
-        fail: false,
-        success: true,
         homeCare: action.payload.homeCare,
         nurseCare: action.payload.nurseCare,
       }
@@ -45,8 +43,6 @@ const brokerageSlice = createSlice({
     getBrokerageFail: (state) => {
       return {
         ...state,
-        fail: true,
-        success: false,
       }
     },
   },

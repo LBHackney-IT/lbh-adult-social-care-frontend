@@ -10,7 +10,7 @@ const BaseField = ({ onClick = () => {}, classes = '', label, noInputStyle = fal
 
   return (
     <div onClick={onClick} className={`${className} ${classes}`}>
-      {hasLabel ? <label>{label}</label> : null}
+      {hasLabel ? <label className='text-bold'>{label}</label> : null}
       {children}
     </div>
   );

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { CaretRightIcon, CaretRightHighlightIcon } from "../Icons";
 import * as RouteConstants from "../../routes/RouteConstants";
 import {useRouter} from "next/router";
@@ -27,9 +27,9 @@ const NavItem = ({ children, to }) => {
 const NavigationColumn = () => {
   return (
     <div className="nav-column-cont">
-      <NavItem to={RouteConstants.PROPOSED_PACKAGES}>Proposed Packages</NavItem>
-      <NavItem to={RouteConstants.CARE_PACKAGE}>Care Package</NavItem>
-      <NavItem to={RouteConstants.CLIENT_HISTORY}>Client History</NavItem>
+      <NavItem to={RouteConstants.PROPOSED_PACKAGES_ROUTE}>Proposed Packages</NavItem>
+      <NavItem to={RouteConstants.CARE_PACKAGE_ROUTE}>Care Package</NavItem>
+      <NavItem to={RouteConstants.CLi}>Client History</NavItem>
       <NavItem to="/test">Client details</NavItem>
       <NavItem to="/test">Medical history</NavItem>
       <NavItem to="/test">Important to me</NavItem>

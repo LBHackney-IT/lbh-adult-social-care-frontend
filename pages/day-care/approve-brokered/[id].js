@@ -22,9 +22,7 @@ import { getSelectedDate } from "../../../api/Utils/CommonOptions";
 export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   const data = {
@@ -70,7 +68,7 @@ const DayCareApproveBrokered = ({
   errorData,
 }) => {
   const router = useRouter();
-  const { dayCarePackageId } = router.query;
+  const dayCarePackageId = router.query.id;
   const [errors, setErrors] = useState(errorData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(
@@ -80,7 +78,7 @@ const DayCareApproveBrokered = ({
   const handleRejectPackage = () => {
     dayCarePackageRejectCommercials(dayCarePackageId)
       .then(() => {
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
@@ -94,7 +92,7 @@ const DayCareApproveBrokered = ({
     )
       .then(() => {
         setDisplayMoreInfoForm(false);
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
@@ -104,7 +102,7 @@ const DayCareApproveBrokered = ({
   const handleApprovePackageCommercials = () => {
     dayCarePackageApproveCommercials(dayCarePackageId)
       .then(() => {
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);

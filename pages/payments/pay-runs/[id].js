@@ -15,9 +15,7 @@ import withSession from "../../../lib/session";
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   return {
@@ -35,17 +33,17 @@ const PayRunPage = (props) => {
     {name: 'status', text: 'Status'},
   ]);
 
-  const popupTypes = useState({
+  const [popupTypes] = useState({
     createPayRun: 'create-pay-run',
     holdPayments: 'hold-payment',
   });
-
   const router = useRouter();
+  const { id } = router.query;
   const [openedPopup, setOpenedPopup] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
   const [actionRequiredBy, setActionRequiredBy] = useState('');
   const [reason, setReason] = useState('');
-  const id = router.pathname.replace('/payments/pay-runs/', '');
+  const [pathname] = useState(`/payments/pay-runs/${id}`);
   const [date, setDate] = useState(new Date());
   const [hocAndRelease, changeHocAndRelease] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
@@ -57,7 +55,7 @@ const PayRunPage = (props) => {
     },
   });
 
-  const [breadcrumbs, setBreadcrumbs] = useState([
+  const [breadcrumbs] = useState([
     {text: 'Payments', onClick: () => router.push('/payments/pay-runs')},
     {text: `Pay Run ${id}`}
   ]);
@@ -91,16 +89,7 @@ const PayRunPage = (props) => {
   }
 
   useEffect(() => {
-    router.replace(`${router.pathname}?page=1`);
-  }, []);
-
-  useEffect(() => {
-    if(router?.query?.id) {
-      setBreadcrumbs([
-        {text: 'payments', route: '/payments/pay-runs', onClick: (value) => router.push(`${value.route}`)},
-        {text: `Pay Run ${router.query.id}`}
-      ]);
-    }
+    router.replace(`${pathname}?page=1`);
   }, []);
 
   useEffect(() => {
@@ -146,7 +135,7 @@ const PayRunPage = (props) => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
       <PayRunsLevelInsight
         firstButton={{
           text: 'Submit pay run for approval',

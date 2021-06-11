@@ -12,13 +12,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {selectSupplierReturns} from "../../../reducers/supplierReturnsReducer";
 import { changeWeekOfSupplier } from "../../../reducers/supplierReturnsReducer";
 import withSession from "../../../lib/session";
+import {PAYMENTS_PAY_RUNS_ROUTE} from "../../../routes/RouteConstants";
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   return {
@@ -38,10 +37,12 @@ const SupplierReturn = (props) => {
   ]);
   const dispatch = useDispatch();
   const router = useRouter();
+  const id = router.query.id;
+  const [pathname] = useState(`${PAYMENTS_PAY_RUNS_ROUTE}/${id}`);
   const [checkedRows, setCheckedRows] = useState([]);
   const {supplierReturns: { weekCommencing: date }} = useSelector(selectSupplierReturns);
 
-  const [breadcrumbs, setBreadcrumbs] = useState([
+  const [breadcrumbs] = useState([
     {text: 'Supplier Returns', onClick: () => router.push('/payments/supplier-returns')},
     {text: `Return week commencing ${date ? formatDateWithSign(date, '.') : ''}`}
   ]);
@@ -75,16 +76,7 @@ const SupplierReturn = (props) => {
   };
 
   useEffect(() => {
-    if(router?.query?.id) {
-      setBreadcrumbs([
-        {text: 'payments', route: '/payments/pay-runs', onClick: (value) => router.push(`${value.route}`)},
-        {text: `Pay Run ${router.query.id}`}
-      ]);
-    }
-  }, []);
-
-  useEffect(() => {
-    router.replace(`${router.pathname}?page=1`);
+    router.replace(`${pathname}?page=1`);
   }, []);
 
   useEffect(() => {
@@ -104,7 +96,7 @@ const SupplierReturn = (props) => {
         sorts={sorts}
         onClickTableRow={onClickTableRow}
       />
-      <Pagination actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
       <SupplierReturnsLevelInsight
         suppliers='832'
         packages='832'

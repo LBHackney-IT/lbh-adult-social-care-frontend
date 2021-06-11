@@ -1,4 +1,4 @@
-import {currency} from "../constants/strings";
+import { currency } from "../constants/strings";
 import React from "react";
 
 const CostCard = ({ selected = false, title = 'TOTAL / WK', price = '1892', status = 'ESTIMATE' }) => {

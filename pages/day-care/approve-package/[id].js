@@ -25,9 +25,7 @@ import { getUserSession } from "../../../service/helpers";
 export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   const data = {
@@ -78,7 +76,7 @@ const DayCareApprovePackage = ({
 }) => {
   // Parameters
   const router = useRouter();
-  let { dayCarePackageId } = router.query;
+  const dayCarePackageId = router.query.id;
 
   const [errors, setErrors] = useState([]);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
@@ -90,7 +88,7 @@ const DayCareApprovePackage = ({
   const handleRejectPackage = () => {
     dayCarePackageRejectContents(dayCarePackageId)
       .then(() => {
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
@@ -104,7 +102,7 @@ const DayCareApprovePackage = ({
     )
       .then(() => {
         setDisplayMoreInfoForm(false);
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
@@ -114,7 +112,7 @@ const DayCareApprovePackage = ({
   const handleApprovePackageContents = () => {
     approveDayCarePackageContents(dayCarePackageId)
       .then(() => {
-        // router.push(`${CARE_PACKAGE}`);
+        // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RESIDENTIAL_CARE } from "../../routes/RouteConstants";
+import { RESIDENTIAL_CARE_ROUTE } from "../../routes/RouteConstants";
 import DatePick from "../DatePick";
 import RadioButton, { yesNoValues } from "../RadioButton";
 import CarePackageSetup from "../CarePackages/CarePackageSetup";
@@ -61,7 +61,7 @@ const ResidentialCareSetup = ({
     const typeOfStayText = typeOfStay ? typeOfStay.text : null;
     // Get the parameters for the residential care package route
     router.push(
-      `${RESIDENTIAL_CARE}/${hasRespiteCare}/${hasDischargePackage}/` +
+      `${RESIDENTIAL_CARE_ROUTE}/${hasRespiteCare}/${hasDischargePackage}/` +
         `${isImmediateOrReEnablement}/${typeOfStayId}/${isS117}/${startDate}/${endDate}?typeOfStayText=${typeOfStayText}`
     );
   };

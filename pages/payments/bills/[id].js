@@ -9,13 +9,12 @@ import PopupBillsPayDownload from "../../../components/Bills/PopupBillsPayDownlo
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
 import {getUserSession} from "../../../service/helpers";
 import withSession from "../../../lib/session";
+import {PAYMENTS_BILLS_ROUTE} from "../../../routes/RouteConstants";
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   return {
@@ -37,11 +36,12 @@ const BillPage = (props) => {
     holdPayments: 'hold-payment',
   });
   const router = useRouter();
+  const id = router.query.id;
+  const [pathname] = useState(`${PAYMENTS_BILLS_ROUTE}/${id}`);
   const [openedPopup, setOpenedPopup] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
   const [actionRequiredBy, setActionRequiredBy] = useState('');
   const [reason, setReason] = useState('');
-  const id = router.query?.id;
 
   const [headerOptions] = useState({
     actionButtonText: 'New Pay Run',
@@ -50,8 +50,8 @@ const BillPage = (props) => {
     },
   });
 
-  const [breadcrumbs, setBreadcrumbs] = useState([
-    {text: 'Bills', onClick: () => router.push('/payments/bills')},
+  const [breadcrumbs] = useState([
+    {text: 'Bills', onClick: () => router.push(PAYMENTS_BILLS_ROUTE)},
     {text: `Bill ${id}`}
   ]);
 
@@ -85,16 +85,7 @@ const BillPage = (props) => {
   }
 
   useEffect(() => {
-    if(router?.query?.id) {
-      setBreadcrumbs([
-        {text: 'payments', route: '/payments/pay-runs', onClick: (value) => router.push(`${value.route}`)},
-        {text: `Pay Run ${router.query.id}`}
-      ]);
-    }
-  }, []);
-
-  useEffect(() => {
-    router.replace(`${router.pathname}?page=1`);
+    router.replace(`${pathname}?page=1`);
   }, []);
 
   useEffect(() => {
@@ -129,7 +120,7 @@ const BillPage = (props) => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
       <HackneyFooterInfo />
     </div>
   )

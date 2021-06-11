@@ -15,9 +15,7 @@ export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
   console.log(user);
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   return {

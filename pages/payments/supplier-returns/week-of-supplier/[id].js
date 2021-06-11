@@ -19,9 +19,7 @@ import withSession from "../../../../lib/session";
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   return {
@@ -52,7 +50,7 @@ const WeekOfSupplierView = () => {
     weekOfSupplier: { suppliers }
   } = useSelector(selectSupplierReturns);
 
-  const [breadcrumbs, setBreadcrumbs] = useState([
+  const [breadcrumbs] = useState([
     {text: 'Supplier Dashboard Returns', onClick: () => router.push('/payments/supplier-returns')},
     {
       text: `Return week commencing ${date ? formatDateWithSign(date, '.') : ''}`,
@@ -170,15 +168,6 @@ const WeekOfSupplierView = () => {
   const chatActions = [
     {id: 'action1', onClick: (item) => openChat(item), className: 'chat-icon', Component: ChatButton}
   ];
-
-  useEffect(() => {
-    if(router?.query?.id) {
-      setBreadcrumbs([
-        {text: 'payments', route: '/payments/pay-runs', onClick: (value) => router.push(`${value.route}`)},
-        {text: `Pay Run ${router.query.id}`}
-      ]);
-    }
-  }, [router]);
 
   useEffect(() => {
     console.log('change sort', sort);

@@ -17,9 +17,9 @@ const staticCategoryOptions = [
 ];
 
 const staticCheckboxOptions = [
-  {value: 'percentage', text: 'Percentage'},
-  {value: 'fixedOneOff', text: 'Fixed amount - one off'},
-  {value: 'fixedWeekly', text: 'Fixed amount - weekly'},
+  { value: 'percentage', text: 'Percentage' },
+  { value: 'fixedOneOff', text: 'Fixed amount - one off' },
+  { value: 'fixedWeekly', text: 'Fixed amount - weekly' },
 ];
 
 const PackageReclaim = ({

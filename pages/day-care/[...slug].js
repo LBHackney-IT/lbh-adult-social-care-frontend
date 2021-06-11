@@ -15,7 +15,7 @@ import {
 } from "../../api/CarePackages/DayCareApi";
 import DayCareOpportunities from "../../components/DayCare/DayCareOpportunities";
 import { Button } from "../../components/Button";
-import { CARE_PACKAGE } from "../../routes/RouteConstants";
+import { CARE_PACKAGE_ROUTE } from "../../routes/RouteConstants";
 import TitleHeader from "../../components/TitleHeader";
 import DayCareSummary from "../../components/DayCare/DayCareSummary";
 import DayCareCollegeAsyncSearch from "../../components/DayCare/DayCareCollegeAsyncSearch";
@@ -25,9 +25,7 @@ import withSession from "../../lib/session";
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
   if(user.redirect) {
-    return {
-      props: { user },
-    }
+    return user;
   }
 
   return {
@@ -249,7 +247,7 @@ const DayCare = (props) => {
     createDayCarePackage(dayCarePackageToCreate)
       .then(() => {
         alert("Package saved.");
-        router.push(`${CARE_PACKAGE}`);
+        router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Create package failed. ${error.message}`);

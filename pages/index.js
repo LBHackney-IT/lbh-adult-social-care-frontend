@@ -1,12 +1,13 @@
 import Head from 'next/head'
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import {LOGIN_ROUTE} from "../routes/RouteConstants";
 
 export default function IndexPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/login');
+    router.replace(LOGIN_ROUTE);
   }, []);
 
   return (
