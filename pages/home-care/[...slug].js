@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router"
@@ -24,12 +24,12 @@ import {getUserSession, uniqueID} from "../../service/helpers";
 import withSession from "../../lib/session";
 
 const initialPackageReclaim = {
-  type: '',
-  notes: '',
-  from: '',
-  category: '',
-  amount: '',
-  id: '1',
+  type: "",
+  notes: "",
+  from: "",
+  category: "",
+  amount: "",
+  id: "1",
 };
 
 // start before render
@@ -67,27 +67,34 @@ const HomeCare = ({
   const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] = useState(1);
   const [homeCareSummaryData, setHomeCareSummaryData] = useState(undefined);
   const [carePackageId, setCarePackageId] = useState(undefined);
-  const [packagesReclaimed, setPackagesReclaimed] = useState([{...initialPackageReclaim}]);
+  const [packagesReclaimed, setPackagesReclaimed] = useState([
+    { ...initialPackageReclaim },
+  ]);
   const [isReclaimed, setIsReclaimed] = useState(null);
 
   const addPackageReclaim = () => {
-    setPackagesReclaimed([...packagesReclaimed, {...initialPackageReclaim, id: uniqueID()}]);
+    setPackagesReclaimed([
+      ...packagesReclaimed,
+      { ...initialPackageReclaim, id: uniqueID() },
+    ]);
   };
 
-  const removePackageReclaim = id => {
-    const newPackagesReclaim = packagesReclaimed.filter(item => item.id !== id);
+  const removePackageReclaim = (id) => {
+    const newPackagesReclaim = packagesReclaimed.filter(
+      (item) => item.id !== id
+    );
     setPackagesReclaimed(newPackagesReclaim);
   };
 
   const changePackageReclaim = (id) => (updatedPackage) => {
     const newPackage = packagesReclaimed.slice();
-    const packageIndex = packagesReclaimed.findIndex(item => String(item.id) === String(id));
+    const packageIndex = packagesReclaimed.findIndex((item) => item.id == id);
     newPackage.splice(packageIndex, 1, updatedPackage);
     setPackagesReclaimed(newPackage);
   };
 
   const changeIsPackageReclaimed = (status) => {
-    setPackagesReclaimed([{...initialPackageReclaim}]);
+    setPackagesReclaimed([{ ...initialPackageReclaim }]);
     setIsReclaimed(status);
   };
 
@@ -127,10 +134,7 @@ const HomeCare = ({
         Care Package
       </ClientSummary>
       <div className="mt-5 mb-5">
-        <CareTitle
-          startDate={format(new Date(startDate), "dd/MM/yyyy")}
-          endDate={format(new Date(endDate), "dd/MM/yyyy")}
-        >
+        <CareTitle startDate="2021/05/19" endDate="2021/05/19">
           Homecare Care
         </CareTitle>
         <div className="is-flex is-justify-content-flex-start home-care-options">
@@ -197,6 +201,13 @@ const HomeCare = ({
             selectedSecondaryCareTypeId={selectedSecondaryCareTime}
           />
         </div>
+
+        <PackageReclaims
+          errors={errors}
+          setErrors={setErrors}
+          packagesReclaimed={packagesReclaimed}
+          setPackagesReclaimed={setPackagesReclaimed}
+        />
         <div className="level mt-4">
           <div className="level-item level-right">
             <Button onClick={addToPackageClick}>Add to package</Button>
@@ -206,22 +217,27 @@ const HomeCare = ({
           isReclaimed={isReclaimed}
           setIsReclaimed={changeIsPackageReclaimed}
         />
-        {
-          isReclaimed &&
-            <div>
-              {packagesReclaimed.map((item, index) => {
-                return (
-                  <PackageReclaim
-                    remove={index !== 0 ? () => removePackageReclaim(item.id) : undefined}
-                    key={item.id}
-                    packageReclaim={item}
-                    setPackageReclaim={changePackageReclaim(item.id)}
-                  />
-                )
-              })}
-              <p onClick={addPackageReclaim} className='action-button-text'>+ Add another reclaim</p>
-            </div>
-        }
+        {isReclaimed && (
+          <div>
+            {packagesReclaimed.map((item, index) => {
+              return (
+                <PackageReclaim
+                  remove={
+                    index !== 0
+                      ? () => removePackageReclaim(item.id)
+                      : undefined
+                  }
+                  key={item.id}
+                  packageReclaim={item}
+                  setPackageReclaim={changePackageReclaim(item.id)}
+                />
+              );
+            })}
+            <p onClick={addPackageReclaim} className="action-button-text">
+              + Add another reclaim
+            </p>
+          </div>
+        )}
         {homeCareSummaryData !== undefined ? (
           <div className="mt-4 mb-4">
             <TitleHeader>Package Details</TitleHeader>

@@ -8,7 +8,6 @@ import AddBillTotalInfo from "../../../../components/Bills/AddBillTotalInfo";
 import { addBillPackageInfoTestData } from "../../../../testData/billsTestData";
 import withSession from "../../../../lib/session";
 import {getUserSession} from "../../../../service/helpers";
-import {useRouter} from "next/router";
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });

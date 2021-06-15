@@ -13,6 +13,7 @@ import {
   createNursingCarePackage,
   getTypeOfNursingHomeOptions,
 } from "../../api/CarePackages/NursingCareApi";
+import PackageReclaims from "../../components/CarePackages/PackageReclaims";
 import { CARE_PACKAGE_ROUTE } from "../../routes/RouteConstants";
 import { getUserSession } from "../../service/helpers";
 import withSession from "../../lib/session";
@@ -69,6 +70,9 @@ const NursingCare = (props) => {
     getInitialAdditionalNeedsArray()
   );
 
+  // Package reclaim
+  const [packagesReclaimed, setPackagesReclaimed] = useState([]);
+
   const retrieveTypeOfNursingHomeOptions = () => {
     getTypeOfNursingHomeOptions()
       .then((res) => {
@@ -111,6 +115,16 @@ const NursingCare = (props) => {
       creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
     }));
 
+    const packageReclaims = packagesReclaimed.map((reclaim) => {
+      return {
+        ReclaimFromId: reclaim.from,
+        ReclaimCategoryId: reclaim.category,
+        ReclaimAmountOptionId: reclaim.type,
+        Notes: reclaim.notes,
+        Amount: reclaim.amount,
+      };
+    });
+
     const nursingCarePackageToCreate = {
       isFixedPeriod: isFixedPeriod,
       clientId: "aee45700-af9b-4ab5-bb43-535adbdcfb80",
@@ -125,6 +139,7 @@ const NursingCare = (props) => {
       typeOfNursingCareHomeId: selectedNursingHomeType,
       creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
       nursingCareAdditionalNeeds,
+      packageReclaims,
     };
 
     createNursingCarePackage(nursingCarePackageToCreate)
@@ -179,6 +194,13 @@ const NursingCare = (props) => {
           setAdditionalNeedsState={setAdditionalNeedsEntries}
         />
       </div>
+
+      <PackageReclaims
+        errors={errors}
+        setErrors={setErrors}
+        packagesReclaimed={packagesReclaimed}
+        setPackagesReclaimed={setPackagesReclaimed}
+      />
 
       <div className="mt-4 mb-4">
         <TitleHeader>Package Details</TitleHeader>

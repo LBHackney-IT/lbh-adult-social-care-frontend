@@ -15,7 +15,7 @@
   .dropdown-container {
     .button {
       width: 157px;
-      height: 46px;
+      height: 36px;
     }
   }
 }
@@ -64,6 +64,7 @@
 
 .held-payments__filters {
   display: flex;
+  height: 36px;
 
   label.checkbox {
     align-items: flex-end;

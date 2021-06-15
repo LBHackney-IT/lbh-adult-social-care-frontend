@@ -19,6 +19,7 @@ import { Button } from "../../components/Button";
 import { CARE_PACKAGE_ROUTE } from "../../routes/RouteConstants";
 import {getUserSession} from "../../service/helpers";
 import withSession from "../../lib/session";
+import PackageReclaims from "../../components/PackageReclaims";
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
@@ -68,6 +69,9 @@ const ResidentialCare = (props) => {
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(
     getInitialAdditionalNeedsArray()
   );
+
+  // Package reclaim
+  const [packagesReclaimed, setPackagesReclaimed] = useState([]);
 
   const retrieveTypeOfResidentialCareHomeOptions = () => {
     getTypeOfResidentialCareHomeOptions()
@@ -133,6 +137,16 @@ const ResidentialCare = (props) => {
       })
     );
 
+    const packageReclaims = packagesReclaimed.map((reclaim) => {
+      return {
+        ReclaimFromId: reclaim.from,
+        ReclaimCategoryId: reclaim.category,
+        ReclaimAmountOptionId: reclaim.type,
+        Notes: reclaim.notes,
+        Amount: reclaim.amount,
+      };
+    });
+
     const residentialCarePackageToCreate = {
       clientId: "aee45700-af9b-4ab5-bb43-535adbdcfb80",
       startDate: startDate ? new Date(startDate).toJSON() : null,
@@ -146,6 +160,7 @@ const ResidentialCare = (props) => {
       typeOfResidentialCareHomeId: selectedCareHomeType,
       creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
       residentialCareAdditionalNeeds,
+      packageReclaims: packageReclaims,
     };
 
     createResidentialCarePackage(residentialCarePackageToCreate)
@@ -201,6 +216,13 @@ const ResidentialCare = (props) => {
           setAdditionalNeedsState={setAdditionalNeedsEntries}
         />
       </div>
+
+      <PackageReclaims
+        errors={errors}
+        setErrors={setErrors}
+        packagesReclaimed={packagesReclaimed}
+        setPackagesReclaimed={setPackagesReclaimed}
+      />
 
       <div className="mt-4 mb-4">
         <TitleHeader>Package Details</TitleHeader>

@@ -1,173 +1,150 @@
 version: 2.1
 
 orbs:
-  aws-s3: circleci/aws-s3@1.0.11
-  aws-cli: circleci/aws-cli@0.1.9
+  aws-cli: circleci/aws-cli@1.0.0
   aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
 
+executors:
+  node-executor:
+    docker:
+      - image: circleci/node:14.15.5-browsers
+  docker-python:
+    docker:
+      - image: circleci/python:3.7
+
 references:
-  workspace_root: &workspace_root "~/repo"
+  workspace_root: &workspace_root '~'
   attach_workspace: &attach_workspace
     attach_workspace:
       at: *workspace_root
 
-executors:
-  mtfh-executor:
-    docker:
-      - image: circleci/node:12.9.1-browsers
-    working_directory: *workspace_root
+jobs:
+  install-dependencies:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+            - /home/circleci/.cache/Cypress
+      - persist_to_workspace:
+          root: *workspace_root
+          paths: .
 
-commands:
-  assume-role-and-persist-workspace:
-    description: "Assumes deployment role and persists credentials across jobs"
-    parameters:
-      aws-account:
-        type: string
+  #tests:
+  #  executor: node-executor
+  #  steps:
+  #    - *attach_workspace
+  #    - run:
+  #        name: Run linter
+  #        command: yarn lint
+  #    - run:
+  #        name: Run typecheck
+  #        command: yarn type-check
+  #    - run:
+  #        name: Run tests
+  #        command: yarn test -w 2
+
+  #e2e:
+  #  executor: node-executor
+  #  steps:
+  #    - *attach_workspace
+  #    - run:
+  #        name: Run E2E
+  #        command: yarn e2e
+  #    - store_artifacts:
+  #        path: ~/project/cypress/screenshots
+  #    - store_artifacts:
+  #        path: ~/project/cypress/videos
+
+  build-deploy-staging:
+    executor: aws-cli/default
+    steps:
+      - *attach_workspace
+      - run:
+          name: deploy
+          command: yarn build && yarn --production=true && sudo npm i -g serverless && sls deploy --stage staging
+
+  build-deploy-production:
+    executor: aws-cli/default
+    steps:
+      - *attach_workspace
+      - run:
+          name: deploy
+          command: yarn build && yarn --production=true && sudo npm i -g serverless && sls deploy -s production
+
+  assume-role-staging:
+    executor: docker-python
     steps:
       - checkout
       - aws_assume_role/assume_role:
-          account: <<parameters.aws-account>>
+          account: $AWS_ACCOUNT_STAGING
           profile_name: default
-          role: "LBH_Circle_CI_Deployment_Role"
+          role: 'LBH_Circle_CI_Deployment_Role'
       - persist_to_workspace:
-          root: "~"
+          root: *workspace_root
           paths:
             - .aws
-jobs:
-  install-dependencies:
-    executor: mtfh-executor
-    working_directory: *workspace_root
-    steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: yarn install
-      - persist_to_workspace:
-          root: "~/repo"
-          paths: .
-
-  assume-role-development:
-    executor: mtfh-executor
-    steps:
-      - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_DEVELOPMENT
-
-  assume-role-staging:
-    executor: mtfh-executor
-    steps:
-      - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_STAGING
 
   assume-role-production:
-    executor: mtfh-executor
+    executor: docker-python
     steps:
-      - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_PRODUCTION
-
-  build-deploy-development:
-    executor: mtfh-executor
-    steps:
-      - *attach_workspace
-      - run:
-          name: build
-          command: |
-            export REACT_APP_ENV=staging
-            yarn run build
-      - aws-s3/sync:
-          from: build
-          to: 's3://lbh-adult-social-care-frontend-development.hackney.gov.uk/'
-          arguments: |
-            --cache-control "max-age=86400"
-          overwrite: true
-
-  build-deploy-staging:
-    executor: mtfh-executor
-    steps:
-      - *attach_workspace
-      - run:
-          name: build
-          command: |
-            export REACT_APP_ENV=staging
-            yarn run build
-      - aws-s3/sync:
-          from: build
-          to: 's3://lbh-adult-social-care-frontend-staging.hackney.gov.uk/'
-          arguments: |
-            --acl public-read \
-            --cache-control "max-age=86400"
-          overwrite: true
-
-  build-deploy-production:
-    executor: mtfh-executor
-    steps:
-      - *attach_workspace
-      - run:
-          name: build
-          command: |
-            export REACT_APP_ENV=production
-            yarn run build
-      - aws-s3/sync:
-          from: build
-          to: 's3://lbh-adult-social-care-frontend.hackney.gov.uk/'
-          arguments: |
-            --acl public-read \
-            --cache-control "max-age=86400"
-          overwrite: true
+      - checkout
+      - aws_assume_role/assume_role:
+          account: $AWS_ACCOUNT_PRODUCTION
+          profile_name: default
+          role: 'LBH_Circle_CI_Deployment_Role'
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - .aws
 
 workflows:
   version: 2
   continuous-delivery:
     jobs:
       - install-dependencies
-      - assume-role-development:
-          context: api-assume-role-housing-development-context
-          requires:
-            - install-dependencies
+      #- tests:
+      #    requires:
+      #      - install-dependencies
+      #- e2e:
+      #    requires:
+      #      - install-dependencies
+      - assume-role-staging:
+          context: api-assume-role-staging-context
+          #requires:
+          #  - tests
+            #- e2e
           filters:
             branches:
-              only:
-                - development
-      - build-deploy-development:
-          context: api-assume-role-housing-development-context
+              only: develop
+      - build-deploy-staging:
           requires:
-            - assume-role-development
+            - assume-role-staging
           filters:
             branches:
-              only:
-                - development
-      # - assume-role-staging:
-      #     context: api-assume-role-housing-staging-context
-      #     requires:
-      #       - install-dependencies
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
-      # - build-deploy-staging:
-      #     context: api-assume-role-housing-staging-context
-      #     requires:
-      #       - assume-role-staging
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
-      # - permit-deploy-production:
-      #     type: approval
-      #     requires:
-      #       - build-deploy-staging
-      # - assume-role-production:
-      #     context: api-assume-role-housing-production-context
-      #     requires:
-      #       - permit-deploy-production
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
-      # - build-deploy-production:
-      #     context: api-assume-role-housing-production-context
-      #     requires:
-      #       - assume-role-production
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
+              only: develop
+      - permit-deploy-production:
+          type: approval
+          requires:
+            - build-deploy-staging
+          filters:
+            branches:
+              only: main
+      - assume-role-production:
+          context: api-assume-role-production-context
+          requires:
+            - permit-deploy-production
+          filters:
+            branches:
+              only: main
+      - build-deploy-production:
+          requires:
+            - assume-role-production

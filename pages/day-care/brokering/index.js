@@ -17,6 +17,10 @@ import {
 } from "../../../api/CarePackages/DayCareApi";
 import { useRouter } from "next/router"
 import {
+  getInitDaysSelected,
+  getInitialPackageReclaim,
+} from "../../../api/Utils/CommonOptions";
+import {
   mapBrokerageSupplierOptions,
   mapDayCarePackageDetailsForBrokerage,
   mapDayCareStageOptions,
@@ -25,15 +29,6 @@ import { getSupplierList } from "../../../api/CarePackages/SuppliersApi";
 import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
 import PackagesDayCare from "../../../components/packages/day-care";
 import withSession from "../../../lib/session";
-
-const initialPackageReclaim = {
-  type: "",
-  notes: "",
-  from: "",
-  category: "",
-  amount: "",
-  id: "1",
-};
 
 // start before render
 export const getServerSideProps = withSession(async function({ req, query: { id: dayCarePackageId } }) {
@@ -153,7 +148,7 @@ const DayCareBrokering = ({
   const addPackageReclaim = () => {
     setPackagesReclaimed([
       ...packagesReclaimed,
-      { ...initialPackageReclaim, id: uniqueID() },
+      { ...getInitialPackageReclaim(), id: uniqueID() },
     ]);
   };
 

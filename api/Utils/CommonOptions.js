@@ -15,6 +15,17 @@ const getInitDaysSelected = [
   { id: 7, short: "Sun", long: "Sunday", checked: true },
 ];
 
+const getInitialPackageReclaim = () => {
+  return {
+    type: "",
+    notes: "",
+    from: "",
+    category: "",
+    amount: "",
+    id: "1",
+  };
+};
+
 const getSelectedDate = (daysData) => {
   const monday = {
     ...getInitDaysSelected.find(
@@ -69,4 +80,4 @@ const getSelectedDate = (daysData) => {
   ];
 }
 
-export { getFixedPeriodOptions, getInitDaysSelected, getSelectedDate };
+export { getFixedPeriodOptions, getInitialPackageReclaim, getInitDaysSelected, getSelectedDate };

@@ -4,6 +4,7 @@ import "bulma/css/bulma.css";
 import { Provider } from "react-redux";
 import { useStore } from "../store";
 import PaymentsHeader from "../components/Payments/PaymentsHeader";
+import SupplierDashboardHeader from "../components/Supplier/SupplierDashboardHeader";
 
 export default function App({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState)
@@ -11,6 +12,7 @@ export default function App({ Component, pageProps }) {
   return (
     <Provider store={store}>
       <PaymentsHeader />
+      <SupplierDashboardHeader />
       <Component {...pageProps} />
     </Provider>
   )

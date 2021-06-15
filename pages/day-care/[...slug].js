@@ -17,6 +17,7 @@ import DayCareOpportunities from "../../components/DayCare/DayCareOpportunities"
 import { Button } from "../../components/Button";
 import { CARE_PACKAGE_ROUTE } from "../../routes/RouteConstants";
 import TitleHeader from "../../components/TitleHeader";
+import PackageReclaims from "../components/PackageReclaims";
 import DayCareSummary from "../../components/DayCare/DayCareSummary";
 import DayCareCollegeAsyncSearch from "../../components/DayCare/DayCareCollegeAsyncSearch";
 import { getUserSession } from "../../service/helpers";
@@ -59,6 +60,9 @@ const DayCare = (props) => {
     opportunityTimesPerMonthOptions,
     setOpportunityTimesPerMonthOptions,
   ] = useState([]);
+
+  // package reclaim
+  const [packagesReclaimed, setPackagesReclaimed] = useState([]);
 
   const [needToAddress, setNeedToAddress] = useState(undefined);
   const [transportNeeded, setTransportIsNeeded] = useState(undefined);
@@ -220,6 +224,16 @@ const DayCare = (props) => {
       opportunitiesNeedToAddress: item.needToAddress,
     }));
 
+    const packageReclaims = packagesReclaimed.map((reclaim) => {
+      return {
+        ReclaimFromId: reclaim.from,
+        ReclaimCategoryId: reclaim.category,
+        ReclaimAmountOptionId: reclaim.type,
+        Notes: reclaim.notes,
+        Amount: reclaim.amount,
+      };
+    });
+
     const dayCarePackageToCreate = {
       clientId: "aee45700-af9b-4ab5-bb43-535adbdcfb80",
       isFixedPeriodOrOngoing: isFixedPeriod,
@@ -242,6 +256,7 @@ const DayCare = (props) => {
       dayCarePackageOpportunities: dayCarePackageOpportunities,
       creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
       collegeId: collegeId,
+      packageReclaims: packageReclaims,
     };
 
     createDayCarePackage(dayCarePackageToCreate)
@@ -365,6 +380,14 @@ const DayCare = (props) => {
             addEntry={onAddOpportunityEntry}
           />
         </div>
+
+        <PackageReclaims
+          errors={errors}
+          setErrors={setErrors}
+          packagesReclaimed={packagesReclaimed}
+          setPackagesReclaimed={setPackagesReclaimed}
+        />
+
         <div className="mt-4 mb-4">
           <TitleHeader>Package Details</TitleHeader>
           <DayCareSummary

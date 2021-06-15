@@ -461,14 +461,6 @@ const PackagesDayCare = ({
             </div>
             <hr className="horizontal-delimiter" />
           </div>
-          <div className="is-flex is-justify-content-flex-end is-align-content-center is-align-items-center">
-            <Button
-              onClick={handleSaveBrokerage}
-              className="button hackney-btn-green"
-            >
-              Submit for approval
-            </Button>
-          </div>
           {!!packagesReclaimed.length && (
             <div>
               {packagesReclaimed.map((item) => {
@@ -486,6 +478,14 @@ const PackagesDayCare = ({
               </p>
             </div>
           )}
+          <div className="is-flex is-justify-content-flex-end is-align-content-center is-align-items-center">
+            <Button
+              onClick={handleSaveBrokerage}
+              className="button hackney-btn-green"
+            >
+              Submit for approval
+            </Button>
+          </div>
         </div>
         <div className="proposed-packages__tabs">
           {[

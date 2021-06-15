@@ -8,8 +8,6 @@ import SupplierReturnDashboardTable from "../../../components/SupplierDashboard/
 import SupplierReturnsDashboardInnerHeader from "../../../components/SupplierDashboard/SupplierReturnsDashboardInnerHeader";
 import ChatButton from "../../../components/PayRuns/ChatButton";
 import PopupHelpChat from "../../../components/Chat/PopupHelpChat";
-import { useSelector } from "react-redux";
-import { selectSupplierDashboard } from "../../../reducers/supplierDashboardReducer";
 import { getUserSession } from "../../../service/helpers";
 import withSession from "../../../lib/session";
 
