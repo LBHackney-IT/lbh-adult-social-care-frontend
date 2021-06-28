@@ -1,6 +1,7 @@
 import { useState } from "react";
 import BaseField from "./baseComponents/BaseField";
 import "./assets/radioButton.scss";
+import ErrorField from "./ErrorField";
 
 const yesNoValues = [
   { text: "Yes", value: true },
@@ -11,6 +12,8 @@ const RadioButton = ({
   label,
   options,
   selectedValue,
+  error,
+  setError,
   inline = true,
   onChange = () => {},
 }) => {
@@ -18,6 +21,7 @@ const RadioButton = ({
   const hasSelectedValue = radioValue !== undefined;
 
   const radioChange = (radioItemValue) => {
+    setError && setError();
     onChange(radioItemValue);
     setRadioValue(radioItemValue);
   };
@@ -49,6 +53,7 @@ const RadioButton = ({
           );
         })}
       </div>
+      {error && <ErrorField text={error} />}
     </BaseField>
   );
 };

@@ -1,27 +1,22 @@
-import Input from "../components/Input";
-import React, {useState} from "react";
+import React from "react";
 import {Button} from "../components/Button";
+import Header from "../Layout/Header";
+import HackneyFooterInfo from "../components/HackneyFooterInfo";
 
 const Login = () => {
-  const initialLoginData = {
-    userName: '',
-    password: '',
-  };
-
-  const [loginData, setLoginData] = useState({...initialLoginData});
-
-  const onChangeLoginData = (data, field) => {
-    setLoginData({
-      ...initialLoginData,
-      [field]: data,
-    })
-  }
 
   return (
     <div className='login-page'>
-      <Input onChange={userName => onChangeLoginData(userName, 'userName')} placeholder='User name' value={loginData.userName} />
-      <Input onChange={password => onChangeLoginData(password, 'password')} placeholder='Password' value={loginData.password} />
-      <Button>Login</Button>
+      <Header showPageHeader={false} />
+      <div className='login-page__form-container'>
+        <div className='login-page__form'>
+          <h2>Sign In</h2>
+          <p>Please sign in with your Hackney email account.</p>
+          <p>Please contact your manager if you have issues signing in.</p>
+          <Button>Sign in with Google</Button>
+        </div>
+      </div>
+      <HackneyFooterInfo />
     </div>
   );
 };

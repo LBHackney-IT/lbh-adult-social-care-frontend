@@ -1,5 +1,6 @@
 import React from "react";
 import BaseField from "./baseComponents/BaseField";
+import ErrorField from "./ErrorField";
 
 const TextArea = ({
   rows = 3,
@@ -8,10 +9,13 @@ const TextArea = ({
   onChange = () => {},
   classes = '',
   value,
+  error,
+  setError,
   children,
 }) => {
   const onTextAreaChange = (event) => {
     event.preventDefault();
+    setError && setError();
     onChange(event.target.value);
   };
 
@@ -24,6 +28,7 @@ const TextArea = ({
       >
         {children !== undefined ? children : null}
       </textarea>
+      {error && <ErrorField text={error}/>}
     </BaseField>
   );
 };

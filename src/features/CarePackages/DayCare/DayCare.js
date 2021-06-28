@@ -35,6 +35,11 @@ const DayCare = ({ history }) => {
   startDate = startDate ?? null;
   endDate = endDate ?? null;
 
+  const [radioErrors, setRadioErrors] = useState({
+    transportNeeded: null,
+    transportEscortNeeded: null,
+  });
+
   const [errors, setErrors] = useState([]);
   const [termTimeNAId, setTermTimeNaId] = useState(undefined);
   const [
@@ -316,6 +321,7 @@ const DayCare = ({ history }) => {
         <div className="mt-4">
           <RadioButton
             label="Transport needed?"
+            error={radioErrors.transportNeeded}
             onChange={setTransportIsNeeded}
             options={yesNoValues}
             selectedValue={transportNeeded}

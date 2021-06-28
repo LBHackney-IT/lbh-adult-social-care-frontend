@@ -9,15 +9,16 @@ const AddBillInvoiceFor = ({ inputs, invoice }) => {
       <Input
         label='Package ID'
         classes='invoice-for__package-id'
-        value={inputs?.packageId?.value}
+        value={inputs?.packageId.value}
+        error={inputs?.packageId.error}
         onChange={inputs?.packageId.onChange}
       />
       <div className='invoice-for__supplier'>
         <p>{invoice?.from || 'From'}</p>
         <p>{invoice?.supplierName || 'SUPPLIER NAME'}</p>
       </div>
-      <DatePick classes='invoice-for__datepicker service-from' label='Service From' />
-      <DatePick classes='invoice-for__datepicker' label='Service To' />
+      <DatePick error={inputs?.serviceFrom.error} dateValue={inputs?.serviceFrom.value} classes='invoice-for__datepicker service-from' label='Service From' />
+      <DatePick error={inputs?.serviceTo.error} dateValue={inputs?.serviceTo.value} classes='invoice-for__datepicker' label='Service To' />
     </CardInfo>
   )
 };

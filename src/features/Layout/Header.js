@@ -14,22 +14,24 @@ const HeaderNav = () => {
   );
 };
 
-const Header = ({ children, subTitle }) => {
+const Header = ({ children, subTitle, showPageHeader = true }) => {
   return (
     <>
       <HeaderNav />
-      <div className="page-header">
-        <NavLink to="/">
-          <ArrowLeftIcon />
-          Back
-        </NavLink>
-        <div className="header-title">
-          {subTitle !== undefined ? <h5>{subTitle}</h5> : null}
-          <h3>
-            <strong>{children}</strong>
-          </h3>
+      {showPageHeader &&
+        <div className="page-header">
+          <NavLink to="/">
+            <ArrowLeftIcon/>
+            Back
+          </NavLink>
+          <div className="header-title">
+            {subTitle !== undefined ? <h5>{subTitle}</h5> : null}
+            <h3>
+              <strong>{children}</strong>
+            </h3>
+          </div>
         </div>
-      </div>
+      }
     </>
   );
 };
