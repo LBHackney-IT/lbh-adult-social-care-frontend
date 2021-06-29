@@ -23,7 +23,6 @@ resource "aws_s3_bucket" "frontend-bucket-staging" {
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["GET"]
-    allowed_origins = ["https://manage-my-home-staging.hackney.gov.uk"]
     expose_headers  = ["x-amz-server-side-encryption","x-amz-request-id","x-amz-id-2"]
     max_age_seconds = 3000
   }
@@ -31,13 +30,13 @@ resource "aws_s3_bucket" "frontend-bucket-staging" {
 module "cloudfront-staging" {
   source = "github.com/LBHackney-IT/aws-hackney-common-terraform.git//modules/cloudfront/s3_distribution"
   s3_domain_name = aws_s3_bucket.frontend-bucket-staging.bucket_regional_domain_name
-  origin_id = "mtfh-t-and-l-common-frontend"
+  origin_id = "hasc-packages-frontend"
   s3_bucket_arn = aws_s3_bucket.frontend-bucket-staging.arn
   s3_bucket_id = aws_s3_bucket.frontend-bucket-staging.id
   orginin_access_identity_desc = "T&L common frontend cloudfront identity"
   cname_aliases = []
   environment_name = "staging"
   cost_code= "B0811"
-  project_name= "MTFH Tenants and Leaseholders"
+  project_name= "Hackney Adult Social Care Packages"
   use_cloudfront_cert = true
 }
