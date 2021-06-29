@@ -222,27 +222,27 @@ workflows:
       #     type: approval
       #     requires:
       #       - build-deploy-staging
-      - assume-role-production:
-          context: api-assume-role-housing-production-context
-          requires:
-            - permit-production-terraform-release
-          filters:
-            branches:
-              only: main
-      - terraform-init-and-apply-to-production:
-          requires:
-            - assume-role-production
-          filters:
-            branches:
-              only: main
-      - permit-deploy-production:
-          type: approval
-          requires:
-            - terraform-init-and-apply-to-production
-      - build-deploy-production:
-          stage: 'production'
-          requires:
-            - permit-deploy-production
-          filters:
-            branches:
-              only: main
+      # - assume-role-production:
+      #     context: api-assume-role-housing-production-context
+      #     requires:
+      #       - permit-production-terraform-release
+      #     filters:
+      #       branches:
+      #         only: main
+      # - terraform-init-and-apply-to-production:
+      #     requires:
+      #       - assume-role-production
+      #     filters:
+      #       branches:
+      #         only: main
+      # - permit-deploy-production:
+      #     type: approval
+      #     requires:
+      #       - terraform-init-and-apply-to-production
+      # - build-deploy-production:
+      #     stage: 'production'
+      #     requires:
+      #       - permit-deploy-production
+      #     filters:
+      #       branches:
+      #         only: main
