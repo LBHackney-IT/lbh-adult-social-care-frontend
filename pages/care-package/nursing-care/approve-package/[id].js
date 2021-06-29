@@ -30,12 +30,12 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
 
   try {
     const nursingCarePackage = await getNursingCarePackageApprovalPackageContent(nursingCarePackageId);
-    const newAdditionalNeedsEntries = nursingCarePackage.nursingCarePackage.nursingCareAdditionalNeeds.map(
-      (additionalNeedsItem) => ({
-        id: additionalNeedsItem.Id,
-        isWeeklyCost: additionalNeedsItem.IsWeeklyCost,
-        isOneOffCost: additionalNeedsItem.IsOneOffCost,
-        needToAddress: additionalNeedsItem.NeedToAddress,
+    const newAdditionalNeedsEntries = res.nursingCarePackage.nursingCareAdditionalNeeds.map(
+      (additionalneedsItem) => ({
+        id: additionalneedsItem.id,
+        isWeeklyCost: additionalneedsItem.isWeeklyCost,
+        isOneOffCost: additionalneedsItem.isOneOffCost,
+        needToAddress: additionalneedsItem.needToAddress,
       })
     );
 

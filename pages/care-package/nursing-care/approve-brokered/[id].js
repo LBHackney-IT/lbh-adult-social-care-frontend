@@ -30,11 +30,11 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
   try {
     const nursingCarePackage = await getNursingCarePackageApproveCommercial(nursingCarePackageId);
     const newAdditionalNeedsEntries = res.nursingCarePackage.nursingCareAdditionalNeeds.map(
-      (additionalNeedsItem) => ({
-        id: additionalNeedsItem.Id,
-        isWeeklyCost: additionalNeedsItem.IsWeeklyCost,
-        isOneOffCost: additionalNeedsItem.IsOneOffCost,
-        needToAddress: additionalNeedsItem.NeedToAddress,
+      (additionalneedsItem) => ({
+        id: additionalneedsItem.id,
+        isWeeklyCost: additionalneedsItem.isWeeklyCost,
+        isOneOffCost: additionalneedsItem.isOneOffCost,
+        needToAddress: additionalneedsItem.needToAddress,
       })
     );
 
@@ -49,10 +49,10 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     const res = await getNursingCarePackageApprovalHistory(nursingCarePackageId);
     const newApprovalHistoryItems = res.map(
       (historyItem) => ({
-        eventDate: new Date(historyItem.ApprovedDate).toLocaleDateString(
+        eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
           "en-GB"
         ),
-        eventMessage: historyItem.LogText,
+        eventMessage: historyItem.logText,
         eventSubMessage: undefined
       })
     );
@@ -120,7 +120,7 @@ const NursingCareApproveBrokered = ({
 
 
   return (
-    <Layout headerTitle="NURSING CARE APPROVAL">
+    <Layout headerTitle="NURSING CARE BROKERED">
       <div className="hackney-text-black font-size-12px">
         <NursingCareApprovalTitle
         startDate={nursingCarePackage?.nursingCarePackage.startDate}

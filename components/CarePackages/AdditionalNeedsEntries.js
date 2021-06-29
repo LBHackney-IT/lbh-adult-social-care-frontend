@@ -4,7 +4,6 @@ import TextArea from "../TextArea";
 import RadioButton from "../RadioButton";
 import React, { useEffect, useState } from "react";
 import DatePick from "../DatePick";
-import fieldValidator from "../../service/inputValidator";
 
 const AdditionalNeedEntry = ({
   costOptions,
@@ -20,7 +19,7 @@ const AdditionalNeedEntry = ({
   const [isFixedPeriodCost, setIsFixedPeriodCost] = useState(false);
 
   const onChangeErrors = (field) => {
-    if(index === undefined) return;
+    if(!currentError) return;
     const newErrors = [...error];
     newErrors.splice(index, 1, {...currentError, [field]: false});
     setError(newErrors);
@@ -70,7 +69,7 @@ const AdditionalNeedEntry = ({
     updateDateSelection();
   }, [startDate, endDate]);
 
-  const currentError = error && error[index];
+  const currentError = index !== undefined && error !== undefined && error[index];
 
   return (
     <>

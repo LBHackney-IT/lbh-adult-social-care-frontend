@@ -1,62 +1,142 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import Dropdown from "../../Dropdown";
 import DatePick from "../../DatePick";
 import {currency} from "../../../constants/strings";
 import EuroInput from "../../EuroInput";
 import {Button} from "../../Button";
-import Input from "../../Input";
 import PackageReclaim from "../../PackageReclaim";
-import ApprovalHistory from "../../ProposedPackages/ApprovalHistory";
-import SummaryDataList from "../../HomeCare/SummaryDataList";
-
-const stageOptions = [
-  { text: "New", value: 1 },
-  { text: "Assigned", value: 2 },
-  { text: "Querying", value: 3 },
-  { text: "SupplierDashboard Sourced", value: 4 },
-  { text: "Pricing agreed", value: 5 },
-  { text: "Submitted For Approval", value: 6 },
-];
-
-const supplierOptions = [
-  { text: "SupplierDashboard type 1", value: 1 },
-  { text: "SupplierDashboard type 2", value: 2 },
-  { text: "SupplierDashboard type 3", value: 3 },
-  { text: "SupplierDashboard type 4", value: 4 },
-];
+import ClientSummary from "../../ClientSummary";
+import {
+  getAgeFromDateString,
+  getEnGBFormattedDate
+} from "../../../api/Utils/FuncUtils";
+import PackageApprovalHistorySummary from "../../PackageApprovalHistorySummary";
+import PackageCostBox from "../../DayCare/PackageCostBox";
+import ResidentialCareSummary from "../../ResidentialCare/ResidentialCareSummary";
 
 const PackagesResidentialCare = ({
   tab,
-  brokerage,
   changeTab,
   packagesReclaimed,
   changePackageReclaim,
   removePackageReclaim,
   addPackageReclaim,
   approvalHistory,
-  summaryData,
-  costCards,
-  careType = '',
+  residentialCarePackage,
+  residentialCareSummary,
+  supplierOptions = [],
+  stageOptions = [],
+  createBrokerageInfo = () => {},
 }) => {
   const [coreCost, setCoreCost] = useState({
-    costPerWeek: 'XXXX',
+    costPerWeek: 0,
   });
 
   const [additionalPayment, setAdditionalPayment] = useState({
-    costPerWeek: 'XXXX',
+    costPerWeek: 0,
   });
 
   const [additionalPaymentOneOff, setAdditionalPaymentOneOff] = useState({
-    oneOf: 'XXXX',
+    oneOf: 0,
   });
 
+  const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(
+    (residentialCarePackage && new Date(residentialCarePackage?.residentialCarePackage?.startDate)) ||
+      undefined
+  );
+  const [endDate, setEndDate] = useState(
+    (residentialCarePackage && new Date(residentialCarePackage?.residentialCarePackage?.endDate)) ||
+      undefined
+  );
+  const [endDateEnabled, setEndDateEnabled] = useState(
+    !residentialCarePackage?.residentialCarePackage?.endDate
+  );
+
+  const [coreCostTotal, setCoreCostTotal] = useState(0);
+  const [additionalCostTotal, setAdditionalNeedsCostTotal] = useState(0);
+  const [weeklyCostTotal, setWeeklyTotalCost] = useState(0);
+  const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
+  const [additionalOneOffCostTotal, setAdditionalNeedsOneOffCostTotal] = useState(0);
 
   const changeElementsData = (setter, getter, field, data) => {
     setter({...getter, [field]: data});
+  };
+
+  useEffect(() => {
+    setEndDateEnabled(!residentialCarePackage?.residentialCarePackage?.endDate);
+
+    setEndDate(
+      (residentialCarePackage && new Date(residentialCarePackage?.residentialCarePackage?.endDate)) ||
+        undefined
+    );
+
+    setStartDate(
+      (residentialCarePackage && new Date(residentialCarePackage?.residentialCarePackage?.startDate)) ||
+        undefined
+    );
+  }, [residentialCarePackage]);
+
+  useEffect(() => {
+    setCoreCostTotal(
+      Number(coreCost.costPerWeek)
+    );
+  }, [coreCost]);
+
+  useEffect(() => {
+    setAdditionalNeedsCostTotal(
+      Number(additionalPayment.costPerWeek)
+    );
+  }, [additionalPayment]);
+
+  useEffect(() => {
+    setAdditionalNeedsOneOffCostTotal(
+      Number(additionalPaymentOneOff.oneOf)
+    );
+  }, [additionalPaymentOneOff]);
+
+  useEffect(() => {
+    setWeeklyTotalCost(
+      coreCostTotal +
+      additionalCostTotal
+    );
+  }, [
+    coreCostTotal,
+    additionalCostTotal
+  ]);
+
+  useEffect(() => {
+    setOneOffTotalCost(additionalPaymentOneOff);
+  }, [additionalPaymentOneOff]);
+
+  const formIsValid = (brokerageInfoForCreation) => {
+    return !!(
+      !isNaN(Number(brokerageInfoForCreation?.residentialCore)) &&
+      !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
+      !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
+    );
+  };
+
+  const handleSaveBrokerage = (event) => {
+    event.preventDefault();
+    const brokerageInfoForCreation = {
+      residentialCarePackageId: residentialCarePackage?.residentialCarePackageId,
+      supplierId: selectedSupplierType,
+      stageId: selectedStageType,
+      residentialCore: Number(coreCost.costPerWeek),
+      additionalNeedsPayment: Number(additionalPayment.costPerWeek),
+      additionalNeedsPaymentOneOff: Number(additionalPaymentOneOff.oneOf)
+    };
+    if (formIsValid(brokerageInfoForCreation)) {
+      createBrokerageInfo(
+        residentialCarePackage?.residentialCarePackageId,
+        brokerageInfoForCreation
+      );
+    } else {
+      alert("Invalid form. Check to ensure all values are set correctly");
+    }
   };
 
   return (
@@ -64,41 +144,49 @@ const PackagesResidentialCare = ({
     <div className="mt-5 mb-5 person-care">
       <div className="column proposed-packages__header is-flex is-justify-content-space-between">
         <div>
-          <h1 className='container-title'>Residential Care {careType && <span className='person-care__care-type'>({careType})</span>}</h1>
-          <h3>ID: <span>{brokerage?.homeCare?.id || ''}</span></h3>
+        <h1 className="container-title">Residential Care</h1>
+          <h3>
+              ID:{" "}
+              <span>
+                {residentialCarePackage?.residentialCarePackageId || ""}
+              </span>
+            </h3>
         </div>
         <Dropdown
-          label=''
-          initialText='Stage'
+          label=""
+          initialText="Stage"
           options={stageOptions}
           selectedValue={selectedStageType}
-          onOptionSelect={(option) => setSelectedStageType(option)}
+          onOptionSelect={setSelectedStageType}
         />
       </div>
       <div className="column">
         <div className="is-flex is-flex-wrap-wrap">
           <div className="mr-3 is-flex is-align-items-flex-end">
-            <Dropdown
-              label=''
-              initialText='Supplier (please select)'
-              options={supplierOptions}
-              onOptionSelect={setSelectedSupplierType}
-              selectedValue={selectedSupplierType}
-            />
+          <Dropdown
+            label=""
+            initialText="Supplier (please select)"
+            options={supplierOptions}
+            onOptionSelect={setSelectedSupplierType}
+            selectedValue={selectedSupplierType}
+          />
           </div>
           <span className="mr-3">
-              <DatePick
-                label='Start Date'
-                dateValue={startDate}
-                setDate={setStartDate}
-              />
+          <DatePick
+            label="Start Date"
+            dateValue={startDate}
+            setDate={setStartDate}
+          />
           </span>
           <span className="mr-3">
-              <DatePick
-                label='End Date'
-                dateValue={endDate}
-                setDate={setEndDate}
-              />
+          <DatePick
+            disabledLabel="Ongoing"
+            classes="datepicker-disabled datepicker-ongoing"
+            label="End Date"
+            disabled={endDateEnabled}
+            dateValue={endDate}
+            setDate={setEndDate}
+          />
           </span>
         </div>
       </div>
@@ -109,44 +197,44 @@ const PackagesResidentialCare = ({
             <h2 className='pt-5 hackney-text-black font-weight-bold'>Residential Core</h2>
             <div className='is-flex is-flex-wrap-wrap is-align-items-center'>
               <EuroInput
-                onChange={(value => changeElementsData(setCoreCost, coreCost, 'costPerDay', value))}
+                onChange={(value => changeElementsData(setCoreCost, coreCost, 'costPerWeek', value))}
                 classes='mr-6'
-                label='Cost per day'
+                label='Cost per week'
                 value={coreCost.costPerWeek}
               />
-              <p className='pt-5'>{currency.euro}240</p>
+              <p className='pt-5'>{currency.euro} {coreCostTotal}</p>
             </div>
           </div>
           <div className='row-container is-align-items-center residential_care__additional-payment'>
             <h2 className='pt-5 hackney-text-black font-weight-bold'>Additional needs payment</h2>
             <div className='is-align-items-center is-flex is-flex-wrap-wrap'>
-              <Input
+              <EuroInput
                 classes='mr-6'
                 value={additionalPayment.costPerWeek}
-                onChange={value => changeElementsData(setAdditionalPayment, additionalPayment, 'costPerDay', value)}
+                onChange={value => changeElementsData(setAdditionalPayment, additionalPayment, 'costPerWeek', value)}
                 label='Cost per week'
               />
-              <p className='pt-5'>{currency.euro}89</p>
+              <p className='pt-5'>{currency.euro} {additionalCostTotal}</p>
             </div>
           </div>
           <div className='row-container is-align-items-center residential_care__additional-payment-one-off'>
             <div className='weekly-total-card is-flex'>
-              <p>Weekly Total {currency.euro}XX</p>
+              <p>Weekly Total {currency.euro} {weeklyCostTotal}</p>
             </div>
             <h2 className='hackney-text-black font-weight-bold pt-5'>Additional needs payment (one off)</h2>
             <div className='is-flex is-flex-wrap-wrap is-align-items-center'>
-              <Input
+              <EuroInput
                 value={additionalPaymentOneOff.oneOf}
-                label='Hours per week'
-                onChange={value => changeElementsData(setAdditionalPaymentOneOff, additionalPaymentOneOff, 'hoursPerWeek', value)}
+                label='One Off'
+                onChange={value => changeElementsData(setAdditionalPaymentOneOff, additionalPaymentOneOff, 'oneOf', value)}
                 classes='mr-6'
               />
-              <p className='pt-5'>{currency.euro}89</p>
+              <p className='pt-5'>{currency.euro} {additionalOneOffCostTotal}</p>
             </div>
           </div>
         </div>
         <div className='proposed-packages__total-cost day-care__total-cost'>
-          <p>One Of Total <span>{currency.euro}XXXX</span></p>
+          <p>One Of Total <span>{currency.euro} {additionalOneOffCostTotal}</span></p>
         </div>
         <div>
           <div className='mt-4 is-flex is-align-items-center is-justify-content-space-between'>
@@ -157,6 +245,14 @@ const PackagesResidentialCare = ({
           </div>
           <hr className='horizontal-delimiter'/>
         </div>
+        <div className="is-flex is-justify-content-flex-end is-align-content-center is-align-items-center">
+            <Button
+              onClick={handleSaveBrokerage}
+              className="button hackney-btn-green"
+            >
+              Submit for approval
+            </Button>
+          </div>
         {!!packagesReclaimed.length &&
           <div>
             {packagesReclaimed.map(item => {
@@ -191,19 +287,122 @@ const PackagesResidentialCare = ({
         }
       </div>
     </div>
-    {tab === 'approvalHistory' ?
-      <ApprovalHistory costCards={costCards} status='(Ongoing)' history={approvalHistory} />
-      : !!summaryData.length &&
-      <SummaryDataList
-        edit={(item) => console.log('edit', item)}
-        remove={(item) => console.log('remove', item)}
-        confirmPackage={false}
-        slicedText={true}
-        summaryData={summaryData}
-      />
-    }
+    {tab === "approvalHistory" ? (
+        <ApprovalHistory
+          history={approvalHistory}
+          residentialCarePackage={residentialCarePackage}
+          costSummary={{
+            costOfCarePerWeek: coreCostTotal,
+            anpPerWeek: additionalCostTotal,
+            oneOffCost: additionalOneOffCostTotal,
+            totalCostPerWeek: weeklyCostTotal,
+          }}
+        />
+      ) : (
+        residentialCareSummary && (
+          <ResidentialCareSummary
+          startDate={residentialCarePackage?.residentialCarePackage.startDate}
+          endDate= {residentialCarePackage?.residentialCarePackage.endDate !== null
+            ? residentialCarePackage?.residentialCarePackage.endDate
+            : "Ongoing"}
+          needToAddress={residentialCareSummary.needToAddress}
+          additionalNeedsEntries={residentialCareSummary.additionalNeedsEntries}
+          setAdditionalNeedsEntries={setAdditionalNeedsEntries}
+        />
+        )
+      )}
     </>
   )
 }
+
+const ApprovalHistory = ({
+  history,
+  residentialCarePackage = undefined,
+  costSummary,
+}) => {
+  return (
+    <div className="approval-history">
+      <h2>
+        Residential Care{" "}
+        <span>
+          (
+          {residentialCarePackage?.residentialCarePackage?.isFixedPeriodOrOngoing
+            ? "Fixed Period"
+            : "Ongoing"}{" "}
+          - {residentialCarePackage?.residentialCarePackage.termTimeConsiderationOption})
+        </span>
+      </h2>
+      <ClientSummary
+        client={residentialCarePackage?.residentialCarePackage?.clientName}
+        hackneyId={residentialCarePackage?.residentialCarePackage?.clientHackneyId}
+        age={
+          residentialCarePackage?.residentialCarePackage &&
+          getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth)
+        }
+        sourcingCare="hackney"
+        dateOfBirth={
+          residentialCarePackage?.residentialCarePackage &&
+          getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth)
+        }
+        postcode={residentialCarePackage?.residentialCarePackage?.clientPostCode}
+      />
+      <div className="care-info">
+        <div>
+          <p>STARTS</p>
+          <p>
+            {getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.startDate)}
+          </p>
+        </div>
+        <div>
+          <p>ENDS</p>
+          <p>
+            {residentialCarePackage?.residentialCarePackage?.endDate !== null
+              ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.endDate)
+              : "Ongoing"}
+          </p>
+        </div>
+        <div>
+          <p>DAYS/WEEK</p>
+          <p />
+        </div>
+      </div>
+      <div className="columns font-size-12px">
+        <div className="column">
+          <div className="is-flex is-flex-wrap-wrap">
+            <PackageCostBox
+              boxClass="hackney-package-cost-light-yellow-box"
+              title="COST OF CARE / WK"
+              cost={`£${costSummary?.costOfCarePerWeek ?? 0.0}`}
+              costType="ESTIMATE"
+            />
+
+            <PackageCostBox
+              boxClass="hackney-package-cost-light-yellow-box"
+              title="ANP / WK"
+              cost={`£${costSummary?.anpPerWeek ?? 0.0}`}
+              costType="ESTIMATE"
+            />
+
+            <PackageCostBox
+              boxClass="hackney-package-cost-light-yellow-box"
+              title="ONE OFF COSTS"
+              cost={`£${costSummary?.oneOffCost ?? 0.0}`}
+              costType="ESTIMATE"
+            />
+
+            <PackageCostBox
+              boxClass="hackney-package-cost-light-yellow-box"
+              title="TOTAL / WK"
+              cost={`£${costSummary?.totalCostPerWeek ?? 0.0}`}
+              costType="ESTIMATE"
+            />
+          </div>
+        </div>
+      </div>
+
+      <PackageApprovalHistorySummary approvalHistoryEntries={history} />
+    </div>
+  );
+};
 
 export default PackagesResidentialCare;
