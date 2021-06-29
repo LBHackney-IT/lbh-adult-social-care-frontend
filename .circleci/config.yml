@@ -166,29 +166,29 @@ workflows:
           filters:
             branches:
               only: nextjs-circle-ci
-      - permit-deploy-production:
-          # type: approval
-          requires:
-            - build-deploy-staging
-          filters:
-            branches:
-              only: nextjs-circle-ci
-      - assume-role-production:
-          context: api-assume-role-production-context
-          requires:
-            - permit-deploy-production
-          filters:
-            branches:
-              only: main
-      - build-deploy-production:
-          requires:
-            - assume-role-production
-          filters:
-            branches:
-              only: main
-      - generate-github-release:
-          requires:
-            - build-deploy-production
-          filters:
-            branches:
-              only: main
+      # - permit-deploy-production:
+      #     type: approval
+      #     requires:
+      #       - build-deploy-staging
+      #     filters:
+      #       branches:
+      #         only: nextjs-circle-ci
+      # - assume-role-production:
+      #     context: api-assume-role-production-context
+      #     requires:
+      #       - permit-deploy-production
+      #     filters:
+      #       branches:
+      #         only: main
+      # - build-deploy-production:
+      #     requires:
+      #       - assume-role-production
+      #     filters:
+      #       branches:
+      #         only: main
+      # - generate-github-release:
+      #     requires:
+      #       - build-deploy-production
+      #     filters:
+      #       branches:
+      #         only: main
