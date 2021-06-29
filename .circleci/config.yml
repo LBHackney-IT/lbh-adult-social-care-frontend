@@ -204,20 +204,20 @@ workflows:
             - build-deploy-development
           filters:
             branches:
-              only: develop
+              only: nextjs-circle-ci
       - terraform-init-and-apply-to-staging:
           requires:
             - assume-role-staging
           filters:
             branches:
-              only: develop
+              only: nextjs-circle-ci
       - build-deploy-staging:
           stage: 'staging'
           requires:
             - terraform-init-and-apply-to-staging
           filters:
             branches:
-              only: develop
+              only: nextjs-circle-ci
       # - permit-production-terraform-release:
       #     type: approval
       #     requires:
