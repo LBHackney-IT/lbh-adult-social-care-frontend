@@ -1,0 +1,44 @@
+.client-summary-cont {
+    padding: 27px 0 16px 0;
+    border-bottom: 2px solid $lbh-green1;
+
+    .column {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .client-summary-title {
+        color: $lbh-green1;
+        font-size: 27px;
+        line-height: 30px;
+        font-weight: bold;
+    }
+
+    .more-info {
+        width: 100%;
+    }
+
+    .package-count {
+        color: $lbh-black1;
+        span {
+            margin-right: 10px;
+        }
+    }
+
+    .client-prop {
+        label {
+            color: $lbh-green1;
+            font-weight: bold;
+            font-size: 12px;
+            line-height: 30px;
+        }
+
+        div {
+            font-size: 14px;
+            line-height: 30px;
+            color: $lbh-black1;
+            width: 100%;
+        }
+    }
+}
