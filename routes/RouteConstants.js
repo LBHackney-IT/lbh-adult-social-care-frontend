@@ -1,4 +1,5 @@
 const LOGIN_ROUTE = "/login";
+const LOGIN_CALL_BACK_ROUTE = "/login-callback";
 const CARE_PACKAGE_ROUTE = "/care-package";
 const ACTIVE_PACKAGES_ROUTE = "/active-packages";
 const PROPOSED_PACKAGES_ROUTE = "/proposed-packages";
@@ -17,7 +18,7 @@ const DAY_CARE_BROKERING_PACKAGE_ROUTER = `${DAY_CARE_ROUTE}/brokering/:dayCareP
 const DAY_CARE_APPROVE_BROKERED_ROUTER = `${DAY_CARE_ROUTE}/approve-brokered/:dayCarePackageId`;
 const CLIENT_HISTORY_ROUTER = "/client-history";
 
-const PAYMENTS_ROUTE = '/payments';
+const PAYMENTS_ROUTE = "/payments";
 const PAYMENTS_PAY_RUNS_ROUTE = `${PAYMENTS_ROUTE}/pay-runs`;
 const PAYMENTS_BILLS_ROUTE = `${PAYMENTS_ROUTE}/bills`;
 const PAYMENTS_ADD_BILL_ROUTE = `${PAYMENTS_ROUTE}/bills/add-bill`;
@@ -29,11 +30,12 @@ const PAYMENTS_SUPPLIER_RETURNS_ROUTE = `${PAYMENTS_ROUTE}/supplier-returns`;
 const PAYMENTS_WEEK_OF_SUPPLIER_ROUTE = `${PAYMENTS_ROUTE}/supplier-returns/week-of-supplier/:id`;
 const PAYMENTS_REPORTING_ROUTE = `${PAYMENTS_ROUTE}/reporting`;
 
-const SUPPLIER_DASHBOARD_ROUTE = '/supplier-dashboard/supplier-returns';
+const SUPPLIER_DASHBOARD_ROUTE = "/supplier-dashboard/supplier-returns";
 const SUPPLIER_RETURNS_DASHBOARD_ROUTE = `${SUPPLIER_DASHBOARD_ROUTE}/supplier-returns/:id`;
 
 export {
   LOGIN_ROUTE,
+  LOGIN_CALL_BACK_ROUTE,
   HOME_CARE_ROUTE,
   HOME_CARE_APPROVE_PACKAGE_ROUTE,
   HOME_CARE_APPROVE_BROKERED_ROUTE,

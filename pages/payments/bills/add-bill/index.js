@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import AddBillTable from "../../../../components/Bills/AddBillTable";
 import AddBillAttachedFiles from "../../../../components/Bills/AddBillAttachedFiles";
@@ -7,40 +7,40 @@ import AddBillInvoiceFor from "../../../../components/Bills/AddBillInvoiceFor";
 import AddBillTotalInfo from "../../../../components/Bills/AddBillTotalInfo";
 import { addBillPackageInfoTestData } from "../../../../testData/billsTestData";
 import withSession from "../../../../lib/session";
-import {getUserSession} from "../../../../service/helpers";
-import fieldValidator from "../../../../service/fieldValidator";
+import { getUserSession } from "../../../../service/helpers";
+import fieldValidator from "../../../../service/inputValidator";
 
-export const getServerSideProps = withSession(async function({ req }) {
+export const getServerSideProps = withSession(async function ({ req }) {
   const user = getUserSession({ req });
-  if(user.redirect) {
+  if (user.redirect) {
     return user;
   }
 
   return {
     props: {}, // will be passed to the page component as props
-  }
+  };
 });
 
 const AddBill = () => {
   const router = useRouter();
   const [sorts] = useState([
-    {name: 'item', text: 'Item'},
-    {name: 'description', text: 'Description'},
-    {name: 'qty', text: 'Qty'},
-    {name: 'unitPrice', text: 'Unit Price'},
-    {name: 'costCentre', text: 'Cost Centre'},
-    {name: 'taxRate', text: 'Tax Rate'},
-    {name: 'amountExVAT', text: 'Amount Ex VAT'},
+    { name: "item", text: "Item" },
+    { name: "description", text: "Description" },
+    { name: "qty", text: "Qty" },
+    { name: "unitPrice", text: "Unit Price" },
+    { name: "costCentre", text: "Cost Centre" },
+    { name: "taxRate", text: "Tax Rate" },
+    { name: "amountExVAT", text: "Amount Ex VAT" },
   ]);
   const [addBillInfo, setAddBillInfo] = useState({});
   const [packageIdTimer, setPackageIdTimer] = useState(null);
   const [inputs, setInputs] = useState({
-    packageId: '',
+    packageId: "",
     serviceFrom: null,
     serviceTo: null,
     invoiceDate: null,
     invoiceDue: null,
-    invRef: '',
+    invRef: "",
   });
 
   const [inputsError, setInputsError] = useState({
@@ -54,63 +54,63 @@ const AddBill = () => {
 
   const invoiceInputs = {
     packageId: {
-      rules: ['empty'],
+      rules: ["empty"],
       value: inputs.packageId,
       error: inputsError.packageId,
-      onChange: (value) => onSetPackageId(value, 'packageId'),
+      onChange: (value) => onSetPackageId(value, "packageId"),
     },
     serviceFrom: {
-      rules: ['empty'],
+      rules: ["empty"],
       value: inputs.serviceFrom,
       error: inputsError.serviceFrom,
-      onChange: (value) => changeInputs(value, 'serviceFrom'),
+      onChange: (value) => changeInputs(value, "serviceFrom"),
     },
     serviceTo: {
-      rules: ['empty'],
+      rules: ["empty"],
       value: inputs.serviceTo,
       error: inputsError.serviceTo,
-      onChange: (value) => changeInputs(value, 'serviceTo'),
+      onChange: (value) => changeInputs(value, "serviceTo"),
     },
-  }
+  };
 
   const detailsInputs = {
     invRef: {
-      rules: ['empty'],
+      rules: ["empty"],
       value: inputs.invRef,
       error: inputsError.invRef,
-      onChange: (value) => changeInputs(value, 'invRef'),
+      onChange: (value) => changeInputs(value, "invRef"),
     },
     invoiceDate: {
-      rules: ['empty'],
+      rules: ["empty"],
       value: inputs.invoiceDate,
       error: inputsError.invoiceDate,
-      onChange: (value) => changeInputs(value, 'invoiceDate'),
+      onChange: (value) => changeInputs(value, "invoiceDate"),
     },
     invoiceDue: {
-      rules: ['empty'],
+      rules: ["empty"],
       value: inputs.invoiceDue,
       error: inputsError.invoiceDue,
-      onChange: (value) => changeInputs(value, 'invoiceDue'),
+      onChange: (value) => changeInputs(value, "invoiceDue"),
     },
-  }
+  };
 
   const [breadcrumbs] = useState([
-    {text: 'Bills', onClick: () => router.back()},
-    {text: 'Add Id'},
+    { text: "Bills", onClick: () => router.back() },
+    { text: "Add Id" },
   ]);
 
   const addBill = () => {
-    console.log('add bill func');
+    console.log("add bill func");
     const arrayInputs = [];
-    for(let i in {...invoiceInputs, ...detailsInputs}) {
+    for (let i in { ...invoiceInputs, ...detailsInputs }) {
       arrayInputs.push(invoiceInputs[i]);
     }
     const { validFields, hasError } = fieldValidator(arrayInputs);
-    if(hasError) {
+    if (hasError) {
       setInputsError(validFields);
       return;
     }
-    console.log('start add bill');
+    console.log("start add bill");
   };
 
   const changeInputs = (value, field) => {
@@ -121,25 +121,25 @@ const AddBill = () => {
     setInputsError({
       ...inputsError,
       [field]: null,
-    })
+    });
   };
 
   const onSetPackageId = async (value) => {
-    changeInputs(value, 'packageId');
-    if(packageIdTimer) {
+    changeInputs(value, "packageId");
+    if (packageIdTimer) {
       clearTimeout(packageIdTimer);
     }
     const timer = setTimeout(() => {
       //emit request
-      setAddBillInfo(addBillPackageInfoTestData)
+      setAddBillInfo(addBillPackageInfoTestData);
     }, 500);
     setPackageIdTimer(timer);
-  }
+  };
 
   return (
-    <div className='add-bill'>
+    <div className="add-bill">
       <Breadcrumbs values={breadcrumbs} />
-      <div className='add-bill__main'>
+      <div className="add-bill__main">
         <AddBillInvoiceFor inputs={invoiceInputs} />
         <AddBillInvoiceDetails inputs={detailsInputs} />
         <AddBillTable
@@ -147,13 +147,13 @@ const AddBill = () => {
           rows={addBillInfo?.invoices}
           sorts={sorts}
         />
-        <div className='is-flex is-justify-content-space-between add-bill__footer'>
+        <div className="is-flex is-justify-content-space-between add-bill__footer">
           <AddBillAttachedFiles attachedFiles={addBillInfo?.attachedFiles} />
           <AddBillTotalInfo addBillInfo={addBillInfo} addBill={addBill} />
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default AddBill;
