@@ -39,10 +39,10 @@ const NursingCareApprovePackage = ({ history }) => {
 
         const newAdditionalNeedsEntries = res.nursingCarePackage.nursingCareAdditionalNeeds.map(
           (additionalneedsItem) => ({
-            id: additionalneedsItem.Id,
-            isWeeklyCost: additionalneedsItem.IsWeeklyCost,
-            isOneOffCost: additionalneedsItem.IsOneOffCost,
-            needToAddress: additionalneedsItem.NeedToAddress,
+            id: additionalneedsItem.id,
+            isWeeklyCost: additionalneedsItem.isWeeklyCost,
+            isOneOffCost: additionalneedsItem.isOneOffCost,
+            needToAddress: additionalneedsItem.needToAddress,
           })
         );
 

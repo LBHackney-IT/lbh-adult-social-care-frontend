@@ -39,10 +39,10 @@ const NursingCareApproveBrokered = ({ history }) => {
 
         const newAdditionalNeedsEntries = res.nursingCarePackage.nursingCareAdditionalNeeds.map(
           (additionalneedsItem) => ({
-            id: additionalneedsItem.Id,
-            isWeeklyCost: additionalneedsItem.IsWeeklyCost,
-            isOneOffCost: additionalneedsItem.IsOneOffCost,
-            needToAddress: additionalneedsItem.NeedToAddress,
+            id: additionalneedsItem.id,
+            isWeeklyCost: additionalneedsItem.isWeeklyCost,
+            isOneOffCost: additionalneedsItem.isOneOffCost,
+            needToAddress: additionalneedsItem.needToAddress,
           })
         );
 
@@ -63,10 +63,10 @@ const NursingCareApproveBrokered = ({ history }) => {
 
         const newApprovalHistoryItems = res.map(
           (historyItem) => ({
-            eventDate: new Date(historyItem.ApprovedDate).toLocaleDateString(
+            eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
               "en-GB"
             ),
-            eventMessage: historyItem.LogText,
+            eventMessage: historyItem.logText,
             eventSubMessage: undefined
           })
         );
@@ -120,7 +120,7 @@ const NursingCareApproveBrokered = ({ history }) => {
 
 
   return (
-    <Layout headerTitle="NURSING CARE APPROVAL">
+    <Layout headerTitle="NURSING CARE BROKERED">
       <div className="hackney-text-black font-size-12px">
         <NursingCareApprovalTitle 
         startDate={nursingCarePackage?.nursingCarePackage.startDate}
