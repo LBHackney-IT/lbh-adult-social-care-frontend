@@ -41,31 +41,31 @@ jobs:
           root: *workspace_root
           paths: .
 
-  tests:
-    executor: node-executor
-    steps:
-      - *attach_workspace
-      - run:
-          name: Run linter
-          command: yarn lint
-      - run:
-          name: Run typecheck
-          command: yarn type-check
-      - run:
-          name: Run tests
-          command: yarn test -w 2
+  # tests:
+  #   executor: node-executor
+  #   steps:
+  #     - *attach_workspace
+  #     - run:
+  #         name: Run linter
+  #         command: yarn lint
+  #     - run:
+  #         name: Run typecheck
+  #         command: yarn type-check
+  #     - run:
+  #         name: Run tests
+  #         command: yarn test -w 2
 
-  e2e:
-    executor: node-executor
-    steps:
-      - *attach_workspace
-      - run:
-          name: Run E2E
-          command: yarn e2e
-      - store_artifacts:
-          path: ~/project/cypress/screenshots
-      - store_artifacts:
-          path: ~/project/cypress/videos
+  # e2e:
+  #   executor: node-executor
+  #   steps:
+  #     - *attach_workspace
+  #     - run:
+  #         name: Run E2E
+  #         command: yarn e2e
+  #     - store_artifacts:
+  #         path: ~/project/cypress/screenshots
+  #     - store_artifacts:
+  #         path: ~/project/cypress/videos
 
   build-deploy-staging:
     executor: aws-cli/default
