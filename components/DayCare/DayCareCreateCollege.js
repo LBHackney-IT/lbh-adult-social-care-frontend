@@ -3,7 +3,7 @@ import DatePick from "../DatePick";
 import React, { useState } from "react";
 import { Button } from "../Button";
 import { createDayCareCollege } from "../../api/CarePackages/DayCareApi";
-import { CARE_PACKAGE } from "../../routes/RouteConstants";
+import fieldValidator from "../../service/inputValidator";
 
 const DayCareCreateCollege = ({
   newName = undefined,
@@ -12,9 +12,28 @@ const DayCareCreateCollege = ({
 }) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [collegeName, setCollegeName] = useState(newName);
+  const [collegeName, setCollegeName]    = useState(newName);
+  const [errorFields, setErrorFields] = useState({
+    collageName: '',
+    startDate:  '',
+    endDate: '',
+  });
+
+  const changeErrorFields = (field, value) => {
+    setErrorFields({
+      ...errorFields,
+      [field]: value,
+    });
+  };
 
   const handleSaveCollege = () => {
+    const { validFields, hasErrors } = fieldValidator([
+      {name: 'startDate', value: startDate, rules: ['empty']},
+      {name: 'endDate', value: endDate, rules: ['empty']},
+      {name: 'collegeName', value: collegeName, rules: ['empty']}
+    ]);
+    setErrorFields(validFields);
+    if(!hasErrors) return;
     const collegeToCreate = {
       collegeName: collegeName,
       startDate: startDate.toJSON(),
@@ -38,6 +57,9 @@ const DayCareCreateCollege = ({
           label="Name"
           placeholder=""
           value={collegeName}
+          fields
+          error={errorFields.collageName}
+          setError={() => changeErrorFields('collageName', [])}
           onChange={setCollegeName}
           type="text"
           classes="max-w-200px"
@@ -45,8 +67,10 @@ const DayCareCreateCollege = ({
 
         <DatePick
           label="End date"
+          error={errorFields.endDate}
           dateValue={endDate}
           setDate={setEndDate}
+          setError={() => changeErrorFields('endDate', [])}
           classes="max-w-200px"
         />
       </div>
@@ -54,6 +78,8 @@ const DayCareCreateCollege = ({
         <DatePick
           label="Start date"
           dateValue={startDate}
+          setError={() => changeErrorFields('startDate', [])}
+          error={errorFields.endDate}
           setDate={setStartDate}
           classes="max-w-200px"
         />

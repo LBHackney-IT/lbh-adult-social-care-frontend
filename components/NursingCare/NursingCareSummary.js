@@ -5,6 +5,8 @@ const NursingCareSummary = ({
   startDate,
   endDate,
   needToAddress = "",
+  errorFields,
+  setErrorFields,
   additionalNeedsEntries = [],
   setAdditionalNeedsEntries = () => {},
 }) => {

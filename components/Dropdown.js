@@ -3,6 +3,7 @@ import { useState } from "react";
 import BaseField from "./baseComponents/BaseField";
 import OutsideTrigger from "./OutsideTrigger";
 import { CaretDownIcon } from "./Icons";
+import ErrorField from "./ErrorField";
 
 const Dropdown = ({
   label,
@@ -14,9 +15,11 @@ const Dropdown = ({
   children,
   isUp = false,
   buttonStyle = {},
+  error,
+  setError,
   buttonClassName = "",
 }) => {
-  if(options.length === 0 || !options.some(option => option.value === null)){
+  if((options.length === 0 || !options.some(option => option.value === null)) && !!initialText){
     options.unshift({ text: initialText, value: null });
   }
 
@@ -41,13 +44,14 @@ const Dropdown = ({
     event.stopPropagation();
     setSelectedOption(option);
     onOptionSelect(option.value);
+    setError && setError();
     setIsActive(false);
   };
 
   return (
     <BaseField classes={`${classes} dropdown-container`} label={label}>
       <div
-        data-selected-value={selectedOption.value}
+        data-selected-value={selectedOption?.value}
         className={
           "dropdown" + (isActive ? " is-active" : "") + (isUp ? " is-up" : "")
         }
@@ -66,7 +70,7 @@ const Dropdown = ({
               children
             ) : (
               <>
-                <span>{selectedOption.text}</span>
+                <span>{selectedOption?.text}</span>
                 <span className="icon">
                   <CaretDownIcon />
                 </span>
@@ -95,6 +99,7 @@ const Dropdown = ({
           </div>
         </OutsideTrigger>
       </div>
+      {error && <ErrorField text={error} />}
     </BaseField>
   );
 };

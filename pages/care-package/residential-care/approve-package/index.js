@@ -1,23 +1,24 @@
-import React, { useState } from "react";
-import NursingCareApprovalTitle from "../../../components/NursingCare/NursingCareApprovalTitle";
-import ApprovalClientSummary from "../../../components/ApprovalClientSummary";
-import Layout from "../../../components/Layout/Layout";
-import PackageCostBox from "../../../components/DayCare/PackageCostBox";
-import PackageApprovalHistorySummary from "../../../components/PackageApprovalHistorySummary";
-import TitleHeader from "../../../components/TitleHeader";
-import NursingCareSummary from "../../../components/NursingCare/NursingCareSummary";
-import TextArea from "../../../components/TextArea";
-import { useRouter } from "next/router";
+import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
+import Layout from "../../../../components/Layout/Layout";
+import React, {useState} from "react";
+import ResidentialCareApprovalTitle from "../../../../components/ResidentialCare/ResidentialCareApprovalTitle";
+import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
+import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
+import TitleHeader from "../../../../components/TitleHeader";
+import ResidentialCareSummary from "../../../../components/ResidentialCare/ResidentialCareSummary";
+import TextArea from "../../../../components/TextArea";
 import {
-  getNursingCarePackageApproveCommercial,
-  getNursingCarePackageApprovalHistory,
-  nursingCareRequestClarification,
-  nursingCareChangeStatus,
-} from "../../../api/CarePackages/NursingCareApi";
-import withSession from "../../../lib/session";
-import {getUserSession} from "../../../service/helpers";
+  getResidentialCarePackageApprovalHistory,
+  getResidentialCarePackageApprovalPackageContent,
+  residentialCareChangeStatus,
+  residentialCareRequestClarification,
+} from "../../../../api/CarePackages/ResidentialCareApi";
+import { useRouter } from "next/router";
+import { getUserSession } from "../../../../service/helpers";
+import withSession from "../../../../lib/session";
 
-export const getServerSideProps = withSession(async function({ req, query: { id: nursingCarePackageId } }) {
+// start before render
+export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
   const user = getUserSession({ req });
   if(user.redirect) {
     return user;
@@ -26,10 +27,9 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
   const data = {
     errorData: [],
   };
-
   try {
-    const nursingCarePackage = await getNursingCarePackageApproveCommercial(nursingCarePackageId);
-    const newAdditionalNeedsEntries = res.nursingCarePackage.nursingCareAdditionalNeeds.map(
+    const residentialCarePackage = await getResidentialCarePackageApprovalPackageContent(residentialCarePackageId);
+    const newAdditionalNeedsEntries = residentialCarePackage.residentialCarePackage.residentialCareAdditionalNeeds.map(
       (additionalNeedsItem) => ({
         id: additionalNeedsItem.Id,
         isWeeklyCost: additionalNeedsItem.IsWeeklyCost,
@@ -37,52 +37,44 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
         needToAddress: additionalNeedsItem.NeedToAddress,
       })
     );
-
-    data.nursingCarePackage = nursingCarePackage;
-    data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
+    data.residentialCarePackageData = residentialCarePackage;
+    data.newAdditionalNeedsEntriesData = additionalNeedsEntries;
 
   } catch(error) {
-    data.errorData.push(`Retrieve nursing care package details failed. ${error.message}`);
+    data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
   }
 
   try {
-    const res = await getNursingCarePackageApprovalHistory(nursingCarePackageId);
-    const newApprovalHistoryItems = res.map(
-      (historyItem) => ({
-        eventDate: new Date(historyItem.ApprovedDate).toLocaleDateString(
-          "en-GB"
-        ),
+    const approvalHistoryEntries = await getResidentialCarePackageApprovalHistory(residentialCarePackageId);
+    data.approvalHistoryEntries = approvalHistoryEntries.map((historyItem) => ({
+        eventDate: new Date(historyItem.ApprovedDate).toLocaleDateString("en-GB"),
         eventMessage: historyItem.LogText,
         eventSubMessage: undefined
-      })
-    );
-
-    data.approvalHistoryEntries = newApprovalHistoryItems.slice();
-
-  } catch(error) {
-    data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`);
+      }
+    ));
+  } catch (error) {
+    data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
   }
 
   return { props: { ...data }};
 });
 
-const NursingCareApproveBrokered = ({
-  nursingCarePackage,
-  additionalNeedsEntriesData,
+const ResidentialCareApprovePackage = ({
+  residentialCarePackage,
+  additionalNeedsEntries,
   approvalHistoryEntries,
+  errorData,
 }) => {
   const router = useRouter();
-  const nursingCarePackageId = router.query.id;
-
-  const [errors, setErrors] = useState([]);
-  const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
+  const { residentialCarePackageId } = router.query;
+  const [errors, setErrors] = useState(errorData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(
     undefined
   );
 
   const handleRejectPackage = () => {
-    nursingCareChangeStatus(nursingCarePackageId, 10)
+    residentialCareChangeStatus(residentialCarePackageId, 10)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
@@ -93,7 +85,7 @@ const NursingCareApproveBrokered = ({
   };
 
   const handleApprovePackageCommercials = () => {
-    nursingCareChangeStatus(nursingCarePackageId, 8)
+    residentialCareChangeStatus(residentialCarePackageId, 8)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
@@ -104,8 +96,8 @@ const NursingCareApproveBrokered = ({
   };
 
   const handleRequestMoreInformation = () => {
-    nursingCareRequestClarification(
-      nursingCarePackageId,
+    residentialCareRequestClarification(
+      residentialCarePackageId,
       requestInformationText
     )
       .then(() => {
@@ -118,14 +110,13 @@ const NursingCareApproveBrokered = ({
       });
   };
 
-
   return (
-    <Layout headerTitle="NURSING CARE APPROVAL">
+    <Layout headerTitle="RESIDENTIAL CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
-        <NursingCareApprovalTitle
-        startDate={nursingCarePackage?.nursingCarePackage.startDate}
-        endDate={nursingCarePackage?.nursingCarePackage.endDate !== null
-          ? nursingCarePackage?.nursingCarePackage.endDate
+      <ResidentialCareApprovalTitle
+        startDate={residentialCarePackage?.residentialCarePackage.startDate}
+        endDate={residentialCarePackage?.residentialCarePackage.endDate !== null
+          ? residentialCarePackage?.residentialCarePackage.endDate
           : "Ongoing"}
         />
         <ApprovalClientSummary />
@@ -141,7 +132,7 @@ const NursingCareApproveBrokered = ({
                     </p>
                     <p className="font-size-14px">
                       {new Date(
-                        nursingCarePackage?.nursingCarePackage.startDate
+                        residentialCarePackage?.residentialCarePackage.startDate
                       ).toLocaleDateString("en-GB")}
                     </p>
                   </div>
@@ -156,8 +147,8 @@ const NursingCareApproveBrokered = ({
                   <div>
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
-                      {nursingCarePackage?.nursingCarePackage.endDate !== null
-                        ? nursingCarePackage?.nursingCarePackage.endDate
+                      {residentialCarePackage?.residentialCarePackage.endDate !== null
+                        ? residentialCarePackage?.residentialCarePackage.endDate
                         : "Ongoing"}
                     </p>
                   </div>
@@ -186,25 +177,33 @@ const NursingCareApproveBrokered = ({
         <div className="columns">
           <div className="column">
             <PackageCostBox
-              boxClass="hackney-package-cost-light-green-box"
+              boxClass="hackney-package-cost-light-yellow-box"
               title="COST OF CARE / WK"
-              cost={`£${nursingCarePackage?.costOfCare}`}
+              cost={`£${residentialCarePackage?.costOfCare}`}
               costType="ESTIMATE"
             />
           </div>
           <div className="column">
             <PackageCostBox
-              boxClass="hackney-package-cost-light-green-box"
+              boxClass="hackney-package-cost-light-yellow-box"
               title="ANP / WK"
-              cost={`£${nursingCarePackage?.costOfAdditionalNeeds}`}
+              cost={`£${residentialCarePackage?.costOfAdditionalNeeds}`}
               costType="ESTIMATE"
             />
           </div>
           <div className="column">
             <PackageCostBox
-              boxClass="hackney-package-cost-green-box"
+              boxClass="hackney-package-cost-yellow-box"
+              title="ONE OFF COSTS"
+              cost={`£${residentialCarePackage?.costOfOneOff}`}
+              costType="ESTIMATE"
+            />
+          </div>
+          <div className="column">
+            <PackageCostBox
+              boxClass="hackney-package-cost-yellow-box"
               title="TOTAL / WK"
-              cost={`£${nursingCarePackage?.totalPerWeek}`}
+              cost={`£${residentialCarePackage?.totalPerWeek}`}
               costType="ESTIMATE"
             />
           </div>
@@ -218,14 +217,15 @@ const NursingCareApproveBrokered = ({
           <div className="column">
             <div className="mt-4 mb-1">
               <TitleHeader>Package Details</TitleHeader>
-              <NursingCareSummary
-                startDate={nursingCarePackage?.nursingCarePackage.startDate}
-                endDate={nursingCarePackage?.nursingCarePackage.endDate !== null
-                  ? nursingCarePackage?.nursingCarePackage.endDate
+              <ResidentialCareSummary
+                startDate={residentialCarePackage?.residentialCarePackage.startDate}
+                endDate={residentialCarePackage?.residentialCarePackage.endDate !== null
+                  ? residentialCarePackage?.residentialCarePackage.endDate
                   : "Ongoing"}
+                typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
-                needToAddress={nursingCarePackage?.nursingCarePackage.needToAddress}
+                needToAddress={residentialCarePackage?.residentialCarePackage.needToAddress}
               />
             </div>
           </div>
@@ -267,7 +267,6 @@ const NursingCareApproveBrokered = ({
           </div>
         </div>
 
-        {displayMoreInfoForm && (
         <div className="columns">
           <div className="column">
             <div className="mt-1">
@@ -289,10 +288,9 @@ const NursingCareApproveBrokered = ({
             </div>
           </div>
         </div>
-        )}
       </div>
     </Layout>
   );
 };
 
-export default NursingCareApproveBrokered;
+export default ResidentialCareApprovePackage;

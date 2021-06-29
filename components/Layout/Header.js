@@ -15,11 +15,12 @@ const HeaderNav = () => {
   );
 };
 
-const Header = ({ children, subTitle }) => {
+const Header = ({ children, subTitle, showPageHeader = true }) => {
   const router = useRouter();
   return (
     <>
       <HeaderNav />
+      {showPageHeader &&
       <div className="page-header">
         <div onClick={() => router.back()}>
           <ArrowLeftIcon />
@@ -32,6 +33,8 @@ const Header = ({ children, subTitle }) => {
           </h3>
         </div>
       </div>
+      }
+
     </>
   );
 };

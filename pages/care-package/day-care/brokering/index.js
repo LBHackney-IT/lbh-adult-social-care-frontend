@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { selectBrokerage } from "../../../reducers/brokerageReducer";
-import {getUserSession, uniqueID} from "../../../service/helpers";
-import { getHomeCareSummaryData } from "../../../api/CarePackages/HomeCareApi";
-import ClientSummary from "../../../components/ClientSummary";
-import Layout from "../../../components/Layout/Layout";
+import { selectBrokerage } from "../../../../reducers/brokerageReducer";
+import {getUserSession, uniqueID} from "../../../../service/helpers";
+import { getHomeCareSummaryData } from "../../../../api/CarePackages/HomeCareApi";
+import ClientSummary from "../../../../components/ClientSummary";
+import Layout from "../../../../components/Layout/Layout";
 import {
   getAgeFromDateString,
   getEnGBFormattedDate,
-} from "../../../api/Utils/FuncUtils";
+} from "../../../../api/Utils/FuncUtils";
 import {
   changeDayCarePackageStatus,
   createDayCareBrokerageInfo,
   getDayCareBrokerageStages,
   getDayCarePackageDetailsForBrokerage,
-} from "../../../api/CarePackages/DayCareApi";
+} from "../../../../api/CarePackages/DayCareApi";
 import { useRouter } from "next/router"
 import {
   getInitDaysSelected,
   getInitialPackageReclaim,
-} from "../../../api/Utils/CommonOptions";
+} from "../../../../api/Utils/CommonOptions";
 import {
   mapBrokerageSupplierOptions,
   mapDayCarePackageDetailsForBrokerage,
   mapDayCareStageOptions,
-} from "../../../api/Mappers/DayCareMapper";
-import { getSupplierList } from "../../../api/CarePackages/SuppliersApi";
-import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
-import PackagesDayCare from "../../../components/packages/day-care";
-import withSession from "../../../lib/session";
+} from "../../../../api/Mappers/DayCareMapper";
+import { getSupplierList } from "../../../../api/CarePackages/SuppliersApi";
+import { CARE_PACKAGE_ROUTE } from "../../../../routes/RouteConstants";
+import PackagesDayCare from "../../../../components/packages/day-care";
+import withSession from "../../../../lib/session";
 
 // start before render
 export const getServerSideProps = withSession(async function({ req, query: { id: dayCarePackageId } }) {

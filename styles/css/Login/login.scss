@@ -1,8 +1,33 @@
-.login {
-  width: 300px;
-  margin: auto;
-  height: 100vh;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
+.login-page__form-container {
+  height: 70vh;
+  width: 30%;
+  margin: 0 auto;
+  padding-top: 64px;
+}
+
+.login-page__form {
+  border: 1px solid #DEE0E2;
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 32px;
+
+  button.button-base {
+    width: 308px;
+    height: 80px;
+    margin-top: 16px;
+    font-size: 19px;
+  }
+
+  & > p {
+    font-size: 18px;
+    color: $lbh-black1;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 36px;
+    font-weight: bold;
+    color: $lbh-black1;
+    margin-bottom: 16px;
+  }
 }

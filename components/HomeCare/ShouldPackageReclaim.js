@@ -6,9 +6,9 @@ const reclaimedRadioOptions = [
   {text: 'Not sure', value: false},
 ];
 
-const ShouldPackageReclaim = ({isReclaimed, setIsReclaimed}) => {
+const ShouldPackageReclaim = ({ isReclaimed, setIsReclaimed, className = '' }) => {
   return (
-    <div className='column should-package-reclaim is-justify-content-space-between is-flex is-flex-wrap-wrap'>
+    <div className={`column should-package-reclaim is-justify-content-space-between is-flex is-flex-wrap-wrap ${className}`}>
       <p>
         Should the cost of this package be reclaimed in part or full from another body, e.g. NHS, CCG, another LA ?
       </p>

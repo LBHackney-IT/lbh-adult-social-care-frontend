@@ -1,27 +1,27 @@
 import { useRouter } from "next/router"
-import ClientSummary from "../../components/ClientSummary";
-import Layout from "../../components/Layout/Layout";
-import CareTitle from "../../components/CarePackages/CareTitle";
-import TextArea from "../../components/TextArea";
-import { days } from "../../components/daysData";
-import Checkbox from "../../components/Checkbox";
+import ClientSummary from "../../../components/ClientSummary";
+import Layout from "../../../components/Layout/Layout";
+import CareTitle from "../../../components/CarePackages/CareTitle";
+import TextArea from "../../../components/TextArea";
+import { days } from "../../../components/daysData";
+import Checkbox from "../../../components/Checkbox";
 import React, { useEffect, useState } from "react";
-import RadioButton, { yesNoValues } from "../../components/RadioButton";
+import RadioButton, { yesNoValues } from "../../../components/RadioButton";
 import {
   createDayCarePackage,
   getOpportunitiesLengthOptions,
   getOpportunityTimesPerMonthOptions,
   getTermTimeConsiderationOptions,
-} from "../../api/CarePackages/DayCareApi";
-import DayCareOpportunities from "../../components/DayCare/DayCareOpportunities";
-import { Button } from "../../components/Button";
-import { CARE_PACKAGE_ROUTE } from "../../routes/RouteConstants";
-import TitleHeader from "../../components/TitleHeader";
-import PackageReclaims from "../components/PackageReclaims";
-import DayCareSummary from "../../components/DayCare/DayCareSummary";
-import DayCareCollegeAsyncSearch from "../../components/DayCare/DayCareCollegeAsyncSearch";
-import { getUserSession } from "../../service/helpers";
-import withSession from "../../lib/session";
+} from "../../../api/CarePackages/DayCareApi";
+import DayCareOpportunities from "../../../components/DayCare/DayCareOpportunities";
+import { Button } from "../../../components/Button";
+import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
+import TitleHeader from "../../../components/TitleHeader";
+import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
+import DayCareSummary from "../../../components/DayCare/DayCareSummary";
+import DayCareCollegeAsyncSearch from "../../../components/DayCare/DayCareCollegeAsyncSearch";
+import {getErrorResponse, getUserSession} from "../../../service/helpers";
+import withSession from "../../../lib/session";
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
@@ -47,6 +47,11 @@ const DayCare = (props) => {
   startDate = startDate ?? null;
   endDate = endDate ?? null;
 
+  const [radioErrors, setRadioErrors] = useState({
+    transportNeeded: null,
+    transportEscortNeeded: null,
+  });
+
   const [errors, setErrors] = useState([]);
   const [termTimeNAId, setTermTimeNaId] = useState(undefined);
   const [
@@ -63,6 +68,9 @@ const DayCare = (props) => {
 
   // package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
+  const [errorFields, setErrorFields] = useState({
+
+  })
 
   const [needToAddress, setNeedToAddress] = useState(undefined);
   const [transportNeeded, setTransportIsNeeded] = useState(undefined);
@@ -253,7 +261,7 @@ const DayCare = (props) => {
       transportEscortNeeded: transportEscortNeeded,
       escortNeeded: escortNeeded,
       termTimeConsiderationOptionId: termTimeConsideration,
-      dayCarePackageOpportunities: dayCarePackageOpportunities,
+      dayCarePackageOpportunities,
       creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
       collegeId: collegeId,
       packageReclaims: packageReclaims,
@@ -266,6 +274,7 @@ const DayCare = (props) => {
       })
       .catch((error) => {
         alert(`Create package failed. ${error.message}`);
+        const errorData = getErrorResponse(error);
         setErrors([...errors, `Create package failed. ${error.message}`]);
       });
   };
@@ -329,6 +338,7 @@ const DayCare = (props) => {
         <div className="mt-4">
           <RadioButton
             label="Transport needed?"
+            error={radioErrors.transportNeeded}
             onChange={setTransportIsNeeded}
             options={yesNoValues}
             selectedValue={transportNeeded}

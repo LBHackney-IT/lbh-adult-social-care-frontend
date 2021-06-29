@@ -1,21 +1,21 @@
-import Layout from "../../../components/Layout/Layout";
+import { getServiceTypeCareTimes } from "../../../../service/homeCareServiceHelper";
+import { PERSONAL_CARE_MODE } from "../../../../service/homeCarePickerHelper";
+import Layout from "../../../../components/Layout/Layout";
 import React from "react";
-import TextArea from "../../../components/TextArea";
-import WeekCarePicker from "../../../components/HomeCare/WeekCarePicker";
-import { getServiceTypeCareTimes } from "../../../service/homeCareServiceHelper";
-import { PERSONAL_CARE_MODE } from "../../../service/homeCarePickerHelper";
-import HomeCareApprovalTitle from "../../../components/HomeCare/HomeCareApprovalTitle";
-import ApprovalClientSummary from "../../../components/ApprovalClientSummary";
-import HomeCarePackageBreakdown from "../../../components/HomeCare/HomeCarePackageBreakdown";
-import PackageApprovalHistorySummary from "../../../components/PackageApprovalHistorySummary";
-import HomeCarePackageDetails from "../../../components/HomeCare/HomeCarePackageDetails";
-import {getUserSession} from "../../../service/helpers";
-import withSession from "../../../lib/session";
+import HomeCareApprovalTitle from "../../../../components/HomeCare/HomeCareApprovalTitle";
+import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
+import HomeCarePackageBreakdown from "../../../../components/HomeCare/HomeCarePackageBreakdown";
+import HomeCarePackageElementCostings from "../../../../components/HomeCare/HomeCarePackageElementCostings";
+import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
+import HomeCarePackageDetails from "../../../../components/HomeCare/HomeCarePackageDetails";
+import WeekCarePicker from "../../../../components/HomeCare/WeekCarePicker";
+import TextArea from "../../../../components/TextArea";
+import {getUserSession} from "../../../../service/helpers";
 
 const approvalHistoryEntries = [
   {
     eventDate: "03/12/2021",
-    eventMessage: "Package requested by Martin Workman · Social Worker ",
+    eventMessage: "Package requested by Martin Workman · Social Worker",
     eventSubMessage: null,
   },
   {
@@ -29,9 +29,20 @@ const approvalHistoryEntries = [
     eventMessage: "Package re-submitted by Martin Workman · Social Worker ",
     eventSubMessage: null,
   },
+  {
+    eventDate: "14/12/2021",
+    eventMessage:
+      "Care Package Approved for brokerage by  Amecie Steadman · Approver",
+    eventSubMessage: null,
+  },
+  {
+    eventDate: "14/12/2021",
+    eventMessage: "Care Package approve-brokered STA by  Derek Knightman · Broker",
+    eventSubMessage: null,
+  },
 ];
 
-export const getServerSideProps = withSession(async function({ req }) {
+export async function getServerSideProps({ req }) {
   const user = getUserSession({ req });
   if(user.redirect) {
     return user;
@@ -40,10 +51,11 @@ export const getServerSideProps = withSession(async function({ req }) {
   return {
     props: {approvalHistoryEntries}, // will be passed to the page component as props
   }
-});
+}
 
-const HomeCareApprovePackage = ({ approvalHistoryEntries }) => {
+const HomeCareApproveBrokered = ({approvalHistoryEntries}) => {
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
+
   return (
     <Layout headerTitle="HOME CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
@@ -75,7 +87,7 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries }) => {
                     </p>
                     <p className="font-size-14px">£1,982</p>
                     <p className="font-weight-bold hackney-text-green">
-                      ESTIMATE
+                      ACTUAL
                     </p>
                   </div>
                 </div>
@@ -88,6 +100,8 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries }) => {
         </div>
 
         <HomeCarePackageBreakdown />
+
+        <HomeCarePackageElementCostings />
 
         <PackageApprovalHistorySummary
           approvalHistoryEntries={approvalHistoryEntries}
@@ -117,7 +131,7 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries }) => {
                 </div>
                 <div className="level-item  mr-2">
                   <button className="button hackney-btn-green">
-                    Approve to be brokered
+                    Approve contracting
                   </button>
                 </div>
               </div>
@@ -139,4 +153,4 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries }) => {
   );
 };
 
-export default HomeCareApprovePackage;
+export default HomeCareApproveBrokered;

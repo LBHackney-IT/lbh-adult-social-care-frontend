@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import BaseField from "./baseComponents/BaseField";
 import { Button } from "./Button";
 import { HackneySearch } from "./Icons";
+import ErrorField from "./ErrorField";
 
 const Input = ({
   label,
@@ -12,6 +13,8 @@ const Input = ({
   value = '',
   preSign = '',
   search,
+  error,
+  setError,
   postSign = '',
   type = 'text',
 }) => {
@@ -21,6 +24,7 @@ const Input = ({
     event.preventDefault();
     const formattedValue = value.replace(preSign, '').replace(postSign, '');
 
+    setError && setError();
     onChange(formattedValue);
   };
 
@@ -46,6 +50,7 @@ const Input = ({
           <HackneySearch />
         </Button>
       }
+      {error && <ErrorField text={error} />}
     </BaseField>
   );
 };

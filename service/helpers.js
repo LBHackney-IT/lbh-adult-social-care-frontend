@@ -41,10 +41,15 @@ const getUserSession = ({ req }) => {
   }
 };
 
+const getErrorResponse = (error) => {
+  return error?.response?.data || {}; // { firstName: 'First Name must be more then 10 symbols', secondName: 'Second Name must be more then 10 symbols'
+}
+
 export {
   uniqueID,
   formatDateWithSign,
   formatStatus,
   includeString,
   getUserSession,
+  getErrorResponse,
 };

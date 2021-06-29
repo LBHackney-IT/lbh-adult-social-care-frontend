@@ -24,6 +24,9 @@ const staticCheckboxOptions = [
 
 const PackageReclaim = ({
   packageReclaim,
+  error,
+  setError,
+  index,
   setPackageReclaim,
   remove,
   reclaimAmountOptions = staticCheckboxOptions,
@@ -35,7 +38,17 @@ const PackageReclaim = ({
       ...packageReclaim,
       [field]: value,
     });
+    onChangeErrors(field);
   };
+
+  const onChangeErrors = (field) => {
+    if(index === undefined) return;
+    const newErrors = [...error];
+    newErrors.splice(index, 1, {...error[index], [field]: false});
+    setError(newErrors);
+  }
+
+  const currentError = index !== undefined && error[index];
 
   return (
     <div className="package-reclaim">
@@ -55,6 +68,7 @@ const PackageReclaim = ({
           <Dropdown
             label="Reclaim from"
             initialText="Select"
+            error={currentError?.from}
             options={reclaimFromOptions}
             onOptionSelect={(value) => changePackageType("from", value)}
             selectedValue={packageReclaim.from}
@@ -62,6 +76,7 @@ const PackageReclaim = ({
           <Dropdown
             label="Reclaim category"
             initialText="Select"
+            error={currentError?.category}
             options={reclaimFromCategoryOptions}
             onOptionSelect={(value) => changePackageType("category", value)}
             selectedValue={packageReclaim.category}
@@ -70,6 +85,7 @@ const PackageReclaim = ({
         <TextArea
           classes="package-reclaim__notes"
           rows={5}
+          error={currentError?.notes}
           label="Add notes"
           onChange={(value) => changePackageType("notes", value)}
           placeholder="My notes here and here"
@@ -77,6 +93,7 @@ const PackageReclaim = ({
         <div className="mt-4 mb-5">
           <RadioButton
             label=""
+            error={currentError?.type}
             onChange={(value) => changePackageType("type", value)}
             options={reclaimAmountOptions}
             selectedValue={packageReclaim.type}
@@ -85,6 +102,7 @@ const PackageReclaim = ({
         <EuroInput
           onChange={(value) => changePackageType("amount", value)}
           label="Amount"
+          error={currentError?.amount}
           value={packageReclaim.amount}
         />
         <hr className="horizontal-delimiter" />

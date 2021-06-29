@@ -8,6 +8,7 @@ import AddBillTotalInfo from "../../../../components/Bills/AddBillTotalInfo";
 import { addBillPackageInfoTestData } from "../../../../testData/billsTestData";
 import withSession from "../../../../lib/session";
 import {getUserSession} from "../../../../service/helpers";
+import fieldValidator from "../../../../service/fieldValidator";
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
@@ -42,32 +43,53 @@ const AddBill = () => {
     invRef: '',
   });
 
+  const [inputsError, setInputsError] = useState({
+    packageId: [],
+    serviceFrom: [],
+    serviceTo: [],
+    invoiceDate: [],
+    invoiceDue: [],
+    invRef: [],
+  });
+
   const invoiceInputs = {
     packageId: {
+      rules: ['empty'],
       value: inputs.packageId,
-      onChange: (value) => onSetPackageId(value),
+      error: inputsError.packageId,
+      onChange: (value) => onSetPackageId(value, 'packageId'),
     },
     serviceFrom: {
+      rules: ['empty'],
       value: inputs.serviceFrom,
+      error: inputsError.serviceFrom,
       onChange: (value) => changeInputs(value, 'serviceFrom'),
     },
     serviceTo: {
+      rules: ['empty'],
       value: inputs.serviceTo,
+      error: inputsError.serviceTo,
       onChange: (value) => changeInputs(value, 'serviceTo'),
     },
   }
 
   const detailsInputs = {
     invRef: {
+      rules: ['empty'],
       value: inputs.invRef,
+      error: inputsError.invRef,
       onChange: (value) => changeInputs(value, 'invRef'),
     },
     invoiceDate: {
+      rules: ['empty'],
       value: inputs.invoiceDate,
+      error: inputsError.invoiceDate,
       onChange: (value) => changeInputs(value, 'invoiceDate'),
     },
     invoiceDue: {
+      rules: ['empty'],
       value: inputs.invoiceDue,
+      error: inputsError.invoiceDue,
       onChange: (value) => changeInputs(value, 'invoiceDue'),
     },
   }
@@ -78,7 +100,17 @@ const AddBill = () => {
   ]);
 
   const addBill = () => {
-    console.log('add bill');
+    console.log('add bill func');
+    const arrayInputs = [];
+    for(let i in {...invoiceInputs, ...detailsInputs}) {
+      arrayInputs.push(invoiceInputs[i]);
+    }
+    const { validFields, hasError } = fieldValidator(arrayInputs);
+    if(hasError) {
+      setInputsError(validFields);
+      return;
+    }
+    console.log('start add bill');
   };
 
   const changeInputs = (value, field) => {
@@ -86,6 +118,10 @@ const AddBill = () => {
       ...inputs,
       [field]: value,
     });
+    setInputsError({
+      ...inputsError,
+      [field]: null,
+    })
   };
 
   const onSetPackageId = async (value) => {

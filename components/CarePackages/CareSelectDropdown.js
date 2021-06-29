@@ -7,9 +7,13 @@ const CareSelectDropdown = ({
   setSelectedCareType,
   label = 'Select approve-package',
   initialText,
+  error,
+  setError,
 }) => {
   return (
     <Dropdown
+      error={error}
+      setError={setError}
       label={label}
       initialText={initialText}
       options={careTypes}

@@ -1,8 +1,8 @@
+import React, { useEffect, useState } from 'react';
 import Dropdown from "../Dropdown";
 import SectionHeading from "../SectionHeading";
 import TextArea from "../TextArea";
 import { Button } from "../Button";
-import { useEffect, useState } from 'react';
 
 const DayCareOpportunityEntry = ({
   lengthOptions,
@@ -32,8 +32,6 @@ const DayCareOpportunityEntry = ({
     setTimeout(handleOpportunityChange(opportunityItem), 1000);
   }
 
-
-
   return (
     <div className="columns day-care-opportunity mt-3">
       <div className="column is-3 opportunity-dropdown-options">
@@ -61,7 +59,7 @@ const DayCareOpportunityEntry = ({
           {entry.needToAddress}
         </TextArea>
       </div>
-      <div className="column is-2"></div>
+      <div className="column is-2" />
     </div>
   );
 };

@@ -13,6 +13,7 @@
 @import "../public/fonts/fonts";
 @import "css/dropdown";
 @import "css/field";
+@import "css/ErrorField/error-field";
 @import "css/CarePackages/additionalNeeds";
 @import "css/CarePackages/careTitle";
 @import "css/ProposedPackages/approval-history";
@@ -58,7 +59,7 @@
 }
 
 button {
-  padding-left: 0px;
+  padding-left: 0;
 }
 
 // Small devices (landscape phones, 576px and smaller)

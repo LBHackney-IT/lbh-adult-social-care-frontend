@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { format } from "date-fns";
-import { useState, useEffect } from "react";
 import { useRouter } from "next/router"
 import {
   createHomeCarePackage,
   getHomeCareServices,
   getHomeCareSummaryData,
-} from "../../api/CarePackages/HomeCareApi";
-import { Button } from "../../components/Button";
-import ClientSummary from "../../components/ClientSummary";
-import Dropdown from "../../components/Dropdown";
-import TextArea from "../../components/TextArea";
-import TitleHeader from "../../components/TitleHeader";
-import Layout from "../../components/Layout/Layout";
-import CareTitle from "../../components/CarePackages/CareTitle";
-import SummaryDataList from "../../components/HomeCare/SummaryDataList";
-import WeekCarePicker from "../../components/HomeCare/WeekCarePicker";
-import { PERSONAL_CARE_MODE } from "../../service/homeCarePickerHelper";
-import { getServiceTypeCareTimes, serviceTypes } from "../../service/homeCareServiceHelper";
-import ShouldPackageReclaim from "../../components/HomeCare/ShouldPackageReclaim";
-import PackageReclaim from "../../components/PackageReclaim";
-import {getUserSession, uniqueID} from "../../service/helpers";
-import withSession from "../../lib/session";
+} from "../../../api/CarePackages/HomeCareApi";
+import { Button } from "../../../components/Button";
+import ClientSummary from "../../../components/ClientSummary";
+import Dropdown from "../../../components/Dropdown";
+import TextArea from "../../../components/TextArea";
+import TitleHeader from "../../../components/TitleHeader";
+import Layout from "../../../components/Layout/Layout";
+import CareTitle from "../../../components/CarePackages/CareTitle";
+import SummaryDataList from "../../../components/HomeCare/SummaryDataList";
+import WeekCarePicker from "../../../components/HomeCare/WeekCarePicker";
+import { PERSONAL_CARE_MODE } from "../../../service/homeCarePickerHelper";
+import { getServiceTypeCareTimes, serviceTypes } from "../../../service/homeCareServiceHelper";
+import ShouldPackageReclaim from "../../../components/HomeCare/ShouldPackageReclaim";
+import PackageReclaim from "../../../components/PackageReclaim";
+import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
+import {getUserSession, uniqueID} from "../../../service/helpers";
+import withSession from "../../../lib/session";
 
 const initialPackageReclaim = {
   type: "",
@@ -66,6 +65,7 @@ const HomeCare = ({
   const [selectedPrimaryCareTime, setSelectedPrimaryCareTime] = useState(1);
   const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] = useState(1);
   const [homeCareSummaryData, setHomeCareSummaryData] = useState(undefined);
+  const [errors, setErrors] = useState([]);
   const [carePackageId, setCarePackageId] = useState(undefined);
   const [packagesReclaimed, setPackagesReclaimed] = useState([
     { ...initialPackageReclaim },
@@ -142,6 +142,7 @@ const HomeCare = ({
             <div>
               <Dropdown
                 label="Select Service"
+                initialText={null}
                 options={serviceTypes}
                 selectedValue={selectedCareType}
                 onOptionSelect={(option) => setSelectedCareType(option)}
@@ -201,20 +202,9 @@ const HomeCare = ({
             selectedSecondaryCareTypeId={selectedSecondaryCareTime}
           />
         </div>
-
-        <PackageReclaims
-          errors={errors}
-          setErrors={setErrors}
-          packagesReclaimed={packagesReclaimed}
-          setPackagesReclaimed={setPackagesReclaimed}
-        />
-        <div className="level mt-4">
-          <div className="level-item level-right">
-            <Button onClick={addToPackageClick}>Add to package</Button>
-          </div>
-        </div>
         <ShouldPackageReclaim
           isReclaimed={isReclaimed}
+          className='mt-6'
           setIsReclaimed={changeIsPackageReclaimed}
         />
         {isReclaimed && (

@@ -1,25 +1,25 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import ClientSummary from "../../components/ClientSummary";
-import Layout from "../../components/Layout/Layout";
-import CareTitle from "../../components/CarePackages/CareTitle";
-import TextArea from "../../components/TextArea";
-import Dropdown from "../../components/Dropdown";
+import ClientSummary from "../../../components/ClientSummary";
+import Layout from "../../../components/Layout/Layout";
+import CareTitle from "../../../components/CarePackages/CareTitle";
+import TextArea from "../../../components/TextArea";
+import Dropdown from "../../../components/Dropdown";
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray
-} from "../../components/CarePackages/AdditionalNeedsEntries";
+} from "../../../components/CarePackages/AdditionalNeedsEntries";
 import {
   createResidentialCarePackage,
   getResidentialCareAdditionalNeedsCostOptions,
   getTypeOfResidentialCareHomeOptions,
-} from "../../api/CarePackages/ResidentialCareApi";
-import TitleHeader from "../../components/TitleHeader";
-import ResidentialCareSummary from "../../components/ResidentialCare/ResidentialCareSummary";
-import { Button } from "../../components/Button";
-import { CARE_PACKAGE_ROUTE } from "../../routes/RouteConstants";
-import {getUserSession} from "../../service/helpers";
-import withSession from "../../lib/session";
-import PackageReclaims from "../../components/PackageReclaims";
+} from "../../../api/CarePackages/ResidentialCareApi";
+import TitleHeader from "../../../components/TitleHeader";
+import ResidentialCareSummary from "../../../components/ResidentialCare/ResidentialCareSummary";
+import { Button } from "../../../components/Button";
+import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
+import {getUserSession} from "../../../service/helpers";
+import withSession from "../../../lib/session";
+import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });

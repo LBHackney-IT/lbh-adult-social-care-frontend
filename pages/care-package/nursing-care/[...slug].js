@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router"
-import ClientSummary from "../../components/ClientSummary";
-import Dropdown from "../../components/Dropdown";
-import TextArea from "../../components/TextArea";
-import Layout from "../../components/Layout/Layout";
-import AdditionalNeeds, { getInitialAdditionalNeedsArray } from "../../components/CarePackages/AdditionalNeedsEntries";
-import CareTitle from "../../components/CarePackages/CareTitle";
-import TitleHeader from "../../components/TitleHeader";
-import NursingCareSummary from "../../components/NursingCare/NursingCareSummary";
-import { Button } from "../../components/Button";
+import ClientSummary from "../../../components/ClientSummary";
+import Dropdown from "../../../components/Dropdown";
+import TextArea from "../../../components/TextArea";
+import Layout from "../../../components/Layout/Layout";
+import AdditionalNeeds, { getInitialAdditionalNeedsArray } from "../../../components/CarePackages/AdditionalNeedsEntries";
+import CareTitle from "../../../components/CarePackages/CareTitle";
+import TitleHeader from "../../../components/TitleHeader";
+import NursingCareSummary from "../../../components/NursingCare/NursingCareSummary";
+import { Button } from "../../../components/Button";
 import {
   createNursingCarePackage,
   getTypeOfNursingHomeOptions,
-} from "../../api/CarePackages/NursingCareApi";
-import PackageReclaims from "../../components/CarePackages/PackageReclaims";
-import { CARE_PACKAGE_ROUTE } from "../../routes/RouteConstants";
-import { getUserSession } from "../../service/helpers";
-import withSession from "../../lib/session";
+} from "../../../api/CarePackages/NursingCareApi";
+import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
+import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
+import { getUserSession } from "../../../service/helpers";
+import withSession from "../../../lib/session";
+import fieldValidator from "../../../service/inputValidator";
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
@@ -29,7 +30,7 @@ export const getServerSideProps = withSession(async function({ req }) {
   }
 });
 
-const NursingCare = (props) => {
+const NursingCare = () => {
   const isTrueParse = (myValue) => myValue === "true";
   const notNullString = (myValue) =>
     myValue !== "null" && myValue !== "undefined";
@@ -65,10 +66,18 @@ const NursingCare = (props) => {
   const [careHomeTypes, setCareHomeTypes] = useState([]);
   const [errors, setErrors] = useState([]);
   const [needToAddress, setNeedToAddress] = useState(undefined);
-  const [selectedNursingHomeType, setSelectedNursingHomeType] = useState(1);
+  const [selectedNursingHomeType, setSelectedNursingHomeType] = useState();
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(
     getInitialAdditionalNeedsArray()
   );
+
+  const [additionalNeedsEntriesErrors, setAdditionalNeedsEntriesErrors] = useState([]);
+  const [packageReclaimedError, setPackageReclaimedError] = useState([]);
+
+  const [errorFields, setErrorFields] = useState({
+    needToAddress: '',
+    selectedNursingHomeType: '',
+  });
 
   // Package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
@@ -97,11 +106,49 @@ const NursingCare = (props) => {
   }, [careHomeTypes]);
 
   const formIsValid = () => {
-    const errors = [];
+    const defaultErrors = fieldValidator([
+      {name: 'needToAddress', value: needToAddress, rules: ['empty']},
+      {name: 'selectedNursingHomeType', value: selectedNursingHomeType, rules: ['empty']},
+    ]);
 
-    setErrors(errors);
-    // Form is valid if the errors array has no items
-    return errors.length === 0;
+    if(defaultErrors.hasErrors) {
+      setErrorFields(defaultErrors.validFields);
+    }
+
+    const additionalNeedsTimedArr = [];
+
+    const additionalNeedsError = additionalNeedsEntries.map(item => {
+      const valid = fieldValidator([
+        {name: 'selectedCost', value: item.selectedCost, rules: ['empty']},
+        {name: 'selectedCostText', value: item.selectedCostText, rules: ['empty']},
+        {name: 'selectedPeriod', value: item.selectedPeriod, rules: ['empty']},
+        {name: 'needToAddress', value: item.needToAddress, rules: ['empty']},
+      ]);
+
+      additionalNeedsTimedArr.push(valid.validFields);
+      return valid.hasErrors;
+    });
+    setAdditionalNeedsEntriesErrors(additionalNeedsTimedArr);
+
+    const packageReclaimsTimedArr = [];
+    const packageReclaimsFieldsError = packagesReclaimed.map(item => {
+      const valid = fieldValidator([
+        {name: 'from', value: item.from, rules: ['empty']},
+        {name: 'category', value: item.category, rules: ['empty']},
+        {name: 'type', value: item.type, rules: ['empty']},
+        {name: 'notes', value: item.notes, rules: ['empty']},
+        {name: 'amount', value: item.amount, rules: ['empty']},
+      ]);
+      packageReclaimsTimedArr.push(valid.validFields);
+      return valid.hasErrors;
+    });
+    setPackageReclaimedError(packageReclaimsTimedArr);
+
+    return !(defaultErrors.hasErrors || additionalNeedsError.some(item => item) || packageReclaimsTimedArr.some(item => item));
+  };
+
+  const changeErrorField = (field) => {
+    setErrorFields({...errorFields, [field]: ''});
   };
 
   const handleSavePackage = (event) => {
@@ -172,6 +219,8 @@ const NursingCare = (props) => {
         <div className="column">
           <TextArea
             label="Need to Address"
+            error={errorFields.needToAddress}
+            setError={() => changeErrorField('needToAddress')}
             rows={5}
             placeholder="Add details..."
             onChange={setNeedToAddress}
@@ -179,9 +228,12 @@ const NursingCare = (props) => {
         </div>
         <div className="column">
           <Dropdown
+            initialText={null}
             label="Type of nursing home"
             options={careHomeTypes}
             selectedValue={selectedNursingHomeType}
+            error={errorFields.selectedNursingHomeType}
+            setError={() => changeErrorField('selectedNursingHomeType')}
             onOptionSelect={(option) => setSelectedNursingHomeType(option)}
             buttonStyle={{ width: "240px" }}
           />
@@ -191,6 +243,8 @@ const NursingCare = (props) => {
         <AdditionalNeeds
           costOptions={additionalNeedsCostOptions}
           entries={additionalNeedsEntries}
+          error={additionalNeedsEntriesErrors}
+          setError={setAdditionalNeedsEntriesErrors}
           setAdditionalNeedsState={setAdditionalNeedsEntries}
         />
       </div>
@@ -198,6 +252,8 @@ const NursingCare = (props) => {
       <PackageReclaims
         errors={errors}
         setErrors={setErrors}
+        error={packageReclaimedError}
+        setError={setPackageReclaimedError}
         packagesReclaimed={packagesReclaimed}
         setPackagesReclaimed={setPackagesReclaimed}
       />

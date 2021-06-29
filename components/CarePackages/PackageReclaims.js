@@ -11,6 +11,8 @@ import ShouldPackageReclaim from "../HomeCare/ShouldPackageReclaim";
 
 const PackageReclaims = ({
   packagesReclaimed = [],
+  error,
+  setError,
   setPackagesReclaimed = () => {},
   errors = [],
   setErrors = () => {},
@@ -160,11 +162,14 @@ const PackageReclaims = ({
 
       {!!packagesReclaimed.length && (
         <div>
-          {packagesReclaimed.map((item) => {
+          {packagesReclaimed.map((item, index) => {
             return (
               <PackageReclaim
                 remove={() => removeDayCarePackageReclaim(item.id)}
                 key={item.id}
+                error={error}
+                index={index}
+                setError={setError}
                 packageReclaim={item}
                 setPackageReclaim={changeDayCarePackageReclaim(item.id)}
                 reclaimFromOptions={reclaimFromOptions}

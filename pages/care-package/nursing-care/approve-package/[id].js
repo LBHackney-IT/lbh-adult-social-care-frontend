@@ -1,24 +1,24 @@
-import ApprovalClientSummary from "../../../components/ApprovalClientSummary";
-import Layout from "../../../components/Layout/Layout";
-import React, {useState} from "react";
-import ResidentialCareApprovalTitle from "../../../components/ResidentialCare/ResidentialCareApprovalTitle";
-import PackageCostBox from "../../../components/DayCare/PackageCostBox";
-import PackageApprovalHistorySummary from "../../../components/PackageApprovalHistorySummary";
-import TitleHeader from "../../../components/TitleHeader";
-import ResidentialCareSummary from "../../../components/ResidentialCare/ResidentialCareSummary";
-import TextArea from "../../../components/TextArea";
+import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
+import Layout from "../../../../components/Layout/Layout";
+import React, { useState } from "react";
+import NursingCareApprovalTitle from "../../../../components/NursingCare/NursingCareApprovalTitle";
+import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
+import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
+import TitleHeader from "../../../../components/TitleHeader";
+import NursingCareSummary from "../../../../components/NursingCare/NursingCareSummary";
+import TextArea from "../../../../components/TextArea";
+import { useRouter } from "next/router"
 import {
-  getResidentialCarePackageApprovalHistory,
-  getResidentialCarePackageApprovalPackageContent,
-  residentialCareChangeStatus,
-  residentialCareRequestClarification,
-} from "../../../api/CarePackages/ResidentialCareApi";
-import { useRouter } from "next/router";
-import { getUserSession } from "../../../service/helpers";
-import withSession from "../../../lib/session";
+  getNursingCarePackageApprovalPackageContent,
+  getNursingCarePackageApprovalHistory,
+  nursingCareRequestClarification,
+  nursingCareChangeStatus,
+} from "../../../../api/CarePackages/NursingCareApi";
+import withSession from "../../../../lib/session";
+import {getUserSession} from "../../../../service/helpers";
 
 // start before render
-export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
+export const getServerSideProps = withSession(async function({ req, query: { id: nursingCarePackageId } }) {
   const user = getUserSession({ req });
   if(user.redirect) {
     return user;
@@ -27,9 +27,10 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
   const data = {
     errorData: [],
   };
+
   try {
-    const residentialCarePackage = await getResidentialCarePackageApprovalPackageContent(residentialCarePackageId);
-    const newAdditionalNeedsEntries = residentialCarePackage.residentialCarePackage.residentialCareAdditionalNeeds.map(
+    const nursingCarePackage = await getNursingCarePackageApprovalPackageContent(nursingCarePackageId);
+    const newAdditionalNeedsEntries = nursingCarePackage.nursingCarePackage.nursingCareAdditionalNeeds.map(
       (additionalNeedsItem) => ({
         id: additionalNeedsItem.Id,
         isWeeklyCost: additionalNeedsItem.IsWeeklyCost,
@@ -37,44 +38,52 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
         needToAddress: additionalNeedsItem.NeedToAddress,
       })
     );
-    data.residentialCarePackageData = residentialCarePackage;
-    data.newAdditionalNeedsEntriesData = additionalNeedsEntries;
+
+    data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
+    data.nursingCarePackage = nursingCarePackage;
 
   } catch(error) {
-    data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
+    data.errorData.push(`Retrieve nursing care package details failed. ${error.message}`);
   }
 
   try {
-    const approvalHistoryEntries = await getResidentialCarePackageApprovalHistory(residentialCarePackageId);
-    data.approvalHistoryEntries = approvalHistoryEntries.map((historyItem) => ({
-        eventDate: new Date(historyItem.ApprovedDate).toLocaleDateString("en-GB"),
-        eventMessage: historyItem.LogText,
+    const res = await getNursingCarePackageApprovalHistory(nursingCarePackageId);
+    const newApprovalHistoryItems = res.map(
+      (historyItem) => ({
+        eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
+          "en-GB"
+        ),
+        eventMessage: historyItem.logText,
         eventSubMessage: undefined
-      }
-    ));
-  } catch (error) {
-    data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
+      })
+    );
+
+    data.approvalHistoryEntries = newApprovalHistoryItems.slice();
+
+  } catch(error) {
+    data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`);
   }
 
   return { props: { ...data }};
 });
 
-const ResidentialCareApprovePackage = ({
-  residentialCarePackage,
-  additionalNeedsEntries,
+const NursingCareApprovePackage = ({
+  nursingCarePackage,
   approvalHistoryEntries,
+  additionalNeedsEntriesData,
   errorData,
 }) => {
   const router = useRouter();
-  const { residentialCarePackageId } = router.query;
+  const nursingCarePackageId = router.query.id;
   const [errors, setErrors] = useState(errorData);
+  const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(
     undefined
   );
 
   const handleRejectPackage = () => {
-    residentialCareChangeStatus(residentialCarePackageId, 10)
+    nursingCareChangeStatus(nursingCarePackageId, 10)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
@@ -84,8 +93,8 @@ const ResidentialCareApprovePackage = ({
       });
   };
 
-  const handleApprovePackageCommercials = () => {
-    residentialCareChangeStatus(residentialCarePackageId, 8)
+  const handleApprovePackageContents = () => {
+    nursingCareChangeStatus(nursingCarePackageId, 4)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
@@ -96,8 +105,8 @@ const ResidentialCareApprovePackage = ({
   };
 
   const handleRequestMoreInformation = () => {
-    residentialCareRequestClarification(
-      residentialCarePackageId,
+    nursingCareRequestClarification(
+      nursingCarePackageId,
       requestInformationText
     )
       .then(() => {
@@ -109,14 +118,13 @@ const ResidentialCareApprovePackage = ({
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
-
   return (
-    <Layout headerTitle="RESIDENTIAL CARE APPROVAL">
+    <Layout headerTitle="NURSING CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
-      <ResidentialCareApprovalTitle
-        startDate={residentialCarePackage?.residentialCarePackage.startDate}
-        endDate={residentialCarePackage?.residentialCarePackage.endDate !== null
-          ? residentialCarePackage?.residentialCarePackage.endDate
+      <NursingCareApprovalTitle
+        startDate={nursingCarePackage?.nursingCarePackage.startDate}
+        endDate={nursingCarePackage?.nursingCarePackage.endDate !== null
+          ? nursingCarePackage?.nursingCarePackage.endDate
           : "Ongoing"}
         />
         <ApprovalClientSummary />
@@ -132,7 +140,7 @@ const ResidentialCareApprovePackage = ({
                     </p>
                     <p className="font-size-14px">
                       {new Date(
-                        residentialCarePackage?.residentialCarePackage.startDate
+                        nursingCarePackage?.nursingCarePackage.startDate
                       ).toLocaleDateString("en-GB")}
                     </p>
                   </div>
@@ -147,8 +155,8 @@ const ResidentialCareApprovePackage = ({
                   <div>
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
-                      {residentialCarePackage?.residentialCarePackage.endDate !== null
-                        ? residentialCarePackage?.residentialCarePackage.endDate
+                      {nursingCarePackage?.nursingCarePackage.endDate !== null
+                        ? nursingCarePackage?.nursingCarePackage.endDate
                         : "Ongoing"}
                     </p>
                   </div>
@@ -179,7 +187,7 @@ const ResidentialCareApprovePackage = ({
             <PackageCostBox
               boxClass="hackney-package-cost-light-yellow-box"
               title="COST OF CARE / WK"
-              cost={`£${residentialCarePackage?.costOfCare}`}
+              cost={`£${nursingCarePackage?.costOfCare}`}
               costType="ESTIMATE"
             />
           </div>
@@ -187,7 +195,7 @@ const ResidentialCareApprovePackage = ({
             <PackageCostBox
               boxClass="hackney-package-cost-light-yellow-box"
               title="ANP / WK"
-              cost={`£${residentialCarePackage?.costOfAdditionalNeeds}`}
+              cost={`£${nursingCarePackage?.costOfAdditionalNeeds}`}
               costType="ESTIMATE"
             />
           </div>
@@ -195,7 +203,7 @@ const ResidentialCareApprovePackage = ({
             <PackageCostBox
               boxClass="hackney-package-cost-yellow-box"
               title="ONE OFF COSTS"
-              cost={`£${residentialCarePackage?.costOfOneOff}`}
+              cost={`£${nursingCarePackage?.costOfOneOff}`}
               costType="ESTIMATE"
             />
           </div>
@@ -203,7 +211,7 @@ const ResidentialCareApprovePackage = ({
             <PackageCostBox
               boxClass="hackney-package-cost-yellow-box"
               title="TOTAL / WK"
-              cost={`£${residentialCarePackage?.totalPerWeek}`}
+              cost={`£${nursingCarePackage?.totalPerWeek}`}
               costType="ESTIMATE"
             />
           </div>
@@ -217,16 +225,14 @@ const ResidentialCareApprovePackage = ({
           <div className="column">
             <div className="mt-4 mb-1">
               <TitleHeader>Package Details</TitleHeader>
-              <ResidentialCareSummary
-                startDate={residentialCarePackage?.residentialCarePackage.startDate}
-                endDate={residentialCarePackage?.residentialCarePackage.endDate !== null
-                  ? residentialCarePackage?.residentialCarePackage.endDate
+              <NursingCareSummary
+                startDate={nursingCarePackage?.nursingCarePackage.startDate}
+                endDate={nursingCarePackage?.nursingCarePackage.endDate !== null
+                  ? nursingCarePackage?.nursingCarePackage.endDate
                   : "Ongoing"}
-                typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
-                needToAddress={residentialCarePackage?.residentialCarePackage.needToAddress}
-              />
+                needToAddress={nursingCarePackage?.nursingCarePackage.needToAddress}              />
             </div>
           </div>
         </div>
@@ -257,9 +263,9 @@ const ResidentialCareApprovePackage = ({
                 <div className="level-item  mr-2">
                 <button
                     className="button hackney-btn-green"
-                    onClick={handleApprovePackageCommercials}
+                    onClick={handleApprovePackageContents}
                   >
-                    Approve Commercials
+                    Approve to be brokered
                   </button>
                 </div>
               </div>
@@ -293,4 +299,4 @@ const ResidentialCareApprovePackage = ({
   );
 };
 
-export default ResidentialCareApprovePackage;
+export default NursingCareApprovePackage;

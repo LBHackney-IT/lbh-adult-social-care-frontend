@@ -29,7 +29,7 @@ const NavigationColumn = () => {
     <div className="nav-column-cont">
       <NavItem to={RouteConstants.PROPOSED_PACKAGES_ROUTE}>Proposed Packages</NavItem>
       <NavItem to={RouteConstants.CARE_PACKAGE_ROUTE}>Care Package</NavItem>
-      <NavItem to={RouteConstants.CLi}>Client History</NavItem>
+      <NavItem to={RouteConstants.CLIENT_HISTORY_ROUTER}>Client History</NavItem>
       <NavItem to="/test">Client details</NavItem>
       <NavItem to="/test">Medical history</NavItem>
       <NavItem to="/test">Important to me</NavItem>
