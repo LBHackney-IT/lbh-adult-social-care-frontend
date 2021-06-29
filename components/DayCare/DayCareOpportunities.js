@@ -6,6 +6,9 @@ import { Button } from "../Button";
 
 const DayCareOpportunityEntry = ({
   lengthOptions,
+  index,
+  error,
+  setError,
   timesPerMonthOptions,
   handleOpportunityChange,
   entry,
@@ -16,21 +19,23 @@ const DayCareOpportunityEntry = ({
     updateParent();
   }, [opportunityItem])
 
-  const handleHowLongChange = (option) => {
-    setOpportunityItem({...opportunityItem, howLongValue: option});
+  const changeField = (field, value) => {
+    setOpportunityItem({ ...opportunityItem, [field]: value })
+    onChangeErrors(field);
   }
 
-  const handleTimesPerMonthChange = (option) => {
-    setOpportunityItem({...opportunityItem, timesPerMonthValue: option})
+  const onChangeErrors = (field) => {
+    if(!currentError) return;
+    const newErrors = [...error];
+    newErrors.splice(index, 1, {...currentError, [field]: false});
+    setError(newErrors);
   }
-
-  const handleNeedToAddressChange = (val) => {
-    setOpportunityItem({...opportunityItem, needToAddress: val})
-  };
 
   const updateParent = () => {
     setTimeout(handleOpportunityChange(opportunityItem), 1000);
   }
+
+  const currentError = index !== undefined && error !== undefined && error[index];
 
   return (
     <div className="columns day-care-opportunity mt-3">
@@ -38,24 +43,32 @@ const DayCareOpportunityEntry = ({
         <div className="opportunity-dropdown-cont">
           <Dropdown
             label="How long"
+            error={currentError?.howLongValue}
             options={lengthOptions}
             selectedValue={entry.howLongValue}
-            onOptionSelect={(option) => handleHowLongChange(option)}
+            onOptionSelect={(option) => changeField('howLongValue', option)}
             buttonStyle={{ width: "100%" }}
           />
         </div>
         <div className="mt-2">
           <Dropdown
+            error={currentError?.timesPerMonthValue}
             label="How many times per month?"
             options={timesPerMonthOptions}
             selectedValue={entry.timesPerMonthValue}
-            onOptionSelect={(option) => handleTimesPerMonthChange(option)}
+            onOptionSelect={(option) => changeField('timesPerMonthValue', option)}
             buttonStyle={{ width: "100%" }}
           />
         </div>
       </div>
       <div className="column">
-        <TextArea label="Need to Address" rows={5} placeholder="Add details..." onChange={handleNeedToAddressChange}>
+        <TextArea
+          error={currentError?.needToAddress}
+          label="Need to Address"
+          rows={5}
+          placeholder="Add details..."
+          onChange={(value) => changeField('needToAddress', value)}
+        >
           {entry.needToAddress}
         </TextArea>
       </div>
@@ -68,6 +81,8 @@ const DayCareOpportunities = ({
   lengthOptions,
   timesPerMonthOptions,
   onOpportunityUpdate,
+  error,
+  setError,
   entries,
   addEntry = () => {},
 }) => {
@@ -75,9 +90,12 @@ const DayCareOpportunities = ({
     <>
       <SectionHeading>Day Care Opportunities</SectionHeading>
       <div>
-        {entries.map((entryItem) => {
+        {entries.map((entryItem, index) => {
           return (
             <DayCareOpportunityEntry
+              index={index}
+              error={error}
+              setError={setError}
               key={entryItem.id}
               lengthOptions={lengthOptions}
               timesPerMonthOptions={timesPerMonthOptions}

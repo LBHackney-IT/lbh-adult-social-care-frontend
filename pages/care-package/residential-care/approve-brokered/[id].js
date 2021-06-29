@@ -32,10 +32,10 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId);
     const newApprovalHistoryItems = res.map(
       (historyItem) => ({
-        eventDate: new Date(historyItem.ApprovedDate).toLocaleDateString(
+        eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
           "en-GB"
         ),
-        eventMessage: historyItem.LogText,
+        eventMessage: historyItem.logText,
         eventSubMessage: undefined
       })
     );
@@ -48,12 +48,12 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
   try {
     const residentialCarePackage = await getResidentialCarePackageApproveBrokered(residentialCarePackageId);
 
-    const newAdditionalNeedsEntries = residentialCarePackage.residentialCarePackage.residentialCareAdditionalNeeds.map(
-      (additionalNeedsItem) => ({
-        id: additionalNeedsItem.Id,
-        isWeeklyCost: additionalNeedsItem.IsWeeklyCost,
-        isOneOffCost: additionalNeedsItem.IsOneOffCost,
-        needToAddress: additionalNeedsItem.NeedToAddress,
+    const newAdditionalNeedsEntries = res.residentialCarePackage.residentialCareAdditionalNeeds.map(
+      (additionalneedsItem) => ({
+        id: additionalneedsItem.id,
+        isWeeklyCost: additionalneedsItem.isWeeklyCost,
+        isOneOffCost: additionalneedsItem.isOneOffCost,
+        needToAddress: additionalneedsItem.needToAddress,
       })
     );
 
@@ -120,7 +120,7 @@ const ResidentialCareApproveBrokered = ({
   };
 
   return (
-    <Layout headerTitle="RESIDENTIAL CARE APPROVAL">
+    <Layout headerTitle="RESIDENTIAL CARE BROKERED">
       <div className="hackney-text-black font-size-12px">
         <ResidentialCareApprovalTitle
         startDate={residentialCarePackage?.residentialCarePackage.startDate}

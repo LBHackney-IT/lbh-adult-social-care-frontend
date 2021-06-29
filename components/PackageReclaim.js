@@ -42,13 +42,13 @@ const PackageReclaim = ({
   };
 
   const onChangeErrors = (field) => {
-    if(index === undefined) return;
+    if(!currentError) return;
     const newErrors = [...error];
-    newErrors.splice(index, 1, {...error[index], [field]: false});
+    newErrors.splice(index, 1, {...currentError, [field]: false});
     setError(newErrors);
   }
 
-  const currentError = index !== undefined && error[index];
+  const currentError = index !== undefined && error !== undefined && error[index];
 
   return (
     <div className="package-reclaim">

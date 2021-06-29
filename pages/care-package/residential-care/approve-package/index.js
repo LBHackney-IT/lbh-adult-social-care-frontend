@@ -1,6 +1,6 @@
 import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
 import Layout from "../../../../components/Layout/Layout";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import ResidentialCareApprovalTitle from "../../../../components/ResidentialCare/ResidentialCareApprovalTitle";
 import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
 import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
@@ -28,17 +28,17 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     errorData: [],
   };
   try {
-    const residentialCarePackage = await getResidentialCarePackageApprovalPackageContent(residentialCarePackageId);
-    const newAdditionalNeedsEntries = residentialCarePackage.residentialCarePackage.residentialCareAdditionalNeeds.map(
-      (additionalNeedsItem) => ({
-        id: additionalNeedsItem.Id,
-        isWeeklyCost: additionalNeedsItem.IsWeeklyCost,
-        isOneOffCost: additionalNeedsItem.IsOneOffCost,
-        needToAddress: additionalNeedsItem.NeedToAddress,
+    const { residentialCarePackage } = await getResidentialCarePackageApprovalPackageContent(residentialCarePackageId);
+    const newAdditionalNeedsEntries = residentialCarePackage.residentialCareAdditionalNeeds.map(
+      (additionalneedsItem) => ({
+        id: additionalneedsItem.id,
+        isWeeklyCost: additionalneedsItem.isWeeklyCost,
+        isOneOffCost: additionalneedsItem.isOneOffCost,
+        needToAddress: additionalneedsItem.needToAddress,
       })
     );
     data.residentialCarePackageData = residentialCarePackage;
-    data.newAdditionalNeedsEntriesData = additionalNeedsEntries;
+    data.newAdditionalNeedsEntriesData = newAdditionalNeedsEntries;
 
   } catch(error) {
     data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
@@ -46,12 +46,15 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
 
   try {
     const approvalHistoryEntries = await getResidentialCarePackageApprovalHistory(residentialCarePackageId);
-    data.approvalHistoryEntries = approvalHistoryEntries.map((historyItem) => ({
-        eventDate: new Date(historyItem.ApprovedDate).toLocaleDateString("en-GB"),
-        eventMessage: historyItem.LogText,
+    data.approvalHistoryEntries = approvalHistoryEntries.map(
+      (historyItem) => ({
+        eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
+          "en-GB"
+        ),
+        eventMessage: historyItem.logText,
         eventSubMessage: undefined
-      }
-    ));
+      })
+    );
   } catch (error) {
     data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
   }

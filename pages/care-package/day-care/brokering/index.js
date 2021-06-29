@@ -17,7 +17,6 @@ import {
 } from "../../../../api/CarePackages/DayCareApi";
 import { useRouter } from "next/router"
 import {
-  getInitDaysSelected,
   getInitialPackageReclaim,
 } from "../../../../api/Utils/CommonOptions";
 import {

@@ -5,7 +5,6 @@ import {
   getHomeCareServices,
   getHomeCareSummaryData,
 } from "../../../api/CarePackages/HomeCareApi";
-import { Button } from "../../../components/Button";
 import ClientSummary from "../../../components/ClientSummary";
 import Dropdown from "../../../components/Dropdown";
 import TextArea from "../../../components/TextArea";
@@ -18,8 +17,7 @@ import { PERSONAL_CARE_MODE } from "../../../service/homeCarePickerHelper";
 import { getServiceTypeCareTimes, serviceTypes } from "../../../service/homeCareServiceHelper";
 import ShouldPackageReclaim from "../../../components/HomeCare/ShouldPackageReclaim";
 import PackageReclaim from "../../../components/PackageReclaim";
-import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
-import {getUserSession, uniqueID} from "../../../service/helpers";
+import { getUserSession, uniqueID } from "../../../service/helpers";
 import withSession from "../../../lib/session";
 
 const initialPackageReclaim = {
@@ -32,7 +30,7 @@ const initialPackageReclaim = {
 };
 
 // start before render
-export const getServerSideProps = withSession(async function({ req, query: { id: dayCarePackageId } }) {
+export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
   if(user.redirect) {
     return user;

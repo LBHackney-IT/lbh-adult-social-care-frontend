@@ -144,7 +144,7 @@ const NursingCare = () => {
     });
     setPackageReclaimedError(packageReclaimsTimedArr);
 
-    return !(defaultErrors.hasErrors || additionalNeedsError.some(item => item) || packageReclaimsTimedArr.some(item => item));
+    return !(defaultErrors.hasErrors || additionalNeedsError.some(item => item) || packageReclaimsFieldsError.some(item => item));
   };
 
   const changeErrorField = (field) => {

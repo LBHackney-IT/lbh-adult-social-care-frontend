@@ -18,14 +18,14 @@ const fieldValidator = (inputs = [], additionalRules = []) => {
 
     // additionalRules EXAMPLE
     // [
-    //  {name: 'firstName', valid: (item) => item.firstName.length > 3},
-    //  {name: 'password', valid: (item) => item.password.length > 10}
+    //  {name: 'firstName', text: 'First name too low', valid: (item) => item.firstName.length > 3},
+    //  {name: 'password', text: 'Password too low', valid: (item) => item.password.length > 10}
     // ]
     additionalRules.forEach(rule => {
       if(item.rules.includes(rule.name)) {
         const additionalRuleValid = rule.valid(item);
         if(!additionalRuleValid) {
-          validFields[item.name] = additionalRuleValid;
+          validFields[item.name] = rule.text;
           hasErrors = true;
         }
       }

@@ -22,6 +22,8 @@ import DayCareSummary from "../../../components/DayCare/DayCareSummary";
 import DayCareCollegeAsyncSearch from "../../../components/DayCare/DayCareCollegeAsyncSearch";
 import {getErrorResponse, getUserSession} from "../../../service/helpers";
 import withSession from "../../../lib/session";
+import fieldValidator from "../../../service/inputValidator";
+import ErrorField from "../../../components/ErrorField";
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
@@ -34,7 +36,7 @@ export const getServerSideProps = withSession(async function({ req }) {
   }
 })
 
-const DayCare = (props) => {
+const DayCare = () => {
   const isTrueSet = (myValue) => myValue === "true";
   const checkFixedPeriod = (myValue) => myValue === "1";
 
@@ -46,11 +48,6 @@ const DayCare = (props) => {
   isFixedPeriod = checkFixedPeriod(isFixedPeriod);
   startDate = startDate ?? null;
   endDate = endDate ?? null;
-
-  const [radioErrors, setRadioErrors] = useState({
-    transportNeeded: null,
-    transportEscortNeeded: null,
-  });
 
   const [errors, setErrors] = useState([]);
   const [termTimeNAId, setTermTimeNaId] = useState(undefined);
@@ -68,9 +65,16 @@ const DayCare = (props) => {
 
   // package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
+  const [packageReclaimedError, setPackageReclaimedError] = useState([]);
+  const [opportunityEntriesError, setOpportunityEntriesError] = useState([]);
   const [errorFields, setErrorFields] = useState({
-
-  })
+    transportNeeded: '',
+    transportEscortNeeded: '',
+    escortNeeded: '',
+    termTimeConsideration: '',
+    needToAddress: '',
+    daysSelected: '',
+  });
 
   const [needToAddress, setNeedToAddress] = useState(undefined);
   const [transportNeeded, setTransportIsNeeded] = useState(undefined);
@@ -214,17 +218,57 @@ const DayCare = (props) => {
       });
   };
 
-  const formIsValid = () => {
-    const errors = [];
+  const changeErrorFields = (field) => {
+    setErrorFields({
+      ...errorFields,
+      [field]: '',
+    });
+  };
 
-    setErrors(errors);
-    // Form is valid if the errors array has no items
-    return errors.length === 0;
+  const formHasErrors = () => {
+    const defaultFields = fieldValidator([
+      {name: 'transportNeeded', value: transportNeeded, rules: ['empty']},
+      {name: 'transportEscortNeeded', value: transportEscortNeeded, rules: ['empty']},
+      {name: 'escortNeeded', value: escortNeeded, rules: ['empty']},
+      {name: 'termTimeConsideration', value: termTimeConsideration, rules: ['empty']},
+      {name: 'needToAddress', value: needToAddress, rules: ['empty']},
+      {name: 'daysSelected', value: daysSelected, rules: ['customEmpty']},
+    ],
+      [{name: 'customEmpty', text: 'Required field', valid: (item) => item.value.some(day => day.checked)}]
+    );
+    setErrorFields(defaultFields.validFields);
+
+    const packageReclaimsTimedArr = [];
+    const opportunityEntriesTimedArr = [];
+    const packageReclaimsFieldsError = packagesReclaimed.map(item => {
+      const valid = fieldValidator([
+        {name: 'from', value: item.from, rules: ['empty']},
+        {name: 'category', value: item.category, rules: ['empty']},
+        {name: 'type', value: item.type, rules: ['empty']},
+        {name: 'notes', value: item.notes, rules: ['empty']},
+        {name: 'amount', value: item.amount, rules: ['empty']},
+      ]);
+      packageReclaimsTimedArr.push(valid.validFields);
+      return valid.hasErrors;
+    });
+    setPackageReclaimedError(packageReclaimsTimedArr);
+
+    const opportunityEntriesFieldsError = opportunityEntries.map(item => {
+      const valid = fieldValidator([
+        {name: 'howLongValue', value: item.howLongValue, rules: ['empty']},
+        {name: 'timesPerMonthValue', value: item.timesPerMonthValue, rules: ['empty']},
+        {name: 'needToAddress', value: item.needToAddress, rules: ['empty']},
+      ]);
+      opportunityEntriesTimedArr.push(valid.validFields);
+      return valid.hasErrors;
+    });
+    setOpportunityEntriesError(opportunityEntriesTimedArr);
+    return opportunityEntriesFieldsError.some(item => item) || packageReclaimsFieldsError.some(item => item) || defaultFields.hasErrors;
   };
 
   const savePackageClick = (event) => {
     event.preventDefault();
-    if (!formIsValid()) return;
+    if (formHasErrors()) return;
 
     const dayCarePackageOpportunities = opportunityEntries.map((item) => ({
       howLongId: item.howLongValue,
@@ -309,6 +353,8 @@ const DayCare = (props) => {
         <div className="mt-4 columns">
           <div className="column">
             <TextArea
+              error={errorFields.needToAddress}
+              setError={() => changeErrorFields('needToAddress')}
               label="Need to Address"
               rows={5}
               placeholder="Add details... NB - where half days are needed please specify"
@@ -316,10 +362,11 @@ const DayCare = (props) => {
             />
           </div>
           <div className="column columns day-care-day-cbxs">
-            {daysSelected.map((dayItem) => {
+            {daysSelected.map((dayItem, index) => {
               // Handle this checkbox click
               const onThisDayCheckboxChange = (isChecked) => {
                 onDayCheckboxChange(dayItem.id, isChecked);
+                changeErrorFields('daysSelected')
               };
 
               return (
@@ -330,6 +377,7 @@ const DayCare = (props) => {
                     checked={dayItem.checked}
                     onChange={onThisDayCheckboxChange}
                   />
+                  {errorFields.daysSelected && index === 0 && <ErrorField text={errorFields.daysSelected}/>}
                 </div>
               );
             })}
@@ -338,7 +386,8 @@ const DayCare = (props) => {
         <div className="mt-4">
           <RadioButton
             label="Transport needed?"
-            error={radioErrors.transportNeeded}
+            error={errorFields.transportNeeded}
+            setError={() => changeErrorFields('transportNeeded')}
             onChange={setTransportIsNeeded}
             options={yesNoValues}
             selectedValue={transportNeeded}
@@ -349,6 +398,8 @@ const DayCare = (props) => {
             label="Transport escort needed?"
             onChange={setTransportEscortIsNeeded}
             options={yesNoValues}
+            error={errorFields.transportEscortNeeded}
+            setError={() => changeErrorFields('transportEscortNeeded')}
             selectedValue={transportEscortNeeded}
           />
         </div>
@@ -357,6 +408,8 @@ const DayCare = (props) => {
             label="Escort needed?"
             onChange={setEscortIsNeeded}
             options={yesNoValues}
+            error={errorFields.escortNeeded}
+            setError={() => changeErrorFields('escortNeeded')}
             selectedValue={escortNeeded}
           />
         </div>
@@ -364,6 +417,8 @@ const DayCare = (props) => {
           <RadioButton
             label="Term Time Consideration"
             onChange={handleTermTimeSelectionChanged}
+            error={errorFields.termTimeConsideration}
+            setError={() => changeErrorFields('termTimeConsideration')}
             options={termTimeConsiderationOptions}
             selectedValue={termTimeConsideration}
           />
@@ -383,6 +438,8 @@ const DayCare = (props) => {
         <div className="mt-4">
           <DayCareOpportunities
             entries={opportunityEntries}
+            error={opportunityEntriesError}
+            setError={setOpportunityEntriesError}
             lengthOptions={opportunitiesLengthOptions}
             timesPerMonthOptions={opportunityTimesPerMonthOptions}
             setOpportunityEntries={setOpportunityEntries}
@@ -394,6 +451,8 @@ const DayCare = (props) => {
         <PackageReclaims
           errors={errors}
           setErrors={setErrors}
+          error={packageReclaimedError}
+          setError={setPackageReclaimedError}
           packagesReclaimed={packagesReclaimed}
           setPackagesReclaimed={setPackagesReclaimed}
         />
