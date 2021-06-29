@@ -200,8 +200,8 @@ workflows:
       #         only: main
       - assume-role-staging:
           context: mosaic-staging-context
-          requires:
-            - build-deploy-development
+          # requires:
+          #   - build-deploy-development
           filters:
             branches:
               only: nextjs-circle-ci
