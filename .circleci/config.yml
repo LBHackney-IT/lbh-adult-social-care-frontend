@@ -139,12 +139,12 @@ workflows:
   continuous-delivery:
     jobs:
       - install-dependencies
-      # - tests:
-      #     requires:
-      #       - install-dependencies
-      # - e2e:
-      #     requires:
-      #       - install-dependencies
+      - tests:
+          requires:
+            - install-dependencies
+      - e2e:
+          requires:
+            - install-dependencies
       - generate-draft-github-release:
           requires:
             - tests
