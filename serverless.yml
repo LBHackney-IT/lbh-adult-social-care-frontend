@@ -87,13 +87,13 @@ custom:
          - amazonaws.com
   aliases:
     staging: adult-social-care-builder-service-staging.hackney.gov.uk
-    production: adult-social-care-builder.hackney.gov.uk
+    production: adult-social-care-builder-service.hackney.gov.uk
   certificate-arn:
     staging: arn:aws:acm:us-east-1:715003523189:certificate/8f7fa30c-a4e5-4775-b827-ade824a33c9a
     production: arn:aws:acm:us-east-1:153306643385:certificate/71728a39-cd3e-4570-a440-e87f84ef9a0d
-  # securityGroups:
-  #   staging: 
-  #     - sg-0630857460fcc6b3e
+  securityGroups:
+    staging: 
+      - sg-0630857460fcc6b3e
   subnets:
     staging:
       - subnet-0d4086ab96db46047
