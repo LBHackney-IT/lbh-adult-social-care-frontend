@@ -80,14 +80,13 @@ resources:
                 HTTPPort: 80
                 HTTPSPort: 443
                 OriginProtocolPolicy: https-only
-
-LambdaSecurityGroup:
-      Type: "AWS::EC2::SecurityGroup"
-      Properties:
-        GroupName: ${self:service}-${self:provider.stage}-lambda
-        GroupDescription: Allow all outbound traffic, no inbound
-        VpcId:
-          - vpc-03dcc1af2c848b965
+    LambdaSecurityGroup:
+          Type: "AWS::EC2::SecurityGroup"
+          Properties:
+            GroupName: ${self:service}-${self:provider.stage}-lambda
+            GroupDescription: Allow all outbound traffic, no inbound
+            VpcId:
+              - vpc-03dcc1af2c848b965
 
 custom:
   domain-name:
