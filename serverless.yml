@@ -85,8 +85,7 @@ resources:
           Properties:
             GroupName: ${self:service}-${self:provider.stage}-lambda
             GroupDescription: Allow all outbound traffic, no inbound
-            VpcId:
-              - vpc-03dcc1af2c848b965
+            VpcId: vpc-03dcc1af2c848b965
 
 custom:
   domain-name:
