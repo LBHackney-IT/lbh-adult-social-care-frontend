@@ -38,6 +38,10 @@ functions:
       AWS_KEY: ${ssm:/lbh-adult-social-care-builder/${self:provider.stage}/aws-key}
 resources:
   Resources:
+    Vpc:
+      Type: AWS::EC2::VPC
+      Properties:
+        CidrBlock: 10.0.0.0/16
     CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
@@ -77,6 +81,14 @@ resources:
                 HTTPSPort: 443
                 OriginProtocolPolicy: https-only
 
+LambdaSecurityGroup:
+      Type: "AWS::EC2::SecurityGroup"
+      Properties:
+        GroupName: ${self:service}-${self:provider.stage}-lambda
+        GroupDescription: Allow all outbound traffic, no inbound
+        VpcId:
+          - vpc-03dcc1af2c848b965
+
 custom:
   domain-name:
     Fn::Join:
@@ -93,7 +105,7 @@ custom:
     production: arn:aws:acm:us-east-1:153306643385:certificate/71728a39-cd3e-4570-a440-e87f84ef9a0d
   securityGroups:
     staging: 
-      - sg-05a6b9460a8df9ea9
+      - Ref: LambdaSecurityGroup
   subnets:
     staging:
       - subnet-0d4086ab96db46047
