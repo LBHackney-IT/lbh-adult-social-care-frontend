@@ -153,7 +153,7 @@ workflows:
       #       branches:
       #         only: main
       - assume-role-staging:
-          context: api-assume-role-staging-context
+          context: mosaic-staging-context
           # requires:
           #   - tests
           #   - e2e
@@ -175,7 +175,7 @@ workflows:
       #       branches:
       #         only: nextjs-circle-ci
       # - assume-role-production:
-      #     context: api-assume-role-production-context
+      #     context: mosaic-production-context
       #     requires:
       #       - permit-deploy-production
       #     filters:
