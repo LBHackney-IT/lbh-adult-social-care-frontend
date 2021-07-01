@@ -25,9 +25,9 @@ functions:
         - build/**
         - node_modules/**
     events:
-      - http:
-          path: api/{proxy+}
-          method: ANY
+      # - http:
+      #     path: api/{proxy+}
+      #     method: ANY
       - http: ANY /
       - http: ANY /{proxy+}
     provisionedConcurrency: 5
@@ -35,13 +35,9 @@ functions:
       securityGroupIds: ${self:custom.securityGroups.${self:provider.stage}}
       subnetIds: ${self:custom.subnets.${self:provider.stage}}
     environment:
-      AWS_KEY: ${ssm:/lbh-adult-social-care-builder/${self:provider.stage}/aws-key}
+      # AWS_KEY: ${ssm:/lbh-adult-social-care-builder/${self:provider.stage}/aws-key}
 resources:
   Resources:
-    Vpc:
-      Type: AWS::EC2::VPC
-      Properties:
-        CidrBlock: 10.0.0.0/16
     CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
@@ -85,7 +81,7 @@ resources:
           Properties:
             GroupName: ${self:service}-${self:provider.stage}-lambda
             GroupDescription: Allow all outbound traffic, no inbound
-            VpcId: vpc-03dcc1af2c848b965
+            VpcId: ${self:custom.vpc.${self:provider.stage}}
 
 custom:
   domain-name:
@@ -100,7 +96,7 @@ custom:
     production: adult-social-care-builder-service.hackney.gov.uk
   certificate-arn:
     staging: arn:aws:acm:us-east-1:290114655000:certificate/1b48a5e9-70b5-4a14-ad3d-1eef9584dc5d
-    production: arn:aws:acm:us-east-1:153306643385:certificate/71728a39-cd3e-4570-a440-e87f84ef9a0d
+    production: arn:aws:acm:us-east-1:267112830674:certificate/dae4d0be-8f3a-4512-ba9c-fb80366e77f7
   securityGroups:
     staging: 
       - Ref: LambdaSecurityGroup
@@ -108,6 +104,9 @@ custom:
     staging:
       - subnet-0d4086ab96db46047
       - subnet-0f5eeab6b619d5e1a
+  vpcs:
+    staging: vpc-03dcc1af2c848b965
+    production:
   # development:
   #   securityGroupIds:
   #     - sg-
