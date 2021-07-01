@@ -30,7 +30,7 @@ functions:
       # - http:
       #     path: api/{proxy+}
       #     method: ANY
-    provisionedConcurrency: 5
+    # provisionedConcurrency: 5
     vpc:
       securityGroupIds: ${self:custom.securityGroups.${self:provider.stage}}
       subnetIds: ${self:custom.subnets.${self:provider.stage}}
