@@ -25,17 +25,17 @@ functions:
         - build/**
         - node_modules/**
     events:
+      - http:
+          path: api/{proxy+}
+          method: ANY
       - http: ANY /
       - http: ANY /{proxy+}
-      # - http:
-      #     path: api/{proxy+}
-      #     method: ANY
     provisionedConcurrency: 5
     vpc:
       securityGroupIds: ${self:custom.securityGroups.${self:provider.stage}}
       subnetIds: ${self:custom.subnets.${self:provider.stage}}
-    # environment:
-      # AWS_KEY: ${ssm:/lbh-adult-social-care-builder/${self:provider.stage}/aws-key}
+    environment:
+      AWS_KEY: ${ssm:/lbh-adult-social-care-builder/${self:provider.stage}/aws-key}
 resources:
   Resources:
     CloudFrontDistribution:
@@ -81,7 +81,7 @@ resources:
           Properties:
             GroupName: ${self:service}-${self:provider.stage}-lambda
             GroupDescription: Allow all outbound traffic, no inbound
-            VpcId: ${self:custom.vpc.${self:provider.stage}}
+            VpcId: vpc-03dcc1af2c848b965
 
 custom:
   domain-name:
@@ -104,9 +104,6 @@ custom:
     staging:
       - subnet-0d4086ab96db46047
       - subnet-0f5eeab6b619d5e1a
-  vpcs:
-    staging: vpc-03dcc1af2c848b965
-    # production:
   # development:
   #   securityGroupIds:
   #     - sg-
