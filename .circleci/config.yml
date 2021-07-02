@@ -164,7 +164,7 @@ workflows:
       #     filters:
       #       branches:
       #         only: main
-      - build:
+      - build
       - assume-role-staging:
           context: mosaic-staging-context
           # requires:
