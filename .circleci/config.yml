@@ -179,6 +179,7 @@ workflows:
           requires:
             - install-dependencies
             - assume-role-staging
+            - build
           filters:
             branches:
               only: nextjs-circle-ci
