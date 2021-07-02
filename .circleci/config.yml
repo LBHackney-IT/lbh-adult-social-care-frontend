@@ -144,7 +144,7 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
-            - project/build
+            - ./build
 
 workflows:
   version: 2
