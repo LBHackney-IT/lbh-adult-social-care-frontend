@@ -139,15 +139,12 @@ jobs:
     steps:
       - *attach_workspace
       - run:
-          name: Files in directory
-          command: ls
-      - run:
           name: Build app
           command: yarn build
       - persist_to_workspace:
           root: *workspace_root
           paths:
-            - /project/build
+            - project/build
 
 workflows:
   version: 2
