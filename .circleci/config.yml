@@ -134,6 +134,18 @@ jobs:
           paths:
             - .aws
 
+  build:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: Build app
+          command: yarn build
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - project/build
+
 workflows:
   version: 2
   continuous-delivery:
@@ -152,6 +164,7 @@ workflows:
       #     filters:
       #       branches:
       #         only: main
+      - build:
       - assume-role-staging:
           context: mosaic-staging-context
           # requires:
