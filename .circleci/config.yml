@@ -73,7 +73,7 @@ jobs:
       - *attach_workspace
       - run:
           name: deploy
-          command: next build && yarn build && yarn --production=true && sudo npm i -g serverless && sls deploy --stage staging
+          command: yarn build && yarn --production=true && sudo npm i -g serverless && sls deploy --stage staging
 
   build-deploy-production:
     executor: aws-cli/default
@@ -87,7 +87,7 @@ jobs:
     executor: aws-cli/default
     steps:
       - *attach_workspace
-      - run:
+      - run:        
           name: delete stale draft GitHub releases
           command: yarn delete-draft-github-releases
       - run:
