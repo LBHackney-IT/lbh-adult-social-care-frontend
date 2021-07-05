@@ -20,6 +20,7 @@ functions:
     package:
       include:
         - lambda.js
+        - next.config.js
         - src/**
         - public/**
         - build/_next/**
