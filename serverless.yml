@@ -23,7 +23,7 @@ functions:
         - next.config.js
         - src/**
         - public/**
-        - build/_next/**
+        - build/**
         - node_modules/**
     events:
       - http: ANY /
