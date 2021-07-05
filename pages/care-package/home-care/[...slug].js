@@ -126,7 +126,7 @@ const HomeCare = ({ homeCareServices }) => {
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
       <ClientSummary
-        client="James Hovens"
+        client="James Stephens"
         hackneyId="786288"
         age="91"
         dateOfBirth="09/12/1972"
