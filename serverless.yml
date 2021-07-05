@@ -22,6 +22,7 @@ functions:
         - lambda.js
         - next.config.js
         - src/**
+        - pages/**
         - public/**
         - build/**
         - node_modules/**
