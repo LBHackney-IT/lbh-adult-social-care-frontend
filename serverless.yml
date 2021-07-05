@@ -22,7 +22,7 @@ functions:
         - lambda.js
         - src/**
         - public/**
-        - build/**
+        - build/_next/**
         - node_modules/**
     events:
       - http: ANY /
