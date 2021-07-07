@@ -4,6 +4,7 @@ import DatePick from "../DatePick";
 import RadioButton, { yesNoValues } from "../RadioButton";
 import CarePackageSetup from "../CarePackages/CarePackageSetup";
 import CareSelectDropdown from "../CarePackages/CareSelectDropdown";
+import { getFixedPeriodOptions } from '../../api/Utils/CommonOptions';
 import { getResidentialCareTypeOfStayOptions } from "../../api/CarePackages/ResidentialCareApi";
 import {useRouter} from "next/router";
 import fieldValidator from "../../service/inputValidator";
@@ -13,6 +14,7 @@ const ResidentialCareSetup = ({
   selectedCareType,
   setSelectedCareType,
 }) => {
+  const fixedPeriodOptions = getFixedPeriodOptions();
   const router = useRouter();
   const [
     residentialCareTypeOfStayOptions,
@@ -31,9 +33,12 @@ const ResidentialCareSetup = ({
   const [typeOfStayId, setTypeOfStayId] = useState(undefined);
   const [isS117, setIsS117] = useState(undefined);
 
+  const [isFixedPeriod, setIsFixedPeriod] = useState(true);
+
   const [errorFields, setErrorFields] = useState({
     isImmediateOrReEnablement: '',
     isS117: '',
+    isFixedPeriod: '',
     typeOfStayId: '',
     hasDischargePackage: '',
     hasRespiteCare: '',
@@ -96,9 +101,19 @@ const ResidentialCareSetup = ({
     // Get the parameters for the residential care package route
     router.push(
       `${RESIDENTIAL_CARE_ROUTE}/${hasRespiteCare}/${hasDischargePackage}/` +
-        `${isImmediateOrReEnablement}/${typeOfStayId}/${isS117}/${startDate}/${endDate}?typeOfStayText=${typeOfStayText}`
+        `${isImmediateOrReEnablement}/${typeOfStayId}/${isS117}/${isFixedPeriod}/${startDate}/${endDate}?typeOfStayText=${typeOfStayText}`
     );
   };
+
+  const handleFixedPeriodChange = (newVal) => {
+    // Update end date based on this change
+    if (!newVal){
+      setEndDate(null);
+    } else {
+      setEndDate(new Date());
+    }
+    setIsFixedPeriod(newVal);
+  }
 
   return (
     <CarePackageSetup onBuildClick={onBuildClick}>
@@ -115,25 +130,41 @@ const ResidentialCareSetup = ({
           />
         </div>
         <div className="column">
-          <div className="is-flex">
+          <div className="columns is-mobile">
+            <div className="column is-3">
+              <RadioButton
+                error={errorFields.isFixedPeriod}
+                setError={() => changeErrorFields('isFixedPeriod')}
+                options={fixedPeriodOptions}
+                inline={false}
+                onChange={handleFixedPeriodChange}
+                selectedValue={isFixedPeriod}
+              />
+            </div>
+            <div className="column is-6">
+              <div className="is-flex">
             <span className="mr-3">
               <DatePick
                 error={errorFields.startDate}
-                setError={changeErrorFields('startDate')}
+                setError={() => changeErrorFields('startDate')}
                 label="Start date"
                 dateValue={startDate}
                 setDate={setStartDate}
               />
             </span>
-            <span>
+                { isFixedPeriod && (
+                  <span>
               <DatePick
                 error={errorFields.endDate}
-                setError={changeErrorFields('endDate')}
+                setError={() => changeErrorFields('endDate')}
                 label="End date"
                 dateValue={endDate}
                 setDate={setEndDate}
               />
             </span>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

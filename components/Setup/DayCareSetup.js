@@ -21,6 +21,7 @@ const DayCareSetup = ({
 }) => {
   const router = useRouter();
   const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [isImmediate, setIsImmediate] = useState(undefined);
   const [isS117, setIsS117] = useState(undefined);
   const [isFixedPeriod, setIsFixedPeriod] = useState(undefined);
@@ -33,6 +34,7 @@ const DayCareSetup = ({
       {name: 'isS117', value: isS117, rules: ['empty']},
       {name: 'isFixedPeriod', value: isFixedPeriod, rules: ['empty']},
       {name: 'startDate', value: startDate, rules: ['empty']},
+      {name: 'endDate', value: endDate, rules: ['empty']},
       {name: 'careTypes', value: selectedCareType, rules: ['empty']},
     ]);
     if(hasErrors) {
@@ -40,7 +42,7 @@ const DayCareSetup = ({
       return;
     }
     router.push(
-      `${DAY_CARE_ROUTE}/${isImmediate}/${isS117}/${isFixedPeriod}/${startDate}`
+      `${DAY_CARE_ROUTE}/${isImmediate}/${isS117}/${isFixedPeriod}/${startDate}/${endDate}`
     );
   };
 
@@ -49,6 +51,7 @@ const DayCareSetup = ({
     isS117: '',
     isFixedPeriod: '',
     startDate: '',
+    endDate: '',
     careTypes: '',
   });
 
@@ -58,6 +61,16 @@ const DayCareSetup = ({
       [field]: '',
     })
   };
+
+  const handleFixedPeriodChange = (newVal) => {
+    // Update end date based on this change
+    if (!newVal){
+      setEndDate(null);
+    } else {
+      setEndDate(new Date());
+    }
+    setIsFixedPeriod(newVal);
+  }
 
   return (
     <CarePackageSetup onBuildClick={onBuildClick}>
@@ -76,11 +89,12 @@ const DayCareSetup = ({
         <div className="column">
           <div style={{ marginBottom: "5px" }}>
             <RadioButton
-              options={fixedPeriodOptions}
-              onChange={setIsFixedPeriod}
-              selectedValue={isFixedPeriod}
               error={errorFields.isFixedPeriod}
               setError={() => changeErrorFields('isFixedPeriod')}
+              options={fixedPeriodOptions}
+              inline={false}
+              onChange={handleFixedPeriodChange}
+              selectedValue={isFixedPeriod}
             />
           </div>
           <div className="is-flex">
@@ -92,6 +106,17 @@ const DayCareSetup = ({
                 setError={() => changeErrorFields('startDate')}
               />
             </span>
+            { isFixedPeriod && (
+                  <span>
+              <DatePick
+                error={errorFields.endDate}
+                setError={() => changeErrorFields('endDate')}
+                label="End date"
+                dateValue={endDate}
+                setDate={setEndDate}
+              />
+            </span>
+                )}
           </div>
         </div>
       </div>
