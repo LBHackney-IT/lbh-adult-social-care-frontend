@@ -20,22 +20,24 @@ functions:
     package:
       include:
         - lambda.js
+        - next.config.js
         - src/**
+        - pages/**
         - public/**
         - build/**
         - node_modules/**
     events:
-      - http:
-          path: api/{proxy+}
-          method: ANY
       - http: ANY /
       - http: ANY /{proxy+}
-    provisionedConcurrency: 5
+      # - http:
+      #     path: api/{proxy+}
+      #     method: ANY
+    # provisionedConcurrency: 5
     vpc:
       securityGroupIds: ${self:custom.securityGroups.${self:provider.stage}}
       subnetIds: ${self:custom.subnets.${self:provider.stage}}
-    environment:
-      AWS_KEY: ${ssm:/lbh-adult-social-care-builder/${self:provider.stage}/aws-key}
+    # environment:
+      # AWS_KEY: ${ssm:/lbh-adult-social-care-builder/${self:provider.stage}/aws-key}
 resources:
   Resources:
     CloudFrontDistribution:
@@ -76,6 +78,12 @@ resources:
                 HTTPPort: 80
                 HTTPSPort: 443
                 OriginProtocolPolicy: https-only
+    LambdaSecurityGroup:
+          Type: "AWS::EC2::SecurityGroup"
+          Properties:
+            GroupName: ${self:service}-${self:provider.stage}-lambda
+            GroupDescription: Allow all outbound traffic, no inbound
+            VpcId: ${self:custom.vpcs.${self:provider.stage}}
 
 custom:
   domain-name:
@@ -87,19 +95,36 @@ custom:
          - amazonaws.com
   aliases:
     staging: adult-social-care-builder-service-staging.hackney.gov.uk
-    production: adult-social-care-builder.hackney.gov.uk
+    production: adult-social-care-builder-service.hackney.gov.uk
   certificate-arn:
-    staging: arn:aws:acm:us-east-1:715003523189:certificate/8f7fa30c-a4e5-4775-b827-ade824a33c9a
-    production: arn:aws:acm:us-east-1:153306643385:certificate/71728a39-cd3e-4570-a440-e87f84ef9a0d
+    staging: arn:aws:acm:us-east-1:290114655000:certificate/1b48a5e9-70b5-4a14-ad3d-1eef9584dc5d
+    production: arn:aws:acm:us-east-1:267112830674:certificate/dae4d0be-8f3a-4512-ba9c-fb80366e77f7
   securityGroups:
-    staging:
-        - sg-0630857460fcc6b3e
-    production:
-      - sg-082581136513324b1
+    staging: 
+      - Ref: LambdaSecurityGroup
   subnets:
     staging:
-        - subnet-0d4086ab96db46047
-        - subnet-0f5eeab6b619d5e1a
-    production:
-      - subnet-0b7b8fea07efabf34
-      - subnet-01d3657f97a243261
+      - subnet-0d4086ab96db46047
+      - subnet-0f5eeab6b619d5e1a
+  vpcs:
+    staging: vpc-03dcc1af2c848b965
+    # production:
+    
+  # development:
+  #   securityGroupIds:
+  #     - sg-
+  #   subnetIds:
+  #     - subnet-0d4086ab96db46047
+  #     - subnet-0f5eeab6b619d5e1a
+  # staging:
+  #   securityGroupIds:
+  #     - sg-0630857460fcc6b3e
+  #   subnetIds:
+  #     - subnet-0d4086ab96db46047
+  #     - subnet-0f5eeab6b619d5e1a
+  # production:
+  #   securityGroupIds:
+  #     - sg-
+  #   subnetIds:
+  #     - subnet-01d3657f97a243261
+  #     - subnet-0b7b8fea07efabf34

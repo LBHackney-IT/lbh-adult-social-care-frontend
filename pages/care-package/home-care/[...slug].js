@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router"
+import { useRouter } from "next/router";
 import {
   createHomeCarePackage,
   getHomeCareServices,
@@ -13,8 +13,12 @@ import Layout from "../../../components/Layout/Layout";
 import CareTitle from "../../../components/CarePackages/CareTitle";
 import SummaryDataList from "../../../components/HomeCare/SummaryDataList";
 import WeekCarePicker from "../../../components/HomeCare/WeekCarePicker";
+import { Button } from "../../../components/Button";
 import { PERSONAL_CARE_MODE } from "../../../service/homeCarePickerHelper";
-import { getServiceTypeCareTimes, serviceTypes } from "../../../service/homeCareServiceHelper";
+import {
+  getServiceTypeCareTimes,
+  serviceTypes,
+} from "../../../service/homeCareServiceHelper";
 import ShouldPackageReclaim from "../../../components/HomeCare/ShouldPackageReclaim";
 import PackageReclaim from "../../../components/PackageReclaim";
 import { getUserSession, uniqueID } from "../../../service/helpers";
@@ -30,9 +34,9 @@ const initialPackageReclaim = {
 };
 
 // start before render
-export const getServerSideProps = withSession(async function({ req }) {
+export const getServerSideProps = withSession(async function ({ req }) {
   const user = getUserSession({ req });
-  if(user.redirect) {
+  if (user.redirect) {
     return user;
   }
 
@@ -43,20 +47,20 @@ export const getServerSideProps = withSession(async function({ req }) {
   try {
     // Call to api to get package
     data.homeCareServices = await getHomeCareServices();
-
-  } catch(error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
+  } catch (error) {
+    data.errorData.push(
+      `Retrieve day care package details failed. ${error.message}`
+    );
   }
 
-  return { props: { ...data }};
+  return { props: { ...data } };
 });
 
-const HomeCare = ({
-  homeCareServices,
-}) => {
+const HomeCare = ({ homeCareServices }) => {
   // Parameters
   const router = useRouter();
-  const [ startDate, endDate, isImmediate, isS117, isFixedPeriod ] = router.query.slug;
+  const [startDate, endDate, isImmediate, isS117, isFixedPeriod] =
+    router.query.slug;
 
   // State
   const [selectedCareType, setSelectedCareType] = useState(PERSONAL_CARE_MODE);
@@ -99,9 +103,10 @@ const HomeCare = ({
   // Init home care package via API
   useEffect(() => {
     async function createHomeCarePackageAsync() {
+      // TODO remove fixed dates
       const carePackageCreateResult = await createHomeCarePackage(
-        new Date(startDate),
-        new Date(endDate),
+        new Date("2021/07/07"),
+        new Date("2021/07/07"),
         isImmediate === "true",
         isS117 === "true",
         isFixedPeriod === "true"
@@ -200,9 +205,14 @@ const HomeCare = ({
             selectedSecondaryCareTypeId={selectedSecondaryCareTime}
           />
         </div>
+        <div className="level mt-4">
+          <div className="level-item level-right">
+            <Button onClick={addToPackageClick}>Add to package</Button>
+          </div>
+        </div>
         <ShouldPackageReclaim
           isReclaimed={isReclaimed}
-          className='mt-6'
+          className="mt-6"
           setIsReclaimed={changeIsPackageReclaimed}
         />
         {isReclaimed && (

@@ -1,9 +1,12 @@
 .control.field-container {
     label {
-        width: 100%;
         font-weight: bold;
         margin-bottom: 5px;
         display: block;
+
+        &:not(.radio-item) {
+            width: 100%;
+        }
 
         input {
             width: 100%;
@@ -25,4 +28,3 @@
         padding: 10px;
     }
 }
-
