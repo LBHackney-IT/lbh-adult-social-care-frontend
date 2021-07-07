@@ -11,6 +11,7 @@ const createHomeCarePackage = async (
   isS117,
   isFixedPeriod
 ) => {
+  debugger;
   const response = await axios.post(HOME_CARE_URL, {
     IsThisuserUnderS117: isS117,
     IsThisAnImmediateService: isImmediate,

@@ -174,21 +174,21 @@ workflows:
           #   - e2e
           filters:
             branches:
-              only: nextjs-circle-ci
+              only: develop
       - build-deploy-staging:
           requires:
             - assume-role-staging
             - build
           filters:
             branches:
-              only: nextjs-circle-ci
+              only: develop
       # - permit-deploy-production:
       #     type: approval
       #     requires:
       #       - build-deploy-staging
       #     filters:
       #       branches:
-      #         only: nextjs-circle-ci
+      #         only: develop
       # - assume-role-production:
       #     context: mosaic-production-context
       #     requires:

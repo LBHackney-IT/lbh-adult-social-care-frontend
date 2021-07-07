@@ -13,6 +13,7 @@ import Layout from "../../../components/Layout/Layout";
 import CareTitle from "../../../components/CarePackages/CareTitle";
 import SummaryDataList from "../../../components/HomeCare/SummaryDataList";
 import WeekCarePicker from "../../../components/HomeCare/WeekCarePicker";
+import { Button } from "../../../components/Button";
 import { PERSONAL_CARE_MODE } from "../../../service/homeCarePickerHelper";
 import {
   getServiceTypeCareTimes,
@@ -102,9 +103,10 @@ const HomeCare = ({ homeCareServices }) => {
   // Init home care package via API
   useEffect(() => {
     async function createHomeCarePackageAsync() {
+      // TODO remove fixed dates
       const carePackageCreateResult = await createHomeCarePackage(
-        new Date(startDate),
-        new Date(endDate),
+        new Date("2021/07/07"),
+        new Date("2021/07/07"),
         isImmediate === "true",
         isS117 === "true",
         isFixedPeriod === "true"
@@ -202,6 +204,11 @@ const HomeCare = ({ homeCareServices }) => {
             selectedPrimaryCareTypeId={selectedPrimaryCareTime}
             selectedSecondaryCareTypeId={selectedSecondaryCareTime}
           />
+        </div>
+        <div className="level mt-4">
+          <div className="level-item level-right">
+            <Button onClick={addToPackageClick}>Add to package</Button>
+          </div>
         </div>
         <ShouldPackageReclaim
           isReclaimed={isReclaimed}
