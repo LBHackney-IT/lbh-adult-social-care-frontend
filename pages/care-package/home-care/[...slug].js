@@ -18,6 +18,8 @@ import Layout from "../../../components/Layout/Layout";
 import PackageReclaim from "../../../components/PackageReclaim";
 import TextArea from "../../../components/TextArea";
 import TitleHeader from "../../../components/TitleHeader";
+import withSession from "../../../lib/session";
+import { getUserSession, uniqueID } from "../../../service/helpers";
 import {
   DOMESTIC_CARE_MODE,
   ESCORT_CARE_MODE,
@@ -26,8 +28,6 @@ import {
   weekDays,
 } from "../../../service/homeCarePickerHelper";
 import { getServiceTimes } from "../../../service/homeCareServiceHelper";
-import { getUserSession, uniqueID } from "../../../service/helpers";
-import withSession from "../../../lib/session";
 
 const initialPackageReclaim = {
   type: "",
@@ -344,7 +344,6 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
     };
 
     const summaryData = await postHomeCareTimeSlots(postData);
-    debugger;
     setHomeCareSummaryData(summaryData);
     window.scrollTo(0, 200);
   };

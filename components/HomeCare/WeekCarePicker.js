@@ -22,7 +22,6 @@ const WeekCarePicker = ({
   weekDays,
   onCarePickerClick = () => {},
 }) => {
-  debugger;
   const [displayMinsOrHours, setDisplayMinsOrHours] = useState(2);
 
   const onCarePickerDropdownSelect = (weekSlotId, dayId, selectedValue) => {

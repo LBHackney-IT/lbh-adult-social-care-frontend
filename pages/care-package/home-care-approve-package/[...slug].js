@@ -1,16 +1,20 @@
-import Layout from "../../../../components/Layout/Layout";
+import Layout from "../../../components/Layout/Layout";
 import React from "react";
-import TextArea from "../../../../components/TextArea";
-import WeekCarePicker from "../../../../components/HomeCare/WeekCarePicker";
-import { getServiceTypeCareTimes } from "../../../../service/homeCareServiceHelper";
-import { PERSONAL_CARE_MODE } from "../../../../service/homeCarePickerHelper";
-import HomeCareApprovalTitle from "../../../../components/HomeCare/HomeCareApprovalTitle";
-import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
-import HomeCarePackageBreakdown from "../../../../components/HomeCare/HomeCarePackageBreakdown";
-import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
-import HomeCarePackageDetails from "../../../../components/HomeCare/HomeCarePackageDetails";
-import {getUserSession} from "../../../../service/helpers";
-import withSession from "../../../../lib/session";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import TextArea from "../../../components/TextArea";
+import WeekCarePicker from "../../../components/HomeCare/WeekCarePicker";
+import { getServiceTypeCareTimes } from "../../../service/homeCareServiceHelper";
+import { PERSONAL_CARE_MODE } from "../../../service/homeCarePickerHelper";
+import HomeCareApprovalTitle from "../../../components/HomeCare/HomeCareApprovalTitle";
+import ApprovalClientSummary from "../../../components/ApprovalClientSummary";
+import HomeCarePackageBreakdown from "../../../components/HomeCare/HomeCarePackageBreakdown";
+import PackageApprovalHistorySummary from "../../../components/PackageApprovalHistorySummary";
+import HomeCarePackageDetails from "../../../components/HomeCare/HomeCarePackageDetails";
+import { getUserSession } from "../../../service/helpers";
+import withSession from "../../../lib/session";
+import { weekDays } from "../../../service/homeCarePickerHelper";
+import { getHomeCareBrokergage } from "../../../api/CarePackages/HomeCareApi";
 
 const approvalHistoryEntries = [
   {
@@ -31,18 +35,36 @@ const approvalHistoryEntries = [
   },
 ];
 
-export const getServerSideProps = withSession(async function({ req }) {
+export const getServerSideProps = withSession(async function ({ req }) {
   const user = getUserSession({ req });
-  if(user.redirect) {
+  if (user.redirect) {
     return user;
   }
 
   return {
-    props: {approvalHistoryEntries}, // will be passed to the page component as props
-  }
+    props: { approvalHistoryEntries }, // will be passed to the page component as props
+  };
 });
 
 const HomeCareApprovePackage = ({ approvalHistoryEntries }) => {
+  // Route
+  const router = useRouter();
+  const [homeCarePackageId] = router.query.slug;
+
+  // State
+  const [packageData, setPackageData] = useState(undefined);
+
+  // On load retrieve package
+  useEffect(() => {
+    if (!packageData) {
+      async function retrieveData() {
+        setPackageData(await getHomeCareBrokergage(homeCarePackageId));
+      }
+
+      retrieveData();
+    }
+  }, [homeCarePackageId, packageData]);
+
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
   return (
     <Layout headerTitle="HOME CARE APPROVAL">

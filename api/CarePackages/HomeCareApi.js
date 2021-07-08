@@ -1,16 +1,11 @@
-import { BASE_URL } from "../BaseApi";
 import axios from "axios";
 import { format } from "date-fns";
 import { UTC_DATE_FORMAT } from "../../Constants";
 import { weekDays } from "../../service/homeCarePickerHelper";
-import {
-  PERSONAL_CARE_MODE,
-  DOMESTIC_CARE_MODE,
-  LIVE_IN_CARE_MODE,
-  ESCORT_CARE_MODE,
-} from "../../service/homeCarePickerHelper";
+import { BASE_URL } from "../BaseApi";
 
 const HOME_CARE_URL = `${BASE_URL}/v1/homeCarePackage`;
+const HOME_CARE_APPROVE_PACKAGE_URL = `${BASE_URL}/v1/homeCareApprovePackage`;
 const HOME_CARE_SERVICE_URL = `${BASE_URL}/v1/homeCareService`;
 const HOME_CARE_PACKAGE_SLOTS_URL = `${BASE_URL}/v1/homeCarePackageSlots`;
 const HOME_CARE_TIME_SLOT_SHIFTS_URL = `${BASE_URL}/v1/timeSlotShifts`;
@@ -228,10 +223,21 @@ const getHomeCareSummaryData = () => {
   ];
 };
 
+const getHomeCareBrokergage = async (packageId) => {
+  const response = await axios
+    .get(`${BASE_URL}/v1/home-care-packages/${packageId}/approve-package`)
+    .catch((error) => {
+      // TODO error
+    });
+
+  return response.data;
+};
+
 export {
   createHomeCarePackage,
   getHomeCareTimeSlotShifts,
   getHomeCareServices,
   getHomeCareSummaryData,
   postHomeCareTimeSlots,
+  getHomeCareBrokergage,
 };
