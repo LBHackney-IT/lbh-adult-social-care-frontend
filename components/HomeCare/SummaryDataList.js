@@ -2,7 +2,13 @@ import React from "react";
 import { Button } from "../Button";
 import DaySummary from "./DaySummary";
 
-const SummaryDataList = ({ slicedText, summaryData, edit, remove, confirmPackage = true }) => {
+const SummaryDataList = ({
+  slicedText,
+  summaryData,
+  edit,
+  remove,
+  confirmPackage = true,
+}) => {
   return (
     <>
       {summaryData.map((summaryItem) => {
@@ -16,8 +22,7 @@ const SummaryDataList = ({ slicedText, summaryData, edit, remove, confirmPackage
           />
         );
       })}
-      {
-        confirmPackage &&
+      {confirmPackage && (
         <div className="mt-5 level">
           <div className="level-item level-right">
             <Button onClick={() => alert("Confirm Package")}>
@@ -25,7 +30,7 @@ const SummaryDataList = ({ slicedText, summaryData, edit, remove, confirmPackage
             </Button>
           </div>
         </div>
-      }
+      )}
     </>
   );
 };

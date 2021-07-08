@@ -103,10 +103,10 @@ const allNightOptions = [
   { text: "12 hours", value: 720 },
 ];
 
-const PERSONAL_CARE_MODE = "PERSONAL_CARE_MODE";
-const DOMESTIC_CARE_MODE = "DOMESTIC_CARE_MODE";
-const LIVE_IN_CARE_MODE = "LIVE_IN_CARE_MODE";
-const ESCORT_CARE_MODE = "ESCORT_CARE_MODE";
+const PERSONAL_CARE_MODE = 1;
+const DOMESTIC_CARE_MODE = 2;
+const LIVE_IN_CARE_MODE = 3;
+const ESCORT_CARE_MODE = 4;
 
 export {
   getWeekSlots,

@@ -1,19 +1,10 @@
-// {
-//     id: 1,
-//     label: "Morning",
-//     careBreakdown: true,
-//     timeLabel: "08:00 - 10:00",
-//     days: [],
-//   },
-import { CheckGreenIcon } from "../Icons";
+import Dropdown from "../../components/Dropdown";
 import {
-  PERSONAL_CARE_MODE,
   DOMESTIC_CARE_MODE,
-  LIVE_IN_CARE_MODE,
   ESCORT_CARE_MODE,
+  LIVE_IN_CARE_MODE,
+  PERSONAL_CARE_MODE,
 } from "../../service/homeCarePickerHelper";
-import Dropdown from "../Dropdown";
-import { nightOwlOptions, allNightOptions } from "../../service/homeCarePickerHelper";
 
 const isPickerActive = (currentMode, { person, domestic, liveIn, escort }) => {
   switch (currentMode) {
@@ -82,19 +73,12 @@ const CarePicker = ({ currentMode, dayId, onClick, selectedValues }) => {
   );
 };
 
-const CareTimeDropdown = ({ weekSlotId, dayId, onChange, selectedValue }) => {
-  let careDropdownOptions;
-  switch (weekSlotId) {
-    case 7: {
-      careDropdownOptions = nightOwlOptions;
-      break;
-    }
-    default: {
-      careDropdownOptions = allNightOptions;
-      break;
-    }
-  }
-
+const CareTimeDropdown = ({
+  minuteOptions,
+  dayId,
+  onChange,
+  selectedValue,
+}) => {
   const onDropdownChange = (option) => {
     onChange(dayId, option);
   };
@@ -103,8 +87,13 @@ const CareTimeDropdown = ({ weekSlotId, dayId, onChange, selectedValue }) => {
     <div className="care-checkbox">
       <Dropdown
         isUp={true}
-        options={careDropdownOptions}
-        onOptionSelect={onChange}
+        options={minuteOptions.map((minuteOptionItem) => {
+          return {
+            text: minuteOptionItem.label,
+            value: minuteOptionItem.minutes,
+          };
+        })}
+        onOptionSelect={onDropdownChange}
         selectedValue={selectedValue}
       >
         {" "}
@@ -114,6 +103,7 @@ const CareTimeDropdown = ({ weekSlotId, dayId, onChange, selectedValue }) => {
 };
 
 const CarePickerTimeSlot = ({
+  homeCareServices,
   currentMode,
   weekSlotItem,
   onClick,
@@ -130,13 +120,13 @@ const CarePickerTimeSlot = ({
   return (
     <div className="columns">
       <div className="column week-slot-labels">
-        <label>{weekSlotItem.label}</label>
-        <label>{weekSlotItem.timeLabel}</label>
+        <label>{weekSlotItem.timeSlotShiftName}</label>
+        <label>{weekSlotItem.timeSlotTimeLabel}</label>
       </div>
       {weekSlotItem.days.map((weekSlotDayItem) => {
         return (
           <div className="column" key={weekSlotItem.id + weekSlotDayItem.id}>
-            {weekSlotItem.careBreakdown ? (
+            {!weekSlotItem.linkedToHomeCareServiceTypeId ? (
               <CarePicker
                 currentMode={currentMode}
                 dayId={weekSlotDayItem.id}
@@ -145,6 +135,12 @@ const CarePickerTimeSlot = ({
               />
             ) : (
               <CareTimeDropdown
+                minuteOptions={
+                  homeCareServices.find(
+                    (item) =>
+                      item.id === weekSlotItem.linkedToHomeCareServiceTypeId
+                  ).minutes
+                }
                 weekSlotId={weekSlotItem.id}
                 dayId={weekSlotDayItem.id}
                 onChange={onCarePickerDropdownSelect}

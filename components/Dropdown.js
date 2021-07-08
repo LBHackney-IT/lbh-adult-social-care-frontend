@@ -10,8 +10,9 @@ const Dropdown = ({
   options,
   selectedValue,
   onOptionSelect,
-  classes = '',
-  initialText = 'Select',
+  classes = "",
+  initialText = "Select",
+  includeInitialText = true,
   children,
   isUp = false,
   buttonStyle = {},
@@ -19,11 +20,16 @@ const Dropdown = ({
   setError,
   buttonClassName = "",
 }) => {
-  if((options.length === 0 || !options.some(option => option.value === null)) && !!initialText){
+  if (
+    (options.length === 0 ||
+      !options.some((option) => option.value === null)) &&
+    !!initialText &&
+    includeInitialText
+  ) {
     options.unshift({ text: initialText, value: null });
   }
 
-  if(!options.some(option => option.value === selectedValue)){
+  if (!options.some((option) => option.value === selectedValue)) {
     selectedValue = null;
   }
 

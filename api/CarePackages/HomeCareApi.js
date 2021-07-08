@@ -1,9 +1,14 @@
 import { BASE_URL } from "../BaseApi";
 import axios from "axios";
+import { format } from "date-fns";
+import { UTC_DATE_FORMAT } from "../../Constants";
 
 const HOME_CARE_URL = `${BASE_URL}/v1/homeCarePackage`;
 const HOME_CARE_SERVICE_URL = `${BASE_URL}/v1/homeCareService`;
+const HOME_CARE_PACKAGE_SLOTS_URL = `${BASE_URL}/v1/homeCarePackageSlots`;
+const HOME_CARE_TIME_SLOT_SHIFTS_URL = `${BASE_URL}/v1/timeSlotShifts`;
 
+// Home care packages
 const createHomeCarePackage = async (
   startDate,
   endDate,
@@ -11,21 +16,106 @@ const createHomeCarePackage = async (
   isS117,
   isFixedPeriod
 ) => {
-  debugger;
-  const response = await axios.post(HOME_CARE_URL, {
-    IsThisuserUnderS117: isS117,
-    IsThisAnImmediateService: isImmediate,
-    IsFixedPeriod: isFixedPeriod,
-    IsOngoingPeriod: !isFixedPeriod,
-    StartDate: startDate,
-    EndDate: endDate,
-  });
+  const response = await axios
+    .post(HOME_CARE_URL, {
+      IsThisuserUnderS117: isS117,
+      IsThisAnImmediateService: isImmediate,
+      IsFixedPeriod: isFixedPeriod,
+      IsOngoingPeriod: !isFixedPeriod,
+      StartDate: format(startDate, UTC_DATE_FORMAT),
+      EndDate: format(endDate, UTC_DATE_FORMAT),
+      CreatorId: 0,
+      UpdatorId: 0,
+      // TODO client
+      ClientId: "694f4adc-f2d8-4422-97c8-08d9057550ea",
+      // TODO status
+      StatusId: 1,
+    })
+    .catch((error) => {
+      // Error
+      // TODO
+      debugger;
+      console.log(error);
+    });
 
   return response.data;
 };
 
+// Home care services
 const getHomeCareServices = async () => {
-  const response = await axios.get(`${HOME_CARE_SERVICE_URL}/getall`);
+  const response = await axios
+    .get(`${HOME_CARE_SERVICE_URL}/getall`)
+    .catch((error) => {
+      // TODO error
+      debugger;
+    });
+
+  return response.data;
+};
+
+// Home care time slots
+const getHomeCareTimeSlotShifts = async () => {
+  const response = await axios
+    .get(`${HOME_CARE_TIME_SLOT_SHIFTS_URL}/getall`)
+    .catch((error) => {
+      // TODO error
+    });
+
+  return response.data.map((shiftItem) => {
+    const daysForShiftItem = [];
+    for (let i = 1; i <= 7; i++) {
+      const hasLinkedHomeCareServiceTypeId =
+        shiftItem.LinkedToHomeCareServiceTypeId &&
+        shiftItem.LinkedToHomeCareServiceTypeId.length > 0;
+
+      if (hasLinkedHomeCareServiceTypeId) {
+        daysForShiftItem.push({
+          id: i,
+          value: 0,
+        });
+      } else {
+        daysForShiftItem.push({
+          id: i,
+          values: {
+            person: {
+              primary: 0,
+              secondary: 0,
+            },
+            domestic: 0,
+            liveIn: 0,
+            escort: 0,
+          },
+        });
+      }
+    }
+    return { ...shiftItem, days: daysForShiftItem };
+  });
+};
+
+// Post home care time slots
+const postHomeCareTimeSlots = async (data) => {
+  const postData = {
+    HomeCarePackageId: data.id,
+    HomeCarePackageSlots: data.slots.map((item) => {
+      return {
+        PrimaryInMinutes: item.PrimaryInMinutes,
+        SecondaryInMinutes: item.SecondaryInMinutes,
+        TimeSlotShiftId: item.TimeSlotShiftId,
+        DayId: item.DayId,
+        NeedToAddress: item.NeedToAddress,
+        WhatShouldBeDone: item.WhatShouldBeDone,
+        ServiceId: item.ServiceId,
+      };
+    }),
+  };
+
+  const response = await axios
+    .post(`${HOME_CARE_PACKAGE_SLOTS_URL}`, postData)
+    .catch((error) => {
+      // TODO error
+      debugger;
+    });
+
   return response.data;
 };
 
@@ -84,4 +174,10 @@ const getHomeCareSummaryData = () => {
   ];
 };
 
-export { createHomeCarePackage, getHomeCareServices, getHomeCareSummaryData };
+export {
+  createHomeCarePackage,
+  getHomeCareTimeSlotShifts,
+  getHomeCareServices,
+  getHomeCareSummaryData,
+  postHomeCareTimeSlots,
+};

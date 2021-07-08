@@ -90,4 +90,28 @@ const getServiceTypeCareTimes = (serviceTypeId) => {
   }
 };
 
-export { serviceTypes, getServiceTypeCareTimes };
+const getServiceTimes = (homeCareServices, selectedServiceTypeId) => {
+  const { minutes } = homeCareServices
+    ? homeCareServices.find((item) => item.id === selectedServiceTypeId)
+    : { minutes: null };
+
+  const times = minutes
+    ? minutes
+        .filter((item) => item.isSecondaryCarer === false)
+        .map((item) => {
+          return { text: item.label, value: item.minutes };
+        })
+    : [];
+  let secondaryTimes = minutes
+    ? minutes
+        .filter((item) => item.isSecondaryCarer === true)
+        .map((item) => {
+          return { text: item.label, value: item.minutes };
+        })
+    : [];
+  secondaryTimes = secondaryTimes.length === 0 ? undefined : secondaryTimes;
+
+  return { times, secondaryTimes };
+};
+
+export { getServiceTimes, serviceTypes, getServiceTypeCareTimes };
