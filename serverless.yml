@@ -36,8 +36,9 @@ functions:
     vpc:
       securityGroupIds: ${self:custom.securityGroups.${self:provider.stage}}
       subnetIds: ${self:custom.subnets.${self:provider.stage}}
-    # environment:
-      # AWS_KEY: ${ssm:/lbh-adult-social-care-builder/${self:provider.stage}/aws-key}
+    environment:
+      NEXT_PUBLIC_AWS_KEY: ${ssm:/lbh-adult-social-care-builder/${self:provider.stage}/AWS_KEY}
+      NEXT_PUBLIC_AWS_ENDPOINT: ${ssm:/lbh-adult-social-care-builder/${self:provider.stage}/aws_endpoint}
 resources:
   Resources:
     CloudFrontDistribution:

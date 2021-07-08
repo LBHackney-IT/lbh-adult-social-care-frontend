@@ -2,7 +2,7 @@ import axios from "axios";
 import { format } from "date-fns";
 import { UTC_DATE_FORMAT } from "../../Constants";
 import { weekDays } from "../../service/homeCarePickerHelper";
-import { BASE_URL } from "../BaseApi";
+import { BASE_URL, AUTH_HEADER } from "../BaseApi";
 
 const HOME_CARE_URL = `${BASE_URL}/v1/homeCarePackage`;
 const HOME_CARE_APPROVE_PACKAGE_URL = `${BASE_URL}/v1/homeCareApprovePackage`;
@@ -19,20 +19,26 @@ const createHomeCarePackage = async (
   isFixedPeriod
 ) => {
   const response = await axios
-    .post(HOME_CARE_URL, {
-      IsThisuserUnderS117: isS117,
-      IsThisAnImmediateService: isImmediate,
-      IsFixedPeriod: isFixedPeriod,
-      IsOngoingPeriod: !isFixedPeriod,
-      StartDate: format(startDate, UTC_DATE_FORMAT),
-      EndDate: format(endDate, UTC_DATE_FORMAT),
-      CreatorId: 0,
-      UpdatorId: 0,
-      // TODO client
-      ClientId: "694f4adc-f2d8-4422-97c8-08d9057550ea",
-      // TODO status
-      StatusId: 1,
-    })
+    .post(
+      HOME_CARE_URL,
+      {
+        IsThisuserUnderS117: isS117,
+        IsThisAnImmediateService: isImmediate,
+        IsFixedPeriod: isFixedPeriod,
+        IsOngoingPeriod: !isFixedPeriod,
+        StartDate: format(startDate, UTC_DATE_FORMAT),
+        EndDate: format(endDate, UTC_DATE_FORMAT),
+        CreatorId: 0,
+        UpdatorId: 0,
+        // TODO client
+        ClientId: "694f4adc-f2d8-4422-97c8-08d9057550ea",
+        // TODO status
+        StatusId: 1,
+      },
+      {
+        headers: AUTH_HEADER,
+      }
+    )
     .catch((error) => {
       // Error
       // TODO
@@ -46,7 +52,9 @@ const createHomeCarePackage = async (
 // Home care services
 const getHomeCareServices = async () => {
   const response = await axios
-    .get(`${HOME_CARE_SERVICE_URL}/getall`)
+    .get(`${HOME_CARE_SERVICE_URL}/getall`, {
+      headers: AUTH_HEADER,
+    })
     .catch((error) => {
       // TODO error
       debugger;
@@ -58,7 +66,9 @@ const getHomeCareServices = async () => {
 // Home care time slots
 const getHomeCareTimeSlotShifts = async () => {
   const response = await axios
-    .get(`${HOME_CARE_TIME_SLOT_SHIFTS_URL}/getall`)
+    .get(`${HOME_CARE_TIME_SLOT_SHIFTS_URL}/getall`, {
+      headers: AUTH_HEADER,
+    })
     .catch((error) => {
       // TODO error
     });
@@ -120,7 +130,9 @@ const postHomeCareTimeSlots = async (data) => {
   };
 
   const response = await axios
-    .post(`${HOME_CARE_PACKAGE_SLOTS_URL}`, postData)
+    .post(`${HOME_CARE_PACKAGE_SLOTS_URL}`, postData, {
+      headers: AUTH_HEADER,
+    })
     .catch((error) => {
       // TODO error
       debugger;
@@ -225,7 +237,9 @@ const getHomeCareSummaryData = () => {
 
 const getHomeCareBrokergage = async (packageId) => {
   const response = await axios
-    .get(`${BASE_URL}/v1/home-care-packages/${packageId}/approve-package`)
+    .get(`${BASE_URL}/v1/home-care-packages/${packageId}/approve-package`, {
+      headers: AUTH_HEADER,
+    })
     .catch((error) => {
       // TODO error
     });
