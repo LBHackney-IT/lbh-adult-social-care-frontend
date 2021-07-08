@@ -1,35 +1,40 @@
-import Layout from "../../../components/Layout/Layout";
-import React from "react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import TextArea from "../../../components/TextArea";
-import WeekCarePicker from "../../../components/HomeCare/WeekCarePicker";
-import { getServiceTypeCareTimes } from "../../../service/homeCareServiceHelper";
-import { PERSONAL_CARE_MODE } from "../../../service/homeCarePickerHelper";
-import HomeCareApprovalTitle from "../../../components/HomeCare/HomeCareApprovalTitle";
+import React, { useEffect, useState } from "react";
+import {
+  getHomeCareBrokergage,
+  getHomeCareServices,
+  getHomeCareTimeSlotShifts,
+} from "../../../api/CarePackages/HomeCareApi";
 import ApprovalClientSummary from "../../../components/ApprovalClientSummary";
+import HomeCareApprovalTitle from "../../../components/HomeCare/HomeCareApprovalTitle";
 import HomeCarePackageBreakdown from "../../../components/HomeCare/HomeCarePackageBreakdown";
-import PackageApprovalHistorySummary from "../../../components/PackageApprovalHistorySummary";
 import HomeCarePackageDetails from "../../../components/HomeCare/HomeCarePackageDetails";
-import { getUserSession } from "../../../service/helpers";
+import WeekCarePicker from "../../../components/HomeCare/WeekCarePicker";
+import Layout from "../../../components/Layout/Layout";
+import PackageApprovalHistorySummary from "../../../components/PackageApprovalHistorySummary";
+import TextArea from "../../../components/TextArea";
 import withSession from "../../../lib/session";
-import { weekDays } from "../../../service/homeCarePickerHelper";
-import { getHomeCareBrokergage } from "../../../api/CarePackages/HomeCareApi";
+import { getUserSession } from "../../../service/helpers";
+import {
+  PERSONAL_CARE_MODE,
+  weekDays,
+} from "../../../service/homeCarePickerHelper";
+import { getServiceTypeCareTimes } from "../../../service/homeCareServiceHelper";
 
 const approvalHistoryEntries = [
   {
-    eventDate: "03/12/2021",
+    eventDate: "08/07/2021",
     eventMessage: "Package requested by Martin Workman · Social Worker ",
     eventSubMessage: null,
   },
   {
-    eventDate: "05/12/2021",
+    eventDate: "15/07/2021",
     eventMessage: "Futher information requested by Amecie Steadman · Approver",
     eventSubMessage:
-      '"There appears to be more support than needed in the morning for Mr Stephens, please amend or call me to discuss" More',
+      '"There appears to be more support than needed in the morning for Mr Stephens, please amend or call me to discuss more"',
   },
   {
-    eventDate: "06/12/2021",
+    eventDate: "25/07/2021",
     eventMessage: "Package re-submitted by Martin Workman · Social Worker ",
     eventSubMessage: null,
   },
@@ -41,12 +46,36 @@ export const getServerSideProps = withSession(async function ({ req }) {
     return user;
   }
 
-  return {
-    props: { approvalHistoryEntries }, // will be passed to the page component as props
+  const data = {
+    errorData: [],
   };
+
+  try {
+    // Call to api to get package
+    data.homeCareServices = await getHomeCareServices();
+  } catch (error) {
+    data.errorData.push(
+      `Retrieve day care package details failed. ${error.message}`
+    );
+  }
+
+  try {
+    // Get home care time shifts
+    data.homeCareTimeShiftsData = await getHomeCareTimeSlotShifts();
+  } catch (error) {
+    data.errorData.push(
+      `Retrieve home care time shift details failed. ${error.message}`
+    );
+  }
+
+  return { props: { ...data, approvalHistoryEntries } };
 });
 
-const HomeCareApprovePackage = ({ approvalHistoryEntries }) => {
+const HomeCareApprovePackage = ({
+  approvalHistoryEntries,
+  homeCareTimeShiftsData,
+  homeCareServices,
+}) => {
   // Route
   const router = useRouter();
   const [homeCarePackageId] = router.query.slug;
@@ -66,8 +95,9 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries }) => {
   }, [homeCarePackageId, packageData]);
 
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
+
   return (
-    <Layout headerTitle="HOME CARE APPROVAL">
+    <Layout headerTitle="HOME CARE PACKAGE APPROVAL">
       <div className="hackney-text-black font-size-12px">
         <HomeCareApprovalTitle />
         <ApprovalClientSummary />
@@ -120,10 +150,13 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries }) => {
         <div className="columns mb-4">
           <div className="column">
             <div className="mt-2">
-              <WeekCarePicker
+              {/* <WeekCarePicker
+                homeCareServices={homeCareServices}
+                homeCareTimeShifts={homeCareTimeShiftsData}
+                weekDays={weekDays}
                 primaryCareTimes={times}
                 secondaryCareTimes={secondaryTimes}
-              />
+              /> */}
             </div>
 
             <div className="level mt-3">

@@ -1,16 +1,17 @@
-import { getServiceTypeCareTimes } from "../../../../service/homeCareServiceHelper";
-import { PERSONAL_CARE_MODE } from "../../../../service/homeCarePickerHelper";
-import Layout from "../../../../components/Layout/Layout";
+import { getServiceTypeCareTimes } from "../../../service/homeCareServiceHelper";
+import { PERSONAL_CARE_MODE } from "../../../service/homeCarePickerHelper";
+import Layout from "../../../components/Layout/Layout";
 import React from "react";
-import HomeCareApprovalTitle from "../../../../components/HomeCare/HomeCareApprovalTitle";
-import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
-import HomeCarePackageBreakdown from "../../../../components/HomeCare/HomeCarePackageBreakdown";
-import HomeCarePackageElementCostings from "../../../../components/HomeCare/HomeCarePackageElementCostings";
-import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
-import HomeCarePackageDetails from "../../../../components/HomeCare/HomeCarePackageDetails";
-import WeekCarePicker from "../../../../components/HomeCare/WeekCarePicker";
-import TextArea from "../../../../components/TextArea";
-import {getUserSession} from "../../../../service/helpers";
+import HomeCareApprovalTitle from "../../../components/HomeCare/HomeCareApprovalTitle";
+import ApprovalClientSummary from "../../../components/ApprovalClientSummary";
+import HomeCarePackageBreakdown from "../../../components/HomeCare/HomeCarePackageBreakdown";
+import HomeCarePackageElementCostings from "../../../components/HomeCare/HomeCarePackageElementCostings";
+import PackageApprovalHistorySummary from "../../../components/PackageApprovalHistorySummary";
+import HomeCarePackageDetails from "../../../components/HomeCare/HomeCarePackageDetails";
+import WeekCarePicker from "../../../components/HomeCare/WeekCarePicker";
+import TextArea from "../../../components/TextArea";
+import { getUserSession } from "../../../service/helpers";
+import withSession from "../../../lib/session";
 
 const approvalHistoryEntries = [
   {
@@ -37,27 +38,48 @@ const approvalHistoryEntries = [
   },
   {
     eventDate: "14/12/2021",
-    eventMessage: "Care Package approve-brokered STA by  Derek Knightman · Broker",
+    eventMessage:
+      "Care Package approve-brokered STA by  Derek Knightman · Broker",
     eventSubMessage: null,
   },
 ];
 
-export async function getServerSideProps({ req }) {
+export const getServerSideProps = withSession(async function ({ req }) {
   const user = getUserSession({ req });
-  if(user.redirect) {
+  if (user.redirect) {
     return user;
   }
 
-  return {
-    props: {approvalHistoryEntries}, // will be passed to the page component as props
-  }
-}
+  const data = {
+    errorData: [],
+  };
 
-const HomeCareApproveBrokered = ({approvalHistoryEntries}) => {
+  try {
+    // Call to api to get package
+    data.homeCareServices = await getHomeCareServices();
+  } catch (error) {
+    data.errorData.push(
+      `Retrieve day care package details failed. ${error.message}`
+    );
+  }
+
+  try {
+    // Get home care time shifts
+    data.homeCareTimeShiftsData = await getHomeCareTimeSlotShifts();
+  } catch (error) {
+    data.errorData.push(
+      `Retrieve home care time shift details failed. ${error.message}`
+    );
+  }
+
+  return { props: { ...data, approvalHistoryEntries } };
+});
+
+const HomeCareApproveBrokered = ({ approvalHistoryEntries }) => {
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
 
   return (
-    <Layout headerTitle="HOME CARE APPROVAL">
+    <Layout headerTitle="HOME CARE APPROVE BROKERED PACKAGE">
       <div className="hackney-text-black font-size-12px">
         <HomeCareApprovalTitle />
         <ApprovalClientSummary />
@@ -112,10 +134,10 @@ const HomeCareApproveBrokered = ({approvalHistoryEntries}) => {
         <div className="columns mb-4">
           <div className="column">
             <div className="mt-2">
-              <WeekCarePicker
+              {/* <WeekCarePicker
                 primaryCareTimes={times}
                 secondaryCareTimes={secondaryTimes}
-              />
+              /> */}
             </div>
 
             <div className="level mt-3">

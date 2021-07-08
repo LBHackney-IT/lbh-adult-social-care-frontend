@@ -30,7 +30,7 @@ const ApprovalHistory = ({
       <div className="care-info">
         <div>
           <p>STARTS</p>
-          <p>03/07/2021</p>
+          <p>08/07/2021</p>
         </div>
         <div>
           <p>ENDS</p>

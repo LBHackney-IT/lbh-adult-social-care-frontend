@@ -66,13 +66,12 @@ const HomeCarePackageDetails = () => {
                     Need Addressing
                   </h3>
                   <p className="font-size-14px">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor.
-                    Aliquam suscipit laoreet pharetra. Aenean vestibulum
-                    ullamcorper enim, sed rhoncus sem tempor vitae. Sed
-                    dignissim ornare metus eu faucibus. Sed vel diam mi. Aenean
-                    a auctor felis, sit amet lacinia urna. Pellentesque bibendum
-                    dui a nulla faucibus, vel dignissim mi rutrum. More...
+                    There are several things to consider, we will need to
+                    address x, y and z. There are various things which will need
+                    action on as soon as possible. There are several things to
+                    consider, we will need to address x, y and z. There are
+                    various things which will need action on as soon as
+                    possible.
                   </p>
                   <div>
                     <Button linkBtn={true} className="mr-2">
@@ -87,13 +86,12 @@ const HomeCarePackageDetails = () => {
                     What should be done
                   </h3>
                   <p className="font-size-14px">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor.
-                    Aliquam suscipit laoreet pharetra. Aenean vestibulum
-                    ullamcorper enim, sed rhoncus sem tempor vitae. Sed
-                    dignissim ornare metus eu faucibus. Sed vel diam mi. Aenean
-                    a auctor felis, sit amet lacinia urna. Pellentesque bibendum
-                    dui a nulla faucibus, vel dignissim mi rutrum. More...
+                    The following tasks should be completed: do five lots of x,
+                    then do twenty lots of z, then do thirty lots of y. The
+                    following tasks should be completed: do five lots of x, then
+                    do twenty lots of z, then do thirty lots of y. The following
+                    tasks should be completed: do five lots of x, then do twenty
+                    lots of z, then do thirty lots of y.
                   </p>
                 </div>
               </div>
@@ -152,13 +150,12 @@ const HomeCarePackageDetails = () => {
                     Need Addressing
                   </h3>
                   <p className="font-size-14px">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor.
-                    Aliquam suscipit laoreet pharetra. Aenean vestibulum
-                    ullamcorper enim, sed rhoncus sem tempor vitae. Sed
-                    dignissim ornare metus eu faucibus. Sed vel diam mi. Aenean
-                    a auctor felis, sit amet lacinia urna. Pellentesque bibendum
-                    dui a nulla faucibus, vel dignissim mi rutrum. More...
+                    There are several things to consider, we will need to
+                    address x, y and z. There are various things which will need
+                    action on as soon as possible. There are several things to
+                    consider, we will need to address x, y and z. There are
+                    various things which will need action on as soon as
+                    possible.
                   </p>
                   <div>
                     <Button linkBtn={true} className="mr-2">
@@ -173,13 +170,12 @@ const HomeCarePackageDetails = () => {
                     What should be done
                   </h3>
                   <p className="font-size-14px">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor.
-                    Aliquam suscipit laoreet pharetra. Aenean vestibulum
-                    ullamcorper enim, sed rhoncus sem tempor vitae. Sed
-                    dignissim ornare metus eu faucibus. Sed vel diam mi. Aenean
-                    a auctor felis, sit amet lacinia urna. Pellentesque bibendum
-                    dui a nulla faucibus, vel dignissim mi rutrum. More...
+                    The following tasks should be completed: do five lots of x,
+                    then do twenty lots of z, then do thirty lots of y. The
+                    following tasks should be completed: do five lots of x, then
+                    do twenty lots of z, then do thirty lots of y. The following
+                    tasks should be completed: do five lots of x, then do twenty
+                    lots of z, then do thirty lots of y.
                   </p>
                 </div>
               </div>
@@ -238,13 +234,12 @@ const HomeCarePackageDetails = () => {
                     Need Addressing
                   </h3>
                   <p className="font-size-14px">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor.
-                    Aliquam suscipit laoreet pharetra. Aenean vestibulum
-                    ullamcorper enim, sed rhoncus sem tempor vitae. Sed
-                    dignissim ornare metus eu faucibus. Sed vel diam mi. Aenean
-                    a auctor felis, sit amet lacinia urna. Pellentesque bibendum
-                    dui a nulla faucibus, vel dignissim mi rutrum. More...
+                    There are several things to consider, we will need to
+                    address x, y and z. There are various things which will need
+                    action on as soon as possible. There are several things to
+                    consider, we will need to address x, y and z. There are
+                    various things which will need action on as soon as
+                    possible.
                   </p>
                   <div>
                     <Button linkBtn={true} className="mr-2">
@@ -259,13 +254,12 @@ const HomeCarePackageDetails = () => {
                     What should be done
                   </h3>
                   <p className="font-size-14px">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor.
-                    Aliquam suscipit laoreet pharetra. Aenean vestibulum
-                    ullamcorper enim, sed rhoncus sem tempor vitae. Sed
-                    dignissim ornare metus eu faucibus. Sed vel diam mi. Aenean
-                    a auctor felis, sit amet lacinia urna. Pellentesque bibendum
-                    dui a nulla faucibus, vel dignissim mi rutrum. More...
+                    The following tasks should be completed: do five lots of x,
+                    then do twenty lots of z, then do thirty lots of y. The
+                    following tasks should be completed: do five lots of x, then
+                    do twenty lots of z, then do thirty lots of y. The following
+                    tasks should be completed: do five lots of x, then do twenty
+                    lots of z, then do thirty lots of y.
                   </p>
                 </div>
               </div>
@@ -331,13 +325,12 @@ const HomeCarePackageDetails = () => {
                     Need Addressing
                   </h3>
                   <p className="font-size-14px">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor.
-                    Aliquam suscipit laoreet pharetra. Aenean vestibulum
-                    ullamcorper enim, sed rhoncus sem tempor vitae. Sed
-                    dignissim ornare metus eu faucibus. Sed vel diam mi. Aenean
-                    a auctor felis, sit amet lacinia urna. Pellentesque bibendum
-                    dui a nulla faucibus, vel dignissim mi rutrum. More...
+                    There are several things to consider, we will need to
+                    address x, y and z. There are various things which will need
+                    action on as soon as possible. There are several things to
+                    consider, we will need to address x, y and z. There are
+                    various things which will need action on as soon as
+                    possible.
                   </p>
                   <div>
                     <Button linkBtn={true} className="mr-2">
@@ -352,13 +345,12 @@ const HomeCarePackageDetails = () => {
                     What should be done
                   </h3>
                   <p className="font-size-14px">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam ut nulla tristique nulla dapibus rhoncus a eu tortor.
-                    Aliquam suscipit laoreet pharetra. Aenean vestibulum
-                    ullamcorper enim, sed rhoncus sem tempor vitae. Sed
-                    dignissim ornare metus eu faucibus. Sed vel diam mi. Aenean
-                    a auctor felis, sit amet lacinia urna. Pellentesque bibendum
-                    dui a nulla faucibus, vel dignissim mi rutrum. More...
+                    The following tasks should be completed: do five lots of x,
+                    then do twenty lots of z, then do thirty lots of y. The
+                    following tasks should be completed: do five lots of x, then
+                    do twenty lots of z, then do thirty lots of y. The following
+                    tasks should be completed: do five lots of x, then do twenty
+                    lots of z, then do thirty lots of y.
                   </p>
                 </div>
               </div>
