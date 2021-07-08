@@ -1,13 +1,12 @@
+import { format } from "date-fns";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { format } from "date-fns";
 import {
   createHomeCarePackage,
   getHomeCareServices,
   getHomeCareTimeSlotShifts,
   postHomeCareTimeSlots,
 } from "../../../api/CarePackages/HomeCareApi";
-import { weekDays } from "../../../service/homeCarePickerHelper";
 import { Button } from "../../../components/Button";
 import CareTitle from "../../../components/CarePackages/CareTitle";
 import ClientSummary from "../../../components/ClientSummary";
@@ -19,19 +18,16 @@ import Layout from "../../../components/Layout/Layout";
 import PackageReclaim from "../../../components/PackageReclaim";
 import TextArea from "../../../components/TextArea";
 import TitleHeader from "../../../components/TitleHeader";
-import { uniqueID } from "../../../service/helpers";
 import {
-  PERSONAL_CARE_MODE,
   DOMESTIC_CARE_MODE,
-  LIVE_IN_CARE_MODE,
   ESCORT_CARE_MODE,
+  LIVE_IN_CARE_MODE,
+  PERSONAL_CARE_MODE,
+  weekDays,
 } from "../../../service/homeCarePickerHelper";
-import {
-  getServiceTypeCareTimes,
-  serviceTypes,
-} from "../../../service/homeCareServiceHelper";
-import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
 import { getServiceTimes } from "../../../service/homeCareServiceHelper";
+import { getUserSession, uniqueID } from "../../../service/helpers";
+import withSession from "../../../lib/session";
 
 const initialPackageReclaim = {
   type: "",
@@ -42,16 +38,50 @@ const initialPackageReclaim = {
   id: "1",
 };
 
-const HomeCare = () => {
+// start before render
+export const getServerSideProps = withSession(async function ({ req }) {
+  const user = getUserSession({ req });
+  if (user.redirect) {
+    return user;
+  }
+
+  const data = {
+    errorData: [],
+  };
+
+  try {
+    // Call to api to get package
+    data.homeCareServices = await getHomeCareServices();
+  } catch (error) {
+    data.errorData.push(
+      `Retrieve day care package details failed. ${error.message}`
+    );
+  }
+
+  try {
+    // Get home care time shifts
+    data.homeCareTimeShiftsData = await getHomeCareTimeSlotShifts();
+  } catch (error) {
+    data.errorData.push(
+      `Retrieve home care time shift details failed. ${error.message}`
+    );
+  }
+
+  return { props: { ...data } };
+});
+
+const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
+  debugger;
   // Parameters
   const router = useRouter();
   const [isImmediate, isS117, isFixedPeriod, startDate, endDate] =
     router.query.slug;
 
   // State
+  const [homeCareTimeShifts, setHomeCareTimeShifts] = useState(
+    homeCareTimeShiftsData
+  );
   const [weekDaysValue, setWeekDaysValue] = useState(weekDays);
-  const [homeCareTimeShifts, setHomeCareTimeShifts] = useState(undefined);
-  const [homeCareServices, setHomeCareServices] = useState(undefined);
   const [selectedCareType, setSelectedCareType] = useState(1);
   const [selectedPrimaryCareTime, setSelectedPrimaryCareTime] = useState(30);
   const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] =
@@ -117,21 +147,21 @@ const HomeCare = () => {
     }
   }, [carePackageId, startDate, endDate, isImmediate, isS117, isFixedPeriod]);
 
-  // Home care services
-  useEffect(async () => {
-    if (!homeCareServices) {
-      const homeCareServicesApiData = await getHomeCareServices();
-      setHomeCareServices(homeCareServicesApiData);
-    }
-  }, [homeCareServices]);
+  // // Home care services
+  // useEffect(async () => {
+  //   if (!homeCareServices) {
+  //     const homeCareServicesApiData = await getHomeCareServices();
+  //     setHomeCareServices(homeCareServicesApiData);
+  //   }
+  // }, [homeCareServices]);
 
   // Home care time shifts
-  useEffect(async () => {
-    if (!homeCareTimeShifts) {
-      const homeCareTimeShiftsApiData = await getHomeCareTimeSlotShifts();
-      setHomeCareTimeShifts(homeCareTimeShiftsApiData);
-    }
-  }, [homeCareTimeShifts]);
+  // useEffect(async () => {
+  //   if (!homeCareTimeShifts) {
+  //     const homeCareTimeShiftsApiData = await getHomeCareTimeSlotShifts();
+  //     setHomeCareTimeShifts(homeCareTimeShiftsApiData);
+  //   }
+  // }, [homeCareTimeShifts]);
 
   // Option selecting
   useEffect(() => {
@@ -434,6 +464,7 @@ const HomeCare = () => {
         </div>
         <ShouldPackageReclaim
           isReclaimed={isReclaimed}
+          className="mt-6"
           setIsReclaimed={changeIsPackageReclaimed}
         />
         {isReclaimed && (
