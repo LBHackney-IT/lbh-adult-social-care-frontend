@@ -1,12 +1,7 @@
-import Dropdown from "../../Dropdown";
-import DatePick from "../../DatePick";
+import React, { useEffect, useState } from "react";
 import { currency } from "../../../constants/strings";
-import EuroInput from "../../EuroInput";
-import { Button } from "../../Button";
-import React, { useState } from "react";
-import PackageReclaim from "../../PackageReclaim";
-import ApprovalHistory from "../../ProposedPackages/ApprovalHistory";
-import SummaryDataList from "../../HomeCare/SummaryDataList";
+import DatePick from "../../DatePick";
+import Dropdown from "../../Dropdown";
 import HomeCareCostEntry from "./components/CostEntry";
 
 const stageOptions = [
@@ -44,17 +39,43 @@ const supplierOptions = [
 ];
 
 const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
-  debugger;
   const [elementsData, setElementsData] = useState({
-    "30mCall": 0,
-    "45mCall": 0,
-    "60m+Call": 0,
-    secondaryCarer: 0,
-    domesticCare: 0,
-    escortServices: 0,
-    sleepingNight: 0,
-    wakingNight: 0,
-    nightOwl: 0,
+    "30mCall": {
+      value: 0,
+      quantity: 3,
+    },
+    "45mCall": {
+      value: 0,
+      quantity: 3,
+    },
+    "60m+Call": {
+      value: 0,
+      quantity: 3,
+    },
+    secondaryCarer: {
+      value: 0,
+      quantity: 3,
+    },
+    domesticCare: {
+      value: 0,
+      quantity: 3,
+    },
+    escortServices: {
+      value: 0,
+      quantity: 3,
+    },
+    sleepingNight: {
+      value: 0,
+      quantity: 3,
+    },
+    wakingNight: {
+      value: 0,
+      quantity: 3,
+    },
+    nightOwl: {
+      value: 0,
+      quantity: 3,
+    },
   });
 
   const [packageReclaim, setPackageReclaim] = useState({
@@ -77,10 +98,24 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [totalCost, setTotalCost] = useState(0);
 
   const changeElementsData = (field, data) => {
-    setElementsData({ ...elementsData, [field]: data });
+    let elementToUpdate = elementsData[field];
+    elementToUpdate.value = data;
+    setElementsData({ ...elementsData, [field]: elementToUpdate });
   };
+
+  // Total values
+  useEffect(() => {
+    let currentTotalCost = 0;
+    for (const property in elementsData) {
+      const currentElement = elementsData[property];
+      currentTotalCost +=
+        parseInt(currentElement.value) * currentElement.quantity;
+    }
+    setTotalCost(currentTotalCost);
+  }, [elementsData]);
 
   return (
     <div className="mt-5 mb-5 person-care">
@@ -145,24 +180,24 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
             <div className="elements-sub-column">
               <HomeCareCostEntry
                 label="30m call"
-                value={elementsData["30mCall"]}
-                quantity={3}
+                value={elementsData["30mCall"].value}
+                quantity={elementsData["30mCall"].quantity}
                 onChange={(value) => {
                   changeElementsData("30mCall", value);
                 }}
               />
               <HomeCareCostEntry
                 label="45m call"
-                value={elementsData["45mCall"]}
-                quantity={2}
+                value={elementsData["45mCall"].value}
+                quantity={elementsData["45mCall"].quantity}
                 onChange={(value) => {
                   changeElementsData("45mCall", value);
                 }}
               />
               <HomeCareCostEntry
                 label="60m+ call"
-                value={elementsData["60m+Call"]}
-                quantity={5}
+                value={elementsData["60m+Call"].value}
+                quantity={elementsData["60m+Call"].quantity}
                 onChange={(value) => {
                   changeElementsData("60m+Call", value);
                 }}
@@ -170,39 +205,29 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
               <br />
               <HomeCareCostEntry
                 label="Secondary Carer"
-                value={elementsData["secondaryCarer"]}
-                quantity={4}
+                value={elementsData["secondaryCarer"].value}
+                quantity={elementsData["secondaryCarer"].quantity}
                 onChange={(value) => {
                   changeElementsData("secondaryCarer", value);
                 }}
               />
               {/* <p className="proposed-packages__split-rate">Split rate</p> */}
-              <div className="elements-row">
-                <div>Domestic Care</div>
-                <div>
-                  <EuroInput
-                    onChange={(value) =>
-                      changeElementsData("domesticCare", value)
-                    }
-                    value={elementsData["domesticCare"]}
-                  />
-                </div>
-                <div>3</div>
-                <div>{currency.euro}48</div>
-              </div>
-              <div className="elements-row">
-                <div>Escort Services</div>
-                <div>
-                  <EuroInput
-                    onChange={(value) =>
-                      changeElementsData("escortServices", value)
-                    }
-                    value={elementsData["escortServices"]}
-                  />
-                </div>
-                <div>3</div>
-                <div>{currency.euro}48</div>
-              </div>
+              <HomeCareCostEntry
+                label="Domestic Care"
+                value={elementsData["domesticCare"].value}
+                quantity={elementsData["domesticCare"].quantity}
+                onChange={(value) => {
+                  changeElementsData("domesticCare", value);
+                }}
+              />
+              <HomeCareCostEntry
+                label="Escort Services"
+                value={elementsData["escortServices"].value}
+                quantity={elementsData["escortServices"].quantity}
+                onChange={(value) => {
+                  changeElementsData("escortServices", value);
+                }}
+              />
             </div>
           </div>
           <div className="vertical-line" />
@@ -213,49 +238,42 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
               <div className="bold-text">hrs/wk</div>
               <div className="bold-text">Total</div>
             </div>
-            <div className="elements-row">
-              <div>Sleeping Night</div>
-              <div>
-                <EuroInput
-                  onChange={(value) =>
-                    changeElementsData("sleepingNight", value)
-                  }
-                  value={elementsData["sleepingNight"]}
-                />
-              </div>
-              <div>3</div>
-              <div>{currency.euro}300</div>
-            </div>
-            <div className="elements-row">
-              <div>Waking Night</div>
-              <div>
-                <EuroInput
-                  onChange={(value) => changeElementsData("wakingNight", value)}
-                  value={elementsData["wakingNight"]}
-                />
-              </div>
-              <div>3</div>
-              <div>{currency.euro}300</div>
-            </div>
-            <div className="elements-row">
-              <div>Night Owl</div>
-              <div>
-                <EuroInput
-                  onChange={(value) => changeElementsData("nightOwl", value)}
-                  value={elementsData["nightOwl"]}
-                />
-              </div>
-              <div>3</div>
-              <div>{currency.euro}300</div>
-            </div>
+            <HomeCareCostEntry
+              label="Sleeping Night"
+              value={elementsData["sleepingNight"].value}
+              quantity={elementsData["sleepingNight"].quantity}
+              onChange={(value) => {
+                changeElementsData("sleepingNight", value);
+              }}
+            />
+            <HomeCareCostEntry
+              label="Waking Night"
+              value={elementsData["wakingNight"].value}
+              quantity={elementsData["wakingNight"].quantity}
+              onChange={(value) => {
+                changeElementsData("wakingNight", value);
+              }}
+            />
+            <HomeCareCostEntry
+              label="Night Owl"
+              value={elementsData["nightOwl"].value}
+              quantity={elementsData["nightOwl"].quantity}
+              onChange={(value) => {
+                changeElementsData("nightOwl", value);
+              }}
+            />
           </div>
         </div>
         <div className="proposed-packages__total-cost">
           <p>
-            Total Cost /WK <span>{currency.euro}XXXX</span>
+            Total Cost /WK{" "}
+            <span>
+              {currency.euro}
+              {totalCost}
+            </span>
           </p>
         </div>
-        {tab === "packageDetails" && (
+        {/* {tab === "packageDetails" && (
           <div>
             <div className="mt-4 is-flex is-align-items-center is-justify-content-space-between">
               <p className="package-reclaim__text">
@@ -266,7 +284,7 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
             </div>
             <hr className="horizontal-delimiter" />
           </div>
-        )}
+        )} */}
       </div>
       {/* {!!packagesReclaimed.length && tab === "approvalHistory" && (
         <div>
@@ -285,7 +303,7 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
           </p>
         </div>
       )} */}
-      <div className="proposed-packages__tabs column">
+      {/* <div className="proposed-packages__tabs column">
         {[
           { text: "Approval history", value: "approvalHistory" },
           { text: "Package details", value: "packageDetails" },
@@ -312,7 +330,7 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
             </div>
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 };

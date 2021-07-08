@@ -6,6 +6,7 @@ import Layout from "../../../components/Layout/Layout";
 import PackagesHomeCare from "../../../components/packages/home-care";
 import { selectBrokerage } from "../../../reducers/brokerageReducer";
 import { uniqueID } from "../../../service/helpers";
+import { Button } from "../../../components/Button";
 
 const HomeCareBrokerPackage = () => {
   // Route
@@ -149,6 +150,11 @@ const HomeCareBrokerPackage = () => {
           brokerage={brokerage}
           changeTab={changeTab}
         />
+        <div className="level mt-4 mb-4">
+          <div className="level-item level-right">
+            <Button onClick={() => {}}>Confirm Brokerage</Button>
+          </div>
+        </div>
       </div>
     </Layout>
   );
