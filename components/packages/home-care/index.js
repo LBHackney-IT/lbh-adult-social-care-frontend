@@ -174,8 +174,8 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
             <div className="elements-row">
               <div>Primary Carer</div>
               <div />
-              <div className="bold-text">3</div>
-              <div className="bold-text">{currency.euro}XX</div>
+              <div className="bold-text"></div>
+              <div className="bold-text"></div>
             </div>
             <div className="elements-sub-column">
               <HomeCareCostEntry
