@@ -71,7 +71,6 @@ export const getServerSideProps = withSession(async function ({ req }) {
 });
 
 const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
-  debugger;
   // Parameters
   const router = useRouter();
   const [isImmediate, isS117, isFixedPeriod, startDate, endDate] =
@@ -92,6 +91,8 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
     { ...initialPackageReclaim },
   ]);
   const [isReclaimed, setIsReclaimed] = useState(null);
+  const [times, setTimes] = useState(undefined);
+  const [secondaryTimes, setSecondaryTimes] = useState(undefined);
 
   const addPackageReclaim = () => {
     setPackagesReclaimed([
@@ -117,11 +118,15 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
   const [needToAddress, setNeedToAddress] = useState(undefined);
   const [whatShouldBeDone, setWhatShouldBeDone] = useState(undefined);
 
-  // Get the primary and secondary times for the selected service
-  const { times, secondaryTimes } =
-    homeCareServices !== undefined
-      ? getServiceTimes(homeCareServices, selectedCareType)
-      : { times: undefined, secondaryTimes: undefined };
+  useEffect(() => {
+    // Get the primary and secondary times for the selected service
+    const { times, secondaryTimes } =
+      homeCareServices !== undefined
+        ? getServiceTimes(homeCareServices, selectedCareType)
+        : { times: undefined, secondaryTimes: undefined };
+    setTimes(times);
+    setSecondaryTimes(secondaryTimes);
+  }, [homeCareServices]);
 
   const changeIsPackageReclaimed = (status) => {
     setPackagesReclaimed([{ ...initialPackageReclaim }]);
@@ -146,22 +151,6 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
       createHomeCarePackageAsync();
     }
   }, [carePackageId, startDate, endDate, isImmediate, isS117, isFixedPeriod]);
-
-  // // Home care services
-  // useEffect(async () => {
-  //   if (!homeCareServices) {
-  //     const homeCareServicesApiData = await getHomeCareServices();
-  //     setHomeCareServices(homeCareServicesApiData);
-  //   }
-  // }, [homeCareServices]);
-
-  // Home care time shifts
-  // useEffect(async () => {
-  //   if (!homeCareTimeShifts) {
-  //     const homeCareTimeShiftsApiData = await getHomeCareTimeSlotShifts();
-  //     setHomeCareTimeShifts(homeCareTimeShiftsApiData);
-  //   }
-  // }, [homeCareTimeShifts]);
 
   // Option selecting
   useEffect(() => {
@@ -355,6 +344,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
     };
 
     const summaryData = await postHomeCareTimeSlots(postData);
+    debugger;
     setHomeCareSummaryData(summaryData);
     window.scrollTo(0, 200);
   };
@@ -419,8 +409,6 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
                   options={[...secondaryTimes]}
                   selectedValue={selectedSecondaryCareTime}
                   onOptionSelect={(option) => {
-                    debugger;
-
                     setSelectedSecondaryCareTime(option);
                   }}
                   buttonStyle={{ minWidth: "200px" }}
@@ -435,6 +423,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
               label="Need to Address"
               rows={5}
               placeholder="Add details..."
+              onChange={setNeedToAddress}
             />
           </div>
           <div className="column">
@@ -442,6 +431,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
               label="What should be done"
               rows={5}
               placeholder="Add details..."
+              onChange={setWhatShouldBeDone}
             />
           </div>
         </div>

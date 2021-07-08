@@ -48,13 +48,13 @@ const weekSlots = [
 ];
 
 const weekDays = [
-  { id: 1, name: "MON", minutes: 0 },
-  { id: 2, name: "TUE", minutes: 0 },
-  { id: 3, name: "WED", minutes: 0 },
-  { id: 4, name: "THU", minutes: 0 },
-  { id: 5, name: "FRI", minutes: 0 },
-  { id: 6, name: "SAT", minutes: 0 },
-  { id: 7, name: "SUN", minutes: 0 },
+  { id: 1, name: "MON", longName: "Monday", minutes: 0 },
+  { id: 2, name: "TUE", longName: "Tuesday", minutes: 0 },
+  { id: 3, name: "WED", longName: "Wednesday", minutes: 0 },
+  { id: 4, name: "THU", longName: "Thursday", minutes: 0 },
+  { id: 5, name: "FRI", longName: "Friday", minutes: 0 },
+  { id: 6, name: "SAT", longName: "Saturday", minutes: 0 },
+  { id: 7, name: "SUN", longName: "Sunday", minutes: 0 },
 ];
 
 const getWeekSlots = () => {

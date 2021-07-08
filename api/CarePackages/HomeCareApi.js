@@ -2,6 +2,13 @@ import { BASE_URL } from "../BaseApi";
 import axios from "axios";
 import { format } from "date-fns";
 import { UTC_DATE_FORMAT } from "../../Constants";
+import { weekDays } from "../../service/homeCarePickerHelper";
+import {
+  PERSONAL_CARE_MODE,
+  DOMESTIC_CARE_MODE,
+  LIVE_IN_CARE_MODE,
+  ESCORT_CARE_MODE,
+} from "../../service/homeCarePickerHelper";
 
 const HOME_CARE_URL = `${BASE_URL}/v1/homeCarePackage`;
 const HOME_CARE_SERVICE_URL = `${BASE_URL}/v1/homeCareService`;
@@ -92,6 +99,14 @@ const getHomeCareTimeSlotShifts = async () => {
   });
 };
 
+const getMinsOrHoursText = (minutes) => {
+  if (minutes < 60) {
+    return `${minutes}m`;
+  } else {
+    return `${minutes / 60}h`;
+  }
+};
+
 // Post home care time slots
 const postHomeCareTimeSlots = async (data) => {
   const postData = {
@@ -116,7 +131,46 @@ const postHomeCareTimeSlots = async (data) => {
       debugger;
     });
 
-  return response.data;
+  let iterator = 1;
+  debugger;
+  const returnData = weekDays
+    .map((weekDayItem) => {
+      debugger;
+      const itemsForWeekDay = response.data.homeCarePackageSlots.filter(
+        (item) => item.dayId === weekDayItem.id
+      );
+
+      if (itemsForWeekDay && itemsForWeekDay.length > 0) {
+        return {
+          id: iterator++,
+          dayId: weekDayItem.id,
+          day: weekDayItem.longName,
+          careSummaries: itemsForWeekDay.map((itemForWeekDay) => {
+            return {
+              id: 1,
+              timeSlot: itemForWeekDay.timeSlotShift.timeSlotTimeLabel,
+              label: itemForWeekDay.service,
+              primaryCarer: getMinsOrHoursText(itemForWeekDay.primaryInMinutes),
+              secondaryCarer: getMinsOrHoursText(
+                itemForWeekDay.secondaryInMinutes
+              ),
+              totalHours: getMinsOrHoursText(
+                itemForWeekDay.primaryInMinutes +
+                  itemForWeekDay.secondaryInMinutes
+              ),
+              needAddressing: itemForWeekDay.needToAddress,
+              whatShouldBeDone: itemForWeekDay.whatShouldBeDone,
+            };
+          }),
+        };
+      }
+
+      return null;
+    })
+    .filter((item) => item !== null);
+
+  debugger;
+  return returnData;
 };
 
 const getHomeCareSummaryData = () => {
