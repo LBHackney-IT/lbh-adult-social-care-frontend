@@ -19,6 +19,7 @@ const createHomeCarePackage = async (
   isFixedPeriod
 ) => {
   alert(HOME_CARE_URL);
+  alert(AUTH_HEADER["x-api-key"]);
   const response = await axios
     .post(
       HOME_CARE_URL,
