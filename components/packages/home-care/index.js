@@ -46,11 +46,11 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
     },
     "45mCall": {
       value: 0,
-      quantity: 3,
+      quantity: 2,
     },
     "60m+Call": {
       value: 0,
-      quantity: 3,
+      quantity: 5,
     },
     secondaryCarer: {
       value: 0,
@@ -62,15 +62,15 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
     },
     escortServices: {
       value: 0,
-      quantity: 3,
+      quantity: 5,
     },
     sleepingNight: {
       value: 0,
-      quantity: 3,
+      quantity: 4,
     },
     wakingNight: {
       value: 0,
-      quantity: 3,
+      quantity: 2,
     },
     nightOwl: {
       value: 0,
