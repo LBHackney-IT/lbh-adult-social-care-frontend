@@ -135,7 +135,7 @@ const HomeCareBrokerPackage = () => {
   };
 
   return (
-    <Layout headerTitle="HOME CARE PACKAGE APPROVAL">
+    <Layout headerTitle="HOME CARE BROKER PACKAGE">
       <div className="hackney-text-black font-size-12px">
         <PackagesHomeCare
           tab={tab}
