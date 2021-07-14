@@ -12,6 +12,8 @@
 }
 
 .default-logo-header-item {
+  font-size: 16px;
+  line-height: 20px;
   color: white;
   display: flex;
   align-items: center;
@@ -27,4 +29,6 @@
 
 .default-logo-header-active-item {
   text-decoration: underline;
+
+  opacity: 0.75;
 }

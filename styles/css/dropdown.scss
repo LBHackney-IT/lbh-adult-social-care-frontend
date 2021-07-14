@@ -4,6 +4,8 @@
         outline: none !important;
         box-shadow: unset !important;
         border: 2px solid $lbh-black1 !important;
+        padding-left: 10px;
+        padding-right: 10px;
         height: 40px;
         display: flex;
         justify-content: space-between;
@@ -11,6 +13,8 @@
 
     .dropdown-item {
         cursor: pointer;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 }
 

@@ -1,9 +1,25 @@
-@import "../variables";
+.proposed-packages__supplier-settings {
+  .dropdown {
+    .button {
+      width: 306px;
+    }
+  }
+}
 
 .container-title {
   font-size: 24px;
   color: $lbh-black1;
   font-weight: 700;
+}
+
+.proposed-packages__submit-button {
+  width: 100%;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  justify-content: flex-end;
+  padding: 0 10px 20px 10px;
 }
 
 .proposed-packages__header {
@@ -54,6 +70,7 @@
   p {
     color: $lbh-black1;
     font-weight: 700;
+    font-size: 19px;
 
     span {
       color: $lbh-green1;
@@ -135,7 +152,7 @@
       border-left: 1px solid $lbh-gray-border;
       padding-left: 8px;
 
-      div:first-of-type {
+      & > div:first-of-type {
         width: 125px;
       }
     }
@@ -152,12 +169,14 @@
 
 .proposed-packages__tabs {
   display: flex;
-  padding: 0 0.75rem;
+  position: relative;
+  padding: 25px 0.75rem 0 0.75rem;
 
   .tab {
     height: 41px;
     display: flex;
     align-items: center;
+    margin-right: 8px;
     padding: 0 16px;
     border: 1px solid $lbh-gray;
     border-bottom: none;
@@ -166,6 +185,8 @@
 
     p {
       margin-right: 10px;
+      font-weight: 700;
+      font-size: 14px;
     }
 
     &:hover {
@@ -210,7 +231,7 @@
 }
 
 .day-care__min-space {
-  min-width: 161px;
+  min-width: 195px;
 }
 
 .day-care__min-input-space {
@@ -222,8 +243,22 @@
 }
 
 .day-care__total-cost {
-  width: 200px;
+  width: 170px;
+  height: 65px;
   margin-left: auto;
+
+  p {
+    font-size: 19px;
+    width: 100%;
+    font-weight: bold;
+    color: black;
+    display: flex;
+    justify-content: space-around;
+
+    span {
+      color: black;
+    }
+  }
 }
 
 .day-care__cost-week {
@@ -241,13 +276,21 @@
   border-bottom: 1px solid $lbh-gray;
 }
 
+.day-care-packages__fixed-dropdown {
+  .dropdown {
+    .button {
+      width: 306px;
+    }
+  }
+}
+
 .day-care__fixed-dropdown-width {
-  width: 251px;
+  width: 241px;
 
   .dropdown {
     width: 100%;
     button {
-      width: 251px;
+      width: 241px;
     }
   }
 }
@@ -268,4 +311,9 @@
     width: 207px;
     height: 65px;
   }
+}
+
+.control.day-care__cost {
+  width: 88px;
+  text-align: right;
 }

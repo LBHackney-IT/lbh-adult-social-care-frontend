@@ -202,7 +202,7 @@ const PackagesResidentialCare = ({
                 label='Cost per week'
                 value={coreCost.costPerWeek}
               />
-              <p className='pt-5'>{currency.euro} {coreCostTotal}</p>
+              <p className='pt-5'>{currency.euro}{coreCostTotal}</p>
             </div>
           </div>
           <div className='row-container is-align-items-center residential_care__additional-payment'>
@@ -214,12 +214,12 @@ const PackagesResidentialCare = ({
                 onChange={value => changeElementsData(setAdditionalPayment, additionalPayment, 'costPerWeek', value)}
                 label='Cost per week'
               />
-              <p className='pt-5'>{currency.euro} {additionalCostTotal}</p>
+              <p className='pt-5'>{currency.euro}{additionalCostTotal}</p>
             </div>
           </div>
           <div className='row-container is-align-items-center residential_care__additional-payment-one-off'>
             <div className='weekly-total-card is-flex'>
-              <p>Weekly Total {currency.euro} {weeklyCostTotal}</p>
+              <p>Weekly Total {currency.euro}{weeklyCostTotal}</p>
             </div>
             <h2 className='hackney-text-black font-weight-bold pt-5'>Additional needs payment (one off)</h2>
             <div className='is-flex is-flex-wrap-wrap is-align-items-center'>
@@ -229,12 +229,12 @@ const PackagesResidentialCare = ({
                 onChange={value => changeElementsData(setAdditionalPaymentOneOff, additionalPaymentOneOff, 'oneOf', value)}
                 classes='mr-6'
               />
-              <p className='pt-5'>{currency.euro} {additionalOneOffCostTotal}</p>
+              <p className='pt-5'>{currency.euro}{additionalOneOffCostTotal}</p>
             </div>
           </div>
         </div>
         <div className='proposed-packages__total-cost day-care__total-cost'>
-          <p>One Of Total <span>{currency.euro} {additionalOneOffCostTotal}</span></p>
+          <p>One Of Total <span>{currency.euro}{additionalOneOffCostTotal}</span></p>
         </div>
         <div>
           <div className='mt-4 is-flex is-align-items-center is-justify-content-space-between'>
@@ -270,7 +270,7 @@ const PackagesResidentialCare = ({
         }
       </div>
       <div className='proposed-packages__tabs'>
-        {[{text: 'Approval history', value: 'approvalHistory'},
+        {[{text: 'Approver history', value: 'approvalHistory'},
           {text: 'Package details', value: 'packageDetails'}]
           .map(item => {
             return (

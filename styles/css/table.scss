@@ -53,7 +53,7 @@
 }
 
 .sort__sort-name {
-  color: $lbh-black1;
+  color: black;
   margin-right: 6px;
   font-weight: bold;
   font-size: 14px;
@@ -70,7 +70,7 @@
 
     svg:first-of-type {
       transform: rotate(180deg);
-      margin-bottom: 6px;
+      margin-bottom: 3px;
     }
 
     svg {
@@ -107,20 +107,20 @@
     padding: 5px;
   }
 
-  &.awaiting-approval, &.held, &.outstanding, &.submitted, &.pending-supplier {
+  &.awaiting-approval, &.held, &.outstanding, &.submitted, &.pending-supplier, &.in-review, &.n\/a {
     p {
       background: $lbh-orange;
     }
   }
 
-  &.paid, &.paid-with-holds, &.released, &.complete, &.accepted {
+  &.paid, &.paid-with-holds, &.released, &.complete, &.accepted, &.approved {
     p {
       background: $lbh-green1;
       color: white;
     }
   }
 
-  &.draft, &.not-started {
+  &.draft, &.not-started, &.assign {
     p {
       background: $lbh-gray;
     }
@@ -175,7 +175,7 @@
     }
   }
 
-  &.overdue, &.disputes-active, &.in-dispute, &.action-needed {
+  &.overdue, &.disputes-active, &.in-dispute, &.action-needed, &.info-needed {
     p {
       background-color: $lbh-red;
       color: white;

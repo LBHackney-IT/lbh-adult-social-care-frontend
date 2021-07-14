@@ -27,7 +27,9 @@ const NavItem = ({ children, to }) => {
 const NavigationColumn = () => {
   return (
     <div className="nav-column-cont">
-      <NavItem to={RouteConstants.PROPOSED_PACKAGES_ROUTE}>
+      <NavItem
+        to={RouteConstants.PROPOSED_PACKAGES_ROUTE}
+      >
         Proposed Packages
       </NavItem>
       <NavItem to={RouteConstants.CARE_PACKAGE_ROUTE}>Care Package</NavItem>

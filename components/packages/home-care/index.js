@@ -3,6 +3,10 @@ import { currency } from "../../../constants/strings";
 import DatePick from "../../DatePick";
 import Dropdown from "../../Dropdown";
 import HomeCareCostEntry from "./components/CostEntry";
+import PackageReclaim from "../../PackageReclaim";
+import {Button} from "../../Button";
+import ApprovalHistory from "../../ProposedPackages/ApprovalHistory";
+import SummaryDataList from "../../HomeCare/SummaryDataList";
 
 const stageOptions = [
   { text: "New", value: 1 },
@@ -10,25 +14,7 @@ const stageOptions = [
   { text: "Querying", value: 3 },
   { text: "Supplier Sourced", value: 4 },
   { text: "Pricing agreed", value: 5 },
-  { text: "Submitted For Approval", value: 6 },
-];
-
-const categoryOptions = [
-  { text: "Category type 1", value: 1 },
-  { text: "Category type 2", value: 2 },
-  { text: "Category type 3", value: 3 },
-];
-
-const reclaimFromOptions = [
-  { text: "Reclaim from 1", value: 1 },
-  { text: "Reclaim from 2", value: 2 },
-  { text: "Reclaim from 3", value: 3 },
-];
-
-const packageReclaimTypes = [
-  { value: "percentage", text: "Percentage" },
-  { value: "fixedOneOff", text: "Fixed amount - one off" },
-  { value: "fixedWeekly", text: "Fixed amount - weekly" },
+  { text: "Submitted For Approver", value: 6 },
 ];
 
 const supplierOptions = [
@@ -38,7 +24,18 @@ const supplierOptions = [
   { text: "Supplier type 4", value: 4 },
 ];
 
-const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
+const PackagesHomeCare = ({
+  tab,
+  addPackageReclaim,
+  removePackageReclaim,
+  packagesReclaimed,
+  changePackageReclaim,
+  brokerage,
+  changeTab,
+  approvalHistory,
+  summaryData,
+  costCards,
+}) => {
   const [elementsData, setElementsData] = useState({
     "30mCall": {
       value: 0,
@@ -78,24 +75,8 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
     },
   });
 
-  const [packageReclaim, setPackageReclaim] = useState({
-    type: "percentage",
-    notes: "",
-    from: ["NHS Bristol"],
-    categoryTypes: ["Category 1", "Category 2"],
-    amount: "888888",
-  });
-
-  const changePackageType = (option) => {
-    setPackageReclaim({
-      ...packageReclaim,
-      type: option.value,
-    });
-  };
-
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [totalCost, setTotalCost] = useState(0);
@@ -118,6 +99,7 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
   }, [elementsData]);
 
   return (
+    <>
     <div className="mt-5 mb-5 person-care">
       <div className="column proposed-packages__header is-flex is-justify-content-space-between">
         <div>
@@ -135,7 +117,7 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
         />
       </div>
       <div className="column">
-        <div className="is-flex is-flex-wrap-wrap">
+        <div className="is-flex is-flex-wrap-wrap proposed-packages__supplier-settings">
           <div className="mr-3 is-flex is-align-items-flex-end">
             <Dropdown
               label=""
@@ -163,7 +145,7 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
       </div>
       <div className="proposed-packages__elements column">
         <h2>Elements</h2>
-        <div className="mb-4 is-flex is-flex-wrap-wrap is-justify-content-space-between">
+        <div className="mb-5 is-flex is-flex-wrap-wrap is-justify-content-space-between">
           <div className="elements-column">
             <div className="elements-row">
               <div />
@@ -174,8 +156,8 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
             <div className="elements-row">
               <div>Primary Carer</div>
               <div />
-              <div className="bold-text"></div>
-              <div className="bold-text"></div>
+              <div className="bold-text"/>
+              <div className="bold-text"/>
             </div>
             <div className="elements-sub-column">
               <HomeCareCostEntry
@@ -211,7 +193,7 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
                   changeElementsData("secondaryCarer", value);
                 }}
               />
-              {/* <p className="proposed-packages__split-rate">Split rate</p> */}
+              <p className="proposed-packages__split-rate">Split rate</p>
               <HomeCareCostEntry
                 label="Domestic Care"
                 value={elementsData["domesticCare"].value}
@@ -273,40 +255,40 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
             </span>
           </p>
         </div>
-        {/* {tab === "packageDetails" && (
+        {tab === "package-details" && (
           <div>
             <div className="mt-4 is-flex is-align-items-center is-justify-content-space-between">
               <p className="package-reclaim__text">
                 Should the cost of this package be reclaimed in part or full
                 from another body, e.g. NHS, CCG, another LA ?
               </p>
-              <Button className="outline">Add reclaim</Button>
+              <Button onClick={addPackageReclaim} className="outline green">Add reclaim</Button>
             </div>
             <hr className="horizontal-delimiter" />
           </div>
-        )} */}
+        )}
       </div>
-      {/* {!!packagesReclaimed.length && tab === "approvalHistory" && (
+      {!!packagesReclaimed.length && (
         <div>
           {packagesReclaimed.map((item) => {
             return (
               <PackageReclaim
-                remove={() => removePackageReclaim(item.id)}
+                remove={tab === 'package-details' ? () => removePackageReclaim(item.id) : undefined}
                 key={item.id}
                 packageReclaim={item}
                 setPackageReclaim={changePackageReclaim(item.id)}
               />
             );
           })}
-          <p onClick={addPackageReclaim} className="action-button-text">
-            + Add another reclaim
-          </p>
         </div>
-      )} */}
-      {/* <div className="proposed-packages__tabs column">
+      )}
+      <div className="proposed-packages__tabs">
+        <div className='proposed-packages__submit-button'>
+          <Button>Submit for approval</Button>
+        </div>
         {[
-          { text: "Approval history", value: "approvalHistory" },
-          { text: "Package details", value: "packageDetails" },
+          { text: "Approver history", value: "approval-history" },
+          { text: "Package details", value: "package-details" },
         ].map((item) => {
           return (
             <div
@@ -330,8 +312,20 @@ const PackagesHomeCare = ({ tab, brokerage, changeTab }) => {
             </div>
           );
         })}
-      </div> */}
+      </div>
     </div>
+      {tab === 'approval-history' ?
+        <ApprovalHistory costCards={costCards} status='(Ongoing)' history={approvalHistory} />
+        : !!summaryData.length &&
+        <SummaryDataList
+          edit={(item) => console.log('edit', item)}
+          remove={(item) => console.log('remove', item)}
+          confirmPackage={false}
+          slicedText={true}
+          summaryData={summaryData}
+        />
+      }
+    </>
   );
 };
 

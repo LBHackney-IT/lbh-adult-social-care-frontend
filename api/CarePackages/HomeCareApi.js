@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { UTC_DATE_FORMAT } from "../../Constants";
 import { weekDays } from "../../service/homeCarePickerHelper";
 import { BASE_URL, AUTH_HEADER } from "../BaseApi";
+import {handleError, handleResponse} from "../Utils/ApiUtils";
 
 const HOME_CARE_URL = `${BASE_URL}/v1/homeCarePackage`;
 const HOME_CARE_APPROVE_PACKAGE_URL = `${BASE_URL}/v1/homeCareApprovePackage`;
@@ -233,6 +234,13 @@ const getHomeCareSummaryData = () => {
       ],
     },
   ];
+};
+
+const getHomeCarePackageDetailsForBrokerage = (homeCarePackageId) => {
+  return axios
+    .get(`${HOME_CARE_URL}/${homeCarePackageId}/brokerage`)
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 const getHomeCareBrokergage = async (packageId) => {

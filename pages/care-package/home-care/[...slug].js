@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import {
@@ -361,8 +360,8 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
       </ClientSummary>
       <div className="mt-5 mb-5">
         <CareTitle
-          startDate={format(new Date(startDate), "dd/MM/yyyy")}
-          endDate={format(new Date(endDate), "dd/MM/yyyy")}
+          startDate={startDate}
+          endDate={endDate}
         >
           Homecare Care
         </CareTitle>

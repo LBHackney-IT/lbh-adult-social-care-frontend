@@ -14,9 +14,6 @@ const supplierRoutes = [
 
 const SupplierDashboardHeader = () => {
   const router = useRouter();
-  if(router.pathname.indexOf(SUPPLIER_DASHBOARD_ROUTE) === -1) {
-    return <></>;
-  }
 
   const changeRoute = route => {
     router.push(route);
@@ -27,7 +24,7 @@ const SupplierDashboardHeader = () => {
       <HackneyFullLogo />
       <div className='default-logo-header-navigation'>
         {supplierRoutes.map(item => {
-          const isActiveRoute = includeString(location, item.route);
+          const isActiveRoute = includeString(router.pathname, item.route);
           return (
             <p key={item.name} onClick={() => changeRoute(item.route)} className={`default-logo-header-item${isActiveRoute ? ' default-logo-header-active-item' : ''}`}>
               {item.name}

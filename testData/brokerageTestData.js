@@ -25,14 +25,14 @@ const brokerageTestData = {
     ends: new Date(new Date().setDate(new Date().getDate() + 3)), // current day + 3 days
     approvalHistory: [
       {date: new Date(2021, 3, 12), stage: 'Package Builder', action: 'Submitted for approval'},
-      {date: new Date(2021, 3, 12), stage: 'Approval of package', action: 'Accepted'},
-      {date: new Date(2021, 3, 12), stage: 'Approval of package', action: 'Queried'},
-      {date: new Date(2021, 3, 12), stage: 'Approval of package', action: 'Rejected'},
+      {date: new Date(2021, 3, 12), stage: 'Approver of package', action: 'Accepted'},
+      {date: new Date(2021, 3, 12), stage: 'Approver of package', action: 'Queried'},
+      {date: new Date(2021, 3, 12), stage: 'Approver of package', action: 'Rejected'},
       {date: new Date(2021, 3, 12), stage: 'Broker', action: 'Assigned'},
       {date: new Date(2021, 3, 12), stage: 'Broker', action: 'Submitted for approval'},
       {date: new Date(2021, 3, 12), stage: 'Broker', action: 'Re-submitted for approval'},
-      {date: new Date(2021, 3, 12), stage: 'Approval', action: 'Approved'},
-      {date: new Date(2021, 3, 12), stage: 'Approval', action: 'PO Send by system'},
+      {date: new Date(2021, 3, 12), stage: 'Approver', action: 'Approved'},
+      {date: new Date(2021, 3, 12), stage: 'Approver', action: 'PO Send by system'},
     ],
   }
 };
