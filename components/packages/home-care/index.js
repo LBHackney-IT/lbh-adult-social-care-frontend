@@ -80,6 +80,7 @@ const PackagesHomeCare = ({
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [totalCost, setTotalCost] = useState(0);
+  const [homeCarePackage, setHomeCarePackage] = useState({});
 
   const changeElementsData = (field, data) => {
     let elementToUpdate = elementsData[field];
@@ -315,7 +316,19 @@ const PackagesHomeCare = ({
       </div>
     </div>
       {tab === 'approval-history' ?
-        <ApprovalHistory costCards={costCards} status='(Ongoing)' history={approvalHistory} />
+        <ApprovalHistory
+          costCards={costCards}
+          status='(Ongoing)'
+          history={approvalHistory}
+          careClientDateOfBirth={homeCarePackage?.homeCarePackage?.clientDateOfBirth}
+          careIsFixedPeriodOrOngoing={homeCarePackage?.homeCarePackage?.isFixedPeriodOrOngoing}
+          careTermTimeConsiderationOption={homeCarePackage?.homeCarePackage?.termTimeConsiderationOption}
+          careClientName={homeCarePackage?.homeCarePackage?.clientName}
+          careClientHackneyId={homeCarePackage?.homeCarePackage?.clientHackneyId}
+          careClientPostCode={homeCarePackage?.homeCarePackage?.clientPostCode}
+          careStartDate={homeCarePackage?.homeCarePackage?.startDate}
+          careEndDate={homeCarePackage?.homeCarePackage?.endDate}
+        />
         : !!summaryData.length &&
         <SummaryDataList
           edit={(item) => console.log('edit', item)}

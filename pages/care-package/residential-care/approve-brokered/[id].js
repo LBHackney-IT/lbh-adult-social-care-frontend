@@ -186,9 +186,8 @@ const ResidentialCareApproveBrokered = ({
         <div className="columns">
           <div className="column">
             <PackageCostBox
-              boxClass="hackney-package-cost-light-green-box"
               title="COST OF CARE / WK"
-              cost={`£${residentialCarePackage?.costOfCare}`}
+              cost={residentialCarePackage?.costOfCare}
               costType="ACTUAL"
             />
           </div>
@@ -196,7 +195,7 @@ const ResidentialCareApproveBrokered = ({
             <PackageCostBox
               boxClass="hackney-package-cost-light-green-box"
               title="ANP / WK"
-              cost={`£${residentialCarePackage?.costOfAdditionalNeeds}`}
+              cost={residentialCarePackage?.costOfAdditionalNeeds}
               costType="ACTUAL"
             />
           </div>
@@ -204,7 +203,7 @@ const ResidentialCareApproveBrokered = ({
             <PackageCostBox
               boxClass="hackney-package-cost-green-box"
               title="TOTAL / WK"
-              cost={`£${residentialCarePackage?.totalPerWeek}`}
+              cost={residentialCarePackage?.totalPerWeek}
               costType="ACTUAL"
             />
           </div>

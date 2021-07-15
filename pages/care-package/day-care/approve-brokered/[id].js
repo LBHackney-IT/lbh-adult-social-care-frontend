@@ -198,7 +198,7 @@ const DayCareApproveBrokered = ({
             <PackageCostBox
               boxClass="hackney-package-cost-light-green-box"
               title="COST OF CARE / WK"
-              cost={`£${dayCarePackage?.costSummary.costOfCarePerWeek}`}
+              cost={dayCarePackage?.costSummary.costOfCarePerWeek}
               costType="ACTUAL"
             />
           </div>
@@ -206,7 +206,7 @@ const DayCareApproveBrokered = ({
             <PackageCostBox
               boxClass="hackney-package-cost-light-green-box"
               title="ANP / WK"
-              cost={`£${dayCarePackage?.costSummary.anpPerWeek}`}
+              cost={dayCarePackage?.costSummary.anpPerWeek}
               costType="ACTUAL"
             />
           </div>
@@ -214,7 +214,7 @@ const DayCareApproveBrokered = ({
             <PackageCostBox
               boxClass="hackney-package-cost-light-green-box"
               title="TRANSPORT / WK"
-              cost={`£${dayCarePackage?.costSummary.transportCostPerWeek}`}
+              cost={dayCarePackage?.costSummary.transportCostPerWeek}
               costType="ACTUAL"
             />
           </div>
@@ -222,7 +222,7 @@ const DayCareApproveBrokered = ({
             <PackageCostBox
               boxClass="hackney-package-cost-green-box"
               title="TOTAL / WK"
-              cost={`£${dayCarePackage?.costSummary.totalCostPerWeek}`}
+              cost={dayCarePackage?.costSummary.totalCostPerWeek}
               costType="ACTUAL"
             />
           </div>

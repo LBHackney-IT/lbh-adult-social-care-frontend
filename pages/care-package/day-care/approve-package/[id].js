@@ -216,30 +216,26 @@ const DayCareApprovePackage = ({
           <div className="column">
             <div className="is-flex is-flex-wrap-wrap">
               <PackageCostBox
-                boxClass="hackney-package-cost-light-yellow-box"
                 title="COST OF CARE / WK"
-                cost={`£${dayCarePackage?.costSummary.costOfCarePerWeek}`}
+                cost={dayCarePackage?.costSummary.costOfCarePerWeek}
                 costType="ESTIMATE"
               />
 
               <PackageCostBox
-                boxClass="hackney-package-cost-light-yellow-box"
                 title="ANP / WK"
-                cost={`£${dayCarePackage?.costSummary.anpPerWeek}`}
+                cost={dayCarePackage?.costSummary.anpPerWeek}
                 costType="ESTIMATE"
               />
 
               <PackageCostBox
-                boxClass="hackney-package-cost-light-yellow-box"
                 title="TRANSPORT / WK"
-                cost={`£${dayCarePackage?.costSummary.transportCostPerWeek}`}
+                cost={dayCarePackage?.costSummary.transportCostPerWeek}
                 costType="ESTIMATE"
               />
 
               <PackageCostBox
-                boxClass="hackney-package-cost-yellow-box"
                 title="TOTAL / WK"
-                cost={`£${dayCarePackage?.costSummary.totalCostPerWeek}`}
+                cost={dayCarePackage?.costSummary.totalCostPerWeek}
                 costType="ESTIMATE"
               />
             </div>

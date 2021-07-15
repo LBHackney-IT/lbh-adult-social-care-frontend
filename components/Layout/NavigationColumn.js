@@ -2,14 +2,16 @@ import React from "react";
 import { CaretRightIcon, CaretRightHighlightIcon } from "../Icons";
 import * as RouteConstants from "../../routes/RouteConstants";
 import { useRouter } from "next/router";
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../reducers/userReducer'
 
-const NavItem = ({ children, to }) => {
+const NavItem = ({ children, to, params = '' }) => {
   const router = useRouter();
   const activeRouteClass = router.pathname.indexOf(to) > -1 ? " is-active" : "";
   return (
     <div
       className={`navigation-item is-clickable${activeRouteClass}`}
-      onClick={() => router.push(to)}
+      onClick={() => router.push(`${to}${params}`)}
     >
       <div>
         {children}
@@ -25,10 +27,12 @@ const NavItem = ({ children, to }) => {
 };
 
 const NavigationColumn = () => {
+  const user = useSelector(selectUser);
   return (
     <div className="nav-column-cont">
       <NavItem
         to={RouteConstants.PROPOSED_PACKAGES_ROUTE}
+        params={`/home-care/brokering/${user?.id || 1}`}
       >
         Proposed Packages
       </NavItem>

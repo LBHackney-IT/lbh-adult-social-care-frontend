@@ -120,24 +120,25 @@ const PackagesResidentialCare = ({
   };
 
   const handleSaveBrokerage = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     const brokerageInfoForCreation = {
       residentialCarePackageId: residentialCarePackage?.residentialCarePackageId,
       supplierId: selectedSupplierType,
+
       stageId: selectedStageType,
       residentialCore: Number(coreCost.costPerWeek),
       additionalNeedsPayment: Number(additionalPayment.costPerWeek),
       additionalNeedsPaymentOneOff: Number(additionalPaymentOneOff.oneOf)
-    };
+    }
     if (formIsValid(brokerageInfoForCreation)) {
       createBrokerageInfo(
         residentialCarePackage?.residentialCarePackageId,
         brokerageInfoForCreation
-      );
+      )
     } else {
-      alert("Invalid form. Check to ensure all values are set correctly");
+      alert('Invalid form. Check to ensure all values are set correctly')
     }
-  };
+  }
 
   return (
     <>
@@ -370,30 +371,25 @@ const ApprovalHistory = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
               title="COST OF CARE / WK"
-              cost={`£${costSummary?.costOfCarePerWeek ?? 0.0}`}
+              cost={costSummary?.costOfCarePerWeek ?? 0.0}
               costType="ESTIMATE"
             />
 
             <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
               title="ANP / WK"
-              cost={`£${costSummary?.anpPerWeek ?? 0.0}`}
+              cost={costSummary?.anpPerWeek ?? 0.0}
               costType="ESTIMATE"
             />
 
             <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
               title="ONE OFF COSTS"
-              cost={`£${costSummary?.oneOffCost ?? 0.0}`}
+              cost={costSummary?.oneOffCost ?? 0.0}
               costType="ESTIMATE"
             />
-
             <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
               title="TOTAL / WK"
-              cost={`£${costSummary?.totalCostPerWeek ?? 0.0}`}
+              cost={costSummary?.totalCostPerWeek ?? 0.0}
               costType="ESTIMATE"
             />
           </div>

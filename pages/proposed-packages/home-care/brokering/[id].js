@@ -1,13 +1,12 @@
-import React, {useState} from "react";
-import {useSelector} from "react-redux";
-import {getHomeCareBrokergage, getHomeCareSummaryData} from "../../../../api/CarePackages/HomeCareApi";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { getHomeCareBrokergage, getHomeCareSummaryData } from "../../../../api/CarePackages/HomeCareApi";
 import Layout from "../../../../components/Layout/Layout";
 import PackagesHomeCare from "../../../../components/packages/home-care";
-import {selectBrokerage} from "../../../../reducers/brokerageReducer";
-import {getUserSession, uniqueID} from "../../../../service/helpers";
-import {Button} from "../../../../components/Button";
+import { selectBrokerage } from "../../../../reducers/brokerageReducer";
+import { getUserSession, uniqueID } from "../../../../service/helpers";
 import withSession from "../../../../lib/session";
-import {getAgeFromDateString, getEnGBFormattedDate} from "../../../../api/Utils/FuncUtils";
+import { getAgeFromDateString, getEnGBFormattedDate } from "../../../../api/Utils/FuncUtils";
 import ClientSummary from "../../../../components/ClientSummary";
 
 // start before render

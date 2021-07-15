@@ -598,23 +598,20 @@ const ApprovalHistory = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
               title="COST OF CARE / WK"
-              cost={`£${costSummary?.costOfCarePerWeek ?? 0.0}`}
+              cost={costSummary?.costOfCarePerWeek ?? 0.0}
               costType="ESTIMATE"
             />
 
             <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
               title="ANP / WK"
-              cost={`£${costSummary?.anpPerWeek ?? 0.0}`}
+              cost={costSummary?.anpPerWeek ?? 0.0}
               costType="ESTIMATE"
             />
 
             <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
               title="TRANSPORT / WK"
-              cost={`£${costSummary?.transportCostPerWeek ?? 0.0}`}
+              cost={costSummary?.transportCostPerWeek ?? 0.0}
               costType="ESTIMATE"
             />
           </div>

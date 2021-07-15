@@ -175,6 +175,8 @@
   .tab {
     height: 41px;
     display: flex;
+    position: relative;
+    z-index: 1;
     align-items: center;
     margin-right: 8px;
     padding: 0 16px;
