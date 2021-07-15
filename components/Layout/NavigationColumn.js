@@ -2,8 +2,6 @@ import React from "react";
 import { CaretRightIcon, CaretRightHighlightIcon } from "../Icons";
 import * as RouteConstants from "../../routes/RouteConstants";
 import { useRouter } from "next/router";
-import { useSelector } from 'react-redux'
-import { selectUser } from '../../reducers/userReducer'
 
 const NavItem = ({ children, to, params = '' }) => {
   const router = useRouter();
@@ -27,15 +25,8 @@ const NavItem = ({ children, to, params = '' }) => {
 };
 
 const NavigationColumn = () => {
-  const user = useSelector(selectUser);
   return (
     <div className="nav-column-cont">
-      <NavItem
-        to={RouteConstants.PROPOSED_PACKAGES_ROUTE}
-        params={`/home-care/brokering/${user?.id || 1}`}
-      >
-        Proposed Packages
-      </NavItem>
       <NavItem to={RouteConstants.CARE_PACKAGE_ROUTE}>Care Package</NavItem>
       {/* <NavItem to={RouteConstants.CLIENT_HISTORY_ROUTER}>Client History</NavItem>
       <NavItem to="/test">Client details</NavItem>

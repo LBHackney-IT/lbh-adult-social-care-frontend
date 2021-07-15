@@ -66,29 +66,40 @@ const ApprovalHistory = ({
       <div className="columns font-size-12px">
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
-            <PackageCostBox
-              title="COST OF CARE / WK"
-              cost={costSummary?.costOfCarePerWeek ?? 0.0}
-              costType="ESTIMATE"
-            />
-
-            <PackageCostBox
-              title="ANP / WK"
-              cost={costSummary?.anpPerWeek ?? 0.0}
-              costType="ESTIMATE"
-            />
-
-            <PackageCostBox
-              title="ONE OFF COSTS"
-              cost={costSummary?.oneOffCost ?? 0.0}
-              costType="ESTIMATE"
-            />
-
-            <PackageCostBox
-              title="TOTAL / WK"
-              cost={costSummary?.totalCostPerWeek ?? 0.0}
-              costType="ESTIMATE"
-            />
+            {costSummary &&
+            <>
+              {costSummary.costOfCarePerWeek && (
+                <PackageCostBox
+                  title="COST OF CARE / WK"
+                  cost={costSummary?.costOfCarePerWeek ?? 0.0}
+                  costType="ESTIMATE"
+                />
+              )}
+              {costSummary.anpPerWeek && (
+                <PackageCostBox
+                  title="ANP / WK"
+                  cost={costSummary?.anpPerWeek ?? 0.0}
+                  costType="ESTIMATE"
+                />
+              )}
+              {costSummary.oneOffCost && (
+                <PackageCostBox
+                  boxClass="hackney-package-cost-yellow-box"
+                  title="ONE OFF COSTS"
+                  cost={costSummary?.oneOffCost ?? 0.0}
+                  costType="ESTIMATE"
+                />
+              )}
+              {costSummary.totalCostPerWeek && (
+                <PackageCostBox
+                  boxClass="hackney-package-cost-yellow-box"
+                  title="TOTAL / WK"
+                  cost={costSummary?.totalCostPerWeek ?? 0.0}
+                  costType="ESTIMATE"
+                />
+              )}
+            </>
+            }
           </div>
         </div>
       </div>

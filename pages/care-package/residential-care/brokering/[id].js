@@ -2,7 +2,7 @@ import PackagesResidentialCare from "../../../../components/packages/residential
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectBrokerage } from "../../../../reducers/brokerageReducer";
-import { uniqueID } from "../../../../service/helpers";
+import {getUserSession, uniqueID} from "../../../../service/helpers";
 import { getHomeCareSummaryData } from "../../../../api/CarePackages/HomeCareApi";
 import ClientSummary from "../../../../components/ClientSummary";
 import Layout from "../../../../components/Layout/Layout";
@@ -24,6 +24,7 @@ import {
 import { getSupplierList } from "../../../../api/CarePackages/SuppliersApi";
 import { CARE_PACKAGE_ROUTE } from "../../../../routes/RouteConstants";
 import {useRouter} from "next/router";
+import withSession from "../../../../lib/session";
 
 const initialPackageReclaim = {
   type: "",
@@ -33,16 +34,60 @@ const initialPackageReclaim = {
   amount: "",
   id: "1",
 };
-const ResidentialCareBrokering = ({ history }) => {
+
+// start before render
+export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
+  const user = getUserSession({ req });
+  if(user.redirect) {
+    return user;
+  }
+
+  const data = {
+    errorData: [],
+  };
+
+  try {
+    // Call to api to get package
+    const residentialCarePackage = await getResidentialCarePackageDetailsForBrokerage(residentialCarePackageId);
+
+    const newAdditionalNeedsEntries = residentialCarePackage.residentialCareAdditionalNeeds.map(
+      (additionalneedsItem) => ({
+        id: additionalneedsItem.id,
+        isWeeklyCost: additionalneedsItem.isWeeklyCost,
+        isOneOffCost: additionalneedsItem.isOneOffCost,
+        needToAddress: additionalneedsItem.needToAddress,
+      })
+    );
+    data.residentialCarePackage = residentialCarePackage;
+    data.additionalNeedsEntries = newAdditionalNeedsEntries;
+  } catch(error) {
+    data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
+  }
+
+  try {
+    const newApprovalHistoryItems = await getResidentialCarePackageApprovalHistory(residentialCarePackageId)
+      .map(
+        (historyItem) => ({
+          eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
+            "en-GB"
+          ),
+          eventMessage: historyItem.logText,
+          eventSubMessage: undefined
+        })
+      );
+    data.approvalHistoryEntries = newApprovalHistoryItems.slice();
+  } catch(error) {
+    data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`)
+  }
+
+  return { props: { ...data }};
+});
+
+const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
   // Parameters
   const router = useRouter();
-  const params = router.query;
-  let { id: residentialCarePackageId } = params;
 
   const [errors, setErrors] = useState([]);
-  const [residentialCarePackage, setResidentialCarePackage] = useState(undefined);
-  const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
-  const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState("approvalHistory");
   const [summaryData, setSummaryData] = useState([]);
@@ -55,62 +100,7 @@ const ResidentialCareBrokering = ({ history }) => {
       retrieveSupplierOptions();
     if (!stageOptions.length || stageOptions.length === 1)
       retrieveResidentialCareBrokerageStages();
-  });
-
-  useEffect(() => {
-    retrieveResidentialCarePackageDetails(residentialCarePackageId);
-    retrieveResidentialCareApprovalHistory(residentialCarePackageId);
-  }, [residentialCarePackageId]);
-
-  const retrieveResidentialCarePackageDetails = (residentialCarePackageId) => {
-    // Call to api to get package
-    getResidentialCarePackageDetailsForBrokerage(residentialCarePackageId)
-      .then((response) => {
-        setResidentialCarePackage(response);
-
-        const newAdditionalNeedsEntries = residentialCarePackage.residentialCareAdditionalNeeds.map(
-          (additionalneedsItem) => ({
-            id: additionalneedsItem.id,
-            isWeeklyCost: additionalneedsItem.isWeeklyCost,
-            isOneOffCost: additionalneedsItem.isOneOffCost,
-            needToAddress: additionalneedsItem.needToAddress,
-          })
-        );
-
-        setAdditionalNeedsEntries([...newAdditionalNeedsEntries]);
-
-      })
-      .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve residential care package details failed. ${error.message}`,
-        ]);
-      });
-  };
-
-  const retrieveResidentialCareApprovalHistory = (residentialCarePackageId) => {
-    getResidentialCarePackageApprovalHistory(residentialCarePackageId)
-      .then((res) => {
-
-        const newApprovalHistoryItems = res.map(
-          (historyItem) => ({
-            eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
-              "en-GB"
-            ),
-            eventMessage: historyItem.logText,
-            eventSubMessage: undefined
-          })
-        );
-
-        setApprovalHistoryEntries([...newApprovalHistoryItems]);
-      })
-      .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve residential care approval history failed. ${error.message}`,
-        ]);
-      });
-  };
+  }, [supplierOptions, stageOptions]);
 
   const retrieveSupplierOptions = () => {
     getSupplierList()
@@ -142,7 +132,7 @@ const ResidentialCareBrokering = ({ history }) => {
     createResidentialCareBrokerageInfo(residentialCarePackageId, brokerageInfoForCreation)
       .then(() => {
         alert("Package saved.");
-        history.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Create brokerage info failed. ${error.message}`);

@@ -2,6 +2,7 @@ const LOGIN_ROUTE = "/login";
 const LOGIN_CALL_BACK_ROUTE = "/login-callback";
 const CARE_PACKAGE_ROUTE = "/care-package";
 const ACTIVE_PACKAGES_ROUTE = "/active-packages";
+const SOCIAL_WORKER_ROUTE = "/social-worker";
 const PROPOSED_PACKAGES_ROUTE = "/proposed-packages";
 const HOME_CARE_ROUTE = `${CARE_PACKAGE_ROUTE}/home-care`;
 const HOME_CARE_APPROVE_PACKAGE_ROUTE = `${HOME_CARE_ROUTE}/approve-package`;
@@ -66,4 +67,5 @@ export {
   PAYMENTS_WEEK_OF_SUPPLIER_ROUTE,
   PAYMENTS_ADD_BILL_ROUTE,
   ACTIVE_PACKAGES_ROUTE,
+  SOCIAL_WORKER_ROUTE,
 };

@@ -6,7 +6,7 @@ import HomeCareCostEntry from "./components/CostEntry";
 import PackageReclaim from "../../PackageReclaim";
 import {Button} from "../../Button";
 import ApprovalHistory from "../../ProposedPackages/ApprovalHistory";
-import SummaryDataList from "../../HomeCare/SummaryDataList";
+import CareSummary from '../../ProposedPackages/CareSummary'
 
 const stageOptions = [
   { text: "New", value: 1 },
@@ -31,10 +31,10 @@ const PackagesHomeCare = ({
   packagesReclaimed,
   changePackageReclaim,
   brokerage,
+  homeCarePackage,
   changeTab,
   approvalHistory,
-  summaryData,
-  costCards,
+  homeCareSummary,
 }) => {
   const [elementsData, setElementsData] = useState({
     "30mCall": {
@@ -75,15 +75,25 @@ const PackagesHomeCare = ({
     },
   });
 
+  const [startDate, setStartDate] = useState(
+    (homeCarePackage && new Date(homeCarePackage?.homeCarePackage?.startDate)) ||
+    undefined
+  );
+  const [endDate, setEndDate] = useState(
+    (homeCarePackage && new Date(homeCarePackage?.homeCarePackage?.endDate)) ||
+    undefined
+  );
+  const [endDateEnabled, setEndDateEnabled] = useState(
+    !homeCarePackage?.homeCarePackage?.endDate
+  );
+
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
   const [totalCost, setTotalCost] = useState(0);
-  const [homeCarePackage, setHomeCarePackage] = useState({});
 
   const changeElementsData = (field, data) => {
-    let elementToUpdate = elementsData[field];
+    const elementToUpdate = elementsData[field];
     elementToUpdate.value = data;
     setElementsData({ ...elementsData, [field]: elementToUpdate });
   };
@@ -98,6 +108,20 @@ const PackagesHomeCare = ({
     }
     setTotalCost(currentTotalCost);
   }, [elementsData]);
+
+  useEffect(() => {
+    setEndDateEnabled(!homeCarePackage?.homeCarePackage?.endDate);
+
+    setEndDate(
+      (homeCarePackage && new Date(homeCarePackage?.homeCarePackage?.endDate)) ||
+      undefined
+    );
+
+    setStartDate(
+      (homeCarePackage && new Date(homeCarePackage?.homeCarePackage?.startDate)) ||
+      undefined
+    );
+  }, [homeCarePackage]);
 
   return (
     <>
@@ -256,7 +280,7 @@ const PackagesHomeCare = ({
             </span>
           </p>
         </div>
-        {tab === "package-details" && (
+        {tab === "packageDetails" && (
           <div>
             <div className="mt-4 is-flex is-align-items-center is-justify-content-space-between">
               <p className="package-reclaim__text">
@@ -274,7 +298,7 @@ const PackagesHomeCare = ({
           {packagesReclaimed.map((item) => {
             return (
               <PackageReclaim
-                remove={tab === 'package-details' ? () => removePackageReclaim(item.id) : undefined}
+                remove={tab === 'packageDetails' ? () => removePackageReclaim(item.id) : undefined}
                 key={item.id}
                 packageReclaim={item}
                 setPackageReclaim={changePackageReclaim(item.id)}
@@ -288,8 +312,8 @@ const PackagesHomeCare = ({
           <Button>Submit for approval</Button>
         </div>
         {[
-          { text: "Approver history", value: "approval-history" },
-          { text: "Package details", value: "package-details" },
+          { text: "Approver history", value: "approvalHistory" },
+          { text: "Package details", value: "packageDetails" },
         ].map((item) => {
           return (
             <div
@@ -315,10 +339,12 @@ const PackagesHomeCare = ({
         })}
       </div>
     </div>
-      {tab === 'approval-history' ?
+      {tab === 'approvalHistory' ?
         <ApprovalHistory
-          costCards={costCards}
           status='(Ongoing)'
+          costSummary={{
+            totalCostPerWeek: totalCost,
+          }}
           history={approvalHistory}
           careClientDateOfBirth={homeCarePackage?.homeCarePackage?.clientDateOfBirth}
           careIsFixedPeriodOrOngoing={homeCarePackage?.homeCarePackage?.isFixedPeriodOrOngoing}
@@ -329,14 +355,18 @@ const PackagesHomeCare = ({
           careStartDate={homeCarePackage?.homeCarePackage?.startDate}
           careEndDate={homeCarePackage?.homeCarePackage?.endDate}
         />
-        : !!summaryData.length &&
-        <SummaryDataList
-          edit={(item) => console.log('edit', item)}
-          remove={(item) => console.log('remove', item)}
-          confirmPackage={false}
-          slicedText={true}
-          summaryData={summaryData}
-        />
+        : homeCareSummary && (
+            <CareSummary
+              careType='Home care'
+              startDate={homeCarePackage?.homeCarePackage?.startDate}
+              endDate= {homeCarePackage?.homeCarePackage?.endDate !== null
+                ? homeCarePackage?.homeCarePackage?.endDate
+                : "Ongoing"}
+              needToAddress={homeCareSummary.needToAddress}
+              additionalNeedsEntries={homeCareSummary.additionalNeedsEntries}
+              setAdditionalNeedsEntries={setAdditionalNeedsEntries}
+            />
+          )
       }
     </>
   );

@@ -383,11 +383,13 @@ const ApprovalHistory = ({
             />
 
             <PackageCostBox
+              boxClass="hackney-package-cost-yellow-box"
               title="ONE OFF COSTS"
               cost={costSummary?.oneOffCost ?? 0.0}
               costType="ESTIMATE"
             />
             <PackageCostBox
+              boxClass="hackney-package-cost-yellow-box"
               title="TOTAL / WK"
               cost={costSummary?.totalCostPerWeek ?? 0.0}
               costType="ESTIMATE"

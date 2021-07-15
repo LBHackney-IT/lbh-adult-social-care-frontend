@@ -1,42 +1,27 @@
-import PackagesResidentialCare from "../../../../components/packages/residential-care";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { selectBrokerage } from "../../../../reducers/brokerageReducer";
-import {getUserSession, uniqueID} from "../../../../service/helpers";
-import { getHomeCareSummaryData } from "../../../../api/CarePackages/HomeCareApi";
-import ClientSummary from "../../../../components/ClientSummary";
-import Layout from "../../../../components/Layout/Layout";
+import PackagesNursingCare from '../../../../components/packages/nursing-care'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectBrokerage } from '../../../../reducers/brokerageReducer'
+import { getUserSession, uniqueID } from '../../../../service/helpers'
+import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi'
+import ClientSummary from '../../../../components/ClientSummary'
+import Layout from '../../../../components/Layout/Layout'
+import { getAgeFromDateString, getEnGBFormattedDate, } from '../../../../api/Utils/FuncUtils'
 import {
-  getAgeFromDateString,
-  getEnGBFormattedDate,
-} from "../../../../api/Utils/FuncUtils";
-import {
-  residentialCareChangeStatus,
-  createResidentialCareBrokerageInfo,
-  getResidentialCareBrokerageStages,
-  getResidentialCarePackageDetailsForBrokerage,
-  getResidentialCarePackageApprovalHistory
-} from "../../../../api/CarePackages/ResidentialCareApi";
-import {
-  mapBrokerageSupplierOptions,
-  mapResidentialCareStageOptions,
-} from "../../../../api/Mappers/ResidentialCareMapper";
-import { getSupplierList } from "../../../../api/CarePackages/SuppliersApi";
-import { CARE_PACKAGE_ROUTE } from "../../../../routes/RouteConstants";
-import {useRouter} from "next/router";
-import withSession from "../../../../lib/session";
-
-const initialPackageReclaim = {
-  type: "",
-  notes: "",
-  from: "",
-  category: "",
-  amount: "",
-  id: "1",
-};
+  createNursingCareBrokerageInfo,
+  getNursingCareBrokerageStages,
+  getNursingCarePackageApprovalHistory,
+  getNursingCarePackageDetailsForBrokerage,
+  nursingCareChangeStatus
+} from '../../../../api/CarePackages/NursingCareApi'
+import { mapBrokerageSupplierOptions, mapNursingCareStageOptions, } from '../../../../api/Mappers/NursingCareMapper'
+import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi'
+import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants'
+import withSession from '../../../../lib/session'
+import { useRouter } from 'next/router'
 
 // start before render
-export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
+export const getServerSideProps = withSession(async function({ req, query: { id: nursingCarePackageId } }) {
   const user = getUserSession({ req });
   if(user.redirect) {
     return user;
@@ -48,9 +33,8 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
 
   try {
     // Call to api to get package
-    const residentialCarePackage = await getResidentialCarePackageDetailsForBrokerage(residentialCarePackageId);
-
-    const newAdditionalNeedsEntries = residentialCarePackage.residentialCareAdditionalNeeds.map(
+    const nursingCarePackage = await getNursingCarePackageDetailsForBrokerage(nursingCarePackageId);
+    const newAdditionalNeedsEntries = nursingCarePackage.nursingCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
         id: additionalneedsItem.id,
         isWeeklyCost: additionalneedsItem.isWeeklyCost,
@@ -58,14 +42,14 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
         needToAddress: additionalneedsItem.needToAddress,
       })
     );
-    data.residentialCarePackage = residentialCarePackage;
+    data.nursingCarePackage = nursingCarePackage;
     data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch(error) {
-    data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
+    data.errorData.push(`Retrieve nursing care package details failed. ${error.message}`);
   }
 
   try {
-    const newApprovalHistoryItems = await getResidentialCarePackageApprovalHistory(residentialCarePackageId)
+    data.approvalHistoryEntries = await getNursingCarePackageApprovalHistory(nursingCarePackageId)
       .map(
         (historyItem) => ({
           eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
@@ -75,18 +59,23 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
           eventSubMessage: undefined
         })
       );
-    data.approvalHistoryEntries = newApprovalHistoryItems.slice();
   } catch(error) {
-    data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`)
+    data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`)
   }
 
   return { props: { ...data }};
 });
 
-const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
-  // Parameters
+const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
   const router = useRouter();
-
+  const [initialPackageReclaim] = useState({
+    type: "",
+    notes: "",
+    from: "",
+    category: "",
+    amount: "",
+    id: "1",
+  });
   const [errors, setErrors] = useState([]);
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState("approvalHistory");
@@ -99,7 +88,7 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
     if (!supplierOptions.length || supplierOptions.length === 1)
       retrieveSupplierOptions();
     if (!stageOptions.length || stageOptions.length === 1)
-      retrieveResidentialCareBrokerageStages();
+      retrieveNursingCareBrokerageStages();
   }, [supplierOptions, stageOptions]);
 
   const retrieveSupplierOptions = () => {
@@ -115,21 +104,21 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
       });
   };
 
-  const retrieveResidentialCareBrokerageStages = () => {
-    getResidentialCareBrokerageStages()
+  const retrieveNursingCareBrokerageStages = () => {
+    getNursingCareBrokerageStages()
       .then((response) => {
-        setStageOptions(mapResidentialCareStageOptions(response));
+        setStageOptions(mapNursingCareStageOptions(response));
       })
       .catch((error) => {
         setErrors([
           ...errors,
-          `Retrieve residential care brokerage stages failed. ${error.message}`,
+          `Retrieve nursing care brokerage stages failed. ${error.message}`,
         ]);
       });
   };
 
-  const createBrokerageInfo = (residentialCarePackageId, brokerageInfoForCreation) => {
-    createResidentialCareBrokerageInfo(residentialCarePackageId, brokerageInfoForCreation)
+  const createBrokerageInfo = (nursingCarePackageId, brokerageInfoForCreation) => {
+    createNursingCareBrokerageInfo(nursingCarePackageId, brokerageInfoForCreation)
       .then(() => {
         alert("Package saved.");
         router.push(`${CARE_PACKAGE_ROUTE}`);
@@ -144,10 +133,10 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
   };
 
   const changePackageBrokeringStatus = (
-    residentialCarePackageId,
+    nursingCarePackageId,
     brokeringStatusId
   ) => {
-    residentialCareChangeStatus(residentialCarePackageId, brokeringStatusId)
+    nursingCareChangeStatus(nursingCarePackageId, brokeringStatusId)
       .then(() => {
         alert("Status changed.");
       })
@@ -189,23 +178,23 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
   };
 
   return (
-    <Layout headerTitle="Residential Care Brokering">
+    <Layout headerTitle="Nursing Care Brokering">
       <ClientSummary
-        client={residentialCarePackage?.residentialCarePackage?.clientName}
-        hackneyId={residentialCarePackage?.residentialCarePackage?.clientHackneyId}
-        age={residentialCarePackage?.residentialCarePackage && getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth)}
-        preferredContact={residentialCarePackage?.residentialCarePackage?.clientPreferredContact}
-        canSpeakEnglish={residentialCarePackage?.residentialCarePackage?.clientCanSpeakEnglish}
+        client={nursingCarePackage?.nursingCarePackage?.clientName}
+        hackneyId={nursingCarePackage?.nursingCarePackage?.clientHackneyId}
+        age={nursingCarePackage?.nursingCarePackage && getAgeFromDateString(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth)}
+        preferredContact={nursingCarePackage?.nursingCarePackage?.clientPreferredContact}
+        canSpeakEnglish={nursingCarePackage?.nursingCarePackage?.clientCanSpeakEnglish}
         packagesCount={4}
         dateOfBirth={
-          residentialCarePackage?.residentialCarePackage && getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth)
+          nursingCarePackage?.nursingCarePackage && getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth)
         }
-        postcode={residentialCarePackage?.residentialCarePackage?.clientPostCode}
+        postcode={nursingCarePackage?.nursingCarePackage?.clientPostCode}
       >
         Proposed Packages
       </ClientSummary>
 
-      <PackagesResidentialCare
+      <PackagesNursingCare
         tab={tab}
         addPackageReclaim={addPackageReclaim}
         removePackageReclaim={removePackageReclaim}
@@ -215,12 +204,12 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
         changeTab={changeTab}
         summaryData={summaryData}
         approvalHistory={approvalHistoryEntries}
-        residentialCarePackage={residentialCarePackage}
+        nursingCarePackage={nursingCarePackage}
         supplierOptions={supplierOptions}
         stageOptions={stageOptions}
-        residentialCareSummary={{
+        nursingCareSummary={{
           additionalNeedsEntries: additionalNeedsEntries,
-          needToAddress: residentialCarePackage?.residentialCarePackage?.needToAddress,
+          needToAddress: nursingCarePackage?.nursingCarePackage?.needToAddress,
           deleteOpportunity: () => {},
         }}
         createBrokerageInfo={createBrokerageInfo}
@@ -230,4 +219,4 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
   );
 };
 
-export default ResidentialCareBrokering;
+export default NursingCareBrokering;
