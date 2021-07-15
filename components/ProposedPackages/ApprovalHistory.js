@@ -1,63 +1,109 @@
-import React from "react";
-import ClientSummary from "../ClientSummary";
-import CostCard from "../CostCard";
-import {
-  getAgeFromDateString,
-  getEnGBFormattedDate,
-} from "../../api/Utils/FuncUtils";
+import ClientSummary from '../ClientSummary'
+import { getAgeFromDateString, getEnGBFormattedDate } from '../../api/Utils/FuncUtils'
+import PackageCostBox from '../DayCare/PackageCostBox'
+import PackageApprovalHistorySummary from '../PackageApprovalHistorySummary'
+import React from 'react'
 
 const ApprovalHistory = ({
-  status = "",
   history,
-  costCards,
-  clientDetails = [],
+  costSummary,
+  clientDateOfBirth,
+  isFixedPeriodOrOngoing,
+  termTimeConsiderationOption,
+  clientName,
+  clientHackneyId,
+  hackneyId,
+  startDate,
+  endDate,
+  careType,
 }) => {
   return (
     <div className="approval-history">
       <h2>
-        Home Care <span>{status}</span>
+        {careType}{" "}
+        <span>
+          (
+          {isFixedPeriodOrOngoing
+            ? "Fixed Period"
+            : "Ongoing"}{" "}
+          - {termTimeConsiderationOption})
+        </span>
       </h2>
       <ClientSummary
-        client={clientDetails?.clientName}
-        hackneyId={clientDetails?.hackneyId}
-        age={clientDetails && getAgeFromDateString(clientDetails.dateOfBirth)}
+        client={clientName}
+        hackneyId={clientHackneyId}
+        age={
+          clientDateOfBirth &&
+          getAgeFromDateString(clientDateOfBirth)
+        }
         sourcingCare="hackney"
         dateOfBirth={
-          clientDetails && getEnGBFormattedDate(clientDetails.dateOfBirth)
+          clientDateOfBirth &&
+          getEnGBFormattedDate(clientDateOfBirth)
         }
-        postcode={clientDetails?.postCode}
+        postcode={hackneyId}
       />
       <div className="care-info">
         <div>
           <p>STARTS</p>
-          <p>08/07/2021</p>
+          <p>
+            {getEnGBFormattedDate(startDate)}
+          </p>
         </div>
         <div>
           <p>ENDS</p>
-          <p>Ongoing</p>
+          <p>
+            {endDate !== null
+              ? getEnGBFormattedDate(endDate)
+              : "Ongoing"}
+          </p>
         </div>
         <div>
           <p>DAYS/WEEK</p>
-          <p>3</p>
+          <p />
         </div>
       </div>
-
-      {!!costCards.length && (
-        <div className="is-flex is-flex-wrap-wrap">
-          {costCards.map((item) => {
-            return <CostCard selected={item.selected} key={item.id} />;
-          })}
+      <div className="columns font-size-12px">
+        <div className="column">
+          <div className="is-flex is-flex-wrap-wrap">
+            {costSummary &&
+            <>
+              {costSummary.costOfCarePerWeek && (
+                <PackageCostBox
+                  title="COST OF CARE / WK"
+                  cost={costSummary?.costOfCarePerWeek ?? 0.0}
+                  costType="ESTIMATE"
+                />
+              )}
+              {costSummary.anpPerWeek && (
+                <PackageCostBox
+                  title="ANP / WK"
+                  cost={costSummary?.anpPerWeek ?? 0.0}
+                  costType="ESTIMATE"
+                />
+              )}
+              {costSummary.oneOffCost && (
+                <PackageCostBox
+                  boxClass="hackney-package-cost-yellow-box"
+                  title="ONE OFF COSTS"
+                  cost={costSummary?.oneOffCost ?? 0.0}
+                  costType="ESTIMATE"
+                />
+              )}
+              {costSummary.totalCostPerWeek && (
+                <PackageCostBox
+                  boxClass="hackney-package-cost-yellow-box"
+                  title="TOTAL / WK"
+                  cost={costSummary?.totalCostPerWeek ?? 0.0}
+                  costType="ESTIMATE"
+                />
+              )}
+            </>
+            }
+          </div>
         </div>
-      )}
-      <div className="approval-history__history">
-        <p className="approval-history__title">APPROVAL HISTORY</p>
-        {history.map((item) => (
-          <p key={item.id} className="approval-history__text">
-            <span className="date">{item.date}</span>
-            {item.text}
-          </p>
-        ))}
       </div>
+      <PackageApprovalHistorySummary approvalHistoryEntries={history} />
     </div>
   );
 };

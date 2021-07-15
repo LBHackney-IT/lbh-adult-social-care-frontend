@@ -3,9 +3,10 @@ import { format } from "date-fns";
 import { UTC_DATE_FORMAT } from "../../Constants";
 import { weekDays } from "../../service/homeCarePickerHelper";
 import { BASE_URL, AUTH_HEADER } from "../BaseApi";
+import {handleError, handleResponse} from "../Utils/ApiUtils";
 
-const HOME_CARE_URL = `${BASE_URL}/v1/homeCarePackage`;
-const HOME_CARE_APPROVE_PACKAGE_URL = `${BASE_URL}/v1/homeCareApprovePackage`;
+const HOME_CARE_URL = `${BASE_URL}/v1/HomeCarePackage`;
+const HOME_CARE_BROKERAGE_URL = `${BASE_URL}/v1/home-care-packages`;
 const HOME_CARE_SERVICE_URL = `${BASE_URL}/v1/homeCareService`;
 const HOME_CARE_PACKAGE_SLOTS_URL = `${BASE_URL}/v1/homeCarePackageSlots`;
 const HOME_CARE_TIME_SLOT_SHIFTS_URL = `${BASE_URL}/v1/timeSlotShifts`;
@@ -42,7 +43,6 @@ const createHomeCarePackage = async (
     .catch((error) => {
       // Error
       // TODO
-      debugger;
       console.log(error);
     });
 
@@ -135,14 +135,12 @@ const postHomeCareTimeSlots = async (data) => {
     })
     .catch((error) => {
       // TODO error
-      debugger;
+      return error;
     });
 
   let iterator = 1;
-  debugger;
   const returnData = weekDays
     .map((weekDayItem) => {
-      debugger;
       const itemsForWeekDay = response.data.homeCarePackageSlots.filter(
         (item) => item.dayId === weekDayItem.id
       );
@@ -175,8 +173,6 @@ const postHomeCareTimeSlots = async (data) => {
       return null;
     })
     .filter((item) => item !== null);
-
-  debugger;
   return returnData;
 };
 
@@ -235,9 +231,16 @@ const getHomeCareSummaryData = () => {
   ];
 };
 
-const getHomeCareBrokergage = async (packageId) => {
+const getHomeCarePackageDetailsForBrokerage = (homeCarePackageId) => {
+  return axios
+    .get(`${HOME_CARE_BROKERAGE_URL}/${homeCarePackageId}/brokerage`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const getHomeCareBrokerageApprovePackage = async (packageId) => {
   const response = await axios
-    .get(`${BASE_URL}/v1/home-care-packages/${packageId}/approve-package`, {
+    .get(`${HOME_CARE_BROKERAGE_URL}${packageId}/approve-package`, {
       headers: AUTH_HEADER,
     })
     .catch((error) => {
@@ -253,5 +256,6 @@ export {
   getHomeCareServices,
   getHomeCareSummaryData,
   postHomeCareTimeSlots,
-  getHomeCareBrokergage,
+  getHomeCareBrokerageApprovePackage,
+  getHomeCarePackageDetailsForBrokerage,
 };

@@ -231,6 +231,7 @@ const PackagesDayCare = ({
             <div className="mr-3 is-flex is-align-items-flex-end">
               <Dropdown
                 label=""
+                classes="day-care-packages__fixed-dropdown"
                 initialText="Supplier (please select)"
                 options={supplierOptions}
                 onOptionSelect={setSelectedSupplierType}
@@ -264,7 +265,7 @@ const PackagesDayCare = ({
                 onChange={(value) =>
                   changeElementsData(setCoreCost, coreCost, "costPerDay", value)
                 }
-                classes="default-label day-care__min-input-space"
+                classes="default-label day-care__fixed-dropdown-width"
                 label="Cost per day"
                 value={coreCost.costPerDay}
               />
@@ -306,7 +307,7 @@ const PackagesDayCare = ({
                 }
                 label="Cost per week"
               />
-              <BaseField label="Cost">
+              <BaseField label="Cost" classes="day-care__cost">
                 <p>
                   {currency.euro}
                   {transportCostTotal}
@@ -315,7 +316,7 @@ const PackagesDayCare = ({
             </div>
             <div className="row-container day-care__transport-escort">
               <Dropdown
-                classes="label-bold"
+                classes="label-bold day-care__fixed-dropdown-width"
                 label="Transport escort"
                 initialText="Select Supplier"
                 options={supplierOptions}
@@ -353,7 +354,7 @@ const PackagesDayCare = ({
                   )
                 }
               />
-              <BaseField label="Cost">
+              <BaseField label="Cost" classes="day-care__cost">
                 <p>
                   {currency.euro}
                   {transportEscortCostTotal}
@@ -362,7 +363,7 @@ const PackagesDayCare = ({
             </div>
             <div className="row-container day-care__opportunities">
               <Dropdown
-                classes="label-bold"
+                classes="label-bold day-care__fixed-dropdown-width"
                 label="Dare care opportunities"
                 initialText="Select Supplier"
                 options={supplierOptions}
@@ -400,7 +401,7 @@ const PackagesDayCare = ({
                   )
                 }
               />
-              <BaseField label="Cost">
+              <BaseField label="Cost" classes="day-care__cost">
                 <p>
                   {currency.euro}
                   {dayCareOpportunitiesCostTotal}
@@ -409,7 +410,7 @@ const PackagesDayCare = ({
             </div>
             <div className="row-container day-care__escort">
               <Dropdown
-                classes="label-bold"
+                classes="label-bold day-care__fixed-dropdown-width"
                 label="Escort"
                 initialText="Select Supplier"
                 options={supplierOptions}
@@ -432,7 +433,7 @@ const PackagesDayCare = ({
                   changeElementsData(setEscort, escort, "costPerHour", value)
                 }
               />
-              <BaseField label="Cost">
+              <BaseField label="Cost" classes="day-care__cost">
                 <p>
                   {currency.euro}
                   {escortCostTotal}
@@ -489,7 +490,7 @@ const PackagesDayCare = ({
         </div>
         <div className="proposed-packages__tabs">
           {[
-            { text: "Approval history", value: "approvalHistory" },
+            { text: "Approver history", value: "approvalHistory" },
             { text: "Package details", value: "packageDetails" },
           ].map((item) => {
             return (
@@ -597,23 +598,20 @@ const ApprovalHistory = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
               title="COST OF CARE / WK"
-              cost={`£${costSummary?.costOfCarePerWeek ?? 0.0}`}
+              cost={costSummary?.costOfCarePerWeek ?? 0.0}
               costType="ESTIMATE"
             />
 
             <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
               title="ANP / WK"
-              cost={`£${costSummary?.anpPerWeek ?? 0.0}`}
+              cost={costSummary?.anpPerWeek ?? 0.0}
               costType="ESTIMATE"
             />
 
             <PackageCostBox
-              boxClass="hackney-package-cost-light-yellow-box"
               title="TRANSPORT / WK"
-              cost={`£${costSummary?.transportCostPerWeek ?? 0.0}`}
+              cost={costSummary?.transportCostPerWeek ?? 0.0}
               costType="ESTIMATE"
             />
           </div>

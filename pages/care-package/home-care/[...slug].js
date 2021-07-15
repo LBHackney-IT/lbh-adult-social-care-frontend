@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import {
@@ -28,6 +27,9 @@ import {
   weekDays,
 } from "../../../service/homeCarePickerHelper";
 import { getServiceTimes } from "../../../service/homeCareServiceHelper";
+import { SOCIAL_WORKER_ROUTE } from '../../../routes/RouteConstants'
+import { useDispatch } from 'react-redux'
+import { addNotification } from '../../../reducers/notificationsReducer';
 
 const initialPackageReclaim = {
   type: "",
@@ -73,6 +75,7 @@ export const getServerSideProps = withSession(async function ({ req }) {
 const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
   // Parameters
   const router = useRouter();
+  const dispatch = useDispatch();
   const [isImmediate, isS117, isFixedPeriod, startDate, endDate] =
     router.query.slug;
 
@@ -343,9 +346,14 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
       slots,
     };
 
-    const summaryData = await postHomeCareTimeSlots(postData);
-    setHomeCareSummaryData(summaryData);
-    window.scrollTo(0, 200);
+    try {
+      const summaryData = await postHomeCareTimeSlots(postData);
+      setHomeCareSummaryData(summaryData);
+      router.push(SOCIAL_WORKER_ROUTE);
+    } catch (e) {
+      dispatch(addNotification({ text: 'Can not add to package'}));
+      console.log('error post time slots', e, e?.response);
+    }
   };
 
   return (
@@ -361,8 +369,8 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
       </ClientSummary>
       <div className="mt-5 mb-5">
         <CareTitle
-          startDate={format(new Date(startDate), "dd/MM/yyyy")}
-          endDate={format(new Date(endDate), "dd/MM/yyyy")}
+          startDate={startDate}
+          endDate={endDate}
         >
           Homecare Care
         </CareTitle>

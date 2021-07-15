@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useState } from "react";
 import BaseField from "./baseComponents/BaseField";
 import OutsideTrigger from "./OutsideTrigger";
@@ -33,13 +33,16 @@ const Dropdown = ({
     selectedValue = null;
   }
 
-  const initialSelectedOption =
-    selectedValue !== undefined
-      ? options.find((item) => item.value === selectedValue)
-      : options[0];
+  useEffect(() => {
+    const initialSelectedOption =
+      selectedValue !== undefined
+        ? options.find((item) => item.value === selectedValue)
+        : options[0];
+    setSelectedOption(initialSelectedOption);
+  }, [selectedValue]);
 
   const [isActive, setIsActive] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
+  const [selectedOption, setSelectedOption] = useState({});
 
   const onTriggerClick = (event) => {
     event.stopPropagation();

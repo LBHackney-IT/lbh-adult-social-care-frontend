@@ -188,7 +188,7 @@ const NursingCareApproveBrokered = ({
             <PackageCostBox
               boxClass="hackney-package-cost-light-green-box"
               title="COST OF CARE / WK"
-              cost={`£${nursingCarePackage?.costOfCare}`}
+              cost={nursingCarePackage?.costOfCare}
               costType="ESTIMATE"
             />
           </div>
@@ -196,7 +196,7 @@ const NursingCareApproveBrokered = ({
             <PackageCostBox
               boxClass="hackney-package-cost-light-green-box"
               title="ANP / WK"
-              cost={`£${nursingCarePackage?.costOfAdditionalNeeds}`}
+              cost={nursingCarePackage?.costOfAdditionalNeeds}
               costType="ESTIMATE"
             />
           </div>
@@ -204,7 +204,7 @@ const NursingCareApproveBrokered = ({
             <PackageCostBox
               boxClass="hackney-package-cost-green-box"
               title="TOTAL / WK"
-              cost={`£${nursingCarePackage?.totalPerWeek}`}
+              cost={nursingCarePackage?.totalPerWeek}
               costType="ESTIMATE"
             />
           </div>

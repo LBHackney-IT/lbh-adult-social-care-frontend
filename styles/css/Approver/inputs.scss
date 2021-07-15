@@ -1,0 +1,20 @@
+.approver-hub__inputs {
+  padding: 32px 16px;
+  margin-bottom: 60px;
+  background: $lbh-light-gray;
+
+  .title {
+    margin-bottom: 18px;
+    font-weight: bold;
+    color: black;
+    font-size: 34px;
+  }
+
+  .custom-input__search {
+    min-width: 275px;
+  }
+
+  .pay-runs__filters .dropdown-container .button {
+    width: 170px;
+  }
+}

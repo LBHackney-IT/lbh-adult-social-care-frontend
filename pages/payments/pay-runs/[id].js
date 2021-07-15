@@ -23,7 +23,7 @@ export const getServerSideProps = withSession(async function({ req }) {
   }
 });
 
-const PayRunPage = (props) => {
+const PayRunPage = () => {
   const [sorts] = useState([
     {name: 'serviceUser', text: 'Service User'},
     {name: 'invId', text: 'INV ID'},

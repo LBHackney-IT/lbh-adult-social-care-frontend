@@ -1,0 +1,18 @@
+.inputs-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 32px 16px;
+  background: $lbh-light-gray;
+  margin-bottom: 60px;
+
+  .dropdown {
+    margin-top: auto;
+  }
+
+  .inputs-container__title {
+    font-weight: bold;
+    font-size: 36px;
+    color: black;
+    flex-basis: 100%;
+  }
+}

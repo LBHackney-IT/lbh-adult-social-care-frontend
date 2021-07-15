@@ -3,13 +3,13 @@ import { CaretRightIcon, CaretRightHighlightIcon } from "../Icons";
 import * as RouteConstants from "../../routes/RouteConstants";
 import { useRouter } from "next/router";
 
-const NavItem = ({ children, to }) => {
+const NavItem = ({ children, to, params = '' }) => {
   const router = useRouter();
   const activeRouteClass = router.pathname.indexOf(to) > -1 ? " is-active" : "";
   return (
     <div
       className={`navigation-item is-clickable${activeRouteClass}`}
-      onClick={() => router.push(to)}
+      onClick={() => router.push(`${to}${params}`)}
     >
       <div>
         {children}
@@ -27,9 +27,6 @@ const NavItem = ({ children, to }) => {
 const NavigationColumn = () => {
   return (
     <div className="nav-column-cont">
-      <NavItem to={RouteConstants.PROPOSED_PACKAGES_ROUTE}>
-        Proposed Packages
-      </NavItem>
       <NavItem to={RouteConstants.CARE_PACKAGE_ROUTE}>Care Package</NavItem>
       {/* <NavItem to={RouteConstants.CLIENT_HISTORY_ROUTER}>Client History</NavItem>
       <NavItem to="/test">Client details</NavItem>

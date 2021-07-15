@@ -100,7 +100,6 @@ const AddBill = () => {
   ]);
 
   const addBill = () => {
-    console.log("add bill func");
     const arrayInputs = [];
     for (let i in { ...invoiceInputs, ...detailsInputs }) {
       arrayInputs.push(invoiceInputs[i]);
@@ -110,7 +109,6 @@ const AddBill = () => {
       setInputsError(validFields);
       return;
     }
-    console.log("start add bill");
   };
 
   const changeInputs = (value, field) => {

@@ -15,9 +15,6 @@ const paymentsRoutes = [
 
 const PaymentsHeader = () => {
   const router = useRouter();
-  if(router.pathname.indexOf('payments') === -1) {
-    return <></>
-  }
 
   const changeRoute = route => {
     if(route === 'logout') {

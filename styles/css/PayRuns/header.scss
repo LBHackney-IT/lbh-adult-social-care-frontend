@@ -10,6 +10,10 @@
 
   .custom-input__search {
     min-width: 231px;
+
+    input {
+      width: 85%;
+    }
   }
 
   .dropdown-container {

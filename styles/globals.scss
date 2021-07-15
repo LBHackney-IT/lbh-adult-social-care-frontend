@@ -14,44 +14,30 @@
 @import "css/dropdown";
 @import "css/field";
 @import "css/ErrorField/error-field";
-@import "css/CarePackages/additionalNeeds";
-@import "css/CarePackages/careTitle";
-@import "css/ProposedPackages/approval-history";
-@import "css/ProposedPackages/proposedPackges";
+@import "css/CarePackages/index";
+@import "css/ProposedPackages/index";
 @import "css/PackageReclaim/package-reclaim";
-@import "css/Payments/payments-header";
-@import "css/Payments/breadcrumbs";
-@import "css/Payments/popup-download-ceder";
-@import "css/PayRuns/header";
-@import "css/PayRuns/table";
-@import "css/PayRuns/pagination";
-@import "css/PayRuns/footer";
-@import "css/PayRuns/create-pay-run";
-@import "css/PayRuns/level-insight";
-@import "css/PayRuns/popup-hold-payment";
-@import "css/PayRuns/held-payments";
-@import "css/Bills/header";
-@import "css/Bills/pagination";
-@import "css/Bills/filters";
-@import "css/Bills/table";
-@import "css/Bills/add-bill";
-@import "css/SupplierDashboard/header";
-@import "css/SupplierDashboard/table";
-@import "css/SupplierDashboard/level-insight";
-@import "css/DayCare/dayCare";
-@import "css/DayCare/packageCostBox";
+@import "css/Payments/index";
+@import "css/Bills/index";
+@import "css/SupplierDashboard/index";
+@import "css/DayCare/index";
 @import "css/HomeCare/homeCare";
 @import "css/NursingCare/nursingCare";
 @import "css/ResidentialCare/residentialCare";
 @import "css/Layout/layout";
-@import "css/WeekOfSupplier/breadcrumbs";
-@import "css/WeekOfSupplier/table";
+@import "css/WeekOfSupplier/index";
 @import "css/SupplierReturns/table";
 @import "css/Login/login";
 @import "css/popup";
 @import "css/sectionHeading";
-@import "css/PayRuns/tabs";
+@import "css/PayRuns/index";
 @import "css/not-found-page";
+@import "css/SocialWorker/index";
+@import "css/Dashboard/index";
+@import "css/Approver/index";
+@import "css/inputs";
+@import "css/BrokerageHub/index";
+@import "css/notifications";
 
 * {
   font-family: "OpenSans", sans-serif !important;
@@ -80,6 +66,12 @@ button {
 
 .mr-auto {
   margin-right: auto;
+}
+
+.border-radius-0 {
+  p {
+    border-radius: 0 !important;
+  }
 }
 
 .hide {
