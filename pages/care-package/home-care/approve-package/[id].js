@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
-  getHomeCareBrokergage,
+  getHomeCareBrokerageApprovePackage,
   getHomeCareServices,
   getHomeCareTimeSlotShifts,
 } from '../../../../api/CarePackages/HomeCareApi';
@@ -63,7 +63,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
   return { props: { ...data, approvalHistoryEntries } };
 });
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars,no-shadow
 const HomeCareApprovePackage = ({ approvalHistoryEntries, homeCareTimeShiftsData, homeCareServices }) => {
   // Route
   const router = useRouter();
@@ -75,7 +75,7 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries, homeCareTimeShiftsData
   // On load retrieve package
   useEffect(() => {
     async function retrieveData() {
-      setPackageData(await getHomeCareBrokergage(homeCarePackageId));
+      setPackageData(await getHomeCareBrokerageApprovePackage(homeCarePackageId));
     }
     if (!packageData) {
       retrieveData();

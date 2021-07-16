@@ -1,11 +1,11 @@
 import { useRouter } from "next/router"
+import React, { useEffect, useState } from "react";
 import ClientSummary from "../../../components/ClientSummary";
 import Layout from "../../../components/Layout/Layout";
 import CareTitle from "../../../components/CarePackages/CareTitle";
 import TextArea from "../../../components/TextArea";
 import { days } from "../../../components/daysData";
 import Checkbox from "../../../components/Checkbox";
-import React, { useEffect, useState } from "react";
 import RadioButton, { yesNoValues } from "../../../components/RadioButton";
 import {
   createDayCarePackage,
@@ -25,7 +25,7 @@ import withSession from "../../../lib/session";
 import fieldValidator from "../../../service/inputValidator";
 import ErrorField from "../../../components/ErrorField";
 
-export const getServerSideProps = withSession(async function({ req }) {
+export const getServerSideProps = withSession(async ({ req }) => {
   const user = getUserSession({ req });
   if(user.redirect) {
     return user;
@@ -90,9 +90,7 @@ const DayCare = () => {
   ]);
   // Setup days state using base days value
   const [daysSelected, setDaysSelected] = useState(
-    days.map((dayItem) => {
-      return { ...dayItem, checked: false };
-    })
+    days.map((dayItem) => ({ ...dayItem, checked: false }))
   );
 
   useEffect(() => {
@@ -164,7 +162,7 @@ const DayCare = () => {
   const retrieveTermTimeConsiderationOptions = () => {
     getTermTimeConsiderationOptions()
       .then((res) => {
-        let options = res.map((option) => {
+        const options = res.map((option) => {
           if (option.optionName.toLowerCase().trim() === "n/a") {
             setTermTimeNaId(option.optionId);
           }
@@ -186,7 +184,7 @@ const DayCare = () => {
   const retrieveOpportunitiesLengthOptions = () => {
     getOpportunitiesLengthOptions()
       .then((res) => {
-        let options = res.map((option) => ({
+        const options = res.map((option) => ({
           text: option.optionName,
           value: option.opportunityLengthOptionId,
           valueInMinutes: option.timeInMinutes,
@@ -204,7 +202,7 @@ const DayCare = () => {
   const retrieveOpportunityTimesPerMonthOptions = () => {
     getOpportunityTimesPerMonthOptions()
       .then((res) => {
-        let options = res.map((option) => ({
+        const options = res.map((option) => ({
           text: option.optionName,
           value: option.opportunityTimePerMonthOptionId,
         }));
@@ -276,15 +274,13 @@ const DayCare = () => {
       opportunitiesNeedToAddress: item.needToAddress,
     }));
 
-    const packageReclaims = packagesReclaimed.map((reclaim) => {
-      return {
+    const packageReclaims = packagesReclaimed.map((reclaim) => ({
         ReclaimFromId: reclaim.from,
         ReclaimCategoryId: reclaim.category,
         ReclaimAmountOptionId: reclaim.type,
         Notes: reclaim.notes,
         Amount: reclaim.amount,
-      };
-    });
+      }));
 
     const dayCarePackageToCreate = {
       clientId: "aee45700-af9b-4ab5-bb43-535adbdcfb80",
@@ -293,7 +289,7 @@ const DayCare = () => {
       endDate: endDate ? new Date(endDate).toJSON() : null,
       isThisAnImmediateService: isImmediate,
       isThisUserUnderS117: isS117,
-      needToAddress: needToAddress,
+      needToAddress,
       monday: daysSelected[0].checked,
       tuesday: daysSelected[1].checked,
       wednesday: daysSelected[2].checked,
@@ -301,14 +297,14 @@ const DayCare = () => {
       friday: daysSelected[4].checked,
       saturday: daysSelected[5].checked,
       sunday: daysSelected[6].checked,
-      transportNeeded: transportNeeded,
-      transportEscortNeeded: transportEscortNeeded,
-      escortNeeded: escortNeeded,
+      transportNeeded,
+      transportEscortNeeded,
+      escortNeeded,
       termTimeConsiderationOptionId: termTimeConsideration,
       dayCarePackageOpportunities,
       creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
-      collegeId: collegeId,
-      packageReclaims: packageReclaims,
+      collegeId,
+      packageReclaims,
     };
 
     createDayCarePackage(dayCarePackageToCreate)

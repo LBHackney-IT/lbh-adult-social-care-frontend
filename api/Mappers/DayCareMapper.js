@@ -26,19 +26,15 @@ const mapDayCarePackageDetailsForBrokerage = (dayCarePackage) => {
   };
 };
 
-const mapBrokerageSupplierOptions = (supplierOptions = []) => {
-  return supplierOptions.map((option) => ({
+const mapBrokerageSupplierOptions = (supplierOptions = []) => supplierOptions.map((option) => ({
     text: option?.supplierName,
     value: option?.id,
   }));
-};
 
-const mapDayCareStageOptions = (stageOptions = []) => {
-  return stageOptions.map((option) => ({
+const mapDayCareStageOptions = (stageOptions = []) => stageOptions.map((option) => ({
     text: option?.packageAction,
     value: option?.packageStatusId,
   }));
-};
 
 export {
   mapDayCarePackageDetailsForBrokerage,

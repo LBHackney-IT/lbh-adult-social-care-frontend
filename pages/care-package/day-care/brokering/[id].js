@@ -135,11 +135,11 @@ const DayCareBrokering = ({
     setPackagesReclaimed(newPackage);
   };
 
-  const changeTab = (tab) => {
-    if (tab === 'packageDetails') {
+  const changeTab = (chosenTab) => {
+    if (chosenTab === 'packageDetails') {
       setSummaryData(getHomeCareSummaryData());
     }
-    setTab(tab);
+    setTab(chosenTab);
   };
 
   return (

@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import { useState } from "react";
+import React, {useEffect, useState } from "react";
+
 import BaseField from "./baseComponents/BaseField";
 import OutsideTrigger from "./OutsideTrigger";
 import { CaretDownIcon } from "./Icons";
@@ -62,7 +62,7 @@ const Dropdown = ({
       <div
         data-selected-value={selectedOption?.value}
         className={
-          "dropdown" + (isActive ? " is-active" : "") + (isUp ? " is-up" : "")
+          `dropdown${  isActive ? " is-active" : ""  }${isUp ? " is-up" : ""}`
         }
       >
         <div
@@ -70,7 +70,7 @@ const Dropdown = ({
           onClick={(event) => onTriggerClick(event)}
         >
           <button
-            className={"button " + buttonClassName}
+            className={`button ${  buttonClassName}`}
             aria-haspopup="true"
             aria-controls="dropdown-menu"
             style={buttonStyle}
@@ -94,8 +94,7 @@ const Dropdown = ({
           role="menu"
         >
           <div className="dropdown-content">
-            {options.map((optionItem) => {
-              return (
+            {options.map((optionItem) => (
                 <div
                   key={optionItem.value}
                   className="dropdown-item"
@@ -103,8 +102,7 @@ const Dropdown = ({
                 >
                   {optionItem.text}
                 </div>
-              );
-            })}
+              ))}
           </div>
         </OutsideTrigger>
       </div>

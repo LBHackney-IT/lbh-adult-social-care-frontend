@@ -8,7 +8,7 @@ import SocialWorkerInputs from "../../components/SocialWorker/SocialWorkerInputs
 import {socialWorkerDashboardTableData} from "../../testData/testDataSocialWorker";
 import SocialWorkerTable from "../../components/SocialWorker/SocialWorkerTable";
 
-export const getServerSideProps = withSession(async function({ req }) {
+export const getServerSideProps = withSession(async ({ req }) => {
   const user = getUserSession({ req });
   if(user.redirect) {
     return user;
@@ -51,7 +51,7 @@ const SocialWorkerDashboardPage = () => {
     <div className="social-worker-page">
       <SocialWorkerInputs />
       <SocialWorkerTable
-        isIgnoreId={true}
+        isIgnoreId
         className='p-4'
         onClickTableRow={onClickTableRow}
         rows={socialWorkerDashboardTableData}

@@ -217,15 +217,13 @@ const getHomeCareSummaryData = () => [
 const getHomeCarePackageDetailsForBrokerage = (homeCarePackageId) =>
   axios.get(`${HOME_CARE_BROKERAGE_URL}/${homeCarePackageId}/brokerage`).then(handleResponse).catch(handleError);
 
-const changeHomeCareBrokerageStatus = async ({ id, statusId }) => {
-  return await axios.put(`${HOME_CARE_BROKERAGE_URL}/${id}/changeStatus/${statusId}`, {
+const changeHomeCareBrokerageStatus = async ({ id, statusId }) => await axios.put(`${HOME_CARE_BROKERAGE_URL}/${id}/changeStatus/${statusId}`, {
       headers: AUTH_HEADER,
     })
-    .catch((error) => {
+    .catch((error) => 
       // TODO error
-      return error;
-    });
-};
+       error
+    );
 
 const createHomeCareBrokerageInfo = ({ id, postData }) => {
   const options = {

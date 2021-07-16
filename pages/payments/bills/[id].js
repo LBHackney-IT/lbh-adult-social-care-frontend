@@ -22,7 +22,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
   };
 });
 
-const BillPage = (props) => {
+const BillPage = () => {
   const [sorts] = useState([
     { name: 'serviceUser', text: 'Service User' },
     { name: 'invId', text: 'INV ID' },
@@ -70,11 +70,11 @@ const BillPage = (props) => {
     setActionRequiredBy('');
   };
 
-  const onCheckRow = (id) => {
-    if (checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter((item) => String(item) !== String(id)));
+  const onCheckRow = (rowId) => {
+    if (checkedRows.includes(rowId)) {
+      setCheckedRows(checkedRows.filter((item) => String(item) !== String(rowId)));
     } else {
-      setCheckedRows([...checkedRows, id]);
+      setCheckedRows([...checkedRows, rowId]);
     }
   };
 

@@ -8,7 +8,6 @@ import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePa
 import HomeCarePackageElementCostings from '../../../../components/HomeCare/HomeCarePackageElementCostings';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
 import HomeCarePackageDetails from '../../../../components/HomeCare/HomeCarePackageDetails';
-import WeekCarePicker from '../../../../components/HomeCare/WeekCarePicker';
 import TextArea from '../../../../components/TextArea';
 import { getUserSession } from '../../../../service/helpers';
 import withSession from '../../../../lib/session';
@@ -70,7 +69,9 @@ export const getServerSideProps = withSession(async ({ req }) => {
   return { props: { ...data, approvalHistoryEntries } };
 });
 
+// eslint-disable-next-line no-shadow
 const HomeCareApproveBrokered = ({ approvalHistoryEntries }) => {
+  // eslint-disable-next-line no-unused-vars
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
 
   return (
@@ -131,13 +132,19 @@ const HomeCareApproveBrokered = ({ approvalHistoryEntries }) => {
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Deny</button>
+                  <button className="button hackney-btn-light" type="button">
+                    Deny
+                  </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Request more information</button>
+                  <button className="button hackney-btn-light" type="button">
+                    Request more information
+                  </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green">Approve contracting</button>
+                  <button className="button hackney-btn-green" type="button">
+                    Approve contracting
+                  </button>
                 </div>
               </div>
             </div>
@@ -145,7 +152,9 @@ const HomeCareApproveBrokered = ({ approvalHistoryEntries }) => {
             <div className="mt-1">
               <p className="font-size-16px font-weight-bold">Request more information</p>
               <TextArea label="" rows={5} placeholder="Add details..." />
-              <button className="button hackney-btn-green">Request more information</button>
+              <button className="button hackney-btn-green" type="button">
+                Request more information
+              </button>
             </div>
           </div>
         </div>

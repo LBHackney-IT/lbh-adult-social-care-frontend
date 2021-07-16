@@ -1,8 +1,7 @@
 import React from "react";
 
-const Breadcrumbs = ({ values, className = '' }) => {
-  return (
-    <div className={`breadcrumbs${className ? ' ' + className : ''}`}>
+const Breadcrumbs = ({ values, className = '' }) => (
+    <div className={`breadcrumbs${className ? ` ${  className}` : ''}`}>
       {values.map((item, index) => {
         const isLastItem = (index + 1) === values.length;
         return (
@@ -17,6 +16,5 @@ const Breadcrumbs = ({ values, className = '' }) => {
       })}
     </div>
   );
-};
 
 export default Breadcrumbs;

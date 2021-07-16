@@ -236,7 +236,7 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light" onClick={handleRejectPackage}>
+                  <button className="button hackney-btn-light" onClick={handleRejectPackage} type="button">
                     Deny
                   </button>
                 </div>
@@ -244,12 +244,13 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
                   <button
                     onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
                     className="button hackney-btn-light"
+                    type="button"
                   >
                     {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green" onClick={handleApprovePackageContents}>
+                  <button className="button hackney-btn-green" onClick={handleApprovePackageContents} type="button">
                     Approve to be brokered
                   </button>
                 </div>
@@ -271,7 +272,7 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
                   error={errorFields.requestInformationText}
                   setError={() => changeErrorFields('requestInformationText')}
                 />
-                <button className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
+                <button className="button hackney-btn-green" onClick={handleRequestMoreInformation} type="button">
                   Request more information
                 </button>
               </div>

@@ -88,7 +88,7 @@ const PayRunTable = ({
               );
             })}
             {additionalActions && additionalActions.map(action => {
-              const Component = action.Component;
+              const {Component} = action;
               return (
                 <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
                   <Component onClick={(e) => {
@@ -100,8 +100,7 @@ const PayRunTable = ({
             })}
             {canCollapseRows && collapsedRow &&
             <div className='table__row-collapsed'>
-              {item.cares.map(care => {
-                return (
+              {item.cares.map(care => (
                   <div key={care.id} className='table__row-collapsed-container'>
                     <div className='table__row-collapsed-header'>
                       <div className='table__row-collapsed-header-left'>
@@ -141,8 +140,7 @@ const PayRunTable = ({
                       release(item, care);
                     }}>Release</Button>}
                   </div>
-                )
-              })}
+                ))}
             </div>
             }
           </div>
