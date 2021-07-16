@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeNotification, selectNotifications, showNotification } from '../reducers/notificationsReducer';
 
-const CustomNotification = ({ classes = '' }) => {
+const CustomNotification = ({ className = '' }) => {
   const { notifications, showedNotifications } = useSelector(selectNotifications);
   const dispatch = useDispatch();
 
@@ -18,9 +18,7 @@ const CustomNotification = ({ classes = '' }) => {
     }
   }, [notifications, showedNotifications, dispatch]);
 
-  const allClasses = `notification ${notifications[0] ? notifications[0].classes || '' : ''} ${classes}`;
-
-  console.log(notifications[0]?.text);
+  const allClasses = `notification ${notifications[0] ? notifications[0].className || '' : ''} ${className}`;
 
   if (notifications[0]?.text) {
     return (
