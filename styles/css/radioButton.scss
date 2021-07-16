@@ -13,18 +13,18 @@
             margin-right: 5px;
             width: 20px;
             height: 20px;
-            border-radius: 10px;
+            border-radius: 3px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px solid $lbh-black1;
+            border: 1px solid $lbh-light-gray-border;
 
             .radio-item-selected {
                 display: none;
                 width: 14px;
                 height: 14px;
                 background-color: $lbh-link;
-                border-radius: 50%;
+                border-radius: 1px;
             }
 
             &.is-active {

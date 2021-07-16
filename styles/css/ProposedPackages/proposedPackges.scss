@@ -66,6 +66,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 3px;
 
   p {
     color: $lbh-black1;
@@ -208,6 +209,7 @@
 
 .person-care {
   border: 1px solid $lbh-gray;
+  border-radius: 3px;
   margin-bottom: 0 !important;
 
   label {

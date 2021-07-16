@@ -178,18 +178,18 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
   };
 
   return (
-    <Layout headerTitle="Nursing Care Brokering">
+    <Layout clientSummaryInfo={{
+      client: nursingCarePackage?.nursingCarePackage?.clientName,
+      hackneyId: nursingCarePackage?.nursingCarePackage?.clientHackneyId,
+      age: nursingCarePackage?.nursingCarePackage && getAgeFromDateString(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth),
+      preferredContact: nursingCarePackage?.nursingCarePackage?.clientPreferredContact,
+      canSpeakEnglish: nursingCarePackage?.nursingCarePackage?.clientCanSpeakEnglish,
+      packagesCount: 4,
+      dateOfBirth: nursingCarePackage?.nursingCarePackage && getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth),
+      postcode: nursingCarePackage?.nursingCarePackage?.clientPostCode,
+    }} headerTitle="Nursing Care Brokering">
       <ClientSummary
-        client={nursingCarePackage?.nursingCarePackage?.clientName}
-        hackneyId={nursingCarePackage?.nursingCarePackage?.clientHackneyId}
-        age={nursingCarePackage?.nursingCarePackage && getAgeFromDateString(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth)}
-        preferredContact={nursingCarePackage?.nursingCarePackage?.clientPreferredContact}
-        canSpeakEnglish={nursingCarePackage?.nursingCarePackage?.clientCanSpeakEnglish}
-        packagesCount={4}
-        dateOfBirth={
-          nursingCarePackage?.nursingCarePackage && getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth)
-        }
-        postcode={nursingCarePackage?.nursingCarePackage?.clientPostCode}
+
       >
         Proposed Packages
       </ClientSummary>

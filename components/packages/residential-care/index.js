@@ -13,6 +13,8 @@ import {
 import PackageApprovalHistorySummary from "../../PackageApprovalHistorySummary";
 import PackageCostBox from "../../DayCare/PackageCostBox";
 import ResidentialCareSummary from "../../ResidentialCare/ResidentialCareSummary";
+import { CaretDownIcon } from '../../Icons'
+import ProposedPackagesTab from '../ProposedPackagesTabs'
 
 const PackagesResidentialCare = ({
   tab,
@@ -270,23 +272,7 @@ const PackagesResidentialCare = ({
           </div>
         }
       </div>
-      <div className='proposed-packages__tabs'>
-        {[{text: 'Approver history', value: 'approvalHistory'},
-          {text: 'Package details', value: 'packageDetails'}]
-          .map(item => {
-            return (
-              <div
-                key={item.value}
-                onClick={() => changeTab(item.value)}
-                className={`tab${tab === item.value ? ' active-tab' : ''}`}>
-                <p>{item.text}</p>
-                <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M0.808608 0L11.1914 0C11.9104 0 12.2704 0.766375 11.762 1.21457L6.57063 5.79162C6.2555 6.06946 5.74452 6.06946 5.42939 5.79162L0.23799 1.21457C-0.270409 0.766375 0.0896673 0 0.808608 0Z" fill="#00664F"/>
-                </svg>
-              </div>)}
-          )
-        }
-      </div>
+      <ProposedPackagesTab tab={tab} changeTab={changeTab} />
     </div>
     {tab === "approvalHistory" ? (
         <ApprovalHistory

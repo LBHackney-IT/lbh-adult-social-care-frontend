@@ -77,6 +77,15 @@ const ArrowLeftIcon = () => {
   );
 };
 
+const ArrowLeftGreenIcon = () => {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15.8332 10H4.1665" stroke="#00664F" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M9.99984 15.8333L4.1665 9.99996L9.99984 4.16663" stroke="#00664F" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+};
+
 const CaretRightIcon = () => {
   return (
     <svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,8 +96,8 @@ const CaretRightIcon = () => {
 
 const CaretDownIcon = ({ onClick = () => {}}) => {
   return (
-    <svg onClick={onClick} width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0.808608 0L11.1914 0C11.9104 0 12.2704 0.766375 11.762 1.21457L6.57063 5.79162C6.2555 6.06946 5.74452 6.06946 5.42939 5.79162L0.23799 1.21457C-0.270409 0.766375 0.0896673 0 0.808608 0Z" fill="#00664F"/>
+    <svg onClick={onClick} width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1 1L7 7L13 1" stroke="#025EA6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 };
@@ -172,4 +181,5 @@ export {
   ChatSettingsIcon,
   UploadFilesIcon,
   AdultSocialCare,
+  ArrowLeftGreenIcon,
 };

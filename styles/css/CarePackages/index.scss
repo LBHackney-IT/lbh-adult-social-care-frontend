@@ -1,2 +1,14 @@
 @import "careTitle";
 @import "additionalNeeds";
+@import "package-header";
+
+
+.care-packages-page {
+  padding: 32px;
+  max-width: 1200px;
+
+  @include media-desktop-xl {
+    padding: 32px 0;
+    margin: 0 auto;
+  }
+}

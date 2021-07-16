@@ -6,6 +6,10 @@ const { homeCare, nurseCare } = brokerageTestData;
 const brokerageSlice = createSlice({
   name: "user",
   initialState: {
+    dayCarePackage: {},
+    homeCarePackage: {},
+    nursingCarePackage: {},
+    residentialCarePackage: {},
     homeCare: {
       id: homeCare.id,
       startDate: homeCare.startDate,
@@ -33,11 +37,10 @@ const brokerageSlice = createSlice({
     },
   },
   reducers: {
-    getBrokerageSuccess: (state, action) => {
+    getBrokerageSuccess: (state, { payload }) => {
       return {
         ...state,
-        homeCare: action.payload.homeCare,
-        nurseCare: action.payload.nurseCare,
+        [payload.type]: payload[payload.type],
       }
     },
     getBrokerageFail: (state) => {

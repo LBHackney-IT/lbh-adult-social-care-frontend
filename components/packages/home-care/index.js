@@ -15,6 +15,8 @@ import { addNotification } from '../../../reducers/notificationsReducer';
 import { useDispatch } from 'react-redux'
 import { getErrorResponse } from '../../../service/helpers'
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants'
+import { CaretDownIcon } from '../../Icons'
+import ProposedPackagesTab from '../ProposedPackagesTabs'
 
 const stageOptions = [
   { text: "New", value: 1 },
@@ -107,7 +109,7 @@ const PackagesHomeCare = ({
     setElementsData({ ...elementsData, [field]: elementToUpdate });
   };
 
-  const addTextNotification = ({ text, className }) => {
+  const addTextNotification = ({ text, className = 'error' }) => {
     dispatch(addNotification({ text, className }));
   };
 
@@ -169,7 +171,7 @@ const PackagesHomeCare = ({
 
   return (
     <>
-    <div className="mt-5 mb-5 person-care">
+    <div className="mb-5 person-care">
       <div className="column proposed-packages__header is-flex is-justify-content-space-between">
         <div>
           <h1 className="container-title">Home Care</h1>
@@ -182,7 +184,7 @@ const PackagesHomeCare = ({
           initialText="Stage"
           options={stageOptions}
           selectedValue={selectedStageType}
-          onOptionSelect={(option) => setSelectedStageType(option)}
+          onOptionSelect={onChangeStatus}
         />
       </div>
       <div className="column">
@@ -192,7 +194,7 @@ const PackagesHomeCare = ({
               label=""
               initialText="Supplier (please select)"
               options={supplierOptions}
-              onOptionSelect={onChangeStatus}
+              onOptionSelect={option => setSelectedSupplierType(option)}
               selectedValue={selectedSupplierType}
             />
           </div>
@@ -351,37 +353,7 @@ const PackagesHomeCare = ({
           })}
         </div>
       )}
-      <div className="proposed-packages__tabs">
-        <div className='proposed-packages__submit-button'>
-          <Button onClick={submitForApproval}>Submit for approval</Button>
-        </div>
-        {[
-          { text: "Approver history", value: "approvalHistory" },
-          { text: "Package details", value: "packageDetails" },
-        ].map((item) => {
-          return (
-            <div
-              key={item.value}
-              onClick={() => changeTab(item.value)}
-              className={`tab${tab === item.value ? " active-tab" : ""}`}
-            >
-              <p>{item.text}</p>
-              <svg
-                width="12"
-                height="6"
-                viewBox="0 0 12 6"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0.808608 0L11.1914 0C11.9104 0 12.2704 0.766375 11.762 1.21457L6.57063 5.79162C6.2555 6.06946 5.74452 6.06946 5.42939 5.79162L0.23799 1.21457C-0.270409 0.766375 0.0896673 0 0.808608 0Z"
-                  fill="#00664F"
-                />
-              </svg>
-            </div>
-          );
-        })}
-      </div>
+      <ProposedPackagesTab tab={tab} changeTab={changeTab} />
     </div>
       {tab === 'approvalHistory' ?
         <ApprovalHistory

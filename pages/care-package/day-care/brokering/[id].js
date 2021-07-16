@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux'
 import { selectBrokerage } from "../../../../reducers/brokerageReducer";
 import {getUserSession, uniqueID} from "../../../../service/helpers";
 import { getHomeCareSummaryData } from "../../../../api/CarePackages/HomeCareApi";
@@ -27,7 +27,9 @@ import {
 import { getSupplierList } from "../../../../api/CarePackages/SuppliersApi";
 import { CARE_PACKAGE_ROUTE } from "../../../../routes/RouteConstants";
 import PackagesDayCare from "../../../../components/packages/day-care";
+import { getBrokerageSuccess } from '../../../../reducers/brokerageReducer';
 import withSession from "../../../../lib/session";
+import PackageHeader from '../../../../components/CarePackages/PackageHeader'
 
 // start before render
 export const getServerSideProps = withSession(async function({ req, query: { id: dayCarePackageId } }) {
@@ -70,6 +72,7 @@ const DayCareBrokering = ({
   dayCarePackage,
   errorData,
 }) => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [errors, setErrors] = useState(errorData);
   const brokerage = useSelector(selectBrokerage);
@@ -85,6 +88,10 @@ const DayCareBrokering = ({
     if (!stageOptions.length || stageOptions.length === 1)
       retrieveDayCareBrokerageStages();
   }, [supplierOptions, stageOptions]);
+
+  useEffect(() => {
+    dispatch(getBrokerageSuccess({ type: 'dayCarePackage', dayCarePackage }));
+  }, []);
 
   const retrieveSupplierOptions = () => {
     getSupplierList()
@@ -173,21 +180,17 @@ const DayCareBrokering = ({
   };
 
   return (
-    <Layout headerTitle="Day Care Brokering">
-      <ClientSummary
-        client={clientDetails?.clientName}
-        hackneyId={clientDetails?.hackneyId}
-        age={clientDetails && getAgeFromDateString(clientDetails.dateOfBirth)}
-        preferredContact={clientDetails?.preferredContact}
-        canSpeakEnglish={clientDetails?.canSpeakEnglish}
-        packagesCount={4}
-        dateOfBirth={
-          clientDetails && getEnGBFormattedDate(clientDetails.dateOfBirth)
-        }
-        postcode={clientDetails?.postCode}
-      >
-        Proposed Packages
-      </ClientSummary>
+    <Layout showBackButton clientSummaryInfo={{
+      client: clientDetails?.clientName,
+      hackneyId: clientDetails?.hackneyId,
+      age: clientDetails && getAgeFromDateString(clientDetails.dateOfBirth),
+      preferredContact: clientDetails?.preferredContact,
+      canSpeakEnglish: clientDetails?.canSpeakEnglish,
+      packagesCount: 4,
+      dateOfBirth: clientDetails && getEnGBFormattedDate(clientDetails.dateOfBirth),
+      postcode: clientDetails?.postCode,
+    }} headerTitle="Day Care Brokering">
+      <PackageHeader />
       <PackagesDayCare
         tab={tab}
         addPackageReclaim={addPackageReclaim}

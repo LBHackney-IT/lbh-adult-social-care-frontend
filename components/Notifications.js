@@ -1,10 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { removeNotification, selectNotifications, showNotification } from '../reducers/notificationsReducer'
 
 const CustomNotification = ({ className = '' }) => {
   const { notifications, showedNotifications } = useSelector(selectNotifications);
+  const [timer, setTimer] = useState(null);
   const dispatch = useDispatch();
+  console.log(notifications);
+
+  const closeNotification = () => {
+    if(timer) {
+      clearTimeout(timer);
+    }
+    dispatch(removeNotification(notifications[0]));
+  };
 
   useEffect(() => {
     if(!showedNotifications.length && notifications[0]) {
@@ -12,9 +21,13 @@ const CustomNotification = ({ className = '' }) => {
 
       if(notifications[0].time === 'debugger') return;
 
-      setTimeout(() => {
+      if(timer) {
+        clearTimeout(timer);
+      }
+
+      setTimer(setTimeout(() => {
         dispatch(removeNotification(notifications[0]))
-      }, notifications[0].time);
+      }, notifications[0].time));
     }
   }, [notifications, showedNotifications, dispatch]);
 
@@ -25,6 +38,7 @@ const CustomNotification = ({ className = '' }) => {
       <div className={allClasses}>
         <div>
           <p>{notifications[0].text}</p>
+          <span className='notification-close' onClick={closeNotification}>+</span>
         </div>
       </div>
     )

@@ -1,9 +1,9 @@
 .dropdown {
     button.button {
-        border-radius: 0;
         outline: none !important;
         box-shadow: unset !important;
-        border: 2px solid $lbh-black1 !important;
+        border: 1px solid #BFC1C3 !important;
+        border-radius: 3px;
         padding-left: 10px;
         padding-right: 10px;
         height: 40px;
@@ -11,10 +11,20 @@
         justify-content: space-between;
     }
 
+    .icon {
+        transition: 0.3s ease;
+    }
+
     .dropdown-item {
         cursor: pointer;
         padding-left: 10px;
         padding-right: 10px;
+    }
+
+    &.is-active {
+        .icon {
+            transform: rotate(180deg);
+        }
     }
 }
 
