@@ -6,7 +6,7 @@ const SocialWorkerTable = ({
   onClickTableRow,
   rows,
   isIgnoreId = false,
-  classes = '',
+  className = '',
   sortBy,
   sorts,
 }) => {
@@ -17,7 +17,7 @@ const SocialWorkerTable = ({
   };
 
   return (
-    <div className={`social-worker__table ${classes}`}>
+    <div className={`social-worker__table ${className}`}>
       <SortTable sortBy={sortBy} sorts={sorts} />
       {rows.map(item => {
         const rowStatus = item.status ? ` ${item.status}` : '';

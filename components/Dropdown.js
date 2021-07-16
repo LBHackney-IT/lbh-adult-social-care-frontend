@@ -10,7 +10,7 @@ const Dropdown = ({
   options,
   selectedValue,
   onOptionSelect,
-  classes = "",
+  className = "",
   initialText = "Select",
   includeInitialText = true,
   children,
@@ -58,7 +58,7 @@ const Dropdown = ({
   };
 
   return (
-    <BaseField classes={`${classes} dropdown-container`} label={label}>
+    <BaseField className={`${className} dropdown-container`} label={label}>
       <div
         data-selected-value={selectedOption?.value}
         className={

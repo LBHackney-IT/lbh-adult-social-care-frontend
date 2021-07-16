@@ -119,7 +119,7 @@ const PayRunPage = () => {
         setDate={setDate}
       />
       }
-      {!!breadcrumbs.length && <Breadcrumbs classes='p-3' values={breadcrumbs} />}
+      {!!breadcrumbs.length && <Breadcrumbs className='p-3' values={breadcrumbs} />}
       <PayRunHeader
         actionButtonText={headerOptions.actionButtonText}
         clickActionButton={headerOptions.clickActionButton}

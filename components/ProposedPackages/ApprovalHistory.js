@@ -14,6 +14,7 @@ const ApprovalHistory = ({
   clientHackneyId,
   hackneyId,
   startDate,
+  boxClasses,
   endDate,
   careType,
 }) => {
@@ -75,10 +76,24 @@ const ApprovalHistory = ({
                   costType="ESTIMATE"
                 />
               )}
+              {costSummary.costOfCarePerDay && (
+                <PackageCostBox
+                  title="COST OF CARE / DAY"
+                  cost={costSummary?.costOfCarePerDay ?? 0.0}
+                  costType="ESTIMATE"
+                />
+              )}
               {costSummary.anpPerWeek && (
                 <PackageCostBox
                   title="ANP / WK"
                   cost={costSummary?.anpPerWeek ?? 0.0}
+                  costType="ESTIMATE"
+                />
+              )}
+              {costSummary.transportPerWeek && (
+                <PackageCostBox
+                  title="TRANSPORT / WK"
+                  cost={costSummary?.transportPerWeek ?? 0.0}
                   costType="ESTIMATE"
                 />
               )}
@@ -92,7 +107,7 @@ const ApprovalHistory = ({
               )}
               {costSummary.totalCostPerWeek && (
                 <PackageCostBox
-                  boxClass="hackney-package-cost-yellow-box"
+                  boxClass={`${boxClasses?.totalCostPerWeek || 'hackney-package-cost-yellow-box'}`}
                   title="TOTAL / WK"
                   cost={costSummary?.totalCostPerWeek ?? 0.0}
                   costType="ESTIMATE"

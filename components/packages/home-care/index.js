@@ -6,7 +6,15 @@ import HomeCareCostEntry from "./components/CostEntry";
 import PackageReclaim from "../../PackageReclaim";
 import {Button} from "../../Button";
 import ApprovalHistory from "../../ProposedPackages/ApprovalHistory";
-import CareSummary from '../../ProposedPackages/CareSummary'
+import CareSummary from '../../ProposedPackages/CareSummary';
+import {
+  changeHomeCareBrokerageStatus,
+  createHomeCareBrokerageInfo,
+} from '../../../api/CarePackages/HomeCareApi'
+import { addNotification } from '../../../reducers/notificationsReducer';
+import { useDispatch } from 'react-redux'
+import { getErrorResponse } from '../../../service/helpers'
+import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants'
 
 const stageOptions = [
   { text: "New", value: 1 },
@@ -36,6 +44,7 @@ const PackagesHomeCare = ({
   approvalHistory,
   homeCareSummary,
 }) => {
+  const dispatch = useDispatch();
   const [elementsData, setElementsData] = useState({
     "30mCall": {
       value: 0,
@@ -98,6 +107,41 @@ const PackagesHomeCare = ({
     setElementsData({ ...elementsData, [field]: elementToUpdate });
   };
 
+  const addTextNotification = ({ text, className }) => {
+    dispatch(addNotification({ text, className }));
+  };
+
+  const onChangeStatus = async option => {
+    try {
+      await changeHomeCareBrokerageStatus(homeCarePackage?.packageDetails?.dayCarePackageId, option);
+      addTextNotification({ text: 'Status changed successfully'});
+    } catch (e) {
+      addTextNotification({ text: 'Can not change home care status' });
+    }
+  };
+
+  const submitForApproval = async () => {
+    try {
+      //TODO need to change params
+      const data = {
+        totalCost,
+        hoursPerWeek: homeCarePackage.homeCarePackageCost.hoursePerWeek,
+        homeCarePackageId: homeCarePackage.id,
+        homeCareServiceTypeId: homeCarePackage.homeCarePackageCost.homeCareServiceTypeId,
+        carerTypeId: homeCarePackage.homeCarePackageCost.carerTypeId,
+        isSecondaryCarer: homeCarePackage.homeCarePackageCost.isSecondaryCarer,
+        costPerHour: homeCarePackage.homeCarePackageCost.costPerHour,
+        creatorId: homeCarePackage.homeCarePackageCost.creatorId,
+      }
+      await createHomeCareBrokerageInfo({id: homeCarePackage.id, data });
+      addTextNotification({ text: 'Home care package submited successfully', className: 'success' });
+      router.push(CARE_PACKAGE_ROUTE);
+    } catch (e) {
+      console.error(getErrorResponse(e));
+      addTextNotification({ text: 'Can not submit for approval' });
+    }
+  }
+
   // Total values
   useEffect(() => {
     let currentTotalCost = 0;
@@ -148,7 +192,7 @@ const PackagesHomeCare = ({
               label=""
               initialText="Supplier (please select)"
               options={supplierOptions}
-              onOptionSelect={setSelectedSupplierType}
+              onOptionSelect={onChangeStatus}
               selectedValue={selectedSupplierType}
             />
           </div>
@@ -309,7 +353,7 @@ const PackagesHomeCare = ({
       )}
       <div className="proposed-packages__tabs">
         <div className='proposed-packages__submit-button'>
-          <Button>Submit for approval</Button>
+          <Button onClick={submitForApproval}>Submit for approval</Button>
         </div>
         {[
           { text: "Approver history", value: "approvalHistory" },
@@ -344,6 +388,9 @@ const PackagesHomeCare = ({
           status='(Ongoing)'
           costSummary={{
             totalCostPerWeek: totalCost,
+          }}
+          boxClasses={{
+            totalCostPerWeek: 'hackney-package-cost-light-yellow-box',
           }}
           history={approvalHistory}
           careClientDateOfBirth={homeCarePackage?.homeCarePackage?.clientDateOfBirth}
