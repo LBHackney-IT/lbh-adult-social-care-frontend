@@ -52,7 +52,7 @@ const SocialWorkerDashboardPage = () => {
       <SocialWorkerInputs />
       <SocialWorkerTable
         isIgnoreId={true}
-        classes='p-4'
+        className='p-4'
         onClickTableRow={onClickTableRow}
         rows={socialWorkerDashboardTableData}
         sortBy={sortBy}

@@ -1,8 +1,8 @@
 import React from "react";
 
-const Breadcrumbs = ({ values, classes = '' }) => {
+const Breadcrumbs = ({ values, className = '' }) => {
   return (
-    <div className={`breadcrumbs${classes ? ' ' + classes : ''}`}>
+    <div className={`breadcrumbs${className ? ' ' + className : ''}`}>
       {values.map((item, index) => {
         const isLastItem = (index + 1) === values.length;
         return (

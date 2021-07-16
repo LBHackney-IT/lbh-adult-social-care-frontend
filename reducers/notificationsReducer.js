@@ -29,7 +29,7 @@ const notificationsSlice = createSlice({
       const cloneNotifications = state.notifications.slice();
       cloneNotifications.push({
         time: 4000,
-        classes: 'error',
+        className: 'error',
         text: 'Something went wrong',
         ...payload,
       });

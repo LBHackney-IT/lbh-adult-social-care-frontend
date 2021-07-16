@@ -15,7 +15,7 @@ const PayRunTable = ({
   additionalActions,
   isIgnoreId = false,
   isStatusDropDown = false,
-  classes = '',
+  className = '',
   canCollapseRows = false,
   careType,
   sortBy,
@@ -40,7 +40,7 @@ const PayRunTable = ({
   };
 
   return (
-    <div className={`table ${classes}`}>
+    <div className={`table ${className}`}>
       <PayRunSortTable additionalActions={additionalActions} checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
       {rows.map(item => {
         const collapsedRow = collapsedRows.includes(item.id);
@@ -66,7 +66,7 @@ const PayRunTable = ({
               if(isStatusDropDown && isStatus) {
                 return (
                   <Dropdown key={`${rowItemName}${item.id}`}
-                    classes={`table__row-item${statusItemClass}`}
+                    className={`table__row-item${statusItemClass}`}
                     options={[
                       {text: 'Accepted', value: 'accepted'},
                       {text: 'Held', value: 'held'},

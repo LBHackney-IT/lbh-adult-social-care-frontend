@@ -159,7 +159,7 @@ const PayRunsPage = (props) => {
         checkedRows={isHeldTab && checkedRows}
         setCheckedRows={onCheckRows}
         isIgnoreId={isHeldTab}
-        classes={tabsClasses[tab]}
+        className={tabsClasses[tab]}
         additionalActions={isHeldTab && heldActions}
         canCollapseRows={isHeldTab}
         release={isHeldTab && release}

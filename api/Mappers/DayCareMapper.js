@@ -19,8 +19,6 @@ const mapDayCarePackageDetailsForBrokerage = (dayCarePackage) => {
     })
   );
 
-
-
   return {
     newApprovalHistoryItems,
     newOpportunityEntries,
