@@ -4,7 +4,7 @@ import DatePick from "../DatePick";
 import RadioButton, { yesNoValues } from "../RadioButton";
 import CarePackageSetup from "../CarePackages/CarePackageSetup";
 import CareSelectDropdown from "../CarePackages/CareSelectDropdown";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import fieldValidator from "../../service/inputValidator";
 
 // TODO remove
@@ -26,32 +26,33 @@ const HomeCareSetup = ({
   const [isFixedPeriod, setIsFixedPeriod] = useState(undefined);
 
   const [errorFields, setErrorFields] = useState({
-    isImmediate: '',
-    isS117: '',
-    isFixedPeriod: '',
-    startDate: '',
-    endDate: '',
+    isImmediate: "",
+    isS117: "",
+    isFixedPeriod: "",
+    startDate: "",
+    endDate: "",
   });
 
   const changeErrorFields = (field) => {
     setErrorFields({
       ...errorFields,
-      [field]: '',
-    })
+      [field]: "",
+    });
   };
 
   // Handle build click
   const onBuildClick = () => {
+    debugger;
     // Get the parameters for the home care package route
     const { validFields, hasErrors } = fieldValidator([
-      {name: 'isImmediate', value: isImmediate, rules: ['empty']},
-      {name: 'isS117', value: isS117, rules: ['empty']},
-      {name: 'isFixedPeriod', value: isFixedPeriod, rules: ['empty']},
-      {name: 'startDate', value: startDate, rules: ['empty']},
-      {name: 'endDate', value: endDate, rules: ['empty']},
-      {name: 'careType', value: selectedCareType, rules: ['empty']},
+      { name: "isImmediate", value: isImmediate, rules: ["empty"] },
+      { name: "isS117", value: isS117, rules: ["empty"] },
+      { name: "isFixedPeriod", value: isFixedPeriod, rules: ["empty"] },
+      { name: "startDate", value: startDate, rules: ["empty"] },
+      { name: "endDate", value: endDate, rules: ["empty"] },
+      { name: "careType", value: selectedCareType, rules: ["empty"] },
     ]);
-    if(hasErrors) {
+    if (hasErrors) {
       setErrorFields(validFields);
       return;
     }
@@ -68,7 +69,7 @@ const HomeCareSetup = ({
           <CareSelectDropdown
             error={errorFields.careType}
             initialText={null}
-            setError={() => changeErrorFields('careType')}
+            setError={() => changeErrorFields("careType")}
             careTypes={careTypes}
             setSelectedCareType={setSelectedCareType}
             selectedCareType={selectedCareType}
@@ -79,7 +80,7 @@ const HomeCareSetup = ({
             <RadioButton
               options={fixedPeriodOptions}
               error={errorFields.isFixedPeriod}
-              setError={() => changeErrorFields('isFixedPeriod')}
+              setError={() => changeErrorFields("isFixedPeriod")}
               onChange={setIsFixedPeriod}
               selectedValue={isFixedPeriod}
             />
@@ -88,7 +89,7 @@ const HomeCareSetup = ({
             <span className="mr-3">
               <DatePick
                 error={errorFields.startDate}
-                setError={() => changeErrorFields('startDate')}
+                setError={() => changeErrorFields("startDate")}
                 dateValue={startDate}
                 setDate={setStartDate}
               />
@@ -98,7 +99,7 @@ const HomeCareSetup = ({
                 dateValue={endDate}
                 setDate={setEndDate}
                 error={errorFields.endDate}
-                setError={() => changeErrorFields('endDate')}
+                setError={() => changeErrorFields("endDate")}
               />
             </span>
           </div>
@@ -109,7 +110,7 @@ const HomeCareSetup = ({
           label="Is this an immediate service or a re-enablement package?"
           options={yesNoValues}
           error={errorFields.isImmediate}
-          setError={() => changeErrorFields('isImmediate')}
+          setError={() => changeErrorFields("isImmediate")}
           onChange={setIsImmediate}
           selectedValue={isImmediate}
         />
@@ -120,7 +121,7 @@ const HomeCareSetup = ({
           options={yesNoValues}
           onChange={setIsS117}
           error={errorFields.isS117}
-          setError={() => changeErrorFields('isS117')}
+          setError={() => changeErrorFields("isS117")}
           selectedValue={isS117}
         />
       </div>
