@@ -1,5 +1,3 @@
 const maxStringLength = 200;
 
-export {
-  maxStringLength,
-};
+export { maxStringLength };

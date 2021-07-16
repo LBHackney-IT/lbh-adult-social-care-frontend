@@ -1,25 +1,24 @@
 .dropdown {
-    button.button {
-        border-radius: 0;
-        outline: none !important;
-        box-shadow: unset !important;
-        border: 2px solid $lbh-black1 !important;
-        padding-left: 10px;
-        padding-right: 10px;
-        height: 40px;
-        display: flex;
-        justify-content: space-between;
-    }
+  button.button {
+    border-radius: 0;
+    outline: none !important;
+    box-shadow: unset !important;
+    border: 2px solid $lbh-black1 !important;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+  }
 
-    .dropdown-item {
-        cursor: pointer;
-        padding-left: 10px;
-        padding-right: 10px;
-    }
+  .dropdown-item {
+    cursor: pointer;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 
-
 .dropdown-container {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }

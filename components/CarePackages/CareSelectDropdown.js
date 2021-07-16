@@ -1,5 +1,5 @@
-import React from "react";
-import Dropdown from "../Dropdown";
+import React from 'react';
+import Dropdown from '../Dropdown';
 
 const CareSelectDropdown = ({
   careTypes,
@@ -9,18 +9,16 @@ const CareSelectDropdown = ({
   initialText,
   error,
   setError,
-}) => {
-  return (
-    <Dropdown
-      error={error}
-      setError={setError}
-      label={label}
-      initialText={initialText}
-      options={careTypes}
-      selectedValue={selectedCareType}
-      onOptionSelect={(option) => setSelectedCareType(option)}
-    />
-  );
-};
+}) => (
+  <Dropdown
+    error={error}
+    setError={setError}
+    label={label}
+    initialText={initialText}
+    options={careTypes}
+    selectedValue={selectedCareType}
+    onOptionSelect={(option) => setSelectedCareType(option)}
+  />
+);
 
 export default CareSelectDropdown;

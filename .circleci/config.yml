@@ -87,7 +87,7 @@ jobs:
     executor: aws-cli/default
     steps:
       - *attach_workspace
-      - run:        
+      - run:
           name: delete stale draft GitHub releases
           command: yarn delete-draft-github-releases
       - run:

@@ -1,17 +1,17 @@
-import { useRouter } from "next/router";
-import React from "react";
-import { Button } from "../../components/Button";
-import HackneyFooterInfo from "../../components/HackneyFooterInfo";
-import Header from "../../components/Layout/Header";
-import { CARE_PACKAGE_ROUTE } from "../../routes/RouteConstants";
+import { useRouter } from 'next/router';
+import React from 'react';
+import { Button } from '../../components/Button';
+import HackneyFooterInfo from '../../components/HackneyFooterInfo';
+import Header from '../../components/Layout/Header';
+import { CARE_PACKAGE_ROUTE } from '../../routes/RouteConstants';
 
 const Login = () => {
   const router = useRouter();
 
   const login = () => {
-    //const baseUrl = window.location.host;
-    //debugger;
-    //const authUrl = `https://auth.hackney.gov.uk/auth?redirect_uri=${baseUrl}`;
+    // const baseUrl = window.location.host;
+    // debugger;
+    // const authUrl = `https://auth.hackney.gov.uk/auth?redirect_uri=${baseUrl}`;
     router.replace(CARE_PACKAGE_ROUTE);
   };
 

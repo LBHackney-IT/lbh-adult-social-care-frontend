@@ -1,23 +1,19 @@
-import React, { useState } from "react";
-import { HOME_CARE_ROUTE } from "../../routes/RouteConstants";
-import DatePick from "../DatePick";
-import RadioButton, { yesNoValues } from "../RadioButton";
-import CarePackageSetup from "../CarePackages/CarePackageSetup";
-import CareSelectDropdown from "../CarePackages/CareSelectDropdown";
-import {useRouter} from "next/router";
-import fieldValidator from "../../service/inputValidator";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { HOME_CARE_ROUTE } from '../../routes/RouteConstants';
+import DatePick from '../DatePick';
+import RadioButton, { yesNoValues } from '../RadioButton';
+import CarePackageSetup from '../CarePackages/CarePackageSetup';
+import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
+import fieldValidator from '../../service/inputValidator';
 
 // TODO remove
 const fixedPeriodOptions = [
-  { text: "Fixed period", value: true },
-  { text: "Ongoing", value: false },
+  { text: 'Fixed period', value: true },
+  { text: 'Ongoing', value: false },
 ];
 
-const HomeCareSetup = ({
-  careTypes,
-  selectedCareType,
-  setSelectedCareType,
-}) => {
+const HomeCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => {
   const router = useRouter();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -37,27 +33,25 @@ const HomeCareSetup = ({
     setErrorFields({
       ...errorFields,
       [field]: '',
-    })
+    });
   };
 
   // Handle build click
   const onBuildClick = () => {
     // Get the parameters for the home care package route
     const { validFields, hasErrors } = fieldValidator([
-      {name: 'isImmediate', value: isImmediate, rules: ['empty']},
-      {name: 'isS117', value: isS117, rules: ['empty']},
-      {name: 'isFixedPeriod', value: isFixedPeriod, rules: ['empty']},
-      {name: 'startDate', value: startDate, rules: ['empty']},
-      {name: 'endDate', value: endDate, rules: ['empty']},
-      {name: 'careType', value: selectedCareType, rules: ['empty']},
+      { name: 'isImmediate', value: isImmediate, rules: ['empty'] },
+      { name: 'isS117', value: isS117, rules: ['empty'] },
+      { name: 'isFixedPeriod', value: isFixedPeriod, rules: ['empty'] },
+      { name: 'startDate', value: startDate, rules: ['empty'] },
+      { name: 'endDate', value: endDate, rules: ['empty'] },
+      { name: 'careType', value: selectedCareType, rules: ['empty'] },
     ]);
-    if(hasErrors) {
+    if (hasErrors) {
       setErrorFields(validFields);
       return;
     }
-    router.push(
-      `${HOME_CARE_ROUTE}/${isImmediate}/${isS117}/${isFixedPeriod}/${startDate}/${endDate}`
-    );
+    router.push(`${HOME_CARE_ROUTE}/${isImmediate}/${isS117}/${isFixedPeriod}/${startDate}/${endDate}`);
   };
 
   return (
@@ -75,7 +69,7 @@ const HomeCareSetup = ({
           />
         </div>
         <div className="column">
-          <div style={{ marginBottom: "5px" }}>
+          <div style={{ marginBottom: '5px' }}>
             <RadioButton
               options={fixedPeriodOptions}
               error={errorFields.isFixedPeriod}

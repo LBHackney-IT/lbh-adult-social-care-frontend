@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {maxStringLength} from "../../constants/variables";
+import React, { useState } from 'react';
+import { maxStringLength } from '../../constants/variables';
 // {
 //       id: 1,
 //       dayId: 1,
@@ -25,26 +25,25 @@ const DaySummary = ({ daySummaryItem, edit, remove, slicedText = false }) => {
   const [openedBeDoneText, setOpenedBeDoneText] = useState([]);
 
   const formatStringLength = (string, collapsedText) => {
-    if(string.length > maxStringLength && collapsedText && slicedText) {
+    if (string.length > maxStringLength && collapsedText && slicedText) {
       return `${string.slice(0, maxStringLength)}`;
-    } else {
-      return string;
     }
-  }
+    return string;
+  };
 
   const showMore = (getter, setter, id) => setter([...getter, id]);
 
-  const collapse = (getter, setter, id) => setter(getter.filter(itemId => String(itemId) !== String(id)));
+  const collapse = (getter, setter, id) => setter(getter.filter((itemId) => String(itemId) !== String(id)));
 
   return (
     <div className="day-summary">
       <div className="day-summary-title">
-        <label>{daySummaryItem.day}</label>
-        <div className="day-summary-line"/>
+        <span>{daySummaryItem.day}</span>
+        <div className="day-summary-line" />
       </div>
       {daySummaryItem.careSummaries.map((careSummary) => {
-        const addressTextCollapsed = !openedAddressText.some(itemId => String(itemId) === String(careSummary.id));
-        const beDoneTextCollapsed = !openedBeDoneText.some(itemId => String(itemId) === String(careSummary.id));
+        const addressTextCollapsed = !openedAddressText.some((itemId) => String(itemId) === String(careSummary.id));
+        const beDoneTextCollapsed = !openedBeDoneText.some((itemId) => String(itemId) === String(careSummary.id));
         return (
           <div key={careSummary.id}>
             <div className="day-summary-time-slot">{careSummary.timeSlot}</div>
@@ -53,63 +52,91 @@ const DaySummary = ({ daySummaryItem, edit, remove, slicedText = false }) => {
               <div className="column level">
                 <div className="level-item level-right care-time-breakdown">
                   <div className="breakdown-item">
-                    <label>Primary Carer</label>
-                    <label className="time-entry">
-                      {careSummary.primaryCarer}
-                    </label>
+                    <span>Primary Carer</span>
+                    <span className="time-entry">{careSummary.primaryCarer}</span>
                   </div>
                   <div className="breakdown-item">
-                    <label>Secondary Carer</label>
-                    <label className="time-entry">
-                      {careSummary.secondaryCarer}
-                    </label>
+                    <span>Secondary Carer</span>
+                    <span className="time-entry">{careSummary.secondaryCarer}</span>
                   </div>
                   <div className="breakdown-item total-breakdown">
-                    <label>Total hrs</label>
-                    <label className="time-entry">
-                      {careSummary.totalHours}
-                    </label>
+                    <span>Total hrs</span>
+                    <span className="time-entry">{careSummary.totalHours}</span>
                   </div>
                 </div>
               </div>
             </div>
             <div className="columns additional-detail-summaries">
               <div className="column">
-                <label>Need Addressing</label>
-                <p>{formatStringLength(careSummary.needAddressing, addressTextCollapsed)} {
-                  addressTextCollapsed ?
+                <span>Need Addressing</span>
+                <p>
+                  {formatStringLength(careSummary.needAddressing, addressTextCollapsed)}{' '}
+                  {addressTextCollapsed ? (
                     <span
-                      className='day-summary__action-button'
-                      onClick={() => showMore(openedAddressText, setOpenedAddressText, careSummary.id)}> More...
-                    </span> :
-                    <span
-                      className='day-summary__action-button'
-                      onClick={() => collapse(openedAddressText, setOpenedAddressText, careSummary.id)}> Collapse
+                      className="day-summary__action-button"
+                      onClick={() => showMore(openedAddressText, setOpenedAddressText, careSummary.id)}
+                      role="presentation"
+                    >
+                      {' '}
+                      More...
                     </span>
-                  }
-                  </p>
-                    {
-                    (edit || remove) &&
-                    <div className='is-flex is-flex-wrap-wrap'>
-                      {edit && <p className='day-summary__action-button' onClick={() => edit(daySummaryItem)}>Edit</p>}
-                      {remove && <p onClick={() => remove(daySummaryItem)} className='day-summary__action-button'>Remove</p>}
-                    </div>
-                    }
+                  ) : (
+                    <span
+                      className="day-summary__action-button"
+                      onClick={() => collapse(openedAddressText, setOpenedAddressText, careSummary.id)}
+                      role="presentation"
+                    >
+                      {' '}
+                      Collapse
+                    </span>
+                  )}
+                </p>
+                {(edit || remove) && (
+                  <div className="is-flex is-flex-wrap-wrap">
+                    {edit && (
+                      <p
+                        className="day-summary__action-button"
+                        onClick={() => edit(daySummaryItem)}
+                        role="presentation"
+                      >
+                        Edit
+                      </p>
+                    )}
+                    {remove && (
+                      <p
+                        onClick={() => remove(daySummaryItem)}
+                        className="day-summary__action-button"
+                        role="presentation"
+                      >
+                        Remove
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
               <div className="column">
-                <label>What should be done</label>
+                <span>What should be done</span>
                 <p>
-                  {formatStringLength(careSummary.whatShouldBeDone, beDoneTextCollapsed)} {
-                    beDoneTextCollapsed ?
-                      <span
-                        className='day-summary__action-button'
-                        onClick={() => showMore(openedBeDoneText, setOpenedBeDoneText, careSummary.id)}> More...
-                      </span> :
+                  {formatStringLength(careSummary.whatShouldBeDone, beDoneTextCollapsed)}{' '}
+                  {beDoneTextCollapsed ? (
                     <span
-                      className='day-summary__action-button'
-                      onClick={() => collapse(openedBeDoneText, setOpenedBeDoneText, careSummary.id)}> Collapse
+                      className="day-summary__action-button"
+                      onClick={() => showMore(openedBeDoneText, setOpenedBeDoneText, careSummary.id)}
+                      role="presentation"
+                    >
+                      {' '}
+                      More...
                     </span>
-                }
+                  ) : (
+                    <span
+                      className="day-summary__action-button"
+                      onClick={() => collapse(openedBeDoneText, setOpenedBeDoneText, careSummary.id)}
+                      role="presentation"
+                    >
+                      {' '}
+                      Collapse
+                    </span>
+                  )}
                 </p>
               </div>
             </div>

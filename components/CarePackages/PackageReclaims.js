@@ -1,13 +1,13 @@
-import PackageReclaim from "../../components/PackageReclaim";
-import React, { useEffect, useState } from "react";
-import { getInitialPackageReclaim } from "../../api/Utils/CommonOptions";
-import { uniqueID } from "../../service/helpers";
+import React, { useEffect, useState } from 'react';
+import PackageReclaim from '../PackageReclaim';
+import { getInitialPackageReclaim } from '../../api/Utils/CommonOptions';
+import { uniqueID } from '../../service/helpers';
 import {
   getReclaimAmountOptions,
   getReclaimFromCategories,
   getReclaimFromOptions,
-} from "../../api/CarePackages/PackageReclaimApi";
-import ShouldPackageReclaim from "../HomeCare/ShouldPackageReclaim";
+} from '../../api/CarePackages/PackageReclaimApi';
+import ShouldPackageReclaim from '../HomeCare/ShouldPackageReclaim';
 
 const PackageReclaims = ({
   packagesReclaimed = [],
@@ -18,9 +18,7 @@ const PackageReclaims = ({
   setErrors = () => {},
 }) => {
   const [reclaimFromOptions, setReclaimFromOptions] = useState([]);
-  const [reclaimFromCategoryOptions, setReclaimFromCategoryOptions] = useState(
-    []
-  );
+  const [reclaimFromCategoryOptions, setReclaimFromCategoryOptions] = useState([]);
   const [reclaimAmountOptions, setReclaimAmountOptions] = useState([]);
   const [isReclaimed, setIsReclaimed] = useState(false);
 
@@ -39,65 +37,51 @@ const PackageReclaims = ({
   const retrieveReclaimFromOptions = () => {
     getReclaimFromOptions()
       .then((res) => {
-        let options = res.map((option) => ({
+        const options = res.map((option) => ({
           text: option.reclaimFromName,
           value: option.reclaimFromId,
         }));
         setReclaimFromOptions(options);
       })
-      .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve reclaim from options failed. ${error.message}`,
-        ]);
+      .catch((e) => {
+        setErrors([...errors, `Retrieve reclaim from options failed. ${e.message}`]);
       });
   };
 
   const retrieveReclaimFromCategories = () => {
     getReclaimFromCategories()
       .then((res) => {
-        let options = res.map((option) => ({
+        const options = res.map((option) => ({
           text: option.reclaimCategoryName,
           value: option.reclaimCategoryId,
         }));
         setReclaimFromCategoryOptions(options);
       })
-      .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve reclaim from categories failed. ${error.message}`,
-        ]);
+      .catch((e) => {
+        setErrors([...errors, `Retrieve reclaim from categories failed. ${e.message}`]);
       });
   };
 
   const retrieveReclaimAmountOptions = () => {
     getReclaimAmountOptions()
       .then((res) => {
-        let options = res.map((option) => ({
+        const options = res.map((option) => ({
           text: option.amountOptionName,
           value: option.amountOptionId,
         }));
         setReclaimAmountOptions(options);
       })
-      .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve reclaim amount options failed. ${error.message}`,
-        ]);
+      .catch((e) => {
+        setErrors([...errors, `Retrieve reclaim amount options failed. ${e.message}`]);
       });
   };
 
   const addDayCarePackageReclaim = () => {
-    setPackagesReclaimed([
-      ...packagesReclaimed,
-      { ...getInitialPackageReclaim(), id: uniqueID() },
-    ]);
+    setPackagesReclaimed([...packagesReclaimed, { ...getInitialPackageReclaim(), id: uniqueID() }]);
   };
 
   const removeDayCarePackageReclaim = (id) => {
-    const newPackagesReclaim = packagesReclaimed.filter(
-      (item) => item.id !== id
-    );
+    const newPackagesReclaim = packagesReclaimed.filter((item) => item.id !== id);
     setPackagesReclaimed(newPackagesReclaim);
   };
 
@@ -124,7 +108,7 @@ const PackageReclaims = ({
 
   return (
     <>
-      {/*<div>
+      {/* <div>
         <div className="mt-4 is-flex is-align-items-center is-justify-content-space-between">
           <p className="package-reclaim__text">
             Should the cost of this package be reclaimed in part or full from
@@ -153,32 +137,27 @@ const PackageReclaims = ({
           </div>
         </div>
         <hr className="horizontal-delimiter" />
-      </div>*/}
+      </div> */}
 
-      <ShouldPackageReclaim
-        isReclaimed={isReclaimed}
-        setIsReclaimed={changeIsPackageReclaimed}
-      />
+      <ShouldPackageReclaim isReclaimed={isReclaimed} setIsReclaimed={changeIsPackageReclaimed} />
 
       {!!packagesReclaimed.length && (
         <div>
-          {packagesReclaimed.map((item, index) => {
-            return (
-              <PackageReclaim
-                remove={() => removeDayCarePackageReclaim(item.id)}
-                key={item.id}
-                error={error}
-                index={index}
-                setError={setError}
-                packageReclaim={item}
-                setPackageReclaim={changeDayCarePackageReclaim(item.id)}
-                reclaimFromOptions={reclaimFromOptions}
-                reclaimFromCategoryOptions={reclaimFromCategoryOptions}
-                reclaimAmountOptions={reclaimAmountOptions}
-              />
-            );
-          })}
-          <p onClick={addDayCarePackageReclaim} className="action-button-text">
+          {packagesReclaimed.map((item, index) => (
+            <PackageReclaim
+              remove={() => removeDayCarePackageReclaim(item.id)}
+              key={item.id}
+              error={error}
+              index={index}
+              setError={setError}
+              packageReclaim={item}
+              setPackageReclaim={changeDayCarePackageReclaim(item.id)}
+              reclaimFromOptions={reclaimFromOptions}
+              reclaimFromCategoryOptions={reclaimFromCategoryOptions}
+              reclaimAmountOptions={reclaimAmountOptions}
+            />
+          ))}
+          <p onClick={addDayCarePackageReclaim} className="action-button-text" role="presentation">
             + Add another reclaim
           </p>
         </div>

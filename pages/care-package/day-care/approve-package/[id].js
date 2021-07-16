@@ -1,31 +1,31 @@
-import Layout from "../../../../components/Layout/Layout";
-import React, { useState } from "react";
-import DayCareApprovalTitle from "../../../../components/DayCare/DayCareApprovalTitle";
-import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
-import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
-import DayCarePackageBreakdown from "../../../../components/DayCare/DayCarePackageBreakdown";
-import DayCarePackageElementCostings from "../../../../components/DayCare/DayCarePackageElementCostings";
-import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
-import TitleHeader from "../../../../components/TitleHeader";
-import DayCareSummary from "../../../../components/DayCare/DayCareSummary";
-import TextArea from "../../../../components/TextArea";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import Layout from '../../../../components/Layout/Layout';
+import DayCareApprovalTitle from '../../../../components/DayCare/DayCareApprovalTitle';
+import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
+import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
+import DayCarePackageBreakdown from '../../../../components/DayCare/DayCarePackageBreakdown';
+import DayCarePackageElementCostings from '../../../../components/DayCare/DayCarePackageElementCostings';
+import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
+import TitleHeader from '../../../../components/TitleHeader';
+import DayCareSummary from '../../../../components/DayCare/DayCareSummary';
+import TextArea from '../../../../components/TextArea';
 import {
   approveDayCarePackageContents,
   dayCarePackageContentsRequestClarification,
   dayCarePackageRejectContents,
   getDayCarePackageApprovalDetails,
-} from "../../../../api/CarePackages/DayCareApi";
-import { useRouter } from "next/router"
-import { getSelectedDate } from "../../../../api/Utils/CommonOptions";
-import { getEnGBFormattedDate } from "../../../../api/Utils/FuncUtils";
-import withSession from "../../../../lib/session";
-import {getErrorResponse, getUserSession} from "../../../../service/helpers";
-import fieldValidator from "../../../../service/inputValidator";
+} from '../../../../api/CarePackages/DayCareApi';
+import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import withSession from '../../../../lib/session';
+import { getErrorResponse, getUserSession } from '../../../../service/helpers';
+import fieldValidator from '../../../../service/inputValidator';
 
 // start before render
-export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
+export const getServerSideProps = withSession(async ({ req, query: { id: residentialCarePackageId } }) => {
   const user = getUserSession({ req });
-  if(user.redirect) {
+  if (user.redirect) {
     return user;
   }
 
@@ -37,53 +37,40 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     data.dayCarePackage = dayCarePackage;
 
     // Update approve-package state
-    const newApprovalHistoryItems = dayCarePackage.packageApprovalHistory.map(
-      (historyItem) => ({
-        eventDate: new Date(historyItem.dateCreated).toLocaleDateString(
-          "en-GB"
-        ),
-        eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
-        eventSubMessage: historyItem.logSubText,
-      })
-    );
+    const newApprovalHistoryItems = dayCarePackage.packageApprovalHistory.map((historyItem) => ({
+      eventDate: new Date(historyItem.dateCreated).toLocaleDateString('en-GB'),
+      eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
+      eventSubMessage: historyItem.logSubText,
+    }));
 
-    const newOpportunityEntries = dayCarePackage.packageDetails.dayCareOpportunities.map(
-      (opportunityItem) => ({
-        id: opportunityItem.dayCarePackageOpportunityId,
-        howLongValue: opportunityItem.howLong.optionName,
-        timesPerMonthValue: opportunityItem.howManyTimesPerMonth.optionName,
-        needToAddress: opportunityItem.opportunitiesNeedToAddress,
-      })
-    );
+    const newOpportunityEntries = dayCarePackage.packageDetails.dayCareOpportunities.map((opportunityItem) => ({
+      id: opportunityItem.dayCarePackageOpportunityId,
+      howLongValue: opportunityItem.howLong.optionName,
+      timesPerMonthValue: opportunityItem.howManyTimesPerMonth.optionName,
+      needToAddress: opportunityItem.opportunitiesNeedToAddress,
+    }));
 
     data.approvalHistoryEntries([...newApprovalHistoryItems]);
     data.opportunityEntries([...newOpportunityEntries]);
 
     // Set days selected
 
-    data.daysSelected = getSelectedDate(dayCarePackage)
-  } catch(error) {
+    data.daysSelected = getSelectedDate(dayCarePackage);
+  } catch (error) {
     data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
 
-  return { props: { data }};
+  return { props: { data } };
 });
 
-const DayCareApprovePackage = ({
-  dayCarePackage,
-  approvalHistoryEntries,
-  opportunityEntries,
-  daysSelected,
-}) => {
+const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportunityEntries, daysSelected }) => {
   // Parameters
   const router = useRouter();
   const dayCarePackageId = router.query.id;
 
   const [errors, setErrors] = useState([]);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
-  const [requestInformationText, setRequestInformationText] = useState(
-    undefined
-  );
+  const [requestInformationText, setRequestInformationText] = useState(undefined);
 
   const [errorFields, setErrorFields] = useState({
     requestInformationText: '',
@@ -93,15 +80,15 @@ const DayCareApprovePackage = ({
     setErrorFields({
       ...errorFields,
       [field]: '',
-    })
+    });
   };
 
   const updateErrorFields = (errors) => {
     setErrorFields({
       ...errorFields,
-      ...getErrorResponse(errors)
+      ...getErrorResponse(errors),
     });
-  }
+  };
 
   const handleRejectPackage = () => {
     dayCarePackageRejectContents(dayCarePackageId)
@@ -114,22 +101,21 @@ const DayCareApprovePackage = ({
       });
   };
   const handleRequestMoreInformation = () => {
-    const { validFields, hasErrors } = fieldValidator([{name: 'requestInformationText', value: requestInformationText, rules: ['empty']}]);
-    if(hasErrors) {
+    const { validFields, hasErrors } = fieldValidator([
+      { name: 'requestInformationText', value: requestInformationText, rules: ['empty'] },
+    ]);
+    if (hasErrors) {
       setErrorFields(validFields);
       return;
     }
-    dayCarePackageContentsRequestClarification(
-      dayCarePackageId,
-      requestInformationText
-    )
+    dayCarePackageContentsRequestClarification(dayCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
-        updateErrorFields(error)
+        updateErrorFields(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
@@ -140,7 +126,7 @@ const DayCareApprovePackage = ({
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
-        updateErrorFields(error)
+        updateErrorFields(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
@@ -148,12 +134,8 @@ const DayCareApprovePackage = ({
     <Layout headerTitle="DAY CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
         <DayCareApprovalTitle
-          termTimeConsiderationOption={
-            dayCarePackage?.packageDetails.termTimeConsiderationOptionName
-          }
-          isFixedPeriodOrOngoing={
-            dayCarePackage?.packageDetails.isFixedPeriodOrOngoing
-          }
+          termTimeConsiderationOption={dayCarePackage?.packageDetails.termTimeConsiderationOptionName}
+          isFixedPeriodOrOngoing={dayCarePackage?.packageDetails.isFixedPeriodOrOngoing}
         />
         <ApprovalClientSummary />
 
@@ -163,14 +145,8 @@ const DayCareApprovePackage = ({
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      STARTS
-                    </p>
-                    <p className="font-size-14px">
-                      {getEnGBFormattedDate(
-                        dayCarePackage?.packageDetails.startDate
-                      )}
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">STARTS</p>
+                    <p className="font-size-14px">{getEnGBFormattedDate(dayCarePackage?.packageDetails.startDate)}</p>
                   </div>
                 </div>
               </div>
@@ -184,10 +160,8 @@ const DayCareApprovePackage = ({
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
                       {dayCarePackage?.packageDetails.endDate !== null
-                        ? getEnGBFormattedDate(
-                            dayCarePackage?.packageDetails.endDate
-                          )
-                        : "Ongoing"}
+                        ? getEnGBFormattedDate(dayCarePackage?.packageDetails.endDate)
+                        : 'Ongoing'}
                     </p>
                   </div>
                 </div>
@@ -199,9 +173,7 @@ const DayCareApprovePackage = ({
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      DAYS/WEEK
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">DAYS/WEEK</p>
                     <p className="font-size-14px">3</p>
                   </div>
                 </div>
@@ -221,11 +193,7 @@ const DayCareApprovePackage = ({
                 costType="ESTIMATE"
               />
 
-              <PackageCostBox
-                title="ANP / WK"
-                cost={dayCarePackage?.costSummary.anpPerWeek}
-                costType="ESTIMATE"
-              />
+              <PackageCostBox title="ANP / WK" cost={dayCarePackage?.costSummary.anpPerWeek} costType="ESTIMATE" />
 
               <PackageCostBox
                 title="TRANSPORT / WK"
@@ -242,16 +210,10 @@ const DayCareApprovePackage = ({
           </div>
         </div>
 
-        <DayCarePackageBreakdown
-          dayCareTime="12h"
-          transportTime="4h/week"
-          dayOpportunitiesTotalTime="3h"
-        />
+        <DayCarePackageBreakdown dayCareTime="12h" transportTime="4h/week" dayOpportunitiesTotalTime="3h" />
         <DayCarePackageElementCostings />
 
-        <PackageApprovalHistorySummary
-          approvalHistoryEntries={approvalHistoryEntries}
-        />
+        <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
 
         <div className="columns">
           <div className="column">
@@ -274,10 +236,7 @@ const DayCareApprovePackage = ({
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button
-                    className="button hackney-btn-light"
-                    onClick={handleRejectPackage}
-                  >
+                  <button className="button hackney-btn-light" onClick={handleRejectPackage}>
                     Deny
                   </button>
                 </div>
@@ -286,16 +245,11 @@ const DayCareApprovePackage = ({
                     onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
                     className="button hackney-btn-light"
                   >
-                    {displayMoreInfoForm
-                      ? "Hide Request more information"
-                      : "Request More Information"}
+                    {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button
-                    className="button hackney-btn-green"
-                    onClick={handleApprovePackageContents}
-                  >
+                  <button className="button hackney-btn-green" onClick={handleApprovePackageContents}>
                     Approve to be brokered
                   </button>
                 </div>
@@ -308,9 +262,7 @@ const DayCareApprovePackage = ({
           <div className="columns">
             <div className="column">
               <div className="mt-1">
-                <p className="font-size-16px font-weight-bold">
-                  Request more information
-                </p>
+                <p className="font-size-16px font-weight-bold">Request more information</p>
                 <TextArea
                   label=""
                   rows={5}
@@ -319,10 +271,7 @@ const DayCareApprovePackage = ({
                   error={errorFields.requestInformationText}
                   setError={() => changeErrorFields('requestInformationText')}
                 />
-                <button
-                  className="button hackney-btn-green"
-                  onClick={handleRequestMoreInformation}
-                >
+                <button className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
                   Request more information
                 </button>
               </div>

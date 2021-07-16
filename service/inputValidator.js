@@ -7,10 +7,10 @@
 const fieldValidator = (inputs = [], additionalRules = []) => {
   const validFields = {};
   let hasErrors = false;
-  inputs.forEach(item => {
+  inputs.forEach((item) => {
     validFields[item.name] = '';
-    if(item.rules.includes('empty')) {
-      if(item.value === undefined || item.value === '') {
+    if (item.rules.includes('empty')) {
+      if (item.value === undefined || item.value === '') {
         validFields[item.name] = 'Required field';
         hasErrors = true;
       }
@@ -21,17 +21,17 @@ const fieldValidator = (inputs = [], additionalRules = []) => {
     //  {name: 'firstName', text: 'First name too low', valid: (item) => item.firstName.length > 3},
     //  {name: 'password', text: 'Password too low', valid: (item) => item.password.length > 10}
     // ]
-    additionalRules.forEach(rule => {
-      if(item.rules.includes(rule.name)) {
+    additionalRules.forEach((rule) => {
+      if (item.rules.includes(rule.name)) {
         const additionalRuleValid = rule.valid(item);
-        if(!additionalRuleValid) {
+        if (!additionalRuleValid) {
           validFields[item.name] = rule.text;
           hasErrors = true;
         }
       }
     });
-  })
+  });
   return { validFields, hasErrors };
-}
+};
 
 export default fieldValidator;

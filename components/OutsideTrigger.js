@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from 'react';
 
 function useOutsideTrigger(ref, onClick) {
   useEffect(() => {
@@ -8,14 +8,14 @@ function useOutsideTrigger(ref, onClick) {
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref, onClick]);
 }
 
-const OutsideTrigger = ({ children, onClick, className = "" }) => {
+const OutsideTrigger = ({ children, onClick, className = '' }) => {
   const wrapperRef = useRef(null);
   useOutsideTrigger(wrapperRef, onClick);
 

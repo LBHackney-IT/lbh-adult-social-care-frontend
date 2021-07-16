@@ -1,8 +1,5 @@
-import { CARE_PACKAGE_ROUTE } from "../../routes/RouteConstants";
-import { useRouter } from "next/router";
+import React from 'react';
 
-const LoginCallback = () => {
-  return <div></div>;
-};
+const LoginCallback = () => <div />;
 
 export default LoginCallback;

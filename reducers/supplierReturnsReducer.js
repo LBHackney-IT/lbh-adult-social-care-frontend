@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const supplierReturnsSlice = createSlice({
-  name: "supplierReturns",
+  name: 'supplierReturns',
   initialState: {
     supplierReturns: {},
     weekOfSupplier: {},
@@ -13,35 +13,30 @@ const supplierReturnsSlice = createSlice({
       return {
         ...state,
         data: payload,
-      }
+      };
     },
     changeSupplierReturns: (state, action) => {
       const { payload } = action;
       return {
         ...state,
         supplierReturns: payload,
-      }
+      };
     },
     changeWeekOfSupplier: (state, action) => {
       const { payload } = action;
       return {
         ...state,
         weekOfSupplier: payload,
-      }
+      };
     },
   },
 });
 
 // Actions
-export const {
-  changeSupplierReturns,
-  changeWeekOfSupplier,
-} = supplierReturnsSlice.actions;
+export const { changeSupplierReturns, changeWeekOfSupplier } = supplierReturnsSlice.actions;
 
 // Selectors
-const selectSupplierReturns = (state) => {
-  return state.supplierReturns;
-};
+const selectSupplierReturns = (state) => state.supplierReturns;
 export { selectSupplierReturns, supplierReturnsSlice };
 
 // Reducer

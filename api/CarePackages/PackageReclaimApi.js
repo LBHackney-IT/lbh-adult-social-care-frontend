@@ -1,32 +1,15 @@
-import axios from "axios";
-import { handleError, handleResponse } from "../Utils/ApiUtils";
-import { BASE_URL } from "../BaseApi";
+import axios from 'axios';
+import { handleError, handleResponse } from '../Utils/ApiUtils';
+import { BASE_URL } from '../BaseApi';
 
 const RECLAIM_URL = `${BASE_URL}/v1/package-reclaim`;
 
-const getReclaimFromOptions = () => {
-  return axios
-    .get(`${RECLAIM_URL}/reclaim-from`)
-    .then(handleResponse)
-    .catch(handleError);
-};
+const getReclaimFromOptions = () => axios.get(`${RECLAIM_URL}/reclaim-from`).then(handleResponse).catch(handleError);
 
-const getReclaimFromCategories = () => {
-  return axios
-    .get(`${RECLAIM_URL}/reclaim-category`)
-    .then(handleResponse)
-    .catch(handleError);
-};
+const getReclaimFromCategories = () =>
+  axios.get(`${RECLAIM_URL}/reclaim-category`).then(handleResponse).catch(handleError);
 
-const getReclaimAmountOptions = () => {
-  return axios
-    .get(`${RECLAIM_URL}/amount-options`)
-    .then(handleResponse)
-    .catch(handleError);
-};
+const getReclaimAmountOptions = () =>
+  axios.get(`${RECLAIM_URL}/amount-options`).then(handleResponse).catch(handleError);
 
-export {
-  getReclaimFromOptions,
-  getReclaimFromCategories,
-  getReclaimAmountOptions,
-};
+export { getReclaimFromOptions, getReclaimFromCategories, getReclaimAmountOptions };

@@ -1,21 +1,17 @@
-import Input from "../Input";
-import DatePick from "../DatePick";
-import React, { useState } from "react";
-import { Button } from "../Button";
-import { createDayCareCollege } from "../../api/CarePackages/DayCareApi";
-import fieldValidator from "../../service/inputValidator";
+import React, { useState } from 'react';
+import Input from '../Input';
+import DatePick from '../DatePick';
+import { Button } from '../Button';
+import { createDayCareCollege } from '../../api/CarePackages/DayCareApi';
+import fieldValidator from '../../service/inputValidator';
 
-const DayCareCreateCollege = ({
-  newName = undefined,
-  onCreated = () => {},
-  onCancelled = () => {},
-}) => {
+const DayCareCreateCollege = ({ newName = undefined, onCreated = () => {}, onCancelled = () => {} }) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [collegeName, setCollegeName]    = useState(newName);
+  const [collegeName, setCollegeName] = useState(newName);
   const [errorFields, setErrorFields] = useState({
     collageName: '',
-    startDate:  '',
+    startDate: '',
     endDate: '',
   });
 
@@ -28,17 +24,17 @@ const DayCareCreateCollege = ({
 
   const handleSaveCollege = () => {
     const { validFields, hasErrors } = fieldValidator([
-      {name: 'startDate', value: startDate, rules: ['empty']},
-      {name: 'endDate', value: endDate, rules: ['empty']},
-      {name: 'collegeName', value: collegeName, rules: ['empty']}
+      { name: 'startDate', value: startDate, rules: ['empty'] },
+      { name: 'endDate', value: endDate, rules: ['empty'] },
+      { name: 'collegeName', value: collegeName, rules: ['empty'] },
     ]);
     setErrorFields(validFields);
-    if(!hasErrors) return;
+    if (!hasErrors) return;
     const collegeToCreate = {
-      collegeName: collegeName,
+      collegeName,
       startDate: startDate.toJSON(),
       endDate: endDate.toJSON(),
-      creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
+      creatorId: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8',
     };
 
     // Save in api and call onCreated if successful else call onCancelled
@@ -47,6 +43,7 @@ const DayCareCreateCollege = ({
         onCreated();
       })
       .catch((error) => {
+        console.log(error);
         onCancelled();
       });
   };
@@ -84,16 +81,10 @@ const DayCareCreateCollege = ({
           classes="max-w-200px"
         />
         <div>
-          <Button
-            className="button hackney-btn-green mt-2 mr-3"
-            onClick={handleSaveCollege}
-          >
+          <Button className="button hackney-btn-green mt-2 mr-3" onClick={handleSaveCollege}>
             Save
           </Button>
-          <Button
-            className="button hackney-btn-green mt-2"
-            onClick={onCancelled}
-          >
+          <Button className="button hackney-btn-green mt-2" onClick={onCancelled}>
             Cancel
           </Button>
         </div>
