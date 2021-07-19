@@ -1,0 +1,19 @@
+@import "table";
+@import "filters";
+@import "header";
+@import "logo";
+
+
+.social-worker-page {
+  .social-worker__header {
+    margin-bottom: 60px;
+  }
+
+  .social-worker__table {
+    padding-top: 0 !important;
+  }
+
+  .sort-table {
+    margin-bottom: 27px;
+  }
+}

@@ -1,0 +1,82 @@
+@import "css/variables";
+@import "css/borders";
+@import "css/typography";
+@import "css/table";
+@import "css/button";
+@import "css/checkbox";
+@import "css/clientSummary";
+@import "css/datePick";
+@import "css/files-drop-zone";
+@import "css/input";
+@import "css/radioButton";
+@import "css/titleHeader";
+@import "../public/fonts/fonts";
+@import "css/dropdown";
+@import "css/field";
+@import "css/ErrorField/error-field";
+@import "css/CarePackages/index";
+@import "css/ProposedPackages/index";
+@import "css/PackageReclaim/package-reclaim";
+@import "css/Payments/index";
+@import "css/Bills/index";
+@import "css/SupplierDashboard/index";
+@import "css/DayCare/index";
+@import "css/HomeCare/homeCare";
+@import "css/NursingCare/nursingCare";
+@import "css/ResidentialCare/residentialCare";
+@import "css/Layout/layout";
+@import "css/WeekOfSupplier/index";
+@import "css/SupplierReturns/table";
+@import "css/Login/login";
+@import "css/popup";
+@import "css/sectionHeading";
+@import "css/PayRuns/index";
+@import "css/not-found-page";
+@import "css/SocialWorker/index";
+@import "css/Dashboard/index";
+@import "css/Approver/index";
+@import "css/inputs";
+@import "css/BrokerageHub/index";
+@import "css/notifications";
+
+* {
+  font-family: "OpenSans", sans-serif !important;
+  letter-spacing: 0.15px;
+}
+
+button {
+  padding-left: 0;
+}
+
+// Small devices (landscape phones, 576px and smaller)
+@media screen and (max-width: 576px) {
+  .level-item {
+    align-items: start;
+    justify-content: left;
+  }
+}
+
+// Medium devices (tablets, 768px and small)
+@media screen and (max-width: 768px) {
+  .level-item {
+    align-items: start;
+    justify-content: left;
+  }
+}
+
+.mr-auto {
+  margin-right: auto;
+}
+
+.border-radius-0 {
+  p {
+    border-radius: 0 !important;
+  }
+}
+
+.hide {
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+  cursor: initial;
+}

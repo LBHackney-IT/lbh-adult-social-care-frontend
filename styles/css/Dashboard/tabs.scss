@@ -1,0 +1,36 @@
+.dashboard__tabs {
+  display: flex;
+  border-bottom: 1px solid $lbh-green1;
+  padding: 0 12px;
+  margin-bottom: 44px;
+}
+
+.dashboard__tabs-tab {
+  margin-right: 12px;
+  padding: 10px 16px;
+  color: black;
+  font-weight: bold;
+  font-size: 14px;
+
+  background: white;
+  border: 1px solid $lbh-green1;
+  border-bottom: 0;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.dashboard__tabs-active-tab {
+  background: $lbh-green1;
+  color: white;
+  position: relative;
+}
+
+.border-2 {
+  border-width: 2px;
+  border-bottom: 2px solid $lbh-green1;
+  margin-top: -1px;
+  bottom: -1px;
+  position: relative;
+}

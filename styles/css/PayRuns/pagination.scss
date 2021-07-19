@@ -1,0 +1,26 @@
+.table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px 16px 0 16px;
+  margin-bottom: 32px;
+
+  .button {
+    border-radius: 0;
+  }
+}
+
+.table-pagination-info {
+  margin-right: 15px;
+}
+
+.table-pagination-button.button.button-base {
+  background-color: white;
+  color: $lbh-gray2;
+  margin-right: 8px;
+}
+
+.table-pagination-item-active.button.button-base {
+  background-color: $lbh-green1;
+  color: white;
+}

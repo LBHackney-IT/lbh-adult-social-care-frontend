@@ -1,0 +1,178 @@
+html {
+  font-size: 1rem;
+}
+
+// Extra small devices (portrait phones, less than 576px) - default
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+  html {
+    font-size: 1.02rem;
+  }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+  html {
+    font-size: 1.04rem;
+  }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+  html {
+    font-size: 1.06rem;
+  }
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+  html {
+    font-size: 1.1rem;
+  }
+}
+
+.text-lowercase {
+  text-transform: lowercase !important;
+}
+
+.text-uppercase {
+  text-transform: uppercase !important;
+}
+
+.text-capitalize {
+  text-transform: capitalize !important;
+}
+
+.font-weight-light {
+  font-weight: 300 !important;
+}
+
+.font-weight-normal {
+  font-weight: 400 !important;
+}
+
+.font-weight-bold {
+  font-weight: 700 !important;
+}
+
+.font-weight-bolder {
+  font-weight: bolder !important;
+}
+
+.font-italic {
+  font-style: italic !important;
+}
+
+.text-white {
+  color: #fff !important;
+}
+
+.text-gray {
+  color: $lbh-gray-text;
+}
+
+.text-light {
+  color: #f8f9fa !important;
+}
+
+.text-dark {
+  color: #343a40 !important;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+.font-size-24px {
+  font-size: 24px !important;
+}
+
+.font-size-19px {
+  font-size: 19px !important;
+}
+
+.font-size-16px {
+  font-size: 16px !important;
+}
+
+.font-size-14px {
+  font-size: 14px !important;
+}
+
+.font-size-12px {
+  font-size: 12px !important;
+}
+
+.max-w-150px {
+  max-width: 150px;
+}
+.max-w-200px {
+  max-width: 200px;
+}
+
+.min-w-150px {
+  min-width: 150px;
+}
+
+.min-w-200px {
+  min-width: 200px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.is-underlined {
+  text-decoration: underline;
+}
+
+//Hackney specific
+
+// Text section
+.hackney-text-green {
+  color: #00664f;
+}
+
+.hackney-text-black {
+  color: #0b0c0c;
+}
+
+.hackney-text-secondary {
+  color: #525a5b;
+}
+
+// Background sections
+.hackney-bg-light {
+  background-color: #dee0e2;
+  color: #0b0c0c !important;
+}
+
+// Buttons sections
+.button.hackney-btn-light {
+  background-color: #dee0e2;
+  color: #0b0c0c;
+  font-size: 14px;
+  font-weight: bold;
+  border-color: transparent;
+}
+
+.button.hackney-btn-green {
+  background-color: #00664f;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  border-color: transparent;
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.text-align-center {
+  text-align: center;
+}

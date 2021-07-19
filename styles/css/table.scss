@@ -1,0 +1,327 @@
+.table {
+  overflow: auto;
+  padding: 16px;
+}
+
+.table__title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: $lbh-black1;
+  margin-bottom: 20px;
+}
+
+.table__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid $lbh-gray3;
+
+  padding-bottom: 16px;
+  padding-top: 20px;
+
+  transition: background-color 0.2s ease;
+
+  &.rejected {
+    background-color: $lbh-light-red;
+  }
+
+  &:not(.collapsed):hover {
+    background-color: $lbh-gray3;
+  }
+
+  &.collapsed {
+    padding-bottom: 0;
+  }
+}
+
+.sort-table {
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 35px;
+}
+
+.sort-checkbox {
+  width: 32px;
+
+  label.checkbox .checkbox-check {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.sort__sort-name {
+  color: black;
+  margin-right: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.sort {
+  display: flex;
+  align-items: center;
+
+  .sort__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    svg:first-of-type {
+      transform: rotate(180deg);
+      margin-bottom: 3px;
+    }
+
+    svg {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.table__row-collapsed-main-item__status {
+  padding: 5px;
+  border-radius: 4px;
+
+  &.disputed {
+    background-color: $lbh-red;
+    color: white;
+  }
+
+  &.not-submitted {
+    background-color: $lbh-light-orange;
+    border: 1px solid $lbh-orange;
+  }
+}
+
+.table__row-item-status {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 12px;
+  color: $lbh-black1;
+
+  .dropdown, p {
+    border-radius: 4px;
+    padding: 5px;
+  }
+
+  &.awaiting-approval, &.held, &.outstanding, &.submitted, &.pending-supplier, &.in-review, &.n\/a {
+    p {
+      background: $lbh-orange;
+    }
+  }
+
+  &.paid, &.paid-with-holds, &.released, &.complete, &.accepted, &.approved {
+    p {
+      background: $lbh-green1;
+      color: white;
+    }
+  }
+
+  &.draft, &.not-started, &.assign {
+    p {
+      background: $lbh-gray;
+    }
+  }
+
+  &.dropdown-container {
+    .button {
+      width: 124px;
+      span {
+        font-size: 14px;
+        color: $lbh-black1;
+      }
+    }
+
+    .dropdown-menu {
+      left: initial;
+      right: 0;
+    }
+  }
+
+  &.in-dispute.dropdown-container {
+    .button {
+      background-color: $lbh-blue-highlight;
+    }
+    span {
+      color: white;
+    }
+    .icon path {
+      fill: white;
+    }
+  }
+
+  &.held.dropdown-container {
+    .button {
+      background-color: $lbh-dark-orange;
+    }
+
+    .icon path {
+      fill: $lbh-black1;
+    }
+  }
+
+  &.accepted.dropdown-container {
+    .button {
+      background-color: $lbh-green1;
+    }
+    span {
+      color: white;
+    }
+    .icon path {
+      fill: white;
+    }
+  }
+
+  &.overdue, &.disputes-active, &.in-dispute, &.action-needed, &.info-needed {
+    p {
+      background-color: $lbh-red;
+      color: white;
+    }
+  }
+
+  &.rejected.dropdown-container {
+    .button {
+      background-color: $lbh-red;
+    }
+    span {
+      color: white;
+    }
+
+    .icon path {
+      fill: white;
+    }
+  }
+}
+
+.table__row-collapsed {
+  flex-basis: 100%;
+}
+
+.table__row-collapsed-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-left: 40px;
+
+  p {
+    font-weight: bold;
+    color: $lbh-black1;
+    font-size: 20px;
+  }
+}
+
+.table__row-collapsed-header-left {
+  display: flex;
+
+  p:first-of-type {
+    margin-right: 120px;
+  }
+}
+
+.table__row-collapsed-main-header {
+  display: flex;
+}
+
+.table__row-collapsed-main-item {
+  display: flex;
+}
+
+.table__row-collapsed-container {
+  background: $lbh-light-gray;
+  padding: 17px 10px;
+
+  &:last-of-type {
+    padding-bottom: 30px;
+  }
+
+  &:first-of-type {
+    margin-top: 18px;
+  }
+}
+
+.table__row-collapsed-main {
+  background: white;
+  padding: 15px 40px;
+  border: 1px solid $lbh-gray;
+}
+
+.table__row-collapsed-main-header {
+  margin-bottom: 10px;
+
+  p:first-of-type {
+    width: 223px;
+  }
+
+  p:nth-of-type(2) {
+    width: 70px;
+  }
+
+  p:nth-of-type(3) {
+    width: 70px;
+  }
+
+  p:nth-of-type(4) {
+    width: 170px;
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: bold;
+    color: $lbh-black1;
+  }
+}
+
+.table__row-collapsed-main-item {
+  padding-bottom: 10px;
+
+  &:not(&:last-of-type) {
+    border-bottom: 1px solid $lbh-gray;
+    margin-bottom: 10px;
+  }
+
+  p:first-of-type {
+    width: 223px;
+  }
+
+  p:nth-of-type(2) {
+    width: 70px;
+  }
+
+  p:nth-of-type(3) {
+    width: 70px;
+  }
+
+  p:nth-of-type(4) {
+    width: 170px;
+  }
+}
+
+.table__row-item-checkbox {
+  label.checkbox .checkbox-check {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.table__row-collapsed-main-item__status {
+  padding: 5px;
+  border-radius: 4px;
+
+  &.disputed {
+    background-color: $lbh-red;
+    color: white;
+  }
+
+  &.submitted {
+    background-color: $lbh-green1;
+    color: white;
+  }
+
+  &.not-submitted, &.accepted, &.resubmitted {
+    background-color: $lbh-light-orange;
+    border: 1px solid $lbh-orange;
+  }
+}

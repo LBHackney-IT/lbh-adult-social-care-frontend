@@ -1,0 +1,66 @@
+.popup {
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0, 0.3);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup__inner-content {
+  background: white;
+  padding: 30px;
+  width: 70%;
+}
+
+.popup__close-button {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.popup__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.popup__header-title {
+  color: $lbh-black1;
+  font-size: 27px;
+  font-weight: bold;
+}
+
+.popup__action-buttons {
+  button {
+    border-radius: 0;
+  }
+
+  button:first-of-type {
+    margin-right: 10px;
+    background: white;
+    color: $lbh-gray2;
+  }
+}
+
+.popup-document-uploader {
+  .popup__inner-content {
+    width: initial;
+  }
+  .popup__action-buttons {
+    width: 70%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column-reverse;
+
+    button:first-of-type {
+      margin-right: initial;
+      margin-top: 9px;
+    }
+  }
+}
