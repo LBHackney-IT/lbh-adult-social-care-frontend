@@ -182,6 +182,21 @@ workflows:
           filters:
             branches:
               only: develop
+      - assume-role-production:
+          context: mosaic-production-context
+          # requires:
+          #   - tests
+          #   - e2e
+          filters:
+            branches:
+              only: main
+      - build-deploy-production:
+          requires:
+            - assume-role-production
+            - build
+          filters:
+            branches:
+              only: main
       # - permit-deploy-production:
       #     type: approval
       #     requires:
