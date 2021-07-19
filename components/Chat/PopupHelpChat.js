@@ -3,6 +3,7 @@ import Popup from "../Popup";
 import Dropdown from "../Dropdown";
 import TextArea from "../TextArea";
 import {ChatSettingsIcon} from "../Icons";
+import { formatDateWithSign } from '../../service/helpers'
 
 const PopupHelpChat = ({
   closePopup,
@@ -28,8 +29,9 @@ const PopupHelpChat = ({
   const createHelpChat = (
     <div className='popup-help-chat__container'>
       <div className='popup-help-chat__header'>
-        <h2>{currentUserInfo.supplier}</h2>
-        <p>w/c 13 Jan 2021</p>
+        <p>Package ID: XXXXXXX</p>
+        <p>{formatDateWithSign(new Date())} - {formatDateWithSign(new Date(new Date().getTime() + 2000000000))}</p>
+        <p className='font-weight-bold'>Currently waiting on: Finance</p>
       </div>
       <div className='popup-help-chat__messages'>
         {messages.map(item => {

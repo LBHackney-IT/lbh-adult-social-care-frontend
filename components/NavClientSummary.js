@@ -1,13 +1,12 @@
 import React from "react";
 import Image from "next/image";
 import { ArrowLeftGreenIcon } from './Icons'
+import { useRouter } from 'next/router'
 
 const NavClientSummary = ({
   children,
-  client,
   hackneyId,
-  age,
-  showBackButton = false,
+  showBackButton = true,
   packagesCount = null,
   preferredContact = null,
   canSpeakEnglish = null,
@@ -15,9 +14,12 @@ const NavClientSummary = ({
   sourcingCare,
   postcode,
 }) => {
+  const router = useRouter();
+  const goBack = () => router.back();
+
   return (
     <div className="client-summary-cont">
-      {showBackButton && <div className="nav-back-button"><ArrowLeftGreenIcon /><p>Back</p></div>}
+      {showBackButton && <div onClick={goBack} className="nav-back-button"><ArrowLeftGreenIcon /><p>Back</p></div>}
       <div className="is-flex-wrap-wrap">
         {children && <div className="is-5 client-summary-title">{children}</div>}
         <div className="client-prop">

@@ -13,7 +13,6 @@ import {
 import PackageApprovalHistorySummary from "../../PackageApprovalHistorySummary";
 import PackageCostBox from "../../DayCare/PackageCostBox";
 import ResidentialCareSummary from "../../ResidentialCare/ResidentialCareSummary";
-import { CaretDownIcon } from '../../Icons'
 import ProposedPackagesTab from '../ProposedPackagesTabs'
 
 const PackagesResidentialCare = ({

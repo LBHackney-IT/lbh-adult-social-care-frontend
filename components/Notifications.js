@@ -6,7 +6,6 @@ const CustomNotification = ({ className = '' }) => {
   const { notifications, showedNotifications } = useSelector(selectNotifications);
   const [timer, setTimer] = useState(null);
   const dispatch = useDispatch();
-  console.log(notifications);
 
   const closeNotification = () => {
     if(timer) {

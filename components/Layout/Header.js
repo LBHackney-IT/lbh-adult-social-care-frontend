@@ -2,9 +2,11 @@ import React from "react";
 import { HackneyLogo } from "../Icons";
 import { useDispatch, useSelector } from 'react-redux'
 import { openMobileMenu, closeMobileMenu, selectMobileMenu } from '../../reducers/mobileMenuReducer'
+import { useRouter } from 'next/router'
 
 const Header = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { isOpened } = useSelector(selectMobileMenu);
 
   const onToggleMobileMenu = () => {
@@ -31,7 +33,7 @@ const Header = () => {
                 </>
             }
           </div>
-          <HackneyLogo />
+          <HackneyLogo className='is-clickable' onClick={() => router.push('/care-package')} />
         </div>
       </div>
       <div className='header-lines'>

@@ -1,10 +1,8 @@
 import React from "react";
 import Header from "./Header";
 import NavigationColumn from './NavigationColumn'
-import { useSelector } from 'react-redux'
-import { selectMobileMenu } from '../../reducers/mobileMenuReducer'
 
-const Layout = ({ children, showNav = true, showBackButton = false, clientSummaryInfo }) => {
+const Layout = ({ children, showNav = true, showBackButton, clientSummaryInfo }) => {
   return (
     <>
       <Header />

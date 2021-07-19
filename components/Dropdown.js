@@ -58,7 +58,7 @@ const Dropdown = ({
   };
 
   return (
-    <BaseField className={`${className} dropdown-container`} label={label}>
+    <BaseField classes={`${className} dropdown-container`} label={label}>
       <div
         data-selected-value={selectedOption?.value}
         className={

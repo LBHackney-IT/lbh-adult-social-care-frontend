@@ -11,6 +11,14 @@
         justify-content: space-between;
     }
 
+    .dropdown-content {
+        border: 1px solid $lbh-light-gray-border;
+    }
+
+    .dropdown-menu {
+        width: 100%;
+    }
+
     .icon {
         transition: 0.3s ease;
     }
@@ -19,6 +27,7 @@
         cursor: pointer;
         padding-left: 10px;
         padding-right: 10px;
+        color: $lbh-text;
     }
 
     &.is-active {

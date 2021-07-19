@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {NURSING_CARE_ROUTE, RESIDENTIAL_CARE_ROUTE} from "../../routes/RouteConstants";
+import {RESIDENTIAL_CARE_ROUTE} from "../../routes/RouteConstants";
 import DatePick from "../DatePick";
 import RadioButton, { yesNoValues } from "../RadioButton";
 import CarePackageSetup from "../CarePackages/CarePackageSetup";

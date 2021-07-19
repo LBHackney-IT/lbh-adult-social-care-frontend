@@ -46,58 +46,60 @@ const PayRunTable = ({
         const collapsedRow = collapsedRows.includes(item.id);
         const rowStatus = item.status ? ` ${item.status}` : '';
         return (
-          <div key={item.id} onClick={() => clickRow(item)} className={`table__row${collapsedRow ? ' collapsed' : ''}${rowStatus}`}>
-            {checkedRows &&
-              <div className='table__row-item table__row-item-checkbox'>
-                <Checkbox checked={checkedRows.includes(item.id)} onChange={(value, event) => {
-                  event.stopPropagation();
-                  setCheckedRows(item.id)
-                }} />
-              </div>
-            }
-            {Object.getOwnPropertyNames(item).map(rowItemName => {
-              if(Array.isArray(item[rowItemName]) || (item[rowItemName]?.id !== undefined) || (isIgnoreId && rowItemName === 'id')) {
-                return <React.Fragment key={`${rowItemName}${item.id}`}/>;
-              }
-              const value = includeString(rowItemName.toLowerCase(),'date') ? formatDateWithSign(item[rowItemName]) : item[rowItemName];
-              const isStatus = rowItemName === 'status';
-              const formattedStatus = isStatus && formatStatus(item[rowItemName]);
-              const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';
-              if(isStatusDropDown && isStatus) {
-                return (
-                  <Dropdown key={`${rowItemName}${item.id}`}
-                    className={`table__row-item${statusItemClass}`}
-                    options={[
-                      {text: 'Accepted', value: 'accepted'},
-                      {text: 'Held', value: 'held'},
-                      {text: 'Rejected', value: 'rejected'},
-                      {text: 'In dispute', value: 'in-dispute'}
-                    ]}
-                    selectedValue={value}
-                    onOptionSelect={(value) => console.log(value)}
-                    initialText='Status'
-                  />
-                );
-              }
-
-              return (
-                <div key={`${rowItemName}${item.id}`}
-                   className={`table__row-item${statusItemClass}`}>
-                  <p>{isStatus ? formattedStatus : value}</p>
-                </div>
-              );
-            })}
-            {additionalActions && additionalActions.map(action => {
-              const Component = action.Component;
-              return (
-                <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
-                  <Component onClick={(e) => {
-                    e.stopPropagation();
-                    action.onClick(item)
+          <div key={item.id}  className={`table__row${collapsedRow ? ' collapsed' : ''}${rowStatus}`}>
+            <div onClick={() => clickRow(item)} className={`table__row-column-items${clickRow ? ' is-clickable' : ''}`}>
+              {checkedRows &&
+                <div className='table__row-item table__row-item-checkbox'>
+                  <Checkbox checked={checkedRows.includes(item.id)} onChange={(value, event) => {
+                    event.stopPropagation();
+                    setCheckedRows(item.id)
                   }} />
                 </div>
-              )
-            })}
+              }
+              {Object.getOwnPropertyNames(item).map(rowItemName => {
+                if(Array.isArray(item[rowItemName]) || (item[rowItemName]?.id !== undefined) || (isIgnoreId && rowItemName === 'id')) {
+                  return <React.Fragment key={`${rowItemName}${item.id}`}/>;
+                }
+                const value = includeString(rowItemName.toLowerCase(),'date') ? formatDateWithSign(item[rowItemName]) : item[rowItemName];
+                const isStatus = rowItemName === 'status';
+                const formattedStatus = isStatus && formatStatus(item[rowItemName]);
+                const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';
+                if(isStatusDropDown && isStatus) {
+                  return (
+                    <Dropdown key={`${rowItemName}${item.id}`}
+                      className={`table__row-item${statusItemClass}`}
+                      options={[
+                        {text: 'Accepted', value: 'accepted'},
+                        {text: 'Held', value: 'held'},
+                        {text: 'Rejected', value: 'rejected'},
+                        {text: 'In dispute', value: 'in-dispute'}
+                      ]}
+                      selectedValue={value}
+                      onOptionSelect={(value) => console.log(value)}
+                      initialText='Status'
+                    />
+                  );
+                }
+
+                return (
+                  <div key={`${rowItemName}${item.id}`}
+                     className={`table__row-item${statusItemClass}`}>
+                    <p>{isStatus ? formattedStatus : value}</p>
+                  </div>
+                );
+              })}
+              {additionalActions && additionalActions.map(action => {
+                const Component = action.Component;
+                return (
+                  <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
+                    <Component onClick={(e) => {
+                      e.stopPropagation();
+                      action.onClick(item)
+                    }} />
+                  </div>
+                )
+              })}
+            </div>
             {canCollapseRows && collapsedRow &&
             <div className='table__row-collapsed'>
               {item.cares.map(care => {
@@ -115,7 +117,7 @@ const PayRunTable = ({
                         <p>Item</p>
                         <p>Cost</p>
                         <p>Qty</p>
-                        <p>Service User</p>
+                        <p>Total</p>
                       </div>
                       {care.items.map(personInfo => {
                         const dateFrom = new Date(personInfo.dateFrom);

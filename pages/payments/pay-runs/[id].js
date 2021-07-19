@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import { useRouter } from 'next/router';
 import PayRunTable from "../../../components/PayRuns/PayRunTable";
 import Pagination from "../../../components/Payments/Pagination";
-import {payRunTableData} from "../../../testData/testDataPayRuns";
+import { payRunTableData } from "../../../testData/testDataPayRuns";
 import PopupCreatePayRun from "../../../components/PayRuns/PopupCreatePayRun";
 import PayRunsLevelInsight from "../../../components/PayRuns/PayRunsLevelInsight";
 import PayRunHeader from "../../../components/PayRuns/PayRunHeader";
 import PopupHoldPayment from "../../../components/PayRuns/PopupHoldPayment";
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import {getUserSession} from "../../../service/helpers";
+import { getUserSession } from "../../../service/helpers";
 import withSession from "../../../lib/session";
 
 export const getServerSideProps = withSession(async function({ req }) {

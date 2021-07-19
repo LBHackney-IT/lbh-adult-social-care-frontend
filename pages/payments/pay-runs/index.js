@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
 import PayRunsHeader from "../../../components/PayRuns/PayRunsHeader";
 import PaymentsTabs from "../../../components/Payments/PaymentsTabs";
@@ -10,7 +10,7 @@ import ChatButton from "../../../components/PayRuns/ChatButton";
 import PayRunsLevelInsight from "../../../components/PayRuns/PayRunsLevelInsight";
 import PopupHelpChat from "../../../components/Chat/PopupHelpChat";
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import {getUserSession} from "../../../service/helpers";
+import { getUserSession } from "../../../service/helpers";
 import withSession from "../../../lib/session";
 
 export const getServerSideProps = withSession(async function({ req }) {

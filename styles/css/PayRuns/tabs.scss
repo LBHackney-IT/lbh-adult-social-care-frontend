@@ -1,18 +1,20 @@
 .payments__tabs {
   display: flex;
-  border-bottom: 1px solid $lbh-gray;
+  border-bottom: 1px solid $lbh-green-border;
   padding: 0 12px;
 }
 
 .payments__tabs-inactive-tab {
   background: $lbh-gray;
   margin-bottom: 7px;
+  border-radius: 4px;
 }
 
 .payments__tabs-tab {
   margin-right: 12px;
   min-width: 134px;
   padding: 6px 12px;
+  border-radius: 4px 4px 0 0;
 
   &:hover {
     cursor: pointer;
@@ -20,10 +22,10 @@
 }
 
 .payments__tabs-active-tab {
-  border-bottom: 2px solid white;
-  border-left: 1px solid $lbh-gray;
-  border-top: 1px solid $lbh-gray;
-  border-right: 1px solid $lbh-gray;
+  border-left: 1px solid $lbh-green-border;
+  border-top: 1px solid $lbh-green-border;
+  border-right: 1px solid $lbh-green-border;
   position: relative;
-  bottom: -2px;
+  background: white;
+  bottom: -1px;
 }

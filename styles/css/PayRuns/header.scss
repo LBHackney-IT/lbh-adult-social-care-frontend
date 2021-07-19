@@ -4,12 +4,27 @@
   justify-content: space-between;
 }
 
+.pay-runs__header {
+  padding-bottom: 20px !important;
+  margin-bottom: 44px;
+}
+
 .pay-runs__filters {
   display: flex;
   flex-wrap: wrap;
 
+  .control {
+    margin-right: 8px;
+  }
+
   .custom-input__search {
     min-width: 231px;
+    height: 42px;
+
+    button {
+      height: 40px;
+      width: 40px;
+    }
 
     input {
       width: 85%;
@@ -19,7 +34,7 @@
   .dropdown-container {
     .button {
       width: 157px;
-      height: 36px;
+      height: 42px;
     }
   }
 }
@@ -64,11 +79,19 @@
 .pay-run__dropdowns {
   display: flex;
   flex-wrap: wrap;
+
+  .control {
+    margin-right: 8px;
+  }
+
+  .dropdown button.button {
+    height: 42px;
+  }
 }
 
 .held-payments__filters {
   display: flex;
-  height: 36px;
+  height: 42px;
 
   label.checkbox {
     align-items: flex-end;

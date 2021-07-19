@@ -3,12 +3,23 @@ label.checkbox {
     align-items: center;
 
     .checkbox-check {
+        padding: 2px;
         margin-right: 12px;
         height: 33px;
         width: 33px;
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 2px solid $lbh-black1;
+        border-radius: 3px;
+        border: 2px solid $lbh-light-gray-border;
+    }
+
+    &.checkbox-status-checked {
+        .checkbox-check {
+            border-color: $lbh-header-green;
+            path {
+                fill: $lbh-header-green;
+            }
+        }
     }
 }

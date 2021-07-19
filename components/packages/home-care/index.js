@@ -15,7 +15,6 @@ import { addNotification } from '../../../reducers/notificationsReducer';
 import { useDispatch } from 'react-redux'
 import { getErrorResponse } from '../../../service/helpers'
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants'
-import { CaretDownIcon } from '../../Icons'
 import ProposedPackagesTab from '../ProposedPackagesTabs'
 
 const stageOptions = [

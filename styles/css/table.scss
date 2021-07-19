@@ -18,9 +18,6 @@
   flex-wrap: wrap;
   border-bottom: 1px solid $lbh-gray3;
 
-  padding-bottom: 16px;
-  padding-top: 20px;
-
   transition: background-color 0.2s ease;
 
   &.rejected {
@@ -28,7 +25,7 @@
   }
 
   &:not(.collapsed):hover {
-    background-color: $lbh-gray3;
+    background-color: #f1f1f1;
   }
 
   &.collapsed {
@@ -74,6 +71,7 @@
     }
 
     svg {
+      width: 12px;
       &:hover {
         cursor: pointer;
       }
@@ -102,7 +100,7 @@
   font-size: 12px;
   color: $lbh-black1;
 
-  .dropdown, p {
+  p {
     border-radius: 4px;
     padding: 5px;
   }
@@ -149,7 +147,7 @@
       color: white;
     }
     .icon path {
-      fill: white;
+      stroke: white;
     }
   }
 
@@ -159,7 +157,7 @@
     }
 
     .icon path {
-      fill: $lbh-black1;
+      stroke: $lbh-black1;
     }
   }
 
@@ -171,7 +169,7 @@
       color: white;
     }
     .icon path {
-      fill: white;
+      stroke: white;
     }
   }
 
@@ -191,7 +189,7 @@
     }
 
     .icon path {
-      fill: white;
+      stroke: white;
     }
   }
 }
@@ -221,12 +219,26 @@
   }
 }
 
+.table__row-column-items {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  height: 56px;
+  padding: 0 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .table__row-collapsed-main-header {
   display: flex;
 }
 
 .table__row-collapsed-main-item {
   display: flex;
+  align-items: center;
 }
 
 .table__row-collapsed-container {
@@ -235,10 +247,6 @@
 
   &:last-of-type {
     padding-bottom: 30px;
-  }
-
-  &:first-of-type {
-    margin-top: 18px;
   }
 }
 

@@ -127,7 +127,7 @@
 
 .column.main-content__with-nav {
     padding-left: 259px;
-    padding-right: 0;
+    padding-right: 10px;
     padding-top: 104px;
 
     @include media-small-ipod-down {
@@ -150,7 +150,6 @@
     .client-summary-cont {
         background: rgba(11, 12, 12, 0.02);
         border-bottom: 0;
-        margin-bottom: 32px;
         padding-left: 16px;
         padding-right: 16px;
 
@@ -171,6 +170,8 @@
         }
 
         .nav-back-button {
+            display: flex;
+            align-items: center;
             margin-bottom: 11px;
             &:hover {
                 cursor: pointer;
@@ -203,6 +204,10 @@
         min-height: 40px;
         padding: 10px;
         display: block;
+
+        &:first-of-type {
+            margin-top: 32px;
+        }
 
         svg {
             margin-left: 8px;
