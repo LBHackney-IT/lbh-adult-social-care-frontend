@@ -81,7 +81,7 @@ jobs:
       - *attach_workspace
       - run:
           name: deploy
-          command: yarn build && yarn --production=true && sudo npm i -g serverless && sls deploy -s production
+          command: yarn --production=true && sudo npm i -g serverless && sls deploy --stage production --force
 
   generate-draft-github-release:
     executor: aws-cli/default
@@ -183,7 +183,7 @@ workflows:
             branches:
               only: develop
       - assume-role-production:
-          context: mosaic-production-context
+          context: api-assume-role-social-care-production-context
           # requires:
           #   - tests
           #   - e2e
