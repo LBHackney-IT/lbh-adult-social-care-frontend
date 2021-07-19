@@ -123,6 +123,9 @@ jobs:
 
   assume-role-production:
     executor: docker-python
+    parameters:
+      aws-account:
+        type: string
     steps:
       - checkout
       - aws_assume_role/assume_role:
