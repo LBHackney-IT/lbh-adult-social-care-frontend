@@ -126,7 +126,7 @@ jobs:
     steps:
       - checkout
       - aws_assume_role/assume_role:
-          account: <<parameters.aws-account>>
+          account: $AWS_ACCOUNT_PRODUCTION
           profile_name: default
           role: 'LBH_Circle_CI_Deployment_Role'
       - persist_to_workspace:
@@ -188,8 +188,6 @@ workflows:
                 - main
       - assume-role-production:
           context: api-assume-role-social-care-production-context          
-          requires:
-            - deploy-to-staging
           # requires:
           #   - tests
           #   - e2e
