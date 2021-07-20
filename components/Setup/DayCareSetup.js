@@ -7,12 +7,7 @@ import CarePackageSetup from "../CarePackages/CarePackageSetup";
 import CareSelectDropdown from "../CarePackages/CareSelectDropdown";
 import { useRouter } from "next/router";
 import fieldValidator from "../../service/inputValidator";
-
-// TODO remove
-const fixedPeriodOptions = [
-  { text: "Fixed period", value: 1 },
-  { text: "Ongoing", value: 2 },
-];
+import DateSetup from './DateSetup'
 
 const DayCareSetup = ({
   careTypes,
@@ -86,39 +81,16 @@ const DayCareSetup = ({
             selectedCareType={selectedCareType}
           />
         </div>
-        <div className="column">
-          <div style={{ marginBottom: "5px" }}>
-            <RadioButton
-              error={errorFields.isFixedPeriod}
-              setError={() => changeErrorFields('isFixedPeriod')}
-              options={fixedPeriodOptions}
-              inline={false}
-              onChange={handleFixedPeriodChange}
-              selectedValue={isFixedPeriod}
-            />
-          </div>
-          <div className="is-flex">
-            <span className="mr-3">
-              <DatePick
-                dateValue={startDate}
-                setDate={setStartDate}
-                error={errorFields.startDate}
-                setError={() => changeErrorFields('startDate')}
-              />
-            </span>
-            { isFixedPeriod && (
-                  <span>
-              <DatePick
-                error={errorFields.endDate}
-                setError={() => changeErrorFields('endDate')}
-                label="End date"
-                dateValue={endDate}
-                setDate={setEndDate}
-              />
-            </span>
-                )}
-          </div>
-        </div>
+        <DateSetup
+          endDate={endDate}
+          changeErrorFields={changeErrorFields}
+          errorFields={errorFields}
+          isFixedPeriod={isFixedPeriod}
+          setEndDate={setEndDate}
+          setIsFixedPeriod={setIsFixedPeriod}
+          setStartDate={setStartDate}
+          startDate={startDate}
+        />
       </div>
       <div className="mt-2">
         <RadioButton

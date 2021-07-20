@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectBrokerage } from "../../../../reducers/brokerageReducer";
 import {getUserSession, uniqueID} from "../../../../service/helpers";
 import { getHomeCareSummaryData } from "../../../../api/CarePackages/HomeCareApi";
-import ClientSummary from "../../../../components/ClientSummary";
 import Layout from "../../../../components/Layout/Layout";
 import {
   getAgeFromDateString,

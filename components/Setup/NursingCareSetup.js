@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {DAY_CARE_ROUTE, NURSING_CARE_ROUTE} from "../../routes/RouteConstants";
-import DatePick from "../DatePick";
+import {NURSING_CARE_ROUTE} from "../../routes/RouteConstants";
 import RadioButton, { yesNoValues } from "../RadioButton";
 import CarePackageSetup from "../CarePackages/CarePackageSetup";
 import CareSelectDropdown from "../CarePackages/CareSelectDropdown";
@@ -8,13 +7,13 @@ import { getFixedPeriodOptions } from '../../api/Utils/CommonOptions';
 import { getNursingCareTypeOfStayOptions } from '../../api/CarePackages/NursingCareApi';
 import {useRouter} from "next/router";
 import fieldValidator from "../../service/inputValidator";
+import DateSetup from './DateSetup'
 
 const NursingCareSetup = ({
   careTypes,
   selectedCareType,
   setSelectedCareType,
 }) => {
-  const fixedPeriodOptions = getFixedPeriodOptions();
   const router = useRouter();
 
   const [nursingCareTypeOfStayOptions, setNursingCareTypeOfStayOptions] = useState([]);
@@ -116,44 +115,16 @@ const NursingCareSetup = ({
             selectedCareType={selectedCareType}
           />
         </div>
-        <div className="column">
-          <div className="columns is-mobile">
-            <div className="column is-3">
-              <RadioButton
-                error={errorFields.isFixedPeriod}
-                setError={() => changeErrorFields('isFixedPeriod')}
-                options={fixedPeriodOptions}
-                inline={false}
-                onChange={handleFixedPeriodChange}
-                selectedValue={isFixedPeriod}
-              />
-            </div>
-            <div className="column is-6">
-              <div className="is-flex">
-            <span className="mr-3">
-              <DatePick
-                error={errorFields.startDate}
-                setError={() => changeErrorFields('startDate')}
-                label="Start date"
-                dateValue={startDate}
-                setDate={setStartDate}
-              />
-            </span>
-                { isFixedPeriod && (
-                  <span>
-              <DatePick
-                error={errorFields.endDate}
-                setError={() => changeErrorFields('endDate')}
-                label="End date"
-                dateValue={endDate}
-                setDate={setEndDate}
-              />
-            </span>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+        <DateSetup
+          endDate={endDate}
+          changeErrorFields={changeErrorFields}
+          errorFields={errorFields}
+          isFixedPeriod={isFixedPeriod}
+          setEndDate={setEndDate}
+          setIsFixedPeriod={setIsFixedPeriod}
+          setStartDate={setStartDate}
+          startDate={startDate}
+        />
       </div>
       <div className="mt-2">
         <RadioButton

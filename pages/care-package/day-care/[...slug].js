@@ -24,6 +24,8 @@ import { getErrorResponse, getUserSession } from "../../../service/helpers";
 import withSession from "../../../lib/session";
 import fieldValidator from "../../../service/inputValidator";
 import ErrorField from "../../../components/ErrorField";
+import { addNotification } from '../../../reducers/notificationsReducer'
+import { useDispatch } from 'react-redux'
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
@@ -37,6 +39,7 @@ export const getServerSideProps = withSession(async function({ req }) {
 })
 
 const DayCare = () => {
+  const dispatch = useDispatch();
   const isTrueSet = (myValue) => myValue === "true";
   const checkFixedPeriod = (myValue) => myValue === "1";
 
@@ -313,12 +316,11 @@ const DayCare = () => {
 
     createDayCarePackage(dayCarePackageToCreate)
       .then(() => {
-        alert("Package saved.");
+        dispatch(addNotification({ text: "Package saved.", className: "success"}));
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Create package failed. ${error.message}`);
-        const errorData = getErrorResponse(error);
+        dispatch(addNotification({ text: `Create package failed. ${error.message}`}));
         setErrors([...errors, `Create package failed. ${error.message}`]);
       });
   };

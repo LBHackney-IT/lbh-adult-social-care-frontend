@@ -18,6 +18,8 @@ import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
 import { getUserSession } from "../../../service/helpers";
 import withSession from "../../../lib/session";
 import fieldValidator from "../../../service/inputValidator";
+import { addNotification } from '../../../reducers/notificationsReducer'
+import { useDispatch } from 'react-redux'
 
 export const getServerSideProps = withSession(async function({ req }) {
   const user = getUserSession({ req });
@@ -31,6 +33,7 @@ export const getServerSideProps = withSession(async function({ req }) {
 });
 
 const NursingCare = () => {
+  const dispatch = useDispatch();
   const isTrueParse = (myValue) => myValue === "true";
   const notNullString = (myValue) =>
     myValue !== "null" && myValue !== "undefined";
@@ -191,11 +194,11 @@ const NursingCare = () => {
 
     createNursingCarePackage(nursingCarePackageToCreate)
       .then(() => {
-        alert("Package saved.");
+        dispatch(addNotification({ text: "Package saved.", className: "success"}));
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Create package failed. ${error.message}`);
+        dispatch(addNotification({ text: `Create package failed. ${error.message}`}));
         setErrors([...errors, `Create package failed. ${error.message}`]);
       });
   };

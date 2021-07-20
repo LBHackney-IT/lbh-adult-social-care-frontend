@@ -43,6 +43,7 @@
 }
 
 .datepicker-ongoing {
+    opacity: 0.5;
     .react-datepicker-wrapper {
         &::before {
             position: absolute;

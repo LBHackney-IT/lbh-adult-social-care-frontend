@@ -6,6 +6,7 @@ import CarePackageSetup from "../CarePackages/CarePackageSetup";
 import CareSelectDropdown from "../CarePackages/CareSelectDropdown";
 import { useRouter } from "next/router";
 import fieldValidator from "../../service/inputValidator";
+import DateSetup from './DateSetup'
 
 // TODO remove
 const fixedPeriodOptions = [
@@ -75,35 +76,16 @@ const HomeCareSetup = ({
             selectedCareType={selectedCareType}
           />
         </div>
-        <div className="column">
-          <div style={{ marginBottom: "5px" }}>
-            <RadioButton
-              options={fixedPeriodOptions}
-              error={errorFields.isFixedPeriod}
-              setError={() => changeErrorFields("isFixedPeriod")}
-              onChange={setIsFixedPeriod}
-              selectedValue={isFixedPeriod}
-            />
-          </div>
-          <div className="is-flex">
-            <span className="mr-3">
-              <DatePick
-                error={errorFields.startDate}
-                setError={() => changeErrorFields("startDate")}
-                dateValue={startDate}
-                setDate={setStartDate}
-              />
-            </span>
-            <span>
-              <DatePick
-                dateValue={endDate}
-                setDate={setEndDate}
-                error={errorFields.endDate}
-                setError={() => changeErrorFields("endDate")}
-              />
-            </span>
-          </div>
-        </div>
+        <DateSetup
+          endDate={endDate}
+          changeErrorFields={changeErrorFields}
+          errorFields={errorFields}
+          isFixedPeriod={isFixedPeriod}
+          setEndDate={setEndDate}
+          setIsFixedPeriod={setIsFixedPeriod}
+          setStartDate={setStartDate}
+          startDate={startDate}
+        />
       </div>
       <div className="mt-2">
         <RadioButton
