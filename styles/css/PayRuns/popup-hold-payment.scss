@@ -91,10 +91,9 @@
       background-color: $lbh-green-border;
       position: relative;
 
-
       &:before {
         position: absolute;
-        content: "";
+        content: '';
         top: 10px;
         right: -7px;
         border-bottom: solid 7px $lbh-green-border;
@@ -104,7 +103,7 @@
 
       &:after {
         position: absolute;
-        content: "";
+        content: '';
         top: 17px;
         right: -7px;
         border-top: solid 7px $lbh-green-border;
@@ -154,7 +153,7 @@
       .popup-help-chat__message-text {
         &:before {
           position: absolute;
-          content: "";
+          content: '';
           top: 10px;
           left: -7px;
           border-bottom: solid 7px $lbh-gray;
@@ -164,7 +163,7 @@
 
         &:after {
           position: absolute;
-          content: "";
+          content: '';
           top: 17px;
           left: -7px;
           border-top: solid 7px $lbh-gray;
@@ -172,7 +171,6 @@
           border-left: solid 7px transparent;
         }
       }
-
     }
     &.hovered {
       .popup-help-chat__message-settings {

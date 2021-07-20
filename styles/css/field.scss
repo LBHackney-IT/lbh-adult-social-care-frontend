@@ -1,28 +1,28 @@
 .control.field-container {
-    label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        display: block;
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
 
-        &:not(.radio-item) {
-            width: 100%;
-        }
-
-        input {
-            width: 100%;
-        }
+    &:not(.radio-item) {
+      width: 100%;
     }
 
-    &:not(.no-input-style) {
-        input,
-        textarea {
-            outline: unset !important;
-        }
+    input {
+      width: 100%;
     }
+  }
 
+  &:not(.no-input-style) {
+    input,
     textarea {
-        width: 100%;
-        resize: none;
-        padding: 10px;
+      outline: unset !important;
     }
+  }
+
+  textarea {
+    width: 100%;
+    resize: none;
+    padding: 10px;
+  }
 }

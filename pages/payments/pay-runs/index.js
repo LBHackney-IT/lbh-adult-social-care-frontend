@@ -4,11 +4,7 @@ import PayRunsHeader from '../../../components/PayRuns/PayRunsHeader';
 import PaymentsTabs from '../../../components/Payments/PaymentsTabs';
 import PayRunTable from '../../../components/PayRuns/PayRunTable';
 import Pagination from '../../../components/Payments/Pagination';
-import {
-  payRunsHeldPaymentsTableData,
-  payRunsTableData,
-  testDataHelpMessages,
-} from '../../../testData/testDataPayRuns';
+import { payRunsHeldPaymentsTableData, testDataHelpMessages } from '../../../testData/testDataPayRuns';
 import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
 import ChatButton from '../../../components/PayRuns/ChatButton';
 import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight';
@@ -16,6 +12,7 @@ import PopupHelpChat from '../../../components/Chat/PopupHelpChat';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
+import usePayRunSummary from '../../../api/Payments/hooks/usePayRunSummary';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getUserSession({ req });
@@ -29,6 +26,8 @@ export const getServerSideProps = withSession(async ({ req }) => {
 });
 
 const PayRunsPage = () => {
+  // eslint-disable-next-line no-unused-vars
+  const { data: payRunsTableData, requestStatus, errors, retrievePayRunSummaryList } = usePayRunSummary();
   const [sortsTab] = useState({
     'pay-runs': [
       { name: 'id', text: 'ID' },

@@ -1,10 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {brokerageTestData} from "../testData/brokerageTestData";
+import { createSlice } from '@reduxjs/toolkit';
+import { brokerageTestData } from '../testData/brokerageTestData';
 
 const { homeCare, nurseCare } = brokerageTestData;
 
 const brokerageSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState: {
     dayCarePackage: {},
     homeCarePackage: {},
@@ -41,22 +41,18 @@ const brokerageSlice = createSlice({
       return {
         ...state,
         [payload.type]: payload[payload.type],
-      }
+      };
     },
     getBrokerageFail: (state) => {
       return {
         ...state,
-      }
+      };
     },
   },
 });
 
 // Actions
-export const {
-  getBrokerageRequest,
-  getBrokerageSuccess,
-  getBrokerageFail
-} = brokerageSlice.actions;
+export const { getBrokerageRequest, getBrokerageSuccess, getBrokerageFail } = brokerageSlice.actions;
 
 // Selectors
 const selectBrokerage = (state) => {
