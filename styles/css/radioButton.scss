@@ -1,54 +1,54 @@
 .radio-cont {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-
-  label.radio-item {
-    display: flex !important;
+    display: flex;
     align-items: center;
-    width: unset;
-    cursor: pointer;
-
-    .radio-select-cont {
-      margin-right: 5px;
-      width: 20px;
-      height: 20px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 2px solid $lbh-black1;
-
-      .radio-item-selected {
-        display: none;
-        width: 14px;
-        height: 14px;
-        background-color: $lbh-link;
-        border-radius: 50%;
-      }
-
-      &.is-active {
-        .radio-item-selected {
-          display: unset;
-        }
-      }
-    }
-
-    &:hover .radio-select-cont:not(.is-active) .radio-item-selected {
-      background-color: rgba($color: $lbh-secondary, $alpha: 0.15);
-      display: unset;
-    }
-
-    &.is-first {
-      margin-right: 16px;
-    }
-  }
-
-  &.not-inline {
-    flex-wrap: wrap;
+    justify-content: flex-start;
 
     label.radio-item {
-      width: 100%;
+        display: flex !important;
+        align-items: center;
+        width: unset;
+        cursor: pointer;
+
+        .radio-select-cont {
+            margin-right: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid $lbh-light-gray-border;
+
+            .radio-item-selected {
+                display: none;
+                width: 14px;
+                height: 14px;
+                background-color: $lbh-link;
+                border-radius: 10px;
+            }
+
+            &.is-active {
+                .radio-item-selected {
+                    display: unset;
+                }
+            }
+        }
+
+        &:hover .radio-select-cont:not(.is-active) .radio-item-selected {
+            background-color: rgba($color: $lbh-secondary, $alpha: 0.15);
+            display: unset;
+        }
+
+        &.is-first {
+            margin-right: 16px;
+        }
     }
-  }
+
+    &.not-inline {
+        flex-wrap: wrap;
+
+        label.radio-item {
+            width: 100%;
+        }
+    }
 }

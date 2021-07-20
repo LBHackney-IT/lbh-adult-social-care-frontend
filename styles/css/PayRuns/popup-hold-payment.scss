@@ -32,8 +32,9 @@
 
   .popup-help-chat__messages {
     overflow: auto;
-    height: 40vh;
+    height: 38vh;
     padding-right: 20px;
+    padding-left: 10px;
     margin-bottom: 30px;
     display: flex;
     flex-direction: column;
@@ -87,10 +88,28 @@
     }
 
     .popup-help-chat__message-text {
-      background-color: $lbh-green1;
+      background-color: $lbh-green-border;
+      position: relative;
+
+
+      &:before {
+        position: absolute;
+        content: "";
+        top: 10px;
+        right: -7px;
+        border-bottom: solid 7px $lbh-green-border;
+        border-right: solid 7px transparent;
+        border-left: solid 7px transparent;
+      }
 
       &:after {
-        border-bottom-right-radius: 1px;
+        position: absolute;
+        content: "";
+        top: 17px;
+        right: -7px;
+        border-top: solid 7px $lbh-green-border;
+        border-right: solid 7px transparent;
+        border-left: solid 7px transparent;
       }
     }
   }
@@ -131,6 +150,29 @@
       display: flex;
       justify-content: center;
       flex-direction: column;
+
+      .popup-help-chat__message-text {
+        &:before {
+          position: absolute;
+          content: "";
+          top: 10px;
+          left: -7px;
+          border-bottom: solid 7px $lbh-gray;
+          border-right: solid 7px transparent;
+          border-left: solid 7px transparent;
+        }
+
+        &:after {
+          position: absolute;
+          content: "";
+          top: 17px;
+          left: -7px;
+          border-top: solid 7px $lbh-gray;
+          border-right: solid 7px transparent;
+          border-left: solid 7px transparent;
+        }
+      }
+
     }
     &.hovered {
       .popup-help-chat__message-settings {
@@ -160,6 +202,10 @@
 
   textarea {
     font-size: 18px;
+  }
+
+  .dropdown-container {
+    margin-bottom: 10px;
   }
 }
 

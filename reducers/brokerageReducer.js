@@ -1,11 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { brokerageTestData } from '../testData/brokerageTestData';
+import { createSlice } from "@reduxjs/toolkit";
+import {brokerageTestData} from "../testData/brokerageTestData";
 
 const { homeCare, nurseCare } = brokerageTestData;
 
 const brokerageSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
+    dayCarePackage: {},
+    homeCarePackage: {},
+    nursingCarePackage: {},
+    residentialCarePackage: {},
     homeCare: {
       id: homeCare.id,
       startDate: homeCare.startDate,
@@ -33,22 +37,31 @@ const brokerageSlice = createSlice({
     },
   },
   reducers: {
-    getBrokerageSuccess: (state, action) => ({
-      ...state,
-      homeCare: action.payload.homeCare,
-      nurseCare: action.payload.nurseCare,
-    }),
-    getBrokerageFail: (state) => ({
-      ...state,
-    }),
+    getBrokerageSuccess: (state, { payload }) => {
+      return {
+        ...state,
+        [payload.type]: payload[payload.type],
+      }
+    },
+    getBrokerageFail: (state) => {
+      return {
+        ...state,
+      }
+    },
   },
 });
 
 // Actions
-export const { getBrokerageRequest, getBrokerageSuccess, getBrokerageFail } = brokerageSlice.actions;
+export const {
+  getBrokerageRequest,
+  getBrokerageSuccess,
+  getBrokerageFail
+} = brokerageSlice.actions;
 
 // Selectors
-const selectBrokerage = (state) => state.brokerage;
+const selectBrokerage = (state) => {
+  return state.brokerage;
+};
 export { selectBrokerage, brokerageSlice };
 
 // Reducer

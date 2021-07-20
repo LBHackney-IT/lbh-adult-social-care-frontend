@@ -1,38 +1,47 @@
-import React from 'react';
-import { useRouter } from 'next/router';
-import { ArrowLeftIcon, HackneyLogo } from '../Icons';
+import React from "react";
+import { HackneyLogo } from "../Icons";
+import { useDispatch, useSelector } from 'react-redux'
+import { openMobileMenu, closeMobileMenu, selectMobileMenu } from '../../reducers/mobileMenuReducer'
+import { useRouter } from 'next/router'
 
-const HeaderNav = () => (
-  <div className="header-nav">
-    <div className="level">
-      <div className="level-item level-left">
-        <HackneyLogo />
-      </div>
-      <div className="level-item level-right" />
-    </div>
-  </div>
-);
-
-const Header = ({ children, subTitle, showPageHeader = true }) => {
+const Header = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
+  const { isOpened } = useSelector(selectMobileMenu);
+
+  const onToggleMobileMenu = () => {
+    if(isOpened) {
+      dispatch(closeMobileMenu());
+    } else {
+      dispatch(openMobileMenu());
+    }
+  };
+
   return (
-    <>
-      <HeaderNav />
-      {showPageHeader && (
-        <div className="page-header">
-          <div className="is-clickable" onClick={() => router.back()} role="presentation">
-            <ArrowLeftIcon />
-            &nbsp;Back
+    <div className="header">
+      <div className="level mb-0">
+        <div className="level-item level-left">
+          <div onClick={onToggleMobileMenu} className={`header__mobile-menu-button${isOpened ? ' opened' : ''}`}>
+            {
+              isOpened ?
+                <div className='header__mobile-menu-close'><p>+</p></div>
+                :
+                <>
+                  <div className='header__mobile-menu-line' />
+                  <div className='header__mobile-menu-line' />
+                  <div className='header__mobile-menu-line' />
+                </>
+            }
           </div>
-          <div className="header-title">
-            {subTitle !== undefined ? <h5>{subTitle}</h5> : null}
-            <h3>
-              <strong>{children}</strong>
-            </h3>
-          </div>
+          <HackneyLogo className='is-clickable' onClick={() => router.push('/care-package')} />
         </div>
-      )}
-    </>
+      </div>
+      <div className='header-lines'>
+        <div className='header-line header-first-line' />
+        <div className='header-line header-second-line' />
+        <div className='header-line header-third-line' />
+      </div>
+    </div>
   );
 };
 

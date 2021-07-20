@@ -1,10 +1,10 @@
-import { combineReducers } from 'redux';
-// eslint-disable-next-line import/no-named-as-default
-import userReducer from './userReducer';
-import brokerageReducer from './brokerageReducer';
-import supplierDashboardReducer from './supplierDashboardReducer';
-import supplierReturnsReducer from './supplierReturnsReducer';
-import notificationsReducer from './notificationsReducer';
+import { combineReducers } from "redux";
+import userReducer from "./userReducer";
+import brokerageReducer from "./brokerageReducer";
+import supplierDashboardReducer from "./supplierDashboardReducer";
+import supplierReturnsReducer from "./supplierReturnsReducer";
+import notificationsReducer from "./notificationsReducer";
+import mobileMenuReducer from "./mobileMenuReducer";
 
 const reducers = {
   user: userReducer,
@@ -12,6 +12,7 @@ const reducers = {
   supplierDashboard: supplierDashboardReducer,
   supplierReturns: supplierReturnsReducer,
   notifications: notificationsReducer,
+  mobileMenu: mobileMenuReducer,
 };
 
 export default combineReducers(reducers);

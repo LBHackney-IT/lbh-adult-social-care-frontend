@@ -3,13 +3,18 @@
   padding-left: 10px;
 }
 
+.control input, textarea {
+  border: 1px solid $lbh-light-gray-border !important;
+  border-radius: 3px !important;
+}
+
 .custom-input__search {
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 2px solid #0b0c0c;
-  border-radius: unset !important;
+  border: 1px solid $lbh-light-gray-border;
+  border-radius: 3px !important;
   outline: unset !important;
   overflow: hidden;
 
@@ -22,7 +27,6 @@
   }
 
   button.button {
-    border-radius: 0;
     width: 34px;
     height: 34px;
     padding: 0;

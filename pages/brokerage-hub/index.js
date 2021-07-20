@@ -90,6 +90,7 @@ const BrokerageHubPage = () => {
     typeOfCare: {
       getClassName: () => 'link-button',
       onClick: (item, prop) => console.log(item, prop),
+      fieldName: 'typeOfCare',
     },
     id: {
       hide: true,
