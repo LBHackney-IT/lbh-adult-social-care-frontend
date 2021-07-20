@@ -80,20 +80,20 @@ resources:
                 HTTPSPort: 443
                 OriginProtocolPolicy: https-only
     LambdaSecurityGroup:
-          Type: "AWS::EC2::SecurityGroup"
-          Properties:
-            GroupName: ${self:service}-${self:provider.stage}-lambda
-            GroupDescription: Allow all outbound traffic, no inbound
-            VpcId: ${self:custom.vpcs.${self:provider.stage}}
+      Type: 'AWS::EC2::SecurityGroup'
+      Properties:
+        GroupName: ${self:service}-${self:provider.stage}-lambda
+        GroupDescription: Allow all outbound traffic, no inbound
+        VpcId: ${self:custom.vpcs.${self:provider.stage}}
 
 custom:
   domain-name:
     Fn::Join:
-       - '.'
-       - - Ref: ApiGatewayRestApi
-         - execute-api
-         - eu-west-2
-         - amazonaws.com
+      - '.'
+      - - Ref: ApiGatewayRestApi
+        - execute-api
+        - eu-west-2
+        - amazonaws.com
   aliases:
     staging: social-care-care-packages-staging.hackney.gov.uk
     production: social-care-care-packages.hackney.gov.uk
@@ -101,7 +101,7 @@ custom:
     staging: arn:aws:acm:us-east-1:290114655000:certificate/1b48a5e9-70b5-4a14-ad3d-1eef9584dc5d
     production: arn:aws:acm:us-east-1:267112830674:certificate/dae4d0be-8f3a-4512-ba9c-fb80366e77f7
   securityGroups:
-    staging: 
+    staging:
       - Ref: LambdaSecurityGroup
   subnets:
     staging:

@@ -1,44 +1,42 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router"
-import ClientSummary from "../../../components/ClientSummary";
-import Dropdown from "../../../components/Dropdown";
-import TextArea from "../../../components/TextArea";
-import Layout from "../../../components/Layout/Layout";
-import AdditionalNeeds, { getInitialAdditionalNeedsArray } from "../../../components/CarePackages/AdditionalNeedsEntries";
-import CareTitle from "../../../components/CarePackages/CareTitle";
-import TitleHeader from "../../../components/TitleHeader";
-import NursingCareSummary from "../../../components/NursingCare/NursingCareSummary";
-import { Button } from "../../../components/Button";
-import {
-  createNursingCarePackage,
-  getTypeOfNursingHomeOptions,
-} from "../../../api/CarePackages/NursingCareApi";
-import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
-import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
-import { getUserSession } from "../../../service/helpers";
-import withSession from "../../../lib/session";
-import fieldValidator from "../../../service/inputValidator";
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import ClientSummary from '../../../components/ClientSummary';
+import Dropdown from '../../../components/Dropdown';
+import TextArea from '../../../components/TextArea';
+import Layout from '../../../components/Layout/Layout';
+import AdditionalNeeds, {
+  getInitialAdditionalNeedsArray,
+} from '../../../components/CarePackages/AdditionalNeedsEntries';
+import CareTitle from '../../../components/CarePackages/CareTitle';
+import TitleHeader from '../../../components/TitleHeader';
+import NursingCareSummary from '../../../components/NursingCare/NursingCareSummary';
+import { Button } from '../../../components/Button';
+import { createNursingCarePackage, getTypeOfNursingHomeOptions } from '../../../api/CarePackages/NursingCareApi';
+import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
+import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
+import { getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
+import fieldValidator from '../../../service/inputValidator';
 
-export const getServerSideProps = withSession(async function({ req }) {
+export const getServerSideProps = withSession(async ({ req }) => {
   const user = getUserSession({ req });
-  if(user.redirect) {
+  if (user.redirect) {
     return user;
   }
 
   return {
     props: {}, // will be passed to the page component as props
-  }
+  };
 });
 
 const NursingCare = () => {
-  const isTrueParse = (myValue) => myValue === "true";
-  const notNullString = (myValue) =>
-    myValue !== "null" && myValue !== "undefined";
+  const isTrueParse = (myValue) => myValue === 'true';
+  const notNullString = (myValue) => myValue !== 'null' && myValue !== 'undefined';
 
   // TODO remove
   const additionalNeedsCostOptions = [
-    { text: "Weekly", value: 1 },
-    { text: "One off", value: 2 },
+    { text: 'Weekly', value: 1 },
+    { text: 'One off', value: 2 },
   ];
 
   // Parameters
@@ -58,7 +56,7 @@ const NursingCare = () => {
   isFixedPeriod = isTrueParse(isFixedPeriod);
   startDate = startDate ?? null;
   endDate = endDate && notNullString(endDate) ? endDate : undefined;
-  typeOfStayId = parseInt(typeOfStayId) ?? null;
+  typeOfStayId = parseInt(typeOfStayId, 10) ?? null;
   hasRespiteCare = isTrueParse(hasRespiteCare);
   hasDischargePackage = isTrueParse(hasDischargePackage);
 
@@ -67,9 +65,7 @@ const NursingCare = () => {
   const [errors, setErrors] = useState([]);
   const [needToAddress, setNeedToAddress] = useState(undefined);
   const [selectedNursingHomeType, setSelectedNursingHomeType] = useState();
-  const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(
-    getInitialAdditionalNeedsArray()
-  );
+  const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(getInitialAdditionalNeedsArray());
 
   const [additionalNeedsEntriesErrors, setAdditionalNeedsEntriesErrors] = useState([]);
   const [packageReclaimedError, setPackageReclaimedError] = useState([]);
@@ -85,17 +81,14 @@ const NursingCare = () => {
   const retrieveTypeOfNursingHomeOptions = () => {
     getTypeOfNursingHomeOptions()
       .then((res) => {
-        let options = res.map((option) => ({
+        const options = res.map((option) => ({
           text: option.typeOfCareHomeName,
           value: option.typeOfCareHomeId,
         }));
         setCareHomeTypes(options);
       })
       .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve nursing care home type options failed. ${error.message}`,
-        ]);
+        setErrors([...errors, `Retrieve nursing care home type options failed. ${error.message}`]);
       });
   };
 
@@ -107,22 +100,22 @@ const NursingCare = () => {
 
   const formIsValid = () => {
     const defaultErrors = fieldValidator([
-      {name: 'needToAddress', value: needToAddress, rules: ['empty']},
-      {name: 'selectedNursingHomeType', value: selectedNursingHomeType, rules: ['empty']},
+      { name: 'needToAddress', value: needToAddress, rules: ['empty'] },
+      { name: 'selectedNursingHomeType', value: selectedNursingHomeType, rules: ['empty'] },
     ]);
 
-    if(defaultErrors.hasErrors) {
+    if (defaultErrors.hasErrors) {
       setErrorFields(defaultErrors.validFields);
     }
 
     const additionalNeedsTimedArr = [];
 
-    const additionalNeedsError = additionalNeedsEntries.map(item => {
+    const additionalNeedsError = additionalNeedsEntries.map((item) => {
       const valid = fieldValidator([
-        {name: 'selectedCost', value: item.selectedCost, rules: ['empty']},
-        {name: 'selectedCostText', value: item.selectedCostText, rules: ['empty']},
-        {name: 'selectedPeriod', value: item.selectedPeriod, rules: ['empty']},
-        {name: 'needToAddress', value: item.needToAddress, rules: ['empty']},
+        { name: 'selectedCost', value: item.selectedCost, rules: ['empty'] },
+        { name: 'selectedCostText', value: item.selectedCostText, rules: ['empty'] },
+        { name: 'selectedPeriod', value: item.selectedPeriod, rules: ['empty'] },
+        { name: 'needToAddress', value: item.needToAddress, rules: ['empty'] },
       ]);
 
       additionalNeedsTimedArr.push(valid.validFields);
@@ -131,24 +124,28 @@ const NursingCare = () => {
     setAdditionalNeedsEntriesErrors(additionalNeedsTimedArr);
 
     const packageReclaimsTimedArr = [];
-    const packageReclaimsFieldsError = packagesReclaimed.map(item => {
+    const packageReclaimsFieldsError = packagesReclaimed.map((item) => {
       const valid = fieldValidator([
-        {name: 'from', value: item.from, rules: ['empty']},
-        {name: 'category', value: item.category, rules: ['empty']},
-        {name: 'type', value: item.type, rules: ['empty']},
-        {name: 'notes', value: item.notes, rules: ['empty']},
-        {name: 'amount', value: item.amount, rules: ['empty']},
+        { name: 'from', value: item.from, rules: ['empty'] },
+        { name: 'category', value: item.category, rules: ['empty'] },
+        { name: 'type', value: item.type, rules: ['empty'] },
+        { name: 'notes', value: item.notes, rules: ['empty'] },
+        { name: 'amount', value: item.amount, rules: ['empty'] },
       ]);
       packageReclaimsTimedArr.push(valid.validFields);
       return valid.hasErrors;
     });
     setPackageReclaimedError(packageReclaimsTimedArr);
 
-    return !(defaultErrors.hasErrors || additionalNeedsError.some(item => item) || packageReclaimsFieldsError.some(item => item));
+    return !(
+      defaultErrors.hasErrors ||
+      additionalNeedsError.some((item) => item) ||
+      packageReclaimsFieldsError.some((item) => item)
+    );
   };
 
   const changeErrorField = (field) => {
-    setErrorFields({...errorFields, [field]: ''});
+    setErrorFields({ ...errorFields, [field]: '' });
   };
 
   const handleSavePackage = (event) => {
@@ -159,39 +156,37 @@ const NursingCare = () => {
       isWeeklyCost: item.selectedCost === 1,
       isOneOffCost: item.selectedCost === 2,
       needToAddress: item.needToAddress,
-      creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
+      creatorId: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8',
     }));
 
-    const packageReclaims = packagesReclaimed.map((reclaim) => {
-      return {
-        ReclaimFromId: reclaim.from,
-        ReclaimCategoryId: reclaim.category,
-        ReclaimAmountOptionId: reclaim.type,
-        Notes: reclaim.notes,
-        Amount: reclaim.amount,
-      };
-    });
+    const packageReclaims = packagesReclaimed.map((reclaim) => ({
+      ReclaimFromId: reclaim.from,
+      ReclaimCategoryId: reclaim.category,
+      ReclaimAmountOptionId: reclaim.type,
+      Notes: reclaim.notes,
+      Amount: reclaim.amount,
+    }));
 
     const nursingCarePackageToCreate = {
-      isFixedPeriod: isFixedPeriod,
-      clientId: "aee45700-af9b-4ab5-bb43-535adbdcfb80",
+      isFixedPeriod,
+      clientId: 'aee45700-af9b-4ab5-bb43-535adbdcfb80',
       startDate: startDate ? new Date(startDate).toJSON() : null,
       endDate: endDate ? new Date(endDate).toJSON() : null,
-      hasRespiteCare: hasRespiteCare,
-      hasDischargePackage: hasDischargePackage,
-      isThisAnImmediateService: isThisAnImmediateService,
-      isThisUserUnderS117: isThisUserUnderS117,
-      typeOfStayId: typeOfStayId,
-      needToAddress: needToAddress,
+      hasRespiteCare,
+      hasDischargePackage,
+      isThisAnImmediateService,
+      isThisUserUnderS117,
+      typeOfStayId,
+      needToAddress,
       typeOfNursingCareHomeId: selectedNursingHomeType,
-      creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
+      creatorId: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8',
       nursingCareAdditionalNeeds,
       packageReclaims,
     };
 
     createNursingCarePackage(nursingCarePackageToCreate)
       .then(() => {
-        alert("Package saved.");
+        alert('Package saved.');
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
@@ -201,13 +196,7 @@ const NursingCare = () => {
   };
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
-      <ClientSummary
-        client="James Stephens"
-        hackneyId="786288"
-        age="91"
-        dateOfBirth="09/12/1972"
-        postcode="E9 6EY"
-      >
+      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
         Care Package
       </ClientSummary>
       <div className="mt-5 mb-5">
@@ -235,7 +224,7 @@ const NursingCare = () => {
             error={errorFields.selectedNursingHomeType}
             setError={() => changeErrorField('selectedNursingHomeType')}
             onOptionSelect={(option) => setSelectedNursingHomeType(option)}
-            buttonStyle={{ width: "240px" }}
+            buttonStyle={{ width: '240px' }}
           />
         </div>
       </div>

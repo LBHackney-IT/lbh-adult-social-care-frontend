@@ -1,16 +1,13 @@
-import React from "react";
-import { CaretRightIcon, CaretRightHighlightIcon } from "../Icons";
-import * as RouteConstants from "../../routes/RouteConstants";
-import { useRouter } from "next/router";
+import React from 'react';
+import { useRouter } from 'next/router';
+import { CaretRightIcon, CaretRightHighlightIcon } from '../Icons';
+import * as RouteConstants from '../../routes/RouteConstants';
 
 const NavItem = ({ children, to, params = '' }) => {
   const router = useRouter();
-  const activeRouteClass = router.pathname.indexOf(to) > -1 ? " is-active" : "";
+  const activeRouteClass = router.pathname.indexOf(to) > -1 ? ' is-active' : '';
   return (
-    <div
-      className={`navigation-item is-clickable${activeRouteClass}`}
-      onClick={() => router.push(`${to}${params}`)}
-    >
+    <div className={`navigation-item is-clickable${activeRouteClass}`} onClick={() => router.push(`${to}${params}`)}>
       <div>
         {children}
         <span className="caret">
@@ -24,11 +21,10 @@ const NavItem = ({ children, to, params = '' }) => {
   );
 };
 
-const NavigationColumn = () => {
-  return (
-    <div className="nav-column-cont">
-      <NavItem to={RouteConstants.CARE_PACKAGE_ROUTE}>Care Package</NavItem>
-      {/* <NavItem to={RouteConstants.CLIENT_HISTORY_ROUTER}>Client History</NavItem>
+const NavigationColumn = () => (
+  <div className="nav-column-cont">
+    <NavItem to={RouteConstants.CARE_PACKAGE_ROUTE}>Care Package</NavItem>
+    {/* <NavItem to={RouteConstants.CLIENT_HISTORY_ROUTER}>Client History</NavItem>
       <NavItem to="/test">Client details</NavItem>
       <NavItem to="/test">Medical history</NavItem>
       <NavItem to="/test">Important to me</NavItem>
@@ -38,8 +34,7 @@ const NavigationColumn = () => {
       <NavItem to="/test">Carer</NavItem>
       <NavItem to="/test">Risk Assessment</NavItem>
       <NavItem to="/test">Review</NavItem> */}
-    </div>
-  );
-};
+  </div>
+);
 
 export default NavigationColumn;

@@ -102,25 +102,39 @@
   font-size: 12px;
   color: $lbh-black1;
 
-  .dropdown, p {
+  .dropdown,
+  p {
     border-radius: 4px;
     padding: 5px;
   }
 
-  &.awaiting-approval, &.held, &.outstanding, &.submitted, &.pending-supplier, &.in-review, &.n\/a {
+  &.awaiting-approval,
+  &.held,
+  &.outstanding,
+  &.submitted,
+  &.pending-supplier,
+  &.in-review,
+  &.n\/a {
     p {
       background: $lbh-orange;
     }
   }
 
-  &.paid, &.paid-with-holds, &.released, &.complete, &.accepted, &.approved {
+  &.paid,
+  &.paid-with-holds,
+  &.released,
+  &.complete,
+  &.accepted,
+  &.approved {
     p {
       background: $lbh-green1;
       color: white;
     }
   }
 
-  &.draft, &.not-started, &.assign {
+  &.draft,
+  &.not-started,
+  &.assign {
     p {
       background: $lbh-gray;
     }
@@ -175,7 +189,11 @@
     }
   }
 
-  &.overdue, &.disputes-active, &.in-dispute, &.action-needed, &.info-needed {
+  &.overdue,
+  &.disputes-active,
+  &.in-dispute,
+  &.action-needed,
+  &.info-needed {
     p {
       background-color: $lbh-red;
       color: white;
@@ -320,7 +338,9 @@
     color: white;
   }
 
-  &.not-submitted, &.accepted, &.resubmitted {
+  &.not-submitted,
+  &.accepted,
+  &.resubmitted {
     background-color: $lbh-light-orange;
     border: 1px solid $lbh-orange;
   }

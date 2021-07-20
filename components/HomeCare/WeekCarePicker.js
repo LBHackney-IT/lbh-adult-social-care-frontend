@@ -1,18 +1,11 @@
-import { useState } from "react";
-import CarePickerTimeSlot from "./CarePickerTimeSlot";
-import LegendItem from "./LegendItem";
-import RadioButton from "../RadioButton";
-import { getWeekSlots, weekDays } from "../../service/homeCarePickerHelper";
-import {
-  PERSONAL_CARE_MODE,
-  DOMESTIC_CARE_MODE,
-  LIVE_IN_CARE_MODE,
-  ESCORT_CARE_MODE,
-} from "../../service/homeCarePickerHelper";
+import React, { useState } from 'react';
+import CarePickerTimeSlot from './CarePickerTimeSlot';
+import LegendItem from './LegendItem';
+import RadioButton from '../RadioButton';
 
 const minutesOrHoursOptions = [
-  { text: "Minutes", value: 1 },
-  { text: "Hours", value: 2 },
+  { text: 'Minutes', value: 1 },
+  { text: 'Hours', value: 2 },
 ];
 
 const WeekCarePicker = ({
@@ -24,8 +17,9 @@ const WeekCarePicker = ({
 }) => {
   const [displayMinsOrHours, setDisplayMinsOrHours] = useState(2);
 
+  // eslint-disable-next-line no-unused-vars
   const onCarePickerDropdownSelect = (weekSlotId, dayId, selectedValue) => {
-    alert("onCarePickerDropdownSelect");
+    alert('onCarePickerDropdownSelect');
   };
 
   return (
@@ -52,38 +46,31 @@ const WeekCarePicker = ({
       </div>
       <div className="week-care-picker mt-4">
         <div className="columns header-columns">
-          <div className="column"></div>
+          <div className="column" />
           {weekDays.map((weekDayItem) => {
             const timeOutput =
-              displayMinsOrHours === 1
-                ? `${weekDayItem.minutes} Mins`
-                : `${weekDayItem.minutes / 60} Hrs`;
+              displayMinsOrHours === 1 ? `${weekDayItem.minutes} Mins` : `${weekDayItem.minutes / 60} Hrs`;
             return (
-              <div
-                className="column week-care-picker-day"
-                key={weekDayItem.name}
-              >
-                <label>
+              <div className="column week-care-picker-day" key={weekDayItem.name}>
+                <span>
                   <strong>{weekDayItem.name}</strong>
-                </label>
-                <label>({timeOutput})</label>
+                </span>
+                <span>({timeOutput})</span>
               </div>
             );
           })}
         </div>
-        {homeCareTimeShifts.map((homeCareTimeShiftItem) => {
-          return (
-            <div className="time-slot-cont" key={homeCareTimeShiftItem.id}>
-              <CarePickerTimeSlot
-                homeCareServices={homeCareServices}
-                currentMode={currentMode}
-                weekSlotItem={homeCareTimeShiftItem}
-                onClick={onCarePickerClick}
-                onCareDropdownSelect={onCarePickerDropdownSelect}
-              />
-            </div>
-          );
-        })}
+        {homeCareTimeShifts.map((homeCareTimeShiftItem) => (
+          <div className="time-slot-cont" key={homeCareTimeShiftItem.id}>
+            <CarePickerTimeSlot
+              homeCareServices={homeCareServices}
+              currentMode={currentMode}
+              weekSlotItem={homeCareTimeShiftItem}
+              onClick={onCarePickerClick}
+              onCareDropdownSelect={onCarePickerDropdownSelect}
+            />
+          </div>
+        ))}
       </div>
     </>
   );

@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
-import {Button} from "../Button";
-import PayRunsFilters from "./PayRunsFilters";
-import HeldPaymentsFilters from "./HeldPaymentsFilters";
+import React, { useEffect, useState } from 'react';
+import { Button } from '../Button';
+import PayRunsFilters from './PayRunsFilters';
+import HeldPaymentsFilters from './HeldPaymentsFilters';
 
 const initialFilters = {
   id: '',
@@ -30,7 +30,7 @@ const PayRunsHeader = ({
   setOpenedPopup,
   tab,
 }) => {
-  const [filters, setFilters] = useState({...initialFilters});
+  const [filters, setFilters] = useState({ ...initialFilters });
 
   const applyFilters = () => {
     console.log('make an apply filters request');
@@ -54,7 +54,8 @@ const PayRunsHeader = ({
       clickActionButton: () => {
         setOpenedPopup('create-pay-run');
       },
-      filtersComponent: <PayRunsFilters
+      filtersComponent: (
+        <PayRunsFilters
           dateOptions={dateOptions}
           statusOptions={statusOptions}
           applyFilters={applyFilters}
@@ -63,13 +64,15 @@ const PayRunsHeader = ({
           filters={filters}
           searchId={searchId}
           typeOptions={typeOptions}
-        />,
+        />
+      ),
     },
     'held-payments': {
       title: 'Held Payments',
       actionButtonText: 'Pay Released Holds',
       clickActionButton: () => {},
-      filtersComponent: <HeldPaymentsFilters
+      filtersComponent: (
+        <HeldPaymentsFilters
           dateRangeOptions={dateRangeOptions}
           statusOptions={statusOptions}
           applyFilters={applyFilters}
@@ -80,26 +83,27 @@ const PayRunsHeader = ({
           changeFilter={changeFilter}
           filters={filters}
           typeOptions={typeOptions}
-        />,
+        />
+      ),
     },
   };
 
   useEffect(() => {
-    setFilters({...initialFilters});
+    setFilters({ ...initialFilters });
   }, [tab]);
 
   return (
-    <div className='pay-runs__header p-3'>
-      <div className='pay-runs__new-pay'>
-        <p className='title'>{tabInfos[tab].title}</p>
+    <div className="pay-runs__header p-3">
+      <div className="pay-runs__new-pay">
+        <p className="title">{tabInfos[tab].title}</p>
         <Button onClick={tabInfos[tab].clickActionButton}>{tabInfos[tab].actionButtonText}</Button>
       </div>
-      <div className='pay-runs__filters'>
-        <p className='pay-runs__filters-title'>Filter by</p>
+      <div className="pay-runs__filters">
+        <p className="pay-runs__filters-title">Filter by</p>
         {tabInfos[tab].filtersComponent}
       </div>
     </div>
-  )
+  );
 };
 
 export default PayRunsHeader;

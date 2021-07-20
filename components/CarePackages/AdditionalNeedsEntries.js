@@ -1,9 +1,9 @@
-import SectionHeading from "../SectionHeading";
-import { Button } from "../Button";
-import TextArea from "../TextArea";
-import RadioButton from "../RadioButton";
-import React, { useEffect, useState } from "react";
-import DatePick from "../DatePick";
+import React, { useEffect, useState } from 'react';
+import SectionHeading from '../SectionHeading';
+import { Button } from '../Button';
+import TextArea from '../TextArea';
+import RadioButton from '../RadioButton';
+import DatePick from '../DatePick';
 
 const AdditionalNeedEntry = ({
   costOptions,
@@ -19,18 +19,18 @@ const AdditionalNeedEntry = ({
   const [isFixedPeriodCost, setIsFixedPeriodCost] = useState(false);
 
   const onChangeErrors = (field) => {
-    if(!currentError) return;
+    if (!currentError) return;
     const newErrors = [...error];
-    newErrors.splice(index, 1, {...currentError, [field]: false});
+    newErrors.splice(index, 1, { ...currentError, [field]: false });
     setError(newErrors);
-  }
+  };
 
   const onRadioBtnChange = (value) => {
     const selectedCostText = costOptions.find((x) => x.value === value).text;
 
-    onChangeErrors('selectedCost')
-    let selectedPeriod = undefined;
-    if (selectedCostText.toLowerCase().includes("fixed")) {
+    onChangeErrors('selectedCost');
+    let selectedPeriod;
+    if (selectedCostText.toLowerCase().includes('fixed')) {
       setIsFixedPeriodCost(true);
       selectedPeriod = {
         startDate,
@@ -108,7 +108,7 @@ const AdditionalNeedEntry = ({
               </div>
             </div>
           )}
-          <Button onClick={() => removeEntry(entry.id)} linkBtn={true}>
+          <Button onClick={() => removeEntry(entry.id)} linkBtn>
             Remove Need
           </Button>
         </div>
@@ -129,13 +129,7 @@ const AdditionalNeedEntry = ({
   );
 };
 
-const AdditionalNeeds = ({
-  costOptions,
-  entries,
-  error,
-  setError,
-  setAdditionalNeedsState = () => {},
-}) => {
+const AdditionalNeeds = ({ costOptions, entries, error, setError, setAdditionalNeedsState = () => {} }) => {
   // Add new additional need entry
   const addAdditionalNeedEntry = () => {
     setAdditionalNeedsState([
@@ -152,9 +146,7 @@ const AdditionalNeeds = ({
 
   // Edit additional need entry
   const editAdditionalNeedEntry = (entry) => {
-    const newEntries = entries.map((entryItem) =>
-      entryItem.id === entry.id ? entry : entryItem
-    );
+    const newEntries = entries.map((entryItem) => (entryItem.id === entry.id ? entry : entryItem));
     setAdditionalNeedsState([...newEntries]);
   };
 
@@ -166,22 +158,20 @@ const AdditionalNeeds = ({
 
   return (
     <>
-      {entries.map((entryItem, index) => {
-        return (
-          <AdditionalNeedEntry
-            setError={setError}
-            key={entryItem.id}
-            index={index}
-            error={error}
-            costOptions={costOptions}
-            entry={entryItem}
-            onEdit={editAdditionalNeedEntry}
-            removeEntry={removeAdditionalNeedEntry}
-          />
-        );
-      })}
+      {entries.map((entryItem, index) => (
+        <AdditionalNeedEntry
+          setError={setError}
+          key={entryItem.id}
+          index={index}
+          error={error}
+          costOptions={costOptions}
+          entry={entryItem}
+          onEdit={editAdditionalNeedEntry}
+          removeEntry={removeAdditionalNeedEntry}
+        />
+      ))}
       <div className="mt-4">
-        <Button onClick={addAdditionalNeedEntry} linkBtn={true}>
+        <Button onClick={addAdditionalNeedEntry} linkBtn>
           + Add Need
         </Button>
       </div>
@@ -189,17 +179,15 @@ const AdditionalNeeds = ({
   );
 };
 
-const getInitialAdditionalNeedsArray = () => {
-  return [
-    {
-      id: 1,
-      selectedCost: undefined,
-      selectedCostText: undefined,
-      selectedPeriod: undefined,
-      needToAddress: undefined,
-    },
-  ];
-};
+const getInitialAdditionalNeedsArray = () => [
+  {
+    id: 1,
+    selectedCost: undefined,
+    selectedCostText: undefined,
+    selectedPeriod: undefined,
+    needToAddress: undefined,
+  },
+];
 
 export default AdditionalNeeds;
 export { getInitialAdditionalNeedsArray };

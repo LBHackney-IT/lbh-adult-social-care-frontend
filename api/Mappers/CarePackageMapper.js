@@ -1,13 +1,8 @@
-const mapHomeCarePackageDetailsForBrokerage = array => array?.map(
-  (historyItem) => ({
-    eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
-      "en-GB"
-    ),
+const mapHomeCarePackageDetailsForBrokerage = (array) =>
+  array?.map((historyItem) => ({
+    eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
     eventMessage: historyItem.logText,
-    eventSubMessage: undefined
-  })
-);
+    eventSubMessage: undefined,
+  }));
 
-export {
-  mapHomeCarePackageDetailsForBrokerage,
-};
+export { mapHomeCarePackageDetailsForBrokerage };

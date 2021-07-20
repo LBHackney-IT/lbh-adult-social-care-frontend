@@ -1,45 +1,35 @@
-import { BASE_URL } from "../BaseApi";
-import axios from "axios";
-import { handleError, handleResponse } from "../Utils/ApiUtils";
+import axios from 'axios';
+import { BASE_URL } from '../BaseApi';
+import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const RESIDENTIAL_CARE_URL = `${BASE_URL}/v1/residential-care-packages`;
 
-const getResidentialCareTypeOfStayOptions = () => {
-  return axios
-    .get(`${RESIDENTIAL_CARE_URL}/type-of-stay-options`)
-    .then(handleResponse)
-    .catch(handleError);
-};
+const getResidentialCareTypeOfStayOptions = () =>
+  axios.get(`${RESIDENTIAL_CARE_URL}/type-of-stay-options`).then(handleResponse).catch(handleError);
 
-const getResidentialCareAdditionalNeedsCostOptions = () => {
-  return [
-    { text: "Weekly", value: 1 },
-    { text: "One off", value: 2 },
-    { text: "Fixed Period", value: 3 },
-  ];
-};
+const getResidentialCareAdditionalNeedsCostOptions = () => [
+  { text: 'Weekly', value: 1 },
+  { text: 'One off', value: 2 },
+  { text: 'Fixed Period', value: 3 },
+];
 
-const getTypeOfResidentialCareHomeOptions = () => {
-  return axios
-    .get(`${RESIDENTIAL_CARE_URL}/type-of-residential-care-homes`)
-    .then(handleResponse)
-    .catch(handleError);
-};
+const getTypeOfResidentialCareHomeOptions = () =>
+  axios.get(`${RESIDENTIAL_CARE_URL}/type-of-residential-care-homes`).then(handleResponse).catch(handleError);
 
 const createResidentialCarePackage = (residentialCarePackageForCreation) => {
   const options = {
     url: `${RESIDENTIAL_CARE_URL}`,
-    method: "POST",
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json;charset=UTF-8",
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
     },
     data: residentialCarePackageForCreation,
   };
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-/*const updateResidentialCarePackage = (residentialCarePackageId, residentialCarePackageForUpdate) => {
+/* const updateResidentialCarePackage = (residentialCarePackageId, residentialCarePackageForUpdate) => {
   const options = {
     url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}`,
     method: 'PUT',
@@ -52,53 +42,39 @@ const createResidentialCarePackage = (residentialCarePackageForCreation) => {
   return axios(options)
     .then(handleResponse)
     .catch(handleError);
-}*/
+} */
 
-const getResidentialCarePackageList = () => {
-  return axios
-    .get(`${RESIDENTIAL_CARE_URL}/get-all`)
-    .then(handleResponse)
-    .catch(handleError);
-};
+const getResidentialCarePackageList = () =>
+  axios.get(`${RESIDENTIAL_CARE_URL}/get-all`).then(handleResponse).catch(handleError);
 
-const getSingleResidentialCarePackage = (residentialCarePackageId) => {
-  return axios
-    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}`)
-    .then(handleResponse)
-    .catch(handleError);
-};
+const getSingleResidentialCarePackage = (residentialCarePackageId) =>
+  axios.get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}`).then(handleResponse).catch(handleError);
 
-const getResidentialCarePackageApprovalPackageContent = (residentialCarePackageId) => {
-  return axios
+const getResidentialCarePackageApprovalPackageContent = (residentialCarePackageId) =>
+  axios
     .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-package-contents`)
     .then(handleResponse)
     .catch(handleError);
-};
 
-const getResidentialCarePackageApproveBrokered = (residentialCarePackageId) => {
-  return axios
+const getResidentialCarePackageApproveBrokered = (residentialCarePackageId) =>
+  axios
     .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-brokered-deal`)
     .then(handleResponse)
     .catch(handleError);
-};
 
-const getResidentialCarePackageApprovalHistory = (residentialCarePackageId) => {
-  return axios
+const getResidentialCarePackageApprovalHistory = (residentialCarePackageId) =>
+  axios
     .get(`${RESIDENTIAL_CARE_URL}/approval-history/${residentialCarePackageId}`)
     .then(handleResponse)
     .catch(handleError);
-};
 
-const residentialCareRequestClarification = (
-  residentialCarePackageId,
-  informationText
-) => {
+const residentialCareRequestClarification = (residentialCarePackageId, informationText) => {
   const options = {
     url: `${BASE_URL}/v1/residential-care-request-more-information`,
-    method: "POST",
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json;charset=UTF-8",
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
     },
     data: {
       residentialCarePackageId,
@@ -108,16 +84,13 @@ const residentialCareRequestClarification = (
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-const residentialCareChangeStatus = (
-  residentialCarePackageId,
-  newStatusId
-) => {
+const residentialCareChangeStatus = (residentialCarePackageId, newStatusId) => {
   const options = {
     url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/change-status/${newStatusId}`,
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json;charset=UTF-8",
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
     },
     data: {
       residentialCarePackageId,
@@ -128,36 +101,24 @@ const residentialCareChangeStatus = (
 };
 
 // Residential care brokerage
-const getResidentialCareBrokerageStages = () => {
-  return axios
-    .get(`${BASE_URL}/v1/stages`)
-    .then(handleResponse)
-    .catch(handleError);
-};
+const getResidentialCareBrokerageStages = () =>
+  axios.get(`${BASE_URL}/v1/stages`).then(handleResponse).catch(handleError);
 
-const getResidentialCarePackageDetailsForBrokerage = (residentialCarePackageId) => {
-  return axios
-    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage`)
-    .then(handleResponse)
-    .catch(handleError);
-};
+const getResidentialCarePackageDetailsForBrokerage = (residentialCarePackageId) =>
+  axios.get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage`).then(handleResponse).catch(handleError);
 
-const createResidentialCareBrokerageInfo = (
-  residentialCarePackageId,
-  residentialCareBrokerageInfoForCreation
-) => {
+const createResidentialCareBrokerageInfo = (residentialCarePackageId, residentialCareBrokerageInfoForCreation) => {
   const options = {
     url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage`,
-    method: "POST",
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
     data: residentialCareBrokerageInfoForCreation,
   };
   return axios(options).then(handleResponse).catch(handleError);
 };
-
 
 export {
   getResidentialCareTypeOfStayOptions,

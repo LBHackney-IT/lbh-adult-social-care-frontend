@@ -1,19 +1,17 @@
-import React from "react";
-import { ArrowLeftIcon, HackneyLogo } from "../Icons";
-import { useRouter } from "next/router";
+import React from 'react';
+import { useRouter } from 'next/router';
+import { ArrowLeftIcon, HackneyLogo } from '../Icons';
 
-const HeaderNav = () => {
-  return (
-    <div className="header-nav">
-      <div className="level">
-        <div className="level-item level-left">
-          <HackneyLogo />
-        </div>
-        <div className="level-item level-right" />
+const HeaderNav = () => (
+  <div className="header-nav">
+    <div className="level">
+      <div className="level-item level-left">
+        <HackneyLogo />
       </div>
+      <div className="level-item level-right" />
     </div>
-  );
-};
+  </div>
+);
 
 const Header = ({ children, subTitle, showPageHeader = true }) => {
   const router = useRouter();
@@ -22,7 +20,7 @@ const Header = ({ children, subTitle, showPageHeader = true }) => {
       <HeaderNav />
       {showPageHeader && (
         <div className="page-header">
-          <div className="is-clickable" onClick={() => router.back()}>
+          <div className="is-clickable" onClick={() => router.back()} role="presentation">
             <ArrowLeftIcon />
             &nbsp;Back
           </div>

@@ -1,46 +1,42 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import {
-  getHomeCareBrokergage,
+  getHomeCareBrokerageApprovePackage,
   getHomeCareServices,
   getHomeCareTimeSlotShifts,
-} from "../../../../api/CarePackages/HomeCareApi";
-import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
-import HomeCareApprovalTitle from "../../../../components/HomeCare/HomeCareApprovalTitle";
-import HomeCarePackageBreakdown from "../../../../components/HomeCare/HomeCarePackageBreakdown";
-import HomeCarePackageDetails from "../../../../components/HomeCare/HomeCarePackageDetails";
-import WeekCarePicker from "../../../../components/HomeCare/WeekCarePicker";
-import Layout from "../../../../components/Layout/Layout";
-import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
-import TextArea from "../../../../components/TextArea";
-import withSession from "../../../../lib/session";
-import { getUserSession } from "../../../../service/helpers";
-import {
-  PERSONAL_CARE_MODE,
-  weekDays,
-} from "../../../../service/homeCarePickerHelper";
-import { getServiceTypeCareTimes } from "../../../../service/homeCareServiceHelper";
+} from '../../../../api/CarePackages/HomeCareApi';
+import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
+import HomeCareApprovalTitle from '../../../../components/HomeCare/HomeCareApprovalTitle';
+import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
+import HomeCarePackageDetails from '../../../../components/HomeCare/HomeCarePackageDetails';
+import Layout from '../../../../components/Layout/Layout';
+import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
+import TextArea from '../../../../components/TextArea';
+import withSession from '../../../../lib/session';
+import { getUserSession } from '../../../../service/helpers';
+import { PERSONAL_CARE_MODE } from '../../../../service/homeCarePickerHelper';
+import { getServiceTypeCareTimes } from '../../../../service/homeCareServiceHelper';
 
 const approvalHistoryEntries = [
   {
-    eventDate: "08/07/2021",
-    eventMessage: "Package requested by Martin Workman · Social Worker ",
+    eventDate: '08/07/2021',
+    eventMessage: 'Package requested by Martin Workman · Social Worker ',
     eventSubMessage: null,
   },
   {
-    eventDate: "15/07/2021",
-    eventMessage: "Futher information requested by Amecie Steadman · Approver",
+    eventDate: '15/07/2021',
+    eventMessage: 'Futher information requested by Amecie Steadman · Approver',
     eventSubMessage:
       '"There appears to be more support than needed in the morning for Mr Stephens, please amend or call me to discuss more"',
   },
   {
-    eventDate: "25/07/2021",
-    eventMessage: "Package re-submitted by Martin Workman · Social Worker ",
+    eventDate: '25/07/2021',
+    eventMessage: 'Package re-submitted by Martin Workman · Social Worker ',
     eventSubMessage: null,
   },
 ];
 
-export const getServerSideProps = withSession(async function ({ req }) {
+export const getServerSideProps = withSession(async ({ req }) => {
   const user = getUserSession({ req });
   if (user.redirect) {
     return user;
@@ -54,28 +50,21 @@ export const getServerSideProps = withSession(async function ({ req }) {
     // Call to api to get package
     data.homeCareServices = await getHomeCareServices();
   } catch (error) {
-    data.errorData.push(
-      `Retrieve day care package details failed. ${error.message}`
-    );
+    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
 
   try {
     // Get home care time shifts
     data.homeCareTimeShiftsData = await getHomeCareTimeSlotShifts();
   } catch (error) {
-    data.errorData.push(
-      `Retrieve home care time shift details failed. ${error.message}`
-    );
+    data.errorData.push(`Retrieve home care time shift details failed. ${error.message}`);
   }
 
   return { props: { ...data, approvalHistoryEntries } };
 });
 
-const HomeCareApprovePackage = ({
-  approvalHistoryEntries,
-  homeCareTimeShiftsData,
-  homeCareServices,
-}) => {
+// eslint-disable-next-line no-unused-vars,no-shadow
+const HomeCareApprovePackage = ({ approvalHistoryEntries, homeCareTimeShiftsData, homeCareServices }) => {
   // Route
   const router = useRouter();
   const homeCarePackageId = router.query.id;
@@ -85,15 +74,15 @@ const HomeCareApprovePackage = ({
 
   // On load retrieve package
   useEffect(() => {
+    async function retrieveData() {
+      setPackageData(await getHomeCareBrokerageApprovePackage(homeCarePackageId));
+    }
     if (!packageData) {
-      async function retrieveData() {
-        setPackageData(await getHomeCareBrokergage(homeCarePackageId));
-      }
-
       retrieveData();
     }
   }, [homeCarePackageId, packageData]);
 
+  // eslint-disable-next-line no-unused-vars
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
 
   return (
@@ -108,9 +97,7 @@ const HomeCareApprovePackage = ({
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      HOURS PER WEEK
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">HOURS PER WEEK</p>
                     <p className="font-size-14px">18</p>
                   </div>
                 </div>
@@ -122,13 +109,9 @@ const HomeCareApprovePackage = ({
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      COST OF CARE
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">COST OF CARE</p>
                     <p className="font-size-14px">£1,982</p>
-                    <p className="font-weight-bold hackney-text-green">
-                      ESTIMATE
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">ESTIMATE</p>
                   </div>
                 </div>
               </div>
@@ -141,9 +124,7 @@ const HomeCareApprovePackage = ({
 
         <HomeCarePackageBreakdown />
 
-        <PackageApprovalHistorySummary
-          approvalHistoryEntries={approvalHistoryEntries}
-        />
+        <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
 
         <HomeCarePackageDetails />
 
@@ -163,15 +144,17 @@ const HomeCareApprovePackage = ({
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Deny</button>
+                  <button className="button hackney-btn-light" type="button">
+                    Deny
+                  </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">
+                  <button className="button hackney-btn-light" type="button">
                     Request more information
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green">
+                  <button className="button hackney-btn-green" type="button">
                     Approve to be brokered
                   </button>
                 </div>
@@ -179,11 +162,9 @@ const HomeCareApprovePackage = ({
             </div>
 
             <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">
-                Request more information
-              </p>
+              <p className="font-size-16px font-weight-bold">Request more information</p>
               <TextArea label="" rows={5} placeholder="Add details..." />
-              <button className="button hackney-btn-green">
+              <button className="button hackney-btn-green" type="button">
                 Request more information
               </button>
             </div>

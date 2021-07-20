@@ -1,46 +1,46 @@
-import React, { useEffect, useState } from "react";
-import Breadcrumbs from "../../../components/Breadcrumbs";
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Pagination from "../../../components/Payments/Pagination";
-import { supplierReturnsDashboardTableData, testDataHelpMessages } from "../../../testData/testDataPayRuns";
-import SupplierReturnsLevelInsight from "../../../components/SupplierDashboard/SupplierReturnsLevelInsight";
-import SupplierReturnDashboardTable from "../../../components/SupplierDashboard/SupplierReturnsDashboardTable";
-import SupplierReturnsDashboardInnerHeader from "../../../components/SupplierDashboard/SupplierReturnsDashboardInnerHeader";
-import ChatButton from "../../../components/PayRuns/ChatButton";
-import PopupHelpChat from "../../../components/Chat/PopupHelpChat";
-import { getUserSession } from "../../../service/helpers";
-import withSession from "../../../lib/session";
+import Breadcrumbs from '../../../components/Breadcrumbs';
+import Pagination from '../../../components/Payments/Pagination';
+import { supplierReturnsDashboardTableData, testDataHelpMessages } from '../../../testData/testDataPayRuns';
+import SupplierReturnsLevelInsight from '../../../components/SupplierDashboard/SupplierReturnsLevelInsight';
+import SupplierReturnDashboardTable from '../../../components/SupplierDashboard/SupplierReturnsDashboardTable';
+import SupplierReturnsDashboardInnerHeader from '../../../components/SupplierDashboard/SupplierReturnsDashboardInnerHeader';
+import ChatButton from '../../../components/PayRuns/ChatButton';
+import PopupHelpChat from '../../../components/Chat/PopupHelpChat';
+import { getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
 
-export const getServerSideProps = withSession(async function({ req }) {
+export const getServerSideProps = withSession(async ({ req }) => {
   const user = getUserSession({ req });
-  if(user.redirect) {
+  if (user.redirect) {
     return user;
   }
 
   return {
     props: {}, // will be passed to the page component as props
-  }
+  };
 });
 
-const SupplierReturnsDashboard = (props) => {
+const SupplierReturnsDashboard = () => {
   const router = useRouter();
-  const id = router.query.id;
+  const { id } = router.query;
   const [pathname] = useState(`/supplier-dashboard/supplier-returns/${id}`);
   const [sorts] = useState([
-    {name: 'serviceUser', text: 'Service User'},
-    {name: 'packageId', text: 'Package ID'},
-    {name: 'packageType', text: 'Package Type'},
-    {name: 'weeklyValue', text: 'Weekly Value'},
-    {name: 'status', text: 'Status'},
-  ])
+    { name: 'serviceUser', text: 'Service User' },
+    { name: 'packageId', text: 'Package ID' },
+    { name: 'packageType', text: 'Package Type' },
+    { name: 'weeklyValue', text: 'Weekly Value' },
+    { name: 'status', text: 'Status' },
+  ]);
   const [openedPopup, setOpenedPopup] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
   const [newMessageText, setNewMessageText] = useState('');
   const [openedHelpChat, setOpenedHelpChat] = useState({});
 
   const [breadcrumbs] = useState([
-    {text: 'Payments', onClick: () => router.push('/payments/pay-runs')},
-    {text: `Pay Run ${router.query.id}`}
+    { text: 'Payments', onClick: () => router.push('/payments/pay-runs') },
+    { text: `Pay Run ${router.query.id}` },
   ]);
 
   const [sort, setSort] = useState({
@@ -49,14 +49,14 @@ const SupplierReturnsDashboard = (props) => {
   });
 
   const sortBy = (field, value) => {
-    setSort({value, name: field});
+    setSort({ value, name: field });
   };
 
-  const onCheckRow = (id) => {
-    if(checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
+  const onCheckRow = (rowId) => {
+    if (checkedRows.includes(rowId)) {
+      setCheckedRows(checkedRows.filter((item) => String(item) !== String(rowId)));
     } else {
-      setCheckedRows([...checkedRows, id]);
+      setCheckedRows([...checkedRows, rowId]);
     }
   };
 
@@ -71,16 +71,16 @@ const SupplierReturnsDashboard = (props) => {
     setNewMessageText('');
   };
 
-  const openChat = item => {
+  const openChat = (item) => {
     setOpenedPopup('help-chat');
     setOpenedHelpChat(item);
   };
 
   const makeServiceAction = (item, service, actionName) => {
-    if(actionName === 'submit') {
+    if (actionName === 'submit') {
       console.log(`make service action ${actionName} with item: `, item);
       console.log(`service: `, service);
-    } else if(actionName === 'resubmit') {
+    } else if (actionName === 'resubmit') {
       console.log(`make service action ${actionName} with item: `, item);
       console.log(`service: `, service);
     } else {
@@ -89,7 +89,7 @@ const SupplierReturnsDashboard = (props) => {
   };
 
   const chatActions = [
-    {id: 'action1', onClick: (item) => openChat(item), className: 'chat-icon', Component: ChatButton}
+    { id: 'action1', onClick: (item) => openChat(item), className: 'chat-icon', Component: ChatButton },
   ];
 
   useEffect(() => {
@@ -101,42 +101,36 @@ const SupplierReturnsDashboard = (props) => {
   }, []);
 
   return (
-    <div className='supplier-returns supplier-returns-dashboard'>
-      {openedPopup === 'help-chat' &&
-      <PopupHelpChat
-        closePopup={closeHelpChat}
-        newMessageText={newMessageText}
-        setNewMessageText={setNewMessageText}
-        currentUserInfo={openedHelpChat}
-        currentUserId={1}
-        messages={testDataHelpMessages}
-      />
-      }
-      {!!breadcrumbs.length && <Breadcrumbs classes='p-3' values={breadcrumbs} />}
+    <div className="supplier-returns supplier-returns-dashboard">
+      {openedPopup === 'help-chat' && (
+        <PopupHelpChat
+          closePopup={closeHelpChat}
+          newMessageText={newMessageText}
+          setNewMessageText={setNewMessageText}
+          currentUserInfo={openedHelpChat}
+          currentUserId={1}
+          messages={testDataHelpMessages}
+        />
+      )}
+      {!!breadcrumbs.length && <Breadcrumbs classes="p-3" values={breadcrumbs} />}
       <SupplierReturnsDashboardInnerHeader />
       <SupplierReturnDashboardTable
         rows={supplierReturnsDashboardTableData}
-        careType='Residential'
+        careType="Residential"
         checkedRows={checkedRows}
         setCheckedRows={onCheckRow}
         openChat={openChat}
         makeAction={makeServiceAction}
         additionalActions={chatActions}
-        isIgnoreId={true}
-        canCollapseRows={true}
+        isIgnoreId
+        canCollapseRows
         sortBy={sortBy}
         sorts={sorts}
       />
       <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
-      <SupplierReturnsLevelInsight
-        packages='832'
-        totalValue='£92,321'
-        returned='700'
-        inDispute='42'
-        accepted='678'
-      />
+      <SupplierReturnsLevelInsight packages="832" totalValue="£92,321" returned="700" inDispute="42" accepted="678" />
     </div>
-  )
+  );
 };
 
 export default SupplierReturnsDashboard;
