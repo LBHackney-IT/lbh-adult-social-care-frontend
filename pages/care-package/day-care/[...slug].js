@@ -1,48 +1,48 @@
-import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react";
-import ClientSummary from "../../../components/ClientSummary";
-import Layout from "../../../components/Layout/Layout";
-import CareTitle from "../../../components/CarePackages/CareTitle";
-import TextArea from "../../../components/TextArea";
-import { days } from "../../../components/daysData";
-import Checkbox from "../../../components/Checkbox";
-import RadioButton, { yesNoValues } from "../../../components/RadioButton";
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import ClientSummary from '../../../components/ClientSummary';
+import Layout from '../../../components/Layout/Layout';
+import CareTitle from '../../../components/CarePackages/CareTitle';
+import TextArea from '../../../components/TextArea';
+import { days } from '../../../components/daysData';
+import Checkbox from '../../../components/Checkbox';
+import RadioButton, { yesNoValues } from '../../../components/RadioButton';
 import {
   createDayCarePackage,
   getOpportunitiesLengthOptions,
   getOpportunityTimesPerMonthOptions,
   getTermTimeConsiderationOptions,
-} from "../../../api/CarePackages/DayCareApi";
-import DayCareOpportunities from "../../../components/DayCare/DayCareOpportunities";
-import { Button } from "../../../components/Button";
-import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
-import TitleHeader from "../../../components/TitleHeader";
-import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
-import DayCareSummary from "../../../components/DayCare/DayCareSummary";
-import DayCareCollegeAsyncSearch from "../../../components/DayCare/DayCareCollegeAsyncSearch";
-import { getErrorResponse, getUserSession } from "../../../service/helpers";
-import withSession from "../../../lib/session";
-import fieldValidator from "../../../service/inputValidator";
-import ErrorField from "../../../components/ErrorField";
+} from '../../../api/CarePackages/DayCareApi';
+import DayCareOpportunities from '../../../components/DayCare/DayCareOpportunities';
+import { Button } from '../../../components/Button';
+import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
+import TitleHeader from '../../../components/TitleHeader';
+import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
+import DayCareSummary from '../../../components/DayCare/DayCareSummary';
+import DayCareCollegeAsyncSearch from '../../../components/DayCare/DayCareCollegeAsyncSearch';
+import { getErrorResponse, getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
+import fieldValidator from '../../../service/inputValidator';
+import ErrorField from '../../../components/ErrorField';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getUserSession({ req });
-  if(user.redirect) {
+  if (user.redirect) {
     return user;
   }
 
   return {
     props: {}, // will be passed to the page component as props
-  }
-})
+  };
+});
 
 const DayCare = () => {
-  const isTrueSet = (myValue) => myValue === "true";
-  const checkFixedPeriod = (myValue) => myValue === "1";
+  const isTrueSet = (myValue) => myValue === 'true';
+  const checkFixedPeriod = (myValue) => myValue === '1';
 
   // Parameters
   const router = useRouter();
-  let [ startDate, endDate, isImmediate, isS117, isFixedPeriod ] = router.query.slug;
+  let [startDate, endDate, isImmediate, isS117, isFixedPeriod] = router.query.slug;
   isImmediate = isTrueSet(isImmediate);
   isS117 = isTrueSet(isS117);
   isFixedPeriod = checkFixedPeriod(isFixedPeriod);
@@ -51,17 +51,9 @@ const DayCare = () => {
 
   const [errors, setErrors] = useState([]);
   const [termTimeNAId, setTermTimeNaId] = useState(undefined);
-  const [
-    termTimeConsiderationOptions,
-    setTermTimeConsiderationOptions,
-  ] = useState([]);
-  const [opportunitiesLengthOptions, setOpportunitiesLengthOptions] = useState(
-    []
-  );
-  const [
-    opportunityTimesPerMonthOptions,
-    setOpportunityTimesPerMonthOptions,
-  ] = useState([]);
+  const [termTimeConsiderationOptions, setTermTimeConsiderationOptions] = useState([]);
+  const [opportunitiesLengthOptions, setOpportunitiesLengthOptions] = useState([]);
+  const [opportunityTimesPerMonthOptions, setOpportunityTimesPerMonthOptions] = useState([]);
 
   // package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
@@ -78,9 +70,7 @@ const DayCare = () => {
 
   const [needToAddress, setNeedToAddress] = useState(undefined);
   const [transportNeeded, setTransportIsNeeded] = useState(undefined);
-  const [transportEscortNeeded, setTransportEscortIsNeeded] = useState(
-    undefined
-  );
+  const [transportEscortNeeded, setTransportEscortIsNeeded] = useState(undefined);
   const [escortNeeded, setEscortIsNeeded] = useState(undefined);
   const [termTimeConsideration, setTermTimeConsideration] = useState(undefined);
   const [displaySelectCollege, setDisplaySelectCollege] = useState(false);
@@ -89,24 +79,16 @@ const DayCare = () => {
     { id: 1, howLongValue: 1, timesPerMonthValue: 1, needToAddress: undefined },
   ]);
   // Setup days state using base days value
-  const [daysSelected, setDaysSelected] = useState(
-    days.map((dayItem) => ({ ...dayItem, checked: false }))
-  );
+  const [daysSelected, setDaysSelected] = useState(days.map((dayItem) => ({ ...dayItem, checked: false })));
 
   useEffect(() => {
     if (termTimeConsiderationOptions.length === 0) {
       retrieveTermTimeConsiderationOptions();
     }
-    if (
-      opportunitiesLengthOptions.length === 0 ||
-      opportunitiesLengthOptions.length === 1
-    ) {
+    if (opportunitiesLengthOptions.length === 0 || opportunitiesLengthOptions.length === 1) {
       retrieveOpportunitiesLengthOptions();
     }
-    if (
-      opportunityTimesPerMonthOptions.length === 0 ||
-      opportunityTimesPerMonthOptions.length === 1
-    ) {
+    if (opportunityTimesPerMonthOptions.length === 0 || opportunityTimesPerMonthOptions.length === 1) {
       retrieveOpportunityTimesPerMonthOptions();
     }
   }, [termTimeConsiderationOptions, opportunityTimesPerMonthOptions]);
@@ -152,18 +134,14 @@ const DayCare = () => {
   const onDayCheckboxChange = (dayId, isChecked) => {
     const dayEntry = daysSelected.find((item) => item.id === dayId);
     dayEntry.checked = isChecked;
-    setDaysSelected(
-      daysSelected.map((dayEntryItem) =>
-        dayEntryItem.id === dayId ? dayEntry : dayEntryItem
-      )
-    );
+    setDaysSelected(daysSelected.map((dayEntryItem) => (dayEntryItem.id === dayId ? dayEntry : dayEntryItem)));
   };
 
   const retrieveTermTimeConsiderationOptions = () => {
     getTermTimeConsiderationOptions()
       .then((res) => {
         const options = res.map((option) => {
-          if (option.optionName.toLowerCase().trim() === "n/a") {
+          if (option.optionName.toLowerCase().trim() === 'n/a') {
             setTermTimeNaId(option.optionId);
           }
           return {
@@ -174,10 +152,7 @@ const DayCare = () => {
         setTermTimeConsiderationOptions(options);
       })
       .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve term time considerations failed. ${error.message}`,
-        ]);
+        setErrors([...errors, `Retrieve term time considerations failed. ${error.message}`]);
       });
   };
 
@@ -192,10 +167,7 @@ const DayCare = () => {
         setOpportunitiesLengthOptions(options);
       })
       .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve opportunity length options failed. ${error.message}`,
-        ]);
+        setErrors([...errors, `Retrieve opportunity length options failed. ${error.message}`]);
       });
   };
 
@@ -209,10 +181,7 @@ const DayCare = () => {
         setOpportunityTimesPerMonthOptions(options);
       })
       .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve opportunity times per month options failed. ${error.message}`,
-        ]);
+        setErrors([...errors, `Retrieve opportunity times per month options failed. ${error.message}`]);
       });
   };
 
@@ -224,44 +193,49 @@ const DayCare = () => {
   };
 
   const formHasErrors = () => {
-    const defaultFields = fieldValidator([
-      {name: 'transportNeeded', value: transportNeeded, rules: ['empty']},
-      {name: 'transportEscortNeeded', value: transportEscortNeeded, rules: ['empty']},
-      {name: 'escortNeeded', value: escortNeeded, rules: ['empty']},
-      {name: 'termTimeConsideration', value: termTimeConsideration, rules: ['empty']},
-      {name: 'needToAddress', value: needToAddress, rules: ['empty']},
-      {name: 'daysSelected', value: daysSelected, rules: ['customEmpty']},
-    ],
-      [{name: 'customEmpty', text: 'Required field', valid: (item) => item.value.some(day => day.checked)}]
+    const defaultFields = fieldValidator(
+      [
+        { name: 'transportNeeded', value: transportNeeded, rules: ['empty'] },
+        { name: 'transportEscortNeeded', value: transportEscortNeeded, rules: ['empty'] },
+        { name: 'escortNeeded', value: escortNeeded, rules: ['empty'] },
+        { name: 'termTimeConsideration', value: termTimeConsideration, rules: ['empty'] },
+        { name: 'needToAddress', value: needToAddress, rules: ['empty'] },
+        { name: 'daysSelected', value: daysSelected, rules: ['customEmpty'] },
+      ],
+      [{ name: 'customEmpty', text: 'Required field', valid: (item) => item.value.some((day) => day.checked) }]
     );
     setErrorFields(defaultFields.validFields);
 
     const packageReclaimsTimedArr = [];
     const opportunityEntriesTimedArr = [];
-    const packageReclaimsFieldsError = packagesReclaimed.map(item => {
+    const packageReclaimsFieldsError = packagesReclaimed.map((item) => {
       const valid = fieldValidator([
-        {name: 'from', value: item.from, rules: ['empty']},
-        {name: 'category', value: item.category, rules: ['empty']},
-        {name: 'type', value: item.type, rules: ['empty']},
-        {name: 'notes', value: item.notes, rules: ['empty']},
-        {name: 'amount', value: item.amount, rules: ['empty']},
+        { name: 'from', value: item.from, rules: ['empty'] },
+        { name: 'category', value: item.category, rules: ['empty'] },
+        { name: 'type', value: item.type, rules: ['empty'] },
+        { name: 'notes', value: item.notes, rules: ['empty'] },
+        { name: 'amount', value: item.amount, rules: ['empty'] },
       ]);
       packageReclaimsTimedArr.push(valid.validFields);
       return valid.hasErrors;
     });
     setPackageReclaimedError(packageReclaimsTimedArr);
 
-    const opportunityEntriesFieldsError = opportunityEntries.map(item => {
+    const opportunityEntriesFieldsError = opportunityEntries.map((item) => {
       const valid = fieldValidator([
-        {name: 'howLongValue', value: item.howLongValue, rules: ['empty']},
-        {name: 'timesPerMonthValue', value: item.timesPerMonthValue, rules: ['empty']},
-        {name: 'needToAddress', value: item.needToAddress, rules: ['empty']},
+        { name: 'howLongValue', value: item.howLongValue, rules: ['empty'] },
+        { name: 'timesPerMonthValue', value: item.timesPerMonthValue, rules: ['empty'] },
+        { name: 'needToAddress', value: item.needToAddress, rules: ['empty'] },
       ]);
       opportunityEntriesTimedArr.push(valid.validFields);
       return valid.hasErrors;
     });
     setOpportunityEntriesError(opportunityEntriesTimedArr);
-    return opportunityEntriesFieldsError.some(item => item) || packageReclaimsFieldsError.some(item => item) || defaultFields.hasErrors;
+    return (
+      opportunityEntriesFieldsError.some((item) => item) ||
+      packageReclaimsFieldsError.some((item) => item) ||
+      defaultFields.hasErrors
+    );
   };
 
   const savePackageClick = (event) => {
@@ -275,15 +249,15 @@ const DayCare = () => {
     }));
 
     const packageReclaims = packagesReclaimed.map((reclaim) => ({
-        ReclaimFromId: reclaim.from,
-        ReclaimCategoryId: reclaim.category,
-        ReclaimAmountOptionId: reclaim.type,
-        Notes: reclaim.notes,
-        Amount: reclaim.amount,
-      }));
+      ReclaimFromId: reclaim.from,
+      ReclaimCategoryId: reclaim.category,
+      ReclaimAmountOptionId: reclaim.type,
+      Notes: reclaim.notes,
+      Amount: reclaim.amount,
+    }));
 
     const dayCarePackageToCreate = {
-      clientId: "aee45700-af9b-4ab5-bb43-535adbdcfb80",
+      clientId: 'aee45700-af9b-4ab5-bb43-535adbdcfb80',
       isFixedPeriodOrOngoing: isFixedPeriod,
       startDate: startDate ? new Date(startDate).toJSON() : null,
       endDate: endDate ? new Date(endDate).toJSON() : null,
@@ -302,14 +276,14 @@ const DayCare = () => {
       escortNeeded,
       termTimeConsiderationOptionId: termTimeConsideration,
       dayCarePackageOpportunities,
-      creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
+      creatorId: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8',
       collegeId,
       packageReclaims,
     };
 
     createDayCarePackage(dayCarePackageToCreate)
       .then(() => {
-        alert("Package saved.");
+        alert('Package saved.');
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
@@ -333,13 +307,7 @@ const DayCare = () => {
 
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
-      <ClientSummary
-        client="James Stephens"
-        hackneyId="786288"
-        age="91"
-        dateOfBirth="09/12/1972"
-        postcode="E9 6EY"
-      >
+      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
         Care Package
       </ClientSummary>
       <div className="mt-5 mb-5">
@@ -362,18 +330,14 @@ const DayCare = () => {
               // Handle this checkbox click
               const onThisDayCheckboxChange = (isChecked) => {
                 onDayCheckboxChange(dayItem.id, isChecked);
-                changeErrorFields('daysSelected')
+                changeErrorFields('daysSelected');
               };
 
               return (
                 <div className="column" key={dayItem.id}>
                   <label>{dayItem.short.toUpperCase()}</label>
-                  <Checkbox
-                    id="immediateServiceCbx"
-                    checked={dayItem.checked}
-                    onChange={onThisDayCheckboxChange}
-                  />
-                  {errorFields.daysSelected && index === 0 && <ErrorField text={errorFields.daysSelected}/>}
+                  <Checkbox id="immediateServiceCbx" checked={dayItem.checked} onChange={onThisDayCheckboxChange} />
+                  {errorFields.daysSelected && index === 0 && <ErrorField text={errorFields.daysSelected} />}
                 </div>
               );
             })}
