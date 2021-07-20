@@ -1,8 +1,8 @@
-import ClientSummary from '../ClientSummary'
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../api/Utils/FuncUtils'
-import PackageCostBox from '../DayCare/PackageCostBox'
-import PackageApprovalHistorySummary from '../PackageApprovalHistorySummary'
-import React from 'react'
+import React from 'react';
+import ClientSummary from '../ClientSummary';
+import { getAgeFromDateString, getEnGBFormattedDate } from '../../api/Utils/FuncUtils';
+import PackageCostBox from '../DayCare/PackageCostBox';
+import PackageApprovalHistorySummary from '../PackageApprovalHistorySummary';
 
 const ApprovalHistory = ({
   history,
@@ -17,57 +17,40 @@ const ApprovalHistory = ({
   boxClasses,
   endDate,
   careType,
-}) => {
-  return (
-    <div className="approval-history">
-      <h2>
-        {careType}{" "}
-        <span>
-          (
-          {isFixedPeriodOrOngoing
-            ? "Fixed Period"
-            : "Ongoing"}{" "}
-          - {termTimeConsiderationOption})
-        </span>
-      </h2>
-      <ClientSummary
-        client={clientName}
-        hackneyId={clientHackneyId}
-        age={
-          clientDateOfBirth &&
-          getAgeFromDateString(clientDateOfBirth)
-        }
-        sourcingCare="hackney"
-        dateOfBirth={
-          clientDateOfBirth &&
-          getEnGBFormattedDate(clientDateOfBirth)
-        }
-        postcode={hackneyId}
-      />
-      <div className="care-info">
-        <div>
-          <p>STARTS</p>
-          <p>
-            {getEnGBFormattedDate(startDate)}
-          </p>
-        </div>
-        <div>
-          <p>ENDS</p>
-          <p>
-            {endDate !== null
-              ? getEnGBFormattedDate(endDate)
-              : "Ongoing"}
-          </p>
-        </div>
-        <div>
-          <p>DAYS/WEEK</p>
-          <p />
-        </div>
+}) => (
+  <div className="approval-history">
+    <h2>
+      {careType}{' '}
+      <span>
+        ({isFixedPeriodOrOngoing ? 'Fixed Period' : 'Ongoing'} - {termTimeConsiderationOption})
+      </span>
+    </h2>
+    <ClientSummary
+      client={clientName}
+      hackneyId={clientHackneyId}
+      age={clientDateOfBirth && getAgeFromDateString(clientDateOfBirth)}
+      sourcingCare="hackney"
+      dateOfBirth={clientDateOfBirth && getEnGBFormattedDate(clientDateOfBirth)}
+      postcode={hackneyId}
+    />
+    <div className="care-info">
+      <div>
+        <p>STARTS</p>
+        <p>{getEnGBFormattedDate(startDate)}</p>
       </div>
-      <div className="columns font-size-12px">
-        <div className="column">
-          <div className="is-flex is-flex-wrap-wrap">
-            {costSummary &&
+      <div>
+        <p>ENDS</p>
+        <p>{endDate !== null ? getEnGBFormattedDate(endDate) : 'Ongoing'}</p>
+      </div>
+      <div>
+        <p>DAYS/WEEK</p>
+        <p />
+      </div>
+    </div>
+    <div className="columns font-size-12px">
+      <div className="column">
+        <div className="is-flex is-flex-wrap-wrap">
+          {costSummary && (
             <>
               {costSummary.costOfCarePerWeek && (
                 <PackageCostBox
@@ -84,11 +67,7 @@ const ApprovalHistory = ({
                 />
               )}
               {costSummary.anpPerWeek && (
-                <PackageCostBox
-                  title="ANP / WK"
-                  cost={costSummary?.anpPerWeek ?? 0.0}
-                  costType="ESTIMATE"
-                />
+                <PackageCostBox title="ANP / WK" cost={costSummary?.anpPerWeek ?? 0.0} costType="ESTIMATE" />
               )}
               {costSummary.transportPerWeek && (
                 <PackageCostBox
@@ -114,13 +93,12 @@ const ApprovalHistory = ({
                 />
               )}
             </>
-            }
-          </div>
+          )}
         </div>
       </div>
-      <PackageApprovalHistorySummary approvalHistoryEntries={history} />
     </div>
-  );
-};
+    <PackageApprovalHistorySummary approvalHistoryEntries={history} />
+  </div>
+);
 
 export default ApprovalHistory;

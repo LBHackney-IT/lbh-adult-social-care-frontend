@@ -66,6 +66,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 3px;
 
   p {
     color: $lbh-black1;
@@ -148,7 +149,9 @@
       display: flex;
     }
 
-    .elements-row:nth-of-type(1), .elements-row:nth-of-type(2), .elements-row:nth-of-type(3) {
+    .elements-row:nth-of-type(1),
+    .elements-row:nth-of-type(2),
+    .elements-row:nth-of-type(3) {
       border-left: 1px solid $lbh-gray-border;
       padding-left: 8px;
 
@@ -170,7 +173,10 @@
 .proposed-packages__tabs {
   display: flex;
   position: relative;
+  width: 100%;
   padding: 25px 0.75rem 0 0.75rem;
+  border-bottom: 1px solid $lbh-green-border;
+  bottom: -1px;
 
   .tab {
     height: 41px;
@@ -180,10 +186,15 @@
     align-items: center;
     margin-right: 8px;
     padding: 0 16px;
-    border: 1px solid $lbh-gray;
+    border: 1px solid $lbh-green-border;
+    background: white;
     border-bottom: none;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+
+    svg {
+      transition: 0.2s ease;
+    }
 
     p {
       margin-right: 10px;
@@ -201,13 +212,16 @@
   }
 
   .active-tab {
-    background: $lbh-light-gray;
+    bottom: -1px;
+    svg {
+      transform: rotate(180deg);
+    }
   }
 }
 
-
 .person-care {
   border: 1px solid $lbh-gray;
+  border-radius: 3px;
   margin-bottom: 0 !important;
 
   label {

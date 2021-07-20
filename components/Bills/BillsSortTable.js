@@ -1,27 +1,22 @@
-import React from "react";
-import {CaretDownIcon} from "../Icons";
+import React from 'react';
+import { CaretDownIcon } from '../Icons';
 
-const BillsSortTable = ({ checkedRows, sorts, sortBy, additionalActions }) => {
-  return (
-    <div className='sort-table'>
-      {checkedRows && <div className='sort sort-checkbox'/> }
-      {sorts.map(item => {
-        return (
-          <div key={item.name} className='sort'>
-            <p className='sort__sort-name'>{item.text}</p>
-            {
-              item.name &&
-              <div className='sort__actions'>
-                <CaretDownIcon onClick={() => sortBy(item.name, 'increase')} />
-                <CaretDownIcon onClick={() => sortBy(item.name, 'decrease')} />
-              </div>
-            }
+const BillsSortTable = ({ checkedRows, sorts, sortBy, additionalActions }) => (
+  <div className="sort-table">
+    {checkedRows && <div className="sort sort-checkbox" />}
+    {sorts.map((item) => (
+      <div key={item.name} className="sort">
+        <p className="sort__sort-name">{item.text}</p>
+        {item.name && (
+          <div className="sort__actions">
+            <CaretDownIcon onClick={() => sortBy(item.name, 'increase')} />
+            <CaretDownIcon onClick={() => sortBy(item.name, 'decrease')} />
           </div>
-        );
-      })}
-      {additionalActions && additionalActions.map(item => <div key={item.id} className='sort'/>)}
-    </div>
-  )
-};
+        )}
+      </div>
+    ))}
+    {additionalActions && additionalActions.map((item) => <div key={item.id} className="sort" />)}
+  </div>
+);
 
 export default BillsSortTable;

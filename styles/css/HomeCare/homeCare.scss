@@ -1,7 +1,7 @@
-$personalHomeCare: #f2f7f6;
-$domestic: #fce8f4;
-$liveInCarer: #fff7e3;
-$escort: #f5e1e1;
+$personalHomeCare: #D9FEF1;
+$domestic: #ECC1D5;
+$liveInCarer: #FCF4E0;
+$escort: #FFA9A9;
 
 .personal-home-care {
     background-color: $personalHomeCare;
@@ -76,7 +76,7 @@ $escort: #f5e1e1;
 
                 .picker-item {
                     height: 100%;
-                    width: 100%;
+                    width: 44px;
                     margin-right: 2px;
                     cursor: pointer;
                     display: flex;

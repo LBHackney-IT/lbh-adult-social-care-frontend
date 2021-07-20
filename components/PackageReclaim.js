@@ -1,19 +1,19 @@
-import Dropdown from "./Dropdown";
-import TextArea from "./TextArea";
-import RadioButton from "./RadioButton";
-import EuroInput from "./EuroInput";
-import React from "react";
+import React from 'react';
+import Dropdown from './Dropdown';
+import TextArea from './TextArea';
+import RadioButton from './RadioButton';
+import EuroInput from './EuroInput';
 
 const staticReclaimFromOptions = [
-  { text: "Reclaim from 1", value: 1 },
-  { text: "Reclaim from 2", value: 2 },
-  { text: "Reclaim from 3", value: 3 },
+  { text: 'Reclaim from 1', value: 1 },
+  { text: 'Reclaim from 2', value: 2 },
+  { text: 'Reclaim from 3', value: 3 },
 ];
 
 const staticCategoryOptions = [
-  { text: "Category type 1", value: 1 },
-  { text: "Category type 2", value: 2 },
-  { text: "Category type 3", value: 3 },
+  { text: 'Category type 1', value: 1 },
+  { text: 'Category type 2', value: 2 },
+  { text: 'Category type 3', value: 3 },
 ];
 
 const staticCheckboxOptions = [
@@ -42,11 +42,11 @@ const PackageReclaim = ({
   };
 
   const onChangeErrors = (field) => {
-    if(!currentError) return;
+    if (!currentError) return;
     const newErrors = [...error];
-    newErrors.splice(index, 1, {...currentError, [field]: false});
+    newErrors.splice(index, 1, { ...currentError, [field]: false });
     setError(newErrors);
-  }
+  };
 
   const currentError = index !== undefined && error !== undefined && error[index];
 
@@ -54,12 +54,9 @@ const PackageReclaim = ({
     <div className="package-reclaim">
       <div className="column">
         <h1 className="package-reclaim__title">
-          Package reclaim{" "}
+          Package reclaim{' '}
           {remove && (
-            <span
-              onClick={remove}
-              className="action-button-text action-button-red"
-            >
+            <span onClick={remove} className="action-button-text action-button-red">
               Remove
             </span>
           )}
@@ -70,7 +67,7 @@ const PackageReclaim = ({
             initialText="Select"
             error={currentError?.from}
             options={reclaimFromOptions}
-            onOptionSelect={(value) => changePackageType("from", value)}
+            onOptionSelect={(value) => changePackageType('from', value)}
             selectedValue={packageReclaim.from}
           />
           <Dropdown
@@ -78,7 +75,7 @@ const PackageReclaim = ({
             initialText="Select"
             error={currentError?.category}
             options={reclaimFromCategoryOptions}
-            onOptionSelect={(value) => changePackageType("category", value)}
+            onOptionSelect={(value) => changePackageType('category', value)}
             selectedValue={packageReclaim.category}
           />
         </div>
@@ -87,20 +84,20 @@ const PackageReclaim = ({
           rows={5}
           error={currentError?.notes}
           label="Add notes"
-          onChange={(value) => changePackageType("notes", value)}
+          onChange={(value) => changePackageType('notes', value)}
           placeholder="My notes here and here"
         />
         <div className="mt-4 mb-5">
           <RadioButton
             label=""
             error={currentError?.type}
-            onChange={(value) => changePackageType("type", value)}
+            onChange={(value) => changePackageType('type', value)}
             options={reclaimAmountOptions}
             selectedValue={packageReclaim.type}
           />
         </div>
         <EuroInput
-          onChange={(value) => changePackageType("amount", value)}
+          onChange={(value) => changePackageType('amount', value)}
           label="Amount"
           error={currentError?.amount}
           value={packageReclaim.amount}

@@ -12,7 +12,7 @@ const Checkbox = ({ children, checked = false, error, setError, onChange = () =>
   };
 
   return (
-    <label className="checkbox" onClick={onCheckedChange}>
+    <label className={`checkbox${checked ? ' checkbox-status-checked' : ''}`} onClick={onCheckedChange}>
       <div className="checkbox-check">{checked ? <CheckIcon /> : null}</div>
       {children !== undefined ? children : null}
       {error && <ErrorField text={error} />}

@@ -9,9 +9,22 @@
   align-items: center;
   justify-content: center;
 
+  .notification-close {
+    font-size: 32px;
+    margin-left: 5px;
+    transform: rotate(45deg);
+    box-sizing: border-box;
+    font-weight: bold;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   p {
     word-break: break-word;
     font-weight: bold;
+    margin-right: 16px;
   }
 
   div {
@@ -19,14 +32,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 20px;
+    padding: 0 8px 0 8px;
     min-height: 44px;
     border-radius: 4px;
   }
 
   &.error {
     div {
-      background-color: red;
+      background-color: $lbh-red;
       color: white;
     }
   }

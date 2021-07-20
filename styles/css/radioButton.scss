@@ -17,14 +17,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px solid $lbh-black1;
+            border: 1px solid $lbh-light-gray-border;
 
             .radio-item-selected {
                 display: none;
                 width: 14px;
                 height: 14px;
                 background-color: $lbh-link;
-                border-radius: 50%;
+                border-radius: 10px;
             }
 
             &.is-active {

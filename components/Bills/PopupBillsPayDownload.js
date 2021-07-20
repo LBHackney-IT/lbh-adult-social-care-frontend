@@ -1,14 +1,11 @@
-import React from "react";
-import Popup from "../Popup";
-import TextArea from "../TextArea";
+import React from 'react';
+import Popup from '../Popup';
+import TextArea from '../TextArea';
 
-const PopupBillsPayDownload = ({
-  closePopup,
-  payBills
-}) => {
+const PopupBillsPayDownload = ({ closePopup, payBills }) => {
   const createPayRun = (
-    <div className='pay-bills'>
-      <TextArea classes='pay-bills__textarea' rows={8}>
+    <div className="pay-bills">
+      <TextArea classes="pay-bills__textarea" rows={8}>
         {payBills}
       </TextArea>
     </div>
@@ -18,9 +15,9 @@ const PopupBillsPayDownload = ({
     <Popup
       closePopup={closePopup}
       mainContent={createPayRun}
-      title='Pay Index'
-      firstButton={{text: 'Cancel'}}
-      secondButton={{text: 'Pay & Download Export File'}}
+      title="Pay Index"
+      firstButton={{ text: 'Cancel' }}
+      secondButton={{ text: 'Pay & Download Export File' }}
     />
   );
 };

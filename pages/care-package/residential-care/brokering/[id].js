@@ -25,6 +25,7 @@ import { getSupplierList } from "../../../../api/CarePackages/SuppliersApi";
 import { CARE_PACKAGE_ROUTE } from "../../../../routes/RouteConstants";
 import {useRouter} from "next/router";
 import withSession from "../../../../lib/session";
+import PackageHeader from '../../../../components/CarePackages/PackageHeader'
 
 const initialPackageReclaim = {
   type: "",
@@ -189,22 +190,17 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
   };
 
   return (
-    <Layout headerTitle="Residential Care Brokering">
-      <ClientSummary
-        client={residentialCarePackage?.residentialCarePackage?.clientName}
-        hackneyId={residentialCarePackage?.residentialCarePackage?.clientHackneyId}
-        age={residentialCarePackage?.residentialCarePackage && getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth)}
-        preferredContact={residentialCarePackage?.residentialCarePackage?.clientPreferredContact}
-        canSpeakEnglish={residentialCarePackage?.residentialCarePackage?.clientCanSpeakEnglish}
-        packagesCount={4}
-        dateOfBirth={
-          residentialCarePackage?.residentialCarePackage && getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth)
-        }
-        postcode={residentialCarePackage?.residentialCarePackage?.clientPostCode}
-      >
-        Proposed Packages
-      </ClientSummary>
-
+    <Layout showBackButton={true} clientSummaryInfo={{
+      client: residentialCarePackage?.residentialCarePackage?.clientName,
+      hackneyId: residentialCarePackage?.residentialCarePackage?.clientHackneyId,
+      age: residentialCarePackage?.residentialCarePackage && getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
+      preferredContact: residentialCarePackage?.residentialCarePackage?.clientPreferredContact,
+      canSpeakEnglish: residentialCarePackage?.residentialCarePackage?.clientCanSpeakEnglish,
+      packagesCount: 4,
+      dateOfBirth: residentialCarePackage?.residentialCarePackage && getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
+      postcode: residentialCarePackage?.residentialCarePackage?.clientPostCode,
+    }} headerTitle="Residential Care Brokering">
+      <PackageHeader />
       <PackagesResidentialCare
         tab={tab}
         addPackageReclaim={addPackageReclaim}

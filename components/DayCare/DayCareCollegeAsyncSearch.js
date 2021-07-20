@@ -1,24 +1,16 @@
-import React, { useEffect, useState } from "react";
-import AsyncSelect from "react-select/async";
-import { getDayCareColleges } from "../../api/CarePackages/DayCareApi";
-import { Button } from "../Button";
-import DayCareCreateCollege from "./DayCareCreateCollege";
+import React, { useEffect, useState } from 'react';
+import AsyncSelect from 'react-select/async';
+import { getDayCareColleges } from '../../api/CarePackages/DayCareApi';
+import { Button } from '../Button';
+import DayCareCreateCollege from './DayCareCreateCollege';
 
-const DayCareCollegeAsyncSearch = ({
-  setSelectedCollege = () => {},
-  onError = () => {},
-  classNames = "is-3",
-}) => {
-  //set default query terms
-  const [query, setQuery] = useState("");
+const DayCareCollegeAsyncSearch = ({ setSelectedCollege = () => {}, onError = () => {}, classNames = 'is-3' }) => {
+  // set default query terms
+  const [query, setQuery] = useState('');
   const [allDayCareColleges, setAllDayCareColleges] = useState([]);
-  const [displayAddNewCollegeButton, setDisplayAddNewCollegeButton] = useState(
-    false
-  );
+  const [displayAddNewCollegeButton, setDisplayAddNewCollegeButton] = useState(false);
 
-  const [displayAddNewCollegeForm, setDisplayAddNewCollegeForm] = useState(
-    false
-  );
+  const [displayAddNewCollegeForm, setDisplayAddNewCollegeForm] = useState(false);
 
   useEffect(() => {
     retrieveDayCareColleges();
@@ -35,13 +27,10 @@ const DayCareCollegeAsyncSearch = ({
   };
 
   // fetch filters search results for dropdown
-  const loadOptions = () => {
-    return new Promise((resolve) => {
+  const loadOptions = () =>
+    new Promise((resolve) => {
       const filteredColleges = allDayCareColleges.filter((ele) =>
-        ele.collegeName
-          .toLowerCase()
-          .trim()
-          .includes(query.toLowerCase().trim())
+        ele.collegeName.toLowerCase().trim().includes(query.toLowerCase().trim())
       );
       if (filteredColleges.length === 0) {
         setDisplayAddNewCollegeButton(true);
@@ -50,10 +39,9 @@ const DayCareCollegeAsyncSearch = ({
       }
       resolve(filteredColleges);
     });
-  };
 
   const handleInputChange = (newValue) => {
-    const inputValue = newValue.replace(/\W/g, "");
+    const inputValue = newValue.replace(/\W/g, '');
     setQuery(inputValue);
     return inputValue;
   };
@@ -75,11 +63,7 @@ const DayCareCollegeAsyncSearch = ({
       <div className="columns">
         <div className={`column ${classNames}`}>
           <div className="columns">
-            <div
-              className={`column ${
-                displayAddNewCollegeButton ? "is-10" : "is-full"
-              }`}
-            >
+            <div className={`column ${displayAddNewCollegeButton ? 'is-10' : 'is-full'}`}>
               <AsyncSelect
                 cacheOptions
                 defaultOptions={allDayCareColleges.slice(0, 5)}
@@ -103,10 +87,7 @@ const DayCareCollegeAsyncSearch = ({
             </div>
             {displayAddNewCollegeButton && (
               <div className="column is-2">
-                <Button
-                  className="button hackney-btn-green"
-                  onClick={() => setDisplayAddNewCollegeForm(true)}
-                >
+                <Button className="button hackney-btn-green" onClick={() => setDisplayAddNewCollegeForm(true)}>
                   New
                 </Button>
               </div>

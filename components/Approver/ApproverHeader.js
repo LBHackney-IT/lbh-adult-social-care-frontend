@@ -18,7 +18,7 @@ const ApproverHeader = () => {
 
   return (
     <div className='default-logo-header'>
-      <div className='hackney-adult-logo'>
+      <div onClick={() => router.push('/care-package')} className='hackney-adult-logo is-clickable'>
         <HackneyLogo />
         <span>|</span>
         <AdultSocialCare />

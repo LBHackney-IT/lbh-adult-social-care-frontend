@@ -1,11 +1,13 @@
 import React from "react";
 import Image from "next/image";
+import { ArrowLeftIcon } from './Icons'
 
 const ClientSummary = ({
   children,
   client,
   hackneyId,
   age,
+  showBackButton = false,
   packagesCount = null,
   preferredContact = null,
   canSpeakEnglish = null,
@@ -15,6 +17,7 @@ const ClientSummary = ({
 }) => {
   return (
     <div className="client-summary-cont">
+      {showBackButton && <div><ArrowLeftIcon /><p>Back</p></div>}
       <div className="columns is-flex-wrap-wrap">
         {children && <div className="column is-5 client-summary-title">{children}</div>}
         <div className="column client-prop">

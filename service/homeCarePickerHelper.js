@@ -2,63 +2,63 @@
 const weekSlots = [
   {
     id: 1,
-    label: "Morning",
+    label: 'Morning',
     careBreakdown: true,
-    timeLabel: "08:00 - 10:00",
+    timeLabel: '08:00 - 10:00',
     days: [],
   },
   {
     id: 2,
-    label: "Mid Morning",
+    label: 'Mid Morning',
     careBreakdown: true,
-    timeLabel: "10:00 - 12:00",
+    timeLabel: '10:00 - 12:00',
     days: [],
   },
   {
     id: 3,
-    label: "Lunch",
+    label: 'Lunch',
     careBreakdown: true,
-    timeLabel: "12:00 - 14:00",
+    timeLabel: '12:00 - 14:00',
     days: [],
   },
   {
     id: 4,
-    label: "Afternoon",
+    label: 'Afternoon',
     careBreakdown: true,
-    timeLabel: "14:00 - 17:00",
+    timeLabel: '14:00 - 17:00',
     days: [],
   },
   {
     id: 5,
-    label: "Evening",
+    label: 'Evening',
     careBreakdown: true,
-    timeLabel: "17:00 - 20:00",
+    timeLabel: '17:00 - 20:00',
     days: [],
   },
   {
     id: 6,
-    label: "Night",
+    label: 'Night',
     careBreakdown: true,
-    timeLabel: "20:00 - 22:00",
+    timeLabel: '20:00 - 22:00',
     days: [],
   },
-  { id: 7, label: "Night Owl", careBreakdown: false, days: [] },
-  { id: 8, label: "Waking Nights", careBreakdown: false, days: [] },
-  { id: 9, label: "Sleeping Nights", careBreakdown: false, days: [] },
+  { id: 7, label: 'Night Owl', careBreakdown: false, days: [] },
+  { id: 8, label: 'Waking Nights', careBreakdown: false, days: [] },
+  { id: 9, label: 'Sleeping Nights', careBreakdown: false, days: [] },
 ];
 
 const weekDays = [
-  { id: 1, name: "MON", longName: "Monday", minutes: 0 },
-  { id: 2, name: "TUE", longName: "Tuesday", minutes: 0 },
-  { id: 3, name: "WED", longName: "Wednesday", minutes: 0 },
-  { id: 4, name: "THU", longName: "Thursday", minutes: 0 },
-  { id: 5, name: "FRI", longName: "Friday", minutes: 0 },
-  { id: 6, name: "SAT", longName: "Saturday", minutes: 0 },
-  { id: 7, name: "SUN", longName: "Sunday", minutes: 0 },
+  { id: 1, name: 'MON', longName: 'Monday', minutes: 0 },
+  { id: 2, name: 'TUE', longName: 'Tuesday', minutes: 0 },
+  { id: 3, name: 'WED', longName: 'Wednesday', minutes: 0 },
+  { id: 4, name: 'THU', longName: 'Thursday', minutes: 0 },
+  { id: 5, name: 'FRI', longName: 'Friday', minutes: 0 },
+  { id: 6, name: 'SAT', longName: 'Saturday', minutes: 0 },
+  { id: 7, name: 'SUN', longName: 'Sunday', minutes: 0 },
 ];
 
-const getWeekSlots = () => {
-  return weekSlots.map((weekSlotItem) => {
+const getWeekSlots = () =>
+  weekSlots.map((weekSlotItem) => {
     if (weekSlotItem.days.length <= 0) {
       if (weekSlotItem.id < 7) {
         for (let i = 1; i <= 7; i++) {
@@ -86,21 +86,20 @@ const getWeekSlots = () => {
     }
     return weekSlotItem;
   });
-};
 
 const nightOwlOptions = [
-  { text: "30 minutes", value: 30 },
-  { text: "45 minutes", value: 45 },
-  { text: "1 hour", value: 60 },
-  { text: "1 hour 15 minutes", value: 75 },
-  { text: "1 hour 30 minutes", value: 90 },
-  { text: "1 hour 45 minutes", value: 105 },
-  { text: "2 hours", value: 120 },
+  { text: '30 minutes', value: 30 },
+  { text: '45 minutes', value: 45 },
+  { text: '1 hour', value: 60 },
+  { text: '1 hour 15 minutes', value: 75 },
+  { text: '1 hour 30 minutes', value: 90 },
+  { text: '1 hour 45 minutes', value: 105 },
+  { text: '2 hours', value: 120 },
 ];
 
 const allNightOptions = [
-  { text: "6 hours", value: 360 },
-  { text: "12 hours", value: 720 },
+  { text: '6 hours', value: 360 },
+  { text: '12 hours', value: 720 },
 ];
 
 const PERSONAL_CARE_MODE = 1;

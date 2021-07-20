@@ -87,7 +87,7 @@ jobs:
     executor: aws-cli/default
     steps:
       - *attach_workspace
-      - run:        
+      - run:
           name: delete stale draft GitHub releases
           command: yarn delete-draft-github-releases
       - run:
@@ -128,7 +128,7 @@ jobs:
       - aws_assume_role/assume_role:
           account: $AWS_ACCOUNT_PRODUCTION
           profile_name: default
-          role: 'LBH_Circle_CI_Deployment_Role'
+          role: 'circleci-assume-role'
       - persist_to_workspace:
           root: *workspace_root
           paths:

@@ -5,10 +5,8 @@ import {includeString} from "../../service/helpers";
 
 const paymentsRoutes = [
   {route: 'pay-runs', name: 'Pay Runs'},
-  {route: 'bills', name: 'Bills'},
   {route: 'care-charges', name: 'Care Charges'},
   {route: 'reclaims', name: 'Reclaims'},
-  {route: 'supplier-returns', name: 'Supplier Returns'},
   {route: 'reporting', name: 'Reporting'},
   {route: 'logout', name: 'Log Out'},
 ];

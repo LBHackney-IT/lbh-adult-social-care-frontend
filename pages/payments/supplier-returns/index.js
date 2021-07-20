@@ -1,37 +1,37 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import SupplierReturnsTable from "../../../components/SupplierReturns/SupplierReturnsTable";
-import Pagination from "../../../components/Payments/Pagination";
-import {supplierReturnsTableData} from "../../../testData/testDataPayRuns";
-import SupplierInnerHeader from "../../../components/SupplierReturns/SupplierInnerHeader";
-import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import {useDispatch} from "react-redux";
-import { changeSupplierReturns } from "../../../reducers/supplierReturnsReducer";
-import {getUserSession} from "../../../service/helpers";
-import withSession from "../../../lib/session";
+import { useDispatch } from 'react-redux';
+import SupplierReturnsTable from '../../../components/SupplierReturns/SupplierReturnsTable';
+import Pagination from '../../../components/Payments/Pagination';
+import { supplierReturnsTableData } from '../../../testData/testDataPayRuns';
+import SupplierInnerHeader from '../../../components/SupplierReturns/SupplierInnerHeader';
+import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
+import { changeSupplierReturns } from '../../../reducers/supplierReturnsReducer';
+import { getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
 
-export const getServerSideProps = withSession(async function({ req }) {
+export const getServerSideProps = withSession(async ({ req }) => {
   const user = getUserSession({ req });
-  if(user.redirect) {
+  if (user.redirect) {
     return user;
   }
 
   return {
     props: {}, // will be passed to the page component as props
-  }
+  };
 });
 
 const SupplierReturns = () => {
   const [sorts] = useState([
-    {name: 'weekCommencing', text: 'Week commencing'},
-    {name: 'suppliers', text: 'Suppliers'},
-    {name: 'value', text: 'Value'},
-    {name: 'totalPackages', text: 'Total Packages'},
-    {name: 'returned', text: 'Returned'},
-    {name: 'inDispute', text: 'In Dispute'},
-    {name: 'accepted', text: 'Accepted'},
-    {name: 'paid', text: 'Paid'},
-    {name: 'status', text: 'Status'},
+    { name: 'weekCommencing', text: 'Week commencing' },
+    { name: 'suppliers', text: 'Suppliers' },
+    { name: 'value', text: 'Value' },
+    { name: 'totalPackages', text: 'Total Packages' },
+    { name: 'returned', text: 'Returned' },
+    { name: 'inDispute', text: 'In Dispute' },
+    { name: 'accepted', text: 'Accepted' },
+    { name: 'paid', text: 'Paid' },
+    { name: 'status', text: 'Status' },
   ]);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -46,7 +46,7 @@ const SupplierReturns = () => {
   };
 
   const sortBy = (field, value) => {
-    setSort({value, name: field});
+    setSort({ value, name: field });
   };
 
   useEffect(() => {
@@ -58,12 +58,12 @@ const SupplierReturns = () => {
   }, [sort]);
 
   return (
-    <div className='supplier-dashboard supplier-returns'>
+    <div className="supplier-dashboard supplier-returns">
       <SupplierInnerHeader />
       <SupplierReturnsTable
-        isIgnoreId={true}
+        isIgnoreId
         onClickTableRow={onClickTableRow}
-        checkedRows={true}
+        checkedRows
         rows={supplierReturnsTableData}
         sortBy={sortBy}
         sorts={sorts}
@@ -71,7 +71,7 @@ const SupplierReturns = () => {
       <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
       <HackneyFooterInfo />
     </div>
-  )
+  );
 };
 
 export default SupplierReturns;

@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Button } from "../Button";
+import React, { useEffect } from 'react';
+import { Button } from '../Button';
 
 const ResidentialCareSummary = ({
   startDate,
@@ -9,19 +9,15 @@ const ResidentialCareSummary = ({
   additionalNeedsEntries = [],
   setAdditionalNeedsEntries = () => {},
 }) => {
-  startDate = new Date(startDate).toLocaleDateString("en-GB");
+  startDate = new Date(startDate).toLocaleDateString('en-GB');
 
-  const renderDate = (dateString) => {
-    return dateString && new Date(dateString).toLocaleDateString("en-GB");
-  };
+  const renderDate = (dateString) => dateString && new Date(dateString).toLocaleDateString('en-GB');
 
   useEffect(() => {}, [additionalNeedsEntries]);
 
   // Remove additional need entry
   const removeAdditionalNeedEntry = (entryId) => {
-    const newEntries = additionalNeedsEntries.filter(
-      (entryItem) => entryItem.id !== entryId
-    );
+    const newEntries = additionalNeedsEntries.filter((entryItem) => entryItem.id !== entryId);
     setAdditionalNeedsEntries([...newEntries]);
   };
 
@@ -30,9 +26,7 @@ const ResidentialCareSummary = ({
       <div className="columns is-multiline">
         <div className="column">
           <div>
-            <span className="font-weight-bold font-size-24px mr-2">
-              Residential Care
-            </span>
+            <span className="font-weight-bold font-size-24px mr-2">Residential Care</span>
             <span className="font-size-16px">
               {startDate} {endDate ? ` - ${endDate}` : null}
             </span>
@@ -57,18 +51,14 @@ const ResidentialCareSummary = ({
 
       <div className="columns is-mobile mb-3">
         <div className="column">
-          <p className="font-weight-bold font-size-16px mb-2">
-            Need Addressing
-          </p>
+          <p className="font-weight-bold font-size-16px mb-2">Need Addressing</p>
           <p>{needToAddress}</p>
         </div>
       </div>
 
       <div className="columns">
         <div className="column">
-          <p className="font-weight-bold font-size-16px mb-2">
-            Additional needs
-          </p>
+          <p className="font-weight-bold font-size-16px mb-2">Additional needs</p>
           <div className="border-bottom" />
         </div>
       </div>
@@ -77,34 +67,26 @@ const ResidentialCareSummary = ({
         <div className="column">
           <div className="mb-3">
             <div className="columns is-multiline">
-              {additionalNeedsEntries.map((entry) => {
-                return (
-                  <div className="column mb-3 is-full" key={entry.id}>
-                    <p className="font-weight-bold mb-2">
-                      {entry.selectedCostText} cost
+              {additionalNeedsEntries.map((entry) => (
+                <div className="column mb-3 is-full" key={entry.id}>
+                  <p className="font-weight-bold mb-2">{entry.selectedCostText} cost</p>
+                  {entry.selectedPeriod && (
+                    <p>
+                      {renderDate(entry.selectedPeriod.startDate)}- {renderDate(entry.selectedPeriod.endDate)}
                     </p>
-                    {entry.selectedPeriod && (
-                      <p>
-                        {renderDate(entry.selectedPeriod.startDate)}-{" "}
-                        {renderDate(entry.selectedPeriod.endDate)}
-                      </p>
-                    )}
-                    <p>{entry.needToAddress}</p>
-                    <div>
-                      <Button linkBtn={true} className="mr-2">
-                        Edit
-                      </Button>
+                  )}
+                  <p>{entry.needToAddress}</p>
+                  <div>
+                    <Button linkBtn className="mr-2">
+                      Edit
+                    </Button>
 
-                      <Button
-                        onClick={() => removeAdditionalNeedEntry(entry.id)}
-                        linkBtn={true}
-                      >
-                        Remove
-                      </Button>
-                    </div>
+                    <Button onClick={() => removeAdditionalNeedEntry(entry.id)} linkBtn>
+                      Remove
+                    </Button>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           </div>
         </div>

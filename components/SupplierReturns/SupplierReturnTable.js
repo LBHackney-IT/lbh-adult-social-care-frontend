@@ -1,7 +1,7 @@
-import React from "react";
-import {formatDateWithSign, formatStatus, includeString} from "../../service/helpers";
-import SupplierSortTable from "./SupplierSortTable";
-import Checkbox from "../Checkbox";
+import React from 'react';
+import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
+import SupplierSortTable from './SupplierSortTable';
+import Checkbox from '../Checkbox';
 
 const SupplierReturnTable = ({
   onClickTableRow,
@@ -15,47 +15,60 @@ const SupplierReturnTable = ({
   sorts,
 }) => {
   const clickRow = (item) => {
-    if(onClickTableRow) {
+    if (onClickTableRow) {
       onClickTableRow(item);
     }
   };
 
   return (
     <div className={`table ${classes}`}>
-      <SupplierSortTable additionalActions={additionalActions} checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
-      {rows.map(item => {
+      <SupplierSortTable
+        additionalActions={additionalActions}
+        checkedRows={checkedRows}
+        sortBy={sortBy}
+        sorts={sorts}
+      />
+      {rows.map((item) => {
         const rowStatus = item.status ? ` ${item.status}` : '';
         return (
           <div key={item.id} onClick={() => clickRow(item)} className={`table__row${rowStatus}`}>
-            {checkedRows &&
-              <div className='table__row-item table__row-item-checkbox'>
-                <Checkbox checked={checkedRows.includes(item.id)} onChange={(value, event) => {
-                  event.stopPropagation();
-                  setCheckedRows(item.id)
-                }} />
+            {checkedRows && (
+              <div className="table__row-item table__row-item-checkbox">
+                <Checkbox
+                  checked={checkedRows.includes(item.id)}
+                  onChange={(value, event) => {
+                    event.stopPropagation();
+                    setCheckedRows(item.id);
+                  }}
+                />
               </div>
-            }
-            {Object.getOwnPropertyNames(item).map(rowItemName => {
-              if(Array.isArray(item[rowItemName]) || (item[rowItemName]?.id !== undefined) || (isIgnoreId && rowItemName === 'id')) {
-                return <React.Fragment key={`${rowItemName}${item.id}`}/>;
+            )}
+            {Object.getOwnPropertyNames(item).map((rowItemName) => {
+              if (
+                Array.isArray(item[rowItemName]) ||
+                item[rowItemName]?.id !== undefined ||
+                (isIgnoreId && rowItemName === 'id')
+              ) {
+                return <React.Fragment key={`${rowItemName}${item.id}`} />;
               }
-              const value = includeString(rowItemName.toLowerCase(), 'date') ? formatDateWithSign(item[rowItemName]) : item[rowItemName];
+              const value = includeString(rowItemName.toLowerCase(), 'date')
+                ? formatDateWithSign(item[rowItemName])
+                : item[rowItemName];
               const isStatus = rowItemName === 'status';
               const formattedStatus = isStatus && formatStatus(item[rowItemName]);
               const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';
 
               return (
-                <div key={`${rowItemName}${item.id}`}
-                   className={`table__row-item${statusItemClass}`}>
+                <div key={`${rowItemName}${item.id}`} className={`table__row-item${statusItemClass}`}>
                   <p>{isStatus ? formattedStatus : value}</p>
                 </div>
               );
             })}
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 };
 
 export default SupplierReturnTable;
