@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import BaseField from './baseComponents/BaseField';
 import ErrorField from './ErrorField';
@@ -10,7 +10,16 @@ const yesNoValues = [
 
 const RadioButton = ({ label, options, selectedValue, error, setError, inline = true, onChange = () => {} }) => {
   const [radioValue, setRadioValue] = useState(selectedValue);
-  const hasSelectedValue = radioValue !== undefined;
+  const [hasSelectedValue, setHasSelectedValue] = useState(radioValue !== undefined);
+  // let hasSelectedValue = radioValue !== undefined;
+
+  useEffect(() => {
+    if (options.find((option) => option.value === selectedValue) === undefined) {
+      setHasSelectedValue(false);
+    } else {
+      setHasSelectedValue(true);
+    }
+  }, [selectedValue]);
 
   const radioChange = (radioItemValue) => {
     setError && setError();

@@ -8,6 +8,14 @@ const PAY_RUN_URL = `${BASE_URL}/v1/transactions/pay-runs`;
 
 const sixMonthsAgo = moment().subtract(6, 'months');
 
+export const PAY_RUN_TYPES = {
+  RESIDENTIAL_RECURRING: 'ResidentialRecurring',
+  DIRECT_PAYMENTS: 'DirectPayments',
+  HOME_CARE: 'HomeCare',
+  RESIDENTIAL_RELEASE_HOLDS: 'ResidentialReleaseHolds',
+  DIRECT_PAYMENTS_RELEASE_HOLDS: 'DirectPaymentsReleaseHolds',
+};
+
 const getPayRunSummaryList = (
   pageNumber = 1,
   pageSize = 10,
@@ -20,6 +28,19 @@ const getPayRunSummaryList = (
 ) => {
   const query = `${PAY_RUN_URL}/summary-list?pageNumber=${pageNumber}&pageSize=${pageSize}&payRunId=${payRunId}&payRunTypeId=${payRunTypeId}&payRunSubTypeId=${payRunSubTypeId}&payRunStatusId=${payRunStatusId}&dateFrom=${dateFrom}&dateTo=${dateTo}`;
   return axios.get(query).then(handleResponse).catch(handleError);
+};
+
+const createPayRun = (payRunType) => {
+  const options = {
+    url: `${PAY_RUN_URL}/${payRunType}`,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data: {},
+  };
+  return axios(options).then(handleResponse).catch(handleError);
 };
 
 export { getPayRunSummaryList };

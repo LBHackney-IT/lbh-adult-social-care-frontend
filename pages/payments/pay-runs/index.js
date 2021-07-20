@@ -26,8 +26,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
 });
 
 const PayRunsPage = () => {
-  // eslint-disable-next-line no-unused-vars
-  const { data: payRunsTableData, requestStatus, errors, retrievePayRunSummaryList } = usePayRunSummary();
+  const { payRunsTableData, setPayRunsTableData } = usePayRunSummary();
   const [sortsTab] = useState({
     'pay-runs': [
       { name: 'id', text: 'ID' },
@@ -60,10 +59,10 @@ const PayRunsPage = () => {
   const [date, setDate] = useState(new Date());
   const [checkedRows, setCheckedRows] = useState([]);
   const [openedHelpChat, setOpenedHelpChat] = useState({});
-  const [hocAndRelease, changeHocAndRelease] = useState('');
+  // const [hocAndRelease, changeHocAndRelease] = useState('');
   const [waitingOn, changeWaitingOn] = useState('');
   const [newMessageText, setNewMessageText] = useState('');
-  const [regularCycles, changeRegularCycles] = useState('');
+  const [newPayRunType, setNewPayRunType] = useState('');
   const [tab, changeTab] = useState('pay-runs');
   const [sort, setSort] = useState({
     value: 'increase',
@@ -79,8 +78,8 @@ const PayRunsPage = () => {
 
   const closeCreatePayRun = () => {
     setOpenedPopup('');
-    changeHocAndRelease('');
-    changeRegularCycles('');
+    // changeHocAndRelease('');
+    setNewPayRunType('');
     setDate(new Date());
   };
 
@@ -121,6 +120,14 @@ const PayRunsPage = () => {
   ];
 
   useEffect(() => {
+    // using the selected field, check data and update
+    if (isPayRunsTab) {
+      const sortedData = payRunsTableData
+        .slice()
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      console.log(sortedData);
+      setPayRunsTableData(sortedData);
+    }
     console.log('change sort', sort);
   }, [sort]);
 
@@ -132,10 +139,8 @@ const PayRunsPage = () => {
     <div className={`pay-runs ${tab}__tab-class`}>
       {openedPopup === 'create-pay-run' && (
         <PopupCreatePayRun
-          changeHocAndRelease={changeHocAndRelease}
-          changeRegularCycles={changeRegularCycles}
-          hocAndRelease={hocAndRelease}
-          regularCycles={regularCycles}
+          setNewPayRunType={setNewPayRunType}
+          newPayRunType={newPayRunType}
           closePopup={closeCreatePayRun}
           date={date}
           setDate={setDate}

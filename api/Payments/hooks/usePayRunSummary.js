@@ -8,7 +8,7 @@ export const REQUEST_STATUS = {
 };
 
 function usePayRunSummary() {
-  const [data, setData] = useState([]);
+  const [payRunsTableData, setPayRunsTableData] = useState([]);
   const [requestStatus, setRequestStatus] = useState(REQUEST_STATUS.LOADING);
   const [errors, setErrors] = useState([]);
 
@@ -31,7 +31,7 @@ function usePayRunSummary() {
         }));
         setRequestStatus(REQUEST_STATUS.SUCCESS);
         console.log(res);
-        setData(options);
+        setPayRunsTableData(options);
       })
       .catch((err) => {
         setRequestStatus(REQUEST_STATUS.FAILURE);
@@ -40,7 +40,8 @@ function usePayRunSummary() {
   };
 
   return {
-    data,
+    payRunsTableData,
+    setPayRunsTableData,
     requestStatus,
     errors,
   };

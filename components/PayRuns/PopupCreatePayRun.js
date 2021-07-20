@@ -3,15 +3,7 @@ import DatePick from '../DatePick';
 import Popup from '../Popup';
 import RadioButton from '../RadioButton';
 
-const PopupCreatePayRun = ({
-  date,
-  setDate,
-  closePopup,
-  regularCycles,
-  changeRegularCycles,
-  hocAndRelease,
-  changeHocAndRelease,
-}) => {
+const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPayRunType }) => {
   const createPayRun = (
     <div className="create-pay-run">
       <div className="create-pay-run__regular-cycles">
@@ -24,8 +16,8 @@ const PopupCreatePayRun = ({
             { value: 'directPayments', text: 'Direct Payments' },
             { value: 'homeCare', text: 'Home care' },
           ]}
-          selectedValue={regularCycles}
-          onChange={(value) => changeRegularCycles(value)}
+          selectedValue={newPayRunType}
+          onChange={(value) => selectPayRunType(value)}
         />
       </div>
       <div className="create-pay-run__run-to">
@@ -43,20 +35,38 @@ const PopupCreatePayRun = ({
             { value: 'residentialReleased', text: `Residential released holds` },
             { value: 'paymentsHolds', text: 'Direct payments released holds' },
           ]}
-          selectedValue={hocAndRelease}
-          onChange={(value) => changeHocAndRelease(value)}
+          selectedValue={newPayRunType}
+          onChange={(value) => selectPayRunType(value)}
         />
       </div>
     </div>
   );
+
+  const createNewPayRun = () => {
+    const payRunType = newPayRunType;
+    console.log(payRunType);
+  };
+
+  const selectPayRunType = (value) => {
+    console.log('Popup button clicked');
+    setNewPayRunType(value);
+  };
 
   return (
     <Popup
       closePopup={closePopup}
       mainContent={createPayRun}
       title="Create pay run"
-      firstButton={{ text: 'Cancel' }}
-      secondButton={{ text: 'Create Draft Pay Run' }}
+      firstButton={{
+        text: 'Cancel',
+        onClick: closePopup,
+      }}
+      secondButton={{
+        text: 'Create Draft Pay Run',
+        onClick: () => {
+          createNewPayRun();
+        },
+      }}
     />
   );
 };
