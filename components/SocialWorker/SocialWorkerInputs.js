@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
-import Input from "../Input";
-import Dropdown from "../Dropdown";
+import React, { useEffect, useState } from 'react';
+import Input from '../Input';
+import Dropdown from '../Dropdown';
 
 const initialFilters = {
   terms: '',
@@ -8,7 +8,7 @@ const initialFilters = {
 };
 
 const SocialWorkerInputs = ({ statusOptions = [] }) => {
-  const [filters, setFilters] = useState({...initialFilters});
+  const [filters, setFilters] = useState({ ...initialFilters });
 
   const applyFilters = () => {
     console.log('make an apply filters request');
@@ -26,33 +26,33 @@ const SocialWorkerInputs = ({ statusOptions = [] }) => {
   };
 
   useEffect(() => {
-    setFilters({...initialFilters});
+    setFilters({ ...initialFilters });
   }, []);
 
   return (
-    <div className='pay-runs__header social-worker__header'>
-      <div className='pay-runs__new-pay'>
-        <p className='title'>Approver hub</p>
+    <div className="pay-runs__header social-worker__header">
+      <div className="pay-runs__new-pay">
+        <p className="title">Approver hub</p>
       </div>
-      <div className='pay-runs__filters social-worker__filters'>
+      <div className="pay-runs__filters social-worker__filters">
         <Input
-          classes='mr-3'
-          label='Search'
+          classes="mr-3"
+          label="Search"
           value={filters.terms}
           search={searchId}
-          placeholder='Enter search terms'
+          placeholder="Enter search terms"
           onChange={(value) => changeFilter('terms', value)}
         />
         <Dropdown
-          initialText='Status'
-          classes='mr-3'
+          initialText="Status"
+          classes="mr-3"
           options={statusOptions}
           selectedValue={filters.status}
           onOptionSelect={(option) => changeFilter('status', option)}
         />
       </div>
     </div>
-  )
+  );
 };
 
 export default SocialWorkerInputs;

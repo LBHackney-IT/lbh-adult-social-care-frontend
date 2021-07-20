@@ -12,7 +12,6 @@
   }
 }
 
-
 .popup.held-payments__popup-help-chat {
   justify-content: flex-end;
 
@@ -192,7 +191,8 @@
     width: 100%;
   }
 
-  .hold-payment__dropdown, .dropdown {
+  .hold-payment__dropdown,
+  .dropdown {
     width: 100%;
   }
 

@@ -1,10 +1,11 @@
-import Dropdown from "../../components/Dropdown";
+import React from 'react';
+import Dropdown from '../Dropdown';
 import {
   DOMESTIC_CARE_MODE,
   ESCORT_CARE_MODE,
   LIVE_IN_CARE_MODE,
   PERSONAL_CARE_MODE,
-} from "../../service/homeCarePickerHelper";
+} from '../../service/homeCarePickerHelper';
 
 const isPickerActive = (currentMode, { person, domestic, liveIn, escort }) => {
   switch (currentMode) {
@@ -37,48 +38,23 @@ const CarePicker = ({ currentMode, dayId, onClick, selectedValues }) => {
   const hasPersonalSecondary = person.primary > 0 && person.secondary > 0;
 
   return (
-    <div
-      className={"care-picker" + (isActive ? " is-active" : "")}
-      onClick={onPickerClick}
-    >
+    <div className={`care-picker${isActive ? ' is-active' : ''}`} onClick={onPickerClick} role="presentation">
       <div className="pickers-cont">
-        <div
-          className={
-            "picker-item " +
-            (hasPersonalSecondary ? "is-split" : "personal-home-care")
-          }
-        >
-          {person.primary > 0 ? (
-            <span className="personal-home-care">{person.primary}</span>
-          ) : null}
-          {hasPersonalSecondary ? (
-            <span className="personal-home-care is-final">
-              {person.secondary}
-            </span>
-          ) : null}
+        <div className={`picker-item ${hasPersonalSecondary ? 'is-split' : 'personal-home-care'}`}>
+          {person.primary > 0 ? <span className="personal-home-care">{person.primary}</span> : null}
+          {hasPersonalSecondary ? <span className="personal-home-care is-final">{person.secondary}</span> : null}
         </div>
-        <div className="domestic-home-care picker-item">
-          {domestic > 0 ? domestic : ""}
-        </div>
+        <div className="domestic-home-care picker-item">{domestic > 0 ? domestic : ''}</div>
       </div>
       <div className="pickers-cont pickers-cont-2">
-        <div className="live-in-home-care picker-item">
-          {liveIn > 0 ? liveIn : ""}
-        </div>
-        <div className="escort-home-care picker-item">
-          {escort > 0 ? escort : ""}
-        </div>
+        <div className="live-in-home-care picker-item">{liveIn > 0 ? liveIn : ''}</div>
+        <div className="escort-home-care picker-item">{escort > 0 ? escort : ''}</div>
       </div>
     </div>
   );
 };
 
-const CareTimeDropdown = ({
-  minuteOptions,
-  dayId,
-  onChange,
-  selectedValue,
-}) => {
+const CareTimeDropdown = ({ minuteOptions, dayId, onChange, selectedValue }) => {
   const onDropdownChange = (option) => {
     onChange(dayId, option);
   };
@@ -86,29 +62,21 @@ const CareTimeDropdown = ({
   return (
     <div className="care-checkbox">
       <Dropdown
-        isUp={true}
-        options={minuteOptions.map((minuteOptionItem) => {
-          return {
-            text: minuteOptionItem.label,
-            value: minuteOptionItem.minutes,
-          };
-        })}
+        isUp
+        options={minuteOptions.map((minuteOptionItem) => ({
+          text: minuteOptionItem.label,
+          value: minuteOptionItem.minutes,
+        }))}
         onOptionSelect={onDropdownChange}
         selectedValue={selectedValue}
       >
-        {" "}
+        {' '}
       </Dropdown>
     </div>
   );
 };
 
-const CarePickerTimeSlot = ({
-  homeCareServices,
-  currentMode,
-  weekSlotItem,
-  onClick,
-  onCareDropdownSelect,
-}) => {
+const CarePickerTimeSlot = ({ homeCareServices, currentMode, weekSlotItem, onClick, onCareDropdownSelect }) => {
   const onCarePickerClick = (dayId) => {
     onClick(weekSlotItem.id, dayId);
   };
@@ -120,36 +88,31 @@ const CarePickerTimeSlot = ({
   return (
     <div className="columns">
       <div className="column week-slot-labels">
-        <label>{weekSlotItem.timeSlotShiftName}</label>
-        <label>{weekSlotItem.timeSlotTimeLabel}</label>
+        <span>{weekSlotItem.timeSlotShiftName}</span>
+        <span>{weekSlotItem.timeSlotTimeLabel}</span>
       </div>
-      {weekSlotItem.days.map((weekSlotDayItem) => {
-        return (
-          <div className="column" key={weekSlotItem.id + weekSlotDayItem.id}>
-            {!weekSlotItem.linkedToHomeCareServiceTypeId ? (
-              <CarePicker
-                currentMode={currentMode}
-                dayId={weekSlotDayItem.id}
-                onClick={onCarePickerClick}
-                selectedValues={weekSlotDayItem.values}
-              />
-            ) : (
-              <CareTimeDropdown
-                minuteOptions={
-                  homeCareServices.find(
-                    (item) =>
-                      item.id === weekSlotItem.linkedToHomeCareServiceTypeId
-                  ).minutes
-                }
-                weekSlotId={weekSlotItem.id}
-                dayId={weekSlotDayItem.id}
-                onChange={onCarePickerDropdownSelect}
-                selectedValue={weekSlotDayItem.value}
-              />
-            )}
-          </div>
-        );
-      })}
+      {weekSlotItem.days.map((weekSlotDayItem) => (
+        <div className="column" key={weekSlotItem.id + weekSlotDayItem.id}>
+          {!weekSlotItem.linkedToHomeCareServiceTypeId ? (
+            <CarePicker
+              currentMode={currentMode}
+              dayId={weekSlotDayItem.id}
+              onClick={onCarePickerClick}
+              selectedValues={weekSlotDayItem.values}
+            />
+          ) : (
+            <CareTimeDropdown
+              minuteOptions={
+                homeCareServices.find((item) => item.id === weekSlotItem.linkedToHomeCareServiceTypeId).minutes
+              }
+              weekSlotId={weekSlotItem.id}
+              dayId={weekSlotDayItem.id}
+              onChange={onCarePickerDropdownSelect}
+              selectedValue={weekSlotDayItem.value}
+            />
+          )}
+        </div>
+      ))}
     </div>
   );
 };

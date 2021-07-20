@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 
 const ErrorField = ({ text }) => {
-  if(!text) return React.Fragment;
+  if (!text) return React.Fragment;
 
   return (
-    <div className='error-field'>
+    <div className="error-field">
       <p>{text}</p>
     </div>
-  )
+  );
 };
 
 export default ErrorField;

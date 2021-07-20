@@ -1,10 +1,10 @@
-import React from "react";
-import { useRouter } from "next/router";
-import PaymentsHeader from "./Payments/PaymentsHeader";
-import {SUPPLIER_DASHBOARD_ROUTE} from "../routes/RouteConstants";
-import SupplierDashboardHeader from "./Supplier/SupplierDashboardHeader";
-import SocialWorkerHeader from "./SocialWorker/SocialWorkerHeader";
-import ApproverHeader from "./Approver/ApproverHeader";
+import React from 'react';
+import { useRouter } from 'next/router';
+import PaymentsHeader from './Payments/PaymentsHeader';
+import { SUPPLIER_DASHBOARD_ROUTE } from '../routes/RouteConstants';
+import SupplierDashboardHeader from './Supplier/SupplierDashboardHeader';
+import SocialWorkerHeader from './SocialWorker/SocialWorkerHeader';
+import ApproverHeader from './Approver/ApproverHeader';
 
 const AdditionalHeader = () => {
   const router = useRouter();
@@ -14,8 +14,8 @@ const AdditionalHeader = () => {
     { route: 'social-worker', component: <SocialWorkerHeader /> },
     { route: 'approver-hub', component: <ApproverHeader /> },
     { route: 'brokerage-hub', component: <ApproverHeader /> },
-  ]
-  const header = headers.find(headerProps => router.pathname.indexOf(headerProps.route) > -1)
+  ];
+  const header = headers.find((headerProps) => router.pathname.indexOf(headerProps.route) > -1);
   return <>{header?.component}</>;
 };
 

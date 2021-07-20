@@ -1,47 +1,47 @@
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   createHomeCarePackage,
   getHomeCareServices,
   getHomeCareTimeSlotShifts,
   postHomeCareTimeSlots,
-} from "../../../api/CarePackages/HomeCareApi";
-import { Button } from "../../../components/Button";
-import CareTitle from "../../../components/CarePackages/CareTitle";
-import ClientSummary from "../../../components/ClientSummary";
-import Dropdown from "../../../components/Dropdown";
-import ShouldPackageReclaim from "../../../components/HomeCare/ShouldPackageReclaim";
-import SummaryDataList from "../../../components/HomeCare/SummaryDataList";
-import WeekCarePicker from "../../../components/HomeCare/WeekCarePicker";
-import Layout from "../../../components/Layout/Layout";
-import PackageReclaim from "../../../components/PackageReclaim";
-import TextArea from "../../../components/TextArea";
-import TitleHeader from "../../../components/TitleHeader";
-import withSession from "../../../lib/session";
-import { getUserSession, uniqueID } from "../../../service/helpers";
+} from '../../../api/CarePackages/HomeCareApi';
+import { Button } from '../../../components/Button';
+import CareTitle from '../../../components/CarePackages/CareTitle';
+import ClientSummary from '../../../components/ClientSummary';
+import Dropdown from '../../../components/Dropdown';
+import ShouldPackageReclaim from '../../../components/HomeCare/ShouldPackageReclaim';
+import SummaryDataList from '../../../components/HomeCare/SummaryDataList';
+import WeekCarePicker from '../../../components/HomeCare/WeekCarePicker';
+import Layout from '../../../components/Layout/Layout';
+import PackageReclaim from '../../../components/PackageReclaim';
+import TextArea from '../../../components/TextArea';
+import TitleHeader from '../../../components/TitleHeader';
+import withSession from '../../../lib/session';
+import { getUserSession, uniqueID } from '../../../service/helpers';
 import {
   DOMESTIC_CARE_MODE,
   ESCORT_CARE_MODE,
   LIVE_IN_CARE_MODE,
   PERSONAL_CARE_MODE,
   weekDays,
-} from "../../../service/homeCarePickerHelper";
-import { getServiceTimes } from "../../../service/homeCareServiceHelper";
-import { SOCIAL_WORKER_ROUTE } from '../../../routes/RouteConstants'
-import { useDispatch } from 'react-redux'
+} from '../../../service/homeCarePickerHelper';
+import { getServiceTimes } from '../../../service/homeCareServiceHelper';
+import { SOCIAL_WORKER_ROUTE } from '../../../routes/RouteConstants';
 import { addNotification } from '../../../reducers/notificationsReducer';
 
 const initialPackageReclaim = {
-  type: "",
-  notes: "",
-  from: "",
-  category: "",
-  amount: "",
-  id: "1",
+  type: '',
+  notes: '',
+  from: '',
+  category: '',
+  amount: '',
+  id: '1',
 };
 
 // start before render
-export const getServerSideProps = withSession(async function ({ req }) {
+export const getServerSideProps = withSession(async ({ req }) => {
   const user = getUserSession({ req });
   if (user.redirect) {
     return user;
@@ -55,18 +55,14 @@ export const getServerSideProps = withSession(async function ({ req }) {
     // Call to api to get package
     data.homeCareServices = await getHomeCareServices();
   } catch (error) {
-    data.errorData.push(
-      `Retrieve day care package details failed. ${error.message}`
-    );
+    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
 
   try {
     // Get home care time shifts
     data.homeCareTimeShiftsData = await getHomeCareTimeSlotShifts();
   } catch (error) {
-    data.errorData.push(
-      `Retrieve home care time shift details failed. ${error.message}`
-    );
+    data.errorData.push(`Retrieve home care time shift details failed. ${error.message}`);
   }
 
   return { props: { ...data } };
@@ -76,44 +72,33 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
   // Parameters
   const router = useRouter();
   const dispatch = useDispatch();
-  const [isImmediate, isS117, isFixedPeriod, startDate, endDate] =
-    router.query.slug;
+  const [isImmediate, isS117, isFixedPeriod, startDate, endDate] = router.query.slug;
 
   // State
-  const [homeCareTimeShifts, setHomeCareTimeShifts] = useState(
-    homeCareTimeShiftsData
-  );
+  const [homeCareTimeShifts, setHomeCareTimeShifts] = useState(homeCareTimeShiftsData);
   const [weekDaysValue, setWeekDaysValue] = useState(weekDays);
   const [selectedCareType, setSelectedCareType] = useState(1);
   const [selectedPrimaryCareTime, setSelectedPrimaryCareTime] = useState(30);
-  const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] =
-    useState(30);
+  const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] = useState(30);
   const [homeCareSummaryData, setHomeCareSummaryData] = useState(undefined);
   const [carePackageId, setCarePackageId] = useState(undefined);
-  const [packagesReclaimed, setPackagesReclaimed] = useState([
-    { ...initialPackageReclaim },
-  ]);
+  const [packagesReclaimed, setPackagesReclaimed] = useState([{ ...initialPackageReclaim }]);
   const [isReclaimed, setIsReclaimed] = useState(null);
   const [times, setTimes] = useState(undefined);
   const [secondaryTimes, setSecondaryTimes] = useState(undefined);
 
   const addPackageReclaim = () => {
-    setPackagesReclaimed([
-      ...packagesReclaimed,
-      { ...initialPackageReclaim, id: uniqueID() },
-    ]);
+    setPackagesReclaimed([...packagesReclaimed, { ...initialPackageReclaim, id: uniqueID() }]);
   };
 
   const removePackageReclaim = (id) => {
-    const newPackagesReclaim = packagesReclaimed.filter(
-      (item) => item.id !== id
-    );
+    const newPackagesReclaim = packagesReclaimed.filter((item) => item.id !== id);
     setPackagesReclaimed(newPackagesReclaim);
   };
 
   const changePackageReclaim = (id) => (updatedPackage) => {
     const newPackage = packagesReclaimed.slice();
-    const packageIndex = packagesReclaimed.findIndex((item) => item.id == id);
+    const packageIndex = packagesReclaimed.findIndex((item) => item.id === id);
     newPackage.splice(packageIndex, 1, updatedPackage);
     setPackagesReclaimed(newPackage);
   };
@@ -123,6 +108,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
 
   useEffect(() => {
     // Get the primary and secondary times for the selected service
+    // eslint-disable-next-line no-shadow
     const { times, secondaryTimes } =
       homeCareServices !== undefined
         ? getServiceTimes(homeCareServices, selectedCareType)
@@ -138,19 +124,18 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
 
   // Init home care package via API
   useEffect(() => {
+    async function createHomeCarePackageAsync() {
+      const carePackageCreateResult = await createHomeCarePackage(
+        new Date(startDate),
+        new Date(endDate),
+        isImmediate === 'true',
+        isS117 === 'true',
+        isFixedPeriod === 'true'
+      );
+
+      setCarePackageId(carePackageCreateResult.id);
+    }
     if (!carePackageId) {
-      async function createHomeCarePackageAsync() {
-        const carePackageCreateResult = await createHomeCarePackage(
-          new Date(startDate),
-          new Date(endDate),
-          isImmediate === "true",
-          isS117 === "true",
-          isFixedPeriod === "true"
-        );
-
-        setCarePackageId(carePackageCreateResult.id);
-      }
-
       createHomeCarePackageAsync();
     }
   }, [carePackageId, startDate, endDate, isImmediate, isS117, isFixedPeriod]);
@@ -172,9 +157,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
     const weekSlotDayItem = weekSlot.days.find((item) => item.id === dayId);
     let newWeekSlotDayItem;
 
-    const primaryCareTimeItem = times.find(
-      (item) => item.value === selectedPrimaryCareTime
-    );
+    const primaryCareTimeItem = times.find((item) => item.value === selectedPrimaryCareTime);
 
     const setPrimaryTime = (primaryTimeProperty) => {
       // Determine primary care time
@@ -184,21 +167,15 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
 
     switch (selectedCareType) {
       case PERSONAL_CARE_MODE: {
-        let newPersonValue = { ...weekSlotDayItem.values.person };
+        const newPersonValue = { ...weekSlotDayItem.values.person };
 
         // Determine primary care time
-        newPersonValue.primary = setPrimaryTime(
-          weekSlotDayItem.values.person.primary
-        );
+        newPersonValue.primary = setPrimaryTime(weekSlotDayItem.values.person.primary);
 
         // Determine secondary care time
-        const secondaryCareTimeItem = secondaryTimes.find(
-          (item) => item.value === selectedSecondaryCareTime
-        );
+        const secondaryCareTimeItem = secondaryTimes.find((item) => item.value === selectedSecondaryCareTime);
         const hasSecondary = weekSlotDayItem.values.person.secondary > 0;
-        newPersonValue.secondary = hasSecondary
-          ? 0
-          : secondaryCareTimeItem.value;
+        newPersonValue.secondary = hasSecondary ? 0 : secondaryCareTimeItem.value;
 
         newWeekSlotDayItem = {
           ...weekSlotDayItem,
@@ -256,14 +233,12 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
       }
     }
 
-    const newWeekSlotDays = weekSlot.days.map((dayItem) => {
-      return dayItem.id === dayId ? newWeekSlotDayItem : dayItem;
-    });
+    const newWeekSlotDays = weekSlot.days.map((dayItem) => (dayItem.id === dayId ? newWeekSlotDayItem : dayItem));
     const newWeekSlot = { ...weekSlot, days: newWeekSlotDays };
 
-    const newWeekSlotsValue = homeCareTimeShifts.map((weekSlotItem) => {
-      return weekSlotItem.id === weekSlotId ? newWeekSlot : weekSlotItem;
-    });
+    const newWeekSlotsValue = homeCareTimeShifts.map((weekSlotItem) =>
+      weekSlotItem.id === weekSlotId ? newWeekSlot : weekSlotItem
+    );
 
     setHomeCareTimeShifts(newWeekSlotsValue);
     calculateTotalTimePerDay(newWeekSlotsValue);
@@ -277,9 +252,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
 
         // For each week slot, get the minutes for this day
         newWeekSlotsValue.forEach((weekSlotItem) => {
-          let weekSlotItemDayEntry = weekSlotItem.days.find(
-            (item) => item.id === weekDayItem.id
-          );
+          const weekSlotItemDayEntry = weekSlotItem.days.find((item) => item.id === weekDayItem.id);
 
           if (weekSlotItemDayEntry !== undefined) {
             if (weekSlotItemDayEntry.values !== undefined) {
@@ -306,6 +279,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
 
     homeCareTimeShifts.forEach((timeShiftItem) => {
       timeShiftItem.days.forEach((timeShiftCell) => {
+        // eslint-disable-next-line no-empty
         if (timeShiftCell.value) {
         } else if (timeShiftCell.values) {
           const iterateServices = [
@@ -317,18 +291,12 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
 
           iterateServices.forEach((serviceItem) => {
             const hasSecondary = serviceItem.value.secondary !== undefined;
-            const hasValue = hasSecondary
-              ? serviceItem.value.primary > 0
-              : serviceItem.value > 0;
+            const hasValue = hasSecondary ? serviceItem.value.primary > 0 : serviceItem.value > 0;
 
             if (hasValue) {
               slots.push({
-                PrimaryInMinutes: hasSecondary
-                  ? serviceItem.value.primary
-                  : serviceItem.value,
-                SecondaryInMinutes: hasSecondary
-                  ? serviceItem.value.secondary
-                  : 0,
+                PrimaryInMinutes: hasSecondary ? serviceItem.value.primary : serviceItem.value,
+                SecondaryInMinutes: hasSecondary ? serviceItem.value.secondary : 0,
                 TimeSlotShiftId: timeShiftItem.id,
                 DayId: timeShiftCell.id,
                 NeedToAddress: needToAddress,
@@ -351,27 +319,18 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
       setHomeCareSummaryData(summaryData);
       router.push(SOCIAL_WORKER_ROUTE);
     } catch (e) {
-      dispatch(addNotification({ text: 'Can not add to package'}));
+      dispatch(addNotification({ text: 'Can not add to package' }));
       console.log('error post time slots', e, e?.response);
     }
   };
 
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
-      <ClientSummary
-        client="James Stephens"
-        hackneyId="786288"
-        age="91"
-        dateOfBirth="09/12/1972"
-        postcode="E9 6EY"
-      >
+      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
         Care Package
       </ClientSummary>
       <div className="mt-5 mb-5">
-        <CareTitle
-          startDate={startDate}
-          endDate={endDate}
-        >
+        <CareTitle startDate={startDate} endDate={endDate}>
           Homecare Care
         </CareTitle>
         <div className="is-flex is-justify-content-flex-start home-care-options">
@@ -381,12 +340,10 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
                 <Dropdown
                   includeInitialText={false}
                   label="Select Service"
-                  options={[...homeCareServices].map((item) => {
-                    return { text: item.serviceName, value: item.id };
-                  })}
+                  options={[...homeCareServices].map((item) => ({ text: item.serviceName, value: item.id }))}
                   selectedValue={selectedCareType}
                   onOptionSelect={(option) => setSelectedCareType(option)}
-                  buttonStyle={{ minWidth: "239px" }}
+                  buttonStyle={{ minWidth: '239px' }}
                 />
               ) : null}
             </div>
@@ -399,10 +356,8 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
                   label="Primary Carer"
                   options={[...times]}
                   selectedValue={selectedPrimaryCareTime}
-                  onOptionSelect={(option) =>
-                    setSelectedPrimaryCareTime(option)
-                  }
-                  buttonStyle={{ minWidth: "200px" }}
+                  onOptionSelect={(option) => setSelectedPrimaryCareTime(option)}
+                  buttonStyle={{ minWidth: '200px' }}
                 />
               ) : null}
             </div>
@@ -418,7 +373,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
                   onOptionSelect={(option) => {
                     setSelectedSecondaryCareTime(option);
                   }}
-                  buttonStyle={{ minWidth: "200px" }}
+                  buttonStyle={{ minWidth: '200px' }}
                 />
               </div>
             </div>
@@ -426,12 +381,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
         </div>
         <div className="columns mt-2">
           <div className="column">
-            <TextArea
-              label="Need to Address"
-              rows={5}
-              placeholder="Add details..."
-              onChange={setNeedToAddress}
-            />
+            <TextArea label="Need to Address" rows={5} placeholder="Add details..." onChange={setNeedToAddress} />
           </div>
           <div className="column">
             <TextArea
@@ -443,8 +393,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
           </div>
         </div>
         <div className="mt-2">
-          {homeCareServices !== undefined &&
-          homeCareTimeShifts !== undefined ? (
+          {homeCareServices !== undefined && homeCareTimeShifts !== undefined ? (
             <WeekCarePicker
               homeCareServices={homeCareServices}
               homeCareTimeShifts={homeCareTimeShifts}
@@ -459,28 +408,18 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
             <Button onClick={addToPackageClick}>Add to package</Button>
           </div>
         </div>
-        <ShouldPackageReclaim
-          isReclaimed={isReclaimed}
-          className="mt-6"
-          setIsReclaimed={changeIsPackageReclaimed}
-        />
+        <ShouldPackageReclaim isReclaimed={isReclaimed} className="mt-6" setIsReclaimed={changeIsPackageReclaimed} />
         {isReclaimed && (
           <div>
-            {packagesReclaimed.map((item, index) => {
-              return (
-                <PackageReclaim
-                  remove={
-                    index !== 0
-                      ? () => removePackageReclaim(item.id)
-                      : undefined
-                  }
-                  key={item.id}
-                  packageReclaim={item}
-                  setPackageReclaim={changePackageReclaim(item.id)}
-                />
-              );
-            })}
-            <p onClick={addPackageReclaim} className="action-button-text">
+            {packagesReclaimed.map((item, index) => (
+              <PackageReclaim
+                remove={index !== 0 ? () => removePackageReclaim(item.id) : undefined}
+                key={item.id}
+                packageReclaim={item}
+                setPackageReclaim={changePackageReclaim(item.id)}
+              />
+            ))}
+            <p onClick={addPackageReclaim} className="action-button-text" role="presentation">
               + Add another reclaim
             </p>
           </div>
