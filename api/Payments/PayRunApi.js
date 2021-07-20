@@ -30,7 +30,7 @@ const getPayRunSummaryList = (
   return axios.get(query).then(handleResponse).catch(handleError);
 };
 
-const createPayRun = (payRunType) => {
+const createNewPayRun = (payRunType, dateTo) => {
   const options = {
     url: `${PAY_RUN_URL}/${payRunType}`,
     method: 'POST',
@@ -38,9 +38,11 @@ const createPayRun = (payRunType) => {
       Accept: 'application/json',
       'Content-Type': 'application/json;charset=UTF-8',
     },
-    data: {},
+    data: {
+      dateTo: new Date(dateTo).toJSON(),
+    },
   };
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-export { getPayRunSummaryList };
+export { getPayRunSummaryList, createNewPayRun };

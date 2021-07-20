@@ -114,7 +114,7 @@ const PayRunPage = () => {
       {openedPopup === popupTypes.createPayRun && (
         <PopupCreatePayRun
           changeHocAndRelease={changeHocAndRelease}
-          changeRegularCycles={changeRegularCycles}
+          setNewPayRunType={changeRegularCycles}
           hocAndRelease={hocAndRelease}
           regularCycles={regularCycles}
           closePopup={closeCreatePayRun}
