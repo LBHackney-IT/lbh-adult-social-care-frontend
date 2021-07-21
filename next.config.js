@@ -4,8 +4,28 @@ module.exports = {
   future: {
     webpack5: true,
   },
+  poweredByHeader: false,
+
   async redirects() {
     return maintenanceMode();
+  },
+
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+        ],
+      },
+    ];
   },
 };
 

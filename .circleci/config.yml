@@ -212,7 +212,6 @@ workflows:
       - build-deploy-staging:
           requires:
             - assume-role-staging
-            - build
             - owasp-zap-baseline-scan
           filters:
             branches:
