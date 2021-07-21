@@ -1,12 +1,12 @@
-import React, { useRef } from "react";
-import BaseField from "./baseComponents/BaseField";
-import { Button } from "./Button";
-import { HackneySearch } from "./Icons";
-import ErrorField from "./ErrorField";
+import React, { useRef } from 'react';
+import BaseField from './baseComponents/BaseField';
+import { Button } from './Button';
+import { HackneySearch } from './Icons';
+import ErrorField from './ErrorField';
 
 const Input = ({
   label,
-  placeholder = "",
+  placeholder = '',
   onChange = () => {},
   onClick,
   classes = '',
@@ -20,7 +20,9 @@ const Input = ({
 }) => {
   const searchRef = useRef(null);
   const onChangeInput = (event) => {
-    const {target: {value}} = event;
+    const {
+      target: { value },
+    } = event;
     event.preventDefault();
     const formattedValue = value.replace(preSign, '').replace(postSign, '');
 
@@ -29,7 +31,7 @@ const Input = ({
   };
 
   const focusInput = (e) => {
-    if(searchRef?.current) {
+    if (searchRef?.current) {
       searchRef.current.focus();
     }
     return onClick && onClick(e);
@@ -46,11 +48,11 @@ const Input = ({
           type={type}
           ref={searchRef}
         />
-        {search &&
-        <Button onClick={search} className='custom-input__search-button'>
-          <HackneySearch />
-        </Button>
-        }
+        {search && (
+          <Button onClick={search} className="custom-input__search-button">
+            <HackneySearch />
+          </Button>
+        )}
       </div>
       {error && <ErrorField text={error} />}
     </BaseField>

@@ -1,11 +1,11 @@
-import React from "react";
-import BaseField from "./baseComponents/BaseField";
-import ErrorField from "./ErrorField";
+import React from 'react';
+import BaseField from './baseComponents/BaseField';
+import ErrorField from './ErrorField';
 
 const TextArea = ({
   rows = 3,
   label,
-  placeholder = "",
+  placeholder = '',
   onChange = () => {},
   classes = '',
   value,
@@ -21,14 +21,10 @@ const TextArea = ({
 
   return (
     <BaseField label={label} classes={classes}>
-      <textarea
-        rows={rows} value={value}
-        placeholder={placeholder}
-        onChange={onTextAreaChange}
-      >
+      <textarea rows={rows} value={value} placeholder={placeholder} onChange={onTextAreaChange}>
         {children !== undefined ? children : null}
       </textarea>
-      {error && <ErrorField text={error}/>}
+      {error && <ErrorField text={error} />}
     </BaseField>
   );
 };

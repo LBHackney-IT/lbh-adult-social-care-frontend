@@ -125,6 +125,7 @@ const HomeCare = () => {
 
   useEffect(() => {
     // Get the primary and secondary times for the selected service
+    // eslint-disable-next-line no-shadow
     const { times, secondaryTimes } =
       homeCareServices !== undefined
         ? getServiceTimes(homeCareServices, selectedCareType)
@@ -184,7 +185,7 @@ const HomeCare = () => {
 
     switch (selectedCareType) {
       case PERSONAL_CARE_MODE: {
-        let newPersonValue = { ...weekSlotDayItem.values.person };
+        const newPersonValue = { ...weekSlotDayItem.values.person };
 
         // Determine primary care time
         newPersonValue.primary = setPrimaryTime(
@@ -192,13 +193,9 @@ const HomeCare = () => {
         );
 
         // Determine secondary care time
-        const secondaryCareTimeItem = secondaryTimes.find(
-          (item) => item.value === selectedSecondaryCareTime
-        );
+        const secondaryCareTimeItem = secondaryTimes.find((item) => item.value === selectedSecondaryCareTime);
         const hasSecondary = weekSlotDayItem.values.person.secondary > 0;
-        newPersonValue.secondary = hasSecondary
-          ? 0
-          : secondaryCareTimeItem.value;
+        newPersonValue.secondary = hasSecondary ? 0 : secondaryCareTimeItem.value;
 
         newWeekSlotDayItem = {
           ...weekSlotDayItem,
@@ -277,9 +274,7 @@ const HomeCare = () => {
 
         // For each week slot, get the minutes for this day
         newWeekSlotsValue.forEach((weekSlotItem) => {
-          let weekSlotItemDayEntry = weekSlotItem.days.find(
-            (item) => item.id === weekDayItem.id
-          );
+          const weekSlotItemDayEntry = weekSlotItem.days.find((item) => item.id === weekDayItem.id);
 
           if (weekSlotItemDayEntry !== undefined) {
             if (weekSlotItemDayEntry.values !== undefined) {
@@ -306,6 +301,7 @@ const HomeCare = () => {
 
     homeCareTimeShifts.forEach((timeShiftItem) => {
       timeShiftItem.days.forEach((timeShiftCell) => {
+        // eslint-disable-next-line no-empty
         if (timeShiftCell.value) {
         } else if (timeShiftCell.values) {
           const iterateServices = [
@@ -317,9 +313,7 @@ const HomeCare = () => {
 
           iterateServices.forEach((serviceItem) => {
             const hasSecondary = serviceItem.value.secondary !== undefined;
-            const hasValue = hasSecondary
-              ? serviceItem.value.primary > 0
-              : serviceItem.value > 0;
+            const hasValue = hasSecondary ? serviceItem.value.primary > 0 : serviceItem.value > 0;
 
             if (hasValue) {
               slots.push({
@@ -351,7 +345,7 @@ const HomeCare = () => {
       setHomeCareSummaryData(summaryData);
       router.push(SOCIAL_WORKER_ROUTE);
     } catch (e) {
-      dispatch(addNotification({ text: 'Can not add to package'}));
+      dispatch(addNotification({ text: 'Can not add to package' }));
       console.log('error post time slots', e, e?.response);
     }
   };
@@ -368,10 +362,7 @@ const HomeCare = () => {
         Care Package
       </ClientSummary>
       <div className="mt-5 mb-5">
-        <CareTitle
-          startDate={startDate}
-          endDate={endDate}
-        >
+        <CareTitle startDate={startDate} endDate={endDate}>
           Homecare Care
         </CareTitle>
         <div className="is-flex is-justify-content-flex-start home-care-options">

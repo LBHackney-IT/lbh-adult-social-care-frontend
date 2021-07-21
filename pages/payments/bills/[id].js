@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import Breadcrumbs from "../../../components/Breadcrumbs";
 import { useRouter } from 'next/router';
+import Breadcrumbs from "../../../components/Breadcrumbs";
 import BillsTable from "../../../components/Bills/BillsTable";
 import Pagination from "../../../components/Payments/Pagination";
 import {payRunTableData} from "../../../testData/testDataPayRuns";
@@ -26,7 +26,7 @@ const BillPage = () => {
     holdPayments: 'hold-payment',
   });
   const router = useRouter();
-  const id = router.query.id;
+  const {id} = router.query;
   const [pathname] = useState(`${PAYMENTS_BILLS_ROUTE}/${id}`);
   const [openedPopup, setOpenedPopup] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
@@ -102,11 +102,11 @@ const BillPage = () => {
       <BillsTable
         rows={payRunTableData}
         careType='Residential'
-        isStatusDropDown={true}
+        isStatusDropDown
         checkedRows={checkedRows}
         setCheckedRows={onCheckRow}
-        isIgnoreId={true}
-        canCollapseRows={true}
+        isIgnoreId
+        canCollapseRows
         sortBy={sortBy}
         sorts={sorts}
       />

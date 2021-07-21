@@ -7,7 +7,7 @@ import SupplierReturnsLevelInsight from "../../../components/SupplierDashboard/S
 import SupplierReturnDashboardTable from "../../../components/SupplierDashboard/SupplierReturnsDashboardTable";
 import SupplierReturnsDashboardInnerHeader from "../../../components/SupplierDashboard/SupplierReturnsDashboardInnerHeader";
 import ChatButton from "../../../components/PayRuns/ChatButton";
-import PopupHelpChat from "../../../components/Chat/PopupHelpChat";
+import PopupInvoiceChat from "../../../components/Chat/PopupInvoiceChat";
 import useSWR from 'swr';
 
 const serverSupplierReturnsId = async () => {};
@@ -94,7 +94,7 @@ const SupplierReturnsDashboard = () => {
   return (
     <div className='supplier-returns supplier-returns-dashboard'>
       {openedPopup === 'help-chat' &&
-      <PopupHelpChat
+      <PopupInvoiceChat
         closePopup={closeHelpChat}
         newMessageText={newMessageText}
         setNewMessageText={setNewMessageText}

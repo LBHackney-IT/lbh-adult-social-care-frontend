@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { CheckIcon } from "./Icons";
-import ErrorField from "./ErrorField";
+import React, { useState } from 'react';
+import { CheckIcon } from './Icons';
+import ErrorField from './ErrorField';
 
 const Checkbox = ({ children, checked = false, error, setError, onChange = () => {} }) => {
   const [isChecked, setIsChecked] = useState(checked);

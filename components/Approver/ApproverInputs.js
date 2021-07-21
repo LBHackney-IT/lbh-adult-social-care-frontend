@@ -1,6 +1,6 @@
-import React from "react";
-import Input from "../Input";
-import Dropdown from "../Dropdown";
+import React from 'react';
+import Input from '../Input';
+import Dropdown from '../Dropdown';
 
 const ApproverInputs = ({
   packageTypeOptions = [],
@@ -24,49 +24,49 @@ const ApproverInputs = ({
 
   return (
     <div className={`approver-hub__inputs ${className}`}>
-      <div className='pay-runs__new-pay'>
-        <p className='title'>Approved hub</p>
+      <div className="pay-runs__new-pay">
+        <p className="title">Approved hub</p>
       </div>
-      <div className='pay-runs__filters social-worker__filters'>
+      <div className="pay-runs__filters social-worker__filters">
         <Input
-          classes='mr-3'
-          label='Search'
+          classes="mr-3"
+          label="Search"
           value={filters.id}
           search={searchId}
-          placeholder='Enter name or Hackney ID'
+          placeholder="Enter name or Hackney ID"
           onChange={(option) => changeFilter('id', option)}
         />
         <Dropdown
-          initialText='Package Type'
-          classes='mr-3'
+          initialText="Package Type"
+          classes="mr-3"
           options={packageTypeOptions}
           selectedValue={filters.packageType}
           onOptionSelect={(option) => changeFilter('packageType', option)}
         />
         <Dropdown
-          initialText='Social Worker'
-          classes='mr-3'
+          initialText="Social Worker"
+          classes="mr-3"
           options={socialWorkerOptions}
           selectedValue={filters.socialWorker}
           onOptionSelect={(option) => changeFilter('socialWorker', option)}
         />
         <Dropdown
-          initialText='Approver'
-          classes='mr-3'
+          initialText="Approver"
+          classes="mr-3"
           options={approverOptions}
           selectedValue={filters.approver}
           onOptionSelect={(option) => changeFilter('approver', option)}
         />
         <Dropdown
-          initialText='By Value'
-          classes='mr-3'
+          initialText="By Value"
+          classes="mr-3"
           options={byValueOptions}
           selectedValue={filters.byValue}
           onOptionSelect={(option) => changeFilter('byValue', option)}
         />
       </div>
     </div>
-  )
+  );
 };
 
 export default ApproverInputs;

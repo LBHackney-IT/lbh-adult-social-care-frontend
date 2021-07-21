@@ -12,8 +12,7 @@
   }
 }
 
-
-.popup.held-payments__popup-help-chat {
+.popup.held-payments__popup-invoice-chat {
   justify-content: flex-end;
 
   .popup__action-buttons {
@@ -31,7 +30,7 @@
     height: 100%;
   }
 
-  .popup-help-chat__messages {
+  .popup-invoice-chat__messages {
     overflow: auto;
     height: 38vh;
     padding-right: 20px;
@@ -41,7 +40,7 @@
     flex-direction: column;
   }
 
-  .popup-help-chat__message {
+  .popup-invoice-chat__message {
     width: 100%;
     margin-bottom: 20px;
   }
@@ -51,7 +50,7 @@
     font-weight: 400;
   }
 
-  .popup-help-chat__header {
+  .popup-invoice-chat__header {
     margin-bottom: 30px;
     h2 {
       font-size: 24px;
@@ -65,37 +64,36 @@
     }
   }
 
-  .popup-help-chat__message-text {
+  .popup-invoice-chat__message-text {
     background-color: $lbh-gray;
     color: $lbh-black1;
     padding: 12px 12px 12px 6px;
     border-radius: 5px;
   }
 
-  .popup-help-chat__message-from {
+  .popup-invoice-chat__message-from {
     color: $lbh-black1;
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 7px;
   }
 
-  .popup-help-chat__message-from-current-user {
-    .popup-help-chat__message-text-container {
+  .popup-invoice-chat__message-from-current-user {
+    .popup-invoice-chat__message-text-container {
       margin-left: auto;
     }
 
-    .popup-help-chat__message-from {
+    .popup-invoice-chat__message-from {
       text-align: right;
     }
 
-    .popup-help-chat__message-text {
+    .popup-invoice-chat__message-text {
       background-color: $lbh-green-border;
       position: relative;
 
-
       &:before {
         position: absolute;
-        content: "";
+        content: '';
         top: 10px;
         right: -7px;
         border-bottom: solid 7px $lbh-green-border;
@@ -105,7 +103,7 @@
 
       &:after {
         position: absolute;
-        content: "";
+        content: '';
         top: 17px;
         right: -7px;
         border-top: solid 7px $lbh-green-border;
@@ -115,7 +113,7 @@
     }
   }
 
-  .popup-help-chat__message-settings {
+  .popup-invoice-chat__message-settings {
     position: absolute;
     justify-content: center;
     z-index: 2;
@@ -133,7 +131,7 @@
     }
   }
 
-  .popup-help-chat__message-settings {
+  .popup-invoice-chat__message-settings {
     display: none;
 
     &:hover {
@@ -141,21 +139,21 @@
     }
   }
 
-  .popup-help-chat__message-text-container {
+  .popup-invoice-chat__message-text-container {
     width: 70%;
   }
 
-  .popup-help-chat__message-from-someone {
-    .popup-help-chat__message-text-container {
+  .popup-invoice-chat__message-from-someone {
+    .popup-invoice-chat__message-text-container {
       position: relative;
       display: flex;
       justify-content: center;
       flex-direction: column;
 
-      .popup-help-chat__message-text {
+      .popup-invoice-chat__message-text {
         &:before {
           position: absolute;
-          content: "";
+          content: '';
           top: 10px;
           left: -7px;
           border-bottom: solid 7px $lbh-gray;
@@ -165,7 +163,7 @@
 
         &:after {
           position: absolute;
-          content: "";
+          content: '';
           top: 17px;
           left: -7px;
           border-top: solid 7px $lbh-gray;
@@ -173,17 +171,16 @@
           border-left: solid 7px transparent;
         }
       }
-
     }
     &.hovered {
-      .popup-help-chat__message-settings {
+      .popup-invoice-chat__message-settings {
         display: flex;
       }
     }
   }
 }
 
-.popup-help-chat__inputs {
+.popup-invoice-chat__inputs {
   .dropdown-trigger {
     width: 100%;
   }
@@ -192,7 +189,8 @@
     width: 100%;
   }
 
-  .hold-payment__dropdown, .dropdown {
+  .hold-payment__dropdown,
+  .dropdown {
     width: 100%;
   }
 
@@ -209,7 +207,7 @@
   }
 }
 
-.popup-help-chat__message-settings-actions {
+.popup-invoice-chat__message-settings-actions {
   padding: 10px;
   background-color: white;
   position: absolute;

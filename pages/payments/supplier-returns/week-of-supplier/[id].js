@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import useSWR from 'swr';
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import Pagination from "../../../../components/Payments/Pagination";
 import {testDataHelpMessages, weeklyOfSupplierTableData} from "../../../../testData/testDataPayRuns";
 import SupplierReturnsLevelInsight from "../../../../components/SupplierReturns/SupplierReturnsLevelInsight";
 import ChatButton from "../../../../components/PayRuns/ChatButton";
-import PopupHelpChat from "../../../../components/Chat/PopupHelpChat";
-import { useSelector } from "react-redux";
+import PopupInvoiceChat from "../../../../components/Chat/PopupInvoiceChat";
 import { selectSupplierReturns } from "../../../../reducers/supplierReturnsReducer";
 import { formatDateWithSign } from "../../../../service/helpers";
 import { Button } from "../../../../components/Button";
@@ -13,8 +15,6 @@ import WeekOfSupplierViewInnerHeader from "../../../../components/SupplierReturn
 import WeeklyOfSupplierTable from "../../../../components/SupplierReturns/WeeklyOfSupplierTable";
 import HackneyFooterInfo from "../../../../components/HackneyFooterInfo";
 import PopupDocumentUploader from "../../../../components/PopupDocumentUploader";
-import { useRouter } from "next/router";
-import useSWR from 'swr';
 
 const serverWeekOfSupplier = async () => {};
 
@@ -89,7 +89,7 @@ const WeekOfSupplierView = () => {
 
     console.log(`make action ${actionType} for services`, supplier.services);
 
-    //emit delay request
+    // emit delay request
     const timer = setTimeout(() => {
       setRequestsQue([]);
     }, 5000);
@@ -104,7 +104,7 @@ const WeekOfSupplierView = () => {
     const actionService = () => {
       setRequestsQue([...requestsQue, `${supplier.id}${service.id}`]);
 
-      //emit delay request
+      // emit delay request
       const timer = setTimeout(() => {
         setRequestsQue([]);
       }, 5000);
@@ -117,7 +117,7 @@ const WeekOfSupplierView = () => {
     const actionSupplier = () => {
       setRequestsQue([...requestsQue, supplier.id]);
 
-      //emit request
+      // emit request
       const timer = setTimeout(() => {
         setRequestsQue([]);
       }, 5000);
@@ -176,7 +176,7 @@ const WeekOfSupplierView = () => {
   return (
     <div className='supplier-returns week-of-supplier supplier-returns-dashboard'>
       {openedPopup === 'help-chat' &&
-      <PopupHelpChat
+      <PopupInvoiceChat
         closePopup={closeHelpChat}
         newMessageText={newMessageText}
         setNewMessageText={setNewMessageText}
@@ -203,8 +203,8 @@ const WeekOfSupplierView = () => {
         makeAction={makeAction}
         requestsQue={requestsQue}
         additionalActions={chatActions}
-        isIgnoreId={true}
-        canCollapseRows={true}
+        isIgnoreId
+        canCollapseRows
         sortBy={sortBy}
         sorts={sorts}
       />

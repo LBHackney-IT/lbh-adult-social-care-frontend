@@ -15,6 +15,8 @@ import {
   nursingCareChangeStatus,
 } from "../../../../api/CarePackages/NursingCareApi";
 import useSWR from 'swr';
+import { addNotification } from '../../../../reducers/notificationsReducer'
+import { useDispatch } from 'react-redux'
 
 const getNursingCareApproveBrokered = async (nursingCarePackageId) => {
   const data = {
@@ -62,12 +64,13 @@ const getNursingCareApproveBrokered = async (nursingCarePackageId) => {
 
 const NursingCareApproveBrokered = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const nursingCarePackageId = router.query.id;
   const { data } = useSWR(nursingCarePackageId, getNursingCareApproveBrokered);
 
-  let nursingCarePackage,
-    additionalNeedsEntriesData,
-    approvalHistoryEntries;
+  let nursingCarePackage;
+  let additionalNeedsEntriesData;
+  let approvalHistoryEntries;
 
   if(data) {
     approvalHistoryEntries = data.approvalHistoryEntries;
@@ -86,9 +89,10 @@ const NursingCareApproveBrokered = () => {
     nursingCareChangeStatus(nursingCarePackageId, 10)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
+        dispatch(addNotification({ text: 'Status change success.', className: 'success' }));
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
@@ -97,9 +101,10 @@ const NursingCareApproveBrokered = () => {
     nursingCareChangeStatus(nursingCarePackageId, 8)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
+        dispatch(addNotification({ text: 'Status change success.', className: 'success' }));
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
@@ -114,7 +119,7 @@ const NursingCareApproveBrokered = () => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };

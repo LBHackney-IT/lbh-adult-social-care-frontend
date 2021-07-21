@@ -81,13 +81,13 @@ jobs:
       - *attach_workspace
       - run:
           name: deploy
-          command: yarn build && yarn --production=true && sudo npm i -g serverless && sls deploy -s production
+          command: yarn --production=true && sudo npm i -g serverless && sls deploy --stage production --force
 
   generate-draft-github-release:
     executor: aws-cli/default
     steps:
       - *attach_workspace
-      - run:        
+      - run:
           name: delete stale draft GitHub releases
           command: yarn delete-draft-github-releases
       - run:
@@ -128,7 +128,7 @@ jobs:
       - aws_assume_role/assume_role:
           account: $AWS_ACCOUNT_PRODUCTION
           profile_name: default
-          role: 'LBH_Circle_CI_Deployment_Role'
+          role: 'circleci-assume-role'
       - persist_to_workspace:
           root: *workspace_root
           paths:
@@ -174,14 +174,33 @@ workflows:
           #   - e2e
           filters:
             branches:
-              only: develop
+              only: 
+                - develop
+                - main
       - build-deploy-staging:
           requires:
             - assume-role-staging
             - build
           filters:
             branches:
-              only: develop
+              only: 
+                - develop
+                - main
+      - assume-role-production:
+          context: api-assume-role-social-care-production-context          
+          # requires:
+          #   - tests
+          #   - e2e
+          filters:
+            branches:
+              only: main
+      - build-deploy-production:
+          requires:
+            - assume-role-production
+            - build
+          filters:
+            branches:
+              only: main
       # - permit-deploy-production:
       #     type: approval
       #     requires:

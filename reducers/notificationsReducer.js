@@ -1,7 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// EXAMPLE OF PAYLOAD
+// {
+//   time: 4000,
+//   className: 'error',
+//   text: 'Something went wrong',
+// }
+
 const notificationsSlice = createSlice({
-  name: "notifications",
+  name: 'notifications',
   initialState: {
     notifications: [],
     showedNotifications: [],
@@ -14,16 +21,16 @@ const notificationsSlice = createSlice({
       return {
         ...state,
         showedNotifications: cloneNotifications,
-      }
+      };
     },
     removeNotification: (state, { payload }) => {
-      const cloneNotifications = state.notifications.filter(notification => notification.text !== payload.text);
-      const cloneShowed = state.showedNotifications.filter(showed => showed.text !== payload.text);
+      const cloneNotifications = state.notifications.filter((notification) => notification.text !== payload.text);
+      const cloneShowed = state.showedNotifications.filter((showed) => showed.text !== payload.text);
       return {
         ...state,
         notifications: cloneNotifications,
         showedNotifications: cloneShowed,
-      }
+      };
     },
     addNotification: (state, { payload }) => {
       const cloneNotifications = state.notifications.slice();
@@ -37,15 +44,13 @@ const notificationsSlice = createSlice({
         ...state,
         notifications: cloneNotifications,
         logoutNotification: payload?.text === 'logout' ? 'logout' : '',
-      }
+      };
     },
-    removeNotifications: (state, { payload }) => {
-      return {
-        ...state,
-        notifications: [],
-        showedNotifications: [],
-      }
-    }
+    removeNotifications: (state) => ({
+      ...state,
+      notifications: [],
+      showedNotifications: [],
+    }),
   },
 });
 
@@ -54,13 +59,11 @@ export const {
   removeNotification,
   removeNotifications,
   showNotification,
-  addNotification,
+  addNotification
 } = notificationsSlice.actions;
 
 // Selectors
-const selectNotifications = (state) => {
-  return state.notifications;
-};
+const selectNotifications = (state) => state.notifications;
 export { selectNotifications, notificationsSlice };
 
 // Reducer

@@ -45,17 +45,9 @@ const DayCare = () => {
 
   const [errors, setErrors] = useState([]);
   const [termTimeNAId, setTermTimeNaId] = useState(undefined);
-  const [
-    termTimeConsiderationOptions,
-    setTermTimeConsiderationOptions,
-  ] = useState([]);
-  const [opportunitiesLengthOptions, setOpportunitiesLengthOptions] = useState(
-    []
-  );
-  const [
-    opportunityTimesPerMonthOptions,
-    setOpportunityTimesPerMonthOptions,
-  ] = useState([]);
+  const [termTimeConsiderationOptions, setTermTimeConsiderationOptions] = useState([]);
+  const [opportunitiesLengthOptions, setOpportunitiesLengthOptions] = useState([]);
+  const [opportunityTimesPerMonthOptions, setOpportunityTimesPerMonthOptions] = useState([]);
 
   // package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
@@ -72,9 +64,7 @@ const DayCare = () => {
 
   const [needToAddress, setNeedToAddress] = useState(undefined);
   const [transportNeeded, setTransportIsNeeded] = useState(undefined);
-  const [transportEscortNeeded, setTransportEscortIsNeeded] = useState(
-    undefined
-  );
+  const [transportEscortNeeded, setTransportEscortIsNeeded] = useState(undefined);
   const [escortNeeded, setEscortIsNeeded] = useState(undefined);
   const [termTimeConsideration, setTermTimeConsideration] = useState(undefined);
   const [displaySelectCollege, setDisplaySelectCollege] = useState(false);
@@ -158,8 +148,8 @@ const DayCare = () => {
   const retrieveTermTimeConsiderationOptions = () => {
     getTermTimeConsiderationOptions()
       .then((res) => {
-        let options = res.map((option) => {
-          if (option.optionName.toLowerCase().trim() === "n/a") {
+        const options = res.map((option) => {
+          if (option.optionName.toLowerCase().trim() === 'n/a') {
             setTermTimeNaId(option.optionId);
           }
           return {
@@ -180,7 +170,7 @@ const DayCare = () => {
   const retrieveOpportunitiesLengthOptions = () => {
     getOpportunitiesLengthOptions()
       .then((res) => {
-        let options = res.map((option) => ({
+        const options = res.map((option) => ({
           text: option.optionName,
           value: option.opportunityLengthOptionId,
           valueInMinutes: option.timeInMinutes,
@@ -198,7 +188,7 @@ const DayCare = () => {
   const retrieveOpportunityTimesPerMonthOptions = () => {
     getOpportunityTimesPerMonthOptions()
       .then((res) => {
-        let options = res.map((option) => ({
+        const options = res.map((option) => ({
           text: option.optionName,
           value: option.opportunityTimePerMonthOptionId,
         }));
@@ -220,44 +210,49 @@ const DayCare = () => {
   };
 
   const formHasErrors = () => {
-    const defaultFields = fieldValidator([
-      {name: 'transportNeeded', value: transportNeeded, rules: ['empty']},
-      {name: 'transportEscortNeeded', value: transportEscortNeeded, rules: ['empty']},
-      {name: 'escortNeeded', value: escortNeeded, rules: ['empty']},
-      {name: 'termTimeConsideration', value: termTimeConsideration, rules: ['empty']},
-      {name: 'needToAddress', value: needToAddress, rules: ['empty']},
-      {name: 'daysSelected', value: daysSelected, rules: ['customEmpty']},
-    ],
-      [{name: 'customEmpty', text: 'Required field', valid: (item) => item.value.some(day => day.checked)}]
+    const defaultFields = fieldValidator(
+      [
+        { name: 'transportNeeded', value: transportNeeded, rules: ['empty'] },
+        { name: 'transportEscortNeeded', value: transportEscortNeeded, rules: ['empty'] },
+        { name: 'escortNeeded', value: escortNeeded, rules: ['empty'] },
+        { name: 'termTimeConsideration', value: termTimeConsideration, rules: ['empty'] },
+        { name: 'needToAddress', value: needToAddress, rules: ['empty'] },
+        { name: 'daysSelected', value: daysSelected, rules: ['customEmpty'] },
+      ],
+      [{ name: 'customEmpty', text: 'Required field', valid: (item) => item.value.some((day) => day.checked) }]
     );
     setErrorFields(defaultFields.validFields);
 
     const packageReclaimsTimedArr = [];
     const opportunityEntriesTimedArr = [];
-    const packageReclaimsFieldsError = packagesReclaimed.map(item => {
+    const packageReclaimsFieldsError = packagesReclaimed.map((item) => {
       const valid = fieldValidator([
-        {name: 'from', value: item.from, rules: ['empty']},
-        {name: 'category', value: item.category, rules: ['empty']},
-        {name: 'type', value: item.type, rules: ['empty']},
-        {name: 'notes', value: item.notes, rules: ['empty']},
-        {name: 'amount', value: item.amount, rules: ['empty']},
+        { name: 'from', value: item.from, rules: ['empty'] },
+        { name: 'category', value: item.category, rules: ['empty'] },
+        { name: 'type', value: item.type, rules: ['empty'] },
+        { name: 'notes', value: item.notes, rules: ['empty'] },
+        { name: 'amount', value: item.amount, rules: ['empty'] },
       ]);
       packageReclaimsTimedArr.push(valid.validFields);
       return valid.hasErrors;
     });
     setPackageReclaimedError(packageReclaimsTimedArr);
 
-    const opportunityEntriesFieldsError = opportunityEntries.map(item => {
+    const opportunityEntriesFieldsError = opportunityEntries.map((item) => {
       const valid = fieldValidator([
-        {name: 'howLongValue', value: item.howLongValue, rules: ['empty']},
-        {name: 'timesPerMonthValue', value: item.timesPerMonthValue, rules: ['empty']},
-        {name: 'needToAddress', value: item.needToAddress, rules: ['empty']},
+        { name: 'howLongValue', value: item.howLongValue, rules: ['empty'] },
+        { name: 'timesPerMonthValue', value: item.timesPerMonthValue, rules: ['empty'] },
+        { name: 'needToAddress', value: item.needToAddress, rules: ['empty'] },
       ]);
       opportunityEntriesTimedArr.push(valid.validFields);
       return valid.hasErrors;
     });
     setOpportunityEntriesError(opportunityEntriesTimedArr);
-    return opportunityEntriesFieldsError.some(item => item) || packageReclaimsFieldsError.some(item => item) || defaultFields.hasErrors;
+    return (
+      opportunityEntriesFieldsError.some((item) => item) ||
+      packageReclaimsFieldsError.some((item) => item) ||
+      defaultFields.hasErrors
+    );
   };
 
   const savePackageClick = (event) => {
@@ -270,24 +265,22 @@ const DayCare = () => {
       opportunitiesNeedToAddress: item.needToAddress,
     }));
 
-    const packageReclaims = packagesReclaimed.map((reclaim) => {
-      return {
-        ReclaimFromId: reclaim.from,
-        ReclaimCategoryId: reclaim.category,
-        ReclaimAmountOptionId: reclaim.type,
-        Notes: reclaim.notes,
-        Amount: reclaim.amount,
-      };
-    });
+    const packageReclaims = packagesReclaimed.map((reclaim) => ({
+      ReclaimFromId: reclaim.from,
+      ReclaimCategoryId: reclaim.category,
+      ReclaimAmountOptionId: reclaim.type,
+      Notes: reclaim.notes,
+      Amount: reclaim.amount,
+    }));
 
     const dayCarePackageToCreate = {
-      clientId: "aee45700-af9b-4ab5-bb43-535adbdcfb80",
+      clientId: 'aee45700-af9b-4ab5-bb43-535adbdcfb80',
       isFixedPeriodOrOngoing: isFixedPeriod,
       startDate: startDate ? new Date(startDate).toJSON() : null,
       endDate: endDate ? new Date(endDate).toJSON() : null,
       isThisAnImmediateService: isImmediate,
       isThisUserUnderS117: isS117,
-      needToAddress: needToAddress,
+      needToAddress,
       monday: daysSelected[0].checked,
       tuesday: daysSelected[1].checked,
       wednesday: daysSelected[2].checked,
@@ -295,14 +288,14 @@ const DayCare = () => {
       friday: daysSelected[4].checked,
       saturday: daysSelected[5].checked,
       sunday: daysSelected[6].checked,
-      transportNeeded: transportNeeded,
-      transportEscortNeeded: transportEscortNeeded,
-      escortNeeded: escortNeeded,
+      transportNeeded,
+      transportEscortNeeded,
+      escortNeeded,
       termTimeConsiderationOptionId: termTimeConsideration,
       dayCarePackageOpportunities,
-      creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
-      collegeId: collegeId,
-      packageReclaims: packageReclaims,
+      creatorId: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8',
+      collegeId,
+      packageReclaims,
     };
 
     createDayCarePackage(dayCarePackageToCreate)
@@ -359,7 +352,7 @@ const DayCare = () => {
               // Handle this checkbox click
               const onThisDayCheckboxChange = (isChecked) => {
                 onDayCheckboxChange(dayItem.id, isChecked);
-                changeErrorFields('daysSelected')
+                changeErrorFields('daysSelected');
               };
 
               return (

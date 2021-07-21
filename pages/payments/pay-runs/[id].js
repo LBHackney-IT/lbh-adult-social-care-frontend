@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumbs from "../../../components/Breadcrumbs";
 import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { useDispatch } from 'react-redux'
+import Breadcrumbs from "../../../components/Breadcrumbs";
 import PayRunTable from "../../../components/PayRuns/PayRunTable";
 import Pagination from "../../../components/Payments/Pagination";
 import { payRunTableData } from "../../../testData/testDataPayRuns";
@@ -9,7 +11,8 @@ import PayRunsLevelInsight from "../../../components/PayRuns/PayRunsLevelInsight
 import PayRunHeader from "../../../components/PayRuns/PayRunHeader";
 import PopupHoldPayment from "../../../components/PayRuns/PopupHoldPayment";
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import useSWR from 'swr';
+import { addNotification } from '../../../reducers/notificationsReducer'
+import { getSinglePayRunInsights } from '../../../api/Payments/PayRunApi'
 
 const serverPayRunsId = async () => {};
 
@@ -29,9 +32,11 @@ const PayRunPage = () => {
     holdPayments: 'hold-payment',
   });
   const router = useRouter();
+  const dispatch = useDispatch();
   const { id } = router.query;
   const [openedPopup, setOpenedPopup] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
+  const [levelInsights, setLevelInsights] = useState(null);
   const [actionRequiredBy, setActionRequiredBy] = useState('');
   const [reason, setReason] = useState('');
   const [pathname] = useState(`/payments/pay-runs/${id}`);
@@ -65,11 +70,11 @@ const PayRunPage = () => {
     setActionRequiredBy('');
   };
 
-  const onCheckRow = (id) => {
-    if(checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
+  const onCheckRow = (rowItemId) => {
+    if(checkedRows.includes(rowItemId)) {
+      setCheckedRows(checkedRows.filter(item => String(item) !== String(rowItemId)));
     } else {
-      setCheckedRows([...checkedRows, id]);
+      setCheckedRows([...checkedRows, rowItemId]);
     }
   };
 
@@ -80,7 +85,9 @@ const PayRunPage = () => {
   }
 
   useEffect(() => {
-    router.replace(`${pathname}?page=1`);
+    getSinglePayRunInsights(id)
+      .then(res => setLevelInsights(res))
+      .catch(() => dispatch(addNotification({ text: 'Can not get Insights'})))
   }, []);
 
   useEffect(() => {
@@ -118,31 +125,34 @@ const PayRunPage = () => {
       <PayRunTable
         rows={payRunTableData}
         careType='Residential'
-        isStatusDropDown={true}
+        isStatusDropDown
         checkedRows={checkedRows}
         setCheckedRows={onCheckRow}
-        isIgnoreId={true}
-        canCollapseRows={true}
+        isIgnoreId
+        canCollapseRows
         sortBy={sortBy}
         sorts={sorts}
       />
       <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
-      <PayRunsLevelInsight
-        firstButton={{
-          text: 'Submit pay run for approval',
-          onClick: () => {}
-        }}
-        secondButton={{
-          text: 'Delete draft pay run',
-          onClick: () => {},
-        }}
-        cost='£42,827'
-        suppliersCount='100'
-        servicesUsersCount='1000'
-        costIncrease='£897'
-        holdsCount='48'
-        holdsPrice='£32,223'
-      />
+      {
+        levelInsights &&
+        <PayRunsLevelInsight
+          firstButton={{
+            text: 'Submit pay run for approval',
+            onClick: () => {}
+          }}
+          secondButton={{
+            text: 'Delete draft pay run',
+            onClick: () => {},
+          }}
+          cost='£42,827'
+          suppliersCount='100'
+          servicesUsersCount='1000'
+          costIncrease='£897'
+          holdsCount='48'
+          holdsPrice='£32,223'
+        />
+      }
       <HackneyFooterInfo />
     </div>
   )

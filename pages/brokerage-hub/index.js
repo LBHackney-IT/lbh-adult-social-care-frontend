@@ -119,7 +119,7 @@ const BrokerageHubPage = () => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination from={1} to={50} itemsCount={tabsTable[tab].length} totalCount={tabsTable[tab].length} />
+      <Pagination from={1} itemsCount={tabsTable[tab].length} totalCount={tabsTable[tab].length} />
       <HackneyFooterInfo />
     </div>
   )

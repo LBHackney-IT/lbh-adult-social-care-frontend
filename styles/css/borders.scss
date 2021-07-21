@@ -1,62 +1,83 @@
-.border-dotted {border-style: dotted !important;}
-.border-dashed {border-style: dashed !important;}
-.border-solid {border-style: solid !important;}
-.border-double {border-style: double !important;}
-.border-groove {border-style: groove !important;}
-.border-ridge {border-style: ridge !important;}
-.border-inset {border-style: inset !important;}
-.border-outset {border-style: outset !important;}
-.border-none {border-style: none !important;}
-.border-hidden {border-style: hidden !important;}
-.border-mix {border-style: dotted dashed solid double !important;}
-
+.border-dotted {
+  border-style: dotted !important;
+}
+.border-dashed {
+  border-style: dashed !important;
+}
+.border-solid {
+  border-style: solid !important;
+}
+.border-double {
+  border-style: double !important;
+}
+.border-groove {
+  border-style: groove !important;
+}
+.border-ridge {
+  border-style: ridge !important;
+}
+.border-inset {
+  border-style: inset !important;
+}
+.border-outset {
+  border-style: outset !important;
+}
+.border-none {
+  border-style: none !important;
+}
+.border-hidden {
+  border-style: hidden !important;
+}
+.border-mix {
+  border-style: dotted dashed solid double !important;
+}
 
 .border-w-1 {
-  border-width: .25rem!important;
+  border-width: 0.25rem !important;
 }
 
 .border-w-2 {
-  border-width: .5rem!important;
+  border-width: 0.5rem !important;
 }
 
 .border-w-3 {
-  border-width: .75rem!important;
+  border-width: 0.75rem !important;
 }
 
 .border-w-4 {
-  border-width: 1rem!important;
+  border-width: 1rem !important;
 }
 
 .border-w-5 {
-  border-width: 1.5rem!important;
+  border-width: 1.5rem !important;
 }
 
 .border-w-6 {
-  border-width: 3rem!important;
+  border-width: 3rem !important;
 }
 
 .bb-w-1 {
-  border-bottom-width: .25rem!important;
+  border-bottom-width: 0.25rem !important;
 }
 
 .bb-w-2 {
-  border-bottom-width: .5rem!important;
+  border-bottom-width: 0.5rem !important;
 }
 
 .bb-w-3 {
-  border-bottom-width: .75rem!important;
+  border-bottom-width: 0.75rem !important;
 }
 
 .bb-w-4 {
-  border-bottom-width: 1rem!important;
+  border-bottom-width: 1rem !important;
 }
 
 .bb-w-5 {
-  border-bottom-width: 1.5rem!important;
+  border-bottom-width: 1.5rem !important;
 }
 
 .bb-w-6 {
-  border-bottom-width: 3rem!important;
+  border-bottom-width: 3rem !important;
 }
 
 .border-w-medium {

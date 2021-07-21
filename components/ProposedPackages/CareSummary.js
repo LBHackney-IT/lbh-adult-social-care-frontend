@@ -1,21 +1,19 @@
-import React from "react";
-import { Button } from "../Button";
+import React from 'react';
+import { Button } from '../Button';
 
 const CareSummary = ({
   startDate,
   endDate,
-  needToAddress = "",
+  needToAddress = '',
   additionalNeedsEntries = [],
   careType,
   setAdditionalNeedsEntries = () => {},
 }) => {
-  startDate = new Date(startDate).toLocaleDateString("en-GB");
+  startDate = new Date(startDate).toLocaleDateString('en-GB');
 
   // Remove additional need entry
   const removeAdditionalNeedEntry = (entryId) => {
-    const newEntries = additionalNeedsEntries.filter(
-      (entryItem) => entryItem.id !== entryId
-    );
+    const newEntries = additionalNeedsEntries.filter((entryItem) => entryItem.id !== entryId);
     setAdditionalNeedsEntries([...newEntries]);
   };
 
@@ -24,9 +22,7 @@ const CareSummary = ({
       <div className="columns is-mobile">
         <div className="column">
           <div>
-            <span className="font-weight-bold mr-2 font-size-16px">
-              {careType}
-            </span>
+            <span className="font-weight-bold mr-2 font-size-16px">{careType}</span>
             <span className="font-size-16px">
               {startDate} {endDate ? ` - ${endDate}` : null}
             </span>
@@ -42,18 +38,14 @@ const CareSummary = ({
 
       <div className="columns is-mobile mb-3">
         <div className="column">
-          <p className="font-weight-bold font-size-16px mb-2">
-            Need Addressing
-          </p>
+          <p className="font-weight-bold font-size-16px mb-2">Need Addressing</p>
           <p>{needToAddress}</p>
         </div>
       </div>
 
       <div className="columns">
         <div className="column">
-          <p className="font-weight-bold font-size-16px mb-2">
-            Additional needs
-          </p>
+          <p className="font-weight-bold font-size-16px mb-2">Additional needs</p>
           <div className="border-bottom" />
         </div>
         <div className="column" />
@@ -63,28 +55,21 @@ const CareSummary = ({
         <div className="column">
           <div className="mb-3">
             <div className="columns is-multiline">
-              {additionalNeedsEntries.map((entry) => {
-                return (
-                  <div className="column is-half" key={entry.id}>
-                    <p className="font-weight-bold mb-2">
-                      {entry.selectedCostText} cost
-                    </p>
-                    <p>{entry.needToAddress}</p>
-                    <div>
-                      <Button linkBtn={true} className="mr-2">
-                        Edit
-                      </Button>
+              {additionalNeedsEntries.map((entry) => (
+                <div className="column is-half" key={entry.id}>
+                  <p className="font-weight-bold mb-2">{entry.selectedCostText} cost</p>
+                  <p>{entry.needToAddress}</p>
+                  <div>
+                    <Button linkBtn className="mr-2">
+                      Edit
+                    </Button>
 
-                      <Button
-                        onClick={() => removeAdditionalNeedEntry(entry.id)}
-                        linkBtn={true}
-                      >
-                        Remove
-                      </Button>
-                    </div>
+                    <Button onClick={() => removeAdditionalNeedEntry(entry.id)} linkBtn>
+                      Remove
+                    </Button>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           </div>
         </div>
