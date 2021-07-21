@@ -20,25 +20,16 @@ import TitleHeader from "../../../components/TitleHeader";
 import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
 import DayCareSummary from "../../../components/DayCare/DayCareSummary";
 import DayCareCollegeAsyncSearch from "../../../components/DayCare/DayCareCollegeAsyncSearch";
-import { getErrorResponse, getUserSession } from "../../../service/helpers";
-import withSession from "../../../lib/session";
 import fieldValidator from "../../../service/inputValidator";
 import ErrorField from "../../../components/ErrorField";
 import { addNotification } from '../../../reducers/notificationsReducer'
 import { useDispatch } from 'react-redux'
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-})
+const serverDayCare = async (slug) => {};
 
 const DayCare = () => {
+  const { data } = useSWR('test slug', serverDayCare);
   const dispatch = useDispatch();
   const isTrueSet = (myValue) => myValue === "true";
   const checkFixedPeriod = (myValue) => myValue === "1";

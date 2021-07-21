@@ -1,51 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
-  getHomeCareBrokergage,
+  getHomeCarePackageDetailsForBrokerage,
   getHomeCareServices,
   getHomeCareTimeSlotShifts,
-} from "../../../../api/CarePackages/HomeCareApi";
+} from '../../../../api/CarePackages/HomeCareApi'
 import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
 import HomeCareApprovalTitle from "../../../../components/HomeCare/HomeCareApprovalTitle";
 import HomeCarePackageBreakdown from "../../../../components/HomeCare/HomeCarePackageBreakdown";
 import HomeCarePackageDetails from "../../../../components/HomeCare/HomeCarePackageDetails";
-import WeekCarePicker from "../../../../components/HomeCare/WeekCarePicker";
 import Layout from "../../../../components/Layout/Layout";
 import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
 import TextArea from "../../../../components/TextArea";
-import withSession from "../../../../lib/session";
-import { getUserSession } from "../../../../service/helpers";
 import {
   PERSONAL_CARE_MODE,
-  weekDays,
 } from "../../../../service/homeCarePickerHelper";
 import { getServiceTypeCareTimes } from "../../../../service/homeCareServiceHelper";
+import useSWR from 'swr';
 
-const approvalHistoryEntries = [
-  {
-    eventDate: "08/07/2021",
-    eventMessage: "Package requested by Martin Workman · Social Worker ",
-    eventSubMessage: null,
-  },
-  {
-    eventDate: "15/07/2021",
-    eventMessage: "Futher information requested by Amecie Steadman · Approver",
-    eventSubMessage:
-      '"There appears to be more support than needed in the morning for Mr Stephens, please amend or call me to discuss more"',
-  },
-  {
-    eventDate: "25/07/2021",
-    eventMessage: "Package re-submitted by Martin Workman · Social Worker ",
-    eventSubMessage: null,
-  },
-];
-
-export const getServerSideProps = withSession(async function ({ req }) {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
-
+const serverHomeCareApprovePackage = async (homeCarePackageId) => {
   const data = {
     errorData: [],
   };
@@ -68,17 +41,25 @@ export const getServerSideProps = withSession(async function ({ req }) {
     );
   }
 
-  return { props: { ...data, approvalHistoryEntries } };
-});
+  return data;
+}
 
-const HomeCareApprovePackage = ({
-  approvalHistoryEntries,
-  homeCareTimeShiftsData,
-  homeCareServices,
-}) => {
+const HomeCareApprovePackage = () => {
   // Route
   const router = useRouter();
   const homeCarePackageId = router.query.id;
+
+  const { data } = useSWR(homeCarePackageId, serverHomeCareApprovePackage);
+
+  let approvalHistoryEntries,
+    homeCareTimeShiftsData,
+    homeCareServices;
+
+  if(data) {
+    approvalHistoryEntries = data.approvalHistoryEntries;
+    homeCareTimeShiftsData = data.homeCareTimeShiftsData;
+    homeCareServices = data.homeCareServices;
+  }
 
   // State
   const [packageData, setPackageData] = useState(undefined);
@@ -86,11 +67,9 @@ const HomeCareApprovePackage = ({
   // On load retrieve package
   useEffect(() => {
     if (!packageData) {
-      async function retrieveData() {
-        setPackageData(await getHomeCareBrokergage(homeCarePackageId));
-      }
-
-      retrieveData();
+      (async function retrieveData() {
+        setPackageData(await getHomeCarePackageDetailsForBrokerage(homeCarePackageId));
+      })()
     }
   }, [homeCarePackageId, packageData]);
 

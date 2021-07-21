@@ -1,27 +1,18 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
 import SupplierReturnsTable from "../../../components/SupplierReturns/SupplierReturnsTable";
 import Pagination from "../../../components/Payments/Pagination";
-import {supplierReturnsTableData} from "../../../testData/testDataPayRuns";
+import { supplierReturnsTableData } from "../../../testData/testDataPayRuns";
 import SupplierInnerHeader from "../../../components/SupplierReturns/SupplierInnerHeader";
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { changeSupplierReturns } from "../../../reducers/supplierReturnsReducer";
-import {getUserSession} from "../../../service/helpers";
-import withSession from "../../../lib/session";
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
+const serverSupplierReturns = async () => {};
 
 const SupplierReturns = () => {
+  const { data } = useSWR('', serverSupplierReturns);
   const [sorts] = useState([
     {name: 'weekCommencing', text: 'Week commencing'},
     {name: 'suppliers', text: 'Suppliers'},

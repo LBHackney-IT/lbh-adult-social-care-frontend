@@ -14,23 +14,17 @@ import {
   nursingCareRequestClarification,
   nursingCareChangeStatus,
 } from "../../../../api/CarePackages/NursingCareApi";
-import withSession from "../../../../lib/session";
-import {getUserSession} from "../../../../service/helpers";
+import useSWR from 'swr';
 
 // start before render
-export const getServerSideProps = withSession(async function({ req, query: { id: nursingCarePackageId } }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
+const getNursingCareApprovePackage = async (nursingCarePackageId) => {
   const data = {
     errorData: [],
   };
 
   try {
     const nursingCarePackage = await getNursingCarePackageApprovalPackageContent(nursingCarePackageId);
-    const newAdditionalNeedsEntries = res.nursingCarePackage.nursingCareAdditionalNeeds.map(
+    const newAdditionalNeedsEntries = nursingCarePackage.nursingCarePackage.nursingCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
         id: additionalneedsItem.id,
         isWeeklyCost: additionalneedsItem.isWeeklyCost,
@@ -64,17 +58,26 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`);
   }
 
-  return { props: { ...data }};
-});
+  return data;
+}
 
-const NursingCareApprovePackage = ({
-  nursingCarePackage,
-  approvalHistoryEntries,
-  additionalNeedsEntriesData,
-  errorData,
-}) => {
+const NursingCareApprovePackage = () => {
   const router = useRouter();
   const nursingCarePackageId = router.query.id;
+  const { data } = useSWR(nursingCarePackageId, getNursingCareApprovePackage);
+
+  let nursingCarePackage,
+    additionalNeedsEntriesData,
+    errorData,
+    approvalHistoryEntries;
+
+  if (data) {
+    approvalHistoryEntries = data.approvalHistoryEntries;
+    additionalNeedsEntriesData = data.additionalNeedsEntriesData;
+    nursingCarePackage = data.nursingCarePackage;
+    errorData = data.errorData;
+  }
+
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);

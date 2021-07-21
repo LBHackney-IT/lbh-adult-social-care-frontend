@@ -8,21 +8,12 @@ import SupplierReturnDashboardTable from "../../../components/SupplierDashboard/
 import SupplierReturnsDashboardInnerHeader from "../../../components/SupplierDashboard/SupplierReturnsDashboardInnerHeader";
 import ChatButton from "../../../components/PayRuns/ChatButton";
 import PopupHelpChat from "../../../components/Chat/PopupHelpChat";
-import { getUserSession } from "../../../service/helpers";
-import withSession from "../../../lib/session";
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
+const serverSupplierReturnsId = async () => {};
 
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
-
-const SupplierReturnsDashboard = (props) => {
+const SupplierReturnsDashboard = () => {
+  const { data } = useSWR('', serverSupplierReturnsId);
   const router = useRouter();
   const id = router.query.id;
   const [pathname] = useState(`/supplier-dashboard/supplier-returns/${id}`);

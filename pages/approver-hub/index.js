@@ -1,27 +1,18 @@
 import React, {useEffect, useState} from "react";
 import Pagination from "../../components/Payments/Pagination";
 import HackneyFooterInfo from "../../components/HackneyFooterInfo";
-import { getUserSession } from "../../service/helpers";
-import withSession from "../../lib/session";
 import DashboardTabs from "../../components/Dashboard/Tabs";
 import ApproverInputs from "../../components/Approver/ApproverInputs";
 import ApproverTable from "../../components/Approver/ApproverTable";
 import { newItems, clarificationItems, awaitingBrokerageItems, completedItems, reviewCommercialsItems } from "../../testData/testDateApprovalHub";
 import {useRouter} from "next/router";
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
+const getApproverHub = async (id) => {}
 
 const ApproverHubPage = () => {
   const route = useRouter();
+  const { data } = useSWR('approver-hub-id', getApproverHub);
   const [initialFilters] = useState({
     id: '',
     packageType: '',

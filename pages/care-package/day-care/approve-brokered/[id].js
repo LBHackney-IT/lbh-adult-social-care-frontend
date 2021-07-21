@@ -14,17 +14,12 @@ import {
   dayCarePackageRejectCommercials,
   getDayCarePackageApprovalDetails,
 } from "../../../../api/CarePackages/DayCareApi";
-import withSession from "../../../../lib/session";
-import {getErrorResponse, getUserSession} from "../../../../service/helpers";
+import { getErrorResponse } from "../../../../service/helpers";
 import { getSelectedDate } from "../../../../api/Utils/CommonOptions";
+import useSWR from 'swr';
 
 // get server side props before render
-export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
+const serverDayCareApproveBrokered = async (dayCarePackageId) => {
   const data = {
     errorData: [],
   };
@@ -52,23 +47,33 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
 
     data.approvalHistoryEntries = newApprovalHistoryItems.slice();
     data.opportunityEntries = newOpportunityEntries.slice();
-
     data.daysSelected = getSelectedDate(dayCarePackage);
+    data.dayCarePackage = dayCarePackage;
   } catch(error) {
     data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
 
-  return { props: { data }};
-});
+  return data;
+}
 
-const DayCareApproveBrokered = ({
-  daysSelected,
-  approvalHistoryEntries,
-  opportunityEntries,
-  errorData,
-}) => {
+const DayCareApproveBrokered = () => {
   const router = useRouter();
   const dayCarePackageId = router.query.id;
+  const { data } = useSWR(dayCarePackageId, serverDayCareApproveBrokered);
+
+  let opportunityEntries,
+    daysSelected,
+    approvalHistoryEntries,
+    dayCarePackage,
+    errorData;
+
+  if(data) {
+    approvalHistoryEntries = data.approvalHistoryEntries;
+    opportunityEntries = data.opportunityEntries;
+    daysSelected = data.daysSelected;
+    dayCarePackage = data.dayCarePackage;
+    errorData = data.errorData;
+  }
   const [errors, setErrors] = useState(errorData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(

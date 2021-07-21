@@ -15,25 +15,16 @@ import {
 } from "../../../api/CarePackages/NursingCareApi";
 import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
 import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
-import { getUserSession } from "../../../service/helpers";
-import withSession from "../../../lib/session";
 import fieldValidator from "../../../service/inputValidator";
 import { addNotification } from '../../../reducers/notificationsReducer'
 import { useDispatch } from 'react-redux'
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
+const serverNursingCare = async () => {};
 
 const NursingCare = () => {
   const dispatch = useDispatch();
+  const { data } = useSWR('', serverNursingCare);
   const isTrueParse = (myValue) => myValue === "true";
   const notNullString = (myValue) =>
     myValue !== "null" && myValue !== "undefined";

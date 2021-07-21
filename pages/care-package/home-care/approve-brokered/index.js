@@ -8,11 +8,10 @@ import HomeCarePackageBreakdown from "../../../../components/HomeCare/HomeCarePa
 import HomeCarePackageElementCostings from "../../../../components/HomeCare/HomeCarePackageElementCostings";
 import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
 import HomeCarePackageDetails from "../../../../components/HomeCare/HomeCarePackageDetails";
-import WeekCarePicker from "../../../../components/HomeCare/WeekCarePicker";
 import TextArea from "../../../../components/TextArea";
-import { getUserSession } from "../../../../service/helpers";
-import withSession from "../../../../lib/session";
 import {getHomeCareServices, getHomeCareTimeSlotShifts} from "../../../../api/CarePackages/HomeCareApi";
+import useSWR from 'swr';
+import { useRouter } from 'next/router'
 
 const approvalHistoryEntries = [
   {
@@ -45,12 +44,7 @@ const approvalHistoryEntries = [
   },
 ];
 
-export const getServerSideProps = withSession(async function ({ req }) {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
-
+const serverHomeCareApproveBrokered = async () => {
   const data = {
     errorData: [],
   };
@@ -73,10 +67,11 @@ export const getServerSideProps = withSession(async function ({ req }) {
     );
   }
 
-  return { props: { ...data, approvalHistoryEntries } };
-});
+  return data;
+}
 
-const HomeCareApproveBrokered = ({ approvalHistoryEntries }) => {
+const HomeCareApproveBrokered = () => {
+  const { data } = useSWR('test arg', serverHomeCareApproveBrokered);
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
 
   return (

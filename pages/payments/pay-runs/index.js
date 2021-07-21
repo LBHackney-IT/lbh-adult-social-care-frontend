@@ -14,21 +14,12 @@ import ChatButton from "../../../components/PayRuns/ChatButton";
 import PayRunsLevelInsight from "../../../components/PayRuns/PayRunsLevelInsight";
 import PopupHelpChat from "../../../components/Chat/PopupHelpChat";
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import { getUserSession } from "../../../service/helpers";
-import withSession from "../../../lib/session";
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function ({ req }) {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+const serverPaymentsPayRuns = async () => {};
 
-  return {
-    props: {}, // will be passed to the page component as props
-  };
-});
-
-const PayRunsPage = (props) => {
+const PayRunsPage = () => {
+  const { data } = useSWR('', serverPaymentsPayRuns);
   const [sortsTab] = useState({
     "pay-runs": [
       { name: "id", text: "ID" },

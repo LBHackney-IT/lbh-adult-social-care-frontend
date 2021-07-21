@@ -17,8 +17,7 @@ import Layout from "../../../components/Layout/Layout";
 import PackageReclaim from "../../../components/PackageReclaim";
 import TextArea from "../../../components/TextArea";
 import TitleHeader from "../../../components/TitleHeader";
-import withSession from "../../../lib/session";
-import { getUserSession, uniqueID } from "../../../service/helpers";
+import { uniqueID } from "../../../service/helpers";
 import {
   DOMESTIC_CARE_MODE,
   ESCORT_CARE_MODE,
@@ -30,6 +29,7 @@ import { getServiceTimes } from "../../../service/homeCareServiceHelper";
 import { SOCIAL_WORKER_ROUTE } from '../../../routes/RouteConstants'
 import { useDispatch } from 'react-redux'
 import { addNotification } from '../../../reducers/notificationsReducer';
+import useSWR from 'swr';
 
 const initialPackageReclaim = {
   type: "",
@@ -41,12 +41,7 @@ const initialPackageReclaim = {
 };
 
 // start before render
-export const getServerSideProps = withSession(async function ({ req }) {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
-
+const serverHomeCare = async () => {
   const data = {
     errorData: [],
   };
@@ -69,12 +64,19 @@ export const getServerSideProps = withSession(async function ({ req }) {
     );
   }
 
-  return { props: { ...data } };
-});
+  return data;
+}
 
-const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
+const HomeCare = () => {
   // Parameters
   const router = useRouter();
+  const { data } = useSWR('', serverHomeCare);
+  let homeCareServices, homeCareTimeShiftsData;
+  if(data) {
+    homeCareServices = data.homeCare;
+    homeCareTimeShiftsData = data.homeCareTimeShiftsData;
+  }
+
   const dispatch = useDispatch();
   const [isImmediate, isS117, isFixedPeriod, startDate, endDate] =
     router.query.slug;
@@ -139,7 +141,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
   // Init home care package via API
   useEffect(() => {
     if (!carePackageId) {
-      async function createHomeCarePackageAsync() {
+      (async function createHomeCarePackageAsync() {
         const carePackageCreateResult = await createHomeCarePackage(
           new Date(startDate),
           new Date(endDate),
@@ -149,9 +151,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
         );
 
         setCarePackageId(carePackageCreateResult.id);
-      }
-
-      createHomeCarePackageAsync();
+      })();
     }
   }, [carePackageId, startDate, endDate, isImmediate, isS117, isFixedPeriod]);
 

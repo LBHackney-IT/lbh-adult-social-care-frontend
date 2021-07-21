@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import { selectBrokerage } from "../../../../reducers/brokerageReducer";
-import {getUserSession, uniqueID} from "../../../../service/helpers";
+import { uniqueID } from "../../../../service/helpers";
 import { getHomeCareSummaryData } from "../../../../api/CarePackages/HomeCareApi";
 import Layout from "../../../../components/Layout/Layout";
 import {
@@ -27,16 +27,11 @@ import { getSupplierList } from "../../../../api/CarePackages/SuppliersApi";
 import { CARE_PACKAGE_ROUTE } from "../../../../routes/RouteConstants";
 import PackagesDayCare from "../../../../components/packages/day-care";
 import { getBrokerageSuccess } from '../../../../reducers/brokerageReducer';
-import withSession from "../../../../lib/session";
 import PackageHeader from '../../../../components/CarePackages/PackageHeader'
+import useSWR from 'swr';
 
 // start before render
-export const getServerSideProps = withSession(async function({ req, query: { id: dayCarePackageId } }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
+const serverBrokering = async (dayCarePackageId) => {
   const data = {
     errorData: [],
   };
@@ -60,19 +55,30 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
 
-  return { props: { ...data }};
-});
+  return data;
+}
 
-const DayCareBrokering = ({
-  approvalHistoryEntries,
-  opportunityEntries,
-  clientDetails,
-  daysSelected,
-  dayCarePackage,
-  errorData,
-}) => {
-  const dispatch = useDispatch();
+const DayCareBrokering = () => {
   const router = useRouter();
+  const dayCarePackageId = router.query.id;
+  const { data } = useSWR(dayCarePackageId, serverBrokering);
+  let approvalHistoryEntries,
+    opportunityEntries,
+    clientDetails,
+    daysSelected,
+    dayCarePackage,
+    errorData;
+
+  if(data) {
+    approvalHistoryEntries = data.approvalHistoryEntries
+    opportunityEntries = data.opportunityEntries
+    clientDetails = data.clientDetails
+    daysSelected = data.daysSelected
+    dayCarePackage = data.dayCarePackage
+    errorData = data.errorData
+  }
+
+  const dispatch = useDispatch();
   const [errors, setErrors] = useState(errorData);
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState("approvalHistory");

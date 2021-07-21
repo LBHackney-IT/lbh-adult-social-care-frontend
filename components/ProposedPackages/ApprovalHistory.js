@@ -5,7 +5,7 @@ import PackageApprovalHistorySummary from '../PackageApprovalHistorySummary'
 import React from 'react'
 
 const ApprovalHistory = ({
-  history,
+  history = [],
   costSummary,
   clientDateOfBirth,
   isFixedPeriodOrOngoing,

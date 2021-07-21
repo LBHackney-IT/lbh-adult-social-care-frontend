@@ -1,4 +1,4 @@
-const mapHomeCarePackageDetailsForBrokerage = array => array?.map(
+const mapHomeCarePackageDetailsForBrokerage = array => !array ? [] : array.map(
   (historyItem) => ({
     eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
       "en-GB"

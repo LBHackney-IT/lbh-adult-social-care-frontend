@@ -5,29 +5,21 @@ import {testDataHelpMessages, weeklyOfSupplierTableData} from "../../../../testD
 import SupplierReturnsLevelInsight from "../../../../components/SupplierReturns/SupplierReturnsLevelInsight";
 import ChatButton from "../../../../components/PayRuns/ChatButton";
 import PopupHelpChat from "../../../../components/Chat/PopupHelpChat";
-import {useSelector} from "react-redux";
-import {selectSupplierReturns} from "../../../../reducers/supplierReturnsReducer";
-import {formatDateWithSign, getUserSession} from "../../../../service/helpers";
-import {Button} from "../../../../components/Button";
+import { useSelector } from "react-redux";
+import { selectSupplierReturns } from "../../../../reducers/supplierReturnsReducer";
+import { formatDateWithSign } from "../../../../service/helpers";
+import { Button } from "../../../../components/Button";
 import WeekOfSupplierViewInnerHeader from "../../../../components/SupplierReturns/WeekOfSupplierViewInnerHeader";
 import WeeklyOfSupplierTable from "../../../../components/SupplierReturns/WeeklyOfSupplierTable";
 import HackneyFooterInfo from "../../../../components/HackneyFooterInfo";
 import PopupDocumentUploader from "../../../../components/PopupDocumentUploader";
-import {useRouter} from "next/router";
-import withSession from "../../../../lib/session";
+import { useRouter } from "next/router";
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
+const serverWeekOfSupplier = async () => {};
 
 const WeekOfSupplierView = () => {
+  const { data } = useSWR('', serverWeekOfSupplier);
   const [sorts] = useState([
     {name: 'serviceUser', text: 'Service User'},
     {name: 'packageType', text: 'Package Type'},

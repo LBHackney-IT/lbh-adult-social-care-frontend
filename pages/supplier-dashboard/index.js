@@ -7,21 +7,12 @@ import SupplierDashboardInnerHeader from "../../components/SupplierDashboard/Sup
 import HackneyFooterInfo from "../../components/HackneyFooterInfo";
 import {useDispatch} from "react-redux";
 import { changeSupplierReturnsDashboard } from "../../reducers/supplierDashboardReducer";
-import withSession from "../../lib/session";
-import {getUserSession} from "../../service/helpers";
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
+const serverSupplierDashboard = async () => {};
 
 const SupplierDashboard = () => {
+  const { data } = useSWR('', serverSupplierDashboard);
   const [sorts] = useState([
     {name: 'weekCommencing', text: 'Week commencing'},
     {name: 'value', text: 'Value'},

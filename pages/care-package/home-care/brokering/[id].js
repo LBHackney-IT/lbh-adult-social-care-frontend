@@ -1,33 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  getHomeCareBrokerageApprovePackage,
   getHomeCarePackageDetailsForBrokerage,
   getHomeCareSummaryData
 } from '../../../../api/CarePackages/HomeCareApi'
 import Layout from '../../../../components/Layout/Layout'
 import PackagesHomeCare from '../../../../components/packages/home-care'
 import { getBrokerageSuccess, selectBrokerage } from '../../../../reducers/brokerageReducer'
-import { getErrorResponse, getUserSession, uniqueID } from '../../../../service/helpers'
-import withSession from '../../../../lib/session'
+import { getErrorResponse, uniqueID } from '../../../../service/helpers'
 import { addNotification } from '../../../../reducers/notificationsReducer'
-import { mapHomeCarePackageDetailsForBrokerage } from '../../../../api/Mappers/CarePackageMapper'
 import PackageHeader from '../../../../components/CarePackages/PackageHeader'
+import { useRouter } from 'next/router'
+import useSWR from 'swr';
+import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils'
 
 // start before render
-export const getServerSideProps = withSession(async function({ req, query: { id: homeCarePackageId } }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
+const serverHomeCareBrokering = async (homeCarePackageId) => {
   const data = {
     errorData: [],
   };
 
   try {
     // Call to api to get package
-     //TODO change API
+    //TODO change API
     const homeCareBrokerageDetails = await getHomeCarePackageDetailsForBrokerage(homeCarePackageId);
     const newAdditionalNeedsEntries = homeCareBrokerageDetails?.homeCareAdditionalNeeds?.map(
       (additionalneedsItem) => ({
@@ -48,19 +43,29 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
 
   try {
     // Call to api to get package
-    const approvePackage = await getHomeCareBrokerageApprovePackage(homeCarePackageId);
-    data.approvalHistoryEntries = mapHomeCarePackageDetailsForBrokerage(approvePackage);
+    data.approvalHistoryEntries = [];
   } catch(error) {
     data.errorData.push({
       text: `Retrieve home care approval history failed. ${error?.message || ''}`,
       response: getErrorResponse(error),
     });
   }
+  return data;
+}
 
-  return { props: { ...data }};
-});
+const HomeCareBrokerPackage = () => {
+  const router = useRouter();
+  const packageId = router.query.id;
+  const { data } = useSWR(packageId, serverHomeCareBrokering);
 
-const HomeCareBrokerPackage = ({ errorData, homeCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
+  let errorData, homeCarePackage, approvalHistoryEntries, additionalNeedsEntries;
+  if(data) {
+    errorData = data.errorData;
+    homeCarePackage = data.homeCarePackage;
+    approvalHistoryEntries = data.approvalHistoryEntries;
+    additionalNeedsEntries = data.additionalNeedsEntries;
+  }
+
   const dispatch = useDispatch();
   const [initialPackageReclaim] = useState({
     type: "",
@@ -110,7 +115,7 @@ const HomeCareBrokerPackage = ({ errorData, homeCarePackage, additionalNeedsEntr
   };
 
   useEffect(() => {
-    if(errorData?.length && errorData[0].text) {
+    if(errorData && errorData?.length && errorData[0].text) {
       errorData.forEach(({ text: errorText, response }) => {
         console.error(response);
         dispatch(addNotification( { text: errorText }));
@@ -121,6 +126,10 @@ const HomeCareBrokerPackage = ({ errorData, homeCarePackage, additionalNeedsEntr
   useEffect(() => {
     dispatch(getBrokerageSuccess({ type: 'homeCarePackage', homeCarePackage }));
   }, []);
+
+  if(!data) {
+    return <p>Loading...</p>
+  }
 
   return (
     <Layout clientSummaryInfo={{

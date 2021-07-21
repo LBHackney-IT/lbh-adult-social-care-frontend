@@ -14,22 +14,16 @@ import {
   nursingCareRequestClarification,
   nursingCareChangeStatus,
 } from "../../../../api/CarePackages/NursingCareApi";
-import withSession from "../../../../lib/session";
-import {getUserSession} from "../../../../service/helpers";
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req, query: { id: nursingCarePackageId } }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
+const getNursingCareApproveBrokered = async (nursingCarePackageId) => {
   const data = {
     errorData: [],
   };
 
   try {
     const nursingCarePackage = await getNursingCarePackageApproveCommercial(nursingCarePackageId);
-    const newAdditionalNeedsEntries = res.nursingCarePackage.nursingCareAdditionalNeeds.map(
+    const newAdditionalNeedsEntries = nursingCarePackage.nursingCarePackage.nursingCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
         id: additionalneedsItem.id,
         isWeeklyCost: additionalneedsItem.isWeeklyCost,
@@ -63,16 +57,23 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`);
   }
 
-  return { props: { ...data }};
-});
+  return data;
+}
 
-const NursingCareApproveBrokered = ({
-  nursingCarePackage,
-  additionalNeedsEntriesData,
-  approvalHistoryEntries,
-}) => {
+const NursingCareApproveBrokered = () => {
   const router = useRouter();
   const nursingCarePackageId = router.query.id;
+  const { data } = useSWR(nursingCarePackageId, getNursingCareApproveBrokered);
+
+  let nursingCarePackage,
+    additionalNeedsEntriesData,
+    approvalHistoryEntries;
+
+  if(data) {
+    approvalHistoryEntries = data.approvalHistoryEntries;
+    additionalNeedsEntriesData = data.additionalNeedsEntriesData;
+    nursingCarePackage = data.nursingCarePackage;
+  }
 
   const [errors, setErrors] = useState([]);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);

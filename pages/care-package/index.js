@@ -5,21 +5,13 @@ import HomeCareSetup from "../../components/Setup/HomeCareSetup";
 import DayCareSetup from "../../components/Setup/DayCareSetup";
 import NursingCareSetup from "../../components/Setup/NursingCareSetup";
 import ResidentialCareSetup from "../../components/Setup/ResidentialCareSetup";
-import withSession from "../../lib/session";
-import {getUserSession} from "../../service/helpers";
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
+const serverCarePackage = async () => {};
 
 const CarePackage = ({ history }) => {
+  const { data } = useSWR('', serverCarePackage);
+
   const [careTypes] = useState([
     { text: "Home care", value: 1 },
     { text: "Day care", value: 2 },

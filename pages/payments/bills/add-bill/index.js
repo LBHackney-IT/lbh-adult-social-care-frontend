@@ -6,23 +6,14 @@ import AddBillInvoiceDetails from "../../../../components/Bills/AddBillInvoiceDe
 import AddBillInvoiceFor from "../../../../components/Bills/AddBillInvoiceFor";
 import AddBillTotalInfo from "../../../../components/Bills/AddBillTotalInfo";
 import { addBillPackageInfoTestData } from "../../../../testData/billsTestData";
-import withSession from "../../../../lib/session";
-import { getUserSession } from "../../../../service/helpers";
 import fieldValidator from "../../../../service/inputValidator";
 import { useRouter } from 'next/router'
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function ({ req }) {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  };
-});
+const serverAddBill = () => {};
 
 const AddBill = () => {
+  const { data } = useSWR('', serverAddBill);
   const router = useRouter();
   const [sorts] = useState([
     { name: "item", text: "Item" },

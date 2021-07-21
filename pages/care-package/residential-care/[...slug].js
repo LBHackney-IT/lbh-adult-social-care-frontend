@@ -17,24 +17,15 @@ import TitleHeader from "../../../components/TitleHeader";
 import ResidentialCareSummary from "../../../components/ResidentialCare/ResidentialCareSummary";
 import { Button } from "../../../components/Button";
 import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
-import {getUserSession} from "../../../service/helpers";
-import withSession from "../../../lib/session";
 import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
 import { useDispatch } from 'react-redux'
 import { addNotification } from '../../../reducers/notificationsReducer';
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
+const serverResidentialCare = async () => {};
 
 const ResidentialCare = () => {
+  const { data } = useSWR('any data', serverResidentialCare);
   const dispatch = useDispatch();
   const isTrueParse = (myValue) => myValue === "true";
   const notNullString = (myValue) =>

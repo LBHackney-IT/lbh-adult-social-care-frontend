@@ -9,21 +9,12 @@ import PayRunsLevelInsight from "../../../components/PayRuns/PayRunsLevelInsight
 import PayRunHeader from "../../../components/PayRuns/PayRunHeader";
 import PopupHoldPayment from "../../../components/PayRuns/PopupHoldPayment";
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import { getUserSession } from "../../../service/helpers";
-import withSession from "../../../lib/session";
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
+const serverPayRunsId = async () => {};
 
 const PayRunPage = () => {
+  const { data } = useSWR('', serverPayRunsId);
   const [sorts] = useState([
     {name: 'serviceUser', text: 'Service User'},
     {name: 'invId', text: 'INV ID'},

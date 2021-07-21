@@ -14,16 +14,10 @@ import {
   residentialCareRequestClarification,
 } from "../../../../api/CarePackages/ResidentialCareApi";
 import { useRouter } from "next/router";
-import { getUserSession } from "../../../../service/helpers";
-import withSession from "../../../../lib/session";
+import useSWR from 'swr';
 
 // start before render
-export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
+const serverResidentialCareApproveCare = async (residentialCarePackageId) => {
   const data = {
     errorData: [],
   };
@@ -59,17 +53,25 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
   }
 
-  return { props: { ...data }};
-});
+  return data;
+}
 
-const ResidentialCareApprovePackage = ({
-  residentialCarePackage,
-  additionalNeedsEntries,
-  approvalHistoryEntries,
-  errorData,
-}) => {
+const ResidentialCareApprovePackage = () => {
   const router = useRouter();
-  const { residentialCarePackageId } = router.query;
+  const residentialCarePackageId = router.query.id
+
+  const { data } = useSWR(residentialCarePackageId, serverResidentialCareApproveCare);
+  let residentialCarePackage,
+    additionalNeedsEntries,
+    approvalHistoryEntries,
+    errorData = [];
+
+  if(data) {
+    residentialCarePackage = data.residentialCarePackage;
+    additionalNeedsEntries = data.additionalNeedsEntries;
+    approvalHistoryEntries = data.approvalHistoryEntries;
+    errorData = data.errorData;
+  }
   const [errors, setErrors] = useState(errorData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(

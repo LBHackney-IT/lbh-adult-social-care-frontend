@@ -8,21 +8,14 @@ import { billsPayRunsTableData, billsTableData } from "../../../testData/billsTe
 import PopupBillsPayDownload from "../../../components/Bills/PopupBillsPayDownload";
 import BillsFilters from "../../../components/Bills/BillsFilters";
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import {getUserSession} from "../../../service/helpers";
-import withSession from "../../../lib/session";
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
+const serverBills = async () => {
 
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
+}
 
-const Bills = (props) => {
+const Bills = () => {
+  const { data } = useSWR('', serverBills);
   const [sortsTab] = useState({
     'bills': [
       {name: 'red', text: 'Ref'},

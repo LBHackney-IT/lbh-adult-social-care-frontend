@@ -2,9 +2,8 @@ import PackagesResidentialCare from "../../../../components/packages/residential
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectBrokerage } from "../../../../reducers/brokerageReducer";
-import {getUserSession, uniqueID} from "../../../../service/helpers";
+import { uniqueID } from "../../../../service/helpers";
 import { getHomeCareSummaryData } from "../../../../api/CarePackages/HomeCareApi";
-import ClientSummary from "../../../../components/ClientSummary";
 import Layout from "../../../../components/Layout/Layout";
 import {
   getAgeFromDateString,
@@ -23,9 +22,9 @@ import {
 } from "../../../../api/Mappers/ResidentialCareMapper";
 import { getSupplierList } from "../../../../api/CarePackages/SuppliersApi";
 import { CARE_PACKAGE_ROUTE } from "../../../../routes/RouteConstants";
-import {useRouter} from "next/router";
-import withSession from "../../../../lib/session";
+import { useRouter } from "next/router";
 import PackageHeader from '../../../../components/CarePackages/PackageHeader'
+import useSWR from 'swr';
 
 const initialPackageReclaim = {
   type: "",
@@ -37,12 +36,7 @@ const initialPackageReclaim = {
 };
 
 // start before render
-export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
+const serverResidentialCareBrokering = async (residentialCarePackageId) => {
   const data = {
     errorData: [],
   };
@@ -81,12 +75,14 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`)
   }
 
-  return { props: { ...data }};
-});
+  return data;
+}
 
 const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
   // Parameters
   const router = useRouter();
+  const residentialCarePackageId = router.query.id;
+  const { data } = useSWR(residentialCarePackageId, serverResidentialCareBrokering);
 
   const [errors, setErrors] = useState([]);
   const brokerage = useSelector(selectBrokerage);

@@ -7,25 +7,17 @@ import SupplierReturnsLevelInsight from "../../../components/SupplierReturns/Sup
 import SupplierReturnsInnerHeader from "../../../components/SupplierReturns/SupplierReturnsInnerHeader";
 import SupplierReturnTable from "../../../components/SupplierReturns/SupplierReturnTable";
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import {formatDateWithSign, getUserSession} from "../../../service/helpers";
-import {useDispatch, useSelector} from "react-redux";
-import {selectSupplierReturns} from "../../../reducers/supplierReturnsReducer";
+import { formatDateWithSign } from "../../../service/helpers";
+import { useDispatch, useSelector } from "react-redux";
+import { selectSupplierReturns } from "../../../reducers/supplierReturnsReducer";
 import { changeWeekOfSupplier } from "../../../reducers/supplierReturnsReducer";
-import withSession from "../../../lib/session";
-import {PAYMENTS_PAY_RUNS_ROUTE} from "../../../routes/RouteConstants";
+import { PAYMENTS_PAY_RUNS_ROUTE } from "../../../routes/RouteConstants";
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
+const serverSupplierReturnsId = async () => {};
 
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
-
-const SupplierReturn = (props) => {
+const SupplierReturn = () => {
+  const { data } = useSWR('', serverSupplierReturnsId);
   const [sorts] = useState([
     {name: 'supplier', text: 'Supplier'},
     {name: 'packages', text: 'Packages'},

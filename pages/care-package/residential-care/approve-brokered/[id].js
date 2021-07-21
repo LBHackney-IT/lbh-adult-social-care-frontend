@@ -1,7 +1,7 @@
 import ResidentialCareApprovalTitle from "../../../../components/ResidentialCare/ResidentialCareApprovalTitle";
 import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
 import Layout from "../../../../components/Layout/Layout";
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
 import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
 import TitleHeader from "../../../../components/TitleHeader";
@@ -14,16 +14,10 @@ import {
   residentialCareRequestClarification,
   residentialCareChangeStatus,
 } from "../../../../api/CarePackages/ResidentialCareApi";
-import withSession from "../../../../lib/session";
-import {getUserSession} from "../../../../service/helpers";
+import useSWR from 'swr';
 
 // start before render
-export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
+const getApproveBrokered = async (residentialCarePackageId) => {
   const data = {
     errorData: [],
   };
@@ -46,7 +40,7 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
   }
 
   try {
-    const residentialCarePackage = await getResidentialCarePackageApproveBrokered(residentialCarePackageId);
+    const res = await getResidentialCarePackageApproveBrokered(residentialCarePackageId);
 
     const newAdditionalNeedsEntries = res.residentialCarePackage.residentialCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
@@ -58,22 +52,30 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     );
 
     data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
-    data.residentialCarePackage = residentialCarePackage;
+    data.residentialCarePackage = res;
   } catch (error) {
     data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
   }
 
-  return { props: { ...data }};
-});
+  return data;
+}
 
-const ResidentialCareApproveBrokered = ({
-  residentialCarePackage,
-  approvalHistoryEntries,
-  additionalNeedsEntriesData,
-  errorData,
-}) => {
+const ResidentialCareApproveBrokered = () => {
   const router = useRouter();
   const residentialCarePackageId = router.query.id;
+  const { data } = useSWR(residentialCarePackageId, getApproveBrokered);
+
+  let residentialCarePackage,
+    approvalHistoryEntries,
+    additionalNeedsEntriesData,
+    errorData;
+
+  if(data) {
+    residentialCarePackage = data.residentialCarePackage;
+    approvalHistoryEntries = data.approvalHistoryEntries;
+    additionalNeedsEntriesData = data.additionalNeedsEntriesData;
+    errorData = data.errorData;
+  }
 
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
@@ -129,7 +131,6 @@ const ResidentialCareApproveBrokered = ({
           : "Ongoing"}
         />
         <ApprovalClientSummary />
-
         <div className="columns">
           <div className="column">
             <div className="level">

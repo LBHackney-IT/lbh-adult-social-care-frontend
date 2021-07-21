@@ -18,17 +18,12 @@ import {
 import { useRouter } from "next/router"
 import { getSelectedDate } from "../../../../api/Utils/CommonOptions";
 import { getEnGBFormattedDate } from "../../../../api/Utils/FuncUtils";
-import withSession from "../../../../lib/session";
-import {getErrorResponse, getUserSession} from "../../../../service/helpers";
+import { getErrorResponse } from "../../../../service/helpers";
 import fieldValidator from "../../../../service/inputValidator";
+import useSWR from 'swr';
 
 // start before render
-export const getServerSideProps = withSession(async function({ req, query: { id: residentialCarePackageId } }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
+const serverDayCareApprovePackage = async (dayCarePackageId) => {
   const data = {
     errorData: [],
   };
@@ -66,18 +61,28 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
 
-  return { props: { data }};
-});
+  return data;
+}
 
-const DayCareApprovePackage = ({
-  dayCarePackage,
-  approvalHistoryEntries,
-  opportunityEntries,
-  daysSelected,
-}) => {
+const DayCareApprovePackage = () => {
   // Parameters
   const router = useRouter();
   const dayCarePackageId = router.query.id;
+  const { data } = useSWR(dayCarePackageId, serverDayCareApprovePackage);
+
+  let opportunityEntries,
+    daysSelected,
+    approvalHistoryEntries,
+    dayCarePackage,
+    errorData;
+
+  if(data) {
+    approvalHistoryEntries = data.approvalHistoryEntries;
+    opportunityEntries = data.opportunityEntries;
+    daysSelected = data.daysSelected;
+    dayCarePackage = data.dayCarePackage;
+    errorData = data.errorData;
+  }
 
   const [errors, setErrors] = useState([]);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);

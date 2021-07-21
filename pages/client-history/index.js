@@ -2,8 +2,7 @@ import React from "react";
 import ClientSummary from "../../components/ClientSummary";
 import Dropdown from "../../components/Dropdown";
 import Layout from "../../components/Layout/Layout";
-import withSession from "../../lib/session";
-import {getUserSession} from "../../service/helpers";
+import useSWR from 'swr';
 
 // TODO remove
 const assessmentTypes = [
@@ -11,18 +10,11 @@ const assessmentTypes = [
   { text: "Type Two", value: 2 },
 ];
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
+const serverClientHistory = async () => {};
 
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
+const ClientHistory = () => {
+  const { data } = useSWR('', serverClientHistory);
 
-const ClientHistory = (props) => {
   return (
     <Layout headerTitle="Rapid D2A">
       <ClientSummary

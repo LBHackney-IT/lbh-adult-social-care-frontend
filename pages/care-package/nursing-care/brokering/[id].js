@@ -2,9 +2,8 @@ import PackagesNursingCare from '../../../../components/packages/nursing-care'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectBrokerage } from '../../../../reducers/brokerageReducer'
-import { getUserSession, uniqueID } from '../../../../service/helpers'
+import { uniqueID } from '../../../../service/helpers'
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi'
-import ClientSummary from '../../../../components/ClientSummary'
 import Layout from '../../../../components/Layout/Layout'
 import { getAgeFromDateString, getEnGBFormattedDate, } from '../../../../api/Utils/FuncUtils'
 import {
@@ -17,16 +16,12 @@ import {
 import { mapBrokerageSupplierOptions, mapNursingCareStageOptions, } from '../../../../api/Mappers/NursingCareMapper'
 import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi'
 import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants'
-import withSession from '../../../../lib/session'
 import { useRouter } from 'next/router'
+import useSWR from 'swr';
+import PackageHeader from '../../../../components/CarePackages/PackageHeader'
 
 // start before render
-export const getServerSideProps = withSession(async function({ req, query: { id: nursingCarePackageId } }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
+const getNursingCareBrokering = async (nursingCarePackageId) => {
   const data = {
     errorData: [],
   };
@@ -63,11 +58,24 @@ export const getServerSideProps = withSession(async function({ req, query: { id:
     data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`)
   }
 
-  return { props: { ...data }};
-});
+  return data;
+}
 
-const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
+const NursingCareBrokering = () => {
   const router = useRouter();
+  const nursingCarePackageId = router.query.id;
+  const { data } = useSWR(nursingCarePackageId, getNursingCareBrokering);
+
+  let nursingCarePackage,
+    additionalNeedsEntries,
+    approvalHistoryEntries;
+
+  if (data) {
+    approvalHistoryEntries = data.approvalHistoryEntries;
+    additionalNeedsEntries = data.additionalNeedsEntriesData;
+    nursingCarePackage = data.nursingCarePackage;
+  }
+
   const [initialPackageReclaim] = useState({
     type: "",
     notes: "",
@@ -188,12 +196,7 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
       dateOfBirth: nursingCarePackage?.nursingCarePackage && getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth),
       postcode: nursingCarePackage?.nursingCarePackage?.clientPostCode,
     }} headerTitle="Nursing Care Brokering">
-      <ClientSummary
-
-      >
-        Proposed Packages
-      </ClientSummary>
-
+      <PackageHeader title='Proposed Package' />
       <PackagesNursingCare
         tab={tab}
         addPackageReclaim={addPackageReclaim}

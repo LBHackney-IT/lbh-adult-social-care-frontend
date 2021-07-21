@@ -1,25 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "../../components/Payments/Pagination";
 import HackneyFooterInfo from "../../components/HackneyFooterInfo";
-import { getUserSession } from "../../service/helpers";
-import withSession from "../../lib/session";
 import DashboardTabs from "../../components/Dashboard/Tabs";
 import { newItems, inProgressItems, doneItems } from "../../testData/testDateBrokerageHub";
 import Table from "../../components/Table";
 import Inputs from "../../components/Inputs";
+import useSWR from 'swr';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-});
+const serverBrokerageHub = async (id) => {}
 
 const BrokerageHubPage = () => {
+  const { data } = useSWR('approver-hub-id', serverBrokerageHub);
   const [initialFilters] = useState({
     id: '',
     typeOfCare: '',
