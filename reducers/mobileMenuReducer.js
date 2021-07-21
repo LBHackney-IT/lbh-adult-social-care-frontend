@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const mobileMenuSlice = createSlice({
-  name: "mobileMenu",
+  name: 'mobileMenu',
   initialState: {
     isOpened: false,
   },
@@ -10,22 +10,19 @@ const mobileMenuSlice = createSlice({
       return {
         ...state,
         isOpened: true,
-      }
+      };
     },
     closeMobileMenu: (state) => {
       return {
         ...state,
         isOpened: false,
-      }
+      };
     },
   },
 });
 
 // Actions
-export const {
-  openMobileMenu,
-  closeMobileMenu,
-} = mobileMenuSlice.actions;
+export const { openMobileMenu, closeMobileMenu } = mobileMenuSlice.actions;
 
 // Selectors
 const selectMobileMenu = (state) => {

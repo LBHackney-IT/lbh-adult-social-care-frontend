@@ -1,10 +1,10 @@
-import { combineReducers } from "redux";
-import userReducer from "./userReducer";
-import brokerageReducer from "./brokerageReducer";
-import supplierDashboardReducer from "./supplierDashboardReducer";
-import supplierReturnsReducer from "./supplierReturnsReducer";
-import notificationsReducer from "./notificationsReducer";
-import mobileMenuReducer from "./mobileMenuReducer";
+import { combineReducers } from 'redux';
+import userReducer from './userReducer';
+import brokerageReducer from './brokerageReducer';
+import supplierDashboardReducer from './supplierDashboardReducer';
+import supplierReturnsReducer from './supplierReturnsReducer';
+import notificationsReducer from './notificationsReducer';
+import mobileMenuReducer from './mobileMenuReducer';
 
 const reducers = {
   user: userReducer,

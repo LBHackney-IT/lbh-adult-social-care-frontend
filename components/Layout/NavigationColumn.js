@@ -1,18 +1,15 @@
-import React from "react";
-import * as RouteConstants from "../../routes/RouteConstants";
-import { useRouter } from "next/router";
+import React from 'react';
+import * as RouteConstants from '../../routes/RouteConstants';
+import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { selectMobileMenu } from '../../reducers/mobileMenuReducer';
 import NavClientSummary from '../NavClientSummary';
 
 const NavItem = ({ children, to, params = '' }) => {
   const router = useRouter();
-  const activeRouteClass = router.pathname.indexOf(to) > -1 ? " is-active" : "";
+  const activeRouteClass = router.pathname.indexOf(to) > -1 ? ' is-active' : '';
   return (
-    <div
-      className={`navigation-item is-clickable${activeRouteClass}`}
-      onClick={() => router.push(`${to}${params}`)}
-    >
+    <div className={`navigation-item is-clickable${activeRouteClass}`} onClick={() => router.push(`${to}${params}`)}>
       <div>{children}</div>
     </div>
   );
