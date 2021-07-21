@@ -28,6 +28,7 @@ module.exports = {
     'no-param-reassign': ['error', { props: false }],
     'arrow-body-style': ['error', 'as-needed'],
     // 'no-param-reassign': [2, { props: false }],
+    'no-console': 'off',
   },
   settings: {
     'import/resolver': {

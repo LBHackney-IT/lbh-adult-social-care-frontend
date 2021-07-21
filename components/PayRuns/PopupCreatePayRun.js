@@ -1,17 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DatePick from '../DatePick';
 import Popup from '../Popup';
 import RadioButton from '../RadioButton';
+import { createNewPayRun } from '../../api/Payments/PayRunApi';
+import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
 
-const PopupCreatePayRun = ({
-  date,
-  setDate,
-  closePopup,
-  regularCycles,
-  changeRegularCycles,
-  hocAndRelease,
-  changeHocAndRelease,
-}) => {
+const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPayRunType }) => {
+  const [errors, setErrors] = useState([]);
   const createPayRun = (
     <div className="create-pay-run">
       <div className="create-pay-run__regular-cycles">
@@ -20,12 +15,12 @@ const PopupCreatePayRun = ({
         <RadioButton
           inline={false}
           options={[
-            { value: 'residentialRecurring', text: `Residential Recurring (3 releases)` },
-            { value: 'directPayments', text: 'Direct Payments' },
-            { value: 'homeCare', text: 'Home care' },
+            { value: 'ResidentialRecurring', text: `Residential Recurring (3 releases)` },
+            { value: 'DirectPayments', text: 'Direct Payments' },
+            { value: 'HomeCare', text: 'Home care' },
           ]}
-          selectedValue={regularCycles}
-          onChange={(value) => changeRegularCycles(value)}
+          selectedValue={newPayRunType}
+          onChange={(value) => setNewPayRunType(value)}
         />
       </div>
       <div className="create-pay-run__run-to">
@@ -40,23 +35,46 @@ const PopupCreatePayRun = ({
         <RadioButton
           inline={false}
           options={[
-            { value: 'residentialReleased', text: `Residential released holds` },
-            { value: 'paymentsHolds', text: 'Direct payments released holds' },
+            { value: 'ResidentialReleaseHolds', text: `Residential released holds` },
+            { value: 'DirectPaymentsReleaseHolds', text: 'Direct payments released holds' },
           ]}
-          selectedValue={hocAndRelease}
-          onChange={(value) => changeHocAndRelease(value)}
+          selectedValue={newPayRunType}
+          onChange={(value) => setNewPayRunType(value)}
         />
       </div>
     </div>
   );
+
+  const postNewPayRun = () => {
+    const payRunType = newPayRunType;
+    if (!stringIsNullOrEmpty(payRunType)) {
+      createNewPayRun(payRunType, date)
+        .then((payRunId) => {
+          alert(`Pay run created. ${payRunId}`);
+        })
+        .catch((err) => {
+          setErrors([...errors, `Create pay run failed. ${err.message}`]);
+        });
+    } else {
+      setErrors([...errors, 'Pay run not selected']);
+    }
+  };
 
   return (
     <Popup
       closePopup={closePopup}
       mainContent={createPayRun}
       title="Create pay run"
-      firstButton={{ text: 'Cancel' }}
-      secondButton={{ text: 'Create Draft Pay Run' }}
+      firstButton={{
+        text: 'Cancel',
+        onClick: closePopup,
+      }}
+      secondButton={{
+        text: 'Create Draft Pay Run',
+        onClick: () => {
+          postNewPayRun();
+        },
+      }}
     />
   );
 };

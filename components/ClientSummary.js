@@ -1,6 +1,6 @@
-import React from "react";
-import Image from "next/image";
-import { ArrowLeftIcon } from './Icons'
+import React from 'react';
+import Image from 'next/image';
+import { ArrowLeftIcon } from './Icons';
 
 const ClientSummary = ({
   children,
@@ -17,7 +17,12 @@ const ClientSummary = ({
 }) => {
   return (
     <div className="client-summary-cont">
-      {showBackButton && <div><ArrowLeftIcon /><p>Back</p></div>}
+      {showBackButton && (
+        <div>
+          <ArrowLeftIcon />
+          <p>Back</p>
+        </div>
+      )}
       <div className="columns is-flex-wrap-wrap">
         {children && <div className="column is-5 client-summary-title">{children}</div>}
         <div className="column client-prop">
@@ -36,18 +41,16 @@ const ClientSummary = ({
           <label>Postcode</label>
           <div>{postcode}</div>
         </div>
-        {
-          sourcingCare &&
-            <div className="column client-prop">
-              <label>WHO IS SOURCING CARE</label>
-              <Image width="300" height="52" src='/images/icons/hackney_logo.png' alt='' />
-            </div>
-        }
-        {
-          (packagesCount !== null || preferredContact !== null || canSpeakEnglish !== null) &&
-          <div className='more-info is-flex is-justify-content-space-between'>
-            <p className='column is-5 package-count'>
-              <span className='font-weight-bold'>{packagesCount}</span>
+        {sourcingCare && (
+          <div className="column client-prop">
+            <label>WHO IS SOURCING CARE</label>
+            <Image width="300" height="52" src="/images/icons/hackney_logo.png" alt="" />
+          </div>
+        )}
+        {(packagesCount !== null || preferredContact !== null || canSpeakEnglish !== null) && (
+          <div className="more-info is-flex is-justify-content-space-between">
+            <p className="column is-5 package-count">
+              <span className="font-weight-bold">{packagesCount}</span>
               {`${packagesCount > 1 ? 'Packages' : 'Package'} to action`}
             </p>
             <div className="column client-prop">
@@ -59,7 +62,7 @@ const ClientSummary = ({
               <div>{canSpeakEnglish}</div>
             </div>
           </div>
-        }
+        )}
       </div>
       {/* TODO Green Divider */}
     </div>
