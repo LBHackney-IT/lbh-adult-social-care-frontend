@@ -1,8 +1,9 @@
 import React from 'react';
+import { currency } from '../constants/strings';
 import Dropdown from './Dropdown';
+import Input from './Input';
 import TextArea from './TextArea';
 import RadioButton from './RadioButton';
-import EuroInput from './EuroInput';
 
 const staticReclaimFromOptions = [
   { text: 'Reclaim from 1', value: 1 },
@@ -96,10 +97,12 @@ const PackageReclaim = ({
             selectedValue={packageReclaim.type}
           />
         </div>
-        <EuroInput
+        <Input
           onChange={(value) => changePackageType('amount', value)}
           label="Amount"
           error={currentError?.amount}
+          preSign={packageReclaim.type !== 'percentage' ? currency.euro : undefined}
+          postSign={packageReclaim.type === 'percentage' ? '%' : undefined}
           value={packageReclaim.amount}
         />
         <hr className="horizontal-delimiter" />

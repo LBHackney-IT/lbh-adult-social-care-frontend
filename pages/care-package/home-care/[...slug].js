@@ -133,7 +133,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
         isFixedPeriod === 'true'
       );
 
-      setCarePackageId(carePackageCreateResult.id);
+      setCarePackageId(carePackageCreateResult?.id);
     }
     if (!carePackageId) {
       createHomeCarePackageAsync();
