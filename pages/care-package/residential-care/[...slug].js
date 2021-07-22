@@ -186,7 +186,7 @@ const ResidentialCare = () => {
       />
 
       <div className="mt-4 mb-4">
-        <TitleHeader>Package Details</TitleHeader>
+        <TitleHeader className='mb-5'>Package Details</TitleHeader>
         <ResidentialCareSummary
           startDate={startDate}
           endDate={endDate}

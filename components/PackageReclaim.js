@@ -17,10 +17,11 @@ const staticCategoryOptions = [
   { text: 'Category type 3', value: 3 },
 ];
 
+const percentageValue = 1;
 const staticCheckboxOptions = [
-  { value: 'percentage', text: 'Percentage' },
-  { value: 'fixedOneOff', text: 'Fixed amount - one off' },
-  { value: 'fixedWeekly', text: 'Fixed amount - weekly' },
+  { value: percentageValue, text: 'Percentage' },
+  { value: 2, text: 'Fixed amount - one off' },
+  { value: 3, text: 'Fixed amount - weekly' },
 ];
 
 const PackageReclaim = ({
@@ -101,8 +102,8 @@ const PackageReclaim = ({
           onChange={(value) => changePackageType('amount', value)}
           label="Amount"
           error={currentError?.amount}
-          preSign={packageReclaim.type !== 'percentage' ? currency.euro : undefined}
-          postSign={packageReclaim.type === 'percentage' ? '%' : undefined}
+          preSign={packageReclaim.type !== percentageValue ? currency.euro : undefined}
+          postSign={packageReclaim.type === percentageValue ? '%' : undefined}
           value={packageReclaim.amount}
         />
         <hr className="horizontal-delimiter" />
