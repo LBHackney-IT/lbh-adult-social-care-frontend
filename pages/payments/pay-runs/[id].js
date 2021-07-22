@@ -5,14 +5,13 @@ import { useDispatch } from 'react-redux'
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import PayRunTable from "../../../components/PayRuns/PayRunTable";
 import Pagination from "../../../components/Payments/Pagination";
-import { payRunTableData } from "../../../testData/testDataPayRuns";
 import PopupCreatePayRun from "../../../components/PayRuns/PopupCreatePayRun";
 import PayRunsLevelInsight from "../../../components/PayRuns/PayRunsLevelInsight";
 import PayRunHeader from "../../../components/PayRuns/PayRunHeader";
 import PopupHoldPayment from "../../../components/PayRuns/PopupHoldPayment";
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
 import { addNotification } from '../../../reducers/notificationsReducer'
-import { getSinglePayRunInsights } from '../../../api/Payments/PayRunApi'
+import { acceptInvoice, getSinglePayRunDetails, getSinglePayRunInsights } from '../../../api/Payments/PayRunApi'
 
 const serverPayRunsId = async () => {};
 
@@ -36,9 +35,11 @@ const PayRunPage = () => {
   const { id } = router.query;
   const [openedPopup, setOpenedPopup] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
-  const [levelInsights, setLevelInsights] = useState(null);
+  const [invoices, setInvoices] = useState();
   const [actionRequiredBy, setActionRequiredBy] = useState('');
   const [reason, setReason] = useState('');
+  const [payRunDetails, setPayRunDetails] = useState('');
+  const [levelInsights, setLevelInsights] = useState();
   const [pathname] = useState(`/payments/pay-runs/${id}`);
   const [date, setDate] = useState(new Date());
   const [hocAndRelease, changeHocAndRelease] = useState('');
@@ -64,6 +65,11 @@ const PayRunPage = () => {
     setSort({value, name: field});
   };
 
+  const changeStatus = (item, status) => {
+    console.log(item, status);
+    acceptInvoice(id, item.invoiceId)
+  }
+
   const closeCreatePayRun = () => {
     setOpenedPopup('');
     setReason('');
@@ -78,15 +84,29 @@ const PayRunPage = () => {
     }
   };
 
+  const filter = () => {
+    getSinglePayRunDetails()
+      .then(res => {
+        setInvoices(res.invoices)
+        setPayRunDetails(res.payRunDetails);
+      })
+      .catch(() => {
+        dispatch(addNotification({ text: 'Can not get Pay Run details' }))
+      })
+  }
+
   const actionButton = {
     classes: 'outline green',
-    onClick: () => console.log('Accept all selected', checkedRows),
+    disabled: !checkedRows.length,
+    onClick: () => console.log("Accept all selected"),
     text: 'Accept all selected',
   }
 
   useEffect(() => {
     getSinglePayRunInsights(id)
-      .then(res => setLevelInsights(res))
+      .then(res => {
+        setLevelInsights(res);
+      })
       .catch(() => dispatch(addNotification({ text: 'Can not get Insights'})))
   }, []);
 
@@ -119,23 +139,33 @@ const PayRunPage = () => {
       }
       {!!breadcrumbs.length && <Breadcrumbs className='p-3' values={breadcrumbs} />}
       <PayRunHeader
+        filter={filter}
         actionButtonText={headerOptions.actionButtonText}
         clickActionButton={headerOptions.clickActionButton}
       />
       <PayRunTable
-        rows={payRunTableData}
+        rows={invoices}
         careType='Residential'
         isStatusDropDown
+        changeAllChecked={setCheckedRows}
         checkedRows={checkedRows}
+        selectStatus={changeStatus}
         setCheckedRows={onCheckRow}
         isIgnoreId
         canCollapseRows
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination
+        pathname={pathname}
+        actionButton={actionButton}
+        totalPages={invoices?.pagingMetaData.totalPages}
+        currentPage={invoices?.pagingMetaData.currentPage}
+        itemsCount={invoices?.pagingMetaData.pageSize}
+        totalCount={invoices?.pagingMetaData.totalCount}
+      />
       {
-        levelInsights &&
+        invoices &&
         <PayRunsLevelInsight
           firstButton={{
             text: 'Submit pay run for approval',

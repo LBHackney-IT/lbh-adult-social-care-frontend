@@ -7,6 +7,8 @@ const initialFilters = {
   id: '',
   type: '',
   status: '',
+  dateStart: '',
+  dateEnd: '',
   date: '',
   dateRange: '',
   serviceType: '',
@@ -28,12 +30,13 @@ const PayRunsHeader = ({
   supplierOptions = [],
   waitingOnOptions = [],
   setOpenedPopup,
+  apply,
   tab,
 }) => {
   const [filters, setFilters] = useState({ ...initialFilters });
 
   const applyFilters = () => {
-    console.log('make an apply filters request');
+    apply()
   };
 
   const searchId = () => {

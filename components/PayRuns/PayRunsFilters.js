@@ -41,6 +41,12 @@ const PayRunsFilters = ({
       selectedValue={filters.date}
       onOptionSelect={(option) => changeFilter('date', option)}
     />
+
+    {/* TODO delete if no need a datepicker */}
+    {/* <DatePick */}
+    {/*  dateValue={filters.date} */}
+    {/*  setDate={(value) => changeFilter('date', value)} */}
+    {/* /> */}
     <Button onClick={applyFilters}>Apply</Button>
   </>
 );

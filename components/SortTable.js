@@ -4,8 +4,7 @@ import Checkbox from './Checkbox'
 
 const SortTable = ({ changeAllChecked, checkedRows = [], rows = [], sorts, sortBy, additionalActions }) => (
   <div className="sort-table">
-    {checkedRows &&
-      (changeAllChecked ? (
+    {checkedRows && changeAllChecked && (
         <div className="sort sort-checkbox">
           <Checkbox
             checked={checkedRows.length === rows.length && rows.length !== 0}
@@ -19,11 +18,10 @@ const SortTable = ({ changeAllChecked, checkedRows = [], rows = [], sorts, sortB
             }}
           />
         </div>
-      ) : (
-        <div className="sort sort-checkbox" />
-    ))}
+      )
+    }
     {sorts.map((item) => (
-      <div key={item.name} className="sort">
+      <div key={item.name} className={`sort${item.className ? ` ${item.className}` : ''}`}>
         <p className="sort__sort-name">{item.text}</p>
         <div className="sort__actions">
           <CaretDownIcon onClick={() => sortBy(item.name, 'increase')} />

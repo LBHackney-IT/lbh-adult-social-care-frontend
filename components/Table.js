@@ -2,7 +2,18 @@ import React, { useState } from 'react'
 import SortTable from './SortTable';
 import Checkbox from './Checkbox';
 
-const Table = ({ changeAllChecked, onClickTableRow, fields = {id: 'id'}, rows = [], rowsRules = {}, className = '', sortBy, sorts }) => {
+const Table = ({
+  changeAllChecked,
+  onClickTableRow,
+  fields = {id: 'id'},
+  rows = [],
+  rowsRules = {},
+  className = '',
+  sortBy,
+  sorts,
+  canCollapseRows,
+  collapsedContainer,
+}) => {
   const [defaultFields] = useState(fields);
 
   const clickRow = (item) => {
@@ -20,7 +31,7 @@ const Table = ({ changeAllChecked, onClickTableRow, fields = {id: 'id'}, rows = 
         sorts={sorts}
       />
       {!rows.length ? (
-        <p>No Table Data</p>
+        <p className='ml-2'>No Table Data</p>
       ) : (
         rows.map((item) => {
           const id = item[defaultFields.id];
@@ -31,15 +42,17 @@ const Table = ({ changeAllChecked, onClickTableRow, fields = {id: 'id'}, rows = 
                   const currentRowRule = rowsRules[rowItemName] || '';
                   const value = item[rowItemName]
 
-                  if (currentRowRule?.component)
-                    return <React.Fragment key={`${rowItemName}${id}`}>{currentRowRule.component}</React.Fragment>;
                   if (currentRowRule?.hide) return <React.Fragment key={`${rowItemName}${id}`} />;
 
                   const currentValue = (currentRowRule?.getValue && currentRowRule.getValue(value)) || value;
-
                   const calculatedClassName = currentRowRule?.getClassName
                     ? currentRowRule.getClassName(value).toLowerCase()
                     : '';
+
+                  const getComponent = currentRowRule?.getComponent;
+                  if (getComponent) {
+                    return getComponent(item, currentRowRule)
+                  }
 
                   if (currentRowRule?.type === 'checkbox')
                     return (
@@ -53,19 +66,23 @@ const Table = ({ changeAllChecked, onClickTableRow, fields = {id: 'id'}, rows = 
                   return (
                     <div
                       onClick={(e) => {
-                        const onPropClick = rowsRules[rowItemName].onClick;
                         if (!currentRowRule.onClick) return;
                         e.stopPropagation();
-                        onPropClick(item, value);
+                        currentRowRule.onClick(item, value);
                       }}
                       key={`${value}${id}`}
                       className={`table__row-item ${calculatedClassName}`}
                     >
-                      <p>{currentValue}</p>
+                      <p>{currentValue || '—'}</p>
                     </div>
                   );
                 })}
               </div>
+              {canCollapseRows && collapsedContainer && (
+                <div className="table__row-collapsed">
+                  {collapsedContainer}
+                </div>
+              )}
             </div>
           )
         })
@@ -88,7 +105,7 @@ export default Table;
     },
     stage: {
       getValue: (value) => `${value}%`,
-      component: <SomeComponent />,
+      getComponent: (cellItem, cellRule) => <SomeComponent className={cellRule.className} someValue={cellItem.someValue} />,
       getClassName: (value) => `${value} table__row-item-status`,
     },
     owner: {

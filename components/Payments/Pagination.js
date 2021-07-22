@@ -1,37 +1,31 @@
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import React from 'react';
 import { Button } from '../Button';
 import { uniqueID } from '../../service/helpers';
 
-const Pagination = ({ classes, changePagination, actionButton, pathname, itemsCount = 0, from = 0, currentPage = 1, totalCount = 0 }) => {
-  const router = useRouter();
-  const finalPage = currentPage !== undefined ? currentPage : router.query.page;
-
-  const localChangePagination = (page) => {
-    const pageQuery = `?page=${page}`;
-    router.push(pathname ? `${pathname}${pageQuery}` : `${router.pathname}${pageQuery}`);
-  };
+const Pagination = ({
+  classes,
+  totalPages = 1,
+  changePagination,
+  actionButton,
+  from = 0,
+  to = 0,
+  itemsCount = 0,
+  currentPage = 1,
+  totalCount = 0
+}) => {
 
   const onChangePagination = (item) => {
-    if(changePagination) {
-      changePagination(item + 1)
-    } else {
-      localChangePagination(item + 1)
-    }
+    changePagination(item)
   }
-
-  useEffect(() => {
-    router.replace(`${router.pathname}?page=1`);
-  }, []);
 
   return (
     <div className={`table-pagination${classes ? ` ${classes}` : ''}`}>
       {actionButton && (
-        <Button disabled className={actionButton.classes} onClick={actionButton.onClick}>
+        <Button disabled={actionButton.disabled} className={actionButton.classes} onClick={actionButton.onClick}>
           {actionButton.text}
         </Button>
       )}
-      <p className="table-pagination-info">Showing {itemsCount === 0 ? 0 : `${from}-${itemsCount} of ${totalCount}`}</p>
+      <p className="table-pagination-info">Showing {itemsCount === 0 ? 0 : `${from}-${to} of ${totalCount} items`}</p>
       <div className="table-pagination-actions">
         {totalCount === 0 ?
           <Button
@@ -42,8 +36,8 @@ const Pagination = ({ classes, changePagination, actionButton, pathname, itemsCo
             1
           </Button>
             :
-          [...Array(Math.round(totalCount / itemsCount)).keys()].map((item) => {
-          const currentPageClass = String(item + 1) === String(finalPage) ? ' table-pagination-item-active' : '';
+          [...Array(Math.round(totalPages)).keys()].map((item) => {
+          const currentPageClass = String(item + 1) === String(currentPage) ? ' table-pagination-item-active' : '';
           return (
             <Button
               key={uniqueID()}

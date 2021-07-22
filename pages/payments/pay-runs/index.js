@@ -14,7 +14,7 @@ import {
   getHeldInvoicePayments,
   getPaymentDepartments,
   getPayRunSummaryList,
-  releaseHeldInvoices
+  releaseHeldInvoices, releaseSingleHeldInvoice
 } from '../../../api/Payments/PayRunApi'
 import { addNotification } from '../../../reducers/notificationsReducer'
 import Table from '../../../components/Table'
@@ -118,7 +118,10 @@ const PayRunsPage = () => {
   };
 
   const release = (item, care) => {
-    console.log("release payment item and care ", item, care);
+    releaseSingleHeldInvoice(listData.holdPayments.payRunId, item.invoiceId)
+      .then(() => {
+        dispatch(addNotification({ text: `Realse invoice ${item.invoiceId}`, className: 'success'}))
+      })
   };
 
   const openChat = (item) => {
@@ -139,16 +142,34 @@ const PayRunsPage = () => {
     },
   ];
 
-  useEffect(() => {
-    console.log("change sort", sort);
-  }, [sort]);
-
   const changeListData = (field, value) => {
     setListData({
       ...listData,
       [field]: value,
     })
   };
+
+  const apply = () => {
+      getLists()
+  }
+
+  const getLists = () => {
+    if(tab === 'pay-runs') {
+      getPayRunSummaryList({ pageNumber: page })
+        .then(payRuns => {
+          changeListData('payRun', payRuns)
+        })
+        .catch(() => {
+          dispatch(addNotification({ text: 'Can not get hold payments' }))
+        })
+    } else {
+      getHeldInvoicePayments({ pageNumber: page })
+        .then(heldInvoices => changeListData('holdPayments', heldInvoices))
+        .catch(() => {
+          dispatch(addNotification({ text: 'Can not get hold payments' }));
+        });
+    }
+  }
 
   const releaseHolds = () => {
     releaseHeldInvoices(checkedRows)
@@ -158,6 +179,10 @@ const PayRunsPage = () => {
       })
       .catch(() => dispatch(addNotification({ text: 'Release Fail' })))
   }
+
+  useEffect(() => {
+    console.log("change sort", sort);
+  }, [sort]);
 
   useEffect(() => {
     if(tab === 'pay-runs') {
@@ -208,7 +233,7 @@ const PayRunsPage = () => {
           messages={openedInvoiceChat.disputedInvoiceChat}
         />
       )}
-      <PayRunsHeader releaseHolds={releaseHolds} checkedItems={checkedRows} tab={tab} setOpenedPopup={setOpenedPopup} />
+      <PayRunsHeader apply={apply} releaseHolds={releaseHolds} checkedItems={checkedRows} tab={tab} setOpenedPopup={setOpenedPopup} />
       <PaymentsTabs
         tab={tab}
         changeTab={changeTab}

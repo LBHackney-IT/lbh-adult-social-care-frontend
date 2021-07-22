@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useRouter } from 'next/router'
+import useSWR from 'swr';
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import AddBillTable from "../../../../components/Bills/AddBillTable";
 import AddBillAttachedFiles from "../../../../components/Bills/AddBillAttachedFiles";
@@ -7,8 +9,6 @@ import AddBillInvoiceFor from "../../../../components/Bills/AddBillInvoiceFor";
 import AddBillTotalInfo from "../../../../components/Bills/AddBillTotalInfo";
 import { addBillPackageInfoTestData } from "../../../../testData/billsTestData";
 import fieldValidator from "../../../../service/inputValidator";
-import { useRouter } from 'next/router'
-import useSWR from 'swr';
 
 const serverAddBill = () => {};
 
@@ -93,13 +93,13 @@ const AddBill = () => {
 
   const addBill = () => {
     const arrayInputs = [];
-    for (let i in { ...invoiceInputs, ...detailsInputs }) {
+    for (const i in { ...invoiceInputs, ...detailsInputs }) {
       arrayInputs.push(invoiceInputs[i]);
     }
     const { validFields, hasError } = fieldValidator(arrayInputs);
     if (hasError) {
       setInputsError(validFields);
-      return;
+      
     }
   };
 
@@ -120,7 +120,7 @@ const AddBill = () => {
       clearTimeout(packageIdTimer);
     }
     const timer = setTimeout(() => {
-      //emit request
+      // emit request
       setAddBillInfo(addBillPackageInfoTestData);
     }, 500);
     setPackageIdTimer(timer);
@@ -133,7 +133,7 @@ const AddBill = () => {
         <AddBillInvoiceFor inputs={invoiceInputs} />
         <AddBillInvoiceDetails inputs={detailsInputs} />
         <AddBillTable
-          isIgnoreId={true}
+          isIgnoreId
           rows={addBillInfo?.invoices}
           sorts={sorts}
         />

@@ -20,6 +20,7 @@ const PayRunTable = ({
   canCollapseRows = false,
   careType,
   sortBy,
+  selectStatus,
   sorts,
 }) => {
   const [collapsedRows, setCollapsedRows] = useState([]);
@@ -46,6 +47,8 @@ const PayRunTable = ({
         additionalActions={additionalActions}
         setCheckedRows={setCheckedRows}
         changeAllChecked={changeAllChecked}
+        rows={rows}
+        checkedRows={checkedRows}
         sortBy={sortBy}
         sorts={sorts}
       />
@@ -69,7 +72,7 @@ const PayRunTable = ({
                 </div>
               )}
               {Object.getOwnPropertyNames(item).map((rowItemName) => {
-                if(
+                if (
                   Array.isArray(item[rowItemName]) ||
                   item[rowItemName]?.id !== undefined ||
                   (isIgnoreId && rowItemName === 'id')
@@ -94,7 +97,7 @@ const PayRunTable = ({
                         { text: 'In dispute', value: 'in-dispute' },
                       ]}
                       selectedValue={value}
-                      onOptionSelect={(value) => console.log(value)}
+                      onOptionSelect={(value) => selectStatus(item, value)}
                       initialText="Status"
                     />
                   );
@@ -123,7 +126,7 @@ const PayRunTable = ({
             </div>
             {canCollapseRows && collapsedRow && (
               <div className="table__row-collapsed">
-                {item.cares.map((care) => (
+                {item.invoiceItems.map((care) => (
                     <div key={care.id} className="table__row-collapsed-container">
                       <div className="table__row-collapsed-header">
                         <div className="table__row-collapsed-header-left">
