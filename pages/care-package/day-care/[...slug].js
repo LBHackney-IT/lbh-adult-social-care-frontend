@@ -36,7 +36,7 @@ const DayCare = () => {
 
   // Parameters
   const router = useRouter();
-  let [ startDate, endDate, isImmediate, isS117, isFixedPeriod ] = router.query.slug;
+  let [isImmediate, isS117, isFixedPeriod, startDate, endDate] = router.query.slug;
   isImmediate = isTrueSet(isImmediate);
   isS117 = isTrueSet(isS117);
   isFixedPeriod = checkFixedPeriod(isFixedPeriod);

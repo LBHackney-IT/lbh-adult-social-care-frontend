@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { batch, useDispatch } from 'react-redux';
+import { getNursingTypeOfStayOptions, getResidentialTypeOfStayOptions } from '../../reducers/carePackageSlice';
 import ClientSummary from "../../components/ClientSummary";
 import Layout from "../../components/Layout/Layout";
 import HomeCareSetup from "../../components/Setup/HomeCareSetup";
@@ -19,6 +21,14 @@ const CarePackage = ({ history }) => {
     { text: "Nursing care", value: 4 },
   ]);
   const [selectedCareType, setSelectedCareType] = useState(1);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    batch(() => {
+      dispatch(getResidentialTypeOfStayOptions());
+      dispatch(getNursingTypeOfStayOptions());
+    });
+  }, []);
 
   const ComponentForCareType = () => {
     switch (selectedCareType) {

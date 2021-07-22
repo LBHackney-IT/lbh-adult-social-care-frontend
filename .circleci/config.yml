@@ -67,13 +67,45 @@ jobs:
       # - store_artifacts:
       #     path: ~/project/cypress/videos
 
+  owasp-zap-baseline-scan:
+    machine:
+      image: ubuntu-2004:202104-01
+    steps:
+      - checkout
+      - *attach_workspace
+
+      - run:
+          name: Run application in background
+          command: PORT=3000 yarn start
+          background: true
+
+      - run:
+          name: Pull owasp zap docker image
+          command: docker pull owasp/zap2docker-stable
+
+      - run:
+          name: ZAP baseline test of application
+          # It will exit with codes of:
+          # 0: Success
+          # 1: At least 1 FAIL
+          # 2: At least one WARN and no FAILs
+          # 3: Any other failure
+          # Link to above:https://github.com/zaproxy/zaproxy/blob/main/docker/zap-baseline.py#L31-L35
+          command: |
+              (
+                docker run -t owasp/zap2docker-stable zap-baseline.py \
+                -u https://raw.githubusercontent.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}/zap-baseline.conf \
+                -t http://$(ip -f inet -o addr show docker0 | awk '{print $4}' | cut -d '/' -f 1):3000 || \
+                if [[ $? == 0 || $? == 2 ]]; then exit 0; else exit 1; fi;
+              )
+
   build-deploy-staging:
     executor: aws-cli/default
     steps:
       - *attach_workspace
       - run:
           name: deploy
-          command: yarn --production=true && sudo npm i -g serverless && sls deploy --stage staging --force
+          command: yarn --frozen-lockfile --production=true && sudo npm i -g serverless && sls deploy --stage staging
 
   build-deploy-production:
     executor: aws-cli/default
@@ -81,7 +113,7 @@ jobs:
       - *attach_workspace
       - run:
           name: deploy
-          command: yarn --production=true && sudo npm i -g serverless && sls deploy --stage production --force
+          command: yarn --frozen-lockfile --production=true && sudo npm i -g serverless && sls deploy -s production
 
   generate-draft-github-release:
     executor: aws-cli/default
@@ -144,7 +176,7 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
-            - .
+            - project/build
 
 workflows:
   version: 2
@@ -154,6 +186,9 @@ workflows:
       - build:
           requires:
             - install-dependencies
+      - owasp-zap-baseline-scan:
+          requires:
+            - build
       # - tests:
       #     requires:
       #       - install-dependencies
@@ -169,9 +204,6 @@ workflows:
       #         only: main
       - assume-role-staging:
           context: mosaic-staging-context
-          # requires:
-          #   - tests
-          #   - e2e
           filters:
             branches:
               only: 
@@ -180,17 +212,16 @@ workflows:
       - build-deploy-staging:
           requires:
             - assume-role-staging
-            - build
+            - owasp-zap-baseline-scan
           filters:
             branches:
               only: 
                 - develop
                 - main
       - assume-role-production:
-          context: api-assume-role-social-care-production-context          
-          # requires:
-          #   - tests
-          #   - e2e
+          context: api-assume-role-social-care-production-context
+          requires:
+            - build-deploy-staging
           filters:
             branches:
               only: main

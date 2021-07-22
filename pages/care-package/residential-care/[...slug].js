@@ -33,16 +33,9 @@ const ResidentialCare = () => {
 
   // Parameters
   const router = useRouter();
-  let [
-    hasRespiteCare,
-    hasDischargePackage,
-    isImmediateOrReEnablement,
-    typeOfStayId,
-    isS117,
-    startDate,
-    endDate,
-    typeOfStayText,
-  ] = router.query.slug; // get query params
+  const [typeOfStayText] = router.query.slug; // get query params
+  let [hasRespiteCare, hasDischargePackage, isImmediateOrReEnablement, typeOfStayId, isS117, isFixedPeriod, startDate, endDate] =
+    router.query.slug; // get query params
   hasRespiteCare = isTrueParse(hasRespiteCare) || false;
   hasDischargePackage = isTrueParse(hasDischargePackage) || false;
   isImmediateOrReEnablement = isTrueParse(isImmediateOrReEnablement) || false;
@@ -145,16 +138,16 @@ const ResidentialCare = () => {
       clientId: "aee45700-af9b-4ab5-bb43-535adbdcfb80",
       startDate: startDate ? new Date(startDate).toJSON() : null,
       endDate: endDate ? new Date(endDate).toJSON() : null,
-      hasRespiteCare: hasRespiteCare,
-      hasDischargePackage: hasDischargePackage,
+      hasRespiteCare,
+      hasDischargePackage,
       isThisAnImmediateService: isImmediateOrReEnablement,
       isThisUserUnderS117: isS117,
       residentialCareTypeOfStayId: typeOfStayId,
-      needToAddress: needToAddress,
+      needToAddress,
       typeOfResidentialCareHomeId: selectedCareHomeType,
       creatorId: "1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8",
       residentialCareAdditionalNeeds,
-      packageReclaims: packageReclaims,
+      packageReclaims,
     };
 
     createResidentialCarePackage(residentialCarePackageToCreate)

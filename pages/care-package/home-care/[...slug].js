@@ -153,6 +153,10 @@ const HomeCare = () => {
 
         setCarePackageId(carePackageCreateResult.id);
       })();
+      setCarePackageId(carePackageCreateResult?.id);
+    }
+    if (!carePackageId) {
+      createHomeCarePackageAsync();
     }
   }, [carePackageId, startDate, endDate, isImmediate, isS117, isFixedPeriod]);
 

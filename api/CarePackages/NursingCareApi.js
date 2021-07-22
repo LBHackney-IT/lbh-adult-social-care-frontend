@@ -2,13 +2,10 @@ import axios from 'axios';
 import { BASE_URL } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 
-const NURSING_CARE_URL = `${BASE_URL}/v1/nursing-care-packages`;
+export const NURSING_CARE_URL = `${BASE_URL}/v1/nursing-care-packages`;
 
 const getTypeOfNursingHomeOptions = () =>
   axios.get(`${NURSING_CARE_URL}/type-of-nursing-care-homes`).then(handleResponse).catch(handleError);
-
-const getNursingCareTypeOfStayOptions = () =>
-  axios.get(`${NURSING_CARE_URL}/type-of-stay-options`).then(handleResponse).catch(handleError);
 
 const createNursingCarePackage = (nursingCarePackageForCreation) => {
   const options = {
@@ -109,7 +106,6 @@ const createNursingCareBrokerageInfo = (nursingCarePackageId, nursingCareBrokera
 
 export {
   getTypeOfNursingHomeOptions,
-  getNursingCareTypeOfStayOptions,
   createNursingCarePackage,
   getNursingCarePackageList,
   getSingleNursingCarePackage,

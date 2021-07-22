@@ -40,7 +40,7 @@ const createHomeCarePackage = async (startDate, endDate, isImmediate, isS117, is
       console.log(error);
     });
 
-  return response.data;
+  return response?.data;
 };
 
 // Home care services

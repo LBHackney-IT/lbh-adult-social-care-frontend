@@ -43,7 +43,6 @@ const HomeCareSetup = ({
 
   // Handle build click
   const onBuildClick = () => {
-    debugger;
     // Get the parameters for the home care package route
     const { validFields, hasErrors } = fieldValidator([
       { name: "isImmediate", value: isImmediate, rules: ["empty"] },

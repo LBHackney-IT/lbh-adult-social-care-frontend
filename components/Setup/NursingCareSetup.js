@@ -16,8 +16,7 @@ const NursingCareSetup = ({
 }) => {
   const router = useRouter();
 
-  const [nursingCareTypeOfStayOptions, setNursingCareTypeOfStayOptions] = useState([]);
-  const [errors, setErrors] = useState([]);
+  const typeOfStayOptions = useSelector(selectNursingTypeOfStayOptions);
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -161,7 +160,7 @@ const NursingCareSetup = ({
           error={errorFields.typeOfStayId}
           setError={() => changeErrorFields('typeOfStayId')}
           label="What type of stay is this?"
-          options={nursingCareTypeOfStayOptions}
+          options={typeOfStayOptions}
           onChange={setTypeOfStayId}
           selectedValue={typeOfStayId}
         />

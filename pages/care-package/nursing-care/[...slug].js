@@ -38,14 +38,14 @@ const NursingCare = () => {
   // Parameters
   const router = useRouter();
   let [
-    startDate,
-    endDate,
-    isThisAnImmediateService,
-    isThisUserUnderS117,
     isFixedPeriod,
+    startDate,
     typeOfStayId,
     hasRespiteCare,
     hasDischargePackage,
+    isThisAnImmediateService,
+    isThisUserUnderS117,
+    endDate,
   ] = router.query.slug;
   isThisAnImmediateService = isTrueParse(isThisAnImmediateService);
   isThisUserUnderS117 = isTrueParse(isThisUserUnderS117);
