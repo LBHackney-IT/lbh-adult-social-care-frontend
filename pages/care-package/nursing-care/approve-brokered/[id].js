@@ -11,8 +11,9 @@ import TextArea from '../../../../components/TextArea';
 import {
   getNursingCarePackageApproveCommercial,
   getNursingCarePackageApprovalHistory,
-  nursingCareRequestClarification,
+  nursingCareClarifyCommercial,
   nursingCareChangeStatus,
+  nursingCareApproveCommercials
 } from '../../../../api/CarePackages/NursingCareApi';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
@@ -79,7 +80,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
   };
 
   const handleApprovePackageCommercials = () => {
-    nursingCareChangeStatus(nursingCarePackageId, 8)
+    nursingCareApproveCommercials(nursingCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
@@ -90,7 +91,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
   };
 
   const handleRequestMoreInformation = () => {
-    nursingCareRequestClarification(nursingCarePackageId, requestInformationText)
+    nursingCareClarifyCommercial(nursingCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);

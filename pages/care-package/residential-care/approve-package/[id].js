@@ -12,6 +12,7 @@ import {
   getResidentialCarePackageApprovalHistory,
   getResidentialCarePackageApprovalPackageContent,
   residentialCareChangeStatus,
+  residentialCareApprovePackageContent,
   residentialCareRequestClarification,
 } from '../../../../api/CarePackages/ResidentialCareApi';
 import { getUserSession } from '../../../../service/helpers';
@@ -81,7 +82,7 @@ const ResidentialCareApprovePackage = ({
   };
 
   const handleApprovePackageCommercials = () => {
-    residentialCareChangeStatus(residentialCarePackageId, 8)
+    residentialCareApprovePackageContent(residentialCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
@@ -92,7 +93,10 @@ const ResidentialCareApprovePackage = ({
   };
 
   const handleRequestMoreInformation = () => {
-    residentialCareRequestClarification(residentialCarePackageId, requestInformationText)
+    residentialCareRequestClarification(
+      residentialCarePackageId,
+      requestInformationText
+    )
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);

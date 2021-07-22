@@ -13,6 +13,7 @@ import {
   getNursingCarePackageApprovalHistory,
   getNursingCarePackageDetailsForBrokerage,
   nursingCareChangeStatus,
+  nursingCareChangeStage,
 } from '../../../../api/CarePackages/NursingCareApi';
 import { mapBrokerageSupplierOptions, mapNursingCareStageOptions } from '../../../../api/Mappers/NursingCareMapper';
 import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
@@ -127,6 +128,23 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
       });
   };
 
+  const changePackageBrokeringStage = (
+    nursingCarePackageId,
+    stageId
+  ) => {
+    nursingCareChangeStage(nursingCarePackageId, stageId)
+      .then(() => {
+        alert("Stage changed.");
+      })
+      .catch((error) => {
+        alert(`Change brokerage stage failed. ${error.message}`);
+        setErrors([
+          ...errors,
+          `Change brokerage stage failed. ${error.message}`,
+        ]);
+      });
+  };
+
   const addPackageReclaim = () => {
     setPackagesReclaimed([...packagesReclaimed, { ...initialPackageReclaim, id: uniqueID() }]);
   };
@@ -190,6 +208,7 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
         }}
         createBrokerageInfo={createBrokerageInfo}
         changePackageBrokeringStatus={changePackageBrokeringStatus}
+        changePackageBrokeringStage={changePackageBrokeringStage}
       />
     </Layout>
   );

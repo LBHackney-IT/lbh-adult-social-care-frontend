@@ -26,6 +26,7 @@ const PackagesNursingCare = ({
   supplierOptions = [],
   stageOptions = [],
   createBrokerageInfo = () => {},
+  changePackageBrokeringStage = () => {},
 }) => {
   const [coreCost, setCoreCost] = useState({
     costPerWeek: 0,
@@ -113,6 +114,14 @@ const PackagesNursingCare = ({
     }
   };
 
+  const handleBrokerageStageChange = (option) => {
+    setSelectedStageType(option);
+    changePackageBrokeringStage(
+      nursingCarePackage?.nursingCarePackageId,
+      option
+    );
+  };
+
   return (
     <>
       <div className="mt-5 mb-5 person-care">
@@ -128,7 +137,7 @@ const PackagesNursingCare = ({
             initialText="Stage"
             options={stageOptions}
             selectedValue={selectedStageType}
-            onOptionSelect={setSelectedStageType}
+            onOptionSelect={(option) => handleBrokerageStageChange(option)}
           />
         </div>
         <div className="column">
