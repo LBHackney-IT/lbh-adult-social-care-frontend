@@ -13,6 +13,7 @@ import {
   getResidentialCareBrokerageStages,
   getResidentialCarePackageDetailsForBrokerage,
   getResidentialCarePackageApprovalHistory,
+  residentialCareChangeStage,
 } from '../../../../api/CarePackages/ResidentialCareApi';
 import {
   mapBrokerageSupplierOptions,
@@ -138,6 +139,23 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
       });
   };
 
+  const changePackageBrokeringStage = (
+    residentialCarePackageId,
+    stageId
+  ) => {
+    residentialCareChangeStage(residentialCarePackageId, stageId)
+      .then(() => {
+        alert("Stage changed.");
+      })
+      .catch((error) => {
+        alert(`Change brokerage stage failed. ${error.message}`);
+        setErrors([
+          ...errors,
+          `Change brokerage stage failed. ${error.message}`,
+        ]);
+      });
+  };
+
   const addPackageReclaim = () => {
     setPackagesReclaimed([...packagesReclaimed, { ...initialPackageReclaim, id: uniqueID() }]);
   };
@@ -201,6 +219,7 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
         }}
         createBrokerageInfo={createBrokerageInfo}
         changePackageBrokeringStatus={changePackageBrokeringStatus}
+        changePackageBrokeringStage={changePackageBrokeringStage}
       />
     </Layout>
   );

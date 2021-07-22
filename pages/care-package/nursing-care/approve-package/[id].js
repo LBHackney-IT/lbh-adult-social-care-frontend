@@ -13,6 +13,7 @@ import {
   getNursingCarePackageApprovalHistory,
   nursingCareRequestClarification,
   nursingCareChangeStatus,
+  nursingCareApprovePackageContent
 } from '../../../../api/CarePackages/NursingCareApi';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
@@ -84,7 +85,7 @@ const NursingCareApprovePackage = ({
   };
 
   const handleApprovePackageContents = () => {
-    nursingCareChangeStatus(nursingCarePackageId, 4)
+    nursingCareApprovePackageContent(nursingCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
@@ -95,7 +96,10 @@ const NursingCareApprovePackage = ({
   };
 
   const handleRequestMoreInformation = () => {
-    nursingCareRequestClarification(nursingCarePackageId, requestInformationText)
+    nursingCareRequestClarification(
+      nursingCarePackageId,
+      requestInformationText
+    )
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
@@ -105,6 +109,7 @@ const NursingCareApprovePackage = ({
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
+  
   return (
     <Layout headerTitle="NURSING CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">

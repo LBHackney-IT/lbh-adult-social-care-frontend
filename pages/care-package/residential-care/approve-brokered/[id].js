@@ -11,8 +11,9 @@ import TextArea from '../../../../components/TextArea';
 import {
   getResidentialCarePackageApproveBrokered,
   getResidentialCarePackageApprovalHistory,
-  residentialCareRequestClarification,
+  residentialCareClarifyCommercial,
   residentialCareChangeStatus,
+  residentialCareApproveCommercials
 } from '../../../../api/CarePackages/ResidentialCareApi';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
@@ -88,7 +89,7 @@ const ResidentialCareApproveBrokered = ({
   };
 
   const handleApprovePackageCommercials = () => {
-    residentialCareChangeStatus(residentialCarePackageId, 8)
+    residentialCareApproveCommercials(residentialCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
@@ -99,7 +100,7 @@ const ResidentialCareApproveBrokered = ({
   };
 
   const handleRequestMoreInformation = () => {
-    residentialCareRequestClarification(residentialCarePackageId, requestInformationText)
+    residentialCareClarifyCommercial(residentialCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
