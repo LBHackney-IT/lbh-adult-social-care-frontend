@@ -39,7 +39,7 @@ const ResidentialCare = () => {
   // Parameters
   const router = useRouter();
   const [typeOfStayText] = router.query.slug; // get query params
-  let [hasRespiteCare, hasDischargePackage, isImmediateOrReEnablement, typeOfStayId, isS117, startDate, endDate] =
+  let [hasRespiteCare, hasDischargePackage, isImmediateOrReEnablement, typeOfStayId, isS117, isFixedPeriod, startDate, endDate] =
     router.query.slug; // get query params
   hasRespiteCare = isTrueParse(hasRespiteCare) || false;
   hasDischargePackage = isTrueParse(hasDischargePackage) || false;

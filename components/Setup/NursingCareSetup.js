@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { DAY_CARE_ROUTE, NURSING_CARE_ROUTE } from '../../routes/RouteConstants';
+import { useSelector } from 'react-redux';
+import { selectNursingTypeOfStayOptions } from '../../reducers/carePackageSlice';
+import { NURSING_CARE_ROUTE } from '../../routes/RouteConstants';
 import DatePick from '../DatePick';
 import RadioButton, { yesNoValues } from '../RadioButton';
 import CarePackageSetup from '../CarePackages/CarePackageSetup';
 import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
 import { getFixedPeriodOptions } from '../../api/Utils/CommonOptions';
-import { getNursingCareTypeOfStayOptions } from '../../api/CarePackages/NursingCareApi';
 import fieldValidator from '../../service/inputValidator';
 
 const NursingCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => {
   const fixedPeriodOptions = getFixedPeriodOptions();
   const router = useRouter();
 
-  const [nursingCareTypeOfStayOptions, setNursingCareTypeOfStayOptions] = useState([]);
-  const [errors, setErrors] = useState([]);
+  const typeOfStayOptions = useSelector(selectNursingTypeOfStayOptions);
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -65,26 +65,6 @@ const NursingCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) 
       `${NURSING_CARE_ROUTE}/${isFixedPeriod}/${startDate}/${typeOfStayId}/` +
         `${isRespiteCare}/${isDischargePackage}/${isImmediateOrReEnablement}/${isS117}/${endDate}`
     );
-  };
-
-  useEffect(() => {
-    if (nursingCareTypeOfStayOptions.length === 0) {
-      retrieveNursingCareTypeOfStayOptions();
-    }
-  }, []);
-
-  const retrieveNursingCareTypeOfStayOptions = () => {
-    getNursingCareTypeOfStayOptions()
-      .then((res) => {
-        const options = res.map((option) => ({
-          text: `${option.optionName} (${option.optionPeriod})`,
-          value: option.typeOfStayOptionId,
-        }));
-        setNursingCareTypeOfStayOptions(options);
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve nursing care type of stay options failed. ${error.message}`]);
-      });
   };
 
   const handleFixedPeriodChange = (newVal) => {
@@ -185,7 +165,7 @@ const NursingCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) 
           error={errorFields.typeOfStayId}
           setError={() => changeErrorFields('typeOfStayId')}
           label="What type of stay is this?"
-          options={nursingCareTypeOfStayOptions}
+          options={typeOfStayOptions}
           onChange={setTypeOfStayId}
           selectedValue={typeOfStayId}
         />
