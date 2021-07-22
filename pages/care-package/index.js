@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { batch, useDispatch } from 'react-redux';
 import ClientSummary from '../../components/ClientSummary';
 import Layout from '../../components/Layout/Layout';
 import HomeCareSetup from '../../components/Setup/HomeCareSetup';
@@ -6,6 +7,7 @@ import DayCareSetup from '../../components/Setup/DayCareSetup';
 import NursingCareSetup from '../../components/Setup/NursingCareSetup';
 import ResidentialCareSetup from '../../components/Setup/ResidentialCareSetup';
 import withSession from '../../lib/session';
+import { getNursingTypeOfStayOptions, getResidentialTypeOfStayOptions } from '../../reducers/carePackageSlice';
 import { getUserSession } from '../../service/helpers';
 
 export const getServerSideProps = withSession(async ({ req }) => {
@@ -27,6 +29,14 @@ const CarePackage = ({ history }) => {
     { text: 'Nursing care', value: 4 },
   ]);
   const [selectedCareType, setSelectedCareType] = useState(1);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    batch(() => {
+      dispatch(getResidentialTypeOfStayOptions());
+      dispatch(getNursingTypeOfStayOptions());
+    });
+  }, []);
 
   const ComponentForCareType = () => {
     switch (selectedCareType) {

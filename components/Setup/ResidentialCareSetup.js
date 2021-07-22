@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import { selectResidentialTypeOfStayOptions } from '../../reducers/carePackageSlice';
 import { RESIDENTIAL_CARE_ROUTE } from '../../routes/RouteConstants';
 import DatePick from '../DatePick';
 import RadioButton, { yesNoValues } from '../RadioButton';
 import CarePackageSetup from '../CarePackages/CarePackageSetup';
 import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
 import { getFixedPeriodOptions } from '../../api/Utils/CommonOptions';
-import { getResidentialCareTypeOfStayOptions } from '../../api/CarePackages/ResidentialCareApi';
-import { useRouter } from 'next/router';
 import fieldValidator from '../../service/inputValidator';
 
 const ResidentialCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => {
   const fixedPeriodOptions = getFixedPeriodOptions();
   const router = useRouter();
-  const [residentialCareTypeOfStayOptions, setResidentialCareTypeOfStayOptions] = useState([]);
 
-  const [errors, setErrors] = useState([]);
+  const typeOfStayOptions = useSelector(selectResidentialTypeOfStayOptions);
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -45,26 +45,6 @@ const ResidentialCareSetup = ({ careTypes, selectedCareType, setSelectedCareType
     });
   };
 
-  const retrieveResidentialCareTypeOfStayOptions = () => {
-    getResidentialCareTypeOfStayOptions()
-      .then((res) => {
-        let options = res.map((option) => ({
-          text: `${option.optionName} (${option.optionPeriod})`,
-          value: option.typeOfStayOptionId,
-        }));
-        setResidentialCareTypeOfStayOptions(options);
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve residential care type of stay options failed. ${error.message}`]);
-      });
-  };
-
-  useEffect(() => {
-    if (residentialCareTypeOfStayOptions.length === 0) {
-      retrieveResidentialCareTypeOfStayOptions();
-    }
-  }, []);
-
   // Handle build click
   const onBuildClick = () => {
     const { validFields, hasErrors } = fieldValidator([
@@ -82,7 +62,7 @@ const ResidentialCareSetup = ({ careTypes, selectedCareType, setSelectedCareType
       return;
     }
 
-    const typeOfStay = residentialCareTypeOfStayOptions.find((opt) => opt.value === typeOfStayId);
+    const typeOfStay = typeOfStayOptions.find((opt) => opt.value === typeOfStayId);
     const typeOfStayText = typeOfStay ? typeOfStay.text : null;
     // Get the parameters for the residential care package route
     router.push(
@@ -189,7 +169,7 @@ const ResidentialCareSetup = ({ careTypes, selectedCareType, setSelectedCareType
           error={errorFields.typeOfStayId}
           setError={changeErrorFields('typeOfStayId')}
           label="What type of stay is this?"
-          options={residentialCareTypeOfStayOptions}
+          options={typeOfStayOptions}
           onChange={setTypeOfStayId}
           selectedValue={typeOfStayId}
         />

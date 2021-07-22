@@ -2,10 +2,7 @@ import axios from 'axios';
 import { BASE_URL } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 
-const RESIDENTIAL_CARE_URL = `${BASE_URL}/v1/residential-care-packages`;
-
-const getResidentialCareTypeOfStayOptions = () =>
-  axios.get(`${RESIDENTIAL_CARE_URL}/type-of-stay-options`).then(handleResponse).catch(handleError);
+export const RESIDENTIAL_CARE_URL = `${BASE_URL}/v1/residential-care-packages`;
 
 const getResidentialCareAdditionalNeedsCostOptions = () => [
   { text: 'Weekly', value: 1 },
@@ -121,7 +118,6 @@ const createResidentialCareBrokerageInfo = (residentialCarePackageId, residentia
 };
 
 export {
-  getResidentialCareTypeOfStayOptions,
   getResidentialCareAdditionalNeedsCostOptions,
   getTypeOfResidentialCareHomeOptions,
   createResidentialCarePackage,
