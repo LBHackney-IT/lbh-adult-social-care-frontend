@@ -177,6 +177,7 @@ export {
   nursingCareRequestClarification,
   nursingCareClarifyCommercial,
   nursingCareChangeStatus,
+  nursingCareChangeStage,
   nursingCareApprovePackageContent,
   nursingCareApproveCommercials,
   getNursingCareBrokerageStages,
