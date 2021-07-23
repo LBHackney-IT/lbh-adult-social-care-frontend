@@ -19,8 +19,19 @@ import TitleHeader from '../../../components/TitleHeader';
 import ResidentialCareSummary from '../../../components/ResidentialCare/ResidentialCareSummary';
 import { Button } from '../../../components/Button';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
+import { getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import { addNotification } from '../../../reducers/notificationsReducer';
+
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const ResidentialCare = () => {
   const dispatch = useDispatch();
@@ -43,7 +54,7 @@ const ResidentialCare = () => {
   hasRespiteCare = isTrueParse(hasRespiteCare) || false;
   hasDischargePackage = isTrueParse(hasDischargePackage) || false;
   isImmediateOrReEnablement = isTrueParse(isImmediateOrReEnablement) || false;
-  typeOfStayId = parseInt(typeOfStayId) ?? null;
+  typeOfStayId = parseInt(typeOfStayId, 10) ?? null;
   isS117 = isTrueParse(isS117) || false;
   startDate = startDate ?? null;
   endDate = endDate && notNullString(endDate) ? endDate : undefined;
@@ -89,11 +100,11 @@ const ResidentialCare = () => {
   }, [careHomeTypes, additionalNeedsCostOptions]);
 
   const formIsValid = () => {
-    const errors = [];
+    const formErrors = [];
 
-    setErrors(errors);
+    setErrors(formErrors);
     // Form is valid if the errors array has no items
-    return errors.length === 0;
+    return formErrors.length === 0;
   };
 
   const handleSavePackage = (event) => {

@@ -1,16 +1,20 @@
-import React from "react";
-import useSWR from 'swr';
+import React from 'react';
+import { getUserSession } from '../../service/helpers';
+import withSession from '../../lib/session';
 
-const serverPayments = async () => {};
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
-const PaymentsPage = () => {
-  const { data } = useSWR('', serverPayments);
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
-  return (
-    <div className='payments-page'>
-      <p>Payments page</p>
-    </div>
-  );
-};
+const PaymentsPage = () => (
+  <div className="payments-page">
+    <p>Payments page</p>
+  </div>
+);
 
 export default PaymentsPage;

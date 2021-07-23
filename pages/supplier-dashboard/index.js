@@ -1,18 +1,25 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import SupplierDashboardTable from "../../components/SupplierDashboard/SupplierDashboardTable";
-import Pagination from "../../components/Payments/Pagination";
-import {supplierDashboardTableData} from "../../testData/testDataPayRuns";
-import SupplierDashboardInnerHeader from "../../components/SupplierDashboard/SupplierDashboardInnerHeader";
-import HackneyFooterInfo from "../../components/HackneyFooterInfo";
-import {useDispatch} from "react-redux";
-import { changeSupplierReturnsDashboard } from "../../reducers/supplierDashboardReducer";
-import useSWR from 'swr';
+import { useDispatch } from 'react-redux';
+import SupplierDashboardTable from '../../components/SupplierDashboard/SupplierDashboardTable';
+import Pagination from '../../components/Payments/Pagination';
+import { supplierDashboardTableData } from '../../testData/testDataPayRuns';
+import SupplierDashboardInnerHeader from '../../components/SupplierDashboard/SupplierDashboardInnerHeader';
+import HackneyFooterInfo from '../../components/HackneyFooterInfo';
+import { changeSupplierReturnsDashboard } from '../../reducers/supplierDashboardReducer';
+import withSession from '../../lib/session';
+import { getUserSession } from '../../service/helpers';
 
-const serverSupplierDashboard = async () => {};
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const SupplierDashboard = () => {
-  const { data } = useSWR('', serverSupplierDashboard);
   const [sorts] = useState([
     {name: 'weekCommencing', text: 'Week commencing'},
     {name: 'value', text: 'Value'},

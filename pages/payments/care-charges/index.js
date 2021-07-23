@@ -1,15 +1,20 @@
-import React from "react";
-import useSWR from 'swr';
+import React from 'react';
+import { getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
 
-const serverPaymentsCareCharges = async () => {};
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
-const CareCharges = () => {
-  const { data } = useSWR('', serverPaymentsCareCharges);
-  return (
-    <div className='care-charges'>
-      <p>Care Charges</p>
-    </div>
-  )
-};
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
+
+const CareCharges = () => (
+  <div className="care-charges">
+    <p>Care Charges</p>
+  </div>
+);
 
 export default CareCharges;

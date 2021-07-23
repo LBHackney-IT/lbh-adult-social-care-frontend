@@ -29,10 +29,10 @@ const Login = () => {
   }, []);
 
   return (
-    <div className='login-page'>
+    <div className="login-page">
       <Header showPageHeader={false} />
-      <div className='login-page__form-container'>
-        <div className='login-page__form'>
+      <div className="login-page__form-container">
+        <div className="login-page__form">
           <h2>Sign In</h2>
           <p>Please sign in with your Hackney email account.</p>
           <p>Please contact your manager if you have issues signing in.</p>

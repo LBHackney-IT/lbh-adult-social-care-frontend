@@ -1,33 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import useSWR from 'swr';
-import { useDispatch } from 'react-redux'
-import Breadcrumbs from "../../../components/Breadcrumbs";
-import PayRunTable from "../../../components/PayRuns/PayRunTable";
-import Pagination from "../../../components/Payments/Pagination";
-import PopupCreatePayRun from "../../../components/PayRuns/PopupCreatePayRun";
-import PayRunsLevelInsight from "../../../components/PayRuns/PayRunsLevelInsight";
-import PayRunHeader from "../../../components/PayRuns/PayRunHeader";
-import PopupHoldPayment from "../../../components/PayRuns/PopupHoldPayment";
-import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import { addNotification } from '../../../reducers/notificationsReducer'
-import {
-  acceptInvoice,
-  acceptInvoices,
-  approvePayRunForPayment,
-  deleteDraftPayRun,
-  getAllInvoiceStatuses,
-  getInvoicePaymentStatuses,
-  getSinglePayRunDetails,
-  getSinglePayRunInsights,
-  kickPayRunBackToDraft,
-  submitPayRunForApproval
-} from '../../../api/Payments/PayRunApi'
+import { acceptInvoice, acceptInvoices, approvePayRunForPayment, deleteDraftPayRun, getAllInvoiceStatuses, getInvoicePaymentStatuses, getSinglePayRunDetails, getSinglePayRunInsights, kickPayRunBackToDraft, submitPayRunForApproval } from '../../../api/Payments/PayRunApi';
+import Breadcrumbs from '../../../components/Breadcrumbs';
+import PayRunTable from '../../../components/PayRuns/PayRunTable';
+import Pagination from '../../../components/Payments/Pagination';
+import { addNotification } from '../../../reducers/notificationsReducer';
+import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
+import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight';
+import PayRunHeader from '../../../components/PayRuns/PayRunHeader';
+import PopupHoldPayment from '../../../components/PayRuns/PopupHoldPayment';
+import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
+import { getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
 
-const serverPayRunsId = async () => {};
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const PayRunPage = () => {
-  const { data } = useSWR('', serverPayRunsId);
   const [sorts] = useState([
     {name: 'serviceUser', text: 'Service User'},
     {name: 'invId', text: 'INV ID'},

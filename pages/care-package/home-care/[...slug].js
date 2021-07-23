@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import useSWR from 'swr';
 import { useDispatch } from 'react-redux';
 import {
   createHomeCarePackage,
@@ -19,7 +18,8 @@ import Layout from '../../../components/Layout/Layout';
 import PackageReclaim from '../../../components/PackageReclaim';
 import TextArea from '../../../components/TextArea';
 import TitleHeader from '../../../components/TitleHeader';
-import { uniqueID } from '../../../service/helpers';
+import withSession from '../../../lib/session';
+import { getUserSession, uniqueID } from '../../../service/helpers';
 import {
   DOMESTIC_CARE_MODE,
   ESCORT_CARE_MODE,
@@ -41,7 +41,10 @@ const initialPackageReclaim = {
 };
 
 // start before render
-const serverHomeCare = async () => {
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
   const data = {
     errorData: [],
   };
@@ -60,20 +63,12 @@ const serverHomeCare = async () => {
     data.errorData.push(`Retrieve home care time shift details failed. ${error.message}`);
   }
 
-  return data;
-};
+  return { props: { ...data } };
+});
 
-const HomeCare = () => {
+const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
   // Parameters
   const router = useRouter();
-  const { data } = useSWR('', serverHomeCare);
-  let homeCareServices;
-  let homeCareTimeShiftsData;
-  if (data) {
-    homeCareServices = data.homeCare;
-    homeCareTimeShiftsData = data.homeCareTimeShiftsData;
-  }
-
   const dispatch = useDispatch();
   const [isImmediate, isS117, isFixedPeriod, startDate, endDate] = router.query.slug;
 

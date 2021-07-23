@@ -1,28 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import useSWR from 'swr';
-import { useDispatch } from 'react-redux'
-import PayRunsHeader from "../../../components/PayRuns/PayRunsHeader";
-import PaymentsTabs from "../../../components/Payments/PaymentsTabs";
-import PayRunTable from "../../../components/PayRuns/PayRunTable";
-import Pagination from "../../../components/Payments/Pagination";
-import PopupCreatePayRun from "../../../components/PayRuns/PopupCreatePayRun";
-import ChatButton from "../../../components/PayRuns/ChatButton";
-import PopupInvoiceChat from "../../../components/Chat/PopupInvoiceChat";
-import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import {
-  getHeldInvoicePayments,
-  getPaymentDepartments,
-  getPayRunSummaryList,
-  releaseHeldInvoices, releaseSingleHeldInvoice
-} from '../../../api/Payments/PayRunApi'
-import { addNotification } from '../../../reducers/notificationsReducer'
-import Table from '../../../components/Table'
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { getHeldInvoicePayments, getPaymentDepartments, getPayRunSummaryList, releaseSingleHeldInvoice } from '../../../api/Payments/PayRunApi';
+import PopupInvoiceChat from '../../../components/Chat/PopupInvoiceChat';
+import PayRunsHeader from '../../../components/PayRuns/PayRunsHeader';
+import PaymentsTabs from '../../../components/Payments/PaymentsTabs';
+import PayRunTable from '../../../components/PayRuns/PayRunTable';
+import Pagination from '../../../components/Payments/Pagination';
+import Table from '../../../components/Table';
+import { addNotification } from '../../../reducers/notificationsReducer';
+import { payRunsHeldPaymentsTableData, testDataHelpMessages } from '../../../testData/testDataPayRuns';
+import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
+import ChatButton from '../../../components/PayRuns/ChatButton';
+import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight';
+import PopupHelpChat from '../../../components/Chat/PopupHelpChat';
+import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
+import { getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
+import usePayRunSummary from '../../../api/Payments/hooks/usePayRunSummary';
 
-const serverPaymentsPayRuns = async () => {};
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const PayRunsPage = () => {
-  const { data } = useSWR('', serverPaymentsPayRuns);
   const dispatch = useDispatch();
   const [sortsTab] = useState({
     "pay-runs": [

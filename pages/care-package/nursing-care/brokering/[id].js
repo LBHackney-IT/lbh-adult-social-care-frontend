@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
-import useSWR from 'swr';
-import { selectBrokerage } from '../../../../reducers/brokerageReducer'
-import { uniqueID } from '../../../../service/helpers'
-import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi'
-import PackagesNursingCare from '../../../../components/packages/nursing-care'
-import Layout from '../../../../components/Layout/Layout'
-import { getAgeFromDateString, getEnGBFormattedDate, } from '../../../../api/Utils/FuncUtils'
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import PackageHeader from '../../../../components/CarePackages/PackageHeader';
+import PackagesNursingCare from '../../../../components/packages/nursing-care';
+import { selectBrokerage } from '../../../../reducers/brokerageReducer';
+import { getUserSession, uniqueID } from '../../../../service/helpers';
+import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
+import Layout from '../../../../components/Layout/Layout';
+import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
   createNursingCareBrokerageInfo,
   getNursingCareBrokerageStages,
@@ -15,14 +15,17 @@ import {
   getNursingCarePackageDetailsForBrokerage,
   nursingCareChangeStatus,
   nursingCareChangeStage,
-} from '../../../../api/CarePackages/NursingCareApi'
-import { mapBrokerageSupplierOptions, mapNursingCareStageOptions, } from '../../../../api/Mappers/NursingCareMapper'
-import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi'
-import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants'
-import PackageHeader from '../../../../components/CarePackages/PackageHeader'
+} from '../../../../api/CarePackages/NursingCareApi';
+import { mapBrokerageSupplierOptions, mapNursingCareStageOptions } from '../../../../api/Mappers/NursingCareMapper';
+import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
+import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import withSession from '../../../../lib/session';
 
 // start before render
-const getNursingCareBrokering = async (nursingCarePackageId) => {
+export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
   const data = {
     errorData: [],
   };
@@ -59,31 +62,18 @@ const getNursingCareBrokering = async (nursingCarePackageId) => {
     data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`)
   }
 
-  return data;
-}
+  return { props: { ...data } };
+});
 
-const NursingCareBrokering = () => {
+const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
   const router = useRouter();
-  const nursingCarePackageId = router.query.id;
-  const { data } = useSWR(nursingCarePackageId, getNursingCareBrokering);
-
-  let nursingCarePackage,
-    additionalNeedsEntries,
-    approvalHistoryEntries;
-
-  if (data) {
-    approvalHistoryEntries = data.approvalHistoryEntries;
-    additionalNeedsEntries = data.additionalNeedsEntriesData;
-    nursingCarePackage = data.nursingCarePackage;
-  }
-
   const [initialPackageReclaim] = useState({
-    type: "",
-    notes: "",
-    from: "",
-    category: "",
-    amount: "",
-    id: "1",
+    type: '',
+    notes: '',
+    from: '',
+    category: '',
+    amount: '',
+    id: '1',
   });
   const [errors, setErrors] = useState([]);
   const brokerage = useSelector(selectBrokerage);

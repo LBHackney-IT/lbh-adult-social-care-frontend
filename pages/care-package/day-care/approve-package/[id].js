@@ -1,29 +1,32 @@
-import Layout from "../../../../components/Layout/Layout";
-import React, { useState } from "react";
-import DayCareApprovalTitle from "../../../../components/DayCare/DayCareApprovalTitle";
-import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
-import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
-import DayCarePackageBreakdown from "../../../../components/DayCare/DayCarePackageBreakdown";
-import DayCarePackageElementCostings from "../../../../components/DayCare/DayCarePackageElementCostings";
-import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
-import TitleHeader from "../../../../components/TitleHeader";
-import DayCareSummary from "../../../../components/DayCare/DayCareSummary";
-import TextArea from "../../../../components/TextArea";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import Layout from '../../../../components/Layout/Layout';
+import DayCareApprovalTitle from '../../../../components/DayCare/DayCareApprovalTitle';
+import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
+import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
+import DayCarePackageBreakdown from '../../../../components/DayCare/DayCarePackageBreakdown';
+import DayCarePackageElementCostings from '../../../../components/DayCare/DayCarePackageElementCostings';
+import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
+import TitleHeader from '../../../../components/TitleHeader';
+import DayCareSummary from '../../../../components/DayCare/DayCareSummary';
+import TextArea from '../../../../components/TextArea';
 import {
   approveDayCarePackageContents,
   dayCarePackageContentsRequestClarification,
   dayCarePackageRejectContents,
   getDayCarePackageApprovalDetails,
-} from "../../../../api/CarePackages/DayCareApi";
-import { useRouter } from "next/router"
-import { getSelectedDate } from "../../../../api/Utils/CommonOptions";
-import { getEnGBFormattedDate } from "../../../../api/Utils/FuncUtils";
-import { getErrorResponse } from "../../../../service/helpers";
-import fieldValidator from "../../../../service/inputValidator";
-import useSWR from 'swr';
+} from '../../../../api/CarePackages/DayCareApi';
+import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import withSession from '../../../../lib/session';
+import { getErrorResponse, getUserSession } from '../../../../service/helpers';
+import fieldValidator from '../../../../service/inputValidator';
 
 // start before render
-const serverDayCareApprovePackage = async (dayCarePackageId) => {
+export const getServerSideProps = withSession(async ({ req, res, query: { id: dayCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
   const data = {
     errorData: [],
   };
@@ -56,39 +59,22 @@ const serverDayCareApprovePackage = async (dayCarePackageId) => {
 
     // Set days selected
 
-    data.daysSelected = getSelectedDate(dayCarePackage)
-  } catch(error) {
+    data.daysSelected = getSelectedDate(dayCarePackage);
+  } catch (error) {
     data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
 
-  return data;
-}
+  return { props: { data } };
+});
 
-const DayCareApprovePackage = () => {
+const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportunityEntries, daysSelected }) => {
   // Parameters
   const router = useRouter();
   const dayCarePackageId = router.query.id;
-  const { data } = useSWR(dayCarePackageId, serverDayCareApprovePackage);
-
-  let opportunityEntries,
-    daysSelected,
-    approvalHistoryEntries,
-    dayCarePackage,
-    errorData;
-
-  if(data) {
-    approvalHistoryEntries = data.approvalHistoryEntries;
-    opportunityEntries = data.opportunityEntries;
-    daysSelected = data.daysSelected;
-    dayCarePackage = data.dayCarePackage;
-    errorData = data.errorData;
-  }
 
   const [errors, setErrors] = useState([]);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
-  const [requestInformationText, setRequestInformationText] = useState(
-    undefined
-  );
+  const [requestInformationText, setRequestInformationText] = useState(undefined);
 
   const [errorFields, setErrorFields] = useState({
     requestInformationText: '',

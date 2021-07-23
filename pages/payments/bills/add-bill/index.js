@@ -1,19 +1,26 @@
-import React, { useState } from "react";
-import { useRouter } from 'next/router'
-import useSWR from 'swr';
-import Breadcrumbs from "../../../../components/Breadcrumbs";
-import AddBillTable from "../../../../components/Bills/AddBillTable";
-import AddBillAttachedFiles from "../../../../components/Bills/AddBillAttachedFiles";
-import AddBillInvoiceDetails from "../../../../components/Bills/AddBillInvoiceDetails";
-import AddBillInvoiceFor from "../../../../components/Bills/AddBillInvoiceFor";
-import AddBillTotalInfo from "../../../../components/Bills/AddBillTotalInfo";
-import { addBillPackageInfoTestData } from "../../../../testData/billsTestData";
-import fieldValidator from "../../../../service/inputValidator";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import Breadcrumbs from '../../../../components/Breadcrumbs';
+import AddBillTable from '../../../../components/Bills/AddBillTable';
+import AddBillAttachedFiles from '../../../../components/Bills/AddBillAttachedFiles';
+import AddBillInvoiceDetails from '../../../../components/Bills/AddBillInvoiceDetails';
+import AddBillInvoiceFor from '../../../../components/Bills/AddBillInvoiceFor';
+import AddBillTotalInfo from '../../../../components/Bills/AddBillTotalInfo';
+import { addBillPackageInfoTestData } from '../../../../testData/billsTestData';
+import withSession from '../../../../lib/session';
+import { getUserSession } from '../../../../service/helpers';
+import fieldValidator from '../../../../service/inputValidator';
 
-const serverAddBill = () => {};
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const AddBill = () => {
-  const { data } = useSWR('', serverAddBill);
   const router = useRouter();
   const [sorts] = useState([
     { name: "item", text: "Item" },
@@ -99,7 +106,7 @@ const AddBill = () => {
     const { validFields, hasError } = fieldValidator(arrayInputs);
     if (hasError) {
       setInputsError(validFields);
-      
+
     }
   };
 

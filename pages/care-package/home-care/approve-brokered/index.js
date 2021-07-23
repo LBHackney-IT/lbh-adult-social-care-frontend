@@ -1,17 +1,17 @@
-import { getServiceTypeCareTimes } from "../../../../service/homeCareServiceHelper";
-import { PERSONAL_CARE_MODE } from "../../../../service/homeCarePickerHelper";
-import Layout from "../../../../components/Layout/Layout";
-import React from "react";
-import HomeCareApprovalTitle from "../../../../components/HomeCare/HomeCareApprovalTitle";
-import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
-import HomeCarePackageBreakdown from "../../../../components/HomeCare/HomeCarePackageBreakdown";
-import HomeCarePackageElementCostings from "../../../../components/HomeCare/HomeCarePackageElementCostings";
-import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
-import HomeCarePackageDetails from "../../../../components/HomeCare/HomeCarePackageDetails";
-import TextArea from "../../../../components/TextArea";
-import {getHomeCareServices, getHomeCareTimeSlotShifts} from "../../../../api/CarePackages/HomeCareApi";
-import useSWR from 'swr';
-import { useRouter } from 'next/router'
+import React from 'react';
+import { getServiceTypeCareTimes } from '../../../../service/homeCareServiceHelper';
+import { PERSONAL_CARE_MODE } from '../../../../service/homeCarePickerHelper';
+import Layout from '../../../../components/Layout/Layout';
+import HomeCareApprovalTitle from '../../../../components/HomeCare/HomeCareApprovalTitle';
+import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
+import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
+import HomeCarePackageElementCostings from '../../../../components/HomeCare/HomeCarePackageElementCostings';
+import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
+import HomeCarePackageDetails from '../../../../components/HomeCare/HomeCarePackageDetails';
+import TextArea from '../../../../components/TextArea';
+import { getUserSession } from '../../../../service/helpers';
+import withSession from '../../../../lib/session';
+import { getHomeCareServices, getHomeCareTimeSlotShifts } from '../../../../api/CarePackages/HomeCareApi';
 
 const approvalHistoryEntries = [
   {
@@ -44,7 +44,10 @@ const approvalHistoryEntries = [
   },
 ];
 
-const serverHomeCareApproveBrokered = async () => {
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
   const data = {
     errorData: [],
   };
@@ -67,11 +70,12 @@ const serverHomeCareApproveBrokered = async () => {
     );
   }
 
-  return data;
-}
+  return { props: { ...data, approvalHistoryEntries } };
+});
 
-const HomeCareApproveBrokered = () => {
-  const { data } = useSWR('test arg', serverHomeCareApproveBrokered);
+// eslint-disable-next-line no-shadow
+const HomeCareApproveBrokered = ({ approvalHistoryEntries }) => {
+  // eslint-disable-next-line no-unused-vars
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
 
   return (

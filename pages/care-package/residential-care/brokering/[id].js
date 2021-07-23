@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import useSWR from 'swr';
-import { useSelector } from "react-redux";
-import { selectBrokerage } from "../../../../reducers/brokerageReducer";
-import { uniqueID } from "../../../../service/helpers";
-import { getHomeCareSummaryData } from "../../../../api/CarePackages/HomeCareApi";
-import Layout from "../../../../components/Layout/Layout";
-import {
-  getAgeFromDateString,
-  getEnGBFormattedDate,
-} from "../../../../api/Utils/FuncUtils";
-import PackagesResidentialCare from "../../../../components/packages/residential-care";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import PackagesResidentialCare from '../../../../components/packages/residential-care';
+import { selectBrokerage } from '../../../../reducers/brokerageReducer';
+import { getUserSession, uniqueID } from '../../../../service/helpers';
+import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
+import Layout from '../../../../components/Layout/Layout';
+import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
   residentialCareChangeStatus,
   createResidentialCareBrokerageInfo,
@@ -18,14 +14,15 @@ import {
   getResidentialCarePackageDetailsForBrokerage,
   getResidentialCarePackageApprovalHistory,
   residentialCareChangeStage,
-} from "../../../../api/CarePackages/ResidentialCareApi";
+} from '../../../../api/CarePackages/ResidentialCareApi';
 import {
   mapBrokerageSupplierOptions,
   mapResidentialCareStageOptions,
-} from "../../../../api/Mappers/ResidentialCareMapper";
-import { getSupplierList } from "../../../../api/CarePackages/SuppliersApi";
-import { CARE_PACKAGE_ROUTE } from "../../../../routes/RouteConstants";
-import PackageHeader from '../../../../components/CarePackages/PackageHeader'
+} from '../../../../api/Mappers/ResidentialCareMapper';
+import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
+import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import withSession from '../../../../lib/session';
+import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 
 const initialPackageReclaim = {
   type: "",
@@ -37,7 +34,10 @@ const initialPackageReclaim = {
 };
 
 // start before render
-const serverResidentialCareBrokering = async (residentialCarePackageId) => {
+export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
   const data = {
     errorData: [],
   };
@@ -76,14 +76,12 @@ const serverResidentialCareBrokering = async (residentialCarePackageId) => {
     data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`)
   }
 
-  return data;
-}
+  return { props: { ...data } };
+});
 
 const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
   // Parameters
   const router = useRouter();
-  const residentialCarePackageId = router.query.id;
-  const { data } = useSWR(residentialCarePackageId, serverResidentialCareBrokering);
 
   const [errors, setErrors] = useState([]);
   const brokerage = useSelector(selectBrokerage);
@@ -204,7 +202,7 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
   };
 
   return (
-    <Layout showBackButton={true} clientSummaryInfo={{
+    <Layout showBackButton clientSummaryInfo={{
       client: residentialCarePackage?.residentialCarePackage?.clientName,
       hackneyId: residentialCarePackage?.residentialCarePackage?.clientHackneyId,
       age: residentialCarePackage?.residentialCarePackage && getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
@@ -229,7 +227,7 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
         supplierOptions={supplierOptions}
         stageOptions={stageOptions}
         residentialCareSummary={{
-          additionalNeedsEntries: additionalNeedsEntries,
+          additionalNeedsEntries,
           needToAddress: residentialCarePackage?.residentialCarePackage?.needToAddress,
           deleteOpportunity: () => {},
         }}

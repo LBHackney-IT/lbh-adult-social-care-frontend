@@ -15,7 +15,18 @@ import { Button } from '../../../components/Button';
 import { createNursingCarePackage, getTypeOfNursingHomeOptions } from '../../../api/CarePackages/NursingCareApi';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
+import { getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
+
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const NursingCare = () => {
   const isTrueParse = (myValue) => myValue === 'true';

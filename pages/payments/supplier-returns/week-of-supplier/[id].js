@@ -1,25 +1,31 @@
-import React, {useEffect, useState} from "react";
-import { useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import useSWR from 'swr';
-import Breadcrumbs from "../../../../components/Breadcrumbs";
-import Pagination from "../../../../components/Payments/Pagination";
-import {testDataHelpMessages, weeklyOfSupplierTableData} from "../../../../testData/testDataPayRuns";
-import SupplierReturnsLevelInsight from "../../../../components/SupplierReturns/SupplierReturnsLevelInsight";
-import ChatButton from "../../../../components/PayRuns/ChatButton";
-import PopupInvoiceChat from "../../../../components/Chat/PopupInvoiceChat";
-import { selectSupplierReturns } from "../../../../reducers/supplierReturnsReducer";
-import { formatDateWithSign } from "../../../../service/helpers";
-import { Button } from "../../../../components/Button";
-import WeekOfSupplierViewInnerHeader from "../../../../components/SupplierReturns/WeekOfSupplierViewInnerHeader";
-import WeeklyOfSupplierTable from "../../../../components/SupplierReturns/WeeklyOfSupplierTable";
-import HackneyFooterInfo from "../../../../components/HackneyFooterInfo";
-import PopupDocumentUploader from "../../../../components/PopupDocumentUploader";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import Breadcrumbs from '../../../../components/Breadcrumbs';
+import PopupInvoiceChat from '../../../../components/Chat/PopupInvoiceChat';
+import Pagination from '../../../../components/Payments/Pagination';
+import { testDataHelpMessages, weeklyOfSupplierTableData } from '../../../../testData/testDataPayRuns';
+import SupplierReturnsLevelInsight from '../../../../components/SupplierReturns/SupplierReturnsLevelInsight';
+import ChatButton from '../../../../components/PayRuns/ChatButton';
+import { selectSupplierReturns } from '../../../../reducers/supplierReturnsReducer';
+import { formatDateWithSign, getUserSession } from '../../../../service/helpers';
+import { Button } from '../../../../components/Button';
+import WeekOfSupplierViewInnerHeader from '../../../../components/SupplierReturns/WeekOfSupplierViewInnerHeader';
+import WeeklyOfSupplierTable from '../../../../components/SupplierReturns/WeeklyOfSupplierTable';
+import HackneyFooterInfo from '../../../../components/HackneyFooterInfo';
+import PopupDocumentUploader from '../../../../components/PopupDocumentUploader';
+import withSession from '../../../../lib/session';
 
-const serverWeekOfSupplier = async () => {};
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const WeekOfSupplierView = () => {
-  const { data } = useSWR('', serverWeekOfSupplier);
   const [sorts] = useState([
     {name: 'serviceUser', text: 'Service User'},
     {name: 'packageType', text: 'Package Type'},

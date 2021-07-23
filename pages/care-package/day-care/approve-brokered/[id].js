@@ -1,31 +1,34 @@
-import DayCareApprovalTitle from "../../../../components/DayCare/DayCareApprovalTitle";
-import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
-import React, { useState } from "react";
-import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
-import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
-import TitleHeader from "../../../../components/TitleHeader";
-import DayCareSummary from "../../../../components/DayCare/DayCareSummary";
-import TextArea from "../../../../components/TextArea";
-import { useRouter } from "next/router"
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import Layout from '../../../../components/Layout/Layout';
+import DayCareApprovalTitle from '../../../../components/DayCare/DayCareApprovalTitle';
+import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
+import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
+import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
+import TitleHeader from '../../../../components/TitleHeader';
+import DayCareSummary from '../../../../components/DayCare/DayCareSummary';
+import TextArea from '../../../../components/TextArea';
 import {
   dayCarePackageApproveCommercials,
   dayCarePackageCommercialsRequestClarification,
   dayCarePackageRejectCommercials,
   getDayCarePackageApprovalDetails,
-} from "../../../../api/CarePackages/DayCareApi";
-import { getErrorResponse } from "../../../../service/helpers";
-import { getSelectedDate } from "../../../../api/Utils/CommonOptions";
-import useSWR from 'swr';
+} from '../../../../api/CarePackages/DayCareApi';
+import withSession from '../../../../lib/session';
+import { getErrorResponse, getUserSession } from '../../../../service/helpers';
+import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
 
 // get server side props before render
-const serverDayCareApproveBrokered = async (dayCarePackageId) => {
+export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
   const data = {
     errorData: [],
   };
   try {
-    const dayCarePackage = await getDayCarePackageApprovalDetails(dayCarePackageId);
+    const dayCarePackage = await getDayCarePackageApprovalDetails(residentialCarePackageId);
     // Update approve-package state
     const newApprovalHistoryItems = dayCarePackage.packageApprovalHistory.map(
       (historyItem) => ({
@@ -54,32 +57,15 @@ const serverDayCareApproveBrokered = async (dayCarePackageId) => {
     data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
 
-  return data;
-}
+  return { props: { data } };
+});
 
-const DayCareApproveBrokered = () => {
+const DayCareApproveBrokered = ({ dayCarePackage, daysSelected, approvalHistoryEntries, opportunityEntries, errorData }) => {
   const router = useRouter();
   const dayCarePackageId = router.query.id;
-  const { data } = useSWR(dayCarePackageId, serverDayCareApproveBrokered);
-
-  let opportunityEntries,
-    daysSelected,
-    approvalHistoryEntries,
-    dayCarePackage,
-    errorData;
-
-  if(data) {
-    approvalHistoryEntries = data.approvalHistoryEntries;
-    opportunityEntries = data.opportunityEntries;
-    daysSelected = data.daysSelected;
-    dayCarePackage = data.dayCarePackage;
-    errorData = data.errorData;
-  }
   const [errors, setErrors] = useState(errorData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
-  const [requestInformationText, setRequestInformationText] = useState(
-    undefined
-  );
+  const [requestInformationText, setRequestInformationText] = useState(undefined);
   const [errorFields, setErrorFields] = useState({
     requestInformationText: '',
   });
@@ -156,9 +142,6 @@ const DayCareApproveBrokered = () => {
                       STARTS
                     </p>
                     <p className="font-size-14px">
-                      {new Date(
-                        dayCarePackage?.packageDetails.startDate
-                      ).toLocaleDateString("en-GB")}
                       {getEnGBFormattedDate(dayCarePackage?.packageDetails.startDate)}
                     </p>
                   </div>

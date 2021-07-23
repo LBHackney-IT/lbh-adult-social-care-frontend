@@ -1,25 +1,28 @@
-import useSWR from 'swr';
-import React, { useState } from 'react'
-import { useRouter } from "next/router"
-import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
-import ResidentialCareApprovalTitle from "../../../../components/ResidentialCare/ResidentialCareApprovalTitle";
-import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
-import Layout from "../../../../components/Layout/Layout";
-import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
-import TitleHeader from "../../../../components/TitleHeader";
-import ResidentialCareSummary from "../../../../components/ResidentialCare/ResidentialCareSummary";
-import TextArea from "../../../../components/TextArea";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import ResidentialCareApprovalTitle from '../../../../components/ResidentialCare/ResidentialCareApprovalTitle';
+import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
+import Layout from '../../../../components/Layout/Layout';
+import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
+import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
+import TitleHeader from '../../../../components/TitleHeader';
+import ResidentialCareSummary from '../../../../components/ResidentialCare/ResidentialCareSummary';
+import TextArea from '../../../../components/TextArea';
 import {
   getResidentialCarePackageApproveBrokered,
   getResidentialCarePackageApprovalHistory,
   residentialCareClarifyCommercial,
   residentialCareChangeStatus,
   residentialCareApproveCommercials
-} from "../../../../api/CarePackages/ResidentialCareApi";
+} from '../../../../api/CarePackages/ResidentialCareApi';
+import withSession from '../../../../lib/session';
+import { getUserSession } from '../../../../service/helpers';
 
 // start before render
-const getApproveBrokered = async (residentialCarePackageId) => {
+export const getServerSideProps = withSession(async ({ req, res: response, query: { id: residentialCarePackageId } }) => {
+  getUserSession({ req, res: response });
+
   const data = {
     errorData: [],
   };
@@ -42,9 +45,9 @@ const getApproveBrokered = async (residentialCarePackageId) => {
   }
 
   try {
-    const res = await getResidentialCarePackageApproveBrokered(residentialCarePackageId);
+    const residentialCarePackage = await getResidentialCarePackageApproveBrokered(residentialCarePackageId);
 
-    const newAdditionalNeedsEntries = res.residentialCarePackage.residentialCareAdditionalNeeds.map(
+    const newAdditionalNeedsEntries = residentialCarePackage.residentialCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
         id: additionalneedsItem.id,
         isWeeklyCost: additionalneedsItem.isWeeklyCost,
@@ -54,30 +57,22 @@ const getApproveBrokered = async (residentialCarePackageId) => {
     );
 
     data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
-    data.residentialCarePackage = res;
+    data.residentialCarePackage = residentialCarePackage;
   } catch (error) {
     data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
   }
 
-  return data;
-}
+  return { props: { ...data } };
+});
 
-const ResidentialCareApproveBrokered = () => {
+const ResidentialCareApproveBrokered = ({
+  residentialCarePackage,
+  approvalHistoryEntries,
+  additionalNeedsEntriesData,
+  errorData,
+}) => {
   const router = useRouter();
   const residentialCarePackageId = router.query.id;
-  const { data } = useSWR(residentialCarePackageId, getApproveBrokered);
-
-  let residentialCarePackage,
-    approvalHistoryEntries,
-    additionalNeedsEntriesData,
-    errorData;
-
-  if(data) {
-    residentialCarePackage = data.residentialCarePackage;
-    approvalHistoryEntries = data.approvalHistoryEntries;
-    additionalNeedsEntriesData = data.additionalNeedsEntriesData;
-    errorData = data.errorData;
-  }
 
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);

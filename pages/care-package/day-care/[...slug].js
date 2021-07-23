@@ -16,14 +16,25 @@ import {
 } from '../../../api/CarePackages/DayCareApi';
 import DayCareOpportunities from '../../../components/DayCare/DayCareOpportunities';
 import { Button } from '../../../components/Button';
+import { addNotification } from '../../../reducers/notificationsReducer';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import TitleHeader from '../../../components/TitleHeader';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import DayCareSummary from '../../../components/DayCare/DayCareSummary';
 import DayCareCollegeAsyncSearch from '../../../components/DayCare/DayCareCollegeAsyncSearch';
+import { getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
 import ErrorField from '../../../components/ErrorField';
-import { addNotification } from '../../../reducers/notificationsReducer';
+
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const DayCare = () => {
   const dispatch = useDispatch();

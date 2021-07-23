@@ -1,21 +1,26 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import BillsHeader from "../../../components/Bills/BillsHeader";
-import PaymentsTabs from "../../../components/Payments/PaymentsTabs";
-import BillsTable from "../../../components/Bills/BillsTable";
-import Pagination from "../../../components/Payments/Pagination";
-import { billsPayRunsTableData, billsTableData } from "../../../testData/billsTestData";
-import PopupBillsPayDownload from "../../../components/Bills/PopupBillsPayDownload";
-import BillsFilters from "../../../components/Bills/BillsFilters";
-import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import useSWR from 'swr';
+import BillsHeader from '../../../components/Bills/BillsHeader';
+import PaymentsTabs from '../../../components/Payments/PaymentsTabs';
+import BillsTable from '../../../components/Bills/BillsTable';
+import Pagination from '../../../components/Payments/Pagination';
+import { billsPayRunsTableData, billsTableData } from '../../../testData/billsTestData';
+import PopupBillsPayDownload from '../../../components/Bills/PopupBillsPayDownload';
+import BillsFilters from '../../../components/Bills/BillsFilters';
+import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
+import { getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
 
-const serverBills = async () => {
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
-}
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const Bills = () => {
-  const { data } = useSWR('', serverBills);
   const [sortsTab] = useState({
     'bills': [
       {name: 'red', text: 'Ref'},

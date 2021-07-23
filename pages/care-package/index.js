@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from "react";
-import useSWR from 'swr';
+import React, { useEffect, useState } from 'react';
 import { batch, useDispatch } from 'react-redux';
+import ClientSummary from '../../components/ClientSummary';
+import Layout from '../../components/Layout/Layout';
+import HomeCareSetup from '../../components/Setup/HomeCareSetup';
+import DayCareSetup from '../../components/Setup/DayCareSetup';
+import NursingCareSetup from '../../components/Setup/NursingCareSetup';
+import ResidentialCareSetup from '../../components/Setup/ResidentialCareSetup';
+import withSession from '../../lib/session';
 import { getNursingTypeOfStayOptions, getResidentialTypeOfStayOptions } from '../../reducers/carePackageSlice';
-import ClientSummary from "../../components/ClientSummary";
-import Layout from "../../components/Layout/Layout";
-import HomeCareSetup from "../../components/Setup/HomeCareSetup";
-import DayCareSetup from "../../components/Setup/DayCareSetup";
-import NursingCareSetup from "../../components/Setup/NursingCareSetup";
-import ResidentialCareSetup from "../../components/Setup/ResidentialCareSetup";
+import { getUserSession } from '../../service/helpers';
 
-const serverCarePackage = async () => {};
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+  return { props: {} };
+});
 
 const CarePackage = ({ history }) => {
-  const { data } = useSWR('', serverCarePackage);
-
   const [careTypes] = useState([
     { text: "Home care", value: 1 },
     { text: "Day care", value: 2 },

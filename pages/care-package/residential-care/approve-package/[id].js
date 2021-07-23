@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router';
-import useSWR from 'swr';
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import Layout from '../../../../components/Layout/Layout';
 import ResidentialCareApprovalTitle from '../../../../components/ResidentialCare/ResidentialCareApprovalTitle';
@@ -9,7 +9,6 @@ import PackageApprovalHistorySummary from '../../../../components/PackageApprova
 import TitleHeader from '../../../../components/TitleHeader';
 import ResidentialCareSummary from '../../../../components/ResidentialCare/ResidentialCareSummary';
 import TextArea from '../../../../components/TextArea';
-import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
   getResidentialCarePackageApprovalHistory,
   getResidentialCarePackageApprovalPackageContent,
@@ -17,9 +16,14 @@ import {
   residentialCareApprovePackageContent,
   residentialCareRequestClarification,
 } from '../../../../api/CarePackages/ResidentialCareApi';
+import { getUserSession } from '../../../../service/helpers';
+import withSession from '../../../../lib/session';
 
 // start before render
-const serverResidentialCareApproveCare = async (residentialCarePackageId) => {
+export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
   const data = {
     errorData: [],
   };
@@ -50,25 +54,17 @@ const serverResidentialCareApproveCare = async (residentialCarePackageId) => {
     data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
   }
 
-  return data;
-};
+  return { props: { ...data } };
+});
 
-const ResidentialCareApprovePackage = () => {
+const ResidentialCareApprovePackage = ({
+  residentialCarePackage,
+  additionalNeedsEntries,
+  approvalHistoryEntries,
+  errorData,
+}) => {
   const router = useRouter();
-  const residentialCarePackageId = router.query.id;
-
-  const { data } = useSWR(residentialCarePackageId, serverResidentialCareApproveCare);
-  let residentialCarePackage;
-  let additionalNeedsEntries;
-  let approvalHistoryEntries;
-  let errorData = [];
-
-  if (data) {
-    residentialCarePackage = data.residentialCarePackage;
-    additionalNeedsEntries = data.additionalNeedsEntries;
-    approvalHistoryEntries = data.approvalHistoryEntries;
-    errorData = data.errorData;
-  }
+  const { residentialCarePackageId } = router.query;
   const [errors, setErrors] = useState(errorData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);

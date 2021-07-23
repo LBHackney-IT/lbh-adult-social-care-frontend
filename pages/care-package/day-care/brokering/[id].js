@@ -1,36 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router"
-import useSWR from 'swr';
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import { selectBrokerage, getBrokerageSuccess } from '../../../../reducers/brokerageReducer';
-import { uniqueID } from "../../../../service/helpers";
-import { getHomeCareSummaryData } from "../../../../api/CarePackages/HomeCareApi";
-import Layout from "../../../../components/Layout/Layout";
-import {
-  getAgeFromDateString,
-  getEnGBFormattedDate,
-} from "../../../../api/Utils/FuncUtils";
+import { getUserSession, uniqueID } from '../../../../service/helpers';
+import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
+import Layout from '../../../../components/Layout/Layout';
+import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
   changeDayCarePackageStatus,
   createDayCareBrokerageInfo,
   getDayCareBrokerageStages,
   getDayCarePackageDetailsForBrokerage,
-} from "../../../../api/CarePackages/DayCareApi";
-import {
-  getInitialPackageReclaim,
-} from "../../../../api/Utils/CommonOptions";
+} from '../../../../api/CarePackages/DayCareApi';
+import { getInitialPackageReclaim } from '../../../../api/Utils/CommonOptions';
 import {
   mapBrokerageSupplierOptions,
   mapDayCarePackageDetailsForBrokerage,
   mapDayCareStageOptions,
-} from "../../../../api/Mappers/DayCareMapper";
-import { getSupplierList } from "../../../../api/CarePackages/SuppliersApi";
-import { CARE_PACKAGE_ROUTE } from "../../../../routes/RouteConstants";
-import PackagesDayCare from "../../../../components/packages/day-care";
-import PackageHeader from '../../../../components/CarePackages/PackageHeader'
+} from '../../../../api/Mappers/DayCareMapper';
+import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
+import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import PackagesDayCare from '../../../../components/packages/day-care';
+
+import withSession from '../../../../lib/session';
+import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 
 // start before render
-const serverBrokering = async (dayCarePackageId) => {
+export const getServerSideProps = withSession(async ({ req, res, query: { id: dayCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
   const data = {
     errorData: [],
   };
@@ -54,29 +53,18 @@ const serverBrokering = async (dayCarePackageId) => {
     data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
 
-  return data;
-}
+  return { props: { ...data } };
+});
 
-const DayCareBrokering = () => {
+const DayCareBrokering = ({
+  approvalHistoryEntries,
+  opportunityEntries,
+  clientDetails,
+  daysSelected,
+  dayCarePackage,
+  errorData,
+}) => {
   const router = useRouter();
-  const dayCarePackageId = router.query.id;
-  const { data } = useSWR(dayCarePackageId, serverBrokering);
-  let approvalHistoryEntries,
-    opportunityEntries,
-    clientDetails,
-    daysSelected,
-    dayCarePackage,
-    errorData;
-
-  if(data) {
-    approvalHistoryEntries = data.approvalHistoryEntries
-    opportunityEntries = data.opportunityEntries
-    clientDetails = data.clientDetails
-    daysSelected = data.daysSelected
-    dayCarePackage = data.dayCarePackage
-    errorData = data.errorData
-  }
-
   const dispatch = useDispatch();
   const [errors, setErrors] = useState(errorData);
   const brokerage = useSelector(selectBrokerage);

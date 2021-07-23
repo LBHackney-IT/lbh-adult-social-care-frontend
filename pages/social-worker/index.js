@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import useSWR from 'swr'
-import Pagination from "../../components/Payments/Pagination";
-import HackneyFooterInfo from "../../components/HackneyFooterInfo";
-import SocialWorkerInputs from "../../components/SocialWorker/SocialWorkerInputs";
-import SocialWorkerTable from "../../components/SocialWorker/SocialWorkerTable";
+import Pagination from '../../components/Payments/Pagination';
+import HackneyFooterInfo from '../../components/HackneyFooterInfo';
+import { getUserSession, formatDateWithSign } from '../../service/helpers';
+import withSession from '../../lib/session';
+import SocialWorkerInputs from '../../components/SocialWorker/SocialWorkerInputs';
 import { getSubmittedPackages, getSubmittedPackagesStatus } from '../../api/ApproversHub/SocialWorkerApi';
 import { RESIDENTIAL_CARE_ROUTE, NURSING_CARE_ROUTE} from '../../routes/RouteConstants';
 import Table from '../../components/Table'
-import { formatDateWithSign } from '../../service/helpers'
 
-const serverSocialWorker = async () => {};
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const SocialWorkerDashboardPage = () => {
-  const { data } = useSWR('', serverSocialWorker);
   const [sorts] = useState([
     { name: 'client', text: 'Client'},
     { name: 'packageId', text: 'Package ID' },

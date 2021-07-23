@@ -1,26 +1,30 @@
-import React, { useState } from "react";
-import NursingCareApprovalTitle from "../../../../components/NursingCare/NursingCareApprovalTitle";
-import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
-import Layout from "../../../../components/Layout/Layout";
-import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
-import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
-import TitleHeader from "../../../../components/TitleHeader";
-import NursingCareSummary from "../../../../components/NursingCare/NursingCareSummary";
-import TextArea from "../../../../components/TextArea";
-import { useRouter } from "next/router";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import NursingCareApprovalTitle from '../../../../components/NursingCare/NursingCareApprovalTitle';
+import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
+import Layout from '../../../../components/Layout/Layout';
+import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
+import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
+import TitleHeader from '../../../../components/TitleHeader';
+import NursingCareSummary from '../../../../components/NursingCare/NursingCareSummary';
+import TextArea from '../../../../components/TextArea';
 import {
   getNursingCarePackageApproveCommercial,
   getNursingCarePackageApprovalHistory,
   nursingCareClarifyCommercial,
   nursingCareChangeStatus,
   nursingCareApproveCommercials
-} from "../../../../api/CarePackages/NursingCareApi";
-import useSWR from 'swr';
-import { addNotification } from '../../../../reducers/notificationsReducer'
-import { useDispatch } from 'react-redux'
+} from '../../../../api/CarePackages/NursingCareApi';
+import withSession from '../../../../lib/session';
+import { addNotification } from '../../../../reducers/notificationsReducer';
+import { getUserSession } from '../../../../service/helpers';
 
-const getNursingCareApproveBrokered = async (nursingCarePackageId) => {
+export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
   const data = {
     errorData: [],
   };
@@ -38,14 +42,13 @@ const getNursingCareApproveBrokered = async (nursingCarePackageId) => {
 
     data.nursingCarePackage = nursingCarePackage;
     data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
-
-  } catch(error) {
+  } catch (error) {
     data.errorData.push(`Retrieve nursing care package details failed. ${error.message}`);
   }
 
   try {
-    const res = await getNursingCarePackageApprovalHistory(nursingCarePackageId);
-    const newApprovalHistoryItems = res.map(
+    const result = await getNursingCarePackageApprovalHistory(nursingCarePackageId);
+    const newApprovalHistoryItems = result.map(
       (historyItem) => ({
         eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
           "en-GB"
@@ -56,37 +59,23 @@ const getNursingCareApproveBrokered = async (nursingCarePackageId) => {
     );
 
     data.approvalHistoryEntries = newApprovalHistoryItems.slice();
-
-  } catch(error) {
+  } catch (error) {
     data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`);
   }
 
-  return data;
-}
+  return { props: { ...data } };
+});
 
-const NursingCareApproveBrokered = () => {
+const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntriesData, approvalHistoryEntries }) => {
   const router = useRouter();
-  const dispatch = useDispatch();
   const nursingCarePackageId = router.query.id;
-  const { data } = useSWR(nursingCarePackageId, getNursingCareApproveBrokered);
-
-  let nursingCarePackage;
-  let additionalNeedsEntriesData;
-  let approvalHistoryEntries;
-
-  if(data) {
-    approvalHistoryEntries = data.approvalHistoryEntries;
-    additionalNeedsEntriesData = data.additionalNeedsEntriesData;
-    nursingCarePackage = data.nursingCarePackage;
-  }
 
   const [errors, setErrors] = useState([]);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
-  const [requestInformationText, setRequestInformationText] = useState(
-    undefined
-  );
+  const [requestInformationText, setRequestInformationText] = useState(undefined);
 
+  const dispatch = useDispatch();
   const handleRejectPackage = () => {
     nursingCareChangeStatus(nursingCarePackageId, 10)
       .then(() => {

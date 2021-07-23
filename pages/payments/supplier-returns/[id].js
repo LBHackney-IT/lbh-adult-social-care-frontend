@@ -1,23 +1,29 @@
-import React, {useEffect, useState} from "react";
-import Breadcrumbs from "../../../components/Breadcrumbs";
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Pagination from "../../../components/Payments/Pagination";
-import {supplierReturnTableData} from "../../../testData/testDataPayRuns";
-import SupplierReturnsLevelInsight from "../../../components/SupplierReturns/SupplierReturnsLevelInsight";
-import SupplierReturnsInnerHeader from "../../../components/SupplierReturns/SupplierReturnsInnerHeader";
-import SupplierReturnTable from "../../../components/SupplierReturns/SupplierReturnTable";
-import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import { formatDateWithSign } from "../../../service/helpers";
-import { useDispatch, useSelector } from "react-redux";
-import { selectSupplierReturns } from "../../../reducers/supplierReturnsReducer";
-import { changeWeekOfSupplier } from "../../../reducers/supplierReturnsReducer";
-import { PAYMENTS_PAY_RUNS_ROUTE } from "../../../routes/RouteConstants";
-import useSWR from 'swr';
+import { useDispatch, useSelector } from 'react-redux';
+import Breadcrumbs from '../../../components/Breadcrumbs';
+import Pagination from '../../../components/Payments/Pagination';
+import { supplierReturnTableData } from '../../../testData/testDataPayRuns';
+import SupplierReturnsLevelInsight from '../../../components/SupplierReturns/SupplierReturnsLevelInsight';
+import SupplierReturnsInnerHeader from '../../../components/SupplierReturns/SupplierReturnsInnerHeader';
+import SupplierReturnTable from '../../../components/SupplierReturns/SupplierReturnTable';
+import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
+import { formatDateWithSign, getUserSession } from '../../../service/helpers';
+import { selectSupplierReturns, changeWeekOfSupplier } from '../../../reducers/supplierReturnsReducer';
 
-const serverSupplierReturnsId = async () => {};
+import withSession from '../../../lib/session';
+import { PAYMENTS_PAY_RUNS_ROUTE } from '../../../routes/RouteConstants';
+
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const SupplierReturn = () => {
-  const { data } = useSWR('', serverSupplierReturnsId);
   const [sorts] = useState([
     {name: 'supplier', text: 'Supplier'},
     {name: 'packages', text: 'Packages'},
@@ -29,7 +35,7 @@ const SupplierReturn = () => {
   ]);
   const dispatch = useDispatch();
   const router = useRouter();
-  const id = router.query.id;
+  const { id } = router.query;
   const [pathname] = useState(`${PAYMENTS_PAY_RUNS_ROUTE}/${id}`);
   const [checkedRows, setCheckedRows] = useState([]);
   const {supplierReturns: { weekCommencing: date }} = useSelector(selectSupplierReturns);
@@ -83,7 +89,7 @@ const SupplierReturn = () => {
         rows={supplierReturnTableData}
         checkedRows={checkedRows}
         setCheckedRows={onCheckRow}
-        isIgnoreId={true}
+        isIgnoreId
         sortBy={sortBy}
         sorts={sorts}
         onClickTableRow={onClickTableRow}

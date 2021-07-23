@@ -1,25 +1,28 @@
-import React, { useState } from "react";
-import NursingCareApprovalTitle from "../../../../components/NursingCare/NursingCareApprovalTitle";
-import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
-import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
-import TitleHeader from "../../../../components/TitleHeader";
-import NursingCareSummary from "../../../../components/NursingCare/NursingCareSummary";
-import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
-import Layout from "../../../../components/Layout/Layout";
-import TextArea from "../../../../components/TextArea";
-import { useRouter } from "next/router"
-import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
+import Layout from '../../../../components/Layout/Layout';
+import NursingCareApprovalTitle from '../../../../components/NursingCare/NursingCareApprovalTitle';
+import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
+import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
+import TitleHeader from '../../../../components/TitleHeader';
+import NursingCareSummary from '../../../../components/NursingCare/NursingCareSummary';
+import TextArea from '../../../../components/TextArea';
 import {
   getNursingCarePackageApprovalPackageContent,
   getNursingCarePackageApprovalHistory,
   nursingCareRequestClarification,
   nursingCareChangeStatus,
   nursingCareApprovePackageContent
-} from "../../../../api/CarePackages/NursingCareApi";
-import useSWR from 'swr';
+} from '../../../../api/CarePackages/NursingCareApi';
+import withSession from '../../../../lib/session';
+import { getUserSession } from '../../../../service/helpers';
 
 // start before render
-const getNursingCareApprovePackage = async (nursingCarePackageId) => {
+export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
   const data = {
     errorData: [],
   };
@@ -43,8 +46,8 @@ const getNursingCareApprovePackage = async (nursingCarePackageId) => {
   }
 
   try {
-    const res = await getNursingCarePackageApprovalHistory(nursingCarePackageId);
-    const newApprovalHistoryItems = res.map(
+    const result = await getNursingCarePackageApprovalHistory(nursingCarePackageId);
+    const newApprovalHistoryItems = result.map(
       (historyItem) => ({
         eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
           "en-GB"
@@ -60,26 +63,17 @@ const getNursingCareApprovePackage = async (nursingCarePackageId) => {
     data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`);
   }
 
-  return data;
-}
+  return { props: { ...data } };
+});
 
-const NursingCareApprovePackage = () => {
+const NursingCareApprovePackage = ({
+  nursingCarePackage,
+  approvalHistoryEntries,
+  additionalNeedsEntriesData,
+  errorData,
+}) => {
   const router = useRouter();
   const nursingCarePackageId = router.query.id;
-  const { data } = useSWR(nursingCarePackageId, getNursingCareApprovePackage);
-
-  let nursingCarePackage,
-    additionalNeedsEntriesData,
-    errorData,
-    approvalHistoryEntries;
-
-  if (data) {
-    approvalHistoryEntries = data.approvalHistoryEntries;
-    additionalNeedsEntriesData = data.additionalNeedsEntriesData;
-    nursingCarePackage = data.nursingCarePackage;
-    errorData = data.errorData;
-  }
-
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);

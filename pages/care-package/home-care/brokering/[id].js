@@ -1,28 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
+  getHomeCareBrokerageApprovePackage,
   getHomeCarePackageDetailsForBrokerage,
-  getHomeCareSummaryData
-} from '../../../../api/CarePackages/HomeCareApi'
-import Layout from '../../../../components/Layout/Layout'
-import PackagesHomeCare from '../../../../components/packages/home-care'
-import { getBrokerageSuccess, selectBrokerage } from '../../../../reducers/brokerageReducer'
-import { getErrorResponse, uniqueID } from '../../../../service/helpers'
-import { addNotification } from '../../../../reducers/notificationsReducer'
-import PackageHeader from '../../../../components/CarePackages/PackageHeader'
-import { useRouter } from 'next/router'
-import useSWR from 'swr';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils'
+  getHomeCareSummaryData,
+} from '../../../../api/CarePackages/HomeCareApi';
+import Layout from '../../../../components/Layout/Layout';
+import PackagesHomeCare from '../../../../components/packages/home-care';
+import { getBrokerageSuccess, selectBrokerage } from '../../../../reducers/brokerageReducer';
+import { getErrorResponse, getUserSession, uniqueID } from '../../../../service/helpers';
+import withSession from '../../../../lib/session';
+import { addNotification } from '../../../../reducers/notificationsReducer';
+import { mapHomeCarePackageDetailsForBrokerage } from '../../../../api/Mappers/CarePackageMapper';
+import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 
 // start before render
-const serverHomeCareBrokering = async (homeCarePackageId) => {
+export const getServerSideProps = withSession(async ({ req, res, query: { id: homeCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
   const data = {
     errorData: [],
   };
 
   try {
     // Call to api to get package
-    // TODO change API
+    //TODO change API
     const homeCareBrokerageDetails = await getHomeCarePackageDetailsForBrokerage(homeCarePackageId);
     const newAdditionalNeedsEntries = homeCareBrokerageDetails?.homeCareAdditionalNeeds?.map(
       (additionalneedsItem) => ({
@@ -43,29 +46,19 @@ const serverHomeCareBrokering = async (homeCarePackageId) => {
 
   try {
     // Call to api to get package
-    data.approvalHistoryEntries = [];
-  } catch(error) {
+    const approvePackage = await getHomeCareBrokerageApprovePackage(homeCarePackageId);
+    data.approvalHistoryEntries = mapHomeCarePackageDetailsForBrokerage(approvePackage);
+  } catch (error) {
     data.errorData.push({
       text: `Retrieve home care approval history failed. ${error?.message || ''}`,
       response: getErrorResponse(error),
     });
   }
-  return data;
-}
 
-const HomeCareBrokerPackage = () => {
-  const router = useRouter();
-  const packageId = router.query.id;
-  const { data } = useSWR(packageId, serverHomeCareBrokering);
+  return { props: { ...data } };
+});
 
-  let errorData, homeCarePackage, approvalHistoryEntries, additionalNeedsEntries;
-  if(data) {
-    errorData = data.errorData;
-    homeCarePackage = data.homeCarePackage;
-    approvalHistoryEntries = data.approvalHistoryEntries;
-    additionalNeedsEntries = data.additionalNeedsEntries;
-  }
-
+const HomeCareBrokerPackage = ({ errorData, homeCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
   const dispatch = useDispatch();
   const [initialPackageReclaim] = useState({
     type: "",
@@ -127,23 +120,25 @@ const HomeCareBrokerPackage = () => {
     dispatch(getBrokerageSuccess({ type: 'homeCarePackage', homeCarePackage }));
   }, []);
 
-  if(!data) {
-    return <p>Loading...</p>
-  }
-
   return (
-    <Layout clientSummaryInfo={{
-      client: homeCarePackage?.homeCarePackage?.clientName,
-      hackneyId: homeCarePackage?.homeCarePackage?.clientHackneyId,
-      age: homeCarePackage?.homeCarePackage && getAgeFromDateString(homeCarePackage?.homeCarePackage?.clientDateOfBirth),
-      preferredContact: homeCarePackage?.homeCarePackage?.clientPreferredContact,
-      canSpeakEnglish: homeCarePackage?.homeCarePackage?.clientCanSpeakEnglish,
-      packagesCount: 4,
-      dateOfBirth: homeCarePackage?.homeCarePackage && getEnGBFormattedDate(homeCarePackage?.homeCarePackage?.clientDateOfBirth),
-      postcode: homeCarePackage?.homeCarePackage?.clientPostCode,
-    }} className='home-care-brokerage-page' headerTitle="HOME CARE BROKER PACKAGE">
+    <Layout
+      clientSummaryInfo={{
+        client: homeCarePackage?.homeCarePackage?.clientName,
+        hackneyId: homeCarePackage?.homeCarePackage?.clientHackneyId,
+        age:
+          homeCarePackage?.homeCarePackage && getAgeFromDateString(homeCarePackage?.homeCarePackage?.clientDateOfBirth),
+        preferredContact: homeCarePackage?.homeCarePackage?.clientPreferredContact,
+        canSpeakEnglish: homeCarePackage?.homeCarePackage?.clientCanSpeakEnglish,
+        packagesCount: 4,
+        dateOfBirth:
+          homeCarePackage?.homeCarePackage && getEnGBFormattedDate(homeCarePackage?.homeCarePackage?.clientDateOfBirth),
+        postcode: homeCarePackage?.homeCarePackage?.clientPostCode,
+      }}
+      className="home-care-brokerage-page"
+      headerTitle="HOME CARE BROKER PACKAGE"
+    >
       <PackageHeader />
-      <div className='hackney-text-black font-size-12px care-packages-page'>
+      <div className="hackney-text-black font-size-12px care-packages-page">
         <PackagesHomeCare
           tab={tab}
           careType="Home care"

@@ -1,21 +1,28 @@
-import React, { useEffect, useState } from "react";
-import Breadcrumbs from "../../../components/Breadcrumbs";
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Pagination from "../../../components/Payments/Pagination";
-import { supplierReturnsDashboardTableData, testDataHelpMessages } from "../../../testData/testDataPayRuns";
-import SupplierReturnsLevelInsight from "../../../components/SupplierDashboard/SupplierReturnsLevelInsight";
-import SupplierReturnDashboardTable from "../../../components/SupplierDashboard/SupplierReturnsDashboardTable";
-import SupplierReturnsDashboardInnerHeader from "../../../components/SupplierDashboard/SupplierReturnsDashboardInnerHeader";
-import ChatButton from "../../../components/PayRuns/ChatButton";
-import PopupInvoiceChat from "../../../components/Chat/PopupInvoiceChat";
-import useSWR from 'swr';
+import Breadcrumbs from '../../../components/Breadcrumbs';
+import PopupInvoiceChat from '../../../components/Chat/PopupInvoiceChat';
+import Pagination from '../../../components/Payments/Pagination';
+import { supplierReturnsDashboardTableData, testDataHelpMessages } from '../../../testData/testDataPayRuns';
+import SupplierReturnsLevelInsight from '../../../components/SupplierDashboard/SupplierReturnsLevelInsight';
+import SupplierReturnDashboardTable from '../../../components/SupplierDashboard/SupplierReturnsDashboardTable';
+import SupplierReturnsDashboardInnerHeader from '../../../components/SupplierDashboard/SupplierReturnsDashboardInnerHeader';
+import ChatButton from '../../../components/PayRuns/ChatButton';
+import { getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
 
-const serverSupplierReturnsId = async () => {};
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const SupplierReturnsDashboard = () => {
-  const { data } = useSWR('', serverSupplierReturnsId);
   const router = useRouter();
-  const id = router.query.id;
+  const { id } = router.query;
   const [pathname] = useState(`/supplier-dashboard/supplier-returns/${id}`);
   const [sorts] = useState([
     {name: 'serviceUser', text: 'Service User'},
@@ -113,8 +120,8 @@ const SupplierReturnsDashboard = () => {
         openChat={openChat}
         makeAction={makeServiceAction}
         additionalActions={chatActions}
-        isIgnoreId={true}
-        canCollapseRows={true}
+        isIgnoreId
+        canCollapseRows
         sortBy={sortBy}
         sorts={sorts}
       />
