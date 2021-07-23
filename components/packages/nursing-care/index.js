@@ -89,13 +89,11 @@ const PackagesNursingCare = ({
     setOneOffTotalCost(additionalPaymentOneOff);
   }, [additionalPaymentOneOff]);
 
-  const formIsValid = (brokerageInfoForCreation) => {
-    return !!(
+  const formIsValid = (brokerageInfoForCreation) => !!(
       !isNaN(Number(brokerageInfoForCreation?.nursingCore)) &&
       !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
       !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
     );
-  };
 
   const handleSaveBrokerage = (event) => {
     event.preventDefault();
@@ -253,16 +251,14 @@ const PackagesNursingCare = ({
           </div>
           {!!packagesReclaimed.length && (
             <div>
-              {packagesReclaimed.map((item) => {
-                return (
+              {packagesReclaimed.map((item) => (
                   <PackageReclaim
                     remove={() => removePackageReclaim(item.id)}
                     key={item.id}
                     packageReclaim={item}
                     setPackageReclaim={changePackageReclaim(item.id)}
                   />
-                );
-              })}
+                ))}
               <p onClick={addPackageReclaim} className="action-button-text">
                 + Add another reclaim
               </p>
@@ -288,7 +284,7 @@ const PackagesNursingCare = ({
             startDate={nursingCarePackage?.nursingCarePackage.startDate}
             endDate={
               nursingCarePackage?.nursingCarePackage.endDate !== null
-                ? nursingCarePackage?.nursingCarePackage.endDate
+                ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
                 : 'Ongoing'
             }
             needToAddress={nursingCareSummary.needToAddress}
@@ -301,8 +297,7 @@ const PackagesNursingCare = ({
   );
 };
 
-const ApprovalHistory = ({ history, nursingCarePackage = undefined, costSummary }) => {
-  return (
+const ApprovalHistory = ({ history, nursingCarePackage = undefined, costSummary }) => (
     <div className="approval-history">
       <h2>
         Nursing Care{' '}
@@ -370,6 +365,5 @@ const ApprovalHistory = ({ history, nursingCarePackage = undefined, costSummary 
       <PackageApprovalHistorySummary approvalHistoryEntries={history} />
     </div>
   );
-};
 
 export default PackagesNursingCare;

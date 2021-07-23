@@ -9,7 +9,11 @@ const getAgeFromDateString = (dateString) => {
   return age;
 };
 
-const getEnGBFormattedDate = (dateString) => new Date(dateString).toLocaleDateString('en-GB');
+const getEnGBFormattedDate = (dateString) => {
+  if (!dateString) return null;
+  return new Date(dateString).toLocaleDateString('en-GB');
+};
+
 const stringIsNullOrEmpty = (str) => {
   if (!str || str.length === 0) return true;
   if (!str || /^\s*$/.test(str)) return true;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import Layout from '../../../../components/Layout/Layout';
 import ResidentialCareApprovalTitle from '../../../../components/ResidentialCare/ResidentialCareApprovalTitle';
@@ -112,7 +113,7 @@ const ResidentialCareApprovePackage = ({
           startDate={residentialCarePackage?.residentialCarePackage.startDate}
           endDate={
             residentialCarePackage?.residentialCarePackage.endDate !== null
-              ? residentialCarePackage?.residentialCarePackage.endDate
+              ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
               : 'Ongoing'
           }
         />
@@ -126,7 +127,7 @@ const ResidentialCareApprovePackage = ({
                   <div>
                     <p className="font-weight-bold hackney-text-green">STARTS</p>
                     <p className="font-size-14px">
-                      {new Date(residentialCarePackage?.residentialCarePackage.startDate).toLocaleDateString('en-GB')}
+                      {getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.startDate)}
                     </p>
                   </div>
                 </div>
@@ -141,7 +142,7 @@ const ResidentialCareApprovePackage = ({
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
                       {residentialCarePackage?.residentialCarePackage.endDate !== null
-                        ? residentialCarePackage?.residentialCarePackage.endDate
+                        ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
                         : 'Ongoing'}
                     </p>
                   </div>
@@ -200,7 +201,7 @@ const ResidentialCareApprovePackage = ({
                 startDate={residentialCarePackage?.residentialCarePackage.startDate}
                 endDate={
                   residentialCarePackage?.residentialCarePackage.endDate !== null
-                    ? residentialCarePackage?.residentialCarePackage.endDate
+                    ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
                     : 'Ongoing'
                 }
                 typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
