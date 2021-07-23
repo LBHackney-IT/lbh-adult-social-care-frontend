@@ -35,6 +35,7 @@ const getUserSession = ({ req }) => {
       },
     }; */
   }
+
   return user;
 };
 

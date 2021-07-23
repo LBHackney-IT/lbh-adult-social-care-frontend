@@ -8,12 +8,15 @@ import NursingCareSetup from '../../components/Setup/NursingCareSetup';
 import ResidentialCareSetup from '../../components/Setup/ResidentialCareSetup';
 import withSession from '../../lib/session';
 import { getNursingTypeOfStayOptions, getResidentialTypeOfStayOptions } from '../../reducers/carePackageSlice';
-import { getUserSession } from '../../service/helpers';
 
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const user = req.session.get("user");
+
+  if (user === undefined) {
+    res.setHeader("location", "/login");
+    res.statusCode = 302;
+    res.end();
+    return { props: {} };
   }
 
   return {
