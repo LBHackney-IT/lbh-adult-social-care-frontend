@@ -1,4 +1,5 @@
 import React from 'react';
+import { getEnGBFormattedDate } from '../../api/Utils/FuncUtils';
 import { Button } from '../Button';
 
 const CareSummary = ({
@@ -9,8 +10,6 @@ const CareSummary = ({
   careType,
   setAdditionalNeedsEntries = () => {},
 }) => {
-  startDate = new Date(startDate).toLocaleDateString('en-GB');
-
   // Remove additional need entry
   const removeAdditionalNeedEntry = (entryId) => {
     const newEntries = additionalNeedsEntries.filter((entryItem) => entryItem.id !== entryId);
@@ -24,7 +23,7 @@ const CareSummary = ({
           <div>
             <span className="font-weight-bold mr-2 font-size-16px">{careType}</span>
             <span className="font-size-16px">
-              {startDate} {endDate ? ` - ${endDate}` : null}
+              {getEnGBFormattedDate(startDate)} {endDate ? ` - ${endDate}` : null}
             </span>
           </div>
         </div>

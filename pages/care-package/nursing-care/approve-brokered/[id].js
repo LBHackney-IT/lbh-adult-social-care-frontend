@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import NursingCareApprovalTitle from '../../../../components/NursingCare/NursingCareApprovalTitle';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import Layout from '../../../../components/Layout/Layout';
@@ -107,7 +108,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
           startDate={nursingCarePackage?.nursingCarePackage.startDate}
           endDate={
             nursingCarePackage?.nursingCarePackage.endDate !== null
-              ? nursingCarePackage?.nursingCarePackage.endDate
+              ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
               : 'Ongoing'
           }
         />
@@ -121,7 +122,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
                   <div>
                     <p className="font-weight-bold hackney-text-green">STARTS</p>
                     <p className="font-size-14px">
-                      {new Date(nursingCarePackage?.nursingCarePackage.startDate).toLocaleDateString('en-GB')}
+                      {getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate)}
                     </p>
                   </div>
                 </div>
@@ -136,7 +137,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
                       {nursingCarePackage?.nursingCarePackage.endDate !== null
-                        ? nursingCarePackage?.nursingCarePackage.endDate
+                        ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
                         : 'Ongoing'}
                     </p>
                   </div>
@@ -197,7 +198,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
                 startDate={nursingCarePackage?.nursingCarePackage.startDate}
                 endDate={
                   nursingCarePackage?.nursingCarePackage.endDate !== null
-                    ? nursingCarePackage?.nursingCarePackage.endDate
+                    ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
                     : 'Ongoing'
                 }
                 additionalNeedsEntries={additionalNeedsEntries}

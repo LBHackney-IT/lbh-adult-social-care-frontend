@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import Layout from '../../../../components/Layout/Layout';
 import DayCareApprovalTitle from '../../../../components/DayCare/DayCareApprovalTitle';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
@@ -126,7 +127,7 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
                   <div>
                     <p className="font-weight-bold hackney-text-green">STARTS</p>
                     <p className="font-size-14px">
-                      {new Date(dayCarePackage?.packageDetails.startDate).toLocaleDateString('en-GB')}
+                      {getEnGBFormattedDate(dayCarePackage?.packageDetails.startDate)}
                     </p>
                   </div>
                 </div>
@@ -141,7 +142,7 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
                       {dayCarePackage?.packageDetails.endDate !== null
-                        ? dayCarePackage?.packageDetails.endDate
+                        ? getEnGBFormattedDate(dayCarePackage?.packageDetails.endDate)
                         : 'Ongoing'}
                     </p>
                   </div>

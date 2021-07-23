@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import { currency } from '../../../constants/strings';
 import DatePick from '../../DatePick';
 import Dropdown from '../../Dropdown';
@@ -9,7 +11,6 @@ import ApprovalHistory from '../../ProposedPackages/ApprovalHistory';
 import CareSummary from '../../ProposedPackages/CareSummary';
 import { changeHomeCareBrokerageStatus, createHomeCareBrokerageInfo } from '../../../api/CarePackages/HomeCareApi';
 import { addNotification } from '../../../reducers/notificationsReducer';
-import { useDispatch } from 'react-redux';
 import { getErrorResponse } from '../../../service/helpers';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
@@ -116,7 +117,7 @@ const PackagesHomeCare = ({
 
   const submitForApproval = async () => {
     try {
-      //TODO need to change params
+      // TODO need to change params
       const data = {
         totalCost,
         hoursPerWeek: homeCarePackage.homeCarePackageCost.hoursePerWeek,
@@ -235,8 +236,8 @@ const PackagesHomeCare = ({
                 <br />
                 <HomeCareCostEntry
                   label="Secondary Carer"
-                  value={elementsData['secondaryCarer'].value}
-                  quantity={elementsData['secondaryCarer'].quantity}
+                  value={elementsData.secondaryCarer.value}
+                  quantity={elementsData.secondaryCarer.quantity}
                   onChange={(value) => {
                     changeElementsData('secondaryCarer', value);
                   }}
@@ -244,16 +245,16 @@ const PackagesHomeCare = ({
                 <p className="proposed-packages__split-rate">Split rate</p>
                 <HomeCareCostEntry
                   label="Domestic Care"
-                  value={elementsData['domesticCare'].value}
-                  quantity={elementsData['domesticCare'].quantity}
+                  value={elementsData.domesticCare.value}
+                  quantity={elementsData.domesticCare.quantity}
                   onChange={(value) => {
                     changeElementsData('domesticCare', value);
                   }}
                 />
                 <HomeCareCostEntry
                   label="Escort Services"
-                  value={elementsData['escortServices'].value}
-                  quantity={elementsData['escortServices'].quantity}
+                  value={elementsData.escortServices.value}
+                  quantity={elementsData.escortServices.quantity}
                   onChange={(value) => {
                     changeElementsData('escortServices', value);
                   }}
@@ -270,24 +271,24 @@ const PackagesHomeCare = ({
               </div>
               <HomeCareCostEntry
                 label="Sleeping Night"
-                value={elementsData['sleepingNight'].value}
-                quantity={elementsData['sleepingNight'].quantity}
+                value={elementsData.sleepingNight.value}
+                quantity={elementsData.sleepingNight.quantity}
                 onChange={(value) => {
                   changeElementsData('sleepingNight', value);
                 }}
               />
               <HomeCareCostEntry
                 label="Waking Night"
-                value={elementsData['wakingNight'].value}
-                quantity={elementsData['wakingNight'].quantity}
+                value={elementsData.wakingNight.value}
+                quantity={elementsData.wakingNight.quantity}
                 onChange={(value) => {
                   changeElementsData('wakingNight', value);
                 }}
               />
               <HomeCareCostEntry
                 label="Night Owl"
-                value={elementsData['nightOwl'].value}
-                quantity={elementsData['nightOwl'].quantity}
+                value={elementsData.nightOwl.value}
+                quantity={elementsData.nightOwl.quantity}
                 onChange={(value) => {
                   changeElementsData('nightOwl', value);
                 }}
@@ -320,16 +321,14 @@ const PackagesHomeCare = ({
         </div>
         {!!packagesReclaimed.length && (
           <div>
-            {packagesReclaimed.map((item) => {
-              return (
+            {packagesReclaimed.map((item) => (
                 <PackageReclaim
                   remove={tab === 'packageDetails' ? () => removePackageReclaim(item.id) : undefined}
                   key={item.id}
                   packageReclaim={item}
                   setPackageReclaim={changePackageReclaim(item.id)}
                 />
-              );
-            })}
+              ))}
           </div>
         )}
         <ProposedPackagesTab tab={tab} changeTab={changeTab} />
@@ -359,7 +358,7 @@ const PackagesHomeCare = ({
             careType="Home care"
             startDate={homeCarePackage?.homeCarePackage?.startDate}
             endDate={
-              homeCarePackage?.homeCarePackage?.endDate !== null ? homeCarePackage?.homeCarePackage?.endDate : 'Ongoing'
+              homeCarePackage?.homeCarePackage?.endDate !== null ? getEnGBFormattedDate(homeCarePackage?.homeCarePackage?.endDate) : 'Ongoing'
             }
             needToAddress={homeCareSummary.needToAddress}
             additionalNeedsEntries={homeCareSummary.additionalNeedsEntries}

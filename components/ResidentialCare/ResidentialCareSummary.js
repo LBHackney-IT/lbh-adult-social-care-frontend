@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { getEnGBFormattedDate } from '../../api/Utils/FuncUtils';
 import { Button } from '../Button';
 
 const ResidentialCareSummary = ({
@@ -9,8 +10,6 @@ const ResidentialCareSummary = ({
   additionalNeedsEntries = [],
   setAdditionalNeedsEntries = () => {},
 }) => {
-  startDate = new Date(startDate).toLocaleDateString('en-GB');
-
   const renderDate = (dateString) => dateString && new Date(dateString).toLocaleDateString('en-GB');
 
   useEffect(() => {}, [additionalNeedsEntries]);
@@ -28,7 +27,7 @@ const ResidentialCareSummary = ({
           <div>
             <span className="font-weight-bold font-size-24px mr-2">Residential Care</span>
             <span className="font-size-16px">
-              {startDate} {endDate ? ` - ${endDate}` : null}
+              {getEnGBFormattedDate(startDate)} {endDate ? ` - ${endDate}` : null}
             </span>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import ClientSummary from '../../../components/ClientSummary';
 import Layout from '../../../components/Layout/Layout';
 import CareTitle from '../../../components/CarePackages/CareTitle';
@@ -187,7 +188,7 @@ const ResidentialCare = () => {
         <TitleHeader className='mb-5'>Package Details</TitleHeader>
         <ResidentialCareSummary
           startDate={startDate}
-          endDate={endDate}
+          endDate={getEnGBFormattedDate(endDate)}
           typeOfStayText={typeOfStayText}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}

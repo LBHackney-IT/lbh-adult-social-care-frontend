@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import ClientSummary from '../../../components/ClientSummary';
 import Dropdown from '../../../components/Dropdown';
 import TextArea from '../../../components/TextArea';
@@ -249,7 +250,7 @@ const NursingCare = () => {
         <TitleHeader>Package Details</TitleHeader>
         <NursingCareSummary
           startDate={startDate}
-          endDate={endDate}
+          endDate={getEnGBFormattedDate(endDate)}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}
           setAdditionalNeedsEntries={setAdditionalNeedsEntries}
