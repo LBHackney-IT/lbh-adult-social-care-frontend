@@ -1,8 +1,9 @@
 import React from 'react';
+import { currency } from '../constants/strings';
 import Dropdown from './Dropdown';
+import Input from './Input';
 import TextArea from './TextArea';
 import RadioButton from './RadioButton';
-import EuroInput from './EuroInput';
 
 const staticReclaimFromOptions = [
   { text: 'Reclaim from 1', value: 1 },
@@ -16,10 +17,11 @@ const staticCategoryOptions = [
   { text: 'Category type 3', value: 3 },
 ];
 
+const percentageValue = 1;
 const staticCheckboxOptions = [
-  { value: 'percentage', text: 'Percentage' },
-  { value: 'fixedOneOff', text: 'Fixed amount - one off' },
-  { value: 'fixedWeekly', text: 'Fixed amount - weekly' },
+  { value: percentageValue, text: 'Percentage' },
+  { value: 2, text: 'Fixed amount - one off' },
+  { value: 3, text: 'Fixed amount - weekly' },
 ];
 
 const PackageReclaim = ({
@@ -96,10 +98,12 @@ const PackageReclaim = ({
             selectedValue={packageReclaim.type}
           />
         </div>
-        <EuroInput
+        <Input
           onChange={(value) => changePackageType('amount', value)}
           label="Amount"
           error={currentError?.amount}
+          preSign={packageReclaim.type !== percentageValue ? currency.euro : undefined}
+          postSign={packageReclaim.type === percentageValue ? '%' : undefined}
           value={packageReclaim.amount}
         />
         <hr className="horizontal-delimiter" />

@@ -2,13 +2,10 @@ import axios from 'axios';
 import { BASE_URL } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 
-const NURSING_CARE_URL = `${BASE_URL}/v1/nursing-care-packages`;
+export const NURSING_CARE_URL = `${BASE_URL}/v1/nursing-care-packages`;
 
 const getTypeOfNursingHomeOptions = () =>
   axios.get(`${NURSING_CARE_URL}/type-of-nursing-care-homes`).then(handleResponse).catch(handleError);
-
-const getNursingCareTypeOfStayOptions = () =>
-  axios.get(`${NURSING_CARE_URL}/type-of-stay-options`).then(handleResponse).catch(handleError);
 
 const createNursingCarePackage = (nursingCarePackageForCreation) => {
   const options = {
@@ -72,9 +69,71 @@ const nursingCareRequestClarification = (nursingCarePackageId, informationText) 
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const nursingCareClarifyCommercial = (nursingCarePackageId, informationText) => {
+  const options = {
+    url: `${BASE_URL}/v1/nursing-care-request-more-information/clarifying-commercials`,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data: {
+      nursingCarePackageId,
+      informationText,
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 const nursingCareChangeStatus = (nursingCarePackageId, newStatusId) => {
   const options = {
     url: `${NURSING_CARE_URL}/${nursingCarePackageId}/change-status/${newStatusId}`,
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    data: {
+      nursingCarePackageId,
+      newStatusId,
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+const nursingCareApprovePackageContent = (nursingCarePackageId) => {
+  const options = {
+    url: `${NURSING_CARE_URL}/${nursingCarePackageId}/approve-package-contents`,
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data: {
+      nursingCarePackageId
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+const nursingCareApproveCommercials = (nursingCarePackageId) => {
+  const options = {
+    url: `${NURSING_CARE_URL}/${nursingCarePackageId}/approve-commercials`,
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data: {
+      nursingCarePackageId
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+const nursingCareChangeStage = (nursingCarePackageId, stageId) => {
+  const options = {
+    url: `${NURSING_CARE_URL}/${nursingCarePackageId}/brokerage/stage/${stageId}`,
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -82,7 +141,7 @@ const nursingCareChangeStatus = (nursingCarePackageId, newStatusId) => {
     },
     data: {
       nursingCarePackageId,
-      newStatusId,
+      stageId,
     },
   };
   return axios(options).then(handleResponse).catch(handleError);
@@ -109,7 +168,6 @@ const createNursingCareBrokerageInfo = (nursingCarePackageId, nursingCareBrokera
 
 export {
   getTypeOfNursingHomeOptions,
-  getNursingCareTypeOfStayOptions,
   createNursingCarePackage,
   getNursingCarePackageList,
   getSingleNursingCarePackage,
@@ -117,7 +175,11 @@ export {
   getNursingCarePackageApproveCommercial,
   getNursingCarePackageApprovalHistory,
   nursingCareRequestClarification,
+  nursingCareClarifyCommercial,
   nursingCareChangeStatus,
+  nursingCareChangeStage,
+  nursingCareApprovePackageContent,
+  nursingCareApproveCommercials,
   getNursingCareBrokerageStages,
   getNursingCarePackageDetailsForBrokerage,
   createNursingCareBrokerageInfo,

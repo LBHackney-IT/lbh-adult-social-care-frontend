@@ -1,5 +1,5 @@
 import React from 'react';
 
-const TitleHeader = ({ children }) => <div className="title-header">{children}</div>;
+const TitleHeader = ({ children, className }) => <div className={`title-header ${className ?? ''}`}>{children}</div>;
 
 export default TitleHeader;

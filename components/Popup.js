@@ -21,7 +21,7 @@ const Popup = ({ mainContent, firstButton, classes = '', secondButton, title, cl
       <div className="popup__inner-content">
         <div className="popup__header">
           <p className="popup__header-title">{title}</p>
-          <div onClick={closePopup} className="popup__close-button">
+          <div onClick={closePopup} className="popup__close-button" role="presentation">
             <CircleCloseIcon />
           </div>
         </div>

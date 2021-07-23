@@ -25,11 +25,9 @@ import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
 import ErrorField from '../../../components/ErrorField';
 
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   return {
     props: {}, // will be passed to the page component as props
@@ -42,7 +40,7 @@ const DayCare = () => {
 
   // Parameters
   const router = useRouter();
-  let [startDate, endDate, isImmediate, isS117, isFixedPeriod] = router.query.slug;
+  let [isImmediate, isS117, isFixedPeriod, startDate, endDate] = router.query.slug;
   isImmediate = isTrueSet(isImmediate);
   isS117 = isTrueSet(isS117);
   isFixedPeriod = checkFixedPeriod(isFixedPeriod);

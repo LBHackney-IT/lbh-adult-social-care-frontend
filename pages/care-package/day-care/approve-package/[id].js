@@ -23,11 +23,9 @@ import { getErrorResponse, getUserSession } from '../../../../service/helpers';
 import fieldValidator from '../../../../service/inputValidator';
 
 // start before render
-export const getServerSideProps = withSession(async ({ req, query: { id: residentialCarePackageId } }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res, query: { id: dayCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   const data = {
     errorData: [],

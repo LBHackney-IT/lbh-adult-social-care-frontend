@@ -19,17 +19,15 @@ import { getErrorResponse, getUserSession } from '../../../../service/helpers';
 import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
 
 // get server side props before render
-export const getServerSideProps = withSession(async ({ req, query: { id: residentialCarePackageId } }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   const data = {
     errorData: [],
   };
   try {
-    const dayCarePackage = await getDayCarePackageApprovalDetails(dayCarePackageId);
+    const dayCarePackage = await getDayCarePackageApprovalDetails(residentialCarePackageId);
     // Update approve-package state
     const newApprovalHistoryItems = dayCarePackage.packageApprovalHistory.map((historyItem) => ({
       eventDate: new Date(historyItem.dateCreated).toLocaleDateString('en-GB'),

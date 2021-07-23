@@ -11,17 +11,16 @@ import TextArea from '../../../../components/TextArea';
 import {
   getNursingCarePackageApproveCommercial,
   getNursingCarePackageApprovalHistory,
-  nursingCareRequestClarification,
+  nursingCareClarifyCommercial,
   nursingCareChangeStatus,
+  nursingCareApproveCommercials
 } from '../../../../api/CarePackages/NursingCareApi';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
 
-export const getServerSideProps = withSession(async ({ req, query: { id: nursingCarePackageId } }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   const data = {
     errorData: [],
@@ -79,7 +78,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
   };
 
   const handleApprovePackageCommercials = () => {
-    nursingCareChangeStatus(nursingCarePackageId, 8)
+    nursingCareApproveCommercials(nursingCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
@@ -90,7 +89,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
   };
 
   const handleRequestMoreInformation = () => {
-    nursingCareRequestClarification(nursingCarePackageId, requestInformationText)
+    nursingCareClarifyCommercial(nursingCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);

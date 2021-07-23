@@ -30,13 +30,15 @@ $max-ipod-width: 1172px;
 }
 
 @mixin media-tablet {
-  @media (min-width: $min-tablet-width) and (max-width: 1172px) and (orientation: portrait), (min-height: $min-tablet-width) and (min-height: $min-tablet-width) and (max-height: 1172px) and (max-width: 1172px) and (orientation: landscape) {
+  @media (min-width: $min-tablet-width) and (max-width: 1172px) and (orientation: portrait),
+    (min-height: $min-tablet-width) and (min-height: $min-tablet-width) and (max-height: 1172px) and (max-width: 1172px) and (orientation: landscape) {
     @content;
   }
 }
 
 @mixin media-tablet-down {
-  @media (max-width: 1024px) and (orientation: portrait), (max-height: 1024px) and (max-width: 1024px) and (orientation: landscape) {
+  @media (max-width: 1024px) and (orientation: portrait),
+    (max-height: 1024px) and (max-width: 1024px) and (orientation: landscape) {
     @content;
   }
 }
@@ -48,7 +50,8 @@ $max-ipod-width: 1172px;
 }
 
 @mixin media-mobile {
-  @media (max-width: $mobile-width) and (orientation: portrait),  (max-height: $mobile-width) and (orientation: landscape) {
+  @media (max-width: $mobile-width) and (orientation: portrait),
+    (max-height: $mobile-width) and (orientation: landscape) {
     @content;
   }
 }

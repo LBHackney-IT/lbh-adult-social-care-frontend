@@ -11,18 +11,16 @@ import TextArea from '../../../../components/TextArea';
 import {
   getResidentialCarePackageApproveBrokered,
   getResidentialCarePackageApprovalHistory,
-  residentialCareRequestClarification,
+  residentialCareClarifyCommercial,
   residentialCareChangeStatus,
+  residentialCareApproveCommercials
 } from '../../../../api/CarePackages/ResidentialCareApi';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
 
 // start before render
-export const getServerSideProps = withSession(async ({ req, query: { id: residentialCarePackageId } }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res: response, query: { id: residentialCarePackageId } }) => {
+  getUserSession({ req, res: response });
 
   const data = {
     errorData: [],
@@ -88,7 +86,7 @@ const ResidentialCareApproveBrokered = ({
   };
 
   const handleApprovePackageCommercials = () => {
-    residentialCareChangeStatus(residentialCarePackageId, 8)
+    residentialCareApproveCommercials(residentialCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
@@ -99,7 +97,7 @@ const ResidentialCareApproveBrokered = ({
   };
 
   const handleRequestMoreInformation = () => {
-    residentialCareRequestClarification(residentialCarePackageId, requestInformationText)
+    residentialCareClarifyCommercial(residentialCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);

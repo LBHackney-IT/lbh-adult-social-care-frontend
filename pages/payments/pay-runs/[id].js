@@ -1,36 +1,34 @@
-import React, { useEffect, useState } from "react";
-import Breadcrumbs from "../../../components/Breadcrumbs";
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import PayRunTable from "../../../components/PayRuns/PayRunTable";
-import Pagination from "../../../components/Payments/Pagination";
-import { payRunTableData } from "../../../testData/testDataPayRuns";
-import PopupCreatePayRun from "../../../components/PayRuns/PopupCreatePayRun";
-import PayRunsLevelInsight from "../../../components/PayRuns/PayRunsLevelInsight";
-import PayRunHeader from "../../../components/PayRuns/PayRunHeader";
-import PopupHoldPayment from "../../../components/PayRuns/PopupHoldPayment";
-import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
-import { getUserSession } from "../../../service/helpers";
-import withSession from "../../../lib/session";
+import Breadcrumbs from '../../../components/Breadcrumbs';
+import PayRunTable from '../../../components/PayRuns/PayRunTable';
+import Pagination from '../../../components/Payments/Pagination';
+import { payRunTableData } from '../../../testData/testDataPayRuns';
+import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
+import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight';
+import PayRunHeader from '../../../components/PayRuns/PayRunHeader';
+import PopupHoldPayment from '../../../components/PayRuns/PopupHoldPayment';
+import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
+import { getUserSession } from '../../../service/helpers';
+import withSession from '../../../lib/session';
 
-export const getServerSideProps = withSession(async function({ req }) {
-  const user = getUserSession({ req });
-  if(user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   return {
     props: {}, // will be passed to the page component as props
-  }
+  };
 });
 
 const PayRunPage = () => {
   const [sorts] = useState([
-    {name: 'serviceUser', text: 'Service User'},
-    {name: 'invId', text: 'INV ID'},
-    {name: 'packageType', text: 'Package Type'},
-    {name: 'supplier', text: 'SupplierDashboard'},
-    {name: 'total', text: 'Total'},
-    {name: 'status', text: 'Status'},
+    { name: 'serviceUser', text: 'Service User' },
+    { name: 'invId', text: 'INV ID' },
+    { name: 'packageType', text: 'Package Type' },
+    { name: 'supplier', text: 'SupplierDashboard' },
+    { name: 'total', text: 'Total' },
+    { name: 'status', text: 'Status' },
   ]);
 
   const [popupTypes] = useState({
@@ -56,8 +54,8 @@ const PayRunPage = () => {
   });
 
   const [breadcrumbs] = useState([
-    {text: 'Payments', onClick: () => router.push('/payments/pay-runs')},
-    {text: `Pay Run ${id}`}
+    { text: 'Payments', onClick: () => router.push('/payments/pay-runs') },
+    { text: `Pay Run ${id}` },
   ]);
   const [sort, setSort] = useState({
     value: 'increase',
@@ -65,7 +63,7 @@ const PayRunPage = () => {
   });
 
   const sortBy = (field, value) => {
-    setSort({value, name: field});
+    setSort({ value, name: field });
   };
 
   const closeCreatePayRun = () => {
@@ -75,8 +73,8 @@ const PayRunPage = () => {
   };
 
   const onCheckRow = (id) => {
-    if(checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
+    if (checkedRows.includes(id)) {
+      setCheckedRows(checkedRows.filter((item) => String(item) !== String(id)));
     } else {
       setCheckedRows([...checkedRows, id]);
     }
@@ -86,7 +84,7 @@ const PayRunPage = () => {
     classes: 'outline green',
     onClick: () => console.log('Accept all selected', checkedRows),
     text: 'Accept all selected',
-  }
+  };
 
   useEffect(() => {
     router.replace(`${pathname}?page=1`);
@@ -97,41 +95,44 @@ const PayRunPage = () => {
   }, [sort]);
 
   return (
-    <div className='pay-runs pay-run'>
-      {openedPopup === popupTypes.holdPayments &&
+    <div className="pay-runs pay-run">
+      {openedPopup === popupTypes.holdPayments && (
         <PopupHoldPayment
           reason={reason}
           actionRequiredBy={actionRequiredBy}
-          actionRequiredByOptions={[{text: 'Brokerage', value: 'brokerage'}, {text: 'Testage', value: 'testage'}]}
+          actionRequiredByOptions={[
+            { text: 'Brokerage', value: 'brokerage' },
+            { text: 'Testage', value: 'testage' },
+          ]}
           changeActionRequiredBy={(value) => setActionRequiredBy(value)}
           closePopup={closeCreatePayRun}
-          changeReason={value => setReason(value)}
+          changeReason={(value) => setReason(value)}
         />
-      }
-      {openedPopup === popupTypes.createPayRun &&
-      <PopupCreatePayRun
-        changeHocAndRelease={changeHocAndRelease}
-        changeRegularCycles={changeRegularCycles}
-        hocAndRelease={hocAndRelease}
-        regularCycles={regularCycles}
-        closePopup={closeCreatePayRun}
-        date={date}
-        setDate={setDate}
-      />
-      }
-      {!!breadcrumbs.length && <Breadcrumbs className='p-3' values={breadcrumbs} />}
+      )}
+      {openedPopup === popupTypes.createPayRun && (
+        <PopupCreatePayRun
+          changeHocAndRelease={changeHocAndRelease}
+          setNewPayRunType={changeRegularCycles}
+          hocAndRelease={hocAndRelease}
+          regularCycles={regularCycles}
+          closePopup={closeCreatePayRun}
+          date={date}
+          setDate={setDate}
+        />
+      )}
+      {!!breadcrumbs.length && <Breadcrumbs className="p-3" values={breadcrumbs} />}
       <PayRunHeader
         actionButtonText={headerOptions.actionButtonText}
         clickActionButton={headerOptions.clickActionButton}
       />
       <PayRunTable
         rows={payRunTableData}
-        careType='Residential'
-        isStatusDropDown={true}
+        careType="Residential"
+        isStatusDropDown
         checkedRows={checkedRows}
         setCheckedRows={onCheckRow}
-        isIgnoreId={true}
-        canCollapseRows={true}
+        isIgnoreId
+        canCollapseRows
         sortBy={sortBy}
         sorts={sorts}
       />
@@ -139,22 +140,22 @@ const PayRunPage = () => {
       <PayRunsLevelInsight
         firstButton={{
           text: 'Submit pay run for approval',
-          onClick: () => {}
+          onClick: () => {},
         }}
         secondButton={{
           text: 'Delete draft pay run',
           onClick: () => {},
         }}
-        cost='£42,827'
-        suppliersCount='100'
-        servicesUsersCount='1000'
-        costIncrease='£897'
-        holdsCount='48'
-        holdsPrice='£32,223'
+        cost="£42,827"
+        suppliersCount="100"
+        servicesUsersCount="1000"
+        costIncrease="£897"
+        holdsCount="48"
+        holdsPrice="£32,223"
       />
       <HackneyFooterInfo />
     </div>
-  )
+  );
 };
 
 export default PayRunPage;

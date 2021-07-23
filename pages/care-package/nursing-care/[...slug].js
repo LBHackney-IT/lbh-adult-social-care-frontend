@@ -18,11 +18,9 @@ import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
 
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   return {
     props: {}, // will be passed to the page component as props
@@ -42,14 +40,14 @@ const NursingCare = () => {
   // Parameters
   const router = useRouter();
   let [
-    startDate,
-    endDate,
-    isThisAnImmediateService,
-    isThisUserUnderS117,
     isFixedPeriod,
+    startDate,
     typeOfStayId,
     hasRespiteCare,
     hasDischargePackage,
+    isThisAnImmediateService,
+    isThisUserUnderS117,
+    endDate,
   ] = router.query.slug;
   isThisAnImmediateService = isTrueParse(isThisAnImmediateService);
   isThisUserUnderS117 = isTrueParse(isThisUserUnderS117);

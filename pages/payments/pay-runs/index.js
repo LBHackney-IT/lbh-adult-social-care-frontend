@@ -4,11 +4,7 @@ import PayRunsHeader from '../../../components/PayRuns/PayRunsHeader';
 import PaymentsTabs from '../../../components/Payments/PaymentsTabs';
 import PayRunTable from '../../../components/PayRuns/PayRunTable';
 import Pagination from '../../../components/Payments/Pagination';
-import {
-  payRunsHeldPaymentsTableData,
-  payRunsTableData,
-  testDataHelpMessages,
-} from '../../../testData/testDataPayRuns';
+import { payRunsHeldPaymentsTableData, testDataHelpMessages } from '../../../testData/testDataPayRuns';
 import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
 import ChatButton from '../../../components/PayRuns/ChatButton';
 import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight';
@@ -16,12 +12,11 @@ import PopupHelpChat from '../../../components/Chat/PopupHelpChat';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
+import usePayRunSummary from '../../../api/Payments/hooks/usePayRunSummary';
 
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   return {
     props: {}, // will be passed to the page component as props
@@ -29,6 +24,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
 });
 
 const PayRunsPage = () => {
+  const { payRunsTableData, setPayRunsTableData } = usePayRunSummary();
   const [sortsTab] = useState({
     'pay-runs': [
       { name: 'id', text: 'ID' },
@@ -61,10 +57,10 @@ const PayRunsPage = () => {
   const [date, setDate] = useState(new Date());
   const [checkedRows, setCheckedRows] = useState([]);
   const [openedHelpChat, setOpenedHelpChat] = useState({});
-  const [hocAndRelease, changeHocAndRelease] = useState('');
+  // const [hocAndRelease, changeHocAndRelease] = useState('');
   const [waitingOn, changeWaitingOn] = useState('');
   const [newMessageText, setNewMessageText] = useState('');
-  const [regularCycles, changeRegularCycles] = useState('');
+  const [newPayRunType, setNewPayRunType] = useState('');
   const [tab, changeTab] = useState('pay-runs');
   const [sort, setSort] = useState({
     value: 'increase',
@@ -80,8 +76,8 @@ const PayRunsPage = () => {
 
   const closeCreatePayRun = () => {
     setOpenedPopup('');
-    changeHocAndRelease('');
-    changeRegularCycles('');
+    // changeHocAndRelease('');
+    setNewPayRunType('');
     setDate(new Date());
   };
 
@@ -122,6 +118,14 @@ const PayRunsPage = () => {
   ];
 
   useEffect(() => {
+    // using the selected field, check data and update
+    if (isPayRunsTab) {
+      const sortedData = payRunsTableData
+        .slice()
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      console.log(sortedData);
+      setPayRunsTableData(sortedData);
+    }
     console.log('change sort', sort);
   }, [sort]);
 
@@ -133,10 +137,8 @@ const PayRunsPage = () => {
     <div className={`pay-runs ${tab}__tab-class`}>
       {openedPopup === 'create-pay-run' && (
         <PopupCreatePayRun
-          changeHocAndRelease={changeHocAndRelease}
-          changeRegularCycles={changeRegularCycles}
-          hocAndRelease={hocAndRelease}
-          regularCycles={regularCycles}
+          setNewPayRunType={setNewPayRunType}
+          newPayRunType={newPayRunType}
           closePopup={closeCreatePayRun}
           date={date}
           setDate={setDate}
