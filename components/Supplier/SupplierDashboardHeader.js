@@ -8,7 +8,7 @@ const supplierRoutes = [
   { route: SUPPLIER_DASHBOARD_ROUTE, name: 'Supplier Returns' },
   { route: ACTIVE_PACKAGES_ROUTE, name: 'Active Packages' },
   { route: PAYMENTS_ROUTE, name: 'Payments' },
-  { route: '/', name: 'Log Out' },
+  { route: '/logout', name: 'Log Out' },
 ];
 
 const SupplierDashboardHeader = () => {

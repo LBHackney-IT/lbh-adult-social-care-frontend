@@ -8,7 +8,6 @@ import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi
 import PackagesNursingCare from '../../../../components/packages/nursing-care'
 import Layout from '../../../../components/Layout/Layout'
 import { getAgeFromDateString, getEnGBFormattedDate, } from '../../../../api/Utils/FuncUtils'
-
 import {
   createNursingCareBrokerageInfo,
   getNursingCareBrokerageStages,
@@ -41,7 +40,7 @@ const getNursingCareBrokering = async (nursingCarePackageId) => {
     );
     data.nursingCarePackage = nursingCarePackage;
     data.additionalNeedsEntries = newAdditionalNeedsEntries;
-  } catch(error) {
+  } catch (error) {
     data.errorData.push(`Retrieve nursing care package details failed. ${error.message}`);
   }
 
@@ -230,7 +229,7 @@ const NursingCareBrokering = () => {
         supplierOptions={supplierOptions}
         stageOptions={stageOptions}
         nursingCareSummary={{
-          additionalNeedsEntries: additionalNeedsEntries,
+          additionalNeedsEntries,
           needToAddress: nursingCarePackage?.nursingCarePackage?.needToAddress,
           deleteOpportunity: () => {},
         }}

@@ -12,10 +12,16 @@ import PopupHoldPayment from "../../../components/PayRuns/PopupHoldPayment";
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
 import { addNotification } from '../../../reducers/notificationsReducer'
 import {
-  acceptInvoice, approvePayRunForPayment, deleteDraftPayRun, getAllInvoiceStatuses, getInvoicePaymentStatuses,
+  acceptInvoice,
+  acceptInvoices,
+  approvePayRunForPayment,
+  deleteDraftPayRun,
+  getAllInvoiceStatuses,
+  getInvoicePaymentStatuses,
   getSinglePayRunDetails,
   getSinglePayRunInsights,
-  kickPayRunBackToDraft, submitPayRunForApproval
+  kickPayRunBackToDraft,
+  submitPayRunForApproval
 } from '../../../api/Payments/PayRunApi'
 
 const serverPayRunsId = async () => {};
@@ -113,7 +119,13 @@ const PayRunPage = () => {
   const actionButton = {
     classes: 'outline green',
     disabled: !checkedRows.length,
-    onClick: () => console.log("Accept all selected"),
+    onClick: () => {
+      setLoading(true);
+      const { payRunId } = payRunDetails;
+      acceptInvoices(payRunId, checkedRows)
+        .then(() => pushNotification('Accepted success'))
+        .catch(() => pushNotification('Accepted fail'))
+    },
     text: 'Accept all selected',
   }
 

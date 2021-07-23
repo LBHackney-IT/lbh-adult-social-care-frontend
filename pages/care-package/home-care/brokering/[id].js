@@ -22,7 +22,7 @@ const serverHomeCareBrokering = async (homeCarePackageId) => {
 
   try {
     // Call to api to get package
-    //TODO change API
+    // TODO change API
     const homeCareBrokerageDetails = await getHomeCarePackageDetailsForBrokerage(homeCarePackageId);
     const newAdditionalNeedsEntries = homeCareBrokerageDetails?.homeCareAdditionalNeeds?.map(
       (additionalneedsItem) => ({
@@ -34,7 +34,7 @@ const serverHomeCareBrokering = async (homeCarePackageId) => {
     );
     data.homeCarePackage = homeCareBrokerageDetails;
     data.additionalNeedsEntries = newAdditionalNeedsEntries;
-  } catch(error) {
+  } catch (error) {
     data.errorData.push({
       text: `Retrieve home care package details failed. ${error?.message || ''}`,
       response: getErrorResponse(error),
@@ -155,7 +155,7 @@ const HomeCareBrokerPackage = () => {
           packagesReclaimed={packagesReclaimed}
           changePackageReclaim={changePackageReclaim}
           homeCareSummary={{
-            additionalNeedsEntries: additionalNeedsEntries,
+            additionalNeedsEntries,
             needToAddress: homeCarePackage?.homeCarePackage?.needToAddress,
             deleteOpportunity: () => {},
           }}

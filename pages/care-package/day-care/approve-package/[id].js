@@ -98,15 +98,15 @@ const DayCareApprovePackage = () => {
     setErrorFields({
       ...errorFields,
       [field]: '',
-    })
+    });
   };
 
   const updateErrorFields = (errors) => {
     setErrorFields({
       ...errorFields,
-      ...getErrorResponse(errors)
+      ...getErrorResponse(errors),
     });
-  }
+  };
 
   const handleRejectPackage = () => {
     dayCarePackageRejectContents(dayCarePackageId)
@@ -134,7 +134,7 @@ const DayCareApprovePackage = () => {
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
-        updateErrorFields(error)
+        updateErrorFields(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
@@ -145,7 +145,7 @@ const DayCareApprovePackage = () => {
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
-        updateErrorFields(error)
+        updateErrorFields(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
@@ -290,6 +290,7 @@ const DayCareApprovePackage = () => {
                   <button
                     onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
                     className="button hackney-btn-light"
+                    type="button"
                   >
                     {displayMoreInfoForm
                       ? "Hide Request more information"

@@ -176,12 +176,25 @@ const PayRunsPage = () => {
   }
 
   const releaseHolds = () => {
-    releaseHeldInvoices(checkedRows)
-      .then(() => {
-        dispatch(addNotification({ text: 'Release Success', className: 'success' }));
-        setCheckedRows([]);
-      })
-      .catch(() => dispatch(addNotification({ text: 'Release Fail' })))
+    // TODO i am not sure that this api is correct for this case
+    // releaseHeldInvoices(checkedRows)
+    //   .then(() => {
+    //     dispatch(addNotification({ text: 'Release Success', className: 'success' }));
+    //     setCheckedRows([]);
+    //   })
+    //   .catch(() => dispatch(addNotification({ text: 'Release Fail' })))
+  }
+
+  const getHelds = () => {
+    getHeldInvoicePayments({ pageNumber: page})
+      .then(heldInvoices => changeListData('holdPayments', heldInvoices))
+      .catch(() => {
+        dispatch(addNotification({ text: 'Can not get hold payments' }));
+      });
+
+    getPaymentDepartments()
+      .then(res => changeWaitingOn(res))
+      .catch(() => dispatch(addNotification({ text: 'Fail get departments' })));
   }
 
   useEffect(() => {
@@ -198,15 +211,7 @@ const PayRunsPage = () => {
           dispatch(addNotification({ text: 'Can not get hold payments' }))
         })
     } else {
-      getHeldInvoicePayments({ pageNumber: page})
-        .then(heldInvoices => changeListData('holdPayments', heldInvoices))
-        .catch(() => {
-          dispatch(addNotification({ text: 'Can not get hold payments' }));
-        });
-
-      getPaymentDepartments()
-        .then(res => changeWaitingOn(res))
-        .catch(() => dispatch(addNotification({ text: 'Fail get departments' })));
+      getHelds()
     }
   }, [tab, page]);
 
@@ -233,6 +238,7 @@ const PayRunsPage = () => {
           waitingOn={waitingOn}
           changeWaitingOn={changeWaitingOn}
           currentUserInfo={openedInvoiceChat}
+          updateChat={getHelds}
           currentUserId={openedInvoiceChat.creatorId}
           messages={openedInvoiceChat.disputedInvoiceChat}
         />

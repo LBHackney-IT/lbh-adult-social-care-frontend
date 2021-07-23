@@ -87,15 +87,15 @@ const DayCareApproveBrokered = () => {
     setErrorFields({
       ...errorFields,
       [field]: '',
-    })
+    });
   };
 
   const updateErrorFields = (errors) => {
     setErrorFields({
       ...errorFields,
-      ...getErrorResponse(errors)
+      ...getErrorResponse(errors),
     });
-  }
+  };
 
   const handleRejectPackage = () => {
     dayCarePackageRejectCommercials(dayCarePackageId)

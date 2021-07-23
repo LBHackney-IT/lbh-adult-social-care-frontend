@@ -259,6 +259,7 @@ const NursingCareApprovePackage = () => {
                 <button
                     onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
                     className="button hackney-btn-light"
+                    type="button"
                   >
                     {displayMoreInfoForm
                       ? "Hide Request more information"

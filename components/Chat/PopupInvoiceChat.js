@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux'
 import Popup from '../Popup';
 import Dropdown from '../Dropdown';
 import TextArea from '../TextArea';
 import { ChatSettingsIcon } from '../Icons';
 import { formatDateWithSign } from '../../service/helpers';
+import { sendMessage } from '../../api/Payments/PayRunApi'
+import { addNotification } from '../../reducers/notificationsReducer'
 
 const PopupInvoiceChat = ({
   closePopup,
@@ -13,9 +16,11 @@ const PopupInvoiceChat = ({
   waitingOnOptions = [],
   currentUserInfo,
   waitingOn,
+  updateChat = () => {console.log('update chat')},
   messages = [],
   currentUserId,
 }) => {
+  const dispatch = useDispatch();
   const [messageSettingsId, setMessageSettingsId] = useState('');
   const [hoveredMessage, setHoveredMessage] = useState('');
 
@@ -97,7 +102,18 @@ const PopupInvoiceChat = ({
       title={`Help Payment - INV ${currentUserInfo.payRunId}`}
       secondButton={{
         text: 'Submit',
-        onClick: () => console.log('send message id: ', currentUserInfo.creatorId),
+        onClick: () => {
+          sendMessage({
+            payRunId: currentUserInfo.payRunId,
+            packageId: currentUserInfo.packageId,
+            message: newMessageText,
+          })
+            .then(() => {
+              setNewMessageText('');
+              updateChat();
+            })
+            .catch(() => dispatch(addNotification({ text: 'Can not send message' })))
+        },
       }}
     />
   );

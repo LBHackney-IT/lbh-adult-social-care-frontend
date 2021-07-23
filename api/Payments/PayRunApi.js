@@ -103,6 +103,11 @@ const kickPayRunBackToDraft = (payRunId) => {
   return axios.get(query).then(handleResponse).catch(handleError);
 };
 
+const sendMessage = ({ payRunId, packageId, message }) => {
+  const url = `${PAY_RUN_URL}/${payRunId}/create-held-chat`;
+  return axiosRequest({ url, method: requestMethods.post, data: { message, packageId, payRunId } })
+};
+
 const approvePayRunForPayment = (payRunId) => {
   const url = `${PAY_RUN_URL}/${payRunId}/status/approve-pay-run`;
   return axiosRequest({ url })
@@ -195,6 +200,11 @@ const acceptInvoice = (payRunId, invoiceId) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const acceptInvoices = (payRunId, invoices) => {
+  const url = `${PAY_RUN_URL}/${payRunId}/invoices/accept-invoice`;
+  return axiosRequest({ url, data: invoices, method: requestMethods.put})
+};
+
 const getPaymentDepartments = () => {
   const query = `${DEPARTMENTS_URL}/payment-departments`;
   return axios.get(query).then(handleResponse).catch(handleError);
@@ -221,5 +231,7 @@ export {
   getAllInvoiceStatuses,
   getInvoicePaymentStatuses,
   acceptInvoice,
+  acceptInvoices,
+  sendMessage,
   getPaymentDepartments,
 };

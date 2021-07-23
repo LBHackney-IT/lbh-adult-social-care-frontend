@@ -152,10 +152,10 @@ const ApproverHubPage = () => {
       }
     ],
     dropdowns: [
-      {options: [], initialText: 'Package Type', name: 'PackageType', className: 'mr-3'},
-      {options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3'},
-      {options: [], initialText: 'Approver', name: 'Approver', className: 'mr-3'},
-      // {options: [], initialText: 'By Value', name: 'ByValue', className: 'mr-3'},
+      { options: [], initialText: 'Package Type', name: 'PackageType', className: 'mr-3' },
+      { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
+      { options: [], initialText: 'Approver', name: 'Approver', className: 'mr-3' },
+      // { options: [], initialText: 'By Value', name: 'ByValue', className: 'mr-3' },
     ],
     buttons: [
       { initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest()}

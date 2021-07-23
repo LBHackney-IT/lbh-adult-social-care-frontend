@@ -152,7 +152,6 @@ const ResidentialCare = () => {
 
     createResidentialCarePackage(residentialCarePackageToCreate)
       .then(() => {
-        alert("Package saved");
         dispatch(addNotification({ text: 'Package saved', className: 'success'}));
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
@@ -213,7 +212,7 @@ const ResidentialCare = () => {
       />
 
       <div className="mt-4 mb-4">
-        <TitleHeader>Package Details</TitleHeader>
+        <TitleHeader className='mb-5'>Package Details</TitleHeader>
         <ResidentialCareSummary
           startDate={startDate}
           endDate={endDate}

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router"
+import useSWR from 'swr';
 import { useDispatch, useSelector } from 'react-redux'
-import { selectBrokerage } from "../../../../reducers/brokerageReducer";
+import { selectBrokerage, getBrokerageSuccess } from '../../../../reducers/brokerageReducer';
 import { uniqueID } from "../../../../service/helpers";
 import { getHomeCareSummaryData } from "../../../../api/CarePackages/HomeCareApi";
 import Layout from "../../../../components/Layout/Layout";
@@ -14,7 +16,6 @@ import {
   getDayCareBrokerageStages,
   getDayCarePackageDetailsForBrokerage,
 } from "../../../../api/CarePackages/DayCareApi";
-import { useRouter } from "next/router"
 import {
   getInitialPackageReclaim,
 } from "../../../../api/Utils/CommonOptions";
@@ -26,9 +27,7 @@ import {
 import { getSupplierList } from "../../../../api/CarePackages/SuppliersApi";
 import { CARE_PACKAGE_ROUTE } from "../../../../routes/RouteConstants";
 import PackagesDayCare from "../../../../components/packages/day-care";
-import { getBrokerageSuccess } from '../../../../reducers/brokerageReducer';
 import PackageHeader from '../../../../components/CarePackages/PackageHeader'
-import useSWR from 'swr';
 
 // start before render
 const serverBrokering = async (dayCarePackageId) => {
@@ -185,16 +184,20 @@ const DayCareBrokering = () => {
   };
 
   return (
-    <Layout showBackButton clientSummaryInfo={{
-      client: clientDetails?.clientName,
-      hackneyId: clientDetails?.hackneyId,
-      age: clientDetails && getAgeFromDateString(clientDetails.dateOfBirth),
-      preferredContact: clientDetails?.preferredContact,
-      canSpeakEnglish: clientDetails?.canSpeakEnglish,
-      packagesCount: 4,
-      dateOfBirth: clientDetails && getEnGBFormattedDate(clientDetails.dateOfBirth),
-      postcode: clientDetails?.postCode,
-    }} headerTitle="Day Care Brokering">
+    <Layout
+      showBackButton
+      clientSummaryInfo={{
+        client: clientDetails?.clientName,
+        hackneyId: clientDetails?.hackneyId,
+        age: clientDetails && getAgeFromDateString(clientDetails.dateOfBirth),
+        preferredContact: clientDetails?.preferredContact,
+        canSpeakEnglish: clientDetails?.canSpeakEnglish,
+        packagesCount: 4,
+        dateOfBirth: clientDetails && getEnGBFormattedDate(clientDetails.dateOfBirth),
+        postcode: clientDetails?.postCode,
+      }}
+      headerTitle='Day Care Brokering'
+    >
       <PackageHeader />
       <PackagesDayCare
         tab={tab}
@@ -210,10 +213,10 @@ const DayCareBrokering = () => {
         supplierOptions={supplierOptions}
         stageOptions={stageOptions}
         dayCareSummary={{
-          opportunityEntries: opportunityEntries,
+          opportunityEntries,
           needToAddress: dayCarePackage?.packageDetails?.needToAddress,
           transportNeeded: dayCarePackage?.packageDetails?.transportNeeded,
-          daysSelected: daysSelected,
+          daysSelected,
           deleteOpportunity: () => {},
         }}
         createBrokerageInfo={createBrokerageInfo}

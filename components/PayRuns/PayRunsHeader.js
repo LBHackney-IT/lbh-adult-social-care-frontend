@@ -25,7 +25,6 @@ const PayRunsHeader = ({
   dateOptions = [],
   serviceTypesOptions = [],
   releaseHolds,
-  checkedItems,
   serviceUserOptions = [],
   supplierOptions = [],
   waitingOnOptions = [],
@@ -98,7 +97,7 @@ const PayRunsHeader = ({
     <div className="pay-runs__header p-3">
       <div className="pay-runs__new-pay">
         <p className="title">{tabInfos[tab].title}</p>
-        <Button disabled={tab === 'held-payments' && !checkedItems.length} onClick={tabInfos[tab].clickActionButton}>{tabInfos[tab].actionButtonText}</Button>
+        <Button onClick={tabInfos[tab].clickActionButton}>{tabInfos[tab].actionButtonText}</Button>
       </div>
       <div className="pay-runs__filters">
         <p className="pay-runs__filters-title">Filter by</p>

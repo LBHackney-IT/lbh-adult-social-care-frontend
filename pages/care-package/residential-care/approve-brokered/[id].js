@@ -36,7 +36,7 @@ const getApproveBrokered = async (residentialCarePackageId) => {
     );
 
     data.approvalHistoryEntries = newApprovalHistoryItems.slice();
-  } catch(error) {
+  } catch (error) {
     data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
   }
 
@@ -246,6 +246,7 @@ const ResidentialCareApproveBrokered = () => {
                 <button
                     onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
                     className="button hackney-btn-light"
+                    type="button"
                   >
                     {displayMoreInfoForm
                       ? "Hide Request more information"

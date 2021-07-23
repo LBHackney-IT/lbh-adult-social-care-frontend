@@ -1,4 +1,5 @@
 import React from 'react';
+import { SWRConfig } from "swr";
 import '/styles/globals.scss';
 import 'bulma/css/bulma.css';
 import { Provider } from 'react-redux';
@@ -11,9 +12,11 @@ export default function App({ Component, pageProps }) {
 
   return (
     <Provider store={store}>
-      <CustomNotification />
-      <AdditionalHeader />
-      <Component {...pageProps} />
+      <SWRConfig value={{}}>
+        <CustomNotification />
+        <AdditionalHeader />
+        <Component {...pageProps} />
+      </SWRConfig>
     </Provider>
   );
 }
