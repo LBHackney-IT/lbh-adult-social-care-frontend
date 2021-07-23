@@ -149,10 +149,6 @@ const PayRunsPage = () => {
     })
   };
 
-  const apply = () => {
-      getLists()
-  }
-
   const getLists = () => {
     if(tab === 'pay-runs') {
       getPayRunSummaryList({ pageNumber: page })
@@ -233,7 +229,7 @@ const PayRunsPage = () => {
           messages={openedInvoiceChat.disputedInvoiceChat}
         />
       )}
-      <PayRunsHeader apply={apply} releaseHolds={releaseHolds} checkedItems={checkedRows} tab={tab} setOpenedPopup={setOpenedPopup} />
+      <PayRunsHeader apply={getLists} releaseHolds={releaseHolds} checkedItems={checkedRows} tab={tab} setOpenedPopup={setOpenedPopup} />
       <PaymentsTabs
         tab={tab}
         changeTab={changeTab}

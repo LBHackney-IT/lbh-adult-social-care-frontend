@@ -2,7 +2,8 @@ import axios from 'axios';
 import moment from 'moment';
 import { BASE_URL } from '../BaseApi';
 
-import { handleError, handleResponse } from '../Utils/ApiUtils';
+import { axiosRequest, handleError, handleResponse } from '../Utils/ApiUtils'
+import { requestMethods } from '../../constants/variables'
 
 const PAY_RUN_URL = `${BASE_URL}/v1/transactions/pay-runs`;
 const INVOICES_URL = `${BASE_URL}/v1/transactions/invoices`;
@@ -90,13 +91,13 @@ const getSinglePayRunDetails = (
 };
 
 const getSinglePayRunInsights = (payRunId) => {
-  const query = `${PAY_RUN_URL}/${payRunId}/summary-insights`;
-  return axios.get(query).then(handleResponse).catch(handleError);
+  const url = `${PAY_RUN_URL}/${payRunId}/summary-insights`;
+  return axiosRequest({ url })
 };
 
 const submitPayRunForApproval = (payRunId) => {
-  const query = `${PAY_RUN_URL}/${payRunId}/status/submit-for-approval`;
-  return axios.get(query).then(handleResponse).catch(handleError);
+  const url = `${PAY_RUN_URL}/${payRunId}/status/submit-for-approval`;
+  return axiosRequest({ url });
 };
 
 const kickPayRunBackToDraft = (payRunId) => {
@@ -105,8 +106,8 @@ const kickPayRunBackToDraft = (payRunId) => {
 };
 
 const approvePayRunForPayment = (payRunId) => {
-  const query = `${PAY_RUN_URL}/${payRunId}/status/approve-pay-run`;
-  return axios.get(query).then(handleResponse).catch(handleError);
+  const url = `${PAY_RUN_URL}/${payRunId}/status/approve-pay-run`;
+  return axiosRequest({ url })
 };
 
 const releaseSingleHeldInvoice = (payRunId, invoiceId) => {
@@ -133,17 +134,8 @@ const releaseSingleHeldInvoice = (payRunId, invoiceId) => {
   }
   ] */
 const releaseHeldInvoices = (invoiceList = []) => {
-  const query = `${PAY_RUN_URL}/release-held-invoice-list`;
-  const options = {
-    url: query,
-    method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json;charset=UTF-8',
-    },
-    data: invoiceList,
-  };
-  return axios(options).then(handleResponse).catch(handleError);
+  const url = `${PAY_RUN_URL}/release-held-invoice-list`;
+  return axiosRequest({ url, data: invoiceList, method: requestMethods.put})
 };
 
 const deleteDraftPayRun = (payRunId) => {

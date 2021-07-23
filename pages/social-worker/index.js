@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { useRouter } from 'next/router';
+import useSWR from 'swr'
 import Pagination from "../../components/Payments/Pagination";
 import HackneyFooterInfo from "../../components/HackneyFooterInfo";
 import SocialWorkerInputs from "../../components/SocialWorker/SocialWorkerInputs";
 import {socialWorkerDashboardTableData} from "../../testData/testDataSocialWorker";
 import SocialWorkerTable from "../../components/SocialWorker/SocialWorkerTable";
-import useSWR from 'swr'
 
 const serverSocialWorker = async () => {};
 
@@ -42,7 +42,7 @@ const SocialWorkerDashboardPage = () => {
     <div className="social-worker-page">
       <SocialWorkerInputs />
       <SocialWorkerTable
-        isIgnoreId={true}
+        isIgnoreId
         className='p-4'
         onClickTableRow={onClickTableRow}
         rows={socialWorkerDashboardTableData}

@@ -9,7 +9,7 @@ import Inputs from "../../components/Inputs";
 import {
   getBrokeredPackagesBrokeredDone,
   getBrokeredPackagesBrokeredInProgress,
-  getBrokeredPackagesBrokeredNew,
+  getBrokeredPackagesBrokeredNew, getBrokeredPackagesPackageTypes, getBrokeredPackagesSocialWorkers,
   getBrokeredPackagesStages, putBrokeredPackagesAssign,
 } from '../../api/Dashboard/brokeredPackages'
 import { formatDateWithSign } from '../../service/helpers'
@@ -73,6 +73,10 @@ const BrokerageHubPage = () => {
     name: 'id',
   });
 
+  const pushNotification = (text, className) => {
+    dispatch(addNotification({ text, className }))
+  }
+
   const sortBy = (field, value) => {
     setSort({value, name: field});
   };
@@ -80,8 +84,8 @@ const BrokerageHubPage = () => {
   const brokeredPackagesAssign = (option) => {
     console.log(option);
     putBrokeredPackagesAssign(option.creatorId)
-      .then(() => dispatch(addNotification({ text: 'Assigned success'})))
-      .catch(() => dispatch(addNotification({ text: 'Assigned fail'})))
+      .then(() => pushNotification('Assigned success'))
+      .catch(() => pushNotification('Assign fail'))
   }
 
   const makeTabRequest = () => {
@@ -89,9 +93,18 @@ const BrokerageHubPage = () => {
       clearTimeout(timer);
     }
     setTimer(setTimeout(() => {
+
       getBrokeredPackagesStages()
         .then(res => setStagesOptions(res))
-        .catch(() => dispatch(addNotification({ text: 'Can not get stages' })))
+        .catch(() => pushNotification('Can not get stages'))
+
+      getBrokeredPackagesPackageTypes()
+        .then(res => changeInputs('TypeOfCare', res))
+        .catch(() => pushNotification('Can not get Package Type'))
+
+      getBrokeredPackagesSocialWorkers()
+        .then(res => changeInputs('SocialWorker', res))
+
       tabsRequests[tab]({
         ...filters,
         PageNumber: page,
@@ -135,7 +148,6 @@ const BrokerageHubPage = () => {
           <CustomDropDown
             onOptionSelect={brokeredPackagesAssign}
             key={item.packageId}
-            fullOptions={stageOptions}
             options={stageOptions}
             className='table__row-item'
             fields={{
@@ -158,10 +170,10 @@ const BrokerageHubPage = () => {
       {label: 'Search', name: 'HackneyId', placeholder: 'Search...', search: () => makeTabRequest(), className: 'mr-3'}
     ],
     dropdowns: [
-      {options: [], initialText: 'Type of care', name: 'typeOfCare', className: 'mr-3'},
-      {options: [], initialText: 'Stage', name: 'stage', className: 'mr-3'},
-      {options: [], initialText: 'Social Worker', name: 'socialWorker', className: 'mr-3'},
-      {options: [], initialText: 'Client', name: 'client', className: 'mr-3'},
+      {options: [], initialText: 'Type of care', name: 'TypeOfCare', className: 'mr-3'},
+      {options: [], initialText: 'Stage', name: 'Stage', className: 'mr-3'},
+      {options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3'},
+      {options: [], initialText: 'Client', name: 'Client', className: 'mr-3'},
     ],
     buttons: [
       { initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest()}

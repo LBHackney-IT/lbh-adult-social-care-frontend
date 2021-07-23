@@ -11,7 +11,12 @@ import PayRunHeader from "../../../components/PayRuns/PayRunHeader";
 import PopupHoldPayment from "../../../components/PayRuns/PopupHoldPayment";
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
 import { addNotification } from '../../../reducers/notificationsReducer'
-import { acceptInvoice, getSinglePayRunDetails, getSinglePayRunInsights } from '../../../api/Payments/PayRunApi'
+import {
+  acceptInvoice,
+  getSinglePayRunDetails,
+  getSinglePayRunInsights,
+  kickPayRunBackToDraft, submitPayRunForApproval
+} from '../../../api/Payments/PayRunApi'
 
 const serverPayRunsId = async () => {};
 
@@ -32,6 +37,7 @@ const PayRunPage = () => {
   });
   const router = useRouter();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const { id } = router.query;
   const [openedPopup, setOpenedPopup] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
@@ -68,6 +74,8 @@ const PayRunPage = () => {
   const changeStatus = (item, status) => {
     console.log(item, status);
     acceptInvoice(id, item.invoiceId)
+      .then(() => dispatch(addNotification({ text: 'Accept invoice success' })))
+      .catch(() => dispatch(addNotification({ text: 'Accept invoce fail' })))
   }
 
   const closeCreatePayRun = () => {
@@ -84,14 +92,19 @@ const PayRunPage = () => {
     }
   };
 
-  const filter = () => {
+  const getPayRunDetails = () => {
+    if(!loading) {
+      setLoading(true);
+    }
     getSinglePayRunDetails()
       .then(res => {
         setInvoices(res.invoices)
         setPayRunDetails(res.payRunDetails);
+        setLoading(false);
       })
       .catch(() => {
         dispatch(addNotification({ text: 'Can not get Pay Run details' }))
+        setLoading(false);
       })
   }
 
@@ -100,6 +113,31 @@ const PayRunPage = () => {
     disabled: !checkedRows.length,
     onClick: () => console.log("Accept all selected"),
     text: 'Accept all selected',
+  }
+
+  const submitPayRun = () => {
+    setLoading(true)
+    submitPayRunForApproval(payRunDetails.payRunId)
+      .then(async () => {
+        await getPayRunDetails();
+        dispatch(addNotification({ text: 'Pay Run approved' }))
+        setLoading(false);
+      })
+      .catch(() => dispatch(addNotification({ text: 'Can not submit for approve'})))
+  }
+
+  const onDeletePayRunDraft = () => {
+    setLoading(true);
+    kickPayRunBackToDraft(payRunDetails.payRunId)
+      .then(async () => {
+        await getPayRunDetails()
+        dispatch(addNotification({ text: 'Pay Run draft deleted', className: 'success' }))
+        setLoading(false)
+      })
+      .catch(() => {
+        dispatch(addNotification({ text: 'Can not delete Pay run draft' }))
+        setLoading(false);
+      });
   }
 
   useEffect(() => {
@@ -139,7 +177,7 @@ const PayRunPage = () => {
       }
       {!!breadcrumbs.length && <Breadcrumbs className='p-3' values={breadcrumbs} />}
       <PayRunHeader
-        filter={filter}
+        filter={getPayRunDetails}
         actionButtonText={headerOptions.actionButtonText}
         clickActionButton={headerOptions.clickActionButton}
       />
@@ -169,11 +207,11 @@ const PayRunPage = () => {
         <PayRunsLevelInsight
           firstButton={{
             text: 'Submit pay run for approval',
-            onClick: () => {}
+            onClick: () => submitPayRun()
           }}
           secondButton={{
             text: 'Delete draft pay run',
-            onClick: () => {},
+            onClick: () => onDeletePayRunDraft,
           }}
           cost='£42,827'
           suppliersCount='100'

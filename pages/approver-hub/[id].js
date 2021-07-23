@@ -7,11 +7,12 @@ import Table from '../../components/Table'
 import { formatDateWithSign, formatStatus } from '../../service/helpers'
 import { addNotification } from '../../reducers/notificationsReducer'
 import {
+  getApprovedPackagesApprovers,
   getApprovedPackagesAwaitingBrokerage,
   getApprovedPackagesClarificationNeed,
   getApprovedPackagesCompleted,
-  getApprovedPackagesNew,
-  getApprovedPackagesReviewCommercial
+  getApprovedPackagesNew, getApprovedPackagesPackageTypes,
+  getApprovedPackagesReviewCommercial, getApprovedPackagesSocialWorkers
 } from '../../api/Dashboard/approvedPackages'
 import Inputs from '../../components/Inputs'
 
@@ -32,7 +33,7 @@ const ApproverHubPage = () => {
   const [sorts] = useState([
     {name: 'service-user', text: 'SERVICE USER'},
     {name: 'package-type', text: 'PACKAGE TYPE'},
-    {name: 'care-value', text: 'CARE TYPE'},
+    {name: 'care-value', text: 'CARE VALUE'},
     {name: 'Approver', text: 'APPROVER'},
     {name: 'submitted-by', text: 'SUBMITTED BY'},
     {name: 'id', text: 'ID'},
@@ -82,11 +83,27 @@ const ApproverHubPage = () => {
     setSort({value, name: field});
   };
 
+  const pushNotification = (text, className) => {
+    dispatch(addNotification({ text, className }))
+  }
+
   const makeTabRequest = () => {
     if(timer) {
       clearTimeout(timer);
     }
     setTimer(setTimeout(() => {
+      getApprovedPackagesPackageTypes()
+        .then(res => changeInputs('PackageType', res))
+        .catch(() => pushNotification('Can not get Package Types'))
+
+      getApprovedPackagesSocialWorkers()
+        .then(res => changeInputs('SocialWorker', res))
+        .catch(() => pushNotification('Get social workers fail'))
+
+      getApprovedPackagesApprovers()
+        .then(res => changeInputs('Approver', res))
+        .catch(() => pushNotification('Get approvers fail'))
+
       tabsRequests[tab]({
         PageNumber: page,
         OrderBy: sort.name,
@@ -113,7 +130,7 @@ const ApproverHubPage = () => {
   const rowsRules = {
     packageType: {
       getClassName: () => 'link-button',
-      onClick: (cellItem, cellValue) => changeInputs('packageType', cellValue),
+      onClick: (cellItem, cellValue) => changeInputs('PackageType', cellValue),
       getValue: (value) => formatStatus(value),
     },
     careValue: {
@@ -135,10 +152,10 @@ const ApproverHubPage = () => {
       }
     ],
     dropdowns: [
-      {options: [], initialText: 'Package Type', name: 'packageType', className: 'mr-3'},
-      {options: [], initialText: 'Social Worker', name: 'socialWorker', className: 'mr-3'},
-      {options: [], initialText: 'Approver', name: 'approver', className: 'mr-3'},
-      {options: [], initialText: 'By Value', name: 'byValue', className: 'mr-3'},
+      {options: [], initialText: 'Package Type', name: 'PackageType', className: 'mr-3'},
+      {options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3'},
+      {options: [], initialText: 'Approver', name: 'Approver', className: 'mr-3'},
+      {options: [], initialText: 'By Value', name: 'ByValue', className: 'mr-3'},
     ],
     buttons: [
       { initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest()}
