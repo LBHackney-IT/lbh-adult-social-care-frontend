@@ -14,7 +14,7 @@ const SocialWorkerHeader = () => {
 
   const changeRoute = (route) => {
     if (route === 'logout') {
-      router.push('/');
+      router.push('/logout');
     } else {
       router.push(`/social-worker/${route}`);
     }

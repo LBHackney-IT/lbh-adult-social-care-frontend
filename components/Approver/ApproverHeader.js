@@ -8,10 +8,8 @@ const ApproverHeader = () => {
 
   const [socialWorkerRoutes] = useState([{ route: 'logout', name: 'Log Out' }]);
 
-  const changeRoute = (route) => {
-    if (route === 'logout') {
-      router.push('/');
-    }
+  const changeRoute = () => {
+    router.push('/logout');
   };
 
   return (

@@ -36,11 +36,9 @@ const approvalHistoryEntries = [
   },
 ];
 
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   const data = {
     errorData: [],

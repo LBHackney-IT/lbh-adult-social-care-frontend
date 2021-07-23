@@ -19,11 +19,8 @@ import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
 
 // start before render
-export const getServerSideProps = withSession(async ({ req, query: { id: residentialCarePackageId } }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res: response, query: { id: residentialCarePackageId } }) => {
+  getUserSession({ req, res: response });
 
   const data = {
     errorData: [],

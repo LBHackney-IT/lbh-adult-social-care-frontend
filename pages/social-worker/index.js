@@ -9,11 +9,9 @@ import SocialWorkerTable from '../../components/SocialWorker/SocialWorkerTable';
 import { getSubmittedPackages, getSubmittedPackagesStatus } from '../../api/ApproversHub/SocialWorkerApi';
 import { RESIDENTIAL_CARE_ROUTE, NURSING_CARE_ROUTE} from '../../routes/RouteConstants';
 
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   return {
     props: {}, // will be passed to the page component as props

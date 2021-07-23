@@ -14,11 +14,9 @@ import { selectSupplierReturns, changeWeekOfSupplier } from '../../../reducers/s
 import withSession from '../../../lib/session';
 import { PAYMENTS_PAY_RUNS_ROUTE } from '../../../routes/RouteConstants';
 
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   return {
     props: {}, // will be passed to the page component as props

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectBrokerage } from '../../../../reducers/brokerageReducer';
+import { useRouter } from 'next/router';
+import { selectBrokerage, getBrokerageSuccess } from '../../../../reducers/brokerageReducer';
 import { getUserSession, uniqueID } from '../../../../service/helpers';
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
 import ClientSummary from '../../../../components/ClientSummary';
@@ -12,7 +13,6 @@ import {
   getDayCareBrokerageStages,
   getDayCarePackageDetailsForBrokerage,
 } from '../../../../api/CarePackages/DayCareApi';
-import { useRouter } from 'next/router';
 import { getInitialPackageReclaim } from '../../../../api/Utils/CommonOptions';
 import {
   mapBrokerageSupplierOptions,
@@ -22,16 +22,14 @@ import {
 import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
 import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 import PackagesDayCare from '../../../../components/packages/day-care';
-import { getBrokerageSuccess } from '../../../../reducers/brokerageReducer';
+
 import withSession from '../../../../lib/session';
 import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 
 // start before render
-export const getServerSideProps = withSession(async function ({ req, query: { id: dayCarePackageId } }) {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res, query: { id: dayCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   const data = {
     errorData: [],
@@ -162,7 +160,7 @@ const DayCareBrokering = ({
         dateOfBirth: clientDetails && getEnGBFormattedDate(clientDetails.dateOfBirth),
         postcode: clientDetails?.postCode,
       }}
-      headerTitle="Day Care Brokering"
+      headerTitle='Day Care Brokering'
     >
       <PackageHeader />
       <PackagesDayCare
@@ -179,10 +177,10 @@ const DayCareBrokering = ({
         supplierOptions={supplierOptions}
         stageOptions={stageOptions}
         dayCareSummary={{
-          opportunityEntries: opportunityEntries,
+          opportunityEntries,
           needToAddress: dayCarePackage?.packageDetails?.needToAddress,
           transportNeeded: dayCarePackage?.packageDetails?.transportNeeded,
-          daysSelected: daysSelected,
+          daysSelected,
           deleteOpportunity: () => {},
         }}
         createBrokerageInfo={createBrokerageInfo}
