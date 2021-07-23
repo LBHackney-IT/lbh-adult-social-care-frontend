@@ -1,6 +1,7 @@
-import PackagesNursingCare from '../../../../components/packages/nursing-care';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import PackagesNursingCare from '../../../../components/packages/nursing-care';
 import { selectBrokerage } from '../../../../reducers/brokerageReducer';
 import { getUserSession, uniqueID } from '../../../../service/helpers';
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
@@ -18,14 +19,11 @@ import { mapBrokerageSupplierOptions, mapNursingCareStageOptions } from '../../.
 import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
 import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 import withSession from '../../../../lib/session';
-import { useRouter } from 'next/router';
 
 // start before render
-export const getServerSideProps = withSession(async function ({ req, query: { id: nursingCarePackageId } }) {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   const data = {
     errorData: [],
@@ -184,7 +182,7 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
         supplierOptions={supplierOptions}
         stageOptions={stageOptions}
         nursingCareSummary={{
-          additionalNeedsEntries: additionalNeedsEntries,
+          additionalNeedsEntries,
           needToAddress: nursingCarePackage?.nursingCarePackage?.needToAddress,
           deleteOpportunity: () => {},
         }}

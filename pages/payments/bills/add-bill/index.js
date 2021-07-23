@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 import AddBillTable from '../../../../components/Bills/AddBillTable';
 import AddBillAttachedFiles from '../../../../components/Bills/AddBillAttachedFiles';
@@ -9,13 +10,10 @@ import { addBillPackageInfoTestData } from '../../../../testData/billsTestData';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
 import fieldValidator from '../../../../service/inputValidator';
-import { useRouter } from 'next/router';
 
-export const getServerSideProps = withSession(async function ({ req }) {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   return {
     props: {}, // will be passed to the page component as props
@@ -99,13 +97,13 @@ const AddBill = () => {
 
   const addBill = () => {
     const arrayInputs = [];
-    for (let i in { ...invoiceInputs, ...detailsInputs }) {
+    for (const i in { ...invoiceInputs, ...detailsInputs }) {
       arrayInputs.push(invoiceInputs[i]);
     }
     const { validFields, hasError } = fieldValidator(arrayInputs);
     if (hasError) {
       setInputsError(validFields);
-      return;
+      
     }
   };
 
@@ -126,7 +124,7 @@ const AddBill = () => {
       clearTimeout(packageIdTimer);
     }
     const timer = setTimeout(() => {
-      //emit request
+      // emit request
       setAddBillInfo(addBillPackageInfoTestData);
     }, 500);
     setPackageIdTimer(timer);
@@ -138,7 +136,7 @@ const AddBill = () => {
       <div className="add-bill__main">
         <AddBillInvoiceFor inputs={invoiceInputs} />
         <AddBillInvoiceDetails inputs={detailsInputs} />
-        <AddBillTable isIgnoreId={true} rows={addBillInfo?.invoices} sorts={sorts} />
+        <AddBillTable isIgnoreId rows={addBillInfo?.invoices} sorts={sorts} />
         <div className="is-flex is-justify-content-space-between add-bill__footer">
           <AddBillAttachedFiles attachedFiles={addBillInfo?.attachedFiles} />
           <AddBillTotalInfo addBillInfo={addBillInfo} addBill={addBill} />

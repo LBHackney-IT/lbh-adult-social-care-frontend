@@ -25,11 +25,9 @@ import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
 import ErrorField from '../../../components/ErrorField';
 
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   return {
     props: {}, // will be passed to the page component as props

@@ -15,11 +15,9 @@ import { mapHomeCarePackageDetailsForBrokerage } from '../../../../api/Mappers/C
 import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 
 // start before render
-export const getServerSideProps = withSession(async function ({ req, query: { id: homeCarePackageId } }) {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res, query: { id: homeCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   const data = {
     errorData: [],
@@ -27,7 +25,7 @@ export const getServerSideProps = withSession(async function ({ req, query: { id
 
   try {
     // Call to api to get package
-    //TODO change API
+    // TODO change API
     const homeCareBrokerageDetails = await getHomeCarePackageDetailsForBrokerage(homeCarePackageId);
     const newAdditionalNeedsEntries = homeCareBrokerageDetails?.homeCareAdditionalNeeds?.map((additionalneedsItem) => ({
       id: additionalneedsItem.id,
@@ -143,7 +141,7 @@ const HomeCareBrokerPackage = ({ errorData, homeCarePackage, additionalNeedsEntr
           packagesReclaimed={packagesReclaimed}
           changePackageReclaim={changePackageReclaim}
           homeCareSummary={{
-            additionalNeedsEntries: additionalNeedsEntries,
+            additionalNeedsEntries,
             needToAddress: homeCarePackage?.homeCarePackage?.needToAddress,
             deleteOpportunity: () => {},
           }}

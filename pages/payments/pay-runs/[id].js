@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Breadcrumbs from '../../../components/Breadcrumbs';
 import { useRouter } from 'next/router';
+import Breadcrumbs from '../../../components/Breadcrumbs';
 import PayRunTable from '../../../components/PayRuns/PayRunTable';
 import Pagination from '../../../components/Payments/Pagination';
 import { payRunTableData } from '../../../testData/testDataPayRuns';
@@ -12,11 +12,9 @@ import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 
-export const getServerSideProps = withSession(async function ({ req }) {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   return {
     props: {}, // will be passed to the page component as props
@@ -130,11 +128,11 @@ const PayRunPage = () => {
       <PayRunTable
         rows={payRunTableData}
         careType="Residential"
-        isStatusDropDown={true}
+        isStatusDropDown
         checkedRows={checkedRows}
         setCheckedRows={onCheckRow}
-        isIgnoreId={true}
-        canCollapseRows={true}
+        isIgnoreId
+        canCollapseRows
         sortBy={sortBy}
         sorts={sorts}
       />

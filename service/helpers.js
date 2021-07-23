@@ -23,20 +23,18 @@ const formatStatus = (status) =>
 
 // check user session
 // if no user, then redirect to Login Page
-const getUserSession = ({ req }) => {
+const getUserSession = ({ req, res }) => {
   const user = req.session.get('user');
 
-  if (!user) {
-    return {}; // TODO delete after setup login
-    /* return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    }; */
+  if (user === undefined) {
+    res.setHeader('location', '/login');
+    res.statusCode = 302;
+    res.end();
+
+    return true;
   }
 
-  return user;
+  return false;
 };
 
 const getErrorResponse = (error) => error?.response?.data || {}; // { firstName: 'First Name must be more then 10 symbols', secondName: 'Second Name must be more then 10 symbols'

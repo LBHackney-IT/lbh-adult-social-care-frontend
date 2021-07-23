@@ -1,6 +1,7 @@
-import PackagesResidentialCare from '../../../../components/packages/residential-care';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import PackagesResidentialCare from '../../../../components/packages/residential-care';
 import { selectBrokerage } from '../../../../reducers/brokerageReducer';
 import { getUserSession, uniqueID } from '../../../../service/helpers';
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
@@ -20,7 +21,6 @@ import {
 } from '../../../../api/Mappers/ResidentialCareMapper';
 import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
 import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
-import { useRouter } from 'next/router';
 import withSession from '../../../../lib/session';
 import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 
@@ -34,11 +34,9 @@ const initialPackageReclaim = {
 };
 
 // start before render
-export const getServerSideProps = withSession(async function ({ req, query: { id: residentialCarePackageId } }) {
-  const user = getUserSession({ req });
-  if (user.redirect) {
-    return user;
-  }
+export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   const data = {
     errorData: [],
@@ -163,7 +161,7 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
 
   return (
     <Layout
-      showBackButton={true}
+      showBackButton
       clientSummaryInfo={{
         client: residentialCarePackage?.residentialCarePackage?.clientName,
         hackneyId: residentialCarePackage?.residentialCarePackage?.clientHackneyId,
@@ -195,7 +193,7 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
         supplierOptions={supplierOptions}
         stageOptions={stageOptions}
         residentialCareSummary={{
-          additionalNeedsEntries: additionalNeedsEntries,
+          additionalNeedsEntries,
           needToAddress: residentialCarePackage?.residentialCarePackage?.needToAddress,
           deleteOpportunity: () => {},
         }}

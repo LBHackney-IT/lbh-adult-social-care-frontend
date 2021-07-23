@@ -8,20 +8,12 @@ import NursingCareSetup from '../../components/Setup/NursingCareSetup';
 import ResidentialCareSetup from '../../components/Setup/ResidentialCareSetup';
 import withSession from '../../lib/session';
 import { getNursingTypeOfStayOptions, getResidentialTypeOfStayOptions } from '../../reducers/carePackageSlice';
+import { getUserSession } from '../../service/helpers';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
-  const user = req.session.get("user");
-
-  if (user === undefined) {
-    res.setHeader("location", "/login");
-    res.statusCode = 302;
-    res.end();
-    return { props: {} };
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  };
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+  return { props: {} };
 });
 
 const CarePackage = ({ history }) => {
@@ -88,11 +80,11 @@ const CarePackage = ({ history }) => {
   };
 
   return (
-    <Layout headerTitle="Rapid D2A">
-      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
+    <Layout headerTitle='Rapid D2A'>
+      <ClientSummary client='James Stephens' hackneyId='786288' age='91' dateOfBirth='09/12/1972' postcode='E9 6EY'>
         Care Package
       </ClientSummary>
-      <div className="mt-5 mb-5">
+      <div className='mt-5 mb-5'>
         <ComponentForCareType />
       </div>
     </Layout>
