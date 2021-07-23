@@ -1,12 +1,15 @@
+import { useRouter } from "next/router";
+import useSWR from 'swr';
+import React, { useState } from "react";
 import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
 import Layout from "../../../../components/Layout/Layout";
-import React, { useState } from "react";
 import ResidentialCareApprovalTitle from "../../../../components/ResidentialCare/ResidentialCareApprovalTitle";
 import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
 import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
 import TitleHeader from "../../../../components/TitleHeader";
 import ResidentialCareSummary from "../../../../components/ResidentialCare/ResidentialCareSummary";
 import TextArea from "../../../../components/TextArea";
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
   getResidentialCarePackageApprovalHistory,
   getResidentialCarePackageApprovalPackageContent,
@@ -14,8 +17,6 @@ import {
   residentialCareApprovePackageContent,
   residentialCareRequestClarification,
 } from "../../../../api/CarePackages/ResidentialCareApi";
-import { useRouter } from "next/router";
-import useSWR from 'swr';
 
 // start before render
 const serverResidentialCareApproveCare = async (residentialCarePackageId) => {
@@ -121,9 +122,11 @@ const ResidentialCareApprovePackage = () => {
       <div className="hackney-text-black font-size-12px">
         <ResidentialCareApprovalTitle
           startDate={residentialCarePackage?.residentialCarePackage.startDate}
-          endDate={residentialCarePackage?.residentialCarePackage.endDate !== null
-            ? residentialCarePackage?.residentialCarePackage.endDate
-            : "Ongoing"}
+          endDate={
+            residentialCarePackage?.residentialCarePackage.endDate !== null
+              ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
+              : 'Ongoing'
+          }
         />
         <ApprovalClientSummary />
 
@@ -137,9 +140,7 @@ const ResidentialCareApprovePackage = () => {
                       STARTS
                     </p>
                     <p className="font-size-14px">
-                      {new Date(
-                        residentialCarePackage?.residentialCarePackage.startDate
-                      ).toLocaleDateString("en-GB")}
+                      {getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.startDate)}
                     </p>
                   </div>
                 </div>
@@ -154,8 +155,8 @@ const ResidentialCareApprovePackage = () => {
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
                       {residentialCarePackage?.residentialCarePackage.endDate !== null
-                        ? residentialCarePackage?.residentialCarePackage.endDate
-                        : "Ongoing"}
+                        ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
+                        : 'Ongoing'}
                     </p>
                   </div>
                 </div>
@@ -223,9 +224,11 @@ const ResidentialCareApprovePackage = () => {
               <TitleHeader>Package Details</TitleHeader>
               <ResidentialCareSummary
                 startDate={residentialCarePackage?.residentialCarePackage.startDate}
-                endDate={residentialCarePackage?.residentialCarePackage.endDate !== null
-                  ? residentialCarePackage?.residentialCarePackage.endDate
-                  : "Ongoing"}
+                endDate={
+                  residentialCarePackage?.residentialCarePackage.endDate !== null
+                    ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
+                    : 'Ongoing'
+                }
                 typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}

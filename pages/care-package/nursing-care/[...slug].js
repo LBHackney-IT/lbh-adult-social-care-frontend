@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router"
+import useSWR from 'swr';
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import ClientSummary from "../../../components/ClientSummary";
 import Dropdown from "../../../components/Dropdown";
 import TextArea from "../../../components/TextArea";
@@ -16,14 +18,10 @@ import {
 import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
 import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
 import fieldValidator from "../../../service/inputValidator";
-import { addNotification } from '../../../reducers/notificationsReducer'
-import { useDispatch } from 'react-redux'
-import useSWR from 'swr';
 
 const serverNursingCare = async () => {};
 
 const NursingCare = () => {
-  const dispatch = useDispatch();
   const { data } = useSWR('', serverNursingCare);
   const isTrueParse = (myValue) => myValue === "true";
   const notNullString = (myValue) =>
@@ -52,7 +50,7 @@ const NursingCare = () => {
   isFixedPeriod = isTrueParse(isFixedPeriod);
   startDate = startDate ?? null;
   endDate = endDate && notNullString(endDate) ? endDate : undefined;
-  typeOfStayId = parseInt(typeOfStayId) ?? null;
+  typeOfStayId = parseInt(typeOfStayId, 10) ?? null;
   hasRespiteCare = isTrueParse(hasRespiteCare);
   hasDischargePackage = isTrueParse(hasDischargePackage);
 
@@ -79,7 +77,7 @@ const NursingCare = () => {
   const retrieveTypeOfNursingHomeOptions = () => {
     getTypeOfNursingHomeOptions()
       .then((res) => {
-        let options = res.map((option) => ({
+        const options = res.map((option) => ({
           text: option.typeOfCareHomeName,
           value: option.typeOfCareHomeId,
         }));
@@ -101,8 +99,8 @@ const NursingCare = () => {
 
   const formIsValid = () => {
     const defaultErrors = fieldValidator([
-      {name: 'needToAddress', value: needToAddress, rules: ['empty']},
-      {name: 'selectedNursingHomeType', value: selectedNursingHomeType, rules: ['empty']},
+      { name: 'needToAddress', value: needToAddress, rules: ['empty'] },
+      { name: 'selectedNursingHomeType', value: selectedNursingHomeType, rules: ['empty'] },
     ]);
 
     if (defaultErrors.hasErrors) {
@@ -252,7 +250,7 @@ const NursingCare = () => {
         <TitleHeader>Package Details</TitleHeader>
         <NursingCareSummary
           startDate={startDate}
-          endDate={endDate}
+          endDate={getEnGBFormattedDate(endDate)}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}
           setAdditionalNeedsEntries={setAdditionalNeedsEntries}

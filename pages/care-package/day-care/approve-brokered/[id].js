@@ -1,4 +1,3 @@
-import Layout from "../../../../components/Layout/Layout";
 import DayCareApprovalTitle from "../../../../components/DayCare/DayCareApprovalTitle";
 import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
 import React, { useState } from "react";
@@ -8,6 +7,8 @@ import TitleHeader from "../../../../components/TitleHeader";
 import DayCareSummary from "../../../../components/DayCare/DayCareSummary";
 import TextArea from "../../../../components/TextArea";
 import { useRouter } from "next/router"
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import Layout from '../../../../components/Layout/Layout';
 import {
   dayCarePackageApproveCommercials,
   dayCarePackageCommercialsRequestClarification,
@@ -158,6 +159,7 @@ const DayCareApproveBrokered = () => {
                       {new Date(
                         dayCarePackage?.packageDetails.startDate
                       ).toLocaleDateString("en-GB")}
+                      {getEnGBFormattedDate(dayCarePackage?.packageDetails.startDate)}
                     </p>
                   </div>
                 </div>

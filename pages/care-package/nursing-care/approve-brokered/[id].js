@@ -8,6 +8,7 @@ import TitleHeader from "../../../../components/TitleHeader";
 import NursingCareSummary from "../../../../components/NursingCare/NursingCareSummary";
 import TextArea from "../../../../components/TextArea";
 import { useRouter } from "next/router";
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
   getNursingCarePackageApproveCommercial,
   getNursingCarePackageApprovalHistory,
@@ -126,10 +127,12 @@ const NursingCareApproveBrokered = () => {
     <Layout headerTitle="NURSING CARE BROKERED">
       <div className="hackney-text-black font-size-12px">
         <NursingCareApprovalTitle
-        startDate={nursingCarePackage?.nursingCarePackage.startDate}
-        endDate={nursingCarePackage?.nursingCarePackage.endDate !== null
-          ? nursingCarePackage?.nursingCarePackage.endDate
-          : "Ongoing"}
+          startDate={nursingCarePackage?.nursingCarePackage.startDate}
+          endDate={
+            nursingCarePackage?.nursingCarePackage.endDate !== null
+              ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
+              : 'Ongoing'
+          }
         />
         <ApprovalClientSummary />
 
@@ -143,9 +146,7 @@ const NursingCareApproveBrokered = () => {
                       STARTS
                     </p>
                     <p className="font-size-14px">
-                      {new Date(
-                        nursingCarePackage?.nursingCarePackage.startDate
-                      ).toLocaleDateString("en-GB")}
+                      {getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate)}
                     </p>
                   </div>
                 </div>
@@ -160,8 +161,8 @@ const NursingCareApproveBrokered = () => {
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
                       {nursingCarePackage?.nursingCarePackage.endDate !== null
-                        ? nursingCarePackage?.nursingCarePackage.endDate
-                        : "Ongoing"}
+                        ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
+                        : 'Ongoing'}
                     </p>
                   </div>
                 </div>
@@ -223,9 +224,11 @@ const NursingCareApproveBrokered = () => {
               <TitleHeader>Package Details</TitleHeader>
               <NursingCareSummary
                 startDate={nursingCarePackage?.nursingCarePackage.startDate}
-                endDate={nursingCarePackage?.nursingCarePackage.endDate !== null
-                  ? nursingCarePackage?.nursingCarePackage.endDate
-                  : "Ongoing"}
+                endDate={
+                  nursingCarePackage?.nursingCarePackage.endDate !== null
+                    ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
+                    : 'Ongoing'
+                }
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
                 needToAddress={nursingCarePackage?.nursingCarePackage.needToAddress}

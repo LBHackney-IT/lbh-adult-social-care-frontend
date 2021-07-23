@@ -10,15 +10,11 @@
   border-radius: 5px;
   padding: 32px;
 
-  button.button-base {
+  a.button-base {
     width: 308px;
     height: 80px;
     margin-top: 16px;
     font-size: 19px;
-
-    a {
-      color: white;
-    }
   }
 
   & > p {

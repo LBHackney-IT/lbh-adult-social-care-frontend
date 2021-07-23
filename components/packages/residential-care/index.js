@@ -92,13 +92,11 @@ const PackagesResidentialCare = ({
     setOneOffTotalCost(additionalPaymentOneOff);
   }, [additionalPaymentOneOff]);
 
-  const formIsValid = (brokerageInfoForCreation) => {
-    return !!(
+  const formIsValid = (brokerageInfoForCreation) => !!(
       !isNaN(Number(brokerageInfoForCreation?.residentialCore)) &&
       !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
       !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
     );
-  };
 
   const handleSaveBrokerage = (event) => {
     event.preventDefault();
@@ -257,16 +255,14 @@ const PackagesResidentialCare = ({
           </div>
           {!!packagesReclaimed.length && (
             <div>
-              {packagesReclaimed.map((item) => {
-                return (
+              {packagesReclaimed.map((item) => (
                   <PackageReclaim
                     remove={() => removePackageReclaim(item.id)}
                     key={item.id}
                     packageReclaim={item}
                     setPackageReclaim={changePackageReclaim(item.id)}
                   />
-                );
-              })}
+                ))}
               <p onClick={addPackageReclaim} className="action-button-text">
                 + Add another reclaim
               </p>
@@ -292,7 +288,7 @@ const PackagesResidentialCare = ({
             startDate={residentialCarePackage?.residentialCarePackage.startDate}
             endDate={
               residentialCarePackage?.residentialCarePackage.endDate !== null
-                ? residentialCarePackage?.residentialCarePackage.endDate
+                ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
                 : 'Ongoing'
             }
             needToAddress={residentialCareSummary.needToAddress}
@@ -305,8 +301,7 @@ const PackagesResidentialCare = ({
   );
 };
 
-const ApprovalHistory = ({ history, residentialCarePackage = undefined, costSummary }) => {
-  return (
+const ApprovalHistory = ({ history, residentialCarePackage = undefined, costSummary }) => (
     <div className="approval-history">
       <h2>
         Residential Care{' '}
@@ -377,6 +372,5 @@ const ApprovalHistory = ({ history, residentialCarePackage = undefined, costSumm
       <PackageApprovalHistorySummary approvalHistoryEntries={history} />
     </div>
   );
-};
 
 export default PackagesResidentialCare;

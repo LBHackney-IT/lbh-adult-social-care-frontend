@@ -1,13 +1,15 @@
+import useSWR from 'swr';
+import React, { useState } from 'react'
+import { useRouter } from "next/router"
+import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
 import ResidentialCareApprovalTitle from "../../../../components/ResidentialCare/ResidentialCareApprovalTitle";
 import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
 import Layout from "../../../../components/Layout/Layout";
-import React, { useState } from 'react'
-import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
 import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
 import TitleHeader from "../../../../components/TitleHeader";
 import ResidentialCareSummary from "../../../../components/ResidentialCare/ResidentialCareSummary";
 import TextArea from "../../../../components/TextArea";
-import { useRouter } from "next/router"
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
   getResidentialCarePackageApproveBrokered,
   getResidentialCarePackageApprovalHistory,
@@ -15,7 +17,6 @@ import {
   residentialCareChangeStatus,
   residentialCareApproveCommercials
 } from "../../../../api/CarePackages/ResidentialCareApi";
-import useSWR from 'swr';
 
 // start before render
 const getApproveBrokered = async (residentialCarePackageId) => {
@@ -123,10 +124,12 @@ const ResidentialCareApproveBrokered = () => {
     <Layout headerTitle="RESIDENTIAL CARE BROKERED">
       <div className="hackney-text-black font-size-12px">
         <ResidentialCareApprovalTitle
-        startDate={residentialCarePackage?.residentialCarePackage.startDate}
-        endDate={residentialCarePackage?.residentialCarePackage.endDate !== null
-          ? residentialCarePackage?.residentialCarePackage.endDate
-          : "Ongoing"}
+          startDate={residentialCarePackage?.residentialCarePackage.startDate}
+          endDate={
+            residentialCarePackage?.residentialCarePackage.endDate !== null
+              ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
+              : 'Ongoing'
+          }
         />
         <ApprovalClientSummary />
         <div className="columns">
@@ -139,9 +142,7 @@ const ResidentialCareApproveBrokered = () => {
                       STARTS
                     </p>
                     <p className="font-size-14px">
-                      {new Date(
-                        residentialCarePackage?.residentialCarePackage.startDate
-                      ).toLocaleDateString("en-GB")}
+                      {getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.startDate)}
                     </p>
                   </div>
                 </div>
@@ -156,8 +157,8 @@ const ResidentialCareApproveBrokered = () => {
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
                       {residentialCarePackage?.residentialCarePackage.endDate !== null
-                        ? residentialCarePackage?.residentialCarePackage.endDate
-                        : "Ongoing"}
+                        ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
+                        : 'Ongoing'}
                     </p>
                   </div>
                 </div>
@@ -218,9 +219,11 @@ const ResidentialCareApproveBrokered = () => {
               <TitleHeader>Package Details</TitleHeader>
               <ResidentialCareSummary
                 startDate={residentialCarePackage?.residentialCarePackage.startDate}
-                endDate={residentialCarePackage?.residentialCarePackage.endDate !== null
-                  ? residentialCarePackage?.residentialCarePackage.endDate
-                  : "Ongoing"}
+                endDate={
+                  residentialCarePackage?.residentialCarePackage.endDate !== null
+                    ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
+                    : 'Ongoing'
+                }
                 typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}

@@ -5,6 +5,7 @@ import Layout from "../../../components/Layout/Layout";
 import CareTitle from "../../../components/CarePackages/CareTitle";
 import TextArea from "../../../components/TextArea";
 import Dropdown from "../../../components/Dropdown";
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray
 } from "../../../components/CarePackages/AdditionalNeedsEntries";
@@ -63,7 +64,7 @@ const ResidentialCare = () => {
   const retrieveTypeOfResidentialCareHomeOptions = () => {
     getTypeOfResidentialCareHomeOptions()
       .then((res) => {
-        let options = res.map((option) => ({
+        const options = res.map((option) => ({
           text: option.typeOfCareHomeName,
           value: option.typeOfCareHomeId,
         }));
@@ -215,7 +216,7 @@ const ResidentialCare = () => {
         <TitleHeader className='mb-5'>Package Details</TitleHeader>
         <ResidentialCareSummary
           startDate={startDate}
-          endDate={endDate}
+          endDate={getEnGBFormattedDate(endDate)}
           typeOfStayText={typeOfStayText}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}
