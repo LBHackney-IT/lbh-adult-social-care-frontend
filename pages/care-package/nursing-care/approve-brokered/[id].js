@@ -11,8 +11,9 @@ import { useRouter } from "next/router";
 import {
   getNursingCarePackageApproveCommercial,
   getNursingCarePackageApprovalHistory,
-  nursingCareRequestClarification,
+  nursingCareClarifyCommercial,
   nursingCareChangeStatus,
+  nursingCareApproveCommercials
 } from "../../../../api/CarePackages/NursingCareApi";
 import useSWR from 'swr';
 import { addNotification } from '../../../../reducers/notificationsReducer'
@@ -98,7 +99,7 @@ const NursingCareApproveBrokered = () => {
   };
 
   const handleApprovePackageCommercials = () => {
-    nursingCareChangeStatus(nursingCarePackageId, 8)
+    nursingCareApproveCommercials(nursingCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
         dispatch(addNotification({ text: 'Status change success.', className: 'success' }));
@@ -110,20 +111,16 @@ const NursingCareApproveBrokered = () => {
   };
 
   const handleRequestMoreInformation = () => {
-    nursingCareRequestClarification(
-      nursingCarePackageId,
-      requestInformationText
-    )
+    nursingCareClarifyCommercial(nursingCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
+        dispatch(addNotification({ text: `Status change failed. ${error.message}`}));
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
-
 
   return (
     <Layout headerTitle="NURSING CARE BROKERED">

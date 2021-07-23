@@ -19,8 +19,7 @@ export const PAY_RUN_TYPES = {
   DIRECT_PAYMENTS_RELEASE_HOLDS: 'DirectPaymentsReleaseHolds',
 };
 
-const getPayRunSummaryList = (
-  {
+const getPayRunSummaryList = ({
     pageNumber = 1,
     pageSize = 10,
     dateFrom = new Date(sixMonthsAgo).toJSON(),
@@ -29,8 +28,7 @@ const getPayRunSummaryList = (
     payRunTypeId = '',
     payRunSubTypeId = '',
     payRunStatusId = ''
-  }
-) => {
+  }) => {
   const query = `${PAY_RUN_URL}/summary-list?PageNumber=${pageNumber}&PageSize=${pageSize}&PayRunId=${payRunId}&PayRunTypeId=${payRunTypeId}&PayRunSubTypeId=${payRunSubTypeId}&PayRunStatusId=${payRunStatusId}&DateFrom=${dateFrom}&DateTo=${dateTo}`;
   return axios.get(query).then(handleResponse).catch(handleError);
 };

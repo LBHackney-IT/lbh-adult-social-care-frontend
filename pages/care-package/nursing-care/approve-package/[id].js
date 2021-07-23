@@ -13,6 +13,7 @@ import {
   getNursingCarePackageApprovalHistory,
   nursingCareRequestClarification,
   nursingCareChangeStatus,
+  nursingCareApprovePackageContent
 } from "../../../../api/CarePackages/NursingCareApi";
 import useSWR from 'swr';
 
@@ -97,7 +98,7 @@ const NursingCareApprovePackage = () => {
   };
 
   const handleApprovePackageContents = () => {
-    nursingCareChangeStatus(nursingCarePackageId, 4)
+    nursingCareApprovePackageContent(nursingCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
@@ -121,6 +122,7 @@ const NursingCareApprovePackage = () => {
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
+
   return (
     <Layout headerTitle="NURSING CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">

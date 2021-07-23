@@ -12,7 +12,7 @@ import PopupHoldPayment from "../../../components/PayRuns/PopupHoldPayment";
 import HackneyFooterInfo from "../../../components/HackneyFooterInfo";
 import { addNotification } from '../../../reducers/notificationsReducer'
 import {
-  acceptInvoice,
+  acceptInvoice, approvePayRunForPayment, deleteDraftPayRun, getAllInvoiceStatuses, getInvoicePaymentStatuses,
   getSinglePayRunDetails,
   getSinglePayRunInsights,
   kickPayRunBackToDraft, submitPayRunForApproval
@@ -48,6 +48,8 @@ const PayRunPage = () => {
   const [levelInsights, setLevelInsights] = useState();
   const [pathname] = useState(`/payments/pay-runs/${id}`);
   const [date, setDate] = useState(new Date());
+  const [invoiceStatuses, setInvoiceStatuses] = useState([])
+  const [invoicePaymentStatuses, setInvoicePaymentStatuses] = useState([])
   const [hocAndRelease, changeHocAndRelease] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
 
@@ -117,27 +119,57 @@ const PayRunPage = () => {
 
   const submitPayRun = () => {
     setLoading(true)
-    submitPayRunForApproval(payRunDetails.payRunId)
-      .then(async () => {
-        await getPayRunDetails();
-        dispatch(addNotification({ text: 'Pay Run approved' }))
-        setLoading(false);
-      })
-      .catch(() => dispatch(addNotification({ text: 'Can not submit for approve'})))
+    const {payRunId} = payRunDetails;
+    if(!payRunDetails.submitted) {
+      submitPayRunForApproval(payRunId)
+        .then(async () => {
+          await getPayRunDetails();
+          dispatch(addNotification({ text: 'Pay Run approved' }))
+          setLoading(false);
+        })
+        .catch(() => dispatch(addNotification({ text: 'Can not submit for approve'})))
+    } else {
+        approvePayRunForPayment(payRunId).then(async () => {
+          await getPayRunDetails();
+          dispatch(addNotification({ text: 'Pay Run approved' }))
+          setLoading(false);
+        })
+        .catch(() => dispatch(addNotification({ text: 'Can not submit for approve'})))
+    }
+
+  }
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
   }
 
   const onDeletePayRunDraft = () => {
     setLoading(true);
-    kickPayRunBackToDraft(payRunDetails.payRunId)
-      .then(async () => {
-        await getPayRunDetails()
-        dispatch(addNotification({ text: 'Pay Run draft deleted', className: 'success' }))
-        setLoading(false)
-      })
-      .catch(() => {
-        dispatch(addNotification({ text: 'Can not delete Pay run draft' }))
-        setLoading(false);
-      });
+    const {payRunId} = payRunDetails;
+    if(payRunDetails.draft) {
+      deleteDraftPayRun(payRunId)
+        .then(async () => {
+          await getPayRunDetails()
+          dispatch(addNotification({ text: 'Pay Run draft deleted', className: 'success' }))
+          setLoading(false)
+        })
+        .catch(() => {
+          dispatch(addNotification({ text: 'Can not delete Pay Run draft' }))
+          setLoading(false);
+        });
+    } else {
+      kickPayRunBackToDraft(payRunId)
+        .then(async () => {
+          await getPayRunDetails()
+          dispatch(addNotification({ text: 'Pay Run kick back success', className: 'success' }))
+          setLoading(false)
+        })
+        .catch(() => {
+          dispatch(addNotification({ text: 'Can not kick back Pay Run' }))
+          setLoading(false);
+        });
+    }
+
   }
 
   useEffect(() => {
@@ -149,8 +181,14 @@ const PayRunPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log('change sort', sort);
-  }, [sort]);
+    getInvoicePaymentStatuses()
+      .then(res => setInvoicePaymentStatuses(res))
+      .catch(() => pushNotification('Can not get invoice payment statuses'))
+
+    getAllInvoiceStatuses()
+      .then(res => setInvoiceStatuses(res))
+      .catch(() => pushNotification('Can not get all invoice statuses'))
+  }, []);
 
   return (
     <div className='pay-runs pay-run'>
@@ -206,12 +244,12 @@ const PayRunPage = () => {
         invoices &&
         <PayRunsLevelInsight
           firstButton={{
-            text: 'Submit pay run for approval',
+            text: payRunDetails?.submitted ? 'Approve for payment' : 'Submit pay run for approval',
             onClick: () => submitPayRun()
           }}
           secondButton={{
-            text: 'Delete draft pay run',
-            onClick: () => onDeletePayRunDraft,
+            text: payRunDetails.kickBack ? 'Kick back' : 'Delete draft pay run',
+            onClick: () => onDeletePayRunDraft(),
           }}
           cost='£42,827'
           suppliersCount='100'

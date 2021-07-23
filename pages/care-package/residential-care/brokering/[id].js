@@ -1,5 +1,6 @@
-import PackagesResidentialCare from "../../../../components/packages/residential-care";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import useSWR from 'swr';
 import { useSelector } from "react-redux";
 import { selectBrokerage } from "../../../../reducers/brokerageReducer";
 import { uniqueID } from "../../../../service/helpers";
@@ -9,12 +10,14 @@ import {
   getAgeFromDateString,
   getEnGBFormattedDate,
 } from "../../../../api/Utils/FuncUtils";
+import PackagesResidentialCare from "../../../../components/packages/residential-care";
 import {
   residentialCareChangeStatus,
   createResidentialCareBrokerageInfo,
   getResidentialCareBrokerageStages,
   getResidentialCarePackageDetailsForBrokerage,
-  getResidentialCarePackageApprovalHistory
+  getResidentialCarePackageApprovalHistory,
+  residentialCareChangeStage,
 } from "../../../../api/CarePackages/ResidentialCareApi";
 import {
   mapBrokerageSupplierOptions,
@@ -22,9 +25,7 @@ import {
 } from "../../../../api/Mappers/ResidentialCareMapper";
 import { getSupplierList } from "../../../../api/CarePackages/SuppliersApi";
 import { CARE_PACKAGE_ROUTE } from "../../../../routes/RouteConstants";
-import { useRouter } from "next/router";
 import PackageHeader from '../../../../components/CarePackages/PackageHeader'
-import useSWR from 'swr';
 
 const initialPackageReclaim = {
   type: "",
@@ -157,6 +158,23 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
       });
   };
 
+  const changePackageBrokeringStage = (
+    residentialCarePackageId,
+    stageId
+  ) => {
+    residentialCareChangeStage(residentialCarePackageId, stageId)
+      .then(() => {
+        alert("Stage changed.");
+      })
+      .catch((error) => {
+        alert(`Change brokerage stage failed. ${error.message}`);
+        setErrors([
+          ...errors,
+          `Change brokerage stage failed. ${error.message}`,
+        ]);
+      });
+  };
+
   const addPackageReclaim = () => {
     setPackagesReclaimed([
       ...packagesReclaimed,
@@ -217,6 +235,7 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
         }}
         createBrokerageInfo={createBrokerageInfo}
         changePackageBrokeringStatus={changePackageBrokeringStatus}
+        changePackageBrokeringStage={changePackageBrokeringStage}
       />
     </Layout>
   );

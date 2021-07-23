@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux'
-import Pagination from "../../components/Payments/Pagination";
 import HackneyFooterInfo from "../../components/HackneyFooterInfo";
 import { addNotification } from '../../reducers/notificationsReducer'
 import DashboardTabs from "../../components/Dashboard/Tabs";
@@ -15,6 +14,7 @@ import {
 import { formatDateWithSign } from '../../service/helpers'
 import { currency } from '../../constants/strings'
 import CustomDropDown from '../../components/CustomDropdown'
+import Pagination from '../../components/Payments/Pagination'
 
 const BrokerageHubPage = () => {
   const dispatch = useDispatch();
@@ -23,7 +23,6 @@ const BrokerageHubPage = () => {
     TypeOfCare: '',
     Stage: '',
     SocialWorker: '',
-    Client: '',
     HackneyId: '',
   });
 
@@ -73,7 +72,7 @@ const BrokerageHubPage = () => {
     name: 'id',
   });
 
-  const pushNotification = (text, className) => {
+  const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }))
   }
 
@@ -173,7 +172,6 @@ const BrokerageHubPage = () => {
       {options: [], initialText: 'Type of care', name: 'TypeOfCare', className: 'mr-3'},
       {options: [], initialText: 'Stage', name: 'Stage', className: 'mr-3'},
       {options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3'},
-      {options: [], initialText: 'Client', name: 'Client', className: 'mr-3'},
     ],
     buttons: [
       { initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest()}

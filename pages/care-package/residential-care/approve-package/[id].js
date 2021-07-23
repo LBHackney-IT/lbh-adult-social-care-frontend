@@ -11,6 +11,7 @@ import {
   getResidentialCarePackageApprovalHistory,
   getResidentialCarePackageApprovalPackageContent,
   residentialCareChangeStatus,
+  residentialCareApprovePackageContent,
   residentialCareRequestClarification,
 } from "../../../../api/CarePackages/ResidentialCareApi";
 import { useRouter } from "next/router";
@@ -90,7 +91,7 @@ const ResidentialCareApprovePackage = () => {
   };
 
   const handleApprovePackageCommercials = () => {
-    residentialCareChangeStatus(residentialCarePackageId, 8)
+    residentialCareApprovePackageContent(residentialCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })

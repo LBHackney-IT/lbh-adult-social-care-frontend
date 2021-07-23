@@ -81,6 +81,52 @@ const residentialCareRequestClarification = (residentialCarePackageId, informati
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const residentialCareClarifyCommercial = (residentialCarePackageId, informationText) => {
+  const options = {
+    url: `${BASE_URL}/v1/residential-care-request-more-information/clarifying-commercials`,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data: {
+      residentialCarePackageId,
+      informationText,
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+const residentialCareApprovePackageContent = (residentialCarePackageId) => {
+  const options = {
+    url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-package-contents`,
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data: {
+      residentialCarePackageId
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+const residentialCareApproveCommercials = (residentialCarePackageId) => {
+  const options = {
+    url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-brokered-deal`,
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data: {
+      residentialCarePackageId
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 const residentialCareChangeStatus = (residentialCarePackageId, newStatusId) => {
   const options = {
     url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/change-status/${newStatusId}`,
@@ -117,6 +163,22 @@ const createResidentialCareBrokerageInfo = (residentialCarePackageId, residentia
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const residentialCareChangeStage = (residentialCarePackageId, stageId) => {
+  const options = {
+    url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage/stage/${stageId}`,
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data: {
+      residentialCarePackageId,
+      stageId,
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 export {
   getResidentialCareAdditionalNeedsCostOptions,
   getTypeOfResidentialCareHomeOptions,
@@ -127,8 +189,12 @@ export {
   getResidentialCarePackageApproveBrokered,
   getResidentialCarePackageApprovalHistory,
   residentialCareRequestClarification,
+  residentialCareClarifyCommercial,
   residentialCareChangeStatus,
+  residentialCareApprovePackageContent,
+  residentialCareApproveCommercials,
   getResidentialCareBrokerageStages,
   getResidentialCarePackageDetailsForBrokerage,
   createResidentialCareBrokerageInfo,
+  residentialCareChangeStage
 };

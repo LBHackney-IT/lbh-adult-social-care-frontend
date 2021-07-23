@@ -9,7 +9,6 @@ const Pagination = ({
   actionButton,
   from = 0,
   to = 0,
-  itemsCount = 0,
   currentPage = 1,
   totalCount = 0
 }) => {
@@ -25,11 +24,10 @@ const Pagination = ({
           {actionButton.text}
         </Button>
       )}
-      <p className="table-pagination-info">Showing {itemsCount === 0 ? 0 : `${from}-${to} of ${totalCount} items`}</p>
+      <p className="table-pagination-info">Showing {`${from}-${to} of ${totalCount} items`}</p>
       <div className="table-pagination-actions">
         {totalCount === 0 ?
-          <Button
-            key={uniqueID()}
+          <Button key={uniqueID()}
             onClick={() => onChangePagination(1)}
             className="table-pagination-button table-pagination-item-active"
           >

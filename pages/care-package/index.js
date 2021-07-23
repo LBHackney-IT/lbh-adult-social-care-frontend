@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import useSWR from 'swr';
 import { batch, useDispatch } from 'react-redux';
 import { getNursingTypeOfStayOptions, getResidentialTypeOfStayOptions } from '../../reducers/carePackageSlice';
 import ClientSummary from "../../components/ClientSummary";
@@ -7,7 +8,6 @@ import HomeCareSetup from "../../components/Setup/HomeCareSetup";
 import DayCareSetup from "../../components/Setup/DayCareSetup";
 import NursingCareSetup from "../../components/Setup/NursingCareSetup";
 import ResidentialCareSetup from "../../components/Setup/ResidentialCareSetup";
-import useSWR from 'swr';
 
 const serverCarePackage = async () => {};
 

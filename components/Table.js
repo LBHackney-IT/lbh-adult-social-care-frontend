@@ -93,7 +93,17 @@ const Table = ({
 
 export default Table;
 /*
-  EXAMPLE
+  EXAMPLES
+
+  if we have object like this
+  {payRunId: 1, clientName: 'Test', dob: '01.01.01'}
+
+  const fields = {
+    id: 'payRunId',
+    clientName: 'clientName',
+    dob: 'dob',
+  }
+
 
   const rowsRules = {
     typeOfCare: {

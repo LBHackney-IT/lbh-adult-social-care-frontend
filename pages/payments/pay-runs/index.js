@@ -151,7 +151,15 @@ const PayRunsPage = () => {
 
   const getLists = () => {
     if(tab === 'pay-runs') {
-      getPayRunSummaryList({ pageNumber: page })
+      getPayRunSummaryList({
+        pageNumber: page,
+        dateFrom: new Date(2021, 1,1),
+        dateTo: new Date(2021, 2,2),
+        payRunId: 1,
+        payRunTypeId: 1,
+        payRunSubTypeId: 1,
+        payRunStatusId: 1,
+      })
         .then(payRuns => {
           changeListData('payRun', payRuns)
         })
@@ -229,7 +237,13 @@ const PayRunsPage = () => {
           messages={openedInvoiceChat.disputedInvoiceChat}
         />
       )}
-      <PayRunsHeader apply={getLists} releaseHolds={releaseHolds} checkedItems={checkedRows} tab={tab} setOpenedPopup={setOpenedPopup} />
+      <PayRunsHeader
+        apply={getLists}
+        releaseHolds={releaseHolds}
+        checkedItems={checkedRows}
+        tab={tab}
+        setOpenedPopup={setOpenedPopup}
+      />
       <PaymentsTabs
         tab={tab}
         changeTab={changeTab}

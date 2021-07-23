@@ -1,23 +1,25 @@
-import PackagesNursingCare from '../../../../components/packages/nursing-care'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
+import useSWR from 'swr';
 import { selectBrokerage } from '../../../../reducers/brokerageReducer'
 import { uniqueID } from '../../../../service/helpers'
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi'
+import PackagesNursingCare from '../../../../components/packages/nursing-care'
 import Layout from '../../../../components/Layout/Layout'
 import { getAgeFromDateString, getEnGBFormattedDate, } from '../../../../api/Utils/FuncUtils'
+
 import {
   createNursingCareBrokerageInfo,
   getNursingCareBrokerageStages,
   getNursingCarePackageApprovalHistory,
   getNursingCarePackageDetailsForBrokerage,
-  nursingCareChangeStatus
+  nursingCareChangeStatus,
+  nursingCareChangeStage,
 } from '../../../../api/CarePackages/NursingCareApi'
 import { mapBrokerageSupplierOptions, mapNursingCareStageOptions, } from '../../../../api/Mappers/NursingCareMapper'
 import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi'
 import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants'
-import { useRouter } from 'next/router'
-import useSWR from 'swr';
 import PackageHeader from '../../../../components/CarePackages/PackageHeader'
 
 // start before render
@@ -157,6 +159,23 @@ const NursingCareBrokering = () => {
       });
   };
 
+  const changePackageBrokeringStage = (
+    nursingCarePackageId,
+    stageId
+  ) => {
+    nursingCareChangeStage(nursingCarePackageId, stageId)
+      .then(() => {
+        alert("Stage changed.");
+      })
+      .catch((error) => {
+        alert(`Change brokerage stage failed. ${error.message}`);
+        setErrors([
+          ...errors,
+          `Change brokerage stage failed. ${error.message}`,
+        ]);
+      });
+  };
+
   const addPackageReclaim = () => {
     setPackagesReclaimed([
       ...packagesReclaimed,
@@ -217,6 +236,7 @@ const NursingCareBrokering = () => {
         }}
         createBrokerageInfo={createBrokerageInfo}
         changePackageBrokeringStatus={changePackageBrokeringStatus}
+        changePackageBrokeringStage={changePackageBrokeringStage}
       />
     </Layout>
   );
