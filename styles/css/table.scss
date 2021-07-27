@@ -3,6 +3,10 @@
   padding: 16px;
 }
 
+.table__row-item-justify-center {
+  justify-content: center !important;
+}
+
 .table__title {
   text-align: center;
   font-size: 24px;
@@ -36,6 +40,8 @@
 .sort-table {
   display: flex;
   justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
 
   margin-bottom: 35px;
 }

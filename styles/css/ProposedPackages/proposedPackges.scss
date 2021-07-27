@@ -60,6 +60,10 @@
   color: $lbh-blue-highlight;
   text-decoration-color: $lbh-blue-highlight;
   text-decoration: underline;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .proposed-packages__total-cost {

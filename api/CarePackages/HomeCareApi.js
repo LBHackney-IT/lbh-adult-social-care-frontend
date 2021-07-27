@@ -243,7 +243,7 @@ const createHomeCareBrokerageInfo = ({ id, postData }) => {
 
 const getHomeCareBrokerageApprovePackage = async (packageId) => {
   const response = await axios
-    .get(`${HOME_CARE_BROKERAGE_URL}${packageId}/approve-package`, {
+    .get(`${HOME_CARE_BROKERAGE_URL}/${packageId}/approve-package`, {
       headers: AUTH_HEADER,
     })
     .catch((error) => {

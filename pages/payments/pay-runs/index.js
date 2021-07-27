@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import {
+  getHeldInvoicePayments,
+  getPaymentDepartments,
+  getPayRunSummaryList,
+  releaseSingleHeldInvoice,
+} from '../../../api/Payments/PayRunApi';
+import PopupInvoiceChat from '../../../components/Chat/PopupInvoiceChat';
 import PayRunsHeader from '../../../components/PayRuns/PayRunsHeader';
 import PaymentsTabs from '../../../components/Payments/PaymentsTabs';
 import PayRunTable from '../../../components/PayRuns/PayRunTable';
 import Pagination from '../../../components/Payments/Pagination';
-import { payRunsHeldPaymentsTableData, testDataHelpMessages } from '../../../testData/testDataPayRuns';
+import Table from '../../../components/Table';
+import { addNotification } from '../../../reducers/notificationsReducer';
 import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
 import ChatButton from '../../../components/PayRuns/ChatButton';
-import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight';
-import PopupHelpChat from '../../../components/Chat/PopupHelpChat';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
-import usePayRunSummary from '../../../api/Payments/hooks/usePayRunSummary';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -24,13 +30,12 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 });
 
 const PayRunsPage = () => {
-  const { payRunsTableData, setPayRunsTableData } = usePayRunSummary();
+  const dispatch = useDispatch();
   const [sortsTab] = useState({
     'pay-runs': [
       { name: 'id', text: 'ID' },
       { name: 'date', text: 'Date' },
       { name: 'type', text: 'Type' },
-      { name: 'cadence', text: 'Cadence' },
       { name: 'paid', text: 'Paid' },
       { name: 'held', text: 'Held' },
       { name: 'status', text: 'Status' },
@@ -56,18 +61,42 @@ const PayRunsPage = () => {
   const [openedPopup, setOpenedPopup] = useState('');
   const [date, setDate] = useState(new Date());
   const [checkedRows, setCheckedRows] = useState([]);
-  const [openedHelpChat, setOpenedHelpChat] = useState({});
-  // const [hocAndRelease, changeHocAndRelease] = useState('');
+  const [openedInvoiceChat, setOpenedInvoiceChat] = useState({});
+  const [hocAndRelease, changeHocAndRelease] = useState('');
+  const [newPayRunType, setNewPayRunType] = useState('');
   const [waitingOn, changeWaitingOn] = useState('');
   const [newMessageText, setNewMessageText] = useState('');
-  const [newPayRunType, setNewPayRunType] = useState('');
+  const [regularCycles, changeRegularCycles] = useState('');
   const [tab, changeTab] = useState('pay-runs');
+  const [listData, setListData] = useState({
+    payRuns: {},
+    holdPayments: {},
+  });
+  const [page, setPage] = useState(1);
   const [sort, setSort] = useState({
     value: 'increase',
     name: 'id',
   });
+  const paginationInfo = listData[tab]?.pagingMetaData || {};
 
-  const isHeldTab = tab === 'held-payments';
+  const [payRunRowsRules] = useState({
+    payRunId: {
+      getClassName: () => 'button-link',
+    },
+    payRunStatusName: {
+      getClassName: (value) => `${value} table__row-item-status`,
+    },
+  });
+
+  const [payRunFields] = useState({
+    id: 'payRunId',
+    date: 'dateCreated',
+    type: 'payRunTypeName',
+    paid: 'totalAmountPaid',
+    held: 'totalAmountHeld',
+    status: 'payRunStatusName',
+  });
+
   const isPayRunsTab = tab === 'pay-runs';
 
   const sortBy = (field, value) => {
@@ -76,8 +105,8 @@ const PayRunsPage = () => {
 
   const closeCreatePayRun = () => {
     setOpenedPopup('');
-    // changeHocAndRelease('');
-    setNewPayRunType('');
+    changeHocAndRelease('');
+    changeRegularCycles('');
     setDate(new Date());
   };
 
@@ -96,16 +125,18 @@ const PayRunsPage = () => {
   };
 
   const release = (item, care) => {
-    console.log('release payment item and care ', item, care);
+    releaseSingleHeldInvoice(listData.holdPayments.payRunId, item.invoiceId).then(() => {
+      dispatch(addNotification({ text: `Realse invoice ${item.invoiceId}`, className: 'success' }));
+    });
   };
 
   const openChat = (item) => {
     setOpenedPopup('help-chat');
-    setOpenedHelpChat(item);
+    setOpenedInvoiceChat(item);
   };
 
-  const onClickTableRow = (rowItems) => {
-    router.push(`${router.pathname}/${rowItems.id}`);
+  const onClickTableRow = (rowItem) => {
+    router.push(`${router.pathname}/${rowItem.payRunId}`);
   };
 
   const heldActions = [
@@ -117,46 +148,114 @@ const PayRunsPage = () => {
     },
   ];
 
-  useEffect(() => {
-    // using the selected field, check data and update
-    if (isPayRunsTab) {
-      const sortedData = payRunsTableData
-        .slice()
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      console.log(sortedData);
-      setPayRunsTableData(sortedData);
+  const changeListData = (field, value) => {
+    setListData({
+      ...listData,
+      [field]: value,
+    });
+  };
+
+  const getLists = () => {
+    if (tab === 'pay-runs') {
+      getPayRunSummaryList({
+        pageNumber: page,
+        dateFrom: new Date(2021, 1, 1),
+        dateTo: new Date(2021, 2, 2),
+        payRunId: 1,
+        payRunTypeId: 1,
+        payRunSubTypeId: 1,
+        payRunStatusId: 1,
+      })
+        .then((payRuns) => {
+          changeListData('payRun', payRuns);
+        })
+        .catch(() => {
+          dispatch(addNotification({ text: 'Can not get hold payments' }));
+        });
+    } else {
+      getHeldInvoicePayments({ pageNumber: page })
+        .then((heldInvoices) => changeListData('holdPayments', heldInvoices))
+        .catch(() => {
+          dispatch(addNotification({ text: 'Can not get hold payments' }));
+        });
     }
+  };
+
+  const releaseHolds = () => {
+    // TODO i am not sure that this api is correct for this case
+    // releaseHeldInvoices(checkedRows)
+    //   .then(() => {
+    //     dispatch(addNotification({ text: 'Release Success', className: 'success' }));
+    //     setCheckedRows([]);
+    //   })
+    //   .catch(() => dispatch(addNotification({ text: 'Release Fail' })))
+  };
+
+  const getHelds = () => {
+    getHeldInvoicePayments({ pageNumber: page })
+      .then((heldInvoices) => changeListData('holdPayments', heldInvoices))
+      .catch(() => {
+        dispatch(addNotification({ text: 'Can not get hold payments' }));
+      });
+
+    getPaymentDepartments()
+      .then((res) => changeWaitingOn(res))
+      .catch(() => dispatch(addNotification({ text: 'Fail get departments' })));
+  };
+
+  useEffect(() => {
     console.log('change sort', sort);
   }, [sort]);
 
   useEffect(() => {
-    router.replace(`${router.pathname}?page=1`);
-  }, []);
+    if (tab === 'pay-runs') {
+      getPayRunSummaryList({ pageNumber: page })
+        .then((payRuns) => {
+          changeListData('payRun', payRuns);
+        })
+        .catch(() => {
+          dispatch(addNotification({ text: 'Can not get hold payments' }));
+        });
+    } else {
+      getHelds();
+    }
+  }, [tab, page]);
 
   return (
     <div className={`pay-runs ${tab}__tab-class`}>
       {openedPopup === 'create-pay-run' && (
         <PopupCreatePayRun
-          setNewPayRunType={setNewPayRunType}
-          newPayRunType={newPayRunType}
+          changeHocAndRelease={changeHocAndRelease}
+          changeRegularCycles={changeRegularCycles}
+          hocAndRelease={hocAndRelease}
+          regularCycles={regularCycles}
           closePopup={closeCreatePayRun}
           date={date}
+          newPayRunType={newPayRunType}
+          setNewPayRunType={setNewPayRunType}
           setDate={setDate}
         />
       )}
       {openedPopup === 'help-chat' && (
-        <PopupHelpChat
+        <PopupInvoiceChat
           closePopup={closeHelpChat}
           newMessageText={newMessageText}
           setNewMessageText={setNewMessageText}
           waitingOn={waitingOn}
           changeWaitingOn={changeWaitingOn}
-          currentUserInfo={openedHelpChat}
-          currentUserId={1}
-          messages={testDataHelpMessages}
+          currentUserInfo={openedInvoiceChat}
+          updateChat={getHelds}
+          currentUserId={openedInvoiceChat.creatorId}
+          messages={openedInvoiceChat.disputedInvoiceChat}
         />
       )}
-      <PayRunsHeader tab={tab} setOpenedPopup={setOpenedPopup} />
+      <PayRunsHeader
+        apply={getLists}
+        releaseHolds={releaseHolds}
+        checkedItems={checkedRows}
+        tab={tab}
+        setOpenedPopup={setOpenedPopup}
+      />
       <PaymentsTabs
         tab={tab}
         changeTab={changeTab}
@@ -165,37 +264,36 @@ const PayRunsPage = () => {
           { text: 'Held Payments', value: 'held-payments' },
         ]}
       />
-      <PayRunTable
-        tableActionButtons={isHeldTab && <ChatButton onClick={() => setOpenedPopup('chat')} />}
-        checkedRows={isHeldTab && checkedRows}
-        setCheckedRows={onCheckRows}
-        isIgnoreId={isHeldTab}
-        className={tabsClasses[tab]}
-        additionalActions={isHeldTab && heldActions}
-        canCollapseRows={isHeldTab}
-        release={isHeldTab && release}
-        onClickTableRow={isPayRunsTab && onClickTableRow}
-        rows={isPayRunsTab ? payRunsTableData : payRunsHeldPaymentsTableData}
-        careType="Residential"
-        sortBy={sortBy}
-        sorts={sortsTab[tab]}
-      />
-      <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
-      <PayRunsLevelInsight
-        firstButton={{
-          text: 'Approve for payment',
-          onClick: () => {},
-        }}
-        secondButton={{
-          text: 'Kick back',
-          onClick: () => {},
-        }}
-        cost="£42,827"
-        suppliersCount="100"
-        servicesUsersCount="1000"
-        costIncrease="£897"
-        holdsCount="48"
-        holdsPrice="£32,223"
+      {isPayRunsTab ? (
+        <Table
+          rows={listData?.payRuns?.data}
+          rowsRules={payRunRowsRules}
+          fields={payRunFields}
+          sorts={sortsTab[tab]}
+          sortBy={sortBy}
+          onClickTableRow={onClickTableRow}
+        />
+      ) : (
+        <PayRunTable
+          checkedRows={checkedRows}
+          setCheckedRows={onCheckRows}
+          isIgnoreId
+          className={tabsClasses[tab]}
+          additionalActions={heldActions}
+          changeAllChecked={setCheckedRows}
+          canCollapseRows
+          release={release}
+          rows={listData?.holdPayments?.invoices}
+          careType="Residential"
+          sortBy={sortBy}
+          sorts={sortsTab[tab]}
+        />
+      )}
+      <Pagination
+        from={paginationInfo?.currentPage}
+        to={paginationInfo?.pageSize}
+        itemsCount={paginationInfo?.pageSize}
+        totalCount={paginationInfo?.totalCount}
       />
       <HackneyFooterInfo />
     </div>

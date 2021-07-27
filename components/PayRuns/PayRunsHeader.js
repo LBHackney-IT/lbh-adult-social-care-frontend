@@ -6,8 +6,9 @@ import HeldPaymentsFilters from './HeldPaymentsFilters';
 const initialFilters = {
   id: '',
   type: '',
-  cadence: '',
   status: '',
+  dateStart: '',
+  dateEnd: '',
   date: '',
   dateRange: '',
   serviceType: '',
@@ -19,21 +20,22 @@ const initialFilters = {
 
 const PayRunsHeader = ({
   typeOptions = [],
-  cadenceOptions = [],
   statusOptions = [],
   dateRangeOptions = [],
   dateOptions = [],
   serviceTypesOptions = [],
+  releaseHolds,
   serviceUserOptions = [],
   supplierOptions = [],
   waitingOnOptions = [],
   setOpenedPopup,
+  apply,
   tab,
 }) => {
   const [filters, setFilters] = useState({ ...initialFilters });
 
   const applyFilters = () => {
-    console.log('make an apply filters request');
+    apply()
   };
 
   const searchId = () => {
@@ -59,7 +61,6 @@ const PayRunsHeader = ({
           dateOptions={dateOptions}
           statusOptions={statusOptions}
           applyFilters={applyFilters}
-          cadenceOptions={cadenceOptions}
           changeFilter={changeFilter}
           filters={filters}
           searchId={searchId}
@@ -70,7 +71,7 @@ const PayRunsHeader = ({
     'held-payments': {
       title: 'Held Payments',
       actionButtonText: 'Pay Released Holds',
-      clickActionButton: () => {},
+      clickActionButton: () => releaseHolds(),
       filtersComponent: (
         <HeldPaymentsFilters
           dateRangeOptions={dateRangeOptions}

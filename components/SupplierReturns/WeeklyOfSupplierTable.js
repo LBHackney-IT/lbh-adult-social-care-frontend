@@ -47,8 +47,8 @@ const WeeklyOfSupplierTable = ({
       <WeekOfSupplierSortTable
         checkedRows={checkedRows}
         setCheckedRows={changeCheckedRowsState}
-        sortBy={sortBy}
         rows={rows}
+        sortBy={sortBy}
         sorts={sorts}
       />
       {rows.map((supplier) => {

@@ -21,14 +21,14 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const SupplierDashboard = () => {
   const [sorts] = useState([
-    { name: 'weekCommencing', text: 'Week commencing' },
-    { name: 'value', text: 'Value' },
-    { name: 'totalPackages', text: 'Total Packages' },
-    { name: 'returned', text: 'Returned' },
-    { name: 'inDispute', text: 'In Dispute' },
-    { name: 'accepted', text: 'Accepted' },
-    { name: 'paid', text: 'Paid' },
-    { name: 'status', text: 'Status' },
+    {name: 'weekCommencing', text: 'Week commencing'},
+    {name: 'value', text: 'Value'},
+    {name: 'totalPackages', text: 'Total Packages'},
+    {name: 'returned', text: 'Returned'},
+    {name: 'inDispute', text: 'In Dispute'},
+    {name: 'accepted', text: 'Accepted'},
+    {name: 'paid', text: 'Paid'},
+    {name: 'status', text: 'Status'},
   ]);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -39,11 +39,11 @@ const SupplierDashboard = () => {
 
   const onClickTableRow = (rowItems) => {
     dispatch(changeSupplierReturnsDashboard(rowItems));
-    router.push(`${router.pathname}/supplier-returns/${rowItems.id}`);
+    router.push(`${router.pathname}/supplier-returns/${rowItems.id}`)
   };
 
   const sortBy = (field, value) => {
-    setSort({ value, name: field });
+    setSort({value, name: field});
   };
 
   useEffect(() => {
@@ -55,10 +55,10 @@ const SupplierDashboard = () => {
   }, [sort]);
 
   return (
-    <div className="supplier-dashboard">
+    <div className='supplier-dashboard'>
       <SupplierDashboardInnerHeader />
       <SupplierDashboardTable
-        isIgnoreId
+        isIgnoreId={true}
         onClickTableRow={onClickTableRow}
         rows={supplierDashboardTableData}
         sortBy={sortBy}
@@ -67,7 +67,7 @@ const SupplierDashboard = () => {
       <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
       <HackneyFooterInfo />
     </div>
-  );
+  )
 };
 
 export default SupplierDashboard;

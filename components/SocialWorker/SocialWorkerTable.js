@@ -32,7 +32,7 @@ const SocialWorkerTable = ({ onClickTableRow, rows, isIgnoreId = false, classNam
               const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';
               return (
                 <div key={`${rowItemName}${item.id}`} className={`table__row-item${statusItemClass}`}>
-                  <p>{isStatus ? formattedStatus : value}</p>
+                  <p>{isStatus ? formattedStatus : value || '-'}</p>
                 </div>
               );
             })}

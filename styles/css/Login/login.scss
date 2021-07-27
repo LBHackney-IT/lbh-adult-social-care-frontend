@@ -1,7 +1,6 @@
 .login-page__form-container {
-  height: 70vh;
   width: 30%;
-  margin: 0 auto;
+  margin: 0 auto 200px auto;
   padding-top: 168px;
 }
 
@@ -16,6 +15,10 @@
     height: 80px;
     margin-top: 16px;
     font-size: 19px;
+
+    a {
+      color: white;
+    }
   }
 
   & > p {

@@ -25,14 +25,16 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: ho
 
   try {
     // Call to api to get package
-    // TODO change API
+    //TODO change API
     const homeCareBrokerageDetails = await getHomeCarePackageDetailsForBrokerage(homeCarePackageId);
-    const newAdditionalNeedsEntries = homeCareBrokerageDetails?.homeCareAdditionalNeeds?.map((additionalneedsItem) => ({
-      id: additionalneedsItem.id,
-      isWeeklyCost: additionalneedsItem.isWeeklyCost,
-      isOneOffCost: additionalneedsItem.isOneOffCost,
-      needToAddress: additionalneedsItem.needToAddress,
-    }));
+    const newAdditionalNeedsEntries = homeCareBrokerageDetails?.homeCareAdditionalNeeds?.map(
+      (additionalneedsItem) => ({
+        id: additionalneedsItem.id,
+        isWeeklyCost: additionalneedsItem.isWeeklyCost,
+        isOneOffCost: additionalneedsItem.isOneOffCost,
+        needToAddress: additionalneedsItem.needToAddress,
+      })
+    );
     data.homeCarePackage = homeCareBrokerageDetails;
     data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch (error) {
@@ -59,51 +61,58 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: ho
 const HomeCareBrokerPackage = ({ errorData, homeCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
   const dispatch = useDispatch();
   const [initialPackageReclaim] = useState({
-    type: '',
-    notes: '',
-    from: '',
-    category: '',
-    amount: '',
-    id: '1',
+    type: "",
+    notes: "",
+    from: "",
+    category: "",
+    amount: "",
+    id: "1",
   });
 
   const brokerage = useSelector(selectBrokerage);
-  const [tab, setTab] = useState('approvalHistory');
+  const [tab, setTab] = useState("approvalHistory");
   const [summaryData, setSummaryData] = useState([]);
-  const [packagesReclaimed, setPackagesReclaimed] = useState([{ ...initialPackageReclaim }]);
+  const [packagesReclaimed, setPackagesReclaimed] = useState([{...initialPackageReclaim}]);
 
   const addPackageReclaim = () => {
-    setPackagesReclaimed([...packagesReclaimed, { ...initialPackageReclaim, id: uniqueID() }]);
+    setPackagesReclaimed([
+      ...packagesReclaimed,
+      { ...initialPackageReclaim, id: uniqueID() },
+    ]);
   };
 
   const removePackageReclaim = (id) => {
-    const newPackagesReclaim = packagesReclaimed.filter((item) => item.id !== id);
+    const newPackagesReclaim = packagesReclaimed.filter(
+      (item) => item.id !== id
+    );
     setPackagesReclaimed(newPackagesReclaim);
   };
 
   const changePackageReclaim = (id) => (updatedPackage) => {
     const newPackage = packagesReclaimed.slice();
-    const packageIndex = packagesReclaimed.findIndex((item) => String(item.id) === String(id));
+    const packageIndex = packagesReclaimed.findIndex(
+      (item) => String(item.id) === String(id)
+    );
     newPackage.splice(packageIndex, 1, updatedPackage);
     setPackagesReclaimed(newPackage);
   };
 
   const changeTab = (tab) => {
-    if (tab === 'packageDetails') {
+    if (tab === "packageDetails") {
       setSummaryData(getHomeCareSummaryData());
       setPackagesReclaimed([]);
     } else {
-      setPackagesReclaimed([{ ...initialPackageReclaim }]);
+      setPackagesReclaimed([{...initialPackageReclaim}])
     }
     setTab(tab);
   };
 
   useEffect(() => {
-    if (errorData?.length && errorData[0].text) {
+    if(errorData && errorData?.length && errorData[0].text) {
       errorData.forEach(({ text: errorText, response }) => {
         console.error(response);
-        dispatch(addNotification({ text: errorText }));
-      });
+        dispatch(addNotification( { text: errorText }));
+      })
     }
   }, [errorData]);
 

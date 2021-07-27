@@ -21,15 +21,15 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const SupplierReturns = () => {
   const [sorts] = useState([
-    { name: 'weekCommencing', text: 'Week commencing' },
-    { name: 'suppliers', text: 'Suppliers' },
-    { name: 'value', text: 'Value' },
-    { name: 'totalPackages', text: 'Total Packages' },
-    { name: 'returned', text: 'Returned' },
-    { name: 'inDispute', text: 'In Dispute' },
-    { name: 'accepted', text: 'Accepted' },
-    { name: 'paid', text: 'Paid' },
-    { name: 'status', text: 'Status' },
+    {name: 'weekCommencing', text: 'Week commencing'},
+    {name: 'suppliers', text: 'Suppliers'},
+    {name: 'value', text: 'Value'},
+    {name: 'totalPackages', text: 'Total Packages'},
+    {name: 'returned', text: 'Returned'},
+    {name: 'inDispute', text: 'In Dispute'},
+    {name: 'accepted', text: 'Accepted'},
+    {name: 'paid', text: 'Paid'},
+    {name: 'status', text: 'Status'},
   ]);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -44,7 +44,7 @@ const SupplierReturns = () => {
   };
 
   const sortBy = (field, value) => {
-    setSort({ value, name: field });
+    setSort({value, name: field});
   };
 
   useEffect(() => {
@@ -56,12 +56,12 @@ const SupplierReturns = () => {
   }, [sort]);
 
   return (
-    <div className="supplier-dashboard supplier-returns">
+    <div className='supplier-dashboard supplier-returns'>
       <SupplierInnerHeader />
       <SupplierReturnsTable
-        isIgnoreId
+        isIgnoreId={true}
         onClickTableRow={onClickTableRow}
-        checkedRows
+        checkedRows={true}
         rows={supplierReturnsTableData}
         sortBy={sortBy}
         sorts={sorts}
@@ -69,7 +69,7 @@ const SupplierReturns = () => {
       <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
       <HackneyFooterInfo />
     </div>
-  );
+  )
 };
 
 export default SupplierReturns;

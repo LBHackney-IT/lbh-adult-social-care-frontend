@@ -29,11 +29,15 @@ export const getServerSideProps = withSession(async ({ req, res: response, query
 
   try {
     const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId);
-    const newApprovalHistoryItems = res.map((historyItem) => ({
-      eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
-      eventMessage: historyItem.logText,
-      eventSubMessage: undefined,
-    }));
+    const newApprovalHistoryItems = res.map(
+      (historyItem) => ({
+        eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
+          "en-GB"
+        ),
+        eventMessage: historyItem.logText,
+        eventSubMessage: undefined
+      })
+    );
 
     data.approvalHistoryEntries = newApprovalHistoryItems.slice();
   } catch (error) {
@@ -73,7 +77,9 @@ const ResidentialCareApproveBrokered = ({
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
-  const [requestInformationText, setRequestInformationText] = useState(undefined);
+  const [requestInformationText, setRequestInformationText] = useState(
+    undefined
+  );
 
   const handleRejectPackage = () => {
     residentialCareChangeStatus(residentialCarePackageId, 10)
@@ -121,14 +127,15 @@ const ResidentialCareApproveBrokered = ({
           }
         />
         <ApprovalClientSummary />
-
         <div className="columns">
           <div className="column">
             <div className="level">
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">STARTS</p>
+                    <p className="font-weight-bold hackney-text-green">
+                      STARTS
+                    </p>
                     <p className="font-size-14px">
                       {getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.startDate)}
                     </p>
@@ -158,7 +165,9 @@ const ResidentialCareApproveBrokered = ({
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">DAYS/WEEK</p>
+                    <p className="font-weight-bold hackney-text-green">
+                      DAYS/WEEK
+                    </p>
                     <p className="font-size-14px">3</p>
                   </div>
                 </div>
@@ -171,7 +180,11 @@ const ResidentialCareApproveBrokered = ({
 
         <div className="columns">
           <div className="column">
-            <PackageCostBox title="COST OF CARE / WK" cost={residentialCarePackage?.costOfCare} costType="ACTUAL" />
+            <PackageCostBox
+              title="COST OF CARE / WK"
+              cost={residentialCarePackage?.costOfCare}
+              costType="ACTUAL"
+            />
           </div>
           <div className="column">
             <PackageCostBox
@@ -191,7 +204,9 @@ const ResidentialCareApproveBrokered = ({
           </div>
         </div>
 
-        <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
+        <PackageApprovalHistorySummary
+          approvalHistoryEntries={approvalHistoryEntries}
+        />
 
         <div className="columns">
           <div className="column">
@@ -207,8 +222,7 @@ const ResidentialCareApproveBrokered = ({
                 typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
-                needToAddress={residentialCarePackage?.residentialCarePackage.needToAddress}
-              />
+                needToAddress={residentialCarePackage?.residentialCarePackage.needToAddress}              />
             </div>
           </div>
         </div>
@@ -219,21 +233,29 @@ const ResidentialCareApproveBrokered = ({
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light" onClick={handleRejectPackage} type="button">
+                <button
+                    className="button hackney-btn-light"
+                    onClick={handleRejectPackage}
+                  >
                     Deny
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button
+                <button
                     onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
                     className="button hackney-btn-light"
                     type="button"
                   >
-                    {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
+                    {displayMoreInfoForm
+                      ? "Hide Request more information"
+                      : "Request More Information"}
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green" onClick={handleApprovePackageCommercials} type="button">
+                <button
+                    className="button hackney-btn-green"
+                    onClick={handleApprovePackageCommercials}
+                  >
                     Approve Commercials
                   </button>
                 </div>
@@ -245,11 +267,21 @@ const ResidentialCareApproveBrokered = ({
         <div className="columns">
           <div className="column">
             <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">Request more information</p>
-              <TextArea label="" rows={5} placeholder="Add details..." onChange={setRequestInformationText} />
-              <button className="button hackney-btn-green" onClick={handleRequestMoreInformation} type="button">
+              <p className="font-size-16px font-weight-bold">
                 Request more information
-              </button>
+              </p>
+              <TextArea
+                  label=""
+                  rows={5}
+                  placeholder="Add details..."
+                  onChange={setRequestInformationText}
+                />
+                <button
+                  className="button hackney-btn-green"
+                  onClick={handleRequestMoreInformation}
+                >
+                  Request more information
+                </button>
             </div>
           </div>
         </div>

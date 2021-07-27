@@ -19,12 +19,13 @@ const PayRunHeader = ({
   typeOptions = [],
   statusOptions = [],
   actionButtonText = '',
+  filter,
   clickActionButton = () => {},
 }) => {
   const [filters, setFilters] = useState({ ...initialFilters });
 
   const applyFilters = () => {
-    console.log('make an apply filters request');
+    filter()
   };
 
   const searchId = () => {

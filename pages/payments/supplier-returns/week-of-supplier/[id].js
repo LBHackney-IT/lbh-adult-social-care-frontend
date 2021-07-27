@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
+import PopupInvoiceChat from '../../../../components/Chat/PopupInvoiceChat';
 import Pagination from '../../../../components/Payments/Pagination';
 import { testDataHelpMessages, weeklyOfSupplierTableData } from '../../../../testData/testDataPayRuns';
 import SupplierReturnsLevelInsight from '../../../../components/SupplierReturns/SupplierReturnsLevelInsight';
 import ChatButton from '../../../../components/PayRuns/ChatButton';
-import PopupHelpChat from '../../../../components/Chat/PopupHelpChat';
 import { selectSupplierReturns } from '../../../../reducers/supplierReturnsReducer';
 import { formatDateWithSign, getUserSession } from '../../../../service/helpers';
 import { Button } from '../../../../components/Button';
@@ -27,12 +27,12 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const WeekOfSupplierView = () => {
   const [sorts] = useState([
-    { name: 'serviceUser', text: 'Service User' },
-    { name: 'packageType', text: 'Package Type' },
-    { name: 'packageId', text: 'Package ID' },
-    { name: 'weeklyValue', text: 'Weekly Value' },
-    { name: 'status', text: 'Status' },
-    { name: 'action', text: 'Action' },
+    {name: 'serviceUser', text: 'Service User'},
+    {name: 'packageType', text: 'Package Type'},
+    {name: 'packageId', text: 'Package ID'},
+    {name: 'weeklyValue', text: 'Weekly Value'},
+    {name: 'status', text: 'Status'},
+    {name: 'action', text: 'Action'},
   ]);
   const router = useRouter();
   const [openedPopup, setOpenedPopup] = useState('');
@@ -45,16 +45,15 @@ const WeekOfSupplierView = () => {
   const [supplierRequestTimer] = useState(null);
   const {
     supplierReturns: { weekCommencing: date, id },
-    weekOfSupplier: { suppliers },
+    weekOfSupplier: { suppliers }
   } = useSelector(selectSupplierReturns);
 
   const [breadcrumbs] = useState([
-    { text: 'Supplier Dashboard Returns', onClick: () => router.push('/payments/supplier-returns') },
+    {text: 'Supplier Dashboard Returns', onClick: () => router.push('/payments/supplier-returns')},
     {
       text: `Return week commencing ${date ? formatDateWithSign(date, '.') : ''}`,
-      onClick: () => router.push(`/payments/supplier-returns/${id}`),
-    },
-    { text: suppliers },
+      onClick: () => router.push(`/payments/supplier-returns/${id}`)},
+    {text: suppliers},
   ]);
 
   const [sort, setSort] = useState({
@@ -63,14 +62,14 @@ const WeekOfSupplierView = () => {
   });
 
   const sortBy = (field, value) => {
-    setSort({ value, name: field });
+    setSort({value, name: field});
   };
 
-  const onCheckRow = (rowId) => {
-    if (checkedRows.includes(rowId)) {
-      setCheckedRows(checkedRows.filter((item) => String(item) !== String(rowId)));
+  const onCheckRow = (id) => {
+    if(checkedRows.includes(id)) {
+      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
     } else {
-      setCheckedRows([...checkedRows, rowId]);
+      setCheckedRows([...checkedRows, id]);
     }
   };
 
@@ -85,13 +84,13 @@ const WeekOfSupplierView = () => {
     setNewMessageText('');
   };
 
-  const openChat = (item) => {
+  const openChat = item => {
     setOpenedPopup('help-chat');
     setOpenedHelpChat(item);
   };
 
   const actionAllServices = (supplier, actionType) => {
-    const serviceCustomIds = supplier.services.map((service) => `${supplier.id}${service.id}`);
+    const serviceCustomIds = supplier.services.map(service => `${supplier.id}${service.id}`);
     setRequestsQue([...requestsQue, ...serviceCustomIds]);
 
     console.log(`make action ${actionType} for services`, supplier.services);
@@ -101,7 +100,7 @@ const WeekOfSupplierView = () => {
       setRequestsQue([]);
     }, 5000);
 
-    if (serviceRequestTimer) {
+    if(serviceRequestTimer) {
       clearTimeout(serviceRequestTimer);
     }
     setServiceRequestTimer(timer);
@@ -116,11 +115,11 @@ const WeekOfSupplierView = () => {
         setRequestsQue([]);
       }, 5000);
 
-      if (serviceRequestTimer) {
+      if(serviceRequestTimer) {
         clearTimeout(serviceRequestTimer);
       }
       setServiceRequestTimer(timer);
-    };
+    }
     const actionSupplier = () => {
       setRequestsQue([...requestsQue, supplier.id]);
 
@@ -129,11 +128,11 @@ const WeekOfSupplierView = () => {
         setRequestsQue([]);
       }, 5000);
 
-      if (supplierRequestTimer) {
+      if(supplierRequestTimer) {
         clearTimeout(supplierRequestTimer);
       }
       setServiceRequestTimer(timer);
-    };
+    }
 
     switch (actionType) {
       case 'accept-supplier': {
@@ -160,13 +159,12 @@ const WeekOfSupplierView = () => {
         actionService();
         break;
       }
-      default:
-        console.log('no action found');
+      default: console.log('no action found');
     }
   };
 
   const chatActions = [
-    { id: 'action1', onClick: (item) => openChat(item), className: 'chat-icon', Component: ChatButton },
+    {id: 'action1', onClick: (item) => openChat(item), className: 'chat-icon', Component: ChatButton}
   ];
 
   useEffect(() => {
@@ -178,23 +176,25 @@ const WeekOfSupplierView = () => {
   }, []);
 
   useEffect(() => {
-    setWeeklyData(weeklyOfSupplierTableData.slice());
+    setWeeklyData(weeklyOfSupplierTableData.slice())
   }, []);
 
   return (
-    <div className="supplier-returns week-of-supplier supplier-returns-dashboard">
-      {openedPopup === 'help-chat' && (
-        <PopupHelpChat
-          closePopup={closeHelpChat}
-          newMessageText={newMessageText}
-          setNewMessageText={setNewMessageText}
-          currentUserInfo={openedHelpChat}
-          currentUserId={1}
-          messages={testDataHelpMessages}
-        />
-      )}
-      {openedPopup === 'upload-files' && <PopupDocumentUploader closePopup={() => setOpenedPopup('')} />}
-      <div className="week-of-supplier__breadcrumbs">
+    <div className='supplier-returns week-of-supplier supplier-returns-dashboard'>
+      {openedPopup === 'help-chat' &&
+      <PopupInvoiceChat
+        closePopup={closeHelpChat}
+        newMessageText={newMessageText}
+        setNewMessageText={setNewMessageText}
+        currentUserInfo={openedHelpChat}
+        currentUserId={1}
+        messages={testDataHelpMessages}
+      />
+      }
+      {openedPopup === 'upload-files' &&
+        <PopupDocumentUploader closePopup={() => setOpenedPopup('')} />
+      }
+      <div className='week-of-supplier__breadcrumbs'>
         {!!breadcrumbs.length && <Breadcrumbs values={breadcrumbs} />}
         <Button>{weeklyData.length} Actions Outstanding</Button>
       </div>
@@ -216,16 +216,16 @@ const WeekOfSupplierView = () => {
       />
       <Pagination actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
       <SupplierReturnsLevelInsight
-        packages="832"
-        totalValue="£92,321"
-        returned="700"
-        inDispute="42"
-        accepted="678"
-        paid="584"
+        packages='832'
+        totalValue='£92,321'
+        returned='700'
+        inDispute='42'
+        accepted='678'
+        paid='584'
       />
       <HackneyFooterInfo />
     </div>
-  );
+  )
 };
 
 export default WeekOfSupplierView;

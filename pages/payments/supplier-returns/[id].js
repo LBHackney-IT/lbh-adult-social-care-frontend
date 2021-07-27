@@ -25,26 +25,24 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const SupplierReturn = () => {
   const [sorts] = useState([
-    { name: 'supplier', text: 'Supplier' },
-    { name: 'packages', text: 'Packages' },
-    { name: 'returned', text: 'Returned' },
-    { name: 'withVariance', text: 'With Variance' },
-    { name: 'inDispute', text: 'In Dispute' },
-    { name: 'accepted', text: 'Accepted' },
-    { name: 'status', text: 'Status' },
+    {name: 'supplier', text: 'Supplier'},
+    {name: 'packages', text: 'Packages'},
+    {name: 'returned', text: 'Returned'},
+    {name: 'withVariance', text: 'With Variance'},
+    {name: 'inDispute', text: 'In Dispute'},
+    {name: 'accepted', text: 'Accepted'},
+    {name: 'status', text: 'Status'},
   ]);
   const dispatch = useDispatch();
   const router = useRouter();
   const { id } = router.query;
   const [pathname] = useState(`${PAYMENTS_PAY_RUNS_ROUTE}/${id}`);
   const [checkedRows, setCheckedRows] = useState([]);
-  const {
-    supplierReturns: { weekCommencing: date },
-  } = useSelector(selectSupplierReturns);
+  const {supplierReturns: { weekCommencing: date }} = useSelector(selectSupplierReturns);
 
   const [breadcrumbs] = useState([
-    { text: 'Supplier Returns', onClick: () => router.push('/payments/supplier-returns') },
-    { text: `Return week commencing ${date ? formatDateWithSign(date, '.') : ''}` },
+    {text: 'Supplier Returns', onClick: () => router.push('/payments/supplier-returns')},
+    {text: `Return week commencing ${date ? formatDateWithSign(date, '.') : ''}`}
   ]);
 
   const [sort, setSort] = useState({
@@ -52,20 +50,20 @@ const SupplierReturn = () => {
     name: 'supplier',
   });
 
-  const onClickTableRow = (rowItemData) => {
+  const onClickTableRow = rowItemData => {
     dispatch(changeWeekOfSupplier(rowItemData));
     router.push(`/payments/supplier-returns/week-of-supplier/${rowItemData.id}`);
-  };
+  }
 
   const sortBy = (field, value) => {
-    setSort({ value, name: field });
+    setSort({value, name: field});
   };
 
-  const onCheckRow = (rowId) => {
-    if (checkedRows.includes(rowId)) {
-      setCheckedRows(checkedRows.filter((item) => String(item) !== String(rowId)));
+  const onCheckRow = (id) => {
+    if(checkedRows.includes(id)) {
+      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
     } else {
-      setCheckedRows([...checkedRows, rowId]);
+      setCheckedRows([...checkedRows, id]);
     }
   };
 
@@ -84,8 +82,8 @@ const SupplierReturn = () => {
   }, [sort]);
 
   return (
-    <div className="supplier-return supplier-returns-dashboard">
-      {!!breadcrumbs.length && <Breadcrumbs classes="p-3" values={breadcrumbs} />}
+    <div className='supplier-return supplier-returns-dashboard'>
+      {!!breadcrumbs.length && <Breadcrumbs classes='p-3' values={breadcrumbs} />}
       <SupplierReturnsInnerHeader />
       <SupplierReturnTable
         rows={supplierReturnTableData}
@@ -98,17 +96,17 @@ const SupplierReturn = () => {
       />
       <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
       <SupplierReturnsLevelInsight
-        suppliers="832"
-        packages="832"
-        totalValue="£92,321"
-        returned="700"
-        inDispute="42"
-        accepted="678"
-        paid="584"
+        suppliers='832'
+        packages='832'
+        totalValue='£92,321'
+        returned='700'
+        inDispute='42'
+        accepted='678'
+        paid='584'
       />
       <HackneyFooterInfo />
     </div>
-  );
+  )
 };
 
 export default SupplierReturn;

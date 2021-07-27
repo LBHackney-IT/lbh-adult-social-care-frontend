@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import { getUserSession } from '../../service/helpers';
+import { getUserSession, formatDateWithSign } from '../../service/helpers';
 import withSession from '../../lib/session';
 import SocialWorkerInputs from '../../components/SocialWorker/SocialWorkerInputs';
-import SocialWorkerTable from '../../components/SocialWorker/SocialWorkerTable';
 import { getSubmittedPackages, getSubmittedPackagesStatus } from '../../api/ApproversHub/SocialWorkerApi';
 import { RESIDENTIAL_CARE_ROUTE, NURSING_CARE_ROUTE} from '../../routes/RouteConstants';
+import Table from '../../components/Table'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -37,7 +37,7 @@ const SocialWorkerDashboardPage = () => {
   });
 
   const sortBy = (field, value) => {
-    setSort({ value, name: field });
+    setSort({value, name: field});
   };
 
   const onClickTableRow = (rowItems) => {
@@ -103,16 +103,35 @@ const SocialWorkerDashboardPage = () => {
       });
   };
 
+  const rowsRules = {
+    DOB: {
+      getValue: (value) => formatDateWithSign(value),
+    },
+    status: {
+      getClassName: (value) => `${value} table__row-item-status`,
+    }
+  }
+
+  const tableFields = {
+    id: 'packageId',
+    client: 'client',
+    category: 'category',
+    DOB: 'DOB',
+    approver: 'approver',
+    submitted: 'submitted',
+    status: 'status',
+  }
+
   return (
     <div className="social-worker-page">
-      <SocialWorkerInputs 
+      <SocialWorkerInputs
         statusOptions = {statusOptions}
       />
-      <SocialWorkerTable
-        isIgnoreId
-        className="p-4"
+      <Table
         onClickTableRow={onClickTableRow}
         rows={socialWorkerData}
+        rowsRules={rowsRules}
+        fields={tableFields}
         sortBy={sortBy}
         sorts={sorts}
       />

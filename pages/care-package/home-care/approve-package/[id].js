@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
-  getHomeCareBrokerageApprovePackage,
+  getHomeCarePackageDetailsForBrokerage,
   getHomeCareServices,
   getHomeCareTimeSlotShifts,
 } from '../../../../api/CarePackages/HomeCareApi';
@@ -48,14 +48,18 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
     // Call to api to get package
     data.homeCareServices = await getHomeCareServices();
   } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
+    data.errorData.push(
+      `Retrieve day care package details failed. ${error.message}`
+    );
   }
 
   try {
     // Get home care time shifts
     data.homeCareTimeShiftsData = await getHomeCareTimeSlotShifts();
   } catch (error) {
-    data.errorData.push(`Retrieve home care time shift details failed. ${error.message}`);
+    data.errorData.push(
+      `Retrieve home care time shift details failed. ${error.message}`
+    );
   }
 
   return { props: { ...data, approvalHistoryEntries } };
@@ -72,15 +76,13 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries, homeCareTimeShiftsData
 
   // On load retrieve package
   useEffect(() => {
-    async function retrieveData() {
-      setPackageData(await getHomeCareBrokerageApprovePackage(homeCarePackageId));
-    }
     if (!packageData) {
-      retrieveData();
+      (async function retrieveData() {
+        setPackageData(await getHomeCarePackageDetailsForBrokerage(homeCarePackageId));
+      })()
     }
   }, [homeCarePackageId, packageData]);
 
-  // eslint-disable-next-line no-unused-vars
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
 
   return (
@@ -95,7 +97,9 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries, homeCareTimeShiftsData
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">HOURS PER WEEK</p>
+                    <p className="font-weight-bold hackney-text-green">
+                      HOURS PER WEEK
+                    </p>
                     <p className="font-size-14px">18</p>
                   </div>
                 </div>
@@ -107,9 +111,13 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries, homeCareTimeShiftsData
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">COST OF CARE</p>
+                    <p className="font-weight-bold hackney-text-green">
+                      COST OF CARE
+                    </p>
                     <p className="font-size-14px">£1,982</p>
-                    <p className="font-weight-bold hackney-text-green">ESTIMATE</p>
+                    <p className="font-weight-bold hackney-text-green">
+                      ESTIMATE
+                    </p>
                   </div>
                 </div>
               </div>
@@ -122,7 +130,9 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries, homeCareTimeShiftsData
 
         <HomeCarePackageBreakdown />
 
-        <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
+        <PackageApprovalHistorySummary
+          approvalHistoryEntries={approvalHistoryEntries}
+        />
 
         <HomeCarePackageDetails />
 
@@ -142,17 +152,15 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries, homeCareTimeShiftsData
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light" type="button">
-                    Deny
-                  </button>
+                  <button className="button hackney-btn-light">Deny</button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light" type="button">
+                  <button className="button hackney-btn-light">
                     Request more information
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green" type="button">
+                  <button className="button hackney-btn-green">
                     Approve to be brokered
                   </button>
                 </div>
@@ -160,9 +168,11 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries, homeCareTimeShiftsData
             </div>
 
             <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">Request more information</p>
+              <p className="font-size-16px font-weight-bold">
+                Request more information
+              </p>
               <TextArea label="" rows={5} placeholder="Add details..." />
-              <button className="button hackney-btn-green" type="button">
+              <button className="button hackney-btn-green">
                 Request more information
               </button>
             </div>

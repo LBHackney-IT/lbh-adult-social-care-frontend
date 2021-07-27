@@ -23,23 +23,23 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 const AddBill = () => {
   const router = useRouter();
   const [sorts] = useState([
-    { name: 'item', text: 'Item' },
-    { name: 'description', text: 'Description' },
-    { name: 'qty', text: 'Qty' },
-    { name: 'unitPrice', text: 'Unit Price' },
-    { name: 'costCentre', text: 'Cost Centre' },
-    { name: 'taxRate', text: 'Tax Rate' },
-    { name: 'amountExVAT', text: 'Amount Ex VAT' },
+    { name: "item", text: "Item" },
+    { name: "description", text: "Description" },
+    { name: "qty", text: "Qty" },
+    { name: "unitPrice", text: "Unit Price" },
+    { name: "costCentre", text: "Cost Centre" },
+    { name: "taxRate", text: "Tax Rate" },
+    { name: "amountExVAT", text: "Amount Ex VAT" },
   ]);
   const [addBillInfo, setAddBillInfo] = useState({});
   const [packageIdTimer, setPackageIdTimer] = useState(null);
   const [inputs, setInputs] = useState({
-    packageId: '',
+    packageId: "",
     serviceFrom: null,
     serviceTo: null,
     invoiceDate: null,
     invoiceDue: null,
-    invRef: '',
+    invRef: "",
   });
 
   const [inputsError, setInputsError] = useState({
@@ -53,47 +53,50 @@ const AddBill = () => {
 
   const invoiceInputs = {
     packageId: {
-      rules: ['empty'],
+      rules: ["empty"],
       value: inputs.packageId,
       error: inputsError.packageId,
-      onChange: (value) => onSetPackageId(value, 'packageId'),
+      onChange: (value) => onSetPackageId(value, "packageId"),
     },
     serviceFrom: {
-      rules: ['empty'],
+      rules: ["empty"],
       value: inputs.serviceFrom,
       error: inputsError.serviceFrom,
-      onChange: (value) => changeInputs(value, 'serviceFrom'),
+      onChange: (value) => changeInputs(value, "serviceFrom"),
     },
     serviceTo: {
-      rules: ['empty'],
+      rules: ["empty"],
       value: inputs.serviceTo,
       error: inputsError.serviceTo,
-      onChange: (value) => changeInputs(value, 'serviceTo'),
+      onChange: (value) => changeInputs(value, "serviceTo"),
     },
   };
 
   const detailsInputs = {
     invRef: {
-      rules: ['empty'],
+      rules: ["empty"],
       value: inputs.invRef,
       error: inputsError.invRef,
-      onChange: (value) => changeInputs(value, 'invRef'),
+      onChange: (value) => changeInputs(value, "invRef"),
     },
     invoiceDate: {
-      rules: ['empty'],
+      rules: ["empty"],
       value: inputs.invoiceDate,
       error: inputsError.invoiceDate,
-      onChange: (value) => changeInputs(value, 'invoiceDate'),
+      onChange: (value) => changeInputs(value, "invoiceDate"),
     },
     invoiceDue: {
-      rules: ['empty'],
+      rules: ["empty"],
       value: inputs.invoiceDue,
       error: inputsError.invoiceDue,
-      onChange: (value) => changeInputs(value, 'invoiceDue'),
+      onChange: (value) => changeInputs(value, "invoiceDue"),
     },
   };
 
-  const [breadcrumbs] = useState([{ text: 'Bills', onClick: () => router.back() }, { text: 'Add Id' }]);
+  const [breadcrumbs] = useState([
+    { text: "Bills", onClick: () => router.back() },
+    { text: "Add Id" },
+  ]);
 
   const addBill = () => {
     const arrayInputs = [];
@@ -103,7 +106,7 @@ const AddBill = () => {
     const { validFields, hasError } = fieldValidator(arrayInputs);
     if (hasError) {
       setInputsError(validFields);
-      
+
     }
   };
 
@@ -119,7 +122,7 @@ const AddBill = () => {
   };
 
   const onSetPackageId = async (value) => {
-    changeInputs(value, 'packageId');
+    changeInputs(value, "packageId");
     if (packageIdTimer) {
       clearTimeout(packageIdTimer);
     }
@@ -136,7 +139,11 @@ const AddBill = () => {
       <div className="add-bill__main">
         <AddBillInvoiceFor inputs={invoiceInputs} />
         <AddBillInvoiceDetails inputs={detailsInputs} />
-        <AddBillTable isIgnoreId rows={addBillInfo?.invoices} sorts={sorts} />
+        <AddBillTable
+          isIgnoreId
+          rows={addBillInfo?.invoices}
+          sorts={sorts}
+        />
         <div className="is-flex is-justify-content-space-between add-bill__footer">
           <AddBillAttachedFiles attachedFiles={addBillInfo?.attachedFiles} />
           <AddBillTotalInfo addBillInfo={addBillInfo} addBill={addBill} />

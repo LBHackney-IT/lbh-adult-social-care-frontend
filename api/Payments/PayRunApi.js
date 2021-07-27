@@ -2,7 +2,8 @@ import axios from 'axios';
 import moment from 'moment';
 import { BASE_URL } from '../BaseApi';
 
-import { handleError, handleResponse } from '../Utils/ApiUtils';
+import { axiosRequest, handleError, handleResponse } from '../Utils/ApiUtils'
+import { requestMethods } from '../../constants/variables'
 
 const PAY_RUN_URL = `${BASE_URL}/v1/transactions/pay-runs`;
 const INVOICES_URL = `${BASE_URL}/v1/transactions/invoices`;
@@ -18,17 +19,17 @@ export const PAY_RUN_TYPES = {
   DIRECT_PAYMENTS_RELEASE_HOLDS: 'DirectPaymentsReleaseHolds',
 };
 
-const getPayRunSummaryList = (
-  pageNumber = 1,
-  pageSize = 10,
-  dateFrom = new Date(sixMonthsAgo).toJSON(),
-  dateTo = new Date().toJSON(),
-  payRunId = '',
-  payRunTypeId = '',
-  payRunSubTypeId = '',
-  payRunStatusId = ''
-) => {
-  const query = `${PAY_RUN_URL}/summary-list?pageNumber=${pageNumber}&pageSize=${pageSize}&payRunId=${payRunId}&payRunTypeId=${payRunTypeId}&payRunSubTypeId=${payRunSubTypeId}&payRunStatusId=${payRunStatusId}&dateFrom=${dateFrom}&dateTo=${dateTo}`;
+const getPayRunSummaryList = ({
+    pageNumber = 1,
+    pageSize = 10,
+    dateFrom = new Date(sixMonthsAgo).toJSON(),
+    dateTo = new Date().toJSON(),
+    payRunId = '',
+    payRunTypeId = '',
+    payRunSubTypeId = '',
+    payRunStatusId = ''
+  }) => {
+  const query = `${PAY_RUN_URL}/summary-list?PageNumber=${pageNumber}&PageSize=${pageSize}&PayRunId=${payRunId}&PayRunTypeId=${payRunTypeId}&PayRunSubTypeId=${payRunSubTypeId}&PayRunStatusId=${payRunStatusId}&DateFrom=${dateFrom}&DateTo=${dateTo}`;
   return axios.get(query).then(handleResponse).catch(handleError);
 };
 
@@ -88,13 +89,13 @@ const getSinglePayRunDetails = (
 };
 
 const getSinglePayRunInsights = (payRunId) => {
-  const query = `${PAY_RUN_URL}/${payRunId}/summary-insights`;
-  return axios.get(query).then(handleResponse).catch(handleError);
+  const url = `${PAY_RUN_URL}/${payRunId}/summary-insights`;
+  return axiosRequest({ url })
 };
 
 const submitPayRunForApproval = (payRunId) => {
-  const query = `${PAY_RUN_URL}/${payRunId}/status/submit-for-approval`;
-  return axios.get(query).then(handleResponse).catch(handleError);
+  const url = `${PAY_RUN_URL}/${payRunId}/status/submit-for-approval`;
+  return axiosRequest({ url });
 };
 
 const kickPayRunBackToDraft = (payRunId) => {
@@ -102,9 +103,14 @@ const kickPayRunBackToDraft = (payRunId) => {
   return axios.get(query).then(handleResponse).catch(handleError);
 };
 
+const sendMessage = ({ payRunId, packageId, message }) => {
+  const url = `${PAY_RUN_URL}/${payRunId}/create-held-chat`;
+  return axiosRequest({ url, method: requestMethods.post, data: { message, packageId, payRunId } })
+};
+
 const approvePayRunForPayment = (payRunId) => {
-  const query = `${PAY_RUN_URL}/${payRunId}/status/approve-pay-run`;
-  return axios.get(query).then(handleResponse).catch(handleError);
+  const url = `${PAY_RUN_URL}/${payRunId}/status/approve-pay-run`;
+  return axiosRequest({ url })
 };
 
 const releaseSingleHeldInvoice = (payRunId, invoiceId) => {
@@ -131,17 +137,8 @@ const releaseSingleHeldInvoice = (payRunId, invoiceId) => {
   }
   ] */
 const releaseHeldInvoices = (invoiceList = []) => {
-  const query = `${PAY_RUN_URL}/release-held-invoice-list`;
-  const options = {
-    url: query,
-    method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json;charset=UTF-8',
-    },
-    data: invoiceList,
-  };
-  return axios(options).then(handleResponse).catch(handleError);
+  const url = `${PAY_RUN_URL}/release-held-invoice-list`;
+  return axiosRequest({ url, data: invoiceList, method: requestMethods.put})
 };
 
 const deleteDraftPayRun = (payRunId) => {
@@ -203,6 +200,11 @@ const acceptInvoice = (payRunId, invoiceId) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const acceptInvoices = (payRunId, invoices) => {
+  const url = `${PAY_RUN_URL}/${payRunId}/invoices/accept-invoice`;
+  return axiosRequest({ url, data: invoices, method: requestMethods.put})
+};
+
 const getPaymentDepartments = () => {
   const query = `${DEPARTMENTS_URL}/payment-departments`;
   return axios.get(query).then(handleResponse).catch(handleError);
@@ -229,5 +231,7 @@ export {
   getAllInvoiceStatuses,
   getInvoicePaymentStatuses,
   acceptInvoice,
+  acceptInvoices,
+  sendMessage,
   getPaymentDepartments,
 };

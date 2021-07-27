@@ -30,31 +30,37 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
   try {
     const dayCarePackage = await getDayCarePackageApprovalDetails(residentialCarePackageId);
     // Update approve-package state
-    const newApprovalHistoryItems = dayCarePackage.packageApprovalHistory.map((historyItem) => ({
-      eventDate: new Date(historyItem.dateCreated).toLocaleDateString('en-GB'),
-      eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
-      eventSubMessage: historyItem.logSubText,
-    }));
+    const newApprovalHistoryItems = dayCarePackage.packageApprovalHistory.map(
+      (historyItem) => ({
+        eventDate: new Date(historyItem.dateCreated).toLocaleDateString(
+          "en-GB"
+        ),
+        eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
+        eventSubMessage: historyItem.logSubText,
+      })
+    );
 
-    const newOpportunityEntries = dayCarePackage.packageDetails.dayCareOpportunities.map((opportunityItem) => ({
-      id: opportunityItem.dayCarePackageOpportunityId,
-      howLongValue: opportunityItem.howLong.optionName,
-      timesPerMonthValue: opportunityItem.howManyTimesPerMonth.optionName,
-      needToAddress: opportunityItem.opportunitiesNeedToAddress,
-    }));
+    const newOpportunityEntries = dayCarePackage.packageDetails.dayCareOpportunities.map(
+      (opportunityItem) => ({
+        id: opportunityItem.dayCarePackageOpportunityId,
+        howLongValue: opportunityItem.howLong.optionName,
+        timesPerMonthValue: opportunityItem.howManyTimesPerMonth.optionName,
+        needToAddress: opportunityItem.opportunitiesNeedToAddress,
+      })
+    );
 
     data.approvalHistoryEntries = newApprovalHistoryItems.slice();
     data.opportunityEntries = newOpportunityEntries.slice();
-
     data.daysSelected = getSelectedDate(dayCarePackage);
-  } catch (error) {
+    data.dayCarePackage = dayCarePackage;
+  } catch(error) {
     data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
 
   return { props: { data } };
 });
 
-const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportunityEntries, errorData }) => {
+const DayCareApproveBrokered = ({ dayCarePackage, daysSelected, approvalHistoryEntries, opportunityEntries, errorData }) => {
   const router = useRouter();
   const dayCarePackageId = router.query.id;
   const [errors, setErrors] = useState(errorData);
@@ -89,7 +95,10 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
       });
   };
   const handleRequestMoreInformation = () => {
-    dayCarePackageCommercialsRequestClarification(dayCarePackageId, requestInformationText)
+    dayCarePackageCommercialsRequestClarification(
+      dayCarePackageId,
+      requestInformationText
+    )
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
@@ -114,8 +123,12 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
     <Layout headerTitle="DAY CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
         <DayCareApprovalTitle
-          termTimeConsiderationOption={dayCarePackage?.packageDetails.termTimeConsiderationOptionName}
-          isFixedPeriodOrOngoing={dayCarePackage?.packageDetails.isFixedPeriodOrOngoing}
+          termTimeConsiderationOption={
+            dayCarePackage?.packageDetails.termTimeConsiderationOptionName
+          }
+          isFixedPeriodOrOngoing={
+            dayCarePackage?.packageDetails.isFixedPeriodOrOngoing
+          }
         />
         <ApprovalClientSummary />
 
@@ -125,7 +138,9 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">STARTS</p>
+                    <p className="font-weight-bold hackney-text-green">
+                      STARTS
+                    </p>
                     <p className="font-size-14px">
                       {getEnGBFormattedDate(dayCarePackage?.packageDetails.startDate)}
                     </p>
@@ -142,8 +157,8 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
                       {dayCarePackage?.packageDetails.endDate !== null
-                        ? getEnGBFormattedDate(dayCarePackage?.packageDetails.endDate)
-                        : 'Ongoing'}
+                        ? dayCarePackage?.packageDetails.endDate
+                        : "Ongoing"}
                     </p>
                   </div>
                 </div>
@@ -155,7 +170,9 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">DAYS/WEEK</p>
+                    <p className="font-weight-bold hackney-text-green">
+                      DAYS/WEEK
+                    </p>
                     <p className="font-size-14px">3</p>
                   </div>
                 </div>
@@ -201,7 +218,9 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
           </div>
         </div>
 
-        <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
+        <PackageApprovalHistorySummary
+          approvalHistoryEntries={approvalHistoryEntries}
+        />
 
         <div className="columns">
           <div className="column">
@@ -224,7 +243,10 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light" onClick={handleRejectPackage}>
+                  <button
+                    className="button hackney-btn-light"
+                    onClick={handleRejectPackage}
+                  >
                     Deny
                   </button>
                 </div>
@@ -233,11 +255,16 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
                     onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
                     className="button hackney-btn-light"
                   >
-                    {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
+                    {displayMoreInfoForm
+                      ? "Hide Request more information"
+                      : "Request More Information"}
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
+                  <button
+                    className="button hackney-btn-green"
+                    onClick={handleApprovePackageCommercials}
+                  >
                     Approve Commercials
                   </button>
                 </div>
@@ -250,7 +277,9 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
           <div className="columns">
             <div className="column">
               <div className="mt-1">
-                <p className="font-size-16px font-weight-bold">Request more information</p>
+                <p className="font-size-16px font-weight-bold">
+                  Request more information
+                </p>
                 <TextArea
                   error={errorFields.requestInformationText}
                   setError={() => changeErrorFields('changeErrorFields')}
@@ -259,7 +288,10 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
                   placeholder="Add details..."
                   onChange={setRequestInformationText}
                 />
-                <button className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
+                <button
+                  className="button hackney-btn-green"
+                  onClick={handleRequestMoreInformation}
+                >
                   Request more information
                 </button>
               </div>

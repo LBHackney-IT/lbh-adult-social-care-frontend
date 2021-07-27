@@ -10,7 +10,8 @@ const PayRunTable = ({
   onClickTableRow,
   checkedRows,
   setCheckedRows,
-  rows,
+  changeAllChecked,
+  rows = [],
   release,
   additionalActions,
   isIgnoreId = false,
@@ -19,6 +20,7 @@ const PayRunTable = ({
   canCollapseRows = false,
   careType,
   sortBy,
+  selectStatus,
   sorts,
 }) => {
   const [collapsedRows, setCollapsedRows] = useState([]);
@@ -41,8 +43,18 @@ const PayRunTable = ({
 
   return (
     <div className={`table ${className}`}>
-      <PayRunSortTable additionalActions={additionalActions} checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
-      {rows.map((item) => {
+      <PayRunSortTable
+        additionalActions={additionalActions}
+        setCheckedRows={setCheckedRows}
+        changeAllChecked={changeAllChecked}
+        rows={rows}
+        checkedRows={checkedRows}
+        sortBy={sortBy}
+        sorts={sorts}
+      />
+      {!rows.length ? (
+        <p>No Table Data</p>
+      ) : (rows.map((item) => {
         const collapsedRow = collapsedRows.includes(item.id);
         const rowStatus = item.status ? ` ${item.status}` : '';
         return (
@@ -85,7 +97,7 @@ const PayRunTable = ({
                         { text: 'In dispute', value: 'in-dispute' },
                       ]}
                       selectedValue={value}
-                      onOptionSelect={(value) => console.log(value)}
+                      onOptionSelect={(value) => selectStatus(item, value)}
                       initialText="Status"
                     />
                   );
@@ -99,7 +111,7 @@ const PayRunTable = ({
               })}
               {additionalActions &&
                 additionalActions.map((action) => {
-                  const Component = action.Component;
+                  const {Component} = action;
                   return (
                     <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
                       <Component
@@ -114,8 +126,7 @@ const PayRunTable = ({
             </div>
             {canCollapseRows && collapsedRow && (
               <div className="table__row-collapsed">
-                {item.cares.map((care) => {
-                  return (
+                {item.invoiceItems.map((care) => (
                     <div key={care.id} className="table__row-collapsed-container">
                       <div className="table__row-collapsed-header">
                         <div className="table__row-collapsed-header-left">
@@ -161,13 +172,12 @@ const PayRunTable = ({
                         </Button>
                       )}
                     </div>
-                  );
-                })}
+                  ))}
               </div>
             )}
           </div>
         );
-      })}
+      }))}
     </div>
   );
 };

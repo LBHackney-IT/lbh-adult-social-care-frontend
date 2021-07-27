@@ -12,6 +12,7 @@
   .notification-close {
     font-size: 32px;
     margin-left: 5px;
+    user-select: none;
     transform: rotate(45deg);
     box-sizing: border-box;
     font-weight: bold;

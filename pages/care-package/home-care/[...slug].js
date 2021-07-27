@@ -96,7 +96,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
 
   const changePackageReclaim = (id) => (updatedPackage) => {
     const newPackage = packagesReclaimed.slice();
-    const packageIndex = packagesReclaimed.findIndex((item) => item.id === id);
+    const packageIndex = packagesReclaimed.findIndex((item) => item.id == id);
     newPackage.splice(packageIndex, 1, updatedPackage);
     setPackagesReclaimed(newPackage);
   };
@@ -122,19 +122,18 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
 
   // Init home care package via API
   useEffect(() => {
-    async function createHomeCarePackageAsync() {
-      const carePackageCreateResult = await createHomeCarePackage(
-        new Date(startDate),
-        new Date(endDate),
-        isImmediate === 'true',
-        isS117 === 'true',
-        isFixedPeriod === 'true'
-      );
-
-      setCarePackageId(carePackageCreateResult?.id);
-    }
     if (!carePackageId) {
-      createHomeCarePackageAsync();
+      (async function createHomeCarePackageAsync() {
+        const carePackageCreateResult = await createHomeCarePackage(
+          new Date(startDate),
+          new Date(endDate),
+          isImmediate === 'true',
+          isS117 === 'true',
+          isFixedPeriod === 'true'
+        );
+
+        setCarePackageId(carePackageCreateResult.id);
+      })();
     }
   }, [carePackageId, startDate, endDate, isImmediate, isS117, isFixedPeriod]);
 
@@ -417,7 +416,7 @@ const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
                 setPackageReclaim={changePackageReclaim(item.id)}
               />
             ))}
-            <p onClick={addPackageReclaim} className="action-button-text" role="presentation">
+            <p onClick={addPackageReclaim} className="action-button-text">
               + Add another reclaim
             </p>
           </div>

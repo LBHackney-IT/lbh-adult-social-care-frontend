@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
+import { useDispatch } from 'react-redux';
 import ClientSummary from '../../../components/ClientSummary';
 import Layout from '../../../components/Layout/Layout';
 import CareTitle from '../../../components/CarePackages/CareTitle';
 import TextArea from '../../../components/TextArea';
 import Dropdown from '../../../components/Dropdown';
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
 } from '../../../components/CarePackages/AdditionalNeedsEntries';
@@ -21,6 +22,7 @@ import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
+import { addNotification } from '../../../reducers/notificationsReducer';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -32,14 +34,23 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 });
 
 const ResidentialCare = () => {
+  const dispatch = useDispatch();
   const isTrueParse = (myValue) => myValue === 'true';
   const notNullString = (myValue) => myValue !== 'null' && myValue !== 'undefined';
 
   // Parameters
   const router = useRouter();
   const [typeOfStayText] = router.query.slug; // get query params
-  let [hasRespiteCare, hasDischargePackage, isImmediateOrReEnablement, typeOfStayId, isS117, isFixedPeriod, startDate, endDate] =
-    router.query.slug; // get query params
+  let [
+    hasRespiteCare,
+    hasDischargePackage,
+    isImmediateOrReEnablement,
+    typeOfStayId,
+    isS117,
+    isFixedPeriod,
+    startDate,
+    endDate,
+  ] = router.query.slug; // get query params
   hasRespiteCare = isTrueParse(hasRespiteCare) || false;
   hasDischargePackage = isTrueParse(hasDischargePackage) || false;
   isImmediateOrReEnablement = isTrueParse(isImmediateOrReEnablement) || false;
@@ -136,11 +147,11 @@ const ResidentialCare = () => {
 
     createResidentialCarePackage(residentialCarePackageToCreate)
       .then(() => {
-        alert('Package saved.');
+        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Create package failed. ${error.message}`);
+        dispatch(addNotification({ text: `Create package failed. ${error.message}` }));
         setErrors([...errors, `Create package failed. ${error.message}`]);
       });
   };
@@ -185,7 +196,7 @@ const ResidentialCare = () => {
       />
 
       <div className="mt-4 mb-4">
-        <TitleHeader className='mb-5'>Package Details</TitleHeader>
+        <TitleHeader className="mb-5">Package Details</TitleHeader>
         <ResidentialCareSummary
           startDate={startDate}
           endDate={getEnGBFormattedDate(endDate)}
