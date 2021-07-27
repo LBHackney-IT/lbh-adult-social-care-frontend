@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
 import Header from '../../components/Layout/Header';
 import useUser from '../../lib/useUser';
+import {BASE_URL} from "../../api/BaseApi";
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
@@ -19,6 +20,7 @@ const Login = () => {
 
     const login = async () => {
       try {
+        alert(BASE_URL);
         mutateUser(await axios('/api/login'));
       } catch (error) {
         console.log(error);
