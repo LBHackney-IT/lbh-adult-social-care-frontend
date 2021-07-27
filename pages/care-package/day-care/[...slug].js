@@ -1,38 +1,34 @@
-import { useRouter } from "next/router"
-import ClientSummary from "../../../components/ClientSummary";
-import Layout from "../../../components/Layout/Layout";
-import CareTitle from "../../../components/CarePackages/CareTitle";
-import TextArea from "../../../components/TextArea";
-import { days } from "../../../components/daysData";
-import Checkbox from "../../../components/Checkbox";
-import React, { useEffect, useState } from "react";
-import RadioButton, { yesNoValues } from "../../../components/RadioButton";
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import ClientSummary from '../../../components/ClientSummary';
+import Layout from '../../../components/Layout/Layout';
+import CareTitle from '../../../components/CarePackages/CareTitle';
+import TextArea from '../../../components/TextArea';
+import { days } from '../../../components/daysData';
+import Checkbox from '../../../components/Checkbox';
+import RadioButton, { yesNoValues } from '../../../components/RadioButton';
 import {
   createDayCarePackage,
   getOpportunitiesLengthOptions,
   getOpportunityTimesPerMonthOptions,
   getTermTimeConsiderationOptions,
-} from "../../../api/CarePackages/DayCareApi";
-import DayCareOpportunities from "../../../components/DayCare/DayCareOpportunities";
-import { Button } from "../../../components/Button";
-import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
-import TitleHeader from "../../../components/TitleHeader";
-import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
-import DayCareSummary from "../../../components/DayCare/DayCareSummary";
-import DayCareCollegeAsyncSearch from "../../../components/DayCare/DayCareCollegeAsyncSearch";
-import fieldValidator from "../../../service/inputValidator";
-import ErrorField from "../../../components/ErrorField";
-import { addNotification } from '../../../reducers/notificationsReducer'
-import { useDispatch } from 'react-redux'
-import useSWR from 'swr';
-
-const serverDayCare = async (slug) => {};
+} from '../../../api/CarePackages/DayCareApi';
+import DayCareOpportunities from '../../../components/DayCare/DayCareOpportunities';
+import { Button } from '../../../components/Button';
+import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
+import TitleHeader from '../../../components/TitleHeader';
+import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
+import DayCareSummary from '../../../components/DayCare/DayCareSummary';
+import DayCareCollegeAsyncSearch from '../../../components/DayCare/DayCareCollegeAsyncSearch';
+import fieldValidator from '../../../service/inputValidator';
+import ErrorField from '../../../components/ErrorField';
+import { addNotification } from '../../../reducers/notificationsReducer';
 
 const DayCare = () => {
-  const { data } = useSWR('test slug', serverDayCare);
   const dispatch = useDispatch();
-  const isTrueSet = (myValue) => myValue === "true";
-  const checkFixedPeriod = (myValue) => myValue === "1";
+  const isTrueSet = (myValue) => myValue === 'true';
+  const checkFixedPeriod = (myValue) => myValue === '1';
 
   // Parameters
   const router = useRouter();
@@ -73,26 +69,16 @@ const DayCare = () => {
     { id: 1, howLongValue: 1, timesPerMonthValue: 1, needToAddress: undefined },
   ]);
   // Setup days state using base days value
-  const [daysSelected, setDaysSelected] = useState(
-    days.map((dayItem) => {
-      return { ...dayItem, checked: false };
-    })
-  );
+  const [daysSelected, setDaysSelected] = useState(days.map((dayItem) => ({ ...dayItem, checked: false })));
 
   useEffect(() => {
     if (termTimeConsiderationOptions.length === 0) {
       retrieveTermTimeConsiderationOptions();
     }
-    if (
-      opportunitiesLengthOptions.length === 0 ||
-      opportunitiesLengthOptions.length === 1
-    ) {
+    if (opportunitiesLengthOptions.length === 0 || opportunitiesLengthOptions.length === 1) {
       retrieveOpportunitiesLengthOptions();
     }
-    if (
-      opportunityTimesPerMonthOptions.length === 0 ||
-      opportunityTimesPerMonthOptions.length === 1
-    ) {
+    if (opportunityTimesPerMonthOptions.length === 0 || opportunityTimesPerMonthOptions.length === 1) {
       retrieveOpportunityTimesPerMonthOptions();
     }
   }, [termTimeConsiderationOptions, opportunityTimesPerMonthOptions]);
@@ -138,11 +124,7 @@ const DayCare = () => {
   const onDayCheckboxChange = (dayId, isChecked) => {
     const dayEntry = daysSelected.find((item) => item.id === dayId);
     dayEntry.checked = isChecked;
-    setDaysSelected(
-      daysSelected.map((dayEntryItem) =>
-        dayEntryItem.id === dayId ? dayEntry : dayEntryItem
-      )
-    );
+    setDaysSelected(daysSelected.map((dayEntryItem) => (dayEntryItem.id === dayId ? dayEntry : dayEntryItem)));
   };
 
   const retrieveTermTimeConsiderationOptions = () => {
@@ -160,10 +142,7 @@ const DayCare = () => {
         setTermTimeConsiderationOptions(options);
       })
       .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve term time considerations failed. ${error.message}`,
-        ]);
+        setErrors([...errors, `Retrieve term time considerations failed. ${error.message}`]);
       });
   };
 
@@ -178,10 +157,7 @@ const DayCare = () => {
         setOpportunitiesLengthOptions(options);
       })
       .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve opportunity length options failed. ${error.message}`,
-        ]);
+        setErrors([...errors, `Retrieve opportunity length options failed. ${error.message}`]);
       });
   };
 
@@ -195,10 +171,7 @@ const DayCare = () => {
         setOpportunityTimesPerMonthOptions(options);
       })
       .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve opportunity times per month options failed. ${error.message}`,
-        ]);
+        setErrors([...errors, `Retrieve opportunity times per month options failed. ${error.message}`]);
       });
   };
 
@@ -300,11 +273,11 @@ const DayCare = () => {
 
     createDayCarePackage(dayCarePackageToCreate)
       .then(() => {
-        dispatch(addNotification({ text: "Package saved.", className: "success"}));
+        dispatch(addNotification({ text: 'Package saved.', className: 'success' }));
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Create package failed. ${error.message}`}));
+        dispatch(addNotification({ text: `Create package failed. ${error.message}` }));
         setErrors([...errors, `Create package failed. ${error.message}`]);
       });
   };
@@ -323,13 +296,7 @@ const DayCare = () => {
 
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
-      <ClientSummary
-        client="James Stephens"
-        hackneyId="786288"
-        age="91"
-        dateOfBirth="09/12/1972"
-        postcode="E9 6EY"
-      >
+      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
         Care Package
       </ClientSummary>
       <div className="mt-5 mb-5">
@@ -358,12 +325,8 @@ const DayCare = () => {
               return (
                 <div className="column" key={dayItem.id}>
                   <label>{dayItem.short.toUpperCase()}</label>
-                  <Checkbox
-                    id="immediateServiceCbx"
-                    checked={dayItem.checked}
-                    onChange={onThisDayCheckboxChange}
-                  />
-                  {errorFields.daysSelected && index === 0 && <ErrorField text={errorFields.daysSelected}/>}
+                  <Checkbox id="immediateServiceCbx" checked={dayItem.checked} onChange={onThisDayCheckboxChange} />
+                  {errorFields.daysSelected && index === 0 && <ErrorField text={errorFields.daysSelected} />}
                 </div>
               );
             })}

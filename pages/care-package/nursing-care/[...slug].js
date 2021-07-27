@@ -1,36 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router"
-import useSWR from 'swr';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
-import ClientSummary from "../../../components/ClientSummary";
-import Dropdown from "../../../components/Dropdown";
-import TextArea from "../../../components/TextArea";
-import Layout from "../../../components/Layout/Layout";
-import AdditionalNeeds, { getInitialAdditionalNeedsArray } from "../../../components/CarePackages/AdditionalNeedsEntries";
-import CareTitle from "../../../components/CarePackages/CareTitle";
-import TitleHeader from "../../../components/TitleHeader";
-import NursingCareSummary from "../../../components/NursingCare/NursingCareSummary";
-import { Button } from "../../../components/Button";
-import {
-  createNursingCarePackage,
-  getTypeOfNursingHomeOptions,
-} from "../../../api/CarePackages/NursingCareApi";
-import PackageReclaims from "../../../components/CarePackages/PackageReclaims";
-import { CARE_PACKAGE_ROUTE } from "../../../routes/RouteConstants";
-import fieldValidator from "../../../service/inputValidator";
-
-const serverNursingCare = async () => {};
+import ClientSummary from '../../../components/ClientSummary';
+import Dropdown from '../../../components/Dropdown';
+import TextArea from '../../../components/TextArea';
+import Layout from '../../../components/Layout/Layout';
+import AdditionalNeeds, {
+  getInitialAdditionalNeedsArray,
+} from '../../../components/CarePackages/AdditionalNeedsEntries';
+import CareTitle from '../../../components/CarePackages/CareTitle';
+import TitleHeader from '../../../components/TitleHeader';
+import NursingCareSummary from '../../../components/NursingCare/NursingCareSummary';
+import { Button } from '../../../components/Button';
+import { createNursingCarePackage, getTypeOfNursingHomeOptions } from '../../../api/CarePackages/NursingCareApi';
+import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
+import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
+import fieldValidator from '../../../service/inputValidator';
 
 const NursingCare = () => {
-  const { data } = useSWR('', serverNursingCare);
-  const isTrueParse = (myValue) => myValue === "true";
-  const notNullString = (myValue) =>
-    myValue !== "null" && myValue !== "undefined";
+  const isTrueParse = (myValue) => myValue === 'true';
+  const notNullString = (myValue) => myValue !== 'null' && myValue !== 'undefined';
 
   // TODO remove
   const additionalNeedsCostOptions = [
-    { text: "Weekly", value: 1 },
-    { text: "One off", value: 2 },
+    { text: 'Weekly', value: 1 },
+    { text: 'One off', value: 2 },
   ];
 
   // Parameters
@@ -59,9 +53,7 @@ const NursingCare = () => {
   const [errors, setErrors] = useState([]);
   const [needToAddress, setNeedToAddress] = useState(undefined);
   const [selectedNursingHomeType, setSelectedNursingHomeType] = useState();
-  const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(
-    getInitialAdditionalNeedsArray()
-  );
+  const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(getInitialAdditionalNeedsArray());
 
   const [additionalNeedsEntriesErrors, setAdditionalNeedsEntriesErrors] = useState([]);
   const [packageReclaimedError, setPackageReclaimedError] = useState([]);
@@ -84,10 +76,7 @@ const NursingCare = () => {
         setCareHomeTypes(options);
       })
       .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve nursing care home type options failed. ${error.message}`,
-        ]);
+        setErrors([...errors, `Retrieve nursing care home type options failed. ${error.message}`]);
       });
   };
 

@@ -1,14 +1,14 @@
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import React, { useState } from "react";
-import ApprovalClientSummary from "../../../../components/ApprovalClientSummary";
-import Layout from "../../../../components/Layout/Layout";
-import ResidentialCareApprovalTitle from "../../../../components/ResidentialCare/ResidentialCareApprovalTitle";
-import PackageCostBox from "../../../../components/DayCare/PackageCostBox";
-import PackageApprovalHistorySummary from "../../../../components/PackageApprovalHistorySummary";
-import TitleHeader from "../../../../components/TitleHeader";
-import ResidentialCareSummary from "../../../../components/ResidentialCare/ResidentialCareSummary";
-import TextArea from "../../../../components/TextArea";
+import React, { useState } from 'react';
+import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
+import Layout from '../../../../components/Layout/Layout';
+import ResidentialCareApprovalTitle from '../../../../components/ResidentialCare/ResidentialCareApprovalTitle';
+import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
+import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
+import TitleHeader from '../../../../components/TitleHeader';
+import ResidentialCareSummary from '../../../../components/ResidentialCare/ResidentialCareSummary';
+import TextArea from '../../../../components/TextArea';
 import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
   getResidentialCarePackageApprovalHistory,
@@ -16,7 +16,7 @@ import {
   residentialCareChangeStatus,
   residentialCareApprovePackageContent,
   residentialCareRequestClarification,
-} from "../../../../api/CarePackages/ResidentialCareApi";
+} from '../../../../api/CarePackages/ResidentialCareApi';
 
 // start before render
 const serverResidentialCareApproveCare = async (residentialCarePackageId) => {
@@ -35,40 +35,35 @@ const serverResidentialCareApproveCare = async (residentialCarePackageId) => {
     );
     data.residentialCarePackageData = residentialCarePackage;
     data.newAdditionalNeedsEntriesData = newAdditionalNeedsEntries;
-
-  } catch(error) {
+  } catch (error) {
     data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
   }
 
   try {
     const approvalHistoryEntries = await getResidentialCarePackageApprovalHistory(residentialCarePackageId);
-    data.approvalHistoryEntries = approvalHistoryEntries.map(
-      (historyItem) => ({
-        eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
-          "en-GB"
-        ),
-        eventMessage: historyItem.logText,
-        eventSubMessage: undefined
-      })
-    );
+    data.approvalHistoryEntries = approvalHistoryEntries.map((historyItem) => ({
+      eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
+      eventMessage: historyItem.logText,
+      eventSubMessage: undefined,
+    }));
   } catch (error) {
     data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
   }
 
   return data;
-}
+};
 
 const ResidentialCareApprovePackage = () => {
   const router = useRouter();
-  const residentialCarePackageId = router.query.id
+  const residentialCarePackageId = router.query.id;
 
   const { data } = useSWR(residentialCarePackageId, serverResidentialCareApproveCare);
-  let residentialCarePackage,
-    additionalNeedsEntries,
-    approvalHistoryEntries,
-    errorData = [];
+  let residentialCarePackage;
+  let additionalNeedsEntries;
+  let approvalHistoryEntries;
+  let errorData = [];
 
-  if(data) {
+  if (data) {
     residentialCarePackage = data.residentialCarePackage;
     additionalNeedsEntries = data.additionalNeedsEntries;
     approvalHistoryEntries = data.approvalHistoryEntries;
@@ -76,9 +71,7 @@ const ResidentialCareApprovePackage = () => {
   }
   const [errors, setErrors] = useState(errorData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
-  const [requestInformationText, setRequestInformationText] = useState(
-    undefined
-  );
+  const [requestInformationText, setRequestInformationText] = useState(undefined);
 
   const handleRejectPackage = () => {
     residentialCareChangeStatus(residentialCarePackageId, 10)
@@ -103,10 +96,7 @@ const ResidentialCareApprovePackage = () => {
   };
 
   const handleRequestMoreInformation = () => {
-    residentialCareRequestClarification(
-      residentialCarePackageId,
-      requestInformationText
-    )
+    residentialCareRequestClarification(residentialCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
@@ -136,9 +126,7 @@ const ResidentialCareApprovePackage = () => {
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      STARTS
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">STARTS</p>
                     <p className="font-size-14px">
                       {getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.startDate)}
                     </p>
@@ -168,9 +156,7 @@ const ResidentialCareApprovePackage = () => {
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      DAYS/WEEK
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">DAYS/WEEK</p>
                     <p className="font-size-14px">3</p>
                   </div>
                 </div>
@@ -183,18 +169,10 @@ const ResidentialCareApprovePackage = () => {
 
         <div className="columns">
           <div className="column">
-            <PackageCostBox
-              title="COST OF CARE / WK"
-              cost={residentialCarePackage?.costOfCare}
-              costType="ESTIMATE"
-            />
+            <PackageCostBox title="COST OF CARE / WK" cost={residentialCarePackage?.costOfCare} costType="ESTIMATE" />
           </div>
           <div className="column">
-            <PackageCostBox
-              title="ANP / WK"
-              cost={residentialCarePackage?.costOfAdditionalNeeds}
-              costType="ESTIMATE"
-            />
+            <PackageCostBox title="ANP / WK" cost={residentialCarePackage?.costOfAdditionalNeeds} costType="ESTIMATE" />
           </div>
           <div className="column">
             <PackageCostBox
@@ -214,9 +192,7 @@ const ResidentialCareApprovePackage = () => {
           </div>
         </div>
 
-        <PackageApprovalHistorySummary
-          approvalHistoryEntries={approvalHistoryEntries}
-        />
+        <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
 
         <div className="columns">
           <div className="column">
@@ -231,7 +207,7 @@ const ResidentialCareApprovePackage = () => {
                 }
                 typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
                 additionalNeedsEntries={additionalNeedsEntries}
-                setAdditionalNeedsEntries={setAdditionalNeedsEntries}
+                // setAdditionalNeedsEntries={setAdditionalNeedsEntries}
                 needToAddress={residentialCarePackage?.residentialCarePackage.needToAddress}
               />
             </div>
@@ -244,10 +220,7 @@ const ResidentialCareApprovePackage = () => {
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button
-                    className="button hackney-btn-light"
-                    onClick={handleRejectPackage}
-                  >
+                  <button className="button hackney-btn-light" onClick={handleRejectPackage}>
                     Deny
                   </button>
                 </div>
@@ -256,16 +229,11 @@ const ResidentialCareApprovePackage = () => {
                     onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
                     className="button hackney-btn-light"
                   >
-                    {displayMoreInfoForm
-                      ? "Hide Request more information"
-                      : "Request More Information"}
+                    {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button
-                    className="button hackney-btn-green"
-                    onClick={handleApprovePackageCommercials}
-                  >
+                  <button className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
                     Approve Commercials
                   </button>
                 </div>
@@ -277,19 +245,9 @@ const ResidentialCareApprovePackage = () => {
         <div className="columns">
           <div className="column">
             <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">
-                Request more information
-              </p>
-              <TextArea
-                label=""
-                rows={5}
-                placeholder="Add details..."
-                onChange={setRequestInformationText}
-              />
-              <button
-                className="button hackney-btn-green"
-                onClick={handleRequestMoreInformation}
-              >
+              <p className="font-size-16px font-weight-bold">Request more information</p>
+              <TextArea label="" rows={5} placeholder="Add details..." onChange={setRequestInformationText} />
+              <button className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
                 Request more information
               </button>
             </div>

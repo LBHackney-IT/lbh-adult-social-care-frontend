@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { selectResidentialTypeOfStayOptions } from '../../reducers/carePackageSlice';
-import { RESIDENTIAL_CARE_ROUTE } from "../../routes/RouteConstants";
-import RadioButton, { yesNoValues } from "../RadioButton";
-import CarePackageSetup from "../CarePackages/CarePackageSetup";
-import CareSelectDropdown from "../CarePackages/CareSelectDropdown";
-import { getResidentialCareTypeOfStayOptions } from "../../api/CarePackages/ResidentialCareApi";
-import fieldValidator from "../../service/inputValidator";
-import DateSetup from './DateSetup'
+import { RESIDENTIAL_CARE_ROUTE } from '../../routes/RouteConstants';
+import RadioButton, { yesNoValues } from '../RadioButton';
+import CarePackageSetup from '../CarePackages/CarePackageSetup';
+import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
+import fieldValidator from '../../service/inputValidator';
+import DateSetup from './DateSetup';
 
-const ResidentialCareSetup = ({
-  careTypes,
-  selectedCareType,
-  setSelectedCareType,
-}) => {
+const ResidentialCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => {
   const router = useRouter();
-  const [
-    residentialCareTypeOfStayOptions,
-    setResidentialCareTypeOfStayOptions,
-  ] = useState([]);
 
   const typeOfStayOptions = useSelector(selectResidentialTypeOfStayOptions);
 
@@ -27,9 +18,7 @@ const ResidentialCareSetup = ({
   const [endDate, setEndDate] = useState(new Date());
   const [hasRespiteCare, setHasRespiteCare] = useState(undefined);
   const [hasDischargePackage, setHasDischargePackage] = useState(undefined);
-  const [isImmediateOrReEnablement, setIsImmediateOrReEnablement] = useState(
-    undefined
-  );
+  const [isImmediateOrReEnablement, setIsImmediateOrReEnablement] = useState(undefined);
   const [typeOfStayId, setTypeOfStayId] = useState(undefined);
   const [isS117, setIsS117] = useState(undefined);
 
@@ -51,45 +40,22 @@ const ResidentialCareSetup = ({
     setErrorFields({
       ...errorFields,
       [field]: '',
-    })
+    });
   };
-
-  const retrieveResidentialCareTypeOfStayOptions = () => {
-    getResidentialCareTypeOfStayOptions()
-      .then((res) => {
-        let options = res.map((option) => ({
-          text: `${option.optionName} (${option.optionPeriod})`,
-          value: option.typeOfStayOptionId,
-        }));
-        setResidentialCareTypeOfStayOptions(options);
-      })
-      .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve residential care type of stay options failed. ${error.message}`,
-        ]);
-      });
-  };
-
-  useEffect(() => {
-    if (residentialCareTypeOfStayOptions.length === 0) {
-      retrieveResidentialCareTypeOfStayOptions();
-    }
-  }, []);
 
   // Handle build click
   const onBuildClick = () => {
     const { validFields, hasErrors } = fieldValidator([
-      {name: 'isImmediateOrReEnablement', value: isImmediateOrReEnablement, rules: ['empty']},
-      {name: 'isS117', value: isS117, rules: ['empty']},
-      {name: 'typeOfStayId', value: typeOfStayId, rules: ['empty']},
-      {name: 'hasDischargePackage', value: hasDischargePackage, rules: ['empty']},
-      {name: 'hasRespiteCare', value: hasRespiteCare, rules: ['empty']},
-      {name: 'startDate', value: startDate, rules: ['empty']},
-      {name: 'endDate', value: endDate, rules: ['empty']},
-      {name: 'careTypes', value: selectedCareType, rules: ['empty']},
+      { name: 'isImmediateOrReEnablement', value: isImmediateOrReEnablement, rules: ['empty'] },
+      { name: 'isS117', value: isS117, rules: ['empty'] },
+      { name: 'typeOfStayId', value: typeOfStayId, rules: ['empty'] },
+      { name: 'hasDischargePackage', value: hasDischargePackage, rules: ['empty'] },
+      { name: 'hasRespiteCare', value: hasRespiteCare, rules: ['empty'] },
+      { name: 'startDate', value: startDate, rules: ['empty'] },
+      { name: 'endDate', value: endDate, rules: ['empty'] },
+      { name: 'careTypes', value: selectedCareType, rules: ['empty'] },
     ]);
-    if(hasErrors) {
+    if (hasErrors) {
       setErrorFields(validFields);
       return;
     }
@@ -101,16 +67,6 @@ const ResidentialCareSetup = ({
       `${RESIDENTIAL_CARE_ROUTE}/${hasRespiteCare}/${hasDischargePackage}/` +
         `${isImmediateOrReEnablement}/${typeOfStayId}/${isS117}/${isFixedPeriod}/${startDate}/${endDate}?typeOfStayText=${typeOfStayText}`
     );
-  };
-
-  const handleFixedPeriodChange = (newVal) => {
-    // Update end date based on this change
-    if (!newVal) {
-      setEndDate(null);
-    } else {
-      setEndDate(new Date());
-    }
-    setIsFixedPeriod(newVal);
   };
 
   return (
