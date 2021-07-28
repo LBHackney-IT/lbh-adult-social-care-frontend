@@ -20,6 +20,19 @@ const createNursingCarePackage = (nursingCarePackageForCreation) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const createNursingCarePackageReclaim = (nursingCarePackageId, data) => {
+  const options = {
+    url: `${NURSING_CARE_URL}/${nursingCarePackageId}/package-reclaim`,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data,
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 /* const updateNursingCarePackage = (nursingCarePackageId, nursingCarePackageForUpdate) => {
   const options = {
     url: `${NURSING_CARE_URL}/${nursingCarePackageId}`,
@@ -187,6 +200,7 @@ const createNursingCareBrokerageInfo = (nursingCarePackageId, nursingCareBrokera
 export {
   getTypeOfNursingHomeOptions,
   createNursingCarePackage,
+  createNursingCarePackageReclaim,
   getNursingCarePackageList,
   getSingleNursingCarePackage,
   getNursingCarePackageApprovalPackageContent,

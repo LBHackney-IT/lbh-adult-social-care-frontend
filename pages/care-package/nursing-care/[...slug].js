@@ -13,7 +13,11 @@ import CareTitle from '../../../components/CarePackages/CareTitle';
 import TitleHeader from '../../../components/TitleHeader';
 import NursingCareSummary from '../../../components/NursingCare/NursingCareSummary';
 import { Button } from '../../../components/Button';
-import { createNursingCarePackage, getTypeOfNursingHomeOptions } from '../../../api/CarePackages/NursingCareApi';
+import {
+  createNursingCarePackage,
+  createNursingCarePackageReclaim,
+  getTypeOfNursingHomeOptions,
+} from '../../../api/CarePackages/NursingCareApi';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
@@ -187,15 +191,35 @@ const NursingCare = () => {
     };
 
     createNursingCarePackage(nursingCarePackageToCreate)
-      .then(() => {
-        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
-        router.push(`${CARE_PACKAGE_ROUTE}`);
-      })
       .catch((error) => {
         dispatch(addNotification({ text: `Create package failed. ${error.message ?? ''}` }));
         setErrors([...errors, `Create package failed. ${error.message}`]);
+        throw new Error();
+      })
+      .then(({ id }) => {
+        const requests = packagesReclaimed.map((el) =>
+          createNursingCarePackageReclaim(id, {
+            nursingCarePackageId: id,
+            reclaimFromId: el.from,
+            reclaimCategoryId: el.category,
+            reclaimAmountOptionId: el.type,
+            notes: el.notes,
+            amount: el.amount,
+          })
+        );
+
+        return Promise.all(requests);
+      })
+      .catch((error) => {
+        dispatch(addNotification({ text: `Create reclaims failed. ${error.message ?? ''}` }));
+        setErrors([...errors, `Create reclaims failed. ${error.message}`]);
+      })
+      .then(() => {
+        router.push(`${CARE_PACKAGE_ROUTE}`);
+        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
       });
   };
+
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
       <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">

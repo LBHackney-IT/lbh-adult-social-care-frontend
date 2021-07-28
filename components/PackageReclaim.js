@@ -98,14 +98,16 @@ const PackageReclaim = ({
             selectedValue={packageReclaim.type}
           />
         </div>
-        <Input
-          onChange={(value) => changePackageType('amount', value)}
-          label="Amount"
-          error={currentError?.amount}
-          preSign={packageReclaim.type !== percentageValue ? currency.euro : undefined}
-          postSign={packageReclaim.type === percentageValue ? '%' : undefined}
-          value={packageReclaim.amount}
-        />
+        {packageReclaim.type && (
+          <Input
+            onChange={(value) => changePackageType('amount', value)}
+            label="Amount"
+            error={currentError?.amount}
+            preSign={packageReclaim.type !== percentageValue ? currency.euro : undefined}
+            postSign={packageReclaim.type === percentageValue ? '%' : undefined}
+            value={packageReclaim.amount}
+          />
+        )}
         <hr className="horizontal-delimiter" />
       </div>
     </div>

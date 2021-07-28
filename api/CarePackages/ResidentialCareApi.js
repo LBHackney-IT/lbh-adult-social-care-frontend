@@ -26,6 +26,19 @@ const createResidentialCarePackage = (residentialCarePackageForCreation) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const createResidentialCarePackageReclaim = (residentialCarePackageId, data) => {
+  const options = {
+    url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/package-reclaim`,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data,
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 /* const updateResidentialCarePackage = (residentialCarePackageId, residentialCarePackageForUpdate) => {
   const options = {
     url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}`,
@@ -183,6 +196,7 @@ export {
   getResidentialCareAdditionalNeedsCostOptions,
   getTypeOfResidentialCareHomeOptions,
   createResidentialCarePackage,
+  createResidentialCarePackageReclaim,
   getResidentialCarePackageList,
   getSingleResidentialCarePackage,
   getResidentialCarePackageApprovalPackageContent,
