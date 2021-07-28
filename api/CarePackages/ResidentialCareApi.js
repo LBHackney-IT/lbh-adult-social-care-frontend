@@ -106,7 +106,7 @@ const residentialCareApprovePackageContent = (residentialCarePackageId) => {
       'Content-Type': 'application/json;charset=UTF-8',
     },
     data: {
-      residentialCarePackageId
+      residentialCarePackageId,
     },
   };
   return axios(options).then(handleResponse).catch(handleError);
@@ -121,7 +121,7 @@ const residentialCareApproveCommercials = (residentialCarePackageId) => {
       'Content-Type': 'application/json;charset=UTF-8',
     },
     data: {
-      residentialCarePackageId
+      residentialCarePackageId,
     },
   };
   return axios(options).then(handleResponse).catch(handleError);
@@ -196,5 +196,5 @@ export {
   getResidentialCareBrokerageStages,
   getResidentialCarePackageDetailsForBrokerage,
   createResidentialCareBrokerageInfo,
-  residentialCareChangeStage
+  residentialCareChangeStage,
 };

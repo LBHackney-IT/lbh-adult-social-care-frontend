@@ -6,8 +6,8 @@ import { getUserSession, formatDateWithSign } from '../../service/helpers';
 import withSession from '../../lib/session';
 import SocialWorkerInputs from '../../components/SocialWorker/SocialWorkerInputs';
 import { getSubmittedPackages, getSubmittedPackagesStatus } from '../../api/ApproversHub/SocialWorkerApi';
-import { RESIDENTIAL_CARE_ROUTE, NURSING_CARE_ROUTE} from '../../routes/RouteConstants';
-import Table from '../../components/Table'
+import { RESIDENTIAL_CARE_ROUTE, NURSING_CARE_ROUTE } from '../../routes/RouteConstants';
+import Table from '../../components/Table';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -20,7 +20,7 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const SocialWorkerDashboardPage = () => {
   const [sorts] = useState([
-    { name: 'client', text: 'Client'},
+    { name: 'client', text: 'Client' },
     { name: 'packageId', text: 'Package ID' },
     { name: 'primarySupport', text: 'Primary Support Reason' },
     { name: 'category', text: 'Category', value: 'categoryId' },
@@ -37,16 +37,16 @@ const SocialWorkerDashboardPage = () => {
   });
 
   const sortBy = (field, value) => {
-    setSort({value, name: field});
+    setSort({ value, name: field });
   };
 
   const onClickTableRow = (rowItems) => {
     console.log(rowItems);
-    {rowItems.categoryId === 3 ? (
-      router.push(`${RESIDENTIAL_CARE_ROUTE}/${rowItems.packageId}`)
-    ) : (
-      router.push(`${NURSING_CARE_ROUTE}/${rowItems.packageId}`)
-    )}
+    {
+      rowItems.categoryId === 3
+        ? router.push(`${RESIDENTIAL_CARE_ROUTE}/${rowItems.packageId}`)
+        : router.push(`${NURSING_CARE_ROUTE}/${rowItems.packageId}`);
+    }
   };
 
   const [socialWorkerData, setSubmittedPackages] = useState([]);
@@ -66,17 +66,17 @@ const SocialWorkerDashboardPage = () => {
   const retrieveSocialWorkerData = (clientId, statusId) => {
     getSubmittedPackages(1, 50, clientId, statusId)
       .then((res) => {
-        const pagedData = res.pagingMetaData
+        const pagedData = res.pagingMetaData;
         const options = res.data.map((option) => ({
           client: option.client,
           packageId: option.packageId,
-          primarySupportReason : option.primarySupportReason,
-          categoryId : option.categoryId,
-          category : option.category,
-          dateOfBirth : option.dateOfBirth,
-          approver : option.approver,
-          submittedDaysAgo : option.submittedDaysAgo,
-          statusName : option.statusName
+          primarySupportReason: option.primarySupportReason,
+          categoryId: option.categoryId,
+          category: option.category,
+          dateOfBirth: option.dateOfBirth,
+          approver: option.approver,
+          submittedDaysAgo: option.submittedDaysAgo,
+          statusName: option.statusName,
         }));
         setSubmittedPackages(options);
         setPagedData(pagedData);
@@ -96,10 +96,7 @@ const SocialWorkerDashboardPage = () => {
         setStatusOptions(options);
       })
       .catch((error) => {
-        setErrors([
-          ...errors,
-          `Retrieve status options failed. ${error.message}`,
-        ]);
+        setErrors([...errors, `Retrieve status options failed. ${error.message}`]);
       });
   };
 
@@ -109,8 +106,8 @@ const SocialWorkerDashboardPage = () => {
     },
     status: {
       getClassName: (value) => `${value} table__row-item-status`,
-    }
-  }
+    },
+  };
 
   const tableFields = {
     id: 'packageId',
@@ -120,13 +117,11 @@ const SocialWorkerDashboardPage = () => {
     approver: 'approver',
     submitted: 'submitted',
     status: 'status',
-  }
+  };
 
   return (
     <div className="social-worker-page">
-      <SocialWorkerInputs
-        statusOptions = {statusOptions}
-      />
+      <SocialWorkerInputs statusOptions={statusOptions} />
       <Table
         onClickTableRow={onClickTableRow}
         rows={socialWorkerData}
@@ -135,7 +130,12 @@ const SocialWorkerDashboardPage = () => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination from={pagedData.currentPage} to={pagedData.totalPages} itemsCount={pagedData.totalCount} totalCount={pagedData.totalPages} />
+      <Pagination
+        from={pagedData.currentPage}
+        to={pagedData.totalPages}
+        itemsCount={pagedData.totalCount}
+        totalCount={pagedData.totalPages}
+      />
       <HackneyFooterInfo />
     </div>
   );

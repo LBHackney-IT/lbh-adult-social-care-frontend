@@ -48,10 +48,7 @@ const CustomDropDown = ({
 
   useEffect(() => {
     const initialSelectedOption =
-      options.find((item) => (
-        item[fields.value] === selectedValue ||
-        item[fields.text] === selectedValue
-      )) || options[0];
+      options.find((item) => item[fields.value] === selectedValue || item[fields.text] === selectedValue) || options[0];
     setSelectedOption(initialSelectedOption);
   }, [selectedValue]);
 

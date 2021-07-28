@@ -1,7 +1,7 @@
 import React from 'react';
 import Dropdown from './Dropdown';
 import Input from './Input';
-import { Button } from './Button'
+import { Button } from './Button';
 
 /*
   EXAMPLE
@@ -60,16 +60,11 @@ const Inputs = ({ title, inputs, changeInputs, className = '', values }) => {
       case 'buttons': {
         inputs[key].forEach((item) => {
           inputsComponent.push(
-            <Button
-              key={item.name}
-              className={item.className}
-              disabled={item.disabled}
-              onClick={item.onClick}
-            >
+            <Button key={item.name} className={item.className} disabled={item.disabled} onClick={item.onClick}>
               {item.initialText}
             </Button>
-          )
-        })
+          );
+        });
       }
     }
   });

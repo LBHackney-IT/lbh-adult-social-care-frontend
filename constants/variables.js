@@ -7,6 +7,6 @@ const requestMethods = {
   delete: 'DELETE',
   patch: 'PATCH',
   head: 'HEAD',
-}
+};
 
 export { maxStringLength, requestMethods };

@@ -35,7 +35,7 @@ const PayRunsHeader = ({
   const [filters, setFilters] = useState({ ...initialFilters });
 
   const applyFilters = () => {
-    apply()
+    apply();
   };
 
   const searchId = () => {

@@ -21,4 +21,7 @@ const stringIsNullOrEmpty = (str) => {
   return false;
 };
 
-export { getAgeFromDateString, getEnGBFormattedDate, stringIsNullOrEmpty };
+const isServer = () => typeof window === 'undefined';
+const isBrowser = () => typeof window !== 'undefined';
+
+export { getAgeFromDateString, getEnGBFormattedDate, stringIsNullOrEmpty, isServer, isBrowser };

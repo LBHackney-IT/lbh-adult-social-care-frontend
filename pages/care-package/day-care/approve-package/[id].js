@@ -35,24 +35,18 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: da
     data.dayCarePackage = dayCarePackage;
 
     // Update approve-package state
-    const newApprovalHistoryItems = dayCarePackage.packageApprovalHistory.map(
-      (historyItem) => ({
-        eventDate: new Date(historyItem.dateCreated).toLocaleDateString(
-          "en-GB"
-        ),
-        eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
-        eventSubMessage: historyItem.logSubText,
-      })
-    );
+    const newApprovalHistoryItems = dayCarePackage.packageApprovalHistory.map((historyItem) => ({
+      eventDate: new Date(historyItem.dateCreated).toLocaleDateString('en-GB'),
+      eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
+      eventSubMessage: historyItem.logSubText,
+    }));
 
-    const newOpportunityEntries = dayCarePackage.packageDetails.dayCareOpportunities.map(
-      (opportunityItem) => ({
-        id: opportunityItem.dayCarePackageOpportunityId,
-        howLongValue: opportunityItem.howLong.optionName,
-        timesPerMonthValue: opportunityItem.howManyTimesPerMonth.optionName,
-        needToAddress: opportunityItem.opportunitiesNeedToAddress,
-      })
-    );
+    const newOpportunityEntries = dayCarePackage.packageDetails.dayCareOpportunities.map((opportunityItem) => ({
+      id: opportunityItem.dayCarePackageOpportunityId,
+      howLongValue: opportunityItem.howLong.optionName,
+      timesPerMonthValue: opportunityItem.howManyTimesPerMonth.optionName,
+      needToAddress: opportunityItem.opportunitiesNeedToAddress,
+    }));
 
     data.approvalHistoryEntries([...newApprovalHistoryItems]);
     data.opportunityEntries([...newOpportunityEntries]);
@@ -105,15 +99,14 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
       });
   };
   const handleRequestMoreInformation = () => {
-    const { validFields, hasErrors } = fieldValidator([{name: 'requestInformationText', value: requestInformationText, rules: ['empty']}]);
-    if(hasErrors) {
+    const { validFields, hasErrors } = fieldValidator([
+      { name: 'requestInformationText', value: requestInformationText, rules: ['empty'] },
+    ]);
+    if (hasErrors) {
       setErrorFields(validFields);
       return;
     }
-    dayCarePackageContentsRequestClarification(
-      dayCarePackageId,
-      requestInformationText
-    )
+    dayCarePackageContentsRequestClarification(dayCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
@@ -139,12 +132,8 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
     <Layout headerTitle="DAY CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
         <DayCareApprovalTitle
-          termTimeConsiderationOption={
-            dayCarePackage?.packageDetails.termTimeConsiderationOptionName
-          }
-          isFixedPeriodOrOngoing={
-            dayCarePackage?.packageDetails.isFixedPeriodOrOngoing
-          }
+          termTimeConsiderationOption={dayCarePackage?.packageDetails.termTimeConsiderationOptionName}
+          isFixedPeriodOrOngoing={dayCarePackage?.packageDetails.isFixedPeriodOrOngoing}
         />
         <ApprovalClientSummary />
 
@@ -154,14 +143,8 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      STARTS
-                    </p>
-                    <p className="font-size-14px">
-                      {getEnGBFormattedDate(
-                        dayCarePackage?.packageDetails.startDate
-                      )}
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">STARTS</p>
+                    <p className="font-size-14px">{getEnGBFormattedDate(dayCarePackage?.packageDetails.startDate)}</p>
                   </div>
                 </div>
               </div>
@@ -175,10 +158,8 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
                       {dayCarePackage?.packageDetails.endDate !== null
-                        ? getEnGBFormattedDate(
-                            dayCarePackage?.packageDetails.endDate
-                          )
-                        : "Ongoing"}
+                        ? getEnGBFormattedDate(dayCarePackage?.packageDetails.endDate)
+                        : 'Ongoing'}
                     </p>
                   </div>
                 </div>
@@ -190,9 +171,7 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      DAYS/WEEK
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">DAYS/WEEK</p>
                     <p className="font-size-14px">3</p>
                   </div>
                 </div>
@@ -212,11 +191,7 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
                 costType="ESTIMATE"
               />
 
-              <PackageCostBox
-                title="ANP / WK"
-                cost={dayCarePackage?.costSummary.anpPerWeek}
-                costType="ESTIMATE"
-              />
+              <PackageCostBox title="ANP / WK" cost={dayCarePackage?.costSummary.anpPerWeek} costType="ESTIMATE" />
 
               <PackageCostBox
                 title="TRANSPORT / WK"
@@ -233,16 +208,10 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
           </div>
         </div>
 
-        <DayCarePackageBreakdown
-          dayCareTime="12h"
-          transportTime="4h/week"
-          dayOpportunitiesTotalTime="3h"
-        />
+        <DayCarePackageBreakdown dayCareTime="12h" transportTime="4h/week" dayOpportunitiesTotalTime="3h" />
         <DayCarePackageElementCostings />
 
-        <PackageApprovalHistorySummary
-          approvalHistoryEntries={approvalHistoryEntries}
-        />
+        <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
 
         <div className="columns">
           <div className="column">
@@ -265,10 +234,7 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button
-                    className="button hackney-btn-light"
-                    onClick={handleRejectPackage}
-                  >
+                  <button className="button hackney-btn-light" onClick={handleRejectPackage}>
                     Deny
                   </button>
                 </div>
@@ -278,16 +244,11 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
                     className="button hackney-btn-light"
                     type="button"
                   >
-                    {displayMoreInfoForm
-                      ? "Hide Request more information"
-                      : "Request More Information"}
+                    {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button
-                    className="button hackney-btn-green"
-                    onClick={handleApprovePackageContents}
-                  >
+                  <button className="button hackney-btn-green" onClick={handleApprovePackageContents}>
                     Approve to be brokered
                   </button>
                 </div>
@@ -300,9 +261,7 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
           <div className="columns">
             <div className="column">
               <div className="mt-1">
-                <p className="font-size-16px font-weight-bold">
-                  Request more information
-                </p>
+                <p className="font-size-16px font-weight-bold">Request more information</p>
                 <TextArea
                   label=""
                   rows={5}
@@ -311,10 +270,7 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
                   error={errorFields.requestInformationText}
                   setError={() => changeErrorFields('requestInformationText')}
                 />
-                <button
-                  className="button hackney-btn-green"
-                  onClick={handleRequestMoreInformation}
-                >
+                <button className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
                   Request more information
                 </button>
               </div>

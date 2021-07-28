@@ -1,11 +1,11 @@
-import React from "react";
-import { useState } from "react";
-import BaseField from "./baseComponents/BaseField";
-import ErrorField from "./ErrorField";
+import React from 'react';
+import { useState } from 'react';
+import BaseField from './baseComponents/BaseField';
+import ErrorField from './ErrorField';
 
 const yesNoValues = [
-  { text: "Yes", value: true },
-  { text: "No", value: false },
+  { text: 'Yes', value: true },
+  { text: 'No', value: false },
 ];
 
 const RadioButton = ({
@@ -29,22 +29,17 @@ const RadioButton = ({
 
   return (
     <BaseField label={label} classes={className}>
-      <div className={"radio-cont" + (inline ? "" : " not-inline")}>
+      <div className={'radio-cont' + (inline ? '' : ' not-inline')}>
         {options.map((radioItem, index) => {
           return (
             <label
               key={radioItem.value}
-              className={
-                "radio-item" + (index !== options.length ? " is-first" : "")
-              }
+              className={'radio-item' + (index !== options.length ? ' is-first' : '')}
               onClick={() => radioChange(radioItem.value)}
             >
               <div
                 className={
-                  "radio-select-cont" +
-                  (hasSelectedValue && radioValue === radioItem.value
-                    ? " is-active"
-                    : "")
+                  'radio-select-cont' + (hasSelectedValue && radioValue === radioItem.value ? ' is-active' : '')
                 }
               >
                 <div className="radio-item-selected"></div>

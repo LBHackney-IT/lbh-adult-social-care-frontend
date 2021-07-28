@@ -15,31 +15,29 @@ import { getHomeCareServices, getHomeCareTimeSlotShifts } from '../../../../api/
 
 const approvalHistoryEntries = [
   {
-    eventDate: "03/12/2021",
-    eventMessage: "Package requested by Martin Workman · Social Worker",
+    eventDate: '03/12/2021',
+    eventMessage: 'Package requested by Martin Workman · Social Worker',
     eventSubMessage: null,
   },
   {
-    eventDate: "05/12/2021",
-    eventMessage: "Futher information requested by Amecie Steadman · Approver",
+    eventDate: '05/12/2021',
+    eventMessage: 'Futher information requested by Amecie Steadman · Approver',
     eventSubMessage:
       '"There appears to be more support than needed in the morning for Mr Stephens, please amend or call me to discuss" More',
   },
   {
-    eventDate: "06/12/2021",
-    eventMessage: "Package re-submitted by Martin Workman · Social Worker ",
+    eventDate: '06/12/2021',
+    eventMessage: 'Package re-submitted by Martin Workman · Social Worker ',
     eventSubMessage: null,
   },
   {
-    eventDate: "14/12/2021",
-    eventMessage:
-      "Care Package Approved for brokerage by  Amecie Steadman · Approver",
+    eventDate: '14/12/2021',
+    eventMessage: 'Care Package Approved for brokerage by  Amecie Steadman · Approver',
     eventSubMessage: null,
   },
   {
-    eventDate: "14/12/2021",
-    eventMessage:
-      "Care Package approve-brokered STA by  Derek Knightman · Broker",
+    eventDate: '14/12/2021',
+    eventMessage: 'Care Package approve-brokered STA by  Derek Knightman · Broker',
     eventSubMessage: null,
   },
 ];
@@ -56,18 +54,14 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
     // Call to api to get package
     data.homeCareServices = await getHomeCareServices();
   } catch (error) {
-    data.errorData.push(
-      `Retrieve day care package details failed. ${error.message}`
-    );
+    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
 
   try {
     // Get home care time shifts
     data.homeCareTimeShiftsData = await getHomeCareTimeSlotShifts();
   } catch (error) {
-    data.errorData.push(
-      `Retrieve home care time shift details failed. ${error.message}`
-    );
+    data.errorData.push(`Retrieve home care time shift details failed. ${error.message}`);
   }
 
   return { props: { ...data, approvalHistoryEntries } };
@@ -90,9 +84,7 @@ const HomeCareApproveBrokered = ({ approvalHistoryEntries }) => {
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      HOURS PER WEEK
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">HOURS PER WEEK</p>
                     <p className="font-size-14px">18</p>
                   </div>
                 </div>
@@ -104,13 +96,9 @@ const HomeCareApproveBrokered = ({ approvalHistoryEntries }) => {
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      COST OF CARE
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">COST OF CARE</p>
                     <p className="font-size-14px">£1,982</p>
-                    <p className="font-weight-bold hackney-text-green">
-                      ACTUAL
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">ACTUAL</p>
                   </div>
                 </div>
               </div>
@@ -125,9 +113,7 @@ const HomeCareApproveBrokered = ({ approvalHistoryEntries }) => {
 
         <HomeCarePackageElementCostings />
 
-        <PackageApprovalHistorySummary
-          approvalHistoryEntries={approvalHistoryEntries}
-        />
+        <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
 
         <HomeCarePackageDetails />
 
@@ -147,26 +133,18 @@ const HomeCareApproveBrokered = ({ approvalHistoryEntries }) => {
                   <button className="button hackney-btn-light">Deny</button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">
-                    Request more information
-                  </button>
+                  <button className="button hackney-btn-light">Request more information</button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green">
-                    Approve contracting
-                  </button>
+                  <button className="button hackney-btn-green">Approve contracting</button>
                 </div>
               </div>
             </div>
 
             <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">
-                Request more information
-              </p>
+              <p className="font-size-16px font-weight-bold">Request more information</p>
               <TextArea label="" rows={5} placeholder="Add details..." />
-              <button className="button hackney-btn-green">
-                Request more information
-              </button>
+              <button className="button hackney-btn-green">Request more information</button>
             </div>
           </div>
         </div>

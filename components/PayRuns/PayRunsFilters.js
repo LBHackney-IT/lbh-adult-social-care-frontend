@@ -3,15 +3,7 @@ import Input from '../Input';
 import Dropdown from '../Dropdown';
 import { Button } from '../Button';
 
-const PayRunsFilters = ({
-  filters,
-  searchId,
-  changeFilter,
-  typeOptions,
-  statusOptions,
-  dateOptions,
-  applyFilters,
-}) => (
+const PayRunsFilters = ({ filters, searchId, changeFilter, typeOptions, statusOptions, dateOptions, applyFilters }) => (
   <>
     <Input
       classes="mr-3"

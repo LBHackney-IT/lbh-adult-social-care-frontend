@@ -89,7 +89,8 @@ const PackagesNursingCare = ({
     setOneOffTotalCost(additionalPaymentOneOff);
   }, [additionalPaymentOneOff]);
 
-  const formIsValid = (brokerageInfoForCreation) => !!(
+  const formIsValid = (brokerageInfoForCreation) =>
+    !!(
       !isNaN(Number(brokerageInfoForCreation?.nursingCore)) &&
       !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
       !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
@@ -114,10 +115,7 @@ const PackagesNursingCare = ({
 
   const handleBrokerageStageChange = (option) => {
     setSelectedStageType(option);
-    changePackageBrokeringStage(
-      nursingCarePackage?.nursingCarePackageId,
-      option
-    );
+    changePackageBrokeringStage(nursingCarePackage?.nursingCarePackageId, option);
   };
 
   return (
@@ -252,13 +250,13 @@ const PackagesNursingCare = ({
           {!!packagesReclaimed.length && (
             <div>
               {packagesReclaimed.map((item) => (
-                  <PackageReclaim
-                    remove={() => removePackageReclaim(item.id)}
-                    key={item.id}
-                    packageReclaim={item}
-                    setPackageReclaim={changePackageReclaim(item.id)}
-                  />
-                ))}
+                <PackageReclaim
+                  remove={() => removePackageReclaim(item.id)}
+                  key={item.id}
+                  packageReclaim={item}
+                  setPackageReclaim={changePackageReclaim(item.id)}
+                />
+              ))}
               <p onClick={addPackageReclaim} className="action-button-text">
                 + Add another reclaim
               </p>
@@ -298,72 +296,68 @@ const PackagesNursingCare = ({
 };
 
 const ApprovalHistory = ({ history, nursingCarePackage = undefined, costSummary }) => (
-    <div className="approval-history">
-      <h2>
-        Nursing Care{' '}
-        <span>
-          ({nursingCarePackage?.nursingCarePackage?.isFixedPeriodOrOngoing ? 'Fixed Period' : 'Ongoing'} -{' '}
-          {nursingCarePackage?.nursingCarePackage.termTimeConsiderationOption})
-        </span>
-      </h2>
-      <ClientSummary
-        client={nursingCarePackage?.nursingCarePackage?.clientName}
-        hackneyId={nursingCarePackage?.nursingCarePackage?.clientHackneyId}
-        age={
-          nursingCarePackage?.nursingCarePackage &&
-          getAgeFromDateString(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth)
-        }
-        sourcingCare="hackney"
-        dateOfBirth={
-          nursingCarePackage?.nursingCarePackage &&
-          getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth)
-        }
-        postcode={nursingCarePackage?.nursingCarePackage?.clientPostCode}
-      />
-      <div className="care-info">
-        <div>
-          <p>STARTS</p>
-          <p>{getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.startDate)}</p>
-        </div>
-        <div>
-          <p>ENDS</p>
-          <p>
-            {nursingCarePackage?.nursingCarePackage?.endDate !== null
-              ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.endDate)
-              : 'Ongoing'}
-          </p>
-        </div>
-        <div>
-          <p>DAYS/WEEK</p>
-          <p />
-        </div>
+  <div className="approval-history">
+    <h2>
+      Nursing Care{' '}
+      <span>
+        ({nursingCarePackage?.nursingCarePackage?.isFixedPeriodOrOngoing ? 'Fixed Period' : 'Ongoing'} -{' '}
+        {nursingCarePackage?.nursingCarePackage.termTimeConsiderationOption})
+      </span>
+    </h2>
+    <ClientSummary
+      client={nursingCarePackage?.nursingCarePackage?.clientName}
+      hackneyId={nursingCarePackage?.nursingCarePackage?.clientHackneyId}
+      age={
+        nursingCarePackage?.nursingCarePackage &&
+        getAgeFromDateString(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth)
+      }
+      sourcingCare="hackney"
+      dateOfBirth={
+        nursingCarePackage?.nursingCarePackage &&
+        getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth)
+      }
+      postcode={nursingCarePackage?.nursingCarePackage?.clientPostCode}
+    />
+    <div className="care-info">
+      <div>
+        <p>STARTS</p>
+        <p>{getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.startDate)}</p>
       </div>
-      <div className="columns font-size-12px">
-        <div className="column">
-          <div className="is-flex is-flex-wrap-wrap">
-            <PackageCostBox
-              title="COST OF CARE / WK"
-              cost={costSummary?.costOfCarePerWeek ?? 0.0}
-              costType="ESTIMATE"
-            />
-            <PackageCostBox title="ANP / WK" cost={costSummary?.anpPerWeek ?? 0.0} costType="ESTIMATE" />
-            <PackageCostBox
-              boxClass="hackney-package-cost-yellow-box"
-              title="ONE OFF COSTS"
-              cost={costSummary?.oneOffCost ?? 0.0}
-              costType="ESTIMATE"
-            />
-            <PackageCostBox
-              boxClass="hackney-package-cost-yellow-box"
-              title="TOTAL / WK"
-              cost={costSummary?.totalCostPerWeek ?? 0.0}
-              costType="ESTIMATE"
-            />
-          </div>
-        </div>
+      <div>
+        <p>ENDS</p>
+        <p>
+          {nursingCarePackage?.nursingCarePackage?.endDate !== null
+            ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.endDate)
+            : 'Ongoing'}
+        </p>
       </div>
-      <PackageApprovalHistorySummary approvalHistoryEntries={history} />
+      <div>
+        <p>DAYS/WEEK</p>
+        <p />
+      </div>
     </div>
-  );
+    <div className="columns font-size-12px">
+      <div className="column">
+        <div className="is-flex is-flex-wrap-wrap">
+          <PackageCostBox title="COST OF CARE / WK" cost={costSummary?.costOfCarePerWeek ?? 0.0} costType="ESTIMATE" />
+          <PackageCostBox title="ANP / WK" cost={costSummary?.anpPerWeek ?? 0.0} costType="ESTIMATE" />
+          <PackageCostBox
+            boxClass="hackney-package-cost-yellow-box"
+            title="ONE OFF COSTS"
+            cost={costSummary?.oneOffCost ?? 0.0}
+            costType="ESTIMATE"
+          />
+          <PackageCostBox
+            boxClass="hackney-package-cost-yellow-box"
+            title="TOTAL / WK"
+            cost={costSummary?.totalCostPerWeek ?? 0.0}
+            costType="ESTIMATE"
+          />
+        </div>
+      </div>
+    </div>
+    <PackageApprovalHistorySummary approvalHistoryEntries={history} />
+  </div>
+);
 
 export default PackagesNursingCare;

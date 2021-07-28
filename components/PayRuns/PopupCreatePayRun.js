@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import DatePick from '../DatePick';
 import Popup from '../Popup';
 import RadioButton from '../RadioButton';
 import { createNewPayRun } from '../../api/Payments/PayRunApi';
 import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
-import { addNotification } from '../../reducers/notificationsReducer'
+import { addNotification } from '../../reducers/notificationsReducer';
 
 const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPayRunType }) => {
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
     if (!stringIsNullOrEmpty(payRunType)) {
       createNewPayRun(payRunType, date)
         .then((payRunId) => {
-          dispatch(addNotification({ text: `Pay run created. ${payRunId}`, className: 'success'}));
+          dispatch(addNotification({ text: `Pay run created. ${payRunId}`, className: 'success' }));
         })
         .catch((err) => {
           dispatch(addNotification({ text: `Create pay run failed. ${err.message}` }));

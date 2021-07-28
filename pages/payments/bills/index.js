@@ -22,27 +22,27 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const Bills = () => {
   const [sortsTab] = useState({
-    'bills': [
-      {name: 'red', text: 'Ref'},
-      {name: 'againstPackage', text: 'Against Package'},
-      {name: 'from', text: 'From'},
-      {name: 'date', text: 'Date'},
-      {name: 'dueDate', text: 'Due Date'},
-      {name: 'amount', text: 'Amount'},
-      {name: 'paid', text: 'Paid'},
-      {name: 'status', text: 'Status'},
+    bills: [
+      { name: 'red', text: 'Ref' },
+      { name: 'againstPackage', text: 'Against Package' },
+      { name: 'from', text: 'From' },
+      { name: 'date', text: 'Date' },
+      { name: 'dueDate', text: 'Due Date' },
+      { name: 'amount', text: 'Amount' },
+      { name: 'paid', text: 'Paid' },
+      { name: 'status', text: 'Status' },
     ],
     'bill-pay-runs': [
-      {name: 'bprId', text: 'BPR ID'},
-      {name: 'date', text: 'Date'},
-      {name: 'invoicesPaid', text: 'Invoices Paid'},
-      {name: 'totalValue', text: 'Total Value'},
-      {name: '', text: ''},
+      { name: 'bprId', text: 'BPR ID' },
+      { name: 'date', text: 'Date' },
+      { name: 'invoicesPaid', text: 'Invoices Paid' },
+      { name: 'totalValue', text: 'Total Value' },
+      { name: '', text: '' },
     ],
   });
 
   const [tabsClasses] = useState({
-    'bills': 'bills__tab-class',
+    bills: 'bills__tab-class',
     'bill-pay-runs': 'bill-pay-runs__tab-class',
   });
 
@@ -54,7 +54,7 @@ const Bills = () => {
   });
 
   const router = useRouter();
-  const [filters, setFilters] = useState({...initialFilters})
+  const [filters, setFilters] = useState({ ...initialFilters });
   const [openedPopup, setOpenedPopup] = useState('');
   const [payBills] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
@@ -80,18 +80,18 @@ const Bills = () => {
   const isBillsTab = tab === 'bills';
 
   const sortBy = (field, value) => {
-    setSort({value, name: field});
+    setSort({ value, name: field });
   };
 
   const closePopup = () => setOpenedPopup('');
 
-  const onCheckRows = id => {
-    if(checkedRows.includes(id)) {
-      setCheckedRows(checkedRows.filter(item => String(item) !== String(id)));
+  const onCheckRows = (id) => {
+    if (checkedRows.includes(id)) {
+      setCheckedRows(checkedRows.filter((item) => String(item) !== String(id)));
     } else {
       setCheckedRows([...checkedRows, id]);
     }
-  }
+  };
 
   useEffect(() => {
     router.replace(`${router.pathname}?page=1`);
@@ -103,16 +103,14 @@ const Bills = () => {
 
   return (
     <div className={`bills ${tab}__tab-class`}>
-      {openedPopup === 'bills-pay-download' &&
-        <PopupBillsPayDownload closePopup={closePopup} payBills={payBills} />
-      }
+      {openedPopup === 'bills-pay-download' && <PopupBillsPayDownload closePopup={closePopup} payBills={payBills} />}
       <BillsHeader addBill={addBill} />
       <PaymentsTabs
         tab={tab}
         changeTab={changeTab}
         tabs={[
-          {text: 'Bills', value: 'bills'},
-          {text: 'Bill Pay Runs', value: 'bill-pay-runs'}
+          { text: 'Bills', value: 'bills' },
+          { text: 'Bill Pay Runs', value: 'bill-pay-runs' },
         ]}
       />
       <BillsFilters
@@ -137,7 +135,7 @@ const Bills = () => {
         actionButton={{
           text: 'Pay selected bills',
           onClick: () => console.log('pay selected bills', checkedRows),
-          classes: 'bills__pay-selected-bills'
+          classes: 'bills__pay-selected-bills',
         }}
         from={1}
         to={10}
@@ -146,7 +144,7 @@ const Bills = () => {
       />
       <HackneyFooterInfo />
     </div>
-  )
+  );
 };
 
 export default Bills;

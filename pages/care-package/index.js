@@ -18,10 +18,10 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const CarePackage = ({ history }) => {
   const [careTypes] = useState([
-    { text: "Home care", value: 1 },
-    { text: "Day care", value: 2 },
-    { text: "Residential care", value: 3 },
-    { text: "Nursing care", value: 4 },
+    { text: 'Home care', value: 1 },
+    { text: 'Day care', value: 2 },
+    { text: 'Residential care', value: 3 },
+    { text: 'Nursing care', value: 4 },
   ]);
   const [selectedCareType, setSelectedCareType] = useState(1);
 
@@ -81,13 +81,7 @@ const CarePackage = ({ history }) => {
 
   return (
     <Layout headerTitle="Rapid D2A">
-      <ClientSummary
-        client="James Stephens"
-        hackneyId="786288"
-        age="91"
-        dateOfBirth="09/12/1972"
-        postcode="E9 6EY"
-      >
+      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
         Care Package
       </ClientSummary>
       <div className="mt-5 mb-5">

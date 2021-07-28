@@ -54,79 +54,83 @@ const PayRunTable = ({
       />
       {!rows.length ? (
         <p>No Table Data</p>
-      ) : (rows.map((item) => {
-        const collapsedRow = collapsedRows.includes(item.id);
-        const rowStatus = item.status ? ` ${item.status}` : '';
-        return (
-          <div key={item.id} className={`table__row${collapsedRow ? ' collapsed' : ''}${rowStatus}`}>
-            <div onClick={() => clickRow(item)} className={`table__row-column-items${clickRow ? ' is-clickable' : ''}`}>
-              {checkedRows && (
-                <div className="table__row-item table__row-item-checkbox">
-                  <Checkbox
-                    checked={checkedRows.includes(item.id)}
-                    onChange={(value, event) => {
-                      event.stopPropagation();
-                      setCheckedRows(item.id);
-                    }}
-                  />
-                </div>
-              )}
-              {Object.getOwnPropertyNames(item).map((rowItemName) => {
-                if (
-                  Array.isArray(item[rowItemName]) ||
-                  item[rowItemName]?.id !== undefined ||
-                  (isIgnoreId && rowItemName === 'id')
-                ) {
-                  return <React.Fragment key={`${rowItemName}${item.id}`} />;
-                }
-                const value = includeString(rowItemName.toLowerCase(), 'date')
-                  ? formatDateWithSign(item[rowItemName])
-                  : item[rowItemName];
-                const isStatus = rowItemName === 'status';
-                const formattedStatus = isStatus && formatStatus(item[rowItemName]);
-                const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';
-                if (isStatusDropDown && isStatus) {
-                  return (
-                    <Dropdown
-                      key={`${rowItemName}${item.id}`}
-                      className={`table__row-item${statusItemClass}`}
-                      options={[
-                        { text: 'Accepted', value: 'accepted' },
-                        { text: 'Held', value: 'held' },
-                        { text: 'Rejected', value: 'rejected' },
-                        { text: 'In dispute', value: 'in-dispute' },
-                      ]}
-                      selectedValue={value}
-                      onOptionSelect={(value) => selectStatus(item, value)}
-                      initialText="Status"
+      ) : (
+        rows.map((item) => {
+          const collapsedRow = collapsedRows.includes(item.id);
+          const rowStatus = item.status ? ` ${item.status}` : '';
+          return (
+            <div key={item.id} className={`table__row${collapsedRow ? ' collapsed' : ''}${rowStatus}`}>
+              <div
+                onClick={() => clickRow(item)}
+                className={`table__row-column-items${clickRow ? ' is-clickable' : ''}`}
+              >
+                {checkedRows && (
+                  <div className="table__row-item table__row-item-checkbox">
+                    <Checkbox
+                      checked={checkedRows.includes(item.id)}
+                      onChange={(value, event) => {
+                        event.stopPropagation();
+                        setCheckedRows(item.id);
+                      }}
                     />
-                  );
-                }
-
-                return (
-                  <div key={`${rowItemName}${item.id}`} className={`table__row-item${statusItemClass}`}>
-                    <p>{isStatus ? formattedStatus : value}</p>
                   </div>
-                );
-              })}
-              {additionalActions &&
-                additionalActions.map((action) => {
-                  const {Component} = action;
-                  return (
-                    <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
-                      <Component
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          action.onClick(item);
-                        }}
+                )}
+                {Object.getOwnPropertyNames(item).map((rowItemName) => {
+                  if (
+                    Array.isArray(item[rowItemName]) ||
+                    item[rowItemName]?.id !== undefined ||
+                    (isIgnoreId && rowItemName === 'id')
+                  ) {
+                    return <React.Fragment key={`${rowItemName}${item.id}`} />;
+                  }
+                  const value = includeString(rowItemName.toLowerCase(), 'date')
+                    ? formatDateWithSign(item[rowItemName])
+                    : item[rowItemName];
+                  const isStatus = rowItemName === 'status';
+                  const formattedStatus = isStatus && formatStatus(item[rowItemName]);
+                  const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';
+                  if (isStatusDropDown && isStatus) {
+                    return (
+                      <Dropdown
+                        key={`${rowItemName}${item.id}`}
+                        className={`table__row-item${statusItemClass}`}
+                        options={[
+                          { text: 'Accepted', value: 'accepted' },
+                          { text: 'Held', value: 'held' },
+                          { text: 'Rejected', value: 'rejected' },
+                          { text: 'In dispute', value: 'in-dispute' },
+                        ]}
+                        selectedValue={value}
+                        onOptionSelect={(value) => selectStatus(item, value)}
+                        initialText="Status"
                       />
+                    );
+                  }
+
+                  return (
+                    <div key={`${rowItemName}${item.id}`} className={`table__row-item${statusItemClass}`}>
+                      <p>{isStatus ? formattedStatus : value}</p>
                     </div>
                   );
                 })}
-            </div>
-            {canCollapseRows && collapsedRow && (
-              <div className="table__row-collapsed">
-                {item.invoiceItems.map((care) => (
+                {additionalActions &&
+                  additionalActions.map((action) => {
+                    const { Component } = action;
+                    return (
+                      <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
+                        <Component
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            action.onClick(item);
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+              </div>
+              {canCollapseRows && collapsedRow && (
+                <div className="table__row-collapsed">
+                  {item.invoiceItems.map((care) => (
                     <div key={care.id} className="table__row-collapsed-container">
                       <div className="table__row-collapsed-header">
                         <div className="table__row-collapsed-header-left">
@@ -173,11 +177,12 @@ const PayRunTable = ({
                       )}
                     </div>
                   ))}
-              </div>
-            )}
-          </div>
-        );
-      }))}
+                </div>
+              )}
+            </div>
+          );
+        })
+      )}
     </div>
   );
 };

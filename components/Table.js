@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import SortTable from './SortTable';
 import Checkbox from './Checkbox';
 
 const Table = ({
   changeAllChecked,
   onClickTableRow,
-  fields = {id: 'id'},
+  fields = { id: 'id' },
   rows = [],
   rowsRules = {},
   className = '',
@@ -24,14 +24,9 @@ const Table = ({
 
   return (
     <div className={`table ${className}`}>
-      <SortTable
-        changeAllChecked={changeAllChecked}
-        rows={rows}
-        sortBy={sortBy}
-        sorts={sorts}
-      />
+      <SortTable changeAllChecked={changeAllChecked} rows={rows} sortBy={sortBy} sorts={sorts} />
       {!rows.length ? (
-        <p className='ml-2'>No Table Data</p>
+        <p className="ml-2">No Table Data</p>
       ) : (
         rows.map((item) => {
           const id = item[defaultFields.id];
@@ -40,7 +35,7 @@ const Table = ({
               <div onClick={() => clickRow(item)} className="table__row-column-items">
                 {Object.values(defaultFields).map((rowItemName) => {
                   const currentRowRule = rowsRules[rowItemName] || '';
-                  const value = item[rowItemName]
+                  const value = item[rowItemName];
 
                   if (currentRowRule?.hide) return <React.Fragment key={`${rowItemName}${id}`} />;
 
@@ -51,16 +46,12 @@ const Table = ({
 
                   const getComponent = currentRowRule?.getComponent;
                   if (getComponent) {
-                    return getComponent(item, currentRowRule)
+                    return getComponent(item, currentRowRule);
                   }
 
                   if (currentRowRule?.type === 'checkbox')
                     return (
-                      <Checkbox
-                        key={`${rowItemName}${id}`}
-                        onChange={currentRowRule.onChange}
-                        checked={currentValue}
-                      />
+                      <Checkbox key={`${rowItemName}${id}`} onChange={currentRowRule.onChange} checked={currentValue} />
                     );
 
                   return (
@@ -79,12 +70,10 @@ const Table = ({
                 })}
               </div>
               {canCollapseRows && collapsedContainer && (
-                <div className="table__row-collapsed">
-                  {collapsedContainer}
-                </div>
+                <div className="table__row-collapsed">{collapsedContainer}</div>
               )}
             </div>
-          )
+          );
         })
       )}
     </div>

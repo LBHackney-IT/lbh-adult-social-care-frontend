@@ -1,6 +1,6 @@
 import React from 'react';
 import { CaretDownIcon } from '../Icons';
-import Checkbox from '../Checkbox'
+import Checkbox from '../Checkbox';
 
 const PayRunSortTable = ({ changeAllChecked, checkedRows = [], rows = [], sorts, sortBy, additionalActions }) => (
   <div className="sort-table">
@@ -21,7 +21,7 @@ const PayRunSortTable = ({ changeAllChecked, checkedRows = [], rows = [], sorts,
         </div>
       ) : (
         <div className="sort sort-checkbox" />
-    ))}
+      ))}
     {sorts.map((item) => (
       <div key={item.name} className="sort">
         <p className="sort__sort-name">{item.text}</p>

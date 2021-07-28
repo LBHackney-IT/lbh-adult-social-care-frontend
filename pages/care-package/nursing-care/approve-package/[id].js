@@ -13,10 +13,11 @@ import {
   getNursingCarePackageApprovalHistory,
   nursingCareRequestClarification,
   nursingCareChangeStatus,
-  nursingCareApprovePackageContent
+  nursingCareApprovePackageContent,
 } from '../../../../api/CarePackages/NursingCareApi';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
@@ -28,7 +29,10 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
   };
 
   try {
-    const nursingCarePackage = await getNursingCarePackageApprovalPackageContent(nursingCarePackageId);
+    const nursingCarePackage = await getNursingCarePackageApprovalPackageContent(
+      nursingCarePackageId,
+      req.cookies.hascToken
+    );
     const newAdditionalNeedsEntries = nursingCarePackage.nursingCarePackage.nursingCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
         id: additionalneedsItem.id,
@@ -40,26 +44,20 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
 
     data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
     data.nursingCarePackage = nursingCarePackage;
-
-  } catch(error) {
-    data.errorData.push(`Retrieve nursing care package details failed. ${error.message}`);
+  } catch (error) {
+    data.errorData.push(`Retrieve nursing care package details failed. ${error}`);
   }
 
   try {
-    const result = await getNursingCarePackageApprovalHistory(nursingCarePackageId);
-    const newApprovalHistoryItems = result.map(
-      (historyItem) => ({
-        eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
-          "en-GB"
-        ),
-        eventMessage: historyItem.logText,
-        eventSubMessage: undefined
-      })
-    );
+    const result = await getNursingCarePackageApprovalHistory(nursingCarePackageId, req.cookies.hascToken);
+    const newApprovalHistoryItems = result.map((historyItem) => ({
+      eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
+      eventMessage: historyItem.logText,
+      eventSubMessage: null,
+    }));
 
     data.approvalHistoryEntries = newApprovalHistoryItems.slice();
-
-  } catch(error) {
+  } catch (error) {
     data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`);
   }
 
@@ -77,9 +75,7 @@ const NursingCareApprovePackage = ({
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
-  const [requestInformationText, setRequestInformationText] = useState(
-    undefined
-  );
+  const [requestInformationText, setRequestInformationText] = useState(undefined);
 
   const handleRejectPackage = () => {
     nursingCareChangeStatus(nursingCarePackageId, 10)
@@ -104,10 +100,7 @@ const NursingCareApprovePackage = ({
   };
 
   const handleRequestMoreInformation = () => {
-    nursingCareRequestClarification(
-      nursingCarePackageId,
-      requestInformationText
-    )
+    nursingCareRequestClarification(nursingCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
@@ -137,9 +130,7 @@ const NursingCareApprovePackage = ({
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      STARTS
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">STARTS</p>
                     <p className="font-size-14px">
                       {getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate)}
                     </p>
@@ -169,9 +160,7 @@ const NursingCareApprovePackage = ({
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      DAYS/WEEK
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">DAYS/WEEK</p>
                     <p className="font-size-14px">3</p>
                   </div>
                 </div>
@@ -184,20 +173,10 @@ const NursingCareApprovePackage = ({
 
         <div className="columns">
           <div className="column">
-            <PackageCostBox
-
-              title="COST OF CARE / WK"
-              cost={nursingCarePackage?.costOfCare}
-              costType="ESTIMATE"
-            />
+            <PackageCostBox title="COST OF CARE / WK" cost={nursingCarePackage?.costOfCare} costType="ESTIMATE" />
           </div>
           <div className="column">
-            <PackageCostBox
-
-              title="ANP / WK"
-              cost={nursingCarePackage?.costOfAdditionalNeeds}
-              costType="ESTIMATE"
-            />
+            <PackageCostBox title="ANP / WK" cost={nursingCarePackage?.costOfAdditionalNeeds} costType="ESTIMATE" />
           </div>
           <div className="column">
             <PackageCostBox
@@ -217,9 +196,7 @@ const NursingCareApprovePackage = ({
           </div>
         </div>
 
-        <PackageApprovalHistorySummary
-          approvalHistoryEntries={approvalHistoryEntries}
-        />
+        <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
 
         <div className="columns">
           <div className="column">
@@ -234,7 +211,8 @@ const NursingCareApprovePackage = ({
                 }
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
-                needToAddress={nursingCarePackage?.nursingCarePackage.needToAddress}              />
+                needToAddress={nursingCarePackage?.nursingCarePackage.needToAddress}
+              />
             </div>
           </div>
         </div>
@@ -245,29 +223,21 @@ const NursingCareApprovePackage = ({
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                <button
-                    className="button hackney-btn-light"
-                    onClick={handleRejectPackage}
-                  >
+                  <button type="button" className="button hackney-btn-light" onClick={handleRejectPackage}>
                     Deny
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                <button
+                  <button
                     onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
                     className="button hackney-btn-light"
                     type="button"
                   >
-                    {displayMoreInfoForm
-                      ? "Hide Request more information"
-                      : "Request More Information"}
+                    {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                <button
-                    className="button hackney-btn-green"
-                    onClick={handleApprovePackageContents}
-                  >
+                  <button type="button" className="button hackney-btn-green" onClick={handleApprovePackageContents}>
                     Approve to be brokered
                   </button>
                 </div>
@@ -279,21 +249,11 @@ const NursingCareApprovePackage = ({
         <div className="columns">
           <div className="column">
             <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">
+              <p className="font-size-16px font-weight-bold">Request more information</p>
+              <TextArea label="" rows={5} placeholder="Add details..." onChange={setRequestInformationText} />
+              <button type="button" className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
                 Request more information
-              </p>
-              <TextArea
-                  label=""
-                  rows={5}
-                  placeholder="Add details..."
-                  onChange={setRequestInformationText}
-                />
-                <button
-                  className="button hackney-btn-green"
-                  onClick={handleRequestMoreInformation}
-                >
-                  Request more information
-                </button>
+              </button>
             </div>
           </div>
         </div>

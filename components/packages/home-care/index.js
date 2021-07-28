@@ -322,13 +322,13 @@ const PackagesHomeCare = ({
         {!!packagesReclaimed.length && (
           <div>
             {packagesReclaimed.map((item) => (
-                <PackageReclaim
-                  remove={tab === 'packageDetails' ? () => removePackageReclaim(item.id) : undefined}
-                  key={item.id}
-                  packageReclaim={item}
-                  setPackageReclaim={changePackageReclaim(item.id)}
-                />
-              ))}
+              <PackageReclaim
+                remove={tab === 'packageDetails' ? () => removePackageReclaim(item.id) : undefined}
+                key={item.id}
+                packageReclaim={item}
+                setPackageReclaim={changePackageReclaim(item.id)}
+              />
+            ))}
           </div>
         )}
         <ProposedPackagesTab tab={tab} changeTab={changeTab} />
@@ -358,7 +358,9 @@ const PackagesHomeCare = ({
             careType="Home care"
             startDate={homeCarePackage?.homeCarePackage?.startDate}
             endDate={
-              homeCarePackage?.homeCarePackage?.endDate !== null ? getEnGBFormattedDate(homeCarePackage?.homeCarePackage?.endDate) : 'Ongoing'
+              homeCarePackage?.homeCarePackage?.endDate !== null
+                ? getEnGBFormattedDate(homeCarePackage?.homeCarePackage?.endDate)
+                : 'Ongoing'
             }
             needToAddress={homeCareSummary.needToAddress}
             additionalNeedsEntries={homeCareSummary.additionalNeedsEntries}

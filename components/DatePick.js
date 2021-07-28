@@ -4,7 +4,19 @@ import BaseField from './baseComponents/BaseField';
 import ErrorField from './ErrorField';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const DatePick = ({ selectsRange, inline, startDate, endDate, error, setError = () => {}, classes = '', disabled = false, label, setDate, dateValue }) => (
+const DatePick = ({
+  selectsRange,
+  inline,
+  startDate,
+  endDate,
+  error,
+  setError = () => {},
+  classes = '',
+  disabled = false,
+  label,
+  setDate,
+  dateValue,
+}) => (
   <BaseField classes={`${classes} react-date-picker`} label={label} noInputStyle>
     <DatePicker
       dateFormat="dd/MM/yyyy"

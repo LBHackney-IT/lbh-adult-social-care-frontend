@@ -2,8 +2,8 @@ import axios from 'axios';
 import moment from 'moment';
 import { BASE_URL } from '../BaseApi';
 
-import { axiosRequest, handleError, handleResponse } from '../Utils/ApiUtils'
-import { requestMethods } from '../../constants/variables'
+import { axiosRequest, handleError, handleResponse } from '../Utils/ApiUtils';
+import { requestMethods } from '../../constants/variables';
 
 const PAY_RUN_URL = `${BASE_URL}/v1/transactions/pay-runs`;
 const INVOICES_URL = `${BASE_URL}/v1/transactions/invoices`;
@@ -20,15 +20,15 @@ export const PAY_RUN_TYPES = {
 };
 
 const getPayRunSummaryList = ({
-    pageNumber = 1,
-    pageSize = 10,
-    dateFrom = new Date(sixMonthsAgo).toJSON(),
-    dateTo = new Date().toJSON(),
-    payRunId = '',
-    payRunTypeId = '',
-    payRunSubTypeId = '',
-    payRunStatusId = ''
-  }) => {
+  pageNumber = 1,
+  pageSize = 10,
+  dateFrom = new Date(sixMonthsAgo).toJSON(),
+  dateTo = new Date().toJSON(),
+  payRunId = '',
+  payRunTypeId = '',
+  payRunSubTypeId = '',
+  payRunStatusId = '',
+}) => {
   const query = `${PAY_RUN_URL}/summary-list?PageNumber=${pageNumber}&PageSize=${pageSize}&PayRunId=${payRunId}&PayRunTypeId=${payRunTypeId}&PayRunSubTypeId=${payRunSubTypeId}&PayRunStatusId=${payRunStatusId}&DateFrom=${dateFrom}&DateTo=${dateTo}`;
   return axios.get(query).then(handleResponse).catch(handleError);
 };
@@ -90,7 +90,7 @@ const getSinglePayRunDetails = (
 
 const getSinglePayRunInsights = (payRunId) => {
   const url = `${PAY_RUN_URL}/${payRunId}/summary-insights`;
-  return axiosRequest({ url })
+  return axiosRequest({ url });
 };
 
 const submitPayRunForApproval = (payRunId) => {
@@ -105,12 +105,12 @@ const kickPayRunBackToDraft = (payRunId) => {
 
 const sendMessage = ({ payRunId, packageId, message }) => {
   const url = `${PAY_RUN_URL}/${payRunId}/create-held-chat`;
-  return axiosRequest({ url, method: requestMethods.post, data: { message, packageId, payRunId } })
+  return axiosRequest({ url, method: requestMethods.post, data: { message, packageId, payRunId } });
 };
 
 const approvePayRunForPayment = (payRunId) => {
   const url = `${PAY_RUN_URL}/${payRunId}/status/approve-pay-run`;
-  return axiosRequest({ url })
+  return axiosRequest({ url });
 };
 
 const releaseSingleHeldInvoice = (payRunId, invoiceId) => {
@@ -138,7 +138,7 @@ const releaseSingleHeldInvoice = (payRunId, invoiceId) => {
   ] */
 const releaseHeldInvoices = (invoiceList = []) => {
   const url = `${PAY_RUN_URL}/release-held-invoice-list`;
-  return axiosRequest({ url, data: invoiceList, method: requestMethods.put})
+  return axiosRequest({ url, data: invoiceList, method: requestMethods.put });
 };
 
 const deleteDraftPayRun = (payRunId) => {
@@ -202,7 +202,7 @@ const acceptInvoice = (payRunId, invoiceId) => {
 
 const acceptInvoices = (payRunId, invoices) => {
   const url = `${PAY_RUN_URL}/${payRunId}/invoices/accept-invoice`;
-  return axiosRequest({ url, data: invoices, method: requestMethods.put})
+  return axiosRequest({ url, data: invoices, method: requestMethods.put });
 };
 
 const getPaymentDepartments = () => {

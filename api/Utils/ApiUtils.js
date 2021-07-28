@@ -1,6 +1,6 @@
-import axios from 'axios'
+import axios from 'axios';
 // eslint-disable-next-line import/named
-import { requestMethods } from '../../constants/variables'
+import { requestMethods } from '../../constants/variables';
 
 async function handleResponse(response) {
   if (response.status === 200 || response.status === 201) return response.data;
@@ -48,11 +48,11 @@ const axiosRequest = (options = {}) => {
       ...headers,
     },
     method: requestMethods.get,
-    ...options
-  }
+    ...options,
+  };
 
   return axios(localOptions).then(handleResponse).catch(handleError);
-}
+};
 
 /*
   EXAMPLE
@@ -67,22 +67,17 @@ const getQueryParamsFromObject = (params = {}) => {
   let string = '';
   let count = 0;
   for (const i in params) {
-    if(params[i]) {
+    if (params[i]) {
       const paramString = `${i}=${params[i]}`;
-      if(count === 0) {
+      if (count === 0) {
         string = `?${string}${paramString}`;
       } else {
-        string = `${string}&${paramString}`
+        string = `${string}&${paramString}`;
       }
       count += 1;
     }
   }
   return string;
-}
+};
 
-export {
-  handleError,
-  handleResponse,
-  axiosRequest,
-  getQueryParamsFromObject,
-}
+export { handleError, handleResponse, axiosRequest, getQueryParamsFromObject };

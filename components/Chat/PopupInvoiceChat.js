@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import Popup from '../Popup';
 import Dropdown from '../Dropdown';
 import TextArea from '../TextArea';
 import { ChatSettingsIcon } from '../Icons';
 import { formatDateWithSign } from '../../service/helpers';
-import { sendMessage } from '../../api/Payments/PayRunApi'
-import { addNotification } from '../../reducers/notificationsReducer'
+import { sendMessage } from '../../api/Payments/PayRunApi';
+import { addNotification } from '../../reducers/notificationsReducer';
 
 const PopupInvoiceChat = ({
   closePopup,
@@ -16,7 +16,9 @@ const PopupInvoiceChat = ({
   waitingOnOptions = [],
   currentUserInfo,
   waitingOn,
-  updateChat = () => {console.log('update chat')},
+  updateChat = () => {
+    console.log('update chat');
+  },
   messages = [],
   currentUserId,
 }) => {
@@ -55,15 +57,16 @@ const PopupInvoiceChat = ({
               onMouseEnter={() => !isMessageFromCurrentUser && setHoveredMessage(messageFromId)}
               className={`popup-invoice-chat__message ${messageFromClasses}${hoveredMessageClass}`}
             >
-              <p className="popup-invoice-chat__message-from">
-                {item.userFullName || 'userFullName'}
-              </p>
+              <p className="popup-invoice-chat__message-from">{item.userFullName || 'userFullName'}</p>
               <div className="popup-invoice-chat__message-text-container">
                 <p className="popup-invoice-chat__message-text">{item.message}</p>
                 <div className="popup-invoice-chat__message-settings">
                   <ChatSettingsIcon onClick={() => setMessageSettingsId(messageFromId)} />
                   {String(messageSettingsId) === String(messageFromId) && (
-                    <div onClick={() => setMessageSettingsId('')} className="popup-invoice-chat__message-settings-actions">
+                    <div
+                      onClick={() => setMessageSettingsId('')}
+                      className="popup-invoice-chat__message-settings-actions"
+                    >
                       <p>Mark Unread</p>
                     </div>
                   )}
@@ -112,7 +115,7 @@ const PopupInvoiceChat = ({
               setNewMessageText('');
               updateChat();
             })
-            .catch(() => dispatch(addNotification({ text: 'Can not send message' })))
+            .catch(() => dispatch(addNotification({ text: 'Can not send message' })));
         },
       }}
     />
