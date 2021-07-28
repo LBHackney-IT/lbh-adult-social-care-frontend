@@ -218,7 +218,7 @@ const ResidentialCare = () => {
       })
       .catch((error) => {
         dispatch(addNotification({ text: `Create reclaims failed. ${error.message ?? ''}` }));
-        setErrors([...errors, `Create package failed. ${error.message}`]);
+        setErrors([...errors, `Create reclaims failed. ${error.message}`]);
       })
       .then(() => {
         dispatch(addNotification({ text: 'Package saved', className: 'success' }));

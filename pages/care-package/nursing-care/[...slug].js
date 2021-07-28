@@ -212,7 +212,7 @@ const NursingCare = () => {
       })
       .catch((error) => {
         dispatch(addNotification({ text: `Create reclaims failed. ${error.message ?? ''}` }));
-        setErrors([...errors, `Create package failed. ${error.message}`]);
+        setErrors([...errors, `Create reclaims failed. ${error.message}`]);
       })
       .then(() => {
         router.push(`${CARE_PACKAGE_ROUTE}`);
