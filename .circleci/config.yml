@@ -190,7 +190,7 @@ workflows:
   continuous-delivery:
     jobs:
       - install-dependencies
-      - get-environment-variables
+      - get-environment-variables:
           requires:
             - install-dependencies
       - build:
