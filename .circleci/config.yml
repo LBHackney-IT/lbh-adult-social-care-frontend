@@ -179,11 +179,11 @@ jobs:
           paths:
             - project/build
 
-  get-environment-variables:
-    executor: aws-cli/default
-    steps:
-      - *attach_workspace
-      - aws-parameter-store/load
+  # get-environment-variables:
+  #   executor: aws-cli/default
+  #   steps:
+  #     - *attach_workspace
+  #     - aws-parameter-store/load
 
 workflows:
   version: 2
