@@ -7,7 +7,7 @@ const initialFilters = {
   status: '',
 };
 
-const SocialWorkerInputs = ({ statusOptions = [] }) => {
+const SocialWorkerInputs = ({ statusOptions = [] , searchTerm }) => {
   const [filters, setFilters] = useState({ ...initialFilters });
 
   const applyFilters = () => {
@@ -15,8 +15,13 @@ const SocialWorkerInputs = ({ statusOptions = [] }) => {
   };
 
   const searchId = () => {
-    console.log('search by id', filters.terms);
+    searchTerm(filters.terms);
   };
+
+  const onChangePagination = (item) => {
+    changePagination(item)
+  }
+
 
   const changeFilter = (field, value) => {
     setFilters({
@@ -32,7 +37,7 @@ const SocialWorkerInputs = ({ statusOptions = [] }) => {
   return (
     <div className="pay-runs__header social-worker__header">
       <div className="pay-runs__new-pay">
-        <p className="title">Approver hub</p>
+        <p className="title">Submitted Package Requests</p>
       </div>
       <div className="pay-runs__filters social-worker__filters">
         <Input
