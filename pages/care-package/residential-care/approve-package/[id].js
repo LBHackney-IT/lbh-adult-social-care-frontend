@@ -28,7 +28,10 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
     errorData: [],
   };
   try {
-    const { residentialCarePackage } = await getResidentialCarePackageApprovalPackageContent(residentialCarePackageId);
+    const { residentialCarePackage } = await getResidentialCarePackageApprovalPackageContent(
+      residentialCarePackageId,
+      req.cookies.hascToken
+    );
     const newAdditionalNeedsEntries = residentialCarePackage.residentialCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
         id: additionalneedsItem.id,
@@ -37,21 +40,24 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
         needToAddress: additionalneedsItem.needToAddress,
       })
     );
-    data.residentialCarePackageData = residentialCarePackage;
-    data.newAdditionalNeedsEntriesData = newAdditionalNeedsEntries;
+    data.residentialCarePackage = residentialCarePackage;
+    data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch (error) {
-    data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
+    data.errorData.push(`Retrieve residential care package details failed. ${error?.message}`);
   }
 
   try {
-    const approvalHistoryEntries = await getResidentialCarePackageApprovalHistory(residentialCarePackageId);
+    const approvalHistoryEntries = await getResidentialCarePackageApprovalHistory(
+      residentialCarePackageId,
+      req.cookies.hascToken
+    );
     data.approvalHistoryEntries = approvalHistoryEntries.map((historyItem) => ({
       eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
       eventMessage: historyItem.logText,
-      eventSubMessage: undefined,
+      eventSubMessage: null,
     }));
   } catch (error) {
-    data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
+    data.errorData.push(`Retrieve residential care approval history failed. ${error?.message}`);
   }
 
   return { props: { ...data } };
@@ -107,11 +113,9 @@ const ResidentialCareApprovePackage = ({
     <Layout headerTitle="RESIDENTIAL CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
         <ResidentialCareApprovalTitle
-          startDate={residentialCarePackage?.residentialCarePackage.startDate}
+          startDate={residentialCarePackage?.startDate}
           endDate={
-            residentialCarePackage?.residentialCarePackage.endDate !== null
-              ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
-              : 'Ongoing'
+            residentialCarePackage?.endDate !== null ? getEnGBFormattedDate(residentialCarePackage?.endDate) : 'Ongoing'
           }
         />
         <ApprovalClientSummary />
@@ -123,9 +127,7 @@ const ResidentialCareApprovePackage = ({
                 <div className="level-item">
                   <div>
                     <p className="font-weight-bold hackney-text-green">STARTS</p>
-                    <p className="font-size-14px">
-                      {getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.startDate)}
-                    </p>
+                    <p className="font-size-14px">{getEnGBFormattedDate(residentialCarePackage?.startDate)}</p>
                   </div>
                 </div>
               </div>
@@ -138,8 +140,8 @@ const ResidentialCareApprovePackage = ({
                   <div>
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
-                      {residentialCarePackage?.residentialCarePackage.endDate !== null
-                        ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
+                      {residentialCarePackage?.endDate !== null
+                        ? getEnGBFormattedDate(residentialCarePackage?.endDate)
                         : 'Ongoing'}
                     </p>
                   </div>
@@ -195,16 +197,16 @@ const ResidentialCareApprovePackage = ({
             <div className="mt-4 mb-1">
               <TitleHeader>Package Details</TitleHeader>
               <ResidentialCareSummary
-                startDate={residentialCarePackage?.residentialCarePackage.startDate}
+                startDate={residentialCarePackage?.startDate}
                 endDate={
-                  residentialCarePackage?.residentialCarePackage.endDate !== null
-                    ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
+                  residentialCarePackage?.endDate !== null
+                    ? getEnGBFormattedDate(residentialCarePackage?.endDate)
                     : 'Ongoing'
                 }
-                typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
+                typeOfStayText={residentialCarePackage?.typeOfStayOptionName}
                 additionalNeedsEntries={additionalNeedsEntries}
                 // setAdditionalNeedsEntries={setAdditionalNeedsEntries}
-                needToAddress={residentialCarePackage?.residentialCarePackage.needToAddress}
+                needToAddress={residentialCarePackage?.needToAddress}
               />
             </div>
           </div>

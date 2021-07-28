@@ -60,9 +60,13 @@ const getResidentialCarePackageList = () =>
 const getSingleResidentialCarePackage = (residentialCarePackageId) =>
   axios.get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}`).then(handleResponse).catch(handleError);
 
-const getResidentialCarePackageApprovalPackageContent = (residentialCarePackageId) =>
+const getResidentialCarePackageApprovalPackageContent = (residentialCarePackageId, hascToken) =>
   axios
-    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-package-contents`)
+    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-package-contents`, {
+      headers: {
+        Authorization: `Bearer ${hascToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 
@@ -72,9 +76,13 @@ const getResidentialCarePackageApproveBrokered = (residentialCarePackageId) =>
     .then(handleResponse)
     .catch(handleError);
 
-const getResidentialCarePackageApprovalHistory = (residentialCarePackageId) =>
+const getResidentialCarePackageApprovalHistory = (residentialCarePackageId, hascToken) =>
   axios
-    .get(`${RESIDENTIAL_CARE_URL}/approval-history/${residentialCarePackageId}`)
+    .get(`${RESIDENTIAL_CARE_URL}/approval-history/${residentialCarePackageId}`, {
+      headers: {
+        Authorization: `Bearer ${hascToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 

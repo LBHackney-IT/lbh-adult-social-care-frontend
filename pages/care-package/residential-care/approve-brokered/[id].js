@@ -14,56 +14,54 @@ import {
   getResidentialCarePackageApprovalHistory,
   residentialCareClarifyCommercial,
   residentialCareChangeStatus,
-  residentialCareApproveCommercials
+  residentialCareApproveCommercials,
 } from '../../../../api/CarePackages/ResidentialCareApi';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
 
 // start before render
-export const getServerSideProps = withSession(async ({ req, res: response, query: { id: residentialCarePackageId } }) => {
-  getUserSession({ req, res: response });
+export const getServerSideProps = withSession(
+  async ({ req, res: response, query: { id: residentialCarePackageId } }) => {
+    getUserSession({ req, res: response });
 
-  const data = {
-    errorData: [],
-  };
+    const data = {
+      errorData: [],
+    };
 
-  try {
-    const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId);
-    const newApprovalHistoryItems = res.map(
-      (historyItem) => ({
-        eventDate: new Date(historyItem.approvedDate).toLocaleDateString(
-          "en-GB"
-        ),
+    try {
+      const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId, req.cookies.hascToken);
+      const newApprovalHistoryItems = res.map((historyItem) => ({
+        eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
         eventMessage: historyItem.logText,
-        eventSubMessage: undefined
-      })
-    );
+        eventSubMessage: undefined,
+      }));
 
-    data.approvalHistoryEntries = newApprovalHistoryItems.slice();
-  } catch (error) {
-    data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
+      data.approvalHistoryEntries = newApprovalHistoryItems.slice();
+    } catch (error) {
+      data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
+    }
+
+    try {
+      const residentialCarePackage = await getResidentialCarePackageApproveBrokered(residentialCarePackageId);
+
+      const newAdditionalNeedsEntries = residentialCarePackage.residentialCareAdditionalNeeds.map(
+        (additionalneedsItem) => ({
+          id: additionalneedsItem.id,
+          isWeeklyCost: additionalneedsItem.isWeeklyCost,
+          isOneOffCost: additionalneedsItem.isOneOffCost,
+          needToAddress: additionalneedsItem.needToAddress,
+        })
+      );
+
+      data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
+      data.residentialCarePackage = residentialCarePackage;
+    } catch (error) {
+      data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
+    }
+
+    return { props: { ...data } };
   }
-
-  try {
-    const residentialCarePackage = await getResidentialCarePackageApproveBrokered(residentialCarePackageId);
-
-    const newAdditionalNeedsEntries = residentialCarePackage.residentialCareAdditionalNeeds.map(
-      (additionalneedsItem) => ({
-        id: additionalneedsItem.id,
-        isWeeklyCost: additionalneedsItem.isWeeklyCost,
-        isOneOffCost: additionalneedsItem.isOneOffCost,
-        needToAddress: additionalneedsItem.needToAddress,
-      })
-    );
-
-    data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
-    data.residentialCarePackage = residentialCarePackage;
-  } catch (error) {
-    data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
-  }
-
-  return { props: { ...data } };
-});
+);
 
 const ResidentialCareApproveBrokered = ({
   residentialCarePackage,
@@ -77,9 +75,7 @@ const ResidentialCareApproveBrokered = ({
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
-  const [requestInformationText, setRequestInformationText] = useState(
-    undefined
-  );
+  const [requestInformationText, setRequestInformationText] = useState(undefined);
 
   const handleRejectPackage = () => {
     residentialCareChangeStatus(residentialCarePackageId, 10)
@@ -133,9 +129,7 @@ const ResidentialCareApproveBrokered = ({
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      STARTS
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">STARTS</p>
                     <p className="font-size-14px">
                       {getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.startDate)}
                     </p>
@@ -165,9 +159,7 @@ const ResidentialCareApproveBrokered = ({
               <div className="level-left">
                 <div className="level-item">
                   <div>
-                    <p className="font-weight-bold hackney-text-green">
-                      DAYS/WEEK
-                    </p>
+                    <p className="font-weight-bold hackney-text-green">DAYS/WEEK</p>
                     <p className="font-size-14px">3</p>
                   </div>
                 </div>
@@ -180,11 +172,7 @@ const ResidentialCareApproveBrokered = ({
 
         <div className="columns">
           <div className="column">
-            <PackageCostBox
-              title="COST OF CARE / WK"
-              cost={residentialCarePackage?.costOfCare}
-              costType="ACTUAL"
-            />
+            <PackageCostBox title="COST OF CARE / WK" cost={residentialCarePackage?.costOfCare} costType="ACTUAL" />
           </div>
           <div className="column">
             <PackageCostBox
@@ -204,9 +192,7 @@ const ResidentialCareApproveBrokered = ({
           </div>
         </div>
 
-        <PackageApprovalHistorySummary
-          approvalHistoryEntries={approvalHistoryEntries}
-        />
+        <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
 
         <div className="columns">
           <div className="column">
@@ -222,7 +208,8 @@ const ResidentialCareApproveBrokered = ({
                 typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
-                needToAddress={residentialCarePackage?.residentialCarePackage.needToAddress}              />
+                needToAddress={residentialCarePackage?.residentialCarePackage.needToAddress}
+              />
             </div>
           </div>
         </div>
@@ -233,29 +220,21 @@ const ResidentialCareApproveBrokered = ({
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                <button
-                    className="button hackney-btn-light"
-                    onClick={handleRejectPackage}
-                  >
+                  <button className="button hackney-btn-light" onClick={handleRejectPackage}>
                     Deny
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                <button
+                  <button
                     onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
                     className="button hackney-btn-light"
                     type="button"
                   >
-                    {displayMoreInfoForm
-                      ? "Hide Request more information"
-                      : "Request More Information"}
+                    {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                <button
-                    className="button hackney-btn-green"
-                    onClick={handleApprovePackageCommercials}
-                  >
+                  <button className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
                     Approve Commercials
                   </button>
                 </div>
@@ -267,21 +246,11 @@ const ResidentialCareApproveBrokered = ({
         <div className="columns">
           <div className="column">
             <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">
+              <p className="font-size-16px font-weight-bold">Request more information</p>
+              <TextArea label="" rows={5} placeholder="Add details..." onChange={setRequestInformationText} />
+              <button className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
                 Request more information
-              </p>
-              <TextArea
-                  label=""
-                  rows={5}
-                  placeholder="Add details..."
-                  onChange={setRequestInformationText}
-                />
-                <button
-                  className="button hackney-btn-green"
-                  onClick={handleRequestMoreInformation}
-                >
-                  Request more information
-                </button>
+              </button>
             </div>
           </div>
         </div>
