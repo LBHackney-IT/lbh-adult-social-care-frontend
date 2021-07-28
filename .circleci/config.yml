@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@1.0.0
   aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
+  aws-parameter-store: circleci/aws-parameter-store@1.0.0
 
 executors:
   node-executor:
@@ -99,6 +100,12 @@ jobs:
                 if [[ $? == 0 || $? == 2 ]]; then exit 0; else exit 1; fi;
               )
 
+  get-environment-variables:
+    executor: aws-cli/default
+    steps:
+      - *attach_workspace
+      - aws-parameter-store/load
+
   build-deploy-staging:
     executor: aws-cli/default
     steps:
@@ -113,7 +120,7 @@ jobs:
       - *attach_workspace
       - run:
           name: deploy
-          command: yarn --frozen-lockfile --production=true && sudo npm i -g serverless && sls deploy -s production
+          command: yarn --frozen-lockfile --production=true && sudo npm i -g serverless && sls deploy --stage production
 
   generate-draft-github-release:
     executor: aws-cli/default
@@ -183,9 +190,12 @@ workflows:
   continuous-delivery:
     jobs:
       - install-dependencies
-      - build:
+      - get-environment-variables
           requires:
             - install-dependencies
+      - build:
+          requires:
+            - get-environment-variables
       - owasp-zap-baseline-scan:
           requires:
             - build
