@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import ClientSummary from '../../../components/ClientSummary';
 import Dropdown from '../../../components/Dropdown';
@@ -14,6 +15,7 @@ import NursingCareSummary from '../../../components/NursingCare/NursingCareSumma
 import { Button } from '../../../components/Button';
 import { createNursingCarePackage, getTypeOfNursingHomeOptions } from '../../../api/CarePackages/NursingCareApi';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
+import { addNotification } from '../../../reducers/notificationsReducer';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
@@ -68,6 +70,8 @@ const NursingCare = () => {
 
   const [additionalNeedsEntriesErrors, setAdditionalNeedsEntriesErrors] = useState([]);
   const [packageReclaimedError, setPackageReclaimedError] = useState([]);
+
+  const dispatch = useDispatch();
 
   const [errorFields, setErrorFields] = useState({
     needToAddress: '',
@@ -184,11 +188,11 @@ const NursingCare = () => {
 
     createNursingCarePackage(nursingCarePackageToCreate)
       .then(() => {
-        alert('Package saved.');
+        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Create package failed. ${error.message}`);
+        dispatch(addNotification({ text: `Create package failed. ${error.message ?? ''}` }));
         setErrors([...errors, `Create package failed. ${error.message}`]);
       });
   };

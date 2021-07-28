@@ -130,6 +130,7 @@ const ResidentialCare = () => {
     }));
 
     const residentialCarePackageToCreate = {
+      isFixedPeriod: JSON.parse(isFixedPeriod),
       clientId: 'aee45700-af9b-4ab5-bb43-535adbdcfb80',
       startDate: startDate ? new Date(startDate).toJSON() : null,
       endDate: endDate ? new Date(endDate).toJSON() : null,
@@ -151,7 +152,7 @@ const ResidentialCare = () => {
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Create package failed. ${error.message}` }));
+        dispatch(addNotification({ text: `Create package failed. ${error.message ?? ''}` }));
         setErrors([...errors, `Create package failed. ${error.message}`]);
       });
   };
