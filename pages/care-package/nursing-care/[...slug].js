@@ -113,7 +113,6 @@ const NursingCare = () => {
       const valid = fieldValidator([
         { name: 'selectedCost', value: item.selectedCost, rules: ['empty'] },
         { name: 'selectedCostText', value: item.selectedCostText, rules: ['empty'] },
-        { name: 'selectedPeriod', value: item.selectedPeriod, rules: ['empty'] },
         { name: 'needToAddress', value: item.needToAddress, rules: ['empty'] },
       ]);
 
