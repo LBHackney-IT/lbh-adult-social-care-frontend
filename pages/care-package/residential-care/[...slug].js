@@ -23,6 +23,7 @@ import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import { addNotification } from '../../../reducers/notificationsReducer';
+import fieldValidator from '../../../service/inputValidator';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -99,12 +100,60 @@ const ResidentialCare = () => {
     }
   }, [careHomeTypes, additionalNeedsCostOptions]);
 
-  const formIsValid = () => {
-    const formErrors = [];
+  const [errorFields, setErrorFields] = useState({
+    needToAddress: '',
+    selectedNursingHomeType: '',
+  });
+  const [additionalNeedsEntriesErrors, setAdditionalNeedsEntriesErrors] = useState([]);
+  const [packageReclaimedError, setPackageReclaimedError] = useState([]);
 
-    setErrors(formErrors);
-    // Form is valid if the errors array has no items
-    return formErrors.length === 0;
+  const changeErrorField = (field) => {
+    setErrorFields({ ...errorFields, [field]: '' });
+  };
+
+  const formIsValid = () => {
+    const defaultErrors = fieldValidator([
+      { name: 'needToAddress', value: needToAddress, rules: ['empty'] },
+      { name: 'selectedCareHomeType', value: selectedCareHomeType, rules: ['empty'] },
+    ]);
+
+    if (defaultErrors.hasErrors) {
+      setErrorFields(defaultErrors.validFields);
+    }
+
+    const additionalNeedsTimedArr = [];
+
+    const additionalNeedsError = additionalNeedsEntries.map((item) => {
+      const valid = fieldValidator([
+        { name: 'selectedCost', value: item.selectedCost, rules: ['empty'] },
+        { name: 'selectedCostText', value: item.selectedCostText, rules: ['empty'] },
+        { name: 'needToAddress', value: item.needToAddress, rules: ['empty'] },
+      ]);
+
+      additionalNeedsTimedArr.push(valid.validFields);
+      return valid.hasErrors;
+    });
+    setAdditionalNeedsEntriesErrors(additionalNeedsTimedArr);
+
+    const packageReclaimsTimedArr = [];
+    const packageReclaimsFieldsError = packagesReclaimed.map((item) => {
+      const valid = fieldValidator([
+        { name: 'from', value: item.from, rules: ['empty'] },
+        { name: 'category', value: item.category, rules: ['empty'] },
+        { name: 'type', value: item.type, rules: ['empty'] },
+        { name: 'notes', value: item.notes, rules: ['empty'] },
+        { name: 'amount', value: item.amount, rules: ['empty'] },
+      ]);
+      packageReclaimsTimedArr.push(valid.validFields);
+      return valid.hasErrors;
+    });
+    setPackageReclaimedError(packageReclaimsTimedArr);
+
+    return !(
+      defaultErrors.hasErrors ||
+      additionalNeedsError.some((item) => item) ||
+      packageReclaimsFieldsError.some((item) => item)
+    );
   };
 
   const handleSavePackage = (event) => {
@@ -169,7 +218,14 @@ const ResidentialCare = () => {
       </div>
       <div className="mt-4 columns">
         <div className="column">
-          <TextArea label="Need to Address" rows={5} placeholder="Add details..." onChange={setNeedToAddress} />
+          <TextArea
+            label="Need to Address"
+            rows={5}
+            placeholder="Add details..."
+            onChange={setNeedToAddress}
+            error={errorFields.needToAddress}
+            setError={() => changeErrorField('needToAddress')}
+          />
         </div>
         <div className="column">
           <Dropdown
@@ -178,6 +234,8 @@ const ResidentialCare = () => {
             selectedValue={selectedCareHomeType}
             onOptionSelect={(option) => setSelectedCareHomeType(option)}
             buttonStyle={{ width: '240px' }}
+            error={errorFields.selectedCareHomeType}
+            setError={() => changeErrorField('selectedCareHomeType')}
           />
         </div>
       </div>
@@ -186,12 +244,16 @@ const ResidentialCare = () => {
           costOptions={additionalNeedsCostOptions}
           entries={additionalNeedsEntries}
           setAdditionalNeedsState={setAdditionalNeedsEntries}
+          error={additionalNeedsEntriesErrors}
+          setError={setAdditionalNeedsEntriesErrors}
         />
       </div>
 
       <PackageReclaims
         errors={errors}
         setErrors={setErrors}
+        error={packageReclaimedError}
+        setError={setPackageReclaimedError}
         packagesReclaimed={packagesReclaimed}
         setPackagesReclaimed={setPackagesReclaimed}
       />
