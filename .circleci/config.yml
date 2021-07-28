@@ -100,13 +100,6 @@ jobs:
                 if [[ $? == 0 || $? == 2 ]]; then exit 0; else exit 1; fi;
               )
 
-  get-environment-variables:
-    executor: aws-cli/default
-    steps:
-      - *attach_workspace
-      - assume-role-staging
-      - aws-parameter-store/load
-
   build-deploy-staging:
     executor: aws-cli/default
     steps:
@@ -185,6 +178,13 @@ jobs:
           root: *workspace_root
           paths:
             - project/build
+
+  get-environment-variables:
+    executor: aws-cli/default
+    steps:
+      - *attach_workspace
+      - assume-role-staging
+      - aws-parameter-store/load
 
 workflows:
   version: 2
