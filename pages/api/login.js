@@ -16,7 +16,6 @@ export default withSession(async (req, res) => {
 
     // const tokenData = jwt.decode(hackneyToken);
     const user = { isLoggedIn: true, ...userRes };
-    debugger;
 
     req.session.set('user', user);
     await req.session.save();
