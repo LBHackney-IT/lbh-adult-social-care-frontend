@@ -18,6 +18,7 @@ import { formatDateWithSign } from '../../service/helpers';
 import { currency } from '../../constants/strings';
 import CustomDropDown from '../../components/CustomDropdown';
 import Pagination from '../../components/Payments/Pagination';
+import { useRouter } from 'next/router';
 
 const BrokerageHubPage = () => {
   const dispatch = useDispatch();
@@ -94,26 +95,28 @@ const BrokerageHubPage = () => {
   };
 
   const makeTabRequest = () => {
-    if (timer) {
+    console.log("1");
+    if(timer) {
       clearTimeout(timer);
     }
-    setTimer(
-      setTimeout(() => {
-        getBrokeredPackagesStages()
-          .then((res) => setStagesOptions(res))
-          .catch(() => pushNotification('Can not get stages'));
+    setTimer(setTimeout(() => {
 
-        getBrokeredPackagesPackageTypes()
-          .then((res) => changeInputs('TypeOfCare', res))
-          .catch(() => pushNotification('Can not get Package Type'));
+      getBrokeredPackagesStages()
+        .then(res => setStagesOptions(res))
+        .catch(() => pushNotification('Can not get stages'))
+        
+      getBrokeredPackagesPackageTypes()
+        .then(res => changeInputs('TypeOfCare', res))
+        .catch(() => pushNotification('Can not get Package Type'))
 
         getBrokeredPackagesSocialWorkers().then((res) => changeInputs('SocialWorker', res));
 
-        tabsRequests[tab]({
-          ...filters,
-          PageNumber: page,
-          OrderBy: sort.name,
-        }).then((res) => {
+      tabsRequests[tab]({
+        ...filters,
+        PageNumber: page,
+        OrderBy: sort.name,
+      })
+        .then(res => {
           setTabsTable({
             ...tabsTable,
             [tab]: res.data,
@@ -138,13 +141,10 @@ const BrokerageHubPage = () => {
       hide: true,
     },
     startDate: {
-      getValue: (value) => `${formatDateWithSign(value, '.')}`,
-    },
-    hackneyId: {
-      getValue: (value) => `${currency.euro}${value}`,
+      getValue: (value) => `${formatDate(value, '/')}`
     },
     lastUpdated: {
-      getValue: (value) => `${formatDateWithSign(value, '.')}`,
+      getValue: (value) => `${formatDate(value, '/')}`
     },
     owner: {
       getComponent: (item) => {
@@ -171,13 +171,7 @@ const BrokerageHubPage = () => {
 
   const inputs = {
     inputs: [
-      {
-        label: 'Search',
-        name: 'HackneyId',
-        placeholder: 'Search...',
-        search: () => makeTabRequest(),
-        className: 'mr-3',
-      },
+      {label: 'Search', name: 'clientName', placeholder: 'Search...', search: () => makeTabRequest(), className: 'mr-3'}
     ],
     dropdowns: [
       { options: [], initialText: 'Type of care', name: 'TypeOfCare', className: 'mr-3' },

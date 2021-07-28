@@ -2,28 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import { getUserSession, formatDateWithSign } from '../../service/helpers';
+import { getUserSession, formatDate } from '../../service/helpers';
 import withSession from '../../lib/session';
 import SocialWorkerInputs from '../../components/SocialWorker/SocialWorkerInputs';
 import { getSubmittedPackages, getSubmittedPackagesStatus } from '../../api/ApproversHub/SocialWorkerApi';
-import { RESIDENTIAL_CARE_ROUTE, NURSING_CARE_ROUTE } from '../../routes/RouteConstants';
-import Table from '../../components/Table';
+import { RESIDENTIAL_CARE_ROUTE, NURSING_CARE_ROUTE} from '../../routes/RouteConstants';
+import Table from '../../components/Table'
 
-export const getServerSideProps = withSession(async ({ req, res }) => {
-  const isRedirect = getUserSession({ req, res });
-  if (isRedirect) return { props: {} };
+// export const getServerSideProps = withSession(async ({ req, res }) => {
+//   const isRedirect = getUserSession({ req, res });
+//   if (isRedirect) return { props: {} };
 
-  return {
-    props: {}, // will be passed to the page component as props
-  };
-});
+//   return {
+//     props: {}, // will be passed to the page component as props
+//   };
+// });
 
 const SocialWorkerDashboardPage = () => {
   const [sorts] = useState([
-    { name: 'client', text: 'Client' },
-    { name: 'packageId', text: 'Package ID' },
-    { name: 'primarySupport', text: 'Primary Support Reason' },
-    { name: 'category', text: 'Category', value: 'categoryId' },
+    { name: 'client', text: 'Client'},
+    { name: 'category', text: 'Category'},
     { name: 'dob', text: 'DOB' },
     { name: 'approver', text: 'Approver' },
     { name: 'submitted', text: 'Submitted\n(days ago)' },
@@ -37,16 +35,16 @@ const SocialWorkerDashboardPage = () => {
   });
 
   const sortBy = (field, value) => {
-    setSort({ value, name: field });
+    setSort({value, name: field});
   };
 
   const onClickTableRow = (rowItems) => {
     console.log(rowItems);
-    {
-      rowItems.categoryId === 3
-        ? router.push(`${RESIDENTIAL_CARE_ROUTE}/${rowItems.packageId}`)
-        : router.push(`${NURSING_CARE_ROUTE}/${rowItems.packageId}`);
-    }
+    {rowItems.categoryId === 3 ? (
+      router.push(`${RESIDENTIAL_CARE_ROUTE}/${rowItems.packageId}`)
+    ) : (
+      router.push(`${NURSING_CARE_ROUTE}/${rowItems.packageId}`)
+    )}
   };
 
   const [socialWorkerData, setSubmittedPackages] = useState([]);
@@ -63,20 +61,20 @@ const SocialWorkerDashboardPage = () => {
     retrieveStatusOptions();
   }, []);
 
-  const retrieveSocialWorkerData = (clientId, statusId) => {
-    getSubmittedPackages(1, 50, clientId, statusId)
+  const retrieveSocialWorkerData = (page ,clientName, statusId) => {
+    console.log("3" + clientName);
+    getSubmittedPackages(page, 50, clientName, statusId)
       .then((res) => {
-        const pagedData = res.pagingMetaData;
+        const pagedData = res.pagingMetaData
         const options = res.data.map((option) => ({
           client: option.client,
           packageId: option.packageId,
-          primarySupportReason: option.primarySupportReason,
-          categoryId: option.categoryId,
-          category: option.category,
-          dateOfBirth: option.dateOfBirth,
-          approver: option.approver,
-          submittedDaysAgo: option.submittedDaysAgo,
-          statusName: option.statusName,
+          categoryId : option.categoryId,
+          category : option.category,
+          dateOfBirth : option.dateOfBirth,
+          approver : option.approver,
+          submittedDaysAgo : option.submittedDaysAgo,
+          statusName : option.statusName
         }));
         setSubmittedPackages(options);
         setPagedData(pagedData);
@@ -96,45 +94,59 @@ const SocialWorkerDashboardPage = () => {
         setStatusOptions(options);
       })
       .catch((error) => {
-        setErrors([...errors, `Retrieve status options failed. ${error.message}`]);
+        setErrors([
+          ...errors,
+          `Retrieve status options failed. ${error.message}`,
+        ]);
       });
   };
 
   const rowsRules = {
-    DOB: {
-      getValue: (value) => formatDateWithSign(value),
+    dateOfBirth: {
+      getValue: (value) => `${formatDate(value, '/')}`
     },
     status: {
       getClassName: (value) => `${value} table__row-item-status`,
-    },
-  };
+    }
+  }
 
   const tableFields = {
-    id: 'packageId',
     client: 'client',
     category: 'category',
-    DOB: 'DOB',
+    DOB: 'dateOfBirth',
     approver: 'approver',
-    submitted: 'submitted',
-    status: 'status',
-  };
+    submitted: 'submittedDaysAgo',
+    status: 'statusName',
+  }
+
+  const setPage = (page) => {
+    retrieveSocialWorkerData(page)
+  }
+
+  const setSearchTerm = (clientName) => {
+    retrieveSocialWorkerData(1, clientName)
+  }
 
   return (
     <div className="social-worker-page">
-      <SocialWorkerInputs statusOptions={statusOptions} />
+      <SocialWorkerInputs
+        statusOptions = {statusOptions}
+        searchTerm={setSearchTerm}
+      />
       <Table
         onClickTableRow={onClickTableRow}
+        fields={tableFields}
         rows={socialWorkerData}
         rowsRules={rowsRules}
-        fields={tableFields}
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination
-        from={pagedData.currentPage}
-        to={pagedData.totalPages}
-        itemsCount={pagedData.totalCount}
-        totalCount={pagedData.totalPages}
+      <Pagination 
+        currentPage={pagedData.currentPage}
+        changePagination={setPage}
+        itemsCount={pagedData.pageSize}
+        totalCount={pagedData.totalCount}
+        totalPages={pagedData.totalPages}
       />
       <HackneyFooterInfo />
     </div>
