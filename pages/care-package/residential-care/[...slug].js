@@ -12,6 +12,7 @@ import AdditionalNeeds, {
 } from '../../../components/CarePackages/AdditionalNeedsEntries';
 import {
   createResidentialCarePackage,
+  createResidentialCarePackageReclaim,
   getResidentialCareAdditionalNeedsCostOptions,
   getTypeOfResidentialCareHomeOptions,
 } from '../../../api/CarePackages/ResidentialCareApi';
@@ -196,13 +197,32 @@ const ResidentialCare = () => {
     };
 
     createResidentialCarePackage(residentialCarePackageToCreate)
-      .then(() => {
-        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
-        router.push(`${CARE_PACKAGE_ROUTE}`);
-      })
       .catch((error) => {
         dispatch(addNotification({ text: `Create package failed. ${error.message ?? ''}` }));
         setErrors([...errors, `Create package failed. ${error.message}`]);
+        throw new Error();
+      })
+      .then(({ id }) => {
+        const requests = packagesReclaimed.map((el) =>
+          createResidentialCarePackageReclaim(id, {
+            residentialCarePackageId: id,
+            reclaimFromId: el.from,
+            reclaimCategoryId: el.category,
+            reclaimAmountOptionId: el.type,
+            notes: el.notes,
+            amount: el.amount,
+          })
+        );
+
+        return Promise.all(requests);
+      })
+      .catch((error) => {
+        dispatch(addNotification({ text: `Create reclaims failed. ${error.message ?? ''}` }));
+        setErrors([...errors, `Create package failed. ${error.message}`]);
+      })
+      .then(() => {
+        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
+        router.push(`${CARE_PACKAGE_ROUTE}`);
       });
   };
 
