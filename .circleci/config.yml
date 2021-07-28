@@ -104,6 +104,7 @@ jobs:
     executor: aws-cli/default
     steps:
       - *attach_workspace
+      - assume-role-staging
       - aws-parameter-store/load
 
   build-deploy-staging:
