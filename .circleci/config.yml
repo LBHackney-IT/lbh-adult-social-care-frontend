@@ -183,7 +183,6 @@ jobs:
     executor: aws-cli/default
     steps:
       - *attach_workspace
-      - assume-role-staging
       - aws-parameter-store/load
 
 workflows:
@@ -191,12 +190,9 @@ workflows:
   continuous-delivery:
     jobs:
       - install-dependencies
-      - get-environment-variables:
-          requires:
-            - install-dependencies
       - build:
           requires:
-            - get-environment-variables
+            - install-dependencies
       - owasp-zap-baseline-scan:
           requires:
             - build
@@ -220,6 +216,9 @@ workflows:
               only: 
                 - develop
                 - main
+      - get-environment-variables:
+          requires:
+            - assume-role-staging
       - build-deploy-staging:
           requires:
             - assume-role-staging
