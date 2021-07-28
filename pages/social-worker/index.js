@@ -9,14 +9,14 @@ import { getSubmittedPackages, getSubmittedPackagesStatus } from '../../api/Appr
 import { RESIDENTIAL_CARE_ROUTE, NURSING_CARE_ROUTE} from '../../routes/RouteConstants';
 import Table from '../../components/Table'
 
-// export const getServerSideProps = withSession(async ({ req, res }) => {
-//   const isRedirect = getUserSession({ req, res });
-//   if (isRedirect) return { props: {} };
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
-//   return {
-//     props: {}, // will be passed to the page component as props
-//   };
-// });
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+});
 
 const SocialWorkerDashboardPage = () => {
   const [sorts] = useState([
