@@ -20,6 +20,19 @@ const createNursingCarePackage = (nursingCarePackageForCreation) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const createNursingCarePackageReclaim = (nursingCarePackageId, data) => {
+  const options = {
+    url: `${NURSING_CARE_URL}/${nursingCarePackageId}/package-reclaim`,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data,
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 /* const updateNursingCarePackage = (nursingCarePackageId, nursingCarePackageForUpdate) => {
   const options = {
     url: `${NURSING_CARE_URL}/${nursingCarePackageId}`,
@@ -88,10 +101,10 @@ const nursingCareClarifyCommercial = (nursingCarePackageId, informationText) => 
 const nursingCareChangeStatus = (nursingCarePackageId, newStatusId) => {
   const options = {
     url: `${NURSING_CARE_URL}/${nursingCarePackageId}/change-status/${newStatusId}`,
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json;charset=UTF-8",
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
     },
     data: {
       nursingCarePackageId,
@@ -110,7 +123,7 @@ const nursingCareApprovePackageContent = (nursingCarePackageId) => {
       'Content-Type': 'application/json;charset=UTF-8',
     },
     data: {
-      nursingCarePackageId
+      nursingCarePackageId,
     },
   };
   return axios(options).then(handleResponse).catch(handleError);
@@ -125,7 +138,7 @@ const nursingCareApproveCommercials = (nursingCarePackageId) => {
       'Content-Type': 'application/json;charset=UTF-8',
     },
     data: {
-      nursingCarePackageId
+      nursingCarePackageId,
     },
   };
   return axios(options).then(handleResponse).catch(handleError);
@@ -169,6 +182,7 @@ const createNursingCareBrokerageInfo = (nursingCarePackageId, nursingCareBrokera
 export {
   getTypeOfNursingHomeOptions,
   createNursingCarePackage,
+  createNursingCarePackageReclaim,
   getNursingCarePackageList,
   getSingleNursingCarePackage,
   getNursingCarePackageApprovalPackageContent,
