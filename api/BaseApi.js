@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
 // Redundant API key (to be removed)
 const AWS_KEY = process.env.NEXT_PUBLIC_AWS_KEY;
