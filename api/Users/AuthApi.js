@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { BASE_URL } from '../BaseApi';
+import { getBaseUrl } from '../BaseApi';
 
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 
-const AUTH_URL = `${BASE_URL}/v1/auth`;
+const AUTH_URL = `${getBaseUrl()}/v1/auth`;
 
 const hackneyGoogleLogin = (hackneyToken) => {
   const options = {

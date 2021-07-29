@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { BASE_URL } from '../BaseApi';
+import { getBaseUrl } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 
-const DAY_CARE_URL = `${BASE_URL}/v1/day-care-packages`;
+const DAY_CARE_URL = `${getBaseUrl()}/v1/day-care-packages`;
 
 const getTermTimeConsiderationOptions = () =>
   axios.get(`${DAY_CARE_URL}/term-time-considerations`).then(handleResponse).catch(handleError);

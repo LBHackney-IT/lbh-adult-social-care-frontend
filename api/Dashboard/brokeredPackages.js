@@ -1,8 +1,8 @@
-import { BASE_URL } from '../BaseApi';
+import { getBaseUrl } from '../BaseApi';
 import { axiosRequest, getQueryParamsFromObject } from '../Utils/ApiUtils';
 import { requestMethods } from '../../constants/variables';
 
-const BROKERED_PACKAGES = `${BASE_URL}/v1/brokered-packages`;
+const BROKERED_PACKAGES = `${getBaseUrl()}/v1/brokered-packages`;
 
 const getBrokeredPackagesBrokeredNew = (props) =>
   axiosRequest({

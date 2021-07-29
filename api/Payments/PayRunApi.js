@@ -1,13 +1,13 @@
 import axios from 'axios';
 import moment from 'moment';
-import { BASE_URL } from '../BaseApi';
+import { getBaseUrl } from '../BaseApi';
 
 import { axiosRequest, handleError, handleResponse } from '../Utils/ApiUtils';
 import { requestMethods } from '../../constants/variables';
 
-const PAY_RUN_URL = `${BASE_URL}/v1/transactions/pay-runs`;
-const INVOICES_URL = `${BASE_URL}/v1/transactions/invoices`;
-const DEPARTMENTS_URL = `${BASE_URL}/v1/transactions/departments`;
+const PAY_RUN_URL = `${getBaseUrl()}/v1/transactions/pay-runs`;
+const INVOICES_URL = `${getBaseUrl()}/v1/transactions/invoices`;
+const DEPARTMENTS_URL = `${getBaseUrl()}/v1/transactions/departments`;
 
 const sixMonthsAgo = moment().subtract(6, 'months');
 

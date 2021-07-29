@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { BASE_URL } from '../BaseApi';
+import { getBaseUrl } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 
-export const NURSING_CARE_URL = `${BASE_URL}/v1/nursing-care-packages`;
+export const NURSING_CARE_URL = `${getBaseUrl()}/v1/nursing-care-packages`;
 
 const getTypeOfNursingHomeOptions = () =>
   axios.get(`${NURSING_CARE_URL}/type-of-nursing-care-homes`).then(handleResponse).catch(handleError);
@@ -86,7 +86,7 @@ const getNursingCarePackageApprovalHistory = (nursingCarePackageId, hascToken) =
 
 const nursingCareRequestClarification = (nursingCarePackageId, informationText) => {
   const options = {
-    url: `${BASE_URL}/v1/nursing-care-request-more-information`,
+    url: `${getBaseUrl()}/v1/nursing-care-request-more-information`,
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -102,7 +102,7 @@ const nursingCareRequestClarification = (nursingCarePackageId, informationText) 
 
 const nursingCareClarifyCommercial = (nursingCarePackageId, informationText) => {
   const options = {
-    url: `${BASE_URL}/v1/nursing-care-request-more-information/clarifying-commercials`,
+    url: `${getBaseUrl()}/v1/nursing-care-request-more-information/clarifying-commercials`,
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -179,7 +179,7 @@ const nursingCareChangeStage = (nursingCarePackageId, stageId) => {
 };
 
 // Nursing care brokerage
-const getNursingCareBrokerageStages = () => axios.get(`${BASE_URL}/v1/stages`).then(handleResponse).catch(handleError);
+const getNursingCareBrokerageStages = () => axios.get(`${getBaseUrl()}/v1/stages`).then(handleResponse).catch(handleError);
 
 const getNursingCarePackageDetailsForBrokerage = (nursingCarePackageId, hascToken) =>
   axios
