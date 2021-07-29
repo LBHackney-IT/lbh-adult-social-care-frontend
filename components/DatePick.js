@@ -7,8 +7,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 const DatePick = ({
   selectsRange,
   inline,
-  startDate,
-  endDate,
+  startDate = new Date(),
+  endDate = new Date(),
   error,
   setError = () => {},
   classes = '',

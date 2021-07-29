@@ -41,7 +41,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
         needToAddress: additionalneedsItem.needToAddress,
       })
     );
-    data.nursingCarePackage = result.nursingCarePackage;
+    data.nursingCarePackage = result;
     data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch (error) {
     data.errorData.push(`Retrieve nursing care package details failed. ${error.message}`);

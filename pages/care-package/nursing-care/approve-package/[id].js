@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import Layout from '../../../../components/Layout/Layout';
 import NursingCareApprovalTitle from '../../../../components/NursingCare/NursingCareApprovalTitle';
@@ -18,6 +19,8 @@ import {
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
 import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import { addNotification } from '../../../../reducers/notificationsReducer';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
@@ -71,6 +74,7 @@ const NursingCareApprovePackage = ({
   errorData,
 }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const nursingCarePackageId = router.query.id;
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
@@ -91,10 +95,11 @@ const NursingCareApprovePackage = ({
   const handleApprovePackageContents = () => {
     nursingCareApprovePackageContent(nursingCarePackageId)
       .then(() => {
-        // router.push(`${CARE_PACKAGE_ROUTE}`);
+        dispatch(addNotification({ text: `Package contents approved successfully`, className: 'success' }));
+        router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };

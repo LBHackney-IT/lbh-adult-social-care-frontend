@@ -10,7 +10,6 @@ import { getAgeFromDateString, getEnGBFormattedDate } from '../../../api/Utils/F
 import NursingCareSummary from '../../NursingCare/NursingCareSummary';
 import PackageApprovalHistorySummary from '../../PackageApprovalHistorySummary';
 import PackageCostBox from '../../DayCare/PackageCostBox';
-import { CaretDownIcon } from '../../Icons';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
 
 const PackagesNursingCare = ({
@@ -91,9 +90,9 @@ const PackagesNursingCare = ({
 
   const formIsValid = (brokerageInfoForCreation) =>
     !!(
-      !isNaN(Number(brokerageInfoForCreation?.nursingCore)) &&
-      !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
-      !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
+      !Number.isNaN(Number(brokerageInfoForCreation?.nursingCore)) &&
+      !Number.isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
+      !Number.isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
     );
 
   const handleSaveBrokerage = (event) => {
@@ -257,7 +256,7 @@ const PackagesNursingCare = ({
                   setPackageReclaim={changePackageReclaim(item.id)}
                 />
               ))}
-              <p onClick={addPackageReclaim} className="action-button-text">
+              <p onClick={addPackageReclaim} className="action-button-text" role="presentation">
                 + Add another reclaim
               </p>
             </div>
