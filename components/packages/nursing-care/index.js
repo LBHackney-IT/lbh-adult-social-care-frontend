@@ -26,29 +26,31 @@ const PackagesNursingCare = ({
   stageOptions = [],
   createBrokerageInfo = () => {},
   changePackageBrokeringStage = () => {},
+  loggedInUserId,
 }) => {
   const [coreCost, setCoreCost] = useState({
-    costPerWeek: 0,
+    costPerWeek: nursingCarePackage?.nursingCore || 0,
   });
 
   const [additionalPayment, setAdditionalPayment] = useState({
-    costPerWeek: 0,
+    costPerWeek: nursingCarePackage?.additionalNeedsPayment || 0,
   });
 
   const [additionalPaymentOneOff, setAdditionalPaymentOneOff] = useState({
-    oneOf: 0,
+    oneOf: nursingCarePackage?.additionalNeedsPaymentOneOff || 0,
   });
 
+  console.log(nursingCarePackage);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
-  const [selectedStageType, setSelectedStageType] = useState(0);
-  const [selectedSupplierType, setSelectedSupplierType] = useState(0);
+  const [selectedStageType, setSelectedStageType] = useState(nursingCarePackage?.stageId);
+  const [selectedSupplierType, setSelectedSupplierType] = useState(nursingCarePackage?.supplierId);
   const [startDate, setStartDate] = useState(
     (nursingCarePackage && new Date(nursingCarePackage?.nursingCarePackage?.startDate)) || undefined
   );
   const [endDate, setEndDate] = useState(
     (nursingCarePackage && new Date(nursingCarePackage?.nursingCarePackage?.endDate)) || undefined
   );
-  const [endDateEnabled, setEndDateEnabled] = useState(!nursingCarePackage?.nursingCarePackage?.endDate);
+  const [endDateDisabled, setEndDateDisabled] = useState(!nursingCarePackage?.nursingCarePackage?.endDate);
 
   const [coreCostTotal, setCoreCostTotal] = useState(0);
   const [additionalCostTotal, setAdditionalNeedsCostTotal] = useState(0);
@@ -61,7 +63,7 @@ const PackagesNursingCare = ({
   };
 
   useEffect(() => {
-    setEndDateEnabled(!nursingCarePackage?.nursingCarePackage?.endDate);
+    setEndDateDisabled(!nursingCarePackage?.nursingCarePackage?.endDate);
 
     setEndDate((nursingCarePackage && new Date(nursingCarePackage?.nursingCarePackage?.endDate)) || undefined);
 
@@ -104,6 +106,7 @@ const PackagesNursingCare = ({
       nursingCore: Number(coreCost.costPerWeek),
       additionalNeedsPayment: Number(additionalPayment.costPerWeek),
       additionalNeedsPaymentOneOff: Number(additionalPaymentOneOff.oneOf),
+      creatorId: loggedInUserId,
     };
     if (formIsValid(brokerageInfoForCreation)) {
       createBrokerageInfo(nursingCarePackage?.nursingCarePackageId, brokerageInfoForCreation);
@@ -154,8 +157,8 @@ const PackagesNursingCare = ({
                 disabledLabel="Ongoing"
                 classes="datepicker-disabled datepicker-ongoing"
                 label="End Date"
-                disabled={endDateEnabled}
-                dateValue={endDate}
+                disabled={endDateDisabled}
+                dateValue={endDateDisabled ? '' : endDate}
                 setDate={setEndDate}
               />
             </span>

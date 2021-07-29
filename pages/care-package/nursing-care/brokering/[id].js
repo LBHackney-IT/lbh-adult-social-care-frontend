@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 import PackagesNursingCare from '../../../../components/packages/nursing-care';
 import { selectBrokerage } from '../../../../reducers/brokerageReducer';
-import { getUserSession, uniqueID } from '../../../../service/helpers';
+import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
 import Layout from '../../../../components/Layout/Layout';
 import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
@@ -20,11 +20,14 @@ import { mapBrokerageSupplierOptions, mapNursingCareStageOptions } from '../../.
 import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
 import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 import withSession from '../../../../lib/session';
+import { addNotification } from '../../../../reducers/notificationsReducer';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
+
+  const user = getLoggedInUser({ req });
 
   const data = {
     errorData: [],
@@ -60,11 +63,17 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
     data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`);
   }
 
-  return { props: { ...data } };
+  return { props: { ...data, loggedInUserId: user.userId } };
 });
 
-const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
+const NursingCareBrokering = ({
+  nursingCarePackage,
+  additionalNeedsEntries,
+  approvalHistoryEntries,
+  loggedInUserId,
+}) => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [initialPackageReclaim] = useState({
     type: '',
     notes: '',
@@ -109,11 +118,11 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
   const createBrokerageInfo = (nursingCarePackageId, brokerageInfoForCreation) => {
     createNursingCareBrokerageInfo(nursingCarePackageId, brokerageInfoForCreation)
       .then(() => {
-        alert('Package saved.');
+        dispatch(addNotification({ text: `Package brokerage saved successfully`, className: 'success' }));
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Create brokerage info failed. ${error.message}`);
+        dispatch(addNotification({ text: `Saving package brokerage failed. ${error.message}` }));
         setErrors([...errors, `Create brokerage info failed. ${error.message}`]);
       });
   };
@@ -203,6 +212,7 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
         createBrokerageInfo={createBrokerageInfo}
         changePackageBrokeringStatus={changePackageBrokeringStatus}
         changePackageBrokeringStage={changePackageBrokeringStage}
+        loggedInUserId={loggedInUserId}
       />
     </Layout>
   );

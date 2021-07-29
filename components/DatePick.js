@@ -8,7 +8,7 @@ const DatePick = ({
   selectsRange,
   inline,
   startDate = new Date(),
-  endDate = new Date(),
+  endDate = '',
   error,
   setError = () => {},
   classes = '',
