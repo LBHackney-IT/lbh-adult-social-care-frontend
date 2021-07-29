@@ -183,6 +183,8 @@ jobs:
     executor: aws-cli/default
     steps:
       - *attach_workspace
+      - aws-cli/install
+      - aws-cli/configure
       - run:
           name: Load AWS params
           command: |
