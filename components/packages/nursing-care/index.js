@@ -10,7 +10,6 @@ import { getAgeFromDateString, getEnGBFormattedDate } from '../../../api/Utils/F
 import NursingCareSummary from '../../NursingCare/NursingCareSummary';
 import PackageApprovalHistorySummary from '../../PackageApprovalHistorySummary';
 import PackageCostBox from '../../DayCare/PackageCostBox';
-import { CaretDownIcon } from '../../Icons';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
 
 const PackagesNursingCare = ({
@@ -27,29 +26,31 @@ const PackagesNursingCare = ({
   stageOptions = [],
   createBrokerageInfo = () => {},
   changePackageBrokeringStage = () => {},
+  loggedInUserId,
 }) => {
   const [coreCost, setCoreCost] = useState({
-    costPerWeek: 0,
+    costPerWeek: nursingCarePackage?.nursingCore || 0,
   });
 
   const [additionalPayment, setAdditionalPayment] = useState({
-    costPerWeek: 0,
+    costPerWeek: nursingCarePackage?.additionalNeedsPayment || 0,
   });
 
   const [additionalPaymentOneOff, setAdditionalPaymentOneOff] = useState({
-    oneOf: 0,
+    oneOf: nursingCarePackage?.additionalNeedsPaymentOneOff || 0,
   });
 
+  console.log(nursingCarePackage);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
-  const [selectedStageType, setSelectedStageType] = useState(0);
-  const [selectedSupplierType, setSelectedSupplierType] = useState(0);
+  const [selectedStageType, setSelectedStageType] = useState(nursingCarePackage?.stageId);
+  const [selectedSupplierType, setSelectedSupplierType] = useState(nursingCarePackage?.supplierId);
   const [startDate, setStartDate] = useState(
     (nursingCarePackage && new Date(nursingCarePackage?.nursingCarePackage?.startDate)) || undefined
   );
   const [endDate, setEndDate] = useState(
     (nursingCarePackage && new Date(nursingCarePackage?.nursingCarePackage?.endDate)) || undefined
   );
-  const [endDateEnabled, setEndDateEnabled] = useState(!nursingCarePackage?.nursingCarePackage?.endDate);
+  const [endDateDisabled, setEndDateDisabled] = useState(!nursingCarePackage?.nursingCarePackage?.endDate);
 
   const [coreCostTotal, setCoreCostTotal] = useState(0);
   const [additionalCostTotal, setAdditionalNeedsCostTotal] = useState(0);
@@ -62,7 +63,7 @@ const PackagesNursingCare = ({
   };
 
   useEffect(() => {
-    setEndDateEnabled(!nursingCarePackage?.nursingCarePackage?.endDate);
+    setEndDateDisabled(!nursingCarePackage?.nursingCarePackage?.endDate);
 
     setEndDate((nursingCarePackage && new Date(nursingCarePackage?.nursingCarePackage?.endDate)) || undefined);
 
@@ -91,9 +92,9 @@ const PackagesNursingCare = ({
 
   const formIsValid = (brokerageInfoForCreation) =>
     !!(
-      !isNaN(Number(brokerageInfoForCreation?.nursingCore)) &&
-      !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
-      !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
+      !Number.isNaN(Number(brokerageInfoForCreation?.nursingCore)) &&
+      !Number.isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
+      !Number.isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
     );
 
   const handleSaveBrokerage = (event) => {
@@ -105,6 +106,7 @@ const PackagesNursingCare = ({
       nursingCore: Number(coreCost.costPerWeek),
       additionalNeedsPayment: Number(additionalPayment.costPerWeek),
       additionalNeedsPaymentOneOff: Number(additionalPaymentOneOff.oneOf),
+      creatorId: loggedInUserId,
     };
     if (formIsValid(brokerageInfoForCreation)) {
       createBrokerageInfo(nursingCarePackage?.nursingCarePackageId, brokerageInfoForCreation);
@@ -155,8 +157,8 @@ const PackagesNursingCare = ({
                 disabledLabel="Ongoing"
                 classes="datepicker-disabled datepicker-ongoing"
                 label="End Date"
-                disabled={endDateEnabled}
-                dateValue={endDate}
+                disabled={endDateDisabled}
+                dateValue={endDateDisabled ? '' : endDate}
                 setDate={setEndDate}
               />
             </span>
@@ -257,7 +259,7 @@ const PackagesNursingCare = ({
                   setPackageReclaim={changePackageReclaim(item.id)}
                 />
               ))}
-              <p onClick={addPackageReclaim} className="action-button-text">
+              <p onClick={addPackageReclaim} className="action-button-text" role="presentation">
                 + Add another reclaim
               </p>
             </div>

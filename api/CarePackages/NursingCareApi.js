@@ -181,8 +181,15 @@ const nursingCareChangeStage = (nursingCarePackageId, stageId) => {
 // Nursing care brokerage
 const getNursingCareBrokerageStages = () => axios.get(`${BASE_URL}/v1/stages`).then(handleResponse).catch(handleError);
 
-const getNursingCarePackageDetailsForBrokerage = (nursingCarePackageId) =>
-  axios.get(`${NURSING_CARE_URL}/${nursingCarePackageId}/brokerage`).then(handleResponse).catch(handleError);
+const getNursingCarePackageDetailsForBrokerage = (nursingCarePackageId, hascToken) =>
+  axios
+    .get(`${NURSING_CARE_URL}/${nursingCarePackageId}/brokerage`, {
+      headers: {
+        Authorization: `Bearer ${hascToken}`,
+      },
+    })
+    .then(handleResponse)
+    .catch(handleError);
 
 const createNursingCareBrokerageInfo = (nursingCarePackageId, nursingCareBrokerageInfoForCreation) => {
   const options = {

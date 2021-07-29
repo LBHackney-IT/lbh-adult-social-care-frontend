@@ -1,7 +1,7 @@
 import React from 'react';
-import * as RouteConstants from '../../routes/RouteConstants';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import * as RouteConstants from '../../routes/RouteConstants';
 import { selectMobileMenu } from '../../reducers/mobileMenuReducer';
 import NavClientSummary from '../NavClientSummary';
 
@@ -9,7 +9,11 @@ const NavItem = ({ children, to, params = '' }) => {
   const router = useRouter();
   const activeRouteClass = router.pathname.indexOf(to) > -1 ? ' is-active' : '';
   return (
-    <div className={`navigation-item is-clickable${activeRouteClass}`} onClick={() => router.push(`${to}${params}`)}>
+    <div
+      className={`navigation-item is-clickable${activeRouteClass}`}
+      onClick={() => router.push(`${to}${params}`)}
+      role="presentation"
+    >
       <div>{children}</div>
     </div>
   );
@@ -23,7 +27,7 @@ const NavigationColumn = ({ clientSummaryInfo, showBackButton }) => {
     <div className={`column pb-0 mb-0 nav-column${mobileNavBar}`}>
       {clientSummaryInfo && <NavClientSummary showBackButton={showBackButton} props={clientSummaryInfo} />}
       <NavItem to={RouteConstants.CARE_PACKAGE_ROUTE}>Care Package</NavItem>
-      {/*/!* <NavItem to={RouteConstants.CLIENT_HISTORY_ROUTER}>Client History</NavItem>*/}
+      {/* /!* <NavItem to={RouteConstants.CLIENT_HISTORY_ROUTER}>Client History</NavItem> */}
       <NavItem to="/test">Client details</NavItem>
       <NavItem to="/test">Medical history</NavItem>
       <NavItem to="/test">Important to me</NavItem>
