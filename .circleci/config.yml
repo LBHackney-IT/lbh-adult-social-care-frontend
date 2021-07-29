@@ -179,34 +179,34 @@ jobs:
           paths:
             - project/build
 
-  # get-environment-variables:
-  #   executor: aws-cli/default
-  #   steps:
-  #     - *attach_workspace
-  #   run:
-  #     name: Load AWS params
-  #     command: |
-  #         mkdir -p /tmp/parameterstore/
-  #         for row in $(aws ssm describe-parameters --no-paginate --filters << parameters.filter >> | jq -c '.Parameters[]'); do
-  #           _jq() {
-  #             PARNAME=$(jq -r '.Name' \<<< "${row}")
-  #             PARDATA=$(aws ssm get-parameters --with-decryption --names "${PARNAME}" | jq '.Parameters[].Value')
-  #             if [ -z "$PARDATA" ]
-  #             then
-  #               echo "${PARNAME} appears to be empty. Please double check the value of this parameter."
-  #               exit 1
-  #             fi
-  #             if [ -f /tmp/parameterstore/"${PARNAME}" ]
-  #             then
-  #               echo "This value has already been stored. Is this value stored twice?"
-  #               exit 1
-  #             fi
-  #             echo "${PARDATA}" >> /tmp/parameterstore/"${PARNAME}"
-  #             echo "export ${PARNAME}=$(cat /tmp/parameterstore/"${PARNAME}")" >> /tmp/parameterstore/PARAMETERSTORESOURCEFILE
-  #           }
-  #           _jq
-  #         done
-  #         source /tmp/parameterstore/PARAMETERSTORESOURCEFILE
+  get-environment-variables:
+    executor: aws-cli/default
+    steps:
+      - *attach_workspace
+    run:
+      name: Load AWS params
+      command: |
+          mkdir -p /tmp/parameterstore/
+          for row in $(aws ssm describe-parameters --no-paginate --filters << parameters.filter >> | jq -c '.Parameters[]'); do
+            _jq() {
+              PARNAME=$(jq -r '.Name' \<<< "${row}")
+              PARDATA=$(aws ssm get-parameters --with-decryption --names "${PARNAME}" | jq '.Parameters[].Value')
+              if [ -z "$PARDATA" ]
+              then
+                echo "${PARNAME} appears to be empty. Please double check the value of this parameter."
+                exit 1
+              fi
+              if [ -f /tmp/parameterstore/"${PARNAME}" ]
+              then
+                echo "This value has already been stored. Is this value stored twice?"
+                exit 1
+              fi
+              echo "${PARDATA}" >> /tmp/parameterstore/"${PARNAME}"
+              echo "export ${PARNAME}=$(cat /tmp/parameterstore/"${PARNAME}")" >> /tmp/parameterstore/PARAMETERSTORESOURCEFILE
+            }
+            _jq
+          done
+          source /tmp/parameterstore/PARAMETERSTORESOURCEFILE
 
 workflows:
   version: 2
@@ -239,9 +239,9 @@ workflows:
               only: 
                 - develop
                 - main
-      # - get-environment-variables:
-      #     requires:
-      #       - assume-role-staging
+      - get-environment-variables:
+          requires:
+            - assume-role-staging
       - build-deploy-staging:
           requires:
             - assume-role-staging
