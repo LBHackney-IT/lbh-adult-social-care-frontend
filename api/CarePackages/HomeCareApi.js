@@ -2,14 +2,14 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { UTC_DATE_FORMAT } from '../../Constants';
 import { weekDays } from '../../service/homeCarePickerHelper';
-import { getBaseUrl, AUTH_HEADER } from '../BaseApi';
+import { BASE_URL, AUTH_HEADER } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 
-const HOME_CARE_URL = `${getBaseUrl()}/v1/HomeCarePackage`;
-const HOME_CARE_BROKERAGE_URL = `${getBaseUrl()}/v1/home-care-packages`;
-const HOME_CARE_SERVICE_URL = `${getBaseUrl()}/v1/homeCareService`;
-const HOME_CARE_PACKAGE_SLOTS_URL = `${getBaseUrl()}/v1/homeCarePackageSlots`;
-const HOME_CARE_TIME_SLOT_SHIFTS_URL = `${getBaseUrl()}/v1/timeSlotShifts`;
+const HOME_CARE_URL = `${BASE_URL}/v1/HomeCarePackage`;
+const HOME_CARE_BROKERAGE_URL = `${BASE_URL}/v1/home-care-packages`;
+const HOME_CARE_SERVICE_URL = `${BASE_URL}/v1/homeCareService`;
+const HOME_CARE_PACKAGE_SLOTS_URL = `${BASE_URL}/v1/homeCarePackageSlots`;
+const HOME_CARE_TIME_SLOT_SHIFTS_URL = `${BASE_URL}/v1/timeSlotShifts`;
 
 // Home care packages
 const createHomeCarePackage = async (startDate, endDate, isImmediate, isS117, isFixedPeriod) => {

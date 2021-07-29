@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { getBaseUrl } from '../BaseApi';
+import { BASE_URL } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 
-export const RESIDENTIAL_CARE_URL = `${getBaseUrl()}/v1/residential-care-packages`;
+export const RESIDENTIAL_CARE_URL = `${BASE_URL}/v1/residential-care-packages`;
 
 const getResidentialCareAdditionalNeedsCostOptions = () => [
   { text: 'Weekly', value: 1 },
@@ -80,7 +80,7 @@ const getResidentialCarePackageApprovalHistory = (residentialCarePackageId) =>
 
 const residentialCareRequestClarification = (residentialCarePackageId, informationText) => {
   const options = {
-    url: `${getBaseUrl()}/v1/residential-care-request-more-information`,
+    url: `${BASE_URL}/v1/residential-care-request-more-information`,
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -96,7 +96,7 @@ const residentialCareRequestClarification = (residentialCarePackageId, informati
 
 const residentialCareClarifyCommercial = (residentialCarePackageId, informationText) => {
   const options = {
-    url: `${getBaseUrl()}/v1/residential-care-request-more-information/clarifying-commercials`,
+    url: `${BASE_URL}/v1/residential-care-request-more-information/clarifying-commercials`,
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -158,7 +158,7 @@ const residentialCareChangeStatus = (residentialCarePackageId, newStatusId) => {
 
 // Residential care brokerage
 const getResidentialCareBrokerageStages = () =>
-  axios.get(`${getBaseUrl()}/v1/stages`).then(handleResponse).catch(handleError);
+  axios.get(`${BASE_URL}/v1/stages`).then(handleResponse).catch(handleError);
 
 const getResidentialCarePackageDetailsForBrokerage = (residentialCarePackageId) =>
   axios.get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage`).then(handleResponse).catch(handleError);

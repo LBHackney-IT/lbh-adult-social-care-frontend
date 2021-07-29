@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
-import { getBaseUrl } from '../BaseApi';
+import { BASE_URL } from '../BaseApi';
 
-const RECLAIM_URL = `${getBaseUrl()}/v1/package-reclaim`;
+const RECLAIM_URL = `${BASE_URL}/v1/package-reclaim`;
 
 const getReclaimFromOptions = () => axios.get(`${RECLAIM_URL}/reclaim-from`).then(handleResponse).catch(handleError);
 

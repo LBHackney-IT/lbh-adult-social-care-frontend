@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
-import { getBaseUrl } from '../BaseApi';
+import { BASE_URL } from '../BaseApi';
 
-const SUPPLIER_URL = `${getBaseUrl()}/v1/suppliers`;
+const SUPPLIER_URL = `${BASE_URL}/v1/suppliers`;
 
 const getSupplierList = () => axios.get(`${SUPPLIER_URL}/get-all`).then(handleResponse).catch(handleError);
 
