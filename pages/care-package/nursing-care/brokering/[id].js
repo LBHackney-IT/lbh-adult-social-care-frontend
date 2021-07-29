@@ -32,27 +32,30 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
 
   try {
     // Call to api to get package
-    const nursingCarePackage = await getNursingCarePackageDetailsForBrokerage(nursingCarePackageId);
-    const newAdditionalNeedsEntries = nursingCarePackage.nursingCareAdditionalNeeds.map((additionalneedsItem) => ({
-      id: additionalneedsItem.id,
-      isWeeklyCost: additionalneedsItem.isWeeklyCost,
-      isOneOffCost: additionalneedsItem.isOneOffCost,
-      needToAddress: additionalneedsItem.needToAddress,
-    }));
-    data.nursingCarePackage = nursingCarePackage;
+    const result = await getNursingCarePackageDetailsForBrokerage(nursingCarePackageId, req.cookies.hascToken);
+    const newAdditionalNeedsEntries = result.nursingCarePackage.nursingCareAdditionalNeeds.map(
+      (additionalneedsItem) => ({
+        id: additionalneedsItem.id,
+        isWeeklyCost: additionalneedsItem.isWeeklyCost,
+        isOneOffCost: additionalneedsItem.isOneOffCost,
+        needToAddress: additionalneedsItem.needToAddress,
+      })
+    );
+    data.nursingCarePackage = result.nursingCarePackage;
     data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch (error) {
     data.errorData.push(`Retrieve nursing care package details failed. ${error.message}`);
   }
 
   try {
-    data.approvalHistoryEntries = await getNursingCarePackageApprovalHistory(nursingCarePackageId).map(
-      (historyItem) => ({
-        eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
-        eventMessage: historyItem.logText,
-        eventSubMessage: undefined,
-      })
-    );
+    data.approvalHistoryEntries = await getNursingCarePackageApprovalHistory(
+      nursingCarePackageId,
+      req.cookies.hascToken
+    ).map((historyItem) => ({
+      eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
+      eventMessage: historyItem.logText,
+      eventSubMessage: null,
+    }));
   } catch (error) {
     data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`);
   }
@@ -153,11 +156,11 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
     setPackagesReclaimed(newPackage);
   };
 
-  const changeTab = (tab) => {
-    if (tab === 'packageDetails') {
+  const changeTab = (chosenTab) => {
+    if (chosenTab === 'packageDetails') {
       setSummaryData(getHomeCareSummaryData());
     }
-    setTab(tab);
+    setTab(chosenTab);
   };
 
   return (
