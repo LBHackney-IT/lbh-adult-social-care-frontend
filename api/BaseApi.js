@@ -2,7 +2,6 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 let BASE_URL;
-alert(window.location.hostname);
 
 switch (window.location.hostname) {
   case 'social-care-care-packages-staging.hackney.gov.uk': {
