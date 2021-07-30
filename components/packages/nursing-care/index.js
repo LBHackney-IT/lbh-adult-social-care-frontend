@@ -40,7 +40,6 @@ const PackagesNursingCare = ({
     oneOf: nursingCarePackage?.additionalNeedsPaymentOneOff || 0,
   });
 
-  console.log(nursingCarePackage);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
   const [selectedStageType, setSelectedStageType] = useState(nursingCarePackage?.stageId);
   const [selectedSupplierType, setSelectedSupplierType] = useState(nursingCarePackage?.supplierId);

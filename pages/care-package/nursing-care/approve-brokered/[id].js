@@ -20,6 +20,7 @@ import {
 import withSession from '../../../../lib/session';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { getUserSession } from '../../../../service/helpers';
+import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
   const isRedirect = getUserSession({ req, res });
@@ -90,7 +91,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
   const handleApprovePackageCommercials = () => {
     nursingCareApproveCommercials(nursingCarePackageId)
       .then(() => {
-        // router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${CARE_PACKAGE_ROUTE}`);
         dispatch(addNotification({ text: 'Status change success.', className: 'success' }));
       })
       .catch((error) => {
@@ -177,7 +178,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
               boxClass="hackney-package-cost-light-green-box"
               title="COST OF CARE / WK"
               cost={nursingCarePackage?.costOfCare}
-              costType="ESTIMATE"
+              costType="ACTUAL"
             />
           </div>
           <div className="column">
@@ -185,7 +186,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
               boxClass="hackney-package-cost-light-green-box"
               title="ANP / WK"
               cost={nursingCarePackage?.costOfAdditionalNeeds}
-              costType="ESTIMATE"
+              costType="ACTUAL"
             />
           </div>
           <div className="column">
@@ -193,7 +194,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
               boxClass="hackney-package-cost-green-box"
               title="TOTAL / WK"
               cost={nursingCarePackage?.totalPerWeek}
-              costType="ESTIMATE"
+              costType="ACTUAL"
             />
           </div>
         </div>
