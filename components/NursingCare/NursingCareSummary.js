@@ -24,7 +24,7 @@ const NursingCareSummary = ({
           <div>
             <span className="font-weight-bold mr-2 font-size-16px">Nursing Care</span>
             <span className="font-size-16px">
-              {getEnGBFormattedDate(startDate)} {endDate ? ` - ${endDate}` : null}
+              {getEnGBFormattedDate(startDate)} {endDate ? ` - ${endDate}` : ' - Ongoing'}
             </span>
           </div>
         </div>

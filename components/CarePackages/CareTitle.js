@@ -7,8 +7,8 @@ const CareTitle = ({ children, startDate, endDate }) => (
     <label>{children}</label>
     <div className="care-date-range">
       <div className="date-entry">
-        {getEnGBFormattedDate(startDate)}
-        {endDate && ` - ${getEnGBFormattedDate(endDate)}`}
+        ({getEnGBFormattedDate(startDate)}
+        {endDate ? ` - ${getEnGBFormattedDate(endDate)}` : ' - Ongoing'})
       </div>
     </div>
   </div>

@@ -14,6 +14,15 @@ const DateSetup = ({
   endDate,
   setEndDate,
 }) => {
+  const handleFixedPeriodChange = (value) => {
+    setIsFixedPeriod(value);
+    if (value === true) {
+      setEndDate(new Date());
+    } else {
+      setEndDate('');
+    }
+  };
+
   return (
     <div className="column">
       <div>
@@ -22,7 +31,7 @@ const DateSetup = ({
           options={fixedPeriodOptions}
           error={errorFields.isFixedPeriod}
           setError={() => changeErrorFields('isFixedPeriod')}
-          onChange={setIsFixedPeriod}
+          onChange={(value) => handleFixedPeriodChange(value)}
           selectedValue={isFixedPeriod}
         />
       </div>
