@@ -166,7 +166,7 @@ const NursingCare = () => {
       isWeeklyCost: item.selectedCost === 1,
       isOneOffCost: item.selectedCost === 2,
       needToAddress: item.needToAddress,
-      creatorId: loggedInUser.userId,
+      creatorId: loggedInUser.user.userId,
     }));
 
     const packageReclaims = packagesReclaimed.map((reclaim) => ({
@@ -189,7 +189,7 @@ const NursingCare = () => {
       typeOfStayId,
       needToAddress,
       typeOfNursingCareHomeId: selectedNursingHomeType,
-      creatorId: loggedInUser.userId,
+      creatorId: loggedInUser.user.userId,
       nursingCareAdditionalNeeds,
       packageReclaims,
     };
