@@ -1,7 +1,7 @@
-import { getBaseUrl } from '../BaseApi';
+import { BASE_URL } from '../BaseApi';
 import { axiosRequest, getQueryParamsFromObject } from '../Utils/ApiUtils';
 
-const APPROVED_PACKAGES_URL = `${getBaseUrl()}/v1/approved-packages`;
+const APPROVED_PACKAGES_URL = `${BASE_URL}/v1/approved-packages`;
 
 const getApprovedPackagesNew = (props) => {
   const params = getQueryParamsFromObject(props);
