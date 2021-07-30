@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 let baseUrl = '';
 let awsKey = '';
 
-debugger;
 switch (process.env.NEXT_PUBLIC_STAGE) {
   case 'staging': {
     baseUrl = 'https://zqf7j796y5.execute-api.eu-west-2.amazonaws.com/staging/api';
