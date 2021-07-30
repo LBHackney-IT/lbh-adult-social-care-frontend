@@ -37,8 +37,7 @@ functions:
       securityGroupIds: ${self:custom.securityGroups.${self:provider.stage}}
       subnetIds: ${self:custom.subnets.${self:provider.stage}}
     environment:
-      AWS_KEY: ${ssm:/lbh-adult-social-care-builder/${self:provider.stage}/AWS_KEY}
-      AWS_ENDPOINT: ${ssm:/lbh-adult-social-care-builder/${self:provider.stage}/aws_endpoint}
+      NEXT_PUBLIC_STAGE: ${self:provider.stage}
       SECRET_COOKIE_PASSWORD: ${ssm:/hasc-fe/${self:provider.stage}/COOKIE_PASSWORD}
 resources:
   Resources:

@@ -1,7 +1,28 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const BASE_URL = process.env.AWS_ENDPOINT;
+const { STAGE } = process.env;
+
+let baseUrl = '';
+let awsKey = '';
+
+switch (STAGE) {
+  case 'staging': {
+    baseUrl = 'https://zqf7j796y5.execute-api.eu-west-2.amazonaws.com/staging/api';
+    awsKey = '28e2GuYzKp2XhLCF448iw95LN2pngp3uahe9C6BE';
+    break;
+  }
+  case 'production': {
+    baseUrl = 'https://dz58oqus03.execute-api.eu-west-2.amazonaws.com/production/api';
+    awsKey = '7l4JGeaolp9xgHUlTD8lN71iTETDzdCZ2xfjVBNy';
+    break;
+  }
+  default: {
+    break;
+  }
+}
+
+const BASE_URL = baseUrl;
 
 // switch (window.location.hostname) {
 //   case 'social-care-care-packages-staging.hackney.gov.uk': {
@@ -22,7 +43,7 @@ const BASE_URL = process.env.AWS_ENDPOINT;
 // }
 
 // Redundant API key (to be removed)
-const AUTH_HEADER = { 'x-api-key': process.env.AWS_KEY };
+const AUTH_HEADER = { 'x-api-key': awsKey };
 
 axios.interceptors.request.use((config) => {
   const token = Cookies.get('hascToken');
