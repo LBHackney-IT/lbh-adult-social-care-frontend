@@ -1,25 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from 'react-redux'
-import Pagination from "../../components/Payments/Pagination";
-import HackneyFooterInfo from "../../components/HackneyFooterInfo";
-import DashboardTabs from "../../components/Dashboard/Tabs";
-import Table from '../../components/Table'
-import { formatDate , formatStatus } from '../../service/helpers'
-import { addNotification } from '../../reducers/notificationsReducer'
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import Pagination from '../../components/Payments/Pagination';
+import HackneyFooterInfo from '../../components/HackneyFooterInfo';
+import DashboardTabs from '../../components/Dashboard/Tabs';
+import Table from '../../components/Table';
+import { formatDate, formatStatus } from '../../service/helpers';
+import { addNotification } from '../../reducers/notificationsReducer';
 import {
   getApprovedPackagesApprovers,
   getApprovedPackagesAwaitingBrokerage,
   getApprovedPackagesClarificationNeed,
   getApprovedPackagesCompleted,
-  getApprovedPackagesNew, 
+  getApprovedPackagesNew,
   getApprovedPackagesPackageTypes,
-  getApprovedPackagesReviewCommercial, 
-  getApprovedPackagesSocialWorkers
-} from '../../api/Dashboard/approvedPackages'
-import Inputs from '../../components/Inputs'
-import { RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE, 
-         NURSING_CARE_APPROVE_PACKAGE_ROUTE} from '../../routes/RouteConstants';
-import { currency } from '../../constants/strings'
+  getApprovedPackagesReviewCommercial,
+  getApprovedPackagesSocialWorkers,
+} from '../../api/Dashboard/approvedPackages';
+import Inputs from '../../components/Inputs';
+import {
+  RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE,
+  NURSING_CARE_APPROVE_PACKAGE_ROUTE,
+} from '../../routes/RouteConstants';
+import { currency } from '../../constants/strings';
 import { useRouter } from 'next/router';
 
 const ApproverHubPage = () => {
@@ -36,14 +38,14 @@ const ApproverHubPage = () => {
 
   const onClickTableRow = (rowItems) => {
     console.log(tab);
-    {rowItems.categoryId === 3 ? (
-      router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
-    ) : (
-      router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
-    )}
+    {
+      rowItems.categoryId === 3
+        ? router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+        : router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
+    }
   };
 
-  const [filters, setFilters] = useState({...initialFilters});
+  const [filters, setFilters] = useState({ ...initialFilters });
   const [timer, setTimer] = useState(null);
   const [page, setPage] = useState(1);
 
@@ -119,55 +121,54 @@ const ApproverHubPage = () => {
     if (timer) {
       clearTimeout(timer);
     }
-    setTimer(setTimeout(() => {
-      getApprovedPackagesPackageTypes()
-      .then((response) => {
-        const options = response.map((option) => ({
-          text: option?.packageType,
-          value: option?.id,
-        }));
-        console.log(options);
-        changeInputs('PackageType',options.text);
-      })
+    setTimer(
+      setTimeout(() => {
+        getApprovedPackagesPackageTypes().then((response) => {
+          const options = response.map((option) => ({
+            text: option?.packageType,
+            value: option?.id,
+          }));
+          console.log(options);
+          changeInputs('PackageType', options.text);
+        });
 
-      getApprovedPackagesSocialWorkers()
-      .then((response) => {
-        const options = response.map((option) => ({
-          text: option?.userName,
-          value: option?.id,
-        }));
-        console.log(options);
-        changeInputs('SocialWorker',options);
-      })
+        getApprovedPackagesSocialWorkers().then((response) => {
+          const options = response.map((option) => ({
+            text: option?.userName,
+            value: option?.id,
+          }));
+          console.log(options);
+          changeInputs('SocialWorker', options);
+        });
 
-      getApprovedPackagesApprovers()
-      .then((response) => {
-        const options = response.map((option) => ({
-          text: option?.userName,
-          value: option?.id,
-        }));
-        console.log(options);
-        changeInputs('Approver',options);
-      })
+        getApprovedPackagesApprovers().then((response) => {
+          const options = response.map((option) => ({
+            text: option?.userName,
+            value: option?.id,
+          }));
+          console.log(options);
+          changeInputs('Approver', options);
+        });
 
-      tabsRequests[tab]({
-        PageNumber: page,
-        OrderBy: sort.name,
-        ...filters,
-      })
-        .then((res) => {
-          setTabsTable({
-            ...tabsTable,
-            [tab]: res.data
-          })
-          setPagingMetaData({
-            ...pagingMetaData,
-            [tab]: res.pagingMetaData,
-          });
+        tabsRequests[tab]({
+          PageNumber: page,
+          OrderBy: sort.name,
+          ...filters,
         })
-        .catch(() => dispatch(addNotification()))
-    }, 500));
-  }
+          .then((res) => {
+            setTabsTable({
+              ...tabsTable,
+              [tab]: res.data,
+            });
+            setPagingMetaData({
+              ...pagingMetaData,
+              [tab]: res.pagingMetaData,
+            });
+          })
+          .catch(() => dispatch(addNotification()));
+      }, 500)
+    );
+  };
 
   useEffect(() => {
     makeTabRequest();
@@ -186,9 +187,9 @@ const ApproverHubPage = () => {
       getValue: (value) => formatDate(value, '/'),
     },
     careValue: {
-      getValue: (value) => `${currency.euro}${value}`
+      getValue: (value) => `${currency.euro}${value}`,
     },
-  }
+  };
 
   const inputs = {
     inputs: [
@@ -198,7 +199,7 @@ const ApproverHubPage = () => {
         search: () => makeTabRequest(),
         className: 'mr-3',
         name: 'clientName',
-      }
+      },
     ],
     dropdowns: [
       { options: [], initialText: 'Package Type', name: 'PackageType', className: 'mr-3' },

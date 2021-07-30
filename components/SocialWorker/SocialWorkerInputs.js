@@ -7,7 +7,7 @@ const initialFilters = {
   status: '',
 };
 
-const SocialWorkerInputs = ({ statusOptions = [] , searchTerm }) => {
+const SocialWorkerInputs = ({ statusOptions = [], searchTerm }) => {
   const [filters, setFilters] = useState({ ...initialFilters });
 
   const applyFilters = () => {
@@ -19,9 +19,8 @@ const SocialWorkerInputs = ({ statusOptions = [] , searchTerm }) => {
   };
 
   const onChangePagination = (item) => {
-    changePagination(item)
-  }
-
+    changePagination(item);
+  };
 
   const changeFilter = (field, value) => {
     setFilters({
