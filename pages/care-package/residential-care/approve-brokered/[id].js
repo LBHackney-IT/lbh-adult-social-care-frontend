@@ -20,31 +20,33 @@ import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
 
 // start before render
-export const getServerSideProps = withSession(
-  async ({ req, res: response, query: { id: residentialCarePackageId } }) => {
-    getUserSession({ req, res: response });
+export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
-    const data = {
-      errorData: [],
-    };
+  const data = {
+    errorData: [],
+  };
 
     try {
-      const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId);
+      const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId,  req.cookies.hascToken);
       const newApprovalHistoryItems = res.map((historyItem) => ({
         eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
         eventMessage: historyItem.logText,
-        eventSubMessage: undefined,
+        eventSubMessage: historyItem.logSubText,
       }));
 
       data.approvalHistoryEntries = newApprovalHistoryItems.slice();
     } catch (error) {
-      data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
+      data.errorData.push(`Retrieve residential care approval history failed. ${error}`);
     }
 
     try {
-      const residentialCarePackage = await getResidentialCarePackageApproveBrokered(residentialCarePackageId);
-
-      const newAdditionalNeedsEntries = residentialCarePackage.residentialCareAdditionalNeeds.map(
+      const residentialCarePackage = await getResidentialCarePackageApproveBrokered(
+        residentialCarePackageId,
+        req.cookies.hascToken
+      );
+      const newAdditionalNeedsEntries = residentialCarePackage.residentialCarePackage.residentialCareAdditionalNeeds.map(
         (additionalneedsItem) => ({
           id: additionalneedsItem.id,
           isWeeklyCost: additionalneedsItem.isWeeklyCost,
@@ -52,11 +54,11 @@ export const getServerSideProps = withSession(
           needToAddress: additionalneedsItem.needToAddress,
         })
       );
-
+  
       data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
       data.residentialCarePackage = residentialCarePackage;
     } catch (error) {
-      data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
+      data.errorData.push(`Retrieve residential care package details failed. ${error}`);
     }
 
     return { props: { ...data } };
@@ -83,8 +85,8 @@ const ResidentialCareApproveBrokered = ({
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        alert(`Status change failed. ${error}`);
+        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
 
@@ -94,8 +96,8 @@ const ResidentialCareApproveBrokered = ({
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        alert(`Status change failed. ${error}`);
+        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
 
@@ -106,8 +108,8 @@ const ResidentialCareApproveBrokered = ({
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        alert(`Status change failed. ${error}`);
+        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
 

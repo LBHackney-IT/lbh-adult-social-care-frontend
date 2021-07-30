@@ -60,23 +60,35 @@ const getResidentialCarePackageList = () =>
 const getSingleResidentialCarePackage = (residentialCarePackageId) =>
   axios.get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}`).then(handleResponse).catch(handleError);
 
-const getResidentialCarePackageApprovalPackageContent = (residentialCarePackageId) =>
+const getResidentialCarePackageApprovalPackageContent = (residentialCarePackageId, hascToken) =>
+axios
+  .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-package-contents`, {
+    headers: {
+      Authorization: `Bearer ${hascToken}`,
+    },
+  })
+  .then(handleResponse)
+  .catch(handleError);
+
+const getResidentialCarePackageApproveBrokered = (residentialCarePackageId, hascToken) =>
   axios
-    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-package-contents`)
+    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-brokered-deal`, {
+      headers: {
+        Authorization: `Bearer ${hascToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 
-const getResidentialCarePackageApproveBrokered = (residentialCarePackageId) =>
-  axios
-    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-brokered-deal`)
-    .then(handleResponse)
-    .catch(handleError);
-
-const getResidentialCarePackageApprovalHistory = (residentialCarePackageId) =>
-  axios
-    .get(`${RESIDENTIAL_CARE_URL}/approval-history/${residentialCarePackageId}`)
-    .then(handleResponse)
-    .catch(handleError);
+const getResidentialCarePackageApprovalHistory = (residentialCarePackageId, hascToken) =>
+axios
+  .get(`${RESIDENTIAL_CARE_URL}/approval-history/${residentialCarePackageId}`, {
+    headers: {
+      Authorization: `Bearer ${hascToken}`,
+    },
+  })
+  .then(handleResponse)
+  .catch(handleError);    
 
 const residentialCareRequestClarification = (residentialCarePackageId, informationText) => {
   const options = {
@@ -160,8 +172,14 @@ const residentialCareChangeStatus = (residentialCarePackageId, newStatusId) => {
 const getResidentialCareBrokerageStages = () =>
   axios.get(`${BASE_URL}/v1/stages`).then(handleResponse).catch(handleError);
 
-const getResidentialCarePackageDetailsForBrokerage = (residentialCarePackageId) =>
-  axios.get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage`).then(handleResponse).catch(handleError);
+const getResidentialCarePackageDetailsForBrokerage = (residentialCarePackageId, hascToken) =>
+  axios
+  .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage`, {
+    headers: {
+      Authorization: `Bearer ${hascToken}`,
+    },
+  })
+  .then(handleResponse).catch(handleError);
 
 const createResidentialCareBrokerageInfo = (residentialCarePackageId, residentialCareBrokerageInfoForCreation) => {
   const options = {
