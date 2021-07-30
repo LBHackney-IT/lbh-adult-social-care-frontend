@@ -172,8 +172,14 @@ const residentialCareChangeStatus = (residentialCarePackageId, newStatusId) => {
 const getResidentialCareBrokerageStages = () =>
   axios.get(`${BASE_URL}/v1/stages`).then(handleResponse).catch(handleError);
 
-const getResidentialCarePackageDetailsForBrokerage = (residentialCarePackageId) =>
-  axios.get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage`).then(handleResponse).catch(handleError);
+const getResidentialCarePackageDetailsForBrokerage = (residentialCarePackageId, hascToken) =>
+  axios
+  .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage`, {
+    headers: {
+      Authorization: `Bearer ${hascToken}`,
+    },
+  })
+  .then(handleResponse).catch(handleError);
 
 const createResidentialCareBrokerageInfo = (residentialCarePackageId, residentialCareBrokerageInfoForCreation) => {
   const options = {

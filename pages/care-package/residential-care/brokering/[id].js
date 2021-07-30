@@ -1,42 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 import PackagesResidentialCare from '../../../../components/packages/residential-care';
 import { selectBrokerage } from '../../../../reducers/brokerageReducer';
-import { getUserSession, uniqueID } from '../../../../service/helpers';
+import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
 import Layout from '../../../../components/Layout/Layout';
 import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
-  residentialCareChangeStatus,
   createResidentialCareBrokerageInfo,
   getResidentialCareBrokerageStages,
-  getResidentialCarePackageDetailsForBrokerage,
   getResidentialCarePackageApprovalHistory,
+  getResidentialCarePackageDetailsForBrokerage,
+  residentialCareChangeStatus,
   residentialCareChangeStage,
 } from '../../../../api/CarePackages/ResidentialCareApi';
-import {
-  mapBrokerageSupplierOptions,
-  mapResidentialCareStageOptions,
-} from '../../../../api/Mappers/ResidentialCareMapper';
+import { mapBrokerageSupplierOptions, mapResidentialCareStageOptions } from '../../../../api/Mappers/ResidentialCareMapper';
 import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
 import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 import withSession from '../../../../lib/session';
-import PackageHeader from '../../../../components/CarePackages/PackageHeader';
-
-const initialPackageReclaim = {
-  type: '',
-  notes: '',
-  from: '',
-  category: '',
-  amount: '',
-  id: '1',
-};
+import { addNotification } from '../../../../reducers/notificationsReducer';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
+
+  const user = getLoggedInUser({ req });
 
   const data = {
     errorData: [],
@@ -44,9 +35,8 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
 
   try {
     // Call to api to get package
-    const residentialCarePackage = await getResidentialCarePackageDetailsForBrokerage(residentialCarePackageId);
-
-    const newAdditionalNeedsEntries = residentialCarePackage.residentialCareAdditionalNeeds.map(
+    const result = await getResidentialCarePackageDetailsForBrokerage(residentialCarePackageId, req.cookies.hascToken);
+    const newAdditionalNeedsEntries = result.residentialCarePackage.residentialCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
         id: additionalneedsItem.id,
         isWeeklyCost: additionalneedsItem.isWeeklyCost,
@@ -54,32 +44,44 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
         needToAddress: additionalneedsItem.needToAddress,
       })
     );
-    data.residentialCarePackage = residentialCarePackage;
+    data.residentialCarePackage = result;
     data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch (error) {
-    data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
+    data.errorData.push(`Retrieve residential care package details failed. ${error}`);
   }
 
   try {
-    const newApprovalHistoryItems = await getResidentialCarePackageApprovalHistory(residentialCarePackageId).map(
-      (historyItem) => ({
-        eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
-        eventMessage: historyItem.logText,
-        eventSubMessage: undefined,
-      })
-    );
+    const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId,  req.cookies.hascToken);
+    const newApprovalHistoryItems = res.map((historyItem) => ({
+      eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
+      eventMessage: historyItem.logText,
+      eventSubMessage: historyItem.logSubText,
+    }));
+
     data.approvalHistoryEntries = newApprovalHistoryItems.slice();
   } catch (error) {
-    data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
+    data.errorData.push(`Retrieve residential care approval history failed. ${error}`);
   }
 
-  return { props: { ...data } };
+  return { props: { ...data, loggedInUserId: user.userId } };
 });
 
-const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
-  // Parameters
+const ResidentialCareBrokering = ({
+  residentialCarePackage,
+  additionalNeedsEntries,
+  approvalHistoryEntries,
+  loggedInUserId,
+}) => {
   const router = useRouter();
-
+  const dispatch = useDispatch();
+  const [initialPackageReclaim] = useState({
+    type: '',
+    notes: '',
+    from: '',
+    category: '',
+    amount: '',
+    id: '1',
+  });
   const [errors, setErrors] = useState([]);
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState('approvalHistory');
@@ -87,7 +89,7 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
   const [supplierOptions, setSupplierOptions] = useState([]);
   const [stageOptions, setStageOptions] = useState([]);
-
+  console.log(approvalHistoryEntries);
   useEffect(() => {
     if (!supplierOptions.length || supplierOptions.length === 1) retrieveSupplierOptions();
     if (!stageOptions.length || stageOptions.length === 1) retrieveResidentialCareBrokerageStages();
@@ -99,7 +101,7 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
         setSupplierOptions(mapBrokerageSupplierOptions(response));
       })
       .catch((error) => {
-        setErrors([...errors, `Retrieve supplier options failed. ${error.message}`]);
+        setErrors([...errors, `Retrieve supplier options failed. ${error}`]);
       });
   };
 
@@ -109,18 +111,18 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
         setStageOptions(mapResidentialCareStageOptions(response));
       })
       .catch((error) => {
-        setErrors([...errors, `Retrieve residential care brokerage stages failed. ${error.message}`]);
+        setErrors([...errors, `Retrieve residential care brokerage stages failed. ${error}`]);
       });
   };
 
   const createBrokerageInfo = (residentialCarePackageId, brokerageInfoForCreation) => {
     createResidentialCareBrokerageInfo(residentialCarePackageId, brokerageInfoForCreation)
       .then(() => {
-        alert('Package saved.');
+        dispatch(addNotification({ text: `Package brokerage saved successfully`, className: 'success' }));
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Create brokerage info failed. ${error.message}`);
+        dispatch(addNotification({ text: `Saving package brokerage failed. ${error.message}` }));
         setErrors([...errors, `Create brokerage info failed. ${error.message}`]);
       });
   };
@@ -163,16 +165,15 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
     setPackagesReclaimed(newPackage);
   };
 
-  const changeTab = (tab) => {
-    if (tab === 'packageDetails') {
+  const changeTab = (chosenTab) => {
+    if (chosenTab === 'packageDetails') {
       setSummaryData(getHomeCareSummaryData());
     }
-    setTab(tab);
+    setTab(chosenTab);
   };
 
   return (
     <Layout
-      showBackButton
       clientSummaryInfo={{
         client: residentialCarePackage?.residentialCarePackage?.clientName,
         hackneyId: residentialCarePackage?.residentialCarePackage?.clientHackneyId,
@@ -189,7 +190,7 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
       }}
       headerTitle="Residential Care Brokering"
     >
-      <PackageHeader />
+      <PackageHeader title="Proposed Package" />
       <PackagesResidentialCare
         tab={tab}
         addPackageReclaim={addPackageReclaim}
@@ -211,6 +212,7 @@ const ResidentialCareBrokering = ({ residentialCarePackage, additionalNeedsEntri
         createBrokerageInfo={createBrokerageInfo}
         changePackageBrokeringStatus={changePackageBrokeringStatus}
         changePackageBrokeringStage={changePackageBrokeringStage}
+        loggedInUserId={loggedInUserId}
       />
     </Layout>
   );
