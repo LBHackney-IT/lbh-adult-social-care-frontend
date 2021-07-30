@@ -18,8 +18,8 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const CarePackage = ({ history }) => {
   const [careTypes] = useState([
-    { text: 'Home care', value: 1 },
-    { text: 'Day care', value: 2 },
+    // { text: 'Home care', value: 1 },
+    // { text: 'Day care', value: 2 },
     { text: 'Residential care', value: 3 },
     { text: 'Nursing care', value: 4 },
   ]);
