@@ -1,26 +1,27 @@
-import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
-import NursingCareApprovalTitle from '../../../../components/NursingCare/NursingCareApprovalTitle';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
-import Layout from '../../../../components/Layout/Layout';
-import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TitleHeader from '../../../../components/TitleHeader';
-import NursingCareSummary from '../../../../components/NursingCare/NursingCareSummary';
-import TextArea from '../../../../components/TextArea';
+import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
 import {
-  getNursingCarePackageApproveCommercial,
   getNursingCarePackageApprovalHistory,
-  nursingCareClarifyCommercial,
-  nursingCareChangeStatus,
+  getNursingCarePackageApproveCommercial,
   nursingCareApproveCommercials,
+  nursingCareChangeStatus,
+  nursingCareClarifyCommercial,
 } from '../../../../api/CarePackages/NursingCareApi';
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
+import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
+import Layout from '../../../../components/Layout/Layout';
+import NursingCareApprovalTitle from '../../../../components/NursingCare/NursingCareApprovalTitle';
+import NursingCareSummary from '../../../../components/NursingCare/NursingCareSummary';
+import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
+import TextArea from '../../../../components/TextArea';
+import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { addNotification } from '../../../../reducers/notificationsReducer';
-import { getUserSession } from '../../../../service/helpers';
 import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import { getUserSession } from '../../../../service/helpers';
 
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
   const isRedirect = getUserSession({ req, res });
@@ -33,7 +34,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
   try {
     const nursingCarePackage = await getNursingCarePackageApproveCommercial(
       nursingCarePackageId,
-      req.cookies.hascToken
+      req.cookies[HASC_TOKEN_ID]
     );
     const newAdditionalNeedsEntries = nursingCarePackage.nursingCarePackage.nursingCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
@@ -51,7 +52,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
   }
 
   try {
-    const result = await getNursingCarePackageApprovalHistory(nursingCarePackageId, req.cookies.hascToken);
+    const result = await getNursingCarePackageApprovalHistory(nursingCarePackageId, req.cookies[HASC_TOKEN_ID]);
     const newApprovalHistoryItems = result.map((historyItem) => ({
       eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
       eventMessage: historyItem.logText,

@@ -1,26 +1,30 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
-import PackageHeader from '../../../../components/CarePackages/PackageHeader';
-import PackagesResidentialCare from '../../../../components/packages/residential-care';
-import { selectBrokerage } from '../../../../reducers/brokerageReducer';
-import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
+import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
-import Layout from '../../../../components/Layout/Layout';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
   createResidentialCareBrokerageInfo,
   getResidentialCareBrokerageStages,
   getResidentialCarePackageApprovalHistory,
   getResidentialCarePackageDetailsForBrokerage,
-  residentialCareChangeStatus,
   residentialCareChangeStage,
+  residentialCareChangeStatus,
 } from '../../../../api/CarePackages/ResidentialCareApi';
-import { mapBrokerageSupplierOptions, mapResidentialCareStageOptions } from '../../../../api/Mappers/ResidentialCareMapper';
 import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
-import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import {
+  mapBrokerageSupplierOptions,
+  mapResidentialCareStageOptions,
+} from '../../../../api/Mappers/ResidentialCareMapper';
+import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import PackageHeader from '../../../../components/CarePackages/PackageHeader';
+import Layout from '../../../../components/Layout/Layout';
+import PackagesResidentialCare from '../../../../components/packages/residential-care';
 import withSession from '../../../../lib/session';
+import { selectBrokerage } from '../../../../reducers/brokerageReducer';
 import { addNotification } from '../../../../reducers/notificationsReducer';
+import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -35,7 +39,10 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
 
   try {
     // Call to api to get package
-    const result = await getResidentialCarePackageDetailsForBrokerage(residentialCarePackageId, req.cookies.hascToken);
+    const result = await getResidentialCarePackageDetailsForBrokerage(
+      residentialCarePackageId,
+      req.cookies[HASC_TOKEN_ID]
+    );
     const newAdditionalNeedsEntries = result.residentialCarePackage.residentialCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
         id: additionalneedsItem.id,
@@ -51,7 +58,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
   }
 
   try {
-    const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId,  req.cookies.hascToken);
+    const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId, req.cookies[HASC_TOKEN_ID]);
     const newApprovalHistoryItems = res.map((historyItem) => ({
       eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
       eventMessage: historyItem.logText,

@@ -1,6 +1,7 @@
 import Cookies from 'cookies';
 import withSession from '../../lib/session';
 import { hackneyGoogleLogin } from '../../api/Users/AuthApi';
+import { HASC_TOKEN_ID } from '../../api/BaseApi';
 
 export default withSession(async (req, res) => {
   const { hackneyToken } = req.cookies;
@@ -23,11 +24,11 @@ export default withSession(async (req, res) => {
     // Set auth cookie
     // Create a cookies instance
     const cookies = new Cookies(req, res);
-    cookies.set('hascToken', user?.token, {
+    cookies.set(HASC_TOKEN_ID, user?.token, {
       httpOnly: false, // true by default
       sameSite: 'lax',
     });
-    // cookieCutter.set('hascToken', user?.token);
+    // cookieCutter.set(HASC_TOKEN_ID, user?.token);
     res.json(user);
   } catch (error) {
     const { response: fetchResponse } = error;

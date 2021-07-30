@@ -23,11 +23,12 @@ switch (process.env.NEXT_PUBLIC_STAGE) {
 }
 
 const BASE_URL = baseUrl;
+const HASC_TOKEN_ID = `hascToken${process.env.NEXT_PUBLIC_STAGE}`;
 
 axios.interceptors.request.use((config) => {
-  const token = Cookies.get('hascToken');
+  const token = Cookies.get(HASC_TOKEN_ID);
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-export { BASE_URL };
+export { BASE_URL, HASC_TOKEN_ID };
