@@ -95,28 +95,27 @@ const BrokerageHubPage = () => {
   };
 
   const makeTabRequest = () => {
-    console.log("1");
-    if(timer) {
+    console.log('1');
+    if (timer) {
       clearTimeout(timer);
     }
-    setTimer(setTimeout(() => {
+    setTimer(
+      setTimeout(() => {
+        getBrokeredPackagesStages()
+          .then((res) => setStagesOptions(res))
+          .catch(() => pushNotification('Can not get stages'));
 
-      getBrokeredPackagesStages()
-        .then(res => setStagesOptions(res))
-        .catch(() => pushNotification('Can not get stages'))
-        
-      getBrokeredPackagesPackageTypes()
-        .then(res => changeInputs('TypeOfCare', res))
-        .catch(() => pushNotification('Can not get Package Type'))
+        getBrokeredPackagesPackageTypes()
+          .then((res) => changeInputs('TypeOfCare', res))
+          .catch(() => pushNotification('Can not get Package Type'));
 
         getBrokeredPackagesSocialWorkers().then((res) => changeInputs('SocialWorker', res));
 
-      tabsRequests[tab]({
-        ...filters,
-        PageNumber: page,
-        OrderBy: sort.name,
-      })
-        .then(res => {
+        tabsRequests[tab]({
+          ...filters,
+          PageNumber: page,
+          OrderBy: sort.name,
+        }).then((res) => {
           setTabsTable({
             ...tabsTable,
             [tab]: res.data,
@@ -141,10 +140,10 @@ const BrokerageHubPage = () => {
       hide: true,
     },
     startDate: {
-      getValue: (value) => `${formatDate(value, '/')}`
+      getValue: (value) => `${formatDate(value, '/')}`,
     },
     lastUpdated: {
-      getValue: (value) => `${formatDate(value, '/')}`
+      getValue: (value) => `${formatDate(value, '/')}`,
     },
     owner: {
       getComponent: (item) => {
@@ -171,7 +170,13 @@ const BrokerageHubPage = () => {
 
   const inputs = {
     inputs: [
-      {label: 'Search', name: 'clientName', placeholder: 'Search...', search: () => makeTabRequest(), className: 'mr-3'}
+      {
+        label: 'Search',
+        name: 'clientName',
+        placeholder: 'Search...',
+        search: () => makeTabRequest(),
+        className: 'mr-3',
+      },
     ],
     dropdowns: [
       { options: [], initialText: 'Type of care', name: 'TypeOfCare', className: 'mr-3' },

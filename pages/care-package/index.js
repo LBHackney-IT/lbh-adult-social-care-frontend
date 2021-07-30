@@ -23,7 +23,7 @@ const CarePackage = ({ history }) => {
     { text: 'Residential care', value: 3 },
     { text: 'Nursing care', value: 4 },
   ]);
-  const [selectedCareType, setSelectedCareType] = useState(1);
+  const [selectedCareType, setSelectedCareType] = useState(3);
 
   const dispatch = useDispatch();
   useEffect(() => {

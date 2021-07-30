@@ -2,7 +2,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { UTC_DATE_FORMAT } from '../../Constants';
 import { weekDays } from '../../service/homeCarePickerHelper';
-import { BASE_URL, AUTH_HEADER } from '../BaseApi';
+import { BASE_URL } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const HOME_CARE_URL = `${BASE_URL}/v1/HomeCarePackage`;
@@ -29,9 +29,6 @@ const createHomeCarePackage = async (startDate, endDate, isImmediate, isS117, is
         ClientId: '694f4adc-f2d8-4422-97c8-08d9057550ea',
         // TODO status
         StatusId: 1,
-      },
-      {
-        headers: AUTH_HEADER,
       }
     )
     .catch((error) => {
@@ -46,9 +43,7 @@ const createHomeCarePackage = async (startDate, endDate, isImmediate, isS117, is
 // Home care services
 const getHomeCareServices = async () => {
   const response = await axios
-    .get(`${HOME_CARE_SERVICE_URL}/getall`, {
-      headers: AUTH_HEADER,
-    })
+    .get(`${HOME_CARE_SERVICE_URL}/getall`)
     .catch((error) => {
       // TODO error
       console.log(error);
@@ -61,9 +56,7 @@ const getHomeCareServices = async () => {
 // Home care time slots
 const getHomeCareTimeSlotShifts = async () => {
   const response = await axios
-    .get(`${HOME_CARE_TIME_SLOT_SHIFTS_URL}/getall`, {
-      headers: AUTH_HEADER,
-    })
+    .get(`${HOME_CARE_TIME_SLOT_SHIFTS_URL}/getall`)
     .catch((error) => {
       // TODO error
       console.log(error);
@@ -122,9 +115,7 @@ const postHomeCareTimeSlots = async (data) => {
   };
 
   const response = await axios
-    .post(`${HOME_CARE_PACKAGE_SLOTS_URL}`, postData, {
-      headers: AUTH_HEADER,
-    })
+    .post(`${HOME_CARE_PACKAGE_SLOTS_URL}`, postData)
     .catch(
       (error) =>
         // TODO error
@@ -219,9 +210,7 @@ const getHomeCarePackageDetailsForBrokerage = (homeCarePackageId) =>
 
 const changeHomeCareBrokerageStatus = async ({ id, statusId }) =>
   await axios
-    .put(`${HOME_CARE_BROKERAGE_URL}/${id}/changeStatus/${statusId}`, {
-      headers: AUTH_HEADER,
-    })
+    .put(`${HOME_CARE_BROKERAGE_URL}/${id}/changeStatus/${statusId}`)
     .catch(
       (error) =>
         // TODO error
@@ -244,7 +233,7 @@ const createHomeCareBrokerageInfo = ({ id, postData }) => {
 const getHomeCareBrokerageApprovePackage = async (packageId) => {
   const response = await axios
     .get(`${HOME_CARE_BROKERAGE_URL}/${packageId}/approve-package`, {
-      headers: AUTH_HEADER,
+      
     })
     .catch((error) => {
       // TODO error

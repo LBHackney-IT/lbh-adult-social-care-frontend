@@ -14,9 +14,9 @@ const getApprovedPackagesClarificationNeed = (props) => {
   const params = getQueryParamsFromObject(props);
 
   return axiosRequest({
-    url: `${APPROVED_PACKAGES_URL}/clarification-need${params}`
-  })
-}
+    url: `${APPROVED_PACKAGES_URL}/clarification-need${params}`,
+  });
+};
 
 const getApprovedPackagesAwaitingBrokerage = (props) => {
   const params = getQueryParamsFromObject(props);
