@@ -55,9 +55,7 @@ const brokerageSlice = createSlice({
 export const { getBrokerageRequest, getBrokerageSuccess, getBrokerageFail } = brokerageSlice.actions;
 
 // Selectors
-const selectBrokerage = (state) => {
-  return state.brokerage;
-};
+const selectBrokerage = (state) => state.brokerage;
 export { selectBrokerage, brokerageSlice };
 
 // Reducer

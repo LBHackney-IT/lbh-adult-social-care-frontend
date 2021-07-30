@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import RadioButton from '../RadioButton';
 import DatePick from '../DatePick';
 import { getFixedPeriodOptions } from '../../api/Utils/CommonOptions';
@@ -14,14 +14,13 @@ const DateSetup = ({
   endDate,
   setEndDate,
 }) => {
-  const handleFixedPeriodChange = (value) => {
-    setIsFixedPeriod(value);
-    if (value === true) {
+  useEffect(() => {
+    if (isFixedPeriod === true) {
       setEndDate(new Date());
     } else {
       setEndDate('');
     }
-  };
+  }, [isFixedPeriod]);
 
   return (
     <div className="column">
@@ -31,7 +30,7 @@ const DateSetup = ({
           options={fixedPeriodOptions}
           error={errorFields.isFixedPeriod}
           setError={() => changeErrorFields('isFixedPeriod')}
-          onChange={(value) => handleFixedPeriodChange(value)}
+          onChange={setIsFixedPeriod}
           selectedValue={isFixedPeriod}
         />
       </div>
