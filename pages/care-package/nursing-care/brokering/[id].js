@@ -52,14 +52,14 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
   }
 
   try {
-    data.approvalHistoryEntries = await getNursingCarePackageApprovalHistory(
-      nursingCarePackageId,
-      req.cookies[HASC_TOKEN_ID]
-    ).map((historyItem) => ({
+    const result = await getNursingCarePackageApprovalHistory(nursingCarePackageId, req.cookies[HASC_TOKEN_ID]);
+    const newApprovalHistoryItems = result.map((historyItem) => ({
       eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
       eventMessage: historyItem.logText,
-      eventSubMessage: null,
+      eventSubMessage: historyItem.logSubText,
     }));
+
+    data.approvalHistoryEntries = newApprovalHistoryItems.slice();
   } catch (error) {
     data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`);
   }
