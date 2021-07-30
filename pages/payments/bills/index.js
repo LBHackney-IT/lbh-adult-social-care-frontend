@@ -125,7 +125,7 @@ const Bills = () => {
       <BillsTable
         checkedRows={checkedRows}
         setCheckedRows={onCheckRows}
-        isIgnoreId
+        isIgnoreId={true}
         classes={tabsClasses[tab]}
         rows={isBillsTab ? billsTableData : billsPayRunsTableData}
         sortBy={sortBy}

@@ -61,11 +61,11 @@ const SupplierReturn = () => {
     setSort({ value, name: field });
   };
 
-  const onCheckRow = (rowId) => {
-    if (checkedRows.includes(rowId)) {
-      setCheckedRows(checkedRows.filter((item) => String(item) !== String(rowId)));
+  const onCheckRow = (id) => {
+    if (checkedRows.includes(id)) {
+      setCheckedRows(checkedRows.filter((item) => String(item) !== String(id)));
     } else {
-      setCheckedRows([...checkedRows, rowId]);
+      setCheckedRows([...checkedRows, id]);
     }
   };
 

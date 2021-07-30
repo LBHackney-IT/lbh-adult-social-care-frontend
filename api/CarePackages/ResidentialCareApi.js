@@ -26,6 +26,19 @@ const createResidentialCarePackage = (residentialCarePackageForCreation) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const createResidentialCarePackageReclaim = (residentialCarePackageId, data) => {
+  const options = {
+    url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/package-reclaim`,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data,
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 /* const updateResidentialCarePackage = (residentialCarePackageId, residentialCarePackageForUpdate) => {
   const options = {
     url: `${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}`,
@@ -47,23 +60,35 @@ const getResidentialCarePackageList = () =>
 const getSingleResidentialCarePackage = (residentialCarePackageId) =>
   axios.get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}`).then(handleResponse).catch(handleError);
 
-const getResidentialCarePackageApprovalPackageContent = (residentialCarePackageId) =>
+const getResidentialCarePackageApprovalPackageContent = (residentialCarePackageId, hascToken) =>
+axios
+  .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-package-contents`, {
+    headers: {
+      Authorization: `Bearer ${hascToken}`,
+    },
+  })
+  .then(handleResponse)
+  .catch(handleError);
+
+const getResidentialCarePackageApproveBrokered = (residentialCarePackageId, hascToken) =>
   axios
-    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-package-contents`)
+    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-brokered-deal`, {
+      headers: {
+        Authorization: `Bearer ${hascToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 
-const getResidentialCarePackageApproveBrokered = (residentialCarePackageId) =>
-  axios
-    .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/approve-brokered-deal`)
-    .then(handleResponse)
-    .catch(handleError);
-
-const getResidentialCarePackageApprovalHistory = (residentialCarePackageId) =>
-  axios
-    .get(`${RESIDENTIAL_CARE_URL}/approval-history/${residentialCarePackageId}`)
-    .then(handleResponse)
-    .catch(handleError);
+const getResidentialCarePackageApprovalHistory = (residentialCarePackageId, hascToken) =>
+axios
+  .get(`${RESIDENTIAL_CARE_URL}/approval-history/${residentialCarePackageId}`, {
+    headers: {
+      Authorization: `Bearer ${hascToken}`,
+    },
+  })
+  .then(handleResponse)
+  .catch(handleError);    
 
 const residentialCareRequestClarification = (residentialCarePackageId, informationText) => {
   const options = {
@@ -106,7 +131,7 @@ const residentialCareApprovePackageContent = (residentialCarePackageId) => {
       'Content-Type': 'application/json;charset=UTF-8',
     },
     data: {
-      residentialCarePackageId
+      residentialCarePackageId,
     },
   };
   return axios(options).then(handleResponse).catch(handleError);
@@ -121,7 +146,7 @@ const residentialCareApproveCommercials = (residentialCarePackageId) => {
       'Content-Type': 'application/json;charset=UTF-8',
     },
     data: {
-      residentialCarePackageId
+      residentialCarePackageId,
     },
   };
   return axios(options).then(handleResponse).catch(handleError);
@@ -147,8 +172,14 @@ const residentialCareChangeStatus = (residentialCarePackageId, newStatusId) => {
 const getResidentialCareBrokerageStages = () =>
   axios.get(`${BASE_URL}/v1/stages`).then(handleResponse).catch(handleError);
 
-const getResidentialCarePackageDetailsForBrokerage = (residentialCarePackageId) =>
-  axios.get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage`).then(handleResponse).catch(handleError);
+const getResidentialCarePackageDetailsForBrokerage = (residentialCarePackageId, hascToken) =>
+  axios
+  .get(`${RESIDENTIAL_CARE_URL}/${residentialCarePackageId}/brokerage`, {
+    headers: {
+      Authorization: `Bearer ${hascToken}`,
+    },
+  })
+  .then(handleResponse).catch(handleError);
 
 const createResidentialCareBrokerageInfo = (residentialCarePackageId, residentialCareBrokerageInfoForCreation) => {
   const options = {
@@ -183,6 +214,7 @@ export {
   getResidentialCareAdditionalNeedsCostOptions,
   getTypeOfResidentialCareHomeOptions,
   createResidentialCarePackage,
+  createResidentialCarePackageReclaim,
   getResidentialCarePackageList,
   getSingleResidentialCarePackage,
   getResidentialCarePackageApprovalPackageContent,
@@ -196,5 +228,5 @@ export {
   getResidentialCareBrokerageStages,
   getResidentialCarePackageDetailsForBrokerage,
   createResidentialCareBrokerageInfo,
-  residentialCareChangeStage
+  residentialCareChangeStage,
 };

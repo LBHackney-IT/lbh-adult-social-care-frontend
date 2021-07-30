@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import ClientSummary from '../../../components/ClientSummary';
 import Dropdown from '../../../components/Dropdown';
 import TextArea from '../../../components/TextArea';
@@ -11,10 +13,15 @@ import CareTitle from '../../../components/CarePackages/CareTitle';
 import TitleHeader from '../../../components/TitleHeader';
 import NursingCareSummary from '../../../components/NursingCare/NursingCareSummary';
 import { Button } from '../../../components/Button';
-import { createNursingCarePackage, getTypeOfNursingHomeOptions } from '../../../api/CarePackages/NursingCareApi';
+import {
+  createNursingCarePackage,
+  createNursingCarePackageReclaim,
+  getTypeOfNursingHomeOptions,
+} from '../../../api/CarePackages/NursingCareApi';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
+import { addNotification } from '../../../reducers/notificationsReducer';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
-import { getUserSession } from '../../../service/helpers';
+import { getLoggedInUser, getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
 
@@ -22,8 +29,10 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
 
+  const user = getLoggedInUser({ req });
+
   return {
-    props: {}, // will be passed to the page component as props
+    props: { loggedInUserId: user.userId }, // will be passed to the page component as props
   };
 });
 
@@ -67,6 +76,8 @@ const NursingCare = () => {
 
   const [additionalNeedsEntriesErrors, setAdditionalNeedsEntriesErrors] = useState([]);
   const [packageReclaimedError, setPackageReclaimedError] = useState([]);
+
+  const dispatch = useDispatch();
 
   const [errorFields, setErrorFields] = useState({
     needToAddress: '',
@@ -112,7 +123,6 @@ const NursingCare = () => {
       const valid = fieldValidator([
         { name: 'selectedCost', value: item.selectedCost, rules: ['empty'] },
         { name: 'selectedCostText', value: item.selectedCostText, rules: ['empty'] },
-        { name: 'selectedPeriod', value: item.selectedPeriod, rules: ['empty'] },
         { name: 'needToAddress', value: item.needToAddress, rules: ['empty'] },
       ]);
 
@@ -183,15 +193,35 @@ const NursingCare = () => {
     };
 
     createNursingCarePackage(nursingCarePackageToCreate)
-      .then(() => {
-        alert('Package saved.');
-        router.push(`${CARE_PACKAGE_ROUTE}`);
+      .catch((error) => {
+        dispatch(addNotification({ text: `Create package failed. ${error.message ?? ''}` }));
+        setErrors([...errors, `Create package failed. ${error.message}`]);
+        throw new Error();
+      })
+      .then(({ id }) => {
+        const requests = packagesReclaimed.map((el) =>
+          createNursingCarePackageReclaim(id, {
+            nursingCarePackageId: id,
+            reclaimFromId: el.from,
+            reclaimCategoryId: el.category,
+            reclaimAmountOptionId: el.type,
+            notes: el.notes,
+            amount: el.amount,
+          })
+        );
+
+        return Promise.all(requests);
       })
       .catch((error) => {
-        alert(`Create package failed. ${error.message}`);
-        setErrors([...errors, `Create package failed. ${error.message}`]);
+        dispatch(addNotification({ text: `Create reclaims failed. ${error.message ?? ''}` }));
+        setErrors([...errors, `Create reclaims failed. ${error.message}`]);
+      })
+      .then(() => {
+        router.push(`${CARE_PACKAGE_ROUTE}`);
+        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
       });
   };
+
   return (
     <Layout headerTitle="BUILD A CARE PACKAGE">
       <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
@@ -249,7 +279,7 @@ const NursingCare = () => {
         <TitleHeader>Package Details</TitleHeader>
         <NursingCareSummary
           startDate={startDate}
-          endDate={endDate}
+          endDate={getEnGBFormattedDate(endDate)}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}
           setAdditionalNeedsEntries={setAdditionalNeedsEntries}

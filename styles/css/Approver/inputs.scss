@@ -12,9 +12,14 @@
 
   .custom-input__search {
     min-width: 275px;
+
+    .input,
+    .textarea {
+      width: 86%;
+    }
   }
 
-  .pay-runs__filters .dropdown-container .button {
+  .dropdown-container .button {
     width: 170px;
   }
 }

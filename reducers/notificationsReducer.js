@@ -1,5 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// EXAMPLE OF PAYLOAD
+// {
+//   time: 4000,
+//   className: 'error',
+//   text: 'Something went wrong',
+// }
+
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState: {

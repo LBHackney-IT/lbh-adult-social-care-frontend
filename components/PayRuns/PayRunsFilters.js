@@ -3,16 +3,7 @@ import Input from '../Input';
 import Dropdown from '../Dropdown';
 import { Button } from '../Button';
 
-const PayRunsFilters = ({
-  filters,
-  searchId,
-  changeFilter,
-  typeOptions,
-  cadenceOptions,
-  statusOptions,
-  dateOptions,
-  applyFilters,
-}) => (
+const PayRunsFilters = ({ filters, searchId, changeFilter, typeOptions, statusOptions, dateOptions, applyFilters }) => (
   <>
     <Input
       classes="mr-3"
@@ -29,13 +20,6 @@ const PayRunsFilters = ({
       onOptionSelect={(option) => changeFilter('type', option)}
     />
     <Dropdown
-      initialText="Cadence"
-      classes="pay-runs__dropdown-cadence mr-3"
-      options={cadenceOptions}
-      selectedValue={filters.cadence}
-      onOptionSelect={(option) => changeFilter('cadence', option)}
-    />
-    <Dropdown
       initialText="Status"
       classes="pay-runs__dropdown-status mr-3"
       options={statusOptions}
@@ -49,6 +33,12 @@ const PayRunsFilters = ({
       selectedValue={filters.date}
       onOptionSelect={(option) => changeFilter('date', option)}
     />
+
+    {/* TODO delete if no need a datepicker */}
+    {/* <DatePick */}
+    {/*  dateValue={filters.date} */}
+    {/*  setDate={(value) => changeFilter('date', value)} */}
+    {/* /> */}
     <Button onClick={applyFilters}>Apply</Button>
   </>
 );

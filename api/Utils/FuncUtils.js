@@ -9,7 +9,11 @@ const getAgeFromDateString = (dateString) => {
   return age;
 };
 
-const getEnGBFormattedDate = (dateString) => new Date(dateString).toLocaleDateString('en-GB');
+const getEnGBFormattedDate = (dateString) => {
+  if (!dateString) return null;
+  return new Date(dateString).toLocaleDateString('en-GB');
+};
+
 const stringIsNullOrEmpty = (str) => {
   if (!str || str.length === 0) return true;
   if (!str || /^\s*$/.test(str)) return true;
@@ -17,4 +21,7 @@ const stringIsNullOrEmpty = (str) => {
   return false;
 };
 
-export { getAgeFromDateString, getEnGBFormattedDate, stringIsNullOrEmpty };
+const isServer = () => typeof window === 'undefined';
+const isBrowser = () => typeof window !== 'undefined';
+
+export { getAgeFromDateString, getEnGBFormattedDate, stringIsNullOrEmpty, isServer, isBrowser };

@@ -25,7 +25,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: ho
 
   try {
     // Call to api to get package
-    // TODO change API
+    //TODO change API
     const homeCareBrokerageDetails = await getHomeCarePackageDetailsForBrokerage(homeCarePackageId);
     const newAdditionalNeedsEntries = homeCareBrokerageDetails?.homeCareAdditionalNeeds?.map((additionalneedsItem) => ({
       id: additionalneedsItem.id,
@@ -99,7 +99,7 @@ const HomeCareBrokerPackage = ({ errorData, homeCarePackage, additionalNeedsEntr
   };
 
   useEffect(() => {
-    if (errorData?.length && errorData[0].text) {
+    if (errorData && errorData?.length && errorData[0].text) {
       errorData.forEach(({ text: errorText, response }) => {
         console.error(response);
         dispatch(addNotification({ text: errorText }));

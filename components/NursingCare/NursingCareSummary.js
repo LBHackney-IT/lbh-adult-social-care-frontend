@@ -1,4 +1,5 @@
 import React from 'react';
+import { getEnGBFormattedDate } from '../../api/Utils/FuncUtils';
 import { Button } from '../Button';
 
 const NursingCareSummary = ({
@@ -10,8 +11,6 @@ const NursingCareSummary = ({
   additionalNeedsEntries = [],
   setAdditionalNeedsEntries = () => {},
 }) => {
-  startDate = new Date(startDate).toLocaleDateString('en-GB');
-
   // Remove additional need entry
   const removeAdditionalNeedEntry = (entryId) => {
     const newEntries = additionalNeedsEntries.filter((entryItem) => entryItem.id !== entryId);
@@ -25,7 +24,7 @@ const NursingCareSummary = ({
           <div>
             <span className="font-weight-bold mr-2 font-size-16px">Nursing Care</span>
             <span className="font-size-16px">
-              {startDate} {endDate ? ` - ${endDate}` : null}
+              {getEnGBFormattedDate(startDate)} {endDate ? ` - ${endDate}` : ' - Ongoing'}
             </span>
           </div>
         </div>

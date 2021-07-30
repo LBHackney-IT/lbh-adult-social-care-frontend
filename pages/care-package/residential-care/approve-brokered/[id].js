@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import ResidentialCareApprovalTitle from '../../../../components/ResidentialCare/ResidentialCareApprovalTitle';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import Layout from '../../../../components/Layout/Layout';
@@ -13,52 +14,56 @@ import {
   getResidentialCarePackageApprovalHistory,
   residentialCareClarifyCommercial,
   residentialCareChangeStatus,
-  residentialCareApproveCommercials
+  residentialCareApproveCommercials,
 } from '../../../../api/CarePackages/ResidentialCareApi';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
 
 // start before render
-export const getServerSideProps = withSession(async ({ req, res: response, query: { id: residentialCarePackageId } }) => {
-  getUserSession({ req, res: response });
+export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
 
   const data = {
     errorData: [],
   };
 
-  try {
-    const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId);
-    const newApprovalHistoryItems = res.map((historyItem) => ({
-      eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
-      eventMessage: historyItem.logText,
-      eventSubMessage: undefined,
-    }));
+    try {
+      const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId,  req.cookies.hascToken);
+      const newApprovalHistoryItems = res.map((historyItem) => ({
+        eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
+        eventMessage: historyItem.logText,
+        eventSubMessage: historyItem.logSubText,
+      }));
 
-    data.approvalHistoryEntries = newApprovalHistoryItems.slice();
-  } catch (error) {
-    data.errorData.push(`Retrieve residential care approval history failed. ${error.message}`);
+      data.approvalHistoryEntries = newApprovalHistoryItems.slice();
+    } catch (error) {
+      data.errorData.push(`Retrieve residential care approval history failed. ${error}`);
+    }
+
+    try {
+      const residentialCarePackage = await getResidentialCarePackageApproveBrokered(
+        residentialCarePackageId,
+        req.cookies.hascToken
+      );
+      const newAdditionalNeedsEntries = residentialCarePackage.residentialCarePackage.residentialCareAdditionalNeeds.map(
+        (additionalneedsItem) => ({
+          id: additionalneedsItem.id,
+          isWeeklyCost: additionalneedsItem.isWeeklyCost,
+          isOneOffCost: additionalneedsItem.isOneOffCost,
+          needToAddress: additionalneedsItem.needToAddress,
+        })
+      );
+  
+      data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
+      data.residentialCarePackage = residentialCarePackage;
+    } catch (error) {
+      data.errorData.push(`Retrieve residential care package details failed. ${error}`);
+    }
+
+    return { props: { ...data } };
   }
-
-  try {
-    const residentialCarePackage = await getResidentialCarePackageApproveBrokered(residentialCarePackageId);
-
-    const newAdditionalNeedsEntries = residentialCarePackage.residentialCareAdditionalNeeds.map(
-      (additionalneedsItem) => ({
-        id: additionalneedsItem.id,
-        isWeeklyCost: additionalneedsItem.isWeeklyCost,
-        isOneOffCost: additionalneedsItem.isOneOffCost,
-        needToAddress: additionalneedsItem.needToAddress,
-      })
-    );
-
-    data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
-    data.residentialCarePackage = residentialCarePackage;
-  } catch (error) {
-    data.errorData.push(`Retrieve residential care package details failed. ${error.message}`);
-  }
-
-  return { props: { ...data } };
-});
+);
 
 const ResidentialCareApproveBrokered = ({
   residentialCarePackage,
@@ -80,8 +85,8 @@ const ResidentialCareApproveBrokered = ({
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        alert(`Status change failed. ${error}`);
+        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
 
@@ -91,8 +96,8 @@ const ResidentialCareApproveBrokered = ({
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        alert(`Status change failed. ${error}`);
+        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
 
@@ -103,8 +108,8 @@ const ResidentialCareApproveBrokered = ({
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        alert(`Status change failed. ${error}`);
+        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
 
@@ -115,12 +120,11 @@ const ResidentialCareApproveBrokered = ({
           startDate={residentialCarePackage?.residentialCarePackage.startDate}
           endDate={
             residentialCarePackage?.residentialCarePackage.endDate !== null
-              ? residentialCarePackage?.residentialCarePackage.endDate
+              ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
               : 'Ongoing'
           }
         />
         <ApprovalClientSummary />
-
         <div className="columns">
           <div className="column">
             <div className="level">
@@ -129,7 +133,7 @@ const ResidentialCareApproveBrokered = ({
                   <div>
                     <p className="font-weight-bold hackney-text-green">STARTS</p>
                     <p className="font-size-14px">
-                      {new Date(residentialCarePackage?.residentialCarePackage.startDate).toLocaleDateString('en-GB')}
+                      {getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.startDate)}
                     </p>
                   </div>
                 </div>
@@ -144,7 +148,7 @@ const ResidentialCareApproveBrokered = ({
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
                       {residentialCarePackage?.residentialCarePackage.endDate !== null
-                        ? residentialCarePackage?.residentialCarePackage.endDate
+                        ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
                         : 'Ongoing'}
                     </p>
                   </div>
@@ -200,7 +204,7 @@ const ResidentialCareApproveBrokered = ({
                 startDate={residentialCarePackage?.residentialCarePackage.startDate}
                 endDate={
                   residentialCarePackage?.residentialCarePackage.endDate !== null
-                    ? residentialCarePackage?.residentialCarePackage.endDate
+                    ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
                     : 'Ongoing'
                 }
                 typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
@@ -218,7 +222,7 @@ const ResidentialCareApproveBrokered = ({
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light" onClick={handleRejectPackage} type="button">
+                  <button className="button hackney-btn-light" onClick={handleRejectPackage}>
                     Deny
                   </button>
                 </div>
@@ -232,7 +236,7 @@ const ResidentialCareApproveBrokered = ({
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green" onClick={handleApprovePackageCommercials} type="button">
+                  <button className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
                     Approve Commercials
                   </button>
                 </div>
@@ -246,7 +250,7 @@ const ResidentialCareApproveBrokered = ({
             <div className="mt-1">
               <p className="font-size-16px font-weight-bold">Request more information</p>
               <TextArea label="" rows={5} placeholder="Add details..." onChange={setRequestInformationText} />
-              <button className="button hackney-btn-green" onClick={handleRequestMoreInformation} type="button">
+              <button className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
                 Request more information
               </button>
             </div>

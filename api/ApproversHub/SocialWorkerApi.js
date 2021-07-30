@@ -4,22 +4,20 @@ import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const SUBMITTED_PACKAGES_URL = `${BASE_URL}/v1/submitted-package-requests`;
 
-const getSubmittedPackages = (pageNumber, pageSize, clientId, statusId) =>
-  axios.get(`${SUBMITTED_PACKAGES_URL}`,
-    {
-        params: {
-            pageNumber: pageNumber,
-            pageSize: pageSize,
-            clientId : clientId,
-            statusId : statusId
-        }
-    }
-  ).then(handleResponse).catch(handleError);
+const getSubmittedPackages = (pageNumber, pageSize, clientName, statusId) =>
+  axios
+    .get(`${SUBMITTED_PACKAGES_URL}`, {
+      params: {
+        pageNumber,
+        pageSize,
+        clientName,
+        statusId,
+      },
+    })
+    .then(handleResponse)
+    .catch(handleError);
 
 const getSubmittedPackagesStatus = () =>
   axios.get(`${SUBMITTED_PACKAGES_URL}/status`).then(handleResponse).catch(handleError);
 
-export {
-    getSubmittedPackages,
-    getSubmittedPackagesStatus
-};
+export { getSubmittedPackages, getSubmittedPackagesStatus };

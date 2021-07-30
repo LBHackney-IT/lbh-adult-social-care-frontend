@@ -1,7 +1,6 @@
 .login-page__form-container {
-  height: 70vh;
   width: 30%;
-  margin: 0 auto;
+  margin: 0 auto 200px auto;
   padding-top: 168px;
 }
 
@@ -11,7 +10,7 @@
   border-radius: 5px;
   padding: 32px;
 
-  button.button-base {
+  a.button-base {
     width: 308px;
     height: 80px;
     margin-top: 16px;

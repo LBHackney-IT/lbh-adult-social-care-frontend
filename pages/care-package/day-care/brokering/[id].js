@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { selectBrokerage, getBrokerageSuccess } from '../../../../reducers/brokerageReducer';
 import { getUserSession, uniqueID } from '../../../../service/helpers';
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
-import ClientSummary from '../../../../components/ClientSummary';
 import Layout from '../../../../components/Layout/Layout';
 import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
@@ -62,8 +61,8 @@ const DayCareBrokering = ({
   dayCarePackage,
   errorData,
 }) => {
-  const dispatch = useDispatch();
   const router = useRouter();
+  const dispatch = useDispatch();
   const [errors, setErrors] = useState(errorData);
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState('approvalHistory');
@@ -160,7 +159,7 @@ const DayCareBrokering = ({
         dateOfBirth: clientDetails && getEnGBFormattedDate(clientDetails.dateOfBirth),
         postcode: clientDetails?.postCode,
       }}
-      headerTitle='Day Care Brokering'
+      headerTitle="Day Care Brokering"
     >
       <PackageHeader />
       <PackagesDayCare

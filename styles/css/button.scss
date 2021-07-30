@@ -26,6 +26,10 @@
     color: $lbh-gray-text;
     border-color: $lbh-gray-text;
   }
+
+  &[disabled]:not(.outline) {
+    background: $lbh-green1;
+  }
 }
 
 .link-button {

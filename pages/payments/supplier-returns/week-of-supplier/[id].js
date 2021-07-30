@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
+import PopupInvoiceChat from '../../../../components/Chat/PopupInvoiceChat';
 import Pagination from '../../../../components/Payments/Pagination';
 import { testDataHelpMessages, weeklyOfSupplierTableData } from '../../../../testData/testDataPayRuns';
 import SupplierReturnsLevelInsight from '../../../../components/SupplierReturns/SupplierReturnsLevelInsight';
 import ChatButton from '../../../../components/PayRuns/ChatButton';
-import PopupHelpChat from '../../../../components/Chat/PopupHelpChat';
 import { selectSupplierReturns } from '../../../../reducers/supplierReturnsReducer';
 import { formatDateWithSign, getUserSession } from '../../../../service/helpers';
 import { Button } from '../../../../components/Button';
@@ -66,11 +66,11 @@ const WeekOfSupplierView = () => {
     setSort({ value, name: field });
   };
 
-  const onCheckRow = (rowId) => {
-    if (checkedRows.includes(rowId)) {
-      setCheckedRows(checkedRows.filter((item) => String(item) !== String(rowId)));
+  const onCheckRow = (id) => {
+    if (checkedRows.includes(id)) {
+      setCheckedRows(checkedRows.filter((item) => String(item) !== String(id)));
     } else {
-      setCheckedRows([...checkedRows, rowId]);
+      setCheckedRows([...checkedRows, id]);
     }
   };
 
@@ -184,7 +184,7 @@ const WeekOfSupplierView = () => {
   return (
     <div className="supplier-returns week-of-supplier supplier-returns-dashboard">
       {openedPopup === 'help-chat' && (
-        <PopupHelpChat
+        <PopupInvoiceChat
           closePopup={closeHelpChat}
           newMessageText={newMessageText}
           setNewMessageText={setNewMessageText}

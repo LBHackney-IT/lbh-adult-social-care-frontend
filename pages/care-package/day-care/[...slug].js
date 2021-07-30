@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ClientSummary from '../../../components/ClientSummary';
 import Layout from '../../../components/Layout/Layout';
 import CareTitle from '../../../components/CarePackages/CareTitle';
@@ -15,12 +16,13 @@ import {
 } from '../../../api/CarePackages/DayCareApi';
 import DayCareOpportunities from '../../../components/DayCare/DayCareOpportunities';
 import { Button } from '../../../components/Button';
+import { addNotification } from '../../../reducers/notificationsReducer';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import TitleHeader from '../../../components/TitleHeader';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import DayCareSummary from '../../../components/DayCare/DayCareSummary';
 import DayCareCollegeAsyncSearch from '../../../components/DayCare/DayCareCollegeAsyncSearch';
-import { getErrorResponse, getUserSession } from '../../../service/helpers';
+import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
 import ErrorField from '../../../components/ErrorField';
@@ -35,6 +37,7 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 });
 
 const DayCare = () => {
+  const dispatch = useDispatch();
   const isTrueSet = (myValue) => myValue === 'true';
   const checkFixedPeriod = (myValue) => myValue === '1';
 
@@ -281,12 +284,11 @@ const DayCare = () => {
 
     createDayCarePackage(dayCarePackageToCreate)
       .then(() => {
-        alert('Package saved.');
+        dispatch(addNotification({ text: 'Package saved.', className: 'success' }));
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Create package failed. ${error.message}`);
-        const errorData = getErrorResponse(error);
+        dispatch(addNotification({ text: `Create package failed. ${error.message}` }));
         setErrors([...errors, `Create package failed. ${error.message}`]);
       });
   };

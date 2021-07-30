@@ -58,7 +58,7 @@ const SupplierDashboard = () => {
     <div className="supplier-dashboard">
       <SupplierDashboardInnerHeader />
       <SupplierDashboardTable
-        isIgnoreId
+        isIgnoreId={true}
         onClickTableRow={onClickTableRow}
         rows={supplierDashboardTableData}
         sortBy={sortBy}

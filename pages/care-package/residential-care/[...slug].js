@@ -1,15 +1,18 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ClientSummary from '../../../components/ClientSummary';
 import Layout from '../../../components/Layout/Layout';
 import CareTitle from '../../../components/CarePackages/CareTitle';
 import TextArea from '../../../components/TextArea';
 import Dropdown from '../../../components/Dropdown';
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
 } from '../../../components/CarePackages/AdditionalNeedsEntries';
 import {
   createResidentialCarePackage,
+  createResidentialCarePackageReclaim,
   getResidentialCareAdditionalNeedsCostOptions,
   getTypeOfResidentialCareHomeOptions,
 } from '../../../api/CarePackages/ResidentialCareApi';
@@ -20,6 +23,8 @@ import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
+import { addNotification } from '../../../reducers/notificationsReducer';
+import fieldValidator from '../../../service/inputValidator';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -31,14 +36,23 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 });
 
 const ResidentialCare = () => {
+  const dispatch = useDispatch();
   const isTrueParse = (myValue) => myValue === 'true';
   const notNullString = (myValue) => myValue !== 'null' && myValue !== 'undefined';
 
   // Parameters
   const router = useRouter();
   const [typeOfStayText] = router.query.slug; // get query params
-  let [hasRespiteCare, hasDischargePackage, isImmediateOrReEnablement, typeOfStayId, isS117, isFixedPeriod, startDate, endDate] =
-    router.query.slug; // get query params
+  let [
+    hasRespiteCare,
+    hasDischargePackage,
+    isImmediateOrReEnablement,
+    typeOfStayId,
+    isS117,
+    isFixedPeriod,
+    startDate,
+    endDate,
+  ] = router.query.slug; // get query params
   hasRespiteCare = isTrueParse(hasRespiteCare) || false;
   hasDischargePackage = isTrueParse(hasDischargePackage) || false;
   isImmediateOrReEnablement = isTrueParse(isImmediateOrReEnablement) || false;
@@ -87,12 +101,60 @@ const ResidentialCare = () => {
     }
   }, [careHomeTypes, additionalNeedsCostOptions]);
 
-  const formIsValid = () => {
-    const formErrors = [];
+  const [errorFields, setErrorFields] = useState({
+    needToAddress: '',
+    selectedNursingHomeType: '',
+  });
+  const [additionalNeedsEntriesErrors, setAdditionalNeedsEntriesErrors] = useState([]);
+  const [packageReclaimedError, setPackageReclaimedError] = useState([]);
 
-    setErrors(formErrors);
-    // Form is valid if the errors array has no items
-    return formErrors.length === 0;
+  const changeErrorField = (field) => {
+    setErrorFields({ ...errorFields, [field]: '' });
+  };
+
+  const formIsValid = () => {
+    const defaultErrors = fieldValidator([
+      { name: 'needToAddress', value: needToAddress, rules: ['empty'] },
+      { name: 'selectedCareHomeType', value: selectedCareHomeType, rules: ['empty'] },
+    ]);
+
+    if (defaultErrors.hasErrors) {
+      setErrorFields(defaultErrors.validFields);
+    }
+
+    const additionalNeedsTimedArr = [];
+
+    const additionalNeedsError = additionalNeedsEntries.map((item) => {
+      const valid = fieldValidator([
+        { name: 'selectedCost', value: item.selectedCost, rules: ['empty'] },
+        { name: 'selectedCostText', value: item.selectedCostText, rules: ['empty'] },
+        { name: 'needToAddress', value: item.needToAddress, rules: ['empty'] },
+      ]);
+
+      additionalNeedsTimedArr.push(valid.validFields);
+      return valid.hasErrors;
+    });
+    setAdditionalNeedsEntriesErrors(additionalNeedsTimedArr);
+
+    const packageReclaimsTimedArr = [];
+    const packageReclaimsFieldsError = packagesReclaimed.map((item) => {
+      const valid = fieldValidator([
+        { name: 'from', value: item.from, rules: ['empty'] },
+        { name: 'category', value: item.category, rules: ['empty'] },
+        { name: 'type', value: item.type, rules: ['empty'] },
+        { name: 'notes', value: item.notes, rules: ['empty'] },
+        { name: 'amount', value: item.amount, rules: ['empty'] },
+      ]);
+      packageReclaimsTimedArr.push(valid.validFields);
+      return valid.hasErrors;
+    });
+    setPackageReclaimedError(packageReclaimsTimedArr);
+
+    return !(
+      defaultErrors.hasErrors ||
+      additionalNeedsError.some((item) => item) ||
+      packageReclaimsFieldsError.some((item) => item)
+    );
   };
 
   const handleSavePackage = (event) => {
@@ -118,6 +180,7 @@ const ResidentialCare = () => {
     }));
 
     const residentialCarePackageToCreate = {
+      isFixedPeriod: JSON.parse(isFixedPeriod),
       clientId: 'aee45700-af9b-4ab5-bb43-535adbdcfb80',
       startDate: startDate ? new Date(startDate).toJSON() : null,
       endDate: endDate ? new Date(endDate).toJSON() : null,
@@ -134,13 +197,32 @@ const ResidentialCare = () => {
     };
 
     createResidentialCarePackage(residentialCarePackageToCreate)
-      .then(() => {
-        alert('Package saved.');
-        router.push(`${CARE_PACKAGE_ROUTE}`);
+      .catch((error) => {
+        dispatch(addNotification({ text: `Create package failed. ${error.message ?? ''}` }));
+        setErrors([...errors, `Create package failed. ${error.message}`]);
+        throw new Error();
+      })
+      .then(({ id }) => {
+        const requests = packagesReclaimed.map((el) =>
+          createResidentialCarePackageReclaim(id, {
+            residentialCarePackageId: id,
+            reclaimFromId: el.from,
+            reclaimCategoryId: el.category,
+            reclaimAmountOptionId: el.type,
+            notes: el.notes,
+            amount: el.amount,
+          })
+        );
+
+        return Promise.all(requests);
       })
       .catch((error) => {
-        alert(`Create package failed. ${error.message}`);
-        setErrors([...errors, `Create package failed. ${error.message}`]);
+        dispatch(addNotification({ text: `Create reclaims failed. ${error.message ?? ''}` }));
+        setErrors([...errors, `Create reclaims failed. ${error.message}`]);
+      })
+      .then(() => {
+        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
+        router.push(`${CARE_PACKAGE_ROUTE}`);
       });
   };
 
@@ -156,7 +238,14 @@ const ResidentialCare = () => {
       </div>
       <div className="mt-4 columns">
         <div className="column">
-          <TextArea label="Need to Address" rows={5} placeholder="Add details..." onChange={setNeedToAddress} />
+          <TextArea
+            label="Need to Address"
+            rows={5}
+            placeholder="Add details..."
+            onChange={setNeedToAddress}
+            error={errorFields.needToAddress}
+            setError={() => changeErrorField('needToAddress')}
+          />
         </div>
         <div className="column">
           <Dropdown
@@ -165,6 +254,8 @@ const ResidentialCare = () => {
             selectedValue={selectedCareHomeType}
             onOptionSelect={(option) => setSelectedCareHomeType(option)}
             buttonStyle={{ width: '240px' }}
+            error={errorFields.selectedCareHomeType}
+            setError={() => changeErrorField('selectedCareHomeType')}
           />
         </div>
       </div>
@@ -173,21 +264,25 @@ const ResidentialCare = () => {
           costOptions={additionalNeedsCostOptions}
           entries={additionalNeedsEntries}
           setAdditionalNeedsState={setAdditionalNeedsEntries}
+          error={additionalNeedsEntriesErrors}
+          setError={setAdditionalNeedsEntriesErrors}
         />
       </div>
 
       <PackageReclaims
         errors={errors}
         setErrors={setErrors}
+        error={packageReclaimedError}
+        setError={setPackageReclaimedError}
         packagesReclaimed={packagesReclaimed}
         setPackagesReclaimed={setPackagesReclaimed}
       />
 
       <div className="mt-4 mb-4">
-        <TitleHeader className='mb-5'>Package Details</TitleHeader>
+        <TitleHeader className="mb-5">Package Details</TitleHeader>
         <ResidentialCareSummary
           startDate={startDate}
-          endDate={endDate}
+          endDate={getEnGBFormattedDate(endDate)}
           typeOfStayText={typeOfStayText}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}

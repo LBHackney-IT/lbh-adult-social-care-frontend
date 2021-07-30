@@ -5,7 +5,7 @@ import PackageCostBox from '../DayCare/PackageCostBox';
 import PackageApprovalHistorySummary from '../PackageApprovalHistorySummary';
 
 const ApprovalHistory = ({
-  history,
+  history = [],
   costSummary,
   clientDateOfBirth,
   isFixedPeriodOrOngoing,

@@ -20,6 +20,19 @@ const createNursingCarePackage = (nursingCarePackageForCreation) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const createNursingCarePackageReclaim = (nursingCarePackageId, data) => {
+  const options = {
+    url: `${NURSING_CARE_URL}/${nursingCarePackageId}/package-reclaim`,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data,
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 /* const updateNursingCarePackage = (nursingCarePackageId, nursingCarePackageForUpdate) => {
   const options = {
     url: `${NURSING_CARE_URL}/${nursingCarePackageId}`,
@@ -41,17 +54,35 @@ const getNursingCarePackageList = () =>
 const getSingleNursingCarePackage = (nursingCarePackageId) =>
   axios.get(`${NURSING_CARE_URL}/${nursingCarePackageId}`).then(handleResponse).catch(handleError);
 
-const getNursingCarePackageApprovalPackageContent = (nursingCarePackageId) =>
+const getNursingCarePackageApprovalPackageContent = (nursingCarePackageId, hascToken) =>
   axios
-    .get(`${NURSING_CARE_URL}/${nursingCarePackageId}/approve-package-contents`)
+    .get(`${NURSING_CARE_URL}/${nursingCarePackageId}/approve-package-contents`, {
+      headers: {
+        Authorization: `Bearer ${hascToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 
-const getNursingCarePackageApproveCommercial = (nursingCarePackageId) =>
-  axios.get(`${NURSING_CARE_URL}/${nursingCarePackageId}/approve-commercials`).then(handleResponse).catch(handleError);
+const getNursingCarePackageApproveCommercial = (nursingCarePackageId, hascToken) =>
+  axios
+    .get(`${NURSING_CARE_URL}/${nursingCarePackageId}/approve-commercials`, {
+      headers: {
+        Authorization: `Bearer ${hascToken}`,
+      },
+    })
+    .then(handleResponse)
+    .catch(handleError);
 
-const getNursingCarePackageApprovalHistory = (nursingCarePackageId) =>
-  axios.get(`${NURSING_CARE_URL}/approval-history/${nursingCarePackageId}`).then(handleResponse).catch(handleError);
+const getNursingCarePackageApprovalHistory = (nursingCarePackageId, hascToken) =>
+  axios
+    .get(`${NURSING_CARE_URL}/approval-history/${nursingCarePackageId}`, {
+      headers: {
+        Authorization: `Bearer ${hascToken}`,
+      },
+    })
+    .then(handleResponse)
+    .catch(handleError);
 
 const nursingCareRequestClarification = (nursingCarePackageId, informationText) => {
   const options = {
@@ -88,10 +119,10 @@ const nursingCareClarifyCommercial = (nursingCarePackageId, informationText) => 
 const nursingCareChangeStatus = (nursingCarePackageId, newStatusId) => {
   const options = {
     url: `${NURSING_CARE_URL}/${nursingCarePackageId}/change-status/${newStatusId}`,
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json;charset=UTF-8",
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
     },
     data: {
       nursingCarePackageId,
@@ -110,7 +141,7 @@ const nursingCareApprovePackageContent = (nursingCarePackageId) => {
       'Content-Type': 'application/json;charset=UTF-8',
     },
     data: {
-      nursingCarePackageId
+      nursingCarePackageId,
     },
   };
   return axios(options).then(handleResponse).catch(handleError);
@@ -125,7 +156,7 @@ const nursingCareApproveCommercials = (nursingCarePackageId) => {
       'Content-Type': 'application/json;charset=UTF-8',
     },
     data: {
-      nursingCarePackageId
+      nursingCarePackageId,
     },
   };
   return axios(options).then(handleResponse).catch(handleError);
@@ -150,8 +181,15 @@ const nursingCareChangeStage = (nursingCarePackageId, stageId) => {
 // Nursing care brokerage
 const getNursingCareBrokerageStages = () => axios.get(`${BASE_URL}/v1/stages`).then(handleResponse).catch(handleError);
 
-const getNursingCarePackageDetailsForBrokerage = (nursingCarePackageId) =>
-  axios.get(`${NURSING_CARE_URL}/${nursingCarePackageId}/brokerage`).then(handleResponse).catch(handleError);
+const getNursingCarePackageDetailsForBrokerage = (nursingCarePackageId, hascToken) =>
+  axios
+    .get(`${NURSING_CARE_URL}/${nursingCarePackageId}/brokerage`, {
+      headers: {
+        Authorization: `Bearer ${hascToken}`,
+      },
+    })
+    .then(handleResponse)
+    .catch(handleError);
 
 const createNursingCareBrokerageInfo = (nursingCarePackageId, nursingCareBrokerageInfoForCreation) => {
   const options = {
@@ -169,6 +207,7 @@ const createNursingCareBrokerageInfo = (nursingCarePackageId, nursingCareBrokera
 export {
   getTypeOfNursingHomeOptions,
   createNursingCarePackage,
+  createNursingCarePackageReclaim,
   getNursingCarePackageList,
   getSingleNursingCarePackage,
   getNursingCarePackageApprovalPackageContent,

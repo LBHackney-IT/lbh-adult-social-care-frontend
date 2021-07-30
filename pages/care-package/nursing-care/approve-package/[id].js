@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import Layout from '../../../../components/Layout/Layout';
 import NursingCareApprovalTitle from '../../../../components/NursingCare/NursingCareApprovalTitle';
@@ -13,10 +14,13 @@ import {
   getNursingCarePackageApprovalHistory,
   nursingCareRequestClarification,
   nursingCareChangeStatus,
-  nursingCareApprovePackageContent
+  nursingCareApprovePackageContent,
 } from '../../../../api/CarePackages/NursingCareApi';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import { addNotification } from '../../../../reducers/notificationsReducer';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
@@ -28,26 +32,31 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
   };
 
   try {
-    const nursingCarePackage = await getNursingCarePackageApprovalPackageContent(nursingCarePackageId);
-    const newAdditionalNeedsEntries = nursingCarePackage.nursingCareAdditionalNeeds.map((additionalneedsItem) => ({
-      id: additionalneedsItem.id,
-      isWeeklyCost: additionalneedsItem.isWeeklyCost,
-      isOneOffCost: additionalneedsItem.isOneOffCost,
-      needToAddress: additionalneedsItem.needToAddress,
-    }));
+    const nursingCarePackage = await getNursingCarePackageApprovalPackageContent(
+      nursingCarePackageId,
+      req.cookies.hascToken
+    );
+    const newAdditionalNeedsEntries = nursingCarePackage.nursingCarePackage.nursingCareAdditionalNeeds.map(
+      (additionalneedsItem) => ({
+        id: additionalneedsItem.id,
+        isWeeklyCost: additionalneedsItem.isWeeklyCost,
+        isOneOffCost: additionalneedsItem.isOneOffCost,
+        needToAddress: additionalneedsItem.needToAddress,
+      })
+    );
 
     data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
     data.nursingCarePackage = nursingCarePackage;
   } catch (error) {
-    data.errorData.push(`Retrieve nursing care package details failed. ${error.message}`);
+    data.errorData.push(`Retrieve nursing care package details failed. ${error}`);
   }
 
   try {
-    const res = await getNursingCarePackageApprovalHistory(nursingCarePackageId);
-    const newApprovalHistoryItems = res.map((historyItem) => ({
+    const result = await getNursingCarePackageApprovalHistory(nursingCarePackageId, req.cookies.hascToken);
+    const newApprovalHistoryItems = result.map((historyItem) => ({
       eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
       eventMessage: historyItem.logText,
-      eventSubMessage: undefined,
+      eventSubMessage: historyItem.logSubText,
     }));
 
     data.approvalHistoryEntries = newApprovalHistoryItems.slice();
@@ -65,6 +74,7 @@ const NursingCareApprovePackage = ({
   errorData,
 }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const nursingCarePackageId = router.query.id;
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
@@ -85,19 +95,17 @@ const NursingCareApprovePackage = ({
   const handleApprovePackageContents = () => {
     nursingCareApprovePackageContent(nursingCarePackageId)
       .then(() => {
-        // router.push(`${CARE_PACKAGE_ROUTE}`);
+        dispatch(addNotification({ text: `Package contents approved successfully`, className: 'success' }));
+        router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
 
   const handleRequestMoreInformation = () => {
-    nursingCareRequestClarification(
-      nursingCarePackageId,
-      requestInformationText
-    )
+    nursingCareRequestClarification(nursingCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
@@ -107,7 +115,7 @@ const NursingCareApprovePackage = ({
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
-  
+
   return (
     <Layout headerTitle="NURSING CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
@@ -115,7 +123,7 @@ const NursingCareApprovePackage = ({
           startDate={nursingCarePackage?.nursingCarePackage.startDate}
           endDate={
             nursingCarePackage?.nursingCarePackage.endDate !== null
-              ? nursingCarePackage?.nursingCarePackage.endDate
+              ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
               : 'Ongoing'
           }
         />
@@ -129,7 +137,7 @@ const NursingCareApprovePackage = ({
                   <div>
                     <p className="font-weight-bold hackney-text-green">STARTS</p>
                     <p className="font-size-14px">
-                      {new Date(nursingCarePackage?.nursingCarePackage.startDate).toLocaleDateString('en-GB')}
+                      {getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate)}
                     </p>
                   </div>
                 </div>
@@ -144,7 +152,7 @@ const NursingCareApprovePackage = ({
                     <p className="font-weight-bold hackney-text-green">ENDS</p>
                     <p className="font-size-14px">
                       {nursingCarePackage?.nursingCarePackage.endDate !== null
-                        ? nursingCarePackage?.nursingCarePackage.endDate
+                        ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
                         : 'Ongoing'}
                     </p>
                   </div>
@@ -203,7 +211,7 @@ const NursingCareApprovePackage = ({
                 startDate={nursingCarePackage?.nursingCarePackage.startDate}
                 endDate={
                   nursingCarePackage?.nursingCarePackage.endDate !== null
-                    ? nursingCarePackage?.nursingCarePackage.endDate
+                    ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
                     : 'Ongoing'
                 }
                 additionalNeedsEntries={additionalNeedsEntries}
@@ -220,7 +228,7 @@ const NursingCareApprovePackage = ({
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light" onClick={handleRejectPackage} type="button">
+                  <button type="button" className="button hackney-btn-light" onClick={handleRejectPackage}>
                     Deny
                   </button>
                 </div>
@@ -234,7 +242,7 @@ const NursingCareApprovePackage = ({
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green" onClick={handleApprovePackageContents} type="button">
+                  <button type="button" className="button hackney-btn-green" onClick={handleApprovePackageContents}>
                     Approve to be brokered
                   </button>
                 </div>
@@ -248,7 +256,7 @@ const NursingCareApprovePackage = ({
             <div className="mt-1">
               <p className="font-size-16px font-weight-bold">Request more information</p>
               <TextArea label="" rows={5} placeholder="Add details..." onChange={setRequestInformationText} />
-              <button className="button hackney-btn-green" onClick={handleRequestMoreInformation} type="button">
+              <button type="button" className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
                 Request more information
               </button>
             </div>

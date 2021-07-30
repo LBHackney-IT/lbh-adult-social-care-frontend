@@ -59,9 +59,9 @@ const SupplierReturns = () => {
     <div className="supplier-dashboard supplier-returns">
       <SupplierInnerHeader />
       <SupplierReturnsTable
-        isIgnoreId
+        isIgnoreId={true}
         onClickTableRow={onClickTableRow}
-        checkedRows
+        checkedRows={true}
         rows={supplierReturnsTableData}
         sortBy={sortBy}
         sorts={sorts}

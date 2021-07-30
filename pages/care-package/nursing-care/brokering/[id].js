@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 import PackagesNursingCare from '../../../../components/packages/nursing-care';
 import { selectBrokerage } from '../../../../reducers/brokerageReducer';
-import { getUserSession, uniqueID } from '../../../../service/helpers';
+import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
-import ClientSummary from '../../../../components/ClientSummary';
 import Layout from '../../../../components/Layout/Layout';
 import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
@@ -20,11 +20,14 @@ import { mapBrokerageSupplierOptions, mapNursingCareStageOptions } from '../../.
 import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
 import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 import withSession from '../../../../lib/session';
+import { addNotification } from '../../../../reducers/notificationsReducer';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
+
+  const user = getLoggedInUser({ req });
 
   const data = {
     errorData: [],
@@ -32,36 +35,45 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
 
   try {
     // Call to api to get package
-    const nursingCarePackage = await getNursingCarePackageDetailsForBrokerage(nursingCarePackageId);
-    const newAdditionalNeedsEntries = nursingCarePackage.nursingCareAdditionalNeeds.map((additionalneedsItem) => ({
-      id: additionalneedsItem.id,
-      isWeeklyCost: additionalneedsItem.isWeeklyCost,
-      isOneOffCost: additionalneedsItem.isOneOffCost,
-      needToAddress: additionalneedsItem.needToAddress,
-    }));
-    data.nursingCarePackage = nursingCarePackage;
+    const result = await getNursingCarePackageDetailsForBrokerage(nursingCarePackageId, req.cookies.hascToken);
+    const newAdditionalNeedsEntries = result.nursingCarePackage.nursingCareAdditionalNeeds.map(
+      (additionalneedsItem) => ({
+        id: additionalneedsItem.id,
+        isWeeklyCost: additionalneedsItem.isWeeklyCost,
+        isOneOffCost: additionalneedsItem.isOneOffCost,
+        needToAddress: additionalneedsItem.needToAddress,
+      })
+    );
+    data.nursingCarePackage = result;
     data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch (error) {
     data.errorData.push(`Retrieve nursing care package details failed. ${error.message}`);
   }
 
   try {
-    data.approvalHistoryEntries = await getNursingCarePackageApprovalHistory(nursingCarePackageId).map(
-      (historyItem) => ({
-        eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
-        eventMessage: historyItem.logText,
-        eventSubMessage: undefined,
-      })
-    );
+    data.approvalHistoryEntries = await getNursingCarePackageApprovalHistory(
+      nursingCarePackageId,
+      req.cookies.hascToken
+    ).map((historyItem) => ({
+      eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
+      eventMessage: historyItem.logText,
+      eventSubMessage: null,
+    }));
   } catch (error) {
     data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`);
   }
 
-  return { props: { ...data } };
+  return { props: { ...data, loggedInUserId: user.userId } };
 });
 
-const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
+const NursingCareBrokering = ({
+  nursingCarePackage,
+  additionalNeedsEntries,
+  approvalHistoryEntries,
+  loggedInUserId,
+}) => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [initialPackageReclaim] = useState({
     type: '',
     notes: '',
@@ -106,11 +118,11 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
   const createBrokerageInfo = (nursingCarePackageId, brokerageInfoForCreation) => {
     createNursingCareBrokerageInfo(nursingCarePackageId, brokerageInfoForCreation)
       .then(() => {
-        alert('Package saved.');
+        dispatch(addNotification({ text: `Package brokerage saved successfully`, className: 'success' }));
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Create brokerage info failed. ${error.message}`);
+        dispatch(addNotification({ text: `Saving package brokerage failed. ${error.message}` }));
         setErrors([...errors, `Create brokerage info failed. ${error.message}`]);
       });
   };
@@ -126,20 +138,14 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
       });
   };
 
-  const changePackageBrokeringStage = (
-    nursingCarePackageId,
-    stageId
-  ) => {
+  const changePackageBrokeringStage = (nursingCarePackageId, stageId) => {
     nursingCareChangeStage(nursingCarePackageId, stageId)
       .then(() => {
-        alert("Stage changed.");
+        alert('Stage changed.');
       })
       .catch((error) => {
         alert(`Change brokerage stage failed. ${error.message}`);
-        setErrors([
-          ...errors,
-          `Change brokerage stage failed. ${error.message}`,
-        ]);
+        setErrors([...errors, `Change brokerage stage failed. ${error.message}`]);
       });
   };
 
@@ -159,11 +165,11 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
     setPackagesReclaimed(newPackage);
   };
 
-  const changeTab = (tab) => {
-    if (tab === 'packageDetails') {
+  const changeTab = (chosenTab) => {
+    if (chosenTab === 'packageDetails') {
       setSummaryData(getHomeCareSummaryData());
     }
-    setTab(tab);
+    setTab(chosenTab);
   };
 
   return (
@@ -184,8 +190,7 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
       }}
       headerTitle="Nursing Care Brokering"
     >
-      <ClientSummary>Proposed Packages</ClientSummary>
-
+      <PackageHeader title="Proposed Package" />
       <PackagesNursingCare
         tab={tab}
         addPackageReclaim={addPackageReclaim}
@@ -207,6 +212,7 @@ const NursingCareBrokering = ({ nursingCarePackage, additionalNeedsEntries, appr
         createBrokerageInfo={createBrokerageInfo}
         changePackageBrokeringStatus={changePackageBrokeringStatus}
         changePackageBrokeringStage={changePackageBrokeringStage}
+        loggedInUserId={loggedInUserId}
       />
     </Layout>
   );

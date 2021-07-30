@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import Layout from '../../../../components/Layout/Layout';
 import DayCareApprovalTitle from '../../../../components/DayCare/DayCareApprovalTitle';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
@@ -44,8 +45,8 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
 
     data.approvalHistoryEntries = newApprovalHistoryItems.slice();
     data.opportunityEntries = newOpportunityEntries.slice();
-
     data.daysSelected = getSelectedDate(dayCarePackage);
+    data.dayCarePackage = dayCarePackage;
   } catch (error) {
     data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
   }
@@ -53,7 +54,13 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
   return { props: { data } };
 });
 
-const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportunityEntries, errorData }) => {
+const DayCareApproveBrokered = ({
+  dayCarePackage,
+  daysSelected,
+  approvalHistoryEntries,
+  opportunityEntries,
+  errorData,
+}) => {
   const router = useRouter();
   const dayCarePackageId = router.query.id;
   const [errors, setErrors] = useState(errorData);
@@ -125,9 +132,7 @@ const DayCareApproveBrokered = ({ daysSelected, approvalHistoryEntries, opportun
                 <div className="level-item">
                   <div>
                     <p className="font-weight-bold hackney-text-green">STARTS</p>
-                    <p className="font-size-14px">
-                      {new Date(dayCarePackage?.packageDetails.startDate).toLocaleDateString('en-GB')}
-                    </p>
+                    <p className="font-size-14px">{getEnGBFormattedDate(dayCarePackage?.packageDetails.startDate)}</p>
                   </div>
                 </div>
               </div>

@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@1.0.0
   aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
+  aws-parameter-store: circleci/aws-parameter-store@1.0.0
 
 executors:
   node-executor:
@@ -113,7 +114,7 @@ jobs:
       - *attach_workspace
       - run:
           name: deploy
-          command: yarn --frozen-lockfile --production=true && sudo npm i -g serverless && sls deploy -s production
+          command: yarn --frozen-lockfile --production=true && sudo npm i -g serverless && sls deploy --stage production
 
   generate-draft-github-release:
     executor: aws-cli/default
@@ -178,6 +179,36 @@ jobs:
           paths:
             - project/build
 
+  # get-environment-variables:
+  #   executor: aws-cli/default
+  #   steps:
+  #     - *attach_workspace
+  #     - aws-cli/install
+  #     - run:
+  #         name: Load AWS params
+  #         command: |
+  #             mkdir -p /tmp/parameterstore/
+  #             for row in $(aws ssm describe-parameters --no-paginate | jq -c '.Parameters[]'); do
+  #               _jq() {
+  #                 PARNAME=$(jq -r '.Name' \<<< "${row}")
+  #                 PARDATA=$(aws ssm get-parameters --with-decryption --names "${PARNAME}" | jq '.Parameters[].Value')
+  #                 if [ -z "$PARDATA" ]
+  #                 then
+  #                   echo "${PARNAME} appears to be empty. Please double check the value of this parameter."
+  #                   exit 1
+  #                 fi
+  #                 if [ -f /tmp/parameterstore/"${PARNAME}" ]
+  #                 then
+  #                   echo "This value has already been stored. Is this value stored twice?"
+  #                   exit 1
+  #                 fi
+  #                 echo "${PARDATA}" >> /tmp/parameterstore/"${PARNAME}"
+  #                 echo "export ${PARNAME}=$(cat /tmp/parameterstore/"${PARNAME}")" >> /tmp/parameterstore/PARAMETERSTORESOURCEFILE
+  #               }
+  #               _jq
+  #             done
+  #             source /tmp/parameterstore/PARAMETERSTORESOURCEFILE
+
 workflows:
   version: 2
   continuous-delivery:
@@ -209,6 +240,9 @@ workflows:
               only: 
                 - develop
                 - main
+      # - get-environment-variables:
+      #     requires:
+      #       - assume-role-staging
       - build-deploy-staging:
           requires:
             - assume-role-staging

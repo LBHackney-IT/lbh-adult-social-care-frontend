@@ -1,124 +1,228 @@
 import React, { useEffect, useState } from 'react';
-import Pagination from '../../components/Payments/Pagination';
+import { useDispatch } from 'react-redux';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import { getUserSession } from '../../service/helpers';
-import withSession from '../../lib/session';
+import { addNotification } from '../../reducers/notificationsReducer';
 import DashboardTabs from '../../components/Dashboard/Tabs';
-import { newItems, inProgressItems, doneItems } from '../../testData/testDateBrokerageHub';
 import Table from '../../components/Table';
 import Inputs from '../../components/Inputs';
-
-export const getServerSideProps = withSession(async ({ req, res }) => {
-  const isRedirect = getUserSession({ req, res });
-  if (isRedirect) return { props: {} };
-
-  return {
-    props: {}, // will be passed to the page component as props
-  };
-});
+import {
+  getBrokeredPackagesBrokeredDone,
+  getBrokeredPackagesBrokeredInProgress,
+  getBrokeredPackagesBrokeredNew,
+  getBrokeredPackagesPackageTypes,
+  getBrokeredPackagesSocialWorkers,
+  getBrokeredPackagesStages,
+  putBrokeredPackagesAssign,
+} from '../../api/Dashboard/brokeredPackages';
+import { formatDate } from '../../service/helpers';
+import { currency } from '../../constants/strings';
+import CustomDropDown from '../../components/CustomDropdown';
+import Pagination from '../../components/Payments/Pagination';
+import { useRouter } from 'next/router';
 
 const BrokerageHubPage = () => {
+  const dispatch = useDispatch();
   const [initialFilters] = useState({
-    id: '',
-    typeOfCare: '',
-    stage: '',
-    socialWorker: '',
-    client: '',
+    PackageId: '',
+    TypeOfCare: '',
+    Stage: '',
+    SocialWorker: '',
+    HackneyId: '',
   });
 
   const [filters, setFilters] = useState({ ...initialFilters });
   const [timer, setTimer] = useState(null);
+  const [stageOptions, setStagesOptions] = useState([]);
 
   const [sorts] = useState([
-    { name: 'type-of-care', text: 'TYPE OF CARE' },
-    { name: 'start-date', text: 'START DATE' },
-    { name: 'stage', text: 'STAGE' },
+    { name: 'packageType', text: 'Package Type' },
+    { name: 'startDate', text: 'Start Date' },
+    { name: 'serviceUser', text: 'Service User' },
+    { name: 'stage', text: 'Stage', className: 'table__row-item-justify-center' },
     { name: 'owner', text: 'OWNER' },
-    { name: 'client', text: 'CLIENT' },
-    { name: 'hackney-reference-number', text: 'HACKNEY REFERENCE NUMBER' },
-    { name: 'last-updated', text: 'LAST UPDATED' },
-    { name: 'days-since-approval', text: 'DAYS SINCE APPROVAL' },
+    { name: 'hackneyReferenceNumber', text: 'HACKNEY REFERENCE NUMBER' },
+    { name: 'lastUpdated', text: 'LAST UPDATED' },
+    { name: 'daysSinceApproval', text: 'DAYS SINCE APPROVAL' },
   ]);
 
   const [tab, setTab] = useState('new');
+  const [page, setPage] = useState(1);
+  const [pagingMetaData, setPagingMetaData] = useState({
+    new: {},
+    inProgress: {},
+    done: {},
+  });
 
-  const tabsTable = {
-    new: newItems,
-    inProgress: inProgressItems,
-    done: doneItems,
-  };
+  const [tabsRequests] = useState({
+    new: getBrokeredPackagesBrokeredNew,
+    inProgress: getBrokeredPackagesBrokeredInProgress,
+    done: getBrokeredPackagesBrokeredDone,
+  });
 
-  const [tabs] = useState([
-    { value: 'new', text: `New ${newItems.length ? `(${newItems.length})` : ''}` },
-    { value: 'inProgress', text: `In Progress ${inProgressItems.length ? `(${inProgressItems.length})` : ''}` },
-    { value: 'done', text: `Done ${doneItems.length ? `(${doneItems.length})` : ''}` },
-  ]);
+  const [tabsTable, setTabsTable] = useState({
+    new: [],
+    inProgress: [],
+    done: [],
+  });
+
+  const tabs = [
+    { value: 'new', text: `New${tabsTable.new.length ? ` (${tabsTable.new.length})` : ''}` },
+    {
+      value: 'inProgress',
+      text: `In Progress ${tabsTable.inProgress.length ? ` (${tabsTable.inProgress.length})` : ''}`,
+    },
+    { value: 'done', text: `Done${tabsTable.done.length ? ` (${tabsTable.done.length})` : ''}` },
+  ];
 
   const [sort, setSort] = useState({
     value: 'increase',
     name: 'id',
   });
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
   const sortBy = (field, value) => {
     setSort({ value, name: field });
   };
 
-  useEffect(() => {
-    console.log('change brokerage-hub sort', sort);
-  }, [sort]);
+  const brokeredPackagesAssign = (option) => {
+    console.log(option);
+    putBrokeredPackagesAssign(option.creatorId)
+      .then(() => pushNotification('Assigned success'))
+      .catch(() => pushNotification('Assign fail'));
+  };
 
-  useEffect(() => {
-    setFilters({ ...initialFilters });
-  }, []);
-
-  useEffect(() => {
+  const makeTabRequest = () => {
+    console.log('1');
     if (timer) {
       clearTimeout(timer);
     }
     setTimer(
       setTimeout(() => {
-        console.log('request with filters');
+        getBrokeredPackagesStages()
+          .then((res) => setStagesOptions(res))
+          .catch(() => pushNotification('Can not get stages'));
+
+        getBrokeredPackagesPackageTypes()
+          .then((res) => changeInputs('TypeOfCare', res))
+          .catch(() => pushNotification('Can not get Package Type'));
+
+        getBrokeredPackagesSocialWorkers().then((res) => changeInputs('SocialWorker', res));
+
+        tabsRequests[tab]({
+          ...filters,
+          PageNumber: page,
+          OrderBy: sort.name,
+        }).then((res) => {
+          setTabsTable({
+            ...tabsTable,
+            [tab]: res.data,
+          });
+          setPagingMetaData({
+            ...pagingMetaData,
+            [tab]: res.pagingMetaData,
+          });
+        });
       }, 500)
     );
-  }, [filters]);
+  };
+
+  useEffect(() => {
+    makeTabRequest();
+  }, [page, tab, sort]);
 
   const tableRows = tabsTable[tab];
 
   const rowsRules = {
-    typeOfCare: {
-      getClassName: () => 'link-button',
-      onClick: (item, prop) => console.log(item, prop),
-      fieldName: 'typeOfCare',
-    },
-    id: {
+    packageId: {
       hide: true,
+    },
+    startDate: {
+      getValue: (value) => `${formatDate(value, '/')}`,
+    },
+    lastUpdated: {
+      getValue: (value) => `${formatDate(value, '/')}`,
+    },
+    owner: {
+      getComponent: (item) => {
+        return (
+          <CustomDropDown
+            onOptionSelect={brokeredPackagesAssign}
+            key={item.packageId}
+            options={stageOptions}
+            className="table__row-item"
+            fields={{
+              value: 'creatorId',
+              text: 'stageName',
+            }}
+            initialText=""
+            selectedValue={item.stage}
+          />
+        );
+      },
     },
     stage: {
       getClassName: (value) => `${value} table__row-item-status`,
-    },
-    owner: {
-      getClassName: (value) => `${value} table__row-item-status border-radius-0`,
     },
   };
 
   const inputs = {
     inputs: [
-      { label: 'Search', placeholder: 'Search...', search: () => console.log('search for item'), className: 'mr-3' },
+      {
+        label: 'Search',
+        name: 'clientName',
+        placeholder: 'Search...',
+        search: () => makeTabRequest(),
+        className: 'mr-3',
+      },
     ],
     dropdowns: [
-      { options: [], initialText: 'Type of care', name: 'typeOfCare', className: 'mr-3' },
-      { options: [], initialText: 'Stage', name: 'stage', className: 'mr-3' },
-      { options: [], initialText: 'Social Worker', name: 'socialWorker', className: 'mr-3' },
-      { options: [], initialText: 'Client', name: 'client', className: 'mr-3' },
+      { options: [], initialText: 'Type of care', name: 'TypeOfCare', className: 'mr-3' },
+      { options: [], initialText: 'Stage', name: 'Stage', className: 'mr-3' },
+      { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
     ],
+    buttons: [{ initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() }],
   };
+
+  const changeInputs = (field, value) => {
+    setFilters({
+      ...filters,
+      [field]: value,
+    });
+  };
+
+  const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
 
   return (
     <div className="brokerage-hub-page">
-      <Inputs inputs={inputs} changeInputs={setFilters} values={filters} title="Brokerage Hub" />
+      <Inputs inputs={inputs} changeInputs={changeInputs} values={filters} title="Brokerage Hub" />
       <DashboardTabs tabs={tabs} changeTab={setTab} tab={tab} />
-      <Table rows={tableRows} rowsRules={rowsRules} sortBy={sortBy} sorts={sorts} />
-      <Pagination from={1} to={50} itemsCount={tabsTable[tab].length} totalCount={tabsTable[tab].length} />
+      <Table
+        rows={tableRows}
+        rowsRules={rowsRules}
+        fields={{
+          id: 'packageId',
+          packageType: 'packageType',
+          startDate: 'startDate',
+          serviceUser: 'serviceUser',
+          stage: 'stage',
+          owner: 'owner',
+          hackneyReferenceNumber: 'hackneyId',
+          lastUpdated: 'lastUpdated',
+          daysSinceApproval: 'daysSinceApproval',
+        }}
+        sortBy={sortBy}
+        sorts={sorts}
+      />
+      <Pagination
+        changePagination={setPage}
+        totalPages={totalPages}
+        currentPage={page}
+        itemsCount={pageSize}
+        totalCount={totalCount}
+      />
       <HackneyFooterInfo />
     </div>
   );

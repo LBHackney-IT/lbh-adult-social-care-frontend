@@ -103,7 +103,6 @@ const AddBill = () => {
     const { validFields, hasError } = fieldValidator(arrayInputs);
     if (hasError) {
       setInputsError(validFields);
-      
     }
   };
 

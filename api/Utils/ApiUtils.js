@@ -1,4 +1,8 @@
-export async function handleResponse(response) {
+import axios from 'axios';
+// eslint-disable-next-line import/named
+import { requestMethods } from '../../constants/variables';
+
+async function handleResponse(response) {
   if (response.status === 200 || response.status === 201) return response.data;
   if (response.status === 400) {
     // So, a server-side validation error occurred.
@@ -10,7 +14,7 @@ export async function handleResponse(response) {
 }
 
 // Maybe call error logging service.
-export function handleError(error) {
+function handleError(error) {
   let errorMessage = '';
   if (error.response) {
     // Request made and server responded
@@ -32,3 +36,48 @@ export function handleError(error) {
   }
   throw errorMessage;
 }
+
+const axiosRequest = (options = {}) => {
+  const headers = options.headers || {};
+  delete options.headers;
+
+  const localOptions = {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+      ...headers,
+    },
+    method: requestMethods.get,
+    ...options,
+  };
+
+  return axios(localOptions).then(handleResponse).catch(handleError);
+};
+
+/*
+  EXAMPLE
+  {
+    payRunId: 'very-long-id-1234',
+    orderBy: 'cost',
+  }
+
+  return a string '?payRunId=very-long-id-1234&orderBy=cost'
+ */
+const getQueryParamsFromObject = (params = {}) => {
+  let string = '';
+  let count = 0;
+  for (const i in params) {
+    if (params[i]) {
+      const paramString = `${i}=${params[i]}`;
+      if (count === 0) {
+        string = `?${string}${paramString}`;
+      } else {
+        string = `${string}&${paramString}`;
+      }
+      count += 1;
+    }
+  }
+  return string;
+};
+
+export { handleError, handleResponse, axiosRequest, getQueryParamsFromObject };
