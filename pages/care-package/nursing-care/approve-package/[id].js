@@ -56,7 +56,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
     const newApprovalHistoryItems = result.map((historyItem) => ({
       eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
       eventMessage: historyItem.logText,
-      eventSubMessage: null,
+      eventSubMessage: historyItem.logSubText,
     }));
 
     data.approvalHistoryEntries = newApprovalHistoryItems.slice();
