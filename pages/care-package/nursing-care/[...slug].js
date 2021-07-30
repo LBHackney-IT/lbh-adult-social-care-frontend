@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import ClientSummary from '../../../components/ClientSummary';
 import Dropdown from '../../../components/Dropdown';
@@ -24,6 +24,7 @@ import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import { getLoggedInUser, getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
+import { selectUser } from '../../../reducers/userReducer';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -39,6 +40,7 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 const NursingCare = () => {
   const isTrueParse = (myValue) => myValue === 'true';
   const notNullString = (myValue) => myValue !== 'null' && myValue !== 'undefined';
+  const loggedInUser = useSelector(selectUser);
 
   // TODO remove
   const additionalNeedsCostOptions = [
@@ -164,7 +166,7 @@ const NursingCare = () => {
       isWeeklyCost: item.selectedCost === 1,
       isOneOffCost: item.selectedCost === 2,
       needToAddress: item.needToAddress,
-      creatorId: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8',
+      creatorId: loggedInUser.userId,
     }));
 
     const packageReclaims = packagesReclaimed.map((reclaim) => ({
@@ -187,7 +189,7 @@ const NursingCare = () => {
       typeOfStayId,
       needToAddress,
       typeOfNursingCareHomeId: selectedNursingHomeType,
-      creatorId: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8',
+      creatorId: loggedInUser.userId,
       nursingCareAdditionalNeeds,
       packageReclaims,
     };
