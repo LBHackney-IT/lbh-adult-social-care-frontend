@@ -23,7 +23,7 @@ switch (process.env.NEXT_PUBLIC_STAGE) {
 }
 
 const BASE_URL = baseUrl;
-const HASC_TOKEN_ID = `hascToken${process.env.NEXT_PUBLIC_STAGE}`;
+const HASC_TOKEN_ID = `hascToken`;
 
 axios.interceptors.request.use((config) => {
   const token = Cookies.get(HASC_TOKEN_ID);
