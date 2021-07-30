@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
+const BASE_URL = 'https://zqf7j796y5.execute-api.eu-west-2.amazonaws.com/staging/api';
 
 // switch (window.location.hostname) {
 //   case 'social-care-care-packages-staging.hackney.gov.uk': {
