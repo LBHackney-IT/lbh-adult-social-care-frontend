@@ -8,6 +8,10 @@ switch (process.env.NEXT_PUBLIC_STAGE) {
     baseUrl = 'https://zqf7j796y5.execute-api.eu-west-2.amazonaws.com/staging/api';
     break;
   }
+  case 'local': {
+    baseUrl = 'http://localhost:5000/api';
+    break;
+  }
   case 'production': {
     baseUrl = 'https://dz58oqus03.execute-api.eu-west-2.amazonaws.com/production/api';
     break;
