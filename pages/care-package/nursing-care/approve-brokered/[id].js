@@ -20,7 +20,7 @@ import TextArea from '../../../../components/TextArea';
 import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { addNotification } from '../../../../reducers/notificationsReducer';
-import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import { CARE_PACKAGE_ROUTE, APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import { getUserSession } from '../../../../service/helpers';
 
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
@@ -92,8 +92,8 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
   const handleApprovePackageCommercials = () => {
     nursingCareApproveCommercials(nursingCarePackageId)
       .then(() => {
-        router.push(`${CARE_PACKAGE_ROUTE}`);
         dispatch(addNotification({ text: 'Status change success.', className: 'success' }));
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
@@ -105,7 +105,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
     nursingCareClarifyCommercial(nursingCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
-        // router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         dispatch(addNotification({ text: `Status change failed. ${error.message}` }));

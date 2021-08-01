@@ -20,7 +20,7 @@ import TextArea from '../../../../components/TextArea';
 import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { addNotification } from '../../../../reducers/notificationsReducer';
-import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import { CARE_PACKAGE_ROUTE, APPROVER_HUB_ROUTE} from '../../../../routes/RouteConstants';
 import { getUserSession } from '../../../../service/helpers';
 
 // start before render
@@ -97,7 +97,7 @@ const NursingCareApprovePackage = ({
     nursingCareApprovePackageContent(nursingCarePackageId)
       .then(() => {
         dispatch(addNotification({ text: `Package contents approved successfully`, className: 'success' }));
-        router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
@@ -109,7 +109,7 @@ const NursingCareApprovePackage = ({
     nursingCareRequestClarification(nursingCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
-        // router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
