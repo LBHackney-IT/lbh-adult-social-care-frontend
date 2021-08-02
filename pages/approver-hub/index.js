@@ -169,6 +169,7 @@ const ApproverHubPage = () => {
         tabsRequests[tab]({
           PageNumber: page,
           OrderBy: sort.name,
+          PageSize : 50,
           ...filters,
         })
           .then((res) => {

@@ -144,6 +144,7 @@ const BrokerageHubPage = () => {
           ...filters,
           PageNumber: page,
           OrderBy: sort.name,
+          PageSize : 50,
         }).then((res) => {
           setTabsTable({
             ...tabsTable,
