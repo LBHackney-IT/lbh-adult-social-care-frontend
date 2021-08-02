@@ -19,6 +19,7 @@ import TextArea from '../../../../components/TextArea';
 import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
+import { APPROVER_HUB_ROUTE} from '../../../../routes/RouteConstants';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -93,7 +94,7 @@ const ResidentialCareApproveBrokered = ({
   const handleApprovePackageCommercials = () => {
     residentialCareApproveCommercials(residentialCarePackageId)
       .then(() => {
-        // router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error}`);
@@ -105,7 +106,7 @@ const ResidentialCareApproveBrokered = ({
     residentialCareClarifyCommercial(residentialCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
-        // router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error}`);
