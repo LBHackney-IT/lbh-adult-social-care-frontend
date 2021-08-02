@@ -33,6 +33,8 @@ const BrokerageHubPage = () => {
   const [filters, setFilters] = useState({ ...initialFilters });
   const [timer, setTimer] = useState(null);
   const [stageOptions, setStagesOptions] = useState([]);
+  const [socialWorkerOptions, setSocialWorkersOptions] = useState([]);
+  const [packageId, setPackageValue] = useState();
 
   const [sorts] = useState([
     { name: 'packageType', text: 'Package Type' },
@@ -87,15 +89,17 @@ const BrokerageHubPage = () => {
     setSort({ value, name: field });
   };
 
+  const setPackageId = (packageId) => {
+    setPackageValue(packageId);
+  };
+
   const brokeredPackagesAssign = (option) => {
-    console.log(option);
-    putBrokeredPackagesAssign(option.creatorId)
+    putBrokeredPackagesAssign(packageId, option.id)
       .then(() => pushNotification('Assigned success'))
       .catch(() => pushNotification('Assign fail'));
   };
 
   const makeTabRequest = () => {
-    console.log('1');
     if (timer) {
       clearTimeout(timer);
     }
@@ -109,7 +113,9 @@ const BrokerageHubPage = () => {
           .then((res) => changeInputs('TypeOfCare', res))
           .catch(() => pushNotification('Can not get Package Type'));
 
-        getBrokeredPackagesSocialWorkers().then((res) => changeInputs('SocialWorker', res));
+        getBrokeredPackagesSocialWorkers()
+        .then((res) => setSocialWorkersOptions(res))
+        .catch(() => pushNotification('Can not get social workers'));
 
         tabsRequests[tab]({
           ...filters,
@@ -150,12 +156,12 @@ const BrokerageHubPage = () => {
         return (
           <CustomDropDown
             onOptionSelect={brokeredPackagesAssign}
-            key={item.packageId}
-            options={stageOptions}
+            key={setPackageId(item.packageId)}
+            options={socialWorkerOptions}
             className="table__row-item"
             fields={{
-              value: 'creatorId',
-              text: 'stageName',
+              value: 'id',
+              text: 'userName',
             }}
             initialText=""
             selectedValue={item.stage}
