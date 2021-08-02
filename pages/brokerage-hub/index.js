@@ -19,6 +19,7 @@ import { currency } from '../../constants/strings';
 import CustomDropDown from '../../components/CustomDropdown';
 import Pagination from '../../components/Payments/Pagination';
 import { useRouter } from 'next/router';
+import { RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE, RESIDENTIAL_CARE_BROKERING_ROUTE, NURSING_CARE_BROKERING_ROUTE, NURSING_CARE_APPROVE_BROKERED_ROUTE } from '../../routes/RouteConstants';
 
 const BrokerageHubPage = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,28 @@ const BrokerageHubPage = () => {
     SocialWorker: '',
     HackneyId: '',
   });
+
+  const router = useRouter();
+
+  const onClickTableRow = (rowItems) => {
+    if(rowItems.packageTypeId === 3)
+    {
+      if(tab === "new")
+      router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+      else if(tab === "inProgress")
+      router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+      else if(tab === "done")
+      router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+    }
+    else{
+      if(tab === "new")
+      router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+      else if(tab === "inProgress")
+      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+      else if(tab === "done")
+      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+    }
+  };
 
   const [filters, setFilters] = useState({ ...initialFilters });
   const [timer, setTimer] = useState(null);
@@ -221,6 +244,7 @@ const BrokerageHubPage = () => {
         }}
         sortBy={sortBy}
         sorts={sorts}
+        onClickTableRow={onClickTableRow}
       />
       <Pagination
         changePagination={setPage}

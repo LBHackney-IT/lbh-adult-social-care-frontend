@@ -44,11 +44,11 @@ const ApproverHubPage = () => {
     if(rowItems.packageTypeId === 3)
     {
       if(tab === "new")
-      router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+      router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
       else if(tab === "clarification")
       router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
       else if(tab === "awaitingBrokerage")
-      router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+      router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
       else if (tab === "reviewCommercials")
       router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
     }
