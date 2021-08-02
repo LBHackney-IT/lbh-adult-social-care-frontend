@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import moment from 'moment';
 import DatePick from '../DatePick';
 import Popup from '../Popup';
 import RadioButton from '../RadioButton';
 import { createNewPayRun, getDateOfLastPayRun } from '../../api/Payments/PayRunApi';
 import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
 import { addNotification } from '../../reducers/notificationsReducer';
-import moment from 'moment';
 
 const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPayRunType }) => {
   const dispatch = useDispatch();
@@ -17,9 +17,9 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
     retrieveDateOfLastPayRun();
   }, [newPayRunType]);
 
-  const calculateDaysFromlastPayRun = (dateOfLastPayRun) => {
+  const calculateDaysFromLastPayRun = (dateOfLastPayRun) => {
     if (!dateOfLastPayRun) {
-      setDaysFromLastPayRun('XX');
+      setDaysFromLastPayRun('0');
     } else {
       // Calculate date difference
       /* const start = moment(dateOfLastPayRun).format('L');
@@ -92,12 +92,13 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
       getDateOfLastPayRun(payRunType)
         .then((payRun) => {
           if (payRun && payRun.dateTo) {
-            calculateDaysFromlastPayRun(new Date(payRun.dateTo));
+            calculateDaysFromLastPayRun(new Date(payRun.dateTo));
           } else {
-            calculateDaysFromlastPayRun(null);
+            calculateDaysFromLastPayRun(null);
           }
         })
         .catch((err) => {
+          setDaysFromLastPayRun('XX');
           dispatch(addNotification({ text: `Failed to fetch date of last pay run. ${err.message}` }));
         });
     }
