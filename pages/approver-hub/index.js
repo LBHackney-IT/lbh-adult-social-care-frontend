@@ -233,6 +233,12 @@ const ApproverHubPage = () => {
     });
   };
 
+  //todo refactor
+  const changePage = (page) => {
+    setPage(page);
+    makeTabRequest()
+  };
+
   const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
 
   return (
@@ -264,7 +270,7 @@ const ApproverHubPage = () => {
       />
       <Pagination
         currentPage={page}
-        changePagination={setPage}
+        changePagination={changePage}
         itemsCount={pageSize}
         totalCount={totalCount}
         totalPages={totalPages}

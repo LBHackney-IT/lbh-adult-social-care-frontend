@@ -222,6 +222,13 @@ const BrokerageHubPage = () => {
     });
   };
 
+    //todo refactor
+    const changePage = (page) => {
+      setPage(page);
+      makeTabRequest()
+    };
+  
+
   const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
 
   return (
@@ -247,7 +254,7 @@ const BrokerageHubPage = () => {
         onClickTableRow={onClickTableRow}
       />
       <Pagination
-        changePagination={setPage}
+        changePagination={changePage}
         totalPages={totalPages}
         currentPage={page}
         itemsCount={pageSize}

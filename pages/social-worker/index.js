@@ -48,6 +48,8 @@ const SocialWorkerDashboardPage = () => {
   const [pagedData, setPagedData] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
   const [errors, setErrors] = useState([]);
+  const [statusId, setStatusId] = useState();
+  const [clientName, setClientName] = useState();
 
   useEffect(() => {
     console.log('change sort', sort);
@@ -117,12 +119,18 @@ const SocialWorkerDashboardPage = () => {
   };
 
   const setSearchTerm = (clientName) => {
+    setClientName();
     retrieveSocialWorkerData(1, clientName);
+  };
+
+  const setFilter = (statusId) => {
+    setStatusId();
+    retrieveSocialWorkerData(1, clientName, statusId);
   };
 
   return (
     <div className="social-worker-page">
-      <SocialWorkerInputs statusOptions={statusOptions} searchTerm={setSearchTerm} />
+      <SocialWorkerInputs statusOptions={statusOptions} searchTerm={setSearchTerm} searchFilters={setFilter}/>
       <Table
         onClickTableRow={onClickTableRow}
         fields={tableFields}
