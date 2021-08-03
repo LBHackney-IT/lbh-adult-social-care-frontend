@@ -20,6 +20,10 @@
   }
 
   .dropdown-container .button {
+    & > span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     width: 170px;
   }
 }
