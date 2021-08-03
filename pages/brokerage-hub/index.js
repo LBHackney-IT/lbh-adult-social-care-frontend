@@ -45,6 +45,24 @@ const BrokerageHubPage = () => {
     { name: 'daysSinceApproval', text: 'DAYS SINCE APPROVAL' },
   ]);
 
+  const [inputs] = useState({
+    inputs: [
+      {
+        label: 'Search',
+        name: 'clientName',
+        placeholder: 'Search...',
+        search: () => makeTabRequest(),
+        className: 'mr-3',
+      },
+    ],
+    dropdowns: [
+      { options: [], initialText: 'Type of care', name: 'TypeOfCare', className: 'mr-3' },
+      { options: [], initialText: 'Stage', name: 'Stage', className: 'mr-3' },
+      { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
+    ],
+    buttons: [{ initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() }],
+  });
+
   const [tab, setTab] = useState('new');
   const [page, setPage] = useState(1);
   const [pagingMetaData, setPagingMetaData] = useState({
@@ -101,15 +119,45 @@ const BrokerageHubPage = () => {
     }
     setTimer(
       setTimeout(() => {
+        const setInitialOptions = (tag, response) => {
+          if (tag === 'Stage') {
+            console.log('i >>>', inputs)
+            inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ stageName, id }) => ({
+              text: stageName,
+              value: id,
+            }));
+          }
+          if (tag === 'TypeOfCare') {
+            inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ packageType, id }) => ({
+              text: packageType,
+              value: id,
+            }));
+          }
+          if (tag === 'SocialWorker') {
+            inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ userName, id }) => ({
+              text: userName,
+              value: id,
+            }));
+          }
+        };
         getBrokeredPackagesStages()
-          .then((res) => setStagesOptions(res))
+          .then((res) => {
+            setInitialOptions('Stage', res);
+            setStagesOptions(res);
+          })
           .catch(() => pushNotification('Can not get stages'));
 
         getBrokeredPackagesPackageTypes()
-          .then((res) => changeInputs('TypeOfCare', res))
+          .then((res) => {
+            setInitialOptions('TypeOfCare', res);
+            changeInputs('TypeOfCare', res);
+          })
           .catch(() => pushNotification('Can not get Package Type'));
 
-        getBrokeredPackagesSocialWorkers().then((res) => changeInputs('SocialWorker', res));
+        getBrokeredPackagesSocialWorkers().then((res) => {
+          setInitialOptions('SocialWorker', res);
+          changeInputs('SocialWorker', res);
+        });
 
         tabsRequests[tab]({
           ...filters,
@@ -166,24 +214,6 @@ const BrokerageHubPage = () => {
     stage: {
       getClassName: (value) => `${value} table__row-item-status`,
     },
-  };
-
-  const inputs = {
-    inputs: [
-      {
-        label: 'Search',
-        name: 'clientName',
-        placeholder: 'Search...',
-        search: () => makeTabRequest(),
-        className: 'mr-3',
-      },
-    ],
-    dropdowns: [
-      { options: [], initialText: 'Type of care', name: 'TypeOfCare', className: 'mr-3' },
-      { options: [], initialText: 'Stage', name: 'Stage', className: 'mr-3' },
-      { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
-    ],
-    buttons: [{ initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() }],
   };
 
   const changeInputs = (field, value) => {
