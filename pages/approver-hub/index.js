@@ -54,11 +54,11 @@ const ApproverHubPage = () => {
     }
     else{
       if(tab === "new")
-      router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+      router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
       else if(tab === "clarification")
       router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
       else if(tab === "awaitingBrokerage")
-      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+      router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
       else if (tab === "reviewCommercials")
       router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
     }
@@ -128,6 +128,25 @@ const ApproverHubPage = () => {
     name: 'id',
   });
 
+  const [inputs] = useState({
+    inputs: [
+      {
+        label: 'Search',
+        placeholder: 'Enter name or Hackney ID',
+        search: () => makeTabRequest(),
+        className: 'mr-3',
+        name: 'clientName',
+      },
+    ],
+    dropdowns: [
+      { options: [], initialText: 'Package Type', name: 'PackageType', className: 'mr-3' },
+      { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
+      { options: [], initialText: 'Approver', name: 'Approver', className: 'mr-3' },
+      // { options: [], initialText: 'By Value', name: 'ByValue', className: 'mr-3' },
+    ],
+    buttons: [{ initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() }],
+  });
+
   const sortBy = (field, value) => {
     setSort({ value, name: field });
   };
@@ -142,7 +161,20 @@ const ApproverHubPage = () => {
     }
     setTimer(
       setTimeout(() => {
+        const setInitialOptions = (tag, response) => {
+          if (tag === 'PackageType')
+            inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ packageType, id }) => ({
+              text: packageType,
+              value: id,
+            }));
+          else
+            inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ userName, id }) => ({
+              text: userName,
+              value: id,
+            }));
+        };
         getApprovedPackagesPackageTypes().then((response) => {
+          setInitialOptions('PackageType', response);
           const options = response.map((option) => ({
             text: option?.packageType,
             value: option?.id,
@@ -151,6 +183,7 @@ const ApproverHubPage = () => {
         });
 
         getApprovedPackagesSocialWorkers().then((response) => {
+          setInitialOptions('SocialWorker', response);
           const options = response.map((option) => ({
             text: option?.userName,
             value: option?.id,
@@ -159,6 +192,7 @@ const ApproverHubPage = () => {
         });
 
         getApprovedPackagesApprovers().then((response) => {
+          setInitialOptions('Approver', response);
           const options = response.map((option) => ({
             text: option?.userName,
             value: option?.id,
@@ -208,25 +242,6 @@ const ApproverHubPage = () => {
     },
   };
 
-  const inputs = {
-    inputs: [
-      {
-        label: 'Search',
-        placeholder: 'Enter name or Hackney ID',
-        search: () => makeTabRequest(),
-        className: 'mr-3',
-        name: 'clientName',
-      },
-    ],
-    dropdowns: [
-      { options: [], initialText: 'Package Type', name: 'PackageType', className: 'mr-3' },
-      { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
-      { options: [], initialText: 'Approver', name: 'Approver', className: 'mr-3' },
-      // { options: [], initialText: 'By Value', name: 'ByValue', className: 'mr-3' },
-    ],
-    buttons: [{ initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() }],
-  };
-
   const changeInputs = (field, value) => {
     setFilters({
       ...filters,
@@ -241,7 +256,6 @@ const ApproverHubPage = () => {
   };
 
   const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
-
   return (
     <div className="approver-hub-page">
       <Inputs
