@@ -109,6 +109,25 @@ const ApproverHubPage = () => {
     name: 'id',
   });
 
+  const [inputs] = useState({
+    inputs: [
+      {
+        label: 'Search',
+        placeholder: 'Enter name or Hackney ID',
+        search: () => makeTabRequest(),
+        className: 'mr-3',
+        name: 'clientName',
+      },
+    ],
+    dropdowns: [
+      { options: [], initialText: 'Package Type', name: 'PackageType', className: 'mr-3' },
+      { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
+      { options: [], initialText: 'Approver', name: 'Approver', className: 'mr-3' },
+      // { options: [], initialText: 'By Value', name: 'ByValue', className: 'mr-3' },
+    ],
+    buttons: [{ initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() }],
+  });
+
   const sortBy = (field, value) => {
     setSort({ value, name: field });
   };
@@ -123,30 +142,42 @@ const ApproverHubPage = () => {
     }
     setTimer(
       setTimeout(() => {
+        const setInitialOptions = (tag, response) => {
+          if (tag === 'PackageType')
+            inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ packageType, id }) => ({
+              text: packageType,
+              value: id,
+            }));
+          else
+            inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ userName, id }) => ({
+              text: userName,
+              value: id,
+            }));
+        };
         getApprovedPackagesPackageTypes().then((response) => {
+          setInitialOptions('PackageType', response);
           const options = response.map((option) => ({
             text: option?.packageType,
             value: option?.id,
           }));
-          console.log(options);
           changeInputs('PackageType', options.text);
         });
 
         getApprovedPackagesSocialWorkers().then((response) => {
+          setInitialOptions('SocialWorker', response);
           const options = response.map((option) => ({
             text: option?.userName,
             value: option?.id,
           }));
-          console.log(options);
           changeInputs('SocialWorker', options);
         });
 
         getApprovedPackagesApprovers().then((response) => {
+          setInitialOptions('Approver', response);
           const options = response.map((option) => ({
             text: option?.userName,
             value: option?.id,
           }));
-          console.log(options);
           changeInputs('Approver', options);
         });
 
@@ -191,25 +222,6 @@ const ApproverHubPage = () => {
     },
   };
 
-  const inputs = {
-    inputs: [
-      {
-        label: 'Search',
-        placeholder: 'Enter name or Hackney ID',
-        search: () => makeTabRequest(),
-        className: 'mr-3',
-        name: 'clientName',
-      },
-    ],
-    dropdowns: [
-      { options: [], initialText: 'Package Type', name: 'PackageType', className: 'mr-3' },
-      { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
-      { options: [], initialText: 'Approver', name: 'Approver', className: 'mr-3' },
-      // { options: [], initialText: 'By Value', name: 'ByValue', className: 'mr-3' },
-    ],
-    buttons: [{ initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() }],
-  };
-
   const changeInputs = (field, value) => {
     setFilters({
       ...filters,
@@ -218,7 +230,6 @@ const ApproverHubPage = () => {
   };
 
   const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
-
   return (
     <div className="approver-hub-page">
       <Inputs
