@@ -43,24 +43,52 @@ const ApproverHubPage = () => {
   const onClickTableRow = (rowItems) => {
     if(rowItems.packageTypeId === 3)
     {
-      if(tab === "new")
-      router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
-      else if(tab === "clarification")
-      router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
-      else if(tab === "awaitingBrokerage")
-      router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
-      else if (tab === "reviewCommercials")
-      router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+      switch (tab) {
+        case 'new': {
+          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+          break;
+        }
+        case 'clarification': {
+          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+          break;
+        }
+        case 'awaitingBrokerage': {
+          router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+          break;
+        }
+        case 'reviewCommercials': {
+          router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+          break;
+        }
+        default: {
+          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+          break;
+        }
+      }
     }
     else{
-      if(tab === "new")
-      router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
-      else if(tab === "clarification")
-      router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
-      else if(tab === "awaitingBrokerage")
-      router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
-      else if (tab === "reviewCommercials")
-      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+      switch (tab) {
+        case 'new': {
+          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+          break;
+        }
+        case 'clarification': {
+          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+          break;
+        }
+        case 'awaitingBrokerage': {
+          router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+          break;
+        }
+        case 'reviewCommercials': {
+          router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+          break;
+        }
+        default: {
+          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+          break;
+        }
+      }
     }
   };
 
