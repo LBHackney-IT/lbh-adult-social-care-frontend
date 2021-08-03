@@ -83,8 +83,13 @@ const NursingCareApprovePackage = ({
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
 
-  const { hasDischargePackage, hasRespiteCare, isThisAnImmediateService, isThisUserUnderS117, typeOfStayOptionName } =
-    nursingCarePackage?.nursingCarePackage;
+  const {
+    hasDischargePackage = false,
+    hasRespiteCare = false,
+    isThisAnImmediateService = false,
+    isThisUserUnderS117 = false,
+    typeOfStayOptionName = '',
+  } = nursingCarePackage?.nursingCarePackage;
 
   const handleRejectPackage = () => {
     nursingCareChangeStatus(nursingCarePackageId, 10)

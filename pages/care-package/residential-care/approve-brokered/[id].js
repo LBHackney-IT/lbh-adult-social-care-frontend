@@ -8,7 +8,7 @@ import {
   residentialCareChangeStatus,
   residentialCareClarifyCommercial,
 } from '../../../../api/CarePackages/ResidentialCareApi';
-import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import { getEnGBFormattedDate, stringIsNullOrEmpty } from '../../../../api/Utils/FuncUtils';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
 import Layout from '../../../../components/Layout/Layout';
@@ -19,7 +19,8 @@ import TextArea from '../../../../components/TextArea';
 import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
-import { APPROVER_HUB_ROUTE} from '../../../../routes/RouteConstants';
+import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
+import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -31,8 +32,8 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
   };
 
   try {
-    const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId, req.cookies[HASC_TOKEN_ID]);
-    const newApprovalHistoryItems = res.map((historyItem) => ({
+    const result = await getResidentialCarePackageApprovalHistory(residentialCarePackageId, req.cookies[HASC_TOKEN_ID]);
+    const newApprovalHistoryItems = result.map((historyItem) => ({
       eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
       eventMessage: historyItem.logText,
       eventSubMessage: historyItem.logSubText,
@@ -79,6 +80,14 @@ const ResidentialCareApproveBrokered = ({
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
+
+  const {
+    hasDischargePackage = false,
+    hasRespiteCare = false,
+    isThisAnImmediateService = false,
+    isThisUserUnderS117 = false,
+    typeOfStayOptionName = '',
+  } = residentialCarePackage?.residentialCarePackage;
 
   const handleRejectPackage = () => {
     residentialCareChangeStatus(residentialCarePackageId, 10)
@@ -127,48 +136,33 @@ const ResidentialCareApproveBrokered = ({
         />
         <ApprovalClientSummary />
         <div className="columns">
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">STARTS</p>
-                    <p className="font-size-14px">
-                      {getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.startDate)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">ENDS</p>
-                    <p className="font-size-14px">
-                      {residentialCarePackage?.residentialCarePackage.endDate !== null
-                        ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
-                        : 'Ongoing'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">DAYS/WEEK</p>
-                    <p className="font-size-14px">3</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ClientSummaryItem
+            itemName="STARTS"
+            itemDetail={getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.startDate)}
+          />
+          <ClientSummaryItem
+            itemName="ENDS"
+            itemDetail={
+              residentialCarePackage?.residentialCarePackage.endDate !== null
+                ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
+                : 'Ongoing'
+            }
+          />
+          <ClientSummaryItem itemName="DAYS/WEEK" itemDetail="3" />
+          <ClientSummaryItem itemName="RESPITE CARE" itemDetail={hasRespiteCare === true ? 'yes' : 'no'} />
+          <ClientSummaryItem itemName="DISCHARGE PACKAGE" itemDetail={hasDischargePackage === true ? 'yes' : 'no'} />
+        </div>
+
+        <div className="columns mt-4 flex flex-wrap">
+          <ClientSummaryItem
+            itemName="IMMEDIATE / RE-ENABLEMENT PACKAGE"
+            itemDetail={isThisAnImmediateService === true ? 'Immediate' : 'Re-enablement'}
+          />
+          <ClientSummaryItem itemName="S117 CLIENT" itemDetail={isThisUserUnderS117 === true ? 'yes' : 'no'} />
+          <ClientSummaryItem
+            itemName="TYPE OF STAY"
+            itemDetail={!stringIsNullOrEmpty(typeOfStayOptionName) ? typeOfStayOptionName : ''}
+          />
           <div className="column" />
           <div className="column" />
         </div>
@@ -223,7 +217,7 @@ const ResidentialCareApproveBrokered = ({
               <div className="level-left" />
               <div className="level-right">
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light" onClick={handleRejectPackage}>
+                  <button type="button" className="button hackney-btn-light" onClick={handleRejectPackage}>
                     Deny
                   </button>
                 </div>
@@ -237,7 +231,7 @@ const ResidentialCareApproveBrokered = ({
                   </button>
                 </div>
                 <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
+                  <button type="button" className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
                     Approve Commercials
                   </button>
                 </div>
@@ -251,7 +245,7 @@ const ResidentialCareApproveBrokered = ({
             <div className="mt-1">
               <p className="font-size-16px font-weight-bold">Request more information</p>
               <TextArea label="" rows={5} placeholder="Add details..." onChange={setRequestInformationText} />
-              <button className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
+              <button type="button" className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
                 Request more information
               </button>
             </div>
