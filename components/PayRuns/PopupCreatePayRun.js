@@ -1,15 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import moment from 'moment';
 import DatePick from '../DatePick';
 import Popup from '../Popup';
 import RadioButton from '../RadioButton';
-import { createNewPayRun } from '../../api/Payments/PayRunApi';
+import { createNewPayRun, getDateOfLastPayRun } from '../../api/Payments/PayRunApi';
 import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
 import { addNotification } from '../../reducers/notificationsReducer';
 
 const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPayRunType }) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState([]);
+  const [daysFromLastPayRun, setDaysFromLastPayRun] = useState('XX');
+
+  useEffect(() => {
+    retrieveDateOfLastPayRun();
+  }, [newPayRunType]);
+
+  const calculateDaysFromLastPayRun = (dateOfLastPayRun) => {
+    if (!dateOfLastPayRun) {
+      setDaysFromLastPayRun('0');
+    } else {
+      // Calculate date difference
+      /* const start = moment(dateOfLastPayRun).format('L');
+      const end = moment(date).format('L'); */
+      const start = moment(dateOfLastPayRun).startOf('day');
+      const end = moment(date).startOf('day');
+      const duration = moment.duration(end.diff(start));
+      const days = duration.asDays();
+      setDaysFromLastPayRun(days.toString());
+    }
+  };
+
   const createPayRun = (
     <div className="create-pay-run">
       <div className="create-pay-run__regular-cycles">
@@ -30,7 +52,7 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
         <p className="create-pay-run__title">Pay run to:</p>
         <DatePick dateValue={date} setDate={setDate} />
         <p className="create-pay-run__days-since">
-          <span>XX</span> days since last cycle
+          <span>{daysFromLastPayRun}</span> days since last cycle
         </p>
       </div>
       <div className="create-pay-run__hoc-releases">
@@ -61,6 +83,24 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
         });
     } else {
       setErrors([...errors, 'Pay run not selected']);
+    }
+  };
+
+  const retrieveDateOfLastPayRun = () => {
+    const payRunType = newPayRunType;
+    if (!stringIsNullOrEmpty(payRunType)) {
+      getDateOfLastPayRun(payRunType)
+        .then((payRun) => {
+          if (payRun && payRun.dateTo) {
+            calculateDaysFromLastPayRun(new Date(payRun.dateTo));
+          } else {
+            calculateDaysFromLastPayRun(null);
+          }
+        })
+        .catch((err) => {
+          setDaysFromLastPayRun('XX');
+          dispatch(addNotification({ text: `Failed to fetch date of last pay run. ${err.message}` }));
+        });
     }
   };
 

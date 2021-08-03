@@ -19,6 +19,7 @@ import { currency } from '../../constants/strings';
 import CustomDropDown from '../../components/CustomDropdown';
 import Pagination from '../../components/Payments/Pagination';
 import { useRouter } from 'next/router';
+import { RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE, RESIDENTIAL_CARE_BROKERING_ROUTE, NURSING_CARE_BROKERING_ROUTE, NURSING_CARE_APPROVE_BROKERED_ROUTE } from '../../routes/RouteConstants';
 
 const BrokerageHubPage = () => {
   const dispatch = useDispatch();
@@ -30,9 +31,33 @@ const BrokerageHubPage = () => {
     HackneyId: '',
   });
 
+  const router = useRouter();
+
+  const onClickTableRow = (rowItems) => {
+    if(rowItems.packageTypeId === 3)
+    {
+      if(tab === "new")
+      router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+      else if(tab === "inProgress")
+      router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+      else if(tab === "done")
+      router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+    }
+    else{
+      if(tab === "new")
+      router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+      else if(tab === "inProgress")
+      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+      else if(tab === "done")
+      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+    }
+  };
+
   const [filters, setFilters] = useState({ ...initialFilters });
   const [timer, setTimer] = useState(null);
   const [stageOptions, setStagesOptions] = useState([]);
+  const [socialWorkerOptions, setSocialWorkersOptions] = useState([]);
+  const [packageId, setPackageValue] = useState();
 
   const [sorts] = useState([
     { name: 'packageType', text: 'Package Type' },
@@ -105,15 +130,17 @@ const BrokerageHubPage = () => {
     setSort({ value, name: field });
   };
 
+  const setPackageId = (packageId) => {
+    setPackageValue(packageId);
+  };
+
   const brokeredPackagesAssign = (option) => {
-    console.log(option);
-    putBrokeredPackagesAssign(option.creatorId)
+    putBrokeredPackagesAssign(packageId, option.id)
       .then(() => pushNotification('Assigned success'))
       .catch(() => pushNotification('Assign fail'));
   };
 
   const makeTabRequest = () => {
-    console.log('1');
     if (timer) {
       clearTimeout(timer);
     }
@@ -121,7 +148,6 @@ const BrokerageHubPage = () => {
       setTimeout(() => {
         const setInitialOptions = (tag, response) => {
           if (tag === 'Stage') {
-            console.log('i >>>', inputs)
             inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ stageName, id }) => ({
               text: stageName,
               value: id,
@@ -154,15 +180,17 @@ const BrokerageHubPage = () => {
           })
           .catch(() => pushNotification('Can not get Package Type'));
 
-        getBrokeredPackagesSocialWorkers().then((res) => {
-          setInitialOptions('SocialWorker', res);
-          changeInputs('SocialWorker', res);
-        });
+        getBrokeredPackagesSocialWorkers()
+        .then((res) => {
+          setInitialOptions('SocialWorker', res)
+          setSocialWorkersOptions(res)})
+        .catch(() => pushNotification('Can not get social workers'));
 
         tabsRequests[tab]({
           ...filters,
           PageNumber: page,
           OrderBy: sort.name,
+          PageSize : 50,
         }).then((res) => {
           setTabsTable({
             ...tabsTable,
@@ -198,12 +226,12 @@ const BrokerageHubPage = () => {
         return (
           <CustomDropDown
             onOptionSelect={brokeredPackagesAssign}
-            key={item.packageId}
-            options={stageOptions}
+            key={setPackageId(item.packageId)}
+            options={socialWorkerOptions}
             className="table__row-item"
             fields={{
-              value: 'creatorId',
-              text: 'stageName',
+              value: 'id',
+              text: 'userName',
             }}
             initialText=""
             selectedValue={item.stage}
@@ -222,6 +250,13 @@ const BrokerageHubPage = () => {
       [field]: value,
     });
   };
+
+    //todo refactor
+    const changePage = (page) => {
+      setPage(page);
+      makeTabRequest()
+    };
+  
 
   const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
 
@@ -245,9 +280,10 @@ const BrokerageHubPage = () => {
         }}
         sortBy={sortBy}
         sorts={sorts}
+        onClickTableRow={onClickTableRow}
       />
       <Pagination
-        changePagination={setPage}
+        changePagination={changePage}
         totalPages={totalPages}
         currentPage={page}
         itemsCount={pageSize}

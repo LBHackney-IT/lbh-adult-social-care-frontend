@@ -20,7 +20,7 @@ import PackagesNursingCare from '../../../../components/packages/nursing-care';
 import withSession from '../../../../lib/session';
 import { selectBrokerage } from '../../../../reducers/brokerageReducer';
 import { addNotification } from '../../../../reducers/notificationsReducer';
-import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import { CARE_PACKAGE_ROUTE, APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
 
 // start before render
@@ -120,7 +120,7 @@ const NursingCareBrokering = ({
     createNursingCareBrokerageInfo(nursingCarePackageId, brokerageInfoForCreation)
       .then(() => {
         dispatch(addNotification({ text: `Package brokerage saved successfully`, className: 'success' }));
-        router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         dispatch(addNotification({ text: `Saving package brokerage failed. ${error.message}` }));
