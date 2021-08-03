@@ -86,7 +86,7 @@ const ResidentialCareApprovePackage = ({
     isThisAnImmediateService = false,
     isThisUserUnderS117 = false,
     typeOfStayOptionName = '',
-  } = residentialCarePackage?.residentialCarePackage;
+  } = residentialCarePackage?.residentialCarePackage || {};
 
   const handleRejectPackage = () => {
     residentialCareChangeStatus(residentialCarePackageId, 10)

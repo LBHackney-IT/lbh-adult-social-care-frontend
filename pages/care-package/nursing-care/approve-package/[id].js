@@ -89,7 +89,7 @@ const NursingCareApprovePackage = ({
     isThisAnImmediateService = false,
     isThisUserUnderS117 = false,
     typeOfStayOptionName = '',
-  } = nursingCarePackage?.nursingCarePackage;
+  } = nursingCarePackage?.nursingCarePackage || {};
 
   const handleRejectPackage = () => {
     nursingCareChangeStatus(nursingCarePackageId, 10)
