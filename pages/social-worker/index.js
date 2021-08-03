@@ -6,7 +6,12 @@ import { getUserSession, formatDate } from '../../service/helpers';
 import withSession from '../../lib/session';
 import SocialWorkerInputs from '../../components/SocialWorker/SocialWorkerInputs';
 import { getSubmittedPackages, getSubmittedPackagesStatus } from '../../api/ApproversHub/SocialWorkerApi';
-import { RESIDENTIAL_CARE_ROUTE, NURSING_CARE_ROUTE, RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE, NURSING_CARE_APPROVE_PACKAGE_ROUTE } from '../../routes/RouteConstants';
+import {
+  RESIDENTIAL_CARE_ROUTE,
+  NURSING_CARE_ROUTE,
+  RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE,
+  NURSING_CARE_APPROVE_PACKAGE_ROUTE,
+} from '../../routes/RouteConstants';
 import Table from '../../components/Table';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
@@ -40,8 +45,12 @@ const SocialWorkerDashboardPage = () => {
 
   const onClickTableRow = (rowItems) => {
     rowItems.categoryId === 3
-      ? rowItems.statusName == "Draft" ? router.push(`${RESIDENTIAL_CARE_ROUTE}/${rowItems.packageId}`) : router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
-      : rowItems.statusName == "Draft" ? router.push(`${NURSING_CARE_ROUTE}/${rowItems.packageId}`) : router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+      ? rowItems.statusName === 'Draft'
+        ? router.push(`${RESIDENTIAL_CARE_ROUTE}/${rowItems.packageId}`)
+        : router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+      : rowItems.statusName === 'Draft'
+      ? router.push(`${NURSING_CARE_ROUTE}/${rowItems.packageId}`)
+      : router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
   };
 
   const [socialWorkerData, setSubmittedPackages] = useState([]);
@@ -64,7 +73,8 @@ const SocialWorkerDashboardPage = () => {
     getSubmittedPackages(page, 50, clientName, statusId)
       .then((res) => {
         const pagedData = res.pagingMetaData;
-        const options = res.data.map((option) => ({
+        const sortedData = res.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+        const options = sortedData.map((option) => ({
           client: option.client,
           packageId: option.packageId,
           categoryId: option.categoryId,
@@ -106,6 +116,7 @@ const SocialWorkerDashboardPage = () => {
   };
 
   const tableFields = {
+    id: 'packageId',
     client: 'client',
     category: 'category',
     DOB: 'dateOfBirth',
@@ -130,7 +141,7 @@ const SocialWorkerDashboardPage = () => {
 
   return (
     <div className="social-worker-page">
-      <SocialWorkerInputs statusOptions={statusOptions} searchTerm={setSearchTerm} searchFilters={setFilter}/>
+      <SocialWorkerInputs statusOptions={statusOptions} searchTerm={setSearchTerm} searchFilters={setFilter} />
       <Table
         onClickTableRow={onClickTableRow}
         fields={tableFields}

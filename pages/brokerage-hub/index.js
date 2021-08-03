@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
 import { addNotification } from '../../reducers/notificationsReducer';
 import DashboardTabs from '../../components/Dashboard/Tabs';
@@ -15,11 +16,14 @@ import {
   putBrokeredPackagesAssign,
 } from '../../api/Dashboard/brokeredPackages';
 import { formatDate } from '../../service/helpers';
-import { currency } from '../../constants/strings';
 import CustomDropDown from '../../components/CustomDropdown';
 import Pagination from '../../components/Payments/Pagination';
-import { useRouter } from 'next/router';
-import { RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE, RESIDENTIAL_CARE_BROKERING_ROUTE, NURSING_CARE_BROKERING_ROUTE, NURSING_CARE_APPROVE_BROKERED_ROUTE } from '../../routes/RouteConstants';
+import {
+  NURSING_CARE_APPROVE_BROKERED_ROUTE,
+  NURSING_CARE_BROKERING_ROUTE,
+  RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE,
+  RESIDENTIAL_CARE_BROKERING_ROUTE,
+} from '../../routes/RouteConstants';
 
 const BrokerageHubPage = () => {
   const dispatch = useDispatch();
@@ -34,22 +38,14 @@ const BrokerageHubPage = () => {
   const router = useRouter();
 
   const onClickTableRow = (rowItems) => {
-    if(rowItems.packageTypeId === 3)
-    {
-      if(tab === "new")
-      router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
-      else if(tab === "inProgress")
-      router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
-      else if(tab === "done")
-      router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
-    }
-    else{
-      if(tab === "new")
-      router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
-      else if(tab === "inProgress")
-      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
-      else if(tab === "done")
-      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+    if (rowItems.packageTypeId === 3) {
+      if (tab === 'new') router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`);
+      else if (tab === 'inProgress') router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`);
+      else if (tab === 'done') router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`);
+    } else {
+      if (tab === 'new') router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`);
+      else if (tab === 'inProgress') router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`);
+      else if (tab === 'done') router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`);
     }
   };
 
@@ -130,8 +126,8 @@ const BrokerageHubPage = () => {
     setSort({ value, name: field });
   };
 
-  const setPackageId = (packageId) => {
-    setPackageValue(packageId);
+  const setPackageId = (selectedPackageId) => {
+    setPackageValue(selectedPackageId);
   };
 
   const brokeredPackagesAssign = (option) => {
@@ -181,16 +177,17 @@ const BrokerageHubPage = () => {
           .catch(() => pushNotification('Can not get Package Type'));
 
         getBrokeredPackagesSocialWorkers()
-        .then((res) => {
-          setInitialOptions('SocialWorker', res)
-          setSocialWorkersOptions(res)})
-        .catch(() => pushNotification('Can not get social workers'));
+          .then((res) => {
+            setInitialOptions('SocialWorker', res);
+            setSocialWorkersOptions(res);
+          })
+          .catch(() => pushNotification('Can not get social workers'));
 
         tabsRequests[tab]({
           ...filters,
           PageNumber: page,
           OrderBy: sort.name,
-          PageSize : 50,
+          PageSize: 50,
         }).then((res) => {
           setTabsTable({
             ...tabsTable,
@@ -223,10 +220,11 @@ const BrokerageHubPage = () => {
     },
     owner: {
       getComponent: (item) => {
+        const { packageId: itemId, stage } = item;
         return (
           <CustomDropDown
             onOptionSelect={brokeredPackagesAssign}
-            key={setPackageId(item.packageId)}
+            key={setPackageId(itemId)}
             options={socialWorkerOptions}
             className="table__row-item"
             fields={{
@@ -234,7 +232,7 @@ const BrokerageHubPage = () => {
               text: 'userName',
             }}
             initialText=""
-            selectedValue={item.stage}
+            selectedValue={stage}
           />
         );
       },
@@ -251,12 +249,11 @@ const BrokerageHubPage = () => {
     });
   };
 
-    //todo refactor
-    const changePage = (page) => {
-      setPage(page);
-      makeTabRequest()
-    };
-  
+  // todo refactor
+  const changePage = (chosenPage) => {
+    setPage(chosenPage);
+    makeTabRequest();
+  };
 
   const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
 

@@ -5,7 +5,7 @@ import Checkbox from './Checkbox';
 const Table = ({
   changeAllChecked,
   onClickTableRow,
-  fields = { id: 'id' },
+  fields = { id: 'id', tab: 'default' },
   rows = [],
   rowsRules = {},
   className = '',
@@ -15,6 +15,7 @@ const Table = ({
   collapsedContainer,
 }) => {
   const [defaultFields] = useState(fields);
+  const { tab } = fields;
 
   const clickRow = (item) => {
     if (onClickTableRow) {
@@ -32,12 +33,12 @@ const Table = ({
           const id = item[defaultFields.id];
           return (
             <div key={id} className="table__row">
-              <div onClick={() => clickRow(item)} className="table__row-column-items">
+              <div onClick={() => clickRow(item)} className="table__row-column-items" role="presentation">
                 {Object.values(defaultFields).map((rowItemName) => {
                   const currentRowRule = rowsRules[rowItemName] || '';
                   const value = item[rowItemName];
 
-                  if (currentRowRule?.hide) return <React.Fragment key={`${rowItemName}${id}`} />;
+                  if (currentRowRule?.hide) return <React.Fragment key={`${tab}${rowItemName}${id}`} />;
 
                   const currentValue = (currentRowRule?.getValue && currentRowRule.getValue(value)) || value;
                   const calculatedClassName = currentRowRule?.getClassName
@@ -51,17 +52,22 @@ const Table = ({
 
                   if (currentRowRule?.type === 'checkbox')
                     return (
-                      <Checkbox key={`${rowItemName}${id}`} onChange={currentRowRule.onChange} checked={currentValue} />
+                      <Checkbox
+                        key={`${tab}${rowItemName}${id}`}
+                        onChange={currentRowRule.onChange}
+                        checked={currentValue}
+                      />
                     );
 
                   return (
                     <div
+                      role="presentation"
                       onClick={(e) => {
                         if (!currentRowRule.onClick) return;
                         e.stopPropagation();
                         currentRowRule.onClick(item, value);
                       }}
-                      key={`${value}${id}`}
+                      key={`${tab}${rowItemName}${value}${id}`}
                       className={`table__row-item ${calculatedClassName}`}
                     >
                       <p>{currentValue || '—'}</p>

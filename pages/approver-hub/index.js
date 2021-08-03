@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
 import DashboardTabs from '../../components/Dashboard/Tabs';
@@ -26,7 +27,6 @@ import {
   NURSING_CARE_BROKERING_ROUTE,
 } from '../../routes/RouteConstants';
 import { currency } from '../../constants/strings';
-import { useRouter } from 'next/router';
 
 const ApproverHubPage = () => {
   const dispatch = useDispatch();
@@ -41,51 +41,49 @@ const ApproverHubPage = () => {
   const router = useRouter();
 
   const onClickTableRow = (rowItems) => {
-    if(rowItems.packageTypeId === 3)
-    {
+    if (rowItems.packageTypeId === 3) {
       switch (tab) {
         case 'new': {
-          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
           break;
         }
         case 'clarification': {
-          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
           break;
         }
         case 'awaitingBrokerage': {
-          router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+          router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`);
           break;
         }
         case 'reviewCommercials': {
-          router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+          router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`);
           break;
         }
         default: {
-          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
           break;
         }
       }
-    }
-    else{
+    } else {
       switch (tab) {
         case 'new': {
-          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
           break;
         }
         case 'clarification': {
-          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
           break;
         }
         case 'awaitingBrokerage': {
-          router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+          router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`);
           break;
         }
         case 'reviewCommercials': {
-          router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+          router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`);
           break;
         }
         default: {
-          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
           break;
         }
       }
@@ -231,13 +229,15 @@ const ApproverHubPage = () => {
         tabsRequests[tab]({
           PageNumber: page,
           OrderBy: sort.name,
-          PageSize : 50,
+          PageSize: 50,
           ...filters,
         })
           .then((res) => {
+            let tableData = res.data || [];
+            tableData = tableData.sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
             setTabsTable({
               ...tabsTable,
-              [tab]: res.data,
+              [tab]: tableData,
             });
             setPagingMetaData({
               ...pagingMetaData,
@@ -259,13 +259,11 @@ const ApproverHubPage = () => {
       onClick: (cellItem, cellValue) => changeInputs('PackageType', cellValue),
       getValue: (value) => formatStatus(value),
     },
-    careValue: {
-      getClassName: () => 'text-bold',
-    },
     lastUpdated: {
       getValue: (value) => formatDate(value, '/'),
     },
     careValue: {
+      getClassName: () => 'text-bold',
       getValue: (value) => `${currency.euro}${value}`,
     },
   };
@@ -277,10 +275,10 @@ const ApproverHubPage = () => {
     });
   };
 
-  //todo refactor
-  const changePage = (page) => {
-    setPage(page);
-    makeTabRequest()
+  // todo refactor
+  const changePage = (chosenPage) => {
+    setPage(chosenPage);
+    makeTabRequest();
   };
 
   const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
@@ -304,6 +302,7 @@ const ApproverHubPage = () => {
           submittedBy: 'submittedBy',
           id: 'packageId',
           lastUpdated: 'lastUpdated',
+          tab,
         }}
         rowsRules={rowsRules}
         rows={tabsTable[tab]}
