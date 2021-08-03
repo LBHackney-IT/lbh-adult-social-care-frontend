@@ -31,7 +31,7 @@ const NavigationColumn = ({ clientSummaryInfo, showBackButton }) => {
       <NavItem to="/approver-hub">Approver Hub</NavItem>
       <NavItem to="/brokerage-hub">Brokerage Hub</NavItem>
       {/* /!* <NavItem to={RouteConstants.CLIENT_HISTORY_ROUTER}>Client History</NavItem> */}
-      <NavItem to="/test">Client details</NavItem>
+      {/* <NavItem to="/test">Client details</NavItem>
       <NavItem to="/test">Medical history</NavItem>
       <NavItem to="/test">Important to me</NavItem>
       <NavItem to="/test">GP Details</NavItem>
@@ -39,7 +39,7 @@ const NavigationColumn = ({ clientSummaryInfo, showBackButton }) => {
       <NavItem to="/test">Mental Capacity Assessment</NavItem>
       <NavItem to="/test">Carer</NavItem>
       <NavItem to="/test">Risk Assessment</NavItem>
-      <NavItem to="/test">Review</NavItem>
+      <NavItem to="/test">Review</NavItem> */}
     </div>
   );
 };
