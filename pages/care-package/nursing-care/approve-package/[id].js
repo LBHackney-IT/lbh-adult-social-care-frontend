@@ -9,7 +9,7 @@ import {
   nursingCareChangeStatus,
   nursingCareRequestClarification,
 } from '../../../../api/CarePackages/NursingCareApi';
-import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import { getEnGBFormattedDate, stringIsNullOrEmpty } from '../../../../api/Utils/FuncUtils';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
 import Layout from '../../../../components/Layout/Layout';
@@ -20,8 +20,9 @@ import TextArea from '../../../../components/TextArea';
 import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { addNotification } from '../../../../reducers/notificationsReducer';
-import { CARE_PACKAGE_ROUTE, APPROVER_HUB_ROUTE} from '../../../../routes/RouteConstants';
+import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import { getUserSession } from '../../../../service/helpers';
+import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
@@ -82,6 +83,9 @@ const NursingCareApprovePackage = ({
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
 
+  const { hasDischargePackage, hasRespiteCare, isThisAnImmediateService, isThisUserUnderS117, typeOfStayOptionName } =
+    nursingCarePackage?.nursingCarePackage;
+
   const handleRejectPackage = () => {
     nursingCareChangeStatus(nursingCarePackageId, 10)
       .then(() => {
@@ -131,48 +135,33 @@ const NursingCareApprovePackage = ({
         <ApprovalClientSummary />
 
         <div className="columns">
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">STARTS</p>
-                    <p className="font-size-14px">
-                      {getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">ENDS</p>
-                    <p className="font-size-14px">
-                      {nursingCarePackage?.nursingCarePackage.endDate !== null
-                        ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
-                        : 'Ongoing'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">DAYS/WEEK</p>
-                    <p className="font-size-14px">3</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ClientSummaryItem
+            itemName="STARTS"
+            itemDetail={getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate)}
+          />
+          <ClientSummaryItem
+            itemName="ENDS"
+            itemDetail={
+              nursingCarePackage?.nursingCarePackage.endDate !== null
+                ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
+                : 'Ongoing'
+            }
+          />
+          <ClientSummaryItem itemName="DAYS/WEEK" itemDetail="3" />
+          <ClientSummaryItem itemName="RESPITE CARE" itemDetail={hasRespiteCare === true ? 'yes' : 'no'} />
+          <ClientSummaryItem itemName="DISCHARGE PACKAGE" itemDetail={hasDischargePackage === true ? 'yes' : 'no'} />
+        </div>
+
+        <div className="columns mt-4 flex flex-wrap">
+          <ClientSummaryItem
+            itemName="IMMEDIATE / RE-ENABLEMENT PACKAGE"
+            itemDetail={isThisAnImmediateService === true ? 'Immediate' : 'Re-enablement'}
+          />
+          <ClientSummaryItem itemName="S117 CLIENT" itemDetail={isThisUserUnderS117 === true ? 'yes' : 'no'} />
+          <ClientSummaryItem
+            itemName="TYPE OF STAY"
+            itemDetail={!stringIsNullOrEmpty(typeOfStayOptionName) ? typeOfStayOptionName : ''}
+          />
           <div className="column" />
           <div className="column" />
         </div>
