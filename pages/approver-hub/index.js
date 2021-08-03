@@ -54,11 +54,11 @@ const ApproverHubPage = () => {
     }
     else{
       if(tab === "new")
-      router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+      router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
       else if(tab === "clarification")
       router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
       else if(tab === "awaitingBrokerage")
-      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+      router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
       else if (tab === "reviewCommercials")
       router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
     }
