@@ -254,14 +254,13 @@ workflows:
                 - main
       - assume-role-production:
           context: api-assume-role-social-care-production-context
-          requires:
-            - build-deploy-staging
           filters:
             branches:
               only: main
       - build-deploy-production:
           requires:
             - assume-role-production
+            - owasp-zap-baseline-scan
             - build
           filters:
             branches:
