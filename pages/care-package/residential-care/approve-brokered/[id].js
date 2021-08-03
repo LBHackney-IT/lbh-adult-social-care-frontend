@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
+import {
+  getResidentialCarePackageApprovalHistory,
+  getResidentialCarePackageApproveBrokered,
+  residentialCareApproveCommercials,
+  residentialCareChangeStatus,
+  residentialCareClarifyCommercial,
+} from '../../../../api/CarePackages/ResidentialCareApi';
 import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
-import ResidentialCareApprovalTitle from '../../../../components/ResidentialCare/ResidentialCareApprovalTitle';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
-import Layout from '../../../../components/Layout/Layout';
 import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
+import Layout from '../../../../components/Layout/Layout';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TitleHeader from '../../../../components/TitleHeader';
+import ResidentialCareApprovalTitle from '../../../../components/ResidentialCare/ResidentialCareApprovalTitle';
 import ResidentialCareSummary from '../../../../components/ResidentialCare/ResidentialCareSummary';
 import TextArea from '../../../../components/TextArea';
-import {
-  getResidentialCarePackageApproveBrokered,
-  getResidentialCarePackageApprovalHistory,
-  residentialCareClarifyCommercial,
-  residentialCareChangeStatus,
-  residentialCareApproveCommercials,
-} from '../../../../api/CarePackages/ResidentialCareApi';
+import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
+import { APPROVER_HUB_ROUTE} from '../../../../routes/RouteConstants';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -28,42 +30,41 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
     errorData: [],
   };
 
-    try {
-      const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId,  req.cookies.hascToken);
-      const newApprovalHistoryItems = res.map((historyItem) => ({
-        eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
-        eventMessage: historyItem.logText,
-        eventSubMessage: historyItem.logSubText,
-      }));
+  try {
+    const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId, req.cookies[HASC_TOKEN_ID]);
+    const newApprovalHistoryItems = res.map((historyItem) => ({
+      eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
+      eventMessage: historyItem.logText,
+      eventSubMessage: historyItem.logSubText,
+    }));
 
-      data.approvalHistoryEntries = newApprovalHistoryItems.slice();
-    } catch (error) {
-      data.errorData.push(`Retrieve residential care approval history failed. ${error}`);
-    }
-
-    try {
-      const residentialCarePackage = await getResidentialCarePackageApproveBrokered(
-        residentialCarePackageId,
-        req.cookies.hascToken
-      );
-      const newAdditionalNeedsEntries = residentialCarePackage.residentialCarePackage.residentialCareAdditionalNeeds.map(
-        (additionalneedsItem) => ({
-          id: additionalneedsItem.id,
-          isWeeklyCost: additionalneedsItem.isWeeklyCost,
-          isOneOffCost: additionalneedsItem.isOneOffCost,
-          needToAddress: additionalneedsItem.needToAddress,
-        })
-      );
-  
-      data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
-      data.residentialCarePackage = residentialCarePackage;
-    } catch (error) {
-      data.errorData.push(`Retrieve residential care package details failed. ${error}`);
-    }
-
-    return { props: { ...data } };
+    data.approvalHistoryEntries = newApprovalHistoryItems.slice();
+  } catch (error) {
+    data.errorData.push(`Retrieve residential care approval history failed. ${error}`);
   }
-);
+
+  try {
+    const residentialCarePackage = await getResidentialCarePackageApproveBrokered(
+      residentialCarePackageId,
+      req.cookies[HASC_TOKEN_ID]
+    );
+    const newAdditionalNeedsEntries = residentialCarePackage.residentialCarePackage.residentialCareAdditionalNeeds.map(
+      (additionalneedsItem) => ({
+        id: additionalneedsItem.id,
+        isWeeklyCost: additionalneedsItem.isWeeklyCost,
+        isOneOffCost: additionalneedsItem.isOneOffCost,
+        needToAddress: additionalneedsItem.needToAddress,
+      })
+    );
+
+    data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
+    data.residentialCarePackage = residentialCarePackage;
+  } catch (error) {
+    data.errorData.push(`Retrieve residential care package details failed. ${error}`);
+  }
+
+  return { props: { ...data } };
+});
 
 const ResidentialCareApproveBrokered = ({
   residentialCarePackage,
@@ -93,7 +94,7 @@ const ResidentialCareApproveBrokered = ({
   const handleApprovePackageCommercials = () => {
     residentialCareApproveCommercials(residentialCarePackageId)
       .then(() => {
-        // router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error}`);
@@ -105,7 +106,7 @@ const ResidentialCareApproveBrokered = ({
     residentialCareClarifyCommercial(residentialCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
-        // router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error}`);

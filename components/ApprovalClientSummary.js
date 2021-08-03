@@ -1,61 +1,18 @@
 import React from 'react';
 import { HackneyLogo } from './Icons';
+import ClientSummaryItem from './CarePackages/ClientSummaryItem';
 
 const ApprovalClientSummary = () => (
   <div className="columns">
+    <ClientSummaryItem itemName="CLIENT" itemDetail="James Stephens" />
+    <ClientSummaryItem itemName="HACKNEY ID" itemDetail="#786288" />
+    <ClientSummaryItem itemName="AGE 91" itemDetail="09/12/1972" />
+    <ClientSummaryItem itemName="POSTCODE" itemDetail="E9 6EY" />
     <div className="column">
       <div className="level">
         <div className="level-left">
           <div className="level-item">
-            <div>
-              <p className="font-weight-bold hackney-text-green">CLIENT</p>
-              <p className="font-size-14px">James Stephens</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div className="column">
-      <div className="level">
-        <div className="level-left">
-          <div className="level-item">
-            <div>
-              <p className="font-weight-bold hackney-text-green">HACKNEY ID</p>
-              <p className="font-size-14px">#786288</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div className="column">
-      <div className="level">
-        <div className="level-left">
-          <div className="level-item">
-            <div>
-              <p className="font-weight-bold hackney-text-green">AGE 91</p>
-              <p className="font-size-14px">09/12/1972</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div className="column">
-      <div className="level">
-        <div className="level-left">
-          <div className="level-item">
-            <div>
-              <p className="font-weight-bold hackney-text-green">POSTCODE</p>
-              <p className="font-size-14px">E9 6EY</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div className="column">
-      <div className="level">
-        <div className="level-left">
-          <div className="level-item">
-            <div>
+            <div className="w-180px">
               <p className="font-weight-bold hackney-text-green">WHO IS SOURCING CARE</p>
               <p className="font-size-14px">
                 <HackneyLogo />

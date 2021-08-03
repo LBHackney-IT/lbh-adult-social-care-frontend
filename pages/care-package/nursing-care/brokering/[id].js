@@ -1,26 +1,27 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
-import PackageHeader from '../../../../components/CarePackages/PackageHeader';
-import PackagesNursingCare from '../../../../components/packages/nursing-care';
-import { selectBrokerage } from '../../../../reducers/brokerageReducer';
-import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
+import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
-import Layout from '../../../../components/Layout/Layout';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import {
   createNursingCareBrokerageInfo,
   getNursingCareBrokerageStages,
   getNursingCarePackageApprovalHistory,
   getNursingCarePackageDetailsForBrokerage,
-  nursingCareChangeStatus,
   nursingCareChangeStage,
+  nursingCareChangeStatus,
 } from '../../../../api/CarePackages/NursingCareApi';
-import { mapBrokerageSupplierOptions, mapNursingCareStageOptions } from '../../../../api/Mappers/NursingCareMapper';
 import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
-import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import { mapBrokerageSupplierOptions, mapNursingCareStageOptions } from '../../../../api/Mappers/NursingCareMapper';
+import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import PackageHeader from '../../../../components/CarePackages/PackageHeader';
+import Layout from '../../../../components/Layout/Layout';
+import PackagesNursingCare from '../../../../components/packages/nursing-care';
 import withSession from '../../../../lib/session';
+import { selectBrokerage } from '../../../../reducers/brokerageReducer';
 import { addNotification } from '../../../../reducers/notificationsReducer';
+import { CARE_PACKAGE_ROUTE, APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
+import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
@@ -35,7 +36,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
 
   try {
     // Call to api to get package
-    const result = await getNursingCarePackageDetailsForBrokerage(nursingCarePackageId, req.cookies.hascToken);
+    const result = await getNursingCarePackageDetailsForBrokerage(nursingCarePackageId, req.cookies[HASC_TOKEN_ID]);
     const newAdditionalNeedsEntries = result.nursingCarePackage.nursingCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
         id: additionalneedsItem.id,
@@ -51,14 +52,14 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
   }
 
   try {
-    data.approvalHistoryEntries = await getNursingCarePackageApprovalHistory(
-      nursingCarePackageId,
-      req.cookies.hascToken
-    ).map((historyItem) => ({
+    const result = await getNursingCarePackageApprovalHistory(nursingCarePackageId, req.cookies[HASC_TOKEN_ID]);
+    const newApprovalHistoryItems = result.map((historyItem) => ({
       eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
       eventMessage: historyItem.logText,
-      eventSubMessage: null,
+      eventSubMessage: historyItem.logSubText,
     }));
+
+    data.approvalHistoryEntries = newApprovalHistoryItems.slice();
   } catch (error) {
     data.errorData.push(`Retrieve nursing care approval history failed. ${error.message}`);
   }
@@ -119,7 +120,7 @@ const NursingCareBrokering = ({
     createNursingCareBrokerageInfo(nursingCarePackageId, brokerageInfoForCreation)
       .then(() => {
         dispatch(addNotification({ text: `Package brokerage saved successfully`, className: 'success' }));
-        router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         dispatch(addNotification({ text: `Saving package brokerage failed. ${error.message}` }));

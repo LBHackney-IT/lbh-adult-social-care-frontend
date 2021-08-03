@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
+import {
+  getResidentialCarePackageApprovalHistory,
+  getResidentialCarePackageApprovalPackageContent,
+  residentialCareApprovePackageContent,
+  residentialCareChangeStatus,
+  residentialCareRequestClarification,
+} from '../../../../api/CarePackages/ResidentialCareApi';
+import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
-import Layout from '../../../../components/Layout/Layout';
-import ResidentialCareApprovalTitle from '../../../../components/ResidentialCare/ResidentialCareApprovalTitle';
 import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
+import Layout from '../../../../components/Layout/Layout';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TitleHeader from '../../../../components/TitleHeader';
+import ResidentialCareApprovalTitle from '../../../../components/ResidentialCare/ResidentialCareApprovalTitle';
 import ResidentialCareSummary from '../../../../components/ResidentialCare/ResidentialCareSummary';
 import TextArea from '../../../../components/TextArea';
-import {
-  getResidentialCarePackageApprovalPackageContent,
-  getResidentialCarePackageApprovalHistory,
-  residentialCareRequestClarification,
-  residentialCareChangeStatus,
-  residentialCareApprovePackageContent,
-} from '../../../../api/CarePackages/ResidentialCareApi';
+import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
-import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
+import { APPROVER_HUB_ROUTE} from '../../../../routes/RouteConstants';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -31,7 +33,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
   try {
     const residentialCarePackage = await getResidentialCarePackageApprovalPackageContent(
       residentialCarePackageId,
-      req.cookies.hascToken
+      req.cookies[HASC_TOKEN_ID]
     );
     const newAdditionalNeedsEntries = residentialCarePackage.residentialCarePackage.residentialCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
@@ -49,7 +51,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
   }
 
   try {
-    const result = await getResidentialCarePackageApprovalHistory(residentialCarePackageId, req.cookies.hascToken);
+    const result = await getResidentialCarePackageApprovalHistory(residentialCarePackageId, req.cookies[HASC_TOKEN_ID]);
     const newApprovalHistoryItems = result.map((historyItem) => ({
       eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
       eventMessage: historyItem.logText,
@@ -91,7 +93,7 @@ const ResidentialCareApprovePackage = ({
   const handleApprovePackageContents = () => {
     residentialCareApprovePackageContent(residentialCarePackageId)
       .then(() => {
-        // router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error}`);
@@ -103,7 +105,7 @@ const ResidentialCareApprovePackage = ({
     residentialCareRequestClarification(residentialCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
-        // router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error}`);

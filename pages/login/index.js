@@ -1,12 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
 import Header from '../../components/Layout/Header';
 import useUser from '../../lib/useUser';
+import { userLogin } from '../../reducers/userReducer';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
 const Login = () => {
+  const dispatch = useDispatch();
   const { mutateUser } = useUser({
     redirectTo: '/care-package',
     redirectIfFound: true,
@@ -25,7 +28,11 @@ const Login = () => {
       }
     };
 
-    login();
+    login().then(() => {
+      axios.get('/api/user').then((user) => {
+        dispatch(userLogin({ user: user.data }));
+      });
+    });
   }, []);
 
   return (

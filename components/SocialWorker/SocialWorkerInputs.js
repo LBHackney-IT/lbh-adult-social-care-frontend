@@ -7,12 +7,8 @@ const initialFilters = {
   status: '',
 };
 
-const SocialWorkerInputs = ({ statusOptions = [], searchTerm }) => {
+const SocialWorkerInputs = ({ statusOptions = [], searchTerm, searchFilters }) => {
   const [filters, setFilters] = useState({ ...initialFilters });
-
-  const applyFilters = () => {
-    console.log('make an apply filters request');
-  };
 
   const searchId = () => {
     searchTerm(filters.terms);
@@ -27,6 +23,7 @@ const SocialWorkerInputs = ({ statusOptions = [], searchTerm }) => {
       ...filters,
       [field]: value,
     });
+    searchFilters(value);
   };
 
   useEffect(() => {

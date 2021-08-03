@@ -28,20 +28,19 @@ const PackagesResidentialCare = ({
   changePackageBrokeringStage = () => {},
 }) => {
   const [coreCost, setCoreCost] = useState({
-    costPerWeek: 0,
+    costPerWeek: residentialCarePackage?.residentialCore || 0,
   });
 
   const [additionalPayment, setAdditionalPayment] = useState({
-    costPerWeek: 0,
+    costPerWeek: residentialCarePackage?.additionalNeedsPayment || 0,
   });
 
   const [additionalPaymentOneOff, setAdditionalPaymentOneOff] = useState({
-    oneOf: 0,
+    oneOf: residentialCarePackage?.additionalNeedsPaymentOneOff || 0,
   });
-
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
-  const [selectedStageType, setSelectedStageType] = useState(0);
-  const [selectedSupplierType, setSelectedSupplierType] = useState(0);
+  const [selectedStageType, setSelectedStageType] = useState(residentialCarePackage?.residentialCarePackage?.stageId);
+  const [selectedSupplierType, setSelectedSupplierType] = useState(residentialCarePackage?.residentialCarePackage?.supplierId);
   const [startDate, setStartDate] = useState(
     (residentialCarePackage && new Date(residentialCarePackage?.residentialCarePackage?.startDate)) || undefined
   );

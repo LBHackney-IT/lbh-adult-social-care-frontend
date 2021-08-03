@@ -1,26 +1,28 @@
-import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
+import {
+  getNursingCarePackageApprovalHistory,
+  getNursingCarePackageApprovalPackageContent,
+  nursingCareApprovePackageContent,
+  nursingCareChangeStatus,
+  nursingCareRequestClarification,
+} from '../../../../api/CarePackages/NursingCareApi';
+import { getEnGBFormattedDate, stringIsNullOrEmpty } from '../../../../api/Utils/FuncUtils';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
+import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
 import Layout from '../../../../components/Layout/Layout';
 import NursingCareApprovalTitle from '../../../../components/NursingCare/NursingCareApprovalTitle';
-import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TitleHeader from '../../../../components/TitleHeader';
 import NursingCareSummary from '../../../../components/NursingCare/NursingCareSummary';
+import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
 import TextArea from '../../../../components/TextArea';
-import {
-  getNursingCarePackageApprovalPackageContent,
-  getNursingCarePackageApprovalHistory,
-  nursingCareRequestClarification,
-  nursingCareChangeStatus,
-  nursingCareApprovePackageContent,
-} from '../../../../api/CarePackages/NursingCareApi';
+import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
-import { getUserSession } from '../../../../service/helpers';
-import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
-import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 import { addNotification } from '../../../../reducers/notificationsReducer';
+import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
+import { getUserSession } from '../../../../service/helpers';
+import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
@@ -34,7 +36,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
   try {
     const nursingCarePackage = await getNursingCarePackageApprovalPackageContent(
       nursingCarePackageId,
-      req.cookies.hascToken
+      req.cookies[HASC_TOKEN_ID]
     );
     const newAdditionalNeedsEntries = nursingCarePackage.nursingCarePackage.nursingCareAdditionalNeeds.map(
       (additionalneedsItem) => ({
@@ -52,7 +54,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
   }
 
   try {
-    const result = await getNursingCarePackageApprovalHistory(nursingCarePackageId, req.cookies.hascToken);
+    const result = await getNursingCarePackageApprovalHistory(nursingCarePackageId, req.cookies[HASC_TOKEN_ID]);
     const newApprovalHistoryItems = result.map((historyItem) => ({
       eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
       eventMessage: historyItem.logText,
@@ -81,6 +83,9 @@ const NursingCareApprovePackage = ({
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
 
+  const { hasDischargePackage, hasRespiteCare, isThisAnImmediateService, isThisUserUnderS117, typeOfStayOptionName } =
+    nursingCarePackage?.nursingCarePackage;
+
   const handleRejectPackage = () => {
     nursingCareChangeStatus(nursingCarePackageId, 10)
       .then(() => {
@@ -96,7 +101,7 @@ const NursingCareApprovePackage = ({
     nursingCareApprovePackageContent(nursingCarePackageId)
       .then(() => {
         dispatch(addNotification({ text: `Package contents approved successfully`, className: 'success' }));
-        router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
@@ -108,7 +113,7 @@ const NursingCareApprovePackage = ({
     nursingCareRequestClarification(nursingCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
-        // router.push(`${CARE_PACKAGE_ROUTE}`);
+        router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         alert(`Status change failed. ${error.message}`);
@@ -130,48 +135,33 @@ const NursingCareApprovePackage = ({
         <ApprovalClientSummary />
 
         <div className="columns">
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">STARTS</p>
-                    <p className="font-size-14px">
-                      {getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">ENDS</p>
-                    <p className="font-size-14px">
-                      {nursingCarePackage?.nursingCarePackage.endDate !== null
-                        ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
-                        : 'Ongoing'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">DAYS/WEEK</p>
-                    <p className="font-size-14px">3</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ClientSummaryItem
+            itemName="STARTS"
+            itemDetail={getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate)}
+          />
+          <ClientSummaryItem
+            itemName="ENDS"
+            itemDetail={
+              nursingCarePackage?.nursingCarePackage.endDate !== null
+                ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
+                : 'Ongoing'
+            }
+          />
+          <ClientSummaryItem itemName="DAYS/WEEK" itemDetail="3" />
+          <ClientSummaryItem itemName="RESPITE CARE" itemDetail={hasRespiteCare === true ? 'yes' : 'no'} />
+          <ClientSummaryItem itemName="DISCHARGE PACKAGE" itemDetail={hasDischargePackage === true ? 'yes' : 'no'} />
+        </div>
+
+        <div className="columns mt-4 flex flex-wrap">
+          <ClientSummaryItem
+            itemName="IMMEDIATE / RE-ENABLEMENT PACKAGE"
+            itemDetail={isThisAnImmediateService === true ? 'Immediate' : 'Re-enablement'}
+          />
+          <ClientSummaryItem itemName="S117 CLIENT" itemDetail={isThisUserUnderS117 === true ? 'yes' : 'no'} />
+          <ClientSummaryItem
+            itemName="TYPE OF STAY"
+            itemDetail={!stringIsNullOrEmpty(typeOfStayOptionName) ? typeOfStayOptionName : ''}
+          />
           <div className="column" />
           <div className="column" />
         </div>
