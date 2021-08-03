@@ -73,7 +73,7 @@ const NursingCare = () => {
   const [careHomeTypes, setCareHomeTypes] = useState([]);
   const [errors, setErrors] = useState([]);
   const [needToAddress, setNeedToAddress] = useState(undefined);
-  const [selectedNursingHomeType, setSelectedNursingHomeType] = useState();
+  const [selectedNursingHomeType, setSelectedNursingHomeType] = useState(1);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(getInitialAdditionalNeedsArray());
 
   const [additionalNeedsEntriesErrors, setAdditionalNeedsEntriesErrors] = useState([]);

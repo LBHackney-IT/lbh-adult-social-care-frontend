@@ -1,6 +1,8 @@
 import { BASE_URL } from '../BaseApi';
 import { axiosRequest, getQueryParamsFromObject } from '../Utils/ApiUtils';
 import { requestMethods } from '../../constants/variables';
+import axios from 'axios';
+import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const BROKERED_PACKAGES = `${BASE_URL}/v1/brokered-packages`;
 
@@ -34,12 +36,21 @@ const getBrokeredPackagesSocialWorkers = () =>
     url: `${BROKERED_PACKAGES}/social-workers`,
   });
 
-const putBrokeredPackagesAssign = (userId) =>
-  axiosRequest({
-    method: requestMethods.put,
-    body: userId,
+const putBrokeredPackagesAssign = (packageId, userId) => {
+  const options = {
     url: `${BROKERED_PACKAGES}/assign`,
-  });
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    data: {
+      packageId,
+      userId
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
 
 export {
   getBrokeredPackagesBrokeredNew,

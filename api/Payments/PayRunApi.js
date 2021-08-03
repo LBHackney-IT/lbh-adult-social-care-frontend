@@ -48,6 +48,11 @@ const createNewPayRun = (payRunType, dateTo) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const getDateOfLastPayRun = (payRunType) => {
+  const query = `${PAY_RUN_URL}/date-of-last-pay-run/${payRunType}`;
+  return axios.get(query).then(handleResponse).catch(handleError);
+};
+
 const getUniqueSuppliersInPayRun = (payRunId, pageNumber = 1, pageSize = 10, searchTerm = '') => {
   const query = `${PAY_RUN_URL}/${payRunId}/unique-suppliers?pageNumber=${pageNumber}&pageSize=${pageSize}&searchTerm=${searchTerm}`;
   return axios.get(query).then(handleResponse).catch(handleError);
@@ -234,4 +239,5 @@ export {
   acceptInvoices,
   sendMessage,
   getPaymentDepartments,
+  getDateOfLastPayRun,
 };

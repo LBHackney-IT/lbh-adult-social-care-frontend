@@ -160,13 +160,14 @@ const PayRunsPage = () => {
       getPayRunSummaryList({
         pageNumber: page,
         dateFrom: new Date(2021, 1, 1),
-        dateTo: new Date(2021, 2, 2),
+        dateTo: new Date(2021, 8, 31),
         payRunId: 1,
         payRunTypeId: 1,
         payRunSubTypeId: 1,
         payRunStatusId: 1,
       })
         .then((payRuns) => {
+          alert(payRuns);
           changeListData('payRun', payRuns);
         })
         .catch(() => {

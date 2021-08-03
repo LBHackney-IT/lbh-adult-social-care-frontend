@@ -52,7 +52,7 @@ const ResidentialCareSetup = ({ careTypes, selectedCareType, setSelectedCareType
       { name: 'hasDischargePackage', value: hasDischargePackage, rules: ['empty'] },
       { name: 'hasRespiteCare', value: hasRespiteCare, rules: ['empty'] },
       { name: 'startDate', value: startDate, rules: ['empty'] },
-      { name: 'endDate', value: endDate, rules: ['empty'] },
+      // { name: 'endDate', value: endDate, rules: ['empty'] },
       { name: 'careTypes', value: selectedCareType, rules: ['empty'] },
     ]);
     if (hasErrors) {

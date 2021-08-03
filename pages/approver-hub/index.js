@@ -19,7 +19,11 @@ import {
 import Inputs from '../../components/Inputs';
 import {
   RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE,
+  RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE,
+  RESIDENTIAL_CARE_BROKERING_ROUTE,
   NURSING_CARE_APPROVE_PACKAGE_ROUTE,
+  NURSING_CARE_APPROVE_BROKERED_ROUTE,
+  NURSING_CARE_BROKERING_ROUTE,
 } from '../../routes/RouteConstants';
 import { currency } from '../../constants/strings';
 import { useRouter } from 'next/router';
@@ -37,11 +41,26 @@ const ApproverHubPage = () => {
   const router = useRouter();
 
   const onClickTableRow = (rowItems) => {
-    console.log(tab);
+    if(rowItems.packageTypeId === 3)
     {
-      rowItems.categoryId === 3
-        ? router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
-        : router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
+      if(tab === "new")
+      router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+      else if(tab === "clarification")
+      router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+      else if(tab === "awaitingBrokerage")
+      router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+      else if (tab === "reviewCommercials")
+      router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+    }
+    else{
+      if(tab === "new")
+      router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
+      else if(tab === "clarification")
+      router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+      else if(tab === "awaitingBrokerage")
+      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
+      else if (tab === "reviewCommercials")
+      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
     }
   };
 
@@ -184,6 +203,7 @@ const ApproverHubPage = () => {
         tabsRequests[tab]({
           PageNumber: page,
           OrderBy: sort.name,
+          PageSize : 50,
           ...filters,
         })
           .then((res) => {
@@ -229,6 +249,12 @@ const ApproverHubPage = () => {
     });
   };
 
+  //todo refactor
+  const changePage = (page) => {
+    setPage(page);
+    makeTabRequest()
+  };
+
   const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
   return (
     <div className="approver-hub-page">
@@ -259,7 +285,7 @@ const ApproverHubPage = () => {
       />
       <Pagination
         currentPage={page}
-        changePagination={setPage}
+        changePagination={changePage}
         itemsCount={pageSize}
         totalCount={totalCount}
         totalPages={totalPages}
