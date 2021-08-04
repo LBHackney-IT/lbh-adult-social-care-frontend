@@ -50,7 +50,7 @@ const Table = ({
                     return getComponent(item, currentRowRule);
                   }
 
-                  if (currentRowRule?.type === 'checkbox')
+                  if (currentRowRule?.type === 'checkbox') {
                     return (
                       <Checkbox
                         key={`${tab}${rowItemName}${id}`}
@@ -58,6 +58,7 @@ const Table = ({
                         checked={currentValue}
                       />
                     );
+                  }
 
                   return (
                     <div

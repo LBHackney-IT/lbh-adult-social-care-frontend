@@ -255,7 +255,6 @@ const ApproverHubPage = () => {
 
   const rowsRules = {
     packageType: {
-      getClassName: () => 'link-button',
       onClick: (cellItem, cellValue) => changeInputs('PackageType', cellValue),
       getValue: (value) => formatStatus(value),
     },
@@ -266,6 +265,9 @@ const ApproverHubPage = () => {
       getClassName: () => 'text-bold',
       getValue: (value) => `${currency.euro}${value}`,
     },
+    id: {
+      getValue: (value) => "[Hackney ID]"
+    }
   };
 
   const changeInputs = (field, value) => {
