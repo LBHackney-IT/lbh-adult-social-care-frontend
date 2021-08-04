@@ -19,6 +19,7 @@ import ChatButton from '../../../components/PayRuns/ChatButton';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -85,6 +86,9 @@ const PayRunsPage = () => {
     },
     payRunStatusName: {
       getClassName: (value) => `${value} table__row-item-status`,
+    },
+    dateCreated: {
+      getValue: (value) => getEnGBFormattedDate(value),
     },
   });
 
@@ -155,23 +159,24 @@ const PayRunsPage = () => {
     });
   };
 
-  const getLists = () => {
+  const getLists = (filters) => {
+    const { id = '', type = '', status = '' } = filters || {};
+    console.log(filters);
     if (tab === 'pay-runs') {
       getPayRunSummaryList({
         pageNumber: page,
-        dateFrom: new Date(2021, 1, 1),
-        dateTo: new Date(2021, 8, 31),
-        payRunId: 1,
-        payRunTypeId: 1,
-        payRunSubTypeId: 1,
-        payRunStatusId: 1,
+        dateFrom: new Date(2021, 1, 1).toJSON(),
+        dateTo: new Date(2021, 8, 31).toJSON(),
+        payRunId: id,
+        payRunTypeId: type,
+        payRunSubTypeId: '',
+        payRunStatusId: status,
       })
         .then((payRuns) => {
-          alert(payRuns);
-          changeListData('payRun', payRuns);
+          changeListData('payRuns', payRuns);
         })
-        .catch(() => {
-          dispatch(addNotification({ text: 'Can not get hold payments' }));
+        .catch((err) => {
+          dispatch(addNotification({ text: `Can not get hold payments: ${err?.message}` }));
         });
     } else {
       getHeldInvoicePayments({ pageNumber: page })
@@ -205,14 +210,28 @@ const PayRunsPage = () => {
   };
 
   useEffect(() => {
-    console.log('change sort', sort);
+    const { value = '', name = '' } = sort || {};
+    let fieldName = '';
+    let sortedList = [];
+    if (tab === 'pay-runs') {
+      const { data = [], pagingMetaData } = listData?.payRuns || {};
+      fieldName = payRunFields[name];
+      if (value === 'increase') {
+        sortedList = data.sort((a, b) => `${a[fieldName]}`.localeCompare(b[fieldName]));
+      } else if (value === 'decrease') {
+        sortedList = data.sort((a, b) => `${b[fieldName]}`.localeCompare(a[fieldName]));
+      }
+      changeListData('payRuns', { data: sortedList, pagingMetaData });
+    } else if (tab === 'held-payments') {
+      console.log(listData?.holdPayments?.data);
+    }
   }, [sort]);
 
   useEffect(() => {
     if (tab === 'pay-runs') {
       getPayRunSummaryList({ pageNumber: page })
         .then((payRuns) => {
-          changeListData('payRun', payRuns);
+          changeListData('payRuns', payRuns);
         })
         .catch(() => {
           dispatch(addNotification({ text: 'Can not get hold payments' }));
