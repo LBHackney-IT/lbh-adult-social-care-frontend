@@ -65,4 +65,17 @@ const SWR_OPTIONS = {
   },
 };
 
-export { getFixedPeriodOptions, getInitialPackageReclaim, getInitDaysSelected, getSelectedDate, SWR_OPTIONS };
+const DATA_TYPES = {
+  STRING: 'string',
+  NUMBER: 'number',
+  DATE: 'date',
+};
+
+export {
+  getFixedPeriodOptions,
+  getInitialPackageReclaim,
+  getInitDaysSelected,
+  getSelectedDate,
+  SWR_OPTIONS,
+  DATA_TYPES,
+};
