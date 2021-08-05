@@ -54,4 +54,15 @@ const getSelectedDate = (daysData) => {
   return [monday, tuesday, wednesday, thursday, friday, saturday, sunday];
 };
 
-export { getFixedPeriodOptions, getInitialPackageReclaim, getInitDaysSelected, getSelectedDate };
+const SWR_OPTIONS = {
+  REVALIDATE_ON_MOUNT: {
+    revalidateOnFocus: false,
+    revalidateOnMount: true,
+    revalidateOnReconnect: false,
+    refreshWhenOffline: false,
+    refreshWhenHidden: false,
+    refreshInterval: 0,
+  },
+};
+
+export { getFixedPeriodOptions, getInitialPackageReclaim, getInitDaysSelected, getSelectedDate, SWR_OPTIONS };

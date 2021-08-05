@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import useSWR from 'swr';
 import {
   getHeldInvoicePayments,
   getPaymentDepartments,
   getPayRunSummaryList,
+  PAY_RUN_ENDPOINTS,
   releaseSingleHeldInvoice,
 } from '../../../api/Payments/PayRunApi';
 import PopupInvoiceChat from '../../../components/Chat/PopupInvoiceChat';
@@ -19,7 +21,10 @@ import ChatButton from '../../../components/PayRuns/ChatButton';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
-import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
+import { getEnGBFormattedDate, stringIsNullOrEmpty } from '../../../api/Utils/FuncUtils';
+import { axiosFetcher } from '../../../api/Utils/ApiUtils';
+import { SWR_OPTIONS } from '../../../api/Utils/CommonOptions';
+import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from '../../../api/Mappers/PayRunMapper';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -73,7 +78,7 @@ const PayRunsPage = () => {
     payRuns: {},
     holdPayments: {},
   });
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
   const [sort, setSort] = useState({
     value: 'increase',
     name: 'id',
@@ -161,15 +166,19 @@ const PayRunsPage = () => {
 
   const getLists = (filters) => {
     const { id = '', type = '', status = '' } = filters || {};
-    console.log(filters);
+    let payRunTypeId = '';
+    let payRunSubTypeId = '';
+    if (!stringIsNullOrEmpty(type)) {
+      [payRunTypeId, payRunSubTypeId] = type.split(' - ');
+    }
     if (tab === 'pay-runs') {
       getPayRunSummaryList({
         pageNumber: page,
         dateFrom: new Date(2021, 1, 1).toJSON(),
         dateTo: new Date(2021, 8, 31).toJSON(),
         payRunId: id,
-        payRunTypeId: type,
-        payRunSubTypeId: '',
+        payRunTypeId,
+        payRunSubTypeId,
         payRunStatusId: status,
       })
         .then((payRuns) => {
@@ -241,6 +250,22 @@ const PayRunsPage = () => {
     }
   }, [tab, page]);
 
+  const { data: payRunTypes = [] } = useSWR(
+    `${PAY_RUN_ENDPOINTS.GET_ALL_PAY_RUN_TYPES}`,
+    axiosFetcher,
+    SWR_OPTIONS.REVALIDATE_ON_MOUNT
+  );
+  const { data: payRunSubTypes = [] } = useSWR(
+    `${PAY_RUN_ENDPOINTS.GET_ALL_PAY_RUN_SUB_TYPES}`,
+    axiosFetcher,
+    SWR_OPTIONS.REVALIDATE_ON_MOUNT
+  );
+  const { data: uniquePayRunStatuses = [] } = useSWR(
+    `${PAY_RUN_ENDPOINTS.GET_ALL_UNIQUE_PAY_RUN_STATUSES}`,
+    axiosFetcher,
+    SWR_OPTIONS.REVALIDATE_ON_MOUNT
+  );
+
   return (
     <div className={`pay-runs ${tab}__tab-class`}>
       {openedPopup === 'create-pay-run' && (
@@ -270,6 +295,8 @@ const PayRunsPage = () => {
         />
       )}
       <PayRunsHeader
+        typeOptions={[...mapPayRunTypeOptions(payRunTypes), ...mapPayRunSubTypeOptions(payRunSubTypes)]}
+        statusOptions={mapPayRunStatuses(uniquePayRunStatuses)}
         apply={getLists}
         releaseHolds={releaseHolds}
         checkedItems={checkedRows}

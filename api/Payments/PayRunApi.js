@@ -215,6 +215,12 @@ const getPaymentDepartments = () => {
   return axios.get(query).then(handleResponse).catch(handleError);
 };
 
+const PAY_RUN_ENDPOINTS = {
+  GET_ALL_PAY_RUN_TYPES: `${PAY_RUN_URL}/pay-run-types`,
+  GET_ALL_PAY_RUN_SUB_TYPES: `${PAY_RUN_URL}/pay-run-sub-types`,
+  GET_ALL_UNIQUE_PAY_RUN_STATUSES: `${PAY_RUN_URL}/unique-pay-run-statuses`,
+};
+
 export {
   getPayRunSummaryList,
   createNewPayRun,
@@ -240,4 +246,5 @@ export {
   sendMessage,
   getPaymentDepartments,
   getDateOfLastPayRun,
+  PAY_RUN_ENDPOINTS,
 };
