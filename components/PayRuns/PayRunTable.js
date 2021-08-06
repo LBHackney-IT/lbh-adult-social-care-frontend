@@ -6,7 +6,6 @@ import { addNotification } from '../../reducers/notificationsReducer';
 import Dropdown from '../Dropdown';
 import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
 import PayRunSortTable from './PayRunSortTable';
-import { shortMonths } from '../../constants/strings';
 import Checkbox from '../Checkbox';
 import { Button } from '../Button';
 

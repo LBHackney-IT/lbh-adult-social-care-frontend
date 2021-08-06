@@ -119,9 +119,8 @@ const approvePayRunForPayment = (payRunId) => {
 };
 
 const releaseSingleHeldInvoice = (payRunId, invoiceId) => {
-  const query = `${PAY_RUN_URL}/release-held-invoice`;
   const options = {
-    url: query,
+    url: `${PAY_RUN_URL}/release-held-invoice`,
     method: 'PUT',
     headers: {
       Accept: 'application/json',

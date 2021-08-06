@@ -134,10 +134,9 @@ const PayRunsPage = () => {
     }
   };
 
-  const release = (item) => {
-    releaseSingleHeldInvoice(listData.holdPayments.payRunId, item.invoiceId).then(() => {
-      dispatch(addNotification({ text: `Realse invoice ${item.invoiceId}`, className: 'success' }));
-    });
+  const release = async (item, invoice) => {
+    await releaseSingleHeldInvoice(item.payRunId, invoice.invoiceId);
+    dispatch(addNotification({ text: `Realse invoice ${item.invoiceId}`, className: 'success' }));
   };
 
   const openChat = (item) => {
