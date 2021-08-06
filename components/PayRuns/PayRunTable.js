@@ -101,8 +101,8 @@ const PayRunTable = ({
 
                   // todo: find status in "invoiceStatuses"
                   const isStatus = rowItemKey === 'invoiceStatusId';
-                  // const formattedStatus = isStatus && formatStatus(item[rowItemKey]);
-                  const formattedStatus = isStatus && formatStatus('status'); // todo: remove
+                  const status = invoiceStatuses.find((el) => el.id === item.invoiceStatusId);
+                  const formattedStatus = isStatus && formatStatus(status?.name);
                   const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemKey]}` : '';
 
                   if (isStatusDropDown && isStatus) {
@@ -165,25 +165,14 @@ const PayRunTable = ({
                           <p>Total</p>
                         </div>
 
-                        {invoice.invoiceItems.map((invoiceItem) => {
-                          const dateFrom = new Date(invoiceItem.dateFrom);
-                          const dateTo = new Date(invoiceItem.dateTo);
-
-                          return (
-                            <div key={invoiceItem.invoiceItemId} className="table__row-collapsed-main-item">
-                              <p>
-                                {invoiceItem.itemName}
-                                <br />
-                                {dateFrom.getDate()} {shortMonths[dateFrom.getMonth()]}-{dateTo.getDate()}{' '}
-                                {shortMonths[dateTo.getMonth()]} {dateTo.getFullYear()}
-                              </p>
-
-                              <p>{invoiceItem.pricePerUnit}</p>
-                              <p>{invoiceItem.quantity}</p>
-                              <p>{invoiceItem.totalPrice}</p>
-                            </div>
-                          );
-                        })}
+                        {invoice.invoiceItems.map((invoiceItem) => (
+                          <div key={invoiceItem.invoiceItemId} className="table__row-collapsed-main-item">
+                            <p>{invoiceItem.itemName}</p>
+                            <p>£{invoiceItem.pricePerUnit}</p>
+                            <p>{invoiceItem.quantity}</p>
+                            <p>£{invoiceItem.totalPrice}</p>
+                          </div>
+                        ))}
                       </div>
 
                       {release && (
