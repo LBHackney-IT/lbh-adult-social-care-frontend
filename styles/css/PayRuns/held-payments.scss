@@ -1,4 +1,7 @@
 .pay-runs__held-payments-class {
+  position: relative;
+  overflow: unset;
+
   .sort-table > div:last-of-type {
     &:after {
       content: '';
@@ -41,5 +44,12 @@
     &:nth-child(9) {
       width: 92px;
     }
+  }
+
+  .table__row-release-all {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    transform: translateY(72px);
   }
 }

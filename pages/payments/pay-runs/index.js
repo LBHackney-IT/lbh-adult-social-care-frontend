@@ -139,11 +139,6 @@ const PayRunsPage = () => {
     dispatch(addNotification({ text: `Realse invoice ${item.invoiceId}`, className: 'success' }));
   };
 
-  const openChat = (item) => {
-    setOpenedPopup('help-chat');
-    setOpenedInvoiceChat(item);
-  };
-
   const onClickTableRow = (rowItem) => {
     router.push(`${router.pathname}/${rowItem.payRunId}`);
   };
@@ -151,7 +146,10 @@ const PayRunsPage = () => {
   const heldActions = [
     {
       id: 'action1',
-      onClick: (item) => openChat(item),
+      onClick: (item) => {
+        setOpenedPopup('help-chat');
+        setOpenedInvoiceChat(item);
+      },
       className: 'chat-icon',
       Component: ChatButton,
     },
@@ -189,16 +187,6 @@ const PayRunsPage = () => {
           dispatch(addNotification({ text: 'Can not get hold payments' }));
         });
     }
-  };
-
-  const releaseHolds = () => {
-    // TODO i am not sure that this api is correct for this case
-    // releaseHeldInvoices(checkedRows)
-    //   .then(() => {
-    //     dispatch(addNotification({ text: 'Release Success', className: 'success' }));
-    //     setCheckedRows([]);
-    //   })
-    //   .catch(() => dispatch(addNotification({ text: 'Release Fail' })))
   };
 
   const getHelds = () => {
@@ -260,6 +248,7 @@ const PayRunsPage = () => {
           setDate={setDate}
         />
       )}
+
       {openedPopup === 'help-chat' && (
         <PopupInvoiceChat
           closePopup={closeHelpChat}
@@ -273,14 +262,17 @@ const PayRunsPage = () => {
           messages={openedInvoiceChat.disputedInvoiceChat}
         />
       )}
+
       <PayRunsHeader
         apply={getLists}
-        releaseHolds={releaseHolds}
+        releaseHolds={() => {}}
         checkedItems={checkedRows}
         tab={tab}
         setOpenedPopup={setOpenedPopup}
       />
+
       <PaymentsTabs tab={tab} changeTab={changeTab} tabs={PAYMENT_TABS} />
+
       {isPayRunsTab ? (
         <Table
           rows={listData?.payRuns?.data}
@@ -302,17 +294,18 @@ const PayRunsPage = () => {
           release={release}
           // rows={listData?.holdPayments}
           rows={testData}
-          careType="Residential"
           sortBy={sortBy}
           sorts={SORTS_TAB[tab]}
         />
       )}
+
       <Pagination
         from={paginationInfo?.currentPage}
         to={paginationInfo?.pageSize}
         itemsCount={paginationInfo?.pageSize}
         totalCount={paginationInfo?.totalCount}
       />
+
       <HackneyFooterInfo />
     </div>
   );

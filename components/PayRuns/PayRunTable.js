@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { pick, omit, groupBy, last } from 'lodash';
-import { getAllInvoiceStatuses } from '../../api/Payments/PayRunApi';
+import { getAllInvoiceStatuses, releaseHeldInvoices } from '../../api/Payments/PayRunApi';
 import { addNotification } from '../../reducers/notificationsReducer';
 import Dropdown from '../Dropdown';
 import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
@@ -20,7 +20,6 @@ const PayRunTable = ({
   isStatusDropDown = false,
   className = '',
   canCollapseRows = false,
-  careType,
   sortBy,
   selectStatus,
   sorts,
@@ -51,6 +50,28 @@ const PayRunTable = ({
       onClickTableRow(item);
     } else if (canCollapseRows) {
       collapseRows(item.key);
+    }
+  };
+
+  const releaseAllSelected = async () => {
+    try {
+      const selectedRows = checkedRows.reduce((acc, key) => {
+        // find selected row
+        const row = groupedData.find((el) => el.key === key);
+
+        // add all invoices of that row
+        row.invoices.forEach((el) => {
+          acc.push({ payRunId: row.payRunId, invoiceId: el.invoiceId });
+        });
+
+        return acc;
+      }, []);
+
+      await releaseHeldInvoices(selectedRows);
+      dispatch(addNotification({ text: 'Release Success', className: 'success' }));
+      setCheckedRows([]);
+    } catch (error) {
+      dispatch(addNotification({ text: 'Release Fail' }));
     }
   };
 
@@ -176,7 +197,7 @@ const PayRunTable = ({
 
                       {release && (
                         <Button
-                          className="outline green table__row-release-button"
+                          className="outline green"
                           onClick={(e) => {
                             e.stopPropagation();
                             release(item, invoice);
@@ -193,6 +214,16 @@ const PayRunTable = ({
           );
         })
       )}
+
+      <Button
+        className="outline green table__row-release-all"
+        onClick={(e) => {
+          e.stopPropagation();
+          releaseAllSelected();
+        }}
+      >
+        Release all selected
+      </Button>
     </div>
   );
 };

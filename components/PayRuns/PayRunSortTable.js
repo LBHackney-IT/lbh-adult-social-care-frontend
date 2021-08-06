@@ -14,7 +14,7 @@ const PayRunSortTable = ({ changeAllChecked, checkedRows = [], rows = [], sorts,
               if (checkedRows.length === rows.length) {
                 changeAllChecked([]);
               } else {
-                changeAllChecked(rows.map((item) => item.id));
+                changeAllChecked(rows.map((item) => item.key));
               }
             }}
           />
