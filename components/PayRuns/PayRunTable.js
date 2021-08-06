@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { pick, omit, groupBy } from 'lodash';
+import { pick, omit, groupBy, last } from 'lodash';
 import { getAllInvoiceStatuses } from '../../api/Payments/PayRunApi';
 import { addNotification } from '../../reducers/notificationsReducer';
 import Dropdown from '../Dropdown';
@@ -223,6 +223,7 @@ const useGroupedData = (data) => {
       const rowResult = {
         ...row,
         ...pick(invoice, invoiceFields),
+        waitingFor: last(invoice.disputedInvoiceChat).actionRequiredFromName,
         invoiceInfo: pick(invoice, ['invoiceItems', 'invoiceId', 'invoiceNumber']),
       };
 

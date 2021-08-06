@@ -26,6 +26,44 @@ const PAYMENT_TABS = [
   { text: 'Held Payments', value: 'held-payments' },
 ];
 
+const SORTS_TAB = {
+  'pay-runs': [
+    { name: 'id', text: 'ID' },
+    { name: 'date', text: 'Date' },
+    { name: 'type', text: 'Type' },
+    { name: 'paid', text: 'Paid' },
+    { name: 'held', text: 'Held' },
+    { name: 'status', text: 'Status' },
+  ],
+  'held-payments': [
+    { name: 'payRunDate', text: 'Pay run date' },
+    { name: 'payRunId', text: 'Pay run ID' },
+    { name: 'serviceUser', text: 'Service User' },
+    { name: 'packageType', text: 'Package Type' },
+    { name: 'supplier', text: 'Supplier' },
+    { name: 'amount', text: 'Amount' },
+    { name: 'status', text: 'Status' },
+    { name: 'waitingFor', text: 'Waiting for' },
+  ],
+};
+
+const TABS_CLASSES = {
+  'pay-runs': 'pay-runs__tab-class',
+  'held-payments': 'pay-runs__held-payments-class',
+};
+
+const PAY_RUN_ROWS_RULES = {
+  payRunId: {
+    getClassName: () => 'button-link',
+  },
+  payRunStatusName: {
+    getClassName: (value) => `${value} table__row-item-status`,
+  },
+  dateCreated: {
+    getValue: (value) => getEnGBFormattedDate(value),
+  },
+};
+
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
@@ -37,31 +75,6 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const PayRunsPage = () => {
   const dispatch = useDispatch();
-  const [sortsTab] = useState({
-    'pay-runs': [
-      { name: 'id', text: 'ID' },
-      { name: 'date', text: 'Date' },
-      { name: 'type', text: 'Type' },
-      { name: 'paid', text: 'Paid' },
-      { name: 'held', text: 'Held' },
-      { name: 'status', text: 'Status' },
-    ],
-    'held-payments': [
-      { name: 'payRunDate', text: 'Pay run date' },
-      { name: 'payRunId', text: 'Pay run ID' },
-      { name: 'serviceUser', text: 'Service User' },
-      { name: 'packageType', text: 'Package Type' },
-      { name: 'supplier', text: 'SupplierDashboard' },
-      { name: 'amount', text: 'Amount' },
-      { name: 'status', text: 'Status' },
-      { name: 'waitingFor', text: 'Waiting for' },
-    ],
-  });
-
-  const [tabsClasses] = useState({
-    'pay-runs': 'pay-runs__tab-class',
-    'held-payments': 'pay-runs__held-payments-class',
-  });
 
   const router = useRouter();
   const [openedPopup, setOpenedPopup] = useState('');
@@ -84,18 +97,6 @@ const PayRunsPage = () => {
     name: 'id',
   });
   const paginationInfo = listData[tab]?.pagingMetaData || {};
-
-  const [payRunRowsRules] = useState({
-    payRunId: {
-      getClassName: () => 'button-link',
-    },
-    payRunStatusName: {
-      getClassName: (value) => `${value} table__row-item-status`,
-    },
-    dateCreated: {
-      getValue: (value) => getEnGBFormattedDate(value),
-    },
-  });
 
   const [payRunFields] = useState({
     id: 'payRunId',
@@ -133,7 +134,7 @@ const PayRunsPage = () => {
     }
   };
 
-  const release = (item, care) => {
+  const release = (item) => {
     releaseSingleHeldInvoice(listData.holdPayments.payRunId, item.invoiceId).then(() => {
       dispatch(addNotification({ text: `Realse invoice ${item.invoiceId}`, className: 'success' }));
     });
@@ -166,7 +167,6 @@ const PayRunsPage = () => {
 
   const getLists = (filters) => {
     const { id = '', type = '', status = '' } = filters || {};
-    console.log(filters);
     if (tab === 'pay-runs') {
       getPayRunSummaryList({
         pageNumber: page,
@@ -285,9 +285,9 @@ const PayRunsPage = () => {
       {isPayRunsTab ? (
         <Table
           rows={listData?.payRuns?.data}
-          rowsRules={payRunRowsRules}
+          rowsRules={PAY_RUN_ROWS_RULES}
           fields={payRunFields}
-          sorts={sortsTab[tab]}
+          sorts={SORTS_TAB[tab]}
           sortBy={sortBy}
           onClickTableRow={onClickTableRow}
         />
@@ -296,7 +296,7 @@ const PayRunsPage = () => {
           checkedRows={checkedRows}
           setCheckedRows={onCheckRows}
           isIgnoreId
-          className={tabsClasses[tab]}
+          className={TABS_CLASSES[tab]}
           additionalActions={heldActions}
           changeAllChecked={setCheckedRows}
           canCollapseRows
@@ -305,7 +305,7 @@ const PayRunsPage = () => {
           rows={testData}
           careType="Residential"
           sortBy={sortBy}
-          sorts={sortsTab[tab]}
+          sorts={SORTS_TAB[tab]}
         />
       )}
       <Pagination
@@ -419,6 +419,7 @@ const testData = [
             message: 'Inaccurate amount',
             messageFromId: null,
             actionRequiredFromId: 1,
+            actionRequiredFromName: 'Enzo Ferrari',
           },
         ],
       },
@@ -517,6 +518,7 @@ const testData = [
             message: 'Inaccurate amount',
             messageFromId: null,
             actionRequiredFromId: 1,
+            actionRequiredFromName: 'Henri Ford',
           },
         ],
       },
