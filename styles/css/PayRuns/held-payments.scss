@@ -52,15 +52,4 @@
     left: 20px;
     transform: translateY(72px);
   }
-
-  .table__row-item-status {
-    &-success p {
-      background-color: $lbh-green1;
-      color: #fff;
-    }
-
-    &-regular p {
-      background-color: $lbh-orange;
-    }
-  }
 }

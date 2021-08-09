@@ -116,9 +116,8 @@ const PayRunTable = ({
                   const isStatus = rowItemKey === 'invoiceStatusId';
                   const status = invoiceStatuses.find((el) => el.statusId === item.invoiceStatusId);
                   const formattedStatus = isStatus && formatStatus(status?.statusName);
-                  const isSuccessfulStatus = [6, 7].includes(status?.statusId); // 6 - released, 7 - paid
                   const statusItemClass = isStatus
-                    ? `table__row-item-status table__row-item-status-${isSuccessfulStatus ? 'success' : 'regular'}`
+                    ? `table__row-item-status ${status?.statusName?.toLowerCase() ?? ''}`
                     : '';
 
                   if (isStatusDropDown && isStatus) {
@@ -140,10 +139,8 @@ const PayRunTable = ({
                   }
 
                   return (
-                    <div key={`${rowItemKey}${item.id}`} className="table__row-item">
-                      <div className={statusItemClass}>
-                        <p>{isStatus ? formattedStatus : value}</p>
-                      </div>
+                    <div key={`${rowItemKey}${item.id}`} className={`table__row-item ${statusItemClass}`}>
+                      <p>{isStatus ? formattedStatus : value}</p>
                     </div>
                   );
                 })}
