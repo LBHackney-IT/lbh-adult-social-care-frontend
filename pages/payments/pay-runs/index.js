@@ -326,8 +326,7 @@ const PayRunsPage = () => {
           changeAllChecked={setCheckedRows}
           canCollapseRows
           release={releaseOne}
-          // rows={listData?.holdPayments}
-          rows={testData}
+          rows={listData?.holdPayments}
           sortBy={sortBy}
           sorts={SORTS_TAB[tab]}
           invoiceStatuses={invoiceStatuses}

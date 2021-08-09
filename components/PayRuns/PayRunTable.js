@@ -213,15 +213,17 @@ const PayRunTable = ({
         })
       )}
 
-      <Button
-        className="outline green table__row-release-all"
-        onClick={(e) => {
-          e.stopPropagation();
-          releaseAllSelected();
-        }}
-      >
-        Release all selected
-      </Button>
+      {checkedRows.length > 0 && (
+        <Button
+          className="outline green table__row-release-all"
+          onClick={(e) => {
+            e.stopPropagation();
+            releaseAllSelected();
+          }}
+        >
+          Release all selected
+        </Button>
+      )}
     </div>
   );
 };
