@@ -28,15 +28,15 @@ const PackagesResidentialCare = ({
   changePackageBrokeringStage = () => {},
 }) => {
   const [coreCost, setCoreCost] = useState({
-    costPerWeek: residentialCarePackage?.residentialCore || 0,
+    costPerWeek: residentialCarePackage?.residentialCore || '',
   });
 
   const [additionalPayment, setAdditionalPayment] = useState({
-    costPerWeek: residentialCarePackage?.additionalNeedsPayment || 0,
+    costPerWeek: residentialCarePackage?.additionalNeedsPayment || '',
   });
 
   const [additionalPaymentOneOff, setAdditionalPaymentOneOff] = useState({
-    oneOf: residentialCarePackage?.additionalNeedsPaymentOneOff || 0,
+    oneOf: residentialCarePackage?.additionalNeedsPaymentOneOff || '',
   });
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
   const [selectedStageType, setSelectedStageType] = useState(residentialCarePackage?.residentialCarePackage?.stageId);
@@ -72,7 +72,7 @@ const PackagesResidentialCare = ({
   }, [residentialCarePackage]);
 
   useEffect(() => {
-    setCoreCostTotal(Number(coreCost.costPerWeek));
+      setCoreCostTotal(Number(coreCost.costPerWeek));
   }, [coreCost]);
 
   useEffect(() => {

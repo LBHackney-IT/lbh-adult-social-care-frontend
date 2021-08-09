@@ -29,15 +29,15 @@ const PackagesNursingCare = ({
   loggedInUserId,
 }) => {
   const [coreCost, setCoreCost] = useState({
-    costPerWeek: nursingCarePackage?.nursingCore || 0,
+    costPerWeek: nursingCarePackage?.nursingCore || '',
   });
 
   const [additionalPayment, setAdditionalPayment] = useState({
-    costPerWeek: nursingCarePackage?.additionalNeedsPayment || 0,
+    costPerWeek: nursingCarePackage?.additionalNeedsPayment || '',
   });
 
   const [additionalPaymentOneOff, setAdditionalPaymentOneOff] = useState({
-    oneOf: nursingCarePackage?.additionalNeedsPaymentOneOff || 0,
+    oneOf: nursingCarePackage?.additionalNeedsPaymentOneOff || '',
   });
 
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
