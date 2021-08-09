@@ -23,17 +23,6 @@ const HeldPaymentsFilters = ({
         selectedValue={filters.dateRange}
         onOptionSelect={(option) => changeFilter('dateRange', option)}
       />
-      {/* TODO delete if no need a datepicker */}
-      {/* <DatePick */}
-      {/*  dateValue={filters.dateStart} */}
-      {/*  startDate={filters.startDate} */}
-      {/*  endDate={filters.endDate} */}
-      {/*  setDate={(value) => { */}
-      {/*    changeFilter('startDate', value[0]) */}
-      {/*    changeFilter('endDate', value[1]) */}
-      {/*  }} */}
-      {/*  selectsRange */}
-      {/* /> */}
       <Dropdown
         initialText="Service type"
         classes="pay-runs__dropdown-cadence mr-3"
@@ -42,10 +31,10 @@ const HeldPaymentsFilters = ({
         onOptionSelect={(option) => changeFilter('serviceType', option)}
       />
       <Dropdown
-        initialText="Status"
+        initialText="Waiting on"
         classes="pay-runs__dropdown-status mr-3"
         options={waitingOnOptions}
-        selectedValue={filters.status}
+        selectedValue={filters.waitingOn}
         onOptionSelect={(option) => changeFilter('status', option)}
       />
       <Dropdown

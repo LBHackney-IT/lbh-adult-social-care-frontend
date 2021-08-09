@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import { uniq, last } from 'lodash';
 import {
   createNewPayRun,
   getHeldInvoicePayments,
@@ -110,6 +111,9 @@ const PayRunsPage = () => {
   });
 
   const isPayRunsTab = tab === 'pay-runs';
+
+  // const filterOptions = useFilterOptions(isPayRunsTab ? listData.payRuns : listData.holdPayments);
+  const filterOptions = useFilterOptions(testData);
 
   const sortBy = (field, value) => {
     setSort({ value, name: field });
@@ -285,6 +289,12 @@ const PayRunsPage = () => {
         checkedItems={checkedRows}
         tab={tab}
         setOpenedPopup={setOpenedPopup}
+        dateRangeOptions={filterOptions.dateRangeOptions}
+        waitingOnOptions={filterOptions.waitingOnOptions}
+        serviceTypesOptions={filterOptions.serviceTypesOptions}
+        serviceUserOptions={filterOptions.serviceUserOptions}
+        supplierOptions={filterOptions.supplierOptions}
+        statusOptions={filterOptions.statusOptions}
       />
 
       <PaymentsTabs tab={tab} changeTab={changeTab} tabs={PAYMENT_TABS} />
@@ -533,5 +543,38 @@ const testData = [
     ],
   },
 ];
+
+const useFilterOptions = (data) => {
+  const createUniqueOptions = (values) => uniq(values).map((el) => ({ value: el, text: el }));
+  const getAllInvoiceValues = (key) =>
+    data.reduce((acc, payRun) => {
+      payRun.invoices.forEach((invoice) => acc.push(invoice[key]));
+      return acc;
+    }, []);
+
+  const dateRangeOptions = createUniqueOptions(data.map((payRun) => getEnGBFormattedDate(payRun.payRunDate)));
+  const serviceTypesOptions = createUniqueOptions(getAllInvoiceValues('packageTypeName'));
+  const serviceUserOptions = createUniqueOptions(getAllInvoiceValues('serviceUserName'));
+  const supplierOptions = createUniqueOptions(getAllInvoiceValues('supplierName'));
+  const statusOptions = createUniqueOptions(getAllInvoiceValues('invoiceStatusId'));
+
+  const waitingOnOptions = createUniqueOptions(
+    data.reduce((acc, payRun) => {
+      payRun.invoices.forEach((invoice) => {
+        acc.push(last(invoice.disputedInvoiceChat).actionRequiredFromName);
+      });
+      return acc;
+    }, [])
+  );
+
+  return {
+    dateRangeOptions,
+    serviceTypesOptions,
+    waitingOnOptions,
+    serviceUserOptions,
+    supplierOptions,
+    statusOptions,
+  };
+};
 
 export default PayRunsPage;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '../Button';
 import PayRunsFilters from './PayRunsFilters';
 import HeldPaymentsFilters from './HeldPaymentsFilters';
-import { isFunction } from '../../api/Utils/FuncUtils';
 
 const initialFilters = {
   id: '',
@@ -36,7 +35,7 @@ const PayRunsHeader = ({
   const [filters, setFilters] = useState({ ...initialFilters });
 
   const applyFilters = () => {
-    if (isFunction(apply)) apply(filters);
+    apply?.(filters);
   };
 
   const searchId = () => {
@@ -75,9 +74,9 @@ const PayRunsHeader = ({
       clickActionButton: releaseHolds,
       filtersComponent: (
         <HeldPaymentsFilters
-          dateRangeOptions={dateRangeOptions}
-          statusOptions={statusOptions}
           applyFilters={applyFilters}
+          statusOptions={statusOptions}
+          dateRangeOptions={dateRangeOptions}
           serviceTypesOptions={serviceTypesOptions}
           serviceUserOptions={serviceUserOptions}
           supplierOptions={supplierOptions}
