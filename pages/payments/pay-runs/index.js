@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import {
+  createNewPayRun,
   getHeldInvoicePayments,
   getPaymentDepartments,
   getPayRunSummaryList,
+  PAY_RUN_TYPES,
   releaseSingleHeldInvoice,
 } from '../../../api/Payments/PayRunApi';
 import PopupInvoiceChat from '../../../components/Chat/PopupInvoiceChat';
@@ -134,11 +136,6 @@ const PayRunsPage = () => {
     }
   };
 
-  const release = async (item, invoice) => {
-    await releaseSingleHeldInvoice(item.payRunId, invoice.invoiceId);
-    dispatch(addNotification({ text: `Realse invoice ${item.invoiceId}`, className: 'success' }));
-  };
-
   const onClickTableRow = (rowItem) => {
     router.push(`${router.pathname}/${rowItem.payRunId}`);
   };
@@ -162,6 +159,15 @@ const PayRunsPage = () => {
     });
   };
 
+  const getHeldInvoices = async () => {
+    try {
+      const result = await getHeldInvoicePayments({ pageNumber: page });
+      changeListData('holdPayments', result);
+    } catch (error) {
+      dispatch(addNotification({ text: 'Can not get hold payments' }));
+    }
+  };
+
   const getLists = (filters) => {
     const { id = '', type = '', status = '' } = filters || {};
     if (tab === 'pay-runs') {
@@ -181,20 +187,12 @@ const PayRunsPage = () => {
           dispatch(addNotification({ text: `Can not get hold payments: ${err?.message}` }));
         });
     } else {
-      getHeldInvoicePayments({ pageNumber: page })
-        .then((heldInvoices) => changeListData('holdPayments', heldInvoices))
-        .catch(() => {
-          dispatch(addNotification({ text: 'Can not get hold payments' }));
-        });
+      getHeldInvoices();
     }
   };
 
   const getHelds = () => {
-    getHeldInvoicePayments({ pageNumber: page })
-      .then((heldInvoices) => changeListData('holdPayments', heldInvoices))
-      .catch(() => {
-        dispatch(addNotification({ text: 'Can not get hold payments' }));
-      });
+    getHeldInvoices();
 
     getPaymentDepartments()
       .then((res) => changeWaitingOn(res))
@@ -233,6 +231,24 @@ const PayRunsPage = () => {
     }
   }, [tab, page]);
 
+  const releaseOne = async (item, invoice) => {
+    try {
+      await releaseSingleHeldInvoice(item.payRunId, invoice.invoiceId);
+      dispatch(addNotification({ text: `Release invoice ${item.invoiceId}`, className: 'success' }));
+    } catch (error) {
+      dispatch(addNotification({ text: 'Can not release invoices' }));
+    }
+  };
+
+  const payReleasedHolds = async () => {
+    try {
+      await createNewPayRun(PAY_RUN_TYPES.RESIDENTIAL_RELEASE_HOLDS, date);
+      dispatch(addNotification({ text: `Paid released holds`, className: 'success' }));
+    } catch (error) {
+      dispatch(addNotification({ text: 'Can not pay released holds' }));
+    }
+  };
+
   return (
     <div className={`pay-runs ${tab}__tab-class`}>
       {openedPopup === 'create-pay-run' && (
@@ -265,7 +281,7 @@ const PayRunsPage = () => {
 
       <PayRunsHeader
         apply={getLists}
-        releaseHolds={() => {}}
+        releaseHolds={payReleasedHolds}
         checkedItems={checkedRows}
         tab={tab}
         setOpenedPopup={setOpenedPopup}
@@ -291,7 +307,7 @@ const PayRunsPage = () => {
           additionalActions={heldActions}
           changeAllChecked={setCheckedRows}
           canCollapseRows
-          release={release}
+          release={releaseOne}
           // rows={listData?.holdPayments}
           rows={testData}
           sortBy={sortBy}

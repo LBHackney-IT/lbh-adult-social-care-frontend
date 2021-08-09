@@ -72,7 +72,7 @@ const PayRunsHeader = ({
     'held-payments': {
       title: 'Held Payments',
       actionButtonText: 'Pay Released Holds',
-      clickActionButton: () => releaseHolds(),
+      clickActionButton: releaseHolds,
       filtersComponent: (
         <HeldPaymentsFilters
           dateRangeOptions={dateRangeOptions}

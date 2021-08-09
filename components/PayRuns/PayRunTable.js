@@ -27,6 +27,7 @@ const PayRunTable = ({
   const [invoiceStatuses, setInvoiceStatuses] = useState([]);
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     getAllInvoiceStatuses()
       .then(setInvoiceStatuses)

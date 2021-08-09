@@ -4,7 +4,7 @@ import moment from 'moment';
 import DatePick from '../DatePick';
 import Popup from '../Popup';
 import RadioButton from '../RadioButton';
-import { createNewPayRun, getDateOfLastPayRun } from '../../api/Payments/PayRunApi';
+import { createNewPayRun, getDateOfLastPayRun, PAY_RUN_TYPES } from '../../api/Payments/PayRunApi';
 import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
 import { addNotification } from '../../reducers/notificationsReducer';
 
@@ -40,9 +40,9 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
         <RadioButton
           inline={false}
           options={[
-            { value: 'ResidentialRecurring', text: `Residential Recurring (3 releases)` },
-            { value: 'DirectPayments', text: 'Direct Payments' },
-            { value: 'HomeCare', text: 'Home care' },
+            { value: PAY_RUN_TYPES.RESIDENTIAL_RECURRING, text: `Residential Recurring (3 releases)` },
+            { value: PAY_RUN_TYPES.DIRECT_PAYMENTS, text: 'Direct Payments' },
+            { value: PAY_RUN_TYPES.HOME_CARE, text: 'Home care' },
           ]}
           selectedValue={newPayRunType}
           onChange={(value) => setNewPayRunType(value)}
@@ -60,8 +60,8 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
         <RadioButton
           inline={false}
           options={[
-            { value: 'ResidentialReleaseHolds', text: `Residential released holds` },
-            { value: 'DirectPaymentsReleaseHolds', text: 'Direct payments released holds' },
+            { value: PAY_RUN_TYPES.RESIDENTIAL_RELEASE_HOLDS, text: `Residential released holds` },
+            { value: PAY_RUN_TYPES.DIRECT_PAYMENTS_RELEASE_HOLDS, text: 'Direct payments released holds' },
           ]}
           selectedValue={newPayRunType}
           onChange={(value) => setNewPayRunType(value)}
