@@ -31,6 +31,7 @@ const Table = ({
       ) : (
         rows.map((item) => {
           const id = item[defaultFields.id];
+          console.log(`id`, id)
           return (
             <div key={id} className="table__row">
               <div onClick={() => clickRow(item)} className="table__row-column-items" role="presentation">

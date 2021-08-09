@@ -167,8 +167,8 @@ const PayRunsPage = () => {
         payRunStatusId: 1,
       })
         .then((payRuns) => {
-          alert(payRuns);
-          changeListData('payRun', payRuns);
+          
+          changeListData('payRuns', payRuns);
         })
         .catch(() => {
           dispatch(addNotification({ text: 'Can not get hold payments' }));
@@ -212,7 +212,7 @@ const PayRunsPage = () => {
     if (tab === 'pay-runs') {
       getPayRunSummaryList({ pageNumber: page })
         .then((payRuns) => {
-          changeListData('payRun', payRuns);
+          changeListData('payRuns', payRuns);
         })
         .catch(() => {
           dispatch(addNotification({ text: 'Can not get hold payments' }));
@@ -223,81 +223,86 @@ const PayRunsPage = () => {
   }, [tab, page]);
 
   return (
-    <div className={`pay-runs ${tab}__tab-class`}>
-      {openedPopup === 'create-pay-run' && (
-        <PopupCreatePayRun
-          changeHocAndRelease={changeHocAndRelease}
-          changeRegularCycles={changeRegularCycles}
-          hocAndRelease={hocAndRelease}
-          regularCycles={regularCycles}
-          closePopup={closeCreatePayRun}
-          date={date}
-          newPayRunType={newPayRunType}
-          setNewPayRunType={setNewPayRunType}
-          setDate={setDate}
+    <>
+      <pre>{JSON.stringify(listData.payRuns)}</pre>
+      <div className={`pay-runs ${tab}__tab-class`}>
+        {openedPopup === 'create-pay-run' && (
+          <PopupCreatePayRun
+            changeHocAndRelease={changeHocAndRelease}
+            changeRegularCycles={changeRegularCycles}
+            hocAndRelease={hocAndRelease}
+            regularCycles={regularCycles}
+            closePopup={closeCreatePayRun}
+            date={date}
+            newPayRunType={newPayRunType}
+            setNewPayRunType={setNewPayRunType}
+            setDate={setDate}
+          />
+        )}
+        {openedPopup === 'help-chat' && (
+          <PopupInvoiceChat
+            closePopup={closeHelpChat}
+            newMessageText={newMessageText}
+            setNewMessageText={setNewMessageText}
+            waitingOn={waitingOn}
+            changeWaitingOn={changeWaitingOn}
+            currentUserInfo={openedInvoiceChat}
+            updateChat={getHelds}
+            currentUserId={openedInvoiceChat.creatorId}
+            messages={openedInvoiceChat.disputedInvoiceChat}
+          />
+        )}
+        <PayRunsHeader
+          apply={getLists}
+          releaseHolds={releaseHolds}
+          checkedItems={checkedRows}
+          tab={tab}
+          setOpenedPopup={setOpenedPopup}
         />
-      )}
-      {openedPopup === 'help-chat' && (
-        <PopupInvoiceChat
-          closePopup={closeHelpChat}
-          newMessageText={newMessageText}
-          setNewMessageText={setNewMessageText}
-          waitingOn={waitingOn}
-          changeWaitingOn={changeWaitingOn}
-          currentUserInfo={openedInvoiceChat}
-          updateChat={getHelds}
-          currentUserId={openedInvoiceChat.creatorId}
-          messages={openedInvoiceChat.disputedInvoiceChat}
+        <div className="table-wrapper">
+          <PaymentsTabs
+            tab={tab}
+            changeTab={changeTab}
+            tabs={[
+              { text: 'Pay Runs', value: 'pay-runs' },
+              { text: 'Held Payments', value: 'held-payments' },
+            ]}
+          />
+          {isPayRunsTab ? (
+            <Table
+              rows={listData?.payRuns?.data}
+              rowsRules={payRunRowsRules}
+              fields={payRunFields}
+              sorts={sortsTab[tab]}
+              sortBy={sortBy}
+              onClickTableRow={onClickTableRow}
+            />
+          ) : (
+            <PayRunTable
+              checkedRows={checkedRows}
+              setCheckedRows={onCheckRows}
+              isIgnoreId
+              className={tabsClasses[tab]}
+              additionalActions={heldActions}
+              changeAllChecked={setCheckedRows}
+              canCollapseRows
+              release={release}
+              rows={listData?.holdPayments?.invoices}
+              careType="Residential"
+              sortBy={sortBy}
+              sorts={sortsTab[tab]}
+            />
+          )}
+        </div>
+        <Pagination
+          from={paginationInfo?.currentPage}
+          to={paginationInfo?.pageSize}
+          itemsCount={paginationInfo?.pageSize}
+          totalCount={paginationInfo?.totalCount}
         />
-      )}
-      <PayRunsHeader
-        apply={getLists}
-        releaseHolds={releaseHolds}
-        checkedItems={checkedRows}
-        tab={tab}
-        setOpenedPopup={setOpenedPopup}
-      />
-      <PaymentsTabs
-        tab={tab}
-        changeTab={changeTab}
-        tabs={[
-          { text: 'Pay Runs', value: 'pay-runs' },
-          { text: 'Held Payments', value: 'held-payments' },
-        ]}
-      />
-      {isPayRunsTab ? (
-        <Table
-          rows={listData?.payRuns?.data}
-          rowsRules={payRunRowsRules}
-          fields={payRunFields}
-          sorts={sortsTab[tab]}
-          sortBy={sortBy}
-          onClickTableRow={onClickTableRow}
-        />
-      ) : (
-        <PayRunTable
-          checkedRows={checkedRows}
-          setCheckedRows={onCheckRows}
-          isIgnoreId
-          className={tabsClasses[tab]}
-          additionalActions={heldActions}
-          changeAllChecked={setCheckedRows}
-          canCollapseRows
-          release={release}
-          rows={listData?.holdPayments?.invoices}
-          careType="Residential"
-          sortBy={sortBy}
-          sorts={sortsTab[tab]}
-        />
-      )}
-      <Pagination
-        from={paginationInfo?.currentPage}
-        to={paginationInfo?.pageSize}
-        itemsCount={paginationInfo?.pageSize}
-        totalCount={paginationInfo?.totalCount}
-      />
-      <HackneyFooterInfo />
-    </div>
+        <HackneyFooterInfo />
+      </div>
+    </>
   );
 };
 
