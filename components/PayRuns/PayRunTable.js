@@ -14,41 +14,17 @@ const PayRunTable = ({
   rows = [],
   release,
   additionalActions,
+  fields,
   isIgnoreId = false,
   isStatusDropDown = false,
   className = '',
+  onCollapseRow = () => {},
   canCollapseRows = false,
   careType,
   sortBy,
   selectStatus,
   sorts,
 }) => {
-  const mappedRows = rows.map((item) => {
-    console.log(`item`, Object.keys(item));
-    const order = [
-      'dateInvoiced',
-      'invoiceId',
-      'serviceUserId',
-      'packageTypeId',
-      'supplierId',
-      'totalAmount',
-      'invoiceStatusId',
-      'invoiceNumber',
-      // 'supplierVATPercent',
-      // 'creatorId',
-      // 'updaterId',
-      'invoiceItems',
-      // 'disputedInvoiceChat',
-    ];
-    return order.reduce((acc, col) => {
-      // console.log(`col`, item[col])
-      acc[col] = item[col];
-      return acc;
-    }, {});
-    // console.log(`lol`, lol)
-    // return lol;
-  });
-
   const [collapsedRows, setCollapsedRows] = useState([]);
 
   const collapseRows = (id) => {
@@ -63,7 +39,9 @@ const PayRunTable = ({
     if (onClickTableRow) {
       onClickTableRow(item);
     } else if (canCollapseRows) {
-      collapseRows(item.id);
+      const payRunId = item.id;
+      collapseRows(payRunId);
+      onCollapseRow(payRunId);
     }
   };
 
@@ -78,13 +56,12 @@ const PayRunTable = ({
         sortBy={sortBy}
         sorts={sorts}
       />
-      {!mappedRows.length ? (
+      {!rows.length ? (
         <p>No Table Data</p>
       ) : (
-        mappedRows.map((item) => {
+        rows.map((item) => {
           const collapsedRow = collapsedRows.includes(item.id);
           const rowStatus = item.status ? ` ${item.status}` : '';
-          console.log(`item.invoiceItems`, item);
           return (
             <div key={item.id} className={`table__row${collapsedRow ? ' collapsed' : ''}${rowStatus}`}>
               <div
@@ -102,7 +79,7 @@ const PayRunTable = ({
                     />
                   </div>
                 )}
-                {Object.getOwnPropertyNames(item).map((rowItemName) => {
+                {Object.getOwnPropertyNames(fields || item).map((rowItemName) => {
                   if (
                     Array.isArray(item[rowItemName]) ||
                     item[rowItemName]?.id !== undefined ||
@@ -141,72 +118,69 @@ const PayRunTable = ({
                   );
                 })}
                 {additionalActions &&
-                  additionalActions.map((action) => {
-                    const { Component } = action;
-                    return (
-                      <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
-                        <Component
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            action.onClick(item);
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
+                additionalActions.map((action) => {
+                  const { Component } = action;
+                  return (
+                    <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
+                      <Component
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          action.onClick(item);
+                        }}
+                      />
+                    </div>
+                  );
+                })}
               </div>
               {canCollapseRows && collapsedRow && (
                 <div className="table__row-collapsed">
-                  {item.invoiceItems.map((care) => {
-                    console.log(`care`, care)
-                    return (
-                      <div key={care.id} className="table__row-collapsed-container">
-                        <div className="table__row-collapsed-header">
-                          <div className="table__row-collapsed-header-left">
-                            <p>{care.userName}</p>
-                            <p>{care.supplier}</p>
-                          </div>
-                          <p>{care.id}</p>
+                  {item.invoiceItems.map((care) => (
+                    <div key={care.id} className="table__row-collapsed-container">
+                      <div className="table__row-collapsed-header">
+                        <div className="table__row-collapsed-header-left">
+                          <p>{care.userName}</p>
+                          <p>{care.supplier}</p>
                         </div>
-                        <div className="table__row-collapsed-main">
-                          <div className="table__row-collapsed-main-header">
-                            <p>Item</p>
-                            <p>Cost</p>
-                            <p>Qty</p>
-                            <p>Total</p>
-                          </div>
-                          {[care].map((personInfo) => {
-                            const dateFrom = new Date(personInfo.dateFrom);
-                            const dateTo = new Date(personInfo.dateTo);
-                            return (
-                              <div key={personInfo.id} className="table__row-collapsed-main-item">
-                                <p>
-                                  {careType} care per week
-                                  <br />
-                                  {dateFrom.getDate()} {shortMonths[dateFrom.getMonth()]}-{dateTo.getDate()}{' '}
-                                  {shortMonths[dateTo.getMonth()]} {dateTo.getFullYear()}
-                                </p>
-                                <p>{personInfo.cost}</p>
-                                <p>{personInfo.qty}</p>
-                                <p>{personInfo.serviceUser}</p>
-                              </div>
-                            );
-                          })}
-                        </div>
-                        {release && (
-                          <Button
-                            className="outline green table__row-release-button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              release(item, care);
-                            }}
-                          >
-                            Release
-                          </Button>
-                        )}
+                        <p>{care.id}</p>
                       </div>
-                    );
-                  })}
+                      <div className="table__row-collapsed-main">
+                        <div className="table__row-collapsed-main-header">
+                          <p>Item</p>
+                          <p>Cost</p>
+                          <p>Qty</p>
+                          <p>Total</p>
+                        </div>
+                        {care.items.map((personInfo) => {
+                          const dateFrom = new Date(personInfo.dateFrom);
+                          const dateTo = new Date(personInfo.dateTo);
+                          return (
+                            <div key={personInfo.id} className="table__row-collapsed-main-item">
+                              <p>
+                                {careType} care per week
+                                <br />
+                                {dateFrom.getDate()} {shortMonths[dateFrom.getMonth()]}-{dateTo.getDate()}{' '}
+                                {shortMonths[dateTo.getMonth()]} {dateTo.getFullYear()}
+                              </p>
+                              <p>{personInfo.cost}</p>
+                              <p>{personInfo.qty}</p>
+                              <p>{personInfo.serviceUser}</p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      {release && (
+                        <Button
+                          className="outline green table__row-release-button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            release(item, care);
+                          }}
+                        >
+                          Release
+                        </Button>
+                      )}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -214,138 +188,6 @@ const PayRunTable = ({
         })
       )}
     </div>
-    //   {!rows.length ? (
-    //     <p>No Table Data</p>
-    //   ) : (
-    //     rows.map((item) => {
-    //       const collapsedRow = collapsedRows.includes(item.id);
-    //       const rowStatus = item.status ? ` ${item.status}` : '';
-    //       return (
-    //         <div key={item.id} className={`table__row${collapsedRow ? ' collapsed' : ''}${rowStatus}`}>
-    //           <div
-    //             onClick={() => clickRow(item)}
-    //             className={`table__row-column-items${clickRow ? ' is-clickable' : ''}`}
-    //           >
-    //             {checkedRows && (
-    //               <div className="table__row-item table__row-item-checkbox">
-    //                 <Checkbox
-    //                   checked={checkedRows.includes(item.id)}
-    //                   onChange={(value, event) => {
-    //                     event.stopPropagation();
-    //                     setCheckedRows(item.id);
-    //                   }}
-    //                 />
-    //               </div>
-    //             )}
-    //             {Object.getOwnPropertyNames(item).map((rowItemName) => {
-    //               if (
-    //                 Array.isArray(item[rowItemName]) ||
-    //                 item[rowItemName]?.id !== undefined ||
-    //                 (isIgnoreId && rowItemName === 'id')
-    //               ) {
-    //                 return <React.Fragment key={`${rowItemName}${item.id}`} />;
-    //               }
-    //               const value = includeString(rowItemName.toLowerCase(), 'date')
-    //                 ? formatDateWithSign(item[rowItemName])
-    //                 : item[rowItemName];
-    //               const isStatus = rowItemName === 'status';
-    //               const formattedStatus = isStatus && formatStatus(item[rowItemName]);
-    //               const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';
-    //               if (isStatusDropDown && isStatus) {
-    //                 return (
-    //                   <Dropdown
-    //                     key={`${rowItemName}${item.id}`}
-    //                     className={`table__row-item${statusItemClass}`}
-    //                     options={[
-    //                       { text: 'Accepted', value: 'accepted' },
-    //                       { text: 'Held', value: 'held' },
-    //                       { text: 'Rejected', value: 'rejected' },
-    //                       { text: 'In dispute', value: 'in-dispute' },
-    //                     ]}
-    //                     selectedValue={value}
-    //                     onOptionSelect={(value) => selectStatus(item, value)}
-    //                     initialText="Status"
-    //                   />
-    //                 );
-    //               }
-
-    //               return (
-    //                 <div key={`${rowItemName}${item.id}`} className={`table__row-item${statusItemClass}`}>
-    //                   <p>{isStatus ? formattedStatus : value}</p>
-    //                 </div>
-    //               );
-    //             })}
-    //             {additionalActions &&
-    //               additionalActions.map((action) => {
-    //                 const { Component } = action;
-    //                 return (
-    //                   <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
-    //                     <Component
-    //                       onClick={(e) => {
-    //                         e.stopPropagation();
-    //                         action.onClick(item);
-    //                       }}
-    //                     />
-    //                   </div>
-    //                 );
-    //               })}
-    //           </div>
-    //           {canCollapseRows && collapsedRow && (
-    //             <div className="table__row-collapsed">
-    //               {item.invoiceItems.map((care) => (
-    //                 <div key={care.id} className="table__row-collapsed-container">
-    //                   <div className="table__row-collapsed-header">
-    //                     <div className="table__row-collapsed-header-left">
-    //                       <p>{care.userName}</p>
-    //                       <p>{care.supplier}</p>
-    //                     </div>
-    //                     <p>{care.id}</p>
-    //                   </div>
-    //                   <div className="table__row-collapsed-main">
-    //                     <div className="table__row-collapsed-main-header">
-    //                       <p>Item</p>
-    //                       <p>Cost</p>
-    //                       <p>Qty</p>
-    //                       <p>Total</p>
-    //                     </div>
-    //                     {care.items.map((personInfo) => {
-    //                       const dateFrom = new Date(personInfo.dateFrom);
-    //                       const dateTo = new Date(personInfo.dateTo);
-    //                       return (
-    //                         <div key={personInfo.id} className="table__row-collapsed-main-item">
-    //                           <p>
-    //                             {careType} care per week
-    //                             <br />
-    //                             {dateFrom.getDate()} {shortMonths[dateFrom.getMonth()]}-{dateTo.getDate()}{' '}
-    //                             {shortMonths[dateTo.getMonth()]} {dateTo.getFullYear()}
-    //                           </p>
-    //                           <p>{personInfo.cost}</p>
-    //                           <p>{personInfo.qty}</p>
-    //                           <p>{personInfo.serviceUser}</p>
-    //                         </div>
-    //                       );
-    //                     })}
-    //                   </div>
-    //                   {release && (
-    //                     <Button
-    //                       className="outline green table__row-release-button"
-    //                       onClick={(e) => {
-    //                         e.stopPropagation();
-    //                         release(item, care);
-    //                       }}
-    //                     >
-    //                       Release
-    //                     </Button>
-    //                   )}
-    //                 </div>
-    //               ))}
-    //             </div>
-    //           )}
-    //         </div>
-    //       );
-    //     })
-    //   )}
-    // </div>
   );
 };
 

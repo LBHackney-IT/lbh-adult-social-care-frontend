@@ -2,7 +2,7 @@ import React from 'react';
 import { CaretDownIcon } from './Icons';
 import Checkbox from './Checkbox';
 
-const SortTable = ({ changeAllChecked, checkedRows = [], rows = [], sorts, sortBy, additionalActions }) => (
+const SortTable = ({ changeAllChecked, fields, checkedRows = [], rows = [], sorts, sortBy, additionalActions }) => (
   <div className="sort-table">
     {checkedRows && changeAllChecked && (
       <div className="sort sort-checkbox">
@@ -13,7 +13,7 @@ const SortTable = ({ changeAllChecked, checkedRows = [], rows = [], sorts, sortB
             if (checkedRows.length === rows.length) {
               changeAllChecked([]);
             } else {
-              changeAllChecked(rows.map((item) => item.id));
+              changeAllChecked(rows.map((item) => item[fields.id]));
             }
           }}
         />

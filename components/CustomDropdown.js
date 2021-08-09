@@ -23,8 +23,9 @@ const CustomDropDown = ({
   setError,
   buttonClassName = '',
 }) => {
+  const localOptions = options.slice();
   if (initialText) {
-    options.unshift({
+    localOptions.unshift({
       [fields.value]: null,
       [fields.text]: initialText,
     });
@@ -48,7 +49,7 @@ const CustomDropDown = ({
 
   useEffect(() => {
     const initialSelectedOption =
-      options.find((item) => item[fields.value] === selectedValue || item[fields.text] === selectedValue) || options[0];
+      localOptions.find((item) => item[fields.value] === selectedValue || item[fields.text] === selectedValue) || localOptions[0];
     setSelectedOption(initialSelectedOption);
   }, [selectedValue]);
 
@@ -76,9 +77,9 @@ const CustomDropDown = ({
         </div>
         <OutsideTrigger onClick={() => setIsActive(false)} className="dropdown-menu" id="dropdown-menu" role="menu">
           <div className="dropdown-content">
-            {options.map((optionItem) => (
+            {localOptions.map((optionItem) => (
               <div
-                key={optionItem[fields.text]}
+                key={optionItem[fields.value]}
                 className="dropdown-item"
                 onClick={(event) => onOptionClick(event, optionItem)}
               >

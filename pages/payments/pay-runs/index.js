@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import {
   getHeldInvoicePayments,
   getPaymentDepartments,
-  getPayRunSummaryList,
+  getPayRunSummaryList, getSinglePayRunInsights,
   releaseSingleHeldInvoice,
-} from '../../../api/Payments/PayRunApi';
+} from '../../../api/Payments/PayRunApi'
 import PopupInvoiceChat from '../../../components/Chat/PopupInvoiceChat';
 import PayRunsHeader from '../../../components/PayRuns/PayRunsHeader';
 import PaymentsTabs from '../../../components/Payments/PaymentsTabs';
@@ -17,8 +17,9 @@ import { addNotification } from '../../../reducers/notificationsReducer';
 import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
 import ChatButton from '../../../components/PayRuns/ChatButton';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { getUserSession } from '../../../service/helpers';
+import { formatDateWithSign, getUserSession } from '../../../service/helpers'
 import withSession from '../../../lib/session';
+import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -45,7 +46,7 @@ const PayRunsPage = () => {
       { name: 'payRunId', text: 'Pay run ID' },
       { name: 'serviceUser', text: 'Service User' },
       { name: 'packageType', text: 'Package Type' },
-      { name: 'supplier', text: 'SupplierDashboard' },
+      { name: 'supplier', text: 'Supplier Dashboard' },
       { name: 'amount', text: 'Amount' },
       { name: 'status', text: 'Status' },
       { name: 'waitingFor', text: 'Waiting for' },
@@ -63,8 +64,8 @@ const PayRunsPage = () => {
   const [checkedRows, setCheckedRows] = useState([]);
   const [openedInvoiceChat, setOpenedInvoiceChat] = useState({});
   const [hocAndRelease, changeHocAndRelease] = useState('');
-  const [newPayRunType, setNewPayRunType] = useState('');
   const [waitingOn, changeWaitingOn] = useState('');
+  const [levelInsights, setLevelInsights] = useState();
   const [newMessageText, setNewMessageText] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
   const [tab, changeTab] = useState('pay-runs');
@@ -83,6 +84,9 @@ const PayRunsPage = () => {
     payRunId: {
       getClassName: () => 'button-link',
     },
+    dateCreated: {
+      getValue: (value) => formatDateWithSign(value),
+    },
     payRunStatusName: {
       getClassName: (value) => `${value} table__row-item-status`,
     },
@@ -98,6 +102,10 @@ const PayRunsPage = () => {
   });
 
   const isPayRunsTab = tab === 'pay-runs';
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  }
 
   const sortBy = (field, value) => {
     setSort({ value, name: field });
@@ -167,7 +175,7 @@ const PayRunsPage = () => {
         payRunStatusId: 1,
       })
         .then((payRuns) => {
-          
+          console.log(payRuns);
           changeListData('payRuns', payRuns);
         })
         .catch(() => {
@@ -191,6 +199,14 @@ const PayRunsPage = () => {
     //   })
     //   .catch(() => dispatch(addNotification({ text: 'Release Fail' })))
   };
+
+  const onCollapseRow = payRunId => {
+    getSinglePayRunInsights(payRunId)
+      .then((res) => {
+        setLevelInsights(res);
+      })
+      .catch(() => pushNotification('Can not get Insights'));
+  }
 
   const getHelds = () => {
     getHeldInvoicePayments({ pageNumber: page })
@@ -224,7 +240,6 @@ const PayRunsPage = () => {
 
   return (
     <>
-      <pre>{JSON.stringify(listData.payRuns)}</pre>
       <div className={`pay-runs ${tab}__tab-class`}>
         {openedPopup === 'create-pay-run' && (
           <PopupCreatePayRun
@@ -234,8 +249,6 @@ const PayRunsPage = () => {
             regularCycles={regularCycles}
             closePopup={closeCreatePayRun}
             date={date}
-            newPayRunType={newPayRunType}
-            setNewPayRunType={setNewPayRunType}
             setDate={setDate}
           />
         )}
@@ -285,6 +298,7 @@ const PayRunsPage = () => {
               className={tabsClasses[tab]}
               additionalActions={heldActions}
               changeAllChecked={setCheckedRows}
+              onCollapseRow={onCollapseRow}
               canCollapseRows
               release={release}
               rows={listData?.holdPayments?.invoices}
@@ -300,6 +314,7 @@ const PayRunsPage = () => {
           itemsCount={paginationInfo?.pageSize}
           totalCount={paginationInfo?.totalCount}
         />
+        <PayRunsLevelInsight levelInsights={levelInsights} />
         <HackneyFooterInfo />
       </div>
     </>

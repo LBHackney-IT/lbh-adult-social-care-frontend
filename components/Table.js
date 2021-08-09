@@ -11,8 +11,9 @@ const Table = ({
   className = '',
   sortBy,
   sorts,
+  checkedRows,
   canCollapseRows,
-  collapsedContainer,
+  getCollapsedContainer,
 }) => {
   const [defaultFields] = useState(fields);
   const { tab } = fields;
@@ -21,68 +22,92 @@ const Table = ({
     if (onClickTableRow) {
       onClickTableRow(item);
     }
+    if(canCollapseRows) {
+      collapseRows(item[fields.id])
+    }
+  };
+
+  const [collapsedRows, setCollapsedRows] = useState([]);
+
+  const collapseRows = (id) => {
+    if (collapsedRows.includes(id)) {
+      setCollapsedRows(collapsedRows.filter((rowId) => String(rowId) !== String(id)));
+    } else {
+      setCollapsedRows([...collapsedRows, id]);
+    }
   };
 
   return (
     <div className={`table ${className}`}>
-      <SortTable changeAllChecked={changeAllChecked} rows={rows} sortBy={sortBy} sorts={sorts} />
+      <SortTable fields={fields} checkedRows={checkedRows} changeAllChecked={changeAllChecked} rows={rows} sortBy={sortBy} sorts={sorts} />
       {!rows.length ? (
         <p className="ml-2">No Table Data</p>
       ) : (
-        rows.map((item) => {
-          const id = item[defaultFields.id];
-          console.log(`id`, id)
-          return (
-            <div key={id} className="table__row">
-              <div onClick={() => clickRow(item)} className="table__row-column-items" role="presentation">
-                {Object.values(defaultFields).map((rowItemName) => {
-                  const currentRowRule = rowsRules[rowItemName] || '';
-                  const value = item[rowItemName];
+        <div className='table__row-container'>
+          {
+            rows.map((item) => {
+              const id = item[defaultFields.id];
+              const collapsedRow = collapsedRows.includes(item[fields.id]);
+              const collapsedClass = collapsedRow ? ' collapsed' : '';
 
-                  if (currentRowRule?.hide) return <React.Fragment key={`${tab}${rowItemName}${id}`} />;
+              return (
+                <div key={id} className={`table__row${collapsedClass}`}>
+                  <div onClick={() => clickRow(item)} className="table__row-column-items" role="presentation">
+                    {Object.values(defaultFields).map((rowItemName) => {
+                      const currentRowRule = rowsRules[rowItemName] || '';
+                      const value = item[rowItemName];
 
-                  const currentValue = (currentRowRule?.getValue && currentRowRule.getValue(value)) || value;
-                  const calculatedClassName = currentRowRule?.getClassName
-                    ? currentRowRule.getClassName(value).toLowerCase()
-                    : '';
+                      if (currentRowRule?.hide) return <React.Fragment key={`${tab}${rowItemName}${id}`} />;
 
-                  const getComponent = currentRowRule?.getComponent;
-                  if (getComponent) {
-                    return getComponent(item, currentRowRule);
-                  }
+                      const currentValue = (currentRowRule?.getValue && currentRowRule.getValue(value, item)) || value;
+                      const calculatedClassName = currentRowRule?.getClassName
+                        ? currentRowRule.getClassName(value).toLowerCase()
+                        : '';
 
-                  if (currentRowRule?.type === 'checkbox') {
-                    return (
-                      <Checkbox
-                        key={`${tab}${rowItemName}${id}`}
-                        onChange={currentRowRule.onChange}
-                        checked={currentValue}
-                      />
-                    );
-                  }
+                      const getComponent = currentRowRule?.getComponent;
+                      if (getComponent) {
+                        return getComponent(item, currentRowRule);
+                      }
 
-                  return (
-                    <div
-                      role="presentation"
-                      onClick={(e) => {
-                        if (!currentRowRule.onClick) return;
-                        e.stopPropagation();
-                        currentRowRule.onClick(item, value);
-                      }}
-                      key={`${tab}${rowItemName}${value}${id}`}
-                      className={`table__row-item ${calculatedClassName}`}
-                    >
-                      <p>{currentValue || '—'}</p>
-                    </div>
-                  );
-                })}
-              </div>
-              {canCollapseRows && collapsedContainer && (
-                <div className="table__row-collapsed">{collapsedContainer}</div>
-              )}
-            </div>
-          );
-        })
+                      if (currentRowRule?.type === 'checkbox') {
+                        return (
+                          <div className='table__row-item-checkbox table__row-item'>
+                            <Checkbox
+                              key={`${rowItemName}${id}`}
+                              onChange={(checkedValue, event) => {
+                                event.stopPropagation();
+                                currentRowRule.onChange(checkedValue, item)
+                              }}
+                              checked={currentValue}
+                            />
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <div
+                          role="presentation"
+                          onClick={(e) => {
+                            if (!currentRowRule.onClick) return;
+                            e.stopPropagation();
+                            currentRowRule.onClick(item, value);
+                          }}
+                          key={`${tab}${rowItemName}${value}${id}`}
+                          className={`table__row-item ${calculatedClassName}`}
+                        >
+                          <p>{currentValue || '—'}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {canCollapseRows && collapsedRow && getCollapsedContainer && (
+                    <div className="table__row-collapsed">{getCollapsedContainer(item)}</div>
+                  )}
+                </div>
+              );
+            })
+          }
+        </div>
       )}
     </div>
   );
