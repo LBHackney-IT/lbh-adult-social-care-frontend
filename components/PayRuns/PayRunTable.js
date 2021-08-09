@@ -120,17 +120,19 @@ const PayRunTable = ({
                     ? formatDateWithSign(item[rowItemKey])
                     : item[rowItemKey];
 
-                  // todo: find status in "invoiceStatuses"
                   const isStatus = rowItemKey === 'invoiceStatusId';
-                  const status = invoiceStatuses.find((el) => el.id === item.invoiceStatusId);
-                  const formattedStatus = isStatus && formatStatus(status?.name);
-                  const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemKey]}` : '';
+                  const status = invoiceStatuses.find((el) => el.statusId === item.invoiceStatusId);
+                  const formattedStatus = isStatus && formatStatus(status?.statusName);
+                  const isSuccessfulStatus = [6, 7].includes(status?.statusId); // 6 - released, 7 - paid
+                  const statusItemClass = isStatus
+                    ? `table__row-item-status table__row-item-status-${isSuccessfulStatus ? 'success' : 'regular'}`
+                    : '';
 
                   if (isStatusDropDown && isStatus) {
                     return (
                       <Dropdown
                         key={`${rowItemKey}${item.id}`}
-                        className={`table__row-item${statusItemClass}`}
+                        className={`table__row-item ${statusItemClass}`}
                         options={[
                           { text: 'Accepted', value: 'accepted' },
                           { text: 'Held', value: 'held' },
@@ -145,8 +147,10 @@ const PayRunTable = ({
                   }
 
                   return (
-                    <div key={`${rowItemKey}${item.id}`} className={`table__row-item${statusItemClass}`}>
-                      <p>{isStatus ? formattedStatus : value}</p>
+                    <div key={`${rowItemKey}${item.id}`} className="table__row-item">
+                      <div className={statusItemClass}>
+                        <p>{isStatus ? formattedStatus : value}</p>
+                      </div>
                     </div>
                   );
                 })}
