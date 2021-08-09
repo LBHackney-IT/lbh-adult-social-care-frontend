@@ -114,8 +114,7 @@ const PayRunsPage = () => {
 
   const isPayRunsTab = tab === 'pay-runs';
 
-  // const filterOptions = useFilterOptions(isPayRunsTab ? listData.payRuns : listData.holdPayments);
-  const filterOptions = useFilterOptions(testData, invoiceStatuses);
+  const filterOptions = useHeldPaymentsFilterOptions(listData.holdPayments, invoiceStatuses);
 
   const sortBy = (field, value) => {
     setSort({ value, name: field });
@@ -326,7 +325,7 @@ const PayRunsPage = () => {
           changeAllChecked={setCheckedRows}
           canCollapseRows
           release={releaseOne}
-          rows={listData?.holdPayments}
+          rows={listData.holdPayments}
           sortBy={sortBy}
           sorts={SORTS_TAB[tab]}
           invoiceStatuses={invoiceStatuses}
@@ -552,7 +551,7 @@ const testData = [
   },
 ];
 
-const useFilterOptions = (data, invoiceStatuses) => {
+const useHeldPaymentsFilterOptions = (data, invoiceStatuses) => {
   const createUniqueOptions = (values) => uniq(values).map((el) => ({ value: el, text: el }));
   const getAllInvoiceValues = (key) =>
     data.reduce((acc, payRun) => {
