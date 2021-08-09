@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { uniq, last } from 'lodash';
 import {
   createNewPayRun,
+  getAllInvoiceStatuses,
   getHeldInvoicePayments,
   getPaymentDepartments,
   getPayRunSummaryList,
@@ -90,6 +91,7 @@ const PayRunsPage = () => {
   const [newMessageText, setNewMessageText] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
   const [tab, changeTab] = useState('pay-runs');
+  const [invoiceStatuses, setInvoiceStatuses] = useState([]);
   const [listData, setListData] = useState({
     payRuns: {},
     holdPayments: [],
@@ -113,7 +115,7 @@ const PayRunsPage = () => {
   const isPayRunsTab = tab === 'pay-runs';
 
   // const filterOptions = useFilterOptions(isPayRunsTab ? listData.payRuns : listData.holdPayments);
-  const filterOptions = useFilterOptions(testData);
+  const filterOptions = useFilterOptions(testData, invoiceStatuses);
 
   const sortBy = (field, value) => {
     setSort({ value, name: field });
@@ -235,6 +237,12 @@ const PayRunsPage = () => {
     }
   }, [tab, page]);
 
+  useEffect(() => {
+    getAllInvoiceStatuses()
+      .then(setInvoiceStatuses)
+      .catch(() => dispatch(addNotification({ text: 'Can not get all invoice statuses' })));
+  }, []);
+
   const releaseOne = async (item, invoice) => {
     try {
       await releaseSingleHeldInvoice(item.payRunId, invoice.invoiceId);
@@ -322,6 +330,7 @@ const PayRunsPage = () => {
           rows={testData}
           sortBy={sortBy}
           sorts={SORTS_TAB[tab]}
+          invoiceStatuses={invoiceStatuses}
         />
       )}
 
@@ -544,7 +553,7 @@ const testData = [
   },
 ];
 
-const useFilterOptions = (data) => {
+const useFilterOptions = (data, invoiceStatuses) => {
   const createUniqueOptions = (values) => uniq(values).map((el) => ({ value: el, text: el }));
   const getAllInvoiceValues = (key) =>
     data.reduce((acc, payRun) => {
@@ -556,7 +565,6 @@ const useFilterOptions = (data) => {
   const serviceTypesOptions = createUniqueOptions(getAllInvoiceValues('packageTypeName'));
   const serviceUserOptions = createUniqueOptions(getAllInvoiceValues('serviceUserName'));
   const supplierOptions = createUniqueOptions(getAllInvoiceValues('supplierName'));
-  const statusOptions = createUniqueOptions(getAllInvoiceValues('invoiceStatusId'));
 
   const waitingOnOptions = createUniqueOptions(
     data.reduce((acc, payRun) => {
@@ -566,6 +574,11 @@ const useFilterOptions = (data) => {
       return acc;
     }, [])
   );
+
+  const statusOptions = invoiceStatuses.map((status) => ({
+    value: status.statusId,
+    text: status.statusName,
+  }));
 
   return {
     dateRangeOptions,

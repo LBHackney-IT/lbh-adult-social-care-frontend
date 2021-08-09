@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { pick, omit, groupBy, last } from 'lodash';
-import { getAllInvoiceStatuses, releaseHeldInvoices } from '../../api/Payments/PayRunApi';
+import { releaseHeldInvoices } from '../../api/Payments/PayRunApi';
 import { addNotification } from '../../reducers/notificationsReducer';
 import Dropdown from '../Dropdown';
 import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
@@ -22,17 +22,10 @@ const PayRunTable = ({
   canCollapseRows = false,
   sortBy,
   selectStatus,
+  invoiceStatuses,
   sorts,
 }) => {
-  const [invoiceStatuses, setInvoiceStatuses] = useState([]);
-
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    getAllInvoiceStatuses()
-      .then(setInvoiceStatuses)
-      .catch(() => dispatch(addNotification({ text: 'Can not get all invoice statuses' })));
-  }, []);
 
   const groupedData = useGroupedData(rows);
 
