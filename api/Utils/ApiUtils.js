@@ -81,4 +81,6 @@ const getQueryParamsFromObject = (params = {}) => {
   return string;
 };
 
-export { handleError, handleResponse, axiosRequest, getQueryParamsFromObject };
+const axiosFetcher = (url) => axios.get(url).then(handleResponse).catch(handleError);
+
+export { handleError, handleResponse, axiosRequest, getQueryParamsFromObject, axiosFetcher };

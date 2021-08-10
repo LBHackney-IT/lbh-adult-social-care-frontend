@@ -90,8 +90,6 @@ const getSinglePayRunDetails = ({
     searchTerm = ''
   }
 ) => {
-  console.log(dateFrom);
-  console.log(dateTo);
   const query = `${PAY_RUN_URL}/${payRunId}/details?pageNumber=${pageNumber}&pageSize=${pageSize}&supplierId=${supplierId}&packageTypeId=${packageTypeId}&invoiceStatusId=${invoiceStatusId}&searchTerm=${searchTerm}&dateFrom=${dateFrom.toJSON()}&dateTo=${dateTo.toJSON()}`;
   return axios.get(query).then(handleResponse).catch(handleError);
 };
@@ -223,6 +221,12 @@ const getPaymentDepartments = () => {
   return axios.get(query).then(handleResponse).catch(handleError);
 };
 
+const PAY_RUN_ENDPOINTS = {
+  GET_ALL_PAY_RUN_TYPES: `${PAY_RUN_URL}/pay-run-types`,
+  GET_ALL_PAY_RUN_SUB_TYPES: `${PAY_RUN_URL}/pay-run-sub-types`,
+  GET_ALL_UNIQUE_PAY_RUN_STATUSES: `${PAY_RUN_URL}/unique-pay-run-statuses`,
+};
+
 export {
   getPayRunSummaryList,
   createNewPayRun,
@@ -249,4 +253,5 @@ export {
   getPaymentDepartments,
   getDateOfLastPayRun,
   rejectInvoicePayment,
+  PAY_RUN_ENDPOINTS,
 };
