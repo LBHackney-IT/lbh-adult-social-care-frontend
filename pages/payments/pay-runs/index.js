@@ -182,7 +182,7 @@ const PayRunsPage = () => {
 
   const getHeldInvoices = async (filters = {}) => {
     try {
-      const { dateRange, serviceType, serviceUser, supplier, waitingOn } = filters;
+      const { dateRange = '', serviceType, serviceUser, supplier, waitingOn } = filters;
       const [dateFrom, dateTo] = dateRange.split(' - ');
 
       const result = await getHeldInvoicePayments({
