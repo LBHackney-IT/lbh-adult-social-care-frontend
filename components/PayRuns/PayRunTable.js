@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { pick, omit, groupBy, last } from 'lodash';
-import { releaseHeldInvoices } from '../../api/Payments/PayRunApi';
-import { addNotification } from '../../reducers/notificationsReducer';
 import Dropdown from '../Dropdown';
 import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
 import PayRunSortTable from './PayRunSortTable';
@@ -16,6 +13,7 @@ const PayRunTable = ({
   changeAllChecked,
   rows = [],
   release,
+  releaseAllSelected,
   additionalActions,
   isStatusDropDown = false,
   className = '',
@@ -25,8 +23,6 @@ const PayRunTable = ({
   invoiceStatuses,
   sorts,
 }) => {
-  const dispatch = useDispatch();
-
   const groupedData = useGroupedData(rows);
 
   const [collapsedRows, setCollapsedRows] = useState([]);
@@ -44,28 +40,6 @@ const PayRunTable = ({
       onClickTableRow(item);
     } else if (canCollapseRows) {
       collapseRows(item.key);
-    }
-  };
-
-  const releaseAllSelected = async () => {
-    try {
-      const selectedRows = checkedRows.reduce((acc, key) => {
-        // find selected row
-        const row = groupedData.find((el) => el.key === key);
-
-        // add all invoices of that row
-        row.invoices.forEach((el) => {
-          acc.push({ payRunId: row.payRunId, invoiceId: el.invoiceId });
-        });
-
-        return acc;
-      }, []);
-
-      await releaseHeldInvoices(selectedRows);
-      dispatch(addNotification({ text: 'Release Success', className: 'success' }));
-      setCheckedRows([]);
-    } catch (error) {
-      dispatch(addNotification({ text: 'Release Fail' }));
     }
   };
 
@@ -215,7 +189,7 @@ const PayRunTable = ({
           className="outline green table__row-release-all"
           onClick={(e) => {
             e.stopPropagation();
-            releaseAllSelected();
+            releaseAllSelected(groupedData);
           }}
         >
           Release all selected

@@ -9,6 +9,7 @@ import {
   getPaymentDepartments,
   getPayRunSummaryList,
   PAY_RUN_TYPES,
+  releaseHeldInvoices,
   releaseSingleHeldInvoice,
 } from '../../../api/Payments/PayRunApi';
 import PopupInvoiceChat from '../../../components/Chat/PopupInvoiceChat';
@@ -246,6 +247,7 @@ const PayRunsPage = () => {
     try {
       await releaseSingleHeldInvoice(item.payRunId, invoice.invoiceId);
       dispatch(addNotification({ text: `Release invoice ${item.invoiceId}`, className: 'success' }));
+      await getHeldInvoices();
     } catch (error) {
       dispatch(addNotification({ text: 'Can not release invoices' }));
     }
@@ -257,6 +259,30 @@ const PayRunsPage = () => {
       dispatch(addNotification({ text: `Paid released holds`, className: 'success' }));
     } catch (error) {
       dispatch(addNotification({ text: 'Can not pay released holds' }));
+    }
+  };
+
+  const releaseAllSelected = async (data) => {
+    try {
+      const selectedRows = checkedRows.reduce((acc, key) => {
+        // find selected row
+        const row = data.find((el) => el.key === key);
+
+        // add all invoices of that row
+        row.invoices.forEach((el) => {
+          acc.push({ payRunId: row.payRunId, invoiceId: el.invoiceId });
+        });
+
+        return acc;
+      }, []);
+
+      await releaseHeldInvoices(selectedRows);
+      dispatch(addNotification({ text: 'Release Success', className: 'success' }));
+      setCheckedRows([]);
+
+      await getHeldInvoices();
+    } catch (error) {
+      dispatch(addNotification({ text: 'Release Fail' }));
     }
   };
 
@@ -325,6 +351,7 @@ const PayRunsPage = () => {
           changeAllChecked={setCheckedRows}
           canCollapseRows
           release={releaseOne}
+          releaseAllSelected={releaseAllSelected}
           rows={listData.holdPayments}
           sortBy={sortBy}
           sorts={SORTS_TAB[tab]}
