@@ -49,9 +49,10 @@ const Table = ({
               const id = item[defaultFields.id];
               const collapsedRow = collapsedRows.includes(item[fields.id]);
               const collapsedClass = collapsedRow ? ' collapsed' : '';
+              const rowClass = rowsRules.getClassName && rowsRules.getClassName(item);
 
               return (
-                <div key={id} className={`table__row${collapsedClass}`}>
+                <div key={id} className={`table__row${collapsedClass} ${rowClass || ''}`}>
                   <div onClick={() => clickRow(item)} className="table__row-column-items" role="presentation">
                     {Object.values(defaultFields).map((rowItemName) => {
                       const currentRowRule = rowsRules[rowItemName] || '';

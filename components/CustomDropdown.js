@@ -24,12 +24,6 @@ const CustomDropDown = ({
   buttonClassName = '',
 }) => {
   const localOptions = options.slice();
-  if (initialText) {
-    localOptions.unshift({
-      [fields.value]: null,
-      [fields.text]: initialText,
-    });
-  }
 
   const [isActive, setIsActive] = useState(false);
   const [selectedOption, setSelectedOption] = useState({});
@@ -41,16 +35,13 @@ const CustomDropDown = ({
 
   const onOptionClick = (event, option) => {
     event.stopPropagation();
-    setSelectedOption(option);
     onOptionSelect(option);
     setError && setError();
     setIsActive(false);
   };
 
   useEffect(() => {
-    const initialSelectedOption =
-      localOptions.find((item) => item[fields.value] === selectedValue || item[fields.text] === selectedValue) || localOptions[0];
-    setSelectedOption(initialSelectedOption);
+    setSelectedOption(selectedValue || {});
   }, [selectedValue]);
 
   return (
@@ -67,7 +58,7 @@ const CustomDropDown = ({
               children
             ) : (
               <>
-                <span>{selectedOption[fields.text]}</span>
+                <span>{selectedValue ? selectedOption[fields.text] : initialText}</span>
                 <span className="icon">
                   <CaretDownIcon />
                 </span>

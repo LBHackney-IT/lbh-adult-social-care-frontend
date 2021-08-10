@@ -78,18 +78,21 @@ const getReleasedHoldsList = (fromDate = new Date(sixMonthsAgo).toJSON(), toDate
   return axios.get(query).then(handleResponse).catch(handleError);
 };
 
-const getSinglePayRunDetails = (
-  payRunId,
-  pageNumber = 1,
-  pageSize = 10,
-  dateFrom = new Date(sixMonthsAgo).toJSON(),
-  dateTo = new Date().toJSON(),
-  supplierId = '',
-  packageTypeId = '',
-  invoiceItemPaymentStatusId = '',
-  searchTerm = ''
+const getSinglePayRunDetails = ({
+    payRunId,
+    pageNumber = 1,
+    pageSize = 10,
+    dateFrom = new Date(sixMonthsAgo),
+    dateTo = new Date(),
+    supplierId = '',
+    packageTypeId = '',
+    invoiceStatusId = '',
+    searchTerm = ''
+  }
 ) => {
-  const query = `${PAY_RUN_URL}/${payRunId}/details?pageNumber=${pageNumber}&pageSize=${pageSize}&supplierId=${supplierId}&packageTypeId=${packageTypeId}&invoiceItemPaymentStatusId=${invoiceItemPaymentStatusId}&searchTerm=${searchTerm}&dateFrom=${dateFrom}&dateTo=${dateTo}`;
+  console.log(dateFrom);
+  console.log(dateTo);
+  const query = `${PAY_RUN_URL}/${payRunId}/details?pageNumber=${pageNumber}&pageSize=${pageSize}&supplierId=${supplierId}&packageTypeId=${packageTypeId}&invoiceStatusId=${invoiceStatusId}&searchTerm=${searchTerm}&dateFrom=${dateFrom.toJSON()}&dateTo=${dateTo.toJSON()}`;
   return axios.get(query).then(handleResponse).catch(handleError);
 };
 
@@ -163,7 +166,7 @@ const deleteDraftPayRun = (payRunId) => {
   "reasonForHolding": "Inaccurate amount"
 } */
 const holdInvoicePayment = (payRunId, payRunItemId, holdReason = {}) => {
-  const query = `${PAY_RUN_URL}/${payRunId}/pay-run-items/${payRunItemId}/hold-payment`;
+  const query = `${PAY_RUN_URL}/${payRunId}/invoices/${payRunItemId}/hold-payment`;
   const options = {
     url: query,
     method: 'POST',
@@ -174,6 +177,11 @@ const holdInvoicePayment = (payRunId, payRunItemId, holdReason = {}) => {
     data: holdReason,
   };
   return axios(options).then(handleResponse).catch(handleError);
+};
+
+const rejectInvoicePayment = (payRunId, payRunItemId, holdReason = {}) => {
+  const url = `${PAY_RUN_URL}/${payRunId}/invoices/${payRunItemId}/status/reject-invoice`;
+  return axiosRequest({ url, data: holdReason, method: requestMethods.put })
 };
 
 const getHeldInvoicePayments = () => {
@@ -206,7 +214,7 @@ const acceptInvoice = (payRunId, invoiceId) => {
 };
 
 const acceptInvoices = (payRunId, invoices) => {
-  const url = `${PAY_RUN_URL}/${payRunId}/invoices/accept-invoice`;
+  const url = `${PAY_RUN_URL}/${payRunId}/invoices/accept-invoices`;
   return axiosRequest({ url, data: invoices, method: requestMethods.put });
 };
 
@@ -240,4 +248,5 @@ export {
   sendMessage,
   getPaymentDepartments,
   getDateOfLastPayRun,
+  rejectInvoicePayment,
 };
