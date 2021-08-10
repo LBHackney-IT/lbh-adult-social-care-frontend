@@ -56,6 +56,24 @@ const getLoggedInUser = ({ req }) => {
   return user;
 };
 
+const sortTableByKey = (input, sort) => {
+  if (!Array.isArray(input)) {
+    console.error('Sorted object is not an array');
+    return input;
+  }
+  if (!sort?.value && !sort?.name) {
+    console.error('Wrong format of sorting object');
+    return input;
+  }
+  const isIncrease = sort.value === 'increase';
+  return input.sort((a, b) => {
+    const moveTo = { up: isIncrease ? 1 : -1, down: isIncrease ? 1 : -1 };
+    if (a[sort.name] > b[sort.name]) return moveTo.up;
+    if (a[sort.name] < b[sort.name]) return moveTo.down;
+    if (a[sort.name] === b[sort.name]) return 0;
+  });
+};
+
 const getErrorResponse = (error) => error?.response?.data || {}; // { firstName: 'First Name must be more then 10 symbols', secondName: 'Second Name must be more then 10 symbols'
 export {
   uniqueID,
@@ -66,4 +84,5 @@ export {
   getErrorResponse,
   formatDate,
   getLoggedInUser,
+  sortTableByKey,
 };

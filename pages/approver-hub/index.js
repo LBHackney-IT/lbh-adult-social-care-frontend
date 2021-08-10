@@ -5,7 +5,7 @@ import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
 import DashboardTabs from '../../components/Dashboard/Tabs';
 import Table from '../../components/Table';
-import { formatDate, formatStatus } from '../../service/helpers';
+import { formatDate, formatStatus, sortTableByKey } from '../../service/helpers';
 import { addNotification } from '../../reducers/notificationsReducer';
 import {
   getApprovedPackagesApprovers,
@@ -95,13 +95,13 @@ const ApproverHubPage = () => {
   const [page, setPage] = useState(1);
 
   const [sorts] = useState([
-    { name: 'service-user', text: 'SERVICE USER' },
-    { name: 'package-type', text: 'PACKAGE TYPE' },
-    { name: 'care-value', text: 'CARE VALUE' },
-    { name: 'Approver', text: 'APPROVER' },
-    { name: 'submitted-by', text: 'SUBMITTED BY' },
-    { name: 'id', text: 'ID' },
-    { name: 'last-updated', text: 'LAST UPDATED' },
+    { name: 'serviceUser', text: 'SERVICE USER' },
+    { name: 'packageType', text: 'PACKAGE TYPE' },
+    { name: 'careValue', text: 'CARE VALUE' },
+    { name: 'approver', text: 'APPROVER' },
+    { name: 'submittedBy', text: 'SUBMITTED BY' },
+    { name: 'packageId', text: 'ID' },
+    { name: 'lastUpdated', text: 'LAST UPDATED' },
   ]);
 
   const [tab, setTab] = useState('new');
@@ -168,17 +168,12 @@ const ApproverHubPage = () => {
       { options: [], initialText: 'Package Type', name: 'PackageType', className: 'mr-3' },
       { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
       { options: [], initialText: 'Approver', name: 'Approver', className: 'mr-3' },
-      // { options: [], initialText: 'By Value', name: 'ByValue', className: 'mr-3' },
     ],
     buttons: [{ initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() }],
   });
 
   const sortBy = (field, value) => {
     setSort({ value, name: field });
-  };
-
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
   };
 
   const makeTabRequest = () => {
@@ -225,7 +220,6 @@ const ApproverHubPage = () => {
           }));
           changeInputs('Approver', options);
         });
-
         tabsRequests[tab]({
           PageNumber: page,
           OrderBy: sort.name,
@@ -233,25 +227,23 @@ const ApproverHubPage = () => {
           ...filters,
         })
           .then((res) => {
-            let tableData = res.data || [];
-            tableData = tableData.sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
-            setTabsTable({
-              ...tabsTable,
-              [tab]: tableData,
-            });
+            const tableData = res.data || [];
+            sortTableByKey(tableData, sort)
+            setTabsTable({ ...tabsTable, [tab]: tableData });
             setPagingMetaData({
               ...pagingMetaData,
               [tab]: res.pagingMetaData,
             });
           })
-          .catch(() => dispatch(addNotification()));
+          .catch(() => {
+            dispatch(addNotification())});
       }, 500)
     );
   };
 
   useEffect(() => {
     makeTabRequest();
-  }, [tab, sort]);
+  }, [tab, sort, page]);
 
   const rowsRules = {
     packageType: {
@@ -266,8 +258,8 @@ const ApproverHubPage = () => {
       getValue: (value) => `${currency.euro}${value}`,
     },
     id: {
-      getValue: (value) => "[Hackney ID]"
-    }
+      getValue: (value) => '[Hackney ID]',
+    },
   };
 
   const changeInputs = (field, value) => {
@@ -280,7 +272,6 @@ const ApproverHubPage = () => {
   // todo refactor
   const changePage = (chosenPage) => {
     setPage(chosenPage);
-    makeTabRequest();
   };
 
   const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
@@ -304,7 +295,6 @@ const ApproverHubPage = () => {
           submittedBy: 'submittedBy',
           id: 'packageId',
           lastUpdated: 'lastUpdated',
-          tab,
         }}
         rowsRules={rowsRules}
         rows={tabsTable[tab]}
