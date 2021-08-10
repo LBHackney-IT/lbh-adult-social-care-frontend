@@ -117,7 +117,7 @@ const PayRunsPage = () => {
     name: 'id',
     dataType: DATA_TYPES.STRING,
   });
-  const paginationInfo = listData[tab]?.pagingMetaData || {};
+  const paginationInfo = listData[tab === 'pay-runs' ? 'payRun' : 'holdPayments']?.pagingMetaData || {};
 
   const [payRunFields] = useState({
     id: 'payRunId',
