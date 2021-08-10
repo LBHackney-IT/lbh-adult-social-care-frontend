@@ -75,7 +75,6 @@ const PayRunsHeader = ({
       filtersComponent: (
         <HeldPaymentsFilters
           applyFilters={applyFilters}
-          statusOptions={statusOptions}
           dateRangeOptions={dateRangeOptions}
           serviceTypesOptions={serviceTypesOptions}
           serviceUserOptions={serviceUserOptions}

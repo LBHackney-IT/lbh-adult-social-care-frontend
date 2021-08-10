@@ -130,7 +130,7 @@ const PayRunsPage = () => {
 
   const isPayRunsTab = tab === 'pay-runs';
 
-  const filterOptions = useHeldPaymentsFilterOptions(listData.holdPayments, invoiceStatuses);
+  const filterOptions = useHeldPaymentsFilterOptions(listData.holdPayments);
 
   const sortBy = (field, value, dataType) => {
     setSort({ value, name: field, dataType });
@@ -358,7 +358,7 @@ const PayRunsPage = () => {
 
       <PayRunsHeader
         typeOptions={[...mapPayRunTypeOptions(payRunTypes), ...mapPayRunSubTypeOptions(payRunSubTypes)]}
-        statusOptions={isPayRunsTab ? mapPayRunStatuses(uniquePayRunStatuses) : filterOptions.statusOptions}
+        statusOptions={mapPayRunStatuses(uniquePayRunStatuses)}
         apply={getLists}
         releaseHolds={payReleasedHolds}
         checkedItems={checkedRows}
@@ -412,7 +412,7 @@ const PayRunsPage = () => {
   );
 };
 
-const useHeldPaymentsFilterOptions = (data, invoiceStatuses) => {
+const useHeldPaymentsFilterOptions = (data) => {
   const createUniqueOptions = (values) => uniq(values).map((el) => ({ value: el, text: el }));
   const getAllInvoiceValues = (key) =>
     data.reduce((acc, payRun) => {
@@ -434,18 +434,12 @@ const useHeldPaymentsFilterOptions = (data, invoiceStatuses) => {
     }, [])
   );
 
-  const statusOptions = invoiceStatuses.map((status) => ({
-    value: status.statusId,
-    text: status.statusName,
-  }));
-
   return {
     dateRangeOptions,
     serviceTypesOptions,
     waitingOnOptions,
     serviceUserOptions,
     supplierOptions,
-    statusOptions,
   };
 };
 

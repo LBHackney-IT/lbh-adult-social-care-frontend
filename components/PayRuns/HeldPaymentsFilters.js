@@ -1,7 +1,6 @@
 import React from 'react';
 import Dropdown from '../Dropdown';
 import { Button } from '../Button';
-import Checkbox from '../Checkbox';
 
 const HeldPaymentsFilters = ({
   filters,
@@ -12,7 +11,6 @@ const HeldPaymentsFilters = ({
   serviceUserOptions,
   applyFilters,
   supplierOptions,
-  statusOptions,
 }) => (
   <>
     <div className="held-payments__filters">
@@ -51,16 +49,6 @@ const HeldPaymentsFilters = ({
         selectedValue={filters.supplier}
         onOptionSelect={(option) => changeFilter('supplier', option)}
       />
-      <Dropdown
-        initialText="Status"
-        classes="pay-runs__dropdown-date mr-3"
-        options={statusOptions}
-        selectedValue={filters.status}
-        onOptionSelect={(option) => changeFilter('status', option)}
-      />
-      <Checkbox checked={filters.unread} onChange={(value) => changeFilter('unread', value)}>
-        <p>Unread</p>
-      </Checkbox>
     </div>
     <Button onClick={applyFilters}>Filter</Button>
   </>
