@@ -424,7 +424,7 @@ const PayRunsPage = () => {
   );
 };
 
-const useHeldPaymentsFilterOptions = (data) => {
+const useHeldPaymentsFilterOptions = (data = []) => {
   const createUniqueOptions = (values) => uniqBy(values, 'value');
   const getAllInvoiceValues = (key) =>
     data.reduce((acc, { invoices }) => {
