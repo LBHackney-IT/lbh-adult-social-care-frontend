@@ -67,7 +67,7 @@ const sortTableByKey = (input, sort) => {
   }
   const isIncrease = sort.value === 'increase';
   return input.sort((a, b) => {
-    const moveTo = { up: isIncrease ? 1 : -1, down: isIncrease ? 1 : -1 };
+    const moveTo = { up: isIncrease ? 1 : -1, down: isIncrease ? -1 : 1 };
     if (a[sort.name] > b[sort.name]) return moveTo.up;
     if (a[sort.name] < b[sort.name]) return moveTo.down;
     if (a[sort.name] === b[sort.name]) return 0;
