@@ -110,9 +110,9 @@ const PayRunPage = () => {
       payRunId: id,
       pageNumber,
       searchTerm: filters?.serviceUser,
-      invoiceStatusId: filters?.invoiceNo,
-      dateFrom: filters?.dateFrom,
-      dateTo: filters?.dateTo || new Date(),
+      invoiceStatusId: filters?.status,
+      dateFrom: filters?.dateFrom?.getTime && filters.dateFrom.toJSON(),
+      dateTo: filters?.dateTo?.getTime && filters.dateTo.toJSON(),
     })
       .then((res) => {
         setInvoices(res.invoices);
@@ -294,7 +294,7 @@ const PayRunPage = () => {
   }))
 
   statusOptions.unshift({
-    value: '0.1',
+    value: '',
     text: 'Status',
   });
 
