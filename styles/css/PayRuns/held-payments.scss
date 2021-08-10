@@ -1,4 +1,7 @@
 .pay-runs__held-payments-class {
+  position: relative;
+  overflow: unset;
+
   .sort-table > div:last-of-type {
     &:after {
       content: '';
@@ -7,16 +10,19 @@
     }
   }
 
-  .sort {
+  .sort, .table__row-item {
+    width: unset;
+
     &:nth-child(2) {
       width: 103px;
     }
+
     &:nth-child(3) {
-      width: 89px;
+      width: 180px;
     }
 
     &:nth-child(4) {
-      width: 101px;
+      width: 120px;
     }
 
     &:nth-child(5) {
@@ -35,41 +41,15 @@
       width: 70px;
     }
 
-    &:nth-child(8) {
+    &:nth-child(9) {
       width: 92px;
     }
   }
 
-  .table__row-item {
-    &:nth-child(2) {
-      width: 103px;
-    }
-    &:nth-child(3) {
-      width: 89px;
-    }
-
-    &:nth-child(4) {
-      width: 101px;
-    }
-
-    &:nth-child(5) {
-      width: 136px;
-    }
-
-    &:nth-child(6) {
-      width: 134px;
-    }
-
-    &:nth-child(7) {
-      width: 90px;
-    }
-
-    &:nth-child(8) {
-      width: 70px;
-    }
-
-    &:nth-child(8) {
-      width: 92px;
-    }
+  .table__row-release-all {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    transform: translateY(72px);
   }
 }
