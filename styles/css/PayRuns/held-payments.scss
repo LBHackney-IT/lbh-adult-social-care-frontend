@@ -13,6 +13,10 @@
   .sort, .table__row-item {
     width: unset;
 
+    &.table__row-item-checkbox, &.chat-icon {
+      width: unset;
+    }
+
     &:nth-child(2) {
       width: 103px;
     }
