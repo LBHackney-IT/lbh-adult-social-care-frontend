@@ -36,6 +36,12 @@
     .button {
       width: 157px;
       height: 42px;
+
+      span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
   }
 }
@@ -97,6 +103,7 @@
 
   label.checkbox {
     align-items: flex-end;
+
     .checkbox-check {
       height: 19px;
       width: 19px;
