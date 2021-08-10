@@ -11,7 +11,7 @@ const initialFilters = {
   supplier: '',
   type: '',
   status: '',
-  dateFrom: new Date(),
+  dateFrom: '',
   dateTo: '',
 };
 

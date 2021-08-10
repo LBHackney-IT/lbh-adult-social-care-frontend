@@ -112,8 +112,8 @@ const PayRunPage = () => {
       pageNumber,
       searchTerm: filters?.serviceUser,
       invoiceStatusId: filters?.status,
-      dateFrom: filters?.dateFrom,
-      dateTo: filters?.dateTo || new Date(),
+      dateFrom: filters?.dateFrom?.getTime && filters.dateFrom.toJSON(),
+      dateTo: filters?.dateTo?.getTime && filters.dateTo.toJSON(),
     })
       .then((res) => {
         setInvoices(res.invoices);
