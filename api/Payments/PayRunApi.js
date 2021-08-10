@@ -82,15 +82,15 @@ const getSinglePayRunDetails = ({
     payRunId,
     pageNumber = 1,
     pageSize = 10,
-    dateFrom = new Date(sixMonthsAgo),
-    dateTo = new Date(),
+    dateFrom = '',
+    dateTo = '',
     supplierId = '',
     packageTypeId = '',
     invoiceStatusId = '',
     searchTerm = ''
   }
 ) => {
-  const query = `${PAY_RUN_URL}/${payRunId}/details?pageNumber=${pageNumber}&pageSize=${pageSize}&supplierId=${supplierId}&packageTypeId=${packageTypeId}&invoiceStatusId=${invoiceStatusId}&searchTerm=${searchTerm}&dateFrom=${dateFrom.toJSON()}&dateTo=${dateTo.toJSON()}`;
+  const query = `${PAY_RUN_URL}/${payRunId}/details?pageNumber=${pageNumber}&pageSize=${pageSize}&supplierId=${supplierId}&packageTypeId=${packageTypeId}&invoiceStatusId=${invoiceStatusId}&searchTerm=${searchTerm}&dateFrom=${dateFrom}&dateTo=${dateTo}`;
   return axios.get(query).then(handleResponse).catch(handleError);
 };
 
