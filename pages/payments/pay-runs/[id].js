@@ -106,7 +106,6 @@ const PayRunPage = () => {
     if (!loading) {
       setLoading(true);
     }
-    console.log(filters);
     getSinglePayRunDetails({
       payRunId: id,
       pageNumber,

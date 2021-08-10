@@ -79,8 +79,8 @@ const PopupCreatePayRun = ({ closeCreatePayRun, date, setDate, closePopup, regul
           dispatch(addNotification({ text: `Pay run created. ${payRunId}`, className: 'success' }));
         })
         .catch((err) => {
-          dispatch(addNotification({ text: `Create pay run failed. ${err?.message}` }));
-          setErrors([...errors, `Create pay run failed. ${err?.message}`]);
+          dispatch(addNotification({ text: err }));
+          setErrors([...errors, err]);
         });
     } else {
       setErrors([...errors, 'Pay run not selected']);
