@@ -3,6 +3,7 @@ import axios from 'axios';
 import { requestMethods } from '../../constants/variables';
 
 async function handleResponse(response) {
+  console.log(`response`, response)
   if (response.status === 200 || response.status === 201 || response.status === 204) return response.data;
   if (response.status === 400) {
     // So, a server-side validation error occurred.

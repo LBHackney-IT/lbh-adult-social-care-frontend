@@ -2,6 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .pay-runs__header {
@@ -86,6 +87,7 @@
 
   .dropdown button.button {
     height: 42px;
+    width: 220px;
   }
 }
 

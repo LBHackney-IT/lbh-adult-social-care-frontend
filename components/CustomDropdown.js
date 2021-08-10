@@ -23,12 +23,7 @@ const CustomDropDown = ({
   setError,
   buttonClassName = '',
 }) => {
-  if (initialText) {
-    options.unshift({
-      [fields.value]: null,
-      [fields.text]: initialText,
-    });
-  }
+  const localOptions = options.slice();
 
   const [isActive, setIsActive] = useState(false);
   const [selectedOption, setSelectedOption] = useState({});
@@ -40,16 +35,13 @@ const CustomDropDown = ({
 
   const onOptionClick = (event, option) => {
     event.stopPropagation();
-    setSelectedOption(option);
     onOptionSelect(option);
     setError && setError();
     setIsActive(false);
   };
 
   useEffect(() => {
-    const initialSelectedOption =
-      options.find((item) => item[fields.value] === selectedValue || item[fields.text] === selectedValue) || options[0];
-    setSelectedOption(initialSelectedOption);
+    setSelectedOption(selectedValue || {});
   }, [selectedValue]);
 
   return (
@@ -66,7 +58,7 @@ const CustomDropDown = ({
               children
             ) : (
               <>
-                <span>{selectedOption[fields.text]}</span>
+                <span>{selectedValue ? selectedOption[fields.text] : initialText}</span>
                 <span className="icon">
                   <CaretDownIcon />
                 </span>
@@ -76,9 +68,9 @@ const CustomDropDown = ({
         </div>
         <OutsideTrigger onClick={() => setIsActive(false)} className="dropdown-menu" id="dropdown-menu" role="menu">
           <div className="dropdown-content">
-            {options.map((optionItem) => (
+            {localOptions.map((optionItem) => (
               <div
-                key={optionItem[fields.text]}
+                key={optionItem[fields.value]}
                 className="dropdown-item"
                 onClick={(event) => onOptionClick(event, optionItem)}
               >
