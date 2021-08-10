@@ -4,18 +4,18 @@ import moment from 'moment';
 import DatePick from '../DatePick';
 import Popup from '../Popup';
 import RadioButton from '../RadioButton';
-import { createNewPayRun, getDateOfLastPayRun } from '../../api/Payments/PayRunApi';
+import { createNewPayRun, getDateOfLastPayRun, PAY_RUN_TYPES } from '../../api/Payments/PayRunApi';
 import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
 import { addNotification } from '../../reducers/notificationsReducer';
 
-const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPayRunType }) => {
+const PopupCreatePayRun = ({ closeCreatePayRun, date, setDate, closePopup, regularCycles, changeRegularCycles }) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState([]);
   const [daysFromLastPayRun, setDaysFromLastPayRun] = useState('XX');
 
   useEffect(() => {
     retrieveDateOfLastPayRun();
-  }, [newPayRunType]);
+  }, [regularCycles, date]);
 
   const calculateDaysFromLastPayRun = (dateOfLastPayRun) => {
     if (!dateOfLastPayRun) {
@@ -40,12 +40,18 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
         <RadioButton
           inline={false}
           options={[
-            { value: 'ResidentialRecurring', text: `Residential Recurring (3 releases)` },
-            { value: 'DirectPayments', text: 'Direct Payments' },
-            { value: 'HomeCare', text: 'Home care' },
+            { value: PAY_RUN_TYPES.RESIDENTIAL_RECURRING, text: `Residential Recurring (3 releases)` },
+            { value: PAY_RUN_TYPES.DIRECT_PAYMENTS, text: 'Direct Payments' },
+            { value: PAY_RUN_TYPES.HOME_CARE, text: 'Home care' },
+            {
+              header: <p className="create-pay-run__title mt-5">Ad Hoc and Releases</p>,
+              value: PAY_RUN_TYPES.RESIDENTIAL_RELEASE_HOLDS,
+              text: `Residential released holds`
+            },
+            { value: PAY_RUN_TYPES.DIRECT_PAYMENTS_RELEASE_HOLDS, text: 'Direct payments released holds' },
           ]}
-          selectedValue={newPayRunType}
-          onChange={(value) => setNewPayRunType(value)}
+          selectedValue={regularCycles}
+          onChange={(value) => changeRegularCycles(value)}
         />
       </div>
       <div className="create-pay-run__run-to">
@@ -55,31 +61,20 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
           <span>{daysFromLastPayRun}</span> days since last cycle
         </p>
       </div>
-      <div className="create-pay-run__hoc-releases">
-        <p className="create-pay-run__title">Ad Hoc and Releases</p>
-        <RadioButton
-          inline={false}
-          options={[
-            { value: 'ResidentialReleaseHolds', text: `Residential released holds` },
-            { value: 'DirectPaymentsReleaseHolds', text: 'Direct payments released holds' },
-          ]}
-          selectedValue={newPayRunType}
-          onChange={(value) => setNewPayRunType(value)}
-        />
-      </div>
     </div>
   );
 
   const postNewPayRun = () => {
-    const payRunType = newPayRunType;
+    const payRunType = regularCycles;
     if (!stringIsNullOrEmpty(payRunType)) {
       createNewPayRun(payRunType, date)
         .then((payRunId) => {
+          closeCreatePayRun();
           dispatch(addNotification({ text: `Pay run created. ${payRunId}`, className: 'success' }));
         })
         .catch((err) => {
-          dispatch(addNotification({ text: `Create pay run failed. ${err.message}` }));
-          setErrors([...errors, `Create pay run failed. ${err.message}`]);
+          dispatch(addNotification({ text: err }));
+          setErrors([...errors, err]);
         });
     } else {
       setErrors([...errors, 'Pay run not selected']);
@@ -87,7 +82,7 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
   };
 
   const retrieveDateOfLastPayRun = () => {
-    const payRunType = newPayRunType;
+    const payRunType = regularCycles;
     if (!stringIsNullOrEmpty(payRunType)) {
       getDateOfLastPayRun(payRunType)
         .then((payRun) => {
@@ -99,7 +94,7 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
         })
         .catch((err) => {
           setDaysFromLastPayRun('XX');
-          dispatch(addNotification({ text: `Failed to fetch date of last pay run. ${err.message}` }));
+          dispatch(addNotification({ text: `Failed to fetch date of last pay run. ${err?.message}` }));
         });
     }
   };
