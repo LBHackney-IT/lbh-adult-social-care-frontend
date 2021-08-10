@@ -109,7 +109,7 @@ const PayRunsPage = () => {
   const [invoiceStatuses, setInvoiceStatuses] = useState([]);
   const [listData, setListData] = useState({
     payRuns: {},
-    holdPayments: {},
+    holdPayments: [],
   });
   const [page] = useState(1);
   const [sort, setSort] = useState({
@@ -130,7 +130,7 @@ const PayRunsPage = () => {
 
   const isPayRunsTab = tab === 'pay-runs';
 
-  const filterOptions = useHeldPaymentsFilterOptions(listData.holdPayments.data);
+  const filterOptions = useHeldPaymentsFilterOptions(listData.holdPayments);
 
   const sortBy = (field, value, dataType) => {
     setSort({ value, name: field, dataType });
@@ -182,7 +182,7 @@ const PayRunsPage = () => {
 
   const getHeldInvoices = async (filters = {}) => {
     try {
-      const { dateRange, serviceType, serviceUser, supplier, waitingOn } = filters;
+      const { dateRange = '', serviceType, serviceUser, supplier, waitingOn } = filters;
       const [dateFrom, dateTo] = dateRange.split(' - ');
 
       const result = await getHeldInvoicePayments({
@@ -405,7 +405,7 @@ const PayRunsPage = () => {
           canCollapseRows
           release={releaseOne}
           releaseAllSelected={releaseAllSelected}
-          rows={listData.holdPayments.data}
+          rows={listData.holdPayments}
           sortBy={sortBy}
           sorts={SORTS_TAB[tab]}
           invoiceStatuses={invoiceStatuses}
