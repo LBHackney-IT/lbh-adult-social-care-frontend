@@ -120,9 +120,8 @@ const approvePayRunForPayment = (payRunId) => {
 };
 
 const releaseSingleHeldInvoice = (payRunId, invoiceId) => {
-  const query = `${PAY_RUN_URL}/release-held-invoice`;
   const options = {
-    url: query,
+    url: `${PAY_RUN_URL}/release-held-invoice`,
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -141,7 +140,7 @@ const releaseSingleHeldInvoice = (payRunId, invoiceId) => {
     "payRunId": "c88378e3-6deb-4429-9364-3598cb6224f0",
     "invoiceId": "505ce36c-18ce-4fe2-9010-706b6f9c8051"
   }
-  ] */
+] */
 const releaseHeldInvoices = (invoiceList = []) => {
   const url = `${PAY_RUN_URL}/release-held-invoice-list`;
   return axiosRequest({ url, data: invoiceList, method: requestMethods.put });
@@ -177,14 +176,14 @@ const holdInvoicePayment = (payRunId, payRunItemId, holdReason = {}) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const getHeldInvoicePayments = (params) => {
+  const query = `${INVOICES_URL}/held-invoice-payments`;
+  return axios.get(query, { params }).then(handleResponse).catch(handleError);
+};
+
 const rejectInvoicePayment = (payRunId, payRunItemId, holdReason = {}) => {
   const url = `${PAY_RUN_URL}/${payRunId}/invoices/${payRunItemId}/status/reject-invoice`;
   return axiosRequest({ url, data: holdReason, method: requestMethods.put })
-};
-
-const getHeldInvoicePayments = () => {
-  const query = `${INVOICES_URL}/held-invoice-payments`;
-  return axios.get(query).then(handleResponse).catch(handleError);
 };
 
 const getAllInvoiceStatuses = () => {

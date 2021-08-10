@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import { uniqBy, last } from 'lodash';
 import useSWR from 'swr';
 import {
+  createNewPayRun,
+  getAllInvoiceStatuses,
   getHeldInvoicePayments,
   getPaymentDepartments,
   getPayRunSummaryList,
-  getSinglePayRunInsights,
   PAY_RUN_ENDPOINTS,
+  PAY_RUN_TYPES,
+  releaseHeldInvoices,
   releaseSingleHeldInvoice,
 } from '../../../api/Payments/PayRunApi';
 import PopupInvoiceChat from '../../../components/Chat/PopupInvoiceChat';
@@ -20,7 +24,7 @@ import { addNotification } from '../../../reducers/notificationsReducer';
 import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
 import ChatButton from '../../../components/PayRuns/ChatButton';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { formatDateWithSign, getUserSession } from '../../../service/helpers'
+import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import {
   getEnGBFormattedDate,
@@ -35,7 +39,49 @@ import {
 import { axiosFetcher } from '../../../api/Utils/ApiUtils';
 import { DATA_TYPES, SWR_OPTIONS } from '../../../api/Utils/CommonOptions';
 import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from '../../../api/Mappers/PayRunMapper';
-import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight'
+
+const PAYMENT_TABS = [
+  { text: 'Pay Runs', value: 'pay-runs' },
+  { text: 'Held Payments', value: 'held-payments' },
+];
+
+const SORTS_TAB = {
+  'pay-runs': [
+    { name: 'id', text: 'ID', dataType: DATA_TYPES.STRING },
+    { name: 'date', text: 'Date', dataType: DATA_TYPES.DATE },
+    { name: 'type', text: 'Type', dataType: DATA_TYPES.STRING },
+    { name: 'paid', text: 'Paid', dataType: DATA_TYPES.NUMBER },
+    { name: 'held', text: 'Held', dataType: DATA_TYPES.NUMBER },
+    { name: 'status', text: 'Status', dataType: DATA_TYPES.STRING },
+  ],
+  'held-payments': [
+    { name: 'payRunDate', text: 'Pay run date', dataType: DATA_TYPES.DATE },
+    { name: 'payRunId', text: 'Pay run ID', dataType: DATA_TYPES.STRING },
+    { name: 'serviceUser', text: 'Service User', dataType: DATA_TYPES.STRING },
+    { name: 'packageType', text: 'Package Type', dataType: DATA_TYPES.STRING },
+    { name: 'supplier', text: 'Supplier', dataType: DATA_TYPES.STRING },
+    { name: 'amount', text: 'Amount', dataType: DATA_TYPES.NUMBER },
+    { name: 'status', text: 'Status', dataType: DATA_TYPES.STRING },
+    { name: 'waitingFor', text: 'Waiting for', dataType: DATA_TYPES.STRING },
+  ],
+};
+
+const TABS_CLASSES = {
+  'pay-runs': 'pay-runs__tab-class',
+  'held-payments': 'pay-runs__held-payments-class',
+};
+
+const PAY_RUN_ROWS_RULES = {
+  payRunId: {
+    getClassName: () => 'button-link',
+  },
+  payRunStatusName: {
+    getClassName: (value) => `${value} table__row-item-status`,
+  },
+  dateCreated: {
+    getValue: (value) => getEnGBFormattedDate(value),
+  },
+};
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -48,31 +94,6 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const PayRunsPage = () => {
   const dispatch = useDispatch();
-  const [sortsTab] = useState({
-    'pay-runs': [
-      { name: 'id', text: 'ID', dataType: DATA_TYPES.STRING },
-      { name: 'date', text: 'Date', dataType: DATA_TYPES.DATE },
-      { name: 'type', text: 'Type', dataType: DATA_TYPES.STRING },
-      { name: 'paid', text: 'Paid', dataType: DATA_TYPES.NUMBER },
-      { name: 'held', text: 'Held', dataType: DATA_TYPES.NUMBER },
-      { name: 'status', text: 'Status', dataType: DATA_TYPES.STRING },
-    ],
-    'held-payments': [
-      { name: 'payRunDate', text: 'Pay run date', dataType: DATA_TYPES.DATE },
-      { name: 'payRunId', text: 'Pay run ID', dataType: DATA_TYPES.STRING },
-      { name: 'serviceUser', text: 'Service User', dataType: DATA_TYPES.STRING },
-      { name: 'packageType', text: 'Package Type', dataType: DATA_TYPES.STRING },
-      { name: 'supplier', text: 'Supplier Dashboard', dataType: DATA_TYPES.STRING },
-      { name: 'amount', text: 'Amount', dataType: DATA_TYPES.NUMBER },
-      { name: 'status', text: 'Status', dataType: DATA_TYPES.STRING },
-      { name: 'waitingFor', text: 'Waiting for', dataType: DATA_TYPES.STRING },
-    ],
-  });
-
-  const [tabsClasses] = useState({
-    'pay-runs': 'pay-runs__tab-class',
-    'held-payments': 'pay-runs__held-payments-class',
-  });
 
   const router = useRouter();
   const [openedPopup, setOpenedPopup] = useState('');
@@ -80,11 +101,12 @@ const PayRunsPage = () => {
   const [checkedRows, setCheckedRows] = useState([]);
   const [openedInvoiceChat, setOpenedInvoiceChat] = useState({});
   const [hocAndRelease, changeHocAndRelease] = useState('');
+  const [newPayRunType, setNewPayRunType] = useState('');
   const [waitingOn, changeWaitingOn] = useState('');
-  const [levelInsights, setLevelInsights] = useState();
   const [newMessageText, setNewMessageText] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
   const [tab, changeTab] = useState('pay-runs');
+  const [invoiceStatuses, setInvoiceStatuses] = useState([]);
   const [listData, setListData] = useState({
     payRuns: {},
     holdPayments: {},
@@ -95,19 +117,7 @@ const PayRunsPage = () => {
     name: 'id',
     dataType: DATA_TYPES.STRING,
   });
-  const paginationInfo = listData[tab]?.pagingMetaData || {};
-
-  const [payRunRowsRules] = useState({
-    payRunId: {
-      getClassName: () => 'button-link',
-    },
-    payRunStatusName: {
-      getClassName: (value) => `${value} table__row-item-status`,
-    },
-    dateCreated: {
-      getValue: (value) => getEnGBFormattedDate(value),
-    },
-  });
+  const paginationInfo = listData[tab === 'pay-runs' ? 'payRun' : 'holdPayments']?.pagingMetaData || {};
 
   const [payRunFields] = useState({
     id: 'payRunId',
@@ -119,6 +129,8 @@ const PayRunsPage = () => {
   });
 
   const isPayRunsTab = tab === 'pay-runs';
+
+  const filterOptions = useHeldPaymentsFilterOptions(listData.holdPayments.data);
 
   const sortBy = (field, value, dataType) => {
     setSort({ value, name: field, dataType });
@@ -145,17 +157,6 @@ const PayRunsPage = () => {
     }
   };
 
-  const release = (item, care) => {
-    releaseSingleHeldInvoice(listData.holdPayments.payRunId, item.invoiceId).then(() => {
-      dispatch(addNotification({ text: `Realse invoice ${item.invoiceId}`, className: 'success' }));
-    });
-  };
-
-  const openChat = (item) => {
-    setOpenedPopup('help-chat');
-    setOpenedInvoiceChat(item);
-  };
-
   const onClickTableRow = (rowItem) => {
     router.push(`${router.pathname}/${rowItem.payRunId}`);
   };
@@ -163,7 +164,10 @@ const PayRunsPage = () => {
   const heldActions = [
     {
       id: 'action1',
-      onClick: (item) => openChat(item),
+      onClick: (item) => {
+        setOpenedPopup('help-chat');
+        setOpenedInvoiceChat(item);
+      },
       className: 'chat-icon',
       Component: ChatButton,
     },
@@ -174,6 +178,27 @@ const PayRunsPage = () => {
       ...listData,
       [field]: value,
     });
+  };
+
+  const getHeldInvoices = async (filters = {}) => {
+    try {
+      const { dateRange, serviceType, serviceUser, supplier, waitingOn } = filters;
+      const [dateFrom, dateTo] = dateRange.split(' - ');
+
+      const result = await getHeldInvoicePayments({
+        dateTo,
+        dateFrom,
+        pageNumber: page,
+        supplierId: supplier,
+        waitingOnId: waitingOn,
+        packageTypeId: serviceType,
+        serviceUserId: serviceUser,
+      });
+
+      changeListData('holdPayments', result);
+    } catch (error) {
+      dispatch(addNotification({ text: 'Can not get hold payments' }));
+    }
   };
 
   const getLists = (filters) => {
@@ -200,38 +225,12 @@ const PayRunsPage = () => {
           dispatch(addNotification({ text: `Can not get hold payments: ${err?.message}` }));
         });
     } else {
-      getHeldInvoicePayments({ pageNumber: page })
-        .then((heldInvoices) => changeListData('holdPayments', heldInvoices))
-        .catch(() => {
-          dispatch(addNotification({ text: 'Can not get hold payments' }));
-        });
+      getHeldInvoices(filters);
     }
   };
 
-  const releaseHolds = () => {
-    // TODO i am not sure that this api is correct for this case
-    // releaseHeldInvoices(checkedRows)
-    //   .then(() => {
-    //     dispatch(addNotification({ text: 'Release Success', className: 'success' }));
-    //     setCheckedRows([]);
-    //   })
-    //   .catch(() => dispatch(addNotification({ text: 'Release Fail' })))
-  };
-
-  const onCollapseRow = payRunId => {
-    getSinglePayRunInsights(payRunId)
-      .then((res) => {
-        setLevelInsights(res);
-      })
-      .catch(() => pushNotification('Can not get Insights'));
-  }
-
   const getHelds = () => {
-    getHeldInvoicePayments({ pageNumber: page })
-      .then((heldInvoices) => changeListData('holdPayments', heldInvoices))
-      .catch(() => {
-        dispatch(addNotification({ text: 'Can not get hold payments' }));
-      });
+    getHeldInvoices();
 
     getPaymentDepartments()
       .then((res) => changeWaitingOn(res))
@@ -274,18 +273,67 @@ const PayRunsPage = () => {
     }
   }, [tab, page]);
 
+  useEffect(() => {
+    getAllInvoiceStatuses()
+      .then(setInvoiceStatuses)
+      .catch(() => dispatch(addNotification({ text: 'Can not get all invoice statuses' })));
+  }, []);
+
+  const releaseOne = async (item, invoice) => {
+    try {
+      await releaseSingleHeldInvoice(item.payRunId, invoice.invoiceId);
+      dispatch(addNotification({ text: `Release invoice ${item.invoiceId}`, className: 'success' }));
+      await getHeldInvoices();
+    } catch (error) {
+      dispatch(addNotification({ text: 'Can not release invoices' }));
+    }
+  };
+
+  const payReleasedHolds = async () => {
+    try {
+      await createNewPayRun(PAY_RUN_TYPES.RESIDENTIAL_RELEASE_HOLDS, date);
+      dispatch(addNotification({ text: `Paid released holds`, className: 'success' }));
+    } catch (error) {
+      dispatch(addNotification({ text: 'Can not pay released holds' }));
+    }
+  };
+
+  const releaseAllSelected = async (data) => {
+    try {
+      const selectedRows = checkedRows.reduce((acc, key) => {
+        // find selected row
+        const row = data.find((el) => el.key === key);
+
+        // add all invoices of that row
+        row.invoices.forEach((el) => {
+          acc.push({ payRunId: row.payRunId, invoiceId: el.invoiceId });
+        });
+
+        return acc;
+      }, []);
+
+      await releaseHeldInvoices(selectedRows);
+      dispatch(addNotification({ text: 'Release Success', className: 'success' }));
+      setCheckedRows([]);
+
+      await getHeldInvoices();
+    } catch (error) {
+      dispatch(addNotification({ text: 'Release Fail' }));
+    }
+  };
+
   const { data: payRunTypes = [] } = useSWR(
-    `${PAY_RUN_ENDPOINTS.GET_ALL_PAY_RUN_TYPES}`,
+    PAY_RUN_ENDPOINTS.GET_ALL_PAY_RUN_TYPES,
     axiosFetcher,
     SWR_OPTIONS.REVALIDATE_ON_MOUNT
   );
   const { data: payRunSubTypes = [] } = useSWR(
-    `${PAY_RUN_ENDPOINTS.GET_ALL_PAY_RUN_SUB_TYPES}`,
+    PAY_RUN_ENDPOINTS.GET_ALL_PAY_RUN_SUB_TYPES,
     axiosFetcher,
     SWR_OPTIONS.REVALIDATE_ON_MOUNT
   );
   const { data: uniquePayRunStatuses = [] } = useSWR(
-    `${PAY_RUN_ENDPOINTS.GET_ALL_UNIQUE_PAY_RUN_STATUSES}`,
+    PAY_RUN_ENDPOINTS.GET_ALL_UNIQUE_PAY_RUN_STATUSES,
     axiosFetcher,
     SWR_OPTIONS.REVALIDATE_ON_MOUNT
   );
@@ -305,6 +353,7 @@ const PayRunsPage = () => {
           setDate={setDate}
         />
       )}
+
       {openedPopup === 'help-chat' && (
         <PopupInvoiceChat
           closePopup={closeHelpChat}
@@ -318,29 +367,30 @@ const PayRunsPage = () => {
           messages={openedInvoiceChat.disputedInvoiceChat}
         />
       )}
+
       <PayRunsHeader
         typeOptions={[...mapPayRunTypeOptions(payRunTypes), ...mapPayRunSubTypeOptions(payRunSubTypes)]}
         statusOptions={mapPayRunStatuses(uniquePayRunStatuses)}
         apply={getLists}
-        releaseHolds={releaseHolds}
+        releaseHolds={payReleasedHolds}
         checkedItems={checkedRows}
         tab={tab}
         setOpenedPopup={setOpenedPopup}
+        dateRangeOptions={filterOptions.dateRangeOptions}
+        waitingOnOptions={filterOptions.waitingOnOptions}
+        serviceTypesOptions={filterOptions.serviceTypesOptions}
+        serviceUserOptions={filterOptions.serviceUserOptions}
+        supplierOptions={filterOptions.supplierOptions}
       />
-      <PaymentsTabs
-        tab={tab}
-        changeTab={changeTab}
-        tabs={[
-          { text: 'Pay Runs', value: 'pay-runs' },
-          { text: 'Held Payments', value: 'held-payments' },
-        ]}
-      />
+
+      <PaymentsTabs tab={tab} changeTab={changeTab} tabs={PAYMENT_TABS} />
+
       {isPayRunsTab ? (
         <Table
           rows={listData?.payRuns?.data}
-          rowsRules={payRunRowsRules}
+          rowsRules={PAY_RUN_ROWS_RULES}
           fields={payRunFields}
-          sorts={sortsTab[tab]}
+          sorts={SORTS_TAB[tab]}
           sortBy={sortBy}
           onClickTableRow={onClickTableRow}
         />
@@ -349,26 +399,69 @@ const PayRunsPage = () => {
           checkedRows={checkedRows}
           setCheckedRows={onCheckRows}
           isIgnoreId
-          className={tabsClasses[tab]}
+          className={TABS_CLASSES[tab]}
           additionalActions={heldActions}
           changeAllChecked={setCheckedRows}
           canCollapseRows
-          release={release}
-          rows={listData?.holdPayments?.invoices}
-          careType="Residential"
+          release={releaseOne}
+          releaseAllSelected={releaseAllSelected}
+          rows={listData.holdPayments.data}
           sortBy={sortBy}
-          sorts={sortsTab[tab]}
+          sorts={SORTS_TAB[tab]}
+          invoiceStatuses={invoiceStatuses}
         />
       )}
+
       <Pagination
         from={paginationInfo?.currentPage}
         to={paginationInfo?.pageSize}
         itemsCount={paginationInfo?.pageSize}
         totalCount={paginationInfo?.totalCount}
       />
+
       <HackneyFooterInfo />
     </div>
   );
+};
+
+const useHeldPaymentsFilterOptions = (data) => {
+  const createUniqueOptions = (values) => uniqBy(values, 'value');
+  const getAllInvoiceValues = (key) =>
+    data.reduce((acc, { invoices }) => {
+      invoices.forEach((invoice) => acc.push({ value: invoice[`${key}Id`], text: invoice[`${key}Name`] }));
+      return acc;
+    }, []);
+
+  const dateRangeOptions = uniqBy(
+    data.map(({ dateFrom, dateTo }) => ({
+      value: `${dateFrom} - ${dateTo}`,
+      text: `${getEnGBFormattedDate(dateFrom)} - ${getEnGBFormattedDate(dateTo)}`,
+    })),
+    'value'
+  );
+  const serviceTypesOptions = createUniqueOptions(getAllInvoiceValues('packageType'));
+  const serviceUserOptions = createUniqueOptions(getAllInvoiceValues('serviceUser'));
+  const supplierOptions = createUniqueOptions(getAllInvoiceValues('supplier'));
+
+  const waitingOnOptions = createUniqueOptions(
+    data.reduce((acc, { invoices }) => {
+      invoices.forEach(({ disputedInvoiceChat }) => {
+        acc.push({
+          value: last(disputedInvoiceChat).actionRequiredFromId,
+          text: last(disputedInvoiceChat).actionRequiredFromName,
+        });
+      });
+      return acc;
+    }, [])
+  );
+
+  return {
+    dateRangeOptions,
+    serviceTypesOptions,
+    waitingOnOptions,
+    serviceUserOptions,
+    supplierOptions,
+  };
 };
 
 export default PayRunsPage;
