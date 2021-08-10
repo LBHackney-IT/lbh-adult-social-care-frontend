@@ -8,14 +8,14 @@ import { createNewPayRun, getDateOfLastPayRun, PAY_RUN_TYPES } from '../../api/P
 import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
 import { addNotification } from '../../reducers/notificationsReducer';
 
-const PopupCreatePayRun = ({ closeCreatePayRun, date, setDate, closePopup, regularCycles, hocAndRelease, changeHocAndRelease, changeRegularCycles }) => {
+const PopupCreatePayRun = ({ closeCreatePayRun, date, setDate, closePopup, regularCycles, changeRegularCycles }) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState([]);
   const [daysFromLastPayRun, setDaysFromLastPayRun] = useState('XX');
 
   useEffect(() => {
     retrieveDateOfLastPayRun();
-  }, [regularCycles]);
+  }, [regularCycles, date]);
 
   const calculateDaysFromLastPayRun = (dateOfLastPayRun) => {
     if (!dateOfLastPayRun) {
@@ -43,6 +43,12 @@ const PopupCreatePayRun = ({ closeCreatePayRun, date, setDate, closePopup, regul
             { value: PAY_RUN_TYPES.RESIDENTIAL_RECURRING, text: `Residential Recurring (3 releases)` },
             { value: PAY_RUN_TYPES.DIRECT_PAYMENTS, text: 'Direct Payments' },
             { value: PAY_RUN_TYPES.HOME_CARE, text: 'Home care' },
+            {
+              header: <p className="create-pay-run__title mt-5">Ad Hoc and Releases</p>,
+              value: PAY_RUN_TYPES.RESIDENTIAL_RELEASE_HOLDS,
+              text: `Residential released holds`
+            },
+            { value: PAY_RUN_TYPES.DIRECT_PAYMENTS_RELEASE_HOLDS, text: 'Direct payments released holds' },
           ]}
           selectedValue={regularCycles}
           onChange={(value) => changeRegularCycles(value)}
@@ -54,18 +60,6 @@ const PopupCreatePayRun = ({ closeCreatePayRun, date, setDate, closePopup, regul
         <p className="create-pay-run__days-since">
           <span>{daysFromLastPayRun}</span> days since last cycle
         </p>
-      </div>
-      <div className="create-pay-run__hoc-releases">
-        <p className="create-pay-run__title">Ad Hoc and Releases</p>
-        <RadioButton
-          inline={false}
-          options={[
-            { value: PAY_RUN_TYPES.RESIDENTIAL_RELEASE_HOLDS, text: `Residential released holds` },
-            { value: PAY_RUN_TYPES.DIRECT_PAYMENTS_RELEASE_HOLDS, text: 'Direct payments released holds' },
-          ]}
-          selectedValue={hocAndRelease}
-          onChange={(value) => changeHocAndRelease(value)}
-        />
       </div>
     </div>
   );

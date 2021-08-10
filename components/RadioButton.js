@@ -34,18 +34,21 @@ const RadioButton = ({
     <BaseField label={label} classes={className}>
       <div className={`radio-cont${inline ? '' : ' not-inline'}`}>
         {options.map((radioItem, index) => (
-          <label
-            key={radioItem.value}
-            className={`radio-item${index !== options.length ? ' is-first' : ''}`}
-            onClick={() => radioChange(radioItem.value)}
-          >
-            <div
-              className={`radio-select-cont${hasSelectedValue && radioValue === radioItem.value ? ' is-active' : ''}`}
+          <>
+            {radioItem.header && radioItem.header}
+            <label
+              key={radioItem.value}
+              className={`radio-item${index !== options.length ? ' is-first' : ''}`}
+              onClick={() => radioChange(radioItem.value)}
             >
-              <div className="radio-item-selected" />
-            </div>
-            {radioItem.text}
-          </label>
+              <div
+                className={`radio-select-cont${hasSelectedValue && radioValue === radioItem.value ? ' is-active' : ''}`}
+              >
+                <div className="radio-item-selected" />
+              </div>
+              {radioItem.text}
+            </label>
+          </>
         ))}
       </div>
       {error && <ErrorField text={error} />}

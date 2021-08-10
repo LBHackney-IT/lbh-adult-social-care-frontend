@@ -41,6 +41,13 @@ const PayRunHeader = ({
     });
   };
 
+  let hasFields = false;
+  for(const name in filters) {
+    if(filters[name]) {
+      hasFields = true;
+    }
+  }
+
   useEffect(() => {
     changeFilters(filters)
   }, [filters]);
@@ -103,12 +110,16 @@ const PayRunHeader = ({
             startDate={filters.dateFrom}
             endDate={filters.dateTo}
             setDate={(value) => {
-              changeFilter('dateFrom', value[0])
-              changeFilter('dateTo', value[1])
+              setFilters({
+                ...filters,
+                dateFrom: value[0],
+                dateTo: value[1],
+              })
             }}
             selectsRange
           />
           <Button onClick={applyFilters}>Filter</Button>
+          {hasFields && <Button onClick={() => setFilters({...initialFilters})}>Clear</Button> }
         </div>
       </div>
     </div>
