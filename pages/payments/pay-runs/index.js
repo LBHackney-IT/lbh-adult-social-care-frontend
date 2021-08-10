@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { uniq, last } from 'lodash';
+import { uniqBy, last } from 'lodash';
 import useSWR from 'swr';
 import {
   createNewPayRun,
@@ -180,9 +180,21 @@ const PayRunsPage = () => {
     });
   };
 
-  const getHeldInvoices = async () => {
+  const getHeldInvoices = async (filters = {}) => {
     try {
-      const result = await getHeldInvoicePayments({ pageNumber: page });
+      const { dateRange, serviceType, serviceUser, supplier, waitingOn } = filters;
+      const [dateFrom, dateTo] = dateRange.split(' - ');
+
+      const result = await getHeldInvoicePayments({
+        dateTo,
+        dateFrom,
+        pageNumber: page,
+        supplierId: supplier,
+        waitingOnId: waitingOn,
+        packageTypeId: serviceType,
+        serviceUserId: serviceUser,
+      });
+
       changeListData('holdPayments', result);
     } catch (error) {
       dispatch(addNotification({ text: 'Can not get hold payments' }));
@@ -213,7 +225,7 @@ const PayRunsPage = () => {
           dispatch(addNotification({ text: `Can not get hold payments: ${err?.message}` }));
         });
     } else {
-      getHeldInvoices();
+      getHeldInvoices(filters);
     }
   };
 
@@ -413,22 +425,31 @@ const PayRunsPage = () => {
 };
 
 const useHeldPaymentsFilterOptions = (data) => {
-  const createUniqueOptions = (values) => uniq(values).map((el) => ({ value: el, text: el }));
+  const createUniqueOptions = (values) => uniqBy(values, 'value');
   const getAllInvoiceValues = (key) =>
-    data.reduce((acc, payRun) => {
-      payRun.invoices.forEach((invoice) => acc.push(invoice[key]));
+    data.reduce((acc, { invoices }) => {
+      invoices.forEach((invoice) => acc.push({ value: invoice[`${key}Id`], text: invoice[`${key}Name`] }));
       return acc;
     }, []);
 
-  const dateRangeOptions = createUniqueOptions(data.map((payRun) => getEnGBFormattedDate(payRun.payRunDate)));
-  const serviceTypesOptions = createUniqueOptions(getAllInvoiceValues('packageTypeName'));
-  const serviceUserOptions = createUniqueOptions(getAllInvoiceValues('serviceUserName'));
-  const supplierOptions = createUniqueOptions(getAllInvoiceValues('supplierName'));
+  const dateRangeOptions = uniqBy(
+    data.map(({ dateFrom, dateTo }) => ({
+      value: `${dateFrom} - ${dateTo}`,
+      text: `${getEnGBFormattedDate(dateFrom)} - ${getEnGBFormattedDate(dateTo)}`,
+    })),
+    'value'
+  );
+  const serviceTypesOptions = createUniqueOptions(getAllInvoiceValues('packageType'));
+  const serviceUserOptions = createUniqueOptions(getAllInvoiceValues('serviceUser'));
+  const supplierOptions = createUniqueOptions(getAllInvoiceValues('supplier'));
 
   const waitingOnOptions = createUniqueOptions(
-    data.reduce((acc, payRun) => {
-      payRun.invoices.forEach((invoice) => {
-        acc.push(last(invoice.disputedInvoiceChat).actionRequiredFromName);
+    data.reduce((acc, { invoices }) => {
+      invoices.forEach(({ disputedInvoiceChat }) => {
+        acc.push({
+          value: last(disputedInvoiceChat).actionRequiredFromId,
+          text: last(disputedInvoiceChat).actionRequiredFromName,
+        });
       });
       return acc;
     }, [])

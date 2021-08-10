@@ -34,6 +34,7 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use(null, async (error) => {
   // redirect to login to refresh hascToken since it is expired
   if (error?.response?.status === 401) {
+    Cookies.remove('hascToken');
     window.location.pathname = '/login';
   }
   return Promise.reject(error);

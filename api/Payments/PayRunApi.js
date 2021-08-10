@@ -175,9 +175,9 @@ const holdInvoicePayment = (payRunId, payRunItemId, holdReason = {}) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-const getHeldInvoicePayments = () => {
+const getHeldInvoicePayments = (params) => {
   const query = `${INVOICES_URL}/held-invoice-payments`;
-  return axios.get(query).then(handleResponse).catch(handleError);
+  return axios.get(query, { params }).then(handleResponse).catch(handleError);
 };
 
 const getAllInvoiceStatuses = () => {
