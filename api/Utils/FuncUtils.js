@@ -26,4 +26,35 @@ const isBrowser = () => typeof window !== 'undefined';
 
 const isFunction = (func) => typeof func === 'function';
 
-export { getAgeFromDateString, getEnGBFormattedDate, stringIsNullOrEmpty, isServer, isBrowser, isFunction };
+const sortArrayOfObjectsByStringAscending = (data = [], fieldName) =>
+  data.sort((a, b) => `${a[fieldName]}`.localeCompare(b[fieldName]));
+
+const sortArrayOfObjectsByStringDescending = (data = [], fieldName) =>
+  data.sort((a, b) => `${b[fieldName]}`.localeCompare(a[fieldName]));
+
+const sortArrayOfObjectsByNumberAscending = (data = [], fieldName) =>
+  data.sort((a, b) => (Number(a[fieldName]) || 0) - (Number(b[fieldName]) || 0));
+
+const sortArrayOfObjectsByNumberDescending = (data = [], fieldName) =>
+  data.sort((a, b) => (Number(b[fieldName]) || 0) - (Number(a[fieldName]) || 0));
+
+const sortArrayOfObjectsByDateAscending = (data = [], fieldName) =>
+  data.sort((a, b) => new Date(a[fieldName]) - new Date(b[fieldName]));
+
+const sortArrayOfObjectsByDateDescending = (data = [], fieldName) =>
+  data.sort((a, b) => new Date(b[fieldName]) - new Date(a[fieldName]));
+
+export {
+  getAgeFromDateString,
+  getEnGBFormattedDate,
+  stringIsNullOrEmpty,
+  isServer,
+  isBrowser,
+  isFunction,
+  sortArrayOfObjectsByStringAscending,
+  sortArrayOfObjectsByStringDescending,
+  sortArrayOfObjectsByNumberAscending,
+  sortArrayOfObjectsByNumberDescending,
+  sortArrayOfObjectsByDateAscending,
+  sortArrayOfObjectsByDateDescending,
+};

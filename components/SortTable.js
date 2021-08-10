@@ -1,6 +1,7 @@
 import React from 'react';
 import { CaretDownIcon } from './Icons';
 import Checkbox from './Checkbox';
+import { DATA_TYPES } from '../api/Utils/CommonOptions';
 
 const SortTable = ({ changeAllChecked, checkedRows = [], rows = [], sorts, sortBy, additionalActions }) => (
   <div className="sort-table">
@@ -23,8 +24,8 @@ const SortTable = ({ changeAllChecked, checkedRows = [], rows = [], sorts, sortB
       <div key={item.name} className={`sort${item.className ? ` ${item.className}` : ''}`}>
         <p className="sort__sort-name">{item.text}</p>
         <div className="sort__actions">
-          <CaretDownIcon onClick={() => sortBy(item.name, 'increase')} />
-          <CaretDownIcon onClick={() => sortBy(item.name, 'decrease')} />
+          <CaretDownIcon onClick={() => sortBy(item.name, 'increase', item?.dataType || DATA_TYPES.STRING)} />
+          <CaretDownIcon onClick={() => sortBy(item.name, 'decrease', item?.dataType || DATA_TYPES.STRING)} />
         </div>
       </div>
     ))}

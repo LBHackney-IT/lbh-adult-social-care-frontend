@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { uniq, last } from 'lodash';
+import useSWR from 'swr';
 import {
   createNewPayRun,
   getAllInvoiceStatuses,
   getHeldInvoicePayments,
   getPaymentDepartments,
   getPayRunSummaryList,
+  PAY_RUN_ENDPOINTS,
   PAY_RUN_TYPES,
   releaseHeldInvoices,
   releaseSingleHeldInvoice,
@@ -24,7 +26,19 @@ import ChatButton from '../../../components/PayRuns/ChatButton';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
-import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
+import {
+  getEnGBFormattedDate,
+  sortArrayOfObjectsByDateAscending,
+  sortArrayOfObjectsByDateDescending,
+  sortArrayOfObjectsByNumberAscending,
+  sortArrayOfObjectsByNumberDescending,
+  sortArrayOfObjectsByStringAscending,
+  sortArrayOfObjectsByStringDescending,
+  stringIsNullOrEmpty,
+} from '../../../api/Utils/FuncUtils';
+import { axiosFetcher } from '../../../api/Utils/ApiUtils';
+import { DATA_TYPES, SWR_OPTIONS } from '../../../api/Utils/CommonOptions';
+import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from '../../../api/Mappers/PayRunMapper';
 
 const PAYMENT_TABS = [
   { text: 'Pay Runs', value: 'pay-runs' },
@@ -33,22 +47,22 @@ const PAYMENT_TABS = [
 
 const SORTS_TAB = {
   'pay-runs': [
-    { name: 'id', text: 'ID' },
-    { name: 'date', text: 'Date' },
-    { name: 'type', text: 'Type' },
-    { name: 'paid', text: 'Paid' },
-    { name: 'held', text: 'Held' },
-    { name: 'status', text: 'Status' },
+    { name: 'id', text: 'ID', dataType: DATA_TYPES.STRING },
+    { name: 'date', text: 'Date', dataType: DATA_TYPES.DATE },
+    { name: 'type', text: 'Type', dataType: DATA_TYPES.STRING },
+    { name: 'paid', text: 'Paid', dataType: DATA_TYPES.NUMBER },
+    { name: 'held', text: 'Held', dataType: DATA_TYPES.NUMBER },
+    { name: 'status', text: 'Status', dataType: DATA_TYPES.STRING },
   ],
   'held-payments': [
-    { name: 'payRunDate', text: 'Pay run date' },
-    { name: 'payRunId', text: 'Pay run ID' },
-    { name: 'serviceUser', text: 'Service User' },
-    { name: 'packageType', text: 'Package Type' },
-    { name: 'supplier', text: 'Supplier' },
-    { name: 'amount', text: 'Amount' },
-    { name: 'status', text: 'Status' },
-    { name: 'waitingFor', text: 'Waiting for' },
+    { name: 'payRunDate', text: 'Pay run date', dataType: DATA_TYPES.DATE },
+    { name: 'payRunId', text: 'Pay run ID', dataType: DATA_TYPES.STRING },
+    { name: 'serviceUser', text: 'Service User', dataType: DATA_TYPES.STRING },
+    { name: 'packageType', text: 'Package Type', dataType: DATA_TYPES.STRING },
+    { name: 'supplier', text: 'Supplier', dataType: DATA_TYPES.STRING },
+    { name: 'amount', text: 'Amount', dataType: DATA_TYPES.NUMBER },
+    { name: 'status', text: 'Status', dataType: DATA_TYPES.STRING },
+    { name: 'waitingFor', text: 'Waiting for', dataType: DATA_TYPES.STRING },
   ],
 };
 
@@ -97,10 +111,11 @@ const PayRunsPage = () => {
     payRuns: {},
     holdPayments: [],
   });
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
   const [sort, setSort] = useState({
     value: 'increase',
     name: 'id',
+    dataType: DATA_TYPES.STRING,
   });
   const paginationInfo = listData[tab]?.pagingMetaData || {};
 
@@ -117,8 +132,8 @@ const PayRunsPage = () => {
 
   const filterOptions = useHeldPaymentsFilterOptions(listData.holdPayments, invoiceStatuses);
 
-  const sortBy = (field, value) => {
-    setSort({ value, name: field });
+  const sortBy = (field, value, dataType) => {
+    setSort({ value, name: field, dataType });
   };
 
   const closeCreatePayRun = () => {
@@ -176,14 +191,19 @@ const PayRunsPage = () => {
 
   const getLists = (filters) => {
     const { id = '', type = '', status = '' } = filters || {};
+    let payRunTypeId = '';
+    let payRunSubTypeId = '';
+    if (!stringIsNullOrEmpty(type)) {
+      [payRunTypeId, payRunSubTypeId] = type.split(' - ');
+    }
     if (tab === 'pay-runs') {
       getPayRunSummaryList({
         pageNumber: page,
         dateFrom: new Date(2021, 1, 1).toJSON(),
         dateTo: new Date(2021, 8, 31).toJSON(),
         payRunId: id,
-        payRunTypeId: type,
-        payRunSubTypeId: '',
+        payRunTypeId,
+        payRunSubTypeId,
         payRunStatusId: status,
       })
         .then((payRuns) => {
@@ -206,16 +226,20 @@ const PayRunsPage = () => {
   };
 
   useEffect(() => {
-    const { value = '', name = '' } = sort || {};
+    const { value = '', name = '', dataType = DATA_TYPES.STRING } = sort || {};
     let fieldName = '';
     let sortedList = [];
     if (tab === 'pay-runs') {
       const { data = [], pagingMetaData } = listData?.payRuns || {};
       fieldName = payRunFields[name];
       if (value === 'increase') {
-        sortedList = data.sort((a, b) => `${a[fieldName]}`.localeCompare(b[fieldName]));
+        if (dataType === DATA_TYPES.STRING) sortedList = sortArrayOfObjectsByStringAscending(data, fieldName);
+        else if (dataType === DATA_TYPES.DATE) sortedList = sortArrayOfObjectsByDateAscending(data, fieldName);
+        else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberAscending(data, fieldName);
       } else if (value === 'decrease') {
-        sortedList = data.sort((a, b) => `${b[fieldName]}`.localeCompare(a[fieldName]));
+        if (dataType === DATA_TYPES.STRING) sortedList = sortArrayOfObjectsByStringDescending(data, fieldName);
+        else if (dataType === DATA_TYPES.DATE) sortedList = sortArrayOfObjectsByDateDescending(data, fieldName);
+        else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberDescending(data, fieldName);
       }
       changeListData('payRuns', { data: sortedList, pagingMetaData });
     } else if (tab === 'held-payments') {
@@ -286,6 +310,22 @@ const PayRunsPage = () => {
     }
   };
 
+  const { data: payRunTypes = [] } = useSWR(
+    PAY_RUN_ENDPOINTS.GET_ALL_PAY_RUN_TYPES,
+    axiosFetcher,
+    SWR_OPTIONS.REVALIDATE_ON_MOUNT
+  );
+  const { data: payRunSubTypes = [] } = useSWR(
+    PAY_RUN_ENDPOINTS.GET_ALL_PAY_RUN_SUB_TYPES,
+    axiosFetcher,
+    SWR_OPTIONS.REVALIDATE_ON_MOUNT
+  );
+  const { data: uniquePayRunStatuses = [] } = useSWR(
+    PAY_RUN_ENDPOINTS.GET_ALL_UNIQUE_PAY_RUN_STATUSES,
+    axiosFetcher,
+    SWR_OPTIONS.REVALIDATE_ON_MOUNT
+  );
+
   return (
     <div className={`pay-runs ${tab}__tab-class`}>
       {openedPopup === 'create-pay-run' && (
@@ -317,6 +357,8 @@ const PayRunsPage = () => {
       )}
 
       <PayRunsHeader
+        typeOptions={[...mapPayRunTypeOptions(payRunTypes), ...mapPayRunSubTypeOptions(payRunSubTypes)]}
+        statusOptions={isPayRunsTab ? mapPayRunStatuses(uniquePayRunStatuses) : filterOptions.statusOptions}
         apply={getLists}
         releaseHolds={payReleasedHolds}
         checkedItems={checkedRows}
@@ -327,7 +369,6 @@ const PayRunsPage = () => {
         serviceTypesOptions={filterOptions.serviceTypesOptions}
         serviceUserOptions={filterOptions.serviceUserOptions}
         supplierOptions={filterOptions.supplierOptions}
-        statusOptions={filterOptions.statusOptions}
       />
 
       <PaymentsTabs tab={tab} changeTab={changeTab} tabs={PAYMENT_TABS} />

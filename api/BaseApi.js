@@ -9,7 +9,7 @@ switch (process.env.NEXT_PUBLIC_STAGE) {
     break;
   }
   case 'local': {
-    baseUrl = 'http://localhost:5000/api';
+    baseUrl = process.env.NEXT_PUBLIC_AWS_ENDPOINT || 'http://localhost:5000/api';
     break;
   }
   case 'production': {
