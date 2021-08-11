@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { pick, omit, groupBy, last } from 'lodash';
-import { useInvoiceStatusList } from '../../swrAPI';
+import { useInvoiceStatusList } from '../../api/SWR';
 import Dropdown from '../Dropdown';
 import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
 import PayRunSortTable from './PayRunSortTable';

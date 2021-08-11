@@ -30,8 +30,14 @@ import {
 } from '../../../api/Utils/FuncUtils';
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
 import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from '../../../api/Mappers/PayRunMapper';
-import { useHeldInvoicePayments, usePayRunSubTypes, usePayRunTypes, useUniquePayRunStatuses } from '../../../swrAPI';
-import usePayRunsSummaryList from '../../../swrAPI/transactions/usePayRunsSummaryList';
+import {
+  useHeldInvoicePayments,
+  usePaymentDepartments,
+  usePayRunSubTypes,
+  usePayRunTypes,
+  useUniquePayRunStatuses,
+} from '../../../api/SWR';
+import usePayRunsSummaryList from '../../../api/SWR/transactions/usePayRunsSummaryList';
 import { PAY_RUN_FIELDS, PAY_RUN_ROWS_RULES, PAYMENT_TABS, SORTS_TAB, TABS_CLASSES } from './constants';
 import { useHeldPaymentsFilterOptions } from './useHeldPaymentsFilterOptions';
 
@@ -67,18 +73,25 @@ const PayRunsPage = () => {
 
   const [filters, setFilters] = useState({});
 
+  const isPayRunsTab = tab === 'pay-runs';
+
   const { data: payRunTypes } = usePayRunTypes();
   const { data: payRunSubTypes } = usePayRunSubTypes();
+  const { options: waitingOnOptions } = usePaymentDepartments();
   const { data: uniquePayRunStatuses } = useUniquePayRunStatuses();
-  const { data: heldPayments, mutate: refetchHeldPayments } = useHeldInvoicePayments(
-    pick(filters, ['dateFrom', 'dateTo', 'serviceType', 'serviceUser', 'supplier', 'waitingOn'])
-  );
-  const { data: summaryList } = usePayRunsSummaryList({
-    ...pick(filters, ['id', 'type', 'status']),
-    pageNumber: page,
+
+  const { data: heldPayments, mutate: refetchHeldPayments } = useHeldInvoicePayments({
+    params: pick(filters, ['dateFrom', 'dateTo', 'serviceType', 'serviceUser', 'supplier', 'waitingOn']),
+    shouldFetch: !isPayRunsTab,
   });
 
-  const isPayRunsTab = tab === 'pay-runs';
+  const { data: summaryList } = usePayRunsSummaryList({
+    params: {
+      ...pick(filters, ['id', 'type', 'status']),
+      pageNumber: page,
+    },
+    shouldFetch: isPayRunsTab,
+  });
 
   const { pagingMetaData: paginationInfo } = isPayRunsTab ? summaryList : heldPayments;
 
@@ -216,7 +229,7 @@ const PayRunsPage = () => {
           updateChat={refetchHeldPayments}
           currentUserId={openedInvoiceChat.creatorId}
           messages={openedInvoiceChat.disputedInvoiceChat}
-          waitingOnOptions={filterOptions.waitingOnOptions}
+          waitingOnOptions={waitingOnOptions}
         />
       )}
 
@@ -229,8 +242,6 @@ const PayRunsPage = () => {
         tab={tab}
         setOpenedPopup={setOpenedPopup}
         dateRangeOptions={filterOptions.dateRangeOptions}
-        waitingOnOptions={filterOptions.waitingOnOptions}
-        serviceTypesOptions={filterOptions.packageTypeOptions}
         serviceUserOptions={filterOptions.serviceUserOptions}
         supplierOptions={filterOptions.supplierOptions}
       />

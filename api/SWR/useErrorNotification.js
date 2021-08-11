@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { addNotification } from '../reducers/notificationsReducer';
+import { addNotification } from '../../reducers/notificationsReducer';
 
 const useErrorNotification = (error, text) => {
   const dispatch = useDispatch();

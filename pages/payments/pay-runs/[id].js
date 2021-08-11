@@ -28,7 +28,7 @@ import Table from '../../../components/Table';
 import CustomDropDown from '../../../components/CustomDropdown';
 import { currency } from '../../../constants/strings';
 import PayRunCollapsedContent from '../../../components/PayRuns/PayRunCollapsedContent';
-import { usePaymentDepartments } from '../../../swrAPI';
+import { usePaymentDepartments } from '../../../api/SWR';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

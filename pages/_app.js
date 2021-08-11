@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { useStore } from '../store';
 import AdditionalHeader from '../components/AdditionalHeader';
 import CustomNotification from '../components/Notifications';
-import fetcher from '../swrAPI/fetcher';
+import fetcher from '../api/SWR/fetcher';
 
 const swrOptions = {
   errorRetryCount: 3,

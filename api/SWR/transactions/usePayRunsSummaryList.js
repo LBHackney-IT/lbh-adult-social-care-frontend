@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import moment from 'moment';
-import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
+import { stringIsNullOrEmpty } from '../../Utils/FuncUtils';
 import fetcher from '../fetcher';
 import useErrorNotification from '../useErrorNotification';
 
@@ -9,29 +9,29 @@ const today = new Date();
 
 const customFetcher = (
   url,
-  PageNumber,
-  PageSize,
-  DateFrom,
-  DateTo,
-  PayRunId,
-  PayRunTypeId,
-  PayRunSubTypeId,
-  PayRunStatusId
+  pageNumber,
+  pageSize,
+  dateFrom,
+  dateTo,
+  payRunId,
+  payRunTypeId,
+  payRunSubTypeId,
+  payRunStatusId
 ) =>
   fetcher(url, {
     params: {
-      PageNumber,
-      PageSize,
-      DateFrom,
-      DateTo,
-      PayRunId,
-      PayRunTypeId,
-      PayRunSubTypeId,
-      PayRunStatusId,
+      pageNumber,
+      pageSize,
+      dateFrom,
+      dateTo,
+      payRunId,
+      payRunTypeId,
+      payRunSubTypeId,
+      payRunStatusId,
     },
   });
 
-const usePayRunsSummaryList = (params = {}) => {
+const usePayRunsSummaryList = ({ params = {}, shouldFetch }) => {
   const {
     pageNumber = 1,
     pageSize = 10,
@@ -49,17 +49,19 @@ const usePayRunsSummaryList = (params = {}) => {
   }
 
   const { data, mutate, error } = useSWR(
-    [
-      '/transactions/pay-runs/summary-list',
-      pageNumber,
-      pageSize,
-      dateFrom,
-      dateTo,
-      payRunId,
-      payRunTypeId,
-      payRunSubTypeId,
-      payRunStatusId,
-    ],
+    shouldFetch
+      ? [
+          '/transactions/pay-runs/summary-list',
+          pageNumber,
+          pageSize,
+          dateFrom,
+          dateTo,
+          payRunId,
+          payRunTypeId,
+          payRunSubTypeId,
+          payRunStatusId,
+        ]
+      : null,
     customFetcher,
     {
       initialData: {

@@ -1,20 +1,23 @@
 import React from 'react';
+import { usePaymentDepartments } from '../../api/SWR';
+import usePackageGetAll from '../../api/SWR/package/usePackageGetAll';
 import Dropdown from '../Dropdown';
 import { Button } from '../Button';
 
 const HeldPaymentsFilters = ({
   filters,
-  serviceTypesOptions,
   changeFilter,
-  dateRangeOptions,
-  waitingOnOptions,
-  serviceUserOptions,
   applyFilters,
+  dateRangeOptions,
+  serviceUserOptions,
   supplierOptions,
 }) => {
+  const { options: packageTypeOptions } = usePackageGetAll();
+  const { options: waitingOnOptions } = usePaymentDepartments();
+
   const dropdowns = [
     { text: 'Date Range', options: dateRangeOptions, key: 'dateRange' },
-    { text: 'Service type', options: serviceTypesOptions, key: 'serviceType' },
+    { text: 'Service type', options: packageTypeOptions, key: 'serviceType' },
     { text: 'Waiting on', options: waitingOnOptions, key: 'waitingOn' },
     { text: 'Service User', options: serviceUserOptions, key: 'serviceUser' },
     { text: 'Supplier', options: supplierOptions, key: 'supplier' },
