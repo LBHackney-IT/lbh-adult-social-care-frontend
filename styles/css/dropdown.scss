@@ -27,10 +27,10 @@
     padding-left: 10px;
     padding-right: 10px;
     color: $lbh-text;
-  }
 
-  .dropdown-item-active {
-    color: $lbh-blue-highlight;
+    &:hover {
+      background: $lbh-gray;
+    }
   }
 
   &.is-active {
@@ -38,6 +38,10 @@
       transform: rotate(180deg);
     }
   }
+}
+
+.dropdown-item.dropdown-item-active {
+  color: $lbh-blue-highlight;
 }
 
 .dropdown-container {

@@ -3,6 +3,7 @@ import { Button } from '../Button';
 import Input from '../Input';
 import Dropdown from '../Dropdown';
 import DatePick from '../DatePick'
+import SearchSelector from '../SearchSelector'
 
 const initialFilters = {
   serviceUser: '',
@@ -76,12 +77,13 @@ const PayRunHeader = ({
           />
         </div>
         <div className="pay-run__dropdowns">
-          <Dropdown
-            initialText="Supplier"
-            className="pay-run__filter-item mr-3"
+          <SearchSelector
+            placeholder='Supplier'
+            value={filters.supplier}
             options={supplierOptions}
-            selectedValue={filters.supplier}
             onOptionSelect={(option) => changeFilter('supplier', option)}
+            keys={['text']}
+            className="pay-run__filter-item mr-3"
           />
           <Dropdown
             initialText="Type"

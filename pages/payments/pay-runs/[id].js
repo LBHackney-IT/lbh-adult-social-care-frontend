@@ -130,7 +130,7 @@ const PayRunPage = () => {
         pageNumber,
         searchTerm: filters?.serviceUser,
         invoiceStatusId: filters?.status,
-        supplierId: filters?.supplier,
+        supplierId: filters?.supplier?.value,
         packageTypeId: filters?.type,
         dateFrom: filters?.dateFrom?.getTime && filters.dateFrom.toJSON(),
         dateTo: filters?.dateTo?.getTime && filters.dateTo.toJSON(),
@@ -178,8 +178,8 @@ const PayRunPage = () => {
           pushNotification('Pay Run submitted for approval', 'success');
           setLoading(false);
         })
-        .catch(() => {
-          pushNotification('Can not submit for approve')
+        .catch((e) => {
+          pushNotification(e || 'Can not submit for approve')
           setLoading(false);
         });
     } else {
@@ -189,8 +189,8 @@ const PayRunPage = () => {
           pushNotification('Pay Run approved', 'success');
           setLoading(false);
         })
-        .catch(() => {
-          pushNotification('Can not submit for approve');
+        .catch((e) => {
+          pushNotification(e || 'Can not submit for approve');
           setLoading(false);
         });
     }
@@ -346,19 +346,15 @@ const PayRunPage = () => {
     text: item.statusName,
   }));
 
-  statusOptions.unshift({ value: '', text: 'Status' });
-
   const packageTypeOptions = packageTypes.map(item => ({
     value: item.packageTypeId,
     text: item.packageTypeName,
   }));
-  packageTypeOptions.unshift({value: '', text: 'Type' });
 
   const supplierOptions = suppliers.map(item => ({
     value: item.supplierId,
-    text: item.supplierName,
+    name: item.supplierName,
   }));
-  supplierOptions.unshift({value: '', text: 'Supplier' });
 
   return (
     <div className="pay-runs pay-run">
