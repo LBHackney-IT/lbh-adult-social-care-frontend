@@ -15,7 +15,7 @@ import {
   getBrokeredPackagesStages,
   putBrokeredPackagesAssign,
 } from '../../api/Dashboard/brokeredPackages';
-import { formatDate } from '../../service/helpers';
+import { formatDate, sortTableByKey } from '../../service/helpers';
 import CustomDropDown from '../../components/CustomDropdown';
 import Pagination from '../../components/Payments/Pagination';
 import {
@@ -189,6 +189,7 @@ const BrokerageHubPage = () => {
           OrderBy: sort.name,
           PageSize: 50,
         }).then((res) => {
+          sortTableByKey(res.data, sort)
           setTabsTable({
             ...tabsTable,
             [tab]: res.data,
@@ -224,7 +225,7 @@ const BrokerageHubPage = () => {
         return (
           <CustomDropDown
             onOptionSelect={brokeredPackagesAssign}
-            key={setPackageId(itemId)}
+            key={itemId}
             options={socialWorkerOptions}
             className="table__row-item"
             fields={{

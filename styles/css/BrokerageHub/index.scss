@@ -23,60 +23,60 @@
   .table {
     .sort {
       &:nth-child(1) {
-        width: 150px;
+        min-width: 150px;
       }
       &:nth-child(2) {
-        width: 90px;
+        min-width: 90px;
       }
       &:nth-child(3) {
         justify-content: center;
-        width: 100px;
+        min-width: 100px;
       }
       &:nth-child(4) {
-        width: 70px;
+        min-width: 70px;
       }
       &:nth-child(5) {
-        width: 100px;
+        min-width: 100px;
       }
       &:nth-child(6) {
-        width: 84px;
+        min-width: 84px;
       }
       &:nth-child(7) {
-        width: 84px;
+        min-width: 84px;
       }
       &:nth-child(8) {
-        width: 96px;
+        min-width: 96px;
       }
     }
 
     .table__row-item {
       font-size: 14px;
       &:nth-child(1) {
-        width: 150px;
+        min-width: 150px;
       }
       &:nth-child(2) {
-        width: 90px;
+        min-width: 90px;
       }
       &:nth-child(3) {
-        width: 100px;
+        min-width: 100px;
         font-size: 14px;
         text-align: center;
       }
       &:nth-child(4) {
-        width: 70px;
-        justify-content: flex-end;
+        min-width: 70px;
+        justify-content: center;
       }
       &:nth-child(5) {
-        width: 100px;
+        min-width: 100px;
       }
       &:nth-child(6) {
-        width: 84px;
+        min-width: 84px;
       }
       &:nth-child(7) {
-        width: 84px;
+        min-width: 84px;
       }
       &:nth-child(8) {
-        width: 96px;
+        min-width: 96px;
         text-align: center;
       }
     }
