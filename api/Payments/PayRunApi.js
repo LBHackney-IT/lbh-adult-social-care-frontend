@@ -7,7 +7,6 @@ import { requestMethods } from '../../constants/variables';
 
 const PAY_RUN_URL = `${BASE_URL}/v1/transactions/pay-runs`;
 const INVOICES_URL = `${BASE_URL}/v1/transactions/invoices`;
-const DEPARTMENTS_URL = `${BASE_URL}/v1/transactions/departments`;
 
 const sixMonthsAgo = moment().subtract(6, 'months');
 
@@ -175,11 +174,6 @@ const holdInvoicePayment = (payRunId, payRunItemId, holdReason = {}) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-const getHeldInvoicePayments = (params) => {
-  const query = `${INVOICES_URL}/held-invoice-payments`;
-  return axios.get(query, { params }).then(handleResponse).catch(handleError);
-};
-
 const rejectInvoicePayment = (payRunId, payRunItemId, holdReason = {}) => {
   const url = `${PAY_RUN_URL}/${payRunId}/invoices/${payRunItemId}/status/reject-invoice`;
   return axiosRequest({ url, data: holdReason, method: requestMethods.put });
@@ -232,7 +226,6 @@ export {
   releaseHeldInvoices,
   deleteDraftPayRun,
   holdInvoicePayment,
-  getHeldInvoicePayments,
   getInvoicePaymentStatuses,
   acceptInvoice,
   acceptInvoices,

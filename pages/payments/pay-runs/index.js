@@ -5,7 +5,6 @@ import { uniqBy, last } from 'lodash';
 import useSWR from 'swr';
 import {
   createNewPayRun,
-  getHeldInvoicePayments,
   getPayRunSummaryList,
   PAY_RUN_ENDPOINTS,
   PAY_RUN_TYPES,
@@ -37,7 +36,7 @@ import {
 import { axiosFetcher } from '../../../api/Utils/ApiUtils';
 import { DATA_TYPES, SWR_OPTIONS } from '../../../api/Utils/CommonOptions';
 import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from '../../../api/Mappers/PayRunMapper';
-import { usePaymentDepartments } from '../../../swrAPI';
+import { useHeldInvoicePayments, usePaymentDepartments } from '../../../swrAPI';
 
 const PAYMENT_TABS = [
   { text: 'Pay Runs', value: 'pay-runs' },
@@ -115,9 +114,6 @@ const PayRunsPage = () => {
     name: 'id',
     dataType: DATA_TYPES.STRING,
   });
-  const paginationInfo = listData[tab === 'pay-runs' ? 'payRun' : 'holdPayments']?.pagingMetaData || {};
-
-  const { data: paymentDepartments } = usePaymentDepartments();
 
   const [payRunFields] = useState({
     id: 'payRunId',
@@ -128,9 +124,16 @@ const PayRunsPage = () => {
     status: 'payRunStatusName',
   });
 
+  const [filters, setFilters] = useState({});
+
+  const { data: paymentDepartments } = usePaymentDepartments();
+  const { data: heldPayments, mutate: refetchHeldPayments } = useHeldInvoicePayments(filters);
+
   const isPayRunsTab = tab === 'pay-runs';
 
-  const filterOptions = useHeldPaymentsFilterOptions(listData.holdPayments.data);
+  const { pagingMetaData: paginationInfo } = isPayRunsTab ? listData.payRuns : heldPayments;
+
+  const filterOptions = useHeldPaymentsFilterOptions(heldPayments.data);
 
   const sortBy = (field, value, dataType) => {
     setSort({ value, name: field, dataType });
@@ -180,29 +183,10 @@ const PayRunsPage = () => {
     });
   };
 
-  const getHeldInvoices = async (filters = {}) => {
-    try {
-      const { dateRange = '', serviceType, serviceUser, supplier, waitingOn } = filters;
-      const [dateFrom, dateTo] = dateRange.split(' - ');
+  const getLists = (newFilters) => {
+    setFilters(newFilters);
 
-      const result = await getHeldInvoicePayments({
-        dateTo,
-        dateFrom,
-        pageNumber: page,
-        supplierId: supplier,
-        waitingOnId: waitingOn,
-        packageTypeId: serviceType,
-        serviceUserId: serviceUser,
-      });
-
-      changeListData('holdPayments', result);
-    } catch (error) {
-      dispatch(addNotification({ text: 'Can not get hold payments' }));
-    }
-  };
-
-  const getLists = (filters) => {
-    const { id = '', type = '', status = '' } = filters || {};
+    const { id = '', type = '', status = '' } = newFilters || {};
     let payRunTypeId = '';
     let payRunSubTypeId = '';
     if (!stringIsNullOrEmpty(type)) {
@@ -224,13 +208,7 @@ const PayRunsPage = () => {
         .catch((err) => {
           dispatch(addNotification({ text: `Can not get hold payments: ${err?.message}` }));
         });
-    } else {
-      getHeldInvoices(filters);
     }
-  };
-
-  const getHelds = () => {
-    getHeldInvoices();
   };
 
   useEffect(() => {
@@ -250,8 +228,6 @@ const PayRunsPage = () => {
         else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberDescending(data, fieldName);
       }
       changeListData('payRuns', { data: sortedList, pagingMetaData });
-    } else if (tab === 'held-payments') {
-      console.log(listData?.holdPayments?.data);
     }
   }, [sort]);
 
@@ -264,8 +240,6 @@ const PayRunsPage = () => {
         .catch(() => {
           dispatch(addNotification({ text: 'Can not get hold payments' }));
         });
-    } else {
-      getHelds();
     }
   }, [tab, page]);
 
@@ -273,7 +247,7 @@ const PayRunsPage = () => {
     try {
       await releaseSingleHeldInvoice(item.payRunId, invoice.invoiceId);
       dispatch(addNotification({ text: `Release invoice ${item.invoiceId}`, className: 'success' }));
-      await getHeldInvoices();
+      await refetchHeldPayments();
     } catch (error) {
       dispatch(addNotification({ text: 'Can not release invoices' }));
     }
@@ -306,7 +280,7 @@ const PayRunsPage = () => {
       dispatch(addNotification({ text: 'Release Success', className: 'success' }));
       setCheckedRows([]);
 
-      await getHeldInvoices();
+      await refetchHeldPayments();
     } catch (error) {
       dispatch(addNotification({ text: 'Release Fail' }));
     }
@@ -352,7 +326,7 @@ const PayRunsPage = () => {
           waitingOn={waitingOn}
           changeWaitingOn={changeWaitingOn}
           currentUserInfo={openedInvoiceChat}
-          updateChat={getHelds}
+          updateChat={refetchHeldPayments}
           currentUserId={openedInvoiceChat.creatorId}
           messages={openedInvoiceChat.disputedInvoiceChat}
           waitingOnOptions={paymentDepartments.map((el) => ({ value: el.departmentId, text: el.departmentName }))}
@@ -396,7 +370,7 @@ const PayRunsPage = () => {
           canCollapseRows
           release={releaseOne}
           releaseAllSelected={releaseAllSelected}
-          rows={listData.holdPayments.data}
+          rows={heldPayments.data}
           sortBy={sortBy}
           sorts={SORTS_TAB[tab]}
         />
