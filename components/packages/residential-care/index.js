@@ -95,7 +95,9 @@ const PackagesResidentialCare = ({
     !!(
       !isNaN(Number(brokerageInfoForCreation?.residentialCore)) &&
       !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
-      !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
+      !isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff)) &&
+      selectedSupplierType &&
+      selectedStageType
     );
 
   const handleSaveBrokerage = (event) => {
