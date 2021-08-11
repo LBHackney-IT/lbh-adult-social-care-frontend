@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { uniqBy, last } from 'lodash';
+import { pick } from 'lodash';
 import {
   createNewPayRun,
   PAY_RUN_TYPES,
@@ -21,7 +21,6 @@ import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import {
-  getEnGBFormattedDate,
   sortArrayOfObjectsByDateAscending,
   sortArrayOfObjectsByDateDescending,
   sortArrayOfObjectsByNumberAscending,
@@ -31,15 +30,10 @@ import {
 } from '../../../api/Utils/FuncUtils';
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
 import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from '../../../api/Mappers/PayRunMapper';
-import {
-  useHeldInvoicePayments,
-  usePaymentDepartments,
-  usePayRunSubTypes,
-  usePayRunTypes,
-  useUniquePayRunStatuses,
-} from '../../../swrAPI';
+import { useHeldInvoicePayments, usePayRunSubTypes, usePayRunTypes, useUniquePayRunStatuses } from '../../../swrAPI';
 import usePayRunsSummaryList from '../../../swrAPI/transactions/usePayRunsSummaryList';
 import { PAY_RUN_FIELDS, PAY_RUN_ROWS_RULES, PAYMENT_TABS, SORTS_TAB, TABS_CLASSES } from './constants';
+import { useHeldPaymentsFilterOptions } from './useHeldPaymentsFilterOptions';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -75,10 +69,14 @@ const PayRunsPage = () => {
 
   const { data: payRunTypes } = usePayRunTypes();
   const { data: payRunSubTypes } = usePayRunSubTypes();
-  const { data: paymentDepartments } = usePaymentDepartments();
   const { data: uniquePayRunStatuses } = useUniquePayRunStatuses();
-  const { data: heldPayments, mutate: refetchHeldPayments } = useHeldInvoicePayments(filters);
-  const { data: summaryList } = usePayRunsSummaryList({ ...filters, pageNumber: page });
+  const { data: heldPayments, mutate: refetchHeldPayments } = useHeldInvoicePayments(
+    pick(filters, ['dateFrom', 'dateTo', 'serviceType', 'serviceUser', 'supplier', 'waitingOn'])
+  );
+  const { data: summaryList } = usePayRunsSummaryList({
+    ...pick(filters, ['id', 'type', 'status']),
+    pageNumber: page,
+  });
 
   const isPayRunsTab = tab === 'pay-runs';
 
@@ -218,7 +216,7 @@ const PayRunsPage = () => {
           updateChat={refetchHeldPayments}
           currentUserId={openedInvoiceChat.creatorId}
           messages={openedInvoiceChat.disputedInvoiceChat}
-          waitingOnOptions={paymentDepartments.map((el) => ({ value: el.departmentId, text: el.departmentName }))}
+          waitingOnOptions={filterOptions.waitingOnOptions}
         />
       )}
 
@@ -232,7 +230,7 @@ const PayRunsPage = () => {
         setOpenedPopup={setOpenedPopup}
         dateRangeOptions={filterOptions.dateRangeOptions}
         waitingOnOptions={filterOptions.waitingOnOptions}
-        serviceTypesOptions={filterOptions.serviceTypesOptions}
+        serviceTypesOptions={filterOptions.packageTypeOptions}
         serviceUserOptions={filterOptions.serviceUserOptions}
         supplierOptions={filterOptions.supplierOptions}
       />
@@ -275,46 +273,6 @@ const PayRunsPage = () => {
       <HackneyFooterInfo />
     </div>
   );
-};
-
-const useHeldPaymentsFilterOptions = (data = []) => {
-  const createUniqueOptions = (values) => uniqBy(values, 'value');
-  const getAllInvoiceValues = (key) =>
-    data.reduce((acc, { invoices }) => {
-      invoices.forEach((invoice) => acc.push({ value: invoice[`${key}Id`], text: invoice[`${key}Name`] }));
-      return acc;
-    }, []);
-
-  const dateRangeOptions = uniqBy(
-    data.map(({ dateFrom, dateTo }) => ({
-      value: `${dateFrom} - ${dateTo}`,
-      text: `${getEnGBFormattedDate(dateFrom)} - ${getEnGBFormattedDate(dateTo)}`,
-    })),
-    'value'
-  );
-  const serviceTypesOptions = createUniqueOptions(getAllInvoiceValues('packageType'));
-  const serviceUserOptions = createUniqueOptions(getAllInvoiceValues('serviceUser'));
-  const supplierOptions = createUniqueOptions(getAllInvoiceValues('supplier'));
-
-  const waitingOnOptions = createUniqueOptions(
-    data.reduce((acc, { invoices }) => {
-      invoices.forEach(({ disputedInvoiceChat }) => {
-        acc.push({
-          value: last(disputedInvoiceChat).actionRequiredFromId,
-          text: last(disputedInvoiceChat).actionRequiredFromName,
-        });
-      });
-      return acc;
-    }, [])
-  );
-
-  return {
-    dateRangeOptions,
-    serviceTypesOptions,
-    waitingOnOptions,
-    serviceUserOptions,
-    supplierOptions,
-  };
 };
 
 export default PayRunsPage;

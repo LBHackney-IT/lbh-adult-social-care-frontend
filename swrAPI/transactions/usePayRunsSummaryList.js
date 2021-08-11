@@ -5,6 +5,7 @@ import fetcher from '../fetcher';
 import useErrorNotification from '../useErrorNotification';
 
 const sixMonthsAgo = moment().subtract(6, 'months');
+const today = new Date();
 
 const customFetcher = (
   url,
@@ -34,8 +35,8 @@ const usePayRunsSummaryList = (params = {}) => {
   const {
     pageNumber = 1,
     pageSize = 10,
-    dateFrom = new Date(sixMonthsAgo).toJSON(),
-    dateTo = new Date().toJSON(),
+    dateFrom = sixMonthsAgo.toJSON(),
+    dateTo = today.toJSON(),
     id: payRunId,
     status: payRunStatusId,
     type,

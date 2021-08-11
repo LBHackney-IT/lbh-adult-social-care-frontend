@@ -2,12 +2,12 @@ import useSWR from 'swr';
 import fetcher from '../fetcher';
 import useErrorNotification from '../useErrorNotification';
 
-const customFetcher = (url, dateFrom, dateTo, serviceType, serviceUser, supplier, waitingOn) =>
+const customFetcher = (url, DateFrom, DateTo, PackageTypeId, ServiceUserId, SupplierId, WaitingOnId) =>
   fetcher(url, {
-    params: { dateFrom, dateTo, serviceType, serviceUser, supplier, waitingOn },
+    params: { DateFrom, DateTo, PackageTypeId, ServiceUserId, SupplierId, WaitingOnId },
   });
 
-const useHeldInvoicePayments = (params) => {
+const useHeldInvoicePayments = (params = {}) => {
   const { dateRange = '', serviceType, serviceUser, supplier, waitingOn } = params;
   const [dateFrom, dateTo] = dateRange.split(' - ');
 
