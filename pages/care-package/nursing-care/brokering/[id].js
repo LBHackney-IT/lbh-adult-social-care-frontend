@@ -99,7 +99,7 @@ const NursingCareBrokering = ({
   const retrieveSupplierOptions = () => {
     getSupplierList()
       .then((response) => {
-        setSupplierOptions(mapBrokerageSupplierOptions(response));
+        setSupplierOptions(mapBrokerageSupplierOptions(response.data));
       })
       .catch((error) => {
         setErrors([...errors, `Retrieve supplier options failed. ${error.message}`]);
