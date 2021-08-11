@@ -6,8 +6,8 @@ const useErrorNotification = (error, text) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (error) dispatch(addNotification({ text }));
-  }, [error]);
+    if (error && text) dispatch(addNotification({ text }));
+  }, [error, text]);
 };
 
 export default useErrorNotification;

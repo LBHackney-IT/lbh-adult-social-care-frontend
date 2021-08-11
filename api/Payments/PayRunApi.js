@@ -203,12 +203,6 @@ const acceptInvoices = (payRunId, invoices) => {
   return axiosRequest({ url, data: invoices, method: requestMethods.put });
 };
 
-const PAY_RUN_ENDPOINTS = {
-  GET_ALL_PAY_RUN_TYPES: `${PAY_RUN_URL}/pay-run-types`,
-  GET_ALL_PAY_RUN_SUB_TYPES: `${PAY_RUN_URL}/pay-run-sub-types`,
-  GET_ALL_UNIQUE_PAY_RUN_STATUSES: `${PAY_RUN_URL}/unique-pay-run-statuses`,
-};
-
 export {
   getPayRunSummaryList,
   createNewPayRun,
@@ -232,5 +226,4 @@ export {
   sendMessage,
   getDateOfLastPayRun,
   rejectInvoicePayment,
-  PAY_RUN_ENDPOINTS,
 };

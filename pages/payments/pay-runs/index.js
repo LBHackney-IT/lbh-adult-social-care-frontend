@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { uniqBy, last } from 'lodash';
-import useSWR from 'swr';
 import {
   createNewPayRun,
   getPayRunSummaryList,
-  PAY_RUN_ENDPOINTS,
   PAY_RUN_TYPES,
   releaseHeldInvoices,
   releaseSingleHeldInvoice,
@@ -33,10 +31,15 @@ import {
   sortArrayOfObjectsByStringDescending,
   stringIsNullOrEmpty,
 } from '../../../api/Utils/FuncUtils';
-import { axiosFetcher } from '../../../api/Utils/ApiUtils';
-import { DATA_TYPES, SWR_OPTIONS } from '../../../api/Utils/CommonOptions';
+import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
 import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from '../../../api/Mappers/PayRunMapper';
-import { useHeldInvoicePayments, usePaymentDepartments } from '../../../swrAPI';
+import {
+  useHeldInvoicePayments,
+  usePaymentDepartments,
+  usePayRunSubTypes,
+  usePayRunTypes,
+  useUniquePayRunStatuses,
+} from '../../../swrAPI';
 
 const PAYMENT_TABS = [
   { text: 'Pay Runs', value: 'pay-runs' },
@@ -126,7 +129,10 @@ const PayRunsPage = () => {
 
   const [filters, setFilters] = useState({});
 
+  const { data: payRunTypes } = usePayRunTypes();
+  const { data: payRunSubTypes } = usePayRunSubTypes();
   const { data: paymentDepartments } = usePaymentDepartments();
+  const { data: uniquePayRunStatuses } = useUniquePayRunStatuses();
   const { data: heldPayments, mutate: refetchHeldPayments } = useHeldInvoicePayments(filters);
 
   const isPayRunsTab = tab === 'pay-runs';
@@ -285,22 +291,6 @@ const PayRunsPage = () => {
       dispatch(addNotification({ text: 'Release Fail' }));
     }
   };
-
-  const { data: payRunTypes = [] } = useSWR(
-    PAY_RUN_ENDPOINTS.GET_ALL_PAY_RUN_TYPES,
-    axiosFetcher,
-    SWR_OPTIONS.REVALIDATE_ON_MOUNT
-  );
-  const { data: payRunSubTypes = [] } = useSWR(
-    PAY_RUN_ENDPOINTS.GET_ALL_PAY_RUN_SUB_TYPES,
-    axiosFetcher,
-    SWR_OPTIONS.REVALIDATE_ON_MOUNT
-  );
-  const { data: uniquePayRunStatuses = [] } = useSWR(
-    PAY_RUN_ENDPOINTS.GET_ALL_UNIQUE_PAY_RUN_STATUSES,
-    axiosFetcher,
-    SWR_OPTIONS.REVALIDATE_ON_MOUNT
-  );
 
   return (
     <div className={`pay-runs ${tab}__tab-class`}>
