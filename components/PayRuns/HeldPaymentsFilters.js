@@ -16,8 +16,8 @@ const HeldPaymentsFilters = ({ filters, changeFilter, applyFilters, dateRangeOpt
     { text: 'Date Range', options: dateRangeOptions, key: 'dateRange' },
     { text: 'Service type', options: packageTypeOptions, key: 'serviceType' },
     { text: 'Waiting on', options: waitingOnOptions, key: 'waitingOn' },
-    { text: 'Service User', key: 'serviceUser', endpoint: 'clients/get-all' },
-    { text: 'Supplier', key: 'supplier', endpoint: 'suppliers/get-all' },
+    { text: 'Service User', key: 'serviceUser', endpoint: 'clients' },
+    { text: 'Supplier', key: 'supplier', endpoint: 'suppliers' },
   ];
 
   return (
@@ -25,22 +25,28 @@ const HeldPaymentsFilters = ({ filters, changeFilter, applyFilters, dateRangeOpt
       <div className="held-payments__filters">
         {dropdowns.map(({ text, options, key, endpoint }) => {
           if (endpoint) {
+            const isClient = endpoint === 'clients';
+            const filterKey = isClient ? 'clientName' : 'supplierName';
+
+            const loadOptions = async (searchText) => {
+              const { data } = await axios.get(`${BASE_URL}/v1/${endpoint}/get-all`, {
+                params: { [filterKey]: searchText },
+              });
+              return data.data;
+            };
+
             return (
               <AsyncSelect
                 onChange={(option) => changeFilter(key, option.id)}
                 getOptionValue={(option) => option.id}
-                getOptionLabel={(option) => option[`${key}Name`]}
-                loadOptions={async (searchText) => {
-                  const { data } = await axios.get(`${BASE_URL}/v1/${endpoint}`, {
-                    params: { searchBy: searchText },
-                  });
-                  return data.data;
-                }}
+                getOptionLabel={(option) => (isClient ? `${option.firstName} ${option.lastName}` : option.supplierName)}
+                loadOptions={loadOptions}
                 components={{ DropdownIndicator: CaretDownIcon }}
                 classNamePrefix="held-payments-select"
                 className="held-payments-select"
                 placeholder={text}
                 defaultOptions
+                cacheOptions
               />
             );
           }
