@@ -5,9 +5,7 @@ import { uniqBy, last } from 'lodash';
 import useSWR from 'swr';
 import {
   createNewPayRun,
-  getAllInvoiceStatuses,
   getHeldInvoicePayments,
-  getPaymentDepartments,
   getPayRunSummaryList,
   PAY_RUN_ENDPOINTS,
   PAY_RUN_TYPES,
@@ -39,6 +37,7 @@ import {
 import { axiosFetcher } from '../../../api/Utils/ApiUtils';
 import { DATA_TYPES, SWR_OPTIONS } from '../../../api/Utils/CommonOptions';
 import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from '../../../api/Mappers/PayRunMapper';
+import { usePaymentDepartments } from '../../../swrAPI';
 
 const PAYMENT_TABS = [
   { text: 'Pay Runs', value: 'pay-runs' },
@@ -106,7 +105,6 @@ const PayRunsPage = () => {
   const [newMessageText, setNewMessageText] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
   const [tab, changeTab] = useState('pay-runs');
-  const [invoiceStatuses, setInvoiceStatuses] = useState([]);
   const [listData, setListData] = useState({
     payRuns: {},
     holdPayments: {},
@@ -118,6 +116,8 @@ const PayRunsPage = () => {
     dataType: DATA_TYPES.STRING,
   });
   const paginationInfo = listData[tab === 'pay-runs' ? 'payRun' : 'holdPayments']?.pagingMetaData || {};
+
+  const { data: paymentDepartments } = usePaymentDepartments();
 
   const [payRunFields] = useState({
     id: 'payRunId',
@@ -231,10 +231,6 @@ const PayRunsPage = () => {
 
   const getHelds = () => {
     getHeldInvoices();
-
-    getPaymentDepartments()
-      .then((res) => changeWaitingOn(res))
-      .catch(() => dispatch(addNotification({ text: 'Fail get departments' })));
   };
 
   useEffect(() => {
@@ -272,12 +268,6 @@ const PayRunsPage = () => {
       getHelds();
     }
   }, [tab, page]);
-
-  useEffect(() => {
-    getAllInvoiceStatuses()
-      .then(setInvoiceStatuses)
-      .catch(() => dispatch(addNotification({ text: 'Can not get all invoice statuses' })));
-  }, []);
 
   const releaseOne = async (item, invoice) => {
     try {
@@ -365,6 +355,7 @@ const PayRunsPage = () => {
           updateChat={getHelds}
           currentUserId={openedInvoiceChat.creatorId}
           messages={openedInvoiceChat.disputedInvoiceChat}
+          waitingOnOptions={paymentDepartments.map((el) => ({ value: el.departmentId, text: el.departmentName }))}
         />
       )}
 
@@ -408,7 +399,6 @@ const PayRunsPage = () => {
           rows={listData.holdPayments.data}
           sortBy={sortBy}
           sorts={SORTS_TAB[tab]}
-          invoiceStatuses={invoiceStatuses}
         />
       )}
 

@@ -79,17 +79,16 @@ const getReleasedHoldsList = (fromDate = new Date(sixMonthsAgo).toJSON(), toDate
 };
 
 const getSinglePayRunDetails = ({
-    payRunId,
-    pageNumber = 1,
-    pageSize = 10,
-    dateFrom = '',
-    dateTo = '',
-    supplierId = '',
-    packageTypeId = '',
-    invoiceStatusId = '',
-    searchTerm = ''
-  }
-) => {
+  payRunId,
+  pageNumber = 1,
+  pageSize = 10,
+  dateFrom = '',
+  dateTo = '',
+  supplierId = '',
+  packageTypeId = '',
+  invoiceStatusId = '',
+  searchTerm = '',
+}) => {
   const query = `${PAY_RUN_URL}/${payRunId}/details?pageNumber=${pageNumber}&pageSize=${pageSize}&supplierId=${supplierId}&packageTypeId=${packageTypeId}&invoiceStatusId=${invoiceStatusId}&searchTerm=${searchTerm}&dateFrom=${dateFrom}&dateTo=${dateTo}`;
   return axios.get(query).then(handleResponse).catch(handleError);
 };
@@ -183,12 +182,7 @@ const getHeldInvoicePayments = (params) => {
 
 const rejectInvoicePayment = (payRunId, payRunItemId, holdReason = {}) => {
   const url = `${PAY_RUN_URL}/${payRunId}/invoices/${payRunItemId}/status/reject-invoice`;
-  return axiosRequest({ url, data: holdReason, method: requestMethods.put })
-};
-
-const getAllInvoiceStatuses = () => {
-  const query = `${INVOICES_URL}/invoice-status-list`;
-  return axios.get(query).then(handleResponse).catch(handleError);
+  return axiosRequest({ url, data: holdReason, method: requestMethods.put });
 };
 
 const getInvoicePaymentStatuses = () => {
@@ -215,11 +209,6 @@ const acceptInvoices = (payRunId, invoices) => {
   return axiosRequest({ url, data: invoices, method: requestMethods.put });
 };
 
-const getPaymentDepartments = () => {
-  const query = `${DEPARTMENTS_URL}/payment-departments`;
-  return axios.get(query).then(handleResponse).catch(handleError);
-};
-
 const PAY_RUN_ENDPOINTS = {
   GET_ALL_PAY_RUN_TYPES: `${PAY_RUN_URL}/pay-run-types`,
   GET_ALL_PAY_RUN_SUB_TYPES: `${PAY_RUN_URL}/pay-run-sub-types`,
@@ -244,12 +233,10 @@ export {
   deleteDraftPayRun,
   holdInvoicePayment,
   getHeldInvoicePayments,
-  getAllInvoiceStatuses,
   getInvoicePaymentStatuses,
   acceptInvoice,
   acceptInvoices,
   sendMessage,
-  getPaymentDepartments,
   getDateOfLastPayRun,
   rejectInvoicePayment,
   PAY_RUN_ENDPOINTS,
