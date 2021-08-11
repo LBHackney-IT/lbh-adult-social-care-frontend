@@ -12,6 +12,7 @@ const HeldPaymentsFilters = ({ filters, changeFilter, applyFilters, dateRangeOpt
   const { options: waitingOnOptions } = usePaymentDepartments();
 
   const dropdowns = [
+    // todo: replace with Date Picker to select a range
     { text: 'Date Range', options: dateRangeOptions, key: 'dateRange' },
     { text: 'Service type', options: packageTypeOptions, key: 'serviceType' },
     { text: 'Waiting on', options: waitingOnOptions, key: 'waitingOn' },
