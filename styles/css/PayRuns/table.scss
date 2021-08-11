@@ -70,6 +70,15 @@
 }
 
 .pay-run {
+  .react-date-picker__input {
+    height: 42px;
+
+    &::placeholder {
+      color: $lbh-black1;
+      font-weight: initial;
+      font-family: "OpenSans", sans-serif;
+    }
+  }
   .table-pagination {
     & > button {
       margin-right: auto;

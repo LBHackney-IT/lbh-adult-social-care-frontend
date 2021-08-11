@@ -7,6 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 const DatePick = ({
   selectsRange,
   inline,
+  placeholder,
   startDate = new Date(),
   endDate = '',
   error,
@@ -26,6 +27,7 @@ const DatePick = ({
         setDate(value);
       }}
       startDate={startDate}
+      placeholderText={placeholder}
       endDate={endDate}
       selectsRange={selectsRange}
       selected={dateValue}

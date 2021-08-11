@@ -29,6 +29,10 @@
     color: $lbh-text;
   }
 
+  .dropdown-item-active {
+    color: $lbh-blue-highlight;
+  }
+
   &.is-active {
     .icon {
       transform: rotate(180deg);
@@ -39,4 +43,7 @@
 .dropdown-container {
   display: flex;
   flex-direction: column;
+  .button {
+    justify-content: space-between;
+  }
 }

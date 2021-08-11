@@ -1,7 +1,11 @@
 .login-page__form-container {
-  width: 30%;
+  width: 380px;
   margin: 0 auto 200px auto;
   padding-top: 168px;
+
+  @include media-mobile {
+    width: 320px;
+  }
 }
 
 .login-page__form {
@@ -15,6 +19,11 @@
     height: 80px;
     margin-top: 16px;
     font-size: 19px;
+
+    @include media-mobile {
+      width: initial;
+      height: initial;
+    }
 
     a {
       color: white;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import Dropdown from '../Dropdown';
 import { Button } from '../Button';
 
@@ -11,6 +11,8 @@ const HeldPaymentsFilters = ({
   serviceUserOptions,
   applyFilters,
   supplierOptions,
+  clearFilters,
+  hasFields,
 }) => {
   const dropdowns = [
     { text: 'Date Range', options: dateRangeOptions, key: 'dateRange' },
@@ -35,7 +37,10 @@ const HeldPaymentsFilters = ({
         ))}
       </div>
 
-      <Button onClick={applyFilters}>Filter</Button>
+      <div className='button-group'>
+        <Button onClick={applyFilters}>Filter</Button>
+        {hasFields && <Button className='outline gray ml-3' onClick={clearFilters}>Clear</Button> }
+      </div>
     </>
   );
 };

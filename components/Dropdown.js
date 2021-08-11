@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
 import BaseField from './baseComponents/BaseField';
-import OutsideTrigger from './OutsideTrigger';
 import { CaretDownIcon } from './Icons';
 import ErrorField from './ErrorField';
 
@@ -39,6 +37,7 @@ const Dropdown = ({
   };
 
   const onOptionClick = (event, option) => {
+    console.log(option);
     event.stopPropagation();
     setSelectedOption(option);
     onOptionSelect(option.value);
@@ -49,11 +48,13 @@ const Dropdown = ({
   return (
     <BaseField classes={`${className} dropdown-container`} label={label}>
       <div
+        tabIndex="0"
+        onBlur={() => setIsActive(false)}
         data-selected-value={selectedOption?.value}
         className={`dropdown${isActive ? ' is-active' : ''}${isUp ? ' is-up' : ''}`}
       >
         <div className="dropdown-trigger" onClick={(event) => onTriggerClick(event)}>
-          <button
+          <div
             className={`button ${buttonClassName}`}
             aria-haspopup="true"
             aria-controls="dropdown-menu"
@@ -69,21 +70,24 @@ const Dropdown = ({
                 </span>
               </>
             )}
-          </button>
-        </div>
-        <OutsideTrigger onClick={() => setIsActive(false)} className="dropdown-menu" id="dropdown-menu" role="menu">
-          <div className="dropdown-content">
-            {options.map((optionItem) => (
-              <div
-                key={optionItem.value}
-                className="dropdown-item"
-                onClick={(event) => onOptionClick(event, optionItem)}
-              >
-                {optionItem.text}
-              </div>
-            ))}
           </div>
-        </OutsideTrigger>
+        </div>
+        <div className="dropdown-menu" id="dropdown-menu" role="menu">
+          <div className="dropdown-content">
+            {options.map((optionItem) => {
+              const activeItemClass = optionItem.value === selectedValue ? ' dropdown-item-active' : '';
+              return (
+                <div
+                  key={optionItem.value}
+                  className={`dropdown-item${activeItemClass}`}
+                  onClick={(event) => onOptionClick(event, optionItem)}
+                >
+                  {optionItem.text}
+                </div>
+              )
+            })}
+          </div>
+        </div>
       </div>
       {error && <ErrorField text={error} />}
     </BaseField>

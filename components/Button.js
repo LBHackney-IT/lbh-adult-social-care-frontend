@@ -1,4 +1,5 @@
 import React from 'react';
+import Loading from './Loading'
 // Get/build the passed class name
 const getClassName = (className = '', linkBtn = false) => (linkBtn ? 'link-button' : `button button-base ${className}`);
 
@@ -12,13 +13,13 @@ const getButtonContent = (Icon, text) => (
   </>
 );
 
-const Button = ({ onClick = () => {}, className, disabled = false, linkBtn = false, Icon, ...props }) => {
+const Button = ({ loading, onClick = () => {}, className, disabled = false, linkBtn = false, Icon, ...props }) => {
   const classNameValue = getClassName(className, linkBtn);
   const buttonContent = getButtonContent(Icon, props.children);
 
   return (
     <button className={classNameValue} onClick={onClick} disabled={disabled} type="button">
-      {buttonContent}
+      {loading ? <Loading /> : buttonContent}
     </button>
   );
 };

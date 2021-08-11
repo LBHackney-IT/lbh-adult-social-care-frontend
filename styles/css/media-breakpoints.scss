@@ -74,6 +74,12 @@ $max-ipod-width: 1172px;
   }
 }
 
+@mixin media-desktop-down {
+  @media (max-width: 1200px) {
+    @content;
+  }
+}
+
 @mixin media-desktop-xl {
   @media (min-width: 1600px) {
     @content;

@@ -49,6 +49,22 @@ const PayRunsHeader = ({
     });
   };
 
+  const [hasFields, setHasFields] = useState(false);
+
+  const clearFilters = () => {
+    setHasFields(false);
+    setFilters({...initialFilters});
+  }
+
+  useEffect(() => {
+    for(const name in filters) {
+      if(filters[name]) {
+        setHasFields(true);
+        break;
+      }
+    }
+  }, [filters]);
+
   const tabInfos = {
     'pay-runs': {
       title: 'Pay Runs',
@@ -61,8 +77,10 @@ const PayRunsHeader = ({
           dateOptions={dateOptions}
           statusOptions={statusOptions}
           applyFilters={applyFilters}
+          hasFields={hasFields}
           changeFilter={changeFilter}
           filters={filters}
+          clearFilters={clearFilters}
           searchId={searchId}
           typeOptions={typeOptions}
         />
@@ -75,11 +93,13 @@ const PayRunsHeader = ({
       filtersComponent: (
         <HeldPaymentsFilters
           applyFilters={applyFilters}
+          hasFields={hasFields}
           dateRangeOptions={dateRangeOptions}
           serviceTypesOptions={serviceTypesOptions}
           serviceUserOptions={serviceUserOptions}
           supplierOptions={supplierOptions}
           waitingOnOptions={waitingOnOptions}
+          clearFilters={clearFilters}
           changeFilter={changeFilter}
           filters={filters}
           typeOptions={typeOptions}
@@ -89,7 +109,7 @@ const PayRunsHeader = ({
   };
 
   useEffect(() => {
-    setFilters({ ...initialFilters });
+    clearFilters()
   }, [tab]);
 
   return (

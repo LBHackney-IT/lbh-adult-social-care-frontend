@@ -25,6 +25,7 @@ const PayRunHeader = ({
   clickActionButton = () => {},
 }) => {
   const [filters, setFilters] = useState({ ...initialFilters });
+  const [hasFields, setHasFields] = useState(false);
 
   const applyFilters = () => {
     filter(filters);
@@ -41,15 +42,14 @@ const PayRunHeader = ({
     });
   };
 
-  let hasFields = false;
-  for(const name in filters) {
-    if(filters[name]) {
-      hasFields = true;
-    }
-  }
-
   useEffect(() => {
     changeFilters(filters)
+    for(const name in filters) {
+      if(filters[name]) {
+        setHasFields(true);
+        break;
+      }
+    }
   }, [filters]);
 
   return (
@@ -73,13 +73,6 @@ const PayRunHeader = ({
             search={searchId}
             placeholder="Invoice No"
             onChange={(value) => changeFilter('invoiceNo', value)}
-          />
-          <Input
-            classes="mr-3 pay-run__filter-item"
-            value={filters.packageId}
-            search={searchId}
-            placeholder="Package ID"
-            onChange={(value) => changeFilter('packageId', value)}
           />
         </div>
         <div className="pay-run__dropdowns">
@@ -107,6 +100,7 @@ const PayRunHeader = ({
           <DatePick
             classes='pay-run__filter-item mr-3'
             dateValue={filters.dateFrom}
+            placeholder='Data range'
             startDate={filters.dateFrom}
             endDate={filters.dateTo}
             setDate={(value) => {
@@ -119,7 +113,10 @@ const PayRunHeader = ({
             selectsRange
           />
           <Button onClick={applyFilters}>Filter</Button>
-          {hasFields && <Button onClick={() => setFilters({...initialFilters})}>Clear</Button> }
+          {hasFields && <Button className='outline gray ml-3' onClick={() => {
+            setFilters({...initialFilters})
+            setHasFields(false);
+          }}>Clear</Button> }
         </div>
       </div>
     </div>

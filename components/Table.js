@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SortTable from './SortTable';
 import Checkbox from './Checkbox';
+import Loading from './Loading'
 
 const Table = ({
   changeAllChecked,
@@ -14,6 +15,7 @@ const Table = ({
   checkedRows,
   canCollapseRows,
   getCollapsedContainer,
+  loading,
 }) => {
   const [defaultFields] = useState(fields);
   const { tab } = fields;
@@ -40,6 +42,7 @@ const Table = ({
   return (
     <div className={`table ${className}`}>
       <SortTable fields={fields} checkedRows={checkedRows} changeAllChecked={changeAllChecked} rows={rows} sortBy={sortBy} sorts={sorts} />
+      {loading && <Loading className='table-loading' />}
       {!rows.length ? (
         <p className="ml-2">No Table Data</p>
       ) : (
@@ -72,9 +75,8 @@ const Table = ({
 
                       if (currentRowRule?.type === 'checkbox') {
                         return (
-                          <div className='table__row-item-checkbox table__row-item'>
+                          <div key={`${rowItemName}${id}`} className='table__row-item-checkbox table__row-item'>
                             <Checkbox
-                              key={`${rowItemName}${id}`}
                               onChange={(checkedValue, event) => {
                                 event.stopPropagation();
                                 currentRowRule.onChange(checkedValue, item)

@@ -24,7 +24,7 @@ import { addNotification } from '../../../reducers/notificationsReducer';
 import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
 import ChatButton from '../../../components/PayRuns/ChatButton';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { getUserSession } from '../../../service/helpers';
+import { formatStatus, getUserSession } from '../../../service/helpers'
 import withSession from '../../../lib/session';
 import {
   getEnGBFormattedDate,
@@ -76,7 +76,8 @@ const PAY_RUN_ROWS_RULES = {
     getClassName: () => 'button-link',
   },
   payRunStatusName: {
-    getClassName: (value) => `${value} table__row-item-status`,
+    getClassName: (value) => `${formatStatus(value)} table__row-item-status`,
+    getValue: (value) => formatStatus(value, ' ', true),
   },
   dateCreated: {
     getValue: (value) => getEnGBFormattedDate(value),
@@ -94,11 +95,11 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const PayRunsPage = () => {
   const dispatch = useDispatch();
-
   const router = useRouter();
   const [openedPopup, setOpenedPopup] = useState('');
   const [date, setDate] = useState(new Date());
   const [checkedRows, setCheckedRows] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [openedInvoiceChat, setOpenedInvoiceChat] = useState({});
   const [hocAndRelease, changeHocAndRelease] = useState('');
   const [newPayRunType, setNewPayRunType] = useState('');
@@ -111,13 +112,13 @@ const PayRunsPage = () => {
     payRuns: {},
     holdPayments: {},
   });
-  const [page] = useState(1);
+  const [page, setPage] = useState(1);
   const [sort, setSort] = useState({
     value: 'increase',
     name: 'id',
     dataType: DATA_TYPES.STRING,
   });
-  const paginationInfo = listData[tab === 'pay-runs' ? 'payRun' : 'holdPayments']?.pagingMetaData || {};
+  const paginationInfo = listData[tab === 'pay-runs' ? 'payRuns' : 'holdPayments']?.pagingMetaData || {};
 
   const [payRunFields] = useState({
     id: 'payRunId',
@@ -185,6 +186,7 @@ const PayRunsPage = () => {
       const { dateRange = '', serviceType, serviceUser, supplier, waitingOn } = filters;
       const [dateFrom, dateTo] = dateRange.split(' - ');
 
+      setLoading(true);
       const result = await getHeldInvoicePayments({
         dateTo,
         dateFrom,
@@ -199,6 +201,7 @@ const PayRunsPage = () => {
     } catch (error) {
       dispatch(addNotification({ text: 'Can not get hold payments' }));
     }
+    setLoading(false);
   };
 
   const getLists = (filters) => {
@@ -209,6 +212,7 @@ const PayRunsPage = () => {
       [payRunTypeId, payRunSubTypeId] = type.split(' - ');
     }
     if (tab === 'pay-runs') {
+      setLoading(true);
       getPayRunSummaryList({
         pageNumber: page,
         dateFrom: new Date(2021, 1, 1).toJSON(),
@@ -220,9 +224,11 @@ const PayRunsPage = () => {
       })
         .then((payRuns) => {
           changeListData('payRuns', payRuns);
+          setLoading(false);
         })
         .catch((err) => {
           dispatch(addNotification({ text: `Can not get hold payments: ${err?.message}` }));
+          setLoading(false);
         });
     } else {
       getHeldInvoices(filters);
@@ -260,13 +266,16 @@ const PayRunsPage = () => {
   }, [sort]);
 
   useEffect(() => {
+    setLoading(true);
     if (tab === 'pay-runs') {
       getPayRunSummaryList({ pageNumber: page })
         .then((payRuns) => {
           changeListData('payRuns', payRuns);
+          setLoading(false);
         })
         .catch(() => {
           dispatch(addNotification({ text: 'Can not get hold payments' }));
+          setLoading(false);
         });
     } else {
       getHelds();
@@ -391,11 +400,13 @@ const PayRunsPage = () => {
           rowsRules={PAY_RUN_ROWS_RULES}
           fields={payRunFields}
           sorts={SORTS_TAB[tab]}
+          loading={loading}
           sortBy={sortBy}
           onClickTableRow={onClickTableRow}
         />
       ) : (
         <PayRunTable
+          loading={loading}
           checkedRows={checkedRows}
           setCheckedRows={onCheckRows}
           isIgnoreId
@@ -417,6 +428,7 @@ const PayRunsPage = () => {
         to={paginationInfo?.pageSize}
         itemsCount={paginationInfo?.pageSize}
         totalCount={paginationInfo?.totalCount}
+        changePagination={(newPage) => setPage(newPage)}
       />
 
       <HackneyFooterInfo />

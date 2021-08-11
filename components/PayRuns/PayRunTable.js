@@ -5,10 +5,12 @@ import { formatDateWithSign, formatStatus, includeString } from '../../service/h
 import PayRunSortTable from './PayRunSortTable';
 import Checkbox from '../Checkbox';
 import { Button } from '../Button';
+import Loading from '../Loading'
 
 const PayRunTable = ({
   onClickTableRow,
   checkedRows,
+  loading,
   setCheckedRows,
   changeAllChecked,
   rows = [],
@@ -55,6 +57,7 @@ const PayRunTable = ({
         sorts={sorts}
       />
 
+      {loading && <Loading className='table-loading' />}
       {!groupedData.length ? (
         <p>No Table Data</p>
       ) : (
@@ -89,7 +92,7 @@ const PayRunTable = ({
 
                   const isStatus = rowItemKey === 'invoiceStatusId';
                   const status = invoiceStatuses.find((el) => el.statusId === item.invoiceStatusId);
-                  const formattedStatus = isStatus && formatStatus(status?.statusName);
+                  const formattedStatus = isStatus && formatStatus(status?.statusName, '-', true);
                   const statusItemClass = isStatus
                     ? `table__row-item-status ${status?.statusName?.toLowerCase() ?? ''}`
                     : '';

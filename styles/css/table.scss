@@ -148,6 +148,7 @@
   &.outstanding,
   &.submitted,
   &.pending-supplier,
+  &.submitted-for-approval,
   &.in-review,
   &.n\/a {
     p {
@@ -274,10 +275,6 @@
   }
 }
 
-.table__row-collapsed-main-header {
-  display: flex;
-}
-
 .table__row-collapsed-main-item {
   display: flex;
   align-items: center;
@@ -298,7 +295,8 @@
   border: 1px solid $lbh-gray;
 }
 
-.table__row-collapsed-main-header {
+.table__row-collapsed-main-header, .table__row-collapsed-main-footer {
+  display: flex;
   margin-bottom: 10px;
 
   p:first-of-type {
@@ -321,6 +319,12 @@
     font-size: 14px;
     font-weight: bold;
     color: $lbh-black1;
+  }
+}
+
+.table__row-collapsed-main-footer {
+  p {
+    font-size: 16px;
   }
 }
 
