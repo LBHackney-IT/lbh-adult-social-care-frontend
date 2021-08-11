@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { pick } from 'lodash';
+import { pick, uniqBy } from 'lodash';
 import {
   createNewPayRun,
   PAY_RUN_TYPES,
@@ -21,6 +21,7 @@ import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import {
+  getEnGBFormattedDate,
   sortArrayOfObjectsByDateAscending,
   sortArrayOfObjectsByDateDescending,
   sortArrayOfObjectsByNumberAscending,
@@ -39,7 +40,6 @@ import {
 } from '../../../api/SWR';
 import usePayRunsSummaryList from '../../../api/SWR/transactions/usePayRunsSummaryList';
 import { PAY_RUN_FIELDS, PAY_RUN_ROWS_RULES, PAYMENT_TABS, SORTS_TAB, TABS_CLASSES } from './constants';
-import { useHeldPaymentsFilterOptions } from './useHeldPaymentsFilterOptions';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -95,7 +95,13 @@ const PayRunsPage = () => {
 
   const { pagingMetaData: paginationInfo } = isPayRunsTab ? summaryList : heldPayments;
 
-  const filterOptions = useHeldPaymentsFilterOptions(heldPayments.data);
+  const dateRangeOptions = uniqBy(
+    heldPayments.data.map(({ dateFrom, dateTo }) => ({
+      value: `${dateFrom} - ${dateTo}`,
+      text: `${getEnGBFormattedDate(dateFrom)} - ${getEnGBFormattedDate(dateTo)}`,
+    })),
+    'value'
+  );
 
   const sortBy = (field, value, dataType) => {
     setSort({ value, name: field, dataType });
@@ -241,9 +247,7 @@ const PayRunsPage = () => {
         checkedItems={checkedRows}
         tab={tab}
         setOpenedPopup={setOpenedPopup}
-        dateRangeOptions={filterOptions.dateRangeOptions}
-        serviceUserOptions={filterOptions.serviceUserOptions}
-        supplierOptions={filterOptions.supplierOptions}
+        dateRangeOptions={dateRangeOptions}
       />
 
       <PaymentsTabs tab={tab} changeTab={changeTab} tabs={PAYMENT_TABS} />

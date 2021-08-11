@@ -24,8 +24,6 @@ const PayRunsHeader = ({
   dateRangeOptions = [],
   dateOptions = [],
   releaseHolds,
-  serviceUserOptions = [],
-  supplierOptions = [],
   setOpenedPopup,
   apply,
   tab,
@@ -76,8 +74,6 @@ const PayRunsHeader = ({
           applyFilters={applyFilters}
           changeFilter={changeFilter}
           dateRangeOptions={dateRangeOptions}
-          serviceUserOptions={serviceUserOptions}
-          supplierOptions={supplierOptions}
         />
       ),
     },
