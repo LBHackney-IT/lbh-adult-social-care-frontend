@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import BaseField from './baseComponents/BaseField';
 import { CaretDownIcon } from './Icons';
 import ErrorField from './ErrorField';
+import { deleteSpaces } from '../service/helpers'
 
 const CustomDropDown = ({
   label,
@@ -38,10 +39,6 @@ const CustomDropDown = ({
     setIsActive(false);
   };
 
-  useEffect(() => {
-    setSelectedOption(selectedValue || {});
-  }, [selectedValue]);
-
   return (
     <BaseField classes={`${className} dropdown-container`} label={label}>
       <div tabIndex="0" onBlur={() => setIsActive(false)} className={`dropdown${isActive ? ' is-active' : ''}${isUp ? ' is-up' : ''}`}>
@@ -56,7 +53,7 @@ const CustomDropDown = ({
               children
             ) : (
               <>
-                <span>{selectedValue ? selectedOption[fields.text] : initialText}</span>
+                <span>{selectedValue || selectedOption[fields.text] || initialText}</span>
                 <span className="icon">
                   <CaretDownIcon />
                 </span>

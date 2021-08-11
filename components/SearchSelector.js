@@ -29,16 +29,17 @@ const SearchSelector = ({ className = '', onOptionSelect = () => {}, options, la
         const activeItemClass = selected ? ' dropdown-item-active' : '';
         const mainOption = option.item || option;
         return (
-          <div
+          <input
+            {...optionItem}
+            defaultValue={null}
+            value={mainOption?.name || null}
             className={`dropdown-item${activeItemClass}`}
             onMouseDown={(e) => {
               e.stopPropagation();
               onOptionSelect(mainOption);
               optionItem.onMouseDown(e);
             }}
-          >
-            {mainOption?.name || ''}
-          </div>
+          />
         )
       }}
       emptyMessage={() => <p className='px-3'>Not found</p>}

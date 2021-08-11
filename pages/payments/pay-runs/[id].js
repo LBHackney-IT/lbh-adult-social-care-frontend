@@ -124,12 +124,13 @@ const PayRunPage = () => {
     if (!loading) {
       setLoading(true);
     }
+    console.log(filters);
     try {
       const res = await getSinglePayRunDetails({
         payRunId: id,
         pageNumber,
         searchTerm: filters?.serviceUser,
-        invoiceStatusId: filters?.status,
+        invoiceStatusId: filters?.invoiceNo,
         supplierId: filters?.supplier?.value,
         packageTypeId: filters?.type,
         dateFrom: filters?.dateFrom?.getTime && filters.dateFrom.toJSON(),
@@ -383,6 +384,7 @@ const PayRunPage = () => {
       {!!breadcrumbs.length && <Breadcrumbs className="p-3" values={breadcrumbs} />}
       <PayRunHeader
         typeOptions={packageTypeOptions}
+        serviceUserOptions={[]}
         changeFilters={setFilters}
         statusOptions={statusOptions}
         filter={getPayRunDetails}

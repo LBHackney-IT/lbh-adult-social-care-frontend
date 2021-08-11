@@ -37,7 +37,6 @@ const Dropdown = ({
   };
 
   const onOptionClick = (event, option) => {
-    console.log(option);
     event.stopPropagation();
     setSelectedOption(option);
     onOptionSelect(option.value);

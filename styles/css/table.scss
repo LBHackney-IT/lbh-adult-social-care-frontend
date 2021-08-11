@@ -149,6 +149,7 @@
   &.submitted,
   &.pending-supplier,
   &.submitted-for-approval,
+  &.querying,
   &.in-review,
   &.n\/a {
     p {
@@ -160,7 +161,9 @@
   &.paid-with-holds,
   &.released,
   &.complete,
+  &.assigned,
   &.accepted,
+  &.pricing-agreed,
   &.approved {
     p {
       background: $lbh-green1;

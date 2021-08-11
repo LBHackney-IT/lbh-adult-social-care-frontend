@@ -33,10 +33,12 @@ const formatStatus = (status, sign = '-', isUpperCase) => {
 
   let newStatus = '';
   for(const i of status) {
-    if(i === i.toUpperCase() && i !== status[0].toUpperCase()) {
-      newStatus += sign;
+    if(i !== '' && i !== ' ') {
+      if(i === i.toUpperCase() && i !== status[0].toUpperCase()) {
+        newStatus += sign;
+      }
+      newStatus += i;
     }
-    newStatus += i;
   }
   return isUpperCase ? newStatus : newStatus.toLowerCase();
 }
@@ -67,9 +69,12 @@ const getLoggedInUser = ({ req }) => {
   return user;
 };
 
+const deleteSpaces = (str) => str.replace(/\s/g, '');
+
 const getErrorResponse = (error) => error?.response?.data || {}; // { firstName: 'First Name must be more then 10 symbols', secondName: 'Second Name must be more then 10 symbols'
 export {
   uniqueID,
+  deleteSpaces,
   formatDateWithSign,
   formatStatus,
   includeString,

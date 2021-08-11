@@ -53,15 +53,18 @@ const Table = ({
               const collapsedRow = collapsedRows.includes(item[fields.id]);
               const collapsedClass = collapsedRow ? ' collapsed' : '';
               const rowClass = rowsRules.getClassName && rowsRules.getClassName(item);
+              let index = 0;
 
               return (
                 <div key={id} className={`table__row${collapsedClass} ${rowClass || ''}`}>
                   <div onClick={() => clickRow(item)} className="table__row-column-items" role="presentation">
                     {Object.values(defaultFields).map((rowItemName) => {
+                      const columnClass = ` table__row-column-${index+1}`;
                       const currentRowRule = rowsRules[rowItemName] || '';
                       const value = item[rowItemName];
 
                       if (currentRowRule?.hide) return <React.Fragment key={`${tab}${rowItemName}${id}`} />;
+                      index += 1;
 
                       const currentValue = (currentRowRule?.getValue && currentRowRule.getValue(value, item)) || value;
                       const calculatedClassName = currentRowRule?.getClassName
@@ -70,12 +73,12 @@ const Table = ({
 
                       const getComponent = currentRowRule?.getComponent;
                       if (getComponent) {
-                        return getComponent(item, currentRowRule);
+                        return getComponent(item, currentRowRule, columnClass);
                       }
 
                       if (currentRowRule?.type === 'checkbox') {
                         return (
-                          <div key={`${rowItemName}${id}`} className='table__row-item-checkbox table__row-item'>
+                          <div key={`${rowItemName}${id}`} className={`table__row-item-checkbox table__row-item${columnClass}`}>
                             <Checkbox
                               onChange={(checkedValue, event) => {
                                 event.stopPropagation();
@@ -96,7 +99,7 @@ const Table = ({
                             currentRowRule.onClick(item, value);
                           }}
                           key={`${tab}${rowItemName}${value}${id}`}
-                          className={`table__row-item ${calculatedClassName}`}
+                          className={`table__row-item${columnClass} ${calculatedClassName}`}
                         >
                           <p>{currentValue || '—'}</p>
                         </div>
@@ -140,7 +143,7 @@ export default Table;
     },
     stage: {
       getValue: (value) => `${value}%`,
-      getComponent: (cellItem, cellRule) => <SomeComponent className={cellRule.className} someValue={cellItem.someValue} />,
+      getComponent: (cellItem, cellRule, tableClass) => <SomeComponent className={cellRule.className} someValue={cellItem.someValue} />,
       getClassName: (value) => `${value} table__row-item-status`,
     },
     owner: {

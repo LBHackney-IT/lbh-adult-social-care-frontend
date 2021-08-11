@@ -10,6 +10,25 @@
     }
   }
 
+  .dropdown-item {
+    border: none !important;
+    border-radius: 0 !important;
+    width: 100%;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    padding: 0.375rem 1rem;
+    cursor: pointer;
+    color: #0b0c0c;
+
+    &.dropdown-item-active {
+      color: $lbh-blue-highlight;
+    }
+
+    &:hover {
+      background: $lbh-gray;
+    }
+  }
+
   &.has-focus {
     .select-search__value {
       &::after {
@@ -24,6 +43,9 @@
     &::after {
       content: '';
       position: absolute;
+      cursor: text;
+      pointer-events: none;
+      user-select: none;
       transition: 0.3s ease;
       right: 0.5em;
       background: url("/images/icons/icon_arrow_bottom.svg");

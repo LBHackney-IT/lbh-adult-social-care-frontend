@@ -20,6 +20,7 @@ const PayRunHeader = ({
   supplierOptions = [],
   changeFilters,
   typeOptions = [],
+  serviceUserOptions = [],
   statusOptions = [],
   actionButtonText = '',
   filter,
@@ -61,30 +62,22 @@ const PayRunHeader = ({
       </div>
       <div>
         <div className="pay-run__searches mb-3">
-          <Input
-            classes="mr-3 pay-run__filter-item"
+          <SearchSelector
+            placeholder='Service User'
             value={filters.serviceUser}
-            search={searchId}
-            placeholder="Service User"
-            onChange={(value) => changeFilter('serviceUser', value)}
+            options={serviceUserOptions}
+            onOptionSelect={(option) => changeFilter('serviceUser', option)}
+            className="pay-run__filter-item mr-3"
           />
-          <Input
-            classes="mr-3 pay-run__filter-item"
-            value={filters.invoiceNo}
-            search={searchId}
-            placeholder="Invoice No"
-            onChange={(value) => changeFilter('invoiceNo', value)}
-          />
-        </div>
-        <div className="pay-run__dropdowns">
           <SearchSelector
             placeholder='Supplier'
             value={filters.supplier}
             options={supplierOptions}
             onOptionSelect={(option) => changeFilter('supplier', option)}
-            keys={['text']}
             className="pay-run__filter-item mr-3"
           />
+        </div>
+        <div className="pay-run__dropdowns">
           <Dropdown
             initialText="Type"
             className="pay-run__filter-item mr-3"

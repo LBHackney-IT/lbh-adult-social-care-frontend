@@ -1,4 +1,5 @@
 @import 'css/variables';
+@import "css/shortcuts";
 @import 'css/media-breakpoints';
 @import 'css/borders';
 @import 'css/typography';
@@ -67,14 +68,14 @@ button {
   }
 }
 
-.mr-auto {
-  margin-right: auto;
-}
-
 .border-radius-0 {
   p {
     border-radius: 0 !important;
   }
+}
+
+.display-none {
+  display: none !important;
 }
 
 .hide {
