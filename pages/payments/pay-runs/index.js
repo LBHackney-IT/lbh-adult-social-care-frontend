@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { uniqBy, last } from 'lodash';
-import useSWR from 'swr';
+import { pick, uniqBy } from 'lodash';
 import {
   createNewPayRun,
-  getAllInvoiceStatuses,
-  getHeldInvoicePayments,
-  getPaymentDepartments,
-  getPayRunSummaryList,
-  PAY_RUN_ENDPOINTS,
   PAY_RUN_TYPES,
   releaseHeldInvoices,
   releaseSingleHeldInvoice,
@@ -34,11 +28,17 @@ import {
   sortArrayOfObjectsByNumberDescending,
   sortArrayOfObjectsByStringAscending,
   sortArrayOfObjectsByStringDescending,
-  stringIsNullOrEmpty,
 } from '../../../api/Utils/FuncUtils';
-import { axiosFetcher } from '../../../api/Utils/ApiUtils';
-import { DATA_TYPES, SWR_OPTIONS } from '../../../api/Utils/CommonOptions';
+import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
 import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from '../../../api/Mappers/PayRunMapper';
+import {
+  useHeldInvoicePayments,
+  usePaymentDepartments,
+  usePayRunSubTypes,
+  usePayRunTypes,
+  useUniquePayRunStatuses,
+} from '../../../api/SWR';
+import usePayRunsSummaryList from '../../../api/SWR/transactions/usePayRunsSummaryList';
 
 const PAYMENT_TABS = [
   { text: 'Pay Runs', value: 'pay-runs' },
@@ -64,6 +64,15 @@ const SORTS_TAB = {
     { name: 'status', text: 'Status', dataType: DATA_TYPES.STRING },
     { name: 'waitingFor', text: 'Waiting for', dataType: DATA_TYPES.STRING },
   ],
+};
+
+const PAY_RUN_FIELDS = {
+  id: 'payRunId',
+  date: 'dateCreated',
+  type: 'payRunTypeName',
+  paid: 'totalAmountPaid',
+  held: 'totalAmountHeld',
+  status: 'payRunStatusName',
 };
 
 const TABS_CLASSES = {
@@ -94,8 +103,8 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const PayRunsPage = () => {
   const dispatch = useDispatch();
-
   const router = useRouter();
+
   const [openedPopup, setOpenedPopup] = useState('');
   const [date, setDate] = useState(new Date());
   const [checkedRows, setCheckedRows] = useState([]);
@@ -106,31 +115,44 @@ const PayRunsPage = () => {
   const [newMessageText, setNewMessageText] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
   const [tab, changeTab] = useState('pay-runs');
-  const [invoiceStatuses, setInvoiceStatuses] = useState([]);
-  const [listData, setListData] = useState({
-    payRuns: {},
-    holdPayments: {},
-  });
   const [page] = useState(1);
   const [sort, setSort] = useState({
     value: 'increase',
     name: 'id',
     dataType: DATA_TYPES.STRING,
   });
-  const paginationInfo = listData[tab === 'pay-runs' ? 'payRun' : 'holdPayments']?.pagingMetaData || {};
 
-  const [payRunFields] = useState({
-    id: 'payRunId',
-    date: 'dateCreated',
-    type: 'payRunTypeName',
-    paid: 'totalAmountPaid',
-    held: 'totalAmountHeld',
-    status: 'payRunStatusName',
-  });
+  const [filters, setFilters] = useState({});
 
   const isPayRunsTab = tab === 'pay-runs';
 
-  const filterOptions = useHeldPaymentsFilterOptions(listData.holdPayments.data);
+  const { data: payRunTypes } = usePayRunTypes();
+  const { data: payRunSubTypes } = usePayRunSubTypes();
+  const { options: waitingOnOptions } = usePaymentDepartments();
+  const { data: uniquePayRunStatuses } = useUniquePayRunStatuses();
+
+  const { data: heldPayments, mutate: refetchHeldPayments } = useHeldInvoicePayments({
+    params: pick(filters, ['dateFrom', 'dateTo', 'serviceType', 'serviceUser', 'supplier', 'waitingOn']),
+    shouldFetch: !isPayRunsTab,
+  });
+
+  const { data: summaryList } = usePayRunsSummaryList({
+    params: {
+      ...pick(filters, ['id', 'type', 'status']),
+      pageNumber: page,
+    },
+    shouldFetch: isPayRunsTab,
+  });
+
+  const { pagingMetaData: paginationInfo } = isPayRunsTab ? summaryList : heldPayments;
+
+  const dateRangeOptions = uniqBy(
+    heldPayments.data.map(({ dateFrom, dateTo }) => ({
+      value: `${dateFrom} - ${dateTo}`,
+      text: `${getEnGBFormattedDate(dateFrom)} - ${getEnGBFormattedDate(dateTo)}`,
+    })),
+    'value'
+  );
 
   const sortBy = (field, value, dataType) => {
     setSort({ value, name: field, dataType });
@@ -173,117 +195,32 @@ const PayRunsPage = () => {
     },
   ];
 
-  const changeListData = (field, value) => {
-    setListData({
-      ...listData,
-      [field]: value,
-    });
-  };
-
-  const getHeldInvoices = async (filters = {}) => {
-    try {
-      const { dateRange = '', serviceType, serviceUser, supplier, waitingOn } = filters;
-      const [dateFrom, dateTo] = dateRange.split(' - ');
-
-      const result = await getHeldInvoicePayments({
-        dateTo,
-        dateFrom,
-        pageNumber: page,
-        supplierId: supplier,
-        waitingOnId: waitingOn,
-        packageTypeId: serviceType,
-        serviceUserId: serviceUser,
-      });
-
-      changeListData('holdPayments', result);
-    } catch (error) {
-      dispatch(addNotification({ text: 'Can not get hold payments' }));
-    }
-  };
-
-  const getLists = (filters) => {
-    const { id = '', type = '', status = '' } = filters || {};
-    let payRunTypeId = '';
-    let payRunSubTypeId = '';
-    if (!stringIsNullOrEmpty(type)) {
-      [payRunTypeId, payRunSubTypeId] = type.split(' - ');
-    }
-    if (tab === 'pay-runs') {
-      getPayRunSummaryList({
-        pageNumber: page,
-        dateFrom: new Date(2021, 1, 1).toJSON(),
-        dateTo: new Date(2021, 8, 31).toJSON(),
-        payRunId: id,
-        payRunTypeId,
-        payRunSubTypeId,
-        payRunStatusId: status,
-      })
-        .then((payRuns) => {
-          changeListData('payRuns', payRuns);
-        })
-        .catch((err) => {
-          dispatch(addNotification({ text: `Can not get hold payments: ${err?.message}` }));
-        });
-    } else {
-      getHeldInvoices(filters);
-    }
-  };
-
-  const getHelds = () => {
-    getHeldInvoices();
-
-    getPaymentDepartments()
-      .then((res) => changeWaitingOn(res))
-      .catch(() => dispatch(addNotification({ text: 'Fail get departments' })));
-  };
-
-  useEffect(() => {
+  const sortedSummaryList = useMemo(() => {
     const { value = '', name = '', dataType = DATA_TYPES.STRING } = sort || {};
+    const { data } = summaryList;
+
     let fieldName = '';
     let sortedList = [];
-    if (tab === 'pay-runs') {
-      const { data = [], pagingMetaData } = listData?.payRuns || {};
-      fieldName = payRunFields[name];
-      if (value === 'increase') {
-        if (dataType === DATA_TYPES.STRING) sortedList = sortArrayOfObjectsByStringAscending(data, fieldName);
-        else if (dataType === DATA_TYPES.DATE) sortedList = sortArrayOfObjectsByDateAscending(data, fieldName);
-        else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberAscending(data, fieldName);
-      } else if (value === 'decrease') {
-        if (dataType === DATA_TYPES.STRING) sortedList = sortArrayOfObjectsByStringDescending(data, fieldName);
-        else if (dataType === DATA_TYPES.DATE) sortedList = sortArrayOfObjectsByDateDescending(data, fieldName);
-        else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberDescending(data, fieldName);
-      }
-      changeListData('payRuns', { data: sortedList, pagingMetaData });
-    } else if (tab === 'held-payments') {
-      console.log(listData?.holdPayments?.data);
-    }
-  }, [sort]);
+    fieldName = PAY_RUN_FIELDS[name];
 
-  useEffect(() => {
-    if (tab === 'pay-runs') {
-      getPayRunSummaryList({ pageNumber: page })
-        .then((payRuns) => {
-          changeListData('payRuns', payRuns);
-        })
-        .catch(() => {
-          dispatch(addNotification({ text: 'Can not get hold payments' }));
-        });
-    } else {
-      getHelds();
+    if (value === 'increase') {
+      if (dataType === DATA_TYPES.STRING) sortedList = sortArrayOfObjectsByStringAscending(data, fieldName);
+      else if (dataType === DATA_TYPES.DATE) sortedList = sortArrayOfObjectsByDateAscending(data, fieldName);
+      else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberAscending(data, fieldName);
+    } else if (value === 'decrease') {
+      if (dataType === DATA_TYPES.STRING) sortedList = sortArrayOfObjectsByStringDescending(data, fieldName);
+      else if (dataType === DATA_TYPES.DATE) sortedList = sortArrayOfObjectsByDateDescending(data, fieldName);
+      else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberDescending(data, fieldName);
     }
-  }, [tab, page]);
 
-  useEffect(() => {
-    getAllInvoiceStatuses()
-      .then(setInvoiceStatuses)
-      .catch(() => dispatch(addNotification({ text: 'Can not get all invoice statuses' })));
-  }, []);
+    return sortedList;
+  }, [sort, summaryList]);
 
   const releaseOne = async (item, invoice) => {
     try {
       await releaseSingleHeldInvoice(item.payRunId, invoice.invoiceId);
       dispatch(addNotification({ text: `Release invoice ${item.invoiceId}`, className: 'success' }));
-      await getHeldInvoices();
+      await refetchHeldPayments();
     } catch (error) {
       dispatch(addNotification({ text: 'Can not release invoices' }));
     }
@@ -316,27 +253,11 @@ const PayRunsPage = () => {
       dispatch(addNotification({ text: 'Release Success', className: 'success' }));
       setCheckedRows([]);
 
-      await getHeldInvoices();
+      await refetchHeldPayments();
     } catch (error) {
       dispatch(addNotification({ text: 'Release Fail' }));
     }
   };
-
-  const { data: payRunTypes = [] } = useSWR(
-    PAY_RUN_ENDPOINTS.GET_ALL_PAY_RUN_TYPES,
-    axiosFetcher,
-    SWR_OPTIONS.REVALIDATE_ON_MOUNT
-  );
-  const { data: payRunSubTypes = [] } = useSWR(
-    PAY_RUN_ENDPOINTS.GET_ALL_PAY_RUN_SUB_TYPES,
-    axiosFetcher,
-    SWR_OPTIONS.REVALIDATE_ON_MOUNT
-  );
-  const { data: uniquePayRunStatuses = [] } = useSWR(
-    PAY_RUN_ENDPOINTS.GET_ALL_UNIQUE_PAY_RUN_STATUSES,
-    axiosFetcher,
-    SWR_OPTIONS.REVALIDATE_ON_MOUNT
-  );
 
   return (
     <div className={`pay-runs ${tab}__tab-class`}>
@@ -362,34 +283,31 @@ const PayRunsPage = () => {
           waitingOn={waitingOn}
           changeWaitingOn={changeWaitingOn}
           currentUserInfo={openedInvoiceChat}
-          updateChat={getHelds}
+          updateChat={refetchHeldPayments}
           currentUserId={openedInvoiceChat.creatorId}
           messages={openedInvoiceChat.disputedInvoiceChat}
+          waitingOnOptions={waitingOnOptions}
         />
       )}
 
       <PayRunsHeader
         typeOptions={[...mapPayRunTypeOptions(payRunTypes), ...mapPayRunSubTypeOptions(payRunSubTypes)]}
         statusOptions={mapPayRunStatuses(uniquePayRunStatuses)}
-        apply={getLists}
+        apply={setFilters}
         releaseHolds={payReleasedHolds}
         checkedItems={checkedRows}
         tab={tab}
         setOpenedPopup={setOpenedPopup}
-        dateRangeOptions={filterOptions.dateRangeOptions}
-        waitingOnOptions={filterOptions.waitingOnOptions}
-        serviceTypesOptions={filterOptions.serviceTypesOptions}
-        serviceUserOptions={filterOptions.serviceUserOptions}
-        supplierOptions={filterOptions.supplierOptions}
+        dateRangeOptions={dateRangeOptions}
       />
 
       <PaymentsTabs tab={tab} changeTab={changeTab} tabs={PAYMENT_TABS} />
 
       {isPayRunsTab ? (
         <Table
-          rows={listData?.payRuns?.data}
+          rows={sortedSummaryList}
           rowsRules={PAY_RUN_ROWS_RULES}
-          fields={payRunFields}
+          fields={PAY_RUN_FIELDS}
           sorts={SORTS_TAB[tab]}
           sortBy={sortBy}
           onClickTableRow={onClickTableRow}
@@ -405,10 +323,9 @@ const PayRunsPage = () => {
           canCollapseRows
           release={releaseOne}
           releaseAllSelected={releaseAllSelected}
-          rows={listData.holdPayments.data}
+          rows={heldPayments.data}
           sortBy={sortBy}
           sorts={SORTS_TAB[tab]}
-          invoiceStatuses={invoiceStatuses}
         />
       )}
 
@@ -422,46 +339,6 @@ const PayRunsPage = () => {
       <HackneyFooterInfo />
     </div>
   );
-};
-
-const useHeldPaymentsFilterOptions = (data = []) => {
-  const createUniqueOptions = (values) => uniqBy(values, 'value');
-  const getAllInvoiceValues = (key) =>
-    data.reduce((acc, { invoices }) => {
-      invoices.forEach((invoice) => acc.push({ value: invoice[`${key}Id`], text: invoice[`${key}Name`] }));
-      return acc;
-    }, []);
-
-  const dateRangeOptions = uniqBy(
-    data.map(({ dateFrom, dateTo }) => ({
-      value: `${dateFrom} - ${dateTo}`,
-      text: `${getEnGBFormattedDate(dateFrom)} - ${getEnGBFormattedDate(dateTo)}`,
-    })),
-    'value'
-  );
-  const serviceTypesOptions = createUniqueOptions(getAllInvoiceValues('packageType'));
-  const serviceUserOptions = createUniqueOptions(getAllInvoiceValues('serviceUser'));
-  const supplierOptions = createUniqueOptions(getAllInvoiceValues('supplier'));
-
-  const waitingOnOptions = createUniqueOptions(
-    data.reduce((acc, { invoices }) => {
-      invoices.forEach(({ disputedInvoiceChat }) => {
-        acc.push({
-          value: last(disputedInvoiceChat).actionRequiredFromId,
-          text: last(disputedInvoiceChat).actionRequiredFromName,
-        });
-      });
-      return acc;
-    }, [])
-  );
-
-  return {
-    dateRangeOptions,
-    serviceTypesOptions,
-    waitingOnOptions,
-    serviceUserOptions,
-    supplierOptions,
-  };
 };
 
 export default PayRunsPage;

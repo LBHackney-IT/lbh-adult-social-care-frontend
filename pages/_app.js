@@ -6,13 +6,20 @@ import { Provider } from 'react-redux';
 import { useStore } from '../store';
 import AdditionalHeader from '../components/AdditionalHeader';
 import CustomNotification from '../components/Notifications';
+import fetcher from '../api/SWR/fetcher';
+
+const swrOptions = {
+  errorRetryCount: 3,
+  revalidateOnMount: true,
+  fetcher,
+};
 
 export default function App({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState);
 
   return (
     <Provider store={store}>
-      <SWRConfig value={{}}>
+      <SWRConfig value={swrOptions}>
         <CustomNotification />
         <AdditionalHeader />
         <Component {...pageProps} />

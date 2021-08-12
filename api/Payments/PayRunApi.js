@@ -7,7 +7,6 @@ import { requestMethods } from '../../constants/variables';
 
 const PAY_RUN_URL = `${BASE_URL}/v1/transactions/pay-runs`;
 const INVOICES_URL = `${BASE_URL}/v1/transactions/invoices`;
-const DEPARTMENTS_URL = `${BASE_URL}/v1/transactions/departments`;
 
 const sixMonthsAgo = moment().subtract(6, 'months');
 
@@ -17,20 +16,6 @@ export const PAY_RUN_TYPES = {
   HOME_CARE: 'HomeCare',
   RESIDENTIAL_RELEASE_HOLDS: 'ResidentialReleaseHolds',
   DIRECT_PAYMENTS_RELEASE_HOLDS: 'DirectPaymentsReleaseHolds',
-};
-
-const getPayRunSummaryList = ({
-  pageNumber = 1,
-  pageSize = 10,
-  dateFrom = new Date(sixMonthsAgo).toJSON(),
-  dateTo = new Date().toJSON(),
-  payRunId = '',
-  payRunTypeId = '',
-  payRunSubTypeId = '',
-  payRunStatusId = '',
-}) => {
-  const query = `${PAY_RUN_URL}/summary-list?PageNumber=${pageNumber}&PageSize=${pageSize}&PayRunId=${payRunId}&PayRunTypeId=${payRunTypeId}&PayRunSubTypeId=${payRunSubTypeId}&PayRunStatusId=${payRunStatusId}&DateFrom=${dateFrom}&DateTo=${dateTo}`;
-  return axios.get(query).then(handleResponse).catch(handleError);
 };
 
 const createNewPayRun = (payRunType, dateTo) => {
@@ -79,17 +64,16 @@ const getReleasedHoldsList = (fromDate = new Date(sixMonthsAgo).toJSON(), toDate
 };
 
 const getSinglePayRunDetails = ({
-    payRunId,
-    pageNumber = 1,
-    pageSize = 10,
-    dateFrom = '',
-    dateTo = '',
-    supplierId = '',
-    packageTypeId = '',
-    invoiceStatusId = '',
-    searchTerm = ''
-  }
-) => {
+  payRunId,
+  pageNumber = 1,
+  pageSize = 10,
+  dateFrom = '',
+  dateTo = '',
+  supplierId = '',
+  packageTypeId = '',
+  invoiceStatusId = '',
+  searchTerm = '',
+}) => {
   const query = `${PAY_RUN_URL}/${payRunId}/details?pageNumber=${pageNumber}&pageSize=${pageSize}&supplierId=${supplierId}&packageTypeId=${packageTypeId}&invoiceStatusId=${invoiceStatusId}&searchTerm=${searchTerm}&dateFrom=${dateFrom}&dateTo=${dateTo}`;
   return axios.get(query).then(handleResponse).catch(handleError);
 };
@@ -176,19 +160,9 @@ const holdInvoicePayment = (payRunId, payRunItemId, holdReason = {}) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-const getHeldInvoicePayments = (params) => {
-  const query = `${INVOICES_URL}/held-invoice-payments`;
-  return axios.get(query, { params }).then(handleResponse).catch(handleError);
-};
-
 const rejectInvoicePayment = (payRunId, payRunItemId, holdReason = {}) => {
   const url = `${PAY_RUN_URL}/${payRunId}/invoices/${payRunItemId}/status/reject-invoice`;
-  return axiosRequest({ url, data: holdReason, method: requestMethods.put })
-};
-
-const getAllInvoiceStatuses = () => {
-  const query = `${INVOICES_URL}/invoice-status-list`;
-  return axios.get(query).then(handleResponse).catch(handleError);
+  return axiosRequest({ url, data: holdReason, method: requestMethods.put });
 };
 
 const getInvoicePaymentStatuses = () => {
@@ -215,19 +189,7 @@ const acceptInvoices = (payRunId, invoices) => {
   return axiosRequest({ url, data: invoices, method: requestMethods.put });
 };
 
-const getPaymentDepartments = () => {
-  const query = `${DEPARTMENTS_URL}/payment-departments`;
-  return axios.get(query).then(handleResponse).catch(handleError);
-};
-
-const PAY_RUN_ENDPOINTS = {
-  GET_ALL_PAY_RUN_TYPES: `${PAY_RUN_URL}/pay-run-types`,
-  GET_ALL_PAY_RUN_SUB_TYPES: `${PAY_RUN_URL}/pay-run-sub-types`,
-  GET_ALL_UNIQUE_PAY_RUN_STATUSES: `${PAY_RUN_URL}/unique-pay-run-statuses`,
-};
-
 export {
-  getPayRunSummaryList,
   createNewPayRun,
   getUniqueSuppliersInPayRun,
   getReleasedHoldsCountByType,
@@ -243,14 +205,10 @@ export {
   releaseHeldInvoices,
   deleteDraftPayRun,
   holdInvoicePayment,
-  getHeldInvoicePayments,
-  getAllInvoiceStatuses,
   getInvoicePaymentStatuses,
   acceptInvoice,
   acceptInvoices,
   sendMessage,
-  getPaymentDepartments,
   getDateOfLastPayRun,
   rejectInvoicePayment,
-  PAY_RUN_ENDPOINTS,
 };
