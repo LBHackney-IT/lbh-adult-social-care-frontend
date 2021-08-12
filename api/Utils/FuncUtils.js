@@ -52,7 +52,9 @@ const sortArrayBy = {
 const sortArray = (data, sort) => {
   if(!Array.isArray(data)) return [];
   const { value = '', name = '' } = sort || {};
-  const variableType = sort.dataType || data[0][name]?.constructor?.name;
+  const variableType = sort.dataType || data[0] && data[0][name]?.constructor?.name;
+
+  if(!variableType) return data;
 
   switch (variableType.toLowerCase()) {
     case DATA_TYPES.DATE: return sortArrayBy.date(data, name, value)

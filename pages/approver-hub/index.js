@@ -5,7 +5,7 @@ import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
 import DashboardTabs from '../../components/Dashboard/Tabs';
 import Table from '../../components/Table';
-import { formatDate, formatForDropDownOptions, sortTableByKey } from '../../service/helpers'
+import { formatDate, formatForDropDownOptions } from '../../service/helpers'
 import { addNotification } from '../../reducers/notificationsReducer';
 import {
   getApprovedPackagesApprovers,
@@ -29,6 +29,8 @@ import {
 import { currency } from '../../constants/strings';
 import { DEFAULT_PAGE_SIZE } from '../../constants/variables';
 import { checkEmptyFields } from '../../service/inputValidator'
+import { sortArray } from '../../api/Utils/FuncUtils'
+import { DATA_TYPES } from '../../api/Utils/CommonOptions'
 
 const ApproverHubPage = () => {
   const dispatch = useDispatch();
@@ -109,7 +111,7 @@ const ApproverHubPage = () => {
     { name: 'approver', text: 'APPROVER' },
     { name: 'submittedBy', text: 'SUBMITTED BY' },
     { name: 'packageId', text: 'ID' },
-    { name: 'lastUpdated', text: 'LAST UPDATED' },
+    { name: 'lastUpdated', text: 'LAST UPDATED', dataType: DATA_TYPES.DATE },
   ]);
 
   const [tab, setTab] = useState('new');
@@ -158,8 +160,8 @@ const ApproverHubPage = () => {
   ];
 
   const [sort, setSort] = useState({
-    value: 'increase',
-    name: 'id',
+    value: 'ascending',
+    name: 'serviceUser',
   });
 
   const pushNotification = (text, className = 'error') => {
@@ -202,12 +204,11 @@ const ApproverHubPage = () => {
     tabsRequests[actualTab]({
       PageNumber: page,
       OrderBy: sort.name,
-      PageSize: DEFAULT_PAGE_SIZE,
+      PageSize: pagingMetaData[actualTab]?.pageSize || DEFAULT_PAGE_SIZE,
       ...filters,
     })
       .then((res) => {
-        const tableData = res.data;
-        sortTableByKey(tableData, sort)
+        const tableData = sortArray(res.data, sort)
         setTabsTable((tabsTableState) => {
           return ({ ...tabsTableState, [actualTab]: tableData })
         });

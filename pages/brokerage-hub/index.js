@@ -15,7 +15,7 @@ import {
   getBrokeredPackagesStages,
   putBrokeredPackagesAssign,
 } from '../../api/Dashboard/brokeredPackages';
-import { formatDate, formatForDropDownOptions, formatStatus, sortTableByKey } from '../../service/helpers'
+import { formatDate, formatForDropDownOptions, formatStatus } from '../../service/helpers'
 import CustomDropDown from '../../components/CustomDropdown';
 import Pagination from '../../components/Payments/Pagination';
 import {
@@ -26,6 +26,8 @@ import {
 } from '../../routes/RouteConstants';
 import { DEFAULT_PAGE_SIZE } from '../../constants/variables'
 import { checkEmptyFields } from '../../service/inputValidator'
+import { sortArray } from '../../api/Utils/FuncUtils'
+import { DATA_TYPES } from '../../api/Utils/CommonOptions'
 
 const BrokerageHubPage = () => {
   const dispatch = useDispatch();
@@ -36,7 +38,6 @@ const BrokerageHubPage = () => {
     SocialWorker: '',
     HackneyId: '',
   });
-
   const router = useRouter();
 
   const onClickTableRow = (rowItems) => {
@@ -60,12 +61,12 @@ const BrokerageHubPage = () => {
 
   const [sorts] = useState([
     { name: 'packageType', text: 'Package Type' },
-    { name: 'startDate', text: 'Start Date' },
+    { name: 'startDate', text: 'Start Date', dataType: DATA_TYPES.DATE },
     { name: 'serviceUser', text: 'Service User' },
     { name: 'stage', text: 'Stage', className: 'table__row-item-justify-center' },
     { name: 'owner', text: 'OWNER' },
     { name: 'hackneyReferenceNumber', text: 'HACKNEY REFERENCE NUMBER' },
-    { name: 'lastUpdated', text: 'LAST UPDATED' },
+    { name: 'lastUpdated', text: 'LAST UPDATED', dataType: DATA_TYPES.DATE },
     { name: 'daysSinceApproval', text: 'DAYS SINCE APPROVAL' },
   ]);
 
@@ -161,8 +162,7 @@ const BrokerageHubPage = () => {
       ...filters,
     })
       .then((res) => {
-        const tableData = res.data;
-        sortTableByKey(tableData, sort)
+        const tableData = sortArray(res.data, sort);
         setTabsTable((tabsTableState) => {
           return ({ ...tabsTableState, [actualTab]: tableData })
         });
