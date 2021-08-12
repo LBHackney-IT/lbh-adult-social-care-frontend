@@ -17,6 +17,7 @@ const DatePick = ({
   label,
   setDate,
   dateValue,
+  placeholderText,
 }) => (
   <BaseField classes={`${classes} react-date-picker`} label={label} noInputStyle>
     <DatePicker
@@ -32,6 +33,7 @@ const DatePick = ({
       selectsRange={selectsRange}
       selected={dateValue}
       inline={inline}
+      placeholderText={placeholderText}
       className="react-date-picker__input"
     />
     {error && <ErrorField text={error} />}

@@ -7,10 +7,9 @@ const initialFilters = {
   id: '',
   type: '',
   status: '',
-  dateStart: '',
-  dateEnd: '',
+  dateStart: null,
+  dateEnd: null,
   date: '',
-  dateRange: '',
   serviceType: '',
   waitingOn: '',
   serviceUser: '',
@@ -21,7 +20,6 @@ const initialFilters = {
 const PayRunsHeader = ({
   typeOptions = [],
   statusOptions = [],
-  dateRangeOptions = [],
   dateOptions = [],
   releaseHolds,
   setOpenedPopup,
@@ -39,10 +37,10 @@ const PayRunsHeader = ({
   };
 
   const changeFilter = (field, value) => {
-    setFilters({
-      ...filters,
+    setFilters((prevFilters) => ({
+      ...prevFilters,
       [field]: value,
-    });
+    }));
   };
 
   const [hasFields, setHasFields] = useState(false);
@@ -93,7 +91,6 @@ const PayRunsHeader = ({
           clearFilters={clearFilters}
           hasFields={hasFields}
           changeFilter={changeFilter}
-          dateRangeOptions={dateRangeOptions}
         />
       ),
     },

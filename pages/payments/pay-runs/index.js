@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { pick, uniqBy } from 'lodash';
+import { pick } from 'lodash';
 import {
   createNewPayRun,
   PAY_RUN_TYPES,
@@ -128,13 +128,17 @@ const PayRunsPage = () => {
 
   const isPayRunsTab = tab === 'pay-runs';
 
+  useEffect(() => {
+    setPage(1);
+  }, [tab]);
+
   const { data: payRunTypes } = usePayRunTypes();
   const { data: payRunSubTypes } = usePayRunSubTypes();
   const { options: waitingOnOptions } = usePaymentDepartments();
   const { data: uniquePayRunStatuses } = useUniquePayRunStatuses();
 
   const { data: heldPayments, mutate: refetchHeldPayments } = useHeldInvoicePayments({
-    params: pick(filters, ['dateFrom', 'dateTo', 'serviceType', 'serviceUser', 'supplier', 'waitingOn']),
+    params: pick(filters, ['dateStart', 'dateEnd', 'serviceType', 'serviceUser', 'supplier', 'waitingOn']),
     shouldFetch: !isPayRunsTab,
   });
 
@@ -146,15 +150,9 @@ const PayRunsPage = () => {
     shouldFetch: isPayRunsTab,
   });
 
-  const { pagingMetaData: paginationInfo } = isPayRunsTab ? summaryList : heldPayments;
-
-  const dateRangeOptions = uniqBy(
-    heldPayments.data.map(({ dateFrom, dateTo }) => ({
-      value: `${dateFrom} - ${dateTo}`,
-      text: `${getEnGBFormattedDate(dateFrom)} - ${getEnGBFormattedDate(dateTo)}`,
-    })),
-    'value'
-  );
+  const {
+    pagingMetaData: { pageSize, totalCount, totalPages },
+  } = isPayRunsTab ? summaryList : heldPayments;
 
   const sortBy = (field, value, dataType) => {
     setSort({ value, name: field, dataType });
@@ -300,7 +298,6 @@ const PayRunsPage = () => {
         checkedItems={checkedRows}
         tab={tab}
         setOpenedPopup={setOpenedPopup}
-        dateRangeOptions={dateRangeOptions}
       />
 
       <PaymentsTabs tab={tab} changeTab={changeTab} tabs={PAYMENT_TABS} />
@@ -334,11 +331,12 @@ const PayRunsPage = () => {
       )}
 
       <Pagination
-        from={paginationInfo?.currentPage}
-        to={paginationInfo?.pageSize}
-        itemsCount={paginationInfo?.pageSize}
-        totalCount={paginationInfo?.totalCount}
-        changePagination={(newPage) => setPage(newPage)}
+        from={page * pageSize - (pageSize - 1)}
+        to={page * pageSize > totalCount ? totalCount : page * pageSize}
+        totalCount={totalCount}
+        totalPages={totalPages}
+        changePagination={setPage}
+        currentPage={page}
       />
 
       <HackneyFooterInfo />
