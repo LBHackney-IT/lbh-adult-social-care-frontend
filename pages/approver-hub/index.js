@@ -5,7 +5,7 @@ import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
 import DashboardTabs from '../../components/Dashboard/Tabs';
 import Table from '../../components/Table';
-import { formatDate, formatStatus } from '../../service/helpers';
+import { formatDate, formatStatus, sortTableByKey } from '../../service/helpers';
 import { addNotification } from '../../reducers/notificationsReducer';
 import {
   getApprovedPackagesApprovers,
@@ -93,15 +93,16 @@ const ApproverHubPage = () => {
   const [filters, setFilters] = useState({ ...initialFilters });
   const [timer, setTimer] = useState(null);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const [sorts] = useState([
-    { name: 'service-user', text: 'SERVICE USER' },
-    { name: 'package-type', text: 'PACKAGE TYPE' },
-    { name: 'care-value', text: 'CARE VALUE' },
-    { name: 'Approver', text: 'APPROVER' },
-    { name: 'submitted-by', text: 'SUBMITTED BY' },
-    { name: 'id', text: 'ID' },
-    { name: 'last-updated', text: 'LAST UPDATED' },
+    { name: 'serviceUser', text: 'SERVICE USER' },
+    { name: 'packageType', text: 'PACKAGE TYPE' },
+    { name: 'careValue', text: 'CARE VALUE' },
+    { name: 'approver', text: 'APPROVER' },
+    { name: 'submittedBy', text: 'SUBMITTED BY' },
+    { name: 'packageId', text: 'ID' },
+    { name: 'lastUpdated', text: 'LAST UPDATED' },
   ]);
 
   const [tab, setTab] = useState('new');
@@ -131,7 +132,7 @@ const ApproverHubPage = () => {
   });
 
   const [tabs] = useState([
-    { className: 'border-2', value: 'new', text: `New ${tabsTable.new.length ? `(${tabsTable.new.length})` : ''}` },
+    { className: 'border-2', value: 'new', text: `New${tabsTable.new.length ? ` (${tabsTable.new.length})` : ''}` },
     {
       value: 'clarification',
       text: `Clarification ${tabsTable.clarification?.length ? `(${tabsTable.clarification.length})` : ''}`,
@@ -154,6 +155,10 @@ const ApproverHubPage = () => {
     name: 'id',
   });
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
   const [inputs] = useState({
     inputs: [
       {
@@ -168,7 +173,6 @@ const ApproverHubPage = () => {
       { options: [], initialText: 'Package Type', name: 'PackageType', className: 'mr-3' },
       { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
       { options: [], initialText: 'Approver', name: 'Approver', className: 'mr-3' },
-      // { options: [], initialText: 'By Value', name: 'ByValue', className: 'mr-3' },
     ],
     buttons: [{ initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() }],
   });
@@ -177,86 +181,82 @@ const ApproverHubPage = () => {
     setSort({ value, name: field });
   };
 
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
-  };
-
   const makeTabRequest = () => {
+    setLoading(true);
     if (timer) {
       clearTimeout(timer);
     }
-    setTimer(
-      setTimeout(() => {
-        const setInitialOptions = (tag, response) => {
-          if (tag === 'PackageType')
-            inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ packageType, id }) => ({
-              text: packageType,
-              value: id,
-            }));
-          else
-            inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ userName, id }) => ({
-              text: userName,
-              value: id,
-            }));
-        };
-        getApprovedPackagesPackageTypes().then((response) => {
-          setInitialOptions('PackageType', response);
-          const options = response.map((option) => ({
-            text: option?.packageType,
-            value: option?.id,
+    setTimer(setTimeout(() => {
+      const setInitialOptions = (tag, response) => {
+        if (tag === 'PackageType')
+          inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ packageType, id }) => ({
+            text: packageType,
+            value: id,
           }));
-          changeInputs('PackageType', options.text);
-        });
-
-        getApprovedPackagesSocialWorkers().then((response) => {
-          setInitialOptions('SocialWorker', response);
-          const options = response.map((option) => ({
-            text: option?.userName,
-            value: option?.id,
+        else
+          inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ userName, id }) => ({
+            text: userName,
+            value: id,
           }));
-          changeInputs('SocialWorker', options);
-        });
+      };
+      getApprovedPackagesPackageTypes().then((response) => {
+        setInitialOptions('PackageType', response);
+        const options = response.map((option) => ({
+          text: option?.packageType,
+          value: option?.id,
+        }));
+        changeInputs('PackageType', options.text);
+      });
 
-        getApprovedPackagesApprovers().then((response) => {
-          setInitialOptions('Approver', response);
-          const options = response.map((option) => ({
-            text: option?.userName,
-            value: option?.id,
-          }));
-          changeInputs('Approver', options);
-        });
+      getApprovedPackagesSocialWorkers().then((response) => {
+        setInitialOptions('SocialWorker', response);
+        const options = response.map((option) => ({
+          text: option?.userName,
+          value: option?.id,
+        }));
+        changeInputs('SocialWorker', options);
+      });
 
-        tabsRequests[tab]({
-          PageNumber: page,
-          OrderBy: sort.name,
-          PageSize: 50,
-          ...filters,
+      getApprovedPackagesApprovers().then((response) => {
+        setInitialOptions('Approver', response);
+        const options = response.map((option) => ({
+          text: option?.userName,
+          value: option?.id,
+        }));
+        changeInputs('Approver', options);
+      });
+      tabsRequests[tab]({
+        PageNumber: page,
+        OrderBy: sort.name,
+        PageSize: 50,
+        ...filters,
+      })
+        .then((res) => {
+          const tableData = res.data || [];
+          sortTableByKey(tableData, sort)
+          setTabsTable({ ...tabsTable, [tab]: tableData });
+          setPagingMetaData({
+            ...pagingMetaData,
+            [tab]: res.pagingMetaData,
+          });
+          setLoading(false);
         })
-          .then((res) => {
-            let tableData = res.data || [];
-            tableData = tableData.sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
-            setTabsTable({
-              ...tabsTable,
-              [tab]: tableData,
-            });
-            setPagingMetaData({
-              ...pagingMetaData,
-              [tab]: res.pagingMetaData,
-            });
-          })
-          .catch(() => dispatch(addNotification()));
+        .catch((e) => {
+          pushNotification(e);
+          setLoading(false);
+        });
       }, 500)
     );
   };
 
   useEffect(() => {
     makeTabRequest();
-  }, [tab, sort]);
+  }, [tab, sort, page]);
 
   const rowsRules = {
     packageType: {
       onClick: (cellItem, cellValue) => changeInputs('PackageType', cellValue),
-      getValue: (value) => formatStatus(value),
+      getClassName: () => 'link-button',
     },
     lastUpdated: {
       getValue: (value) => formatDate(value, '/'),
@@ -265,9 +265,6 @@ const ApproverHubPage = () => {
       getClassName: () => 'text-bold',
       getValue: (value) => `${currency.euro}${value}`,
     },
-    id: {
-      getValue: (value) => "[Hackney ID]"
-    }
   };
 
   const changeInputs = (field, value) => {
@@ -280,7 +277,6 @@ const ApproverHubPage = () => {
   // todo refactor
   const changePage = (chosenPage) => {
     setPage(chosenPage);
-    makeTabRequest();
   };
 
   const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
@@ -295,6 +291,7 @@ const ApproverHubPage = () => {
       />
       <DashboardTabs tabs={tabs} changeTab={setTab} tab={tab} />
       <Table
+        loading={loading}
         classes="p-4"
         fields={{
           serviceUser: 'serviceUser',
@@ -304,7 +301,6 @@ const ApproverHubPage = () => {
           submittedBy: 'submittedBy',
           id: 'packageId',
           lastUpdated: 'lastUpdated',
-          tab,
         }}
         rowsRules={rowsRules}
         rows={tabsTable[tab]}

@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import {
   acceptInvoice,
   acceptInvoices,
   approvePayRunForPayment,
   deleteDraftPayRun,
-  getInvoicePaymentStatuses, getPaymentDepartments,
+  getInvoicePaymentStatuses,
   getSinglePayRunDetails,
-  getSinglePayRunInsights, getUniquePackageTypesInPayRun, getUniqueSuppliersInPayRun, holdInvoicePayment,
-  kickPayRunBackToDraft, rejectInvoicePayment,
+  getSinglePayRunInsights,
+  holdInvoicePayment,
+  kickPayRunBackToDraft,
+  rejectInvoicePayment,
+  getUniquePackageTypesInPayRun,
+  getUniqueSuppliersInPayRun,
   submitPayRunForApproval,
-} from '../../../api/Payments/PayRunApi'
+} from '../../../api/Payments/PayRunApi';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import Pagination from '../../../components/Payments/Pagination';
 import { addNotification } from '../../../reducers/notificationsReducer';
@@ -20,12 +24,13 @@ import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight
 import PayRunHeader from '../../../components/PayRuns/PayRunHeader';
 import PopupHoldPayment from '../../../components/PayRuns/PopupHoldPayment';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { formatStatus, getUserSession } from '../../../service/helpers'
+import { formatStatus, getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
-import Table from '../../../components/Table'
-import CustomDropDown from '../../../components/CustomDropdown'
-import { currency } from '../../../constants/strings'
-import PayRunCollapsedContent from '../../../components/PayRuns/PayRunCollapsedContent'
+import Table from '../../../components/Table';
+import CustomDropDown from '../../../components/CustomDropdown';
+import { currency } from '../../../constants/strings';
+import PayRunCollapsedContent from '../../../components/PayRuns/PayRunCollapsedContent';
+import { usePaymentDepartments } from '../../../api/SWR';
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions'
 import {
   sortArrayOfObjectsByDateAscending, sortArrayOfObjectsByDateDescending,
@@ -65,7 +70,6 @@ const PayRunPage = () => {
     createPayRun: 'create-pay-run',
     holdPayments: 'hold-payment',
   });
-  const [paymentDepartments, setPaymentDepartments] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [invoice, setInvoice] = useState(null);
   const router = useRouter();
@@ -87,6 +91,8 @@ const PayRunPage = () => {
   const [invoiceStatuses, setInvoiceStatuses] = useState([]);
   const [hocAndRelease, changeHocAndRelease] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
+
+  const { data: paymentDepartments } = usePaymentDepartments();
 
   const [breadcrumbs] = useState([
     { text: 'Payments', onClick: () => router.push('/payments/pay-runs') },
@@ -124,13 +130,12 @@ const PayRunPage = () => {
     if (!loading) {
       setLoading(true);
     }
-    console.log(filters);
     try {
       const res = await getSinglePayRunDetails({
         payRunId: id,
         pageNumber,
         searchTerm: filters?.serviceUser,
-        invoiceStatusId: filters?.invoiceNo,
+        invoiceStatusId: filters?.status,
         supplierId: filters?.supplier?.value,
         packageTypeId: filters?.type,
         dateFrom: filters?.dateFrom?.getTime && filters.dateFrom.toJSON(),
@@ -159,10 +164,10 @@ const PayRunPage = () => {
         .then(async () => {
           await getPayRunDetails();
           setCheckedRows([]);
-          pushNotification('Accepted success', 'success')
+          pushNotification('Accepted success', 'success');
         })
         .catch((e) => {
-          pushNotification(e)
+          pushNotification(e);
           setLoading(false);
         });
     },
@@ -227,7 +232,7 @@ const PayRunPage = () => {
   };
 
   useEffect(() => {
-    getPayRunDetails()
+    getPayRunDetails();
   }, [pageNumber]);
 
   useEffect(() => {
@@ -250,9 +255,6 @@ const PayRunPage = () => {
   }, [sort]);
 
   useEffect(() => {
-    getPaymentDepartments()
-      .then(res => setPaymentDepartments(res))
-      .catch(() => pushNotification('Fail get Departments'))
     getSinglePayRunInsights(id)
       .then((res) => {
         setLevelInsights(res);
@@ -285,17 +287,17 @@ const PayRunPage = () => {
   }
 
   const changeInvoiceStatus = ({ statusName }, item) => {
-    if(statusName === 'Accepted') {
+    if (statusName === 'Accepted') {
       acceptInvoice(id, item.invoiceId)
         .then(async () => {
           await getPayRunDetails();
           pushNotification('Accept invoice success', 'success');
         })
         .catch((e) => pushNotification(e || 'Accept invoice fail'));
-    } else if(statusName === 'Held') {
+    } else if (statusName === 'Held') {
       setInvoice(item);
       setOpenedPopup(popupTypes.holdPayments);
-    } else if(statusName === 'Rejected') {
+    } else if (statusName === 'Rejected') {
       rejectInvoicePayment(id, item.invoiceId)
         .then(async () => {
           await getPayRunDetails();
@@ -303,13 +305,13 @@ const PayRunPage = () => {
         })
         .catch((e) => pushNotification(e || 'Reject invoice fail'));
     }
-  }
+  };
 
   const rowRules = {
     getClassName: (item) => {
       const { invoiceStatusId } = item;
-      const statusItem = invoiceStatuses.find(status => status.statusId === invoiceStatusId);
-      if(statusItem) return formatStatus(statusItem.statusName).toLowerCase();
+      const statusItem = invoiceStatuses.find((status) => status.statusId === invoiceStatusId);
+      if (statusItem) return formatStatus(statusItem.statusName).toLowerCase();
     },
     invoiceCheckbox: {
       type: 'checkbox',
@@ -317,19 +319,21 @@ const PayRunPage = () => {
       getValue: (value, item) => !!checkedRows.find((invoiceId) => String(invoiceId) === String(item.invoiceId)),
     },
     totalAmount: {
-      getValue: (value) => value ? `${currency.euro}${value}` : '-',
+      getValue: (value) => (value ? `${currency.euro}${value}` : '-'),
     },
     invoiceStatusId: {
       getComponent: (item) => {
         const { invoiceStatusId, invoiceId } = item;
-        const statusItem = invoiceStatuses.find(status => status.statusId === invoiceStatusId);
+        const statusItem = invoiceStatuses.find((status) => status.statusId === invoiceStatusId);
         return (
           <CustomDropDown
             onlyEmptyText
             onOptionSelect={(value) => changeInvoiceStatus(value, item)}
             key={invoiceId}
             options={invoiceStatuses}
-            className={`table__row-item table__row-item-status${statusItem ? ` ${statusItem.statusName.toLowerCase()}` : ''}`}
+            className={`table__row-item table__row-item-status${
+              statusItem ? ` ${statusItem.statusName.toLowerCase()}` : ''
+            }`}
             fields={{
               value: 'statusId',
               text: 'statusName',
@@ -339,10 +343,10 @@ const PayRunPage = () => {
           />
         );
       },
-    }
-  }
+    },
+  };
 
-  const statusOptions = invoiceStatuses.map(item => ({
+  const statusOptions = invoiceStatuses.map((item) => ({
     value: item.statusId,
     text: item.statusName,
   }));

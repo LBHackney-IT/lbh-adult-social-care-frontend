@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import BaseField from './baseComponents/BaseField';
 import { CaretDownIcon } from './Icons';
 import ErrorField from './ErrorField';
-import { deleteSpaces } from '../service/helpers'
 
 const CustomDropDown = ({
   label,
@@ -25,7 +24,6 @@ const CustomDropDown = ({
   const localOptions = options.slice();
 
   const [isActive, setIsActive] = useState(false);
-  const [selectedOption, setSelectedOption] = useState({});
 
   const onTriggerClick = (event) => {
     event.stopPropagation();
@@ -53,7 +51,7 @@ const CustomDropDown = ({
               children
             ) : (
               <>
-                <span>{selectedValue || selectedOption[fields.text] || initialText}</span>
+                <span>{selectedValue ? selectedValue[fields.text] : initialText}</span>
                 <span className="icon">
                   <CaretDownIcon />
                 </span>

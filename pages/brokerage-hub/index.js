@@ -15,7 +15,7 @@ import {
   getBrokeredPackagesStages,
   putBrokeredPackagesAssign,
 } from '../../api/Dashboard/brokeredPackages';
-import { formatDate, formatStatus } from '../../service/helpers'
+import { formatDate, formatStatus, sortTableByKey } from '../../service/helpers';
 import CustomDropDown from '../../components/CustomDropdown';
 import Pagination from '../../components/Payments/Pagination';
 import {
@@ -197,6 +197,7 @@ const BrokerageHubPage = () => {
         OrderBy: sort.name,
         PageSize: 50,
       }).then((res) => {
+        sortTableByKey(res.data, sort)
         setTabsTable({
           ...tabsTable,
           [tab]: res.data,
@@ -224,6 +225,9 @@ const BrokerageHubPage = () => {
     packageId: {
       hide: true,
     },
+    hackneyId: {
+      getValue: (value) => `#${value}`,
+    },
     startDate: {
       getValue: (value) => `${formatDate(value, '/')}`,
     },
@@ -236,7 +240,7 @@ const BrokerageHubPage = () => {
         return (
           <CustomDropDown
             onOptionSelect={brokeredPackagesAssign}
-            key={setPackageId(itemId)}
+            key={itemId}
             options={socialWorkerOptions}
             className={`table__row-item${tableClass}`}
             initialText=""
@@ -263,7 +267,7 @@ const BrokerageHubPage = () => {
     makeTabRequest();
   };
 
-  const { pageSize, currentPage, totalCount, totalPages } = pagingMetaData[tab];
+  const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
 
   return (
     <div className="brokerage-hub-page">

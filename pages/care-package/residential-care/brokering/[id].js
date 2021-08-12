@@ -96,7 +96,6 @@ const ResidentialCareBrokering = ({
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
   const [supplierOptions, setSupplierOptions] = useState([]);
   const [stageOptions, setStageOptions] = useState([]);
-  console.log(approvalHistoryEntries);
   useEffect(() => {
     if (!supplierOptions.length || supplierOptions.length === 1) retrieveSupplierOptions();
     if (!stageOptions.length || stageOptions.length === 1) retrieveResidentialCareBrokerageStages();
@@ -105,11 +104,12 @@ const ResidentialCareBrokering = ({
   const retrieveSupplierOptions = () => {
     getSupplierList()
       .then((response) => {
-        setSupplierOptions(mapBrokerageSupplierOptions(response));
+        setSupplierOptions(mapBrokerageSupplierOptions(response.data));
       })
       .catch((error) => {
         setErrors([...errors, `Retrieve supplier options failed. ${error}`]);
       });
+      
   };
 
   const retrieveResidentialCareBrokerageStages = () => {

@@ -118,6 +118,26 @@
   }
 }
 
+.held-payments-select {
+  margin-right: 8px;
+
+  &__control {
+    width: 185px;
+    height: 42px;
+    border-color: #bfc1c3 !important;
+    border-radius: 3px !important;
+    box-shadow: none !important;
+  }
+
+  &__placeholder {
+    color: #363636 !important;
+  }
+
+  &__indicators svg {
+    margin: 0 10px;
+  }
+}
+
 .held-payments__tab-class {
   .pay-runs__filters {
     justify-content: space-between;

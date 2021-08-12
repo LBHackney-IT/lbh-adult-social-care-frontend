@@ -23,11 +23,7 @@ const PayRunsHeader = ({
   statusOptions = [],
   dateRangeOptions = [],
   dateOptions = [],
-  serviceTypesOptions = [],
   releaseHolds,
-  serviceUserOptions = [],
-  supplierOptions = [],
-  waitingOnOptions = [],
   setOpenedPopup,
   apply,
   tab,
@@ -92,17 +88,12 @@ const PayRunsHeader = ({
       clickActionButton: releaseHolds,
       filtersComponent: (
         <HeldPaymentsFilters
-          applyFilters={applyFilters}
-          hasFields={hasFields}
-          dateRangeOptions={dateRangeOptions}
-          serviceTypesOptions={serviceTypesOptions}
-          serviceUserOptions={serviceUserOptions}
-          supplierOptions={supplierOptions}
-          waitingOnOptions={waitingOnOptions}
-          clearFilters={clearFilters}
-          changeFilter={changeFilter}
           filters={filters}
-          typeOptions={typeOptions}
+          applyFilters={applyFilters}
+          clearFilters={clearFilters}
+          hasFields={hasFields}
+          changeFilter={changeFilter}
+          dateRangeOptions={dateRangeOptions}
         />
       ),
     },
@@ -118,6 +109,7 @@ const PayRunsHeader = ({
         <p className="title">{tabInfos[tab].title}</p>
         <Button onClick={tabInfos[tab].clickActionButton}>{tabInfos[tab].actionButtonText}</Button>
       </div>
+
       <div className="pay-runs__filters">
         <p className="pay-runs__filters-title">Filter by</p>
         {tabInfos[tab].filtersComponent}

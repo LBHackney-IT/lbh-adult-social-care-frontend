@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from '../Button';
-import Input from '../Input';
 import Dropdown from '../Dropdown';
 import DatePick from '../DatePick'
-import SearchSelector from '../SearchSelector'
+import AsyncUserSelector from '../AsyncSelect'
 
 const initialFilters = {
   serviceUser: '',
@@ -17,10 +16,8 @@ const initialFilters = {
 };
 
 const PayRunHeader = ({
-  supplierOptions = [],
   changeFilters,
   typeOptions = [],
-  serviceUserOptions = [],
   statusOptions = [],
   actionButtonText = '',
   filter,
@@ -31,10 +28,6 @@ const PayRunHeader = ({
 
   const applyFilters = () => {
     filter(filters);
-  };
-
-  const searchId = () => {
-    console.log('search by id', filters.id);
   };
 
   const changeFilter = (field, value) => {
@@ -62,19 +55,17 @@ const PayRunHeader = ({
       </div>
       <div>
         <div className="pay-run__searches mb-3">
-          <SearchSelector
+          <AsyncUserSelector
+            onChange={(option) => changeFilter('serviceUser', option)}
             placeholder='Service User'
+            endpoint='clients'
             value={filters.serviceUser}
-            options={serviceUserOptions}
-            onOptionSelect={(option) => changeFilter('serviceUser', option)}
-            className="pay-run__filter-item mr-3"
           />
-          <SearchSelector
-            placeholder='Supplier'
+          <AsyncUserSelector
             value={filters.supplier}
-            options={supplierOptions}
-            onOptionSelect={(option) => changeFilter('supplier', option)}
-            className="pay-run__filter-item mr-3"
+            onChange={(option) => changeFilter('supplier', option)}
+            placeholder='Supplier'
+            endpoint='suppliers'
           />
         </div>
         <div className="pay-run__dropdowns">
