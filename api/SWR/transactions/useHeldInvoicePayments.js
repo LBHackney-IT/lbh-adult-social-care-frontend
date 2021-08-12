@@ -8,15 +8,14 @@ const customFetcher = (url, dateFrom, dateTo, packageTypeId, serviceUserId, supp
   });
 
 const useHeldInvoicePayments = ({ params = {}, shouldFetch }) => {
-  const { dateRange = '', serviceType, serviceUser, supplier, waitingOn } = params;
-  const [dateFrom, dateTo] = dateRange.split(' - ');
+  const { dateStart, dateEnd, serviceType, serviceUser, supplier, waitingOn } = params;
 
   const { data, mutate, error } = useSWR(
     shouldFetch
       ? [
           '/transactions/invoices/held-invoice-payments',
-          dateFrom,
-          dateTo,
+          dateStart,
+          dateEnd,
           serviceType,
           serviceUser,
           supplier,
