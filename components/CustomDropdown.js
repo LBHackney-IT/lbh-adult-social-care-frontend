@@ -62,7 +62,7 @@ const CustomDropDown = ({
         <div className="dropdown-menu" id="dropdown-menu" role="menu">
           <div className="dropdown-content">
             {localOptions.map((optionItem) => {
-              const activeItemClass = optionItem[fields.value] === selectedValue[fields.value] ? ' dropdown-item-active' : '';
+              const activeItemClass = (selectedValue && optionItem[fields.value] === selectedValue[fields.value]) ? ' dropdown-item-active' : '';
               return (
                 <div
                   key={optionItem[fields.value]}
