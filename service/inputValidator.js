@@ -4,6 +4,8 @@
 //  {name: 'secondName', value: 'SecondName', rules: ['empty']}
 //  {name: 'password', value: 'SoMePASS', rules: ['empty', 'password']}
 // ]
+import { useCallback } from 'react'
+
 const fieldValidator = (inputs = [], additionalRules = []) => {
   const validFields = {};
   let hasErrors = false;
@@ -32,6 +34,19 @@ const fieldValidator = (inputs = [], additionalRules = []) => {
     });
   });
   return { validFields, hasErrors };
+};
+
+const checkEmptyFields = (filters) => {
+  for(const field in filters) {
+    if(filters[field]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+export {
+  checkEmptyFields,
 };
 
 export default fieldValidator;

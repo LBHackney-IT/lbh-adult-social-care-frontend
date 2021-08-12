@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
 import { getUserSession, formatDate } from '../../service/helpers';
 import withSession from '../../lib/session';
-import SocialWorkerInputs from '../../components/SocialWorker/SocialWorkerInputs';
+import { addNotification } from '../../reducers/notificationsReducer';
 import { getSubmittedPackages, getSubmittedPackagesStatus } from '../../api/ApproversHub/SocialWorkerApi';
 import {
   RESIDENTIAL_CARE_ROUTE,
@@ -13,6 +14,10 @@ import {
   NURSING_CARE_APPROVE_PACKAGE_ROUTE,
 } from '../../routes/RouteConstants';
 import Table from '../../components/Table';
+import Inputs from '../../components/Inputs';
+import { checkEmptyFields } from '../../service/inputValidator';
+import { DATA_TYPES } from '../../api/Utils/CommonOptions';
+import { sortArray } from '../../api/Utils/FuncUtils';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -24,44 +29,37 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 });
 
 const SocialWorkerDashboardPage = () => {
+  const dispatch = useDispatch();
   const [sorts] = useState([
     { name: 'client', text: 'Client' },
     { name: 'category', text: 'Category' },
-    { name: 'dob', text: 'DOB' },
+    { name: 'dob', text: 'DOB', dataType: DATA_TYPES.DATE },
     { name: 'approver', text: 'Approver' },
-    { name: 'submitted', text: 'Submitted\n(days ago)' },
-    { name: 'status', text: 'Status' },
+    { name: 'submittedDaysAgo', text: 'Submitted\n(days ago)' },
+    { name: 'statusName', text: 'Status' },
   ]);
 
+  const [initialFilters] = useState({
+    terms: '',
+    status: '',
+  });
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [sort, setSort] = useState({
-    value: 'increase',
-    name: 'id',
+    value: 'ascending',
+    name: sorts[0].name,
   });
 
   const sortBy = (field, value) => {
     setSort({ value, name: field });
   };
-
-  const onClickTableRow = (rowItems) => {
-    rowItems.categoryId === 3
-      ? rowItems.statusName === 'Draft'
-        ? router.push(`${RESIDENTIAL_CARE_ROUTE}/${rowItems.packageId}`)
-        : router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
-      : rowItems.statusName === 'Draft'
-      ? router.push(`${NURSING_CARE_ROUTE}/${rowItems.packageId}`)
-      : router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
-  };
-
   const [socialWorkerData, setSubmittedPackages] = useState([]);
   const [pagedData, setPagedData] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
-  const [errors, setErrors] = useState([]);
-  const [statusId, setStatusId] = useState();
-  const [clientName, setClientName] = useState();
+  const [filters, setFilters] = useState({...initialFilters});
 
   useEffect(() => {
-    console.log('change sort', sort);
+    retrieveSocialWorkerData();
   }, [sort]);
 
   useEffect(() => {
@@ -69,26 +67,31 @@ const SocialWorkerDashboardPage = () => {
     retrieveStatusOptions();
   }, []);
 
-  const retrieveSocialWorkerData = (page, clientName, statusId) => {
-    getSubmittedPackages(page, 50, clientName, statusId)
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }))
+  }
+
+  const onClickTableRow = (rowItems) => {
+    rowItems.categoryId === 3
+      ? rowItems.statusName === 'Draft'
+      ? router.push(`${RESIDENTIAL_CARE_ROUTE}/${rowItems.packageId}`)
+      : router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`)
+      : rowItems.statusName === 'Draft'
+      ? router.push(`${NURSING_CARE_ROUTE}/${rowItems.packageId}`)
+      : router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
+  };
+
+  const retrieveSocialWorkerData = (page, statusId) => {
+    setLoading(true);
+    getSubmittedPackages(page, 50, filters.terms, statusId)
       .then((res) => {
-        const pagedData = res.pagingMetaData;
-        const sortedData = res.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
-        const options = sortedData.map((option) => ({
-          client: option.client,
-          packageId: option.packageId,
-          categoryId: option.categoryId,
-          category: option.category,
-          dateOfBirth: option.dateOfBirth,
-          approver: option.approver,
-          submittedDaysAgo: option.submittedDaysAgo,
-          statusName: option.statusName,
-        }));
-        setSubmittedPackages(options);
-        setPagedData(pagedData);
+        setSubmittedPackages(sortArray(res.data, sort));
+        setPagedData(res.pagingMetaData);
+        setLoading(false);
       })
       .catch((error) => {
-        setErrors([...errors, `Retrieve Submitted Packages Requests failed. ${error.message}`]);
+        pushNotification(error);
+        setLoading(false);
       });
   };
 
@@ -102,11 +105,14 @@ const SocialWorkerDashboardPage = () => {
         setStatusOptions(options);
       })
       .catch((error) => {
-        setErrors([...errors, `Retrieve status options failed. ${error.message}`]);
+        pushNotification(error)
       });
   };
 
   const rowsRules = {
+    packageId: {
+      hide: true,
+    },
     dateOfBirth: {
       getValue: (value) => `${formatDate(value, '/')}`,
     },
@@ -129,23 +135,49 @@ const SocialWorkerDashboardPage = () => {
     retrieveSocialWorkerData(page);
   };
 
-  const setSearchTerm = (clientName) => {
-    setClientName();
-    retrieveSocialWorkerData(1, clientName);
+  const setSearchTerm = () => {
+    retrieveSocialWorkerData(1, filters.terms);
   };
 
-  const setFilter = (statusId) => {
-    setStatusId();
-    retrieveSocialWorkerData(1, clientName, statusId);
+  const changeFilters = (field, value) => {
+    setFilters(filtersState => ({
+      ...filtersState,
+      [field]: value,
+    }))
+  }
+
+  const inputs = {
+    inputs: [
+      {
+        label: 'Search',
+        name: 'terms',
+        placeholder: 'Enter search terms',
+        search: () => setSearchTerm(),
+        className: 'mr-3'
+      },
+    ],
+    dropdowns: [
+      { options: statusOptions, initialText: 'Status', name: 'status', className: 'mr-3' },
+    ],
+    buttons: [
+      { initialText: 'Filter', name: 'button-1', className: 'mt-auto ml-6', onClick: () =>  retrieveSocialWorkerData()},
+      {
+        initialText: 'Clear',
+        name: 'button-2',
+        className: `mt-auto ml-3 outline gray${checkEmptyFields(filters) ? ' display-none' : ''}`,
+        onClick: () => setFilters({...initialFilters})
+      },
+    ],
   };
 
   return (
     <div className="social-worker-page">
-      <SocialWorkerInputs statusOptions={statusOptions} searchTerm={setSearchTerm} searchFilters={setFilter} />
+      <Inputs values={filters} inputs={inputs} title='Submitted Package Request' changeInputs={changeFilters} />
       <Table
         onClickTableRow={onClickTableRow}
         fields={tableFields}
         rows={socialWorkerData}
+        loading={loading}
         rowsRules={rowsRules}
         sortBy={sortBy}
         sorts={sorts}
@@ -153,7 +185,7 @@ const SocialWorkerDashboardPage = () => {
       <Pagination
         currentPage={pagedData.currentPage}
         changePagination={setPage}
-        itemsCount={pagedData.pageSize}
+        pageSize={pagedData.pageSize}
         totalCount={pagedData.totalCount}
         totalPages={pagedData.totalPages}
       />

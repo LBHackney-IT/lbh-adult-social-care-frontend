@@ -42,7 +42,7 @@ const SupplierReturnsDashboard = () => {
   ]);
 
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'serviceUser',
   });
 
@@ -125,7 +125,7 @@ const SupplierReturnsDashboard = () => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} pageSize={10} totalCount={30} />
       <SupplierReturnsLevelInsight packages="832" totalValue="£92,321" returned="700" inDispute="42" accepted="678" />
     </div>
   );

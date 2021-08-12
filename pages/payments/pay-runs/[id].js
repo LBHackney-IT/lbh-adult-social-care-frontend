@@ -32,11 +32,7 @@ import { currency } from '../../../constants/strings';
 import PayRunCollapsedContent from '../../../components/PayRuns/PayRunCollapsedContent';
 import { usePaymentDepartments } from '../../../api/SWR';
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions'
-import {
-  sortArrayOfObjectsByDateAscending, sortArrayOfObjectsByDateDescending,
-  sortArrayOfObjectsByNumberAscending, sortArrayOfObjectsByNumberDescending,
-  sortArrayOfObjectsByStringAscending, sortArrayOfObjectsByStringDescending
-} from '../../../api/Utils/FuncUtils'
+import { sortArray } from '../../../api/Utils/FuncUtils'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -99,7 +95,7 @@ const PayRunPage = () => {
     { text: `Pay Run ${id}` },
   ]);
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'id',
     dataType: DATA_TYPES.STRING,
   });
@@ -237,21 +233,8 @@ const PayRunPage = () => {
 
   useEffect(() => {
     if(!invoices?.invoices?.length) return;
-    const { value = '', name = '', dataType = DATA_TYPES.STRING } = sort;
-    let fieldName = '';
-    let sortedList = [];
-    fieldName = payRunFields[name];
     const data = invoices.invoices.slice();
-    if (value === 'increase') {
-      if (dataType === DATA_TYPES.STRING) sortedList = sortArrayOfObjectsByStringAscending(data, fieldName);
-      else if (dataType === DATA_TYPES.DATE) sortedList = sortArrayOfObjectsByDateAscending(data, fieldName);
-      else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberAscending(data, fieldName);
-    } else if (value === 'decrease') {
-      if (dataType === DATA_TYPES.STRING) sortedList = sortArrayOfObjectsByStringDescending(data, fieldName);
-      else if (dataType === DATA_TYPES.DATE) sortedList = sortArrayOfObjectsByDateDescending(data, fieldName);
-      else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberDescending(data, fieldName);
-    }
-    setInvoices({ ...invoices, invoices: sortedList });
+    setInvoices({ ...invoices, invoices: sortArray(data, sort) });
   }, [sort]);
 
   useEffect(() => {

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
 import DashboardTabs from '../../components/Dashboard/Tabs';
 import Table from '../../components/Table';
-import { formatDate, formatStatus, sortTableByKey } from '../../service/helpers';
+import { formatDate, formatForDropDownOptions, sortTableByKey } from '../../service/helpers'
 import { addNotification } from '../../reducers/notificationsReducer';
 import {
   getApprovedPackagesApprovers,
@@ -27,6 +27,8 @@ import {
   NURSING_CARE_BROKERING_ROUTE,
 } from '../../routes/RouteConstants';
 import { currency } from '../../constants/strings';
+import { DEFAULT_PAGE_SIZE } from '../../constants/variables';
+import { checkEmptyFields } from '../../service/inputValidator'
 
 const ApproverHubPage = () => {
   const dispatch = useDispatch();
@@ -94,6 +96,11 @@ const ApproverHubPage = () => {
   const [timer, setTimer] = useState(null);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [filterOptions, setFilterOptions] = useState({
+    approvers: [],
+    packageTypes: [],
+    socialWorkers: [],
+  });
 
   const [sorts] = useState([
     { name: 'serviceUser', text: 'SERVICE USER' },
@@ -131,7 +138,7 @@ const ApproverHubPage = () => {
     completed: [],
   });
 
-  const [tabs] = useState([
+  const tabs = [
     { className: 'border-2', value: 'new', text: `New${tabsTable.new.length ? ` (${tabsTable.new.length})` : ''}` },
     {
       value: 'clarification',
@@ -148,7 +155,7 @@ const ApproverHubPage = () => {
       text: `Review Commercials ${tabsTable.reviewCommercials.length ? `(${tabsTable.reviewCommercials.length})` : ''}`,
     },
     { value: 'completed', text: `Completed ${tabsTable.completed.length ? `(${tabsTable.completed.length})` : ''}` },
-  ]);
+  ];
 
   const [sort, setSort] = useState({
     value: 'increase',
@@ -159,7 +166,14 @@ const ApproverHubPage = () => {
     dispatch(addNotification({ text, className }));
   };
 
-  const [inputs] = useState({
+  const checkFields = useCallback(() => {
+    if(checkEmptyFields(filters)) {
+      return ' display-none';
+    }
+    return '';
+  }, [filters]);
+
+  const inputs = {
     inputs: [
       {
         label: 'Search',
@@ -170,16 +184,51 @@ const ApproverHubPage = () => {
       },
     ],
     dropdowns: [
-      { options: [], initialText: 'Package Type', name: 'PackageType', className: 'mr-3' },
-      { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
-      { options: [], initialText: 'Approver', name: 'Approver', className: 'mr-3' },
+      { options: filterOptions.packageTypes, initialText: 'Package Type', name: 'PackageType', className: 'mr-3' },
+      { options: filterOptions.socialWorkers, initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
+      { options: filterOptions.approvers, initialText: 'Approver', name: 'Approver', className: 'mr-3' },
     ],
-    buttons: [{ initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() }],
-  });
+    buttons: [
+      { initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() },
+      { initialText: 'Clear', name: 'button-2', className: `mt-auto ml-3 outline gray${checkFields()}`, onClick: () => setFilters({...initialFilters}) },
+    ],
+  };
 
   const sortBy = (field, value) => {
     setSort({ value, name: field });
   };
+
+  const tabRequest = (actualTab = tab) => {
+    tabsRequests[actualTab]({
+      PageNumber: page,
+      OrderBy: sort.name,
+      PageSize: DEFAULT_PAGE_SIZE,
+      ...filters,
+    })
+      .then((res) => {
+        const tableData = res.data;
+        sortTableByKey(tableData, sort)
+        setTabsTable((tabsTableState) => {
+          return ({ ...tabsTableState, [actualTab]: tableData })
+        });
+        setPagingMetaData((pagingState => ({
+          ...pagingState,
+          [actualTab]: res.pagingMetaData,
+        })));
+        setLoading(false);
+      })
+      .catch((e) => {
+        pushNotification(e);
+        setLoading(false);
+      });
+  }
+
+  function changeFilterOptions(field, newValue) {
+    setFilterOptions((filterOptionsState) => ({
+      ...filterOptionsState,
+      [field]: newValue,
+    }));
+  }
 
   const makeTabRequest = () => {
     setLoading(true);
@@ -187,64 +236,18 @@ const ApproverHubPage = () => {
       clearTimeout(timer);
     }
     setTimer(setTimeout(() => {
-      const setInitialOptions = (tag, response) => {
-        if (tag === 'PackageType')
-          inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ packageType, id }) => ({
-            text: packageType,
-            value: id,
-          }));
-        else
-          inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ userName, id }) => ({
-            text: userName,
-            value: id,
-          }));
-      };
       getApprovedPackagesPackageTypes().then((response) => {
-        setInitialOptions('PackageType', response);
-        const options = response.map((option) => ({
-          text: option?.packageType,
-          value: option?.id,
-        }));
-        changeInputs('PackageType', options.text);
+        changeFilterOptions('packageTypes', formatForDropDownOptions({ text: 'packageType' }, response))
       });
 
       getApprovedPackagesSocialWorkers().then((response) => {
-        setInitialOptions('SocialWorker', response);
-        const options = response.map((option) => ({
-          text: option?.userName,
-          value: option?.id,
-        }));
-        changeInputs('SocialWorker', options);
+        changeFilterOptions('socialWorkers', formatForDropDownOptions({ text: 'userName' }, response))
       });
 
       getApprovedPackagesApprovers().then((response) => {
-        setInitialOptions('Approver', response);
-        const options = response.map((option) => ({
-          text: option?.userName,
-          value: option?.id,
-        }));
-        changeInputs('Approver', options);
+        changeFilterOptions('approvers', formatForDropDownOptions({ text: 'userName' }, response));
       });
-      tabsRequests[tab]({
-        PageNumber: page,
-        OrderBy: sort.name,
-        PageSize: 50,
-        ...filters,
-      })
-        .then((res) => {
-          const tableData = res.data || [];
-          sortTableByKey(tableData, sort)
-          setTabsTable({ ...tabsTable, [tab]: tableData });
-          setPagingMetaData({
-            ...pagingMetaData,
-            [tab]: res.pagingMetaData,
-          });
-          setLoading(false);
-        })
-        .catch((e) => {
-          pushNotification(e);
-          setLoading(false);
-        });
+      tabRequest();
       }, 500)
     );
   };
@@ -253,9 +256,17 @@ const ApproverHubPage = () => {
     makeTabRequest();
   }, [tab, sort, page]);
 
+  useEffect(() => {
+    tabs.forEach(tabsItem => {
+      tabRequest(tabsItem.value)
+    });
+  }, []);
+
   const rowsRules = {
     packageType: {
-      onClick: (cellItem, cellValue) => changeInputs('PackageType', cellValue),
+      onClick: (cellItem) => {
+        changeInputs('PackageType', cellItem?.packageTypeId)
+      },
       getClassName: () => 'link-button',
     },
     lastUpdated: {
@@ -311,7 +322,7 @@ const ApproverHubPage = () => {
       <Pagination
         currentPage={page}
         changePagination={changePage}
-        itemsCount={pageSize}
+        pageSize={pageSize}
         totalCount={totalCount}
         totalPages={totalPages}
       />

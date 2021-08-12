@@ -69,16 +69,29 @@ const getLoggedInUser = ({ req }) => {
   return user;
 };
 
+function formatForDropDownOptions(fields, res) {
+  if(!res) return [];
+  const localFields = {
+    text: 'text',
+    value: 'id',
+    ...fields,
+  };
+  return res.map((item) => ({
+    text: item[localFields.text],
+    value: item[localFields.value],
+  }));
+}
+
 const sortTableByKey = (input, sort) => {
   if (!Array.isArray(input)) {
     console.error('Sorted object is not an array');
-    return input;
+    return [];
   }
   if (!sort?.value && !sort?.name) {
     console.error('Wrong format of sorting object');
-    return input;
+    return [];
   }
-  const isIncrease = sort.value === 'increase';
+  const isIncrease = sort.value === 'ascending';
   return input.sort((a, b) => {
     const moveTo = { up: isIncrease ? 1 : -1, down: isIncrease ? -1 : 1 };
     if (a[sort.name] > b[sort.name]) return moveTo.up;
@@ -101,4 +114,5 @@ export {
   formatDate,
   getLoggedInUser,
   sortTableByKey,
+  formatForDropDownOptions,
 };

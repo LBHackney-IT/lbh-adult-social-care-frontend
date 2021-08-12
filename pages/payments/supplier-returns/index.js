@@ -34,7 +34,7 @@ const SupplierReturns = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'weekCommencing',
   });
 
@@ -66,7 +66,7 @@ const SupplierReturns = () => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination from={1} to={10} pageSize={10} totalCount={30} />
       <HackneyFooterInfo />
     </div>
   );

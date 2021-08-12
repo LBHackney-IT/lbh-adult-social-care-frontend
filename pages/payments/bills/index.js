@@ -60,7 +60,7 @@ const Bills = () => {
   const [checkedRows, setCheckedRows] = useState([]);
   const [tab, changeTab] = useState('bills');
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'ref',
   });
 
@@ -139,7 +139,7 @@ const Bills = () => {
         }}
         from={1}
         to={10}
-        itemsCount={10}
+        pageSize={10}
         totalCount={30}
       />
       <HackneyFooterInfo />

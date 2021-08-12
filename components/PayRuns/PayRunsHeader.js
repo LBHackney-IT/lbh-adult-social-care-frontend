@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '../Button';
 import PayRunsFilters from './PayRunsFilters';
 import HeldPaymentsFilters from './HeldPaymentsFilters';
+import { checkEmptyFields } from '../../service/inputValidator'
 
 const initialFilters = {
   id: '',
@@ -51,11 +52,11 @@ const PayRunsHeader = ({
   }
 
   useEffect(() => {
-    for(const name in filters) {
-      if(filters[name]) {
-        setHasFields(true);
-        break;
-      }
+    const empty = checkEmptyFields(filters);
+    if(empty) {
+      setHasFields(false);
+    } else {
+      setHasFields(true);
     }
   }, [filters]);
 

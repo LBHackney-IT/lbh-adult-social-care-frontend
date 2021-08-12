@@ -18,17 +18,9 @@ import { addNotification } from '../../../reducers/notificationsReducer';
 import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
 import ChatButton from '../../../components/PayRuns/ChatButton';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { formatStatus, getUserSession } from '../../../service/helpers'
+import { formatStatus, getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
-import {
-  getEnGBFormattedDate,
-  sortArrayOfObjectsByDateAscending,
-  sortArrayOfObjectsByDateDescending,
-  sortArrayOfObjectsByNumberAscending,
-  sortArrayOfObjectsByNumberDescending,
-  sortArrayOfObjectsByStringAscending,
-  sortArrayOfObjectsByStringDescending,
-} from '../../../api/Utils/FuncUtils';
+import { getEnGBFormattedDate, sortArray } from '../../../api/Utils/FuncUtils';
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
 import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from '../../../api/Mappers/PayRunMapper';
 import {
@@ -39,6 +31,7 @@ import {
   useUniquePayRunStatuses,
 } from '../../../api/SWR';
 import usePayRunsSummaryList from '../../../api/SWR/transactions/usePayRunsSummaryList';
+import useGroupedData from '../../../service/useGroupPayRun'
 
 const PAYMENT_TABS = [
   { text: 'Pay Runs', value: 'pay-runs' },
@@ -47,21 +40,21 @@ const PAYMENT_TABS = [
 
 const SORTS_TAB = {
   'pay-runs': [
-    { name: 'id', text: 'ID', dataType: DATA_TYPES.STRING },
-    { name: 'date', text: 'Date', dataType: DATA_TYPES.DATE },
-    { name: 'type', text: 'Type', dataType: DATA_TYPES.STRING },
-    { name: 'paid', text: 'Paid', dataType: DATA_TYPES.NUMBER },
-    { name: 'held', text: 'Held', dataType: DATA_TYPES.NUMBER },
-    { name: 'status', text: 'Status', dataType: DATA_TYPES.STRING },
+    { name: 'payRunId', text: 'ID', dataType: DATA_TYPES.STRING },
+    { name: 'dateCreated', text: 'Date', dataType: DATA_TYPES.DATE },
+    { name: 'payRunTypeName', text: 'Type', dataType: DATA_TYPES.STRING },
+    { name: 'totalAmountPaid', text: 'Paid', dataType: DATA_TYPES.NUMBER },
+    { name: 'totalAmountHeld', text: 'Held', dataType: DATA_TYPES.NUMBER },
+    { name: 'payRunStatusName', text: 'Status', dataType: DATA_TYPES.STRING },
   ],
   'held-payments': [
     { name: 'payRunDate', text: 'Pay run date', dataType: DATA_TYPES.DATE },
     { name: 'payRunId', text: 'Pay run ID', dataType: DATA_TYPES.STRING },
-    { name: 'serviceUser', text: 'Service User', dataType: DATA_TYPES.STRING },
-    { name: 'packageType', text: 'Package Type', dataType: DATA_TYPES.STRING },
-    { name: 'supplier', text: 'Supplier', dataType: DATA_TYPES.STRING },
-    { name: 'amount', text: 'Amount', dataType: DATA_TYPES.NUMBER },
-    { name: 'status', text: 'Status', dataType: DATA_TYPES.STRING },
+    { name: 'serviceUserName', text: 'Service User', dataType: DATA_TYPES.STRING },
+    { name: 'packageTypeName', text: 'Package Type', dataType: DATA_TYPES.STRING },
+    { name: 'supplierName', text: 'Supplier', dataType: DATA_TYPES.STRING },
+    { name: 'totalAmount', text: 'Amount', dataType: DATA_TYPES.NUMBER },
+    { name: 'invoiceStatusId', text: 'Status', dataType: DATA_TYPES.NUMBER },
     { name: 'waitingFor', text: 'Waiting for', dataType: DATA_TYPES.STRING },
   ],
 };
@@ -109,18 +102,17 @@ const PayRunsPage = () => {
   const [openedPopup, setOpenedPopup] = useState('');
   const [date, setDate] = useState(new Date());
   const [checkedRows, setCheckedRows] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [openedInvoiceChat, setOpenedInvoiceChat] = useState({});
   const [hocAndRelease, changeHocAndRelease] = useState('');
   const [newPayRunType, setNewPayRunType] = useState('');
   const [waitingOn, changeWaitingOn] = useState('');
   const [newMessageText, setNewMessageText] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
-  const [tab, changeTab] = useState('pay-runs');
+  const [tab, setTab] = useState('pay-runs');
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState({
-    value: 'increase',
-    name: 'id',
+    value: 'ascending',
+    name: 'payRunId',
     dataType: DATA_TYPES.STRING,
   });
 
@@ -157,6 +149,15 @@ const PayRunsPage = () => {
   const sortBy = (field, value, dataType) => {
     setSort({ value, name: field, dataType });
   };
+
+  const changeTab = newTab => {
+    setSort({
+      value: 'ascending',
+      name: SORTS_TAB[newTab][0].name,
+      dataType: SORTS_TAB[newTab][0].dataType
+    });
+    setTab(newTab);
+  }
 
   const closeCreatePayRun = () => {
     setOpenedPopup('');
@@ -195,26 +196,10 @@ const PayRunsPage = () => {
     },
   ];
 
-  const sortedSummaryList = useMemo(() => {
-    const { value = '', name = '', dataType = DATA_TYPES.STRING } = sort || {};
-    const { data } = summaryList;
-
-    let fieldName = '';
-    let sortedList = [];
-    fieldName = PAY_RUN_FIELDS[name];
-
-    if (value === 'increase') {
-      if (dataType === DATA_TYPES.STRING) sortedList = sortArrayOfObjectsByStringAscending(data, fieldName);
-      else if (dataType === DATA_TYPES.DATE) sortedList = sortArrayOfObjectsByDateAscending(data, fieldName);
-      else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberAscending(data, fieldName);
-    } else if (value === 'decrease') {
-      if (dataType === DATA_TYPES.STRING) sortedList = sortArrayOfObjectsByStringDescending(data, fieldName);
-      else if (dataType === DATA_TYPES.DATE) sortedList = sortArrayOfObjectsByDateDescending(data, fieldName);
-      else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberDescending(data, fieldName);
-    }
-
-    return sortedList;
-  }, [sort, summaryList]);
+  const sortedTableData = useMemo(() => {
+    const tabData = isPayRunsTab ? summaryList.data : useGroupedData(heldPayments.data);
+    return sortArray(tabData, sort)
+  }, [sort, summaryList, heldPayments, isPayRunsTab]);
 
   const releaseOne = async (item, invoice) => {
     try {
@@ -259,6 +244,8 @@ const PayRunsPage = () => {
     }
   };
 
+  const loading = !pageSize;
+
   return (
     <div className={`pay-runs ${tab}__tab-class`}>
       {openedPopup === 'create-pay-run' && (
@@ -274,7 +261,6 @@ const PayRunsPage = () => {
           setDate={setDate}
         />
       )}
-
       {openedPopup === 'help-chat' && (
         <PopupInvoiceChat
           closePopup={closeHelpChat}
@@ -289,7 +275,6 @@ const PayRunsPage = () => {
           waitingOnOptions={waitingOnOptions}
         />
       )}
-
       <PayRunsHeader
         typeOptions={[...mapPayRunTypeOptions(payRunTypes), ...mapPayRunSubTypeOptions(payRunSubTypes)]}
         statusOptions={mapPayRunStatuses(uniquePayRunStatuses)}
@@ -299,12 +284,10 @@ const PayRunsPage = () => {
         tab={tab}
         setOpenedPopup={setOpenedPopup}
       />
-
       <PaymentsTabs tab={tab} changeTab={changeTab} tabs={PAYMENT_TABS} />
-
       {isPayRunsTab ? (
         <Table
-          rows={sortedSummaryList}
+          rows={sortedTableData}
           rowsRules={PAY_RUN_ROWS_RULES}
           fields={PAY_RUN_FIELDS}
           sorts={SORTS_TAB[tab]}
@@ -314,22 +297,21 @@ const PayRunsPage = () => {
         />
       ) : (
         <PayRunTable
-          loading={loading}
           checkedRows={checkedRows}
           setCheckedRows={onCheckRows}
           isIgnoreId
+          loading={loading}
           className={TABS_CLASSES[tab]}
           additionalActions={heldActions}
           changeAllChecked={setCheckedRows}
           canCollapseRows
           release={releaseOne}
           releaseAllSelected={releaseAllSelected}
-          rows={heldPayments.data}
+          rows={sortedTableData}
           sortBy={sortBy}
           sorts={SORTS_TAB[tab]}
         />
       )}
-
       <Pagination
         from={page * pageSize - (pageSize - 1)}
         to={page * pageSize > totalCount ? totalCount : page * pageSize}
@@ -338,7 +320,6 @@ const PayRunsPage = () => {
         changePagination={setPage}
         currentPage={page}
       />
-
       <HackneyFooterInfo />
     </div>
   );

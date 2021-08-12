@@ -9,8 +9,8 @@ const BillsSortTable = ({ checkedRows, sorts, sortBy, additionalActions }) => (
         <p className="sort__sort-name">{item.text}</p>
         {item.name && (
           <div className="sort__actions">
-            <CaretDownIcon onClick={() => sortBy(item.name, 'increase')} />
-            <CaretDownIcon onClick={() => sortBy(item.name, 'decrease')} />
+            <CaretDownIcon onClick={() => sortBy(item.name, 'ascending')} />
+            <CaretDownIcon onClick={() => sortBy(item.name, 'descending')} />
           </div>
         )}
       </div>

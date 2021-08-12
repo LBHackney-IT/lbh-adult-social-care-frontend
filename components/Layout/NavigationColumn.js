@@ -25,7 +25,7 @@ const NavigationColumn = ({ clientSummaryInfo, showBackButton }) => {
 
   return (
     <div className={`column pb-0 mb-0 nav-column${mobileNavBar}`}>
-      {clientSummaryInfo && <NavClientSummary showBackButton={showBackButton} props={clientSummaryInfo} />}
+      {clientSummaryInfo && <NavClientSummary showBackButton={showBackButton} {...clientSummaryInfo} />}
       <NavItem to={RouteConstants.CARE_PACKAGE_ROUTE}>Care Package</NavItem>
       <NavItem to="/social-worker">Social Worker</NavItem>
       <NavItem to="/approver-hub">Approver Hub</NavItem>

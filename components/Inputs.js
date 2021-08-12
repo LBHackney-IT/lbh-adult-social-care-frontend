@@ -7,7 +7,6 @@ import { Button } from './Button';
   EXAMPLE
 
   {
-    title: 'Approver Hub',
     inputs: {
       inputs: [
         {label: 'Search', placeholder: 'Search...', search: () => console.log('search for item'), className: 'mr-3'}
