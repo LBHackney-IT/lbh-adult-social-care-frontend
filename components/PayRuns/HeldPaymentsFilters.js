@@ -53,6 +53,7 @@ const HeldPaymentsFilters = ({ filters, changeFilter, applyFilters }) => {
             changeFilter('dateStart', convertLocalToUTCDate(from, false));
             changeFilter('dateEnd', convertLocalToUTCDate(to, true));
           }}
+          placeholderText="Date range"
           selectsRange
         />
 
