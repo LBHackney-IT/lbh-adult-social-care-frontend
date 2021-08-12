@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { pick, uniqBy } from 'lodash';
@@ -115,7 +115,7 @@ const PayRunsPage = () => {
   const [newMessageText, setNewMessageText] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
   const [tab, changeTab] = useState('pay-runs');
-  const [page] = useState(1);
+  const [page, setPage] = useState(1);
   const [sort, setSort] = useState({
     value: 'increase',
     name: 'id',
@@ -125,6 +125,10 @@ const PayRunsPage = () => {
   const [filters, setFilters] = useState({});
 
   const isPayRunsTab = tab === 'pay-runs';
+
+  useEffect(() => {
+    setPage(1);
+  }, [tab]);
 
   const { data: payRunTypes } = usePayRunTypes();
   const { data: payRunSubTypes } = usePayRunSubTypes();
@@ -144,7 +148,9 @@ const PayRunsPage = () => {
     shouldFetch: isPayRunsTab,
   });
 
-  const { pagingMetaData: paginationInfo } = isPayRunsTab ? summaryList : heldPayments;
+  const {
+    pagingMetaData: { pageSize, totalCount, totalPages },
+  } = isPayRunsTab ? summaryList : heldPayments;
 
   const dateRangeOptions = uniqBy(
     heldPayments.data.map(({ dateFrom, dateTo }) => ({
@@ -330,10 +336,12 @@ const PayRunsPage = () => {
       )}
 
       <Pagination
-        from={paginationInfo?.currentPage}
-        to={paginationInfo?.pageSize}
-        itemsCount={paginationInfo?.pageSize}
-        totalCount={paginationInfo?.totalCount}
+        from={page * pageSize - (pageSize - 1)}
+        to={page * pageSize > totalCount ? totalCount : page * pageSize}
+        totalCount={totalCount}
+        totalPages={totalPages}
+        changePagination={setPage}
+        currentPage={page}
       />
 
       <HackneyFooterInfo />

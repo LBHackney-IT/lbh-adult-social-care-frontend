@@ -23,7 +23,9 @@ const Pagination = ({
           {actionButton.text}
         </Button>
       )}
+
       <p className="table-pagination-info">Showing {`${from}-${to} of ${totalCount} items`}</p>
+
       <div className="table-pagination-actions">
         {totalCount === 0 ? (
           <Button
