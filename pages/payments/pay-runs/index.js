@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { pick, uniqBy } from 'lodash';
+import { pick } from 'lodash';
 import {
   createNewPayRun,
   PAY_RUN_TYPES,
@@ -136,7 +136,7 @@ const PayRunsPage = () => {
   const { data: uniquePayRunStatuses } = useUniquePayRunStatuses();
 
   const { data: heldPayments, mutate: refetchHeldPayments } = useHeldInvoicePayments({
-    params: pick(filters, ['dateFrom', 'dateTo', 'serviceType', 'serviceUser', 'supplier', 'waitingOn']),
+    params: pick(filters, ['dateStart', 'dateEnd', 'serviceType', 'serviceUser', 'supplier', 'waitingOn']),
     shouldFetch: !isPayRunsTab,
   });
 
@@ -151,14 +151,6 @@ const PayRunsPage = () => {
   const {
     pagingMetaData: { pageSize, totalCount, totalPages },
   } = isPayRunsTab ? summaryList : heldPayments;
-
-  const dateRangeOptions = uniqBy(
-    heldPayments.data.map(({ dateFrom, dateTo }) => ({
-      value: `${dateFrom} - ${dateTo}`,
-      text: `${getEnGBFormattedDate(dateFrom)} - ${getEnGBFormattedDate(dateTo)}`,
-    })),
-    'value'
-  );
 
   const sortBy = (field, value, dataType) => {
     setSort({ value, name: field, dataType });
@@ -304,7 +296,6 @@ const PayRunsPage = () => {
         checkedItems={checkedRows}
         tab={tab}
         setOpenedPopup={setOpenedPopup}
-        dateRangeOptions={dateRangeOptions}
       />
 
       <PaymentsTabs tab={tab} changeTab={changeTab} tabs={PAYMENT_TABS} />
