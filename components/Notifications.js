@@ -38,7 +38,7 @@ const CustomNotification = ({ className = '' }) => {
     return (
       <div className={allClasses}>
         <div>
-          <p>{notifications[0].text}</p>
+          <p>{notifications[0].text.toString()}</p>
           <span className="notification-close" onClick={closeNotification}>
             +
           </span>

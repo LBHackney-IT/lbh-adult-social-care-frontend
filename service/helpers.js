@@ -22,13 +22,26 @@ const formatDate = (date, sign = '/') => {
 
 const includeString = (mainString, checkString) => mainString && mainString.indexOf(checkString) > -1;
 
-const formatStatus = (status) =>
-  status
-    ? status
-        .split('-')
-        .map((text) => text.slice(0, 1).toUpperCase() + text.slice(1, text.length))
-        .join(' ')
-    : '';
+const formatStatus = (status, sign = '-', isUpperCase) => {
+  if(!status) return '';
+  if(status.indexOf('-') > -1) {
+    return status
+      .split('-')
+      .map((text) => text.slice(0, 1).toUpperCase() + text.slice(1, text.length))
+      .join(' ');
+  }
+
+  let newStatus = '';
+  for(const i of status) {
+    if(i !== '' && i !== ' ') {
+      if(i === i.toUpperCase() && i !== status[0].toUpperCase()) {
+        newStatus += sign;
+      }
+      newStatus += i;
+    }
+  }
+  return isUpperCase ? newStatus : newStatus.toLowerCase();
+}
 
 // check user session
 // if no user, then redirect to Login Page
@@ -74,9 +87,12 @@ const sortTableByKey = (input, sort) => {
   });
 };
 
+const deleteSpaces = (str) => str.replace(/\s/g, '');
+
 const getErrorResponse = (error) => error?.response?.data || {}; // { firstName: 'First Name must be more then 10 symbols', secondName: 'Second Name must be more then 10 symbols'
 export {
   uniqueID,
+  deleteSpaces,
   formatDateWithSign,
   formatStatus,
   includeString,

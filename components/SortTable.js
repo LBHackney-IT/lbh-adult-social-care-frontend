@@ -20,15 +20,19 @@ const SortTable = ({ changeAllChecked, fields, checkedRows = [], rows = [], sort
         />
       </div>
     )}
-    {sorts.map((item) => (
-      <div key={item.name} className={`sort${item.className ? ` ${item.className}` : ''}`}>
-        <p className="sort__sort-name">{item.text}</p>
-        <div className="sort__actions">
-          <CaretDownIcon onClick={() => sortBy(item.name, 'increase', item?.dataType || DATA_TYPES.STRING)} />
-          <CaretDownIcon onClick={() => sortBy(item.name, 'decrease', item?.dataType || DATA_TYPES.STRING)} />
+    {sorts.map((item, index) => {
+      const columnClass = ` table__row-column-${index+1}`;
+      const outerClass = item.className ? ` ${item.className}` : '';
+      return (
+        <div key={item.name} className={`sort${outerClass}${columnClass}`}>
+          <p className="sort__sort-name">{item.text}</p>
+          <div className="sort__actions">
+            <CaretDownIcon onClick={() => sortBy(item.name, 'increase', item?.dataType || DATA_TYPES.STRING)} />
+            <CaretDownIcon onClick={() => sortBy(item.name, 'decrease', item?.dataType || DATA_TYPES.STRING)} />
+          </div>
         </div>
-      </div>
-    ))}
+      )
+    })}
     {additionalActions && additionalActions.map((item) => <div key={item.id} className="sort" />)}
   </div>
 );

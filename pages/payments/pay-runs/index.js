@@ -18,7 +18,7 @@ import { addNotification } from '../../../reducers/notificationsReducer';
 import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
 import ChatButton from '../../../components/PayRuns/ChatButton';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { getUserSession } from '../../../service/helpers';
+import { formatStatus, getUserSession } from '../../../service/helpers'
 import withSession from '../../../lib/session';
 import {
   getEnGBFormattedDate,
@@ -85,7 +85,8 @@ const PAY_RUN_ROWS_RULES = {
     getClassName: () => 'button-link',
   },
   payRunStatusName: {
-    getClassName: (value) => `${value} table__row-item-status`,
+    getClassName: (value) => `${formatStatus(value)} table__row-item-status`,
+    getValue: (value) => formatStatus(value, ' ', true),
   },
   dateCreated: {
     getValue: (value) => getEnGBFormattedDate(value),
@@ -108,6 +109,7 @@ const PayRunsPage = () => {
   const [openedPopup, setOpenedPopup] = useState('');
   const [date, setDate] = useState(new Date());
   const [checkedRows, setCheckedRows] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [openedInvoiceChat, setOpenedInvoiceChat] = useState({});
   const [hocAndRelease, changeHocAndRelease] = useState('');
   const [newPayRunType, setNewPayRunType] = useState('');
@@ -306,11 +308,13 @@ const PayRunsPage = () => {
           rowsRules={PAY_RUN_ROWS_RULES}
           fields={PAY_RUN_FIELDS}
           sorts={SORTS_TAB[tab]}
+          loading={loading}
           sortBy={sortBy}
           onClickTableRow={onClickTableRow}
         />
       ) : (
         <PayRunTable
+          loading={loading}
           checkedRows={checkedRows}
           setCheckedRows={onCheckRows}
           isIgnoreId

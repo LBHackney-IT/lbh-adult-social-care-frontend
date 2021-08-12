@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { Button } from './Button';
 import { CircleCloseIcon } from './Icons';
+import Loading from './Loading'
 
-const Popup = ({ mainContent, firstButton, classes = '', secondButton, title, closePopup }) => {
+const Popup = ({ mainContent, loading, firstButton, classes = '', secondButton, title, closePopup }) => {
   useEffect(() => {
     const onClickOutside = (e) => {
       if (e.target.classList.contains('popup')) {
@@ -19,6 +20,7 @@ const Popup = ({ mainContent, firstButton, classes = '', secondButton, title, cl
   return (
     <div className={`popup ${classes}`}>
       <div className="popup__inner-content">
+        {loading && <Loading />}
         <div className="popup__header">
           <p className="popup__header-title">{title}</p>
           <div onClick={closePopup} className="popup__close-button" role="presentation">

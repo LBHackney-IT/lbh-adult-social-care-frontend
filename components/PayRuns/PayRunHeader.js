@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from '../Button';
-import Input from '../Input';
 import Dropdown from '../Dropdown';
 import DatePick from '../DatePick'
+import AsyncUserSelector from '../AsyncSelect'
 
 const initialFilters = {
   serviceUser: '',
@@ -16,7 +16,6 @@ const initialFilters = {
 };
 
 const PayRunHeader = ({
-  supplierOptions = [],
   changeFilters,
   typeOptions = [],
   statusOptions = [],
@@ -25,13 +24,10 @@ const PayRunHeader = ({
   clickActionButton = () => {},
 }) => {
   const [filters, setFilters] = useState({ ...initialFilters });
+  const [hasFields, setHasFields] = useState(false);
 
   const applyFilters = () => {
     filter(filters);
-  };
-
-  const searchId = () => {
-    console.log('search by id', filters.id);
   };
 
   const changeFilter = (field, value) => {
@@ -41,15 +37,14 @@ const PayRunHeader = ({
     });
   };
 
-  let hasFields = false;
-  for(const name in filters) {
-    if(filters[name]) {
-      hasFields = true;
-    }
-  }
-
   useEffect(() => {
     changeFilters(filters)
+    for(const name in filters) {
+      if(filters[name]) {
+        setHasFields(true);
+        break;
+      }
+    }
   }, [filters]);
 
   return (
@@ -60,36 +55,20 @@ const PayRunHeader = ({
       </div>
       <div>
         <div className="pay-run__searches mb-3">
-          <Input
-            classes="mr-3 pay-run__filter-item"
+          <AsyncUserSelector
+            onChange={(option) => changeFilter('serviceUser', option)}
+            placeholder='Service User'
+            endpoint='clients'
             value={filters.serviceUser}
-            search={searchId}
-            placeholder="Service User"
-            onChange={(value) => changeFilter('serviceUser', value)}
           />
-          <Input
-            classes="mr-3 pay-run__filter-item"
-            value={filters.invoiceNo}
-            search={searchId}
-            placeholder="Invoice No"
-            onChange={(value) => changeFilter('invoiceNo', value)}
-          />
-          <Input
-            classes="mr-3 pay-run__filter-item"
-            value={filters.packageId}
-            search={searchId}
-            placeholder="Package ID"
-            onChange={(value) => changeFilter('packageId', value)}
+          <AsyncUserSelector
+            value={filters.supplier}
+            onChange={(option) => changeFilter('supplier', option)}
+            placeholder='Supplier'
+            endpoint='suppliers'
           />
         </div>
         <div className="pay-run__dropdowns">
-          <Dropdown
-            initialText="Supplier"
-            className="pay-run__filter-item mr-3"
-            options={supplierOptions}
-            selectedValue={filters.supplier}
-            onOptionSelect={(option) => changeFilter('supplier', option)}
-          />
           <Dropdown
             initialText="Type"
             className="pay-run__filter-item mr-3"
@@ -107,6 +86,7 @@ const PayRunHeader = ({
           <DatePick
             classes='pay-run__filter-item mr-3'
             dateValue={filters.dateFrom}
+            placeholder='Data range'
             startDate={filters.dateFrom}
             endDate={filters.dateTo}
             setDate={(value) => {
@@ -119,7 +99,10 @@ const PayRunHeader = ({
             selectsRange
           />
           <Button onClick={applyFilters}>Filter</Button>
-          {hasFields && <Button onClick={() => setFilters({...initialFilters})}>Clear</Button> }
+          {hasFields && <Button className='outline gray ml-3' onClick={() => {
+            setFilters({...initialFilters})
+            setHasFields(false);
+          }}>Clear</Button> }
         </div>
       </div>
     </div>
