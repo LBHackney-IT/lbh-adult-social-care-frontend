@@ -80,10 +80,16 @@ const CarePackage = ({ history }) => {
   };
 
   return (
-    <Layout headerTitle="Rapid D2A">
-      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
-        Care Package
-      </ClientSummary>
+    <Layout showBackButton={false} clientSummaryInfo={{
+      client: "James Stephens",
+      hackneyId: "786288",
+      age: "91",
+      dateOfBirth: "09/12/1972",
+      postcode: "E9 6EY",
+    }} headerTitle="Rapid D2A">
+      {/*<ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">*/}
+      {/*  Care Package*/}
+      {/*</ClientSummary>*/}
       <div className="mt-5 mb-5">
         <ComponentForCareType />
       </div>

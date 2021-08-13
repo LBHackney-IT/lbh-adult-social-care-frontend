@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import ClientSummary from '../../../components/ClientSummary';
 import Layout from '../../../components/Layout/Layout';
@@ -8,12 +8,7 @@ import TextArea from '../../../components/TextArea';
 import { days } from '../../../components/daysData';
 import Checkbox from '../../../components/Checkbox';
 import RadioButton, { yesNoValues } from '../../../components/RadioButton';
-import {
-  createDayCarePackage,
-  getOpportunitiesLengthOptions,
-  getOpportunityTimesPerMonthOptions,
-  getTermTimeConsiderationOptions,
-} from '../../../api/CarePackages/DayCareApi';
+import { createDayCarePackage } from '../../../api/CarePackages/DayCareApi';
 import DayCareOpportunities from '../../../components/DayCare/DayCareOpportunities';
 import { Button } from '../../../components/Button';
 import { addNotification } from '../../../reducers/notificationsReducer';
@@ -53,13 +48,10 @@ const DayCare = () => {
 
   const [errors, setErrors] = useState([]);
   const [termTimeNAId, setTermTimeNaId] = useState(undefined);
-  const [termTimeConsiderationOptions, setTermTimeConsiderationOptions] = useState([]);
-  const [opportunitiesLengthOptions, setOpportunitiesLengthOptions] = useState([]);
-  const [opportunityTimesPerMonthOptions, setOpportunityTimesPerMonthOptions] = useState([]);
 
-  // const { data: opportunitiesLengthOptions } = useDayCareApi.opportunityLengthOptions();
-  // const { data: opportunityTimesPerMonthOptions } = useDayCareApi.opportunityTimesPerMonthOptions();
-  // const { data: termTimeConsiderationOptions } = useDayCareApi.termTimeConsiderationOptions();
+  const { data: opportunitiesLengthOptions } = useDayCareApi.opportunityLengthOptions();
+  const { data: opportunityTimesPerMonthOptions } = useDayCareApi.opportunityTimesPerMonthOptions();
+  const { data: termTimeConsiderationOptions } = useDayCareApi.termTimeConsiderationOptions();
 
   // package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
@@ -88,16 +80,12 @@ const DayCare = () => {
   const [daysSelected, setDaysSelected] = useState(days.map((dayItem) => ({ ...dayItem, checked: false })));
 
   useEffect(() => {
-    if (termTimeConsiderationOptions.length === 0) {
-      retrieveTermTimeConsiderationOptions();
-    }
-    if (opportunitiesLengthOptions.length === 0 || opportunitiesLengthOptions.length === 1) {
-      retrieveOpportunitiesLengthOptions();
-    }
-    if (opportunityTimesPerMonthOptions.length === 0 || opportunityTimesPerMonthOptions.length === 1) {
-      retrieveOpportunityTimesPerMonthOptions();
-    }
-  }, [termTimeConsiderationOptions, opportunityTimesPerMonthOptions]);
+    termTimeConsiderationOptions?.forEach((option) => {
+      if (option.text.toLowerCase().trim() === 'n/a') {
+        setTermTimeNaId(option.value);
+      }
+    })
+  }, [termTimeConsiderationOptions])
 
   // Adding a new opportunity entry
   const onAddOpportunityEntry = () => {
@@ -141,54 +129,6 @@ const DayCare = () => {
     const dayEntry = daysSelected.find((item) => item.id === dayId);
     dayEntry.checked = isChecked;
     setDaysSelected(daysSelected.map((dayEntryItem) => (dayEntryItem.id === dayId ? dayEntry : dayEntryItem)));
-  };
-
-  const retrieveTermTimeConsiderationOptions = () => {
-    getTermTimeConsiderationOptions()
-      .then((res) => {
-        const options = res.map((option) => {
-          if (option.optionName.toLowerCase().trim() === 'n/a') {
-            setTermTimeNaId(option.optionId);
-          }
-          return {
-            text: option.optionName,
-            value: option.optionId,
-          };
-        });
-        setTermTimeConsiderationOptions(options);
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve term time considerations failed. ${error.message}`]);
-      });
-  };
-
-  const retrieveOpportunitiesLengthOptions = () => {
-    getOpportunitiesLengthOptions()
-      .then((res) => {
-        const options = res.map((option) => ({
-          text: option.optionName,
-          value: option.opportunityLengthOptionId,
-          valueInMinutes: option.timeInMinutes,
-        }));
-        setOpportunitiesLengthOptions(options);
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve opportunity length options failed. ${error.message}`]);
-      });
-  };
-
-  const retrieveOpportunityTimesPerMonthOptions = () => {
-    getOpportunityTimesPerMonthOptions()
-      .then((res) => {
-        const options = res.map((option) => ({
-          text: option.optionName,
-          value: option.opportunityTimePerMonthOptionId,
-        }));
-        setOpportunityTimesPerMonthOptions(options);
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve opportunity times per month options failed. ${error.message}`]);
-      });
   };
 
   const changeErrorFields = (field) => {
@@ -311,10 +251,13 @@ const DayCare = () => {
   };
 
   return (
-    <Layout headerTitle="BUILD A CARE PACKAGE">
-      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
-        Care Package
-      </ClientSummary>
+    <Layout showBackButton={false} clientSummaryInfo={{
+      client: "James Stephens",
+      hackneyId: "786288",
+      age: "91",
+      dateOfBirth: "09/12/1972",
+      postcode: "E9 6EY",
+    }} headerTitle="BUILD A CARE PACKAGE">
       <div className="mt-5 mb-5">
         <CareTitle startDate={startDate} endDate={endDate}>
           Day Care

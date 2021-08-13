@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   createHomeCarePackage,
-  getHomeCareServices,
-  getHomeCareTimeSlotShifts,
   postHomeCareTimeSlots,
 } from '../../../api/CarePackages/HomeCareApi';
 import { Button } from '../../../components/Button';
@@ -30,6 +28,7 @@ import {
 import { getServiceTimes } from '../../../service/homeCareServiceHelper';
 import { SOCIAL_WORKER_ROUTE } from '../../../routes/RouteConstants';
 import { addNotification } from '../../../reducers/notificationsReducer';
+import useHomeCareApi from '../../../api/SWR/useHomeCareApi'
 
 const initialPackageReclaim = {
   type: '',
@@ -45,29 +44,14 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
 
-  const data = {
-    errorData: [],
-  };
-
-  try {
-    // Call to api to get package
-    data.homeCareServices = await getHomeCareServices();
-  } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
-  }
-
-  try {
-    // Get home care time shifts
-    data.homeCareTimeShiftsData = await getHomeCareTimeSlotShifts();
-  } catch (error) {
-    data.errorData.push(`Retrieve home care time shift details failed. ${error.message}`);
-  }
-
-  return { props: { ...data } };
+  return { props: {} };
 });
 
-const HomeCare = ({ homeCareServices, homeCareTimeShiftsData }) => {
+const HomeCare = () => {
   // Parameters
+  const { data: homeCareServices } = useHomeCareApi.getAllServices();
+  const { data: homeCareTimeShiftsData } = useHomeCareApi.getAllTimeShiftSlots();
+
   const router = useRouter();
   const dispatch = useDispatch();
   const [isImmediate, isS117, isFixedPeriod, startDate, endDate] = router.query.slug;

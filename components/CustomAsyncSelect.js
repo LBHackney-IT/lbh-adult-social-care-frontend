@@ -5,7 +5,6 @@ import { BASE_URL } from '../api/BaseApi'
 import { CaretDownIcon } from './Icons'
 
 const loadOptions = async (searchText, endpoint) => {
-  console.log(endpoint);
   const { filterKey, endpointName } = endpoint;
   const { data } = await axios.get(`${BASE_URL}/v1${endpointName}`, {
     params: { [filterKey]: searchText },
@@ -13,8 +12,7 @@ const loadOptions = async (searchText, endpoint) => {
   return data.data;
 };
 
-const CustomAsyncSelector = ({ onChange, value, placeholder, getOptionLabel, endpoint }) => {
-  return (
+const CustomAsyncSelector = ({ onChange, value, placeholder, getOptionLabel, endpoint }) => (
     <AsyncSelect
       onChange={(option) => onChange(option)}
       getOptionValue={(option) => option.id}
@@ -28,7 +26,6 @@ const CustomAsyncSelector = ({ onChange, value, placeholder, getOptionLabel, end
       defaultOptions
       cacheOptions
     />
-  )
-};
+  );
 
 export default CustomAsyncSelector;

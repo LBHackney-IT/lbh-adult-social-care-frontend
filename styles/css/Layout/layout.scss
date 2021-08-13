@@ -131,7 +131,7 @@
   padding-top: 104px;
 
   @include media-small-ipod-down {
-    padding-left: 0;
+    padding-left: 10px;
   }
 }
 
@@ -150,17 +150,24 @@
   .client-summary-cont {
     background: rgba(11, 12, 12, 0.02);
     border-bottom: 0;
+    margin-bottom: 30px;
     padding-left: 16px;
     padding-right: 16px;
 
     .client-prop {
+      display: flex;
+      align-items: center;
       .client-fullName {
         font-size: 19px;
+        font-weight: bold;
+        margin-bottom: 10px;
       }
-      label {
+      p {
         color: black;
+        margin-right: 10px;
       }
       div {
+        width: initial;
         color: $lbh-nav-gray;
       }
     }

@@ -1,30 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AsyncSelect from 'react-select/async';
-import { getDayCareColleges } from '../../api/CarePackages/DayCareApi';
 import { Button } from '../Button';
 import DayCareCreateCollege from './DayCareCreateCollege';
+import useDayCareApi from '../../api/SWR/useDayCareApi'
 
-const DayCareCollegeAsyncSearch = ({ setSelectedCollege = () => {}, onError = () => {}, classNames = 'is-3' }) => {
+const DayCareCollegeAsyncSearch = ({ setSelectedCollege = () => {}, classNames = 'is-3' }) => {
   // set default query terms
   const [query, setQuery] = useState('');
-  const [allDayCareColleges, setAllDayCareColleges] = useState([]);
   const [displayAddNewCollegeButton, setDisplayAddNewCollegeButton] = useState(false);
-
   const [displayAddNewCollegeForm, setDisplayAddNewCollegeForm] = useState(false);
 
-  useEffect(() => {
-    retrieveDayCareColleges();
-  }, []);
-
-  const retrieveDayCareColleges = () => {
-    getDayCareColleges()
-      .then((res) => {
-        setAllDayCareColleges(res);
-      })
-      .catch((error) => {
-        onError(`Retrieve day care colleges failed. ${error.message}`);
-      });
-  };
+  const { mutate: retrieveDayCareColleges, data: allDayCareColleges = [] } = useDayCareApi.dayCareColleges();
 
   // fetch filters search results for dropdown
   const loadOptions = () =>

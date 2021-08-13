@@ -1,63 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  getHomeCareBrokerageApprovePackage,
-  getHomeCarePackageDetailsForBrokerage,
-  getHomeCareSummaryData,
-} from '../../../../api/CarePackages/HomeCareApi';
+import { useRouter } from 'next/router'
+import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
 import Layout from '../../../../components/Layout/Layout';
 import PackagesHomeCare from '../../../../components/packages/home-care';
 import { getBrokerageSuccess, selectBrokerage } from '../../../../reducers/brokerageReducer';
-import { getErrorResponse, getUserSession, uniqueID } from '../../../../service/helpers';
+import { getUserSession, uniqueID } from '../../../../service/helpers';
 import withSession from '../../../../lib/session';
-import { addNotification } from '../../../../reducers/notificationsReducer';
 import { mapHomeCarePackageDetailsForBrokerage } from '../../../../api/Mappers/CarePackageMapper';
 import PackageHeader from '../../../../components/CarePackages/PackageHeader';
+import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
 
 // start before render
-export const getServerSideProps = withSession(async ({ req, res, query: { id: homeCarePackageId } }) => {
+export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
 
-  const data = {
-    errorData: [],
+  return {
+    props: {}, // will be passed to the page component as props
   };
-
-  try {
-    // Call to api to get package
-    //TODO change API
-    const homeCareBrokerageDetails = await getHomeCarePackageDetailsForBrokerage(homeCarePackageId);
-    const newAdditionalNeedsEntries = homeCareBrokerageDetails?.homeCareAdditionalNeeds?.map((additionalneedsItem) => ({
-      id: additionalneedsItem.id,
-      isWeeklyCost: additionalneedsItem.isWeeklyCost,
-      isOneOffCost: additionalneedsItem.isOneOffCost,
-      needToAddress: additionalneedsItem.needToAddress,
-    }));
-    data.homeCarePackage = homeCareBrokerageDetails;
-    data.additionalNeedsEntries = newAdditionalNeedsEntries;
-  } catch (error) {
-    data.errorData.push({
-      text: `Retrieve home care package details failed. ${error?.message || ''}`,
-      response: getErrorResponse(error),
-    });
-  }
-
-  try {
-    // Call to api to get package
-    const approvePackage = await getHomeCareBrokerageApprovePackage(homeCarePackageId);
-    data.approvalHistoryEntries = mapHomeCarePackageDetailsForBrokerage(approvePackage);
-  } catch (error) {
-    data.errorData.push({
-      text: `Retrieve home care approval history failed. ${error?.message || ''}`,
-      response: getErrorResponse(error),
-    });
-  }
-
-  return { props: { ...data } };
 });
 
-const HomeCareBrokerPackage = ({ errorData, homeCarePackage, additionalNeedsEntries, approvalHistoryEntries }) => {
+const HomeCareBrokerPackage = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const { id: homeCarePackageId } = router.query;
+  const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
   const [initialPackageReclaim] = useState({
     type: '',
     notes: '',
@@ -66,6 +34,22 @@ const HomeCareBrokerPackage = ({ errorData, homeCarePackage, additionalNeedsEntr
     amount: '',
     id: '1',
   });
+
+  const { data: approvalHistoryEntries } = useHomeCareApi.approvePackage(homeCarePackageId);
+  const { data: homeCarePackage } = useHomeCareApi.detailsForBrokerage(homeCarePackageId);
+
+  useEffect(() => {
+    const additionalNeeds = homeCarePackage?.homeCareAdditionalNeeds;
+    if(additionalNeeds) {
+      const formattedAdditionalNeeds = additionalNeeds?.map((item) => ({
+        id: item.id,
+        isWeeklyCost: item.isWeeklyCost,
+        isOneOffCost: item.isOneOffCost,
+        needToAddress: item.needToAddress,
+      }));
+      setAdditionalNeedsEntries(formattedAdditionalNeeds);
+    }
+  }, [homeCarePackage])
 
   const brokerage = useSelector(selectBrokerage);
   const [tab, setTab] = useState('approvalHistory');
@@ -88,24 +72,15 @@ const HomeCareBrokerPackage = ({ errorData, homeCarePackage, additionalNeedsEntr
     setPackagesReclaimed(newPackage);
   };
 
-  const changeTab = (tab) => {
-    if (tab === 'packageDetails') {
+  const changeTab = (newTab) => {
+    if (newTab === 'packageDetails') {
       setSummaryData(getHomeCareSummaryData());
       setPackagesReclaimed([]);
     } else {
       setPackagesReclaimed([{ ...initialPackageReclaim }]);
     }
-    setTab(tab);
+    setTab(newTab);
   };
-
-  useEffect(() => {
-    if (errorData && errorData?.length && errorData[0].text) {
-      errorData.forEach(({ text: errorText, response }) => {
-        console.error(response);
-        dispatch(addNotification({ text: errorText }));
-      });
-    }
-  }, [errorData]);
 
   useEffect(() => {
     dispatch(getBrokerageSuccess({ type: 'homeCarePackage', homeCarePackage }));
@@ -136,7 +111,7 @@ const HomeCareBrokerPackage = ({ errorData, homeCarePackage, additionalNeedsEntr
           addPackageReclaim={addPackageReclaim}
           removePackageReclaim={removePackageReclaim}
           summaryData={summaryData}
-          approvalHistory={approvalHistoryEntries}
+          approvalHistory={mapHomeCarePackageDetailsForBrokerage(approvalHistoryEntries)}
           homeCarePackage={homeCarePackage}
           packagesReclaimed={packagesReclaimed}
           changePackageReclaim={changePackageReclaim}
