@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import { getUserSession, formatDate } from '../../service/helpers';
+import { getUserSession, formatDate, sortTableByKey } from '../../service/helpers';
 import withSession from '../../lib/session';
 import SocialWorkerInputs from '../../components/SocialWorker/SocialWorkerInputs';
 import { getSubmittedPackages, getSubmittedPackagesStatus } from '../../api/ApproversHub/SocialWorkerApi';
@@ -26,11 +26,11 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 const SocialWorkerDashboardPage = () => {
   const [sorts] = useState([
     { name: 'client', text: 'Client' },
-    { name: 'category', text: 'Category' },
-    { name: 'dob', text: 'DOB' },
+    { name: 'categoryId', text: 'Category' },
+    { name: 'dateOfBirth', text: 'DOB' },
     { name: 'approver', text: 'Approver' },
-    { name: 'submitted', text: 'Submitted\n(days ago)' },
-    { name: 'status', text: 'Status' },
+    { name: 'submittedDaysAgo', text: 'Submitted\n(days ago)' },
+    { name: 'statusName', text: 'Status' },
   ]);
 
   const router = useRouter();
@@ -61,7 +61,7 @@ const SocialWorkerDashboardPage = () => {
   const [clientName, setClientName] = useState();
 
   useEffect(() => {
-    console.log('change sort', sort);
+    sortTableByKey(socialWorkerData, sort);
   }, [sort]);
 
   useEffect(() => {
