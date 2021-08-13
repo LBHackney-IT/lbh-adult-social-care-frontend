@@ -5,23 +5,24 @@ import { BASE_URL } from '../api/BaseApi'
 import { CaretDownIcon } from './Icons'
 
 const loadOptions = async (searchText, endpoint) => {
-  const filterKey = endpoint === 'clients' ? 'clientName' : 'supplierName';
-  const { data } = await axios.get(`${BASE_URL}/v1/${endpoint}/get-all`, {
+  console.log(endpoint);
+  const { filterKey, endpointName } = endpoint;
+  const { data } = await axios.get(`${BASE_URL}/v1${endpointName}`, {
     params: { [filterKey]: searchText },
   });
   return data.data;
 };
 
-const AsyncUserSelector = ({ onChange, value, placeholder, endpoint = 'clients' }) => {
+const CustomAsyncSelector = ({ onChange, value, placeholder, getOptionLabel, endpoint }) => {
   return (
     <AsyncSelect
       onChange={(option) => onChange(option)}
       getOptionValue={(option) => option.id}
-      getOptionLabel={(option) => endpoint === 'suppliers' ? option.supplierName : `${option.firstName} ${option.lastName}`}
+      getOptionLabel={(option) => getOptionLabel(option)}
       loadOptions={(searchText) => loadOptions(searchText, endpoint)}
       components={{ DropdownIndicator: CaretDownIcon }}
-      classNamePrefix="held-payments-select"
-      className="held-payments-select"
+      classNamePrefix="custom-async-selector"
+      className="custom-async-selector"
       value={value}
       placeholder={placeholder}
       defaultOptions
@@ -30,4 +31,4 @@ const AsyncUserSelector = ({ onChange, value, placeholder, endpoint = 'clients' 
   )
 };
 
-export default AsyncUserSelector;
+export default CustomAsyncSelector;

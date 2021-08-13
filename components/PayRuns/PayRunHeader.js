@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button } from '../Button';
 import Dropdown from '../Dropdown';
 import DatePick from '../DatePick'
-import AsyncUserSelector from '../AsyncSelect'
+import CustomAsyncSelector from '../CustomAsyncSelect'
 
 const initialFilters = {
   serviceUser: '',
@@ -55,17 +55,35 @@ const PayRunHeader = ({
       </div>
       <div>
         <div className="pay-run__searches mb-3">
-          <AsyncUserSelector
+          <CustomAsyncSelector
             onChange={(option) => changeFilter('serviceUser', option)}
             placeholder='Service User'
-            endpoint='clients'
+            getOptionLabel={option =>  `${option.firstName} ${option.lastName}`}
+            endpoint={{
+              endpointName: '/clients/get-all',
+              filterKey: 'clientName',
+            }}
             value={filters.serviceUser}
           />
-          <AsyncUserSelector
+          <CustomAsyncSelector
             value={filters.supplier}
+            getOptionLabel={option => option.supplierName}
             onChange={(option) => changeFilter('supplier', option)}
             placeholder='Supplier'
-            endpoint='suppliers'
+            endpoint={{
+              endpointName: '/suppliers/get-all',
+              filterKey: 'supplierName',
+            }}
+          />
+          <CustomAsyncSelector
+            value={filters.invoiceNo}
+            getOptionLabel={option => option.invoiceNo}
+            onChange={(option) => changeFilter('invoiceNo', option)}
+            placeholder='Invoice Number'
+            endpoint={{
+              endpointName: '/invoiceNo/get-all',
+              filterKey: 'invoiceNo',
+            }}
           />
         </div>
         <div className="pay-run__dropdowns">
@@ -98,7 +116,7 @@ const PayRunHeader = ({
             }}
             selectsRange
           />
-          {/*<Button onClick={applyFilters}>Filter</Button>*/}
+          <Button onClick={applyFilters}>Filter</Button>
           {hasFields && <Button className='outline gray ml-3' onClick={() => {
             setFilters({...initialFilters})
             setHasFields(false);

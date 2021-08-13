@@ -26,6 +26,7 @@ import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
 import ErrorField from '../../../components/ErrorField';
+import useDayCareApi from '../../../api/SWR/useDayCareApi'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -55,6 +56,10 @@ const DayCare = () => {
   const [termTimeConsiderationOptions, setTermTimeConsiderationOptions] = useState([]);
   const [opportunitiesLengthOptions, setOpportunitiesLengthOptions] = useState([]);
   const [opportunityTimesPerMonthOptions, setOpportunityTimesPerMonthOptions] = useState([]);
+
+  // const { data: opportunitiesLengthOptions } = useDayCareApi.opportunityLengthOptions();
+  // const { data: opportunityTimesPerMonthOptions } = useDayCareApi.opportunityTimesPerMonthOptions();
+  // const { data: termTimeConsiderationOptions } = useDayCareApi.termTimeConsiderationOptions();
 
   // package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);

@@ -1,78 +1,43 @@
-.select-search {
-  font-family: "OpenSans", sans-serif;
-  .select-search__input {
+.custom-async-selector {
+  margin-right: 8px;
+
+  &__control {
+    width: 185px;
     height: 42px;
-    width: 100%;
-    padding: 1em;
-    &::placeholder {
-      font-size: 16px;
-      color: $lbh-black1;
-    }
-  }
-
-  .dropdown-item {
-    border: none !important;
-    border-radius: 0 !important;
-    width: 100%;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    padding: 0.375rem 1rem;
-    cursor: pointer;
-    color: #0b0c0c;
-
-    &.dropdown-item-active {
-      color: $lbh-blue-highlight;
-    }
+    border-color: #bfc1c3 !important;
+    border-radius: 3px !important;
+    box-shadow: none !important;
 
     &:hover {
-      background: $lbh-gray;
+      cursor: pointer;
     }
-  }
 
-  &.has-focus {
-    .select-search__value {
-      &::after {
+    .custom-async-selector__value-container {
+      &:hover {
+        cursor: text;
+      }
+    }
+
+    &--menu-is-open {
+      .custom-async-selector__indicators svg {
         transform: rotate(180deg);
       }
     }
   }
 
-  .select-search__value {
-    display: flex;
-    align-items: center;
-    &::after {
-      content: '';
-      position: absolute;
-      cursor: text;
-      pointer-events: none;
-      user-select: none;
-      transition: 0.3s ease;
-      right: 0.5em;
-      background: url("/images/icons/icon_arrow_bottom.svg");
-      background-repeat: no-repeat;
-      width: 14px;
-      height: 8px;
-    }
-  }
-
-  .select-search__select {
-    position: absolute;
-    width: 100%;
-    z-index: 2;
-    top: 46px;
-    left: 0;
-    background-color: white;
-    border-radius: 4px;
-    -webkit-box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0px 0 1px rgb(10 10 10 / 2%);
-    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0px 0 1px rgb(10 10 10 / 2%);
-    padding-bottom: 0.5rem;
-    padding-top: 0.5rem;
-    border: 1px solid #bfc1c3;
-  }
-
-  .select-search__option {
+  &__option {
     &:hover {
-      background: $lbh-gray;
+      cursor: pointer;
     }
+  }
+
+  &__placeholder {
+    color: #363636 !important;
+  }
+
+  &__indicators svg {
+    margin: 0 10px;
+
+    transition: 0.2s ease;
   }
 }

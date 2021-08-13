@@ -26,10 +26,11 @@
     cursor: pointer;
     padding-left: 10px;
     padding-right: 10px;
+    font-size: 16px;
     color: $lbh-text;
 
     &:hover {
-      background: $lbh-gray;
+      background: #DEEBFF;
     }
   }
 
@@ -41,7 +42,8 @@
 }
 
 .dropdown-item.dropdown-item-active {
-  color: $lbh-blue-highlight;
+  background-color: #2684FF;
+  color: white;
 }
 
 .dropdown-container {

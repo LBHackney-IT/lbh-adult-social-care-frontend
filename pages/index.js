@@ -2,6 +2,7 @@ import Head from 'next/head';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { LOGIN_ROUTE } from '../routes/RouteConstants';
+import Loading from '../components/Loading'
 
 export default function IndexPage() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function IndexPage() {
       <Head>
         <link href="/fonts/style.css" rel="stylesheet" />
       </Head>
-      <p>...loading</p>
+      <Loading className='loading-center' />
     </div>
   );
 }
