@@ -23,8 +23,8 @@ const useSinglePayRunDetails = ({
   supplierId = '',
   packageTypeId = '',
   invoiceStatusId = '',
-  serviceUser = '',
-}) => useGetData(`${PAY_RUN_URL}/${payRunId}/details?pageNumber=${pageNumber}&pageSize=${pageSize}&supplierId=${supplierId}&packageTypeId=${packageTypeId}&invoiceStatusId=${invoiceStatusId}&serviceUser=${serviceUser}&dateFrom=${dateFrom}&dateTo=${dateTo}`);
+  serviceUserId = '',
+}) => useGetData(`${PAY_RUN_URL}/${payRunId}/details?pageNumber=${pageNumber}&pageSize=${pageSize}&supplierId=${supplierId}&packageTypeId=${packageTypeId}&invoiceStatusId=${invoiceStatusId}&serviceUserId=${serviceUserId}&dateFrom=${dateFrom}&dateTo=${dateTo}`);
 
 export {
   usePayRunTypes,

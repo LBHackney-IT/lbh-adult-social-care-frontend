@@ -82,10 +82,10 @@ const PayRunPage = () => {
   const { data: { data: suppliers } } = useUniquePayRunSuppliers(id);
   const { data: invoiceStatuses } = useInvoicePaymentStatuses();
   const { data : levelInsights } = usePayRunSummaryInsights(id)
-  const { data : { invoices, payRunDetails } } = useSinglePayRunDetails({
+  const { mutate: refetchSingleDetails , data : { invoices, payRunDetails } } = useSinglePayRunDetails({
     payRunId: id,
     pageNumber,
-    serviceUser: filters?.serviceUser?.id,
+    serviceUserId: filters?.serviceUser?.id,
     invoiceStatusId: filters?.status,
     supplierId: filters?.supplier?.value,
     packageTypeId: filters?.type,
@@ -132,7 +132,6 @@ const PayRunPage = () => {
       const { payRunId } = payRunDetails;
       acceptInvoices(payRunId, { invoiceIds: checkedRows })
         .then(async () => {
-
           setCheckedRows([]);
           pushNotification('Accepted success', 'success');
         })
@@ -148,7 +147,7 @@ const PayRunPage = () => {
     if (payRunDetails.payRunStatusName === 'Draft') {
       submitPayRunForApproval(payRunId)
         .then(async () => {
-
+          refetchSingleDetails()
           pushNotification('Pay Run submitted for approval', 'success');
         })
         .catch((e) => {
@@ -157,7 +156,7 @@ const PayRunPage = () => {
     } else {
       approvePayRunForPayment(payRunId)
         .then(async () => {
-
+          refetchSingleDetails();
           pushNotification('Pay Run approved', 'success');
         })
         .catch((e) => {
@@ -171,17 +170,18 @@ const PayRunPage = () => {
     if (payRunDetails.payRunStatusName === 'Draft') {
       deleteDraftPayRun(payRunId)
         .then(async () => {
-
+          refetchSingleDetails()
           pushNotification('Pay Run draft deleted', 'success');
           router.replace('/payments/pay-runs');
         })
         .catch(() => {
+          refetchSingleDetails()
           pushNotification('Can not delete Pay Run draft');
         });
     } else {
       kickPayRunBackToDraft(payRunId)
         .then(async () => {
-
+          refetchSingleDetails()
           pushNotification('Pay Run kick back success', 'success');
         })
         .catch(() => {
@@ -190,11 +190,16 @@ const PayRunPage = () => {
     }
   };
 
-  useEffect(() => {
+  const sortInvoices = () => {
     if(!invoices?.invoices?.length) return;
     const data = invoices.invoices.slice();
     setSortedInvoices({ ...invoices, invoices: sortArray(data, sort) });
+  }
+
+  useEffect(() => {
+    sortInvoices()
   }, [sort, invoices]);
+
 
   const holdInvoice = () => {
     const holdReason = {
@@ -215,18 +220,24 @@ const PayRunPage = () => {
     if (statusName === 'Accepted') {
       acceptInvoice(id, item.invoiceId)
         .then(async () => {
+          refetchSingleDetails();
           pushNotification('Accept invoice success', 'success');
         })
-        .catch((e) => pushNotification(e || 'Accept invoice fail'));
+        .catch((e) => {
+          pushNotification(e || 'Accept invoice fail')
+        });
     } else if (statusName === 'Held') {
       setInvoice(item);
       setOpenedPopup(popupTypes.holdPayments);
     } else if (statusName === 'Rejected') {
       rejectInvoicePayment(id, item.invoiceId)
         .then(async () => {
+          refetchSingleDetails();
           pushNotification('Accept invoice success', 'success');
         })
-        .catch((e) => pushNotification(e || 'Reject invoice fail'));
+        .catch((e) => {
+          pushNotification(e || 'Reject invoice fail')
+        });
     }
   };
 
