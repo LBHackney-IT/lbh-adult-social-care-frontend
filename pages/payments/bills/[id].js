@@ -54,7 +54,7 @@ const BillPage = () => {
   ]);
 
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'id',
   });
 
@@ -121,7 +121,7 @@ const BillPage = () => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} pageSize={10} totalCount={30} />
       <HackneyFooterInfo />
     </div>
   );

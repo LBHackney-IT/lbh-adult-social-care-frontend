@@ -1,4 +1,5 @@
 const maxStringLength = 200;
+const DEFAULT_PAGE_SIZE = 50;
 
 const requestMethods = {
   put: 'PUT',
@@ -9,4 +10,4 @@ const requestMethods = {
   head: 'HEAD',
 };
 
-export { maxStringLength, requestMethods };
+export { maxStringLength, requestMethods, DEFAULT_PAGE_SIZE };

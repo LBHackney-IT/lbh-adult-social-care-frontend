@@ -15,7 +15,7 @@ import {
   getBrokeredPackagesStages,
   putBrokeredPackagesAssign,
 } from '../../api/Dashboard/brokeredPackages';
-import { formatDate, formatStatus, sortTableByKey } from '../../service/helpers';
+import { formatDate, formatForDropDownOptions, formatStatus } from '../../service/helpers'
 import CustomDropDown from '../../components/CustomDropdown';
 import Pagination from '../../components/Payments/Pagination';
 import {
@@ -24,6 +24,10 @@ import {
   RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE,
   RESIDENTIAL_CARE_BROKERING_ROUTE,
 } from '../../routes/RouteConstants';
+import { DEFAULT_PAGE_SIZE } from '../../constants/variables'
+import { checkEmptyFields } from '../../service/inputValidator'
+import { sortArray } from '../../api/Utils/FuncUtils'
+import { DATA_TYPES } from '../../api/Utils/CommonOptions'
 
 const BrokerageHubPage = () => {
   const dispatch = useDispatch();
@@ -34,7 +38,6 @@ const BrokerageHubPage = () => {
     SocialWorker: '',
     HackneyId: '',
   });
-
   const router = useRouter();
 
   const onClickTableRow = (rowItems) => {
@@ -55,26 +58,23 @@ const BrokerageHubPage = () => {
   const [stageOptions, setStagesOptions] = useState([]);
   const [typeOfCareOptions, setTypeOfCareOptions] = useState([]);
   const [socialWorkerOptions, setSocialWorkersOptions] = useState([]);
-  const [packageId, setPackageValue] = useState();
 
   const [sorts] = useState([
     { name: 'packageType', text: 'Package Type' },
-    { name: 'startDate', text: 'Start Date' },
+    { name: 'startDate', text: 'Start Date', dataType: DATA_TYPES.DATE },
     { name: 'serviceUser', text: 'Service User' },
     { name: 'stage', text: 'Stage', className: 'table__row-item-justify-center' },
     { name: 'owner', text: 'OWNER' },
     { name: 'hackneyReferenceNumber', text: 'HACKNEY REFERENCE NUMBER' },
-    { name: 'lastUpdated', text: 'LAST UPDATED' },
+    { name: 'lastUpdated', text: 'LAST UPDATED', dataType: DATA_TYPES.DATE },
     { name: 'daysSinceApproval', text: 'DAYS SINCE APPROVAL' },
   ]);
 
-  const checkEmptyFields = useCallback(() => {
-    for(const field in filters) {
-      if(filters[field]) {
-        return '';
-      }
+  const checkFields = useCallback(() => {
+    if(checkEmptyFields(filters)) {
+      return ' display-none';
     }
-    return ' display-none';
+    return '';
   }, [filters]);
 
   const inputs = {
@@ -82,7 +82,7 @@ const BrokerageHubPage = () => {
       {
         label: 'Search',
         name: 'clientName',
-        placeholder: 'Search...',
+        placeholder: 'Enter name or Hackney ID',
         search: () => makeTabRequest(),
         className: 'mr-3',
       },
@@ -94,7 +94,7 @@ const BrokerageHubPage = () => {
     ],
     buttons: [
       { initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() },
-      { initialText: 'Clear', name: 'button-2', className: `mt-auto ml-3 outline gray${checkEmptyFields()}`, onClick: () => setFilters({...initialFilters}) }
+      { initialText: 'Clear', name: 'button-2', className: `mt-auto ml-3 outline gray${checkFields()}`, onClick: () => setFilters({...initialFilters}) }
     ],
   };
 
@@ -140,34 +140,47 @@ const BrokerageHubPage = () => {
     setSort({ value, name: field });
   };
 
-  const setPackageId = (selectedPackageId) => {
-    setPackageValue(selectedPackageId);
-  };
-
-  const brokeredPackagesAssign = (option) => {
-    putBrokeredPackagesAssign(packageId, option.id)
+  const brokeredPackagesAssign = (packageId, userId) => {
+    putBrokeredPackagesAssign(packageId, userId)
       .then(() => pushNotification('Assigned success', 'success'))
       .catch((e) => pushNotification(e || 'Assign fail'));
   };
 
-  function getNewOptions(field, res) {
-    return res.map((item) => ({
-      text: item[field],
-      value: item.id,
-    }));
-  }
-
   function onGetBrokeredPackagesPackageTypes() {
     return getBrokeredPackagesPackageTypes()
       .then((res) => {
-        setTypeOfCareOptions(getNewOptions('packageType', res));
+        setTypeOfCareOptions(formatForDropDownOptions({ text: 'packageType' }, res));
       })
       .catch((e) => pushNotification(e || 'Can not get Package Type'));
   }
 
+  const tabRequest = (actualTab = tab) => {
+    tabsRequests[actualTab]({
+      PageNumber: page,
+      OrderBy: sort.name,
+      PageSize: DEFAULT_PAGE_SIZE,
+      ...filters,
+    })
+      .then((res) => {
+        const tableData = sortArray(res.data, sort);
+        setTabsTable((tabsTableState) => {
+          return ({ ...tabsTableState, [actualTab]: tableData })
+        });
+        setPagingMetaData((pagingState => ({
+          ...pagingState,
+          [actualTab]: res.pagingMetaData,
+        })));
+        setLoading(false);
+      })
+      .catch((e) => {
+        pushNotification(e);
+        setLoading(false);
+      });
+  }
+
   function onGetBrokeredPackagesStages() {
     return getBrokeredPackagesStages().then((res) => {
-      setStagesOptions(getNewOptions('stageName', res));
+      setStagesOptions(formatForDropDownOptions({text: 'stageName'}, res));
     })
       .catch((e) => pushNotification(e || 'Can not get stages'));
   }
@@ -175,7 +188,7 @@ const BrokerageHubPage = () => {
   function onGetBrokeredPackagesSocialWorkers() {
     return getBrokeredPackagesSocialWorkers()
       .then((res) => {
-        setSocialWorkersOptions(getNewOptions('userName', res));
+        setSocialWorkersOptions(formatForDropDownOptions({text: 'userName'}, res));
       })
       .catch((e) => pushNotification(e || 'Can not get social workers'));
   }
@@ -191,33 +204,19 @@ const BrokerageHubPage = () => {
       onGetBrokeredPackagesStages();
       onGetBrokeredPackagesSocialWorkers();
 
-      tabsRequests[tab]({
-        ...filters,
-        PageNumber: page,
-        OrderBy: sort.name,
-        PageSize: 50,
-      }).then((res) => {
-        sortTableByKey(res.data, sort)
-        setTabsTable({
-          ...tabsTable,
-          [tab]: res.data,
-        });
-        setPagingMetaData({
-          ...pagingMetaData,
-          [tab]: res.pagingMetaData,
-        });
-        setLoading(false);
-      })
-        .catch(e => {
-          pushNotification(e);
-          setLoading(false);
-        })
+      tabRequest();
     }, 500));
   };
 
   useEffect(() => {
     makeTabRequest();
   }, [page, tab, sort]);
+
+  useEffect(() => {
+    tabs.forEach(tabsItem => {
+      tabRequest(tabsItem.value)
+    });
+  }, []);
 
   const tableRows = tabsTable[tab];
 
@@ -236,15 +235,15 @@ const BrokerageHubPage = () => {
     },
     owner: {
       getComponent: (item, b, tableClass) => {
-        const { packageId: itemId, serviceUser } = item;
+        const { packageId, serviceUser, serviceUserId } = item;
         return (
           <CustomDropDown
-            onOptionSelect={brokeredPackagesAssign}
-            key={itemId}
+            onOptionSelect={() => brokeredPackagesAssign(packageId, serviceUserId)}
+            key={packageId}
             options={socialWorkerOptions}
             className={`table__row-item${tableClass}`}
             initialText=""
-            selectedValue={serviceUser}
+            selectedValue={{ text: serviceUser, value: serviceUserId }}
           />
         );
       },
@@ -296,7 +295,7 @@ const BrokerageHubPage = () => {
         changePagination={changePage}
         totalPages={totalPages}
         currentPage={page}
-        itemsCount={pageSize}
+        pageSize={pageSize}
         totalCount={totalCount}
       />
       <HackneyFooterInfo />

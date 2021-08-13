@@ -58,7 +58,7 @@ const WeekOfSupplierView = () => {
   ]);
 
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'serviceUser',
   });
 
@@ -214,7 +214,7 @@ const WeekOfSupplierView = () => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination actionButton={actionButton} from={1} to={10} pageSize={10} totalCount={30} />
       <SupplierReturnsLevelInsight
         packages="832"
         totalValue="£92,321"
