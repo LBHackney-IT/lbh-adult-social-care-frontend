@@ -20,7 +20,7 @@ const PayRunHeader = ({
   typeOptions = [],
   statusOptions = [],
   actionButtonText = '',
-  filter,
+  filter = () => {},
   clickActionButton = () => {},
 }) => {
   const [filters, setFilters] = useState({ ...initialFilters });
@@ -98,7 +98,7 @@ const PayRunHeader = ({
             }}
             selectsRange
           />
-          <Button onClick={applyFilters}>Filter</Button>
+          {/*<Button onClick={applyFilters}>Filter</Button>*/}
           {hasFields && <Button className='outline gray ml-3' onClick={() => {
             setFilters({...initialFilters})
             setHasFields(false);

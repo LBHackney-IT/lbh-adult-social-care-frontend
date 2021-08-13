@@ -70,7 +70,7 @@ const HeldPaymentsFilters = ({ filters, changeFilter, clearFilters, applyFilters
             return (
               <AsyncSelect
                 onChange={(option) => changeFilter(key, option.id)}
-                getOptionValue={(option) =>  option.id}
+                getOptionValue={(option) => option.id}
                 getOptionLabel={(option) => (isClient ? `${option.firstName} ${option.lastName}` : option.supplierName)}
                 loadOptions={loadOptions}
                 components={{ DropdownIndicator: CaretDownIcon }}

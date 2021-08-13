@@ -304,7 +304,7 @@ const ApproverHubPage = () => {
       <DashboardTabs tabs={tabs} changeTab={setTab} tab={tab} />
       <Table
         loading={loading}
-        classes="p-4"
+        className='approver-hub__table'
         fields={{
           serviceUser: 'serviceUser',
           packageType: 'packageType',

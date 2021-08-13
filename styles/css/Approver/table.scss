@@ -1,62 +1,43 @@
 .approver-hub__table {
-  &.p-4 {
-    padding-top: 0 !important;
-  }
-  .sort {
-    &:nth-child(1) {
+  .table__row-column {
+    &-1 {
       width: 132px;
     }
-    &:nth-child(2) {
+    &-2 {
       width: 124px;
     }
-    &:nth-child(3) {
+    &-3 {
       justify-content: center;
       width: 100px;
+      text-align: center;
     }
-    &:nth-child(4) {
+    &-4 {
       width: 120px;
+      justify-content: center;
+      text-align: center;
     }
-    &:nth-child(5) {
+    &-5 {
       width: 150px;
-    }
-    &:nth-child(6) {
-      width: 84px;
+      text-align: center;
       justify-content: center;
     }
-    &:nth-child(7) {
+    &-6 {
+      width: 178px;
+      text-align: center;
+      justify-content: center;
+    }
+    &-7 {
       width: 84px;
+      text-align: center;
+      justify-content: center;
     }
   }
 
   .table__row-item {
     font-size: 14px;
-
-    &:nth-child(1) {
-      width: 132px;
-    }
-    &:nth-child(2) {
-      width: 124px;
-    }
     &:nth-child(3) {
-      width: 100px;
       font-weight: bold;
-      text-align: center;
       color: black;
-    }
-    &:nth-child(4) {
-      width: 120px;
-    }
-    &:nth-child(5) {
-      width: 150px;
-      text-align: center;
-    }
-    &:nth-child(6) {
-      width: 84px;
-      text-align: center;
-    }
-    &:nth-child(7) {
-      width: 84px;
-      text-align: center;
     }
   }
 
