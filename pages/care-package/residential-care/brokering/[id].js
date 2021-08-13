@@ -103,7 +103,7 @@ const ResidentialCareBrokering = ({
 
   const retrieveSupplierOptions = () => {
     getSupplierList()
-      .then((response) => {
+    .then((response) => {
         setSupplierOptions(mapBrokerageSupplierOptions(response.data));
       })
       .catch((error) => {
@@ -114,8 +114,8 @@ const ResidentialCareBrokering = ({
 
   const retrieveResidentialCareBrokerageStages = () => {
     getResidentialCareBrokerageStages()
-      .then((response) => {
-        setStageOptions(mapResidentialCareStageOptions(response));
+    .then((response) => {
+      setStageOptions(mapResidentialCareStageOptions(response));
       })
       .catch((error) => {
         setErrors([...errors, `Retrieve residential care brokerage stages failed. ${error}`]);

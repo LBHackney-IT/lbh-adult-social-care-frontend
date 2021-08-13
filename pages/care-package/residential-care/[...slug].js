@@ -73,6 +73,8 @@ const ResidentialCare = () => {
   // Package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
 
+  console.log(`additionalNeedsEntries`, additionalNeedsEntries)
+
   const retrieveTypeOfResidentialCareHomeOptions = () => {
     getTypeOfResidentialCareHomeOptions()
       .then((res) => {
@@ -162,11 +164,9 @@ const ResidentialCare = () => {
     if (!formIsValid()) return;
 
     const residentialCareAdditionalNeeds = additionalNeedsEntries.map((item) => ({
-      isWeeklyCost: item.selectedCost === 1,
-      isOneOffCost: item.selectedCost === 2,
-      isFixedPeriod: item.selectedCost === 3,
-      startDate: item.selectedCost === 3 ? new Date(item.selectedPeriod.startDate).toJSON() : null,
-      endDate: item.selectedCost === 3 ? new Date(item.selectedPeriod.endDate).toJSON() : null,
+      additionalNeedsPaymentTypeId: item.selectedCost,
+      // startDate: item.selectedCost === 3 ? new Date(item.selectedPeriod.startDate).toJSON() : null,
+      // endDate: item.selectedCost === 3 ? new Date(item.selectedPeriod.endDate).toJSON() : null,
       needToAddress: item.needToAddress,
       creatorId: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8',
     }));
@@ -213,7 +213,6 @@ const ResidentialCare = () => {
             amount: el.amount,
           })
         );
-
         return Promise.all(requests);
       })
       .catch((error) => {
