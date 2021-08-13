@@ -3,68 +3,31 @@
     margin-right: 40px;
   }
 
+  .table__row-column {
+    &-1 {
+      width: 170px;
+    }
+    &-2 {
+      width: 70px;
+    }
+    &-3 {
+      width: 178px;
+    }
+    &-4 {
+      width: 116px;
+    }
+    &-5 {
+      width: 82px;
+    }
+    &-6 {
+      width: 200px;
+    }
+  }
+
   .sort-table {
     width: 100%;
     .sort:not(.sort:last-of-type) {
       margin-right: 40px;
-    }
-
-    .sort:first-of-type {
-      min-width: 170px;
-    }
-
-    .sort:nth-of-type(2) {
-      min-width: 63px;
-    }
-
-    .sort:nth-of-type(3) {
-      min-width: 178px;
-    }
-
-    .sort:nth-of-type(4) {
-      min-width: 116px;
-    }
-
-    .sort:nth-of-type(5) {
-      min-width: 82px;
-    }
-
-    .sort:nth-of-type(6) {
-      min-width: 73px;
-    }
-
-    .sort:nth-of-type(7) {
-      min-width: 124px;
-    }
-  }
-
-  .table__row {
-    .table__row-item:first-of-type {
-      min-width: 170px;
-    }
-
-    .table__row-item:nth-of-type(2) {
-      min-width: 63px;
-    }
-
-    .table__row-item:nth-of-type(3) {
-      min-width: 178px;
-    }
-
-    .table__row-item:nth-of-type(4) {
-      min-width: 116px;
-    }
-
-    .table__row-item:nth-of-type(5) {
-      min-width: 82px;
-    }
-
-    .table__row-item:nth-of-type(6) {
-      min-width: 73px;
-    }
-
-    .table__row-item:nth-of-type(7) {
-      min-width: 124px;
     }
   }
 }

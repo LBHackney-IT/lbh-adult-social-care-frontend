@@ -68,7 +68,7 @@ const Table = ({
 
                       const currentValue = (currentRowRule?.getValue && currentRowRule.getValue(value, item)) || value;
                       const calculatedClassName = currentRowRule?.getClassName
-                        ? currentRowRule.getClassName(value).toLowerCase()
+                        ? currentRowRule.getClassName(value, item).toLowerCase()
                         : '';
 
                       const getComponent = currentRowRule?.getComponent;
@@ -80,6 +80,7 @@ const Table = ({
                         return (
                           <div key={`${rowItemName}${id}`} className={`table__row-item-checkbox table__row-item${columnClass}`}>
                             <Checkbox
+                              className={calculatedClassName}
                               onChange={(checkedValue, event) => {
                                 event.stopPropagation();
                                 currentRowRule.onChange(checkedValue, item)
@@ -132,22 +133,24 @@ export default Table;
     dob: 'dob',
   }
 
-
   const rowsRules = {
-    typeOfCare: {
+    getClassName: (item) => return 'new-row-class',
+    clientName: {
       getClassName: () => 'link-button',
       onClick: (item, prop) => console.log(item, prop),
     },
-    id: {
+    payRunId: {
       hide: true,
     },
-    stage: {
-      getValue: (value) => `${value}%`,
-      getComponent: (cellItem, cellRule, tableClass) => <SomeComponent className={cellRule.className} someValue={cellItem.someValue} />,
-      getClassName: (value) => `${value} table__row-item-status`,
+    checkboxField: {
+      type: 'checkbox',
+      getValue: (value, item) => checked,
+      getClassName: (value, item) => `custom-checkbox ${item.statusName}`,
+      onChange: (value, item) => setChecked(item.id),
     },
-    owner: {
-      value: customValue
-      getClassName: (value) => `${value} table__row-item-status border-radius-0`,
+    dob: {
+      getValue: (value, item) => `${value}%`,
+      getComponent: (cellItem, cellRule, tableClass) => <SomeComponent className={cellRule.className} someValue={cellItem.someValue} />,
+      getClassName: (value, item) => `${value} table__row-item-status`,
     },
  */

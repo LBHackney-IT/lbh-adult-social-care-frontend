@@ -27,8 +27,8 @@ const SortTable = ({ changeAllChecked, fields, checkedRows = [], rows = [], sort
         <div key={item.name} className={`sort${outerClass}${columnClass}`}>
           <p className="sort__sort-name">{item.text}</p>
           <div className="sort__actions">
-            <CaretDownIcon onClick={() => sortBy(item.name, 'increase', item?.dataType || DATA_TYPES.STRING)} />
-            <CaretDownIcon onClick={() => sortBy(item.name, 'decrease', item?.dataType || DATA_TYPES.STRING)} />
+            <CaretDownIcon onClick={() => sortBy(item.name, 'ascending', item?.dataType || DATA_TYPES.STRING)} />
+            <CaretDownIcon onClick={() => sortBy(item.name, 'descending', item?.dataType || DATA_TYPES.STRING)} />
           </div>
         </div>
       )

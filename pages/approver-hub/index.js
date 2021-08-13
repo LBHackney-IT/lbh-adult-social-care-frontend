@@ -1,22 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useState } from 'react'
 import { useRouter } from 'next/router';
 import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
 import DashboardTabs from '../../components/Dashboard/Tabs';
 import Table from '../../components/Table';
-import { formatDate, formatStatus, sortTableByKey } from '../../service/helpers';
-import { addNotification } from '../../reducers/notificationsReducer';
-import {
-  getApprovedPackagesApprovers,
-  getApprovedPackagesAwaitingBrokerage,
-  getApprovedPackagesClarificationNeed,
-  getApprovedPackagesCompleted,
-  getApprovedPackagesNew,
-  getApprovedPackagesPackageTypes,
-  getApprovedPackagesReviewCommercial,
-  getApprovedPackagesSocialWorkers,
-} from '../../api/Dashboard/approvedPackages';
+import { formatDate, formatForDropDownOptions } from '../../service/helpers'
 import Inputs from '../../components/Inputs';
 import {
   RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE,
@@ -27,9 +15,13 @@ import {
   NURSING_CARE_BROKERING_ROUTE,
 } from '../../routes/RouteConstants';
 import { currency } from '../../constants/strings';
+import { DEFAULT_PAGE_SIZE } from '../../constants/variables';
+import { checkEmptyFields } from '../../service/inputValidator'
+import { sortArray } from '../../api/Utils/FuncUtils'
+import { DATA_TYPES } from '../../api/Utils/CommonOptions'
+import useApprovedPackageApi from '../../api/SWR/useApprovedPackagesApi'
 
 const ApproverHubPage = () => {
-  const dispatch = useDispatch();
   const [initialFilters] = useState({
     hackneyId: '',
     packageTypeId: '',
@@ -91,9 +83,10 @@ const ApproverHubPage = () => {
   };
 
   const [filters, setFilters] = useState({ ...initialFilters });
-  const [timer, setTimer] = useState(null);
+  const [requestFilters, setRequestFilters] = useState({
+    ...initialFilters,
+  })
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
 
   const [sorts] = useState([
     { name: 'serviceUser', text: 'SERVICE USER' },
@@ -102,160 +95,147 @@ const ApproverHubPage = () => {
     { name: 'approver', text: 'APPROVER' },
     { name: 'submittedBy', text: 'SUBMITTED BY' },
     { name: 'packageId', text: 'ID' },
-    { name: 'lastUpdated', text: 'LAST UPDATED' },
+    { name: 'lastUpdated', text: 'LAST UPDATED', dataType: DATA_TYPES.DATE },
   ]);
+
+  const [sort, setSort] = useState({
+    value: 'ascending',
+    name: sorts[0].name,
+  });
 
   const [tab, setTab] = useState('new');
 
-  const tabsRequests = {
-    new: getApprovedPackagesNew,
-    clarification: getApprovedPackagesClarificationNeed,
-    awaitingBrokerage: getApprovedPackagesAwaitingBrokerage,
-    reviewCommercials: getApprovedPackagesReviewCommercial,
-    completed: getApprovedPackagesCompleted,
+  const { data: approversOptions } = useApprovedPackageApi.approvers();
+  const { data: packageTypeOptions } = useApprovedPackageApi.types();
+  const { data: socialWorkerOptions } = useApprovedPackageApi.socialWorkers();
+
+  const { data: {
+      data: approvedNew,
+      pagingMetaData: pagingMetaDataNew,
+    }} = useApprovedPackageApi.new({
+      PageNumber: page,
+      OrderBy: sort.name,
+      PageSize: DEFAULT_PAGE_SIZE,
+      ...requestFilters,
+    }
+  );
+
+  const { data: {
+      data: approvedClarification,
+      pagingMetaData: pagingMetaDataClarification,
+    }} = useApprovedPackageApi.clarificationNeed({
+      PageNumber: page,
+      OrderBy: sort.name,
+      PageSize: DEFAULT_PAGE_SIZE,
+      ...requestFilters
+    }
+  );
+
+  const { data: {
+      data: approvedAwaitingBrokerage,
+      pagingMetaData: pagingMetaDataAwaitingBrokerage,
+    }} = useApprovedPackageApi.awaitingBrokerage({
+      PageNumber: page,
+      OrderBy: sort.name,
+      PageSize: DEFAULT_PAGE_SIZE,
+      ...requestFilters,
+    }
+  );
+
+  const { data: {
+      data: approvedReviewCommercials,
+      pagingMetaData: pagingMetaDataReviewCommercial,
+    }} = useApprovedPackageApi.reviewCommercial({
+      PageNumber: page,
+      OrderBy: sort.name,
+      PageSize: DEFAULT_PAGE_SIZE,
+      ...requestFilters,
+    }
+  );
+
+  const { data: {
+      data: approvedCompleted,
+      pagingMetaData: pagingMetaDataCompleted,
+    }} = useApprovedPackageApi.completed({
+      PageNumber: page,
+      OrderBy: sort.name,
+      PageSize: DEFAULT_PAGE_SIZE,
+      ...requestFilters,
+    }
+  );
+
+  const tabsTable = {
+    new: approvedNew,
+    clarification: approvedClarification,
+    awaitingBrokerage: approvedAwaitingBrokerage,
+    reviewCommercials: approvedReviewCommercials,
+    completed: approvedCompleted,
   };
 
-  const [pagingMetaData, setPagingMetaData] = useState({
-    new: {},
-    clarification: {},
-    awaitingBrokerage: {},
-    reviewCommercials: {},
-    completed: {},
-  });
+  const pagingMetaData = {
+    new: pagingMetaDataNew,
+    clarification: pagingMetaDataClarification,
+    awaitingBrokerage: pagingMetaDataAwaitingBrokerage,
+    reviewCommercials: pagingMetaDataReviewCommercial,
+    completed: pagingMetaDataCompleted,
+  }
 
-  const [tabsTable, setTabsTable] = useState({
-    new: [],
-    clarification: [],
-    awaitingBrokerage: [],
-    reviewCommercials: [],
-    completed: [],
-  });
-
-  const [tabs] = useState([
-    { className: 'border-2', value: 'new', text: `New${tabsTable.new.length ? ` (${tabsTable.new.length})` : ''}` },
+  const tabs = [
+    { className: 'border-2', value: 'new', text: `New${pagingMetaData.new ? ` (${pagingMetaData.new.totalCount})` : ''}` },
     {
       value: 'clarification',
-      text: `Clarification ${tabsTable.clarification?.length ? `(${tabsTable.clarification.length})` : ''}`,
+      text: `Clarification ${pagingMetaData.clarification ? `(${pagingMetaData.clarification.totalCount})` : ''}`,
     },
     {
       className: 'border-2',
       value: 'awaitingBrokerage',
-      text: `Awaiting Brokerage ${tabsTable.awaitingBrokerage.length ? `(${tabsTable.awaitingBrokerage.length})` : ''}`,
+      text: `Awaiting Brokerage ${pagingMetaData.awaitingBrokerage ? `(${pagingMetaData.awaitingBrokerage.totalCount})` : ''}`,
     },
     {
       className: 'border-2',
       value: 'reviewCommercials',
-      text: `Review Commercials ${tabsTable.reviewCommercials.length ? `(${tabsTable.reviewCommercials.length})` : ''}`,
+      text: `Review Commercials ${pagingMetaData.reviewCommercials ? `(${pagingMetaData.reviewCommercials.totalCount})` : ''}`,
     },
-    { value: 'completed', text: `Completed ${tabsTable.completed.length ? `(${tabsTable.completed.length})` : ''}` },
-  ]);
+    { value: 'completed', text: `Completed ${pagingMetaData.completed ? `(${pagingMetaData.completed.totalCount})` : ''}` },
+  ];
 
-  const [sort, setSort] = useState({
-    value: 'increase',
-    name: 'id',
-  });
+  const checkFields = useCallback(() => {
+    if(checkEmptyFields(filters)) {
+      return ' display-none';
+    }
+    return '';
+  }, [filters]);
 
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
-  };
-
-  const [inputs] = useState({
+  const inputs = {
     inputs: [
       {
         label: 'Search',
         placeholder: 'Enter name or Hackney ID',
-        search: () => makeTabRequest(),
+        search: () => setRequestFilters(filters),
         className: 'mr-3',
         name: 'clientName',
       },
     ],
     dropdowns: [
-      { options: [], initialText: 'Package Type', name: 'PackageType', className: 'mr-3' },
-      { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
-      { options: [], initialText: 'Approver', name: 'Approver', className: 'mr-3' },
+      { options: formatForDropDownOptions({ text: 'packageType' }, packageTypeOptions), initialText: 'Package Type', name: 'PackageType', className: 'mr-3' },
+      { options: formatForDropDownOptions({ text: 'userName' }, socialWorkerOptions), initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
+      { options: formatForDropDownOptions({ text: 'userName' }, approversOptions), initialText: 'Approver', name: 'Approver', className: 'mr-3' },
     ],
-    buttons: [{ initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() }],
-  });
+    buttons: [
+      { initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => setRequestFilters(filters)},
+      { initialText: 'Clear', name: 'button-2', className: `mt-auto ml-3 outline gray${checkFields()}`, onClick: () => setFilters({...initialFilters}) },
+    ],
+  };
 
   const sortBy = (field, value) => {
     setSort({ value, name: field });
   };
 
-  const makeTabRequest = () => {
-    setLoading(true);
-    if (timer) {
-      clearTimeout(timer);
-    }
-    setTimer(setTimeout(() => {
-      const setInitialOptions = (tag, response) => {
-        if (tag === 'PackageType')
-          inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ packageType, id }) => ({
-            text: packageType,
-            value: id,
-          }));
-        else
-          inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ userName, id }) => ({
-            text: userName,
-            value: id,
-          }));
-      };
-      getApprovedPackagesPackageTypes().then((response) => {
-        setInitialOptions('PackageType', response);
-        const options = response.map((option) => ({
-          text: option?.packageType,
-          value: option?.id,
-        }));
-        changeInputs('PackageType', options.text);
-      });
-
-      getApprovedPackagesSocialWorkers().then((response) => {
-        setInitialOptions('SocialWorker', response);
-        const options = response.map((option) => ({
-          text: option?.userName,
-          value: option?.id,
-        }));
-        changeInputs('SocialWorker', options);
-      });
-
-      getApprovedPackagesApprovers().then((response) => {
-        setInitialOptions('Approver', response);
-        const options = response.map((option) => ({
-          text: option?.userName,
-          value: option?.id,
-        }));
-        changeInputs('Approver', options);
-      });
-      tabsRequests[tab]({
-        PageNumber: page,
-        OrderBy: sort.name,
-        PageSize: 50,
-        ...filters,
-      })
-        .then((res) => {
-          const tableData = res.data || [];
-          sortTableByKey(tableData, sort)
-          setTabsTable({ ...tabsTable, [tab]: tableData });
-          setPagingMetaData({
-            ...pagingMetaData,
-            [tab]: res.pagingMetaData,
-          });
-          setLoading(false);
-        })
-        .catch((e) => {
-          pushNotification(e);
-          setLoading(false);
-        });
-      }, 500)
-    );
-  };
-
-  useEffect(() => {
-    makeTabRequest();
-  }, [tab, sort, page]);
-
   const rowsRules = {
     packageType: {
-      onClick: (cellItem, cellValue) => changeInputs('PackageType', cellValue),
+      onClick: (cellItem) => {
+        changeInputs('PackageType', cellItem?.packageTypeId)
+      },
       getClassName: () => 'link-button',
     },
     lastUpdated: {
@@ -279,7 +259,8 @@ const ApproverHubPage = () => {
     setPage(chosenPage);
   };
 
-  const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
+  const isLoadingData = Object.values(tabsTable).every((item) => !item);
+
   return (
     <div className="approver-hub-page">
       <Inputs
@@ -291,8 +272,8 @@ const ApproverHubPage = () => {
       />
       <DashboardTabs tabs={tabs} changeTab={setTab} tab={tab} />
       <Table
-        loading={loading}
-        classes="p-4"
+        loading={isLoadingData}
+        className='approver-hub__table'
         fields={{
           serviceUser: 'serviceUser',
           packageType: 'packageType',
@@ -303,7 +284,7 @@ const ApproverHubPage = () => {
           lastUpdated: 'lastUpdated',
         }}
         rowsRules={rowsRules}
-        rows={tabsTable[tab]}
+        rows={sortArray(tabsTable[tab], sort)}
         sortBy={sortBy}
         sorts={sorts}
         onClickTableRow={onClickTableRow}
@@ -311,9 +292,9 @@ const ApproverHubPage = () => {
       <Pagination
         currentPage={page}
         changePagination={changePage}
-        itemsCount={pageSize}
-        totalCount={totalCount}
-        totalPages={totalPages}
+        pageSize={pagingMetaData[tab]?.pageSize}
+        totalCount={pagingMetaData[tab]?.totalCount}
+        totalPages={pagingMetaData[tab]?.totalPages}
       />
       <HackneyFooterInfo />
     </div>

@@ -48,7 +48,7 @@ const SupplierReturn = () => {
   ]);
 
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'supplier',
   });
 
@@ -96,7 +96,7 @@ const SupplierReturn = () => {
         sorts={sorts}
         onClickTableRow={onClickTableRow}
       />
-      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} pageSize={10} totalCount={30} />
       <SupplierReturnsLevelInsight
         suppliers="832"
         packages="832"

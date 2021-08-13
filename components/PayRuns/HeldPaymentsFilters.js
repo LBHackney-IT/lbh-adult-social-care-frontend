@@ -1,6 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AsyncSelect from 'react-select/async';
 import { BASE_URL } from '../../api/BaseApi';
 import { usePackageGetAll, usePaymentDepartments } from '../../api/SWR';
@@ -26,7 +26,7 @@ const convertLocalToUTCDate = (date, isEndDate) => {
     .format();
 };
 
-const HeldPaymentsFilters = ({ filters, changeFilter, applyFilters }) => {
+const HeldPaymentsFilters = ({ filters, changeFilter, clearFilters, applyFilters, hasFields }) => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
 
@@ -56,7 +56,6 @@ const HeldPaymentsFilters = ({ filters, changeFilter, applyFilters }) => {
           placeholderText="Date range"
           selectsRange
         />
-
         {dropdowns.map(({ text, options, key, endpoint }) => {
           if (endpoint) {
             const isClient = endpoint === 'clients';
@@ -68,7 +67,6 @@ const HeldPaymentsFilters = ({ filters, changeFilter, applyFilters }) => {
               });
               return data.data;
             };
-
             return (
               <AsyncSelect
                 onChange={(option) => changeFilter(key, option.id)}
@@ -84,7 +82,6 @@ const HeldPaymentsFilters = ({ filters, changeFilter, applyFilters }) => {
               />
             );
           }
-
           return (
             <Dropdown
               key={key}
@@ -97,8 +94,10 @@ const HeldPaymentsFilters = ({ filters, changeFilter, applyFilters }) => {
           );
         })}
       </div>
-
-      <Button onClick={applyFilters}>Filter</Button>
+      <div>
+        <Button onClick={applyFilters}>Filter</Button>
+        {hasFields && <Button className='ml-3 outline gray' onClick={clearFilters}>Clear</Button>}
+      </div>
     </>
   );
 };

@@ -6,14 +6,9 @@ import {
   acceptInvoices,
   approvePayRunForPayment,
   deleteDraftPayRun,
-  getInvoicePaymentStatuses,
-  getSinglePayRunDetails,
-  getSinglePayRunInsights,
   holdInvoicePayment,
   kickPayRunBackToDraft,
   rejectInvoicePayment,
-  getUniquePackageTypesInPayRun,
-  getUniqueSuppliersInPayRun,
   submitPayRunForApproval,
 } from '../../../api/Payments/PayRunApi';
 import Breadcrumbs from '../../../components/Breadcrumbs';
@@ -30,13 +25,18 @@ import Table from '../../../components/Table';
 import CustomDropDown from '../../../components/CustomDropdown';
 import { currency } from '../../../constants/strings';
 import PayRunCollapsedContent from '../../../components/PayRuns/PayRunCollapsedContent';
-import { usePaymentDepartments } from '../../../api/SWR';
-import { DATA_TYPES } from '../../../api/Utils/CommonOptions'
 import {
-  sortArrayOfObjectsByDateAscending, sortArrayOfObjectsByDateDescending,
-  sortArrayOfObjectsByNumberAscending, sortArrayOfObjectsByNumberDescending,
-  sortArrayOfObjectsByStringAscending, sortArrayOfObjectsByStringDescending
-} from '../../../api/Utils/FuncUtils'
+  useInvoicePaymentStatuses,
+  usePaymentDepartments,
+} from '../../../api/SWR';
+import {
+  usePayRunSummaryInsights,
+  useSinglePayRunDetails,
+  useUniquePayRunPackageTypes,
+  useUniquePayRunSuppliers
+} from '../../../api/SWR/transactions/payrun/usePayRunApi';
+import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
+import { sortArray } from '../../../api/Utils/FuncUtils';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -46,6 +46,17 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
     props: {}, // will be passed to the page component as props
   };
 });
+
+const initialFilters = {
+  serviceUser: '',
+  invoiceNo: '',
+  packageId: '',
+  supplier: '',
+  type: '',
+  status: '',
+  dateFrom: '',
+  dateTo: '',
+};
 
 const PayRunPage = () => {
   const [sorts] = useState([
@@ -57,49 +68,52 @@ const PayRunPage = () => {
     { name: 'invoiceStatusId', text: 'Status', dataType: DATA_TYPES.NUMBER },
   ]);
 
-  const [payRunFields] = useState({
-    serviceUserName: 'serviceUserName',
-    invoiceId: 'invoiceId',
-    packageTypeName: 'packageTypeName',
-    supplierName: 'supplierName',
-    totalAmount: 'totalAmount',
-    invoiceStatusId: 'invoiceStatusId',
-  });
-
   const [popupTypes] = useState({
     createPayRun: 'create-pay-run',
     holdPayments: 'hold-payment',
   });
-  const [suppliers, setSuppliers] = useState([]);
   const [invoice, setInvoice] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
   const { id } = router.query;
   const [openedPopup, setOpenedPopup] = useState('');
   const [checkedRows, setCheckedRows] = useState([]);
-  const [packageTypes, setPackageTypes] = useState([]);
-  const [invoices, setInvoices] = useState({});
   const [actionRequiredBy, setActionRequiredBy] = useState('');
   const [reason, setReason] = useState('');
-  const [payRunDetails, setPayRunDetails] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState({});
-  const [levelInsights, setLevelInsights] = useState();
+  const [requestFilters, setRequestFilters] = useState({
+    ...initialFilters
+  });
   const [pathname] = useState(`/payments/pay-runs/${id}`);
   const [date, setDate] = useState(new Date());
-  const [invoiceStatuses, setInvoiceStatuses] = useState([]);
   const [hocAndRelease, changeHocAndRelease] = useState('');
   const [regularCycles, changeRegularCycles] = useState('');
+  const [sortedInvoices, setSortedInvoices] = useState([]);
 
   const { data: paymentDepartments } = usePaymentDepartments();
+  const { data: packageTypes } = useUniquePayRunPackageTypes(id);
+  const { data: { data: suppliers } } = useUniquePayRunSuppliers(id);
+  const { data: invoiceStatuses } = useInvoicePaymentStatuses();
+  const { data : levelInsights } = usePayRunSummaryInsights(id)
+  const { mutate: refetchSingleDetails , data : { invoices, payRunDetails } } = useSinglePayRunDetails({
+    payRunId: id,
+    pageNumber,
+    serviceUserId: requestFilters?.serviceUser?.id,
+    invoiceStatusId: requestFilters?.status,
+    invoiceNo: requestFilters?.invoiceNo,
+    supplierId: requestFilters?.supplier?.value,
+    packageTypeId: requestFilters?.type,
+    dateFrom: requestFilters?.dateFrom?.getTime && requestFilters.dateFrom.toJSON(),
+    dateTo: requestFilters?.dateTo?.getTime && requestFilters.dateTo.toJSON(),
+  });
 
   const [breadcrumbs] = useState([
     { text: 'Payments', onClick: () => router.push('/payments/pay-runs') },
     { text: `Pay Run ${id}` },
   ]);
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'id',
     dataType: DATA_TYPES.STRING,
   });
@@ -126,163 +140,94 @@ const PayRunPage = () => {
     }
   };
 
-  const getPayRunDetails = async () => {
-    if (!loading) {
-      setLoading(true);
-    }
-    try {
-      const res = await getSinglePayRunDetails({
-        payRunId: id,
-        pageNumber,
-        searchTerm: filters?.serviceUser,
-        invoiceStatusId: filters?.status,
-        supplierId: filters?.supplier?.value,
-        packageTypeId: filters?.type,
-        dateFrom: filters?.dateFrom?.getTime && filters.dateFrom.toJSON(),
-        dateTo: filters?.dateTo?.getTime && filters.dateTo.toJSON(),
-      });
-      setInvoices(res.invoices);
-      setPayRunDetails(res.payRunDetails);
-      const packageTypesRes = await getUniquePackageTypesInPayRun(id);
-      const suppliersRes = await getUniqueSuppliersInPayRun(id);
-      setSuppliers(suppliersRes?.data || []);
-      setPackageTypes(packageTypesRes);
-      setLoading(false);
-    } catch(e) {
-      pushNotification(e || 'Can not get Pay Run details');
-      setLoading(false);
-    }
-  };
-
   const actionButton = {
     classes: 'outline green',
     disabled: !checkedRows.length,
     onClick: () => {
-      setLoading(true);
       const { payRunId } = payRunDetails;
       acceptInvoices(payRunId, { invoiceIds: checkedRows })
         .then(async () => {
-          await getPayRunDetails();
           setCheckedRows([]);
           pushNotification('Accepted success', 'success');
         })
         .catch((e) => {
           pushNotification(e);
-          setLoading(false);
         });
     },
     text: 'Accept all selected',
   };
 
   const submitPayRun = () => {
-    setLoading(true);
     const { payRunId } = payRunDetails;
     if (payRunDetails.payRunStatusName === 'Draft') {
       submitPayRunForApproval(payRunId)
         .then(async () => {
-          await getPayRunDetails();
+          refetchSingleDetails()
           pushNotification('Pay Run submitted for approval', 'success');
-          setLoading(false);
         })
         .catch((e) => {
           pushNotification(e || 'Can not submit for approve')
-          setLoading(false);
         });
     } else {
       approvePayRunForPayment(payRunId)
         .then(async () => {
-          await getPayRunDetails();
+          refetchSingleDetails();
           pushNotification('Pay Run approved', 'success');
-          setLoading(false);
         })
         .catch((e) => {
           pushNotification(e || 'Can not submit for approve');
-          setLoading(false);
         });
     }
   };
 
   const onDeletePayRunDraft = () => {
-    setLoading(true);
     const { payRunId } = payRunDetails;
     if (payRunDetails.payRunStatusName === 'Draft') {
       deleteDraftPayRun(payRunId)
         .then(async () => {
-          await getPayRunDetails();
+          refetchSingleDetails()
           pushNotification('Pay Run draft deleted', 'success');
-          setLoading(false);
           router.replace('/payments/pay-runs');
         })
         .catch(() => {
+          refetchSingleDetails()
           pushNotification('Can not delete Pay Run draft');
-          setLoading(false);
         });
     } else {
       kickPayRunBackToDraft(payRunId)
         .then(async () => {
-          await getPayRunDetails();
+          refetchSingleDetails()
           pushNotification('Pay Run kick back success', 'success');
-          setLoading(false);
         })
         .catch(() => {
           pushNotification('Can not kick back Pay Run');
-          setLoading(false);
         });
     }
   };
 
-  useEffect(() => {
-    getPayRunDetails();
-  }, [pageNumber]);
-
-  useEffect(() => {
+  const sortInvoices = () => {
     if(!invoices?.invoices?.length) return;
-    const { value = '', name = '', dataType = DATA_TYPES.STRING } = sort;
-    let fieldName = '';
-    let sortedList = [];
-    fieldName = payRunFields[name];
     const data = invoices.invoices.slice();
-    if (value === 'increase') {
-      if (dataType === DATA_TYPES.STRING) sortedList = sortArrayOfObjectsByStringAscending(data, fieldName);
-      else if (dataType === DATA_TYPES.DATE) sortedList = sortArrayOfObjectsByDateAscending(data, fieldName);
-      else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberAscending(data, fieldName);
-    } else if (value === 'decrease') {
-      if (dataType === DATA_TYPES.STRING) sortedList = sortArrayOfObjectsByStringDescending(data, fieldName);
-      else if (dataType === DATA_TYPES.DATE) sortedList = sortArrayOfObjectsByDateDescending(data, fieldName);
-      else if (dataType === DATA_TYPES.NUMBER) sortedList = sortArrayOfObjectsByNumberDescending(data, fieldName);
-    }
-    setInvoices({ ...invoices, invoices: sortedList });
-  }, [sort]);
+    setSortedInvoices({ ...invoices, invoices: sortArray(data, sort) });
+  }
 
   useEffect(() => {
-    getSinglePayRunInsights(id)
-      .then((res) => {
-        setLevelInsights(res);
-      })
-      .catch(() => pushNotification('Can not get Insights'));
-  }, []);
+    sortInvoices()
+  }, [sort, invoices]);
 
-  useEffect(() => {
-    getInvoicePaymentStatuses()
-      .then((res) => setInvoiceStatuses(res))
-      .catch((e) => pushNotification(e || 'Can not get invoice payment statuses'));
-  }, []);
 
   const holdInvoice = () => {
     const holdReason = {
       actionRequiredFromId: actionRequiredBy.departmentId,
       reasonForHolding: reason,
     };
-    setLoading(true);
     holdInvoicePayment(id, invoice.invoiceId, holdReason)
       .then(async () => {
-        await getPayRunDetails();
         closeCreatePayRun();
         pushNotification('Hold invoice success', 'success');
       })
       .catch((e) => {
         pushNotification(e || 'Hold invoice fail');
-        setLoading(false);
       });
   }
 
@@ -290,20 +235,24 @@ const PayRunPage = () => {
     if (statusName === 'Accepted') {
       acceptInvoice(id, item.invoiceId)
         .then(async () => {
-          await getPayRunDetails();
+          refetchSingleDetails();
           pushNotification('Accept invoice success', 'success');
         })
-        .catch((e) => pushNotification(e || 'Accept invoice fail'));
+        .catch((e) => {
+          pushNotification(e || 'Accept invoice fail')
+        });
     } else if (statusName === 'Held') {
       setInvoice(item);
       setOpenedPopup(popupTypes.holdPayments);
     } else if (statusName === 'Rejected') {
       rejectInvoicePayment(id, item.invoiceId)
         .then(async () => {
-          await getPayRunDetails();
+          refetchSingleDetails();
           pushNotification('Accept invoice success', 'success');
         })
-        .catch((e) => pushNotification(e || 'Reject invoice fail'));
+        .catch((e) => {
+          pushNotification(e || 'Reject invoice fail')
+        });
     }
   };
 
@@ -356,7 +305,7 @@ const PayRunPage = () => {
     text: item.packageTypeName,
   }));
 
-  const supplierOptions = suppliers.map(item => ({
+  const supplierOptions = !suppliers ? [] : suppliers.map(item => ({
     value: item.supplierId,
     name: item.supplierName,
   }));
@@ -389,13 +338,13 @@ const PayRunPage = () => {
       <PayRunHeader
         typeOptions={packageTypeOptions}
         serviceUserOptions={[]}
+        filter={() => setRequestFilters(filters)}
         changeFilters={setFilters}
         statusOptions={statusOptions}
-        filter={getPayRunDetails}
         supplierOptions={supplierOptions}
       />
       <Table
-        loading={loading}
+        loading={!invoices}
         fields={{
           invoiceCheckbox: 'invoiceCheckbox',
           serviceUser: 'serviceUserName',
@@ -407,7 +356,7 @@ const PayRunPage = () => {
         }}
         getCollapsedContainer={(item) => <PayRunCollapsedContent invoice={item} />}
         rowsRules={rowRules}
-        rows={invoices?.invoices}
+        rows={sortedInvoices?.invoices}
         checkedRows={checkedRows}
         sortBy={sortBy}
         sorts={sorts}
@@ -425,11 +374,11 @@ const PayRunPage = () => {
       />
       <PayRunsLevelInsight
         firstButton={{
-          text: payRunDetails.payRunStatusName === 'Draft' ? 'Submit pay run for approval' : 'Approve for payment',
+          text: payRunDetails?.payRunStatusName === 'Draft' ? 'Submit pay run for approval' : 'Approve for payment',
           onClick: () => submitPayRun(),
         }}
         secondButton={{
-          text: payRunDetails.payRunStatusName === 'Draft' ? 'Delete draft pay run' : 'Kick back',
+          text: payRunDetails?.payRunStatusName === 'Draft' ? 'Delete draft pay run' : 'Kick back',
           onClick: () => onDeletePayRunDraft(),
         }}
         levelInsights={levelInsights}

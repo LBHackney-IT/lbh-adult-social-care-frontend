@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
-import { ArrowLeftGreenIcon } from './Icons';
 import { useRouter } from 'next/router';
+import { ArrowLeftGreenIcon } from './Icons';
 
 const NavClientSummary = ({
   children,
@@ -49,7 +49,7 @@ const NavClientSummary = ({
           </div>
         )}
         {(packagesCount !== null || preferredContact !== null || canSpeakEnglish !== null) && (
-          <div className="more-info is-flex is-justify-content-space-between">
+          <div className="more-info is-flex-wrap-wrap is-flex is-justify-content-space-between">
             <p className="is-5 package-count">
               <span className="font-weight-bold">{packagesCount}</span>
               {`${packagesCount > 1 ? 'Packages' : 'Package'} to action`}
