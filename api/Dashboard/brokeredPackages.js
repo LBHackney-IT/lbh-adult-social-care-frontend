@@ -1,8 +1,6 @@
-import { BASE_URL } from '../BaseApi';
-import { axiosRequest, getQueryParamsFromObject } from '../Utils/ApiUtils';
-import { requestMethods } from '../../constants/variables';
 import axios from 'axios';
-import { handleError, handleResponse } from '../Utils/ApiUtils';
+import { BASE_URL } from '../BaseApi';
+import { axiosRequest, getQueryParamsFromObject , handleError, handleResponse } from '../Utils/ApiUtils';
 
 const BROKERED_PACKAGES = `${BASE_URL}/v1/brokered-packages`;
 

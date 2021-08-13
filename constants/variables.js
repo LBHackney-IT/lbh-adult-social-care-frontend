@@ -1,5 +1,5 @@
 const maxStringLength = 200;
-const DEFAULT_PAGE_SIZE = 50;
+const DEFAULT_PAGE_SIZE = 10;
 
 const requestMethods = {
   put: 'PUT',

@@ -8,7 +8,7 @@ import ApproverHeader from './Approver/ApproverHeader';
 const AdditionalHeader = () => {
   const router = useRouter();
   const headers = [
-    { route: 'payments', component: <PaymentsHeader /> },
+    { route: 'payments', component: <ApproverHeader /> || <PaymentsHeader /> },
     { route: SUPPLIER_DASHBOARD_ROUTE, component: <SupplierDashboardHeader /> },
     { route: 'social-worker', component: <ApproverHeader /> },
     { route: 'approver-hub', component: <ApproverHeader /> },

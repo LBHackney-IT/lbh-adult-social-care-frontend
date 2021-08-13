@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
@@ -6,16 +6,8 @@ import { addNotification } from '../../reducers/notificationsReducer';
 import DashboardTabs from '../../components/Dashboard/Tabs';
 import Table from '../../components/Table';
 import Inputs from '../../components/Inputs';
-import {
-  getBrokeredPackagesBrokeredDone,
-  getBrokeredPackagesBrokeredInProgress,
-  getBrokeredPackagesBrokeredNew,
-  getBrokeredPackagesPackageTypes,
-  getBrokeredPackagesSocialWorkers,
-  getBrokeredPackagesStages,
-  putBrokeredPackagesAssign,
-} from '../../api/Dashboard/brokeredPackages';
-import { formatDate, formatForDropDownOptions, formatStatus } from '../../service/helpers'
+import { putBrokeredPackagesAssign } from '../../api/Dashboard/brokeredPackages';
+import { formatDate, formatForDropDownOptions, formatStatus } from '../../service/helpers';
 import CustomDropDown from '../../components/CustomDropdown';
 import Pagination from '../../components/Payments/Pagination';
 import {
@@ -24,10 +16,18 @@ import {
   RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE,
   RESIDENTIAL_CARE_BROKERING_ROUTE,
 } from '../../routes/RouteConstants';
-import { DEFAULT_PAGE_SIZE } from '../../constants/variables'
-import { checkEmptyFields } from '../../service/inputValidator'
-import { sortArray } from '../../api/Utils/FuncUtils'
-import { DATA_TYPES } from '../../api/Utils/CommonOptions'
+import { DEFAULT_PAGE_SIZE } from '../../constants/variables';
+import { checkEmptyFields } from '../../service/inputValidator';
+import { sortArray } from '../../api/Utils/FuncUtils';
+import { DATA_TYPES } from '../../api/Utils/CommonOptions';
+import {
+  useBrokeredPackagesDone,
+  useBrokeredPackagesInProgress,
+  useBrokeredPackagesNew,
+  useBrokeredPackagesSocialWorkers,
+  useBrokeredPackagesStages,
+  useBrokeredPackagesTypes
+} from '../../api/SWR/useBrokeredPackagesApi'
 
 const BrokerageHubPage = () => {
   const dispatch = useDispatch();
@@ -53,11 +53,13 @@ const BrokerageHubPage = () => {
   };
 
   const [filters, setFilters] = useState({ ...initialFilters });
-  const [timer, setTimer] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [stageOptions, setStagesOptions] = useState([]);
-  const [typeOfCareOptions, setTypeOfCareOptions] = useState([]);
-  const [socialWorkerOptions, setSocialWorkersOptions] = useState([]);
+  const [requestFilters, setRequestFilters] = useState({
+    ...initialFilters,
+  })
+
+  const { data: stageOptions } = useBrokeredPackagesStages();
+  const { data: typeOfCareOptions } = useBrokeredPackagesTypes();
+  const { data: socialWorkerOptions } = useBrokeredPackagesSocialWorkers();
 
   const [sorts] = useState([
     { name: 'packageType', text: 'Package Type' },
@@ -83,54 +85,84 @@ const BrokerageHubPage = () => {
         label: 'Search',
         name: 'clientName',
         placeholder: 'Enter name or Hackney ID',
-        search: () => makeTabRequest(),
+        search: () => setRequestFilters(filters),
         className: 'mr-3',
       },
     ],
     dropdowns: [
-      { options: typeOfCareOptions, initialText: 'Type of care', name: 'typeOfCare', className: 'mr-3' },
-      { options: stageOptions, initialText: 'Stage', name: 'stageName', className: 'mr-3' },
-      { options: socialWorkerOptions, initialText: 'Social Worker', name: 'socialWorkerName', className: 'mr-3' },
+      { options: formatForDropDownOptions({ text: 'packageType' }, typeOfCareOptions), initialText: 'Type of care', name: 'typeOfCare', className: 'mr-3' },
+      { options: formatForDropDownOptions({ text: 'stageName' }, stageOptions), initialText: 'Stage', name: 'stageName', className: 'mr-3' },
+      { options: formatForDropDownOptions({ text: 'userName' }, socialWorkerOptions), initialText: 'Social Worker', name: 'socialWorkerName', className: 'mr-3' },
     ],
     buttons: [
-      { initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() },
+      { initialText: 'Filter', name: 'button-1', className: 'mt-auto ml-auto', onClick: () => setRequestFilters(filters) },
       { initialText: 'Clear', name: 'button-2', className: `mt-auto ml-3 outline gray${checkFields()}`, onClick: () => setFilters({...initialFilters}) }
     ],
   };
-
-  const [tab, setTab] = useState('new');
-  const [page, setPage] = useState(1);
-  const [pagingMetaData, setPagingMetaData] = useState({
-    new: {},
-    inProgress: {},
-    done: {},
-  });
-
-  const [tabsRequests] = useState({
-    new: getBrokeredPackagesBrokeredNew,
-    inProgress: getBrokeredPackagesBrokeredInProgress,
-    done: getBrokeredPackagesBrokeredDone,
-  });
-
-  const [tabsTable, setTabsTable] = useState({
-    new: [],
-    inProgress: [],
-    done: [],
-  });
-
-  const tabs = [
-    { value: 'new', text: `New${tabsTable.new.length ? ` (${tabsTable.new.length})` : ''}` },
-    {
-      value: 'inProgress',
-      text: `In Progress ${tabsTable.inProgress.length ? ` (${tabsTable.inProgress.length})` : ''}`,
-    },
-    { value: 'done', text: `Done${tabsTable.done.length ? ` (${tabsTable.done.length})` : ''}` },
-  ];
 
   const [sort, setSort] = useState({
     value: 'increase',
     name: 'id',
   });
+
+  const [tab, setTab] = useState('new');
+  const [page, setPage] = useState(1);
+
+  const { data: {
+    data: brokeredNew,
+    pagingMetaData: pagingMetaDataNew,
+  }} = useBrokeredPackagesNew({
+      PageNumber: page,
+      OrderBy: sort.name,
+      PageSize: DEFAULT_PAGE_SIZE,
+      ...requestFilters,
+    }
+  );
+
+  const {
+    data: {
+      data: brokeredInProgress,
+      pagingMetaData: pagingMetaDataInProgress,
+    }} = useBrokeredPackagesInProgress({
+      PageNumber: page,
+      OrderBy: sort.name,
+      PageSize: DEFAULT_PAGE_SIZE,
+      ...requestFilters,
+    }
+  );
+
+  const {
+    data: {
+      data: brokeredDone,
+      pagingMetaData: pagingMetaDataDone,
+    }} = useBrokeredPackagesDone({
+      PageNumber: page,
+      OrderBy: sort.name,
+      PageSize: DEFAULT_PAGE_SIZE,
+      ...requestFilters,
+    }
+  );
+
+  const tabsTable = {
+    new: brokeredNew,
+    inProgress: brokeredInProgress,
+    done: brokeredDone,
+  };
+
+  const pagingMetaData = {
+    new: pagingMetaDataNew,
+    inProgress: pagingMetaDataInProgress,
+    done: pagingMetaDataDone,
+  }
+
+  const tabs = [
+    { value: 'new', text: `New${pagingMetaData.new ? ` (${pagingMetaData.new.totalCount})` : ''}` },
+    {
+      value: 'inProgress',
+      text: `In Progress ${pagingMetaData.inProgress ? ` (${pagingMetaData.inProgress.totalCount})` : ''}`,
+    },
+    { value: 'done', text: `Done${pagingMetaData.done ? ` (${pagingMetaData.done.totalCount})` : ''}` },
+  ];
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
@@ -146,79 +178,7 @@ const BrokerageHubPage = () => {
       .catch((e) => pushNotification(e || 'Assign fail'));
   };
 
-  function onGetBrokeredPackagesPackageTypes() {
-    return getBrokeredPackagesPackageTypes()
-      .then((res) => {
-        setTypeOfCareOptions(formatForDropDownOptions({ text: 'packageType' }, res));
-      })
-      .catch((e) => pushNotification(e || 'Can not get Package Type'));
-  }
-
-  const tabRequest = (actualTab = tab) => {
-    tabsRequests[actualTab]({
-      PageNumber: page,
-      OrderBy: sort.name,
-      PageSize: DEFAULT_PAGE_SIZE,
-      ...filters,
-    })
-      .then((res) => {
-        const tableData = sortArray(res.data, sort);
-        setTabsTable((tabsTableState) => {
-          return ({ ...tabsTableState, [actualTab]: tableData })
-        });
-        setPagingMetaData((pagingState => ({
-          ...pagingState,
-          [actualTab]: res.pagingMetaData,
-        })));
-        setLoading(false);
-      })
-      .catch((e) => {
-        pushNotification(e);
-        setLoading(false);
-      });
-  }
-
-  function onGetBrokeredPackagesStages() {
-    return getBrokeredPackagesStages().then((res) => {
-      setStagesOptions(formatForDropDownOptions({text: 'stageName'}, res));
-    })
-      .catch((e) => pushNotification(e || 'Can not get stages'));
-  }
-
-  function onGetBrokeredPackagesSocialWorkers() {
-    return getBrokeredPackagesSocialWorkers()
-      .then((res) => {
-        setSocialWorkersOptions(formatForDropDownOptions({text: 'userName'}, res));
-      })
-      .catch((e) => pushNotification(e || 'Can not get social workers'));
-  }
-
-  const makeTabRequest = () => {
-    setLoading(true);
-    if (timer) {
-      clearTimeout(timer);
-    }
-    setTimer(setTimeout( () => {
-
-      onGetBrokeredPackagesPackageTypes();
-      onGetBrokeredPackagesStages();
-      onGetBrokeredPackagesSocialWorkers();
-
-      tabRequest();
-    }, 500));
-  };
-
-  useEffect(() => {
-    makeTabRequest();
-  }, [page, tab, sort]);
-
-  useEffect(() => {
-    tabs.forEach(tabsItem => {
-      tabRequest(tabsItem.value)
-    });
-  }, []);
-
-  const tableRows = tabsTable[tab];
+  const tableRows = sortArray(tabsTable[tab], sort);
 
   const rowsRules = {
     packageId: {
@@ -260,20 +220,18 @@ const BrokerageHubPage = () => {
     });
   };
 
-  // todo refactor
   const changePage = (chosenPage) => {
     setPage(chosenPage);
-    makeTabRequest();
   };
 
-  const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
+  const isLoadingData = Object.values(tabsTable).every((item) => !item);
 
   return (
     <div className="brokerage-hub-page">
       <Inputs inputs={inputs} changeInputs={changeInputs} values={filters} title="Brokerage Hub" />
       <DashboardTabs tabs={tabs} changeTab={setTab} tab={tab} />
       <Table
-        loading={loading}
+        loading={isLoadingData}
         rows={tableRows}
         rowsRules={rowsRules}
         fields={{
@@ -293,10 +251,10 @@ const BrokerageHubPage = () => {
       />
       <Pagination
         changePagination={changePage}
-        totalPages={totalPages}
+        totalPages={pagingMetaData[tab]?.totalPages}
         currentPage={page}
-        pageSize={pageSize}
-        totalCount={totalCount}
+        pageSize={pagingMetaData[tab]?.pageSize}
+        totalCount={pagingMetaData[tab]?.totalCount}
       />
       <HackneyFooterInfo />
     </div>

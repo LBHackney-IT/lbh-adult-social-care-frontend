@@ -47,6 +47,17 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
   };
 });
 
+const initialFilters = {
+  serviceUser: '',
+  invoiceNo: '',
+  packageId: '',
+  supplier: '',
+  type: '',
+  status: '',
+  dateFrom: '',
+  dateTo: '',
+};
+
 const PayRunPage = () => {
   const [sorts] = useState([
     { name: 'serviceUserName', text: 'Service User', dataType: DATA_TYPES.STRING },
@@ -71,6 +82,9 @@ const PayRunPage = () => {
   const [reason, setReason] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState({});
+  const [requestFilters, setRequestFilters] = useState({
+    ...initialFilters
+  });
   const [pathname] = useState(`/payments/pay-runs/${id}`);
   const [date, setDate] = useState(new Date());
   const [hocAndRelease, changeHocAndRelease] = useState('');
@@ -85,12 +99,13 @@ const PayRunPage = () => {
   const { mutate: refetchSingleDetails , data : { invoices, payRunDetails } } = useSinglePayRunDetails({
     payRunId: id,
     pageNumber,
-    serviceUserId: filters?.serviceUser?.id,
-    invoiceStatusId: filters?.status,
-    supplierId: filters?.supplier?.value,
-    packageTypeId: filters?.type,
-    dateFrom: filters?.dateFrom?.getTime && filters.dateFrom.toJSON(),
-    dateTo: filters?.dateTo?.getTime && filters.dateTo.toJSON(),
+    serviceUserId: requestFilters?.serviceUser?.id,
+    invoiceStatusId: requestFilters?.status,
+    invoiceNo: requestFilters?.invoiceNo,
+    supplierId: requestFilters?.supplier?.value,
+    packageTypeId: requestFilters?.type,
+    dateFrom: requestFilters?.dateFrom?.getTime && requestFilters.dateFrom.toJSON(),
+    dateTo: requestFilters?.dateTo?.getTime && requestFilters.dateTo.toJSON(),
   });
 
   const [breadcrumbs] = useState([
@@ -323,6 +338,7 @@ const PayRunPage = () => {
       <PayRunHeader
         typeOptions={packageTypeOptions}
         serviceUserOptions={[]}
+        filter={() => setRequestFilters(filters)}
         changeFilters={setFilters}
         statusOptions={statusOptions}
         supplierOptions={supplierOptions}
