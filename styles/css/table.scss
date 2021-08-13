@@ -18,14 +18,18 @@
     &:hover {
       cursor: pointer;
     }
-    .table__row-item {
-      width: 100%;
-    }
   }
-
 
   &__row-wrapper {
     padding: 0 10px
+  }
+}
+
+.table__row-item {
+  width: 100%;
+
+  &:not(.table__row-item-status) > p {
+    font-size: 16px;
   }
 }
 
@@ -135,7 +139,7 @@
 .table__row-item-status {
   display: flex;
   justify-content: flex-start;
-  font-size: 12px;
+  font-size: 14px;
   color: $lbh-black1;
 
   p {

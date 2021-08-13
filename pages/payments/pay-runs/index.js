@@ -26,10 +26,12 @@ import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from
 import {
   useHeldInvoicePayments,
   usePaymentDepartments,
+} from '../../../api/SWR';
+import {
   usePayRunSubTypes,
   usePayRunTypes,
   useUniquePayRunStatuses,
-} from '../../../api/SWR';
+} from '../../../api/SWR/transactions/payrun/usePayRunApi';
 import usePayRunsSummaryList from '../../../api/SWR/transactions/usePayRunsSummaryList';
 import useGroupedData from '../../../service/useGroupPayRun'
 
@@ -75,7 +77,7 @@ const TABS_CLASSES = {
 
 const PAY_RUN_ROWS_RULES = {
   payRunId: {
-    getClassName: () => 'button-link',
+    getClassName: () => 'link-button',
   },
   payRunStatusName: {
     getClassName: (value) => `${formatStatus(value)} table__row-item-status`,
