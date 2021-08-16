@@ -55,12 +55,12 @@ const SocialWorkerDashboardPage = () => {
   const [requestFilters, setRequestFilters] = useState({...initialFilters});
 
   const { data: statusOptions } = useSocialWorkerApi.submittedPackagesStatus();
-  const { data: {data: submittedPackages, pagingMetaData } } = useSocialWorkerApi.submittedPackageRequests({
+  const { data: { data: submittedPackages, pagingMetaData } } = useSocialWorkerApi.submittedPackageRequests({
     pageNumber: page,
     pageSize: 50,
     clientName: requestFilters.terms,
     statusId: requestFilters.status,
-  })
+  });
 
   const onClickTableRow = (rowItems) => {
     rowItems.categoryId === 3
