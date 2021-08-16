@@ -27,7 +27,6 @@ const ApproverHeader = () => {
         <span>|</span>
         <AdultSocialCare />
       </div>
-      {/* {JSON.stringify(addLinksByRoute.route.filter(el => el.route === router.pathname))} */}
       <div className="default-logo-header-navigation">
         {socialWorkerRoutes.map((item) => {
           const isActiveRoute = includeString(router.pathname, item.route);
