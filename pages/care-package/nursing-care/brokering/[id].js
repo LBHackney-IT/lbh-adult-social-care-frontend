@@ -19,8 +19,8 @@ import { selectBrokerage } from '../../../../reducers/brokerageReducer';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
-import useNursingCareApi from '../../../../api/SWR/useNursingCareApi'
 import useSuppliersApi from '../../../../api/SWR/useSuppliersApi'
+import useBaseApi from '../../../../api/SWR/useBaseApi'
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
@@ -37,11 +37,11 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
     // Call to api to get package
     const result = await getNursingCarePackageDetailsForBrokerage(nursingCarePackageId, req.cookies[HASC_TOKEN_ID]);
     const newAdditionalNeedsEntries = result.nursingCarePackage.nursingCareAdditionalNeeds.map(
-      (additionalneedsItem) => ({
-        id: additionalneedsItem.id,
-        isWeeklyCost: additionalneedsItem.isWeeklyCost,
-        isOneOffCost: additionalneedsItem.isOneOffCost,
-        needToAddress: additionalneedsItem.needToAddress,
+      (additionalNeedsItem) => ({
+        id: additionalNeedsItem.id,
+        isWeeklyCost: additionalNeedsItem.isWeeklyCost,
+        isOneOffCost: additionalNeedsItem.isOneOffCost,
+        needToAddress: additionalNeedsItem.needToAddress,
       })
     );
     data.nursingCarePackage = result;
@@ -87,8 +87,8 @@ const NursingCareBrokering = ({
   const [tab, setTab] = useState('approvalHistory');
   const [summaryData, setSummaryData] = useState([]);
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
-  const { data: stageOptions } = useNursingCareApi.brokerageStages();
-  const { data: supplierOptions } = useSuppliersApi.supplierList();
+  const { data: stageOptions } = useBaseApi.stages();
+  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));

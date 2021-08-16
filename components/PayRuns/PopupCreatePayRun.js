@@ -8,7 +8,7 @@ import { createNewPayRun, getDateOfLastPayRun, PAY_RUN_TYPES } from '../../api/P
 import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
 import { addNotification } from '../../reducers/notificationsReducer';
 
-const PopupCreatePayRun = ({ closeCreatePayRun, date, setDate, closePopup, regularCycles, changeRegularCycles }) => {
+const PopupCreatePayRun = ({ updateData, date, setDate, closePopup, regularCycles, changeRegularCycles }) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState([]);
   const [daysFromLastPayRun, setDaysFromLastPayRun] = useState('XX');
@@ -69,7 +69,8 @@ const PopupCreatePayRun = ({ closeCreatePayRun, date, setDate, closePopup, regul
     if (!stringIsNullOrEmpty(payRunType)) {
       createNewPayRun(payRunType, date)
         .then((payRunId) => {
-          closeCreatePayRun();
+          closePopup();
+          updateData();
           dispatch(addNotification({ text: `Pay run created. ${payRunId}`, className: 'success' }));
         })
         .catch((err) => {

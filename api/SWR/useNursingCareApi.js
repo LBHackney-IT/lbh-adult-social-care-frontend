@@ -1,5 +1,4 @@
 import useGetData from './useGetData'
-import { mapNursingCareStageOptions } from '../Mappers/NursingCareMapper'
 
 const NURSING_CARE_URL = '/nursing-care-packages';
 
@@ -20,15 +19,6 @@ const useNursingCareApi = {
   singleNursingCarePackage: (nursingCarePackageId) => useGetData(`${NURSING_CARE_URL}/${nursingCarePackageId}`),
   detailsForBrokerage: (nursingCarePackageId, hascToken) => {
     useGetData(`${NURSING_CARE_URL}/${nursingCarePackageId}/brokerage`)
-  },
-  brokerageStages: () => {
-    const propsData = useGetData(`${NURSING_CARE_URL}/stages`)
-    const { data: stages } = propsData;
-    const formatStages = mapNursingCareStageOptions(stages);
-    return {
-      ...propsData,
-      data: formatStages,
-    };
   },
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux'
 import Popup from '../Popup';
 import Dropdown from '../Dropdown';
 import TextArea from '../TextArea';
@@ -40,7 +40,7 @@ const PopupInvoiceChat = ({
         <p>
           {formatDateWithSign(new Date())} - {formatDateWithSign(new Date(currentUserInfo.dateInvoiced))}
         </p>
-        <p className="font-weight-bold">Currently waiting on: Finance</p>
+        <p className="font-weight-bold">Currently waiting on: {messages[0]?.actionRequiredFromName || ''}</p>
       </div>
       <div className="popup-invoice-chat__messages">
         {messages.map((item) => {
@@ -57,7 +57,7 @@ const PopupInvoiceChat = ({
               onMouseEnter={() => !isMessageFromCurrentUser && setHoveredMessage(messageFromId)}
               className={`popup-invoice-chat__message ${messageFromClasses}${hoveredMessageClass}`}
             >
-              <p className="popup-invoice-chat__message-from">{item.userFullName || 'userFullName'}</p>
+              <p className="popup-invoice-chat__message-from">{isMessageFromCurrentUser ? currentUserInfo.loggedInUserName : item.actionRequiredFromName}</p>
               <div className="popup-invoice-chat__message-text-container">
                 <p className="popup-invoice-chat__message-text">{item.message}</p>
                 <div className="popup-invoice-chat__message-settings">
@@ -99,7 +99,7 @@ const PopupInvoiceChat = ({
 
   return (
     <Popup
-      classes="held-payments__popup-invoice-chat"
+      className="held-payments__popup-invoice-chat"
       closePopup={closePopup}
       mainContent={createInvoiceChat}
       title={`Help Payment - INV ${currentUserInfo.payRunId}`}
@@ -108,8 +108,9 @@ const PopupInvoiceChat = ({
         onClick: () => {
           sendMessage({
             payRunId: currentUserInfo.payRunId,
-            packageId: currentUserInfo.packageId,
             message: newMessageText,
+            actionRequiredFromId: waitingOn,
+            payRunItemId: currentUserInfo.invoiceId,
           })
             .then(() => {
               setNewMessageText('');

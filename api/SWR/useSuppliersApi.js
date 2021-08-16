@@ -1,16 +1,23 @@
 import useGetData from './useGetData';
-import { mapBrokerageSupplierOptions } from '../Mappers/NursingCareMapper'
+import optionsMapper from '../Mappers/optionsMapper'
 
 const SUPPLIERS_URL = 'suppliers';
 
 const useSuppliersApi = {
   supplierList: () => {
     const propsData = useGetData(`${SUPPLIERS_URL}/get-all`);
-    const { data: supplierList } = propsData;
-    const formatSupplierList = mapBrokerageSupplierOptions(supplierList);
+    const { data: { data: supplierList } } = propsData;
+
+    const formatSupplierList = optionsMapper({
+      text: 'supplierName',
+      value: 'id',
+    }, supplierList);
     return {
       ...propsData,
-      data: formatSupplierList,
+      data: {
+        ...propsData.data,
+        data: formatSupplierList,
+      },
     };
   },
 }

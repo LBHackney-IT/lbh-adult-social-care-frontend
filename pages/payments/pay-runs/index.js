@@ -18,7 +18,7 @@ import { addNotification } from '../../../reducers/notificationsReducer';
 import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
 import ChatButton from '../../../components/PayRuns/ChatButton';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { formatStatus, getUserSession } from '../../../service/helpers';
+import { formatStatus, getLoggedInUser, getUserSession } from '../../../service/helpers'
 import withSession from '../../../lib/session';
 import { getEnGBFormattedDate, sortArray } from '../../../api/Utils/FuncUtils';
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
@@ -92,12 +92,14 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
 
+  const user = getLoggedInUser({ req });
+
   return {
-    props: {}, // will be passed to the page component as props
+    props: { loggedInUserId: user.userId, loggedInUserName: user.name }, // will be passed to the page component as props
   };
 });
 
-const PayRunsPage = () => {
+const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -136,7 +138,7 @@ const PayRunsPage = () => {
     shouldFetch: !isPayRunsTab,
   });
 
-  const { data: summaryList } = usePayRunsSummaryList({
+  const { data: summaryList, refetchSummaryList } = usePayRunsSummaryList({
     params: {
       ...pick(filters, ['id', 'type', 'status']),
       pageNumber: page,
@@ -191,7 +193,13 @@ const PayRunsPage = () => {
       id: 'action1',
       onClick: (item) => {
         setOpenedPopup('help-chat');
-        setOpenedInvoiceChat(item);
+        const findItem = heldPayments?.data?.find(payRun => payRun.payRunId === item.payRunId);
+        setOpenedInvoiceChat({
+          ...findItem?.invoices[0],
+          payRunId: item.payRunId,
+          packageId: item.packageId,
+          loggedInUserName,
+        });
       },
       className: 'chat-icon',
       Component: ChatButton,
@@ -245,7 +253,6 @@ const PayRunsPage = () => {
       dispatch(addNotification({ text: 'Release Fail' }));
     }
   };
-
   const loading = !pageSize;
 
   return (
@@ -256,6 +263,7 @@ const PayRunsPage = () => {
           changeRegularCycles={changeRegularCycles}
           hocAndRelease={hocAndRelease}
           regularCycles={regularCycles}
+          updateData={refetchSummaryList}
           closePopup={closeCreatePayRun}
           date={date}
           newPayRunType={newPayRunType}
@@ -272,7 +280,7 @@ const PayRunsPage = () => {
           changeWaitingOn={changeWaitingOn}
           currentUserInfo={openedInvoiceChat}
           updateChat={refetchHeldPayments}
-          currentUserId={openedInvoiceChat.creatorId}
+          currentUserId={loggedInUserId}
           messages={openedInvoiceChat.disputedInvoiceChat}
           waitingOnOptions={waitingOnOptions}
         />

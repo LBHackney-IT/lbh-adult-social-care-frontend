@@ -126,7 +126,9 @@
 }
 
 .chat-button {
+  transition: 0.2s ease;
   &:hover {
     cursor: pointer;
+    transform: scale(1.1);
   }
 }

@@ -93,9 +93,9 @@ const kickPayRunBackToDraft = (payRunId) => {
   return axios.get(query).then(handleResponse).catch(handleError);
 };
 
-const sendMessage = ({ payRunId, packageId, message }) => {
+const sendMessage = ({ payRunId, actionRequiredFromId, message, payRunItemId }) => {
   const url = `${PAY_RUN_URL}/${payRunId}/create-held-chat`;
-  return axiosRequest({ url, method: requestMethods.post, data: { message, packageId, payRunId } });
+  return axiosRequest({ url, method: requestMethods.post, data: { message, actionRequiredFromId, payRunItemId } });
 };
 
 const approvePayRunForPayment = (payRunId) => {

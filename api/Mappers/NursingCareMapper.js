@@ -1,8 +1,7 @@
-const mapBrokerageSupplierOptions = (supplierOptions = []) =>
-  supplierOptions.map((option) => ({
-    text: option?.supplierName,
-    value: option?.id,
-  }));
+const mapBrokerageSupplierOptions = (supplierOptions = []) => supplierOptions.map((option) => ({
+  text: option?.supplierName,
+  value: option?.id,
+}));
 
 const mapNursingCareStageOptions = (stageOptions = []) =>
   stageOptions.map((option) => ({

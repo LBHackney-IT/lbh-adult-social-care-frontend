@@ -19,8 +19,8 @@ import { selectBrokerage } from '../../../../reducers/brokerageReducer';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
-import useResidentialCareApi from '../../../../api/SWR/useResidentialCareApi'
-import useSuppliersApi from '../../../../api/SWR/useSuppliersApi'
+import useSuppliersApi from '../../../../api/SWR/useSuppliersApi';
+import useBaseApi from '../../../../api/SWR/useBaseApi';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -90,7 +90,7 @@ const ResidentialCareBrokering = ({
   const [tab, setTab] = useState('approvalHistory');
   const [summaryData, setSummaryData] = useState([]);
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
-  const { data: stageOptions } = useResidentialCareApi.brokerageStages();
+  const { data: stageOptions } = useBaseApi.stages();
   const { data: supplierOptions } = useSuppliersApi.supplierList();
 
   const pushNotification = (text, className = 'error') => {

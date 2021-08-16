@@ -14,6 +14,7 @@ const loadOptions = async (searchText, endpoint) => {
 
 const CustomAsyncSelector = ({ onChange, value, placeholder, getOptionLabel, endpoint }) => (
     <AsyncSelect
+      instanceId={endpoint.filterKey}
       onChange={(option) => onChange(option)}
       getOptionValue={(option) => option.id}
       getOptionLabel={(option) => getOptionLabel(option)}
