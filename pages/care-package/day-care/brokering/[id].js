@@ -135,7 +135,7 @@ const DayCareBrokering = () => {
         summaryData={summaryData}
         approvalHistory={approvalHistoryEntries}
         dayCarePackage={dayCarePackage}
-        supplierOptions={mapBrokerageSupplierOptions(supplierOptions)}
+        supplierOptions={supplierOptions}
         stageOptions={mapDayCareStageOptions(stageOptions)}
         dayCareSummary={{
           opportunityEntries,

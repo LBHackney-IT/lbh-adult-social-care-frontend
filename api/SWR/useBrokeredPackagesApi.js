@@ -9,7 +9,6 @@ const useBrokeredPackageApi = {
   done: (params) => useGetData(`${BROKERED_PACKAGES_URL}/done${getQueryParamsFromObject(params)}`),
   types: () => useGetData(`${BROKERED_PACKAGES_URL}/package-types`),
   socialWorkers: () => useGetData(`${BROKERED_PACKAGES_URL}/social-workers`),
-  approvers: () => useGetData(`${BROKERED_PACKAGES_URL}/approvers`),
   stages: () => useGetData(`${BROKERED_PACKAGES_URL}/stages`),
 }
 

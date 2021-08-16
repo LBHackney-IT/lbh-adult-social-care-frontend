@@ -71,9 +71,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
 const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntriesData, approvalHistoryEntries }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-
   const nursingCarePackageId = router.query.id;
-
   const [errors, setErrors] = useState([]);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);

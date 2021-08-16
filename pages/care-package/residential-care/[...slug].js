@@ -14,7 +14,6 @@ import {
   createResidentialCarePackage,
   createResidentialCarePackageReclaim,
   getResidentialCareAdditionalNeedsCostOptions,
-  getTypeOfResidentialCareHomeOptions,
 } from '../../../api/CarePackages/ResidentialCareApi';
 import TitleHeader from '../../../components/TitleHeader';
 import ResidentialCareSummary from '../../../components/ResidentialCare/ResidentialCareSummary';
@@ -25,6 +24,8 @@ import withSession from '../../../lib/session';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import fieldValidator from '../../../service/inputValidator';
+import useResidentialCareApi from '../../../api/SWR/useResidentialCareApi'
+import { classNames } from 'react-select/src/utils'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -62,7 +63,6 @@ const ResidentialCare = () => {
   endDate = endDate && notNullString(endDate) ? endDate : undefined;
 
   // State
-  const [careHomeTypes, setCareHomeTypes] = useState([]);
   const [additionalNeedsCostOptions, setAdditionalNeedsCostOptions] = useState([]);
   const [errors, setErrors] = useState([]);
 
@@ -72,20 +72,7 @@ const ResidentialCare = () => {
 
   // Package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
-
-  const retrieveTypeOfResidentialCareHomeOptions = () => {
-    getTypeOfResidentialCareHomeOptions()
-      .then((res) => {
-        const options = res.map((option) => ({
-          text: option.typeOfCareHomeName,
-          value: option.typeOfCareHomeId,
-        }));
-        setCareHomeTypes(options);
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve residential care home type options failed. ${error.message}`]);
-      });
-  };
+  const { data: careHomeOptions } = useResidentialCareApi.homeTypeOptions();
 
   const retrieveResidentialCareAdditionalNeedsCostOptions = () => {
     const options = getResidentialCareAdditionalNeedsCostOptions();
@@ -93,13 +80,10 @@ const ResidentialCare = () => {
   };
 
   useEffect(() => {
-    if (careHomeTypes.length === 0 || careHomeTypes.length === 1) {
-      retrieveTypeOfResidentialCareHomeOptions();
-    }
     if (additionalNeedsCostOptions.length === 0 || additionalNeedsCostOptions.length === 1) {
       retrieveResidentialCareAdditionalNeedsCostOptions();
     }
-  }, [careHomeTypes, additionalNeedsCostOptions]);
+  }, [additionalNeedsCostOptions]);
 
   const [errorFields, setErrorFields] = useState({
     needToAddress: '',
@@ -196,9 +180,13 @@ const ResidentialCare = () => {
       packageReclaims,
     };
 
+    const pushNotification = (text, className = 'error') => {
+      dispatch(addNotification({ text, className }));
+    };
+
     createResidentialCarePackage(residentialCarePackageToCreate)
       .catch((error) => {
-        dispatch(addNotification({ text: `Create package failed. ${error.message ?? ''}` }));
+        pushNotification(error);
         setErrors([...errors, `Create package failed. ${error.message}`]);
         throw new Error();
       })
@@ -213,15 +201,14 @@ const ResidentialCare = () => {
             amount: el.amount,
           })
         );
-
         return Promise.all(requests);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Create reclaims failed. ${error.message ?? ''}` }));
+        pushNotification(error);
         setErrors([...errors, `Create reclaims failed. ${error.message}`]);
       })
       .then(() => {
-        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
+        pushNotification('Package saved', 'success');
         router.push(`${CARE_PACKAGE_ROUTE}`);
       });
   };
@@ -250,7 +237,7 @@ const ResidentialCare = () => {
         <div className="column">
           <Dropdown
             label="Type of care home"
-            options={careHomeTypes}
+            options={careHomeOptions}
             selectedValue={selectedCareHomeType}
             onOptionSelect={(option) => setSelectedCareHomeType(option)}
             buttonStyle={{ width: '240px' }}

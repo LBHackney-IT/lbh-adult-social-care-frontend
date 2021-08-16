@@ -1,21 +1,15 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
 import {
   createResidentialCareBrokerageInfo,
-  getResidentialCareBrokerageStages,
   getResidentialCarePackageApprovalHistory,
   getResidentialCarePackageDetailsForBrokerage,
   residentialCareChangeStage,
   residentialCareChangeStatus,
 } from '../../../../api/CarePackages/ResidentialCareApi';
-import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
-import {
-  mapBrokerageSupplierOptions,
-  mapResidentialCareStageOptions,
-} from '../../../../api/Mappers/ResidentialCareMapper';
 import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 import Layout from '../../../../components/Layout/Layout';
@@ -23,8 +17,10 @@ import PackagesResidentialCare from '../../../../components/packages/residential
 import withSession from '../../../../lib/session';
 import { selectBrokerage } from '../../../../reducers/brokerageReducer';
 import { addNotification } from '../../../../reducers/notificationsReducer';
-import { CARE_PACKAGE_ROUTE, APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
+import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
+import useResidentialCareApi from '../../../../api/SWR/useResidentialCareApi'
+import useSuppliersApi from '../../../../api/SWR/useSuppliersApi'
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -44,11 +40,11 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
       req.cookies[HASC_TOKEN_ID]
     );
     const newAdditionalNeedsEntries = result.residentialCarePackage.residentialCareAdditionalNeeds.map(
-      (additionalneedsItem) => ({
-        id: additionalneedsItem.id,
-        isWeeklyCost: additionalneedsItem.isWeeklyCost,
-        isOneOffCost: additionalneedsItem.isOneOffCost,
-        needToAddress: additionalneedsItem.needToAddress,
+      (additionalNeedsItem) => ({
+        id: additionalNeedsItem.id,
+        isWeeklyCost: additionalNeedsItem.isWeeklyCost,
+        isOneOffCost: additionalNeedsItem.isOneOffCost,
+        needToAddress: additionalNeedsItem.needToAddress,
       })
     );
     data.residentialCarePackage = result;
@@ -94,42 +90,21 @@ const ResidentialCareBrokering = ({
   const [tab, setTab] = useState('approvalHistory');
   const [summaryData, setSummaryData] = useState([]);
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
-  const [supplierOptions, setSupplierOptions] = useState([]);
-  const [stageOptions, setStageOptions] = useState([]);
-  useEffect(() => {
-    if (!supplierOptions.length || supplierOptions.length === 1) retrieveSupplierOptions();
-    if (!stageOptions.length || stageOptions.length === 1) retrieveResidentialCareBrokerageStages();
-  }, [supplierOptions, stageOptions]);
+  const { data: stageOptions } = useResidentialCareApi.brokerageStages();
+  const { data: supplierOptions } = useSuppliersApi.supplierList();
 
-  const retrieveSupplierOptions = () => {
-    getSupplierList()
-      .then((response) => {
-        setSupplierOptions(mapBrokerageSupplierOptions(response.data));
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve supplier options failed. ${error}`]);
-      });
-      
-  };
-
-  const retrieveResidentialCareBrokerageStages = () => {
-    getResidentialCareBrokerageStages()
-      .then((response) => {
-        setStageOptions(mapResidentialCareStageOptions(response));
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve residential care brokerage stages failed. ${error}`]);
-      });
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
   };
 
   const createBrokerageInfo = (residentialCarePackageId, brokerageInfoForCreation) => {
     createResidentialCareBrokerageInfo(residentialCarePackageId, brokerageInfoForCreation)
       .then(() => {
-        dispatch(addNotification({ text: `Package brokerage saved successfully`, className: 'success' }));
+        pushNotification('Package brokerage saved successfully', 'success');
         router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Saving package brokerage failed. ${error.message}` }));
+        pushNotification(error);
         setErrors([...errors, `Create brokerage info failed. ${error.message}`]);
       });
   };
@@ -137,10 +112,10 @@ const ResidentialCareBrokering = ({
   const changePackageBrokeringStatus = (residentialCarePackageId, brokeringStatusId) => {
     residentialCareChangeStatus(residentialCarePackageId, brokeringStatusId)
       .then(() => {
-        alert('Status changed.');
+        pushNotification('Status changed.', 'success');
       })
       .catch((error) => {
-        alert(`Change brokerage status failed. ${error.message}`);
+        pushNotification(error);
         setErrors([...errors, `Change package status failed. ${error.message}`]);
       });
   };
@@ -148,10 +123,10 @@ const ResidentialCareBrokering = ({
   const changePackageBrokeringStage = (residentialCarePackageId, stageId) => {
     residentialCareChangeStage(residentialCarePackageId, stageId)
       .then(() => {
-        alert('Stage changed.');
+        pushNotification('Stage changed.');
       })
       .catch((error) => {
-        alert(`Change brokerage stage failed. ${error.message}`);
+        pushNotification(error);
         setErrors([...errors, `Change brokerage stage failed. ${error.message}`]);
       });
   };
