@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import { getUserSession, formatDate } from '../../service/helpers';
+import { getUserSession, formatDate, sortTableByKey } from '../../service/helpers';
 import withSession from '../../lib/session';
 import { addNotification } from '../../reducers/notificationsReducer';
 import { getSubmittedPackages, getSubmittedPackagesStatus } from '../../api/ApproversHub/SocialWorkerApi';
@@ -32,8 +32,8 @@ const SocialWorkerDashboardPage = () => {
   const dispatch = useDispatch();
   const [sorts] = useState([
     { name: 'client', text: 'Client' },
-    { name: 'category', text: 'Category' },
-    { name: 'dob', text: 'DOB', dataType: DATA_TYPES.DATE },
+    { name: 'categoryId', text: 'Category' },
+    { name: 'dateOfBirth', text: 'DOB', dataType: DATA_TYPES.DATE },
     { name: 'approver', text: 'Approver' },
     { name: 'submittedDaysAgo', text: 'Submitted\n(days ago)' },
     { name: 'statusName', text: 'Status' },
@@ -59,6 +59,7 @@ const SocialWorkerDashboardPage = () => {
   const [filters, setFilters] = useState({...initialFilters});
 
   useEffect(() => {
+    sortTableByKey(socialWorkerData, sort);
     retrieveSocialWorkerData();
   }, [sort]);
 
