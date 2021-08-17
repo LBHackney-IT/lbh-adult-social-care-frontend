@@ -32,11 +32,11 @@ const ApproverHeader = () => {
           const isActiveRoute = includeString(router.pathname, item?.route);
           return (
             <p
-              key={item.name}
+              key={item?.name}
               onClick={() => changeRoute(item?.route)}
               className={`default-logo-header-item${isActiveRoute ? ' default-logo-header-active-item' : ''}`}
             >
-              {item.name}
+              {item?.name}
             </p>
           );
         })}
