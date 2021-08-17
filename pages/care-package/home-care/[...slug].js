@@ -91,10 +91,7 @@ const HomeCare = () => {
   useEffect(() => {
     // Get the primary and secondary times for the selected service
     // eslint-disable-next-line no-shadow
-    const { times, secondaryTimes } =
-      homeCareServices !== undefined
-        ? getServiceTimes(homeCareServices, selectedCareType)
-        : { times: undefined, secondaryTimes: undefined };
+    const { times, secondaryTimes } = getServiceTimes(homeCareServices, selectedCareType);
     setTimes(times);
     setSecondaryTimes(secondaryTimes);
   }, [homeCareServices]);
@@ -109,14 +106,15 @@ const HomeCare = () => {
     if (!carePackageId) {
       (async function createHomeCarePackageAsync() {
         const carePackageCreateResult = await createHomeCarePackage(
-          new Date(startDate),
-          new Date(endDate),
+          startDate,
+          endDate,
           isImmediate === 'true',
           isS117 === 'true',
           isFixedPeriod === 'true'
         );
 
-        setCarePackageId(carePackageCreateResult.id);
+        console.log(carePackageCreateResult)
+        setCarePackageId(carePackageCreateResult?.packageId);
       })();
     }
   }, [carePackageId, startDate, endDate, isImmediate, isS117, isFixedPeriod]);
@@ -310,10 +308,16 @@ const HomeCare = () => {
   };
 
   return (
-    <Layout headerTitle="BUILD A CARE PACKAGE">
-      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
-        Care Package
-      </ClientSummary>
+    <Layout
+      clientSummaryInfo={{
+        client: "James Stephens",
+        hackneyId: "786288",
+        age: "91",
+        dateOfBirth: "09/12/1972",
+        postcode: "E9 6EY",
+      }}
+      headerTitle="BUILD A CARE PACKAGE"
+    >
       <div className="mt-5 mb-5">
         <CareTitle startDate={startDate} endDate={endDate}>
           Homecare Care

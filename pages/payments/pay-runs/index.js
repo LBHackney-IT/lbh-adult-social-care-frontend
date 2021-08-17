@@ -131,12 +131,11 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
     shouldFetch: !isPayRunsTab,
   });
 
-  const { data: summaryList, refetchSummaryList } = usePayRunsSummaryList({
+  const { data: summaryList, mutate: refetchSummaryList } = usePayRunsSummaryList({
     params: {
-      ...pick(filters, ['id', 'type', 'status']),
+      ...pick(filters, ['id', 'dateStart', 'dateEnd', 'type', 'status']),
       pageNumber: page,
     },
-    shouldFetch: isPayRunsTab,
   });
 
   const {
@@ -156,11 +155,12 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
     setTab(newTab);
   }
 
-  const closeCreatePayRun = () => {
+  const closeCreatePayRun = async () => {
     setOpenedPopup('');
     changeHocAndRelease('');
     changeRegularCycles('');
     setDate(new Date());
+    await refetchSummaryList();
   };
 
   const closeHelpChat = () => {
@@ -271,7 +271,6 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
           changeRegularCycles={changeRegularCycles}
           hocAndRelease={hocAndRelease}
           regularCycles={regularCycles}
-          updateData={refetchSummaryList}
           closePopup={closeCreatePayRun}
           date={date}
           newPayRunType={newPayRunType}

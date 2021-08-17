@@ -83,9 +83,9 @@ const getServiceTypeCareTimes = (serviceTypeId) => {
 };
 
 const getServiceTimes = (homeCareServices, selectedServiceTypeId) => {
-  const { minutes } = homeCareServices
-    ? homeCareServices.find((item) => item.id === selectedServiceTypeId)
-    : { minutes: null };
+  if(homeCareServices === undefined) return { times: undefined, secondaryTimes: undefined };
+
+  const minutes = homeCareServices.find((item) => item.id === selectedServiceTypeId)?.minutes || null;
 
   const times = minutes
     ? minutes

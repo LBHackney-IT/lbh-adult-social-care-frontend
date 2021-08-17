@@ -10,6 +10,8 @@ const fieldValidator = (inputs = [], additionalRules = []) => {
   let hasErrors = false;
   inputs.forEach((item) => {
     validFields[item.name] = '';
+    console.log(item);
+    console.log(item.rules.includes('empty'));
     if (item.rules.includes('empty')) {
       if (item.value === undefined || item.value === '') {
         validFields[item.name] = 'Required field';

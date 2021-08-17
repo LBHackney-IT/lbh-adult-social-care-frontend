@@ -64,11 +64,11 @@ const axiosRequest = (options = {}) => {
 
   return a string '?payRunId=very-long-id-1234&orderBy=cost'
  */
-const getQueryParamsFromObject = (params = {}) => {
+const getQueryParamsFromObject = (params = {}, addEmptyString = false) => {
   let string = '';
   let count = 0;
   for (const i in params) {
-    if (params[i]) {
+    if (params[i] || (addEmptyString && params[i] === '')) {
       const paramString = `${i}=${params[i]}`;
       if (count === 0) {
         string = `?${string}${paramString}`;

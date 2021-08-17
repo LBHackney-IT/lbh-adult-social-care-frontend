@@ -1,44 +1,20 @@
-import useSWR from 'swr';
 import moment from 'moment';
 import { stringIsNullOrEmpty } from '../../Utils/FuncUtils';
-import fetcher from '../fetcher';
 import useErrorNotification from '../useErrorNotification';
+import useGetData from '../useGetData'
+import { getQueryParamsFromObject } from '../../Utils/ApiUtils';
 
 const sixMonthsAgo = moment().subtract(6, 'months');
-const today = new Date();
+const sixMonthAfter = moment().add(6, 'months');
 
-const customFetcher = (
-  url,
-  pageNumber,
-  pageSize,
-  dateFrom,
-  dateTo,
-  payRunId,
-  payRunTypeId,
-  payRunSubTypeId,
-  payRunStatusId
-) =>
-  fetcher(url, {
-    params: {
-      pageNumber,
-      pageSize,
-      dateFrom,
-      dateTo,
-      payRunId,
-      payRunTypeId,
-      payRunSubTypeId,
-      payRunStatusId,
-    },
-  });
-
-const usePayRunsSummaryList = ({ params = {}, shouldFetch }) => {
+const usePayRunsSummaryList = ({ params = {} }) => {
   const {
     pageNumber = 1,
     pageSize = 10,
-    dateFrom = sixMonthsAgo.toJSON(),
-    dateTo = today.toJSON(),
     id: payRunId,
     status: payRunStatusId,
+    dateStart: dateFrom = sixMonthsAgo.toJSON(),
+    dateEnd: dateTo = sixMonthAfter.toJSON(),
     type,
   } = params;
 
@@ -47,33 +23,24 @@ const usePayRunsSummaryList = ({ params = {}, shouldFetch }) => {
   if (!stringIsNullOrEmpty(type)) {
     [payRunTypeId, payRunSubTypeId] = type.split(' - ');
   }
+  const initialData = {
+    pagingMetaData: {},
+    data: [],
+  };
 
-  const { data, mutate, error } = useSWR(
-    shouldFetch
-      ? [
-          '/transactions/pay-runs/summary-list',
-          pageNumber,
-          pageSize,
-          dateFrom,
-          dateTo,
-          payRunId,
-          payRunTypeId,
-          payRunSubTypeId,
-          payRunStatusId,
-        ]
-      : null,
-    customFetcher,
-    {
-      initialData: {
-        pagingMetaData: {},
-        data: [],
-      },
-    }
-  );
+  const dataProps = useGetData(`/transactions/pay-runs/summary-list${getQueryParamsFromObject({
+    pageNumber,
+    pageSize,
+    dateFrom,
+    dateTo,
+    payRunId,
+    payRunTypeId,
+    payRunSubTypeId,
+    payRunStatusId,
+  }, true)}`);
 
-  useErrorNotification(error, `Can not get summary list: ${error?.message}`);
-
-  return { data, mutate };
+  useErrorNotification(dataProps.error, `Can not get summary list: ${dataProps.error?.message}`);
+  return { ...dataProps, data: dataProps.data?.data ? dataProps.data : initialData };
 };
 
 export default usePayRunsSummaryList;

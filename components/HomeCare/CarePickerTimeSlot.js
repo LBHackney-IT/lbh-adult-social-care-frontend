@@ -91,7 +91,7 @@ const CarePickerTimeSlot = ({ homeCareServices, currentMode, weekSlotItem, onCli
         <span>{weekSlotItem.timeSlotShiftName}</span>
         <span>{weekSlotItem.timeSlotTimeLabel}</span>
       </div>
-      {weekSlotItem.days.map((weekSlotDayItem) => (
+      {weekSlotItem?.days.map((weekSlotDayItem) => (
         <div className="column" key={weekSlotItem.id + weekSlotDayItem.id}>
           {!weekSlotItem.linkedToHomeCareServiceTypeId ? (
             <CarePicker

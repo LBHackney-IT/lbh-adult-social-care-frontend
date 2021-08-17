@@ -19,7 +19,7 @@ import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight
 import PayRunHeader from '../../../components/PayRuns/PayRunHeader';
 import PopupHoldPayment from '../../../components/PayRuns/PopupHoldPayment';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { formatStatus, getUserSession } from '../../../service/helpers';
+import { formatStatus, getUserSession, includeString } from '../../../service/helpers'
 import withSession from '../../../lib/session';
 import Table from '../../../components/Table';
 import CustomDropDown from '../../../components/CustomDropdown';
@@ -96,7 +96,7 @@ const PayRunPage = () => {
   const { data: { data: suppliers } } = useUniquePayRunSuppliers(id);
   const { data: invoiceStatuses } = useInvoicePaymentStatuses();
   const { data : levelInsights } = usePayRunSummaryInsights(id)
-  const { mutate: refetchSingleDetails , data : { invoices, payRunDetails } } = useSinglePayRunDetails({
+  const { mutate: refetchSingleDetails , data : { invoices, payRunDetails }, serverError } = useSinglePayRunDetails({
     payRunId: id,
     pageNumber,
     serviceUserId: requestFilters?.serviceUser?.id,
@@ -121,6 +121,12 @@ const PayRunPage = () => {
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
   };
+
+  useEffect(() => {
+    if(serverError && includeString(serverError, 'Pay run with id') && includeString(serverError, 'not found')) {
+      router.push('/payments/pay-runs');
+    }
+  }, [serverError]);
 
   const sortBy = (field, value, dataType) => {
     setSort({ value, name: field, dataType });
