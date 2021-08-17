@@ -8,9 +8,10 @@ import { createNewPayRun, getDateOfLastPayRun, PAY_RUN_TYPES } from '../../api/P
 import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
 import { addNotification } from '../../reducers/notificationsReducer';
 
-const PopupCreatePayRun = ({ updateData, date, setDate, closePopup, regularCycles, changeRegularCycles }) => {
+const PopupCreatePayRun = ({ date, updateData, setDate, closePopup, regularCycles, changeRegularCycles }) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState([]);
+  const [emptyField, setEmptyField] = useState(false);
   const [daysFromLastPayRun, setDaysFromLastPayRun] = useState('XX');
 
   useEffect(() => {
@@ -38,6 +39,7 @@ const PopupCreatePayRun = ({ updateData, date, setDate, closePopup, regularCycle
         <p className="create-pay-run__title">Regular Cycles:</p>
         <p className="create-pay-run__text">NB - pay cycles will always include released holds.</p>
         <RadioButton
+          error={emptyField ? 'Required field' : ''}
           inline={false}
           options={[
             { value: PAY_RUN_TYPES.RESIDENTIAL_RECURRING, text: `Residential Recurring (3 releases)` },
@@ -51,7 +53,10 @@ const PopupCreatePayRun = ({ updateData, date, setDate, closePopup, regularCycle
             { value: PAY_RUN_TYPES.DIRECT_PAYMENTS_RELEASE_HOLDS, text: 'Direct payments released holds' },
           ]}
           selectedValue={regularCycles}
-          onChange={(value) => changeRegularCycles(value)}
+          onChange={(value) => {
+            changeRegularCycles(value);
+            setEmptyField(false);
+          }}
         />
       </div>
       <div className="create-pay-run__run-to">
@@ -72,9 +77,9 @@ const PopupCreatePayRun = ({ updateData, date, setDate, closePopup, regularCycle
     const payRunType = regularCycles;
     if (!stringIsNullOrEmpty(payRunType)) {
       createNewPayRun(payRunType, date)
-        .then((payRunId) => {
+        .then(async (payRunId) => {
           closePopup();
-          updateData();
+          await updateData();
           pushNotification(`Pay run created. ${payRunId}`,'success');
         })
         .catch((error) => {
@@ -82,6 +87,7 @@ const PopupCreatePayRun = ({ updateData, date, setDate, closePopup, regularCycle
           setErrors([...errors, error]);
         });
     } else {
+      setEmptyField(true);
       setErrors([...errors, 'Pay run not selected']);
     }
   };
