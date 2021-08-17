@@ -55,7 +55,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: da
 
     data.daysSelected = getSelectedDate(dayCarePackage);
   } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
+    data.errorData.push(`Retrieve day care package details failed. ${error?.message}`);
   }
 
   return { props: { data } };
@@ -94,8 +94,8 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        alert(`Status change failed. ${error}`);
+        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
   const handleRequestMoreInformation = () => {
@@ -112,9 +112,9 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        alert(`Status change failed. ${error}`);
         updateErrorFields(error);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
   const handleApprovePackageContents = () => {
@@ -123,9 +123,9 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        alert(`Status change failed. ${error}`);
         updateErrorFields(error);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
   return (

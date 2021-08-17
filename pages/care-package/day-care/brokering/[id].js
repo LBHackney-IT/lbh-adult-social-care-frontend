@@ -47,7 +47,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: da
     data.clientDetails = dayCarePackage.clientDetails;
     data.daysSelected = [...currentDaysSelected];
   } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
+    data.errorData.push(`Retrieve day care package details failed. ${error?.message}`);
   }
 
   return { props: { ...data } };
@@ -86,7 +86,7 @@ const DayCareBrokering = ({
         setSupplierOptions(mapBrokerageSupplierOptions(response));
       })
       .catch((error) => {
-        setErrors([...errors, `Retrieve supplier options failed. ${error.message}`]);
+        setErrors([...errors, `Retrieve supplier options failed. ${error?.message}`]);
       });
   };
 
@@ -96,7 +96,7 @@ const DayCareBrokering = ({
         setStageOptions(mapDayCareStageOptions(response));
       })
       .catch((error) => {
-        setErrors([...errors, `Retrieve day care brokerage stages failed. ${error.message}`]);
+        setErrors([...errors, `Retrieve day care brokerage stages failed. ${error?.message}`]);
       });
   };
 
@@ -107,8 +107,8 @@ const DayCareBrokering = ({
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Create brokerage info failed. ${error.message}`);
-        setErrors([...errors, `Create brokerage info failed. ${error.message}`]);
+        alert(`Create brokerage info failed. ${error?.message}`);
+        setErrors([...errors, `Create brokerage info failed. ${error?.message}`]);
       });
   };
 
@@ -118,8 +118,8 @@ const DayCareBrokering = ({
         alert('Status changed.');
       })
       .catch((error) => {
-        alert(`Change brokerage status failed. ${error.message}`);
-        setErrors([...errors, `Change package status failed. ${error.message}`]);
+        alert(`Change brokerage status failed. ${error?.message}`);
+        setErrors([...errors, `Change package status failed. ${error?.message}`]);
       });
   };
 

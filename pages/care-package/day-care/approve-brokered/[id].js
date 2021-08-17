@@ -48,7 +48,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
     data.daysSelected = getSelectedDate(dayCarePackage);
     data.dayCarePackage = dayCarePackage;
   } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
+    data.errorData.push(`Retrieve day care package details failed. ${error?.message}`);
   }
 
   return { props: { data } };
@@ -63,7 +63,7 @@ const DayCareApproveBrokered = ({
 }) => {
   const router = useRouter();
   const dayCarePackageId = router.query.id;
-  const [errors, setErrors] = useState(errorData);
+  const [errors, setErrors] = useState(errorData || []);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
   const [errorFields, setErrorFields] = useState({
@@ -90,8 +90,8 @@ const DayCareApproveBrokered = ({
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        alert(`Status change failed. ${error}`);
+        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
   const handleRequestMoreInformation = () => {
@@ -101,9 +101,9 @@ const DayCareApproveBrokered = ({
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        alert(`Status change failed. ${error}`);
         updateErrorFields(error);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
   const handleApprovePackageCommercials = () => {
@@ -112,8 +112,8 @@ const DayCareApproveBrokered = ({
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        alert(`Status change failed. ${error}`);
+        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
   return (
