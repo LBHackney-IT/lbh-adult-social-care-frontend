@@ -206,7 +206,7 @@ const PayRunPage = () => {
   };
 
   const sortInvoices = () => {
-    if(!invoices?.invoices?.length) return;
+    if(!invoices?.invoices) return;
     const data = invoices.invoices.slice();
     setSortedInvoices({ ...invoices, invoices: sortArray(data, sort) });
   }
