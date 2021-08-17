@@ -173,9 +173,13 @@ const NursingCare = () => {
       packageReclaims,
     };
 
+    const pushNotification = (text, className = 'error') => {
+      dispatch(addNotification({ text, className }));
+    };
+
     createNursingCarePackage(nursingCarePackageToCreate)
       .catch((error) => {
-        dispatch(addNotification({ text: `Create package failed. ${error.message ?? ''}` }));
+        pushNotification(error);
         setErrors([...errors, `Create package failed. ${error.message}`]);
         throw new Error();
       })
@@ -194,12 +198,12 @@ const NursingCare = () => {
         return Promise.all(requests);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Create reclaims failed. ${error.message ?? ''}` }));
+        pushNotification(error);
         setErrors([...errors, `Create reclaims failed. ${error.message}`]);
       })
       .then(() => {
         router.push(`${CARE_PACKAGE_ROUTE}`);
-        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
+        pushNotification('Package saved.', 'success');
       });
   };
 

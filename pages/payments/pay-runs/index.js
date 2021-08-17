@@ -23,17 +23,10 @@ import withSession from '../../../lib/session';
 import { getEnGBFormattedDate, sortArray } from '../../../api/Utils/FuncUtils';
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
 import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from '../../../api/Mappers/PayRunMapper';
-import {
-  useHeldInvoicePayments,
-  usePaymentDepartments,
-} from '../../../api/SWR';
-import {
-  usePayRunSubTypes,
-  usePayRunTypes,
-  useUniquePayRunStatuses,
-} from '../../../api/SWR/transactions/payrun/usePayRunApi';
+import { useHeldInvoicePayments, usePaymentDepartments } from '../../../api/SWR';
+import { usePayRunSubTypes, usePayRunTypes, useUniquePayRunStatuses } from '../../../api/SWR/transactions/payrun/usePayRunApi';
 import usePayRunsSummaryList from '../../../api/SWR/transactions/usePayRunsSummaryList';
-import useGroupedData from '../../../service/useGroupPayRun'
+import useGroupedData from '../../../service/useGroupPayRun';
 
 const PAYMENT_TABS = [
   { text: 'Pay Runs', value: 'pay-runs' },
@@ -188,23 +181,31 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
     router.push(`${router.pathname}/${rowItem.payRunId}`);
   };
 
+  const openInvoiceChatItem = item => {
+    const findItem = heldPayments?.data?.find(payRun => payRun.payRunId === item.payRunId);
+    setOpenedInvoiceChat({
+      ...findItem?.invoices[0],
+      payRunId: item.payRunId,
+      packageId: item.packageId,
+      loggedInUserName,
+    });
+  }
+
   const heldActions = [
     {
       id: 'action1',
       onClick: (item) => {
         setOpenedPopup('help-chat');
-        const findItem = heldPayments?.data?.find(payRun => payRun.payRunId === item.payRunId);
-        setOpenedInvoiceChat({
-          ...findItem?.invoices[0],
-          payRunId: item.payRunId,
-          packageId: item.packageId,
-          loggedInUserName,
-        });
+        openInvoiceChatItem(item);
       },
       className: 'chat-icon',
       Component: ChatButton,
     },
   ];
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  }
 
   const sortedTableData = useMemo(() => {
     const tabData = isPayRunsTab ? summaryList.data : useGroupedData(heldPayments.data);
@@ -214,19 +215,19 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
   const releaseOne = async (item, invoice) => {
     try {
       await releaseSingleHeldInvoice(item.payRunId, invoice.invoiceId);
-      dispatch(addNotification({ text: `Release invoice ${item.invoiceId}`, className: 'success' }));
+      pushNotification(`Release invoice ${item.invoiceId}`, 'success');
       await refetchHeldPayments();
     } catch (error) {
-      dispatch(addNotification({ text: 'Can not release invoices' }));
+      pushNotification(error);
     }
   };
 
   const payReleasedHolds = async () => {
     try {
       await createNewPayRun(PAY_RUN_TYPES.RESIDENTIAL_RELEASE_HOLDS, date);
-      dispatch(addNotification({ text: `Paid released holds`, className: 'success' }));
+      pushNotification(`Paid released holds`, 'success');
     } catch (error) {
-      dispatch(addNotification({ text: 'Can not pay released holds' }));
+      pushNotification(error);
     }
   };
 
@@ -245,14 +246,21 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
       }, []);
 
       await releaseHeldInvoices(selectedRows);
-      dispatch(addNotification({ text: 'Release Success', className: 'success' }));
+      pushNotification('Release Success','success');
       setCheckedRows([]);
 
       await refetchHeldPayments();
     } catch (error) {
-      dispatch(addNotification({ text: 'Release Fail' }));
+      pushNotification(error);
     }
   };
+
+  useEffect(() => {
+    if(openedInvoiceChat) {
+      openInvoiceChatItem(openedInvoiceChat);
+    }
+  }, [heldPayments]);
+
   const loading = !pageSize;
 
   return (

@@ -25,7 +25,6 @@ import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import fieldValidator from '../../../service/inputValidator';
 import useResidentialCareApi from '../../../api/SWR/useResidentialCareApi'
-import { classNames } from 'react-select/src/utils'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

@@ -79,8 +79,20 @@
   }
 
   .popup-invoice-chat__message-from-someone {
+    .settings-opened {
+      display: flex;
+    }
     .popup-invoice-chat__message-text-container {
+      display: flex;
+      position: relative;
+      align-items: center;
       margin-left: auto;
+    }
+
+    &:hover {
+      .popup-invoice-chat__message-settings {
+        display: flex;
+      }
     }
 
     .popup-invoice-chat__message-from {
@@ -89,6 +101,7 @@
 
     .popup-invoice-chat__message-text {
       background-color: $lbh-green-border;
+      width: 100%;
       position: relative;
 
       &:before {
@@ -117,7 +130,7 @@
     position: absolute;
     justify-content: center;
     z-index: 2;
-    right: -24px;
+    left: -24px;
 
     .chat-settings-icon {
       display: flex;
@@ -172,11 +185,6 @@
         }
       }
     }
-    &.hovered {
-      .popup-invoice-chat__message-settings {
-        display: flex;
-      }
-    }
   }
 }
 
@@ -214,6 +222,10 @@
   bottom: -60px;
   min-width: 150px;
   border-radius: 3px;
+
+  &.last-item {
+    bottom: 40px;
+  }
 
   p {
     text-align: center;

@@ -1,13 +1,20 @@
-.notification {
-  position: fixed !important;
-  background: none !important;
-  z-index: 4;
+.notifications {
+  position: fixed;
   bottom: 20px;
-  text-align: center;
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.notification {
+  background: none !important;
+  z-index: 4;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0 !important;
 
   .notification-close {
     font-size: 32px;

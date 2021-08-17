@@ -64,6 +64,10 @@ const PopupCreatePayRun = ({ updateData, date, setDate, closePopup, regularCycle
     </div>
   );
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  }
+
   const postNewPayRun = () => {
     const payRunType = regularCycles;
     if (!stringIsNullOrEmpty(payRunType)) {
@@ -71,11 +75,11 @@ const PopupCreatePayRun = ({ updateData, date, setDate, closePopup, regularCycle
         .then((payRunId) => {
           closePopup();
           updateData();
-          dispatch(addNotification({ text: `Pay run created. ${payRunId}`, className: 'success' }));
+          pushNotification(`Pay run created. ${payRunId}`,'success');
         })
-        .catch((err) => {
-          dispatch(addNotification({ text: err }));
-          setErrors([...errors, err]);
+        .catch((error) => {
+          pushNotification(error)
+          setErrors([...errors, error]);
         });
     } else {
       setErrors([...errors, 'Pay run not selected']);
@@ -93,9 +97,9 @@ const PopupCreatePayRun = ({ updateData, date, setDate, closePopup, regularCycle
             calculateDaysFromLastPayRun(null);
           }
         })
-        .catch((err) => {
+        .catch((error) => {
           setDaysFromLastPayRun('XX');
-          dispatch(addNotification({ text: `Failed to fetch date of last pay run. ${err?.message}` }));
+          pushNotification(error);
         });
     }
   };

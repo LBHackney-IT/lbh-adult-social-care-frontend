@@ -227,13 +227,17 @@ const DayCare = () => {
       packageReclaims,
     };
 
+    const pushNotification = (text, className = 'error') => {
+      dispatch(addNotification({ text, className }));
+    }
+
     createDayCarePackage(dayCarePackageToCreate)
       .then(() => {
-        dispatch(addNotification({ text: 'Package saved.', className: 'success' }));
+        pushNotification('Package saved.', 'success')
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Create package failed. ${error.message}` }));
+        pushNotification(error);
         setErrors([...errors, `Create package failed. ${error.message}`]);
       });
   };

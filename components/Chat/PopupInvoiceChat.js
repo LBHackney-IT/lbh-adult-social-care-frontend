@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import Popup from '../Popup';
 import Dropdown from '../Dropdown';
 import TextArea from '../TextArea';
 import { ChatSettingsIcon } from '../Icons';
-import { formatDateWithSign } from '../../service/helpers';
+import { formatDateWithSign, scrollToElement } from '../../service/helpers'
 import { sendMessage } from '../../api/Payments/PayRunApi';
 import { addNotification } from '../../reducers/notificationsReducer';
 
@@ -20,24 +20,31 @@ const PopupInvoiceChat = ({
     console.log('update chat');
   },
   messages = [],
-  currentUserId,
 }) => {
   const dispatch = useDispatch();
+  const chatRef = useRef(null);
   const [messageSettingsId, setMessageSettingsId] = useState('');
-  const [hoveredMessage, setHoveredMessage] = useState('');
 
-  const onMouseLeave = (isActive) => {
-    if (isActive) {
-      setHoveredMessage('');
+  const openSettings = (disputedInvoiceChatId) => {
+    if(messageSettingsId && disputedInvoiceChatId === messageSettingsId) {
       setMessageSettingsId('');
+    } else {
+      setMessageSettingsId(disputedInvoiceChatId)
     }
-  };
+  }
 
   useEffect(() => {
     if(waitingOnOptions?.length) {
       changeWaitingOn(waitingOnOptions[0].value);
     }
   }, [waitingOnOptions]);
+
+  useEffect(() => {
+    const chatEl = chatRef.current;
+    if(chatEl) {
+      scrollToElement({ element: chatEl });
+    }
+  }, [messages]);
 
   const createInvoiceChat = (
     <div className="popup-invoice-chat__container">
@@ -49,29 +56,31 @@ const PopupInvoiceChat = ({
         <p className="font-weight-bold">Currently waiting on: {messages[0]?.actionRequiredFromName || ''}</p>
       </div>
       <div className="popup-invoice-chat__messages">
-        {messages.map((item) => {
-          const { messageFromId } = item;
-          const isMessageFromCurrentUser = String(messageFromId) === String(currentUserId);
+        {messages.map((item, index) => {
+          const { messageFromId, disputedInvoiceChatId } = item;
+          const isLast = index === messages.length-1;
+          const settingsOpenedClassItem = messageSettingsId === disputedInvoiceChatId ? ' settings-opened' : '';
+          const settingsLastItemClass = isLast ? ' last-item' : '';
+          const isMessageFromCurrentUser = !!messageFromId;
           const messageFromClasses = isMessageFromCurrentUser
             ? 'popup-invoice-chat__message-from-current-user'
             : 'popup-invoice-chat__message-from-someone';
-          const hoveredMessageClass = String(messageFromId) === String(hoveredMessage) ? ' hovered' : '';
+          const propsObject = isLast ? { ref: chatRef } : {};
           return (
             <div
               key={item.disputedInvoiceChatId}
-              onMouseLeave={() => onMouseLeave(!isMessageFromCurrentUser)}
-              onMouseEnter={() => !isMessageFromCurrentUser && setHoveredMessage(messageFromId)}
-              className={`popup-invoice-chat__message ${messageFromClasses}${hoveredMessageClass}`}
+              {...propsObject}
+              className={`popup-invoice-chat__message ${messageFromClasses}`}
             >
               <p className="popup-invoice-chat__message-from">{isMessageFromCurrentUser ? currentUserInfo.loggedInUserName : item.actionRequiredFromName}</p>
               <div className="popup-invoice-chat__message-text-container">
                 <p className="popup-invoice-chat__message-text">{item.message}</p>
-                <div className="popup-invoice-chat__message-settings">
-                  <ChatSettingsIcon onClick={() => setMessageSettingsId(messageFromId)} />
-                  {String(messageSettingsId) === String(messageFromId) && (
+                <div className={`popup-invoice-chat__message-settings${settingsOpenedClassItem}`}>
+                  <ChatSettingsIcon onClick={() => openSettings(disputedInvoiceChatId)} />
+                  {String(messageSettingsId) === String(disputedInvoiceChatId) && (
                     <div
                       onClick={() => setMessageSettingsId('')}
-                      className="popup-invoice-chat__message-settings-actions"
+                      className={`popup-invoice-chat__message-settings-actions${settingsLastItemClass}`}
                     >
                       <p>Mark Unread</p>
                     </div>
@@ -118,11 +127,11 @@ const PopupInvoiceChat = ({
             actionRequiredFromId: waitingOn,
             invoiceId: currentUserInfo.invoiceId,
           })
-            .then(() => {
+            .then(async () => {
               setNewMessageText('');
-              updateChat();
+              await updateChat();
             })
-            .catch(() => dispatch(addNotification({ text: 'Can not send message' })));
+            .catch((e) => dispatch(addNotification({ text: e })));
         },
       }}
     />

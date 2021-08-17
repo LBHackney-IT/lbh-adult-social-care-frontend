@@ -82,6 +82,19 @@ function formatForDropDownOptions(fields, res) {
   }));
 }
 
+/**
+  behavior: auto or smooth
+  block: start, center, end, or nearest
+  inline: start, center, end, or nearest
+ */
+const scrollToElement = ({ element, behavior = 'smooth', block = 'center', inline = 'end' }) => {
+  element?.scrollIntoView({
+    behavior,
+    block,
+    inline,
+  });
+};
+
 const sortTableByKey = (input, sort) => {
   if (!Array.isArray(input)) {
     console.error('Sorted object is not an array');
@@ -115,4 +128,5 @@ export {
   getLoggedInUser,
   sortTableByKey,
   formatForDropDownOptions,
+  scrollToElement,
 };

@@ -295,13 +295,17 @@ const HomeCare = () => {
       slots,
     };
 
+    const pushNotification = (text, className = 'error') => {
+      dispatch(addNotification({ text, className }));
+    };
+
     try {
       const summaryData = await postHomeCareTimeSlots(postData);
       setHomeCareSummaryData(summaryData);
       router.push(SOCIAL_WORKER_ROUTE);
-    } catch (e) {
-      dispatch(addNotification({ text: 'Can not add to package' }));
-      console.log('error post time slots', e, e?.response);
+    } catch (error) {
+      pushNotification(error);
+      console.log('error post time slots', error, error?.response);
     }
   };
 

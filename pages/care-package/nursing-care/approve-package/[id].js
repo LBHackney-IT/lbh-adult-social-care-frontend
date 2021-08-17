@@ -91,13 +91,17 @@ const NursingCareApprovePackage = ({
     typeOfStayOptionName = '',
   } = nursingCarePackage?.nursingCarePackage || {};
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
   const handleRejectPackage = () => {
     nursingCareChangeStatus(nursingCarePackageId, 10)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        pushNotification(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
@@ -105,11 +109,11 @@ const NursingCareApprovePackage = ({
   const handleApprovePackageContents = () => {
     nursingCareApprovePackageContent(nursingCarePackageId)
       .then(() => {
-        dispatch(addNotification({ text: `Package contents approved successfully`, className: 'success' }));
+        pushNotification(`Package contents approved successfully`,'success');
         router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
+        pushNotification(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
@@ -121,7 +125,7 @@ const NursingCareApprovePackage = ({
         router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        pushNotification(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
