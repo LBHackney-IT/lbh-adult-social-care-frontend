@@ -61,7 +61,7 @@ const PopupInvoiceChat = ({
           const isLast = index === messages.length-1;
           const settingsOpenedClassItem = messageSettingsId === disputedInvoiceChatId ? ' settings-opened' : '';
           const settingsLastItemClass = isLast ? ' last-item' : '';
-          const isMessageFromCurrentUser = !!messageFromId;
+          const isMessageFromCurrentUser = !messageFromId;
           const messageFromClasses = isMessageFromCurrentUser
             ? 'popup-invoice-chat__message-from-current-user'
             : 'popup-invoice-chat__message-from-someone';
