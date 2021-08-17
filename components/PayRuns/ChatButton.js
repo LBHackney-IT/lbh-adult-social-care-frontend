@@ -2,7 +2,7 @@ import React from 'react';
 import { ChatIcon } from '../Icons';
 
 const ChatButton = ({ onClick = () => {} }) => (
-  <div onClick={onClick} className="chat-button">
+  <div title='Held chat' onClick={onClick} className="chat-button">
     <ChatIcon />
   </div>
 );

@@ -3,22 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeNotification, selectNotifications, showNotification } from '../reducers/notificationsReducer';
 
 const CustomNotification = ({ className = '' }) => {
-  const { notifications, showedNotifications } = useSelector(selectNotifications);
+  const { notifications, showedNotifications, notificationsLimit } = useSelector(selectNotifications);
   const [timer, setTimer] = useState(null);
   const dispatch = useDispatch();
 
-  const closeNotification = () => {
+  const closeNotification = (notification) => {
     if (timer) {
       clearTimeout(timer);
     }
-    dispatch(removeNotification(notifications[0]));
+    dispatch(removeNotification(notification));
   };
 
   useEffect(() => {
-    if (!showedNotifications.length && notifications[0]) {
+    if (notifications[0] && showedNotifications.length < notificationsLimit) {
+      const currentNotification = {...notifications[0]};
       dispatch(showNotification(notifications[0]));
 
-      if (notifications[0].time === 'debugger') return;
+      if (currentNotification.time === 'debugger') return;
 
       if (timer) {
         clearTimeout(timer);
@@ -26,23 +27,27 @@ const CustomNotification = ({ className = '' }) => {
 
       setTimer(
         setTimeout(() => {
-          dispatch(removeNotification(notifications[0]));
-        }, notifications[0].time)
+          dispatch(removeNotification(currentNotification));
+        }, currentNotification.time)
       );
     }
   }, [notifications, showedNotifications, dispatch]);
 
-  const allClasses = `notification ${notifications[0] ? notifications[0].className || '' : ''} ${className}`;
+  const allClasses = `notification ${showedNotifications[0] ? showedNotifications[0].className || '' : ''} ${className}`;
 
-  if (notifications[0]?.text) {
+  if (showedNotifications?.length) {
     return (
-      <div className={allClasses}>
-        <div>
-          <p>{notifications[0].text.toString()}</p>
-          <span className="notification-close" onClick={closeNotification}>
-            +
-          </span>
-        </div>
+      <div className='notifications'>
+        {showedNotifications.map(item => (
+            <div key={item.text} className={allClasses}>
+              <div>
+                <p>{item.text.toString()}</p>
+                <span className="notification-close" onClick={() => closeNotification(item)}>
+                  +
+                </span>
+              </div>
+            </div>
+          ))}
       </div>
     );
   }

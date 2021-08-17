@@ -8,7 +8,7 @@ import { createNewPayRun, getDateOfLastPayRun, PAY_RUN_TYPES } from '../../api/P
 import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
 import { addNotification } from '../../reducers/notificationsReducer';
 
-const PopupCreatePayRun = ({ closeCreatePayRun, date, setDate, closePopup, regularCycles, changeRegularCycles }) => {
+const PopupCreatePayRun = ({ updateData, date, setDate, closePopup, regularCycles, changeRegularCycles }) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState([]);
   const [daysFromLastPayRun, setDaysFromLastPayRun] = useState('XX');
@@ -64,17 +64,22 @@ const PopupCreatePayRun = ({ closeCreatePayRun, date, setDate, closePopup, regul
     </div>
   );
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  }
+
   const postNewPayRun = () => {
     const payRunType = regularCycles;
     if (!stringIsNullOrEmpty(payRunType)) {
       createNewPayRun(payRunType, date)
         .then((payRunId) => {
-          closeCreatePayRun();
-          dispatch(addNotification({ text: `Pay run created. ${payRunId}`, className: 'success' }));
+          closePopup();
+          updateData();
+          pushNotification(`Pay run created. ${payRunId}`,'success');
         })
-        .catch((err) => {
-          dispatch(addNotification({ text: err }));
-          setErrors([...errors, err]);
+        .catch((error) => {
+          pushNotification(error)
+          setErrors([...errors, error]);
         });
     } else {
       setErrors([...errors, 'Pay run not selected']);
@@ -92,9 +97,9 @@ const PopupCreatePayRun = ({ closeCreatePayRun, date, setDate, closePopup, regul
             calculateDaysFromLastPayRun(null);
           }
         })
-        .catch((err) => {
+        .catch((error) => {
           setDaysFromLastPayRun('XX');
-          dispatch(addNotification({ text: `Failed to fetch date of last pay run. ${err?.message}` }));
+          pushNotification(error);
         });
     }
   };

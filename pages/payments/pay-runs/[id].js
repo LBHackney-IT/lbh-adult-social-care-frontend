@@ -224,6 +224,7 @@ const PayRunPage = () => {
     holdInvoicePayment(id, invoice.invoiceId, holdReason)
       .then(async () => {
         closeCreatePayRun();
+        refetchSingleDetails();
         pushNotification('Hold invoice success', 'success');
       })
       .catch((e) => {
@@ -248,7 +249,7 @@ const PayRunPage = () => {
       rejectInvoicePayment(id, item.invoiceId)
         .then(async () => {
           refetchSingleDetails();
-          pushNotification('Accept invoice success', 'success');
+          pushNotification('Reject invoice success', 'success');
         })
         .catch((e) => {
           pushNotification(e || 'Reject invoice fail')

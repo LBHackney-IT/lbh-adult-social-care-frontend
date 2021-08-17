@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { pick, omit, groupBy, last } from 'lodash';
 import { useInvoiceStatusList } from '../../api/SWR';
 import Dropdown from '../Dropdown';
 import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
@@ -84,7 +83,7 @@ const PayRunTable = ({
                 )}
 
                 {Object.keys(item).map((rowItemKey) => {
-                  if (['key', 'invoices'].includes(rowItemKey)) return null;
+                  if (['key', 'invoices'].includes(rowItemKey)) return <React.Fragment key={item.id} />;
 
                   const value = includeString(rowItemKey.toLowerCase(), 'date')
                     ? formatDateWithSign(item[rowItemKey])
