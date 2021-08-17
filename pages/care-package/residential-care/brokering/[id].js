@@ -91,7 +91,7 @@ const ResidentialCareBrokering = ({
   const [summaryData, setSummaryData] = useState([]);
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
   const { data: stageOptions } = useBaseApi.stages();
-  const { data: supplierOptions } = useSuppliersApi.supplierList();
+  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));

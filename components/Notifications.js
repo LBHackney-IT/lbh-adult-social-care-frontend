@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeNotification, selectNotifications, showNotification } from '../reducers/notificationsReducer';
 
 const CustomNotification = ({ className = '' }) => {
-  const { notifications, showedNotifications, notificationsLimit } = useSelector(selectNotifications);
+  const { notifications, showedNotifications } = useSelector(selectNotifications);
   const [timer, setTimer] = useState(null);
   const dispatch = useDispatch();
 
@@ -15,21 +15,23 @@ const CustomNotification = ({ className = '' }) => {
   };
 
   useEffect(() => {
-    if (notifications[0] && showedNotifications.length < notificationsLimit) {
-      const currentNotification = {...notifications[0]};
+    if(!showedNotifications.length) return;
+    if (showedNotifications[0].time === 'debugger') return;
+
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    setTimer(
+      setTimeout(() => {
+        dispatch(removeNotification(showedNotifications[0]));
+      }, showedNotifications[0].time)
+    );
+  }, [showedNotifications]);
+
+  useEffect(() => {
+    if (notifications[0] && !showedNotifications.length) {
       dispatch(showNotification(notifications[0]));
-
-      if (currentNotification.time === 'debugger') return;
-
-      if (timer) {
-        clearTimeout(timer);
-      }
-
-      setTimer(
-        setTimeout(() => {
-          dispatch(removeNotification(currentNotification));
-        }, currentNotification.time)
-      );
     }
   }, [notifications, showedNotifications, dispatch]);
 
@@ -39,7 +41,7 @@ const CustomNotification = ({ className = '' }) => {
     return (
       <div className='notifications'>
         {showedNotifications.map(item => (
-            <div key={item.text} className={allClasses}>
+            <div key={item.text.toString()} className={allClasses}>
               <div>
                 <p>{item.text.toString()}</p>
                 <span className="notification-close" onClick={() => closeNotification(item)}>
