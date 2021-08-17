@@ -273,6 +273,7 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
           regularCycles={regularCycles}
           closePopup={closeCreatePayRun}
           date={date}
+          updateData={refetchSummaryList}
           newPayRunType={newPayRunType}
           setNewPayRunType={setNewPayRunType}
           setDate={setDate}

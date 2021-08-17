@@ -25,15 +25,12 @@ import Table from '../../../components/Table';
 import CustomDropDown from '../../../components/CustomDropdown';
 import { currency } from '../../../constants/strings';
 import PayRunCollapsedContent from '../../../components/PayRuns/PayRunCollapsedContent';
-import {
-  useInvoicePaymentStatuses,
-  usePaymentDepartments,
-} from '../../../api/SWR';
+import { useInvoicePaymentStatuses, usePaymentDepartments } from '../../../api/SWR';
 import {
   usePayRunSummaryInsights,
   useSinglePayRunDetails,
   useUniquePayRunPackageTypes,
-  useUniquePayRunSuppliers
+  useUniquePayRunSuppliers,
 } from '../../../api/SWR/transactions/payrun/usePayRunApi';
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
 import { sortArray } from '../../../api/Utils/FuncUtils';
@@ -83,7 +80,7 @@ const PayRunPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState({});
   const [requestFilters, setRequestFilters] = useState({
-    ...initialFilters
+    ...initialFilters,
   });
   const [pathname] = useState(`/payments/pay-runs/${id}`);
   const [date, setDate] = useState(new Date());
@@ -95,8 +92,8 @@ const PayRunPage = () => {
   const { data: packageTypes } = useUniquePayRunPackageTypes(id);
   const { data: { data: suppliers } } = useUniquePayRunSuppliers(id);
   const { data: invoiceStatuses } = useInvoicePaymentStatuses();
-  const { data : levelInsights } = usePayRunSummaryInsights(id)
-  const { mutate: refetchSingleDetails , data : { invoices, payRunDetails }, serverError } = useSinglePayRunDetails({
+  const { data: levelInsights } = usePayRunSummaryInsights(id)
+  const { mutate: refetchSingleDetails , data: { invoices, payRunDetails }, serverError } = useSinglePayRunDetails({
     payRunId: id,
     pageNumber,
     serviceUserId: requestFilters?.serviceUser?.id,
@@ -168,11 +165,11 @@ const PayRunPage = () => {
     if (payRunDetails.payRunStatusName === 'Draft') {
       submitPayRunForApproval(payRunId)
         .then(async () => {
-          refetchSingleDetails()
+          refetchSingleDetails();
           pushNotification('Pay Run submitted for approval', 'success');
         })
         .catch((e) => {
-          pushNotification(e || 'Can not submit for approve')
+          pushNotification(e || 'Can not submit for approve');
         });
     } else {
       approvePayRunForPayment(payRunId)
@@ -191,18 +188,18 @@ const PayRunPage = () => {
     if (payRunDetails.payRunStatusName === 'Draft') {
       deleteDraftPayRun(payRunId)
         .then(async () => {
-          refetchSingleDetails()
+          refetchSingleDetails();
           pushNotification('Pay Run draft deleted', 'success');
           router.replace('/payments/pay-runs');
         })
         .catch(() => {
-          refetchSingleDetails()
+          refetchSingleDetails();
           pushNotification('Can not delete Pay Run draft');
         });
     } else {
       kickPayRunBackToDraft(payRunId)
         .then(async () => {
-          refetchSingleDetails()
+          refetchSingleDetails();
           pushNotification('Pay Run kick back success', 'success');
         })
         .catch(() => {
@@ -212,15 +209,14 @@ const PayRunPage = () => {
   };
 
   const sortInvoices = () => {
-    if(!invoices?.invoices) return;
+    if (!invoices?.invoices) return;
     const data = invoices.invoices.slice();
     setSortedInvoices({ ...invoices, invoices: sortArray(data, sort) });
-  }
+  };
 
   useEffect(() => {
-    sortInvoices()
+    sortInvoices();
   }, [sort, invoices]);
-
 
   const holdInvoice = () => {
     const holdReason = {
@@ -236,7 +232,7 @@ const PayRunPage = () => {
       .catch((e) => {
         pushNotification(e || 'Hold invoice fail');
       });
-  }
+  };
 
   const changeInvoiceStatus = ({ statusName }, item) => {
     if (statusName === 'Accepted') {
@@ -246,7 +242,7 @@ const PayRunPage = () => {
           pushNotification('Accept invoice success', 'success');
         })
         .catch((e) => {
-          pushNotification(e || 'Accept invoice fail')
+          pushNotification(e || 'Accept invoice fail');
         });
     } else if (statusName === 'Held') {
       setInvoice(item);
@@ -258,7 +254,7 @@ const PayRunPage = () => {
           pushNotification('Reject invoice success', 'success');
         })
         .catch((e) => {
-          pushNotification(e || 'Reject invoice fail')
+          pushNotification(e || 'Reject invoice fail');
         });
     }
   };
@@ -307,15 +303,17 @@ const PayRunPage = () => {
     text: item.statusName,
   }));
 
-  const packageTypeOptions = packageTypes.map(item => ({
+  const packageTypeOptions = packageTypes.map((item) => ({
     value: item.packageTypeId,
     text: item.packageTypeName,
   }));
 
-  const supplierOptions = !suppliers ? [] : suppliers.map(item => ({
-    value: item.supplierId,
-    name: item.supplierName,
-  }));
+  const supplierOptions = !suppliers
+    ? []
+    : suppliers.map((item) => ({
+        value: item.supplierId,
+        name: item.supplierName,
+      }));
 
   return (
     <div className="pay-runs pay-run">

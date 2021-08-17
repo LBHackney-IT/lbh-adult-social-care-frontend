@@ -57,7 +57,7 @@ const HomeCare = () => {
   const [isImmediate, isS117, isFixedPeriod, startDate, endDate] = router.query.slug;
 
   // State
-  const [homeCareTimeShifts, setHomeCareTimeShifts] = useState(homeCareTimeShiftsData);
+  const [homeCareTimeShifts, setHomeCareTimeShifts] = useState([]);
   const [weekDaysValue, setWeekDaysValue] = useState(weekDays);
   const [selectedCareType, setSelectedCareType] = useState(1);
   const [selectedPrimaryCareTime, setSelectedPrimaryCareTime] = useState(30);
@@ -129,6 +129,12 @@ const HomeCare = () => {
       setSelectedSecondaryCareTime(secondaryTimes[1].value);
     }
   }, [times, secondaryTimes]);
+
+  useEffect(() => {
+    if(homeCareTimeShiftsData) {
+      setHomeCareTimeShifts(homeCareTimeShiftsData);
+    }
+  }, [homeCareTimeShiftsData]);
 
   // Handle a care picker cell click
   const onCarePickerClick = (weekSlotId, dayId) => {
@@ -257,7 +263,7 @@ const HomeCare = () => {
     const slots = [];
 
     homeCareTimeShifts.forEach((timeShiftItem) => {
-      timeShiftItem.days.forEach((timeShiftCell) => {
+      timeShiftItem?.days?.forEach((timeShiftCell) => {
         // eslint-disable-next-line no-empty
         if (timeShiftCell.value) {
         } else if (timeShiftCell.values) {
