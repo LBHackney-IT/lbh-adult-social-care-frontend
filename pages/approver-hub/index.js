@@ -4,7 +4,7 @@ import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
 import DashboardTabs from '../../components/Dashboard/Tabs';
 import Table from '../../components/Table';
-import { formatDate, formatForDropDownOptions } from '../../service/helpers'
+import { formatDate, formatForDropDownOptions, includeString } from '../../service/helpers'
 import Inputs from '../../components/Inputs';
 import {
   RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE,
@@ -16,10 +16,10 @@ import {
 } from '../../routes/RouteConstants';
 import { currency } from '../../constants/strings';
 import { DEFAULT_PAGE_SIZE } from '../../constants/variables';
-import { checkEmptyFields } from '../../service/inputValidator'
-import { sortArray } from '../../api/Utils/FuncUtils'
-import { DATA_TYPES } from '../../api/Utils/CommonOptions'
-import useApprovedPackageApi from '../../api/SWR/useApprovedPackagesApi'
+import { checkEmptyFields } from '../../service/inputValidator';
+import { sortArray } from '../../api/Utils/FuncUtils';
+import { DATA_TYPES } from '../../api/Utils/CommonOptions';
+import useApprovedPackageApi from '../../api/SWR/useApprovedPackagesApi';
 
 const ApproverHubPage = () => {
   const [initialFilters] = useState({
@@ -33,7 +33,10 @@ const ApproverHubPage = () => {
   const router = useRouter();
 
   const onClickTableRow = (rowItems) => {
-    if (rowItems.packageTypeId === 3) {
+    const packageType = packageTypeOptions.find(item => item.id === rowItems.packageTypeId);
+    console.log(rowItems);
+    console.log(packageTypeOptions);
+    if(includeString(packageType.packageType.toLowerCase(), 'residential')) {
       switch (tab) {
         case 'new': {
           router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);

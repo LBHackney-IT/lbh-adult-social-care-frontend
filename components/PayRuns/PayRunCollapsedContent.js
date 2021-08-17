@@ -39,7 +39,7 @@ const PayRunCollapsedContent = ({ invoice = {} }) => {
                   <p>Total to pay</p>
                   <p></p>
                   <p></p>
-                  <p>{totalToPay}</p>
+                  <p>{totalToPay.toFixed(2)}</p>
                 </div>
                 {/*<div key={care.id} className="table__row-collapsed-main-item">*/}
                 {/*  <p>*/}
