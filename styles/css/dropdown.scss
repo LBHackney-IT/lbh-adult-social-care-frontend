@@ -41,6 +41,18 @@
   }
 }
 
+.dropdown-trigger {
+  .button {
+    span:not(.icon) {
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 90%;
+      overflow: hidden;
+    }
+  }
+}
+
 .dropdown-item.dropdown-item-active {
   background-color: #2684FF;
   color: white;
