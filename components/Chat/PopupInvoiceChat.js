@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import Popup from '../Popup';
 import Dropdown from '../Dropdown';
@@ -32,6 +32,12 @@ const PopupInvoiceChat = ({
       setMessageSettingsId('');
     }
   };
+
+  useEffect(() => {
+    if(waitingOnOptions?.length) {
+      changeWaitingOn(waitingOnOptions[0].value);
+    }
+  }, [waitingOnOptions]);
 
   const createInvoiceChat = (
     <div className="popup-invoice-chat__container">
@@ -110,7 +116,7 @@ const PopupInvoiceChat = ({
             payRunId: currentUserInfo.payRunId,
             message: newMessageText,
             actionRequiredFromId: waitingOn,
-            payRunItemId: currentUserInfo.invoiceId,
+            invoiceId: currentUserInfo.invoiceId,
           })
             .then(() => {
               setNewMessageText('');
