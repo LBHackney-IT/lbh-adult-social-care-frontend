@@ -10,7 +10,7 @@ const ApproverHeader = () => {
 
   const getCurrentLinks = () =>
     addLinksByRoute.map((el) => {
-      if (el.route === router.pathname) return el.link;
+      if (el?.route === router.pathname) return el.link;
     });
 
   const [socialWorkerRoutes] = useState([...getCurrentLinks(), { route: '/logout', name: 'Log Out' }]);
