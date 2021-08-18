@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { pick } from 'lodash';
 import {
   createNewPayRun,
   PAY_RUN_TYPES,
@@ -102,6 +101,7 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
   const router = useRouter();
 
   const [openedPopup, setOpenedPopup] = useState('');
+  const [chatInvoiceItem, setChatInvoiceItem] = useState({});
   const [date, setDate] = useState(new Date());
   const [checkedRows, setCheckedRows] = useState([]);
   const [openedInvoiceChat, setOpenedInvoiceChat] = useState({});
@@ -122,26 +122,20 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
 
   const isPayRunsTab = tab === 'pay-runs';
 
-  useEffect(() => {
-    setPage(1);
-  }, [tab]);
-
   const { data: payRunTypes } = usePayRunTypes();
   const { data: payRunSubTypes } = usePayRunSubTypes();
   const { options: waitingOnOptions } = usePaymentDepartments();
   const { data: uniquePayRunStatuses } = useUniquePayRunStatuses();
 
   const { data: heldPayments, mutate: refetchHeldPayments } = useHeldInvoicePayments({
-    params: pick(filters, ['dateStart', 'dateEnd', 'serviceType', 'serviceUser', 'supplier', 'waitingOn']),
-    shouldFetch: !isPayRunsTab,
-  });
+    ...filters,
+    pageNumber: page,
+  }, !isPayRunsTab);
 
   const { data: summaryList, mutate: refetchSummaryList } = usePayRunsSummaryList({
-    params: {
-      ...pick(filters, ['id', 'dateStart', 'dateEnd', 'type', 'status']),
-      pageNumber: page,
-    },
-  });
+    ...filters,
+    pageNumber: page,
+  }, isPayRunsTab);
 
   const {
     pagingMetaData: { pageSize, totalCount, totalPages },
@@ -157,6 +151,8 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
       name: SORTS_TAB[newTab][0].name,
       dataType: SORTS_TAB[newTab][0].dataType
     });
+    setPage(1);
+    setFilters({});
     setTab(newTab);
   }
 
@@ -185,7 +181,8 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
     router.push(`${router.pathname}/${rowItem.payRunId}`);
   };
 
-  const openInvoiceChatItem = item => {
+  const getInvoiceChatItem = (item = chatInvoiceItem) => {
+    if(!chatInvoiceItem) setChatInvoiceItem(item);
     const findItem = heldPayments?.data?.find(payRun => payRun.payRunId === item.payRunId);
     setOpenedInvoiceChat({
       ...findItem?.invoices[0],
@@ -200,7 +197,7 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
       id: 'action1',
       onClick: (item) => {
         setOpenedPopup('help-chat');
-        openInvoiceChatItem(item);
+        getInvoiceChatItem(item);
       },
       className: 'chat-icon',
       Component: ChatButton,
@@ -259,12 +256,6 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
     }
   };
 
-  useEffect(() => {
-    if(openedInvoiceChat) {
-      openInvoiceChatItem(openedInvoiceChat);
-    }
-  }, [heldPayments]);
-
   const loading = !pageSize;
 
   return (
@@ -289,6 +280,7 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
           newMessageText={newMessageText}
           setNewMessageText={setNewMessageText}
           waitingOn={waitingOn}
+          getInvoiceChatItem={getInvoiceChatItem}
           changeWaitingOn={changeWaitingOn}
           currentUserInfo={openedInvoiceChat}
           updateChat={refetchHeldPayments}

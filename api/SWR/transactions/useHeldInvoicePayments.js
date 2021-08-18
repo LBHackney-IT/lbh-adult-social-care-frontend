@@ -1,39 +1,30 @@
-import useSWR from 'swr';
-import fetcher from '../fetcher';
-import useErrorNotification from '../useErrorNotification';
+import useGetData from '../useGetData'
+import { getQueryParamsFromObject } from '../../Utils/ApiUtils'
 
-const customFetcher = (url, dateFrom, dateTo, packageTypeId, serviceUserId, supplierId, waitingOnId) =>
-  fetcher(url, {
-    params: { dateFrom, dateTo, packageTypeId, serviceUserId, supplierId, waitingOnId },
-  });
+const useHeldInvoicePayments = (params, shouldFetch) => {
+  const initialData = {
+    pagingMetaData: {},
+    data: [],
+  };
 
-const useHeldInvoicePayments = ({ params = {}, shouldFetch }) => {
-  const { dateStart, dateEnd, serviceType, serviceUser, supplier, waitingOn } = params;
+  if(!shouldFetch) {
+    return { data: initialData };
+  }
 
-  const { data, mutate, error } = useSWR(
-    shouldFetch
-      ? [
-          '/transactions/invoices/held-invoice-payments',
-          dateStart,
-          dateEnd,
-          serviceType,
-          serviceUser,
-          supplier,
-          waitingOn,
-        ]
-      : null,
-    customFetcher,
-    {
-      initialData: {
-        pagingMetaData: {},
-        data: [],
-      },
-    }
-  );
+  const { dateFrom, dateTo, pageSize = 10, serviceType, pageNumber = 1, serviceUser, supplier, waitingOn } = params;
 
-  useErrorNotification(error, `Can not get hold payments. ${error ?? ''}`);
+  const dataProps = useGetData(`/transactions/invoices/held-invoice-payments${getQueryParamsFromObject({
+    dateFrom: dateFrom?.getDate ? dateFrom.toJSON() : '',
+    dateTo: dateTo?.getDate ? dateTo.toJSON() : '',
+    pageNumber,
+    pageSize,
+    serviceType,
+    serviceUser,
+    supplier,
+    waitingOn,
+  })}`);
 
-  return { data, mutate };
+  return { ...dataProps, data: dataProps.data?.data ? dataProps.data : initialData };
 };
 
 export default useHeldInvoicePayments;

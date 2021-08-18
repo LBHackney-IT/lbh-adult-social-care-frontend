@@ -2,6 +2,7 @@ import React from 'react'
 import Input from '../Input';
 import Dropdown from '../Dropdown';
 import { Button } from '../Button';
+import DatePick from '../DatePick'
 
 const PayRunsFilters = ({
   filters,
@@ -36,19 +37,19 @@ const PayRunsFilters = ({
             selectedValue={filters.status}
             onOptionSelect={(option) => changeFilter('status', option)}
           />
-          {/* <Dropdown
-            initialText="Date"
-            classes="pay-runs__dropdown-date mr-3"
-            options={dateOptions}
-            selectedValue={filters.date}
-            onOptionSelect={(option) => changeFilter('date', option)}
-          /> */}
-
-          {/* TODO delete if no need a datepicker */}
-          {/* <DatePick */}
-          {/*  dateValue={filters.date} */}
-          {/*  setDate={(value) => changeFilter('date', value)} */}
-          {/* /> */}
+          <DatePick
+            classes='pay-run__filter-item mr-3'
+            dateValue={filters.dateFrom}
+            placeholder='Data range'
+            startDate={filters.dateFrom}
+            endDate={filters.dateTo}
+            setDate={(dateRange) => {
+              const [dateFrom, dateTo] = dateRange;
+              changeFilter('dateFrom', dateFrom);
+              changeFilter('dateTo', dateTo);
+            }}
+            selectsRange
+          />
           <Button onClick={applyFilters}>Apply</Button>
           {hasFields && <Button className='outline gray ml-3' onClick={clearFilters}>Clear</Button> }
       </>

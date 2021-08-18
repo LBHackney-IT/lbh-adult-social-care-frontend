@@ -15,6 +15,7 @@ const PopupInvoiceChat = ({
   changeWaitingOn,
   waitingOnOptions = [],
   currentUserInfo,
+  getInvoiceChatItem,
   waitingOn,
   updateChat = () => {
     console.log('update chat');
@@ -133,6 +134,7 @@ const PopupInvoiceChat = ({
             .then(async () => {
               setNewMessageText('');
               await updateChat();
+              getInvoiceChatItem();
             })
             .catch((e) => dispatch(addNotification({ text: e })));
         },

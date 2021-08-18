@@ -1,6 +1,5 @@
 import axios from 'axios';
-import moment from 'moment';
-import React, { useState } from 'react';
+import React from 'react';
 import AsyncSelect from 'react-select/async';
 import { BASE_URL } from '../../api/BaseApi';
 import { usePackageGetAll, usePaymentDepartments } from '../../api/SWR';
@@ -9,26 +8,7 @@ import DatePick from '../DatePick';
 import Dropdown from '../Dropdown';
 import { CaretDownIcon } from '../Icons';
 
-const convertLocalToUTCDate = (date, isEndDate) => {
-  if (!date) return date;
-
-  const utcDate = moment.parseZone(date).utc(true);
-
-  if (!isEndDate) return utcDate.format();
-
-  // set time to end of the day for dateEnd
-  return utcDate
-    .add({
-      hours: 23,
-      minutes: 59,
-      seconds: 59,
-    })
-    .format();
-};
-
 const HeldPaymentsFilters = ({ filters, changeFilter, clearFilters, applyFilters, hasFields }) => {
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
 
   const { options: packageTypeOptions } = usePackageGetAll();
   const { options: waitingOnOptions } = usePaymentDepartments();
@@ -44,16 +24,16 @@ const HeldPaymentsFilters = ({ filters, changeFilter, clearFilters, applyFilters
     <>
       <div className="held-payments__filters">
         <DatePick
-          classes="held-payments__date-picker"
-          startDate={startDate}
-          endDate={endDate}
-          setDate={(dates) => {
-            setDateRange(dates);
-            const [from, to] = dates;
-            changeFilter('dateStart', convertLocalToUTCDate(from, false));
-            changeFilter('dateEnd', convertLocalToUTCDate(to, true));
+          classes='pay-run__filter-item mr-3'
+          dateValue={filters.dateFrom}
+          placeholder='Data range'
+          startDate={filters.dateFrom}
+          endDate={filters.dateTo}
+          setDate={(dateRange) => {
+            const [dateFrom, dateTo] = dateRange;
+            changeFilter('dateFrom', dateFrom);
+            changeFilter('dateTo', dateTo);
           }}
-          placeholderText="Date range"
           selectsRange
         />
         {dropdowns.map(({ text, options, key, endpoint }) => {
@@ -95,7 +75,7 @@ const HeldPaymentsFilters = ({ filters, changeFilter, clearFilters, applyFilters
           );
         })}
       </div>
-      <div>
+      <div className='ml-3'>
         <Button onClick={applyFilters}>Filter</Button>
         {hasFields && <Button className='ml-3 outline gray' onClick={clearFilters}>Clear</Button>}
       </div>

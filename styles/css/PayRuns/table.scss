@@ -35,7 +35,7 @@
   }
 }
 
-.pay-run {
+.pay-runs {
   .react-date-picker__input {
     height: 42px;
 
@@ -45,6 +45,9 @@
       font-family: "OpenSans", sans-serif;
     }
   }
+}
+
+.pay-run {
   .table-pagination {
     & > button {
       margin-right: auto;

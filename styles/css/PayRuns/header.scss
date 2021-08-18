@@ -68,7 +68,6 @@
       width: 220px;
       padding-left: 10px;
       padding-right: 10px;
-
       span {
         font-size: 14px;
       }
@@ -150,11 +149,5 @@
 
   &__indicators svg {
     margin: 0 10px;
-  }
-}
-
-.held-payments__tab-class {
-  .pay-runs__filters {
-    justify-content: space-between;
   }
 }
