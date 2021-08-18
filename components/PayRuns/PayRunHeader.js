@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Button } from '../Button';
 import Dropdown from '../Dropdown';
-import DatePick from '../DatePick'
-import CustomAsyncSelector from '../CustomAsyncSelect'
+import DatePick from '../DatePick';
+import CustomAsyncSelector from '../CustomAsyncSelect';
 
 const initialFilters = {
   serviceUser: '',
@@ -16,6 +16,7 @@ const initialFilters = {
 };
 
 const PayRunHeader = ({
+  payRunDetails,
   changeFilters,
   typeOptions = [],
   statusOptions = [],
@@ -38,9 +39,10 @@ const PayRunHeader = ({
   };
 
   useEffect(() => {
-    changeFilters(filters)
-    for(const name in filters) {
-      if(filters[name]) {
+    changeFilters(filters);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const name in filters) {
+      if (filters[name]) {
         setHasFields(true);
         break;
       }
@@ -50,15 +52,18 @@ const PayRunHeader = ({
   return (
     <div className="pay-runs__header p-3 pay-run__header">
       <div className="pay-runs__new-pay">
-        <p className="title">Pay Runs</p>
+        <span className="pay-runs__new-pay_container">
+          <p className="title">Pay Run {payRunDetails?.payRunId}</p>
+          <p className="subtitle">{payRunDetails?.payRunStatusName}</p>
+        </span>
         {actionButtonText && <Button onClick={clickActionButton}>{actionButtonText}</Button>}
       </div>
       <div>
         <div className="pay-run__searches mb-3">
           <CustomAsyncSelector
             onChange={(option) => changeFilter('serviceUser', option)}
-            placeholder='Service User'
-            getOptionLabel={option =>  `${option.firstName} ${option.lastName}`}
+            placeholder="Service User"
+            getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
             endpoint={{
               endpointName: '/clients/get-all',
               filterKey: 'clientName',
@@ -67,9 +72,9 @@ const PayRunHeader = ({
           />
           <CustomAsyncSelector
             value={filters.supplier}
-            getOptionLabel={option => option.supplierName}
+            getOptionLabel={(option) => option.supplierName}
             onChange={(option) => changeFilter('supplier', option)}
-            placeholder='Supplier'
+            placeholder="Supplier"
             endpoint={{
               endpointName: '/suppliers/get-all',
               filterKey: 'supplierName',
@@ -77,9 +82,9 @@ const PayRunHeader = ({
           />
           <CustomAsyncSelector
             value={filters.invoiceNo}
-            getOptionLabel={option => option.invoiceNo}
+            getOptionLabel={(option) => option.invoiceNo}
             onChange={(option) => changeFilter('invoiceNo', option)}
-            placeholder='Invoice Number'
+            placeholder="Invoice Number"
             endpoint={{
               endpointName: '/invoiceNo/get-all',
               filterKey: 'invoiceNo',
@@ -102,9 +107,9 @@ const PayRunHeader = ({
             onOptionSelect={(option) => changeFilter('status', option)}
           />
           <DatePick
-            classes='pay-run__filter-item mr-3'
+            classes="pay-run__filter-item mr-3"
             dateValue={filters.dateFrom}
-            placeholder='Data range'
+            placeholder="Data range"
             startDate={filters.dateFrom}
             endDate={filters.dateTo}
             setDate={(value) => {
@@ -112,15 +117,22 @@ const PayRunHeader = ({
                 ...filters,
                 dateFrom: value[0],
                 dateTo: value[1],
-              })
+              });
             }}
             selectsRange
           />
           <Button onClick={applyFilters}>Filter</Button>
-          {hasFields && <Button className='outline gray ml-3' onClick={() => {
-            setFilters({...initialFilters})
-            setHasFields(false);
-          }}>Clear</Button> }
+          {hasFields && (
+            <Button
+              className="outline gray ml-3"
+              onClick={() => {
+                setFilters({ ...initialFilters });
+                setHasFields(false);
+              }}
+            >
+              Clear
+            </Button>
+          )}
         </div>
       </div>
     </div>
