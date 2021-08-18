@@ -19,7 +19,7 @@ import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight
 import PayRunHeader from '../../../components/PayRuns/PayRunHeader';
 import PopupHoldPayment from '../../../components/PayRuns/PopupHoldPayment';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { formatStatus, getUserSession } from '../../../service/helpers';
+import { formatStatus, getUserSession, getNumberWithCommas } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import Table from '../../../components/Table';
 import CustomDropDown from '../../../components/CustomDropdown';
@@ -283,7 +283,7 @@ const PayRunPage = () => {
       getValue: (value, item) => !!checkedRows.find((invoiceId) => String(invoiceId) === String(item.invoiceId)),
     },
     totalAmount: {
-      getValue: (value) => (value ? `${currency.euro}${value}` : '-'),
+      getValue: (value) => (value ? `${currency.euro}${getNumberWithCommas(value)}` : '-'),
     },
     invoiceStatusId: {
       getComponent: (item) => {

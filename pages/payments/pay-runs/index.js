@@ -17,7 +17,7 @@ import { addNotification } from '../../../reducers/notificationsReducer';
 import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
 import ChatButton from '../../../components/PayRuns/ChatButton';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { formatStatus, getLoggedInUser, getUserSession } from '../../../service/helpers'
+import { formatStatus, getLoggedInUser, getUserSession, getNumberWithCommas } from '../../../service/helpers'
 import withSession from '../../../lib/session';
 import { getEnGBFormattedDate, sortArray } from '../../../api/Utils/FuncUtils';
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
@@ -82,6 +82,9 @@ const PAY_RUN_ROWS_RULES = {
   },
   dateTo: {
     getValue: (value) => getEnGBFormattedDate(value),
+  },
+  totalAmountPaid: {
+    getValue: (value) => `£${getNumberWithCommas(value)}`,
   },
 };
 
