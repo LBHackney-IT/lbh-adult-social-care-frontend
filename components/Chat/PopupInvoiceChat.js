@@ -93,13 +93,16 @@ const PopupInvoiceChat = ({
       </div>
       <div className="popup-invoice-chat__inputs">
         {changeWaitingOn && (
-          <Dropdown
-            classes="hold-payment__dropdown"
-            initialText="Change waiting on"
-            onOptionSelect={(value) => changeWaitingOn(value)}
-            options={waitingOnOptions}
-            selectedValue={waitingOn}
-          />
+          <>
+            <p>Assigned to:</p>
+            <Dropdown
+              classes="hold-payment__dropdown"
+              initialText="Change waiting on"
+              onOptionSelect={(value) => changeWaitingOn(value)}
+              options={waitingOnOptions}
+              selectedValue={waitingOn}
+            />
+          </>
         )}
         <TextArea
           classes="popup-invoice-chat__textarea"
