@@ -6,10 +6,18 @@ import { includeString } from '../../service/helpers';
 const ApproverHeader = () => {
   const router = useRouter();
 
-  const [socialWorkerRoutes] = useState([{ route: 'logout', name: 'Log Out' }]);
+  const addLinksByRoute = [{ route: '/social-worker', link: { route: '/care-package', name: 'New Package' } }];
 
-  const changeRoute = () => {
-    router.push('/logout');
+  const getCurrentLinks = () =>
+    addLinksByRoute.map((el) => {
+      if (el?.route === router.pathname) return el.link;
+    });
+
+  const [socialWorkerRoutes] = useState([...getCurrentLinks(), { route: '/logout', name: 'Log Out' }]);
+
+
+  const changeRoute = (route) => {
+    router.push(route);
   };
 
   return (
@@ -21,14 +29,14 @@ const ApproverHeader = () => {
       </div>
       <div className="default-logo-header-navigation">
         {socialWorkerRoutes.map((item) => {
-          const isActiveRoute = includeString(router.pathname, item.route);
+          const isActiveRoute = includeString(router.pathname, item?.route);
           return (
             <p
-              key={item.name}
-              onClick={() => changeRoute(item.route)}
+              key={item?.name}
+              onClick={() => changeRoute(item?.route)}
               className={`default-logo-header-item${isActiveRoute ? ' default-logo-header-active-item' : ''}`}
             >
-              {item.name}
+              {item?.name}
             </p>
           );
         })}
