@@ -9,7 +9,6 @@ const PayRunsFilters = ({
   changeFilter,
   typeOptions,
   statusOptions,
-  dateOptions,
   applyFilters,
   clearFilters,
   hasFields,

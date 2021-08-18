@@ -39,11 +39,6 @@
       transform: rotate(180deg);
     }
   }
-
-  &.disabled {
-    user-select: none !important;
-    cursor: not-allowed !important;
-  }
 }
 
 .dropdown-trigger {
@@ -68,5 +63,13 @@
   flex-direction: column;
   .button {
     justify-content: space-between;
+  }
+
+  &.disable {
+    pointer-events: none !important;
+    user-select: none !important;
+    cursor: not-allowed !important;
+
+    opacity: 0.5;
   }
 }

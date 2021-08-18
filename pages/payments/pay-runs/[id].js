@@ -34,6 +34,7 @@ import {
 } from '../../../api/SWR/transactions/payrun/usePayRunApi';
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
 import { sortArray } from '../../../api/Utils/FuncUtils';
+import PopupDownloadCEDER from '../../../components/Payments/PopupDownloadCEDER'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -68,6 +69,7 @@ const PayRunPage = () => {
   const [popupTypes] = useState({
     createPayRun: 'create-pay-run',
     holdPayments: 'hold-payment',
+    exportPaymentFile: 'export-payment-file',
   });
   const [invoice, setInvoice] = useState(null);
   const router = useRouter();
@@ -162,7 +164,7 @@ const PayRunPage = () => {
 
   const submitPayRun = () => {
     const { payRunId } = payRunDetails;
-    if (payRunDetails.payRunStatusName === 'Draft') {
+    if (payRunDetails?.payRunStatusName === 'Draft') {
       submitPayRunForApproval(payRunId)
         .then(async () => {
           refetchSingleDetails();
@@ -185,7 +187,7 @@ const PayRunPage = () => {
 
   const onDeletePayRunDraft = () => {
     const { payRunId } = payRunDetails;
-    if (payRunDetails.payRunStatusName === 'Draft') {
+    if (payRunDetails?.payRunStatusName === 'Draft') {
       deleteDraftPayRun(payRunId)
         .then(async () => {
           refetchSingleDetails();
@@ -259,6 +261,8 @@ const PayRunPage = () => {
     }
   };
 
+  const isPayRunStatusApproved = payRunDetails?.payRunStatusName === 'Approved';
+
   const rowRules = {
     getClassName: (item) => {
       const { invoiceStatusId } = item;
@@ -277,15 +281,15 @@ const PayRunPage = () => {
       getComponent: (item) => {
         const { invoiceStatusId, invoiceId } = item;
         const statusItem = invoiceStatuses.find((status) => status.statusId === invoiceStatusId);
+        const statusClass = statusItem ? ` ${statusItem.statusName.toLowerCase()}` : '';
+        const payRunStatusApprovedClass = isPayRunStatusApproved ? ' disable' : '';
         return (
           <CustomDropDown
             onlyEmptyText
             onOptionSelect={(value) => changeInvoiceStatus(value, item)}
             key={invoiceId}
             options={invoiceStatuses}
-            className={`table__row-item table__row-item-status${
-              statusItem ? ` ${statusItem.statusName.toLowerCase()}` : ''
-            }`}
+            className={`table__row-item table__row-item-status${statusClass}${payRunStatusApprovedClass}`}
             fields={{
               value: 'statusId',
               text: 'statusName',
@@ -315,7 +319,7 @@ const PayRunPage = () => {
         name: item.supplierName,
       }));
 
-    console.log(payRunDetails);
+  const draftText = payRunDetails?.payRunStatusName === 'Draft' ? 'Submit pay run for approval' : 'Approve for payment';
 
   return (
     <div className="pay-runs pay-run">
@@ -340,6 +344,13 @@ const PayRunPage = () => {
           date={date}
           setDate={setDate}
         />
+      )}
+      {openedPopup === popupTypes.exportPaymentFile && (
+        <PopupDownloadCEDER onDownload={() => {
+          pushNotification('Start download payment file', 'warning');
+          setOpenedPopup('');
+          // router.push('/link-to-file')
+        }} closePopup={() => setOpenedPopup('')} />
       )}
       {!!breadcrumbs.length && <Breadcrumbs className="p-3" values={breadcrumbs} />}
       <PayRunHeader
@@ -380,17 +391,19 @@ const PayRunPage = () => {
         to={invoices?.pagingMetaData?.pageSize}
         totalCount={invoices?.pagingMetaData?.totalCount}
       />
-      <PayRunsLevelInsight
-        firstButton={{
-          text: payRunDetails?.payRunStatusName === 'Draft' ? 'Submit pay run for approval' : 'Approve for payment',
-          onClick: () => submitPayRun(),
-        }}
-        secondButton={{
-          text: payRunDetails?.payRunStatusName === 'Draft' ? 'Delete draft pay run' : 'Kick back',
-          onClick: () => onDeletePayRunDraft(),
-        }}
-        levelInsights={levelInsights}
-      />
+      {payRunDetails &&
+        <PayRunsLevelInsight
+          firstButton={{
+            text: isPayRunStatusApproved ? 'Export payment file' : draftText,
+            onClick: () => isPayRunStatusApproved ? setOpenedPopup(popupTypes.exportPaymentFile) : submitPayRun(),
+          }}
+          secondButton={!isPayRunStatusApproved ? {
+            text: payRunDetails?.payRunStatusName === 'Draft' ? 'Delete draft pay run' : 'Kick back',
+            onClick: () => onDeletePayRunDraft(),
+          } : undefined}
+          levelInsights={levelInsights}
+        />
+      }
       <HackneyFooterInfo />
     </div>
   );
