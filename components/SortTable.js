@@ -3,14 +3,18 @@ import { CaretDownIcon } from './Icons';
 import Checkbox from './Checkbox';
 import { DATA_TYPES } from '../api/Utils/CommonOptions';
 
-const SortTable = ({ changeAllChecked, fields, checkedRows = [], rows = [], sorts, sortBy, additionalActions }) => (
+const SortTable = ({ changeAllChecked, checkedRule, fields, checkedRows = [], rows = [], sorts, sortBy, additionalActions }) => (
   <div className="sort-table">
     {checkedRows && changeAllChecked && (
       <div className="sort sort-checkbox">
         <Checkbox
-          checked={checkedRows.length === rows.length && rows.length !== 0}
+          checked={checkedRule !== undefined ? checkedRule() : checkedRows.length === rows.length && rows.length !== 0}
           onChange={(value, event) => {
             event.stopPropagation();
+            if(checkedRule !== undefined) {
+              return changeAllChecked();
+            }
+
             if (checkedRows.length === rows.length) {
               changeAllChecked([]);
             } else {

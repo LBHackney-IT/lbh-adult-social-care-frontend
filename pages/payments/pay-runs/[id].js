@@ -72,6 +72,7 @@ const PayRunPage = () => {
     holdPayments: 'hold-payment',
     exportPaymentFile: 'export-payment-file',
   });
+  const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [invoice, setInvoice] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -273,9 +274,9 @@ const PayRunPage = () => {
     },
     invoiceCheckbox: {
       type: 'checkbox',
-      getComponent: (item) => {
+      getComponent: (item, currentRowRule) => {
         if(item.invoiceStatusId === invoiceStatusIdByString.accepted) {
-          return <div className='table__row-item' />
+          return <div key={`${item.invoiceId}${currentRowRule}`} className='table__row-item' />
         }
       },
       onChange: (value, item) => onCheckRow(item.invoiceId),
@@ -309,6 +310,27 @@ const PayRunPage = () => {
       },
     },
   };
+
+  const filterCheckedRows = () => {
+    if(sortedInvoices?.invoices?.length === undefined) return [];
+    const filteredCheckedIds = sortedInvoices?.invoices.filter((rowData) => {
+      return rowData.invoiceStatusId !== invoiceStatusIdByString.accepted;
+    });
+    return filteredCheckedIds.map(invoiceData => invoiceData.invoiceId);
+  }
+
+  const customCheckedAll = () => {
+    const onlyInvoiceIds = filterCheckedRows();
+    if(checkedRows.length) {
+      if(onlyInvoiceIds.length === checkedRows.length) {
+        return [];
+      }
+
+      return onlyInvoiceIds;
+    } else {
+      return onlyInvoiceIds;
+    }
+  }
 
   const statusOptions = invoiceStatuses.map((item) => ({
     value: item.statusId,
@@ -388,7 +410,15 @@ const PayRunPage = () => {
         sortBy={sortBy}
         sorts={sorts}
         canCollapseRows
-        changeAllChecked={setCheckedRows}
+        checkedRule={() => !checkedRows.length ? false : filterCheckedRows().length === checkedRows.length}
+        changeAllChecked={() => {
+          const checkedIds = customCheckedAll();
+          if(checkedIds.length) {
+            setCheckedRows(checkedIds);
+          } else {
+            setCheckedRows([]);
+          }
+        }}
       />
       <Pagination
         pathname={pathname}

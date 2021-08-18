@@ -11,6 +11,7 @@ const Table = ({
   rowsRules = {},
   className = '',
   sortBy,
+  checkedRule,
   sorts,
   checkedRows,
   canCollapseRows,
@@ -41,7 +42,7 @@ const Table = ({
 
   return (
     <div className={`table ${className}`}>
-      <SortTable fields={fields} checkedRows={checkedRows} changeAllChecked={changeAllChecked} rows={rows} sortBy={sortBy} sorts={sorts} />
+      <SortTable fields={fields} checkedRule={checkedRule} checkedRows={checkedRows} changeAllChecked={changeAllChecked} rows={rows} sortBy={sortBy} sorts={sorts} />
       {loading && <Loading className='table-loading' />}
       {!rows.length ? (
         <p className="ml-2">No Table Data</p>
