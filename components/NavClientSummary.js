@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { ArrowLeftGreenIcon } from './Icons';
 
 const NavClientSummary = ({
-  children,
+  title,
   hackneyId,
   showBackButton = true,
   packagesCount = null,
@@ -27,7 +27,7 @@ const NavClientSummary = ({
         </div>
       )}
       <div className="is-flex-wrap-wrap">
-        {children && <div className="is-5 client-summary-title">{children}</div>}
+        {title && <div className="is-5 mb-3 mt-5 client-summary-title">{title}</div>}
         <div className="client-prop">
           <p className="client-fullName">James Kenter</p>
         </div>
@@ -50,7 +50,7 @@ const NavClientSummary = ({
         {sourcingCare && (
           <div className="client-prop">
             <p>WHO IS SOURCING CARE:</p>
-            <Image width="300" height="52" src="/images/icons/hackney_logo.png" alt="" />
+            {sourcingCare === 'hackney' && <Image width="300" height="52" src="/images/icons/hackney_logo.png" alt="" />}
           </div>
         )}
         {(packagesCount !== null || preferredContact !== null || canSpeakEnglish !== null) && (

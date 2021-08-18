@@ -272,6 +272,7 @@ const HomeCare = ({ loggedInUserId }) => {
       timeShiftItem?.days?.forEach((timeShiftCell) => {
         // eslint-disable-next-line no-empty
         if (timeShiftCell.value) {
+
         } else if (timeShiftCell.values) {
           const iterateServices = [
             { id: DOMESTIC_CARE_MODE, value: timeShiftCell.values.domestic },

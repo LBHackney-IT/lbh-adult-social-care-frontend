@@ -1,11 +1,9 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { DAY_CARE_ROUTE } from '../../routes/RouteConstants';
-import DatePick from '../DatePick';
 import RadioButton, { yesNoValues } from '../RadioButton';
 import CarePackageSetup from '../CarePackages/CarePackageSetup';
 import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
-import { useRouter } from 'next/router';
 import fieldValidator from '../../service/inputValidator';
 import DateSetup from './DateSetup';
 
@@ -15,7 +13,7 @@ const DayCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => {
   const [endDate, setEndDate] = useState(new Date());
   const [isImmediate, setIsImmediate] = useState(undefined);
   const [isS117, setIsS117] = useState(undefined);
-  const [isFixedPeriod, setIsFixedPeriod] = useState(undefined);
+  const [isFixedPeriod, setIsFixedPeriod] = useState(false);
 
   // Handle build click
   const onBuildClick = () => {

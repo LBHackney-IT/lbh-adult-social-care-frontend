@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { batch, useDispatch } from 'react-redux';
-import ClientSummary from '../../components/ClientSummary';
 import Layout from '../../components/Layout/Layout';
 import HomeCareSetup from '../../components/Setup/HomeCareSetup';
 import DayCareSetup from '../../components/Setup/DayCareSetup';

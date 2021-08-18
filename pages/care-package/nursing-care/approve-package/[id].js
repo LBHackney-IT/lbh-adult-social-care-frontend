@@ -131,7 +131,18 @@ const NursingCareApprovePackage = ({
   };
 
   return (
-    <Layout headerTitle="NURSING CARE APPROVAL">
+    <Layout
+      clientSummaryInfo={{
+        client: 'James Stephens',
+        hackneyId: '#786288',
+        dateOfBirth: '09/12/1972',
+        age: 91,
+        postcode: 'E9 6EY',
+        sourcingCare: 'hackney',
+        title: `Nursing Care
+        (${getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate)} - ${nursingCarePackage?.nursingCarePackage.endDate || 'Ongoing'})`,
+      }}
+      headerTitle="NURSING CARE APPROVAL">
       <div className="hackney-text-black font-size-12px">
         <NursingCareApprovalTitle
           startDate={nursingCarePackage?.nursingCarePackage.startDate}

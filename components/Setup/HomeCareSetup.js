@@ -13,7 +13,7 @@ const HomeCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => 
   const [endDate, setEndDate] = useState(new Date());
   const [isImmediate, setIsImmediate] = useState(undefined);
   const [isS117, setIsS117] = useState(undefined);
-  const [isFixedPeriod, setIsFixedPeriod] = useState(undefined);
+  const [isFixedPeriod, setIsFixedPeriod] = useState(false);
 
   const [errorFields, setErrorFields] = useState({
     isImmediate: '',
