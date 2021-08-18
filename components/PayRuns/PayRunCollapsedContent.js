@@ -1,5 +1,6 @@
 import React from 'react';
 import { currency } from '../../constants/strings';
+import { getNumberWithCommas } from '../../service/helpers';
 
 const PayRunCollapsedContent = ({ invoice = {} }) => {
   const { invoiceItems } = invoice;
@@ -29,12 +30,12 @@ const PayRunCollapsedContent = ({ invoice = {} }) => {
                 <p>{care.itemName}</p>
                 <p>
                   {currency.euro}
-                  {care.pricePerUnit}
+                  {getNumberWithCommas(care.pricePerUnit)}
                 </p>
                 <p>{care.quantity}</p>
                 <p>
                   {currency.euro}
-                  {care.totalPrice}
+                  {getNumberWithCommas(care.totalPrice)}
                 </p>
                 <p>INV {care.invoiceItemId}</p>
               </div>
@@ -46,7 +47,7 @@ const PayRunCollapsedContent = ({ invoice = {} }) => {
             <p />
             <p>
               {currency.euro}
-              {totalToPay}
+              {getNumberWithCommas(totalToPay)}
             </p>
           </div>
           {/* <div key={care.id} className="table__row-collapsed-main-item"> */}

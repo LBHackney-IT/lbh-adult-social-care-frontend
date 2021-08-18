@@ -37,13 +37,13 @@ const PayRunsFilters = ({
             selectedValue={filters.status}
             onOptionSelect={(option) => changeFilter('status', option)}
           />
-          <Dropdown
+          {/* <Dropdown
             initialText="Date"
             classes="pay-runs__dropdown-date mr-3"
             options={dateOptions}
             selectedValue={filters.date}
             onOptionSelect={(option) => changeFilter('date', option)}
-          />
+          /> */}
 
           {/* TODO delete if no need a datepicker */}
           {/* <DatePick */}

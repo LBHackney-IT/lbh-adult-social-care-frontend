@@ -36,7 +36,8 @@ const PAYMENT_TABS = [
 const SORTS_TAB = {
   'pay-runs': [
     { name: 'payRunId', text: 'ID', dataType: DATA_TYPES.STRING },
-    { name: 'dateCreated', text: 'Date', dataType: DATA_TYPES.DATE },
+    { name: 'dateCreated', text: 'Created', dataType: DATA_TYPES.DATE },
+    { name: 'dateTo', text: 'Pay run date to', dataType: DATA_TYPES.DATE },
     { name: 'payRunTypeName', text: 'Type', dataType: DATA_TYPES.STRING },
     { name: 'totalAmountPaid', text: 'Paid', dataType: DATA_TYPES.NUMBER },
     { name: 'totalAmountHeld', text: 'Held', dataType: DATA_TYPES.NUMBER },
@@ -56,7 +57,8 @@ const SORTS_TAB = {
 
 const PAY_RUN_FIELDS = {
   id: 'payRunId',
-  date: 'dateCreated',
+  dateCreated: 'dateCreated',
+  dateTo: 'dateTo',
   type: 'payRunTypeName',
   paid: 'totalAmountPaid',
   held: 'totalAmountHeld',
@@ -77,6 +79,9 @@ const PAY_RUN_ROWS_RULES = {
     getValue: (value) => formatStatus(value, ' ', true),
   },
   dateCreated: {
+    getValue: (value) => getEnGBFormattedDate(value),
+  },
+  dateTo: {
     getValue: (value) => getEnGBFormattedDate(value),
   },
 };

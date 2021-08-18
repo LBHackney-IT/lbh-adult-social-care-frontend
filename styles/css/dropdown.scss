@@ -39,6 +39,11 @@
       transform: rotate(180deg);
     }
   }
+
+  &.disabled {
+    user-select: none !important;
+    cursor: not-allowed !important;
+  }
 }
 
 .dropdown-trigger {

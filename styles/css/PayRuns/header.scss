@@ -1,3 +1,13 @@
+.pay-runs__new-pay_container {
+  display: flex;
+  flex-direction: column;
+
+  .subtitle {
+    font-weight: 100;
+    font-size: 1.6rem;
+  }
+}
+
 .pay-runs__new-pay {
   display: flex;
   flex-wrap: wrap;
