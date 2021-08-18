@@ -108,7 +108,16 @@
 
 .held-payments__filters {
   display: flex;
-  height: 42px;
+  flex-wrap: wrap;
+
+  @include media-tablet-down {
+    .control {
+      margin-top: 10px;
+    }
+    .held-payments-select {
+      margin-top: 10px;
+    }
+  }
 
   label.checkbox {
     align-items: flex-end;

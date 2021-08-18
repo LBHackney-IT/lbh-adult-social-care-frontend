@@ -120,11 +120,14 @@ const PayRunHeader = ({
             }}
             selectsRange
           />
-          <Button onClick={applyFilters}>Filter</Button>
-          {hasFields && <Button className='outline gray ml-3' onClick={() => {
-            setFilters({...initialFilters})
-            setHasFields(false);
-          }}>Clear</Button> }
+          <div className='inputs__button-container'>
+            <Button onClick={applyFilters}>Filter</Button>
+            {hasFields && <Button className='outline gray ml-3' onClick={() => {
+              setFilters({...initialFilters})
+              setHasFields(false);
+            }}>Clear</Button> }
+          </div>
+
         </div>
       </div>
     </div>

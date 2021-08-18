@@ -38,6 +38,11 @@
   border-left: 1px solid $lbh-gray;
   margin-left: 30px;
 
+  @media (max-width: 1062px) {
+    margin-left: 16px;
+    padding-left: 16px;
+  }
+
   p:first-of-type {
     color: $lbh-green1;
     font-size: 36px;

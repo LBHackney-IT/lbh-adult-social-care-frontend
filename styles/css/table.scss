@@ -1,5 +1,16 @@
 .table {
   padding: 16px;
+  overflow-x: auto;
+
+  .table__row-item:not(.table__row-item:last-of-type) {
+    margin-right: 40px;
+  }
+
+  .sort-table {
+    .sort:not(.sort:last-of-type) {
+      margin-right: 40px;
+    }
+  }
 
   &-wrapper {
     width: 100%;
@@ -79,6 +90,10 @@
   padding-right: 10px;
 
   margin-bottom: 35px;
+
+  @include media-desktop-down {
+    width: fit-content;
+  }
 }
 
 .sort-checkbox {

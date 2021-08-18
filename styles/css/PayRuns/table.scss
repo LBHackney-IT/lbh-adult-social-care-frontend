@@ -3,6 +3,12 @@
     margin-right: 40px;
   }
 
+  .sort-table {
+    .sort:not(.sort:last-of-type) {
+      margin-right: 40px;
+    }
+  }
+
   .table__row-column {
     &-1 {
       width: 170px;
@@ -24,13 +30,6 @@
     }
     &-7 {
       width: 200px;
-    }
-  }
-
-  .sort-table {
-    width: 100%;
-    .sort:not(.sort:last-of-type) {
-      margin-right: 40px;
     }
   }
 }
