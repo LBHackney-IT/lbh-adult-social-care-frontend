@@ -1,20 +1,28 @@
 import moment from 'moment';
 import { stringIsNullOrEmpty } from '../../Utils/FuncUtils';
-import useErrorNotification from '../useErrorNotification';
 import useGetData from '../useGetData'
 import { getQueryParamsFromObject } from '../../Utils/ApiUtils';
 
 const sixMonthsAgo = moment().subtract(6, 'months');
 const sixMonthAfter = moment().add(6, 'months');
 
-const usePayRunsSummaryList = ({ params = {} }) => {
+const usePayRunsSummaryList = (params, shouldFetch) => {
+  const initialData = {
+    pagingMetaData: {},
+    data: [],
+  };
+
+  if(!shouldFetch) {
+    return { data: initialData };
+  }
+
   const {
     pageNumber = 1,
     pageSize = 10,
     id: payRunId,
     status: payRunStatusId,
-    dateStart: dateFrom = sixMonthsAgo.toJSON(),
-    dateEnd: dateTo = sixMonthAfter.toJSON(),
+    dateFrom = sixMonthsAgo.toJSON(),
+    dateTo = sixMonthAfter.toJSON(),
     type,
   } = params;
 
@@ -23,23 +31,18 @@ const usePayRunsSummaryList = ({ params = {} }) => {
   if (!stringIsNullOrEmpty(type)) {
     [payRunTypeId, payRunSubTypeId] = type.split(' - ');
   }
-  const initialData = {
-    pagingMetaData: {},
-    data: [],
-  };
 
   const dataProps = useGetData(`/transactions/pay-runs/summary-list${getQueryParamsFromObject({
     pageNumber,
     pageSize,
-    dateFrom,
-    dateTo,
+    dateFrom: dateFrom?.getDate ? dateFrom.toJSON() : '',
+    dateTo: dateTo?.getDate ? dateTo.toJSON() : '',
     payRunId,
     payRunTypeId,
     payRunSubTypeId,
     payRunStatusId,
-  }, true)}`);
+  })}`);
 
-  useErrorNotification(dataProps.error, `Can not get summary list: ${dataProps.error?.message}`);
   return { ...dataProps, data: dataProps.data?.data ? dataProps.data : initialData };
 };
 

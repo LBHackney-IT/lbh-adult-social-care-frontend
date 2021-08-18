@@ -68,17 +68,17 @@ const HomeCare = ({ loggedInUserId }) => {
   const [secondaryTimes, setSecondaryTimes] = useState(undefined);
 
   const addPackageReclaim = () => {
-    setPackageReclaims([...packageReclaims, { ...initialPackageReclaim, packageReclaimId: uniqueID() }]);
+    setPackageReclaims([...packageReclaims, { ...initialPackageReclaim, id: uniqueID() }]);
   };
 
   const removePackageReclaim = (id) => {
-    const newPackagesReclaim = packageReclaims.filter((item) => item.packageReclaimId !== id);
+    const newPackagesReclaim = packageReclaims.filter((item) => item.id !== id);
     setPackageReclaims(newPackagesReclaim);
   };
 
   const changePackageReclaim = (id) => (updatedPackage) => {
     const newPackage = packageReclaims.slice();
-    const packageIndex = packageReclaims.findIndex((item) => item.packageReclaimId === id);
+    const packageIndex = packageReclaims.findIndex((item) => item.id === id);
     newPackage.splice(packageIndex, 1, updatedPackage);
     setPackageReclaims(newPackage);
   };
@@ -103,6 +103,11 @@ const HomeCare = ({ loggedInUserId }) => {
   useEffect(() => {
     if (!carePackageId) {
       (async function createHomeCarePackageAsync() {
+        const filteredPackageReclaims = packageReclaims.filter(item => !!item.reclaimFromId);
+        const params = {};
+
+        if(filteredPackageReclaims.length) params.packageReclaims = filteredPackageReclaims;
+
         const carePackageCreateResult = await createHomeCarePackage({
           startDate,
           endDate,
@@ -111,7 +116,7 @@ const HomeCare = ({ loggedInUserId }) => {
           isFixedPeriod: isFixedPeriod === 'true',
           creatorId: loggedInUserId,
           clientId: loggedInUserId,
-          packageReclaims,
+          ...params,
         });
 
         console.log(carePackageCreateResult)
@@ -409,10 +414,10 @@ const HomeCare = ({ loggedInUserId }) => {
           <div>
             {packageReclaims.map((item, index) => (
               <PackageReclaim
-                remove={index !== 0 ? () => removePackageReclaim(item.packageReclaimId) : undefined}
-                key={item.packageReclaimId}
+                remove={index !== 0 ? () => removePackageReclaim(item.id) : undefined}
+                key={item.id}
                 packageReclaim={item}
-                setPackageReclaim={changePackageReclaim(item.packageReclaimId)}
+                setPackageReclaim={changePackageReclaim(item.id)}
               />
             ))}
             <p onClick={addPackageReclaim} className="action-button-text">

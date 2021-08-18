@@ -57,4 +57,11 @@
       color: white;
     }
   }
+
+  &.warning {
+    div {
+      background-color: $lbh-dark-orange;
+      color: white;
+    }
+  }
 }

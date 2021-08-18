@@ -16,6 +16,7 @@ const initialFilters = {
 };
 
 const PayRunHeader = ({
+  payRunDetails,
   changeFilters,
   typeOptions = [],
   statusOptions = [],
@@ -50,7 +51,10 @@ const PayRunHeader = ({
   return (
     <div className="pay-runs__header p-3 pay-run__header">
       <div className="pay-runs__new-pay">
-        <p className="title">Pay Runs</p>
+        <span className="pay-runs__new-pay_container">
+          <p className="title">Pay Run {payRunDetails?.payRunId}</p>
+          <p className="subtitle">{payRunDetails?.payRunStatusName}</p>
+        </span>
         {actionButtonText && <Button onClick={clickActionButton}>{actionButtonText}</Button>}
       </div>
       <div>

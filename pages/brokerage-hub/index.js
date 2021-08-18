@@ -175,7 +175,7 @@ const BrokerageHubPage = () => {
 
   const rowsRules = {
     packageId: {
-      hide: true,
+      getHide: () => true,
     },
     hackneyId: {
       getValue: (value) => `#${value}`,

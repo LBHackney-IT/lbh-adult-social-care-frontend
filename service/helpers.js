@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 const chr4 = () => Math.random().toString(16).slice(-4);
 
 const uniqueID = () => `${chr4() + chr4()}-${chr4()}-${chr4()}-${chr4()}-${chr4()}${chr4()}${chr4()}`;
@@ -113,9 +115,29 @@ const sortTableByKey = (input, sort) => {
   });
 };
 
+const convertLocalToUTCDate = (date, isEndDate) => {
+  if (!date) return date;
+
+  const utcDate = moment.parseZone(date).utc(true);
+
+  if (!isEndDate) return utcDate.format();
+
+  // set time to end of the day for dateEnd
+  return utcDate
+    .add({
+      hours: 23,
+      minutes: 59,
+      seconds: 59,
+    })
+    .format();
+};
+
 const deleteSpaces = (str) => str.replace(/\s/g, '');
 
 const getErrorResponse = (error) => error?.response?.data || {}; // { firstName: 'First Name must be more then 10 symbols', secondName: 'Second Name must be more then 10 symbols'
+
+const getNumberWithCommas = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
 export {
   uniqueID,
   deleteSpaces,
@@ -129,4 +151,6 @@ export {
   sortTableByKey,
   formatForDropDownOptions,
   scrollToElement,
+  getNumberWithCommas,
+  convertLocalToUTCDate,
 };
