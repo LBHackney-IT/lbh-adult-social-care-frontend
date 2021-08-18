@@ -74,7 +74,7 @@ const SocialWorkerDashboardPage = () => {
 
   const rowsRules = {
     packageId: {
-      hide: true,
+      getHide: () => {},
     },
     dateOfBirth: {
       getValue: (value) => `${formatDate(value, '/')}`,

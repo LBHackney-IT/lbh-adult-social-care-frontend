@@ -62,8 +62,12 @@ const Table = ({
                       const columnClass = ` table__row-column-${index+1}`;
                       const currentRowRule = rowsRules[rowItemName] || '';
                       const value = item[rowItemName];
+                      const key = `${tab}${rowItemName}${value}${id}`;
 
-                      if (currentRowRule?.hide) return <React.Fragment key={`${tab}${rowItemName}${id}`} />;
+                      if (currentRowRule?.getHide) {
+                        const isHide = currentRowRule?.getHide(value, item);
+                        if(isHide) return <React.Fragment key={key} />;
+                      }
                       index += 1;
 
                       const currentValue = (currentRowRule?.getValue && currentRowRule.getValue(value, item)) || value;
@@ -73,12 +77,13 @@ const Table = ({
 
                       const getComponent = currentRowRule?.getComponent;
                       if (getComponent) {
-                        return getComponent(item, currentRowRule, columnClass);
+                        const rowComponent = getComponent(item, currentRowRule, columnClass);
+                        if(rowComponent) return rowComponent;
                       }
 
                       if (currentRowRule?.type === 'checkbox') {
                         return (
-                          <div key={`${rowItemName}${id}`} className={`table__row-item-checkbox table__row-item${columnClass}`}>
+                          <div key={key} className={`table__row-item-checkbox table__row-item${columnClass}`}>
                             <Checkbox
                               className={calculatedClassName}
                               onChange={(checkedValue, event) => {
@@ -99,7 +104,7 @@ const Table = ({
                             e.stopPropagation();
                             currentRowRule.onClick(item, value);
                           }}
-                          key={`${tab}${rowItemName}${value}${id}`}
+                          key={key}
                           className={`table__row-item${columnClass} ${calculatedClassName}`}
                         >
                           <p>{currentValue || '—'}</p>
@@ -140,7 +145,7 @@ export default Table;
       onClick: (item, prop) => console.log(item, prop),
     },
     payRunId: {
-      hide: true,
+      getHide: (value, item) => true,
     },
     checkboxField: {
       type: 'checkbox',

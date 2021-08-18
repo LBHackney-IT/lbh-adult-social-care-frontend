@@ -35,6 +35,7 @@ import {
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
 import { sortArray } from '../../../api/Utils/FuncUtils';
 import PopupDownloadCEDER from '../../../components/Payments/PopupDownloadCEDER'
+import { invoiceStatusIdByString } from '../../../constants/variables'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -153,6 +154,7 @@ const PayRunPage = () => {
       acceptInvoices(payRunId, { invoiceIds: checkedRows })
         .then(async () => {
           setCheckedRows([]);
+          await refetchSingleDetails();
           pushNotification('Accepted success', 'success');
         })
         .catch((e) => {
@@ -167,7 +169,7 @@ const PayRunPage = () => {
     if (payRunDetails?.payRunStatusName === 'Draft') {
       submitPayRunForApproval(payRunId)
         .then(async () => {
-          refetchSingleDetails();
+          await refetchSingleDetails();
           pushNotification('Pay Run submitted for approval', 'success');
         })
         .catch((e) => {
@@ -176,7 +178,7 @@ const PayRunPage = () => {
     } else {
       approvePayRunForPayment(payRunId)
         .then(async () => {
-          refetchSingleDetails();
+          await refetchSingleDetails();
           pushNotification('Pay Run approved', 'success');
         })
         .catch((e) => {
@@ -190,18 +192,18 @@ const PayRunPage = () => {
     if (payRunDetails?.payRunStatusName === 'Draft') {
       deleteDraftPayRun(payRunId)
         .then(async () => {
-          refetchSingleDetails();
+          await refetchSingleDetails();
           pushNotification('Pay Run draft deleted', 'success');
           router.replace('/payments/pay-runs');
         })
-        .catch(() => {
-          refetchSingleDetails();
+        .catch(async () => {
+          await refetchSingleDetails();
           pushNotification('Can not delete Pay Run draft');
         });
     } else {
       kickPayRunBackToDraft(payRunId)
         .then(async () => {
-          refetchSingleDetails();
+          await refetchSingleDetails();
           pushNotification('Pay Run kick back success', 'success');
         })
         .catch(() => {
@@ -271,6 +273,11 @@ const PayRunPage = () => {
     },
     invoiceCheckbox: {
       type: 'checkbox',
+      getComponent: (item) => {
+        if(item.invoiceStatusId === invoiceStatusIdByString.accepted) {
+          return <div className='table__row-item' />
+        }
+      },
       onChange: (value, item) => onCheckRow(item.invoiceId),
       getValue: (value, item) => !!checkedRows.find((invoiceId) => String(invoiceId) === String(item.invoiceId)),
     },
@@ -283,12 +290,13 @@ const PayRunPage = () => {
         const statusItem = invoiceStatuses.find((status) => status.statusId === invoiceStatusId);
         const statusClass = statusItem ? ` ${statusItem.statusName.toLowerCase()}` : '';
         const payRunStatusApprovedClass = isPayRunStatusApproved ? ' disable' : '';
+        const filteredInvoiceStatuses = invoiceStatuses.filter(status => status.statusId !== invoiceStatusId);
         return (
           <CustomDropDown
             onlyEmptyText
             onOptionSelect={(value) => changeInvoiceStatus(value, item)}
             key={invoiceId}
-            options={invoiceStatuses}
+            options={filteredInvoiceStatuses}
             className={`table__row-item table__row-item-status${statusClass}${payRunStatusApprovedClass}`}
             fields={{
               value: 'statusId',
