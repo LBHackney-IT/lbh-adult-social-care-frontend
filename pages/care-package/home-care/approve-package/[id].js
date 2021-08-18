@@ -1,10 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
-import {
-  getHomeCarePackageDetailsForBrokerage,
-  getHomeCareServices,
-  getHomeCareTimeSlotShifts,
-} from '../../../../api/CarePackages/HomeCareApi';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import HomeCareApprovalTitle from '../../../../components/HomeCare/HomeCareApprovalTitle';
 import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
@@ -16,6 +11,7 @@ import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
 import { PERSONAL_CARE_MODE } from '../../../../service/homeCarePickerHelper';
 import { getServiceTypeCareTimes } from '../../../../service/homeCareServiceHelper';
+import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
 
 const approvalHistoryEntries = [
   {
@@ -36,48 +32,22 @@ const approvalHistoryEntries = [
   },
 ];
 
-export const getServerSideProps = withSession(async ({ req, res }) => {
+export const getServerSideProps = withSession(({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
 
-  const data = {
-    errorData: [],
-  };
-
-  try {
-    // Call to api to get package
-    data.homeCareServices = await getHomeCareServices();
-  } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
-  }
-
-  try {
-    // Get home care time shifts
-    data.homeCareTimeShiftsData = await getHomeCareTimeSlotShifts();
-  } catch (error) {
-    data.errorData.push(`Retrieve home care time shift details failed. ${error.message}`);
-  }
-
-  return { props: { ...data, approvalHistoryEntries } };
+  return { props: {} };
 });
 
 // eslint-disable-next-line no-unused-vars,no-shadow
-const HomeCareApprovePackage = ({ approvalHistoryEntries, homeCareTimeShiftsData, homeCareServices }) => {
+const HomeCareApprovePackage = () => {
   // Route
   const router = useRouter();
   const homeCarePackageId = router.query.id;
 
-  // State
-  const [packageData, setPackageData] = useState(undefined);
-
-  // On load retrieve package
-  useEffect(() => {
-    if (!packageData) {
-      (async function retrieveData() {
-        setPackageData(await getHomeCarePackageDetailsForBrokerage(homeCarePackageId));
-      })();
-    }
-  }, [homeCarePackageId, packageData]);
+  const { data: homeCareTimeShiftsData } = useHomeCareApi.getAllTimeShiftSlots();
+  const { data: homeCareServices } = useHomeCareApi.getAllServices();
+  const { data: packageData } = useHomeCareApi.detailsForBrokerage(homeCarePackageId);
 
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
 

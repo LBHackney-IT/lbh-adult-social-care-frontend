@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import { selectBrokerage, getBrokerageSuccess } from '../../../../reducers/brokerageReducer';
 import { getUserSession, uniqueID } from '../../../../service/helpers';
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
 import Layout from '../../../../components/Layout/Layout';
@@ -9,8 +8,6 @@ import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Util
 import {
   changeDayCarePackageStatus,
   createDayCareBrokerageInfo,
-  getDayCareBrokerageStages,
-  getDayCarePackageDetailsForBrokerage,
 } from '../../../../api/CarePackages/DayCareApi';
 import { getInitialPackageReclaim } from '../../../../api/Utils/CommonOptions';
 import {
@@ -18,108 +15,73 @@ import {
   mapDayCarePackageDetailsForBrokerage,
   mapDayCareStageOptions,
 } from '../../../../api/Mappers/DayCareMapper';
-import { getSupplierList } from '../../../../api/CarePackages/SuppliersApi';
 import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 import PackagesDayCare from '../../../../components/packages/day-care';
-
 import withSession from '../../../../lib/session';
 import PackageHeader from '../../../../components/CarePackages/PackageHeader';
+import useDayCareApi from '../../../../api/SWR/useDayCareApi';
+import { addNotification } from '../../../../reducers/notificationsReducer';
+import useSuppliersApi from '../../../../api/SWR/useSuppliersApi'
 
 // start before render
-export const getServerSideProps = withSession(async ({ req, res, query: { id: dayCarePackageId } }) => {
+export const getServerSideProps = withSession(({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
 
-  const data = {
-    errorData: [],
-  };
+  return { props: {} };
+});
 
-  try {
-    // Call to api to get package
-    const dayCarePackage = await getDayCarePackageDetailsForBrokerage(dayCarePackageId);
-    data.dayCarePackage = dayCarePackage;
+const DayCareBrokering = () => {
+  const router = useRouter();
+  const dayCareId = router.query.id;
+  const dispatch = useDispatch();
+  const [tab, setTab] = useState('approvalHistory');
+  const [summaryData, setSummaryData] = useState([]);
+  const [packagesReclaimed, setPackagesReclaimed] = useState([]);
+  const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
+  const [opportunityEntries, setOpportunityEntries] = useState([]);
+  const [daysSelected, setDaysSelected] = useState([]);
+  const [clientDetails, setClientDetails] = useState([]);
+
+  const { data: dayCarePackage } = useDayCareApi.detailsForBrokerage(dayCareId);
+  const { data: stageOptions } = useDayCareApi.brokerAgeStages();
+  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
+
+  useEffect(() => {
+    if(!dayCarePackage) return;
 
     const { newApprovalHistoryItems, newOpportunityEntries, currentDaysSelected } =
       mapDayCarePackageDetailsForBrokerage(dayCarePackage);
 
-    data.approvalHistoryEntries = [...newApprovalHistoryItems];
-    data.opportunityEntries = [...newOpportunityEntries];
-    data.clientDetails = dayCarePackage.clientDetails;
-    data.daysSelected = [...currentDaysSelected];
-  } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
-  }
+    setApprovalHistoryEntries(newApprovalHistoryItems);
+    setOpportunityEntries(newOpportunityEntries);
+    setOpportunityEntries(newOpportunityEntries);
+    setClientDetails(dayCarePackage.clientDetails);
+    setDaysSelected(currentDaysSelected);
+  }, [dayCarePackage]);
 
-  return { props: { ...data } };
-});
-
-const DayCareBrokering = ({
-  approvalHistoryEntries,
-  opportunityEntries,
-  clientDetails,
-  daysSelected,
-  dayCarePackage,
-  errorData,
-}) => {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const [errors, setErrors] = useState(errorData);
-  const brokerage = useSelector(selectBrokerage);
-  const [tab, setTab] = useState('approvalHistory');
-  const [summaryData, setSummaryData] = useState([]);
-  const [packagesReclaimed, setPackagesReclaimed] = useState([]);
-  const [supplierOptions, setSupplierOptions] = useState([]);
-  const [stageOptions, setStageOptions] = useState([]);
-
-  useEffect(() => {
-    if (!supplierOptions.length || supplierOptions.length === 1) retrieveSupplierOptions();
-    if (!stageOptions.length || stageOptions.length === 1) retrieveDayCareBrokerageStages();
-  }, [supplierOptions, stageOptions]);
-
-  useEffect(() => {
-    dispatch(getBrokerageSuccess({ type: 'dayCarePackage', dayCarePackage }));
-  }, []);
-
-  const retrieveSupplierOptions = () => {
-    getSupplierList()
-      .then((response) => {
-        setSupplierOptions(mapBrokerageSupplierOptions(response));
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve supplier options failed. ${error.message}`]);
-      });
-  };
-
-  const retrieveDayCareBrokerageStages = () => {
-    getDayCareBrokerageStages()
-      .then((response) => {
-        setStageOptions(mapDayCareStageOptions(response));
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve day care brokerage stages failed. ${error.message}`]);
-      });
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
   };
 
   const createBrokerageInfo = (dayCarePackageId, brokerageInfoForCreation) => {
     createDayCareBrokerageInfo(dayCarePackageId, brokerageInfoForCreation)
       .then(() => {
-        alert('Package saved.');
+        pushNotification('Package saved', 'success');
         router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Create brokerage info failed. ${error.message}`);
-        setErrors([...errors, `Create brokerage info failed. ${error.message}`]);
+        pushNotification(error);
       });
   };
 
   const changePackageBrokeringStatus = (dayCarePackageId, brokeringStatusId) => {
     changeDayCarePackageStatus(dayCarePackageId, brokeringStatusId)
       .then(() => {
-        alert('Status changed.');
+        pushNotification('Status changed');
       })
       .catch((error) => {
-        alert(`Change brokerage status failed. ${error.message}`);
-        setErrors([...errors, `Change package status failed. ${error.message}`]);
+        pushNotification(error);
       });
   };
 
@@ -139,11 +101,11 @@ const DayCareBrokering = ({
     setPackagesReclaimed(newPackage);
   };
 
-  const changeTab = (tab) => {
-    if (tab === 'packageDetails') {
+  const changeTab = (newTab) => {
+    if (newTab === 'packageDetails') {
       setSummaryData(getHomeCareSummaryData());
     }
-    setTab(tab);
+    setTab(newTab);
   };
 
   return (
@@ -168,13 +130,13 @@ const DayCareBrokering = ({
         removePackageReclaim={removePackageReclaim}
         packagesReclaimed={packagesReclaimed}
         changePackageReclaim={changePackageReclaim}
-        brokerage={brokerage}
+        brokerage={dayCarePackage?.dayCarePackage}
         changeTab={changeTab}
         summaryData={summaryData}
         approvalHistory={approvalHistoryEntries}
         dayCarePackage={dayCarePackage}
         supplierOptions={supplierOptions}
-        stageOptions={stageOptions}
+        stageOptions={mapDayCareStageOptions(stageOptions)}
         dayCareSummary={{
           opportunityEntries,
           needToAddress: dayCarePackage?.packageDetails?.needToAddress,

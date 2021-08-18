@@ -25,18 +25,17 @@ import Table from '../../../components/Table';
 import CustomDropDown from '../../../components/CustomDropdown';
 import { currency } from '../../../constants/strings';
 import PayRunCollapsedContent from '../../../components/PayRuns/PayRunCollapsedContent';
-import {
-  useInvoicePaymentStatuses,
-  usePaymentDepartments,
-} from '../../../api/SWR';
+import { useInvoicePaymentStatuses, usePaymentDepartments } from '../../../api/SWR';
 import {
   usePayRunSummaryInsights,
   useSinglePayRunDetails,
   useUniquePayRunPackageTypes,
-  useUniquePayRunSuppliers
+  useUniquePayRunSuppliers,
 } from '../../../api/SWR/transactions/payrun/usePayRunApi';
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
 import { sortArray } from '../../../api/Utils/FuncUtils';
+import PopupDownloadCEDER from '../../../components/Payments/PopupDownloadCEDER';
+import { invoiceStatusIdByString } from '../../../constants/variables';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -71,7 +70,9 @@ const PayRunPage = () => {
   const [popupTypes] = useState({
     createPayRun: 'create-pay-run',
     holdPayments: 'hold-payment',
+    exportPaymentFile: 'export-payment-file',
   });
+  // const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [invoice, setInvoice] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -83,7 +84,7 @@ const PayRunPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState({});
   const [requestFilters, setRequestFilters] = useState({
-    ...initialFilters
+    ...initialFilters,
   });
   const [pathname] = useState(`/payments/pay-runs/${id}`);
   const [date, setDate] = useState(new Date());
@@ -93,16 +94,22 @@ const PayRunPage = () => {
 
   const { data: paymentDepartments } = usePaymentDepartments();
   const { data: packageTypes } = useUniquePayRunPackageTypes(id);
-  const { data: { data: suppliers } } = useUniquePayRunSuppliers(id);
+  const {
+    data: { data: suppliers },
+  } = useUniquePayRunSuppliers(id);
   const { data: invoiceStatuses } = useInvoicePaymentStatuses();
-  const { data : levelInsights } = usePayRunSummaryInsights(id)
-  const { mutate: refetchSingleDetails , data : { invoices, payRunDetails } } = useSinglePayRunDetails({
+  const { data: levelInsights } = usePayRunSummaryInsights(id);
+
+  const {
+    mutate: refetchSingleDetails,
+    data: { invoices, payRunDetails },
+  } = useSinglePayRunDetails({
     payRunId: id,
     pageNumber,
     serviceUserId: requestFilters?.serviceUser?.id,
     invoiceStatusId: requestFilters?.status,
     invoiceNo: requestFilters?.invoiceNo,
-    supplierId: requestFilters?.supplier?.value,
+    supplierId: requestFilters?.supplier?.id,
     packageTypeId: requestFilters?.type,
     dateFrom: requestFilters?.dateFrom?.getTime && requestFilters.dateFrom.toJSON(),
     dateTo: requestFilters?.dateTo?.getTime && requestFilters.dateTo.toJSON(),
@@ -148,6 +155,7 @@ const PayRunPage = () => {
       acceptInvoices(payRunId, { invoiceIds: checkedRows })
         .then(async () => {
           setCheckedRows([]);
+          await refetchSingleDetails();
           pushNotification('Accepted success', 'success');
         })
         .catch((e) => {
@@ -159,19 +167,19 @@ const PayRunPage = () => {
 
   const submitPayRun = () => {
     const { payRunId } = payRunDetails;
-    if (payRunDetails.payRunStatusName === 'Draft') {
+    if (payRunDetails?.payRunStatusName === 'Draft') {
       submitPayRunForApproval(payRunId)
         .then(async () => {
-          refetchSingleDetails()
+          await refetchSingleDetails();
           pushNotification('Pay Run submitted for approval', 'success');
         })
         .catch((e) => {
-          pushNotification(e || 'Can not submit for approve')
+          pushNotification(e || 'Can not submit for approve');
         });
     } else {
       approvePayRunForPayment(payRunId)
         .then(async () => {
-          refetchSingleDetails();
+          await refetchSingleDetails();
           pushNotification('Pay Run approved', 'success');
         })
         .catch((e) => {
@@ -182,21 +190,21 @@ const PayRunPage = () => {
 
   const onDeletePayRunDraft = () => {
     const { payRunId } = payRunDetails;
-    if (payRunDetails.payRunStatusName === 'Draft') {
+    if (payRunDetails?.payRunStatusName === 'Draft') {
       deleteDraftPayRun(payRunId)
         .then(async () => {
-          refetchSingleDetails()
+          await refetchSingleDetails();
           pushNotification('Pay Run draft deleted', 'success');
           router.replace('/payments/pay-runs');
         })
-        .catch(() => {
-          refetchSingleDetails()
+        .catch(async () => {
+          await refetchSingleDetails();
           pushNotification('Can not delete Pay Run draft');
         });
     } else {
       kickPayRunBackToDraft(payRunId)
         .then(async () => {
-          refetchSingleDetails()
+          await refetchSingleDetails();
           pushNotification('Pay Run kick back success', 'success');
         })
         .catch(() => {
@@ -206,15 +214,14 @@ const PayRunPage = () => {
   };
 
   const sortInvoices = () => {
-    if(!invoices?.invoices?.length) return;
+    if (!invoices?.invoices) return;
     const data = invoices.invoices.slice();
     setSortedInvoices({ ...invoices, invoices: sortArray(data, sort) });
-  }
+  };
 
   useEffect(() => {
-    sortInvoices()
+    sortInvoices();
   }, [sort, invoices]);
-
 
   const holdInvoice = () => {
     const holdReason = {
@@ -224,12 +231,13 @@ const PayRunPage = () => {
     holdInvoicePayment(id, invoice.invoiceId, holdReason)
       .then(async () => {
         closeCreatePayRun();
+        refetchSingleDetails();
         pushNotification('Hold invoice success', 'success');
       })
       .catch((e) => {
         pushNotification(e || 'Hold invoice fail');
       });
-  }
+  };
 
   const changeInvoiceStatus = ({ statusName }, item) => {
     if (statusName === 'Accepted') {
@@ -239,7 +247,7 @@ const PayRunPage = () => {
           pushNotification('Accept invoice success', 'success');
         })
         .catch((e) => {
-          pushNotification(e || 'Accept invoice fail')
+          pushNotification(e || 'Accept invoice fail');
         });
     } else if (statusName === 'Held') {
       setInvoice(item);
@@ -248,13 +256,15 @@ const PayRunPage = () => {
       rejectInvoicePayment(id, item.invoiceId)
         .then(async () => {
           refetchSingleDetails();
-          pushNotification('Accept invoice success', 'success');
+          pushNotification('Reject invoice success', 'success');
         })
         .catch((e) => {
-          pushNotification(e || 'Reject invoice fail')
+          pushNotification(e || 'Reject invoice fail');
         });
     }
   };
+
+  const isPayRunStatusApproved = payRunDetails?.payRunStatusName === 'Approved';
 
   const rowRules = {
     getClassName: (item) => {
@@ -264,6 +274,11 @@ const PayRunPage = () => {
     },
     invoiceCheckbox: {
       type: 'checkbox',
+      getComponent: (item, currentRowRule) => {
+        if (item.invoiceStatusId === invoiceStatusIdByString.accepted) {
+          return <div key={`${item.invoiceId}${currentRowRule}`} className="table__row-item" />;
+        }
+      },
       onChange: (value, item) => onCheckRow(item.invoiceId),
       getValue: (value, item) => !!checkedRows.find((invoiceId) => String(invoiceId) === String(item.invoiceId)),
     },
@@ -274,15 +289,16 @@ const PayRunPage = () => {
       getComponent: (item) => {
         const { invoiceStatusId, invoiceId } = item;
         const statusItem = invoiceStatuses.find((status) => status.statusId === invoiceStatusId);
+        const statusClass = statusItem ? ` ${statusItem.statusName.toLowerCase()}` : '';
+        const payRunStatusApprovedClass = isPayRunStatusApproved ? ' disable' : '';
+        const filteredInvoiceStatuses = invoiceStatuses.filter((status) => status.statusId !== invoiceStatusId);
         return (
           <CustomDropDown
             onlyEmptyText
             onOptionSelect={(value) => changeInvoiceStatus(value, item)}
             key={invoiceId}
-            options={invoiceStatuses}
-            className={`table__row-item table__row-item-status${
-              statusItem ? ` ${statusItem.statusName.toLowerCase()}` : ''
-            }`}
+            options={filteredInvoiceStatuses}
+            className={`table__row-item table__row-item-status${statusClass}${payRunStatusApprovedClass}`}
             fields={{
               value: 'statusId',
               text: 'statusName',
@@ -295,20 +311,44 @@ const PayRunPage = () => {
     },
   };
 
+  const filterCheckedRows = () => {
+    if (sortedInvoices?.invoices?.length === undefined) return [];
+    const filteredCheckedIds = sortedInvoices?.invoices.filter(
+      (rowData) => rowData.invoiceStatusId !== invoiceStatusIdByString.accepted
+    );
+    return filteredCheckedIds.map((invoiceData) => invoiceData.invoiceId);
+  };
+
+  const customCheckedAll = () => {
+    const onlyInvoiceIds = filterCheckedRows();
+    if (checkedRows.length) {
+      if (onlyInvoiceIds.length === checkedRows.length) {
+        return [];
+      }
+
+      return onlyInvoiceIds;
+    }
+    return onlyInvoiceIds;
+  };
+
   const statusOptions = invoiceStatuses.map((item) => ({
     value: item.statusId,
     text: item.statusName,
   }));
 
-  const packageTypeOptions = packageTypes.map(item => ({
+  const packageTypeOptions = packageTypes.map((item) => ({
     value: item.packageTypeId,
     text: item.packageTypeName,
   }));
 
-  const supplierOptions = !suppliers ? [] : suppliers.map(item => ({
-    value: item.supplierId,
-    name: item.supplierName,
-  }));
+  const supplierOptions = !suppliers
+    ? []
+    : suppliers.map((item) => ({
+        value: item.supplierId,
+        name: item.supplierName,
+      }));
+
+  const draftText = payRunDetails?.payRunStatusName === 'Draft' ? 'Submit pay run for approval' : 'Approve for payment';
 
   return (
     <div className="pay-runs pay-run">
@@ -334,8 +374,19 @@ const PayRunPage = () => {
           setDate={setDate}
         />
       )}
+      {openedPopup === popupTypes.exportPaymentFile && (
+        <PopupDownloadCEDER
+          onDownload={() => {
+            pushNotification('Start download payment file', 'warning');
+            setOpenedPopup('');
+            // router.push('/link-to-file')
+          }}
+          closePopup={() => setOpenedPopup('')}
+        />
+      )}
       {!!breadcrumbs.length && <Breadcrumbs className="p-3" values={breadcrumbs} />}
       <PayRunHeader
+        payRunDetails={payRunDetails}
         typeOptions={packageTypeOptions}
         serviceUserOptions={[]}
         filter={() => setRequestFilters(filters)}
@@ -361,7 +412,15 @@ const PayRunPage = () => {
         sortBy={sortBy}
         sorts={sorts}
         canCollapseRows
-        changeAllChecked={setCheckedRows}
+        checkedRule={() => (!checkedRows.length ? false : filterCheckedRows().length === checkedRows.length)}
+        changeAllChecked={() => {
+          const checkedIds = customCheckedAll();
+          if (checkedIds.length) {
+            setCheckedRows(checkedIds);
+          } else {
+            setCheckedRows([]);
+          }
+        }}
       />
       <Pagination
         pathname={pathname}
@@ -372,17 +431,23 @@ const PayRunPage = () => {
         to={invoices?.pagingMetaData?.pageSize}
         totalCount={invoices?.pagingMetaData?.totalCount}
       />
-      <PayRunsLevelInsight
-        firstButton={{
-          text: payRunDetails?.payRunStatusName === 'Draft' ? 'Submit pay run for approval' : 'Approve for payment',
-          onClick: () => submitPayRun(),
-        }}
-        secondButton={{
-          text: payRunDetails?.payRunStatusName === 'Draft' ? 'Delete draft pay run' : 'Kick back',
-          onClick: () => onDeletePayRunDraft(),
-        }}
-        levelInsights={levelInsights}
-      />
+      {payRunDetails && (
+        <PayRunsLevelInsight
+          firstButton={{
+            text: isPayRunStatusApproved ? 'Export payment file' : draftText,
+            onClick: () => (isPayRunStatusApproved ? setOpenedPopup(popupTypes.exportPaymentFile) : submitPayRun()),
+          }}
+          secondButton={
+            !isPayRunStatusApproved
+              ? {
+                  text: payRunDetails?.payRunStatusName === 'Draft' ? 'Delete draft pay run' : 'Kick back',
+                  onClick: () => onDeletePayRunDraft(),
+                }
+              : undefined
+          }
+          levelInsights={levelInsights}
+        />
+      )}
       <HackneyFooterInfo />
     </div>
   );

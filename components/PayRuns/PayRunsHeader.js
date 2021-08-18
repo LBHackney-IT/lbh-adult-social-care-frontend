@@ -8,9 +8,8 @@ const initialFilters = {
   id: '',
   type: '',
   status: '',
-  dateStart: null,
-  dateEnd: null,
-  date: '',
+  dateFrom: null,
+  dateTo: null,
   serviceType: '',
   waitingOn: '',
   serviceUser: '',
@@ -21,7 +20,6 @@ const initialFilters = {
 const PayRunsHeader = ({
   typeOptions = [],
   statusOptions = [],
-  dateOptions = [],
   releaseHolds,
   setOpenedPopup,
   apply,
@@ -69,7 +67,6 @@ const PayRunsHeader = ({
       },
       filtersComponent: (
         <PayRunsFilters
-          dateOptions={dateOptions}
           statusOptions={statusOptions}
           applyFilters={applyFilters}
           hasFields={hasFields}

@@ -11,6 +11,7 @@ const NavClientSummary = ({
   preferredContact = null,
   canSpeakEnglish = null,
   dateOfBirth,
+  age,
   sourcingCare,
   postcode,
 }) => {
@@ -28,23 +29,27 @@ const NavClientSummary = ({
       <div className="is-flex-wrap-wrap">
         {children && <div className="is-5 client-summary-title">{children}</div>}
         <div className="client-prop">
-          <label className="client-fullName">James Kenter</label>
+          <p className="client-fullName">James Kenter</p>
         </div>
         <div className="client-prop">
-          <label>HACKNEY ID</label>
+          <p>HACKNEY ID:</p>
           <div>{hackneyId}</div>
         </div>
         <div className="client-prop">
-          <label>DOB</label>
+          <p>Age:</p>
+          <div>{age}</div>
+        </div>
+        <div className="client-prop">
+          <p>DOB:</p>
           <div>{dateOfBirth}</div>
         </div>
         <div className="client-prop">
-          <label>POSTCODE</label>
+          <p>POSTCODE:</p>
           <div>{postcode}</div>
         </div>
         {sourcingCare && (
           <div className="client-prop">
-            <label>WHO IS SOURCING CARE</label>
+            <p>WHO IS SOURCING CARE:</p>
             <Image width="300" height="52" src="/images/icons/hackney_logo.png" alt="" />
           </div>
         )}
@@ -55,11 +60,11 @@ const NavClientSummary = ({
               {`${packagesCount > 1 ? 'Packages' : 'Package'} to action`}
             </p>
             <div className="client-prop">
-              <label>PREFERRED CONTACT</label>
+              <p>PREFERRED CONTACT:</p>
               <div>{preferredContact}</div>
             </div>
             <div className="client-prop">
-              <label>CAN SPEAK ENGLISH</label>
+              <p>CAN SPEAK ENGLISH:</p>
               <div>{canSpeakEnglish}</div>
             </div>
           </div>

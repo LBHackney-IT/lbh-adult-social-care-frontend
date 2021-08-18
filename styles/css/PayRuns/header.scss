@@ -1,3 +1,13 @@
+.pay-runs__new-pay_container {
+  display: flex;
+  flex-direction: column;
+
+  .subtitle {
+    font-weight: 100;
+    font-size: 1.6rem;
+  }
+}
+
 .pay-runs__new-pay {
   display: flex;
   flex-wrap: wrap;
@@ -58,7 +68,6 @@
       width: 220px;
       padding-left: 10px;
       padding-right: 10px;
-
       span {
         font-size: 14px;
       }
@@ -140,11 +149,5 @@
 
   &__indicators svg {
     margin: 0 10px;
-  }
-}
-
-.held-payments__tab-class {
-  .pay-runs__filters {
-    justify-content: space-between;
   }
 }

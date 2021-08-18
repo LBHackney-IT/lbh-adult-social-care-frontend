@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Breadcrumbs from '../../../components/Breadcrumbs';
-import BillsTable from '../../../components/Bills/BillsTable';
 import Pagination from '../../../components/Payments/Pagination';
 import { payRunTableData } from '../../../testData/testDataPayRuns';
 import BillsHeader from '../../../components/Bills/BillsHeader';
@@ -10,6 +9,7 @@ import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import { PAYMENTS_BILLS_ROUTE } from '../../../routes/RouteConstants';
+import Table from '../../../components/Table'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -110,18 +110,24 @@ const BillPage = () => {
         actionButtonText={headerOptions.actionButtonText}
         clickActionButton={headerOptions.clickActionButton}
       />
-      <BillsTable
+
+      // Todo format table with correct data
+      <Table
         rows={payRunTableData}
-        careType="Residential"
-        isStatusDropDown
+        fields={{
+          id: 'billsId',
+          serviceUserName: 'serviceUserName',
+          invoiceId: 'invoiceId',
+          packageTypeName: 'packageTypeName',
+          paidCount: 'paidCount',
+          statusName: 'statusName',
+        }}
         checkedRows={checkedRows}
         setCheckedRows={onCheckRow}
-        isIgnoreId
-        canCollapseRows
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} pageSize={10} totalCount={30} />
+      <Pagination pathname={pathname} actionButton={actionButton} pageSize={10} totalCount={30} />
       <HackneyFooterInfo />
     </div>
   );

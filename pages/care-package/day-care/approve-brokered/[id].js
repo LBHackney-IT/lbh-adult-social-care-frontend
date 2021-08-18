@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import Layout from '../../../../components/Layout/Layout';
@@ -13,62 +14,48 @@ import {
   dayCarePackageApproveCommercials,
   dayCarePackageCommercialsRequestClarification,
   dayCarePackageRejectCommercials,
-  getDayCarePackageApprovalDetails,
 } from '../../../../api/CarePackages/DayCareApi';
 import withSession from '../../../../lib/session';
 import { getErrorResponse, getUserSession } from '../../../../service/helpers';
 import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
+import useDayCareApi from '../../../../api/SWR/useDayCareApi';
+import { addNotification } from '../../../../reducers/notificationsReducer';
+import { formatApprovalHistory, formatDayCareOpportunities } from '../../../../service/formatItems'
 
 // get server side props before render
-export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
+export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
 
-  const data = {
-    errorData: [],
-  };
-  try {
-    const dayCarePackage = await getDayCarePackageApprovalDetails(residentialCarePackageId);
-    // Update approve-package state
-    const newApprovalHistoryItems = dayCarePackage.packageApprovalHistory.map((historyItem) => ({
-      eventDate: new Date(historyItem.dateCreated).toLocaleDateString('en-GB'),
-      eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
-      eventSubMessage: historyItem.logSubText,
-    }));
-
-    const newOpportunityEntries = dayCarePackage.packageDetails.dayCareOpportunities.map((opportunityItem) => ({
-      id: opportunityItem.dayCarePackageOpportunityId,
-      howLongValue: opportunityItem.howLong.optionName,
-      timesPerMonthValue: opportunityItem.howManyTimesPerMonth.optionName,
-      needToAddress: opportunityItem.opportunitiesNeedToAddress,
-    }));
-
-    data.approvalHistoryEntries = newApprovalHistoryItems.slice();
-    data.opportunityEntries = newOpportunityEntries.slice();
-    data.daysSelected = getSelectedDate(dayCarePackage);
-    data.dayCarePackage = dayCarePackage;
-  } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
-  }
-
-  return { props: { data } };
+  return { props: {} };
 });
 
-const DayCareApproveBrokered = ({
-  dayCarePackage,
-  daysSelected,
-  approvalHistoryEntries,
-  opportunityEntries,
-  errorData,
-}) => {
+const DayCareApproveBrokered = () => {
   const router = useRouter();
   const dayCarePackageId = router.query.id;
-  const [errors, setErrors] = useState(errorData);
+  const dispatch = useDispatch();
+  const [daysSelected, setDaysSelected] = useState([]);
+  const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
+  const [opportunityEntries, setOpportunityEntries] = useState([]);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
   const [errorFields, setErrorFields] = useState({
     requestInformationText: '',
   });
+
+  const { data: dayCarePackage } = useDayCareApi.approvalDetails(dayCarePackageId);
+
+  useEffect(() => {
+    if(dayCarePackage) {
+      const newApprovalHistoryItems = formatApprovalHistory(dayCarePackage?.packageApprovalHistory);
+      setApprovalHistoryEntries(newApprovalHistoryItems);
+
+      const newOpportunityEntries = formatDayCareOpportunities(dayCarePackage?.packageDetails?.dayCareOpportunities);
+      setOpportunityEntries(newOpportunityEntries);
+      setDaysSelected(getSelectedDate(dayCarePackage));
+    }
+
+  }, [dayCarePackage]);
 
   const changeErrorFields = (field) => {
     setErrorFields({
@@ -84,15 +71,16 @@ const DayCareApproveBrokered = ({
     });
   };
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }))
+  }
+
   const handleRejectPackage = () => {
     dayCarePackageRejectCommercials(dayCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
-      .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
-      });
+      .catch((error) => pushNotification(error));
   };
   const handleRequestMoreInformation = () => {
     dayCarePackageCommercialsRequestClarification(dayCarePackageId, requestInformationText)
@@ -101,9 +89,8 @@ const DayCareApproveBrokered = ({
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        pushNotification(error);
         updateErrorFields(error);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
   const handleApprovePackageCommercials = () => {
@@ -111,10 +98,7 @@ const DayCareApproveBrokered = ({
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
-      .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
-      });
+      .catch((error) => pushNotification(error));
   };
   return (
     <Layout headerTitle="DAY CARE APPROVAL">

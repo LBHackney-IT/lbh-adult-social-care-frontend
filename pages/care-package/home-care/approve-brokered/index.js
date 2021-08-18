@@ -11,7 +11,7 @@ import HomeCarePackageDetails from '../../../../components/HomeCare/HomeCarePack
 import TextArea from '../../../../components/TextArea';
 import { getUserSession } from '../../../../service/helpers';
 import withSession from '../../../../lib/session';
-import { getHomeCareServices, getHomeCareTimeSlotShifts } from '../../../../api/CarePackages/HomeCareApi';
+import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
 
 const approvalHistoryEntries = [
   {
@@ -51,24 +51,19 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
   };
 
   try {
-    // Call to api to get package
-    data.homeCareServices = await getHomeCareServices();
-  } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
-  }
-
-  try {
     // Get home care time shifts
-    data.homeCareTimeShiftsData = await getHomeCareTimeSlotShifts();
   } catch (error) {
     data.errorData.push(`Retrieve home care time shift details failed. ${error.message}`);
   }
 
-  return { props: { ...data, approvalHistoryEntries } };
+  return { props: { ...data } };
 });
 
 // eslint-disable-next-line no-shadow
-const HomeCareApproveBrokered = ({ approvalHistoryEntries }) => {
+const HomeCareApproveBrokered = () => {
+  const { data: homeCareServices } = useHomeCareApi.getAllServices();
+  const { data: homeCareTimeShiftsData } = useHomeCareApi.getAllTimeShiftSlots();
+
   // eslint-disable-next-line no-unused-vars
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
@@ -16,7 +16,6 @@ import { Button } from '../../../components/Button';
 import {
   createNursingCarePackage,
   createNursingCarePackageReclaim,
-  getTypeOfNursingHomeOptions,
 } from '../../../api/CarePackages/NursingCareApi';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import { addNotification } from '../../../reducers/notificationsReducer';
@@ -25,6 +24,7 @@ import { getLoggedInUser, getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
 import { selectUser } from '../../../reducers/userReducer';
+import useNursingCareApi from '../../../api/SWR/useNursingCareApi'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -70,14 +70,13 @@ const NursingCare = () => {
   hasDischargePackage = isTrueParse(hasDischargePackage);
 
   // State
-  const [careHomeTypes, setCareHomeTypes] = useState([]);
   const [errors, setErrors] = useState([]);
   const [needToAddress, setNeedToAddress] = useState(undefined);
   const [selectedNursingHomeType, setSelectedNursingHomeType] = useState(1);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(getInitialAdditionalNeedsArray());
-
   const [additionalNeedsEntriesErrors, setAdditionalNeedsEntriesErrors] = useState([]);
   const [packageReclaimedError, setPackageReclaimedError] = useState([]);
+  const { data: careHomeTypesOptions } = useNursingCareApi.typeOfNursingCareHomes();
 
   const dispatch = useDispatch();
 
@@ -88,26 +87,6 @@ const NursingCare = () => {
 
   // Package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
-
-  const retrieveTypeOfNursingHomeOptions = () => {
-    getTypeOfNursingHomeOptions()
-      .then((res) => {
-        const options = res.map((option) => ({
-          text: option.typeOfCareHomeName,
-          value: option.typeOfCareHomeId,
-        }));
-        setCareHomeTypes(options);
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve nursing care home type options failed. ${error.message}`]);
-      });
-  };
-
-  useEffect(() => {
-    if (careHomeTypes.length === 0 || careHomeTypes.length === 1) {
-      retrieveTypeOfNursingHomeOptions();
-    }
-  }, [careHomeTypes]);
 
   const formIsValid = () => {
     const defaultErrors = fieldValidator([
@@ -194,9 +173,13 @@ const NursingCare = () => {
       packageReclaims,
     };
 
+    const pushNotification = (text, className = 'error') => {
+      dispatch(addNotification({ text, className }));
+    };
+
     createNursingCarePackage(nursingCarePackageToCreate)
       .catch((error) => {
-        dispatch(addNotification({ text: `Create package failed. ${error.message ?? ''}` }));
+        pushNotification(error);
         setErrors([...errors, `Create package failed. ${error.message}`]);
         throw new Error();
       })
@@ -215,12 +198,12 @@ const NursingCare = () => {
         return Promise.all(requests);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Create reclaims failed. ${error.message ?? ''}` }));
+        pushNotification(error);
         setErrors([...errors, `Create reclaims failed. ${error.message}`]);
       })
       .then(() => {
         router.push(`${CARE_PACKAGE_ROUTE}`);
-        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
+        pushNotification('Package saved.', 'success');
       });
   };
 
@@ -249,7 +232,7 @@ const NursingCare = () => {
           <Dropdown
             initialText={null}
             label="Type of nursing home"
-            options={careHomeTypes}
+            options={careHomeTypesOptions}
             selectedValue={selectedNursingHomeType}
             error={errorFields.selectedNursingHomeType}
             setError={() => changeErrorField('selectedNursingHomeType')}
