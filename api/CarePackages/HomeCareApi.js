@@ -12,24 +12,31 @@ const HOME_CARE_PACKAGE_SLOTS_URL = `${BASE_URL}/v1/homeCarePackageSlots`;
 const HOME_CARE_TIME_SLOT_SHIFTS_URL = `${BASE_URL}/v1/timeSlotShifts`;
 
 // Home care packages
-const createHomeCarePackage = async (startDate, endDate, isImmediate, isS117, isFixedPeriod) => {
+const createHomeCarePackage = async ({
+  startDate,
+  endDate,
+  isImmediate,
+  isS117,
+  isFixedPeriod,
+  creatorId,
+  clientId,
+  packageReclaims,
+}) => {
   try {
     const response = await axios
       .post(
         HOME_CARE_URL,
         {
-          IsThisuserUnderS117: isS117,
-          IsThisAnImmediateService: isImmediate,
-          IsFixedPeriod: isFixedPeriod,
-          IsOngoingPeriod: !isFixedPeriod,
-          StartDate: startDate ? format(new Date(startDate), UTC_DATE_FORMAT) : '',
-          EndDate: endDate ? format(new Date(endDate), UTC_DATE_FORMAT) : '',
-          CreatorId: 0,
-          UpdatorId: 0,
-          // TODO client
-          ClientId: '694f4adc-f2d8-4422-97c8-08d9057550ea',
-          // TODO status
-          StatusId: 1,
+          isThisClientUnderS117: isS117,
+          isThisAnImmediateService: isImmediate,
+          isFixedPeriod,
+          isOngoingPeriod: !isFixedPeriod,
+          startDate: startDate ? format(new Date(startDate), UTC_DATE_FORMAT) : '',
+          endDate: endDate ? format(new Date(endDate), UTC_DATE_FORMAT) : '',
+          creatorId,
+          clientId,
+          statusId: 1,
+          packageReclaims,
         }
       )
     console.log(response);
