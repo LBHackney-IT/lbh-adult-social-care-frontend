@@ -109,7 +109,7 @@ const PayRunPage = () => {
   });
 
   const [breadcrumbs] = useState([
-    { text: 'Payments', onClick: () => router.push('/payments/pay-runs') },
+    { text: 'Pay-Runs', onClick: () => router.push('/payments/pay-runs') },
     { text: `Pay Run ${id}` },
   ]);
   const [sort, setSort] = useState({
