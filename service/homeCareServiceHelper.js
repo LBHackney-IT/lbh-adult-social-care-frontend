@@ -41,10 +41,30 @@ const careTimes = [
       { text: '1 hour 45 minutes', value: 6, mins: 105 },
       { text: '2 hours', value: 7, mins: 120 },
     ],
+    secondaryTimes: [
+      { text: 'N/A', value: 0, mins: 0 },
+      { text: '30 minutes', value: 1, mins: 30 },
+      { text: '45 minutes', value: 2, mins: 45 },
+      { text: '1 hour', value: 3, mins: 60 },
+      { text: '1 hour 15 minutes', value: 4, mins: 75 },
+      { text: '1 hour 30 minutes', value: 5, mins: 90 },
+      { text: '1 hour 45 minutes', value: 6, mins: 105 },
+      { text: '2 hours', value: 7, mins: 120 },
+    ],
   },
   {
     serviceTypeId: LIVE_IN_CARE_MODE,
     times: [
+      { text: '30 minutes', value: 1, mins: 30 },
+      { text: '45 minutes', value: 2, mins: 45 },
+      { text: '1 hour', value: 3, mins: 60 },
+      { text: '1 hour 15 minutes', value: 4, mins: 75 },
+      { text: '1 hour 30 minutes', value: 5, mins: 90 },
+      { text: '1 hour 45 minutes', value: 6, mins: 105 },
+      { text: '2 hours', value: 7, mins: 120 },
+    ],
+    secondaryTimes: [
+      { text: 'N/A', value: 0, mins: 0 },
       { text: '30 minutes', value: 1, mins: 30 },
       { text: '45 minutes', value: 2, mins: 45 },
       { text: '1 hour', value: 3, mins: 60 },
@@ -65,21 +85,23 @@ const careTimes = [
       { text: '1 hour 45 minutes', value: 6, mins: 105 },
       { text: '2 hours', value: 7, mins: 120 },
     ],
+    secondaryTimes: [
+      { text: 'N/A', value: 0, mins: 0 },
+      { text: '30 minutes', value: 1, mins: 30 },
+      { text: '45 minutes', value: 2, mins: 45 },
+      { text: '1 hour', value: 3, mins: 60 },
+      { text: '1 hour 15 minutes', value: 4, mins: 75 },
+      { text: '1 hour 30 minutes', value: 5, mins: 90 },
+      { text: '1 hour 45 minutes', value: 6, mins: 105 },
+      { text: '2 hours', value: 7, mins: 120 },
+    ],
   },
 ];
 
 const getServiceTypeCareTimes = (serviceTypeId) => {
-  const careTimeItem = careTimes.find((item) => item.serviceTypeId === serviceTypeId);
-
-  if (serviceTypeId === PERSONAL_CARE_MODE) {
-    return {
-      times: careTimeItem.times,
-      secondaryTimes: careTimeItem.secondaryTimes,
-    };
-  }
-  return {
-    times: careTimeItem.times,
-  };
+  return careTimes.find((item) => {
+    return item.serviceTypeId === serviceTypeId;
+  });
 };
 
 const getServiceTimes = (homeCareServices, selectedServiceTypeId) => {

@@ -33,6 +33,17 @@
   }
 }
 
+@media (max-width: 743px) {
+  .pay-runs__level-insight-cost {
+    flex-basis: 100%;
+    margin-bottom: 20px;
+  }
+
+  .level-insight__bordered {
+    margin-bottom: 20px;
+  }
+}
+
 .level-insight__bordered {
   padding-left: 30px;
   border-left: 1px solid $lbh-gray;
@@ -60,6 +71,19 @@
   display: flex;
   flex-direction: column;
   margin-left: auto;
+
+  @include media-tablet-down {
+    margin-top: 10px;
+    flex-basis: 100%;
+
+    & > button {
+      width: 200px;
+
+      &:first-child {
+        margin-right: 10px;
+      }
+    }
+  }
 
   button {
     &:first-of-type {

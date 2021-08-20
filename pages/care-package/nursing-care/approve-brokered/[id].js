@@ -21,8 +21,9 @@ import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import { getUserSession } from '../../../../service/helpers';
+import { formatCareDatePeriod, getUserSession } from '../../../../service/helpers'
 import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
+import { Button } from '../../../../components/Button'
 
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
   const isRedirect = getUserSession({ req, res });
@@ -125,38 +126,37 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
       });
   };
 
-  return (
-    <Layout headerTitle="NURSING CARE BROKERED">
-      <div className="hackney-text-black font-size-12px">
-        <NursingCareApprovalTitle
-          startDate={nursingCarePackage?.nursingCarePackage.startDate}
-          endDate={
-            nursingCarePackage?.nursingCarePackage.endDate !== null
-              ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
-              : 'Ongoing'
-          }
-        />
-        <ApprovalClientSummary />
+  const datePeriod = formatCareDatePeriod(
+    nursingCarePackage?.nursingCarePackage.startDate,
+    nursingCarePackage?.nursingCarePackage.endDate
+  );
 
-        <div className="columns">
+  return (
+    <Layout
+      clientSummaryInfo={{
+        whoIsSourcing: 'hackney',
+        client: 'James Stephens',
+        title: `Nursing Care (${datePeriod.startDate} - ${datePeriod.endDate})`,
+        hackneyId: '#786288',
+        age: '91',
+        dateOfBirth: '09/12/1972',
+        postcode: 'E9 6EY',
+      }}
+      headerTitle="NURSING CARE BROKERED">
+      <div className="hackney-text-black font-size-12px">
+        <div className="client-summary">
           <ClientSummaryItem
             itemName="STARTS"
-            itemDetail={getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate)}
+            itemDetail={datePeriod.startDate}
           />
           <ClientSummaryItem
             itemName="ENDS"
-            itemDetail={
-              nursingCarePackage?.nursingCarePackage.endDate !== null
-                ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
-                : 'Ongoing'
-            }
+            itemDetail={datePeriod.endDate}
           />
           <ClientSummaryItem itemName="DAYS/WEEK" itemDetail="3" />
           <ClientSummaryItem itemName="RESPITE CARE" itemDetail={hasRespiteCare === true ? 'yes' : 'no'} />
           <ClientSummaryItem itemName="DISCHARGE PACKAGE" itemDetail={hasDischargePackage === true ? 'yes' : 'no'} />
-        </div>
 
-        <div className="columns mt-4 flex flex-wrap">
           <ClientSummaryItem
             itemName="IMMEDIATE / RE-ENABLEMENT PACKAGE"
             itemDetail={isThisAnImmediateService === true ? 'Immediate' : 'Re-enablement'}
@@ -166,35 +166,29 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
             itemName="TYPE OF STAY"
             itemDetail={!stringIsNullOrEmpty(typeOfStayOptionName) ? typeOfStayOptionName : ''}
           />
-          <div className="column" />
-          <div className="column" />
+          <ClientSummaryItem />
+          <ClientSummaryItem />
         </div>
 
-        <div className="columns">
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-light-green-box"
-              title="COST OF CARE / WK"
-              cost={nursingCarePackage?.costOfCare}
-              costType="ACTUAL"
-            />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-light-green-box"
-              title="ANP / WK"
-              cost={nursingCarePackage?.costOfAdditionalNeeds}
-              costType="ACTUAL"
-            />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-green-box"
-              title="TOTAL / WK"
-              cost={nursingCarePackage?.totalPerWeek}
-              costType="ACTUAL"
-            />
-          </div>
+        <div className="package-cost-box__group mb-5">
+          <PackageCostBox
+            boxClass="hackney-package-cost-light-green-box"
+            title="COST OF CARE / WK"
+            cost={nursingCarePackage?.costOfCare}
+            costType="ACTUAL"
+          />
+          <PackageCostBox
+            boxClass="hackney-package-cost-light-green-box"
+            title="ANP / WK"
+            cost={nursingCarePackage?.costOfAdditionalNeeds}
+            costType="ACTUAL"
+          />
+          <PackageCostBox
+            boxClass="hackney-package-cost-green-box"
+            title="TOTAL / WK"
+            cost={nursingCarePackage?.totalPerWeek}
+            costType="ACTUAL"
+          />
         </div>
 
         <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
@@ -204,12 +198,8 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
             <div className="mt-4 mb-1">
               <TitleHeader>Package Details</TitleHeader>
               <NursingCareSummary
-                startDate={nursingCarePackage?.nursingCarePackage.startDate}
-                endDate={
-                  nursingCarePackage?.nursingCarePackage.endDate !== null
-                    ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
-                    : 'Ongoing'
-                }
+                startDate={datePeriod.startDate}
+                endDate={datePeriod.endDate}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
                 needToAddress={nursingCarePackage?.nursingCarePackage.needToAddress}
@@ -218,35 +208,20 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
           </div>
         </div>
 
-        <div className="columns">
-          <div className="column">
-            <div className="level mt-3">
-              <div className="level-left" />
-              <div className="level-right">
-                <div className="level-item  mr-2">
-                  <button type="button" className="button hackney-btn-light" onClick={handleRejectPackage}>
-                    Deny
-                  </button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button
-                    type="button"
-                    onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
-                    className="button hackney-btn-light"
-                  >
-                    {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
-                  </button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button type="button" className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
-                    Approve Commercials
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className='button-group is-justify-content-flex-end'>
+          <Button className="gray" onClick={handleRejectPackage}>
+            Deny
+          </Button>
+          <Button
+            onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
+            className="gray"
+          >
+            {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
+          </Button>
+          <Button className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
+            Approve Commercials
+          </Button>
         </div>
-
         {displayMoreInfoForm && (
           <div className="columns">
             <div className="column">

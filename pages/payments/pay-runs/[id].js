@@ -286,7 +286,7 @@ const PayRunPage = () => {
       getValue: (value) => (value ? `${currency.euro}${value}` : '-'),
     },
     invoiceStatusId: {
-      getComponent: (item) => {
+      getComponent: (item, cellValue, columnClass) => {
         const { invoiceStatusId, invoiceId } = item;
         const statusItem = invoiceStatuses.find((status) => status.statusId === invoiceStatusId);
         const statusClass = statusItem ? ` ${statusItem.statusName.toLowerCase()}` : '';
@@ -298,7 +298,7 @@ const PayRunPage = () => {
             onOptionSelect={(value) => changeInvoiceStatus(value, item)}
             key={invoiceId}
             options={filteredInvoiceStatuses}
-            className={`table__row-item table__row-item-status${statusClass}${payRunStatusApprovedClass}`}
+            className={`table__row-item table__row-item-status${statusClass}${payRunStatusApprovedClass}${columnClass}`}
             fields={{
               value: 'statusId',
               text: 'statusName',

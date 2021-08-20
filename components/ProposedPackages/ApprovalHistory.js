@@ -29,7 +29,7 @@ const ApprovalHistory = ({
       client={clientName}
       hackneyId={clientHackneyId}
       age={clientDateOfBirth && getAgeFromDateString(clientDateOfBirth)}
-      sourcingCare="hackney"
+      whoIsSourcing="hackney"
       dateOfBirth={clientDateOfBirth && getEnGBFormattedDate(clientDateOfBirth)}
       postcode={hackneyId}
     />

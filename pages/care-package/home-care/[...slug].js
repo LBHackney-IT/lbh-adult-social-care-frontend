@@ -17,7 +17,7 @@ import PackageReclaim from '../../../components/PackageReclaim';
 import TextArea from '../../../components/TextArea';
 import TitleHeader from '../../../components/TitleHeader';
 import withSession from '../../../lib/session';
-import { getUserSession, uniqueID } from '../../../service/helpers';
+import { formatCareDatePeriod, getUserSession, uniqueID } from '../../../service/helpers'
 import {
   DOMESTIC_CARE_MODE,
   ESCORT_CARE_MODE,
@@ -29,6 +29,7 @@ import { getServiceTimes } from '../../../service/homeCareServiceHelper';
 import { SOCIAL_WORKER_ROUTE } from '../../../routes/RouteConstants';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import useHomeCareApi from '../../../api/SWR/useHomeCareApi'
+import start from 'next/dist/server/lib/start-server'
 
 const initialPackageReclaim = {
   type: '',
@@ -91,8 +92,7 @@ const HomeCare = () => {
   useEffect(() => {
     // Get the primary and secondary times for the selected service
     // eslint-disable-next-line no-shadow
-    const { times, secondaryTimes } =
-      homeCareServices !== undefined
+    const { times, secondaryTimes } = homeCareServices.length
         ? getServiceTimes(homeCareServices, selectedCareType)
         : { times: undefined, secondaryTimes: undefined };
     setTimes(times);
@@ -110,7 +110,7 @@ const HomeCare = () => {
       (async function createHomeCarePackageAsync() {
         const carePackageCreateResult = await createHomeCarePackage(
           new Date(startDate),
-          new Date(endDate),
+          endDate ? new Date(endDate) : null,
           isImmediate === 'true',
           isS117 === 'true',
           isFixedPeriod === 'true'
@@ -309,16 +309,21 @@ const HomeCare = () => {
     }
   };
 
+  const datePeriod = formatCareDatePeriod(startDate, endDate);
+
   return (
-    <Layout headerTitle="BUILD A CARE PACKAGE">
-      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
-        Care Package
-      </ClientSummary>
+    <Layout
+      clientSummaryInfo={{
+        client: "James Stephens",
+        hackneyId: "786288",
+        age: "91",
+        dateOfBirth: "09/12/1972",
+        postcode: "E9 6EY",
+        title: `Home Care (${datePeriod.startDate} - ${datePeriod.endDate})`
+      }}
+      headerTitle="BUILD A CARE PACKAGE">
       <div className="mt-5 mb-5">
-        <CareTitle startDate={startDate} endDate={endDate}>
-          Homecare Care
-        </CareTitle>
-        <div className="is-flex is-justify-content-flex-start home-care-options">
+        <div className="is-flex is-flex-wrap-wrap is-justify-content-flex-start home-care-options">
           <div className="home-care-option">
             <div>
               {homeCareServices !== undefined ? (

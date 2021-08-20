@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { ArrowLeftGreenIcon } from './Icons';
 
 const NavClientSummary = ({
-  children,
+  title,
   hackneyId,
   showBackButton = true,
   packagesCount = null,
@@ -12,14 +12,16 @@ const NavClientSummary = ({
   canSpeakEnglish = null,
   dateOfBirth,
   age,
-  sourcingCare,
+  whoIsSourcing,
   postcode,
+  className = '',
+  client,
 }) => {
   const router = useRouter();
   const goBack = () => router.back();
 
   return (
-    <div className="client-summary-cont">
+    <div className={`client-summary-cont nav-client-summary ${className}`}>
       {showBackButton && (
         <div onClick={goBack} className="nav-back-button">
           <ArrowLeftGreenIcon />
@@ -27,30 +29,30 @@ const NavClientSummary = ({
         </div>
       )}
       <div className="is-flex-wrap-wrap">
-        {children && <div className="is-5 client-summary-title">{children}</div>}
-        <div className="client-prop">
-          <p className="client-fullName">James Kenter</p>
-        </div>
-        <div className="client-prop">
+        {title && <div className="is-5 client-summary-title">{title}</div>}
+        {client && <div className="client-prop">
+          <p className="client-fullName">{client}</p>
+        </div>}
+        {hackneyId && <div className="client-prop">
           <p>HACKNEY ID:</p>
           <div>{hackneyId}</div>
-        </div>
-        <div className="client-prop">
+        </div>}
+        {age && <div className="client-prop">
           <p>Age:</p>
           <div>{age}</div>
-        </div>
-        <div className="client-prop">
+        </div>}
+        {dateOfBirth && <div className="client-prop">
           <p>DOB:</p>
           <div>{dateOfBirth}</div>
-        </div>
-        <div className="client-prop">
+        </div>}
+        {postcode && <div className="client-prop">
           <p>POSTCODE:</p>
           <div>{postcode}</div>
-        </div>
-        {sourcingCare && (
+        </div>}
+        {whoIsSourcing && (
           <div className="client-prop">
             <p>WHO IS SOURCING CARE:</p>
-            <Image width="300" height="52" src="/images/icons/hackney_logo.png" alt="" />
+            <Image width="122" height="30" src="/images/icons/hackney_logo.png" alt="" />
           </div>
         )}
         {(packagesCount !== null || preferredContact !== null || canSpeakEnglish !== null) && (

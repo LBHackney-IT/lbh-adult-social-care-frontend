@@ -11,8 +11,13 @@ const getAgeFromDateString = (dateString) => {
   return age;
 };
 
-const getEnGBFormattedDate = (dateString) => {
-  if (!dateString) return null;
+const getEnGBFormattedDate = (dateString, nullData = false) => {
+  if (!dateString) {
+    if(nullData) {
+      return nullData;
+    }
+    return null;
+  }
   return new Date(dateString).toLocaleDateString('en-GB');
 };
 

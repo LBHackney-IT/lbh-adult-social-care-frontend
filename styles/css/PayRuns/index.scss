@@ -13,3 +13,17 @@
   min-height: calc(100vh - 79px);
   flex-direction: column;
 }
+
+.pay-run {
+  .pay-run__searches {
+    .custom-async-selector {
+      margin-bottom: 10px;
+    }
+  }
+
+  .pay-run__dropdowns {
+    .control {
+      margin-bottom: 10px;
+    }
+  }
+}

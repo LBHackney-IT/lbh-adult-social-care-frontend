@@ -58,7 +58,7 @@ const PayRunHeader = ({
         {actionButtonText && <Button onClick={clickActionButton}>{actionButtonText}</Button>}
       </div>
       <div>
-        <div className="pay-run__searches mb-3">
+        <div className="pay-run__searches">
           <CustomAsyncSelector
             onChange={(option) => changeFilter('serviceUser', option)}
             placeholder='Service User'

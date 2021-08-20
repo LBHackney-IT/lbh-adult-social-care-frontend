@@ -12,6 +12,8 @@ import TextArea from '../../../../components/TextArea';
 import { getUserSession } from '../../../../service/helpers';
 import withSession from '../../../../lib/session';
 import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
+import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem'
+import { Button } from '../../../../components/Button'
 
 const approvalHistoryEntries = [
   {
@@ -68,40 +70,21 @@ const HomeCareApproveBrokered = () => {
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
 
   return (
-    <Layout headerTitle="HOME CARE APPROVE BROKERED PACKAGE">
+    <Layout
+      clientSummaryInfo={{
+        whoIsSourcing: 'hackney',
+        client: 'James Stephens',
+        title: `Home Care`,
+        hackneyId: '#786288',
+        age: '91',
+        dateOfBirth: '09/12/1972',
+        postcode: 'E9 6EY',
+      }}
+    >
       <div className="hackney-text-black font-size-12px">
-        <HomeCareApprovalTitle />
-        <ApprovalClientSummary />
-
-        <div className="columns">
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">HOURS PER WEEK</p>
-                    <p className="font-size-14px">18</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">COST OF CARE</p>
-                    <p className="font-size-14px">£1,982</p>
-                    <p className="font-weight-bold hackney-text-green">ACTUAL</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column" />
-          <div className="column" />
-          <div className="column" />
+        <div className='client-summary'>
+          <ClientSummaryItem itemDetail={18} itemName='HOURS PER WEEK' />
+          <ClientSummaryItem itemDetail='£1,982' itemName='COST OF CARE' />
         </div>
 
         <HomeCarePackageBreakdown />
@@ -121,19 +104,10 @@ const HomeCareApproveBrokered = () => {
               /> */}
             </div>
 
-            <div className="level mt-3">
-              <div className="level-left" />
-              <div className="level-right">
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Deny</button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Request more information</button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green">Approve contracting</button>
-                </div>
-              </div>
+            <div className='button-group mb-5'>
+              <Button className="button hackney-btn-light">Deny</Button>
+              <Button className="button hackney-btn-light">Request more information</Button>
+              <Button className="button hackney-btn-green">Approve to be brokered</Button>
             </div>
 
             <div className="mt-1">

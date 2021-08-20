@@ -2,6 +2,10 @@
   padding: 16px;
   overflow-x: auto;
 
+  @include media-tablet-down {
+    padding: 0;
+  }
+
   .table__row-item:not(.table__row-item:last-of-type) {
     margin-right: 40px;
   }
@@ -29,10 +33,19 @@
     &:hover {
       cursor: pointer;
     }
+
+    @include media-tablet-down {
+      padding: 0 4px;
+      height: initial;
+    }
   }
 
   &__row-wrapper {
-    padding: 0 10px
+    padding: 0 10px;
+
+    @include media-tablet-down {
+      padding: 0;
+    }
   }
 }
 
@@ -41,6 +54,10 @@
 
   &:not(.table__row-item-status) > p {
     font-size: 16px;
+
+    @include media-tablet-down {
+      font-size: 14px;
+    }
   }
 }
 
@@ -92,7 +109,12 @@
   margin-bottom: 35px;
 
   @include media-desktop-down {
-    width: fit-content;
+    min-width: fit-content;
+    margin-bottom: 10px;
+  }
+
+  @include media-tablet-down {
+    padding: 0 4px;
   }
 }
 

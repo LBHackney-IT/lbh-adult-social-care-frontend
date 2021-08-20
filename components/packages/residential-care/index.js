@@ -316,7 +316,7 @@ const ApprovalHistory = ({ history, residentialCarePackage = undefined, costSumm
         residentialCarePackage?.residentialCarePackage &&
         getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth)
       }
-      sourcingCare="hackney"
+      whoIsSourcing="hackney"
       dateOfBirth={
         residentialCarePackage?.residentialCarePackage &&
         getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth)

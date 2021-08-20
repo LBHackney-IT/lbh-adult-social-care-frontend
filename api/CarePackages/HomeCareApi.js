@@ -22,7 +22,7 @@ const createHomeCarePackage = async (startDate, endDate, isImmediate, isS117, is
         IsFixedPeriod: isFixedPeriod,
         IsOngoingPeriod: !isFixedPeriod,
         StartDate: format(startDate, UTC_DATE_FORMAT),
-        EndDate: format(endDate, UTC_DATE_FORMAT),
+        EndDate: endDate ? format(endDate, UTC_DATE_FORMAT) : '',
         CreatorId: 0,
         UpdatorId: 0,
         // TODO client

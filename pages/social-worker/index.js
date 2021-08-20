@@ -74,7 +74,7 @@ const SocialWorkerDashboardPage = () => {
 
   const rowsRules = {
     packageId: {
-      getHide: () => {},
+      getHide: () => true,
     },
     dateOfBirth: {
       getValue: (value) => `${formatDate(value, '/')}`,
@@ -129,6 +129,7 @@ const SocialWorkerDashboardPage = () => {
     <div className="social-worker-page">
       <Inputs values={filters} inputs={inputs} title='Submitted Package Request' changeInputs={changeFilters} />
       <Table
+        className='social-worker__table'
         onClickTableRow={onClickTableRow}
         fields={tableFields}
         rows={sortArray(submittedPackages, sort)}

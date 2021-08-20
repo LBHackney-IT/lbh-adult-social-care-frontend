@@ -20,7 +20,7 @@ import {
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
-import { getLoggedInUser, getUserSession } from '../../../service/helpers';
+import { formatCareDatePeriod, getLoggedInUser, getUserSession } from '../../../service/helpers'
 import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
 import { selectUser } from '../../../reducers/userReducer';
@@ -207,16 +207,20 @@ const NursingCare = () => {
       });
   };
 
+  const datePeriod = formatCareDatePeriod(startDate, endDate);
+
   return (
-    <Layout headerTitle="BUILD A CARE PACKAGE">
-      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
-        Care Package
-      </ClientSummary>
-      <div className="mt-5 mb-5">
-        <CareTitle startDate={startDate} endDate={endDate}>
-          Nursing Care
-        </CareTitle>
-      </div>
+    <Layout
+      clientSummaryInfo={{
+        client: "James Stephens",
+        hackneyId: "786288",
+        age: "91",
+        title: `Day care (${datePeriod.startDate} - ${datePeriod.endDate})`,
+        dateOfBirth: "09/12/1972",
+        postcode: "E9 6EY",
+      }}
+      headerTitle="BUILD A CARE PACKAGE"
+    >
       <div className="mt-4 columns">
         <div className="column">
           <TextArea
@@ -264,7 +268,7 @@ const NursingCare = () => {
         <TitleHeader>Package Details</TitleHeader>
         <NursingCareSummary
           startDate={startDate}
-          endDate={getEnGBFormattedDate(endDate)}
+          endDate={datePeriod.endDate}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}
           setAdditionalNeedsEntries={setAdditionalNeedsEntries}

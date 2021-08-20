@@ -46,7 +46,7 @@ const RadioButton = ({
               >
                 <div className="radio-item-selected" />
               </div>
-              {radioItem.text}
+              <p className='radio-item__text'>{radioItem.text}</p>
             </label>
           </>
         ))}
