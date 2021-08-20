@@ -32,13 +32,14 @@ const HomeCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => 
 
   // Handle build click
   const onBuildClick = () => {
+    const endDateRules = isFixedPeriod ? ['empty'] : [];
     // Get the parameters for the home care package route
     const { validFields, hasErrors } = fieldValidator([
       { name: 'isImmediate', value: isImmediate, rules: ['empty'] },
       { name: 'isS117', value: isS117, rules: ['empty'] },
       { name: 'isFixedPeriod', value: isFixedPeriod, rules: ['empty'] },
       { name: 'startDate', value: startDate, rules: ['empty'] },
-      { name: 'endDate', value: endDate, rules: ['empty'] },
+      { name: 'endDate', value: endDate, rules: endDateRules },
       { name: 'careType', value: selectedCareType, rules: ['empty'] },
     ]);
     if (hasErrors) {

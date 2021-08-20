@@ -159,11 +159,12 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
     setTab(newTab);
   }
 
-  const closeCreatePayRun = () => {
+  const closeCreatePayRun = async () => {
     setOpenedPopup('');
     changeHocAndRelease('');
     changeRegularCycles('');
     setDate(new Date());
+    await refetchSummaryList();
   };
 
   const closeHelpChat = () => {

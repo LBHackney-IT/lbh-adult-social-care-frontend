@@ -73,7 +73,7 @@ const ResidentialCareSetup = ({ careTypes, selectedCareType, setSelectedCareType
     <CarePackageSetup onBuildClick={onBuildClick}>
       <div className="level" />
       <div className="columns">
-        <div className="column is-5">
+        <div className="column">
           <CareSelectDropdown
             initialText={null}
             error={errorFields.careTypes}

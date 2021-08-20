@@ -13,7 +13,7 @@ const DayCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => {
   const [endDate, setEndDate] = useState(new Date());
   const [isImmediate, setIsImmediate] = useState(undefined);
   const [isS117, setIsS117] = useState(undefined);
-  const [isFixedPeriod, setIsFixedPeriod] = useState(undefined);
+  const [isFixedPeriod, setIsFixedPeriod] = useState(false);
 
   // Handle build click
   const onBuildClick = () => {
@@ -63,7 +63,7 @@ const DayCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => {
     <CarePackageSetup onBuildClick={onBuildClick}>
       <div className="level" />
       <div className="columns">
-        <div className="column is-5">
+        <div className="column">
           <CareSelectDropdown
             initialText={null}
             careTypes={careTypes}

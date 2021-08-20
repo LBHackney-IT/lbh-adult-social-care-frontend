@@ -1,13 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  createHomeCarePackage,
-  postHomeCareTimeSlots,
-} from '../../../api/CarePackages/HomeCareApi';
+import { createHomeCarePackage, postHomeCareTimeSlots } from '../../../api/CarePackages/HomeCareApi';
 import { Button } from '../../../components/Button';
-import CareTitle from '../../../components/CarePackages/CareTitle';
-import ClientSummary from '../../../components/ClientSummary';
 import Dropdown from '../../../components/Dropdown';
 import ShouldPackageReclaim from '../../../components/HomeCare/ShouldPackageReclaim';
 import SummaryDataList from '../../../components/HomeCare/SummaryDataList';
@@ -17,7 +12,7 @@ import PackageReclaim from '../../../components/PackageReclaim';
 import TextArea from '../../../components/TextArea';
 import TitleHeader from '../../../components/TitleHeader';
 import withSession from '../../../lib/session';
-import { formatCareDatePeriod, getUserSession, uniqueID } from '../../../service/helpers'
+import { formatCareDatePeriod, getLoggedInUser, getUserSession, uniqueID } from '../../../service/helpers'
 import {
   DOMESTIC_CARE_MODE,
   ESCORT_CARE_MODE,
@@ -29,15 +24,14 @@ import { getServiceTimes } from '../../../service/homeCareServiceHelper';
 import { SOCIAL_WORKER_ROUTE } from '../../../routes/RouteConstants';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import useHomeCareApi from '../../../api/SWR/useHomeCareApi'
-import start from 'next/dist/server/lib/start-server'
 
 const initialPackageReclaim = {
-  type: '',
+  homeCarePackageId: '1',
+  reclaimFromId: '',
+  reclaimCategoryId: 0,
+  reclaimAmountOptionId: 0,
   notes: '',
-  from: '',
-  category: '',
   amount: '',
-  id: '1',
 };
 
 // start before render
@@ -45,10 +39,12 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
 
-  return { props: {} };
+  const user = getLoggedInUser({ req });
+
+  return { props: { loggedInUserId: user.userId } };
 });
 
-const HomeCare = () => {
+const HomeCare = ({ loggedInUserId }) => {
   // Parameters
   const { data: homeCareServices } = useHomeCareApi.getAllServices();
   const { data: homeCareTimeShiftsData } = useHomeCareApi.getAllTimeShiftSlots();
@@ -58,32 +54,32 @@ const HomeCare = () => {
   const [isImmediate, isS117, isFixedPeriod, startDate, endDate] = router.query.slug;
 
   // State
-  const [homeCareTimeShifts, setHomeCareTimeShifts] = useState(homeCareTimeShiftsData);
+  const [homeCareTimeShifts, setHomeCareTimeShifts] = useState([]);
   const [weekDaysValue, setWeekDaysValue] = useState(weekDays);
   const [selectedCareType, setSelectedCareType] = useState(1);
   const [selectedPrimaryCareTime, setSelectedPrimaryCareTime] = useState(30);
   const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] = useState(30);
   const [homeCareSummaryData, setHomeCareSummaryData] = useState(undefined);
   const [carePackageId, setCarePackageId] = useState(undefined);
-  const [packagesReclaimed, setPackagesReclaimed] = useState([{ ...initialPackageReclaim }]);
+  const [packageReclaims, setPackageReclaims] = useState([{ ...initialPackageReclaim }]);
   const [isReclaimed, setIsReclaimed] = useState(null);
   const [times, setTimes] = useState(undefined);
   const [secondaryTimes, setSecondaryTimes] = useState(undefined);
 
   const addPackageReclaim = () => {
-    setPackagesReclaimed([...packagesReclaimed, { ...initialPackageReclaim, id: uniqueID() }]);
+    setPackageReclaims([...packageReclaims, { ...initialPackageReclaim, id: uniqueID() }]);
   };
 
   const removePackageReclaim = (id) => {
-    const newPackagesReclaim = packagesReclaimed.filter((item) => item.id !== id);
-    setPackagesReclaimed(newPackagesReclaim);
+    const newPackagesReclaim = packageReclaims.filter((item) => item.id !== id);
+    setPackageReclaims(newPackagesReclaim);
   };
 
   const changePackageReclaim = (id) => (updatedPackage) => {
-    const newPackage = packagesReclaimed.slice();
-    const packageIndex = packagesReclaimed.findIndex((item) => item.id == id);
+    const newPackage = packageReclaims.slice();
+    const packageIndex = packageReclaims.findIndex((item) => item.id === id);
     newPackage.splice(packageIndex, 1, updatedPackage);
-    setPackagesReclaimed(newPackage);
+    setPackageReclaims(newPackage);
   };
 
   const [needToAddress, setNeedToAddress] = useState(undefined);
@@ -92,15 +88,13 @@ const HomeCare = () => {
   useEffect(() => {
     // Get the primary and secondary times for the selected service
     // eslint-disable-next-line no-shadow
-    const { times, secondaryTimes } = homeCareServices.length
-        ? getServiceTimes(homeCareServices, selectedCareType)
-        : { times: undefined, secondaryTimes: undefined };
+    const { times, secondaryTimes } = getServiceTimes(homeCareServices, selectedCareType);
     setTimes(times);
     setSecondaryTimes(secondaryTimes);
   }, [homeCareServices]);
 
   const changeIsPackageReclaimed = (status) => {
-    setPackagesReclaimed([{ ...initialPackageReclaim }]);
+    setPackageReclaims([{ ...initialPackageReclaim }]);
     setIsReclaimed(status);
   };
 
@@ -108,15 +102,23 @@ const HomeCare = () => {
   useEffect(() => {
     if (!carePackageId) {
       (async function createHomeCarePackageAsync() {
-        const carePackageCreateResult = await createHomeCarePackage(
-          new Date(startDate),
-          endDate ? new Date(endDate) : null,
-          isImmediate === 'true',
-          isS117 === 'true',
-          isFixedPeriod === 'true'
-        );
+        const filteredPackageReclaims = packageReclaims.filter(item => !!item.reclaimFromId);
+        const params = {};
 
-        setCarePackageId(carePackageCreateResult.id);
+        if(filteredPackageReclaims.length) params.packageReclaims = filteredPackageReclaims;
+
+        const carePackageCreateResult = await createHomeCarePackage({
+          startDate,
+          endDate,
+          isImmediate: isImmediate === 'true',
+          isS117: isS117 === 'true',
+          isFixedPeriod: isFixedPeriod === 'true',
+          creatorId: loggedInUserId,
+          clientId: loggedInUserId,
+          ...params,
+        });
+
+        setCarePackageId(carePackageCreateResult?.packageId);
       })();
     }
   }, [carePackageId, startDate, endDate, isImmediate, isS117, isFixedPeriod]);
@@ -131,6 +133,12 @@ const HomeCare = () => {
       setSelectedSecondaryCareTime(secondaryTimes[1].value);
     }
   }, [times, secondaryTimes]);
+
+  useEffect(() => {
+    if(homeCareTimeShiftsData) {
+      setHomeCareTimeShifts(homeCareTimeShiftsData);
+    }
+  }, [homeCareTimeShiftsData]);
 
   // Handle a care picker cell click
   const onCarePickerClick = (weekSlotId, dayId) => {
@@ -259,9 +267,10 @@ const HomeCare = () => {
     const slots = [];
 
     homeCareTimeShifts.forEach((timeShiftItem) => {
-      timeShiftItem.days.forEach((timeShiftCell) => {
+      timeShiftItem?.days?.forEach((timeShiftCell) => {
         // eslint-disable-next-line no-empty
         if (timeShiftCell.value) {
+
         } else if (timeShiftCell.values) {
           const iterateServices = [
             { id: DOMESTIC_CARE_MODE, value: timeShiftCell.values.domestic },
@@ -401,7 +410,7 @@ const HomeCare = () => {
         <ShouldPackageReclaim isReclaimed={isReclaimed} className="mt-6" setIsReclaimed={changeIsPackageReclaimed} />
         {isReclaimed && (
           <div>
-            {packagesReclaimed.map((item, index) => (
+            {packageReclaims.map((item, index) => (
               <PackageReclaim
                 remove={index !== 0 ? () => removePackageReclaim(item.id) : undefined}
                 key={item.id}

@@ -30,7 +30,10 @@ const DateSetup = ({
           options={fixedPeriodOptions}
           error={errorFields.isFixedPeriod}
           setError={() => changeErrorFields('isFixedPeriod')}
-          onChange={setIsFixedPeriod}
+          onChange={(value) => {
+            setIsFixedPeriod(value);
+            changeErrorFields('endDate');
+          }}
           selectedValue={isFixedPeriod}
         />
       </div>
