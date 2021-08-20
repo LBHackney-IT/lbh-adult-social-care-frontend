@@ -2852,6 +2852,9 @@ html {
 .govuk-radios__input:disabled + .govuk-radios__label {
   cursor: default;
 }
+.govuk-radios--inline {
+  display: inline-block;
+}
 .govuk-radios--inline.govuk-radios--conditional .govuk-radios__item {
   margin-right: 0;
   float: none;
