@@ -5,12 +5,11 @@ import { currency } from '../../../constants/strings';
 import EuroInput from '../../EuroInput';
 import { Button } from '../../Button';
 import PackageReclaim from '../../PackageReclaim';
-import ClientSummary from '../../ClientSummary';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
-import PackageApprovalHistorySummary from '../../PackageApprovalHistorySummary';
-import PackageCostBox from '../../DayCare/PackageCostBox';
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import ResidentialCareSummary from '../../ResidentialCare/ResidentialCareSummary';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
+import AutocompleteSelect from '../../AutocompleteSelect';
+import ApprovalHistory from '../../ProposedPackages/ApprovalHistory';
 
 const PackagesResidentialCare = ({
   tab,
@@ -20,34 +19,37 @@ const PackagesResidentialCare = ({
   removePackageReclaim,
   addPackageReclaim,
   approvalHistory,
-  residentialCarePackage,
+  residentialCarePackage: residentialCarePackageData,
   residentialCareSummary,
   supplierOptions = [],
   stageOptions = [],
   createBrokerageInfo = () => {},
   changePackageBrokeringStage = () => {},
 }) => {
+  const residentialCarePackage = residentialCarePackageData?.residentialCarePackage;
   const [coreCost, setCoreCost] = useState({
-    costPerWeek: residentialCarePackage?.residentialCore || '',
+    costPerWeek: residentialCarePackageData?.residentialCore || '',
   });
 
   const [additionalPayment, setAdditionalPayment] = useState({
-    costPerWeek: residentialCarePackage?.additionalNeedsPayment || '',
+    costPerWeek: residentialCarePackageData?.additionalNeedsPayment || '',
   });
 
   const [additionalPaymentOneOff, setAdditionalPaymentOneOff] = useState({
-    oneOf: residentialCarePackage?.additionalNeedsPaymentOneOff || '',
+    oneOf: residentialCarePackageData?.additionalNeedsPaymentOneOff || '',
   });
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
-  const [selectedStageType, setSelectedStageType] = useState(residentialCarePackage?.residentialCarePackage?.stageId);
-  const [selectedSupplierType, setSelectedSupplierType] = useState(residentialCarePackage?.residentialCarePackage?.supplierId);
+  const [selectedStageType, setSelectedStageType] = useState(residentialCarePackageData?.residentialCarePackage?.stageId);
+  const [selectedSupplierType, setSelectedSupplierType] = useState(
+    residentialCarePackageData?.residentialCarePackage?.supplierId
+  );
   const [startDate, setStartDate] = useState(
-    (residentialCarePackage && new Date(residentialCarePackage?.residentialCarePackage?.startDate)) || undefined
+    (residentialCarePackageData && new Date(residentialCarePackageData?.residentialCarePackage?.startDate)) || undefined
   );
   const [endDate, setEndDate] = useState(
-    (residentialCarePackage && new Date(residentialCarePackage?.residentialCarePackage?.endDate)) || undefined
+    (residentialCarePackageData && new Date(residentialCarePackageData?.residentialCarePackage?.endDate)) || undefined
   );
-  const [endDateEnabled, setEndDateEnabled] = useState(!residentialCarePackage?.residentialCarePackage?.endDate);
+  const [endDateEnabled, setEndDateEnabled] = useState(!residentialCarePackageData?.residentialCarePackage?.endDate);
 
   const [coreCostTotal, setCoreCostTotal] = useState(0);
   const [additionalCostTotal, setAdditionalNeedsCostTotal] = useState(0);
@@ -60,19 +62,19 @@ const PackagesResidentialCare = ({
   };
 
   useEffect(() => {
-    setEndDateEnabled(!residentialCarePackage?.residentialCarePackage?.endDate);
+    setEndDateEnabled(!residentialCarePackageData?.residentialCarePackage?.endDate);
 
     setEndDate(
-      (residentialCarePackage && new Date(residentialCarePackage?.residentialCarePackage?.endDate)) || undefined
+      (residentialCarePackageData && new Date(residentialCarePackageData?.residentialCarePackage?.endDate)) || undefined
     );
 
     setStartDate(
-      (residentialCarePackage && new Date(residentialCarePackage?.residentialCarePackage?.startDate)) || undefined
+      (residentialCarePackageData && new Date(residentialCarePackageData?.residentialCarePackage?.startDate)) || undefined
     );
-  }, [residentialCarePackage]);
+  }, [residentialCarePackageData]);
 
   useEffect(() => {
-      setCoreCostTotal(Number(coreCost.costPerWeek));
+    setCoreCostTotal(Number(coreCost.costPerWeek));
   }, [coreCost]);
 
   useEffect(() => {
@@ -103,7 +105,7 @@ const PackagesResidentialCare = ({
   const handleSaveBrokerage = (event) => {
     event.preventDefault();
     const brokerageInfoForCreation = {
-      residentialCarePackageId: residentialCarePackage?.residentialCarePackageId,
+      residentialCarePackageId: residentialCarePackageData?.residentialCarePackageId,
       supplierId: selectedSupplierType,
 
       stageId: selectedStageType,
@@ -112,7 +114,7 @@ const PackagesResidentialCare = ({
       additionalNeedsPaymentOneOff: Number(additionalPaymentOneOff.oneOf),
     };
     if (formIsValid(brokerageInfoForCreation)) {
-      createBrokerageInfo(residentialCarePackage?.residentialCarePackageId, brokerageInfoForCreation);
+      createBrokerageInfo(residentialCarePackageData?.residentialCarePackageId, brokerageInfoForCreation);
     } else {
       alert('Invalid form. Check to ensure all values are set correctly');
     }
@@ -120,7 +122,7 @@ const PackagesResidentialCare = ({
 
   const handleBrokerageStageChange = (option) => {
     setSelectedStageType(option);
-    changePackageBrokeringStage(residentialCarePackage?.residentialCarePackageId, option);
+    changePackageBrokeringStage(residentialCarePackageData?.residentialCarePackageId, option);
   };
 
   return (
@@ -130,7 +132,7 @@ const PackagesResidentialCare = ({
           <div>
             <h1 className="container-title">Residential Care</h1>
             <h3>
-              ID: <span>{residentialCarePackage?.residentialCarePackageId || ''}</span>
+              ID: <span>{residentialCarePackageData?.residentialCarePackageId || ''}</span>
             </h3>
           </div>
           <Dropdown
@@ -144,12 +146,11 @@ const PackagesResidentialCare = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <div className="mr-3 is-flex is-align-items-flex-end">
-              <Dropdown
-                label=""
-                initialText="Supplier (please select)"
+              <AutocompleteSelect
+                placeholder="Supplier (please select)"
                 options={supplierOptions}
-                onOptionSelect={setSelectedSupplierType}
-                selectedValue={selectedSupplierType}
+                selectProvider={setSelectedSupplierType}
+                value={selectedSupplierType}
               />
             </div>
             <span className="mr-3">
@@ -273,7 +274,8 @@ const PackagesResidentialCare = ({
       {tab === 'approvalHistory' ? (
         <ApprovalHistory
           history={approvalHistory}
-          residentialCarePackage={residentialCarePackage}
+          careType='Residential care'
+          approvalData={residentialCarePackage}
           costSummary={{
             costOfCarePerWeek: coreCostTotal,
             anpPerWeek: additionalCostTotal,
@@ -284,10 +286,9 @@ const PackagesResidentialCare = ({
       ) : (
         residentialCareSummary && (
           <ResidentialCareSummary
-            startDate={residentialCarePackage?.residentialCarePackage.startDate}
-            endDate={
-              residentialCarePackage?.residentialCarePackage.endDate !== null
-                ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
+            startDate={residentialCarePackage?.startDate}
+            endDate={residentialCarePackage?.endDate !== null
+                ? getEnGBFormattedDate(residentialCarePackage?.endDate)
                 : 'Ongoing'
             }
             needToAddress={residentialCareSummary.needToAddress}
@@ -299,73 +300,5 @@ const PackagesResidentialCare = ({
     </>
   );
 };
-
-const ApprovalHistory = ({ history, residentialCarePackage = undefined, costSummary }) => (
-  <div className="approval-history">
-    <h2>
-      Residential Care{' '}
-      <span>
-        ({residentialCarePackage?.residentialCarePackage?.isFixedPeriodOrOngoing ? 'Fixed Period' : 'Ongoing'} -{' '}
-        {residentialCarePackage?.residentialCarePackage.termTimeConsiderationOption})
-      </span>
-    </h2>
-    <ClientSummary
-      client={residentialCarePackage?.residentialCarePackage?.clientName}
-      hackneyId={residentialCarePackage?.residentialCarePackage?.clientHackneyId}
-      age={
-        residentialCarePackage?.residentialCarePackage &&
-        getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth)
-      }
-      whoIsSourcing="hackney"
-      dateOfBirth={
-        residentialCarePackage?.residentialCarePackage &&
-        getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth)
-      }
-      postcode={residentialCarePackage?.residentialCarePackage?.clientPostCode}
-    />
-    <div className="care-info">
-      <div>
-        <p>STARTS</p>
-        <p>{getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.startDate)}</p>
-      </div>
-      <div>
-        <p>ENDS</p>
-        <p>
-          {residentialCarePackage?.residentialCarePackage?.endDate !== null
-            ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.endDate)
-            : 'Ongoing'}
-        </p>
-      </div>
-      <div>
-        <p>DAYS/WEEK</p>
-        <p />
-      </div>
-    </div>
-    <div className="columns font-size-12px">
-      <div className="column">
-        <div className="is-flex is-flex-wrap-wrap">
-          <PackageCostBox title="COST OF CARE / WK" cost={costSummary?.costOfCarePerWeek ?? 0.0} costType="ESTIMATE" />
-
-          <PackageCostBox title="ANP / WK" cost={costSummary?.anpPerWeek ?? 0.0} costType="ESTIMATE" />
-
-          <PackageCostBox
-            boxClass="hackney-package-cost-yellow-box"
-            title="ONE OFF COSTS"
-            cost={costSummary?.oneOffCost ?? 0.0}
-            costType="ESTIMATE"
-          />
-          <PackageCostBox
-            boxClass="hackney-package-cost-yellow-box"
-            title="TOTAL / WK"
-            cost={costSummary?.totalCostPerWeek ?? 0.0}
-            costType="ESTIMATE"
-          />
-        </div>
-      </div>
-    </div>
-
-    <PackageApprovalHistorySummary approvalHistoryEntries={history} />
-  </div>
-);
 
 export default PackagesResidentialCare;

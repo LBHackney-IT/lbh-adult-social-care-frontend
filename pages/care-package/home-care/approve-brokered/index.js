@@ -2,8 +2,6 @@ import React from 'react';
 import { getServiceTypeCareTimes } from '../../../../service/homeCareServiceHelper';
 import { PERSONAL_CARE_MODE } from '../../../../service/homeCarePickerHelper';
 import Layout from '../../../../components/Layout/Layout';
-import HomeCareApprovalTitle from '../../../../components/HomeCare/HomeCareApprovalTitle';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
 import HomeCarePackageElementCostings from '../../../../components/HomeCare/HomeCarePackageElementCostings';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';

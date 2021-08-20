@@ -82,14 +82,14 @@ const PackagesHomeCare = ({
       quantity: 3,
     },
   });
-
+  const homeCarePackageData = homeCarePackage?.homeCarePackage;
   const [startDate, setStartDate] = useState(
-    (homeCarePackage && new Date(homeCarePackage?.homeCarePackage?.startDate)) || undefined
+    (homeCarePackage && new Date(homeCarePackageData?.startDate)) || undefined
   );
   const [endDate, setEndDate] = useState(
-    (homeCarePackage && new Date(homeCarePackage?.homeCarePackage?.endDate)) || undefined
+    (homeCarePackage && new Date(homeCarePackageData?.endDate)) || undefined
   );
-  const [endDateEnabled, setEndDateEnabled] = useState(!homeCarePackage?.homeCarePackage?.endDate);
+  const [endDateEnabled, setEndDateEnabled] = useState(!homeCarePackageData?.endDate);
 
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
@@ -148,11 +148,11 @@ const PackagesHomeCare = ({
   }, [elementsData]);
 
   useEffect(() => {
-    setEndDateEnabled(!homeCarePackage?.homeCarePackage?.endDate);
+    setEndDateEnabled(!homeCarePackageData?.endDate);
 
-    setEndDate((homeCarePackage && new Date(homeCarePackage?.homeCarePackage?.endDate)) || undefined);
+    setEndDate((homeCarePackage && new Date(homeCarePackageData?.endDate)) || undefined);
 
-    setStartDate((homeCarePackage && new Date(homeCarePackage?.homeCarePackage?.startDate)) || undefined);
+    setStartDate((homeCarePackage && new Date(homeCarePackageData?.startDate)) || undefined);
   }, [homeCarePackage]);
 
   return (
@@ -343,25 +343,14 @@ const PackagesHomeCare = ({
             totalCostPerWeek: 'hackney-package-cost-light-yellow-box',
           }}
           history={approvalHistory}
-          careClientDateOfBirth={homeCarePackage?.homeCarePackage?.clientDateOfBirth}
-          careIsFixedPeriodOrOngoing={homeCarePackage?.homeCarePackage?.isFixedPeriodOrOngoing}
-          careTermTimeConsiderationOption={homeCarePackage?.homeCarePackage?.termTimeConsiderationOption}
-          careClientName={homeCarePackage?.homeCarePackage?.clientName}
-          careClientHackneyId={homeCarePackage?.homeCarePackage?.clientHackneyId}
-          careClientPostCode={homeCarePackage?.homeCarePackage?.clientPostCode}
-          careStartDate={homeCarePackage?.homeCarePackage?.startDate}
-          careEndDate={homeCarePackage?.homeCarePackage?.endDate}
+          approvalData={homeCarePackage?.homeCarePackage}
         />
       ) : (
         homeCareSummary && (
           <CareSummary
             careType="Home care"
-            startDate={homeCarePackage?.homeCarePackage?.startDate}
-            endDate={
-              homeCarePackage?.homeCarePackage?.endDate !== null
-                ? getEnGBFormattedDate(homeCarePackage?.homeCarePackage?.endDate)
-                : 'Ongoing'
-            }
+            startDate={homeCarePackageData?.startDate}
+            endDate={homeCarePackageData?.endDate}
             needToAddress={homeCareSummary.needToAddress}
             additionalNeedsEntries={homeCareSummary.additionalNeedsEntries}
             setAdditionalNeedsEntries={setAdditionalNeedsEntries}

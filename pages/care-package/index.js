@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { batch, useDispatch } from 'react-redux';
-import ClientSummary from '../../components/ClientSummary';
 import Layout from '../../components/Layout/Layout';
 import HomeCareSetup from '../../components/Setup/HomeCareSetup';
 import DayCareSetup from '../../components/Setup/DayCareSetup';
@@ -18,8 +17,8 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 const CarePackage = ({ history }) => {
   const [careTypes] = useState([
-    // { text: 'Home care', value: 1 },
-    // { text: 'Day care', value: 2 },
+    { text: 'Home care', value: 1 },
+    { text: 'Day care', value: 2 },
     { text: 'Residential care', value: 3 },
     { text: 'Nursing care', value: 4 },
   ]);
@@ -86,11 +85,9 @@ const CarePackage = ({ history }) => {
       age: "91",
       dateOfBirth: "09/12/1972",
       postcode: "E9 6EY",
-    }} headerTitle="Rapid D2A">
-      {/*<ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">*/}
-      {/*  Care Package*/}
-      {/*</ClientSummary>*/}
-      <div className="mt-5 mb-5">
+      title: 'Rapid D2A',
+    }}>
+      <div className="mt-5 mb-5 care-packages-setup">
         <ComponentForCareType />
       </div>
     </Layout>

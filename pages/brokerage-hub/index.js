@@ -88,8 +88,8 @@ const BrokerageHubPage = () => {
       { options: formatForDropDownOptions({ text: 'userName' }, socialWorkerOptions), initialText: 'Social Worker', name: 'socialWorkerName', className: 'mr-3' },
     ],
     buttons: [
-      { initialText: 'Filter', name: 'button-1', className: 'mt-auto ml-auto', onClick: () => setRequestFilters(filters) },
-      { initialText: 'Clear', name: 'button-2', className: `mt-auto ml-3 outline gray${checkFields()}`, onClick: () => setFilters({...initialFilters}) }
+      { initialText: 'Filter', name: 'button-1', className: 'mr-3', onClick: () => setRequestFilters(filters) },
+      { initialText: 'Clear', name: 'button-2', className: `outline gray${checkFields()}`, onClick: () => setFilters({...initialFilters}) }
     ],
   };
 

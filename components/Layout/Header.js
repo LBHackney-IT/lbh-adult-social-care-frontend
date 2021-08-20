@@ -22,17 +22,13 @@ const Header = () => {
       <div className="level mb-0">
         <div className="level-item level-left">
           <div onClick={onToggleMobileMenu} className={`header__mobile-menu-button${isOpened ? ' opened' : ''}`}>
-            {isOpened ? (
-              <div className="header__mobile-menu-close">
-                <p>+</p>
-              </div>
-            ) : (
-              <>
+            {isOpened ? (<div className="header__mobile-menu-close"><span>+</span></div>) :
+              (<>
                 <div className="header__mobile-menu-line" />
                 <div className="header__mobile-menu-line" />
                 <div className="header__mobile-menu-line" />
-              </>
-            )}
+              </>)
+            }
           </div>
           <HackneyLogo className="is-clickable" onClick={() => router.push('/care-package')} />
         </div>

@@ -50,8 +50,8 @@ const PayRunsFilters = ({
             }}
             selectsRange
           />
-          <Button onClick={applyFilters}>Apply</Button>
-          {hasFields && <Button className='outline gray ml-3' onClick={clearFilters}>Clear</Button> }
+          <Button className='mr-3' onClick={applyFilters}>Apply</Button>
+          {hasFields && <Button className='outline gray' onClick={clearFilters}>Clear</Button> }
       </>
     );
 }

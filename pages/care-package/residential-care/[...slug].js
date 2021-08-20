@@ -213,15 +213,16 @@ const ResidentialCare = () => {
   };
 
   return (
-    <Layout headerTitle="BUILD A CARE PACKAGE">
-      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
-        Care Package
-      </ClientSummary>
-      <div className="mt-5 mb-5">
-        <CareTitle startDate={startDate} endDate={endDate}>
-          Residential Care
-        </CareTitle>
-      </div>
+    <Layout
+      clientSummaryInfo={{
+        client: "James Stephens",
+        hackneyId: "786288",
+        age: "91",
+        dateOfBirth: "09/12/1972",
+        postcode: "E9 6EY",
+        title: "BUILD A CARE PACKAGE",
+      }}
+    >
       <div className="mt-4 columns">
         <div className="column">
           <TextArea
@@ -268,7 +269,7 @@ const ResidentialCare = () => {
         <TitleHeader className="mb-5">Package Details</TitleHeader>
         <ResidentialCareSummary
           startDate={startDate}
-          endDate={getEnGBFormattedDate(endDate)}
+          endDate={endDate}
           typeOfStayText={typeOfStayText}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}

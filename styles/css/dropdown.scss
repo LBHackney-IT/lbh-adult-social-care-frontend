@@ -15,6 +15,7 @@
   }
 
   .dropdown-menu {
+    min-width: initial;
     width: 100%;
   }
 
@@ -26,6 +27,7 @@
     cursor: pointer;
     padding-left: 10px;
     padding-right: 10px;
+    word-break: break-word;
     font-size: 16px;
     color: $lbh-text;
 
@@ -42,7 +44,9 @@
 }
 
 .dropdown-trigger {
+  width: 100%;
   .button {
+    width: 100%;
     span:not(.icon) {
       text-align: left;
       text-overflow: ellipsis;

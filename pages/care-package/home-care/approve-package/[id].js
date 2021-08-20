@@ -1,7 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
-import HomeCareApprovalTitle from '../../../../components/HomeCare/HomeCareApprovalTitle';
 import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
 import HomeCarePackageDetails from '../../../../components/HomeCare/HomeCarePackageDetails';
 import Layout from '../../../../components/Layout/Layout';

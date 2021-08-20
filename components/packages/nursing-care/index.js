@@ -5,12 +5,11 @@ import EuroInput from '../../EuroInput';
 import { Button } from '../../Button';
 import { currency } from '../../../constants/strings';
 import PackageReclaim from '../../PackageReclaim';
-import ClientSummary from '../../ClientSummary';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import NursingCareSummary from '../../NursingCare/NursingCareSummary';
-import PackageApprovalHistorySummary from '../../PackageApprovalHistorySummary';
-import PackageCostBox from '../../DayCare/PackageCostBox';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
+import AutocompleteSelect from '../../AutocompleteSelect';
+import ApprovalHistory from '../../ProposedPackages/ApprovalHistory'
 
 const PackagesNursingCare = ({
   tab,
@@ -140,12 +139,11 @@ const PackagesNursingCare = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <div className="mr-3 is-flex is-align-items-flex-end">
-              <Dropdown
-                label=""
-                initialText="Supplier (please select)"
+              <AutocompleteSelect
+                placeholder="Supplier (please select)"
                 options={supplierOptions}
-                onOptionSelect={setSelectedSupplierType}
-                selectedValue={selectedSupplierType}
+                selectProvider={setSelectedSupplierType}
+                value={selectedSupplierType}
               />
             </div>
             <span className="mr-3">
@@ -269,7 +267,7 @@ const PackagesNursingCare = ({
       {tab === 'approvalHistory' ? (
         <ApprovalHistory
           history={approvalHistory}
-          nursingCarePackage={nursingCarePackage}
+          approvalData={nursingCarePackage?.nursingCarePackage}
           costSummary={{
             costOfCarePerWeek: coreCostTotal,
             anpPerWeek: additionalCostTotal,
@@ -295,70 +293,5 @@ const PackagesNursingCare = ({
     </>
   );
 };
-
-const ApprovalHistory = ({ history, nursingCarePackage = undefined, costSummary }) => (
-  <div className="approval-history">
-    <h2>
-      Nursing Care{' '}
-      <span>
-        ({nursingCarePackage?.nursingCarePackage?.isFixedPeriodOrOngoing ? 'Fixed Period' : 'Ongoing'} -{' '}
-        {nursingCarePackage?.nursingCarePackage.termTimeConsiderationOption})
-      </span>
-    </h2>
-    <ClientSummary
-      client={nursingCarePackage?.nursingCarePackage?.clientName}
-      hackneyId={nursingCarePackage?.nursingCarePackage?.clientHackneyId}
-      age={
-        nursingCarePackage?.nursingCarePackage &&
-        getAgeFromDateString(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth)
-      }
-      whoIsSourcing="hackney"
-      dateOfBirth={
-        nursingCarePackage?.nursingCarePackage &&
-        getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth)
-      }
-      postcode={nursingCarePackage?.nursingCarePackage?.clientPostCode}
-    />
-    <div className="care-info">
-      <div>
-        <p>STARTS</p>
-        <p>{getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.startDate)}</p>
-      </div>
-      <div>
-        <p>ENDS</p>
-        <p>
-          {nursingCarePackage?.nursingCarePackage?.endDate !== null
-            ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.endDate)
-            : 'Ongoing'}
-        </p>
-      </div>
-      <div>
-        <p>DAYS/WEEK</p>
-        <p />
-      </div>
-    </div>
-    <div className="columns font-size-12px">
-      <div className="column">
-        <div className="is-flex is-flex-wrap-wrap">
-          <PackageCostBox title="COST OF CARE / WK" cost={costSummary?.costOfCarePerWeek ?? 0.0} costType="ESTIMATE" />
-          <PackageCostBox title="ANP / WK" cost={costSummary?.anpPerWeek ?? 0.0} costType="ESTIMATE" />
-          <PackageCostBox
-            boxClass="hackney-package-cost-yellow-box"
-            title="ONE OFF COSTS"
-            cost={costSummary?.oneOffCost ?? 0.0}
-            costType="ESTIMATE"
-          />
-          <PackageCostBox
-            boxClass="hackney-package-cost-yellow-box"
-            title="TOTAL / WK"
-            cost={costSummary?.totalCostPerWeek ?? 0.0}
-            costType="ESTIMATE"
-          />
-        </div>
-      </div>
-    </div>
-    <PackageApprovalHistorySummary approvalHistoryEntries={history} />
-  </div>
-);
 
 export default PackagesNursingCare;

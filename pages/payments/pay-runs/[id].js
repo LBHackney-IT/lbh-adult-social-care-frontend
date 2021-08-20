@@ -19,7 +19,7 @@ import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight
 import PayRunHeader from '../../../components/PayRuns/PayRunHeader';
 import PopupHoldPayment from '../../../components/PayRuns/PopupHoldPayment';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { formatStatus, getUserSession } from '../../../service/helpers';
+import { formatStatus, getUserSession, getNumberWithCommas } from '../../../service/helpers';
 import withSession from '../../../lib/session';
 import Table from '../../../components/Table';
 import CustomDropDown from '../../../components/CustomDropdown';
@@ -34,8 +34,8 @@ import {
 } from '../../../api/SWR/transactions/payrun/usePayRunApi';
 import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
 import { sortArray } from '../../../api/Utils/FuncUtils';
-import PopupDownloadCEDER from '../../../components/Payments/PopupDownloadCEDER'
-import { invoiceStatusIdByString } from '../../../constants/variables'
+import PopupDownloadCEDER from '../../../components/Payments/PopupDownloadCEDER';
+import { invoiceStatusIdByString } from '../../../constants/variables';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -72,7 +72,7 @@ const PayRunPage = () => {
     holdPayments: 'hold-payment',
     exportPaymentFile: 'export-payment-file',
   });
-  const [isCheckedAll, setIsCheckedAll] = useState(false);
+  // const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [invoice, setInvoice] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -116,7 +116,7 @@ const PayRunPage = () => {
   });
 
   const [breadcrumbs] = useState([
-    { text: 'Payments', onClick: () => router.push('/payments/pay-runs') },
+    { text: 'Pay-Runs', onClick: () => router.push('/payments/pay-runs') },
     { text: `Pay Run ${id}` },
   ]);
   const [sort, setSort] = useState({
@@ -275,15 +275,15 @@ const PayRunPage = () => {
     invoiceCheckbox: {
       type: 'checkbox',
       getComponent: (item, currentRowRule) => {
-        if(item.invoiceStatusId === invoiceStatusIdByString.accepted) {
-          return <div key={`${item.invoiceId}${currentRowRule}`} className='table__row-item' />
+        if (item.invoiceStatusId === invoiceStatusIdByString.accepted) {
+          return <div key={`${item.invoiceId}${currentRowRule}`} className="table__row-item" />;
         }
       },
       onChange: (value, item) => onCheckRow(item.invoiceId),
       getValue: (value, item) => !!checkedRows.find((invoiceId) => String(invoiceId) === String(item.invoiceId)),
     },
     totalAmount: {
-      getValue: (value) => (value ? `${currency.euro}${value}` : '-'),
+      getValue: (value) => (value ? `${currency.euro}${getNumberWithCommas(value)}` : '-'),
     },
     invoiceStatusId: {
       getComponent: (item, cellValue, columnClass) => {
@@ -291,7 +291,7 @@ const PayRunPage = () => {
         const statusItem = invoiceStatuses.find((status) => status.statusId === invoiceStatusId);
         const statusClass = statusItem ? ` ${statusItem.statusName.toLowerCase()}` : '';
         const payRunStatusApprovedClass = isPayRunStatusApproved ? ' disable' : '';
-        const filteredInvoiceStatuses = invoiceStatuses.filter(status => status.statusId !== invoiceStatusId);
+        const filteredInvoiceStatuses = invoiceStatuses.filter((status) => status.statusId !== invoiceStatusId);
         return (
           <CustomDropDown
             onlyEmptyText
@@ -312,25 +312,24 @@ const PayRunPage = () => {
   };
 
   const filterCheckedRows = () => {
-    if(sortedInvoices?.invoices?.length === undefined) return [];
-    const filteredCheckedIds = sortedInvoices?.invoices.filter((rowData) => {
-      return rowData.invoiceStatusId !== invoiceStatusIdByString.accepted;
-    });
-    return filteredCheckedIds.map(invoiceData => invoiceData.invoiceId);
-  }
+    if (sortedInvoices?.invoices?.length === undefined) return [];
+    const filteredCheckedIds = sortedInvoices?.invoices.filter(
+      (rowData) => rowData.invoiceStatusId !== invoiceStatusIdByString.accepted
+    );
+    return filteredCheckedIds.map((invoiceData) => invoiceData.invoiceId);
+  };
 
   const customCheckedAll = () => {
     const onlyInvoiceIds = filterCheckedRows();
-    if(checkedRows.length) {
-      if(onlyInvoiceIds.length === checkedRows.length) {
+    if (checkedRows.length) {
+      if (onlyInvoiceIds.length === checkedRows.length) {
         return [];
       }
 
       return onlyInvoiceIds;
-    } else {
-      return onlyInvoiceIds;
     }
-  }
+    return onlyInvoiceIds;
+  };
 
   const statusOptions = invoiceStatuses.map((item) => ({
     value: item.statusId,
@@ -376,11 +375,14 @@ const PayRunPage = () => {
         />
       )}
       {openedPopup === popupTypes.exportPaymentFile && (
-        <PopupDownloadCEDER onDownload={() => {
-          pushNotification('Start download payment file', 'warning');
-          setOpenedPopup('');
-          // router.push('/link-to-file')
-        }} closePopup={() => setOpenedPopup('')} />
+        <PopupDownloadCEDER
+          onDownload={() => {
+            pushNotification('Start download payment file', 'warning');
+            setOpenedPopup('');
+            // router.push('/link-to-file')
+          }}
+          closePopup={() => setOpenedPopup('')}
+        />
       )}
       {!!breadcrumbs.length && <Breadcrumbs className="p-3" values={breadcrumbs} />}
       <PayRunHeader
@@ -410,10 +412,10 @@ const PayRunPage = () => {
         sortBy={sortBy}
         sorts={sorts}
         canCollapseRows
-        checkedRule={() => !checkedRows.length ? false : filterCheckedRows().length === checkedRows.length}
+        checkedRule={() => (!checkedRows.length ? false : filterCheckedRows().length === checkedRows.length)}
         changeAllChecked={() => {
           const checkedIds = customCheckedAll();
-          if(checkedIds.length) {
+          if (checkedIds.length) {
             setCheckedRows(checkedIds);
           } else {
             setCheckedRows([]);
@@ -429,19 +431,23 @@ const PayRunPage = () => {
         to={invoices?.pagingMetaData?.pageSize}
         totalCount={invoices?.pagingMetaData?.totalCount}
       />
-      {payRunDetails &&
+      {payRunDetails && (
         <PayRunsLevelInsight
           firstButton={{
             text: isPayRunStatusApproved ? 'Export payment file' : draftText,
-            onClick: () => isPayRunStatusApproved ? setOpenedPopup(popupTypes.exportPaymentFile) : submitPayRun(),
+            onClick: () => (isPayRunStatusApproved ? setOpenedPopup(popupTypes.exportPaymentFile) : submitPayRun()),
           }}
-          secondButton={!isPayRunStatusApproved ? {
-            text: payRunDetails?.payRunStatusName === 'Draft' ? 'Delete draft pay run' : 'Kick back',
-            onClick: () => onDeletePayRunDraft(),
-          } : undefined}
+          secondButton={
+            !isPayRunStatusApproved
+              ? {
+                  text: payRunDetails?.payRunStatusName === 'Draft' ? 'Delete draft pay run' : 'Kick back',
+                  onClick: () => onDeletePayRunDraft(),
+                }
+              : undefined
+          }
           levelInsights={levelInsights}
         />
-      }
+      )}
       <HackneyFooterInfo />
     </div>
   );

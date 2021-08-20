@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
-import ClientSummary from '../../../components/ClientSummary';
 import Dropdown from '../../../components/Dropdown';
 import TextArea from '../../../components/TextArea';
 import Layout from '../../../components/Layout/Layout';
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
 } from '../../../components/CarePackages/AdditionalNeedsEntries';
-import CareTitle from '../../../components/CarePackages/CareTitle';
 import TitleHeader from '../../../components/TitleHeader';
 import NursingCareSummary from '../../../components/NursingCare/NursingCareSummary';
 import { Button } from '../../../components/Button';
@@ -215,13 +212,12 @@ const NursingCare = () => {
         client: "James Stephens",
         hackneyId: "786288",
         age: "91",
-        title: `Day care (${datePeriod.startDate} - ${datePeriod.endDate})`,
+        title: `BUILD A CARE PACKAGE (${datePeriod.startDate} - ${datePeriod.endDate})`,
         dateOfBirth: "09/12/1972",
         postcode: "E9 6EY",
       }}
-      headerTitle="BUILD A CARE PACKAGE"
     >
-      <div className="mt-4 columns">
+      <div className="mt-4 columns nursing-care">
         <div className="column">
           <TextArea
             label="Need to Address"
@@ -241,7 +237,6 @@ const NursingCare = () => {
             error={errorFields.selectedNursingHomeType}
             setError={() => changeErrorField('selectedNursingHomeType')}
             onOptionSelect={(option) => setSelectedNursingHomeType(option)}
-            buttonStyle={{ width: '240px' }}
           />
         </div>
       </div>

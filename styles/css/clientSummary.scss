@@ -47,7 +47,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   grid-gap: 12px;
-  justify-items: center;
+
+  @include media-small-ipod-down {
+    justify-items: center;
+  }
 
   .client-summary__item {
     display: flex;

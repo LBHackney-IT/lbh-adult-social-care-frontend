@@ -169,8 +169,8 @@ const ResidentialCareBrokering = ({
           residentialCarePackage?.residentialCarePackage &&
           getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
         postcode: residentialCarePackage?.residentialCarePackage?.clientPostCode,
+        title: 'Residential Care Brokering',
       }}
-      headerTitle="Residential Care Brokering"
     >
       <PackageHeader title="Proposed Package" />
       <PackagesResidentialCare

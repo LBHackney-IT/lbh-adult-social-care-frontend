@@ -1,6 +1,7 @@
 import { DATA_TYPES } from './CommonOptions'
 
 const getAgeFromDateString = (dateString) => {
+  if(!dateString) return;
   const today = new Date();
   const birthDate = new Date(dateString);
   let age = today.getFullYear() - birthDate.getFullYear();

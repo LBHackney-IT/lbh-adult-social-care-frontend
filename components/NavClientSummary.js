@@ -55,24 +55,21 @@ const NavClientSummary = ({
             <Image width="122" height="30" src="/images/icons/hackney_logo.png" alt="" />
           </div>
         )}
-        {(packagesCount !== null || preferredContact !== null || canSpeakEnglish !== null) && (
-          <div className="more-info is-flex-wrap-wrap is-flex is-justify-content-space-between">
-            <p className="is-5 package-count">
-              <span className="font-weight-bold">{packagesCount}</span>
-              {`${packagesCount > 1 ? 'Packages' : 'Package'} to action`}
-            </p>
-            <div className="client-prop">
-              <p>PREFERRED CONTACT:</p>
-              <div>{preferredContact}</div>
-            </div>
-            <div className="client-prop">
-              <p>CAN SPEAK ENGLISH:</p>
-              <div>{canSpeakEnglish}</div>
-            </div>
-          </div>
-        )}
+        <div className="more-info is-flex-wrap-wrap is-flex is-justify-content-space-between">
+          {packagesCount && <p className="is-5 package-count">
+            <span className="font-weight-bold">{packagesCount}</span>
+            {`${packagesCount > 1 ? 'Packages' : 'Package'} to action`}
+          </p>}
+          {preferredContact && <div className="client-prop">
+            <p>PREFERRED CONTACT:</p>
+            <div>{preferredContact}</div>
+          </div>}
+          {canSpeakEnglish && <div className="client-prop">
+            <p>CAN SPEAK ENGLISH:</p>
+            <div>{canSpeakEnglish}</div>
+          </div>}
+        </div>
       </div>
-      {/* TODO Green Divider */}
     </div>
   );
 };

@@ -3,7 +3,7 @@
   overflow-x: auto;
 
   @include media-tablet-down {
-    padding: 0;
+    padding: 16px 0;
   }
 
   .table__row-item:not(.table__row-item:last-of-type) {
@@ -105,11 +105,10 @@
   justify-content: space-between;
   padding-left: 10px;
   padding-right: 10px;
-
+  min-width: fit-content;
   margin-bottom: 35px;
 
   @include media-desktop-down {
-    min-width: fit-content;
     margin-bottom: 10px;
   }
 
@@ -185,12 +184,14 @@
   }
 
   &.awaiting-approval,
+  &.waiting-approval,
   &.held,
   &.outstanding,
   &.submitted,
   &.pending-supplier,
   &.submitted-for-approval,
   &.querying,
+  &.for-contents-approval,
   &.in-review,
   &.n\/a {
     p {
@@ -204,7 +205,9 @@
   &.complete,
   &.assigned,
   &.accepted,
+  &.closed,
   &.pricing-agreed,
+  &.brokering,
   &.approved {
     p {
       background: $lbh-green1;
@@ -272,6 +275,7 @@
   &.overdue,
   &.disputes-active,
   &.in-dispute,
+  &.declined,
   &.action-needed,
   &.info-needed {
     p {

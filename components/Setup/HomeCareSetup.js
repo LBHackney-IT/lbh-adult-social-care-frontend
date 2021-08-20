@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { HOME_CARE_ROUTE } from '../../routes/RouteConstants';
-import DatePick from '../DatePick';
 import RadioButton, { yesNoValues } from '../RadioButton';
 import CarePackageSetup from '../CarePackages/CarePackageSetup';
 import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
-import { useRouter } from 'next/router';
 import fieldValidator from '../../service/inputValidator';
 import DateSetup from './DateSetup';
-
-// TODO remove
-const fixedPeriodOptions = [
-  { text: 'Fixed period', value: true },
-  { text: 'Ongoing', value: false },
-];
 
 const HomeCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => {
   const router = useRouter();
@@ -20,7 +13,7 @@ const HomeCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => 
   const [endDate, setEndDate] = useState(new Date());
   const [isImmediate, setIsImmediate] = useState(undefined);
   const [isS117, setIsS117] = useState(undefined);
-  const [isFixedPeriod, setIsFixedPeriod] = useState(undefined);
+  const [isFixedPeriod, setIsFixedPeriod] = useState(false);
 
   const [errorFields, setErrorFields] = useState({
     isImmediate: '',
