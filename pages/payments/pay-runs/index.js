@@ -86,6 +86,9 @@ const PAY_RUN_ROWS_RULES = {
   totalAmountPaid: {
     getValue: (value) => `£${getNumberWithCommas(value)}`,
   },
+  totalAmountHeld: {
+    getValue: (value) => `£${getNumberWithCommas(value)}`,
+  },
 };
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
