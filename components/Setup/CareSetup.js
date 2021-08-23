@@ -68,7 +68,7 @@ const CareSetup = ({
     <CarePackageSetup onBuildClick={onBuildClick}>
       <div className="level" />
       <div className="columns">
-        <div className="column is-5">
+        <div className="column">
           <CareSelectDropdown
             error={errors.careType}
             initialText={null}
