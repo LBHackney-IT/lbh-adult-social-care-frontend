@@ -39,7 +39,6 @@ const createHomeCarePackage = async ({
           packageReclaims,
         }
       )
-    console.log(response);
     return response?.data;
   } catch (error) {
     console.error(error);

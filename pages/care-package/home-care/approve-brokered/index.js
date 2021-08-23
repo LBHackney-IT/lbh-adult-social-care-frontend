@@ -63,7 +63,6 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 // eslint-disable-next-line no-shadow
 const HomeCareApproveBrokered = () => {
-  console.log('qwe');
   const { data: homeCareServices } = useHomeCareApi.getAllServices();
   const { data: homeCareTimeShiftsData } = useHomeCareApi.getAllTimeShiftSlots();
   const [homeCareSummaryData] = useState([]);
