@@ -328,7 +328,12 @@ const HomeCare = ({ loggedInUserId }) => {
         age: "91",
         dateOfBirth: "09/12/1972",
         postcode: "E9 6EY",
-        title: `Home Care (${datePeriod.startDate} - ${datePeriod.endDate})`
+        title:
+          <p>Home Care <br />
+            <span className='font-size-14px'>
+              ({datePeriod.startDate} - {datePeriod.endDate})
+            </span>
+          </p>
       }}
       headerTitle="BUILD A CARE PACKAGE">
       <div className="mt-5 mb-5">

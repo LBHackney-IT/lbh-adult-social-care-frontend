@@ -10,13 +10,14 @@
     justify-content: space-between;
   }
 
-  .dropdown-content {
-    border: 1px solid $lbh-light-gray-border;
-  }
-
   .dropdown-menu {
     min-width: initial;
     width: 100%;
+
+    border: 1px solid #bfc1c3;
+    border-radius: 4px;
+    overflow: auto;
+    max-height: 160px;
   }
 
   .icon {

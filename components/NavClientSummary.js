@@ -29,7 +29,7 @@ const NavClientSummary = ({
         </div>
       )}
       <div className="is-flex-wrap-wrap">
-        {title && <div className="is-5 client-summary-title">{title}</div>}
+        {title && <div className="client-summary-title">{title}</div>}
         {client && <div className="client-prop">
           <p className="client-fullName">{client}</p>
         </div>}

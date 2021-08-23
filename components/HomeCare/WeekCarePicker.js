@@ -36,7 +36,7 @@ const WeekCarePicker = ({
             <LegendItem className="escort-home-care">Escort</LegendItem>
           </div>
         </div>
-        <div className="level-item level-right">
+        <div>
           <RadioButton
             label="Display Time"
             options={minutesOrHoursOptions}

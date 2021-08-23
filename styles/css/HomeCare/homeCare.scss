@@ -28,6 +28,7 @@ $escort: #ffa9a9;
 
 .legend-items {
   display: flex;
+  flex-wrap: wrap;
 
   .legend-item {
     display: flex;
