@@ -230,7 +230,7 @@ workflows:
       - build:
           requires:
             - install-dependencies
-      - chromatic-deploy:
+      - chromatic-deployment:
           requires:
             - build
       - owasp-zap-baseline-scan:
