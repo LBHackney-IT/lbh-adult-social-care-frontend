@@ -179,7 +179,6 @@ jobs:
           paths:
             - project/build
 
-  # 👇 Adds Chromatic as a job
   chromatic-deployment: 
     docker:
       - image: circleci/node:12
@@ -191,7 +190,6 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
       - run: yarn install
-        # 👇 Runs the Chromatic CLI
       - run: yarn chromatic --project-token=${CHROMATIC_PROJECT_TOKEN}
 
   # get-environment-variables:
@@ -232,6 +230,9 @@ workflows:
       - build:
           requires:
             - install-dependencies
+      - chromatic-deploy:
+          requires:
+            - build
       - owasp-zap-baseline-scan:
           requires:
             - build
@@ -307,7 +308,3 @@ workflows:
       #     filters:
       #       branches:
       #         only: main
-   # 👇 Adds Chromatic to the workflow
-  chromatic-deploy:
-    jobs:
-      - chromatic-deployment # 👈 Runs the Chromatic job implemented above
