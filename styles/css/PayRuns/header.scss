@@ -26,6 +26,7 @@
 
   .control {
     margin-right: 8px;
+    margin-bottom: 20px;
   }
 
   .custom-input__search {
@@ -108,7 +109,21 @@
 
 .held-payments__filters {
   display: flex;
-  height: 42px;
+  flex-wrap: wrap;
+
+  .held-payments-select__menu {
+    top: 74%;
+    margin-top: 0;
+  }
+
+  @include media-tablet-down {
+    .control {
+      margin-top: 10px;
+    }
+    .held-payments-select {
+      margin-top: 10px;
+    }
+  }
 
   label.checkbox {
     align-items: flex-end;

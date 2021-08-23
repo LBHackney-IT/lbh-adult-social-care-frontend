@@ -1,7 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
-import HomeCareApprovalTitle from '../../../../components/HomeCare/HomeCareApprovalTitle';
 import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
 import HomeCarePackageDetails from '../../../../components/HomeCare/HomeCarePackageDetails';
 import Layout from '../../../../components/Layout/Layout';
@@ -12,6 +10,8 @@ import { getUserSession } from '../../../../service/helpers';
 import { PERSONAL_CARE_MODE } from '../../../../service/homeCarePickerHelper';
 import { getServiceTypeCareTimes } from '../../../../service/homeCareServiceHelper';
 import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
+import { Button } from '../../../../components/Button'
+import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem'
 
 const approvalHistoryEntries = [
   {
@@ -52,40 +52,21 @@ const HomeCareApprovePackage = () => {
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
 
   return (
-    <Layout headerTitle="HOME CARE PACKAGE APPROVAL">
+    <Layout
+      clientSummaryInfo={{
+        whoIsSourcing: 'hackney',
+        client: 'James Stephens',
+        title: `Home Care`,
+        hackneyId: '#786288',
+        age: '91',
+        dateOfBirth: '09/12/1972',
+        postcode: 'E9 6EY',
+      }}
+    >
       <div className="hackney-text-black font-size-12px">
-        <HomeCareApprovalTitle />
-        <ApprovalClientSummary />
-
-        <div className="columns">
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">HOURS PER WEEK</p>
-                    <p className="font-size-14px">18</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">COST OF CARE</p>
-                    <p className="font-size-14px">£1,982</p>
-                    <p className="font-weight-bold hackney-text-green">ESTIMATE</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column" />
-          <div className="column" />
-          <div className="column" />
+        <div className='client-summary'>
+          <ClientSummaryItem itemDetail={18} itemName='HOURS PER WEEK' />
+          <ClientSummaryItem itemDetail='£1,982' itemName='COST OF CARE' />
         </div>
 
         <HomeCarePackageBreakdown />
@@ -106,19 +87,10 @@ const HomeCareApprovePackage = () => {
               /> */}
             </div>
 
-            <div className="level mt-3">
-              <div className="level-left" />
-              <div className="level-right">
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Deny</button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Request more information</button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green">Approve to be brokered</button>
-                </div>
-              </div>
+            <div className='button-group mb-5'>
+              <Button className="button hackney-btn-light">Deny</Button>
+              <Button className="button hackney-btn-light">Request more information</Button>
+              <Button className="button hackney-btn-green">Approve to be brokered</Button>
             </div>
 
             <div className="mt-1">

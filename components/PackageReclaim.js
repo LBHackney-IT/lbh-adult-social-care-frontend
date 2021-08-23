@@ -67,18 +67,18 @@ const PackageReclaim = ({
           <Dropdown
             label="Reclaim from"
             initialText="Select"
-            error={currentError?.from}
+            error={currentError?.reclaimFromId}
             options={reclaimFromOptions}
-            onOptionSelect={(value) => changePackageType('from', value)}
-            selectedValue={packageReclaim.from}
+            onOptionSelect={(value) => changePackageType('reclaimFromId', value)}
+            selectedValue={packageReclaim.reclaimFromId}
           />
           <Dropdown
             label="Reclaim category"
             initialText="Select"
-            error={currentError?.category}
+            error={currentError?.reclaimCategoryId}
             options={reclaimFromCategoryOptions}
-            onOptionSelect={(value) => changePackageType('category', value)}
-            selectedValue={packageReclaim.category}
+            onOptionSelect={(value) => changePackageType('reclaimCategoryId', value)}
+            selectedValue={packageReclaim.reclaimCategoryId}
           />
         </div>
         <TextArea
@@ -92,10 +92,10 @@ const PackageReclaim = ({
         <div className="mt-4 mb-5">
           <RadioButton
             label=""
-            error={currentError?.type}
-            onChange={(value) => changePackageType('type', value)}
+            error={currentError?.homeCarePackageId}
+            onChange={(value) => changePackageType('homeCarePackageId', value)}
             options={reclaimAmountOptions}
-            selectedValue={packageReclaim.type}
+            selectedValue={packageReclaim.homeCarePackageId}
           />
         </div>
         {packageReclaim.type && (

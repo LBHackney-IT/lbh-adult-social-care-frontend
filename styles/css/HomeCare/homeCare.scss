@@ -22,11 +22,13 @@ $escort: #ffa9a9;
 .home-care-options {
   .home-care-option {
     margin-right: 20px;
+    margin-top: 10px;
   }
 }
 
 .legend-items {
   display: flex;
+  flex-wrap: wrap;
 
   .legend-item {
     display: flex;
@@ -158,6 +160,10 @@ $escort: #ffa9a9;
     align-items: center;
     margin-top: 32px;
     margin-bottom: 16px;
+
+    & > span {
+      margin-right: 5px;
+    }
 
     label {
       font-weight: bold;

@@ -42,3 +42,34 @@
     }
   }
 }
+
+.client-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-gap: 12px;
+
+  @include media-small-ipod-down {
+    justify-items: center;
+  }
+
+  .client-summary__item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__item {
+    color: $lbh-green1;
+    font-weight: bold;
+
+    @include media-tablet-up {
+      display: flex;
+      flex-direction: column;
+    }
+
+    span {
+      color: $lbh-black1;
+      font-weight: initial;
+      font-size: 14px;
+    }
+  }
+}

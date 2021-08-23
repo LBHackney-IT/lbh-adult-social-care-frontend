@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
-import ClientSummary from '../../../components/ClientSummary';
 import Dropdown from '../../../components/Dropdown';
 import TextArea from '../../../components/TextArea';
 import Layout from '../../../components/Layout/Layout';
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
 } from '../../../components/CarePackages/AdditionalNeedsEntries';
-import CareTitle from '../../../components/CarePackages/CareTitle';
 import TitleHeader from '../../../components/TitleHeader';
 import NursingCareSummary from '../../../components/NursingCare/NursingCareSummary';
 import { Button } from '../../../components/Button';
@@ -20,7 +17,7 @@ import {
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
-import { getLoggedInUser, getUserSession } from '../../../service/helpers';
+import { formatCareDatePeriod, getLoggedInUser, getUserSession } from '../../../service/helpers'
 import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
 import { selectUser } from '../../../reducers/userReducer';
@@ -207,17 +204,20 @@ const NursingCare = () => {
       });
   };
 
+  const datePeriod = formatCareDatePeriod(startDate, endDate);
+
   return (
-    <Layout headerTitle="BUILD A CARE PACKAGE">
-      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
-        Care Package
-      </ClientSummary>
-      <div className="mt-5 mb-5">
-        <CareTitle startDate={startDate} endDate={endDate}>
-          Nursing Care
-        </CareTitle>
-      </div>
-      <div className="mt-4 columns">
+    <Layout
+      clientSummaryInfo={{
+        client: "James Stephens",
+        hackneyId: "786288",
+        age: "91",
+        title: `BUILD A CARE PACKAGE (${datePeriod.startDate} - ${datePeriod.endDate})`,
+        dateOfBirth: "09/12/1972",
+        postcode: "E9 6EY",
+      }}
+    >
+      <div className="mt-4 columns nursing-care">
         <div className="column">
           <TextArea
             label="Need to Address"
@@ -237,7 +237,6 @@ const NursingCare = () => {
             error={errorFields.selectedNursingHomeType}
             setError={() => changeErrorField('selectedNursingHomeType')}
             onOptionSelect={(option) => setSelectedNursingHomeType(option)}
-            buttonStyle={{ width: '240px' }}
           />
         </div>
       </div>
@@ -264,7 +263,7 @@ const NursingCare = () => {
         <TitleHeader>Package Details</TitleHeader>
         <NursingCareSummary
           startDate={startDate}
-          endDate={getEnGBFormattedDate(endDate)}
+          endDate={datePeriod.endDate}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}
           setAdditionalNeedsEntries={setAdditionalNeedsEntries}

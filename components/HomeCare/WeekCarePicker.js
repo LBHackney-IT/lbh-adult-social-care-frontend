@@ -24,6 +24,7 @@ const WeekCarePicker = ({
 
   return (
     <>
+      <strong>When should this be done? </strong><span>(Select time and day)</span>
       <div className="level">
         <div className="level-item level-left">
           <div className="legend-items">
@@ -35,7 +36,7 @@ const WeekCarePicker = ({
             <LegendItem className="escort-home-care">Escort</LegendItem>
           </div>
         </div>
-        <div className="level-item level-right">
+        <div>
           <RadioButton
             label="Display Time"
             options={minutesOrHoursOptions}

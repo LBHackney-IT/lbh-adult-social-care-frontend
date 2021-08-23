@@ -9,6 +9,29 @@
   border-radius: 4px;
 }
 
+.package-cost-box__group {
+  display: flex;
+  flex-wrap: wrap;
+
+  @include media-desktop-down {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 8px;
+    justify-items: center;
+
+    @include media-small-ipod-up {
+      grid-template-columns: fit-content(1fr);
+    }
+
+    @include media-mobile {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    & > div {
+      margin-right: 0;
+    }
+  }
+}
+
 .hackney-package-cost-yellow-box {
   border-radius: 4px;
   background: #f8e08e;

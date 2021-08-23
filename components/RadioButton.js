@@ -30,6 +30,7 @@ const RadioButton = ({
     setRadioValue(radioItemValue);
   };
 
+
   return (
     <BaseField label={label} classes={className}>
       <div className={`radio-cont${inline ? '' : ' not-inline'}`}>
@@ -37,7 +38,7 @@ const RadioButton = ({
           <>
             {radioItem.header && radioItem.header}
             <label
-              key={radioItem.value}
+              key={`${radioItem.value}${label}`}
               className={`radio-item${index !== options.length ? ' is-first' : ''}`}
               onClick={() => radioChange(radioItem.value)}
             >
@@ -46,7 +47,7 @@ const RadioButton = ({
               >
                 <div className="radio-item-selected" />
               </div>
-              {radioItem.text}
+              <p className='radio-item__text'>{radioItem.text}</p>
             </label>
           </>
         ))}

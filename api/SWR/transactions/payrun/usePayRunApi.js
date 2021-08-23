@@ -1,4 +1,5 @@
 import useGetData from '../../useGetData'
+import { getQueryParamsFromObject } from '../../../Utils/ApiUtils'
 
 const PAY_RUN_URL = '/transactions/pay-runs';
 
@@ -14,17 +15,11 @@ const useUniquePayRunSuppliers = (payRunId) => useGetData(`${PAY_RUN_URL}/${payR
 
 const usePayRunSummaryInsights = (payRunId) => useGetData(`${PAY_RUN_URL}/${payRunId}/summary-insights`);
 
-const useSinglePayRunDetails = ({
-  payRunId,
-  pageNumber = 1,
-  pageSize = 10,
-  dateFrom = '',
-  dateTo = '',
-  supplierId = '',
-  packageTypeId = '',
-  invoiceStatusId = '',
-  serviceUserId = '',
-}) => useGetData(`${PAY_RUN_URL}/${payRunId}/details?pageNumber=${pageNumber}&pageSize=${pageSize}&supplierId=${supplierId}&packageTypeId=${packageTypeId}&invoiceStatusId=${invoiceStatusId}&serviceUserId=${serviceUserId}&dateFrom=${dateFrom}&dateTo=${dateTo}`);
+const useSinglePayRunDetails = (props) => {
+  const { payRunId } = props;
+  delete props.payRunId;
+  return useGetData(`${PAY_RUN_URL}/${payRunId}/details${getQueryParamsFromObject(props, true)}`);
+}
 
 export {
   usePayRunTypes,

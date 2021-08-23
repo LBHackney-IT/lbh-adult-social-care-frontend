@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { getEnGBFormattedDate } from '../api/Utils/FuncUtils'
 
 const chr4 = () => Math.random().toString(16).slice(-4);
 
@@ -11,6 +12,13 @@ const formatDateWithSign = (date, sign = '/') => {
   const year = newDate.getFullYear();
 
   return `${`00${day}`.slice(-2)}${sign}${`00${month}`.slice(-2)}${sign}${`00${year}`.slice(-2)}`;
+};
+
+const formatCareDatePeriod = (startDate, endDate) => {
+  return {
+    startDate: getEnGBFormattedDate(startDate, ' '),
+    endDate: endDate ? getEnGBFormattedDate(endDate, ' ') : 'Ongoing'
+  };
 };
 
 const formatDate = (date, sign = '/') => {
@@ -153,4 +161,5 @@ export {
   scrollToElement,
   getNumberWithCommas,
   convertLocalToUTCDate,
+  formatCareDatePeriod,
 };
