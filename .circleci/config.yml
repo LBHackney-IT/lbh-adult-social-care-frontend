@@ -179,6 +179,19 @@ jobs:
           paths:
             - project/build
 
+  chromatic-deployment: 
+    docker:
+      - image: circleci/node:12
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn install
+      - run: yarn chromatic --project-token=${CHROMATIC_PROJECT_TOKEN}
+
   # get-environment-variables:
   #   executor: aws-cli/default
   #   steps:
@@ -217,6 +230,9 @@ workflows:
       - build:
           requires:
             - install-dependencies
+      - chromatic-deployment:
+          requires:
+            - build
       - owasp-zap-baseline-scan:
           requires:
             - build

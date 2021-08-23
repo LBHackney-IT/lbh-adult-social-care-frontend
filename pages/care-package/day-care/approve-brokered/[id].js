@@ -32,6 +32,7 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 const DayCareApproveBrokered = () => {
   const router = useRouter();
   const dayCarePackageId = router.query.id;
+  const [errors, setErrors] = useState(errorData || []);
   const dispatch = useDispatch();
   const [daysSelected, setDaysSelected] = useState([]);
   const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
@@ -56,7 +57,6 @@ const DayCareApproveBrokered = () => {
       setOpportunityEntries(newOpportunityEntries);
       setDaysSelected(getSelectedDate(dayCarePackage));
     }
-
   }, [dayCarePackage]);
 
   const changeErrorFields = (field) => {
@@ -74,8 +74,8 @@ const DayCareApproveBrokered = () => {
   };
 
   const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }))
-  }
+    dispatch(addNotification({ text, className }));
+  };
 
   const handleRejectPackage = () => {
     dayCarePackageRejectCommercials(dayCarePackageId)
