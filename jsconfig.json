@@ -2,7 +2,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@components": ["components/"]
+      "@components": ["components/"],
+      "@constants": ["constants/"],
+      "@routes": ["routes/"],
+      "@api": ["api/"],
     }
   }
 }

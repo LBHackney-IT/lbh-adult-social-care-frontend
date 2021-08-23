@@ -39,6 +39,9 @@ module.exports = {
       alias: {
         map: [
           ['components', './components'],
+          ['constants', './constants'],
+          ['routes', './routes'],
+          ['api', './api'],
         ],
       },
     },
