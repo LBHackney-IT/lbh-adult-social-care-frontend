@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import React, { useState } from 'react';
 import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
 import {
@@ -21,6 +22,7 @@ import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
 import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
+import { addNotification } from '../../../../reducers/notificationsReducer';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -74,6 +76,7 @@ const ResidentialCareApprovePackage = ({
   errorData,
 }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const residentialCarePackageId = router.query.id;
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
@@ -88,13 +91,17 @@ const ResidentialCareApprovePackage = ({
     typeOfStayOptionName = '',
   } = residentialCarePackage?.residentialCarePackage || {};
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  }
+
   const handleRejectPackage = () => {
     residentialCareChangeStatus(residentialCarePackageId, 10)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error}`);
+        pushNotification(error);
         setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
@@ -105,7 +112,7 @@ const ResidentialCareApprovePackage = ({
         router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error}`);
+        pushNotification(error);
         setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
@@ -117,7 +124,7 @@ const ResidentialCareApprovePackage = ({
         router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error}`);
+        pushNotification(error);
         setErrors([...errors, `Status change failed. ${error}`]);
       });
   };

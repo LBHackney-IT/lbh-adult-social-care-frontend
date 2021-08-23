@@ -10,4 +10,10 @@ const requestMethods = {
   head: 'HEAD',
 };
 
-export { maxStringLength, requestMethods, DEFAULT_PAGE_SIZE };
+const invoiceStatusIdByString = {
+  accepted: 5,
+  rejected: 2,
+  hold: 1,
+};
+
+export { maxStringLength, invoiceStatusIdByString, requestMethods, DEFAULT_PAGE_SIZE };

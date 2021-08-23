@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import BillsHeader from '../../../components/Bills/BillsHeader';
 import PaymentsTabs from '../../../components/Payments/PaymentsTabs';
-import BillsTable from '../../../components/Bills/BillsTable';
 import Pagination from '../../../components/Payments/Pagination';
 import { billsPayRunsTableData, billsTableData } from '../../../testData/billsTestData';
 import PopupBillsPayDownload from '../../../components/Bills/PopupBillsPayDownload';
@@ -10,6 +9,7 @@ import BillsFilters from '../../../components/Bills/BillsFilters';
 import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
 import { getUserSession } from '../../../service/helpers';
 import withSession from '../../../lib/session';
+import Table from '../../../components/Table'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -122,11 +122,10 @@ const Bills = () => {
         dateRangeOptions={[]}
         packageIdOptions={[]}
       />
-      <BillsTable
+      <Table
         checkedRows={checkedRows}
         setCheckedRows={onCheckRows}
-        isIgnoreId={true}
-        classes={tabsClasses[tab]}
+        className={tabsClasses[tab]}
         rows={isBillsTab ? billsTableData : billsPayRunsTableData}
         sortBy={sortBy}
         sorts={sortsTab[tab]}

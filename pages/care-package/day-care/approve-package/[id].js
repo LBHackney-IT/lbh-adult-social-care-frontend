@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux'
 import Layout from '../../../../components/Layout/Layout';
 import DayCareApprovalTitle from '../../../../components/DayCare/DayCareApprovalTitle';
 import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
@@ -14,61 +15,48 @@ import {
   approveDayCarePackageContents,
   dayCarePackageContentsRequestClarification,
   dayCarePackageRejectContents,
-  getDayCarePackageApprovalDetails,
 } from '../../../../api/CarePackages/DayCareApi';
 import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
 import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import withSession from '../../../../lib/session';
 import { getErrorResponse, getUserSession } from '../../../../service/helpers';
 import fieldValidator from '../../../../service/inputValidator';
+import useDayCareApi from '../../../../api/SWR/useDayCareApi'
+import { formatApprovalHistory, formatDayCareOpportunities } from '../../../../service/formatItems';
+import { addNotification } from '../../../../reducers/notificationsReducer';
 
 // start before render
-export const getServerSideProps = withSession(async ({ req, res, query: { id: dayCarePackageId } }) => {
+export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
 
-  const data = {
-    errorData: [],
-  };
-  try {
-    const dayCarePackage = await getDayCarePackageApprovalDetails(dayCarePackageId);
-    data.dayCarePackage = dayCarePackage;
-
-    // Update approve-package state
-    const newApprovalHistoryItems = dayCarePackage.packageApprovalHistory.map((historyItem) => ({
-      eventDate: new Date(historyItem.dateCreated).toLocaleDateString('en-GB'),
-      eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
-      eventSubMessage: historyItem.logSubText,
-    }));
-
-    const newOpportunityEntries = dayCarePackage.packageDetails.dayCareOpportunities.map((opportunityItem) => ({
-      id: opportunityItem.dayCarePackageOpportunityId,
-      howLongValue: opportunityItem.howLong.optionName,
-      timesPerMonthValue: opportunityItem.howManyTimesPerMonth.optionName,
-      needToAddress: opportunityItem.opportunitiesNeedToAddress,
-    }));
-
-    data.approvalHistoryEntries([...newApprovalHistoryItems]);
-    data.opportunityEntries([...newOpportunityEntries]);
-
-    // Set days selected
-
-    data.daysSelected = getSelectedDate(dayCarePackage);
-  } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error?.message}`);
-  }
-
-  return { props: { data } };
+  return { props: {} };
 });
 
-const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportunityEntries, daysSelected }) => {
+const DayCareApprovePackage = () => {
   // Parameters
   const router = useRouter();
   const dayCarePackageId = router.query.id;
-
-  const [errors, setErrors] = useState([]);
+  const dispatch = useDispatch();
+  const [daysSelected, setDaysSelected] = useState([]);
+  const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
+  const [opportunityEntries, setOpportunityEntries] = useState([]);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
+
+  const { data: dayCarePackage } = useDayCareApi.approvalDetails(dayCarePackageId);
+
+  useEffect(() => {
+    if(dayCarePackage) {
+      const newApprovalHistoryItems = formatApprovalHistory(dayCarePackage?.packageApprovalHistory);
+      setApprovalHistoryEntries(newApprovalHistoryItems);
+
+      const newOpportunityEntries = formatDayCareOpportunities(dayCarePackage?.packageDetails?.dayCareOpportunities);
+      setOpportunityEntries(newOpportunityEntries);
+      setDaysSelected(getSelectedDate(dayCarePackage));
+    }
+
+  }, [dayCarePackage]);
 
   const [errorFields, setErrorFields] = useState({
     requestInformationText: '',
@@ -88,15 +76,16 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
     });
   };
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  }
+
   const handleRejectPackage = () => {
     dayCarePackageRejectContents(dayCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
-      .catch((error) => {
-        alert(`Status change failed. ${error}`);
-        setErrors([...errors, `Status change failed. ${error}`]);
-      });
+      .catch((error) => pushNotification(error));
   };
   const handleRequestMoreInformation = () => {
     const { validFields, hasErrors } = fieldValidator([
@@ -112,9 +101,8 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error}`);
+        pushNotification(error);
         updateErrorFields(error);
-        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
   const handleApprovePackageContents = () => {
@@ -123,9 +111,8 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error}`);
+        pushNotification(error);
         updateErrorFields(error);
-        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
   return (

@@ -3,20 +3,13 @@ import { getQueryParamsFromObject } from '../Utils/ApiUtils'
 
 const BROKERED_PACKAGES_URL = '/brokered-packages';
 
-const useBrokeredPackagesNew = (params) => useGetData(`${BROKERED_PACKAGES_URL}/new${getQueryParamsFromObject(params)}`);
-const useBrokeredPackagesInProgress = (params) => useGetData(`${BROKERED_PACKAGES_URL}/in-progress${getQueryParamsFromObject(params)}`);
-const useBrokeredPackagesDone = (params) => useGetData(`${BROKERED_PACKAGES_URL}/done${getQueryParamsFromObject(params)}`);
-const useBrokeredPackagesTypes = () => useGetData(`${BROKERED_PACKAGES_URL}/package-types`);
-const useBrokeredPackagesSocialWorkers = () => useGetData(`${BROKERED_PACKAGES_URL}/social-workers`);
-const useBrokeredPackagesApprovers = () => useGetData(`${BROKERED_PACKAGES_URL}/approvers`);
-const useBrokeredPackagesStages = () => useGetData(`${BROKERED_PACKAGES_URL}/stages`);
+const useBrokeredPackageApi = {
+  new: (params) => useGetData(`${BROKERED_PACKAGES_URL}/new${getQueryParamsFromObject(params)}`),
+  inProgress: (params) => useGetData(`${BROKERED_PACKAGES_URL}/in-progress${getQueryParamsFromObject(params)}`),
+  done: (params) => useGetData(`${BROKERED_PACKAGES_URL}/done${getQueryParamsFromObject(params)}`),
+  types: () => useGetData(`${BROKERED_PACKAGES_URL}/package-types`),
+  socialWorkers: () => useGetData(`${BROKERED_PACKAGES_URL}/social-workers`),
+  stages: () => useGetData(`${BROKERED_PACKAGES_URL}/stages`),
+}
 
-export {
-  useBrokeredPackagesNew,
-  useBrokeredPackagesDone,
-  useBrokeredPackagesInProgress,
-  useBrokeredPackagesStages,
-  useBrokeredPackagesTypes,
-  useBrokeredPackagesSocialWorkers,
-  useBrokeredPackagesApprovers,
-};
+export default useBrokeredPackageApi;

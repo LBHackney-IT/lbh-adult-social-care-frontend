@@ -11,6 +11,7 @@ import PackageApprovalHistorySummary from '../../PackageApprovalHistorySummary';
 import PackageCostBox from '../../DayCare/PackageCostBox';
 import ResidentialCareSummary from '../../ResidentialCare/ResidentialCareSummary';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
+import AutocompleteSelect from '../../AutocompleteSelect';
 
 const PackagesResidentialCare = ({
   tab,
@@ -40,7 +41,9 @@ const PackagesResidentialCare = ({
   });
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
   const [selectedStageType, setSelectedStageType] = useState(residentialCarePackage?.residentialCarePackage?.stageId);
-  const [selectedSupplierType, setSelectedSupplierType] = useState(residentialCarePackage?.residentialCarePackage?.supplierId);
+  const [selectedSupplierType, setSelectedSupplierType] = useState(
+    residentialCarePackage?.residentialCarePackage?.supplierId
+  );
   const [startDate, setStartDate] = useState(
     (residentialCarePackage && new Date(residentialCarePackage?.residentialCarePackage?.startDate)) || undefined
   );
@@ -72,7 +75,7 @@ const PackagesResidentialCare = ({
   }, [residentialCarePackage]);
 
   useEffect(() => {
-      setCoreCostTotal(Number(coreCost.costPerWeek));
+    setCoreCostTotal(Number(coreCost.costPerWeek));
   }, [coreCost]);
 
   useEffect(() => {
@@ -144,12 +147,11 @@ const PackagesResidentialCare = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <div className="mr-3 is-flex is-align-items-flex-end">
-              <Dropdown
-                label=""
-                initialText="Supplier (please select)"
+              <AutocompleteSelect
+                placeholder="Supplier (please select)"
                 options={supplierOptions}
-                onOptionSelect={setSelectedSupplierType}
-                selectedValue={selectedSupplierType}
+                selectProvider={setSelectedSupplierType}
+                value={selectedSupplierType}
               />
             </div>
             <span className="mr-3">

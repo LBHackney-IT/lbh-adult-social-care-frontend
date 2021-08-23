@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
 import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import { getUserSession, formatDate, sortTableByKey } from '../../service/helpers';
+import { getUserSession, formatDate } from '../../service/helpers';
+import useSocialWorkerApi from '../../api/SWR/useSocialWorkerApi';
 import withSession from '../../lib/session';
-import { addNotification } from '../../reducers/notificationsReducer';
-import { getSubmittedPackages, getSubmittedPackagesStatus } from '../../api/ApproversHub/SocialWorkerApi';
 import {
   RESIDENTIAL_CARE_ROUTE,
   NURSING_CARE_ROUTE,
@@ -29,7 +27,6 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 });
 
 const SocialWorkerDashboardPage = () => {
-  const dispatch = useDispatch();
   const [sorts] = useState([
     { name: 'client', text: 'Client' },
     { name: 'categoryId', text: 'Category' },
@@ -44,7 +41,7 @@ const SocialWorkerDashboardPage = () => {
     status: '',
   });
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
   const [sort, setSort] = useState({
     value: 'ascending',
     name: sorts[0].name,
@@ -53,24 +50,17 @@ const SocialWorkerDashboardPage = () => {
   const sortBy = (field, value) => {
     setSort({ value, name: field });
   };
-  const [socialWorkerData, setSubmittedPackages] = useState([]);
-  const [pagedData, setPagedData] = useState([]);
-  const [statusOptions, setStatusOptions] = useState([]);
+
   const [filters, setFilters] = useState({...initialFilters});
+  const [requestFilters, setRequestFilters] = useState({...initialFilters});
 
-  useEffect(() => {
-    sortTableByKey(socialWorkerData, sort);
-    retrieveSocialWorkerData();
-  }, [sort]);
-
-  useEffect(() => {
-    retrieveSocialWorkerData();
-    retrieveStatusOptions();
-  }, []);
-
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }))
-  }
+  const { data: statusOptions } = useSocialWorkerApi.submittedPackagesStatus();
+  const { data: { data: submittedPackages, pagingMetaData } } = useSocialWorkerApi.submittedPackageRequests({
+    pageNumber: page,
+    pageSize: 50,
+    clientName: requestFilters.terms,
+    statusId: requestFilters.status,
+  });
 
   const onClickTableRow = (rowItems) => {
     rowItems.categoryId === 3
@@ -82,37 +72,9 @@ const SocialWorkerDashboardPage = () => {
       : router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
   };
 
-  const retrieveSocialWorkerData = (page, statusId) => {
-    setLoading(true);
-    getSubmittedPackages(page, 50, filters.terms, statusId)
-      .then((res) => {
-        setSubmittedPackages(sortArray(res.data, sort));
-        setPagedData(res.pagingMetaData);
-        setLoading(false);
-      })
-      .catch((error) => {
-        pushNotification(error);
-        setLoading(false);
-      });
-  };
-
-  const retrieveStatusOptions = () => {
-    getSubmittedPackagesStatus()
-      .then((response) => {
-        const options = response.map((option) => ({
-          text: option?.statusName,
-          value: option?.id,
-        }));
-        setStatusOptions(options);
-      })
-      .catch((error) => {
-        pushNotification(error)
-      });
-  };
-
   const rowsRules = {
     packageId: {
-      hide: true,
+      getHide: () => {},
     },
     dateOfBirth: {
       getValue: (value) => `${formatDate(value, '/')}`,
@@ -132,14 +94,6 @@ const SocialWorkerDashboardPage = () => {
     status: 'statusName',
   };
 
-  const setPage = (page) => {
-    retrieveSocialWorkerData(page);
-  };
-
-  const setSearchTerm = () => {
-    retrieveSocialWorkerData(1, filters.terms);
-  };
-
   const changeFilters = (field, value) => {
     setFilters(filtersState => ({
       ...filtersState,
@@ -153,7 +107,7 @@ const SocialWorkerDashboardPage = () => {
         label: 'Search',
         name: 'terms',
         placeholder: 'Enter search terms',
-        search: () => setSearchTerm(),
+        search: () => setRequestFilters({ ...filters }),
         className: 'mr-3'
       },
     ],
@@ -161,7 +115,7 @@ const SocialWorkerDashboardPage = () => {
       { options: statusOptions, initialText: 'Status', name: 'status', className: 'mr-3' },
     ],
     buttons: [
-      { initialText: 'Filter', name: 'button-1', className: 'mt-auto ml-6', onClick: () =>  retrieveSocialWorkerData()},
+      { initialText: 'Filter', name: 'button-1', className: 'mt-auto ml-6', onClick: () =>  setRequestFilters({ ...filters })},
       {
         initialText: 'Clear',
         name: 'button-2',
@@ -177,18 +131,18 @@ const SocialWorkerDashboardPage = () => {
       <Table
         onClickTableRow={onClickTableRow}
         fields={tableFields}
-        rows={socialWorkerData}
-        loading={loading}
+        rows={sortArray(submittedPackages, sort)}
+        loading={!submittedPackages}
         rowsRules={rowsRules}
         sortBy={sortBy}
         sorts={sorts}
       />
       <Pagination
-        currentPage={pagedData.currentPage}
-        changePagination={setPage}
-        pageSize={pagedData.pageSize}
-        totalCount={pagedData.totalCount}
-        totalPages={pagedData.totalPages}
+        currentPage={pagingMetaData?.currentPage}
+        changePagination={(pageNumber) => setPage(pageNumber)}
+        pageSize={pagingMetaData?.pageSize}
+        totalCount={pagingMetaData?.totalCount}
+        totalPages={pagingMetaData?.totalPages}
       />
       <HackneyFooterInfo />
     </div>

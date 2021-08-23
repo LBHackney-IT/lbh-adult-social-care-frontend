@@ -11,15 +11,18 @@
       width: 70px;
     }
     &-3 {
-      width: 178px;
+      width: 70px;
     }
     &-4 {
-      width: 116px;
+      width: 178px;
     }
     &-5 {
-      width: 82px;
+      width: 116px;
     }
     &-6 {
+      width: 82px;
+    }
+    &-7 {
       width: 200px;
     }
   }
@@ -32,7 +35,7 @@
   }
 }
 
-.pay-run {
+.pay-runs {
   .react-date-picker__input {
     height: 42px;
 
@@ -42,6 +45,9 @@
       font-family: "OpenSans", sans-serif;
     }
   }
+}
+
+.pay-run {
   .table-pagination {
     & > button {
       margin-right: auto;
@@ -126,7 +132,9 @@
 }
 
 .chat-button {
+  transition: 0.2s ease;
   &:hover {
     cursor: pointer;
+    transform: scale(1.1);
   }
 }

@@ -11,6 +11,7 @@ import NursingCareSummary from '../../NursingCare/NursingCareSummary';
 import PackageApprovalHistorySummary from '../../PackageApprovalHistorySummary';
 import PackageCostBox from '../../DayCare/PackageCostBox';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
+import AutocompleteSelect from '../../AutocompleteSelect';
 
 const PackagesNursingCare = ({
   tab,
@@ -140,12 +141,11 @@ const PackagesNursingCare = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <div className="mr-3 is-flex is-align-items-flex-end">
-              <Dropdown
-                label=""
-                initialText="Supplier (please select)"
+              <AutocompleteSelect
+                placeholder="Supplier (please select)"
                 options={supplierOptions}
-                onOptionSelect={setSelectedSupplierType}
-                selectedValue={selectedSupplierType}
+                selectProvider={setSelectedSupplierType}
+                value={selectedSupplierType}
               />
             </div>
             <span className="mr-3">

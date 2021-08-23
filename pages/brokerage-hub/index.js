@@ -20,14 +20,7 @@ import { DEFAULT_PAGE_SIZE } from '../../constants/variables';
 import { checkEmptyFields } from '../../service/inputValidator';
 import { sortArray } from '../../api/Utils/FuncUtils';
 import { DATA_TYPES } from '../../api/Utils/CommonOptions';
-import {
-  useBrokeredPackagesDone,
-  useBrokeredPackagesInProgress,
-  useBrokeredPackagesNew,
-  useBrokeredPackagesSocialWorkers,
-  useBrokeredPackagesStages,
-  useBrokeredPackagesTypes
-} from '../../api/SWR/useBrokeredPackagesApi'
+import useBrokeredPackageApi from '../../api/SWR/useBrokeredPackagesApi'
 
 const BrokerageHubPage = () => {
   const dispatch = useDispatch();
@@ -57,9 +50,9 @@ const BrokerageHubPage = () => {
     ...initialFilters,
   })
 
-  const { data: stageOptions } = useBrokeredPackagesStages();
-  const { data: typeOfCareOptions } = useBrokeredPackagesTypes();
-  const { data: socialWorkerOptions } = useBrokeredPackagesSocialWorkers();
+  const { data: stageOptions } = useBrokeredPackageApi.stages();
+  const { data: typeOfCareOptions } = useBrokeredPackageApi.types();
+  const { data: socialWorkerOptions } = useBrokeredPackageApi.socialWorkers();
 
   const [sorts] = useState([
     { name: 'packageType', text: 'Package Type' },
@@ -111,7 +104,7 @@ const BrokerageHubPage = () => {
   const { data: {
     data: brokeredNew,
     pagingMetaData: pagingMetaDataNew,
-  }} = useBrokeredPackagesNew({
+  }} = useBrokeredPackageApi.new({
       PageNumber: page,
       OrderBy: sort.name,
       PageSize: DEFAULT_PAGE_SIZE,
@@ -123,7 +116,7 @@ const BrokerageHubPage = () => {
     data: {
       data: brokeredInProgress,
       pagingMetaData: pagingMetaDataInProgress,
-    }} = useBrokeredPackagesInProgress({
+    }} = useBrokeredPackageApi.inProgress({
       PageNumber: page,
       OrderBy: sort.name,
       PageSize: DEFAULT_PAGE_SIZE,
@@ -135,7 +128,7 @@ const BrokerageHubPage = () => {
     data: {
       data: brokeredDone,
       pagingMetaData: pagingMetaDataDone,
-    }} = useBrokeredPackagesDone({
+    }} = useBrokeredPackageApi.done({
       PageNumber: page,
       OrderBy: sort.name,
       PageSize: DEFAULT_PAGE_SIZE,
@@ -182,7 +175,7 @@ const BrokerageHubPage = () => {
 
   const rowsRules = {
     packageId: {
-      hide: true,
+      getHide: () => true,
     },
     hackneyId: {
       getValue: (value) => `#${value}`,
