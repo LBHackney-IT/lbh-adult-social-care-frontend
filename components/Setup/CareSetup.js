@@ -30,10 +30,11 @@ const CareSetup = ({
     });
   };
 
+  const selectedCare = careTypes.find(item => item.value === selectedCareType);
 
   // Handle build click
   const onBuildClick = () => {
-    const requiredFields = careTypes[selectedCareType].fields.map(field => {
+    const requiredFields = selectedCare.fields.map(field => {
       let rules = ['empty'];
 
       if(includeString(field.toLowerCase(), 'date')) {
@@ -57,11 +58,11 @@ const CareSetup = ({
     }
 
     const formattedRoute = {};
-    careTypes[selectedCareType].fields.forEach(field => {
+    selectedCare.fields.forEach(field => {
       formattedRoute[field] = values[field];
     });
 
-    router.push(`${careTypes[selectedCareType].route}/${Object.keys(formattedRoute).join('/')}`);
+    router.push(`${selectedCare.route}/${Object.keys(formattedRoute).join('/')}`);
   };
 
   return (
@@ -89,10 +90,10 @@ const CareSetup = ({
           startDate={values.startDate}
         />
       </div>
-        {Object.keys(careTypes[selectedCareType].labels).map(field => (
+        {Object.keys(selectedCare.labels).map(field => (
           <div key={field} className="mt-2">
             <RadioButton
-              label={careTypes[selectedCareType].labels[field]}
+              label={selectedCare.labels[field]}
               options={yesNoValues}
               error={errors[field]}
               setError={() => changeErrorFields(field)}

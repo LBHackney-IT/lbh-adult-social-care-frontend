@@ -161,7 +161,7 @@ const CarePackage = ({ history }) => {
             }))
           }}
           history={history}
-          careTypes={careTypes}
+          careTypes={careTypes.slice(2)}
           errors={errors}
           setErrors={setErrors}
           selectedCareType={selectedCareType}
