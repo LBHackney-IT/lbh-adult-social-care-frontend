@@ -20,7 +20,7 @@ import { getErrorResponse, getUserSession } from '../../../../service/helpers';
 import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
 import useDayCareApi from '../../../../api/SWR/useDayCareApi';
 import { addNotification } from '../../../../reducers/notificationsReducer';
-import { formatApprovalHistory, formatDayCareOpportunities } from '../../../../service/formatItems'
+import { formatApprovalHistory, formatDayCareOpportunities } from '../../../../service/formatItems';
 
 // get server side props before render
 export const getServerSideProps = withSession(async ({ req, res }) => {
@@ -33,6 +33,7 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 const DayCareApproveBrokered = () => {
   const router = useRouter();
   const dayCarePackageId = router.query.id;
+  const [errors, setErrors] = useState(errorData || []);
   const dispatch = useDispatch();
   const [daysSelected, setDaysSelected] = useState([]);
   const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
@@ -46,7 +47,7 @@ const DayCareApproveBrokered = () => {
   const { data: dayCarePackage } = useDayCareApi.approvalDetails(dayCarePackageId);
 
   useEffect(() => {
-    if(dayCarePackage) {
+    if (dayCarePackage) {
       const newApprovalHistoryItems = formatApprovalHistory(dayCarePackage?.packageApprovalHistory);
       setApprovalHistoryEntries(newApprovalHistoryItems);
 
@@ -54,7 +55,6 @@ const DayCareApproveBrokered = () => {
       setOpportunityEntries(newOpportunityEntries);
       setDaysSelected(getSelectedDate(dayCarePackage));
     }
-
   }, [dayCarePackage]);
 
   const changeErrorFields = (field) => {
@@ -72,8 +72,8 @@ const DayCareApproveBrokered = () => {
   };
 
   const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }))
-  }
+    dispatch(addNotification({ text, className }));
+  };
 
   const handleRejectPackage = () => {
     dayCarePackageRejectCommercials(dayCarePackageId)
