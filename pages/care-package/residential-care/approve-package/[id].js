@@ -15,12 +15,12 @@ import ResidentialCareSummary from '../../../../components/ResidentialCare/Resid
 import TextArea from '../../../../components/TextArea';
 import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
-import { formatCareDatePeriod, getUserSession } from '../../../../service/helpers'
+import { getUserSession } from '../../../../service/helpers'
 import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { Button } from '../../../../components/Button'
 import ApprovalHistory from '../../../../components/ProposedPackages/ApprovalHistory'
-import NavClientSummary from '../../../../components/NavClientSummary'
+import optionsMapper from '../../../../api/Mappers/optionsMapper'
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -36,14 +36,13 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
       residentialCarePackageId,
       req.cookies[HASC_TOKEN_ID]
     );
-    const newAdditionalNeedsEntries = residentialCarePackage.residentialCarePackage.residentialCareAdditionalNeeds.map(
-      (additionalNeedsItem) => ({
-        id: additionalNeedsItem.id,
-        isWeeklyCost: additionalNeedsItem.isWeeklyCost,
-        isOneOffCost: additionalNeedsItem.isOneOffCost,
-        needToAddress: additionalNeedsItem.needToAddress,
-      })
-    );
+
+    const newAdditionalNeedsEntries = optionsMapper({
+      id: 'id',
+      isWeeklyCost: 'isWeeklyCost',
+      isOneOffCost: 'isOneOffCost',
+      needToAddress: 'needToAddress',
+    }, residentialCarePackage.residentialCarePackage.residentialCareAdditionalNeeds);
 
     data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
     data.residentialCarePackage = residentialCarePackage;

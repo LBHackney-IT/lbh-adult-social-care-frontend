@@ -9,11 +9,9 @@ import {
   nursingCareChangeStatus,
   nursingCareClarifyCommercial,
 } from '../../../../api/CarePackages/NursingCareApi';
-import { getEnGBFormattedDate, stringIsNullOrEmpty } from '../../../../api/Utils/FuncUtils';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
+import { stringIsNullOrEmpty } from '../../../../api/Utils/FuncUtils';
 import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
 import Layout from '../../../../components/Layout/Layout';
-import NursingCareApprovalTitle from '../../../../components/NursingCare/NursingCareApprovalTitle';
 import NursingCareSummary from '../../../../components/NursingCare/NursingCareSummary';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
 import TextArea from '../../../../components/TextArea';

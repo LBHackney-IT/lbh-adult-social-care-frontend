@@ -8,7 +8,6 @@ import { getBrokerageSuccess, selectBrokerage } from '../../../../reducers/broke
 import { getUserSession, uniqueID } from '../../../../service/helpers';
 import withSession from '../../../../lib/session';
 import { mapHomeCarePackageDetailsForBrokerage } from '../../../../api/Mappers/CarePackageMapper';
-import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
 
 // start before render
@@ -99,11 +98,10 @@ const HomeCareBrokerPackage = () => {
         dateOfBirth:
           homeCarePackage?.homeCarePackage && getEnGBFormattedDate(homeCarePackage?.homeCarePackage?.clientDateOfBirth),
         postcode: homeCarePackage?.homeCarePackage?.clientPostCode,
+        title: 'HOME CARE BROKER PACKAGE',
       }}
       className="home-care-brokerage-page"
-      headerTitle="HOME CARE BROKER PACKAGE"
     >
-      <PackageHeader />
       <div className="hackney-text-black font-size-12px care-packages-page">
         <PackagesHomeCare
           tab={tab}

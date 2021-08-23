@@ -9,19 +9,14 @@ import {
   residentialCareChangeStatus,
   residentialCareClarifyCommercial,
 } from '../../../../api/CarePackages/ResidentialCareApi';
-import { getAgeFromDateString, getEnGBFormattedDate, stringIsNullOrEmpty } from '../../../../api/Utils/FuncUtils'
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
-import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
+import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils'
 import Layout from '../../../../components/Layout/Layout';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import ResidentialCareApprovalTitle from '../../../../components/ResidentialCare/ResidentialCareApprovalTitle';
 import ResidentialCareSummary from '../../../../components/ResidentialCare/ResidentialCareSummary';
 import TextArea from '../../../../components/TextArea';
 import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
 import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import ApprovalHistory from '../../../../components/ProposedPackages/ApprovalHistory'
 import { Button } from '../../../../components/Button'
@@ -80,7 +75,6 @@ const ResidentialCareApproveBrokered = ({
   const router = useRouter();
   const dispatch = useDispatch();
   const residentialCarePackageId = router.query.id;
-
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);

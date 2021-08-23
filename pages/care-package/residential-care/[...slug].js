@@ -1,12 +1,9 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import ClientSummary from '../../../components/ClientSummary';
 import Layout from '../../../components/Layout/Layout';
-import CareTitle from '../../../components/CarePackages/CareTitle';
 import TextArea from '../../../components/TextArea';
 import Dropdown from '../../../components/Dropdown';
-import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
 } from '../../../components/CarePackages/AdditionalNeedsEntries';

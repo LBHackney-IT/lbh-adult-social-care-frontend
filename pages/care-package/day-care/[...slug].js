@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import Layout from '../../../components/Layout/Layout';
-import CareTitle from '../../../components/CarePackages/CareTitle';
 import TextArea from '../../../components/TextArea';
 import { days } from '../../../components/daysData';
 import Checkbox from '../../../components/Checkbox';
@@ -263,7 +262,7 @@ const DayCare = () => {
       title: `Day Care (${datePeriod.startDate} - ${datePeriod.endDate})`,
       dateOfBirth: "09/12/1972",
       postcode: "E9 6EY",
-    }} headerTitle="BUILD A CARE PACKAGE">
+    }}>
       <div className="mt-5 mb-5">
         <div className="mt-4 columns">
           <div className="column">

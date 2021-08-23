@@ -11,7 +11,6 @@ import {
   residentialCareChangeStatus,
 } from '../../../../api/CarePackages/ResidentialCareApi';
 import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
-import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 import Layout from '../../../../components/Layout/Layout';
 import PackagesResidentialCare from '../../../../components/packages/residential-care';
 import withSession from '../../../../lib/session';
@@ -21,6 +20,8 @@ import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
 import useSuppliersApi from '../../../../api/SWR/useSuppliersApi';
 import useBaseApi from '../../../../api/SWR/useBaseApi';
+import { mapDetailsForBrokerage } from '../../../../api/Mappers/NursingCareMapper';
+import { mapCarePackageApprovalHistory } from '../../../../api/Mappers/optionsMapper';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -39,14 +40,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
       residentialCarePackageId,
       req.cookies[HASC_TOKEN_ID]
     );
-    const newAdditionalNeedsEntries = result.residentialCarePackage.residentialCareAdditionalNeeds.map(
-      (additionalNeedsItem) => ({
-        id: additionalNeedsItem.id,
-        isWeeklyCost: additionalNeedsItem.isWeeklyCost,
-        isOneOffCost: additionalNeedsItem.isOneOffCost,
-        needToAddress: additionalNeedsItem.needToAddress,
-      })
-    );
+    const newAdditionalNeedsEntries = mapDetailsForBrokerage(result.residentialCarePackage.residentialCareAdditionalNeeds);
     data.residentialCarePackage = result;
     data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch (error) {
@@ -55,11 +49,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
 
   try {
     const res = await getResidentialCarePackageApprovalHistory(residentialCarePackageId, req.cookies[HASC_TOKEN_ID]);
-    const newApprovalHistoryItems = res.map((historyItem) => ({
-      eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
-      eventMessage: historyItem.logText,
-      eventSubMessage: historyItem.logSubText,
-    }));
+    const newApprovalHistoryItems = mapCarePackageApprovalHistory(res);
 
     data.approvalHistoryEntries = newApprovalHistoryItems.slice();
   } catch (error) {
@@ -172,7 +162,6 @@ const ResidentialCareBrokering = ({
         title: 'Residential Care Brokering',
       }}
     >
-      <PackageHeader title="Proposed Package" />
       <PackagesResidentialCare
         tab={tab}
         addPackageReclaim={addPackageReclaim}

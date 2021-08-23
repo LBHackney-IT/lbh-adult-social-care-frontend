@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux'
 import Layout from '../../../../components/Layout/Layout';
-import DayCareApprovalTitle from '../../../../components/DayCare/DayCareApprovalTitle';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
 import DayCarePackageBreakdown from '../../../../components/DayCare/DayCarePackageBreakdown';
 import DayCarePackageElementCostings from '../../../../components/DayCare/DayCarePackageElementCostings';
@@ -17,7 +15,6 @@ import {
   dayCarePackageRejectContents,
 } from '../../../../api/CarePackages/DayCareApi';
 import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
-import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import withSession from '../../../../lib/session';
 import { formatCareDatePeriod, getErrorResponse, getUserSession } from '../../../../service/helpers'
 import fieldValidator from '../../../../service/inputValidator';
