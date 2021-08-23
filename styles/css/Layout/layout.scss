@@ -178,9 +178,16 @@
   .nav-back-button {
     display: flex;
     align-items: center;
+    width: fit-content;
+    padding: 5px;
+    padding-left: 0;
+    border-radius: 4px;
     margin-bottom: 11px;
+    transition: 0.2s easy;
+
     &:hover {
       cursor: pointer;
+      background-color: $lbh-gray-border;
     }
 
     p {
