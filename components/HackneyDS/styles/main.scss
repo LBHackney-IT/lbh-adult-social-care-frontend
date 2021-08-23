@@ -2545,6 +2545,9 @@ html {
 .lbh-page-announcement__content ul > li {
   margin-bottom: 0;
 }
+.govuk-radios--inline.govuk-radios--small {
+  margin-bottom: unset;
+}
 .lbh-inset-text {
   font-family: Open Sans;
   -webkit-font-smoothing: antialiased;

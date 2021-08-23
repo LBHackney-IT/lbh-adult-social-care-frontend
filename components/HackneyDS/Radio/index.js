@@ -8,18 +8,15 @@ export default function Radio({
   name,
   inline,
   disabled,
+  small,
   handler = () => {},
 }) {
   const dataProvider = useRef();
-
   const inlineClassList = (inline ?? '') && ' govuk-radios--inline';
-
+  const smallClassList = (small ?? '') && ' govuk-radios--small'
   return (
     <>
-      {/* <div class="govuk-form-group lbh-form-group"> */}
-      {/* <fieldset class="govuk-fieldset" aria-describedby="example-hint"> */}
-      {/* <div class="govuk-radios lbh-radios"> */}
-      <div className={`govuk-radios__item${inlineClassList}`}>
+      <div className={`govuk-radios__item${inlineClassList + smallClassList}`} >
         <input
           className="govuk-radios__input"
           id={id}
@@ -35,9 +32,6 @@ export default function Radio({
           {children}
         </label>
       </div>
-      {/* </div> */}
-      {/* </fieldset> */}
-      {/* </div> */}
     </>
   );
 }

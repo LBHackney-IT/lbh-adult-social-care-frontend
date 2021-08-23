@@ -13,7 +13,7 @@ export default function Button({ children, secondary, disabled, link, 'add-item'
 
   return link ? (
     <a
-      href={!disabled && link}
+      href={disabled ? '' : link}
       role="button"
       draggable="false"
       className={`govuk-button lbh-button${secondaryClassList + disabledClassList}`}

@@ -69,7 +69,7 @@ export default function DesignTestPage() {
   );
 
   const Radios = (
-    <div style={{ margin: '30px' }}>
+    <div style={{ margin: '30px', maxWidth: '600px' }}>
       <h1 style={{ fontSize: '30px', fontWeight: '700' }}>Radios</h1>
       {'' + checkedRadio}
       <Fieldset>
@@ -95,6 +95,36 @@ export default function DesignTestPage() {
         </span>
         <Radio checked={checkedRadio === 'error'} value="error" handler={radioHandler}>
           Error
+        </Radio>
+      </Fieldset>
+
+      <Fieldset>
+        <Radio checked={checkedRadio === 'long-text'} value="long-text" name="long-text" handler={radioHandler}>
+          <div
+            className="govuk-radios__conditional govuk-radios__conditional--hidden"
+            id="conditional-how-contacted-checked"
+          >
+            <label className="govuk-label" htmlFor="context-email">
+              Mobile phone number
+            </label>
+            <input
+              className="govuk-input govuk-!-width-one-third"
+              name="context-email"
+              type="text"
+              id="context-email"
+            />
+          </div>
+        </Radio>
+      </Fieldset>
+      <Fieldset>
+        <Radio small checked={checkedRadio === 'small'} value="small" handler={radioHandler}>
+          Small
+        </Radio>
+        <Radio small disabled checked={checkedRadio === 'small-disabled'} value="small-disabled" handler={radioHandler}>
+          Small Disabled
+        </Radio>
+        <Radio small inline checked={checkedRadio === 'small-inline'} value="small-inline" handler={radioHandler}>
+          Small Inline
         </Radio>
       </Fieldset>
     </div>
