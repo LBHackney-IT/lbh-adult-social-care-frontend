@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { batch, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
 import Layout from '../../components/Layout/Layout';
 import withSession from '../../lib/session';
-import { getNursingTypeOfStayOptions, getResidentialTypeOfStayOptions } from '../../reducers/carePackageSlice';
 import { getUserSession } from '../../service/helpers';
 import CareSetup from '../../components/Setup/CareSetup'
 import {
@@ -11,6 +9,8 @@ import {
   NURSING_CARE_ROUTE,
   RESIDENTIAL_CARE_ROUTE
 } from '../../routes/RouteConstants'
+import useResidentialCareApi from '../../api/SWR/useResidentialCareApi'
+import useNursingCareApi from '../../api/SWR/useNursingCareApi'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -124,13 +124,8 @@ const CarePackage = ({ history }) => {
   ]);
   const [selectedCareType, setSelectedCareType] = useState(3);
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    batch(() => {
-      dispatch(getResidentialTypeOfStayOptions());
-      dispatch(getNursingTypeOfStayOptions());
-    });
-  }, []);
+  const residentialTypeOfStayOptions = useResidentialCareApi.typeOfStayOptions();
+  const nursingCareTypeOfStayOptions = useNursingCareApi.typeOfStayOptions();
 
   const changeCareType = (option) => {
     setSelectedCareType(option);

@@ -50,7 +50,7 @@ const DaySummary = ({ daySummaryItem, edit, remove, slicedText = false }) => {
             <div className="columns">
               <div className="column care-label">{careSummary.label}</div>
               <div className="column level">
-                <div className="level-item level-right care-time-breakdown">
+                <div className="is-flex is-flex-wrap-wrap care-time-breakdown">
                   <div className="breakdown-item">
                     <span>Primary Carer</span>
                     <span className="time-entry">{careSummary.primaryCarer}</span>
