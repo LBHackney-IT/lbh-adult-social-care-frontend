@@ -41,88 +41,89 @@ const Table = ({
   };
 
   return (
-    <div className={`table ${className}`}>
-      <SortTable fields={fields} checkedRule={checkedRule} checkedRows={checkedRows} changeAllChecked={changeAllChecked} rows={rows} sortBy={sortBy} sorts={sorts} />
-      {loading && <Loading className='table-loading' />}
-      {!rows.length ? (
-        <p className="ml-2">No Table Data</p>
-      ) : (
-        <div className='table__row-container'>
-          {
-            rows.map((item) => {
+    <>
+      {loading && !rows.length ? <Loading className='table-loading' /> : (
+        <div className={`table ${className}`}>
+          {loading && rows.length && <Loading className='table-loading' />}
+          <SortTable
+            fields={fields}
+            checkedRule={checkedRule}
+            checkedRows={checkedRows}
+            changeAllChecked={changeAllChecked}
+            rows={rows}
+            sortBy={sortBy}
+            sorts={sorts}
+          />
+          {!rows.length ? (<p className="ml-2">No Table Data</p>) :
+            (<div className='table__row-container'>
+              {rows.map((item) => {
               const id = item[defaultFields.id];
               const collapsedRow = collapsedRows.includes(item[fields.id]);
               const collapsedClass = collapsedRow ? ' collapsed' : '';
               const rowClass = rowsRules.getClassName && rowsRules.getClassName(item);
               let index = 0;
 
-              return (
-                <div key={id} className={`table__row${collapsedClass} ${rowClass || ''}`}>
-                  <div onClick={() => clickRow(item)} className="table__row-column-items" role="presentation">
-                    {Object.values(defaultFields).map((rowItemName) => {
-                      const columnClass = ` table__row-column-${index+1}`;
-                      const currentRowRule = rowsRules[rowItemName] || '';
-                      const value = item[rowItemName];
-                      const key = `${tab}${rowItemName}${value}${id}`;
+              return (<div key={id} className={`table__row${collapsedClass} ${rowClass || ''}`}>
+                <div onClick={() => clickRow(item)} className="table__row-column-items" role="presentation">
+                  {Object.values(defaultFields).map((rowItemName) => {
+                    const columnClass = ` table__row-column-${index+1}`;
+                    const currentRowRule = rowsRules[rowItemName] || '';
+                    const value = item[rowItemName];
+                    const key = `${tab}${rowItemName}${value}${id}`;
 
-                      if (currentRowRule?.getHide) {
-                        const isHide = currentRowRule?.getHide(value, item);
-                        if(isHide) return <React.Fragment key={key} />;
-                      }
-                      index += 1;
+                    if (currentRowRule?.getHide) {
+                      const isHide = currentRowRule?.getHide(value, item);
+                      if(isHide) return <React.Fragment key={key} />;
+                    }
+                    index += 1;
 
-                      const currentValue = (currentRowRule?.getValue && currentRowRule.getValue(value, item)) || value;
-                      const calculatedClassName = currentRowRule?.getClassName
-                        ? currentRowRule.getClassName(value, item).toLowerCase()
-                        : '';
+                    const currentValue = (currentRowRule?.getValue && currentRowRule.getValue(value, item)) || value;
+                    const calculatedClassName = currentRowRule?.getClassName
+                      ? currentRowRule.getClassName(value, item).toLowerCase()
+                      : '';
 
-                      const getComponent = currentRowRule?.getComponent;
-                      if (getComponent) {
-                        const rowComponent = getComponent(item, currentRowRule, columnClass);
-                        if(rowComponent) return rowComponent;
-                      }
+                    const getComponent = currentRowRule?.getComponent;
+                    if (getComponent) {
+                      const rowComponent = getComponent(item, currentRowRule, columnClass);
+                      if(rowComponent) return rowComponent;
+                    }
 
-                      if (currentRowRule?.type === 'checkbox') {
-                        return (
-                          <div key={key} className={`table__row-item-checkbox table__row-item${columnClass}`}>
-                            <Checkbox
-                              className={calculatedClassName}
-                              onChange={(checkedValue, event) => {
-                                event.stopPropagation();
-                                currentRowRule.onChange(checkedValue, item)
-                              }}
-                              checked={currentValue}
-                            />
-                          </div>
-                        );
-                      }
-
-                      return (
-                        <div
-                          role="presentation"
-                          onClick={(e) => {
-                            if (!currentRowRule.onClick) return;
-                            e.stopPropagation();
-                            currentRowRule.onClick(item, value);
+                    if (currentRowRule?.type === 'checkbox') {
+                      return (<div key={key} className={`table__row-item-checkbox table__row-item${columnClass}`}>
+                        <Checkbox
+                          className={calculatedClassName}
+                          onChange={(checkedValue, event) => {
+                            event.stopPropagation();
+                            currentRowRule.onChange(checkedValue, item)
                           }}
-                          key={key}
-                          className={`table__row-item${columnClass} ${calculatedClassName}`}
-                        >
-                          <p>{currentValue || '—'}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  {canCollapseRows && collapsedRow && getCollapsedContainer && (
-                    <div className="table__row-collapsed">{getCollapsedContainer(item)}</div>
-                  )}
+                          checked={currentValue}
+                        />
+                      </div>);
+                    }
+
+                    return (<div
+                      role="presentation"
+                      onClick={(e) => {
+                        if (!currentRowRule.onClick) return;
+                        e.stopPropagation();
+                        currentRowRule.onClick(item, value);
+                      }}
+                      key={key}
+                      className={`table__row-item${columnClass} ${calculatedClassName}`}
+                    >
+                      <p>{currentValue || '—'}</p>
+                    </div>);
+                  })}
                 </div>
-              );
-            })
-          }
+                {canCollapseRows && collapsedRow && getCollapsedContainer && (
+                  <div className="table__row-collapsed">{getCollapsedContainer(item)}</div>
+                )}
+              </div>)})}
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -86,6 +86,9 @@ const PAY_RUN_ROWS_RULES = {
   totalAmountPaid: {
     getValue: (value) => `£${getNumberWithCommas(value)}`,
   },
+  totalAmountHeld: {
+    getValue: (value) => `£${getNumberWithCommas(value)}`,
+  },
 };
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
@@ -159,11 +162,12 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
     setTab(newTab);
   }
 
-  const closeCreatePayRun = () => {
+  const closeCreatePayRun = async () => {
     setOpenedPopup('');
     changeHocAndRelease('');
     changeRegularCycles('');
     setDate(new Date());
+    await refetchSummaryList();
   };
 
   const closeHelpChat = () => {

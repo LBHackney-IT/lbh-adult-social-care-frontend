@@ -75,7 +75,7 @@ const HeldPaymentsFilters = ({ filters, changeFilter, clearFilters, applyFilters
           );
         })}
       </div>
-      <div className='ml-3'>
+      <div className='held-payments__filters-button--group'>
         <Button onClick={applyFilters}>Filter</Button>
         {hasFields && <Button className='ml-3 outline gray' onClick={clearFilters}>Clear</Button>}
       </div>

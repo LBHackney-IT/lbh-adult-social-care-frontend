@@ -12,6 +12,7 @@ const useResidentialCareApi = {
       data: mapTypeHomeOptions(typeHomeOptions),
     };
   },
+  typeOfStayOptions: () => useGetData(`${RESIDENTIAL_CARE_URL}/type-of-stay-options`),
 };
 
 export default useResidentialCareApi;

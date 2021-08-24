@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { pick, omit, groupBy, last } from 'lodash';
 import { useInvoiceStatusList } from '../../api/SWR';
 import Dropdown from '../Dropdown';
-import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
+import { formatDateWithSign, formatStatus, getNumberWithCommas, includeString } from '../../service/helpers';
 import PayRunSortTable from './PayRunSortTable';
 import Checkbox from '../Checkbox';
 import { Button } from '../Button';
-import Loading from '../Loading'
+import Loading from '../Loading';
 
 const PayRunTable = ({
   onClickTableRow,
@@ -57,7 +57,7 @@ const PayRunTable = ({
         sorts={sorts}
       />
 
-      {loading && <Loading className='table-loading' />}
+      {loading && <Loading className="table-loading" />}
       {!rows.length ? (
         <p>No Table Data</p>
       ) : (
@@ -97,6 +97,8 @@ const PayRunTable = ({
                     ? `table__row-item-status ${status?.statusName?.toLowerCase() ?? ''}`
                     : '';
 
+                  const isCurrency = typeof item[rowItemKey] === 'number' && !isStatus;
+
                   if (isStatusDropDown && isStatus) {
                     return (
                       <Dropdown
@@ -117,7 +119,7 @@ const PayRunTable = ({
 
                   return (
                     <div key={`${rowItemKey}${item.id}`} className={`table__row-item ${statusItemClass}`}>
-                      <p>{isStatus ? formattedStatus : value}</p>
+                      {isCurrency ? <p>£{getNumberWithCommas(value)}</p> : <p>{isStatus ? formattedStatus : value}</p>}
                     </div>
                   );
                 })}
@@ -160,9 +162,9 @@ const PayRunTable = ({
                         {invoice.invoiceItems.map((invoiceItem) => (
                           <div key={invoiceItem.invoiceItemId} className="table__row-collapsed-main-item">
                             <p>{invoiceItem.itemName}</p>
-                            <p>£{invoiceItem.pricePerUnit}</p>
+                            <p>£{getNumberWithCommas(invoiceItem.pricePerUnit)}</p>
                             <p>{invoiceItem.quantity}</p>
-                            <p>£{invoiceItem.totalPrice}</p>
+                            <p>£{getNumberWithCommas(invoiceItem.totalPrice)}</p>
                           </div>
                         ))}
                       </div>

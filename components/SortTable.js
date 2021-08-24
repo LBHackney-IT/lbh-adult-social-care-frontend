@@ -6,7 +6,7 @@ import { DATA_TYPES } from '../api/Utils/CommonOptions';
 const SortTable = ({ changeAllChecked, checkedRule, fields, checkedRows = [], rows = [], sorts, sortBy, additionalActions }) => (
   <div className="sort-table">
     {checkedRows && changeAllChecked && (
-      <div className="sort sort-checkbox">
+      <div className={`sort sort-checkbox 'table__row-column-1`}>
         <Checkbox
           checked={checkedRule !== undefined ? checkedRule() : checkedRows.length === rows.length && rows.length !== 0}
           onChange={(value, event) => {
@@ -25,7 +25,8 @@ const SortTable = ({ changeAllChecked, checkedRule, fields, checkedRows = [], ro
       </div>
     )}
     {sorts.map((item, index) => {
-      const columnClass = ` table__row-column-${index+1}`;
+      const initialColumn = checkedRows && changeAllChecked ? 2 : 1;
+      const columnClass = ` table__row-column-${index+initialColumn}`;
       const outerClass = item.className ? ` ${item.className}` : '';
       return (
         <div key={item.name} className={`sort${outerClass}${columnClass}`}>

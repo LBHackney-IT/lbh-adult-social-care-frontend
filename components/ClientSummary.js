@@ -12,7 +12,7 @@ const ClientSummary = ({
   preferredContact = null,
   canSpeakEnglish = null,
   dateOfBirth,
-  sourcingCare,
+  whoIsSourcing,
   postcode,
 }) => {
   return (
@@ -41,7 +41,7 @@ const ClientSummary = ({
           <label>Postcode</label>
           <div>{postcode}</div>
         </div>
-        {sourcingCare && (
+        {whoIsSourcing && (
           <div className="column client-prop">
             <label>WHO IS SOURCING CARE</label>
             <Image width="300" height="52" src="/images/icons/hackney_logo.png" alt="" />

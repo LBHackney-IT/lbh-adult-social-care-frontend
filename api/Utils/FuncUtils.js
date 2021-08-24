@@ -1,6 +1,7 @@
 import { DATA_TYPES } from './CommonOptions'
 
 const getAgeFromDateString = (dateString) => {
+  if(!dateString) return;
   const today = new Date();
   const birthDate = new Date(dateString);
   let age = today.getFullYear() - birthDate.getFullYear();
@@ -11,8 +12,13 @@ const getAgeFromDateString = (dateString) => {
   return age;
 };
 
-const getEnGBFormattedDate = (dateString) => {
-  if (!dateString) return null;
+const getEnGBFormattedDate = (dateString, nullData = false) => {
+  if (!dateString) {
+    if(nullData) {
+      return nullData;
+    }
+    return null;
+  }
   return new Date(dateString).toLocaleDateString('en-GB');
 };
 

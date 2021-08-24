@@ -1,6 +1,6 @@
 import React from 'react';
-import { getEnGBFormattedDate } from '../../api/Utils/FuncUtils';
 import { Button } from '../Button';
+import { formatCareDatePeriod } from '../../service/helpers'
 
 const CareSummary = ({
   startDate,
@@ -16,6 +16,8 @@ const CareSummary = ({
     setAdditionalNeedsEntries([...newEntries]);
   };
 
+  const datePeriod = formatCareDatePeriod(startDate, endDate);
+
   return (
     <div className="day-summary hackney-text-black font-size-14px">
       <div className="columns is-mobile">
@@ -23,7 +25,7 @@ const CareSummary = ({
           <div>
             <span className="font-weight-bold mr-2 font-size-16px">{careType}</span>
             <span className="font-size-16px">
-              {getEnGBFormattedDate(startDate)} {endDate ? ` - ${endDate}` : null}
+              {datePeriod.startDate} - {datePeriod.endDate}
             </span>
           </div>
         </div>

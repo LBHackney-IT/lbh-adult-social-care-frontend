@@ -9,20 +9,17 @@ import {
   residentialCareChangeStatus,
   residentialCareClarifyCommercial,
 } from '../../../../api/CarePackages/ResidentialCareApi';
-import { getEnGBFormattedDate, stringIsNullOrEmpty } from '../../../../api/Utils/FuncUtils';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
-import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
+import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils'
 import Layout from '../../../../components/Layout/Layout';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import ResidentialCareApprovalTitle from '../../../../components/ResidentialCare/ResidentialCareApprovalTitle';
 import ResidentialCareSummary from '../../../../components/ResidentialCare/ResidentialCareSummary';
 import TextArea from '../../../../components/TextArea';
 import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { getUserSession } from '../../../../service/helpers';
 import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
 import { addNotification } from '../../../../reducers/notificationsReducer';
+import ApprovalHistory from '../../../../components/ProposedPackages/ApprovalHistory'
+import { Button } from '../../../../components/Button'
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -78,19 +75,12 @@ const ResidentialCareApproveBrokered = ({
   const router = useRouter();
   const dispatch = useDispatch();
   const residentialCarePackageId = router.query.id;
-
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
 
-  const {
-    hasDischargePackage = false,
-    hasRespiteCare = false,
-    isThisAnImmediateService = false,
-    isThisUserUnderS117 = false,
-    typeOfStayOptionName = '',
-  } = residentialCarePackage?.residentialCarePackage || {};
+  const residentialCarePackageData = residentialCarePackage?.residentialCarePackage;
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
@@ -131,120 +121,49 @@ const ResidentialCareApproveBrokered = ({
   };
 
   return (
-    <Layout headerTitle="RESIDENTIAL CARE BROKERED">
+    <Layout
+      clientSummaryInfo={{
+        title: "RESIDENTIAL CARE BROKERED",
+        client: residentialCarePackageData?.clientName,
+        hackneyId: residentialCarePackageData?.hackneyId,
+        age: residentialCarePackage && getAgeFromDateString(residentialCarePackage.dateOfBirth),
+        preferredContact: residentialCarePackageData?.preferredContact,
+        canSpeakEnglish: residentialCarePackageData?.canSpeakEnglish,
+        packagesCount: 4,
+        dateOfBirth: residentialCarePackage && getEnGBFormattedDate(residentialCarePackage.dateOfBirth),
+        postcode: residentialCarePackageData?.clientPostCodeId,
+      }}
+    >
       <div className="hackney-text-black font-size-12px">
-        <ResidentialCareApprovalTitle
-          startDate={residentialCarePackage?.residentialCarePackage.startDate}
-          endDate={
-            residentialCarePackage?.residentialCarePackage.endDate !== null
-              ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
-              : 'Ongoing'
-          }
+        <ApprovalHistory
+          approvalData={residentialCarePackageData}
+          costSummary={residentialCarePackageData?.costSummary}
+          history={approvalHistoryEntries}
+          careType='Residential Care Brokered'
         />
-        <ApprovalClientSummary />
-        <div className="columns">
-          <ClientSummaryItem
-            itemName="STARTS"
-            itemDetail={getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.startDate)}
-          />
-          <ClientSummaryItem
-            itemName="ENDS"
-            itemDetail={
-              residentialCarePackage?.residentialCarePackage.endDate !== null
-                ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
-                : 'Ongoing'
-            }
-          />
-          <ClientSummaryItem itemName="DAYS/WEEK" itemDetail="3" />
-          <ClientSummaryItem itemName="RESPITE CARE" itemDetail={hasRespiteCare === true ? 'yes' : 'no'} />
-          <ClientSummaryItem itemName="DISCHARGE PACKAGE" itemDetail={hasDischargePackage === true ? 'yes' : 'no'} />
-        </div>
-
-        <div className="columns mt-4 flex flex-wrap">
-          <ClientSummaryItem
-            itemName="IMMEDIATE / RE-ENABLEMENT PACKAGE"
-            itemDetail={isThisAnImmediateService === true ? 'Immediate' : 'Re-enablement'}
-          />
-          <ClientSummaryItem itemName="S117 CLIENT" itemDetail={isThisUserUnderS117 === true ? 'yes' : 'no'} />
-          <ClientSummaryItem
-            itemName="TYPE OF STAY"
-            itemDetail={!stringIsNullOrEmpty(typeOfStayOptionName) ? typeOfStayOptionName : ''}
-          />
-          <div className="column" />
-          <div className="column" />
-        </div>
-
-        <div className="columns">
-          <div className="column">
-            <PackageCostBox title="COST OF CARE / WK" cost={residentialCarePackage?.costOfCare} costType="ACTUAL" />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-light-green-box"
-              title="ANP / WK"
-              cost={residentialCarePackage?.costOfAdditionalNeeds}
-              costType="ACTUAL"
-            />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-green-box"
-              title="TOTAL / WK"
-              cost={residentialCarePackage?.totalPerWeek}
-              costType="ACTUAL"
-            />
-          </div>
-        </div>
-
-        <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
 
         <div className="columns">
           <div className="column">
             <div className="mt-4 mb-1">
               <TitleHeader>Package Details</TitleHeader>
               <ResidentialCareSummary
-                startDate={residentialCarePackage?.residentialCarePackage.startDate}
-                endDate={
-                  residentialCarePackage?.residentialCarePackage.endDate !== null
-                    ? getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage.endDate)
-                    : 'Ongoing'
-                }
-                typeOfStayText={residentialCarePackage?.residentialCarePackage.typeOfStayOptionName}
+                startDate={residentialCarePackageData?.startDate}
+                endDate={residentialCarePackageData?.endData}
+                typeOfStayText={residentialCarePackageData?.typeOfStayOptionName}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
-                needToAddress={residentialCarePackage?.residentialCarePackage.needToAddress}
+                needToAddress={residentialCarePackageData?.needToAddress}
               />
             </div>
           </div>
         </div>
 
-        <div className="columns">
-          <div className="column">
-            <div className="level mt-3">
-              <div className="level-left" />
-              <div className="level-right">
-                <div className="level-item  mr-2">
-                  <button type="button" className="button hackney-btn-light" onClick={handleRejectPackage}>
-                    Deny
-                  </button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button
-                    onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
-                    className="button hackney-btn-light"
-                    type="button"
-                  >
-                    {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
-                  </button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button type="button" className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
-                    Approve Commercials
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="button-group mb-5">
+          <Button className="gray" onClick={handleRejectPackage}>Deny</Button>
+          <Button onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)} className="gray">
+            {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
+          </Button>
+          <Button onClick={handleApprovePackageCommercials}>Approve Commercials</Button>
         </div>
 
         <div className="columns">

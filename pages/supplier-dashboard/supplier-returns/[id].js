@@ -91,10 +91,6 @@ const SupplierReturnsDashboard = () => {
   ];
 
   useEffect(() => {
-    console.log('change sort', sort);
-  }, [sort]);
-
-  useEffect(() => {
     router.replace(`${pathname}?page=1`);
   }, []);
 

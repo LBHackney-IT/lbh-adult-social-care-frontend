@@ -1,5 +1,4 @@
 import React from 'react';
-import { getEnGBFormattedDate } from '../../api/Utils/FuncUtils';
 import { Button } from '../Button';
 
 const NursingCareSummary = ({
@@ -24,7 +23,7 @@ const NursingCareSummary = ({
           <div>
             <span className="font-weight-bold mr-2 font-size-16px">Nursing Care</span>
             <span className="font-size-16px">
-              {getEnGBFormattedDate(startDate)} {endDate ? ` - ${endDate}` : ' - Ongoing'}
+              {startDate} - {endDate}
             </span>
           </div>
         </div>

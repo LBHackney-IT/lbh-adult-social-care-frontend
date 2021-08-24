@@ -58,7 +58,7 @@ const PayRunHeader = ({
         {actionButtonText && <Button onClick={clickActionButton}>{actionButtonText}</Button>}
       </div>
       <div>
-        <div className="pay-run__searches mb-3">
+        <div className="pay-run__searches">
           <CustomAsyncSelector
             onChange={(option) => changeFilter('serviceUser', option)}
             placeholder='Service User'
@@ -120,11 +120,14 @@ const PayRunHeader = ({
             }}
             selectsRange
           />
-          <Button onClick={applyFilters}>Filter</Button>
-          {hasFields && <Button className='outline gray ml-3' onClick={() => {
-            setFilters({...initialFilters})
-            setHasFields(false);
-          }}>Clear</Button> }
+          <div className='inputs__button-container'>
+            <Button onClick={applyFilters}>Filter</Button>
+            {hasFields && <Button className='outline gray ml-3' onClick={() => {
+              setFilters({...initialFilters})
+              setHasFields(false);
+            }}>Clear</Button> }
+          </div>
+
         </div>
       </div>
     </div>
