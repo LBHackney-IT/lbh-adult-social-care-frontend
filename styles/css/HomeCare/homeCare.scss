@@ -45,7 +45,7 @@ $escort: #ffa9a9;
 }
 
 .week-care-picker {
-  @include media-small-ipod-down {
+  @include media-max-ipod-down {
     overflow: auto;
     max-height: 350px;
   }

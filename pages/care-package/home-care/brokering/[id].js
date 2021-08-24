@@ -39,6 +39,8 @@ const HomeCareBrokerPackage = () => {
   const { data: approvalHistoryEntries } = useHomeCareApi.approvePackage(homeCarePackageId);
   const { data: homeCarePackage } = useHomeCareApi.detailsForBrokerage(homeCarePackageId);
 
+  const innerCarePackage = homeCarePackage?.homeCarePackage;
+
   useEffect(() => {
     const additionalNeeds = homeCarePackage?.homeCareAdditionalNeeds;
     if(additionalNeeds) {
@@ -85,16 +87,16 @@ const HomeCareBrokerPackage = () => {
   return (
     <Layout
       clientSummaryInfo={{
-        client: homeCarePackage?.homeCarePackage?.clientName,
-        hackneyId: homeCarePackage?.homeCarePackage?.clientHackneyId,
+        client: innerCarePackage?.clientName,
+        hackneyId: innerCarePackage?.clientHackneyId,
         age:
-          homeCarePackage?.homeCarePackage && getAgeFromDateString(homeCarePackage?.homeCarePackage?.clientDateOfBirth),
-        preferredContact: homeCarePackage?.homeCarePackage?.clientPreferredContact,
-        canSpeakEnglish: homeCarePackage?.homeCarePackage?.clientCanSpeakEnglish,
+          innerCarePackage && getAgeFromDateString(innerCarePackage?.clientDateOfBirth, 'No date'),
+        preferredContact: innerCarePackage?.clientPreferredContact,
+        canSpeakEnglish: innerCarePackage?.clientCanSpeakEnglish,
         packagesCount: 4,
         dateOfBirth:
-          homeCarePackage?.homeCarePackage && getEnGBFormattedDate(homeCarePackage?.homeCarePackage?.clientDateOfBirth),
-        postcode: homeCarePackage?.homeCarePackage?.clientPostCode,
+          innerCarePackage && getEnGBFormattedDate(innerCarePackage?.clientDateOfBirth),
+        postcode: innerCarePackage?.clientPostCode,
         title: 'HOME CARE BROKER PACKAGE',
       }}
       className="home-care-brokerage-page"

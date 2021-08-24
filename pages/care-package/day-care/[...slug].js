@@ -275,7 +275,7 @@ const DayCare = () => {
               onChange={handleNeedToUpdateChange}
             />
           </div>
-          <div className="column columns day-care-day-cbxs">
+          <div className="day-care-day-cbxs">
             {daysSelected.map((dayItem, index) => {
               // Handle this checkbox click
               const onThisDayCheckboxChange = (isChecked) => {
@@ -284,7 +284,7 @@ const DayCare = () => {
               };
 
               return (
-                <div className="column" key={dayItem.id}>
+                <div key={dayItem.id}>
                   <label>{dayItem.short.toUpperCase()}</label>
                   <Checkbox id="immediateServiceCbx" checked={dayItem.checked} onChange={onThisDayCheckboxChange} />
                   {errorFields.daysSelected && index === 0 && <ErrorField text={errorFields.daysSelected} />}

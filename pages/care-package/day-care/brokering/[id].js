@@ -38,7 +38,7 @@ const DayCareBrokering = () => {
   const { data: dayCarePackage } = useDayCareApi.detailsForBrokerage(dayCareId);
   const packageDetails = dayCarePackage?.packageDetails;
   const { data: stageOptions } = useDayCareApi.brokerAgeStages();
-  const { data: supplierOptions } = useSuppliersApi.supplierList();
+  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
 
   useEffect(() => {
     if(!dayCarePackage?.packageApprovalHistory) return;

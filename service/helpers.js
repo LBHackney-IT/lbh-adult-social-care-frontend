@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { getEnGBFormattedDate } from '../api/Utils/FuncUtils'
+import { maxStringLength } from '../constants/variables'
 
 const chr4 = () => Math.random().toString(16).slice(-4);
 
@@ -12,6 +13,13 @@ const formatDateWithSign = (date, sign = '/') => {
   const year = newDate.getFullYear();
 
   return `${`00${day}`.slice(-2)}${sign}${`00${month}`.slice(-2)}${sign}${`00${year}`.slice(-2)}`;
+};
+
+const formatStringLength = (string, collapsedText, isSlicedText) => {
+  if (string.length > maxStringLength && collapsedText && isSlicedText) {
+    return `${string.slice(0, maxStringLength)}`;
+  }
+  return string;
 };
 
 const formatCareDatePeriod = (startDate, endDate) => {
@@ -162,4 +170,5 @@ export {
   getNumberWithCommas,
   convertLocalToUTCDate,
   formatCareDatePeriod,
+  formatStringLength,
 };
