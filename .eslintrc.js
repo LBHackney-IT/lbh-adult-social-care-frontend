@@ -36,6 +36,14 @@ module.exports = {
         extensions: ['.js', '.jsx', '.css', '.scss'],
         paths: ['styles'],
       },
+      alias: {
+        map: [
+          ['components', './components'],
+          ['constants', './constants'],
+          ['routes', './routes'],
+          ['api', './api'],
+        ],
+      },
     },
   },
 };
