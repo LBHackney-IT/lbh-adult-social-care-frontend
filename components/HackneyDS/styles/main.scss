@@ -322,6 +322,9 @@ button.lbh-link {
 .js-enabled .govuk-accordion {
   border-bottom: 1px solid #b1b4b6;
 }
+.js-enabled.govuk-accordion:last-child {
+  border-bottom: 1px solid #b1b4b6;
+}
 .lbh-link:visited {
   color: #8031a7;
 }
@@ -624,7 +627,7 @@ html {
   padding-top: 0;
 }
 .js-enabled .govuk-accordion__section-content {
-  display: none;
+  // display: none;
   padding-top: 15px;
   padding-bottom: 15px;
 }
@@ -633,13 +636,14 @@ html {
   display: block;
 }
 .js-enabled .govuk-accordion__open-all {
+  display: block;
+  margin-bottom: 3px;
+  margin-left: auto;
   font-weight: 400;
   font-size: 0.875rem;
   line-height: 1.1428571429;
   position: relative;
   z-index: 1;
-  margin: 0;
-  padding: 0;
   border-width: 0;
   color: #025ea6;
   background: none;
@@ -811,6 +815,9 @@ html {
 .lbh-announcement__title {
   margin-top: 0;
   margin-bottom: 0.75rem;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #1c1e21;
 }
 .lbh-announcement__content {
   color: #0b0c0c;
@@ -1865,21 +1872,21 @@ html {
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
-.lbh-contact__block-title--address:before {
-  background: url(/6e53c87b7db34f03067afd55ed108697.svg);
-}
-.lbh-contact__block-title--email:before {
-  background: url(/5f7fc65347b7845228b00a7f1996e35b.svg);
-}
-.lbh-contact__block-title--telephone:before {
-  background: url(/5924c441b056ef37b5c1243582f1266d.svg);
-}
-.lbh-contact__block-title--notes:before {
-  background: url(/9c127fffaf18a876bebbbd47e34a1f71.svg);
-}
-.lbh-contact__block-title--opening-times:before {
-  background: url(/233e076870b8ebf86f94556bdd976729.svg);
-}
+// .lbh-contact__block-title--address:before {
+//   background: url(/6e53c87b7db34f03067afd55ed108697.svg);
+// }
+// .lbh-contact__block-title--email:before {
+//   background: url(/5f7fc65347b7845228b00a7f1996e35b.svg);
+// }
+// .lbh-contact__block-title--telephone:before {
+//   background: url(/5924c441b056ef37b5c1243582f1266d.svg);
+// }
+// .lbh-contact__block-title--notes:before {
+//   background: url(/9c127fffaf18a876bebbbd47e34a1f71.svg);
+// }
+// .lbh-contact__block-title--opening-times:before {
+//   background: url(/233e076870b8ebf86f94556bdd976729.svg);
+// }
 .govuk-details__summary:focus,
 .govuk-error-summary__list a:focus,
 .lbh-cookie-banner__content a:focus,

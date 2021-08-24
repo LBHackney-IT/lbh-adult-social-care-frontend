@@ -12,8 +12,8 @@ export default function Radio({
   handler = () => {},
 }) {
   const dataProvider = useRef();
-  const inlineClassList = (inline ?? '') && ' govuk-radios--inline';
-  const smallClassList = (small ?? '') && ' govuk-radios--small'
+  const inlineClassList = inline ? ' govuk-radios--inline' : '';
+  const smallClassList = small ? ' govuk-radios--small' : ''
   return (
     <>
       <div className={`govuk-radios__item${inlineClassList + smallClassList}`} >

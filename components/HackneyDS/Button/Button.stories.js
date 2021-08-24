@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '../../Button';
+import { Button } from '../index';
 
 export default {
   title: 'Hackney Design System/Button',
@@ -16,17 +16,21 @@ const Template = (args) => <Button {...args} />;
 export const Default = Template.bind({});
 
 Default.args = {
-  children: 'Button',
+  children: 'Default button',
+  secondary: false,
   disabled: false,
-  linkBtn: false,
+  link: '',
+  'add-item': false,
 };
 
-export const Link = Template.bind({});
+export const Secondary = Template.bind({});
 
-Link.args = {
-  children: 'Button',
+Secondary.args = {
+  children: 'Secondary button',
+  secondary: true,
   disabled: false,
-  linkBtn: true,
+  link: '',
+  'add-item': false,
 };
 
 export const Disabled = Template.bind({});
@@ -35,4 +39,34 @@ Disabled.args = {
   children: 'Button',
   disabled: true,
   linkBtn: false,
+};
+
+export const Link = Template.bind({});
+
+Link.args = {
+  children: 'Link button',
+  secondary: false,
+  disabled: false,
+  link: '/example',
+  'add-item': false,
+};
+
+export const DisabledLink = Template.bind({});
+
+DisabledLink.args = {
+  children: 'Disabled link',
+  secondary: false,
+  disabled: true,
+  link: '/example',
+  'add-item': false,
+};
+
+export const AddAnotherItemButton = Template.bind({});
+
+AddAnotherItemButton.args = {
+  children: 'Add another item',
+  secondary: false,
+  disabled: false,
+  link: '',
+  'add-item': true,
 };
