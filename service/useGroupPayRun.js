@@ -1,4 +1,7 @@
-import { groupBy, last, omit, pick } from 'lodash'
+import groupBy from 'lodash-es/groupBy'
+import last from 'lodash-es/last'
+import omit from 'lodash-es/omit'
+import pick from 'lodash-es/pick'
 
 const useGroupedData = (data) => {
   // move all invoices to one level and generate key as combination of fields
