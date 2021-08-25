@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Input from '.';
 
-// State
-// const [inputValues, setInputValues] = useState({ default: 'null', hinted: 'null', error: 'null' });
-
-// Handlers
-
 export default {
   title: 'Hackney Design System/Input',
   component: Input,

@@ -13,8 +13,6 @@ const Accordion = ({ children = [] }) => {
     })
   );
 
-  console.log(`mappedChildren`, mappedChildren)
-
   const isAllExpands = !mappedChildren.find((el) => !el.isExpanded);
 
   const expandAllLabel = useMemo(() => (isAllExpands ? 'Close All' : 'Open All'), [isAllExpands]);
