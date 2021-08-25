@@ -2,9 +2,7 @@ import React from 'react';
 
 export default function Announcement({ children = [] }) {
   const nodeList = Array.isArray(children) ? children : [children];
-
   const getSlot = (name) => nodeList.find((el) => el.props.slot === name);
-
   return (
     <section className="lbh-announcement lbh-announcement--site">
       <div className="lbh-container">

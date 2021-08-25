@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
 
 export default function Input({
-  children,
+  label,
   id = 'lbh-input',
   name,
   type = 'text',
+  hint,
   error,
   value,
   handler = () => {
@@ -15,15 +16,15 @@ export default function Input({
 
   return (
     <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}`}>
-      {children && (
+      {label && (
         <label className="govuk-label lbh-label" htmlFor={id}>
-          {children}
+          {label}
         </label>
       )}
+      {hint && <span className="govuk-hint lbh-hint">{hint}</span>}
       {error && (
         <span className="govuk-error-message lbh-error-message">
-          <span className="govuk-visually-hidden">Error:</span>
-          {error}
+          <span className="govuk-visually-hidden">{error}</span>
         </span>
       )}
       <input

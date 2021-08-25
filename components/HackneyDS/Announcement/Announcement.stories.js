@@ -26,8 +26,6 @@ const Template = (args) => (
 
 export const Default = Template.bind({});
 
-console.log(`defa`, Default());
-
 Default.args = {
   children: (
     <>

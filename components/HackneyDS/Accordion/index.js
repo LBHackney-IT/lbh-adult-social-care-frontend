@@ -1,23 +1,22 @@
 import React, { useReducer, useMemo } from 'react';
 
-const Accordion = ({ children = [] }) => {
+const Accordion = ({ expandAll, children = [] }) => {
   const [mappedChildren, changeOpen] = useReducer(
     changeExpand,
     children.map((node) => {
       const nodeContent = [...node.props.children];
-      nodeContent.key = node.key
+      nodeContent.key = node.key;
       nodeContent.getHeader = () => node.props.children?.find((el) => el.props.slot === 'header');
       nodeContent.getContent = () => node.props.children?.find((el) => el.props.slot === 'content');
       nodeContent.isExpanded = node.props.expanded ?? false;
       return nodeContent;
     })
   );
-
   const isAllExpands = !mappedChildren.find((el) => !el.isExpanded);
 
   const expandAllLabel = useMemo(() => (isAllExpands ? 'Close All' : 'Open All'), [isAllExpands]);
 
-  const expandAll = () => {
+  const toggleExpandAll = () => {
     changeOpen(isAllExpands);
   };
 
@@ -35,9 +34,11 @@ const Accordion = ({ children = [] }) => {
 
   return (
     <div className="govuk-accordion lbh-accordion js-enabled">
-      <button type="button" className="govuk-accordion__open-all" onClick={expandAll}>
-        {expandAllLabel}
-      </button>
+      {expandAll && (
+        <button type="button" className="govuk-accordion__open-all" onClick={toggleExpandAll}>
+          {expandAllLabel}
+        </button>
+      )}
       {mappedChildren.map((el) => (
         <div
           key={el.key}
@@ -45,10 +46,10 @@ const Accordion = ({ children = [] }) => {
         >
           <div className="govuk-accordion__section-header">
             <h5 className="govuk-accordion__section-heading">
-              <span className="govuk-accordion__section-button" onClick={() => changeOpen(el)}>
+              <button className="js-enabled govuk-accordion__section-button" onClick={() => changeOpen(el)}>
                 {el.getHeader()}
                 <span className="govuk-accordion__icon" />
-              </span>
+              </button>
             </h5>
           </div>
           {el.isExpanded && (
