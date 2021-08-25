@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { pick, omit, groupBy, last } from 'lodash';
 import { useInvoiceStatusList } from '../../api/SWR';
 import Dropdown from '../Dropdown';
 import { formatDateWithSign, formatStatus, getNumberWithCommas, includeString } from '../../service/helpers';
