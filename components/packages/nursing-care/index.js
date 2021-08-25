@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import Dropdown from '../../Dropdown';
 import DatePick from '../../DatePick';
 import EuroInput from '../../EuroInput';
@@ -10,6 +11,8 @@ import NursingCareSummary from '../../NursingCare/NursingCareSummary';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
 import AutocompleteSelect from '../../AutocompleteSelect';
 import ApprovalHistory from '../../ProposedPackages/ApprovalHistory'
+import { addNotification } from '../../../reducers/notificationsReducer';
+import CustomDropDown from '../../CustomDropdown'
 
 const PackagesNursingCare = ({
   tab,
@@ -27,6 +30,7 @@ const PackagesNursingCare = ({
   changePackageBrokeringStage = () => {},
   loggedInUserId,
 }) => {
+  const dispatch = useDispatch();
   const [coreCost, setCoreCost] = useState({
     costPerWeek: nursingCarePackage?.nursingCore || '',
   });
@@ -37,6 +41,15 @@ const PackagesNursingCare = ({
 
   const [additionalPaymentOneOff, setAdditionalPaymentOneOff] = useState({
     oneOf: nursingCarePackage?.additionalNeedsPaymentOneOff || '',
+  });
+
+  const [initialFncCostPerWeek] = useState(187.60);
+
+  const [fncCostPerWeek, setFncCostPerWeek] = useState(initialFncCostPerWeek);
+
+  const [collectedBy, setCollectedBy] = useState({
+    value: 'supplier',
+    text: 'Supplier'
   });
 
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
@@ -55,9 +68,14 @@ const PackagesNursingCare = ({
   const [weeklyCostTotal, setWeeklyTotalCost] = useState(0);
   const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
   const [additionalOneOffCostTotal, setAdditionalNeedsOneOffCostTotal] = useState(0);
+  const [paidToCareHome, setPaidToCareHome] = useState(0);
 
   const changeElementsData = (setter, getter, field, data) => {
     setter({ ...getter, [field]: data });
+  };
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
   };
 
   useEffect(() => {
@@ -81,6 +99,10 @@ const PackagesNursingCare = ({
   }, [additionalPaymentOneOff]);
 
   useEffect(() => {
+    setPaidToCareHome((Number(fncCostPerWeek) - initialFncCostPerWeek).toFixed(2));
+  }, [fncCostPerWeek]);
+
+  useEffect(() => {
     setWeeklyTotalCost(coreCostTotal + additionalCostTotal);
   }, [coreCostTotal, additionalCostTotal]);
 
@@ -88,12 +110,11 @@ const PackagesNursingCare = ({
     setOneOffTotalCost(additionalPaymentOneOff);
   }, [additionalPaymentOneOff]);
 
-  const formIsValid = (brokerageInfoForCreation) =>
-    !!(
-      !Number.isNaN(Number(brokerageInfoForCreation?.nursingCore)) &&
-      !Number.isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
-      !Number.isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
-    );
+  const formIsValid = (brokerageInfoForCreation) => !!(
+    !Number.isNaN(Number(brokerageInfoForCreation?.nursingCore)) &&
+    !Number.isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
+    !Number.isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
+  );
 
   const handleSaveBrokerage = (event) => {
     event.preventDefault();
@@ -109,7 +130,7 @@ const PackagesNursingCare = ({
     if (formIsValid(brokerageInfoForCreation)) {
       createBrokerageInfo(nursingCarePackage?.nursingCarePackageId, brokerageInfoForCreation);
     } else {
-      alert('Invalid form. Check to ensure all values are set correctly');
+      pushNotification('Invalid form. Check to ensure all values are set correctly');
     }
   };
 
@@ -222,12 +243,66 @@ const PackagesNursingCare = ({
           </div>
           <div className="proposed-packages__total-cost day-care__total-cost">
             <p>
-              One Of Total{' '}
+              One off Total{' '}
               <span>
                 {currency.euro}
                 {additionalOneOffCostTotal}
               </span>
             </p>
+          </div>
+          <div className="row-container is-align-items-center residential_care__additional-payment-one-off">
+            <h2 className="hackney-text-black font-weight-bold pt-5">Funded Nursing Care (FNC)</h2>
+          </div>
+          <div className='is-flex is-flex-wrap-wrap funded-nursing-care'>
+            <div className='is-flex is-flex-wrap-wrap is-align-content-flex-end mr-auto'>
+              <p className='is-flex is-align-items-center mr-5'>Collected by</p>
+              <CustomDropDown
+                selectedValue={collectedBy}
+                onOptionSelect={(option) => {
+                  setCollectedBy(option)
+                  if(option.value !== 'no-fnc') {
+                    setFncCostPerWeek(initialFncCostPerWeek);
+                  } else {
+                    setFncCostPerWeek(0);
+                  }
+                }}
+                options={[
+                  {value: 'supplier', text: 'Supplier'},
+                  {value: 'hackney', text: 'Hackney'},
+                  {value: 'no-fnc', text: 'No FNC'},
+                ]}
+                placeholder='Supplier'
+                endpoint={{
+                  endpointName: '/suppliers/get-all',
+                  filterKey: 'supplierName',
+                }}
+              />
+            </div>
+            {collectedBy.value !== 'no-fnc' &&
+            <>
+              <div className='is-flex is-flex-wrap-wrap is-align-items-center mr-5'>
+                <EuroInput
+                  onBlur={() => {
+                    if(fncCostPerWeek < initialFncCostPerWeek) {
+                      setFncCostPerWeek(initialFncCostPerWeek);
+                    }
+                  }}
+                  value={fncCostPerWeek}
+                  onChange={(value) => {
+                    if(!value) {
+                      return setFncCostPerWeek(initialFncCostPerWeek)
+                    }
+                    setFncCostPerWeek(value)
+                  }}
+                  label='Cost Per Week'
+                />
+              </div>
+              <div className='is-flex is-align-items-flex-end'>
+                <p className='is-flex is-align-items-center'>
+                  {`${paidToCareHome < 0 ? '-' : ''}${currency.euro}${paidToCareHome < 0 ? -paidToCareHome : paidToCareHome}`}
+                </p>
+              </div>
+            </>}
           </div>
           <div>
             <div className="mt-4 is-flex is-align-items-center is-justify-content-space-between">

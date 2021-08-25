@@ -183,6 +183,15 @@
 }
 
 .proposed-packages__elements {
+  .funded-nursing-care {
+    margin-bottom: 60px;
+    p {
+      height: 42px;
+    }
+    .custom-input {
+      height: 42px;
+    }
+  }
   & > h2 {
     font-size: 19px;
     color: $lbh-black1;

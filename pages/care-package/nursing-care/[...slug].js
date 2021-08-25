@@ -262,7 +262,7 @@ const NursingCare = () => {
       <div className="mt-4 mb-4">
         <TitleHeader>Package Details</TitleHeader>
         <NursingCareSummary
-          startDate={startDate}
+          startDate={datePeriod.startDate}
           endDate={datePeriod.endDate}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}

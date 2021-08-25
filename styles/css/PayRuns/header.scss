@@ -24,7 +24,7 @@
   display: flex;
   flex-wrap: wrap;
 
-  .control {
+  .control, .held-payments-select {
     margin-right: 8px;
     margin-bottom: 20px;
   }
@@ -114,15 +114,6 @@
   .held-payments-select__menu {
     top: 74%;
     margin-top: 0;
-  }
-
-  @include media-tablet-down {
-    .control {
-      margin-top: 10px;
-    }
-    .held-payments-select {
-      margin-top: 10px;
-    }
   }
 
   label.checkbox {
