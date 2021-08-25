@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
 import HomeCarePackageDetails from '../../../../components/HomeCare/HomeCarePackageDetails';
@@ -12,6 +12,9 @@ import { getServiceTypeCareTimes } from '../../../../service/homeCareServiceHelp
 import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
 import { Button } from '../../../../components/Button'
 import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem'
+import TitleHeader from '../../../../components/TitleHeader'
+import DaySummary from '../../../../components/HomeCare/DaySummary'
+import { testDataDaySummaries } from '../../../../testData/testDateHomeCare'
 
 const approvalHistoryEntries = [
   {
@@ -48,8 +51,17 @@ const HomeCareApprovePackage = () => {
   const { data: homeCareTimeShiftsData } = useHomeCareApi.getAllTimeShiftSlots();
   const { data: homeCareServices } = useHomeCareApi.getAllServices();
   const { data: packageData } = useHomeCareApi.detailsForBrokerage(homeCarePackageId);
+  const [homeCareSummaryData, setHomeCareSummaryData] = useState([]);
 
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
+
+  const editDaySummary = (daySummary, value) => {
+    daySummary.needToAddress = value;
+  };
+
+  useEffect(() => {
+    setHomeCareSummaryData(testDataDaySummaries);
+  }, [testDataDaySummaries]);
 
   return (
     <Layout
@@ -64,7 +76,7 @@ const HomeCareApprovePackage = () => {
       }}
     >
       <div className="hackney-text-black font-size-12px">
-        <div className='client-summary'>
+        <div className='client-summary mb-5'>
           <ClientSummaryItem itemDetail={18} itemName='HOURS PER WEEK' />
           <ClientSummaryItem itemDetail='£1,982' itemName='COST OF CARE' />
         </div>
@@ -73,7 +85,14 @@ const HomeCareApprovePackage = () => {
 
         <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
 
-        <HomeCarePackageDetails />
+        <TitleHeader>Package Details</TitleHeader>
+        {homeCareSummaryData?.length ? homeCareSummaryData.map((summaryItem) => (
+          <DaySummary
+            key={summaryItem.id}
+            daySummaryItem={summaryItem}
+            edit={editDaySummary}
+          />
+        )) : <p className='mt-3 pl-4'>No package details</p>}
 
         <div className="columns mb-4">
           <div className="column">
@@ -88,9 +107,9 @@ const HomeCareApprovePackage = () => {
             </div>
 
             <div className='button-group mb-5'>
-              <Button className="button hackney-btn-light">Deny</Button>
-              <Button className="button hackney-btn-light">Request more information</Button>
-              <Button className="button hackney-btn-green">Approve to be brokered</Button>
+              <Button className='gray'>Deny</Button>
+              <Button className='gray'>Request more information</Button>
+              <Button>Approve to be brokered</Button>
             </div>
 
             <div className="mt-1">

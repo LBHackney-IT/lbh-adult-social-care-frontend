@@ -52,7 +52,10 @@ const NavClientSummary = ({
         {whoIsSourcing && (
           <div className="client-prop">
             <p>WHO IS SOURCING CARE:</p>
-            {whoIsSourcing === 'hackney' && <Image width="122" height="30" src="/images/icons/hackney_logo.png" alt="" />}
+            {
+              whoIsSourcing === 'hackney' ? <Image width="122" height="30" src="/images/icons/hackney_logo.png" alt="" />
+              : <Image width="122" height="30" src={whoIsSourcing} alt="" />
+            }
           </div>
         )}
         <div className="more-info is-flex-wrap-wrap is-flex is-justify-content-space-between">

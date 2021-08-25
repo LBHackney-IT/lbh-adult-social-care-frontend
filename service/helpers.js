@@ -1,5 +1,5 @@
-import moment from 'moment'
 import { getEnGBFormattedDate } from '../api/Utils/FuncUtils'
+import { maxStringLength } from '../constants/variables'
 
 const chr4 = () => Math.random().toString(16).slice(-4);
 
@@ -12,6 +12,13 @@ const formatDateWithSign = (date, sign = '/') => {
   const year = newDate.getFullYear();
 
   return `${`00${day}`.slice(-2)}${sign}${`00${month}`.slice(-2)}${sign}${`00${year}`.slice(-2)}`;
+};
+
+const formatStringLength = (string, collapsedText, isSlicedText) => {
+  if (string.length > maxStringLength && collapsedText && isSlicedText) {
+    return `${string.slice(0, maxStringLength)}`;
+  }
+  return string;
 };
 
 const formatCareDatePeriod = (startDate, endDate) => {
@@ -123,23 +130,6 @@ const sortTableByKey = (input, sort) => {
   });
 };
 
-const convertLocalToUTCDate = (date, isEndDate) => {
-  if (!date) return date;
-
-  const utcDate = moment.parseZone(date).utc(true);
-
-  if (!isEndDate) return utcDate.format();
-
-  // set time to end of the day for dateEnd
-  return utcDate
-    .add({
-      hours: 23,
-      minutes: 59,
-      seconds: 59,
-    })
-    .format();
-};
-
 const deleteSpaces = (str) => str.replace(/\s/g, '');
 
 const getErrorResponse = (error) => error?.response?.data || {}; // { firstName: 'First Name must be more then 10 symbols', secondName: 'Second Name must be more then 10 symbols'
@@ -160,6 +150,6 @@ export {
   formatForDropDownOptions,
   scrollToElement,
   getNumberWithCommas,
-  convertLocalToUTCDate,
   formatCareDatePeriod,
+  formatStringLength,
 };

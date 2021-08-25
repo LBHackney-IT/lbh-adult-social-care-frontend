@@ -11,6 +11,12 @@ $max-ipod-width: 1172px;
   }
 }
 
+@mixin media-max-ipod-down {
+  @media (max-width: $max-ipod-width - 1) {
+    @content;
+  }
+}
+
 @mixin media-small-ipod-up {
   @media (min-width: $min-ipod-width) {
     @content;

@@ -5,7 +5,7 @@
   position: fixed;
   left: 0;
   right: 0;
-  z-index: 2;
+  z-index: 4;
   align-items: center;
 
   .level {
@@ -125,6 +125,13 @@
   }
 }
 
+.main-content__with-nav {
+
+  .nav-client-summary.mobile-client-summary {
+    padding: 10px 0;
+  }
+}
+
 .column.main-content__with-nav {
   padding-left: 259px;
   padding-right: 10px;
@@ -178,9 +185,16 @@
   .nav-back-button {
     display: flex;
     align-items: center;
+    width: fit-content;
+    padding: 5px;
+    padding-left: 0;
+    border-radius: 4px;
     margin-bottom: 11px;
+    transition: 0.2s easy;
+
     &:hover {
       cursor: pointer;
+      background-color: $lbh-gray-border;
     }
 
     p {
@@ -195,7 +209,7 @@
   width: 248px;
   border-right: 1px solid #dee0e2;
   background: white;
-  z-index: 1;
+  z-index: 3;
   position: fixed;
   left: 0;
   top: 0;

@@ -5,7 +5,6 @@ import Layout from '../../../../components/Layout/Layout';
 import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
 import HomeCarePackageElementCostings from '../../../../components/HomeCare/HomeCarePackageElementCostings';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import HomeCarePackageDetails from '../../../../components/HomeCare/HomeCarePackageDetails';
 import TextArea from '../../../../components/TextArea';
 import { getUserSession } from '../../../../service/helpers';
 import withSession from '../../../../lib/session';
@@ -14,6 +13,7 @@ import ClientSummaryItem from '../../../../components/CarePackages/ClientSummary
 import { Button } from '../../../../components/Button'
 import DaySummary from '../../../../components/HomeCare/DaySummary'
 import TitleHeader from '../../../../components/TitleHeader'
+import { useRouter } from 'next/router'
 
 const approvalHistoryEntries = [
   {
@@ -63,6 +63,8 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 // eslint-disable-next-line no-shadow
 const HomeCareApproveBrokered = () => {
+  // const router = useRouter();
+  // const id = router.query.id;
   const { data: homeCareServices } = useHomeCareApi.getAllServices();
   const { data: homeCareTimeShiftsData } = useHomeCareApi.getAllTimeShiftSlots();
   const [homeCareSummaryData] = useState([]);
@@ -101,8 +103,6 @@ const HomeCareApproveBrokered = () => {
             daySummaryItem={summaryItem}
           />
         )) : <p className='mt-3 pl-4'>No package details</p>}
-
-        {/*<HomeCarePackageDetails />*/}
 
         <div className="columns mb-4">
           <div className="column">
