@@ -10,10 +10,21 @@ const requestMethods = {
   head: 'HEAD',
 };
 
+const initialPagingOptions = {
+  pagingMetaData: {},
+  data: [],
+}
+
 const invoiceStatusIdByString = {
   accepted: 5,
   rejected: 2,
   hold: 1,
 };
 
-export { maxStringLength, invoiceStatusIdByString, requestMethods, DEFAULT_PAGE_SIZE };
+export {
+  initialPagingOptions,
+  maxStringLength,
+  invoiceStatusIdByString,
+  requestMethods,
+  DEFAULT_PAGE_SIZE,
+};

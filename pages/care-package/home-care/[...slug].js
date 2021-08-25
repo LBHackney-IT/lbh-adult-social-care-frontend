@@ -15,11 +15,11 @@ import withSession from '../../../lib/session';
 import { formatCareDatePeriod, getLoggedInUser, getUserSession, uniqueID } from '../../../service/helpers'
 import {
   DOMESTIC_CARE_MODE,
-  ESCORT_CARE_MODE,
+  ESCORT_CARE_MODE, getWeekSlots,
   LIVE_IN_CARE_MODE,
   PERSONAL_CARE_MODE,
   weekDays,
-} from '../../../service/homeCarePickerHelper';
+} from '../../../service/homeCarePickerHelper'
 import { getServiceTimes } from '../../../service/homeCareServiceHelper';
 import { SOCIAL_WORKER_ROUTE } from '../../../routes/RouteConstants';
 import { addNotification } from '../../../reducers/notificationsReducer';
@@ -136,14 +136,17 @@ const HomeCare = ({ loggedInUserId }) => {
 
   useEffect(() => {
     if(homeCareTimeShiftsData) {
-      setHomeCareTimeShifts(homeCareTimeShiftsData);
+      setHomeCareTimeShifts(getWeekSlots(homeCareTimeShiftsData));
     }
   }, [homeCareTimeShiftsData]);
+
+  console.log(homeCareTimeShifts);
+
 
   // Handle a care picker cell click
   const onCarePickerClick = (weekSlotId, dayId) => {
     const weekSlot = homeCareTimeShifts.find((item) => item.id === weekSlotId);
-    const weekSlotDayItem = weekSlot.days.find((item) => item.id === dayId);
+    const weekSlotDayItem = weekSlot?.days?.find((item) => item.id === dayId);
     let newWeekSlotDayItem;
 
     const primaryCareTimeItem = times.find((item) => item.value === selectedPrimaryCareTime);

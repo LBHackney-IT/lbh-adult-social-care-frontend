@@ -57,9 +57,12 @@ const weekDays = [
   { id: 7, name: 'SUN', longName: 'Sunday', minutes: 0 },
 ];
 
-const getWeekSlots = () =>
-  weekSlots.map((weekSlotItem) => {
-    if (weekSlotItem.days.length <= 0) {
+const getWeekSlots = (outerWeekSlots = weekSlots) =>
+  outerWeekSlots.map((weekSlotItem) => {
+    if(!weekSlotItem.days) {
+      weekSlotItem.days = [];
+    }
+    if (weekSlotItem.days?.length <= 0) {
       if (weekSlotItem.id < 7) {
         for (let i = 1; i <= 7; i++) {
           weekSlotItem.days.push({
@@ -85,7 +88,7 @@ const getWeekSlots = () =>
       }
     }
     return weekSlotItem;
-  });
+});
 
 const nightOwlOptions = [
   { text: '30 minutes', value: 30 },

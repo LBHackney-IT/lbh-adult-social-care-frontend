@@ -11,4 +11,8 @@
     padding: 32px 0;
     margin: 0 auto;
   }
+
+  @include media-small-ipod-down {
+    padding: 32px 0;
+  }
 }

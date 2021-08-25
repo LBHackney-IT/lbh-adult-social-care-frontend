@@ -1,8 +1,42 @@
+.visiting-days {
+  display: flex;
+  flex-wrap: wrap;
+
+  @include media-small-ipod-down {
+    & > span:first-of-type {
+      flex-basis: 100%;
+    }
+
+    span.level-item {
+      margin-bottom: 0;
+    }
+  }
+}
+
 .day-care-day-cbxs {
-  .column {
+  display: flex;
+  flex-wrap: wrap;
+  width: 50%;
+  padding: 0 12px;
+  margin-bottom: 20px;
+
+  @include media-small-ipod-down {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  & > div {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    &:not(&:last-of-type) {
+      margin-right: 20px;
+
+      @include media-small-ipod-down {
+        margin-right: 0;
+      }
+    }
 
     label:not(.checkbox) {
       font-weight: bold;

@@ -25,7 +25,7 @@ const WeekCarePicker = ({
   return (
     <>
       <strong>When should this be done? </strong><span>(Select time and day)</span>
-      <div className="level">
+      <div className="level is-flex-wrap-wrap">
         <div className="level-item level-left">
           <div className="legend-items">
             <LegendItem className="personal-home-care">
