@@ -20,7 +20,7 @@ const DatePick = ({
 }) => {
   return (
     <BaseField classes={`${classes} react-date-picker`} label={label} noInputStyle>
-      {!dateValue || dateValue?.toString() === 'Invalid Date' ? <p>Invalid Date</p> :
+      {dateValue?.toString() === 'Invalid Date' ? <p>Invalid Date</p> :
         <DatePicker
           dateFormat="dd/MM/yyyy"
           disabled={disabled}

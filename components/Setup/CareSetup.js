@@ -6,6 +6,7 @@ import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
 import fieldValidator from '../../service/inputValidator';
 import DateSetup from './DateSetup';
 import { includeString } from '../../service/helpers'
+import { RESIDENTIAL_CARE_ROUTE } from '../../routes/RouteConstants'
 
 const CareSetup = ({
   errors,
@@ -57,12 +58,17 @@ const CareSetup = ({
       return;
     }
 
-    const formattedRoute = {};
+    let formattedRoute = '';
     selectedCare.fields.forEach(field => {
-      formattedRoute[field] = values[field];
+      if(field === 'typeOfStayId' && selectedCare.route === RESIDENTIAL_CARE_ROUTE) {
+        const typeOfStay = selectedCare.optionFields[field].find((opt) => opt.value === selectedCare.typeOfStayId);
+        formattedRoute += `?typeOfStayText=${typeOfStay}`;
+      } else {
+        formattedRoute += `/${values[field]}`;
+      }
     });
 
-    router.push(`${selectedCare.route}/${Object.keys(formattedRoute).join('/')}`);
+    router.push(`${selectedCare.route}${formattedRoute}`);
   };
 
   return (
@@ -94,7 +100,7 @@ const CareSetup = ({
           <div key={field} className="mt-2">
             <RadioButton
               label={selectedCare.labels[field]}
-              options={yesNoValues}
+              options={selectedCare.optionFields[field] || yesNoValues}
               error={errors[field]}
               setError={() => changeErrorFields(field)}
               onChange={value => setValues(field, value)}

@@ -13,7 +13,7 @@
   display: flex;
   flex-wrap: wrap;
 
-  @include media-desktop-down {
+  @include media-tablet-down {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 8px;
