@@ -92,6 +92,12 @@ const CarePackage = ({ history }) => {
         'startDate',
         'endDate',
       ],
+      tooltips: {
+        isRespiteCare: 'Lorem ipsum isRespiteCare',
+        isDischargePackage: 'Lorem ipsum isDischargePackage',
+        isImmediateOrReEnablement: 'Lorem ipsum isImmediateOrReEnablement',
+        isS117: 'Lorem ipsum isS117',
+      },
       optionFields: {
         typeOfStayId: mapTypeOfCareIdOptions(residentialTypeOfStayOptions),
       },
@@ -107,6 +113,12 @@ const CarePackage = ({ history }) => {
     {
       text: 'Nursing care',
       value: 3,
+      tooltips: {
+        isRespiteCare: 'Lorem ipsum isRespiteCare',
+        isDischargePackage: 'Lorem ipsum isDischargePackage',
+        isImmediateOrReEnablement: 'Lorem ipsum isImmediateOrReEnablement',
+        isS117: 'Lorem ipsum isS117',
+      },
       fields: [
         'isFixedPeriod',
         'startDate',

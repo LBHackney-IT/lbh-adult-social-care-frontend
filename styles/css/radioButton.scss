@@ -58,3 +58,19 @@
     }
   }
 }
+
+.radio-button {
+  &.control.field-container label:not(.radio-item) {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+  }
+  .tooltip {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: -20px;
+  }
+}

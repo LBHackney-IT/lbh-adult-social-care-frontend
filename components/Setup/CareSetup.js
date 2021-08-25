@@ -5,7 +5,7 @@ import CarePackageSetup from '../CarePackages/CarePackageSetup';
 import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
 import fieldValidator from '../../service/inputValidator';
 import DateSetup from './DateSetup';
-import { includeString } from '../../service/helpers'
+import { getFutureDate, includeString } from '../../service/helpers'
 import { RESIDENTIAL_CARE_ROUTE } from '../../routes/RouteConstants'
 
 const CareSetup = ({
@@ -73,6 +73,12 @@ const CareSetup = ({
     router.push(`${selectedCare.route}${formattedRoute}`);
   };
 
+  const typeOfStayIdMaxDates = {
+    1: getFutureDate({ days: 7 * 6}),
+    2: getFutureDate({ days: 7 * 52}),
+    3: undefined,
+  };
+
   return (
     <CarePackageSetup onBuildClick={onBuildClick}>
       <div className="level" />
@@ -89,8 +95,10 @@ const CareSetup = ({
         </div>
         <DateSetup
           endDate={values.endDate}
+          disabledStartDate={values.typeOfStayId !== undefined && !values.typeOfStayId}
           changeErrorFields={changeErrorFields}
           errorFields={errors}
+          startMaxDate={typeOfStayIdMaxDates[values.typeOfStayId]}
           isFixedPeriod={values.isFixedPeriod}
           setEndDate={(date) => setValues('endDate', date)}
           setIsFixedPeriod={(value) => setValues('isFixedPeriod', value)}
@@ -101,8 +109,9 @@ const CareSetup = ({
         {Object.keys(selectedCare.labels).map(field => (
           <div key={field} className="mt-2">
             <RadioButton
+              tooltipText={selectedCare.tooltips ? selectedCare.tooltips[field] : ''}
               label={selectedCare.labels[field]}
-              options={selectedCare.optionFields[field] || yesNoValues}
+              options={selectedCare.optionFields ? selectedCare.optionFields[field] || yesNoValues : yesNoValues}
               error={errors[field]}
               setError={() => changeErrorFields(field)}
               onChange={value => setValues(field, value)}
