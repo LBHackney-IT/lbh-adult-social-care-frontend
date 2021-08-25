@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux';
 import Layout from '../../components/Layout/Layout';
 import withSession from '../../lib/session';
@@ -12,7 +12,7 @@ import {
 } from '../../routes/RouteConstants';
 import useResidentialCareApi from '../../api/SWR/useResidentialCareApi';
 import useNursingCareApi from '../../api/SWR/useNursingCareApi';
-import { selectNursingTypeOfStayOptions, selectResidentialTypeOfStayOptions } from '../../reducers/carePackageSlice'
+import { mapTypeOfCareIdOptions } from '../../api/Mappers/optionsMapper'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -21,8 +21,9 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 });
 
 const CarePackage = ({ history }) => {
-  const typeOfStayResidentialOptions = useSelector(selectResidentialTypeOfStayOptions);
-  const typeOfStayNursingOptions = useSelector(selectNursingTypeOfStayOptions);
+  const { data: residentialTypeOfStayOptions } = useResidentialCareApi.typeOfStayOptions();
+  const { data: nursingCareTypeOfStayOptions } = useNursingCareApi.typeOfStayOptions();
+
   const [initialValues] = useState({
     isImmediateOrReEnablement: '',
     isS117: '',
@@ -45,7 +46,7 @@ const CarePackage = ({ history }) => {
     endDate: '',
   });
 
-  const [careTypes] = useState([
+  const careTypes = useMemo(() => [
     {
       text: 'Home care',
       value: 0,
@@ -92,15 +93,14 @@ const CarePackage = ({ history }) => {
         'endDate',
       ],
       optionFields: {
-        typeOfStayId: typeOfStayResidentialOptions,
+        typeOfStayId: mapTypeOfCareIdOptions(residentialTypeOfStayOptions),
       },
       labels: {
         hasRespiteCare: 'Respite care?',
-        hasDiscardChanges: 'Discharge package?',
-        isImmediate: 'Is this an immediate service or a re-enablement package?',
-        isS117: 'Is this user under S117 of the Mental Health Act?',
+        hasDischargePackage: 'Discharge package?',
         isImmediateOrReEnablement: 'Immediate / re-enablement package?',
         typeOfStayId: 'What type of stay is this?',
+        isS117: 'Is this user under S117 of the Mental Health Act?',
       },
       route: RESIDENTIAL_CARE_ROUTE,
     },
@@ -116,26 +116,22 @@ const CarePackage = ({ history }) => {
         'isImmediateOrReEnablement',
         'isS117',
         'endDate',
-        'isImmediate',
       ],
       optionFields: {
-        typeOfStayId: typeOfStayNursingOptions,
+        typeOfStayId: mapTypeOfCareIdOptions(nursingCareTypeOfStayOptions),
       },
       labels: {
         isRespiteCare: 'Respite care?',
         isDischargePackage: 'Discharge package?',
-        isImmediate: 'Is this an immediate service or a re-enablement package?',
-        isS117: 'Is this user under S117 of the Mental Health Act?',
         isImmediateOrReEnablement: 'Immediate / re-enablement package?',
         typeOfStayId: 'What type of stay is this?',
+        isS117: 'Is this user under S117 of the Mental Health Act?',
       },
       route: NURSING_CARE_ROUTE,
     },
-  ]);
-  const [selectedCareType, setSelectedCareType] = useState(3);
+  ], [nursingCareTypeOfStayOptions, residentialTypeOfStayOptions]);
 
-  const residentialTypeOfStayOptions = useResidentialCareApi.typeOfStayOptions();
-  const nursingCareTypeOfStayOptions = useNursingCareApi.typeOfStayOptions();
+  const [selectedCareType, setSelectedCareType] = useState(3);
 
   const changeCareType = (option) => {
     setSelectedCareType(option);

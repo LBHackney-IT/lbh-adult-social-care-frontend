@@ -61,10 +61,12 @@ const CareSetup = ({
     let formattedRoute = '';
     selectedCare.fields.forEach(field => {
       if(field === 'typeOfStayId' && selectedCare.route === RESIDENTIAL_CARE_ROUTE) {
-        const typeOfStay = selectedCare.optionFields[field].find((opt) => opt.value === selectedCare.typeOfStayId);
-        formattedRoute += `?typeOfStayText=${typeOfStay}`;
+        const typeOfStay = selectedCare.optionFields[field].find((opt) => opt.value === values[field]).value;
+        formattedRoute += `?typeOfStayText=${typeOfStay.text}`;
       } else {
-        formattedRoute += `/${values[field]}`;
+        if(values[field] !== undefined && values[field] !== '') {
+          formattedRoute += `/${values[field]}`;
+        }
       }
     });
 
