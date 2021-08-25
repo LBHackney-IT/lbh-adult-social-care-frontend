@@ -10,6 +10,7 @@ import { CaretDownIcon } from '../Icons';
 
 const HeldPaymentsFilters = ({ filters, changeFilter, clearFilters, applyFilters, hasFields }) => {
 
+  console.log(filters);
   const { options: packageTypeOptions } = usePackageGetAll();
   const { options: waitingOnOptions } = usePaymentDepartments();
 

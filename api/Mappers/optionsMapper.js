@@ -10,6 +10,12 @@ const optionsMapper = (fields, data = []) => {
   })
 };
 
+const mapTypeOfCareIdOptions = (options) =>
+  options.map((option) => ({
+    text: `${option.optionName} (${option.optionPeriod})`,
+    value: option.typeOfStayOptionId,
+}));
+
 const mapCarePackageApprovalHistory = (approvalHistoryItems) => approvalHistoryItems.map((historyItem) => ({
     eventDate: getEnGBFormattedDate(historyItem.dateCreated),
     eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
@@ -20,4 +26,5 @@ export default optionsMapper;
 
 export {
   mapCarePackageApprovalHistory,
+  mapTypeOfCareIdOptions,
 };

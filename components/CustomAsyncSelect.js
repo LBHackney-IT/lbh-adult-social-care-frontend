@@ -13,20 +13,20 @@ const loadOptions = async (searchText, endpoint) => {
 };
 
 const CustomAsyncSelector = ({ onChange, value, placeholder, getOptionLabel, endpoint }) => (
-    <AsyncSelect
-      instanceId={endpoint.filterKey}
-      onChange={(option) => onChange(option)}
-      getOptionValue={(option) => option.id}
-      getOptionLabel={(option) => getOptionLabel(option)}
-      loadOptions={(searchText) => loadOptions(searchText, endpoint)}
-      components={{ DropdownIndicator: CaretDownIcon }}
-      classNamePrefix="custom-async-selector"
-      className="custom-async-selector"
-      value={value}
-      placeholder={placeholder}
-      defaultOptions
-      cacheOptions
-    />
-  );
+  <AsyncSelect
+    instanceId={endpoint.filterKey}
+    onChange={(option) => onChange(option)}
+    getOptionValue={(option) => option.id}
+    getOptionLabel={(option) => getOptionLabel(option)}
+    loadOptions={(searchText) => loadOptions(searchText, endpoint)}
+    components={{ DropdownIndicator: CaretDownIcon }}
+    classNamePrefix="custom-async-selector"
+    className="custom-async-selector"
+    value={value}
+    placeholder={placeholder}
+    defaultOptions
+    cacheOptions
+  />
+);
 
 export default CustomAsyncSelector;
