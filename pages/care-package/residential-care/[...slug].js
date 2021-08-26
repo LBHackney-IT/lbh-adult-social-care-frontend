@@ -16,7 +16,7 @@ import TitleHeader from '../../../components/TitleHeader';
 import ResidentialCareSummary from '../../../components/ResidentialCare/ResidentialCareSummary';
 import { Button } from '../../../components/Button';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
-import { getUserSession } from '../../../service/helpers';
+import { formatCareDatePeriod, getUserSession } from '../../../service/helpers'
 import withSession from '../../../lib/session';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import { addNotification } from '../../../reducers/notificationsReducer';
@@ -209,6 +209,8 @@ const ResidentialCare = () => {
       });
   };
 
+  const periodDate = formatCareDatePeriod(startDate, endDate);
+
   return (
     <Layout
       clientSummaryInfo={{
@@ -217,7 +219,7 @@ const ResidentialCare = () => {
         age: "91",
         dateOfBirth: "09/12/1972",
         postcode: "E9 6EY",
-        title: "BUILD A CARE PACKAGE",
+        title: `BUILD A CARE PACKAGE\nResidential Care ${periodDate.startDate} - ${periodDate.endDate}`,
       }}
     >
       <div className="mt-4 columns">

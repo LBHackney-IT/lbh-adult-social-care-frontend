@@ -17,6 +17,7 @@ const CareSetup = ({
   selectedCareType,
   setSelectedCareType,
   history,
+  tooltips,
 }) => {
   const router = useRouter();
 
@@ -60,15 +61,14 @@ const CareSetup = ({
 
     let formattedRoute = '';
     selectedCare.fields.forEach(field => {
-      if(field === 'typeOfStayId' && selectedCare.route === RESIDENTIAL_CARE_ROUTE) {
-        const typeOfStay = selectedCare.optionFields[field].find((opt) => opt.value === values[field]).value;
-        formattedRoute += `?typeOfStayText=${typeOfStay.text}`;
-      } else {
-        if(values[field] !== undefined && values[field] !== '') {
-          formattedRoute += `/${values[field]}`;
-        }
+      if(values[field] !== undefined && values[field] !== '') {
+        formattedRoute += `/${values[field]}`;
       }
     });
+
+    if(selectedCare.route === RESIDENTIAL_CARE_ROUTE) {
+      formattedRoute += `?${selectedCare.optionFields.typeOfStayId.find((opt) => opt.value === values.typeOfStayId).text}`;
+    }
 
     router.push(`${selectedCare.route}${formattedRoute}`);
   };
@@ -78,6 +78,8 @@ const CareSetup = ({
     2: getFutureDate({ days: 7 * 52}),
     3: undefined,
   };
+
+  const hasTypeOfStayId = Object.keys(selectedCare.fields).includes('typeOfStayId');
 
   return (
     <CarePackageSetup onBuildClick={onBuildClick}>
@@ -95,7 +97,7 @@ const CareSetup = ({
         </div>
         <DateSetup
           endDate={values.endDate}
-          disabledStartDate={values.typeOfStayId !== undefined && !values.typeOfStayId}
+          disabledStartDate={hasTypeOfStayId && !values.typeOfStayId}
           changeErrorFields={changeErrorFields}
           errorFields={errors}
           startMaxDate={typeOfStayIdMaxDates[values.typeOfStayId]}
@@ -109,7 +111,7 @@ const CareSetup = ({
         {Object.keys(selectedCare.labels).map(field => (
           <div key={field} className="mt-2">
             <RadioButton
-              tooltipText={selectedCare.tooltips ? selectedCare.tooltips[field] : ''}
+              tooltipText={tooltips[field] || ''}
               label={selectedCare.labels[field]}
               options={selectedCare.optionFields ? selectedCare.optionFields[field] || yesNoValues : yesNoValues}
               error={errors[field]}
