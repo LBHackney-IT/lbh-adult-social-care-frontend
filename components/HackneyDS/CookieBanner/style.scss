@@ -1,0 +1,32 @@
+.lbh-cookie-banner {
+  z-index: 5;
+  padding: 1.5rem 0;
+  background: rgba(11, 12, 12, 0.9);
+  line-height: 1.5rem;
+  &__content {
+    &-wrapper {
+      display: flex;
+      margin: 20px auto 20px;
+    }
+    width: 66.6666%;
+    box-sizing: border-box;
+    padding: 0 15px;
+    margin-bottom: 0;
+  }
+  &__button-wrapper button {
+    margin: 0;
+  }
+  &,
+  &__content p {
+    margin: 0;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    letter-spacing: 0.15px;
+    a {
+      color: #fff;
+      font-weight: 700;
+    }
+  }
+}

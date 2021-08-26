@@ -1,0 +1,22 @@
+.lbh-announcement {
+  padding: 2.25rem 0;
+  border-top: 1px solid #84bd00;
+  border-bottom: 1px solid #84bd00;
+  background: rgba(164, 214, 94, 0.2);
+  &--site {
+    background: rgba(164, 214, 94, 0.5);
+  }
+  &__title {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: #1c1e21;
+  }
+  &__content {
+    color: #0b0c0c;
+    font-size: 1rem;
+    line-height: 1.625rem;
+    font-weight: 400;
+  }
+}

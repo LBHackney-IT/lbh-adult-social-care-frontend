@@ -1,0 +1,72 @@
+.govuk-back-link {
+  font-size: 0.875rem;
+  line-height: 1.1428571429;
+  font-family: Open Sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  position: relative;
+  padding-left: 14px;
+
+  &:active,
+  &:focus,
+  &:hover,
+  &:link,
+  &:visited {
+    color: #0b0c0c;
+  }
+  &:before {
+    content: '';
+    width: 7px;
+    margin: auto 0;
+    display: block;
+    position: absolute;
+  }
+  &:link {
+    color: #025ea6;
+  }
+  &:visited {
+    color: #8031a7;
+  }
+  &:active {
+    color: #2b8cc4;
+  }
+  &:focus {
+    outline: transparent solid 3px;
+    background-color: #ffc845;
+    box-shadow: 0 -2px #ffc845, 0 4px #0b0c0c;
+  }
+  &[href] {
+    text-decoration: underline;
+    border-color: #0b0c0c;
+  }
+  &:before {
+    top: 0;
+    bottom: 0;
+    left: 3px;
+    height: 7px;
+    -webkit-transform: rotate(225deg);
+    -ms-transform: rotate(225deg);
+    transform: rotate(225deg);
+    border: solid #505a5f;
+    border-width: 1px 1px 0 0;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    top: -14px;
+    right: 0;
+    bottom: -14px;
+    left: 0;
+  }
+}
+@media (min-width: 40.0625em) {
+  .govuk-back-link {
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+}
+
+.lbh-back-link:link {
+  color: #025ea6;
+}
