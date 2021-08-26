@@ -16,6 +16,12 @@ const fieldValidator = (inputs = [], additionalRules = []) => {
         hasErrors = true;
       }
     }
+    if (item.rules.includes('null')) {
+      if (item.value === null) {
+        validFields[item.name] = 'Required field';
+        hasErrors = true;
+      }
+    }
 
     // additionalRules EXAMPLE
     // [

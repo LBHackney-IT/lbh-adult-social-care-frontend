@@ -5,20 +5,12 @@ import { getUserSession, uniqueID } from '../../../../service/helpers';
 import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
 import Layout from '../../../../components/Layout/Layout';
 import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
-import {
-  changeDayCarePackageStatus,
-  createDayCareBrokerageInfo,
-} from '../../../../api/CarePackages/DayCareApi';
+import { changeDayCarePackageStatus, createDayCareBrokerageInfo } from '../../../../api/CarePackages/DayCareApi';
 import { getInitialPackageReclaim } from '../../../../api/Utils/CommonOptions';
-import {
-  mapBrokerageSupplierOptions,
-  mapDayCarePackageDetailsForBrokerage,
-  mapDayCareStageOptions,
-} from '../../../../api/Mappers/DayCareMapper';
+import { mapDayCarePackageDetailsForBrokerage, mapDayCareStageOptions } from '../../../../api/Mappers/DayCareMapper';
 import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 import PackagesDayCare from '../../../../components/packages/day-care';
 import withSession from '../../../../lib/session';
-import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 import useDayCareApi from '../../../../api/SWR/useDayCareApi';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import useSuppliersApi from '../../../../api/SWR/useSuppliersApi'
@@ -44,14 +36,18 @@ const DayCareBrokering = () => {
   const [clientDetails, setClientDetails] = useState([]);
 
   const { data: dayCarePackage } = useDayCareApi.detailsForBrokerage(dayCareId);
+  const packageDetails = dayCarePackage?.packageDetails;
   const { data: stageOptions } = useDayCareApi.brokerAgeStages();
   const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
 
   useEffect(() => {
-    if(!dayCarePackage) return;
+    if(!dayCarePackage?.packageApprovalHistory) return;
 
-    const { newApprovalHistoryItems, newOpportunityEntries, currentDaysSelected } =
-      mapDayCarePackageDetailsForBrokerage(dayCarePackage);
+    const {
+      newApprovalHistoryItems,
+      newOpportunityEntries,
+      currentDaysSelected
+    } = mapDayCarePackageDetailsForBrokerage(dayCarePackage);
 
     setApprovalHistoryEntries(newApprovalHistoryItems);
     setOpportunityEntries(newOpportunityEntries);
@@ -120,10 +116,9 @@ const DayCareBrokering = () => {
         packagesCount: 4,
         dateOfBirth: clientDetails && getEnGBFormattedDate(clientDetails.dateOfBirth),
         postcode: clientDetails?.postCode,
+        title: 'Day care brokering',
       }}
-      headerTitle="Day Care Brokering"
     >
-      <PackageHeader />
       <PackagesDayCare
         tab={tab}
         addPackageReclaim={addPackageReclaim}
@@ -139,8 +134,8 @@ const DayCareBrokering = () => {
         stageOptions={mapDayCareStageOptions(stageOptions)}
         dayCareSummary={{
           opportunityEntries,
-          needToAddress: dayCarePackage?.packageDetails?.needToAddress,
-          transportNeeded: dayCarePackage?.packageDetails?.transportNeeded,
+          needToAddress: packageDetails?.needToAddress,
+          transportNeeded: packageDetails?.transportNeeded,
           daysSelected,
           deleteOpportunity: () => {},
         }}

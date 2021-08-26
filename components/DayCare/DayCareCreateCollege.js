@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Input from '../Input';
 import DatePick from '../DatePick';
 import { Button } from '../Button';
 import { createDayCareCollege } from '../../api/CarePackages/DayCareApi';
 import fieldValidator from '../../service/inputValidator';
+import { addNotification } from '../../reducers/notificationsReducer';
 
 const DayCareCreateCollege = ({ newName = undefined, onCreated = () => {}, onCancelled = () => {} }) => {
+  const dispatch = useDispatch();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [collegeName, setCollegeName] = useState(newName);
@@ -20,6 +23,10 @@ const DayCareCreateCollege = ({ newName = undefined, onCreated = () => {}, onCan
       ...errorFields,
       [field]: value,
     });
+  };
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
   };
 
   const handleSaveCollege = () => {
@@ -43,7 +50,7 @@ const DayCareCreateCollege = ({ newName = undefined, onCreated = () => {}, onCan
         onCreated();
       })
       .catch((error) => {
-        console.log(error);
+        pushNotification(error);
         onCancelled();
       });
   };

@@ -4,6 +4,15 @@
   justify-content: flex-end;
   padding: 16px 16px 0 16px;
   margin-bottom: 32px;
+
+  @include media-mobile {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    & > button {
+      margin-bottom: 20px;
+    }
+  }
 }
 
 .table-pagination-info {

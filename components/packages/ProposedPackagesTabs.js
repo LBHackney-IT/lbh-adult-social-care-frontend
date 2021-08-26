@@ -1,5 +1,5 @@
-import { CaretDownIcon } from '../Icons';
 import React from 'react';
+import { CaretDownIcon } from '../Icons';
 
 const ProposedPackagesTab = ({
   changeTab,
@@ -23,6 +23,7 @@ const ProposedPackagesTab = ({
           </div>
         );
       })}
+      <div className='line' />
     </div>
   );
 };

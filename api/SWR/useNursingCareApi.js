@@ -17,9 +17,7 @@ const useNursingCareApi = {
   },
   nursingCarePackageList: () => useGetData(`${NURSING_CARE_URL}/get-all`),
   singleNursingCarePackage: (nursingCarePackageId) => useGetData(`${NURSING_CARE_URL}/${nursingCarePackageId}`),
-  detailsForBrokerage: (nursingCarePackageId, hascToken) => {
-    useGetData(`${NURSING_CARE_URL}/${nursingCarePackageId}/brokerage`)
-  },
+  typeOfStayOptions: () => useGetData(`${NURSING_CARE_URL}/type-of-stay-options`),
 }
 
 export default useNursingCareApi;

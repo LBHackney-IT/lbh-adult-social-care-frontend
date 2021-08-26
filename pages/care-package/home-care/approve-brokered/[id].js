@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react'
 import { getServiceTypeCareTimes } from '../../../../service/homeCareServiceHelper';
 import { PERSONAL_CARE_MODE } from '../../../../service/homeCarePickerHelper';
 import Layout from '../../../../components/Layout/Layout';
-import HomeCareApprovalTitle from '../../../../components/HomeCare/HomeCareApprovalTitle';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
 import HomeCarePackageElementCostings from '../../../../components/HomeCare/HomeCarePackageElementCostings';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import HomeCarePackageDetails from '../../../../components/HomeCare/HomeCarePackageDetails';
 import TextArea from '../../../../components/TextArea';
 import { getUserSession } from '../../../../service/helpers';
 import withSession from '../../../../lib/session';
 import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
+import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem'
+import { Button } from '../../../../components/Button'
+import DaySummary from '../../../../components/HomeCare/DaySummary'
+import TitleHeader from '../../../../components/TitleHeader'
+import { useRouter } from 'next/router'
 
 const approvalHistoryEntries = [
   {
@@ -61,47 +63,31 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 // eslint-disable-next-line no-shadow
 const HomeCareApproveBrokered = () => {
+  // const router = useRouter();
+  // const id = router.query.id;
   const { data: homeCareServices } = useHomeCareApi.getAllServices();
   const { data: homeCareTimeShiftsData } = useHomeCareApi.getAllTimeShiftSlots();
+  const [homeCareSummaryData] = useState([]);
 
   // eslint-disable-next-line no-unused-vars
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
 
   return (
-    <Layout headerTitle="HOME CARE APPROVE BROKERED PACKAGE">
+    <Layout
+      clientSummaryInfo={{
+        whoIsSourcing: 'hackney',
+        client: 'James Stephens',
+        title: `Home Care`,
+        hackneyId: '#786288',
+        age: '91',
+        dateOfBirth: '09/12/1972',
+        postcode: 'E9 6EY',
+      }}
+    >
       <div className="hackney-text-black font-size-12px">
-        <HomeCareApprovalTitle />
-        <ApprovalClientSummary />
-
-        <div className="columns">
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">HOURS PER WEEK</p>
-                    <p className="font-size-14px">18</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">COST OF CARE</p>
-                    <p className="font-size-14px">£1,982</p>
-                    <p className="font-weight-bold hackney-text-green">ACTUAL</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column" />
-          <div className="column" />
-          <div className="column" />
+        <div className='client-summary mb-5'>
+          <ClientSummaryItem itemDetail={18} itemName='HOURS PER WEEK' />
+          <ClientSummaryItem itemDetail='£1,982' itemName='COST OF CARE' />
         </div>
 
         <HomeCarePackageBreakdown />
@@ -110,7 +96,13 @@ const HomeCareApproveBrokered = () => {
 
         <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
 
-        <HomeCarePackageDetails />
+        <TitleHeader>Package Details</TitleHeader>
+        {homeCareSummaryData?.length ? homeCareSummaryData.map((summaryItem) => (
+          <DaySummary
+            key={summaryItem.id}
+            daySummaryItem={summaryItem}
+          />
+        )) : <p className='mt-3 pl-4'>No package details</p>}
 
         <div className="columns mb-4">
           <div className="column">
@@ -121,19 +113,10 @@ const HomeCareApproveBrokered = () => {
               /> */}
             </div>
 
-            <div className="level mt-3">
-              <div className="level-left" />
-              <div className="level-right">
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Deny</button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Request more information</button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green">Approve contracting</button>
-                </div>
-              </div>
+            <div className='button-group mb-5'>
+              <Button className='gray'>Deny</Button>
+              <Button className='gray'>Request more information</Button>
+              <Button >Approve to be brokered</Button>
             </div>
 
             <div className="mt-1">

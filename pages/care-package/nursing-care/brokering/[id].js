@@ -11,7 +11,6 @@ import {
   nursingCareChangeStatus,
 } from '../../../../api/CarePackages/NursingCareApi';
 import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
-import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 import Layout from '../../../../components/Layout/Layout';
 import PackagesNursingCare from '../../../../components/packages/nursing-care';
 import withSession from '../../../../lib/session';
@@ -169,7 +168,6 @@ const NursingCareBrokering = ({
       }}
       headerTitle="Nursing Care Brokering"
     >
-      <PackageHeader title="Proposed Package" />
       <PackagesNursingCare
         tab={tab}
         addPackageReclaim={addPackageReclaim}

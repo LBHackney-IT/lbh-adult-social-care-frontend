@@ -1,0 +1,123 @@
+.lbh-announcement__content a:focus {
+  outline: transparent solid 3px;
+  background-color: #ffc845;
+  box-shadow: 0 -2px #ffc845, 0 4px #0b0c0c;
+}
+
+.lbh-announcement + .lbh-announcement {
+  margin-top: 0;
+}
+
+.lbh-announcement {
+  padding: 2.25rem 0;
+  border-top: 1px solid #84bd00;
+  border-bottom: 1px solid #84bd00;
+  background: rgba(164, 214, 94, 0.2);
+}
+
+.lbh-phase-banner + .lbh-announcement {
+  margin-top: -1px;
+}
+
+.lbh-announcement--site {
+  background: rgba(164, 214, 94, 0.5);
+}
+
+.lbh-announcement__title {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #1c1e21;
+}
+
+.lbh-announcement__content {
+  color: #0b0c0c;
+  font-size: 1rem;
+  line-height: 1.625rem;
+  font-weight: 400;
+}
+
+.lbh-announcement__content,
+.lbh-announcement__content a {
+  font-family: Open Sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.lbh-announcement__content a:focus {
+  text-decoration: none;
+  color: #0b0c0c;
+}
+
+.lbh-announcement__content a:link {
+  color: #025ea6;
+}
+
+.lbh-announcement__content a:visited {
+  color: #8031a7;
+}
+
+.lbh-announcement__content a:hover {
+  color: #0085ca;
+}
+
+.lbh-announcement__content a:active {
+  color: #2b8cc4;
+}
+
+.lbh-announcement__content p:last-child {
+  margin-bottom: 0;
+}
+
+.lbh-container {
+  max-width: 750px;
+  margin-right: 15px;
+  margin-left: 15px;
+}
+
+@supports (margin: max(calc(0px))) {
+  .lbh-container {
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .lbh-announcement__content {
+    font-size: 1.1875rem;
+    line-height: 1.875rem;
+  }
+
+  .lbh-container {
+    margin-right: 30px;
+    margin-left: 30px;
+  }
+}
+
+@media (min-width: 810px) {
+  .lbh-container {
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
+@media print {
+  .lbh-announcement__content a[href^="/"]:after,
+  .lbh-announcement__content a[href^="http://"]:after,
+  .lbh-announcement__content a[href^="https://"]:after
+  {
+    content: ' (' attr(href) ')';
+    font-size: 90%;
+    word-wrap: break-word;
+  }
+
+  .lbh-announcement__content a[href^="/"]:after,
+  .lbh-announcement__content a[href^="http://"]:after,
+  .lbh-announcement__content a[href^="https://"]:after
+  {
+    content: ' (' attr(href) ')';
+    font-size: 90%;
+    word-wrap: break-word;
+  }
+}

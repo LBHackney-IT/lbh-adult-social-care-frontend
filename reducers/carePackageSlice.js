@@ -12,7 +12,7 @@ const mapOptions = (options) =>
   options.map((option) => ({
     text: `${option.optionName} (${option.optionPeriod})`,
     value: option.typeOfStayOptionId,
-  }));
+}));
 
 export const getResidentialTypeOfStayOptions = createAsyncThunk(
   'GET_RESIDENTIAL_TYPE_OF_STAY_OPTIONS',

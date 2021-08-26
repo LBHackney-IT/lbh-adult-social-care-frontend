@@ -17,25 +17,29 @@ const DatePick = ({
   label,
   setDate,
   dateValue,
-}) => (
-  <BaseField classes={`${classes} react-date-picker`} label={label} noInputStyle>
-    <DatePicker
-      dateFormat="dd/MM/yyyy"
-      disabled={disabled}
-      onChange={(value) => {
-        setError();
-        setDate(value);
-      }}
-      startDate={startDate}
-      endDate={endDate}
-      selectsRange={selectsRange}
-      selected={dateValue}
-      inline={inline}
-      placeholderText={placeholder}
-      className="react-date-picker__input"
-    />
-    {error && <ErrorField text={error} />}
-  </BaseField>
-);
+}) => {
+  return (
+    <BaseField classes={`${classes} react-date-picker`} label={label} noInputStyle>
+      {dateValue?.toString() === 'Invalid Date' ? <p>Invalid Date</p> :
+        <DatePicker
+          dateFormat="dd/MM/yyyy"
+          disabled={disabled}
+          onChange={(value) => {
+            setError();
+            setDate(value);
+          }}
+          startDate={startDate}
+          endDate={endDate}
+          selectsRange={selectsRange}
+          selected={dateValue}
+          inline={inline}
+          placeholderText={placeholder}
+          className="react-date-picker__input"
+        />
+      }
+      {error && <ErrorField text={error} />}
+    </BaseField>
+  );
+}
 
 export default DatePick;

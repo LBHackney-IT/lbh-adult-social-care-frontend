@@ -79,10 +79,6 @@ const SupplierReturn = () => {
     router.replace(`${pathname}?page=1`);
   }, []);
 
-  useEffect(() => {
-    console.log('change sort', sort);
-  }, [sort]);
-
   return (
     <div className="supplier-return supplier-returns-dashboard">
       {!!breadcrumbs.length && <Breadcrumbs classes="p-3" values={breadcrumbs} />}

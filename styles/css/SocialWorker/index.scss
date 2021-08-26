@@ -12,7 +12,9 @@
     padding-top: 0 !important;
   }
 
-  .sort-table {
-    margin-bottom: 27px;
+  .inputs-container {
+    .button[aria-controls="dropdown-menu"] {
+      width: 200px;
+    }
   }
 }

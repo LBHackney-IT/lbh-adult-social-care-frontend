@@ -51,10 +51,6 @@ const SupplierReturns = () => {
     router.replace(`${router.pathname}?page=1`);
   }, []);
 
-  useEffect(() => {
-    console.log('change sort', sort);
-  }, [sort]);
-
   return (
     <div className="supplier-dashboard supplier-returns">
       <SupplierInnerHeader />

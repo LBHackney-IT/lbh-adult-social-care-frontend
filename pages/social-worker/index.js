@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Pagination from '../../components/Payments/Pagination';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import { getUserSession, formatDate } from '../../service/helpers';
+import { getUserSession, formatDate, formatStatus } from '../../service/helpers'
 import useSocialWorkerApi from '../../api/SWR/useSocialWorkerApi';
 import withSession from '../../lib/session';
 import {
@@ -74,13 +74,13 @@ const SocialWorkerDashboardPage = () => {
 
   const rowsRules = {
     packageId: {
-      getHide: () => {},
+      getHide: () => true,
     },
     dateOfBirth: {
       getValue: (value) => `${formatDate(value, '/')}`,
     },
-    status: {
-      getClassName: (value) => `${value} table__row-item-status`,
+    statusName: {
+      getClassName: (value) => `${formatStatus(value)} table__row-item-status`,
     },
   };
 
@@ -115,11 +115,11 @@ const SocialWorkerDashboardPage = () => {
       { options: statusOptions, initialText: 'Status', name: 'status', className: 'mr-3' },
     ],
     buttons: [
-      { initialText: 'Filter', name: 'button-1', className: 'mt-auto ml-6', onClick: () =>  setRequestFilters({ ...filters })},
+      { initialText: 'Filter', name: 'button-1', className: 'mr-3', onClick: () =>  setRequestFilters({ ...filters })},
       {
         initialText: 'Clear',
         name: 'button-2',
-        className: `mt-auto ml-3 outline gray${checkEmptyFields(filters) ? ' display-none' : ''}`,
+        className: `outline gray${checkEmptyFields(filters) ? ' display-none' : ''}`,
         onClick: () => setFilters({...initialFilters})
       },
     ],
@@ -129,6 +129,7 @@ const SocialWorkerDashboardPage = () => {
     <div className="social-worker-page">
       <Inputs values={filters} inputs={inputs} title='Submitted Package Request' changeInputs={changeFilters} />
       <Table
+        className='social-worker__table'
         onClickTableRow={onClickTableRow}
         fields={tableFields}
         rows={sortArray(submittedPackages, sort)}

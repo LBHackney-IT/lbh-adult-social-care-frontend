@@ -13,6 +13,7 @@ const Input = ({
   value = '',
   preSign = '',
   search,
+  onBlur = () => {},
   error,
   setError,
   postSign = '',
@@ -24,7 +25,13 @@ const Input = ({
       target: { value },
     } = event;
     event.preventDefault();
-    const formattedValue = value.replace(preSign, '').replace(postSign, '');
+    let formattedValue = value;
+    for(const sign of preSign) {
+      formattedValue = formattedValue.replace(sign, '');
+    }
+    for(const sign of postSign) {
+      formattedValue = formattedValue.replace(sign, '');
+    }
 
     setError && setError();
     onChange(formattedValue);
@@ -41,6 +48,7 @@ const Input = ({
     <BaseField onClick={focusInput} classes={`${classes}`} label={label}>
       <div className={search ? ' custom-input__search' : ''}>
         <input
+          onBlur={onBlur}
           className="custom-input input"
           placeholder={placeholder}
           onChange={onChangeInput}

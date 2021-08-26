@@ -5,7 +5,7 @@
   position: fixed;
   left: 0;
   right: 0;
-  z-index: 2;
+  z-index: 4;
   align-items: center;
 
   .level {
@@ -57,7 +57,7 @@
         justify-content: center;
         border-radius: 3px;
 
-        p {
+        span {
           font-size: 32px;
           transform: rotate(45deg);
           box-sizing: border-box;
@@ -125,6 +125,13 @@
   }
 }
 
+.main-content__with-nav {
+
+  .nav-client-summary.mobile-client-summary {
+    padding: 10px 0;
+  }
+}
+
 .column.main-content__with-nav {
   padding-left: 259px;
   padding-right: 10px;
@@ -135,24 +142,23 @@
   }
 }
 
-.nav-column.column {
-  max-width: 248px;
-  width: 248px;
-  border-right: 1px solid #dee0e2;
-  background: white;
-  z-index: 1;
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100vh;
-  padding: 104px 0 0 0;
+.mobile-client-summary {
+  @include media-small-ipod-up {
+    display: none;
+  }
+}
 
-  .client-summary-cont {
-    background: rgba(11, 12, 12, 0.02);
-    border-bottom: 0;
-    margin-bottom: 30px;
-    padding-left: 16px;
-    padding-right: 16px;
+.nav-client-summary {
+  background: rgba(11, 12, 12, 0.02);
+  border-bottom: 0;
+  margin-bottom: 30px;
+  padding-left: 16px;
+  padding-right: 16px;
+
+    .client-summary-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
 
     .client-prop {
       display: flex;
@@ -172,24 +178,43 @@
       }
     }
 
-    .columns {
-      margin: 0;
+  .columns {
+    margin: 0;
+  }
+
+  .nav-back-button {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    padding: 5px;
+    padding-left: 0;
+    border-radius: 4px;
+    margin-bottom: 11px;
+    transition: 0.2s easy;
+
+    &:hover {
+      cursor: pointer;
+      background-color: $lbh-gray-border;
     }
 
-    .nav-back-button {
-      display: flex;
-      align-items: center;
-      margin-bottom: 11px;
-      &:hover {
-        cursor: pointer;
-      }
-
-      p {
-        margin-left: 8px;
-        color: $lbh-green1;
-      }
+    p {
+      margin-left: 8px;
+      color: $lbh-green1;
     }
   }
+}
+
+.nav-column.column {
+  max-width: 248px;
+  width: 248px;
+  border-right: 1px solid #dee0e2;
+  background: white;
+  z-index: 3;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  padding: 104px 0 0 0;
 
   @include media-small-ipod-down {
     display: none;

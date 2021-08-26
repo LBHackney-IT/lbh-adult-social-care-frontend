@@ -29,7 +29,7 @@ jobs:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
-          command: yarn
+          command: yarn install --frozen-lockfile
       - run:
           name: Set GitHub username and email
           command: git config user.email "ci@hackney.gov.uk" && git config user.name "lbhackney-automation"
@@ -106,7 +106,7 @@ jobs:
       - *attach_workspace
       - run:
           name: deploy
-          command: yarn --frozen-lockfile --production=true && sudo npm i -g serverless && sls deploy --stage staging
+          command: yarn install --production --ignore-scripts --prefer-offline && sudo npm i -g serverless && sls deploy --stage staging
 
   build-deploy-production:
     executor: aws-cli/default
@@ -114,7 +114,7 @@ jobs:
       - *attach_workspace
       - run:
           name: deploy
-          command: yarn --frozen-lockfile --production=true && sudo npm i -g serverless && sls deploy --stage production
+          command: yarn install --production --ignore-scripts --prefer-offline && sudo npm i -g serverless && sls deploy --stage production
 
   generate-draft-github-release:
     executor: aws-cli/default
@@ -179,6 +179,19 @@ jobs:
           paths:
             - project/build
 
+  chromatic-deployment: 
+    docker:
+      - image: circleci/node:12
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn install
+      - run: yarn chromatic --project-token=${CHROMATIC_PROJECT_TOKEN} --exit-zero-on-changes
+
   # get-environment-variables:
   #   executor: aws-cli/default
   #   steps:
@@ -217,6 +230,9 @@ workflows:
       - build:
           requires:
             - install-dependencies
+      - chromatic-deployment:
+          requires:
+            - build
       - owasp-zap-baseline-scan:
           requires:
             - build

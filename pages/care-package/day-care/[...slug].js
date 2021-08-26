@@ -1,9 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
-import ClientSummary from '../../../components/ClientSummary';
 import Layout from '../../../components/Layout/Layout';
-import CareTitle from '../../../components/CarePackages/CareTitle';
 import TextArea from '../../../components/TextArea';
 import { days } from '../../../components/daysData';
 import Checkbox from '../../../components/Checkbox';
@@ -17,7 +15,7 @@ import TitleHeader from '../../../components/TitleHeader';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import DayCareSummary from '../../../components/DayCare/DayCareSummary';
 import DayCareCollegeAsyncSearch from '../../../components/DayCare/DayCareCollegeAsyncSearch';
-import { getUserSession } from '../../../service/helpers';
+import { formatCareDatePeriod, getUserSession } from '../../../service/helpers'
 import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
 import ErrorField from '../../../components/ErrorField';
@@ -254,18 +252,18 @@ const DayCare = () => {
     }
   };
 
+  const datePeriod = formatCareDatePeriod(startDate, endDate);
+
   return (
     <Layout showBackButton={false} clientSummaryInfo={{
       client: "James Stephens",
       hackneyId: "786288",
       age: "91",
+      title: `Day Care (${datePeriod.startDate} - ${datePeriod.endDate})`,
       dateOfBirth: "09/12/1972",
       postcode: "E9 6EY",
-    }} headerTitle="BUILD A CARE PACKAGE">
+    }}>
       <div className="mt-5 mb-5">
-        <CareTitle startDate={startDate} endDate={endDate}>
-          Day Care
-        </CareTitle>
         <div className="mt-4 columns">
           <div className="column">
             <TextArea
@@ -277,7 +275,7 @@ const DayCare = () => {
               onChange={handleNeedToUpdateChange}
             />
           </div>
-          <div className="column columns day-care-day-cbxs">
+          <div className="day-care-day-cbxs">
             {daysSelected.map((dayItem, index) => {
               // Handle this checkbox click
               const onThisDayCheckboxChange = (isChecked) => {
@@ -286,7 +284,7 @@ const DayCare = () => {
               };
 
               return (
-                <div className="column" key={dayItem.id}>
+                <div key={dayItem.id}>
                   <label>{dayItem.short.toUpperCase()}</label>
                   <Checkbox id="immediateServiceCbx" checked={dayItem.checked} onChange={onThisDayCheckboxChange} />
                   {errorFields.daysSelected && index === 0 && <ErrorField text={errorFields.daysSelected} />}

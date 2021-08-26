@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import moment from 'moment';
+import { differenceInDays } from 'date-fns';
 import DatePick from '../DatePick';
 import Popup from '../Popup';
 import RadioButton from '../RadioButton';
@@ -22,14 +22,8 @@ const PopupCreatePayRun = ({ date, updateData, setDate, closePopup, regularCycle
     if (!dateOfLastPayRun) {
       setDaysFromLastPayRun('0');
     } else {
-      // Calculate date difference
-      /* const start = moment(dateOfLastPayRun).format('L');
-      const end = moment(date).format('L'); */
-      const start = moment(dateOfLastPayRun).startOf('day');
-      const end = moment(date).startOf('day');
-      const duration = moment.duration(end.diff(start));
-      const days = duration.asDays();
-      setDaysFromLastPayRun(days.toString());
+      const difference = differenceInDays(dateOfLastPayRun, date);
+      setDaysFromLastPayRun(difference.toString());
     }
   };
 

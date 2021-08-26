@@ -28,6 +28,15 @@
     background-color: $lbh-light-gray2;
     width: 40%;
     height: 100%;
+    overflow: auto;
+
+    @include media-small-ipod-down {
+      width: 60%;
+    }
+
+    @include media-mobile {
+      width: 100%;
+    }
   }
 
   .popup-invoice-chat__messages {

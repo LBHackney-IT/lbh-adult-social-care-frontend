@@ -31,7 +31,7 @@ const brokerageSlice = createSlice({
       hackneyid: nurseCare.hackneyid,
       age: nurseCare.age,
       postcode: nurseCare.postcode,
-      sourcingCare: nurseCare.sourcingCare,
+      whoIsSourcing: nurseCare.whoIsSourcing,
       starts: nurseCare.starts,
       ends: nurseCare.ends,
     },

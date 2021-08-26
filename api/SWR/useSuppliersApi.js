@@ -1,22 +1,24 @@
 import useGetData from './useGetData';
-import optionsMapper from '../Mappers/optionsMapper'
+import optionsMapper from '../Mappers/optionsMapper';
+import { initialPagingOptions } from '../../constants/variables';
 
 const SUPPLIERS_URL = 'suppliers';
 
 const useSuppliersApi = {
   supplierList: () => {
-    const propsData = useGetData(`${SUPPLIERS_URL}/get-all`);
-    const { data: { data: supplierList } } = propsData;
+    const propsData = useGetData(`${SUPPLIERS_URL}/get-all`, '', initialPagingOptions);
+    const { data: { data: supplierList }} = propsData;
 
     const formatSupplierList = optionsMapper({
       text: 'supplierName',
       value: 'id',
-    }, supplierList);
+    }, [] || supplierList);
+
     return {
       ...propsData,
       data: {
-        ...propsData.data,
-        data: formatSupplierList,
+        ...propsData.pagingMetaData,
+        data: formatSupplierList
       },
     };
   },

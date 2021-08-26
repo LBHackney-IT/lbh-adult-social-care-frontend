@@ -32,7 +32,7 @@ const useDayCareApi = {
     return { ...allData, data: formattedData };
   },
   colleges: () => useGetData(`${DAY_CARE_URL}/colleges`),
-  approvalDetails: () => useGetData(`${DAY_CARE_URL}/approval-details`),
+  approvalDetails: (dayCareId) => useGetData(`${DAY_CARE_URL}/${dayCareId}/approval-details`, '', {}),
   detailsForBrokerage: (dayCareId) => useGetData(`${DAY_CARE_URL}/${dayCareId}/brokerage`),
   brokerAgeStages: () => useGetData(`${DAY_CARE_URL}/brokerage/stages`),
 }

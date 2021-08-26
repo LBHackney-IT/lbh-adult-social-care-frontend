@@ -1,7 +1,7 @@
 import Input from './Input';
 import Button from './Button';
-import Radio from './Radio';
-import Fieldset from './Fieldset';
+// import Radio from './Radio';
+// import Fieldset from './Fieldset';
 import Accordion from './Accordion';
 import Announcement from './Announcement';
 import BackLink from './BackLink';
@@ -11,12 +11,14 @@ import Collapsible from './Collapsible';
 import Textarea from './Textarea';
 import Checkbox from './Checkbox';
 import CookieBanner from './CookieBanner';
+import { Tabs } from './Tabs';
+import { Tab } from './Tabs/Tab';
 
 export {
   Input,
   Button,
-  Radio,
-  Fieldset,
+  // Radio,
+  // Fieldset,
   Accordion,
   Announcement,
   BackLink,
@@ -26,4 +28,6 @@ export {
   Textarea,
   Checkbox,
   CookieBanner,
+  Tabs,
+  Tab,
 };

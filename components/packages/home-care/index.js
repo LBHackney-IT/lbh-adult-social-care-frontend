@@ -14,6 +14,7 @@ import { addNotification } from '../../../reducers/notificationsReducer';
 import { getErrorResponse } from '../../../service/helpers';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
+import { useRouter } from 'next/router'
 
 const stageOptions = [
   { text: 'New', value: 1 },
@@ -82,14 +83,15 @@ const PackagesHomeCare = ({
       quantity: 3,
     },
   });
-
+  const router = useRouter();
+  const homeCarePackageData = homeCarePackage?.homeCarePackage;
   const [startDate, setStartDate] = useState(
-    (homeCarePackage && new Date(homeCarePackage?.homeCarePackage?.startDate)) || undefined
+    (homeCarePackage && new Date(homeCarePackageData?.startDate)) || undefined
   );
   const [endDate, setEndDate] = useState(
-    (homeCarePackage && new Date(homeCarePackage?.homeCarePackage?.endDate)) || undefined
+    (homeCarePackage && new Date(homeCarePackageData?.endDate)) || undefined
   );
-  const [endDateEnabled, setEndDateEnabled] = useState(!homeCarePackage?.homeCarePackage?.endDate);
+  const [endDateEnabled, setEndDateEnabled] = useState(!homeCarePackageData?.endDate);
 
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
@@ -129,7 +131,7 @@ const PackagesHomeCare = ({
         creatorId: homeCarePackage.homeCarePackageCost.creatorId,
       };
       await createHomeCareBrokerageInfo({ id: homeCarePackage.id, data });
-      addTextNotification({ text: 'Home care package submited successfully', className: 'success' });
+      addTextNotification({ text: 'Home care package submitted successfully', className: 'success' });
       router.push(CARE_PACKAGE_ROUTE);
     } catch (e) {
       console.error(getErrorResponse(e));
@@ -148,16 +150,16 @@ const PackagesHomeCare = ({
   }, [elementsData]);
 
   useEffect(() => {
-    setEndDateEnabled(!homeCarePackage?.homeCarePackage?.endDate);
+    setEndDateEnabled(!homeCarePackageData?.endDate);
 
-    setEndDate((homeCarePackage && new Date(homeCarePackage?.homeCarePackage?.endDate)) || undefined);
+    setEndDate((homeCarePackage && new Date(homeCarePackageData?.endDate)) || undefined);
 
-    setStartDate((homeCarePackage && new Date(homeCarePackage?.homeCarePackage?.startDate)) || undefined);
-  }, [homeCarePackage]);
+    setStartDate((homeCarePackage && new Date(homeCarePackageData?.startDate)) || undefined);
+  }, [homeCarePackageData]);
 
   return (
     <>
-      <div className="mb-5 person-care">
+      <div className="mb-5 person-care tabs-border">
         <div className="column proposed-packages__header is-flex is-justify-content-space-between">
           <div>
             <h1 className="container-title">Home Care</h1>
@@ -167,6 +169,7 @@ const PackagesHomeCare = ({
           </div>
           <Dropdown
             label=""
+            className='stage-dropdown'
             initialText="Stage"
             options={stageOptions}
             selectedValue={selectedStageType}
@@ -175,15 +178,13 @@ const PackagesHomeCare = ({
         </div>
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap proposed-packages__supplier-settings">
-            <div className="mr-3 is-flex is-align-items-flex-end">
-              <Dropdown
-                label=""
-                initialText="Supplier (please select)"
-                options={supplierOptions}
-                onOptionSelect={(option) => setSelectedSupplierType(option)}
-                selectedValue={selectedSupplierType}
-              />
-            </div>
+            <Dropdown
+              label=""
+              initialText="Supplier (please select)"
+              options={supplierOptions}
+              onOptionSelect={(option) => setSelectedSupplierType(option)}
+              selectedValue={selectedSupplierType}
+            />
             <span className="mr-3">
               <DatePick label="Start Date" dateValue={startDate} setDate={setStartDate} />
             </span>
@@ -343,25 +344,14 @@ const PackagesHomeCare = ({
             totalCostPerWeek: 'hackney-package-cost-light-yellow-box',
           }}
           history={approvalHistory}
-          careClientDateOfBirth={homeCarePackage?.homeCarePackage?.clientDateOfBirth}
-          careIsFixedPeriodOrOngoing={homeCarePackage?.homeCarePackage?.isFixedPeriodOrOngoing}
-          careTermTimeConsiderationOption={homeCarePackage?.homeCarePackage?.termTimeConsiderationOption}
-          careClientName={homeCarePackage?.homeCarePackage?.clientName}
-          careClientHackneyId={homeCarePackage?.homeCarePackage?.clientHackneyId}
-          careClientPostCode={homeCarePackage?.homeCarePackage?.clientPostCode}
-          careStartDate={homeCarePackage?.homeCarePackage?.startDate}
-          careEndDate={homeCarePackage?.homeCarePackage?.endDate}
+          approvalData={homeCarePackage?.homeCarePackage}
         />
       ) : (
         homeCareSummary && (
           <CareSummary
             careType="Home care"
-            startDate={homeCarePackage?.homeCarePackage?.startDate}
-            endDate={
-              homeCarePackage?.homeCarePackage?.endDate !== null
-                ? getEnGBFormattedDate(homeCarePackage?.homeCarePackage?.endDate)
-                : 'Ongoing'
-            }
+            startDate={homeCarePackageData?.startDate}
+            endDate={homeCarePackageData?.endDate}
             needToAddress={homeCareSummary.needToAddress}
             additionalNeedsEntries={homeCareSummary.additionalNeedsEntries}
             setAdditionalNeedsEntries={setAdditionalNeedsEntries}

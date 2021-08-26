@@ -11,11 +11,11 @@ const mapNursingCareStageOptions = (stageOptions = []) =>
 
 const mapDetailsForBrokerage = (detailsForBrokerageOptions = []) =>
   detailsForBrokerageOptions.map(
-    (additionalneedsItem) => ({
-      id: additionalneedsItem.id,
-      isWeeklyCost: additionalneedsItem.isWeeklyCost,
-      isOneOffCost: additionalneedsItem.isOneOffCost,
-      needToAddress: additionalneedsItem.needToAddress,
+    (additionalNeedsItem) => ({
+      id: additionalNeedsItem.id,
+      isWeeklyCost: additionalNeedsItem.isWeeklyCost,
+      isOneOffCost: additionalNeedsItem.isOneOffCost,
+      needToAddress: additionalNeedsItem.needToAddress,
     })
 );
 

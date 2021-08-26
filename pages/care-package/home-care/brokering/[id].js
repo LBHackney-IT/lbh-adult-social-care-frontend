@@ -8,8 +8,9 @@ import { getBrokerageSuccess, selectBrokerage } from '../../../../reducers/broke
 import { getUserSession, uniqueID } from '../../../../service/helpers';
 import withSession from '../../../../lib/session';
 import { mapHomeCarePackageDetailsForBrokerage } from '../../../../api/Mappers/CarePackageMapper';
-import PackageHeader from '../../../../components/CarePackages/PackageHeader';
 import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
+import { mapDetailsForBrokerage } from '../../../../api/Mappers/NursingCareMapper'
+import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils'
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res }) => {
@@ -38,15 +39,12 @@ const HomeCareBrokerPackage = () => {
   const { data: approvalHistoryEntries } = useHomeCareApi.approvePackage(homeCarePackageId);
   const { data: homeCarePackage } = useHomeCareApi.detailsForBrokerage(homeCarePackageId);
 
+  const innerCarePackage = homeCarePackage?.homeCarePackage;
+
   useEffect(() => {
     const additionalNeeds = homeCarePackage?.homeCareAdditionalNeeds;
     if(additionalNeeds) {
-      const formattedAdditionalNeeds = additionalNeeds?.map((item) => ({
-        id: item.id,
-        isWeeklyCost: item.isWeeklyCost,
-        isOneOffCost: item.isOneOffCost,
-        needToAddress: item.needToAddress,
-      }));
+      const formattedAdditionalNeeds = mapDetailsForBrokerage(additionalNeeds);
       setAdditionalNeedsEntries(formattedAdditionalNeeds);
     }
   }, [homeCarePackage])
@@ -89,21 +87,20 @@ const HomeCareBrokerPackage = () => {
   return (
     <Layout
       clientSummaryInfo={{
-        client: homeCarePackage?.homeCarePackage?.clientName,
-        hackneyId: homeCarePackage?.homeCarePackage?.clientHackneyId,
+        client: innerCarePackage?.clientName,
+        hackneyId: innerCarePackage?.clientHackneyId,
         age:
-          homeCarePackage?.homeCarePackage && getAgeFromDateString(homeCarePackage?.homeCarePackage?.clientDateOfBirth),
-        preferredContact: homeCarePackage?.homeCarePackage?.clientPreferredContact,
-        canSpeakEnglish: homeCarePackage?.homeCarePackage?.clientCanSpeakEnglish,
+          innerCarePackage && getAgeFromDateString(innerCarePackage?.clientDateOfBirth, 'No date'),
+        preferredContact: innerCarePackage?.clientPreferredContact,
+        canSpeakEnglish: innerCarePackage?.clientCanSpeakEnglish,
         packagesCount: 4,
         dateOfBirth:
-          homeCarePackage?.homeCarePackage && getEnGBFormattedDate(homeCarePackage?.homeCarePackage?.clientDateOfBirth),
-        postcode: homeCarePackage?.homeCarePackage?.clientPostCode,
+          innerCarePackage && getEnGBFormattedDate(innerCarePackage?.clientDateOfBirth),
+        postcode: innerCarePackage?.clientPostCode,
+        title: 'HOME CARE BROKER PACKAGE',
       }}
       className="home-care-brokerage-page"
-      headerTitle="HOME CARE BROKER PACKAGE"
     >
-      <PackageHeader />
       <div className="hackney-text-black font-size-12px care-packages-page">
         <PackagesHomeCare
           tab={tab}

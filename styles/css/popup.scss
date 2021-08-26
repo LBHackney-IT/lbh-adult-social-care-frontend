@@ -17,6 +17,10 @@
   padding: 30px 20px;
   width: 70%;
   border-radius: 3px;
+
+  @include media-mobile {
+    width: 100%;
+  }
 }
 
 .popup__close-button {
