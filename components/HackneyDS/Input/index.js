@@ -34,7 +34,7 @@ export default function Input({
         type={type}
         ref={dataProvider}
         value={value}
-        onChange={() => handler(dataProvider.current.value)}
+        onChange={(e) => handler(e.target.value)}
       />
     </div>
   );
