@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 export default function Textarea({ 'max-count': maxCount, rows = 5, id, name, value, handler = () => {} }) {
   const [currentValue, setCurrentValue] = useState(value);
+  useEffect(() => setCurrentValue(value), [value]);
   useEffect(() => handler(currentValue), [currentValue]);
   const getCount = () => maxCount - currentValue.length;
-
   return (
     <div className="govuk-form-group lbh-form-group">
       <textarea
