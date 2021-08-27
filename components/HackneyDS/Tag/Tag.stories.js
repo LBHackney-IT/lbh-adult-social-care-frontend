@@ -4,6 +4,10 @@ import { Tag } from '../index';
 export default {
   title: 'Hackney Design System/Tag',
   component: Tag,
+  argTypes: {
+    color: { type: 'string' },
+    className: { type: 'string' },
+  },
 };
 
 const Template = (args) => <Tag {...args} />;

@@ -1,5 +1,6 @@
 import React from 'react';
 
-export default function ErrorMessage({ text = '' }) {
-  return <span className="govuk-error-message">{text}</span>;
+export default function ErrorMessage({ text = '', className = '' }) {
+  const outerClass = className ? ` ${className}` : '';
+  return <span className={`govuk-error-message${outerClass}`}>{text}</span>;
 }

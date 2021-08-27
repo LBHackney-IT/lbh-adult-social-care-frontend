@@ -1,16 +1,17 @@
 import React from 'react';
-import { Label } from '../index';
+import { Link } from '../index';
 
 export default {
-  title: 'Hackney Design System/Label',
-  component: Label,
+  title: 'Hackney Design System/Link',
+  component: Link,
   argTypes: {
     text: { type: 'string' },
     className: { type: 'string' },
+    href: { type: 'string' },
   },
 };
 
-const Template = (args) => <Label {...args} />;
+const Template = (args) => <Link {...args} />;
 
 export const Default = Template.bind({});
 

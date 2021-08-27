@@ -16,8 +16,12 @@ import Select from './Select';
 import Hint from './Hint';
 import Label from './Label';
 import ErrorMessage from './ErrorMessage';
+import Link from './Link';
+import Timeline from './Timeline';
 
 export {
+  Link,
+  Timeline,
   ErrorMessage,
   Label,
   Hint,

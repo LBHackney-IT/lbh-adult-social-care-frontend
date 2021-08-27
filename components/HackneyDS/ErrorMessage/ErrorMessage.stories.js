@@ -5,7 +5,8 @@ export default {
   title: 'Hackney Design System/ErrorMessage',
   component: ErrorMessage,
   argTypes: {
-    text: 'string',
+    text: { type: 'string' },
+    className: { type: 'string' },
   },
 };
 
@@ -15,4 +16,5 @@ export const Default = Template.bind({});
 
 Default.args = {
   text: 'Default error message text',
+  className: '',
 };
