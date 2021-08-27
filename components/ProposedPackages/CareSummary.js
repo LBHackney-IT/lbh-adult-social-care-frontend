@@ -16,6 +16,8 @@ const CareSummary = ({
     setAdditionalNeedsEntries([...newEntries]);
   };
 
+  const renderDate = (dateString) => dateString && new Date(dateString).toLocaleDateString('en-GB');
+
   const datePeriod = formatCareDatePeriod(startDate, endDate);
 
   return (
@@ -59,6 +61,11 @@ const CareSummary = ({
               {additionalNeedsEntries.map((entry) => (
                 <div className="column is-half" key={entry.id}>
                   <p className="font-weight-bold mb-2">{entry.selectedCostText} cost</p>
+                  {entry.selectedPeriod && (
+                    <p>
+                      {renderDate(entry.selectedPeriod.startDate)}- {renderDate(entry.selectedPeriod.endDate)}
+                    </p>
+                  )}
                   <p>{entry.needToAddress}</p>
                   <div>
                     <Button linkBtn className="mr-2">

@@ -1,7 +1,7 @@
 import React from 'react';
 import Loading from './Loading'
 // Get/build the passed class name
-const getClassName = (className = '', linkBtn = false) => (linkBtn ? 'link-button' : `button button-base ${className}`);
+const getClassName = (className = '', linkBtn = false) => (linkBtn ? `link-button ${className}` : `button button-base ${className}`);
 
 // Gets the inner content of a button for the given values
 const getButtonContent = (Icon, text) => (

@@ -8,7 +8,6 @@ import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
 } from '../../../components/CarePackages/AdditionalNeedsEntries';
 import TitleHeader from '../../../components/TitleHeader';
-import NursingCareSummary from '../../../components/NursingCare/NursingCareSummary';
 import { Button } from '../../../components/Button';
 import {
   createNursingCarePackage,
@@ -22,6 +21,7 @@ import withSession from '../../../lib/session';
 import fieldValidator from '../../../service/inputValidator';
 import { selectUser } from '../../../reducers/userReducer';
 import useNursingCareApi from '../../../api/SWR/useNursingCareApi'
+import CareSummary from '../../../components/ProposedPackages/CareSummary'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -261,9 +261,9 @@ const NursingCare = () => {
 
       <div className="mt-4 mb-4">
         <TitleHeader>Package Details</TitleHeader>
-        <NursingCareSummary
-          startDate={datePeriod.startDate}
-          endDate={datePeriod.endDate}
+        <CareSummary
+          startDate={startDate}
+          endDate={endDate}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}
           setAdditionalNeedsEntries={setAdditionalNeedsEntries}

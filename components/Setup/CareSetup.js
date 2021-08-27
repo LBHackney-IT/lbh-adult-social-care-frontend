@@ -79,7 +79,7 @@ const CareSetup = ({
     3: undefined,
   };
 
-  const hasTypeOfStayId = Object.keys(selectedCare.fields).includes('typeOfStayId');
+  const hasTypeOfStayId = selectedCare.fields.includes('typeOfStayId');
 
   return (
     <CarePackageSetup onBuildClick={onBuildClick}>
@@ -104,7 +104,15 @@ const CareSetup = ({
           isFixedPeriod={values.isFixedPeriod}
           setEndDate={(date) => setValues('endDate', date)}
           setIsFixedPeriod={(value) => setValues('isFixedPeriod', value)}
-          setStartDate={(date) => setValues('startDate', date)}
+          setStartDate={(date) => {
+            setValues('startDate', date);
+            const { endDate, isFixedPeriod } = values;
+            if(endDate && date && isFixedPeriod) {
+              if (endDate - date < 0) {
+                setValues('endDate', date);
+              }
+            }
+          }}
           startDate={values.startDate}
         />
       </div>

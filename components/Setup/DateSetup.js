@@ -24,6 +24,8 @@ const DateSetup = ({
     }
   }, [isFixedPeriod]);
 
+  const disabledEndDate = !isFixedPeriod || disabledStartDate;
+
   return (
     <div className="column">
       <div>
@@ -57,9 +59,9 @@ const DateSetup = ({
           <DatePick
             label="End Date"
             dateValue={!isFixedPeriod ? '' : endDate}
-            disabled={!isFixedPeriod}
+            disabled={disabledEndDate}
             minDate={startDate}
-            classes={!isFixedPeriod ? 'datepicker-ongoing' : ''}
+            classes={`${!isFixedPeriod ? ' datepicker-ongoing' : ''}${disabledStartDate ? ' disabled' : ''}`}
             setDate={setEndDate}
             error={errorFields.endDate}
             setError={() => changeErrorFields('endDate')}

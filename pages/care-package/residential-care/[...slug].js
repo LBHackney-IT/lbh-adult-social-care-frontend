@@ -13,7 +13,6 @@ import {
   getResidentialCareAdditionalNeedsCostOptions,
 } from '../../../api/CarePackages/ResidentialCareApi';
 import TitleHeader from '../../../components/TitleHeader';
-import ResidentialCareSummary from '../../../components/ResidentialCare/ResidentialCareSummary';
 import { Button } from '../../../components/Button';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import { formatCareDatePeriod, getUserSession } from '../../../service/helpers'
@@ -22,6 +21,7 @@ import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import fieldValidator from '../../../service/inputValidator';
 import useResidentialCareApi from '../../../api/SWR/useResidentialCareApi'
+import CareSummary from '../../../components/ProposedPackages/CareSummary'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -266,7 +266,8 @@ const ResidentialCare = () => {
 
       <div className="mt-4 mb-4">
         <TitleHeader className="mb-5">Package Details</TitleHeader>
-        <ResidentialCareSummary
+        <CareSummary
+          careType='Residential Care'
           startDate={startDate}
           endDate={endDate}
           typeOfStayText={typeOfStayText}

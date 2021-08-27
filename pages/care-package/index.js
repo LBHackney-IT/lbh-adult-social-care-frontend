@@ -141,7 +141,7 @@ const CarePackage = ({ history }) => {
     isImmediate: 'Lorem ipsum isImmediate',
   });
 
-  const [selectedCareType, setSelectedCareType] = useState(3);
+  const [selectedCareType, setSelectedCareType] = useState(2);
 
   const changeCareType = (option) => {
     setSelectedCareType(option);
@@ -173,7 +173,7 @@ const CarePackage = ({ history }) => {
           }}
           tooltips={tooltips}
           history={history}
-          careTypes={careTypes.slice(2)}
+          careTypes={careTypes}
           errors={errors}
           setErrors={setErrors}
           selectedCareType={selectedCareType}

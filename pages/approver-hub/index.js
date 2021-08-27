@@ -34,8 +34,6 @@ const ApproverHubPage = () => {
 
   const onClickTableRow = (rowItems) => {
     const packageType = packageTypeOptions.find(item => item.id === rowItems.packageTypeId);
-    console.log(rowItems);
-    console.log(packageTypeOptions);
     if(includeString(packageType.packageType.toLowerCase(), 'residential')) {
       switch (tab) {
         case 'new': {

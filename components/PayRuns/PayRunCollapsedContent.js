@@ -24,6 +24,7 @@ const PayRunCollapsedContent = ({ invoice = {} }) => {
             <p>Id</p>
           </div>
           {invoiceItems.map((care) => {
+            const isClaimedByHackney = care?.claimedBy === 'Hackney';
             totalToPay += care.totalPrice;
             return (
               <div key={care.invoiceItemId} className="table__row-collapsed-main-item">

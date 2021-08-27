@@ -1,5 +1,6 @@
 import React from 'react';
-import { TooltipIcon } from '../Icons'
+import ReactTooltip from 'react-tooltip';
+import { TooltipIcon } from '../Icons';
 
 const BaseField = ({ onClick = () => {}, tooltipText = '', classes = '', label, noInputStyle = false, children }) => {
   const hasLabel = label !== undefined;
@@ -12,10 +13,11 @@ const BaseField = ({ onClick = () => {}, tooltipText = '', classes = '', label, 
   return (
     <div onClick={onClick} className={`${className} ${classes}`}>
       {hasLabel ? <label className="text-bold">
-        {label}
+        <label>{label}</label>
         {tooltipText && <TooltipIcon tooltipText={tooltipText} />}
       </label> : null}
       {children}
+      <ReactTooltip backgroundColor='#525A5B' wrapper='span' id={tooltipText} />
     </div>
   );
 };
