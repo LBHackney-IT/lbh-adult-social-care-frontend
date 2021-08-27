@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
 import { TooltipIcon } from '../Icons';
+import ReactTooltipNextJs from '../ReactTooltipNextJs';
 
 const BaseField = ({ onClick = () => {}, tooltipText = '', classes = '', label, noInputStyle = false, children }) => {
   const hasLabel = label !== undefined;
@@ -17,7 +17,7 @@ const BaseField = ({ onClick = () => {}, tooltipText = '', classes = '', label, 
         {tooltipText && <TooltipIcon tooltipText={tooltipText} />}
       </label> : null}
       {children}
-      <ReactTooltip backgroundColor='#525A5B' wrapper='span' id={tooltipText} />
+      <ReactTooltipNextJs backgroundColor='#525A5B' id={tooltipText} />
     </div>
   );
 };

@@ -87,3 +87,8 @@ button {
   pointer-events: none;
   cursor: initial;
 }
+
+.max-desktop-width {
+  max-width: 1200px;
+  margin: 0 auto;
+}

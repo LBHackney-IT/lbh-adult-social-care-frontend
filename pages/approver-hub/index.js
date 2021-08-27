@@ -263,7 +263,7 @@ const ApproverHubPage = () => {
   const isLoadingData = Object.values(tabsTable).every((item) => !item);
 
   return (
-    <div className="approver-hub-page">
+    <div className="approver-hub-page max-desktop-width">
       <Inputs
         inputs={inputs}
         changeInputs={changeInputs}

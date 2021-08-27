@@ -36,23 +36,24 @@ const RadioButton = ({
   return (
     <BaseField tooltipText={tooltipText} label={label} classes={innerClass}>
       <div className={`radio-cont${inline ? '' : ' not-inline'}`}>
-        {options.map((radioItem, index) => (
-          <>
-            {radioItem.header && radioItem.header}
-            <label
-              key={`${radioItem.value}${label}`}
-              className={`radio-item${index !== options.length ? ' is-first' : ''}`}
-              onClick={() => radioChange(radioItem.value)}
-            >
-              <div
-                className={`radio-select-cont${hasSelectedValue && radioValue === radioItem.value ? ' is-active' : ''}`}
+        {options.map((radioItem, index) => {
+          return (
+            <React.Fragment key={`${radioItem.value}${label}${radioItem.text}`}>
+              {radioItem.header && radioItem.header}
+              <label
+                className={`radio-item${index !== options.length ? ' is-first' : ''}`}
+                onClick={() => radioChange(radioItem.value)}
               >
-                <div className="radio-item-selected" />
-              </div>
-              <p className='radio-item__text'>{radioItem.text}</p>
-            </label>
-          </>
-        ))}
+                <div
+                  className={`radio-select-cont${hasSelectedValue && radioValue === radioItem.value ? ' is-active' : ''}`}
+                >
+                  <div className="radio-item-selected" />
+                </div>
+                <p className='radio-item__text'>{radioItem.text}</p>
+              </label>
+            </React.Fragment>
+          )
+        })}
       </div>
       {error && <ErrorField text={error} />}
     </BaseField>

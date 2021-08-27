@@ -95,7 +95,7 @@ const CarePackage = ({ history }) => {
         typeOfStayId: mapTypeOfCareIdOptions(residentialTypeOfStayOptions),
       },
       labels: {
-        hasRespiteCare: 'Lorem ipsum hasRespiteCare',
+        hasRespiteCare: 'Respite care?',
         hasDischargePackage: 'Discharge package?',
         isImmediateOrReEnablement: 'Immediate / re-enablement package?',
         typeOfStayId: 'What type of stay is this?',

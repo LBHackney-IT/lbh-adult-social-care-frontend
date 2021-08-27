@@ -11,8 +11,16 @@ import Checkbox from './Checkbox';
 import CookieBanner from './CookieBanner';
 import { Tabs } from './Tabs';
 import { Tab } from './Tabs/Tab';
+import Tag from './Tag';
+import Select from './Select';
+import Hint from './Hint';
+import Label from './Label';
+import ErrorMessage from './ErrorMessage';
 
 export {
+  ErrorMessage,
+  Label,
+  Hint,
   Input,
   Button,
   Accordion,
@@ -26,4 +34,6 @@ export {
   CookieBanner,
   Tabs,
   Tab,
+  Tag,
+  Select,
 };
