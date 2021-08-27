@@ -83,6 +83,17 @@
     -moz-osx-font-smoothing: grayscale;
     font-weight: 600;
     text-decoration: none;
+    &:hover,
+    &:active {
+      color: #0085ca;
+      text-decoration: underline;
+    }
+    &:focus,
+    &:active {
+      outline: transparent solid 3px;
+      background-color: #ffc845;
+      box-shadow: 0 -2px #ffc845, 0 4px #0b0c0c;
+    }
   }
 }
 
