@@ -34,8 +34,6 @@ const ApproverHubPage = () => {
 
   const onClickTableRow = (rowItems) => {
     const packageType = packageTypeOptions.find(item => item.id === rowItems.packageTypeId);
-    console.log(rowItems);
-    console.log(packageTypeOptions);
     if(includeString(packageType.packageType.toLowerCase(), 'residential')) {
       switch (tab) {
         case 'new': {
@@ -265,7 +263,7 @@ const ApproverHubPage = () => {
   const isLoadingData = Object.values(tabsTable).every((item) => !item);
 
   return (
-    <div className="approver-hub-page">
+    <div className="approver-hub-page max-desktop-width">
       <Inputs
         inputs={inputs}
         changeInputs={changeInputs}

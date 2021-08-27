@@ -28,7 +28,11 @@ export default function Button({ children, secondary, disabled, link, 'add-item'
       data-module="govuk-button"
       aria-disabled={disabled}
       disabled={disabled}
+<<<<<<< HEAD
       onClick={handler}
+=======
+      onClick={onClick}
+>>>>>>> a3f9b82f9b94d01aa22b311f86782a173d246321
     >
       {addItem && addItemIcon}
       {children}

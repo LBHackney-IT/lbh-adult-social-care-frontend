@@ -87,4 +87,8 @@
   outline: none !important;
   box-shadow: none !important;
   cursor: pointer;
+
+  &.red {
+    color: $lbh-link-red;
+  }
 }

@@ -5,7 +5,7 @@ import CarePackageSetup from '../CarePackages/CarePackageSetup';
 import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
 import fieldValidator from '../../service/inputValidator';
 import DateSetup from './DateSetup';
-import { includeString } from '../../service/helpers'
+import { getFutureDate, includeString } from '../../service/helpers'
 import { RESIDENTIAL_CARE_ROUTE } from '../../routes/RouteConstants'
 
 const CareSetup = ({
@@ -17,6 +17,7 @@ const CareSetup = ({
   selectedCareType,
   setSelectedCareType,
   history,
+  tooltips,
 }) => {
   const router = useRouter();
 
@@ -60,18 +61,25 @@ const CareSetup = ({
 
     let formattedRoute = '';
     selectedCare.fields.forEach(field => {
-      if(field === 'typeOfStayId' && selectedCare.route === RESIDENTIAL_CARE_ROUTE) {
-        const typeOfStay = selectedCare.optionFields[field].find((opt) => opt.value === values[field]).value;
-        formattedRoute += `?typeOfStayText=${typeOfStay.text}`;
-      } else {
-        if(values[field] !== undefined && values[field] !== '') {
-          formattedRoute += `/${values[field]}`;
-        }
+      if(values[field] !== undefined && values[field] !== '') {
+        formattedRoute += `/${values[field]}`;
       }
     });
 
+    if(selectedCare.route === RESIDENTIAL_CARE_ROUTE) {
+      formattedRoute += `?${selectedCare.optionFields.typeOfStayId.find((opt) => opt.value === values.typeOfStayId).text}`;
+    }
+
     router.push(`${selectedCare.route}${formattedRoute}`);
   };
+
+  const typeOfStayIdMaxDates = {
+    1: getFutureDate({ days: 7 * 6}),
+    2: getFutureDate({ days: 7 * 52}),
+    3: undefined,
+  };
+
+  const hasTypeOfStayId = selectedCare.fields.includes('typeOfStayId');
 
   return (
     <CarePackageSetup onBuildClick={onBuildClick}>
@@ -89,20 +97,31 @@ const CareSetup = ({
         </div>
         <DateSetup
           endDate={values.endDate}
+          disabledStartDate={hasTypeOfStayId && !values.typeOfStayId}
           changeErrorFields={changeErrorFields}
           errorFields={errors}
+          startMaxDate={typeOfStayIdMaxDates[values.typeOfStayId]}
           isFixedPeriod={values.isFixedPeriod}
           setEndDate={(date) => setValues('endDate', date)}
           setIsFixedPeriod={(value) => setValues('isFixedPeriod', value)}
-          setStartDate={(date) => setValues('startDate', date)}
+          setStartDate={(date) => {
+            setValues('startDate', date);
+            const { endDate, isFixedPeriod } = values;
+            if(endDate && date && isFixedPeriod) {
+              if (endDate - date < 0) {
+                setValues('endDate', date);
+              }
+            }
+          }}
           startDate={values.startDate}
         />
       </div>
         {Object.keys(selectedCare.labels).map(field => (
           <div key={field} className="mt-2">
             <RadioButton
+              tooltipText={tooltips[field] || ''}
               label={selectedCare.labels[field]}
-              options={selectedCare.optionFields[field] || yesNoValues}
+              options={selectedCare.optionFields ? selectedCare.optionFields[field] || yesNoValues : yesNoValues}
               error={errors[field]}
               setError={() => changeErrorFields(field)}
               onChange={value => setValues(field, value)}

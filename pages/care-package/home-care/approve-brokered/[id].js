@@ -13,7 +13,6 @@ import ClientSummaryItem from '../../../../components/CarePackages/ClientSummary
 import { Button } from '../../../../components/Button'
 import DaySummary from '../../../../components/HomeCare/DaySummary'
 import TitleHeader from '../../../../components/TitleHeader'
-import { useRouter } from 'next/router'
 
 const approvalHistoryEntries = [
   {

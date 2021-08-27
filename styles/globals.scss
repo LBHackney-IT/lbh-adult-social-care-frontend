@@ -46,7 +46,6 @@
 @import "css/HackneyDS/styles.scss";
 @import "../components/HackneyDS/styles.scss";
 
-
 * {
   font-family: 'OpenSans', sans-serif !important;
   letter-spacing: 0.15px;
@@ -87,4 +86,9 @@ button {
   user-select: none;
   pointer-events: none;
   cursor: initial;
+}
+
+.max-desktop-width {
+  max-width: 1200px;
+  margin: 0 auto;
 }

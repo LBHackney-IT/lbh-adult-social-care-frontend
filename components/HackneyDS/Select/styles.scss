@@ -1,0 +1,45 @@
+.govuk-select {
+  font-family: Open Sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.25;
+  box-sizing: border-box;
+  max-width: 100%;
+  height: 2.5rem;
+  padding: 5px;
+  border: 2px solid #0b0c0c;
+
+  &:focus {
+    outline: #ffc845 solid 3px;
+    outline-offset: 0;
+    box-shadow: inset 0 0 0 2px;
+  }
+
+  &--error {
+    border: 2px solid #d4351c;
+
+    &:focus {
+      border-color: #0b0c0c;
+    }
+  }
+
+  & option:active,
+  & option:checked,
+  &:focus::-ms-value {
+    color: #fff;
+    background-color: #1d70b8;
+  }
+
+  @media (min-width: 40.0625em) {
+    font-size: 1.1875rem;
+    line-height: 1.25;
+  }
+
+  @media print {
+    line-height: 1.25;
+    font-family: sans-serif;
+    font-size: 14pt;
+  }
+}
