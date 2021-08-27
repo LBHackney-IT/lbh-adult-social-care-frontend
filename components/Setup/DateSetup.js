@@ -9,8 +9,10 @@ const DateSetup = ({
   changeErrorFields,
   setIsFixedPeriod,
   isFixedPeriod,
+  disabledStartDate,
   startDate,
   setStartDate,
+  startMaxDate,
   endDate,
   setEndDate,
 }) => {
@@ -21,6 +23,8 @@ const DateSetup = ({
       setEndDate('');
     }
   }, [isFixedPeriod]);
+
+  const disabledEndDate = !isFixedPeriod || disabledStartDate;
 
   return (
     <div className="column">
@@ -41,7 +45,11 @@ const DateSetup = ({
         <span className="mr-3">
           <DatePick
             label="Start Date"
+            disabled={disabledStartDate}
             error={errorFields.startDate}
+            minDate={new Date()}
+            maxDate={startMaxDate}
+            classes={disabledStartDate ? 'disabled' : ''}
             setError={() => changeErrorFields('startDate')}
             dateValue={startDate}
             setDate={setStartDate}
@@ -51,8 +59,9 @@ const DateSetup = ({
           <DatePick
             label="End Date"
             dateValue={!isFixedPeriod ? '' : endDate}
-            disabled={!isFixedPeriod}
-            classes={!isFixedPeriod ? 'datepicker-ongoing' : ''}
+            disabled={disabledEndDate}
+            minDate={startDate}
+            classes={`${!isFixedPeriod ? ' datepicker-ongoing' : ''}${disabledStartDate ? ' disabled' : ''}`}
             setDate={setEndDate}
             error={errorFields.endDate}
             setError={() => changeErrorFields('endDate')}

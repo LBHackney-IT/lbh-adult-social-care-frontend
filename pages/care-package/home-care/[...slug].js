@@ -12,18 +12,18 @@ import PackageReclaim from '../../../components/PackageReclaim';
 import TextArea from '../../../components/TextArea';
 import TitleHeader from '../../../components/TitleHeader';
 import withSession from '../../../lib/session';
-import { formatCareDatePeriod, getLoggedInUser, getUserSession, uniqueID } from '../../../service/helpers'
+import { formatCareDatePeriod, getLoggedInUser, getUserSession, uniqueID } from '../../../service/helpers';
 import {
   DOMESTIC_CARE_MODE,
   ESCORT_CARE_MODE, getWeekSlots,
   LIVE_IN_CARE_MODE,
   PERSONAL_CARE_MODE,
   weekDays,
-} from '../../../service/homeCarePickerHelper'
+} from '../../../service/homeCarePickerHelper';
 import { getServiceTimes } from '../../../service/homeCareServiceHelper';
 import { SOCIAL_WORKER_ROUTE } from '../../../routes/RouteConstants';
 import { addNotification } from '../../../reducers/notificationsReducer';
-import useHomeCareApi from '../../../api/SWR/useHomeCareApi'
+import useHomeCareApi from '../../../api/SWR/useHomeCareApi';
 
 const initialPackageReclaim = {
   homeCarePackageId: '1',
@@ -139,9 +139,6 @@ const HomeCare = ({ loggedInUserId }) => {
       setHomeCareTimeShifts(getWeekSlots(homeCareTimeShiftsData));
     }
   }, [homeCareTimeShiftsData]);
-
-  console.log(homeCareTimeShifts);
-
 
   // Handle a care picker cell click
   const onCarePickerClick = (weekSlotId, dayId) => {

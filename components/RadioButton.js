@@ -16,6 +16,7 @@ const RadioButton = ({
   className = '',
   setError,
   inline = true,
+  tooltipText = '',
   onChange = () => {},
 }) => {
   const [radioValue, setRadioValue] = useState(selectedValue);
@@ -30,9 +31,10 @@ const RadioButton = ({
     setRadioValue(radioItemValue);
   };
 
+  const innerClass = `radio-button ${className}`;
 
   return (
-    <BaseField label={label} classes={className}>
+    <BaseField tooltipText={tooltipText} label={label} classes={innerClass}>
       <div className={`radio-cont${inline ? '' : ' not-inline'}`}>
         {options.map((radioItem, index) => (
           <>

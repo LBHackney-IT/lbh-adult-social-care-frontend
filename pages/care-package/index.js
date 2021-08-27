@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react'
-import { useSelector } from 'react-redux';
 import Layout from '../../components/Layout/Layout';
 import withSession from '../../lib/session';
 import { getUserSession } from '../../service/helpers';
@@ -96,7 +95,7 @@ const CarePackage = ({ history }) => {
         typeOfStayId: mapTypeOfCareIdOptions(residentialTypeOfStayOptions),
       },
       labels: {
-        hasRespiteCare: 'Respite care?',
+        hasRespiteCare: 'Lorem ipsum hasRespiteCare',
         hasDischargePackage: 'Discharge package?',
         isImmediateOrReEnablement: 'Immediate / re-enablement package?',
         typeOfStayId: 'What type of stay is this?',
@@ -131,7 +130,18 @@ const CarePackage = ({ history }) => {
     },
   ], [nursingCareTypeOfStayOptions, residentialTypeOfStayOptions]);
 
-  const [selectedCareType, setSelectedCareType] = useState(3);
+  const [tooltips] = useState({
+    hasRespiteCare: 'Lorem ipsum hasRespiteCare',
+    hasDischargePackage: 'Lorem ipsum hasDischargePackage',
+    isRespiteCare: 'Lorem ipsum isRespiteCare',
+    typeOfStayId: 'Lorem ipsum typeOfStayId',
+    isDischargePackage: 'Lorem ipsum isDischargePackage',
+    isImmediateOrReEnablement: 'Lorem ipsum isImmediateOrReEnablement',
+    isS117: 'Lorem ipsum isS117',
+    isImmediate: 'Lorem ipsum isImmediate',
+  });
+
+  const [selectedCareType, setSelectedCareType] = useState(2);
 
   const changeCareType = (option) => {
     setSelectedCareType(option);
@@ -161,8 +171,9 @@ const CarePackage = ({ history }) => {
               [field]: value,
             }))
           }}
+          tooltips={tooltips}
           history={history}
-          careTypes={careTypes.slice(2)}
+          careTypes={careTypes}
           errors={errors}
           setErrors={setErrors}
           selectedCareType={selectedCareType}

@@ -67,7 +67,7 @@
 
 .opportunity-summary-line {
   border-bottom: 2px solid #dee0e2;
-  height: 0px;
+  height: 0;
   width: 100%;
 }
 
@@ -86,4 +86,8 @@
 .react-date-picker {
   width: 100%;
   max-width: 200px;
+
+  &.disabled {
+    opacity: 0.5;
+  }
 }

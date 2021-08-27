@@ -1,6 +1,8 @@
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
+import { TooltipIcon } from '../Icons';
 
-const BaseField = ({ onClick = () => {}, classes = '', label, noInputStyle = false, children }) => {
+const BaseField = ({ onClick = () => {}, tooltipText = '', classes = '', label, noInputStyle = false, children }) => {
   const hasLabel = label !== undefined;
   let className = `control field-container${hasLabel ? ' has-label' : ''}`;
 
@@ -10,8 +12,12 @@ const BaseField = ({ onClick = () => {}, classes = '', label, noInputStyle = fal
 
   return (
     <div onClick={onClick} className={`${className} ${classes}`}>
-      {hasLabel ? <label className="text-bold">{label}</label> : null}
+      {hasLabel ? <label className="text-bold">
+        <label>{label}</label>
+        {tooltipText && <TooltipIcon tooltipText={tooltipText} />}
+      </label> : null}
       {children}
+      <ReactTooltip backgroundColor='#525A5B' wrapper='span' id={tooltipText} />
     </div>
   );
 };
