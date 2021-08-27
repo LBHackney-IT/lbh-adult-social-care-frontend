@@ -12,7 +12,7 @@ export default function Select({
   const errorClass = error ? ' govuk-select--error' : '';
   const errorDescribedBy = error ? { 'aria-describedby': ' govuk-select--error' } : {};
   return (
-    <select {...errorDescribedBy} onChange={onChange} className={`govuk-select lbh-select${outerClass}${errorClass}`}>
+    <select {...errorDescribedBy} onChange={onChange} defaultValue={value} className={`govuk-select lbh-select${outerClass}${errorClass}`}>
       {options.map(option => {
         const isDisabledOption = disabledOptions.some(disabledOption => (
           disabledOption === option.value
@@ -21,7 +21,6 @@ export default function Select({
         return (
           <option
             disabled={isDisabledOption}
-            selected={value.value === option.value}
             key={option.text}
             value={option.value}
           >

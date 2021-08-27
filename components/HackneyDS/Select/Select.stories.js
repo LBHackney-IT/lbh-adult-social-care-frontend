@@ -1,6 +1,5 @@
 import React from 'react';
-import { Hint, Label, Select } from '../index'
-import ErrorMessage from '../ErrorMessage'
+import { Select } from '../index';
 
 export default {
   title: 'Hackney Design System/Select',
