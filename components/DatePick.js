@@ -15,6 +15,8 @@ const DatePick = ({
   classes = '',
   disabled = false,
   label,
+  minDate,
+  maxDate,
   setDate,
   dateValue,
 }) => {
@@ -30,6 +32,8 @@ const DatePick = ({
           }}
           startDate={startDate}
           endDate={endDate}
+          minDate={minDate}
+          maxDate={maxDate}
           selectsRange={selectsRange}
           selected={dateValue}
           inline={inline}

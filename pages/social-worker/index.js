@@ -126,7 +126,7 @@ const SocialWorkerDashboardPage = () => {
   };
 
   return (
-    <div className="social-worker-page">
+    <div className="social-worker-page max-desktop-width">
       <Inputs values={filters} inputs={inputs} title='Submitted Package Request' changeInputs={changeFilters} />
       <Table
         className='social-worker__table'

@@ -25,9 +25,9 @@
     }
   }
 
-  .& option:active,
-  .& option:checked,
-  .&:focus::-ms-value {
+  & option:active,
+  & option:checked,
+  &:focus::-ms-value {
     color: #fff;
     background-color: #1d70b8;
   }

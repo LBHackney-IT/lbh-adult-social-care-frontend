@@ -5,6 +5,6 @@ export default function Tag({ children, color = '', className = ''}) {
   const tagColorClass = color ? ` lbh-tag--${color}` : '';
 
   return (
-    <span className={`lbh-tag${tagColorClass}${outerClass}`}>{children}</span>
+    <span className={`lbh-tag govuk-tag${tagColorClass}${outerClass}`}>{children}</span>
   );
 }

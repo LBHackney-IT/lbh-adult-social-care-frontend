@@ -62,7 +62,7 @@ const PayRunPage = () => {
     { name: 'serviceUserName', text: 'Service User', dataType: DATA_TYPES.STRING },
     { name: 'invoiceId', text: 'INV ID', dataType: DATA_TYPES.STRING },
     { name: 'packageTypeName', text: 'Package Type', dataType: DATA_TYPES.STRING },
-    { name: 'supplierName', text: 'SupplierDashboard', dataType: DATA_TYPES.STRING },
+    { name: 'supplierName', text: 'Supplier Dashboard', dataType: DATA_TYPES.STRING },
     { name: 'totalAmount', text: 'Total', dataType: DATA_TYPES.NUMBER },
     { name: 'invoiceStatusId', text: 'Status', dataType: DATA_TYPES.NUMBER },
   ]);

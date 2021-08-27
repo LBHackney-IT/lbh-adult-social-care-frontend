@@ -1,2 +1,15 @@
-@import "Tag/styles";
-@import "Select/styles";
+@import "./styles/common.scss";
+
+@import "./Announcement/style.scss";
+@import "./BackLink/style.scss";
+@import "./BackToTop/style.scss";
+@import "./Breadcrumbs/style.scss";
+@import "./Checkbox/style.scss";
+@import "./Collapsible/style.scss";
+@import "./CookieBanner/style.scss";
+@import "./Textarea/style.scss";
+@import "./Tag/styles";
+@import "./Select/styles";
+@import "./Hint/styles";
+@import "./Label/styles";
+@import "./ErrorMessage/styles";

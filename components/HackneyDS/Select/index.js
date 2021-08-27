@@ -6,28 +6,29 @@ export default function Select({
   className = '',
   disabledOptions = [],
   options = [],
+  error,
 }) {
   const outerClass = className ? ` ${className}` : '';
+  const errorClass = error ? ' govuk-select--error' : '';
+  const errorDescribedBy = error ? { 'aria-describedby': ' govuk-select--error' } : {};
   return (
-    <div className={`govuk-form-group lbh-form-group${outerClass}`}>
-      <select onChange={onChange} className="govuk-select lbh-select">
-        {options.map(option => {
-          const isDisabledOption = disabledOptions.some(disabledOption => (
-            disabledOption === option.value
-          ));
+    <select {...errorDescribedBy} onChange={onChange} className={`govuk-select lbh-select${outerClass}${errorClass}`}>
+      {options.map(option => {
+        const isDisabledOption = disabledOptions.some(disabledOption => (
+          disabledOption === option.value
+        ));
 
-          return (
-            <option
-              disabled={isDisabledOption}
-              selected={value.value === option.value}
-              key={option.text}
-              value={option.value}
-            >
-              {option.text}
-            </option>
-          )
-        })}
-      </select>
-    </div>
+        return (
+          <option
+            disabled={isDisabledOption}
+            selected={value.value === option.value}
+            key={option.text}
+            value={option.value}
+          >
+            {option.text}
+          </option>
+        )
+      })}
+    </select>
   )
 }

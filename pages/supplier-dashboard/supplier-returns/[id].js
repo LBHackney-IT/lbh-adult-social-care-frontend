@@ -95,7 +95,7 @@ const SupplierReturnsDashboard = () => {
   }, []);
 
   return (
-    <div className="supplier-returns supplier-returns-dashboard">
+    <div className="supplier-returns supplier-returns-dashboard max-desktop-width">
       {openedPopup === 'help-chat' && (
         <PopupInvoiceChat
           closePopup={closeHelpChat}

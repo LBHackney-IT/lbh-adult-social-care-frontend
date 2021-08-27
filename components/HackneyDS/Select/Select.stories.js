@@ -1,5 +1,6 @@
 import React from 'react';
-import { Select } from '../index';
+import { Hint, Label, Select } from '../index'
+import ErrorMessage from '../ErrorMessage'
 
 export default {
   title: 'Hackney Design System/Select',
@@ -14,6 +15,7 @@ export default {
     className: { type: 'string' },
     disabledOptions: { type: 'array' },
     options: { type: 'array' },
+    error: { type: 'boolean' },
     onChange: { control: false },
   },
 };
@@ -33,16 +35,6 @@ Default.args = {
 export const DisabledOptions = Template.bind({});
 
 DisabledOptions.args = {
-  options: [{ text: 'Option 1', value: 1}, { text: 'Option 2', value: 2}],
-  onChange: () => {},
-  disabledOptions: [2],
-  value: { value: '', text: ''},
-  className: '',
-};
-
-export const Label = Template.bind({});
-
-Label.args = {
   options: [{ text: 'Option 1', value: 1}, { text: 'Option 2', value: 2}],
   onChange: () => {},
   disabledOptions: [2],

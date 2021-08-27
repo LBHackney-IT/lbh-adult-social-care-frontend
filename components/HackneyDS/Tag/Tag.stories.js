@@ -43,7 +43,7 @@ Red.args = {
 export const Grey = Template.bind({});
 
 Grey.args = {
-  children: 'Overdue',
+  children: 'Archived',
   className: '',
   color: 'grey',
 };
