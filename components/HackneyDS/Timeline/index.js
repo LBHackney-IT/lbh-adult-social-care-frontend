@@ -13,7 +13,16 @@ export default function Timeline({ timelines = [] }) {
         const { header } = timeline;
         return (
           <li className={`lbh-timeline__event${calcClasses}`}>
-            {header && <h3 className={header.rewriteClass || 'lbh-heading-h3'}>{header.text}</h3>}
+            {header &&
+              <h3 className={header.rewriteClass || 'lbh-heading-h3'}>
+                {header.link ?
+                  <Link
+                    text={header.text}
+                    noVisited
+                  /> : header.text
+                }
+              </h3>
+            }
             {timeline.innerElements.map(element => {
               if(element.text) {
                 return (
@@ -22,8 +31,8 @@ export default function Timeline({ timelines = [] }) {
                       <Link
                         href={element.link}
                         text={element.text}
-                        className='lbh-link--no-visited-state'
-                      /> : element
+                        noVisited
+                      /> : element.text
                     }
                   </p>
                 )

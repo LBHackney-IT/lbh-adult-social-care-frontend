@@ -13,13 +13,15 @@ import { Tabs } from './Tabs';
 import { Tab } from './Tabs/Tab';
 import Tag from './Tag';
 import Select from './Select';
-import Hint from './Hint';
-import Label from './Label';
-import ErrorMessage from './ErrorMessage';
-import Link from './Link';
+import Hint from './lettering/Hint';
+import Label from './lettering/Label';
+import ErrorMessage from './lettering/ErrorMessage';
+import Link from './lettering/Link';
 import Timeline from './Timeline';
+import Conversation from './Conversation';
 
 export {
+  Conversation,
   Link,
   Timeline,
   ErrorMessage,
