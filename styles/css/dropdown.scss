@@ -10,8 +10,13 @@
     justify-content: space-between;
   }
 
+  .dropdown-content {
+    box-shadow: none;
+  }
+
   .dropdown-menu {
     min-width: initial;
+    background-color: white;
     width: 100%;
     top: 110%;
 

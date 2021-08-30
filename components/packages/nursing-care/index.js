@@ -260,7 +260,7 @@ const PackagesNursingCare = ({
                 selectedValue={collectedBy}
                 onOptionSelect={(option) => {
                   setCollectedBy(option)
-                  if(option.value !== 'no-fnc') {
+                  if(option.value !== 'N/A') {
                     setFncCostPerWeek(initialFncCostPerWeek);
                   } else {
                     setFncCostPerWeek(0);
@@ -269,7 +269,7 @@ const PackagesNursingCare = ({
                 options={[
                   {value: 'supplier', text: 'Supplier'},
                   {value: 'hackney', text: 'Hackney'},
-                  {value: 'no-fnc', text: 'No FNC'},
+                  {value: 'N/A', text: 'N/A'},
                 ]}
                 placeholder='Supplier'
                 endpoint={{
@@ -278,7 +278,7 @@ const PackagesNursingCare = ({
                 }}
               />
             </div>
-            {collectedBy.value !== 'no-fnc' &&
+            {collectedBy.value !== 'N/A' &&
             <>
               <div className='is-flex is-flex-wrap-wrap is-align-items-center mr-5'>
                 <EuroInput

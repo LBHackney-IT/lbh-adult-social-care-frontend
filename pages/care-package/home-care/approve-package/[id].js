@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
-import HomeCarePackageDetails from '../../../../components/HomeCare/HomeCarePackageDetails';
 import Layout from '../../../../components/Layout/Layout';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
 import TextArea from '../../../../components/TextArea';
@@ -53,7 +52,7 @@ const HomeCareApprovePackage = () => {
   const { data: packageData } = useHomeCareApi.detailsForBrokerage(homeCarePackageId);
   const [homeCareSummaryData, setHomeCareSummaryData] = useState([]);
 
-  const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
+  const { times, secondaryTimes } = getServiceTypeCa
 
   const editDaySummary = (daySummary, value) => {
     daySummary.needToAddress = value;

@@ -220,7 +220,7 @@ const BrokerageHubPage = () => {
   const isLoadingData = Object.values(tabsTable).every((item) => !item);
 
   return (
-    <div className="brokerage-hub-page">
+    <div className="brokerage-hub-page max-desktop-width">
       <Inputs inputs={inputs} changeInputs={changeInputs} values={filters} title="Brokerage Hub" />
       <DashboardTabs tabs={tabs} changeTab={setTab} tab={tab} />
       <Table

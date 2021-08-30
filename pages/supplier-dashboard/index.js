@@ -55,7 +55,7 @@ const SupplierDashboard = () => {
   }, [sort]);
 
   return (
-    <div className="supplier-dashboard">
+    <div className="supplier-dashboard max-desktop-width">
       <SupplierDashboardInnerHeader />
       <SupplierDashboardTable
         isIgnoreId={true}

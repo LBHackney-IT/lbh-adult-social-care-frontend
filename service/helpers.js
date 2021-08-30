@@ -14,6 +14,29 @@ const formatDateWithSign = (date, sign = '/') => {
   return `${`00${day}`.slice(-2)}${sign}${`00${month}`.slice(-2)}${sign}${`00${year}`.slice(-2)}`;
 };
 
+const getFutureDate = (time) => {
+  const {
+    year: yearFuture = 0,
+    month: monthFuture = 0,
+    days: daysFuture = 0,
+    hours: hoursFuture = 0,
+    minutes: minutesFuture = 0,
+    seconds: secondsFuture = 0,
+    milliseconds: millisecondsFuture = 0,
+  } = time;
+
+  const newDate = new Date();
+  const year = newDate.getFullYear() + yearFuture;
+  const month = newDate.getMonth() + monthFuture;
+  const days = newDate.getDate() + daysFuture;
+  const hours = newDate.getHours() + hoursFuture;
+  const minutes = newDate.getMinutes() + minutesFuture;
+  const seconds = newDate.getSeconds() + secondsFuture;
+  const milliseconds = newDate.getMilliseconds() + millisecondsFuture;
+
+  return new Date(year, month, days, hours, minutes, seconds, milliseconds);
+}
+
 const formatStringLength = (string, collapsedText, isSlicedText) => {
   if (string.length > maxStringLength && collapsedText && isSlicedText) {
     return `${string.slice(0, maxStringLength)}`;
@@ -152,4 +175,5 @@ export {
   getNumberWithCommas,
   formatCareDatePeriod,
   formatStringLength,
+  getFutureDate,
 };

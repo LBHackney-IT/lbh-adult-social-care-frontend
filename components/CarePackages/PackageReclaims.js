@@ -145,7 +145,7 @@ const PackageReclaims = ({
         <div>
           {packagesReclaimed.map((item, index) => (
             <PackageReclaim
-              remove={() => removeDayCarePackageReclaim(item.id)}
+              remove={packagesReclaimed.length > 1 && removeDayCarePackageReclaim(item.id)}
               key={item.id}
               error={error}
               index={index}

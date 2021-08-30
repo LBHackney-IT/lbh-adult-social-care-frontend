@@ -38,8 +38,6 @@
 
 .border-2 {
   border-width: 2px;
-  border-bottom: 2px solid $lbh-green1;
-  margin-top: -1px;
-  bottom: -1px;
+  border-bottom: 1px solid $lbh-green1;
   position: relative;
 }

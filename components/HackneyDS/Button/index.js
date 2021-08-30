@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Button({ children, secondary, disabled, link, 'add-item': addItem }) {
+export default function Button({ onClick, children, secondary, disabled, link, 'add-item': addItem }) {
   const secondaryClassList = secondary ? ' govuk-secondary lbh-button--secondary' : '';
   const disabledClassList = disabled ? ' lbh-button--disabled govuk-button--disabled' : '';
   const addItemClassList = addItem ? ' lbh-button--add' : '';
@@ -28,6 +28,7 @@ export default function Button({ children, secondary, disabled, link, 'add-item'
       data-module="govuk-button"
       aria-disabled={disabled}
       disabled={disabled}
+      onClick={onClick}
     >
       {addItem && addItemIcon}
       {children}
