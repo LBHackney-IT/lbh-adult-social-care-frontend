@@ -13,6 +13,11 @@ import DayCareSummary from '../../DayCare/DayCareSummary';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
 import { formatCareDatePeriod } from '../../../service/helpers'
 import ClientSummaryItem from '../../CarePackages/ClientSummaryItem'
+import PopupAddSupplier from '../../PopupAddSupplier'
+import AutocompleteSelect from '../../AutocompleteSelect'
+import useSuppliersApi from '../../../api/SWR/useSuppliersApi'
+import useDayCareApi from '../../../api/SWR/useDayCareApi'
+import { mapCareStageOptions } from '../../../api/Mappers/CarePackageMapper'
 
 const PackagesDayCare = ({
   tab,
@@ -24,8 +29,6 @@ const PackagesDayCare = ({
   approvalHistory,
   dayCarePackage,
   dayCareSummary,
-  supplierOptions = [],
-  stageOptions = [],
   createBrokerageInfo = () => {},
   changePackageBrokeringStatus = () => {},
 }) => {
@@ -57,6 +60,8 @@ const PackagesDayCare = ({
   });
 
   const packageDetails = dayCarePackage?.packageDetails;
+  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
+  const { data: stageOptions } = useDayCareApi.brokerAgeStages();
 
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
@@ -78,6 +83,7 @@ const PackagesDayCare = ({
   const [dayCareOpportunitiesCostTotal, setDayCareOpportunitiesCostTotal] = useState(0);
   const [escortCostTotal, setEscortCostTotal] = useState(0);
   const [totalPackageCost, setTotalPackageCost] = useState(0);
+  const [popupAddSupplier, setPopupAddSupplier] = useState(false);
 
   const changeElementsData = (setter, getter, field, data) => {
     setter({ ...getter, [field]: data });
@@ -166,6 +172,7 @@ const PackagesDayCare = ({
 
   return (
     <>
+      {popupAddSupplier && <PopupAddSupplier closePopup={() => setPopupAddSupplier(false)} />}
       <div className="mt-5 mb-5 person-care">
         <div className="column proposed-packages__header is-flex is-justify-content-space-between">
           <div>
@@ -177,7 +184,7 @@ const PackagesDayCare = ({
           <Dropdown
             label=""
             initialText="Stage"
-            options={stageOptions}
+            options={mapCareStageOptions(stageOptions)}
             selectedValue={selectedStageType}
             onOptionSelect={(option) => handleBrokerageStageChange(option)}
           />
@@ -185,13 +192,12 @@ const PackagesDayCare = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <div className="mr-3 is-flex is-align-items-flex-end">
-              <Dropdown
-                label=""
-                classes="day-care-packages__fixed-dropdown"
-                initialText="Supplier (please select)"
+              <Button className='mr-3' onClick={() => setPopupAddSupplier(true)}>New Supplier</Button>
+              <AutocompleteSelect
+                placeholder="Supplier (please select)"
                 options={supplierOptions}
-                onOptionSelect={setSelectedSupplierType}
-                selectedValue={selectedSupplierType}
+                selectProvider={setSelectedSupplierType}
+                value={selectedSupplierType}
               />
             </div>
             <span className="mr-3">

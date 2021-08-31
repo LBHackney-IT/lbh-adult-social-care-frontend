@@ -258,11 +258,14 @@
 
 .person-care {
   border: 1px solid $lbh-gray;
+  border-bottom: 0;
   border-radius: 3px;
   margin-bottom: 0 !important;
 
-  &.tabs-border {
-    border-bottom: 0;
+  .proposed-packages__supplier-settings {
+    .custom-autocomplete-selector__control {
+      height: 42px;
+    }
   }
 
   .stage-dropdown {

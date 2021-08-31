@@ -13,6 +13,9 @@ import AutocompleteSelect from '../../AutocompleteSelect';
 import ApprovalHistory from '../../ProposedPackages/ApprovalHistory'
 import { addNotification } from '../../../reducers/notificationsReducer';
 import CustomDropDown from '../../CustomDropdown'
+import PopupAddSupplier from '../../PopupAddSupplier'
+import useSuppliersApi from '../../../api/SWR/useSuppliersApi'
+import useDayCareApi from '../../../api/SWR/useDayCareApi'
 
 const PackagesNursingCare = ({
   tab,
@@ -24,8 +27,6 @@ const PackagesNursingCare = ({
   approvalHistory,
   nursingCarePackage,
   nursingCareSummary,
-  supplierOptions = [],
-  stageOptions = [],
   createBrokerageInfo = () => {},
   changePackageBrokeringStage = () => {},
   loggedInUserId,
@@ -34,6 +35,9 @@ const PackagesNursingCare = ({
   const [coreCost, setCoreCost] = useState({
     costPerWeek: nursingCarePackage?.nursingCore || '',
   });
+  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
+  const { data: stageOptions } = useDayCareApi.brokerAgeStages();
+  const [popupAddSupplier, setPopupAddSupplier] = useState(false);
 
   const [additionalPayment, setAdditionalPayment] = useState({
     costPerWeek: nursingCarePackage?.additionalNeedsPayment || '',
@@ -141,6 +145,7 @@ const PackagesNursingCare = ({
 
   return (
     <>
+      {popupAddSupplier && <PopupAddSupplier closePopup={() => setPopupAddSupplier(false)} />}
       <div className="mt-5 mb-5 person-care">
         <div className="column proposed-packages__header is-flex is-justify-content-space-between">
           <div>
@@ -160,6 +165,7 @@ const PackagesNursingCare = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <div className="mr-3 is-flex is-align-items-flex-end">
+              <Button className='mr-3' onClick={() => setPopupAddSupplier(true)}>New Supplier</Button>
               <AutocompleteSelect
                 placeholder="Supplier (please select)"
                 options={supplierOptions}

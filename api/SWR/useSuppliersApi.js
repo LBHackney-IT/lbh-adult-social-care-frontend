@@ -12,7 +12,7 @@ const useSuppliersApi = {
     const formatSupplierList = optionsMapper({
       text: 'supplierName',
       value: 'id',
-    }, [] || supplierList);
+    }, supplierList);
 
     return {
       ...propsData,

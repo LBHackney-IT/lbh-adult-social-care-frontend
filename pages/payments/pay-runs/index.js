@@ -133,6 +133,8 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
   const { options: waitingOnOptions } = usePaymentDepartments();
   const { data: uniquePayRunStatuses } = useUniquePayRunStatuses();
 
+  console.log('main filters', filters);
+
   const { data: heldPayments, mutate: refetchHeldPayments } = useHeldInvoicePayments({
     ...filters,
     pageNumber: page,

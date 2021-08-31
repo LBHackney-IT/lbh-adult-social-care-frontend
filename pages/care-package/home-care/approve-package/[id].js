@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
 import Layout from '../../../../components/Layout/Layout';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TextArea from '../../../../components/TextArea';
 import withSession from '../../../../lib/session';
-import { getUserSession } from '../../../../service/helpers';
-import { PERSONAL_CARE_MODE } from '../../../../service/homeCarePickerHelper';
-import { getServiceTypeCareTimes } from '../../../../service/homeCareServiceHelper';
-import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
-import { Button } from '../../../../components/Button'
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem'
-import TitleHeader from '../../../../components/TitleHeader'
-import DaySummary from '../../../../components/HomeCare/DaySummary'
-import { testDataDaySummaries } from '../../../../testData/testDateHomeCare'
+import { getErrorResponse, getUserSession } from '../../../../service/helpers';
+import useHomeCareApi from '../../../../api/SWR/useHomeCareApi';
+import { Button } from '../../../../components/Button';
+import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
+import TitleHeader from '../../../../components/TitleHeader';
+import DaySummary from '../../../../components/HomeCare/DaySummary';
+import { testDataDaySummaries } from '../../../../testData/testDateHomeCare';
+import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation';
+import fieldValidator from '../../../../service/inputValidator';
+import { nursingCareRequestClarification } from '../../../../api/CarePackages/NursingCareApi';
+import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
+import { addNotification } from '../../../../reducers/notificationsReducer';
+import { getServiceTypeCareTimes } from '../../../../service/homeCareServiceHelper'
 
 const approvalHistoryEntries = [
   {
@@ -45,17 +49,59 @@ export const getServerSideProps = withSession(({ req, res }) => {
 const HomeCareApprovePackage = () => {
   // Route
   const router = useRouter();
+  const dispatch = useDispatch();
   const homeCarePackageId = router.query.id;
 
   const { data: homeCareTimeShiftsData } = useHomeCareApi.getAllTimeShiftSlots();
   const { data: homeCareServices } = useHomeCareApi.getAllServices();
   const { data: packageData } = useHomeCareApi.detailsForBrokerage(homeCarePackageId);
   const [homeCareSummaryData, setHomeCareSummaryData] = useState([]);
+  const [errorFields, setErrorFields] = useState({
+    requestInformationText: '',
+  });
+  const [requestInformationText, setRequestInformationText] = useState(undefined);
 
-  const { times, secondaryTimes } = getServiceTypeCa
+  const changeErrorFields = (field) => {
+    setErrorFields({
+      ...errorFields,
+      [field]: '',
+    });
+  };
+
+  const updateErrorFields = (errors, field) => {
+    const newErrors = field ? {[field]: errors} : getErrorResponse(errors);
+    setErrorFields({
+      ...errorFields,
+      ...newErrors,
+    });
+  };
+
+  const { times, secondaryTimes } = getServiceTypeCareTimes(homeCarePackageId);
 
   const editDaySummary = (daySummary, value) => {
     daySummary.needToAddress = value;
+  };
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
+  const handleRequestMoreInformation = () => {
+    const { validFields, hasErrors } = fieldValidator([{
+      name: 'requestInformationText', value: requestInformationText, rules: ['empty'],
+    }]);
+    setErrorFields(validFields);
+
+    if(hasErrors) return;
+
+    nursingCareRequestClarification(homeCarePackageId, requestInformationText)
+      .then(() => {
+        router.push(`${APPROVER_HUB_ROUTE}`);
+      })
+      .catch((error) => {
+        pushNotification(error);
+        updateErrorFields(error);
+      });
   };
 
   useEffect(() => {
@@ -107,17 +153,17 @@ const HomeCareApprovePackage = () => {
 
             <div className='button-group mb-5'>
               <Button className='gray'>Deny</Button>
-              <Button className='gray'>Request more information</Button>
               <Button>Approve to be brokered</Button>
-            </div>
-
-            <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">Request more information</p>
-              <TextArea label="" rows={5} placeholder="Add details..." />
-              <button className="button hackney-btn-green">Request more information</button>
             </div>
           </div>
         </div>
+        <RequestMoreInformation
+          requestMoreInformationText={requestInformationText}
+          setRequestInformationText={setRequestInformationText}
+          errorFields={errorFields}
+          changeErrorFields={changeErrorFields}
+          handleRequestMoreInformation={handleRequestMoreInformation}
+        />
       </div>
     </Layout>
   );

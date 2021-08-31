@@ -15,12 +15,14 @@ import ResidentialCareSummary from '../../../../components/ResidentialCare/Resid
 import TextArea from '../../../../components/TextArea';
 import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
-import { getUserSession } from '../../../../service/helpers'
+import { getErrorResponse, getUserSession } from '../../../../service/helpers'
 import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { Button } from '../../../../components/Button'
 import ApprovalHistory from '../../../../components/ProposedPackages/ApprovalHistory'
 import optionsMapper from '../../../../api/Mappers/optionsMapper'
+import fieldValidator from '../../../../service/inputValidator'
+import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation'
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -69,16 +71,31 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
 const ResidentialCareApprovePackage = ({
   residentialCarePackage,
   additionalNeedsEntriesData,
-  errorData,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const residentialCarePackageId = router.query.id;
   const residentialCarePackageData = residentialCarePackage?.residentialCarePackage;
-  const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
-  const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
+
+  const [errorFields, setErrorFields] = useState({
+    requestInformationText: '',
+  });
+
+  const changeErrorFields = (field) => {
+    setErrorFields({
+      ...errorFields,
+      [field]: '',
+    });
+  };
+
+  const updateErrorFields = (errors) => {
+    setErrorFields({
+      ...errorFields,
+      ...getErrorResponse(errors),
+    });
+  };
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
@@ -91,7 +108,6 @@ const ResidentialCareApprovePackage = ({
       })
       .catch((error) => {
         pushNotification(error);
-        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
 
@@ -102,19 +118,25 @@ const ResidentialCareApprovePackage = ({
       })
       .catch((error) => {
         pushNotification(error);
-        setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
 
   const handleRequestMoreInformation = () => {
+    const { validFields, hasErrors } = fieldValidator([
+      { name: 'requestInformationText', value: requestInformationText, rules: ['empty'] },
+    ]);
+    if (hasErrors) {
+      setErrorFields(validFields);
+      return;
+    }
+
     residentialCareRequestClarification(residentialCarePackageId, requestInformationText)
       .then(() => {
-        setDisplayMoreInfoForm(false);
         router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         pushNotification(error);
-        setErrors([...errors, `Status change failed. ${error}`]);
+        updateErrorFields(error);
       });
   };
 
@@ -160,23 +182,16 @@ const ResidentialCareApprovePackage = ({
 
         <div className="button-group mb-5">
           <Button className="gray" onClick={handleRejectPackage}>Deny</Button>
-          <Button onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)} className="gray">
-            {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
-          </Button>
           <Button onClick={handleApprovePackageContents}>Approve to be brokered</Button>
         </div>
 
-        <div className="columns">
-          <div className="column">
-            <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">Request more information</p>
-              <TextArea label="" rows={5} placeholder="Add details..." onChange={setRequestInformationText} />
-              <button type="button" className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
-                Request more information
-              </button>
-            </div>
-          </div>
-        </div>
+        <RequestMoreInformation
+          requestMoreInformationText={requestInformationText}
+          setRequestInformationText={setRequestInformationText}
+          errorFields={errorFields}
+          changeErrorFields={changeErrorFields}
+          handleRequestMoreInformation={handleRequestMoreInformation}
+        />
       </div>
     </Layout>
   );

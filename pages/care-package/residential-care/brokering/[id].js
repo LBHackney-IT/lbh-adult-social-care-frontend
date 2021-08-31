@@ -20,8 +20,8 @@ import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
 import useSuppliersApi from '../../../../api/SWR/useSuppliersApi';
 import useBaseApi from '../../../../api/SWR/useBaseApi';
-import { mapDetailsForBrokerage } from '../../../../api/Mappers/NursingCareMapper';
 import { mapCarePackageApprovalHistory } from '../../../../api/Mappers/optionsMapper';
+import { mapCareAdditionalNeedsEntries } from '../../../../api/Mappers/CarePackageMapper'
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -40,7 +40,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
       residentialCarePackageId,
       req.cookies[HASC_TOKEN_ID]
     );
-    const newAdditionalNeedsEntries = mapDetailsForBrokerage(result.residentialCarePackage.residentialCareAdditionalNeeds);
+    const newAdditionalNeedsEntries = mapCareAdditionalNeedsEntries(result.residentialCarePackage.residentialCareAdditionalNeeds);
     data.residentialCarePackage = result;
     data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch (error) {

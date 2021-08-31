@@ -14,13 +14,14 @@ import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
 import Layout from '../../../../components/Layout/Layout';
 import NursingCareSummary from '../../../../components/NursingCare/NursingCareSummary';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TextArea from '../../../../components/TextArea';
 import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import { getUserSession } from '../../../../service/helpers';
+import { getErrorResponse, getUserSession } from '../../../../service/helpers'
 import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
+import fieldValidator from '../../../../service/inputValidator'
+import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation'
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
@@ -71,15 +72,31 @@ const NursingCareApprovePackage = ({
   nursingCarePackage,
   approvalHistoryEntries,
   additionalNeedsEntriesData,
-  errorData,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const nursingCarePackageId = router.query.id;
-  const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
+  const [errorFields, setErrorFields] = useState({
+    requestInformationText: '',
+  });
+
+  const changeErrorFields = (field) => {
+    setErrorFields({
+      ...errorFields,
+      [field]: '',
+    });
+  };
+
+  const updateErrorFields = (errors, field) => {
+    const newErrors = field ? {[field]: errors} : getErrorResponse(errors);
+    setErrorFields({
+      ...errorFields,
+      ...newErrors,
+    });
+  };
 
   const {
     hasDischargePackage = false,
@@ -100,7 +117,6 @@ const NursingCareApprovePackage = ({
       })
       .catch((error) => {
         pushNotification(error);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
 
@@ -112,11 +128,17 @@ const NursingCareApprovePackage = ({
       })
       .catch((error) => {
         pushNotification(error);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
 
   const handleRequestMoreInformation = () => {
+    const { validFields, hasErrors } = fieldValidator([{
+      name: 'requestInformationText', value: requestInformationText, rules: ['empty'],
+    }]);
+    setErrorFields(validFields);
+
+    if(hasErrors) return;
+
     nursingCareRequestClarification(nursingCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
@@ -124,7 +146,7 @@ const NursingCareApprovePackage = ({
       })
       .catch((error) => {
         pushNotification(error);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
+        updateErrorFields(error);
       });
   };
 
@@ -228,18 +250,13 @@ const NursingCareApprovePackage = ({
             </div>
           </div>
         </div>
-
-        <div className="columns">
-          <div className="column">
-            <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">Request more information</p>
-              <TextArea label="" rows={5} placeholder="Add details..." onChange={setRequestInformationText} />
-              <button type="button" className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
-                Request more information
-              </button>
-            </div>
-          </div>
-        </div>
+        <RequestMoreInformation
+          requestMoreInformationText={requestInformationText}
+          setRequestInformationText={setRequestInformationText}
+          errorFields={errorFields}
+          changeErrorFields={changeErrorFields}
+          handleRequestMoreInformation={handleRequestMoreInformation}
+        />
       </div>
     </Layout>
   );

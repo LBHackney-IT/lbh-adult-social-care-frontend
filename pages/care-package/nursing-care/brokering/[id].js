@@ -20,6 +20,10 @@ import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
 import useSuppliersApi from '../../../../api/SWR/useSuppliersApi'
 import useBaseApi from '../../../../api/SWR/useBaseApi'
+import {
+  mapCareAdditionalNeedsEntries,
+  mapCareApprovalHistoryItems
+} from '../../../../api/Mappers/CarePackageMapper'
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
@@ -35,14 +39,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
   try {
     // Call to api to get package
     const result = await getNursingCarePackageDetailsForBrokerage(nursingCarePackageId, req.cookies[HASC_TOKEN_ID]);
-    const newAdditionalNeedsEntries = result.nursingCarePackage.nursingCareAdditionalNeeds.map(
-      (additionalNeedsItem) => ({
-        id: additionalNeedsItem.id,
-        isWeeklyCost: additionalNeedsItem.isWeeklyCost,
-        isOneOffCost: additionalNeedsItem.isOneOffCost,
-        needToAddress: additionalNeedsItem.needToAddress,
-      })
-    );
+    const newAdditionalNeedsEntries = mapCareAdditionalNeedsEntries(result?.nursingCarePackage?.nursingCareAdditionalNeeds);
     data.nursingCarePackage = result;
     data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch (error) {
@@ -51,11 +48,7 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
 
   try {
     const result = await getNursingCarePackageApprovalHistory(nursingCarePackageId, req.cookies[HASC_TOKEN_ID]);
-    const newApprovalHistoryItems = result.map((historyItem) => ({
-      eventDate: new Date(historyItem.approvedDate).toLocaleDateString('en-GB'),
-      eventMessage: historyItem.logText,
-      eventSubMessage: historyItem.logSubText,
-    }));
+    const newApprovalHistoryItems = mapCareApprovalHistoryItems(result);
 
     data.approvalHistoryEntries = newApprovalHistoryItems.slice();
   } catch (error) {

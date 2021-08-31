@@ -1,3 +1,4 @@
+import React from 'react';
 import EuroInput from '../../../EuroInput';
 import { currency } from '../../../../constants/strings';
 
@@ -10,11 +11,11 @@ const HomeCareCostEntry = ({ label, quantity, value = 0, onChange = () => {} }) 
       <div>
         <EuroInput onChange={onChange} value={value} />
       </div>
-      <div>{quantity}</div>
-      <div>
+      {quantity && <div>{quantity}</div>}
+      {quantity && <div>
         {currency.euro}
         {valueOutput}
-      </div>
+      </div>}
     </div>
   );
 };

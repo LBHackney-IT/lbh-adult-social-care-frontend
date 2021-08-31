@@ -5,7 +5,6 @@ import Layout from '../../../../components/Layout/Layout';
 import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
 import HomeCarePackageElementCostings from '../../../../components/HomeCare/HomeCarePackageElementCostings';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TextArea from '../../../../components/TextArea';
 import { getUserSession } from '../../../../service/helpers';
 import withSession from '../../../../lib/session';
 import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
@@ -13,6 +12,9 @@ import ClientSummaryItem from '../../../../components/CarePackages/ClientSummary
 import { Button } from '../../../../components/Button'
 import DaySummary from '../../../../components/HomeCare/DaySummary'
 import TitleHeader from '../../../../components/TitleHeader'
+import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation'
+import { dayCarePackageCommercialsRequestClarification } from '../../../../api/CarePackages/DayCareApi'
+import fieldValidator from '../../../../service/inputValidator'
 
 const approvalHistoryEntries = [
   {
@@ -66,10 +68,32 @@ const HomeCareApproveBrokered = () => {
   // const id = router.query.id;
   const { data: homeCareServices } = useHomeCareApi.getAllServices();
   const { data: homeCareTimeShiftsData } = useHomeCareApi.getAllTimeShiftSlots();
+  const [errorFields, setErrorFields] = useState({
+    requestInformationText: '',
+  });
+  const [requestInformationText, setRequestInformationText] = useState(undefined);
   const [homeCareSummaryData] = useState([]);
 
   // eslint-disable-next-line no-unused-vars
   const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
+
+  const changeErrorFields = (field) => {
+    setErrorFields({
+      ...errorFields,
+      [field]: '',
+    });
+  };
+
+  const handleRequestMoreInformation = () => {
+    const { validFields, hasErrors } = fieldValidator([{
+      name: 'requestInformationText', value: requestInformationText, rules: ['empty'],
+    }]);
+
+    setErrorFields(validFields);
+
+    if(hasErrors) return;
+    console.log('request more information info');
+  };
 
   return (
     <Layout
@@ -114,15 +138,16 @@ const HomeCareApproveBrokered = () => {
 
             <div className='button-group mb-5'>
               <Button className='gray'>Deny</Button>
-              <Button className='gray'>Request more information</Button>
               <Button >Approve to be brokered</Button>
             </div>
 
-            <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">Request more information</p>
-              <TextArea label="" rows={5} placeholder="Add details..." />
-              <button className="button hackney-btn-green">Request more information</button>
-            </div>
+            <RequestMoreInformation
+              requestMoreInformationText={requestInformationText}
+              setRequestInformationText={setRequestInformationText}
+              errorFields={errorFields}
+              changeErrorFields={changeErrorFields}
+              handleRequestMoreInformation={handleRequestMoreInformation}
+            />
           </div>
         </div>
       </div>

@@ -28,10 +28,4 @@ const mapBrokerageSupplierOptions = (supplierOptions = []) =>
     value: option?.id,
   }));
 
-const mapDayCareStageOptions = (stageOptions = []) =>
-  stageOptions.map((option) => ({
-    text: option?.packageAction,
-    value: option?.packageStatusId,
-  }));
-
-export { mapDayCarePackageDetailsForBrokerage, mapBrokerageSupplierOptions, mapDayCareStageOptions };
+export { mapDayCarePackageDetailsForBrokerage, mapBrokerageSupplierOptions };

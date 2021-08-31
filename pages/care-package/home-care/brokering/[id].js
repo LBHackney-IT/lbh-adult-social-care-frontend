@@ -7,9 +7,11 @@ import PackagesHomeCare from '../../../../components/packages/home-care';
 import { getBrokerageSuccess, selectBrokerage } from '../../../../reducers/brokerageReducer';
 import { getUserSession, uniqueID } from '../../../../service/helpers';
 import withSession from '../../../../lib/session';
-import { mapHomeCarePackageDetailsForBrokerage } from '../../../../api/Mappers/CarePackageMapper';
+import {
+  mapCareAdditionalNeedsEntries,
+  mapCareApprovalHistoryItems
+} from '../../../../api/Mappers/CarePackageMapper'
 import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
-import { mapDetailsForBrokerage } from '../../../../api/Mappers/NursingCareMapper'
 import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils'
 
 // start before render
@@ -36,7 +38,6 @@ const HomeCareBrokerPackage = () => {
     id: '1',
   });
 
-  const { data: approvalHistoryEntries } = useHomeCareApi.approvePackage(homeCarePackageId);
   const { data: homeCarePackage } = useHomeCareApi.detailsForBrokerage(homeCarePackageId);
 
   const innerCarePackage = homeCarePackage?.homeCarePackage;
@@ -44,7 +45,7 @@ const HomeCareBrokerPackage = () => {
   useEffect(() => {
     const additionalNeeds = homeCarePackage?.homeCareAdditionalNeeds;
     if(additionalNeeds) {
-      const formattedAdditionalNeeds = mapDetailsForBrokerage(additionalNeeds);
+      const formattedAdditionalNeeds = mapCareAdditionalNeedsEntries(additionalNeeds);
       setAdditionalNeedsEntries(formattedAdditionalNeeds);
     }
   }, [homeCarePackage])
@@ -108,7 +109,7 @@ const HomeCareBrokerPackage = () => {
           addPackageReclaim={addPackageReclaim}
           removePackageReclaim={removePackageReclaim}
           summaryData={summaryData}
-          approvalHistory={mapHomeCarePackageDetailsForBrokerage(approvalHistoryEntries)}
+          approvalHistory={mapCareApprovalHistoryItems(homeCarePackage?.packageApprovalHistory)}
           homeCarePackage={homeCarePackage}
           packagesReclaimed={packagesReclaimed}
           changePackageReclaim={changePackageReclaim}

@@ -29,6 +29,7 @@ const PayRunsHeader = ({
 
   const applyFilters = () => {
     apply?.(filters);
+    console.log('apply filters', filters)
   };
 
   const searchId = () => {
