@@ -1,11 +1,13 @@
 import React from 'react';
-import { currency } from '../../constants/strings';
-import { getNumberWithCommas } from '../../service/helpers';
+import PayRunInvoiceItems from './PayRunInvoiceItems'
 
 const PayRunCollapsedContent = ({ invoice = {} }) => {
   const { invoiceItems } = invoice;
-  let totalToPay = 0;
   if (!invoiceItems) return React.Fragment;
+
+  const invoiceClaimedByHackney = invoiceItems.filter(item => item.claimedBy === 'Hackney');
+  const invoiceClaimedByOther = invoiceItems.filter(item => item.claimedBy !== 'Hackney');
+
   return (
     <>
       <div className="table__row-collapsed-container">
@@ -16,41 +18,21 @@ const PayRunCollapsedContent = ({ invoice = {} }) => {
           </div>
         </div>
         <div className="table__row-collapsed-main">
-          <div className="table__row-collapsed-main-header">
-            <p>Item</p>
-            <p>Cost</p>
-            <p>Qty</p>
-            <p>Total</p>
-            <p>Id</p>
-          </div>
-          {invoiceItems.map((care) => {
-            const isClaimedByHackney = care?.claimedBy === 'Hackney';
-            totalToPay += care.totalPrice;
-            return (
-              <div key={care.invoiceItemId} className="table__row-collapsed-main-item">
-                <p>{care.itemName}</p>
-                <p>
-                  {currency.euro}
-                  {getNumberWithCommas(care.pricePerUnit)}
-                </p>
-                <p>{care.quantity}</p>
-                <p>
-                  {currency.euro}
-                  {getNumberWithCommas(care.totalPrice)}
-                </p>
-                <p>INV {care.invoiceItemId}</p>
+          <PayRunInvoiceItems
+            invoiceItems={invoiceClaimedByOther}
+            totalToText='Total to pay'
+          />
+          {!!invoiceClaimedByHackney.length &&
+            <>
+              <div className="table__row-collapsed-header">
+                <p>Hackney’s Reclaims against this package</p>
               </div>
-            );
-          })}
-          <div className="table__row-collapsed-main-footer">
-            <p>Total to pay</p>
-            <p />
-            <p />
-            <p>
-              {currency.euro}
-              {getNumberWithCommas(totalToPay)}
-            </p>
-          </div>
+              <PayRunInvoiceItems
+                invoiceItems={invoiceClaimedByHackney}
+                totalToText='Total to reclaim'
+              />
+            </>
+          }
         </div>
       </div>
     </>

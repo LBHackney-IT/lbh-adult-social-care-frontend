@@ -86,8 +86,8 @@ const DaySummary = ({ daySummaryItem, edit = (item) => console.log(item), remove
               <div className="column">
                 <span>Need Addressing</span>
                 <p>
-                  {formattedNeedAddressing}{' '}
-                  {formattedNeedAddressing.length !== careSummary.needAddressing.length && (addressTextCollapsed ? (
+                  {`${formattedNeedAddressing} `}
+                  {formattedNeedAddressing.length !== careSummary?.needAddressing?.length && (addressTextCollapsed ? (
                     <span
                       className="day-summary__action-button"
                       onClick={() => showMore(openedAddressText, setOpenedAddressText, careSummary.id)}
@@ -153,7 +153,7 @@ const DaySummary = ({ daySummaryItem, edit = (item) => console.log(item), remove
                 <span>What should be done</span>
                 <p>
                   {whatShouldBeDone}{' '}
-                  {whatShouldBeDone.length !== careSummary.whatShouldBeDone.length && (beDoneTextCollapsed ? (
+                  {whatShouldBeDone.length !== careSummary?.whatShouldBeDone?.length && (beDoneTextCollapsed ? (
                     <span
                       className="day-summary__action-button"
                       onClick={() => showMore(openedBeDoneText, setOpenedBeDoneText, careSummary.id)}
