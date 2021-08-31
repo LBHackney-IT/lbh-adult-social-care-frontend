@@ -1,13 +1,20 @@
-.notification {
-  position: fixed !important;
-  background: none !important;
-  z-index: 4;
+.notifications {
+  position: fixed;
   bottom: 20px;
-  text-align: center;
+  z-index: 100001;
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.notification {
+  background: none !important;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0 !important;
 
   .notification-close {
     font-size: 32px;
@@ -29,7 +36,6 @@
   }
 
   div {
-    max-width: 90%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -48,6 +54,13 @@
   &.success {
     div {
       background-color: #219d21;
+      color: white;
+    }
+  }
+
+  &.warning {
+    div {
+      background-color: $lbh-dark-orange;
       color: white;
     }
   }

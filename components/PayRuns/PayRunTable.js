@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { pick, omit, groupBy, last } from 'lodash';
 import { useInvoiceStatusList } from '../../api/SWR';
 import Dropdown from '../Dropdown';
-import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
+import { formatDateWithSign, formatStatus, getNumberWithCommas, includeString } from '../../service/helpers';
 import PayRunSortTable from './PayRunSortTable';
 import Checkbox from '../Checkbox';
 import { Button } from '../Button';
-import Loading from '../Loading'
+import Loading from '../Loading';
 
 const PayRunTable = ({
   onClickTableRow,
@@ -26,8 +25,6 @@ const PayRunTable = ({
   sorts,
 }) => {
   const { data: invoiceStatuses } = useInvoiceStatusList();
-
-  const groupedData = useGroupedData(rows);
 
   const [collapsedRows, setCollapsedRows] = useState([]);
 
@@ -53,17 +50,17 @@ const PayRunTable = ({
         additionalActions={additionalActions}
         setCheckedRows={setCheckedRows}
         changeAllChecked={changeAllChecked}
-        rows={groupedData}
+        rows={rows}
         checkedRows={checkedRows}
         sortBy={sortBy}
         sorts={sorts}
       />
 
-      {loading && <Loading className='table-loading' />}
-      {!groupedData.length ? (
+      {loading && <Loading className="table-loading" />}
+      {!rows.length ? (
         <p>No Table Data</p>
       ) : (
-        groupedData.map((item) => {
+        rows.map((item) => {
           const collapsedRow = collapsedRows.includes(item.key);
           const rowStatus = item.status ? ` ${item.status}` : '';
 
@@ -99,6 +96,8 @@ const PayRunTable = ({
                     ? `table__row-item-status ${status?.statusName?.toLowerCase() ?? ''}`
                     : '';
 
+                  const isCurrency = typeof item[rowItemKey] === 'number' && !isStatus;
+
                   if (isStatusDropDown && isStatus) {
                     return (
                       <Dropdown
@@ -119,7 +118,7 @@ const PayRunTable = ({
 
                   return (
                     <div key={`${rowItemKey}${item.id}`} className={`table__row-item ${statusItemClass}`}>
-                      <p>{isStatus ? formattedStatus : value}</p>
+                      {isCurrency ? <p>£{getNumberWithCommas(value)}</p> : <p>{isStatus ? formattedStatus : value}</p>}
                     </div>
                   );
                 })}
@@ -162,9 +161,9 @@ const PayRunTable = ({
                         {invoice.invoiceItems.map((invoiceItem) => (
                           <div key={invoiceItem.invoiceItemId} className="table__row-collapsed-main-item">
                             <p>{invoiceItem.itemName}</p>
-                            <p>£{invoiceItem.pricePerUnit}</p>
+                            <p>£{getNumberWithCommas(invoiceItem.pricePerUnit)}</p>
                             <p>{invoiceItem.quantity}</p>
-                            <p>£{invoiceItem.totalPrice}</p>
+                            <p>£{getNumberWithCommas(invoiceItem.totalPrice)}</p>
                           </div>
                         ))}
                       </div>
@@ -194,7 +193,7 @@ const PayRunTable = ({
           className="outline green table__row-release-all"
           onClick={(e) => {
             e.stopPropagation();
-            releaseAllSelected(groupedData);
+            releaseAllSelected(rows);
           }}
         >
           Release all selected
@@ -202,48 +201,6 @@ const PayRunTable = ({
       )}
     </div>
   );
-};
-
-const useGroupedData = (data) => {
-  // move all invoices to one level and generate key as combination of fields
-  let result = data.reduce((rowAcc, payRun) => {
-    const row = {
-      payRunDate: payRun.payRunDate,
-      payRunId: payRun.payRunId,
-    };
-
-    payRun.invoices.forEach((invoice) => {
-      const invoiceFields = ['serviceUserName', 'packageTypeName', 'supplierName', 'totalAmount', 'invoiceStatusId'];
-
-      const rowResult = {
-        ...row,
-        ...pick(invoice, invoiceFields),
-        waitingFor: last(invoice.disputedInvoiceChat).actionRequiredFromName,
-        invoiceInfo: pick(invoice, ['invoiceItems', 'invoiceId', 'invoiceNumber']),
-      };
-
-      const keyFields = ['payRunId', 'payRunDate', ...invoiceFields];
-      rowResult.key = keyFields.reduce((keyAcc, field) => {
-        keyAcc += rowResult[field];
-        return keyAcc;
-      }, '');
-
-      rowAcc.push(rowResult);
-    });
-
-    return rowAcc;
-  }, []);
-
-  // group all invoices by generated key
-  result = groupBy(result, 'key');
-
-  // format structure from grouped object to an array
-  result = Object.values(result).map((invoices) => ({
-    ...omit(invoices[0], 'invoiceInfo'),
-    invoices: invoices.map((invoice) => ({ ...invoice.invoiceInfo })),
-  }));
-
-  return result;
 };
 
 export default PayRunTable;

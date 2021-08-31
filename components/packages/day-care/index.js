@@ -1,19 +1,18 @@
+import React, { useEffect, useState } from 'react';
 import Dropdown from '../../Dropdown';
 import DatePick from '../../DatePick';
 import { currency } from '../../../constants/strings';
 import EuroInput from '../../EuroInput';
 import { Button } from '../../Button';
-import React, { useEffect, useState } from 'react';
 import BaseField from '../../baseComponents/BaseField';
 import Input from '../../Input';
 import PackageReclaim from '../../PackageReclaim';
-import ClientSummary from '../../ClientSummary';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import PackageCostBox from '../../DayCare/PackageCostBox';
 import PackageApprovalHistorySummary from '../../PackageApprovalHistorySummary';
 import DayCareSummary from '../../DayCare/DayCareSummary';
-import { CaretDownIcon } from '../../Icons';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
+import { formatCareDatePeriod } from '../../../service/helpers'
+import ClientSummaryItem from '../../CarePackages/ClientSummaryItem'
 
 const PackagesDayCare = ({
   tab,
@@ -57,17 +56,19 @@ const PackagesDayCare = ({
     costPerHour: 0,
   });
 
+  const packageDetails = dayCarePackage?.packageDetails;
+
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
   const [startDate, setStartDate] = useState(
-    (dayCarePackage && new Date(dayCarePackage?.packageDetails?.startDate)) || undefined
+    (packageDetails?.startDate && new Date(packageDetails?.startDate)) || undefined
   );
   const [endDate, setEndDate] = useState(
-    (dayCarePackage && new Date(dayCarePackage?.packageDetails?.endDate)) || undefined
+    (packageDetails?.endDate && new Date(packageDetails?.endDate)) || undefined
   );
-  const [endDateEnabled, setEndDateEnabled] = useState(!dayCarePackage?.packageDetails?.endDate);
+  const [endDateEnabled, setEndDateEnabled] = useState(!packageDetails?.endDate);
   const [corePackageSelectedDaysPerWeek, setCorePackageSelectedDaysPerWeek] = useState(
-    dayCarePackage?.packageDetails?.daysPerWeek ?? 0
+    packageDetails?.daysPerWeek ?? 0
   );
 
   // Cost calculations
@@ -83,12 +84,12 @@ const PackagesDayCare = ({
   };
 
   useEffect(() => {
-    setCorePackageSelectedDaysPerWeek(dayCarePackage?.packageDetails?.daysPerWeek ?? 0);
-    setEndDateEnabled(!dayCarePackage?.packageDetails?.endDate);
+    setCorePackageSelectedDaysPerWeek(packageDetails?.daysPerWeek ?? 0);
+    setEndDateEnabled(!packageDetails?.endDate);
 
-    setEndDate((dayCarePackage && new Date(dayCarePackage?.packageDetails?.endDate)) || undefined);
+    setEndDate((packageDetails?.endDate && new Date(packageDetails?.endDate)) || undefined);
 
-    setStartDate((dayCarePackage && new Date(dayCarePackage?.packageDetails?.startDate)) || undefined);
+    setStartDate((packageDetails?.startDate && new Date(packageDetails?.startDate)) || undefined);
   }, [dayCarePackage]);
 
   useEffect(() => {
@@ -119,8 +120,7 @@ const PackagesDayCare = ({
     );
   }, [coreCostTotal, transportCostTotal, transportEscortCostTotal, dayCareOpportunitiesCostTotal, escortCostTotal]);
 
-  const formIsValid = (brokerageInfoForCreation) => {
-    return !!(
+  const formIsValid = (brokerageInfoForCreation) => !!(
       brokerageInfoForCreation?.corePackageSupplierId &&
       brokerageInfoForCreation?.corePackageDaysPerWeek &&
       brokerageInfoForCreation?.corePackageCostPerDay &&
@@ -131,7 +131,6 @@ const PackagesDayCare = ({
       !isNaN(Number(brokerageInfoForCreation?.transportCostPerDay)) &&
       brokerageInfoForCreation?.creatorId
     );
-  };
 
   const handleSaveBrokerage = (event) => {
     event.preventDefault();
@@ -154,7 +153,7 @@ const PackagesDayCare = ({
       creatorId: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8',
     };
     if (formIsValid(brokerageInfoForCreation)) {
-      createBrokerageInfo(dayCarePackage?.packageDetails?.dayCarePackageId, brokerageInfoForCreation);
+      createBrokerageInfo(packageDetails?.dayCarePackageId, brokerageInfoForCreation);
     } else {
       alert('Invalid form. Check to ensure all values are set correctly');
     }
@@ -162,7 +161,7 @@ const PackagesDayCare = ({
 
   const handleBrokerageStageChange = (option) => {
     setSelectedStageType(option);
-    changePackageBrokeringStatus(dayCarePackage?.packageDetails?.dayCarePackageId, option);
+    changePackageBrokeringStatus(packageDetails?.dayCarePackageId, option);
   };
 
   return (
@@ -172,7 +171,7 @@ const PackagesDayCare = ({
           <div>
             <h1 className="container-title">Day Care</h1>
             <h3>
-              ID: <span>{dayCarePackage?.packageDetails?.dayCarePackageId || ''}</span>
+              ID: <span>{packageDetails?.dayCarePackageId || ''}</span>
             </h3>
           </div>
           <Dropdown
@@ -351,7 +350,7 @@ const PackagesDayCare = ({
             </p>
           </div>
           <div>
-            <div className="mt-4 is-flex is-align-items-center is-justify-content-space-between">
+            <div className="mt-4 is-flex is-align-items-center is-flex-wrap-wrap is-justify-content-space-between">
               <p className="package-reclaim__text">
                 Should the cost of this package be reclaimed in part or full from another body, e.g. NHS, CCG, another
                 LA ?
@@ -364,16 +363,14 @@ const PackagesDayCare = ({
           </div>
           {!!packagesReclaimed.length && (
             <div>
-              {packagesReclaimed.map((item) => {
-                return (
+              {packagesReclaimed.map((item) => (
                   <PackageReclaim
                     remove={() => removePackageReclaim(item.id)}
                     key={item.id}
                     packageReclaim={item}
                     setPackageReclaim={changePackageReclaim(item.id)}
                   />
-                );
-              })}
+                ))}
               <p onClick={addPackageReclaim} className="action-button-text">
                 + Add another reclaim
               </p>
@@ -398,80 +395,54 @@ const PackagesDayCare = ({
             totalCostPerWeek: totalPackageCost,
           }}
         />
-      ) : (
-        dayCareSummary && (
-          <DayCareSummary
-            opportunityEntries={dayCareSummary.opportunityEntries}
-            needToAddress={dayCareSummary.needToAddress}
-            transportNeeded={dayCareSummary.transportNeeded}
-            daysSelected={dayCareSummary.daysSelected}
-            deleteOpportunity={dayCareSummary.deleteOpportunity}
-          />
-        )
-      )}
+      ) : (dayCareSummary && (
+        <DayCareSummary
+          opportunityEntries={dayCareSummary.opportunityEntries}
+          needToAddress={dayCareSummary.needToAddress}
+          transportNeeded={dayCareSummary.transportNeeded}
+          daysSelected={dayCareSummary.daysSelected}
+          deleteOpportunity={dayCareSummary.deleteOpportunity}
+        />
+      ))}
     </>
   );
 };
 
 const ApprovalHistory = ({ history, dayCarePackage = undefined, costSummary }) => {
+  const packageDetails = dayCarePackage?.packageDetails;
+  const datePeriod = formatCareDatePeriod(packageDetails?.startDate, packageDetails?.endDate);
+  const periodText = packageDetails?.isFixedPeriodOrOngoing ? 'Fixed Period' : 'Ongoing'
   return (
     <div className="approval-history">
       <h2>
         Day Care{' '}
         <span>
-          ({dayCarePackage?.packageDetails.isFixedPeriodOrOngoing ? 'Fixed Period' : 'Ongoing'} -{' '}
-          {dayCarePackage?.packageDetails.termTimeConsiderationOption})
+          ({periodText}-{' '}
+          {packageDetails?.termTimeConsiderationOption})
         </span>
       </h2>
-      <ClientSummary
-        client={dayCarePackage?.clientDetails.clientName}
-        hackneyId={dayCarePackage?.clientDetails.hackneyId}
-        age={dayCarePackage?.clientDetails && getAgeFromDateString(dayCarePackage?.clientDetails.dateOfBirth)}
-        sourcingCare="hackney"
-        dateOfBirth={dayCarePackage?.clientDetails && getEnGBFormattedDate(dayCarePackage?.clientDetails.dateOfBirth)}
-        postcode={dayCarePackage?.clientDetails.postCode}
-      />
-      <div className="care-info">
-        <div>
-          <p>STARTS</p>
-          <p>{getEnGBFormattedDate(dayCarePackage?.packageDetails.startDate)}</p>
-        </div>
-        <div>
-          <p>ENDS</p>
-          <p>
-            {dayCarePackage?.packageDetails.endDate !== null
-              ? getEnGBFormattedDate(dayCarePackage?.packageDetails.endDate)
-              : 'Ongoing'}
-          </p>
-        </div>
-        <div>
-          <p>DAYS/WEEK</p>
-          <p>{dayCarePackage?.packageDetails.daysPerWeek}</p>
-        </div>
+      <div className="client-summary mb-5 mt-5">
+        <ClientSummaryItem itemDetail={datePeriod.startDate} itemName='STARTS' />
+        <ClientSummaryItem itemDetail={datePeriod.endDate} itemName='ENDS' />
+        <ClientSummaryItem itemDetail={packageDetails?.dayPerWeek} itemName='DAYS/WEEK' />
       </div>
-      <div className="columns font-size-12px">
-        <div className="column">
-          <div className="is-flex is-flex-wrap-wrap">
-            <PackageCostBox
-              title="COST OF CARE / WK"
-              cost={costSummary?.costOfCarePerWeek ?? 0.0}
-              costType="ESTIMATE"
-            />
-
-            <PackageCostBox title="ANP / WK" cost={costSummary?.anpPerWeek ?? 0.0} costType="ESTIMATE" />
-
-            <PackageCostBox
-              title="TRANSPORT / WK"
-              cost={costSummary?.transportCostPerWeek ?? 0.0}
-              costType="ESTIMATE"
-            />
-          </div>
-        </div>
+      <div className="package-cost-box__group mb-5">
+        <PackageCostBox
+          title="COST OF CARE / WK"
+          cost={costSummary?.costOfCarePerWeek ?? 0.0}
+          costType="ESTIMATE"
+        />
+        <PackageCostBox title="ANP / WK" cost={costSummary?.anpPerWeek ?? 0.0} costType="ESTIMATE" />
+        <PackageCostBox
+          title="TRANSPORT / WK"
+          cost={costSummary?.transportCostPerWeek ?? 0.0}
+          costType="ESTIMATE"
+        />
       </div>
 
       <PackageApprovalHistorySummary approvalHistoryEntries={history} />
     </div>
   );
-};
+}
 
 export default PackagesDayCare;

@@ -4,7 +4,7 @@
 @import 'logo';
 
 .social-worker-page {
-  .social-worker__header {
+  .inputs-container__title {
     margin-bottom: 60px;
   }
 
@@ -12,7 +12,9 @@
     padding-top: 0 !important;
   }
 
-  .sort-table {
-    margin-bottom: 27px;
+  .inputs-container {
+    .button[aria-controls="dropdown-menu"] {
+      width: 200px;
+    }
   }
 }

@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux'
 import Layout from '../../../../components/Layout/Layout';
-import DayCareApprovalTitle from '../../../../components/DayCare/DayCareApprovalTitle';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
 import DayCarePackageBreakdown from '../../../../components/DayCare/DayCarePackageBreakdown';
 import DayCarePackageElementCostings from '../../../../components/DayCare/DayCarePackageElementCostings';
@@ -14,61 +13,51 @@ import {
   approveDayCarePackageContents,
   dayCarePackageContentsRequestClarification,
   dayCarePackageRejectContents,
-  getDayCarePackageApprovalDetails,
 } from '../../../../api/CarePackages/DayCareApi';
 import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
-import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
 import withSession from '../../../../lib/session';
-import { getErrorResponse, getUserSession } from '../../../../service/helpers';
+import { formatCareDatePeriod, getErrorResponse, getUserSession } from '../../../../service/helpers'
 import fieldValidator from '../../../../service/inputValidator';
+import useDayCareApi from '../../../../api/SWR/useDayCareApi'
+import { formatApprovalHistory, formatDayCareOpportunities } from '../../../../service/formatItems';
+import { addNotification } from '../../../../reducers/notificationsReducer';
+import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem'
 
 // start before render
-export const getServerSideProps = withSession(async ({ req, res, query: { id: dayCarePackageId } }) => {
+export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
 
-  const data = {
-    errorData: [],
-  };
-  try {
-    const dayCarePackage = await getDayCarePackageApprovalDetails(dayCarePackageId);
-    data.dayCarePackage = dayCarePackage;
-
-    // Update approve-package state
-    const newApprovalHistoryItems = dayCarePackage.packageApprovalHistory.map((historyItem) => ({
-      eventDate: new Date(historyItem.dateCreated).toLocaleDateString('en-GB'),
-      eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
-      eventSubMessage: historyItem.logSubText,
-    }));
-
-    const newOpportunityEntries = dayCarePackage.packageDetails.dayCareOpportunities.map((opportunityItem) => ({
-      id: opportunityItem.dayCarePackageOpportunityId,
-      howLongValue: opportunityItem.howLong.optionName,
-      timesPerMonthValue: opportunityItem.howManyTimesPerMonth.optionName,
-      needToAddress: opportunityItem.opportunitiesNeedToAddress,
-    }));
-
-    data.approvalHistoryEntries([...newApprovalHistoryItems]);
-    data.opportunityEntries([...newOpportunityEntries]);
-
-    // Set days selected
-
-    data.daysSelected = getSelectedDate(dayCarePackage);
-  } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
-  }
-
-  return { props: { data } };
+  return { props: {} };
 });
 
-const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportunityEntries, daysSelected }) => {
+const DayCareApprovePackage = () => {
   // Parameters
   const router = useRouter();
   const dayCarePackageId = router.query.id;
-
-  const [errors, setErrors] = useState([]);
+  const dispatch = useDispatch();
+  const [daysSelected, setDaysSelected] = useState([]);
+  const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
+  const [opportunityEntries, setOpportunityEntries] = useState([]);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
+
+  const { data: dayCarePackage } = useDayCareApi.approvalDetails(dayCarePackageId);
+
+  const packageDetails = dayCarePackage?.packageDetails;
+  const costSummary = dayCarePackage?.costSummary;
+
+  useEffect(() => {
+    if(packageDetails) {
+      const newApprovalHistoryItems = formatApprovalHistory(dayCarePackage?.packageApprovalHistory);
+      setApprovalHistoryEntries(newApprovalHistoryItems);
+
+      const newOpportunityEntries = formatDayCareOpportunities(packageDetails?.dayCareOpportunities);
+      setOpportunityEntries(newOpportunityEntries);
+      setDaysSelected(getSelectedDate(dayCarePackage));
+    }
+
+  }, [dayCarePackage]);
 
   const [errorFields, setErrorFields] = useState({
     requestInformationText: '',
@@ -88,15 +77,16 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
     });
   };
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  }
+
   const handleRejectPackage = () => {
     dayCarePackageRejectContents(dayCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
-      .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
-      });
+      .catch((error) => pushNotification(error));
   };
   const handleRequestMoreInformation = () => {
     const { validFields, hasErrors } = fieldValidator([
@@ -112,9 +102,8 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        pushNotification(error);
         updateErrorFields(error);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
   const handleApprovePackageContents = () => {
@@ -123,104 +112,67 @@ const DayCareApprovePackage = ({ dayCarePackage, approvalHistoryEntries, opportu
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        pushNotification(error);
         updateErrorFields(error);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
+
+  const periodText = packageDetails?.isFixedPeriodOrOngoing ? 'Fixed Period' : 'Ongoing';
+
+  const datePeriod = formatCareDatePeriod(
+    packageDetails?.startDate,
+    packageDetails?.endDate,
+  );
+
   return (
-    <Layout headerTitle="DAY CARE APPROVAL">
+    <Layout
+      clientSummaryInfo={{
+        whoIsSourcing: 'hackney',
+        client: 'James Stephens',
+        hackneyId: '#786288',
+        title: `Nursing Care (${periodText} - ${packageDetails?.termTimeConsiderationOptionName})`,
+        age: '91',
+        dateOfBirth: '09/12/1972',
+        postcode: 'E9 6EY',
+      }}
+      headerTitle="DAY CARE APPROVAL"
+    >
       <div className="hackney-text-black font-size-12px">
-        <DayCareApprovalTitle
-          termTimeConsiderationOption={dayCarePackage?.packageDetails.termTimeConsiderationOptionName}
-          isFixedPeriodOrOngoing={dayCarePackage?.packageDetails.isFixedPeriodOrOngoing}
-        />
-        <ApprovalClientSummary />
-
-        <div className="columns">
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">STARTS</p>
-                    <p className="font-size-14px">{getEnGBFormattedDate(dayCarePackage?.packageDetails.startDate)}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">ENDS</p>
-                    <p className="font-size-14px">
-                      {dayCarePackage?.packageDetails.endDate !== null
-                        ? getEnGBFormattedDate(dayCarePackage?.packageDetails.endDate)
-                        : 'Ongoing'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">DAYS/WEEK</p>
-                    <p className="font-size-14px">3</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column" />
-          <div className="column" />
+        <div className='client-summary mb-5'>
+          <ClientSummaryItem itemDetail={datePeriod.startDate} itemName='STARTS' />
+          <ClientSummaryItem itemDetail={datePeriod.endDate} itemName='ENDS' />
+          <ClientSummaryItem itemDetail={3} itemName='DAYS/WEEK' />
         </div>
-
-        <div className="columns">
-          <div className="column">
-            <div className="is-flex is-flex-wrap-wrap">
-              <PackageCostBox
-                title="COST OF CARE / WK"
-                cost={dayCarePackage?.costSummary.costOfCarePerWeek}
-                costType="ESTIMATE"
-              />
-
-              <PackageCostBox title="ANP / WK" cost={dayCarePackage?.costSummary.anpPerWeek} costType="ESTIMATE" />
-
-              <PackageCostBox
-                title="TRANSPORT / WK"
-                cost={dayCarePackage?.costSummary.transportCostPerWeek}
-                costType="ESTIMATE"
-              />
-
-              <PackageCostBox
-                title="TOTAL / WK"
-                cost={dayCarePackage?.costSummary.totalCostPerWeek}
-                costType="ESTIMATE"
-              />
-            </div>
-          </div>
+        <div className="package-cost-box__group mb-5">
+          <PackageCostBox
+            title="COST OF CARE / WK"
+            cost={costSummary?.costOfCarePerWeek}
+            costType="ESTIMATE"
+          />
+          <PackageCostBox title="ANP / WK" cost={costSummary?.anpPerWeek} costType="ESTIMATE" />
+          <PackageCostBox
+            title="TRANSPORT / WK"
+            cost={costSummary?.transportCostPerWeek}
+            costType="ESTIMATE"
+          />
+          <PackageCostBox
+            title="TOTAL / WK"
+            cost={costSummary?.totalCostPerWeek}
+            costType="ESTIMATE"
+          />
         </div>
 
         <DayCarePackageBreakdown dayCareTime="12h" transportTime="4h/week" dayOpportunitiesTotalTime="3h" />
         <DayCarePackageElementCostings />
-
         <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
-
         <div className="columns">
           <div className="column">
             <div className="mt-4 mb-4">
               <TitleHeader>Package Details</TitleHeader>
               <DayCareSummary
                 opportunityEntries={opportunityEntries}
-                needToAddress={dayCarePackage?.packageDetails.needToAddress}
-                transportNeeded={dayCarePackage?.packageDetails.transportNeeded}
+                needToAddress={packageDetails?.needToAddress}
+                transportNeeded={packageDetails?.transportNeeded}
                 daysSelected={daysSelected}
                 deleteOpportunity={() => {}}
               />

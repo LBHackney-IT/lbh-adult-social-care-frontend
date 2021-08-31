@@ -1,5 +1,5 @@
 import axios from 'axios';
-import moment from 'moment';
+import { subMonths } from 'date-fns';
 import { BASE_URL } from '../BaseApi';
 
 import { axiosRequest, handleError, handleResponse } from '../Utils/ApiUtils';
@@ -8,7 +8,7 @@ import { requestMethods } from '../../constants/variables';
 const PAY_RUN_URL = `${BASE_URL}/v1/transactions/pay-runs`;
 const INVOICES_URL = `${BASE_URL}/v1/transactions/invoices`;
 
-const sixMonthsAgo = moment().subtract(6, 'months');
+const sixMonthsAgo = subMonths(new Date(), 6);
 
 export const PAY_RUN_TYPES = {
   RESIDENTIAL_RECURRING: 'ResidentialRecurring',
@@ -93,9 +93,9 @@ const kickPayRunBackToDraft = (payRunId) => {
   return axios.get(query).then(handleResponse).catch(handleError);
 };
 
-const sendMessage = ({ payRunId, packageId, message }) => {
-  const url = `${PAY_RUN_URL}/${payRunId}/create-held-chat`;
-  return axiosRequest({ url, method: requestMethods.post, data: { message, packageId, payRunId } });
+const sendMessage = ({ payRunId, actionRequiredFromId, message, invoiceId }) => {
+  const url = `${PAY_RUN_URL}/${payRunId}/invoices/${invoiceId}/create-held-chat`;
+  return axiosRequest({ url, method: requestMethods.post, data: { message, actionRequiredFromId } });
 };
 
 const approvePayRunForPayment = (payRunId) => {

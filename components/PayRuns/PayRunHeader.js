@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button } from '../Button';
 import Dropdown from '../Dropdown';
 import DatePick from '../DatePick'
-import AsyncUserSelector from '../AsyncSelect'
+import CustomAsyncSelector from '../CustomAsyncSelect'
 
 const initialFilters = {
   serviceUser: '',
@@ -16,11 +16,12 @@ const initialFilters = {
 };
 
 const PayRunHeader = ({
+  payRunDetails,
   changeFilters,
   typeOptions = [],
   statusOptions = [],
   actionButtonText = '',
-  filter,
+  filter = () => {},
   clickActionButton = () => {},
 }) => {
   const [filters, setFilters] = useState({ ...initialFilters });
@@ -50,22 +51,43 @@ const PayRunHeader = ({
   return (
     <div className="pay-runs__header p-3 pay-run__header">
       <div className="pay-runs__new-pay">
-        <p className="title">Pay Runs</p>
+        <span className="pay-runs__new-pay_container">
+          <p className="title">Pay Run {payRunDetails?.payRunId}</p>
+          <p className="subtitle">{payRunDetails?.payRunStatusName}</p>
+        </span>
         {actionButtonText && <Button onClick={clickActionButton}>{actionButtonText}</Button>}
       </div>
       <div>
-        <div className="pay-run__searches mb-3">
-          <AsyncUserSelector
+        <div className="pay-run__searches">
+          <CustomAsyncSelector
             onChange={(option) => changeFilter('serviceUser', option)}
             placeholder='Service User'
-            endpoint='clients'
+            getOptionLabel={option =>  `${option.firstName} ${option.lastName}`}
+            endpoint={{
+              endpointName: '/clients/get-all',
+              filterKey: 'clientName',
+            }}
             value={filters.serviceUser}
           />
-          <AsyncUserSelector
+          <CustomAsyncSelector
             value={filters.supplier}
+            getOptionLabel={option => option.supplierName}
             onChange={(option) => changeFilter('supplier', option)}
             placeholder='Supplier'
-            endpoint='suppliers'
+            endpoint={{
+              endpointName: '/suppliers/get-all',
+              filterKey: 'supplierName',
+            }}
+          />
+          <CustomAsyncSelector
+            value={filters.invoiceNo}
+            getOptionLabel={option => option.invoiceNo}
+            onChange={(option) => changeFilter('invoiceNo', option)}
+            placeholder='Invoice Number'
+            endpoint={{
+              endpointName: '/invoiceNo/get-all',
+              filterKey: 'invoiceNo',
+            }}
           />
         </div>
         <div className="pay-run__dropdowns">
@@ -98,11 +120,14 @@ const PayRunHeader = ({
             }}
             selectsRange
           />
-          <Button onClick={applyFilters}>Filter</Button>
-          {hasFields && <Button className='outline gray ml-3' onClick={() => {
-            setFilters({...initialFilters})
-            setHasFields(false);
-          }}>Clear</Button> }
+          <div className='inputs__button-container'>
+            <Button onClick={applyFilters}>Filter</Button>
+            {hasFields && <Button className='outline gray ml-3' onClick={() => {
+              setFilters({...initialFilters})
+              setHasFields(false);
+            }}>Clear</Button> }
+          </div>
+
         </div>
       </div>
     </div>

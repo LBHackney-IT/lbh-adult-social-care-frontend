@@ -1,10 +1,16 @@
 import useGetData from '../useGetData';
 
-export const useInvoiceStatusList = () =>
-  useGetData('/transactions/invoices/invoice-status-list', 'Can not get all invoice statuses');
+const INVOICES_URL = '/transactions/invoices';
 
-export const usePayRunSubTypes = () => useGetData('/transactions/pay-runs/pay-run-sub-types');
+const useInvoiceStatusList = () =>
+  useGetData(`${INVOICES_URL}/invoice-status-list`, 'Can not get all invoice statuses');
 
-export const usePayRunTypes = () => useGetData('/transactions/pay-runs/pay-run-types');
 
-export const useUniquePayRunStatuses = () => useGetData('/transactions/pay-runs/unique-pay-run-statuses');
+const useInvoicePaymentStatuses = () => useGetData(`${INVOICES_URL}/invoice-payment-statuses`);
+
+
+export {
+  useGetData,
+  useInvoiceStatusList,
+  useInvoicePaymentStatuses,
+}

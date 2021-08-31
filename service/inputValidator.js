@@ -4,6 +4,7 @@
 //  {name: 'secondName', value: 'SecondName', rules: ['empty']}
 //  {name: 'password', value: 'SoMePASS', rules: ['empty', 'password']}
 // ]
+
 const fieldValidator = (inputs = [], additionalRules = []) => {
   const validFields = {};
   let hasErrors = false;
@@ -11,6 +12,12 @@ const fieldValidator = (inputs = [], additionalRules = []) => {
     validFields[item.name] = '';
     if (item.rules.includes('empty')) {
       if (item.value === undefined || item.value === '') {
+        validFields[item.name] = 'Required field';
+        hasErrors = true;
+      }
+    }
+    if (item.rules.includes('null')) {
+      if (item.value === null) {
         validFields[item.name] = 'Required field';
         hasErrors = true;
       }
@@ -32,6 +39,19 @@ const fieldValidator = (inputs = [], additionalRules = []) => {
     });
   });
   return { validFields, hasErrors };
+};
+
+const checkEmptyFields = (filters) => {
+  for(const field in filters) {
+    if(filters[field]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+export {
+  checkEmptyFields,
 };
 
 export default fieldValidator;

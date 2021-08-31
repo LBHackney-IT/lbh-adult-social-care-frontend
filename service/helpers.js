@@ -1,3 +1,6 @@
+import { getEnGBFormattedDate } from '../api/Utils/FuncUtils'
+import { maxStringLength } from '../constants/variables'
+
 const chr4 = () => Math.random().toString(16).slice(-4);
 
 const uniqueID = () => `${chr4() + chr4()}-${chr4()}-${chr4()}-${chr4()}-${chr4()}${chr4()}${chr4()}`;
@@ -9,6 +12,43 @@ const formatDateWithSign = (date, sign = '/') => {
   const year = newDate.getFullYear();
 
   return `${`00${day}`.slice(-2)}${sign}${`00${month}`.slice(-2)}${sign}${`00${year}`.slice(-2)}`;
+};
+
+const getFutureDate = (time) => {
+  const {
+    year: yearFuture = 0,
+    month: monthFuture = 0,
+    days: daysFuture = 0,
+    hours: hoursFuture = 0,
+    minutes: minutesFuture = 0,
+    seconds: secondsFuture = 0,
+    milliseconds: millisecondsFuture = 0,
+  } = time;
+
+  const newDate = new Date();
+  const year = newDate.getFullYear() + yearFuture;
+  const month = newDate.getMonth() + monthFuture;
+  const days = newDate.getDate() + daysFuture;
+  const hours = newDate.getHours() + hoursFuture;
+  const minutes = newDate.getMinutes() + minutesFuture;
+  const seconds = newDate.getSeconds() + secondsFuture;
+  const milliseconds = newDate.getMilliseconds() + millisecondsFuture;
+
+  return new Date(year, month, days, hours, minutes, seconds, milliseconds);
+}
+
+const formatStringLength = (string, collapsedText, isSlicedText) => {
+  if (string.length > maxStringLength && collapsedText && isSlicedText) {
+    return `${string.slice(0, maxStringLength)}`;
+  }
+  return string;
+};
+
+const formatCareDatePeriod = (startDate, endDate) => {
+  return {
+    startDate: getEnGBFormattedDate(startDate, ' '),
+    endDate: endDate ? getEnGBFormattedDate(endDate, ' ') : 'Ongoing'
+  };
 };
 
 const formatDate = (date, sign = '/') => {
@@ -69,16 +109,42 @@ const getLoggedInUser = ({ req }) => {
   return user;
 };
 
+function formatForDropDownOptions(fields, res) {
+  if(!res) return [];
+  const localFields = {
+    text: 'text',
+    value: 'id',
+    ...fields,
+  };
+  return res.map((item) => ({
+    text: item[localFields.text],
+    value: item[localFields.value],
+  }));
+}
+
+/**
+  behavior: auto or smooth
+  block: start, center, end, or nearest
+  inline: start, center, end, or nearest
+ */
+const scrollToElement = ({ element, behavior = 'smooth', block = 'center', inline = 'end' }) => {
+  element?.scrollIntoView({
+    behavior,
+    block,
+    inline,
+  });
+};
+
 const sortTableByKey = (input, sort) => {
   if (!Array.isArray(input)) {
     console.error('Sorted object is not an array');
-    return input;
+    return [];
   }
   if (!sort?.value && !sort?.name) {
     console.error('Wrong format of sorting object');
-    return input;
+    return [];
   }
-  const isIncrease = sort.value === 'increase';
+  const isIncrease = sort.value === 'ascending';
   return input.sort((a, b) => {
     const moveTo = { up: isIncrease ? 1 : -1, down: isIncrease ? -1 : 1 };
     if (a[sort.name] > b[sort.name]) return moveTo.up;
@@ -90,6 +156,9 @@ const sortTableByKey = (input, sort) => {
 const deleteSpaces = (str) => str.replace(/\s/g, '');
 
 const getErrorResponse = (error) => error?.response?.data || {}; // { firstName: 'First Name must be more then 10 symbols', secondName: 'Second Name must be more then 10 symbols'
+
+const getNumberWithCommas = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
 export {
   uniqueID,
   deleteSpaces,
@@ -101,4 +170,10 @@ export {
   formatDate,
   getLoggedInUser,
   sortTableByKey,
+  formatForDropDownOptions,
+  scrollToElement,
+  getNumberWithCommas,
+  formatCareDatePeriod,
+  formatStringLength,
+  getFutureDate,
 };

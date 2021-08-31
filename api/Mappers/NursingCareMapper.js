@@ -1,8 +1,7 @@
-const mapBrokerageSupplierOptions = (supplierOptions = []) =>
-  supplierOptions.map((option) => ({
-    text: option?.supplierName,
-    value: option?.id,
-  }));
+const mapBrokerageSupplierOptions = (supplierOptions = []) => supplierOptions.map((option) => ({
+  text: option?.supplierName,
+  value: option?.id,
+}));
 
 const mapNursingCareStageOptions = (stageOptions = []) =>
   stageOptions.map((option) => ({
@@ -10,4 +9,14 @@ const mapNursingCareStageOptions = (stageOptions = []) =>
     value: option?.id,
   }));
 
-export { mapBrokerageSupplierOptions, mapNursingCareStageOptions };
+const mapDetailsForBrokerage = (detailsForBrokerageOptions = []) =>
+  detailsForBrokerageOptions.map(
+    (additionalNeedsItem) => ({
+      id: additionalNeedsItem.id,
+      isWeeklyCost: additionalNeedsItem.isWeeklyCost,
+      isOneOffCost: additionalNeedsItem.isOneOffCost,
+      needToAddress: additionalNeedsItem.needToAddress,
+    })
+);
+
+export { mapBrokerageSupplierOptions, mapNursingCareStageOptions, mapDetailsForBrokerage };

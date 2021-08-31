@@ -40,8 +40,11 @@
 @import 'css/inputs';
 @import 'css/BrokerageHub/index';
 @import 'css/notifications';
-@import "css/loader";
+@import "css/loading";
 @import "css/search-selector";
+@import "css/AutocompleteSelect/option.scss";
+@import "css/HackneyDS/styles.scss";
+@import "../components/HackneyDS/styles.scss";
 
 * {
   font-family: 'OpenSans', sans-serif !important;
@@ -83,4 +86,9 @@ button {
   user-select: none;
   pointer-events: none;
   cursor: initial;
+}
+
+.max-desktop-width {
+  max-width: 1200px;
+  margin: 0 auto;
 }

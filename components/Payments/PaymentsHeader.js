@@ -4,10 +4,10 @@ import { HackneyFullLogo } from '../Icons';
 import { includeString } from '../../service/helpers';
 
 const paymentsRoutes = [
-  { route: 'pay-runs', name: 'Pay Runs' },
-  { route: 'care-charges', name: 'Care Charges' },
-  { route: 'reclaims', name: 'Reclaims' },
-  { route: 'reporting', name: 'Reporting' },
+  // { route: 'pay-runs', name: 'Pay Runs' },
+  // { route: 'care-charges', name: 'Care Charges' },
+  // { route: 'reclaims', name: 'Reclaims' },
+  // { route: 'reporting', name: 'Reporting' },
   { route: 'logout', name: 'Log Out' },
 ];
 

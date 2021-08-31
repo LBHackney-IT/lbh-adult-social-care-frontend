@@ -48,7 +48,7 @@ const SupplierReturn = () => {
   ]);
 
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'supplier',
   });
 
@@ -79,10 +79,6 @@ const SupplierReturn = () => {
     router.replace(`${pathname}?page=1`);
   }, []);
 
-  useEffect(() => {
-    console.log('change sort', sort);
-  }, [sort]);
-
   return (
     <div className="supplier-return supplier-returns-dashboard">
       {!!breadcrumbs.length && <Breadcrumbs classes="p-3" values={breadcrumbs} />}
@@ -96,7 +92,7 @@ const SupplierReturn = () => {
         sorts={sorts}
         onClickTableRow={onClickTableRow}
       />
-      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} pageSize={10} totalCount={30} />
       <SupplierReturnsLevelInsight
         suppliers="832"
         packages="832"

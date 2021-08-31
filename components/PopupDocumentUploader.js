@@ -19,7 +19,7 @@ const PopupDocumentUploader = ({
     <Popup
       closePopup={closePopup}
       mainContent={popupMainContent}
-      classes={`popup-document-uploader ${classes}`}
+      className={`popup-document-uploader ${classes}`}
       title={title}
       firstButton={firstButton}
       secondButton={secondButton}

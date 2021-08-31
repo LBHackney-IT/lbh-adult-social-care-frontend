@@ -1,12 +1,9 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import ClientSummary from '../../../components/ClientSummary';
 import Layout from '../../../components/Layout/Layout';
-import CareTitle from '../../../components/CarePackages/CareTitle';
 import TextArea from '../../../components/TextArea';
 import Dropdown from '../../../components/Dropdown';
-import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
 } from '../../../components/CarePackages/AdditionalNeedsEntries';
@@ -14,17 +11,17 @@ import {
   createResidentialCarePackage,
   createResidentialCarePackageReclaim,
   getResidentialCareAdditionalNeedsCostOptions,
-  getTypeOfResidentialCareHomeOptions,
 } from '../../../api/CarePackages/ResidentialCareApi';
 import TitleHeader from '../../../components/TitleHeader';
-import ResidentialCareSummary from '../../../components/ResidentialCare/ResidentialCareSummary';
 import { Button } from '../../../components/Button';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
-import { getUserSession } from '../../../service/helpers';
+import { formatCareDatePeriod, getUserSession } from '../../../service/helpers'
 import withSession from '../../../lib/session';
 import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import fieldValidator from '../../../service/inputValidator';
+import useResidentialCareApi from '../../../api/SWR/useResidentialCareApi'
+import CareSummary from '../../../components/ProposedPackages/CareSummary'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -62,7 +59,6 @@ const ResidentialCare = () => {
   endDate = endDate && notNullString(endDate) ? endDate : undefined;
 
   // State
-  const [careHomeTypes, setCareHomeTypes] = useState([]);
   const [additionalNeedsCostOptions, setAdditionalNeedsCostOptions] = useState([]);
   const [errors, setErrors] = useState([]);
 
@@ -72,22 +68,7 @@ const ResidentialCare = () => {
 
   // Package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
-
-  console.log(`additionalNeedsEntries`, additionalNeedsEntries)
-
-  const retrieveTypeOfResidentialCareHomeOptions = () => {
-    getTypeOfResidentialCareHomeOptions()
-      .then((res) => {
-        const options = res.map((option) => ({
-          text: option.typeOfCareHomeName,
-          value: option.typeOfCareHomeId,
-        }));
-        setCareHomeTypes(options);
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve residential care home type options failed. ${error.message}`]);
-      });
-  };
+  const { data: careHomeOptions } = useResidentialCareApi.homeTypeOptions();
 
   const retrieveResidentialCareAdditionalNeedsCostOptions = () => {
     const options = getResidentialCareAdditionalNeedsCostOptions();
@@ -95,13 +76,10 @@ const ResidentialCare = () => {
   };
 
   useEffect(() => {
-    if (careHomeTypes.length === 0 || careHomeTypes.length === 1) {
-      retrieveTypeOfResidentialCareHomeOptions();
-    }
     if (additionalNeedsCostOptions.length === 0 || additionalNeedsCostOptions.length === 1) {
       retrieveResidentialCareAdditionalNeedsCostOptions();
     }
-  }, [careHomeTypes, additionalNeedsCostOptions]);
+  }, [additionalNeedsCostOptions]);
 
   const [errorFields, setErrorFields] = useState({
     needToAddress: '',
@@ -196,9 +174,13 @@ const ResidentialCare = () => {
       packageReclaims,
     };
 
+    const pushNotification = (text, className = 'error') => {
+      dispatch(addNotification({ text, className }));
+    };
+
     createResidentialCarePackage(residentialCarePackageToCreate)
       .catch((error) => {
-        dispatch(addNotification({ text: `Create package failed. ${error.message ?? ''}` }));
+        pushNotification(error);
         setErrors([...errors, `Create package failed. ${error.message}`]);
         throw new Error();
       })
@@ -216,25 +198,28 @@ const ResidentialCare = () => {
         return Promise.all(requests);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Create reclaims failed. ${error.message ?? ''}` }));
+        pushNotification(error);
         setErrors([...errors, `Create reclaims failed. ${error.message}`]);
       })
       .then(() => {
-        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
+        pushNotification('Package saved', 'success');
         router.push(`${CARE_PACKAGE_ROUTE}`);
       });
   };
 
+  const periodDate = formatCareDatePeriod(startDate, endDate);
+
   return (
-    <Layout headerTitle="BUILD A CARE PACKAGE">
-      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
-        Care Package
-      </ClientSummary>
-      <div className="mt-5 mb-5">
-        <CareTitle startDate={startDate} endDate={endDate}>
-          Residential Care
-        </CareTitle>
-      </div>
+    <Layout
+      clientSummaryInfo={{
+        client: "James Stephens",
+        hackneyId: "786288",
+        age: "91",
+        dateOfBirth: "09/12/1972",
+        postcode: "E9 6EY",
+        title: `BUILD A CARE PACKAGE\nResidential Care ${periodDate.startDate} - ${periodDate.endDate}`,
+      }}
+    >
       <div className="mt-4 columns">
         <div className="column">
           <TextArea
@@ -249,7 +234,7 @@ const ResidentialCare = () => {
         <div className="column">
           <Dropdown
             label="Type of care home"
-            options={careHomeTypes}
+            options={careHomeOptions}
             selectedValue={selectedCareHomeType}
             onOptionSelect={(option) => setSelectedCareHomeType(option)}
             buttonStyle={{ width: '240px' }}
@@ -279,9 +264,10 @@ const ResidentialCare = () => {
 
       <div className="mt-4 mb-4">
         <TitleHeader className="mb-5">Package Details</TitleHeader>
-        <ResidentialCareSummary
+        <CareSummary
+          careType='Residential Care'
           startDate={startDate}
-          endDate={getEnGBFormattedDate(endDate)}
+          endDate={endDate}
           typeOfStayText={typeOfStayText}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}

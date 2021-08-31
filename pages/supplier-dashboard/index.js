@@ -33,7 +33,7 @@ const SupplierDashboard = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'id',
   });
 
@@ -55,7 +55,7 @@ const SupplierDashboard = () => {
   }, [sort]);
 
   return (
-    <div className="supplier-dashboard">
+    <div className="supplier-dashboard max-desktop-width">
       <SupplierDashboardInnerHeader />
       <SupplierDashboardTable
         isIgnoreId={true}
@@ -64,7 +64,7 @@ const SupplierDashboard = () => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination from={1} to={10} pageSize={10} totalCount={30} />
       <HackneyFooterInfo />
     </div>
   );

@@ -10,10 +10,8 @@ import {
   nursingCareRequestClarification,
 } from '../../../../api/CarePackages/NursingCareApi';
 import { getEnGBFormattedDate, stringIsNullOrEmpty } from '../../../../api/Utils/FuncUtils';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
 import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
 import Layout from '../../../../components/Layout/Layout';
-import NursingCareApprovalTitle from '../../../../components/NursingCare/NursingCareApprovalTitle';
 import NursingCareSummary from '../../../../components/NursingCare/NursingCareSummary';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
 import TextArea from '../../../../components/TextArea';
@@ -91,13 +89,17 @@ const NursingCareApprovePackage = ({
     typeOfStayOptionName = '',
   } = nursingCarePackage?.nursingCarePackage || {};
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
   const handleRejectPackage = () => {
     nursingCareChangeStatus(nursingCarePackageId, 10)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        pushNotification(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
@@ -105,11 +107,11 @@ const NursingCareApprovePackage = ({
   const handleApprovePackageContents = () => {
     nursingCareApprovePackageContent(nursingCarePackageId)
       .then(() => {
-        dispatch(addNotification({ text: `Package contents approved successfully`, className: 'success' }));
+        pushNotification(`Package contents approved successfully`,'success');
         router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
+        pushNotification(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
@@ -121,43 +123,38 @@ const NursingCareApprovePackage = ({
         router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        pushNotification(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
 
-  return (
-    <Layout headerTitle="NURSING CARE APPROVAL">
-      <div className="hackney-text-black font-size-12px">
-        <NursingCareApprovalTitle
-          startDate={nursingCarePackage?.nursingCarePackage.startDate}
-          endDate={
-            nursingCarePackage?.nursingCarePackage.endDate !== null
-              ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
-              : 'Ongoing'
-          }
-        />
-        <ApprovalClientSummary />
+  const datePeriod = {
+    startDate: getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate, 'No Date'),
+    endDate:
+      nursingCarePackage?.nursingCarePackage.endDate !== null
+      ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate, 'No Date')
+      : 'Ongoing'
+  };
 
-        <div className="columns">
-          <ClientSummaryItem
-            itemName="STARTS"
-            itemDetail={getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate)}
-          />
-          <ClientSummaryItem
-            itemName="ENDS"
-            itemDetail={
-              nursingCarePackage?.nursingCarePackage.endDate !== null
-                ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
-                : 'Ongoing'
-            }
-          />
+  return (
+    <Layout
+      clientSummaryInfo={{
+        whoIsSourcing: 'hackney',
+        client: 'James Stephens',
+        hackneyId: '#786288',
+        title: `Nursing Care (${datePeriod.startDate} - ${datePeriod.endDate})`,
+        age: '91',
+        dateOfBirth: '09/12/1972',
+        postcode: 'E9 6EY',
+      }}
+      headerTitle="NURSING CARE APPROVAL">
+      <div className="hackney-text-black font-size-12px">
+        <div className="client-summary mt-5 mb-5">
+          <ClientSummaryItem itemName="STARTS" itemDetail={datePeriod.startDate} />
+          <ClientSummaryItem itemName="ENDS" itemDetail={datePeriod.endDate} />
           <ClientSummaryItem itemName="DAYS/WEEK" itemDetail="3" />
           <ClientSummaryItem itemName="RESPITE CARE" itemDetail={hasRespiteCare === true ? 'yes' : 'no'} />
           <ClientSummaryItem itemName="DISCHARGE PACKAGE" itemDetail={hasDischargePackage === true ? 'yes' : 'no'} />
-        </div>
-
-        <div className="columns mt-4 flex flex-wrap">
           <ClientSummaryItem
             itemName="IMMEDIATE / RE-ENABLEMENT PACKAGE"
             itemDetail={isThisAnImmediateService === true ? 'Immediate' : 'Re-enablement'}
@@ -167,33 +164,23 @@ const NursingCareApprovePackage = ({
             itemName="TYPE OF STAY"
             itemDetail={!stringIsNullOrEmpty(typeOfStayOptionName) ? typeOfStayOptionName : ''}
           />
-          <div className="column" />
-          <div className="column" />
         </div>
 
-        <div className="columns">
-          <div className="column">
-            <PackageCostBox title="COST OF CARE / WK" cost={nursingCarePackage?.costOfCare} costType="ESTIMATE" />
-          </div>
-          <div className="column">
-            <PackageCostBox title="ANP / WK" cost={nursingCarePackage?.costOfAdditionalNeeds} costType="ESTIMATE" />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-yellow-box"
-              title="ONE OFF COSTS"
-              cost={nursingCarePackage?.costOfOneOff}
-              costType="ESTIMATE"
-            />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-yellow-box"
-              title="TOTAL / WK"
-              cost={nursingCarePackage?.totalPerWeek}
-              costType="ESTIMATE"
-            />
-          </div>
+        <div className='package-cost-box__group'>
+          <PackageCostBox className='mb-5' title="COST OF CARE / WK" cost={nursingCarePackage?.costOfCare} costType="ESTIMATE" />
+          <PackageCostBox className='mb-5' title="ANP / WK" cost={nursingCarePackage?.costOfAdditionalNeeds} costType="ESTIMATE" />
+          <PackageCostBox className='mb-5'
+            boxClass="hackney-package-cost-yellow-box"
+            title="ONE OFF COSTS"
+            cost={nursingCarePackage?.costOfOneOff}
+            costType="ESTIMATE"
+          />
+          <PackageCostBox className='mb-5'
+            boxClass="hackney-package-cost-yellow-box"
+            title="TOTAL / WK"
+            cost={nursingCarePackage?.totalPerWeek}
+            costType="ESTIMATE"
+          />
         </div>
 
         <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
@@ -204,11 +191,7 @@ const NursingCareApprovePackage = ({
               <TitleHeader>Package Details</TitleHeader>
               <NursingCareSummary
                 startDate={nursingCarePackage?.nursingCarePackage.startDate}
-                endDate={
-                  nursingCarePackage?.nursingCarePackage.endDate !== null
-                    ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
-                    : 'Ongoing'
-                }
+                endDate={datePeriod.endDate}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
                 needToAddress={nursingCarePackage?.nursingCarePackage.needToAddress}

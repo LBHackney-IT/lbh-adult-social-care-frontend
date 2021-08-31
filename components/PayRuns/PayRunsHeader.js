@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '../Button';
 import PayRunsFilters from './PayRunsFilters';
 import HeldPaymentsFilters from './HeldPaymentsFilters';
+import { checkEmptyFields } from '../../service/inputValidator'
 
 const initialFilters = {
   id: '',
   type: '',
   status: '',
-  dateStart: null,
-  dateEnd: null,
-  date: '',
+  dateFrom: null,
+  dateTo: null,
   serviceType: '',
   waitingOn: '',
   serviceUser: '',
@@ -20,7 +20,6 @@ const initialFilters = {
 const PayRunsHeader = ({
   typeOptions = [],
   statusOptions = [],
-  dateOptions = [],
   releaseHolds,
   setOpenedPopup,
   apply,
@@ -51,11 +50,11 @@ const PayRunsHeader = ({
   }
 
   useEffect(() => {
-    for(const name in filters) {
-      if(filters[name]) {
-        setHasFields(true);
-        break;
-      }
+    const empty = checkEmptyFields(filters);
+    if(empty) {
+      setHasFields(false);
+    } else {
+      setHasFields(true);
     }
   }, [filters]);
 
@@ -68,7 +67,6 @@ const PayRunsHeader = ({
       },
       filtersComponent: (
         <PayRunsFilters
-          dateOptions={dateOptions}
           statusOptions={statusOptions}
           applyFilters={applyFilters}
           hasFields={hasFields}

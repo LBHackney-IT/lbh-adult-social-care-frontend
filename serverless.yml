@@ -26,6 +26,7 @@ functions:
         - public/**
         - build/**
         - node_modules/**
+
     events:
       - http: ANY /
       - http: ANY /{proxy+}

@@ -1,6 +1,5 @@
 .pay-runs__held-payments-class {
   position: relative;
-  overflow: unset;
 
   .sort-table > div:last-of-type {
     &:after {
@@ -55,5 +54,18 @@
     bottom: 0;
     left: 20px;
     transform: translateY(72px);
+  }
+}
+
+
+.held-payments__filters-button--group {
+  margin-left: 10px;
+
+  @media (max-width: 1044px) {
+    margin-left: 0;
+  }
+
+  @media (max-width: 1034px) {
+    margin-left: 0;
   }
 }

@@ -26,20 +26,20 @@ const HomeCarePackageDetails = () => (
               <div className="column">
                 <div className="level">
                   <div className="level-left" />
-                  <div className="level-right">
-                    <div className="level-item has-text-centered-tablet">
+                  <div className="is-flex is-flex-wrap-wrap">
+                    <div className="is-flex is-flex-wrap-wrap mr-5 has-text-centered-tablet">
                       <div>
                         <p className="hackney-text-secondary">Primary Carer</p>
                         <p className="font-weight-bold font-size-14px">2h</p>
                       </div>
                     </div>
-                    <div className="level-item has-text-centered-tablet">
+                    <div className="is-flex is-flex-wrap-wrap mr-5 has-text-centered-tablet">
                       <div>
                         <p className="hackney-text-secondary">Secondary Carer</p>
                         <p className="font-weight-bold font-size-14px">30m</p>
                       </div>
                     </div>
-                    <div className="level-item has-text-centered-tablet">
+                    <div className="is-flex is-flex-wrap-wrap mr-5 has-text-centered-tablet">
                       <div className="hackney-text-green font-weight-bold">
                         <p>Total hrs</p>
                         <p className="font-size-14px">2.5</p>
@@ -93,20 +93,20 @@ const HomeCarePackageDetails = () => (
               <div className="column">
                 <div className="level">
                   <div className="level-left" />
-                  <div className="level-right">
-                    <div className="level-item has-text-centered-tablet">
+                  <div className="is-flex is-flex-wrap-wrap">
+                    <div className="is-flex is-flex-wrap-wrap mr-5 has-text-centered-tablet">
                       <div>
                         <p className="hackney-text-secondary">Primary Carer</p>
                         <p className="font-weight-bold font-size-14px">2h</p>
                       </div>
                     </div>
-                    <div className="level-item has-text-centered-tablet">
+                    <div className="is-flex is-flex-wrap-wrap mr-5 has-text-centered-tablet">
                       <div>
                         <p className="hackney-text-secondary">Secondary Carer</p>
                         <p className="font-weight-bold font-size-14px">30m</p>
                       </div>
                     </div>
-                    <div className="level-item has-text-centered-tablet">
+                    <div className="is-flex is-flex-wrap-wrap mr-5 has-text-centered-tablet">
                       <div className="hackney-text-green font-weight-bold">
                         <p>Total hrs</p>
                         <p className="font-size-14px">2.5</p>
@@ -160,20 +160,20 @@ const HomeCarePackageDetails = () => (
               <div className="column">
                 <div className="level">
                   <div className="level-left" />
-                  <div className="level-right">
-                    <div className="level-item has-text-centered-tablet">
+                  <div className="is-flex is-flex-wrap-wrap">
+                    <div className="is-flex is-flex-wrap-wrap mr-5 has-text-centered-tablet">
                       <div>
                         <p className="hackney-text-secondary">Primary Carer</p>
                         <p className="font-weight-bold font-size-14px">2h</p>
                       </div>
                     </div>
-                    <div className="level-item has-text-centered-tablet">
+                    <div className="is-flex is-flex-wrap-wrap mr-5 has-text-centered-tablet">
                       <div>
                         <p className="hackney-text-secondary">Secondary Carer</p>
                         <p className="font-weight-bold font-size-14px">30m</p>
                       </div>
                     </div>
-                    <div className="level-item has-text-centered-tablet">
+                    <div className="is-flex is-flex-wrap-wrap mr-5 has-text-centered-tablet">
                       <div className="hackney-text-green font-weight-bold">
                         <p>Total hrs</p>
                         <p className="font-size-14px">2.5</p>
@@ -234,20 +234,20 @@ const HomeCarePackageDetails = () => (
               <div className="column">
                 <div className="level">
                   <div className="level-left" />
-                  <div className="level-right">
-                    <div className="level-item has-text-centered-tablet">
+                  <div className="is-flex is-flex-wrap-wrap">
+                    <div className="is-flex is-flex-wrap-wrap mr-5 has-text-centered-tablet">
                       <div>
                         <p className="hackney-text-secondary">Primary Carer</p>
                         <p className="font-weight-bold font-size-14px">2h</p>
                       </div>
                     </div>
-                    <div className="level-item has-text-centered-tablet">
+                    <div className="is-flex is-flex-wrap-wrap mr-5 has-text-centered-tablet">
                       <div>
                         <p className="hackney-text-secondary">Secondary Carer</p>
                         <p className="font-weight-bold font-size-14px">30m</p>
                       </div>
                     </div>
-                    <div className="level-item has-text-centered-tablet">
+                    <div className="is-flex is-flex-wrap-wrap mr-5 has-text-centered-tablet">
                       <div className="hackney-text-green font-weight-bold">
                         <p>Total hrs</p>
                         <p className="font-size-14px">2.5</p>

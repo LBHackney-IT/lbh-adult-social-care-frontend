@@ -64,16 +64,18 @@ const axiosRequest = (options = {}) => {
 
   return a string '?payRunId=very-long-id-1234&orderBy=cost'
  */
-const getQueryParamsFromObject = (params = {}) => {
+const getQueryParamsFromObject = (params = {}, addEmptyString, signs = {}) => {
   let string = '';
   let count = 0;
   for (const i in params) {
-    if (params[i]) {
+    if (params[i] || (addEmptyString && params[i] === '')) {
       const paramString = `${i}=${params[i]}`;
       if (count === 0) {
-        string = `?${string}${paramString}`;
+        const sign = signs?.firstSign || '?';
+        string = `${sign}${string}${paramString}`;
       } else {
-        string = `${string}&${paramString}`;
+        const sign = signs?.generalSign || '&';
+        string = `${string}${sign}${paramString}`;
       }
       count += 1;
     }
