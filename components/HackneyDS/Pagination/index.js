@@ -16,7 +16,9 @@ export const Pagination = ({ totalCount, currentPage, pageSize, onPageChange, si
 
   return (
     <nav className="lbh-pagination">
-      <div className="lbh-pagination__summary">{`Showing ${firstResultOnPage}—${lastResultOnPage} of ${totalCount} results`}</div>
+      <div className="lbh-pagination__summary">{`Showing ${firstResultOnPage}—${
+        lastResultOnPage > totalCount ? totalCount : lastResultOnPage
+      } of ${totalCount} results`}</div>
       <ul className="lbh-pagination__list">
         <li
           role="button"
