@@ -13,12 +13,19 @@ import { Tabs } from './Tabs';
 import { Tab } from './Tabs/Tab';
 import Tag from './Tag';
 import Select from './Select';
-import Hint from './Hint';
-import Label from './Label';
-import ErrorMessage from './ErrorMessage';
+import Hint from './lettering/Hint';
+import Label from './lettering/Label';
+import ErrorMessage from './lettering/ErrorMessage';
+import Link from './lettering/Link';
+import Timeline from './Timeline';
+import Conversation from './Conversation';
+import { Table } from './Table';
 import { Pagination } from './Pagination';
 
 export {
+  Conversation,
+  Link,
+  Timeline,
   ErrorMessage,
   Label,
   Hint,
@@ -38,4 +45,5 @@ export {
   Tag,
   Select,
   Pagination,
+  Table,
 };

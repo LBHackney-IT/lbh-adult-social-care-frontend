@@ -4,6 +4,13 @@ import { Tag } from '../index';
 export default {
   title: 'Hackney Design System/Tag',
   component: Tag,
+  argTypes: {
+    yellow: { type: 'boolean' },
+    red: { type: 'boolean' },
+    green: { type: 'boolean' },
+    gray: { type: 'boolean' },
+    className: { type: 'string' },
+  },
 };
 
 const Template = (args) => <Tag {...args} />;
@@ -13,7 +20,6 @@ export const Default = Template.bind({});
 Default.args = {
   children: 'New',
   className: '',
-  color: '',
 };
 
 export const Green = Template.bind({});
@@ -21,7 +27,7 @@ export const Green = Template.bind({});
 Green.args = {
   children: 'Approved',
   className: '',
-  color: 'green',
+  green: true,
 };
 
 export const Yellow = Template.bind({});
@@ -29,7 +35,7 @@ export const Yellow = Template.bind({});
 Yellow.args = {
   children: 'In review',
   className: '',
-  color: 'yellow',
+  yellow: true,
 };
 
 export const Red = Template.bind({});
@@ -37,7 +43,7 @@ export const Red = Template.bind({});
 Red.args = {
   children: 'Overdue',
   className: '',
-  color: 'red',
+  red: true,
 };
 
 export const Grey = Template.bind({});
@@ -45,5 +51,5 @@ export const Grey = Template.bind({});
 Grey.args = {
   children: 'Archived',
   className: '',
-  color: 'grey',
+  grey: true,
 };
