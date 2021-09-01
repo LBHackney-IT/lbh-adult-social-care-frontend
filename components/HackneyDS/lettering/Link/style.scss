@@ -1,0 +1,109 @@
+.lbh-link {
+  font-family: Open Sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  &:focus {
+    outline: transparent solid 3px;
+    background-color: #ffc845;
+    box-shadow: 0 -2px #ffc845, 0 4px #0b0c0c;
+    text-decoration: none;
+    color: #0b0c0c;
+  }
+
+  &:link {
+    color: #025ea6;
+  }
+
+  &--muted {
+
+    &:focus {
+      color: #0b0c0c;
+    }
+
+    &:active,
+    &:hover,
+    &:link,
+    &:visited {
+      color: #505a5f;
+    }
+  }
+
+  &:visited {
+    color: #8031a7;
+  }
+
+  &:hover {
+    color: #0085ca;
+  }
+
+  &:active {
+    color: #2b8cc4;
+  }
+
+  &--danger:link,
+  &--danger:visited {
+    color: #be3a34;
+  }
+
+  &--danger:focus,
+  &--text-colour:active,
+  &--text-colour:focus,
+  &--text-colour:hover,
+  &--text-colour:link,
+  &--text-colour:visited {
+    color: #0b0c0c;
+  }
+
+  &--no-visited-state:link,
+  &--no-visited-state:visited {
+    color: #025ea6;
+  }
+
+  &--no-visited-state:hover {
+    color: #003078;
+  }
+
+  &--no-visited-state:active,
+  &--no-visited-state:focus {
+    color: #0b0c0c;
+  }
+
+  @media print {
+    &[href^="/"]:after,
+    &[href^="http://"]:after,
+    &[href^="https://"]:after {
+      content: ' (' attr(href) ')';
+      font-size: 90%;
+      word-wrap: break-word;
+    }
+
+    &--text-colour:active,
+    &--text-colour:focus,
+    &--text-colour:hover,
+    &--text-colour:link,
+    &--text-colour:visited {
+      color: #000;
+    }
+  }
+}
+
+button.lbh-link {
+  text-decoration: underline;
+  line-height: 1.625rem;
+  color: #025ea6;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: Open Sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 1rem;
+  font-weight: 400;
+
+  @media (min-width: 40.0625em) {
+    line-height: 1.875rem;
+    font-size: 1.1875rem;
+  }
+}
