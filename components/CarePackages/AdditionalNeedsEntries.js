@@ -174,15 +174,29 @@ const AdditionalNeeds = ({ costOptions, entries, error, setError, setAdditionalN
   );
 };
 
-const getInitialAdditionalNeedsArray = () => [
+const responseInit = () => [
   {
-    id: 1,
-    selectedCost: undefined,
-    selectedCostText: undefined,
-    selectedPeriod: undefined,
-    needToAddress: undefined,
+    additionalNeedsPaymentTypeId: 2,
+    optionName: 'example1',
+  },
+  {
+    additionalNeedsPaymentTypeId: 3,
+    optionName: 'example2',
+  },
+  {
+    additionalNeedsPaymentTypeId: 2,
+    optionName: 'example3',
   },
 ];
 
+const getInitialAdditionalNeedsArray = () =>
+  responseInit().map((need, idx) => ({
+    id: idx + 1,
+    selectedCost: need.additionalNeedsPaymentTypeId || undefined,
+    selectedCostText: need.optionName || undefined,
+    selectedPeriod: undefined,
+    needToAddress: undefined,
+  }));
+
 export default AdditionalNeeds;
-export { getInitialAdditionalNeedsArray };
+export { getInitialAdditionalNeedsArray, responseInit };
