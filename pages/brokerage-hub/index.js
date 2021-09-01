@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import HackneyFooterInfo from '../../components/HackneyFooterInfo';
@@ -20,7 +20,7 @@ import { DEFAULT_PAGE_SIZE } from '../../constants/variables';
 import { checkEmptyFields } from '../../service/inputValidator';
 import { sortArray } from '../../api/Utils/FuncUtils';
 import { DATA_TYPES } from '../../api/Utils/CommonOptions';
-import useBrokeredPackageApi from '../../api/SWR/useBrokeredPackagesApi'
+import useBrokeredPackageApi from '../../api/SWR/useBrokeredPackagesApi';
 
 const BrokerageHubPage = () => {
   const dispatch = useDispatch();

@@ -18,8 +18,6 @@ import { selectBrokerage } from '../../../../reducers/brokerageReducer';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
 import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
-import useSuppliersApi from '../../../../api/SWR/useSuppliersApi';
-import useBaseApi from '../../../../api/SWR/useBaseApi';
 import { mapCarePackageApprovalHistory } from '../../../../api/Mappers/optionsMapper';
 import { mapCareAdditionalNeedsEntries } from '../../../../api/Mappers/CarePackageMapper'
 
@@ -80,8 +78,6 @@ const ResidentialCareBrokering = ({
   const [tab, setTab] = useState('approvalHistory');
   const [summaryData, setSummaryData] = useState([]);
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
-  const { data: stageOptions } = useBaseApi.stages();
-  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
@@ -173,8 +169,6 @@ const ResidentialCareBrokering = ({
         summaryData={summaryData}
         approvalHistory={approvalHistoryEntries}
         residentialCarePackage={residentialCarePackage}
-        supplierOptions={supplierOptions}
-        stageOptions={stageOptions}
         residentialCareSummary={{
           additionalNeedsEntries,
           needToAddress: residentialCarePackage?.residentialCarePackage?.needToAddress,

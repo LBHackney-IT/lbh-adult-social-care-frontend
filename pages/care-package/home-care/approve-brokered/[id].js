@@ -13,7 +13,6 @@ import { Button } from '../../../../components/Button'
 import DaySummary from '../../../../components/HomeCare/DaySummary'
 import TitleHeader from '../../../../components/TitleHeader'
 import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation'
-import { dayCarePackageCommercialsRequestClarification } from '../../../../api/CarePackages/DayCareApi'
 import fieldValidator from '../../../../service/inputValidator'
 
 const approvalHistoryEntries = [

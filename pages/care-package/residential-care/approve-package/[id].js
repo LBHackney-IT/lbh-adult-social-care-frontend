@@ -12,7 +12,6 @@ import {
 import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils'
 import Layout from '../../../../components/Layout/Layout';
 import ResidentialCareSummary from '../../../../components/ResidentialCare/ResidentialCareSummary';
-import TextArea from '../../../../components/TextArea';
 import TitleHeader from '../../../../components/TitleHeader';
 import withSession from '../../../../lib/session';
 import { getErrorResponse, getUserSession } from '../../../../service/helpers'

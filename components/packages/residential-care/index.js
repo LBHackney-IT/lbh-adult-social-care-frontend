@@ -10,6 +10,11 @@ import ResidentialCareSummary from '../../ResidentialCare/ResidentialCareSummary
 import ProposedPackagesTab from '../ProposedPackagesTabs';
 import AutocompleteSelect from '../../AutocompleteSelect';
 import ApprovalHistory from '../../ProposedPackages/ApprovalHistory';
+import PopupAddSupplier from '../../PopupAddSupplier';
+import { addNotification } from '../../../reducers/notificationsReducer';
+import useBaseApi from '../../../api/SWR/useBaseApi';
+import useSuppliersApi from '../../../api/SWR/useSuppliersApi';
+import { useDispatch } from 'react-redux'
 
 const PackagesResidentialCare = ({
   tab,
@@ -21,11 +26,13 @@ const PackagesResidentialCare = ({
   approvalHistory,
   residentialCarePackage: residentialCarePackageData,
   residentialCareSummary,
-  supplierOptions = [],
-  stageOptions = [],
   createBrokerageInfo = () => {},
   changePackageBrokeringStage = () => {},
 }) => {
+  const dispatch = useDispatch();
+  const { data: stageOptions } = useBaseApi.stages();
+  const { mutate: getSuppliers, data: { data: supplierOptions }} = useSuppliersApi.supplierList();
+
   const residentialCarePackage = residentialCarePackageData?.residentialCarePackage;
   const [coreCost, setCoreCost] = useState({
     costPerWeek: residentialCarePackageData?.residentialCore || '',
@@ -52,6 +59,7 @@ const PackagesResidentialCare = ({
   const [endDateEnabled, setEndDateEnabled] = useState(!residentialCarePackageData?.residentialCarePackage?.endDate);
 
   const [coreCostTotal, setCoreCostTotal] = useState(0);
+  const [popupAddSupplier, setPopupAddSupplier] = useState(false);
   const [additionalCostTotal, setAdditionalNeedsCostTotal] = useState(0);
   const [weeklyCostTotal, setWeeklyTotalCost] = useState(0);
   const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
@@ -59,6 +67,10 @@ const PackagesResidentialCare = ({
 
   const changeElementsData = (setter, getter, field, data) => {
     setter({ ...getter, [field]: data });
+  };
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
   };
 
   useEffect(() => {
@@ -116,7 +128,7 @@ const PackagesResidentialCare = ({
     if (formIsValid(brokerageInfoForCreation)) {
       createBrokerageInfo(residentialCarePackageData?.residentialCarePackageId, brokerageInfoForCreation);
     } else {
-      alert('Invalid form. Check to ensure all values are set correctly');
+      pushNotification('Invalid form. Check to ensure all values are set correctly');
     }
   };
 
@@ -127,6 +139,7 @@ const PackagesResidentialCare = ({
 
   return (
     <>
+      {popupAddSupplier && <PopupAddSupplier getSuppliers={getSuppliers} closePopup={() => setPopupAddSupplier(false)} />}
       <div className="mt-5 mb-5 person-care">
         <div className="column proposed-packages__header is-flex is-justify-content-space-between">
           <div>
@@ -146,6 +159,7 @@ const PackagesResidentialCare = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <div className="mr-3 is-flex is-align-items-flex-end">
+              <Button className='mr-3' onClick={() => setPopupAddSupplier(true)}>New Supplier</Button>
               <AutocompleteSelect
                 placeholder="Supplier (please select)"
                 options={supplierOptions}

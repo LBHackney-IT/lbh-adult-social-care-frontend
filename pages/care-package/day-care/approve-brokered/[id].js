@@ -6,7 +6,6 @@ import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
 import TitleHeader from '../../../../components/TitleHeader';
 import DayCareSummary from '../../../../components/DayCare/DayCareSummary';
-import TextArea from '../../../../components/TextArea';
 import {
   dayCarePackageApproveCommercials,
   dayCarePackageCommercialsRequestClarification,

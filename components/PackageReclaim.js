@@ -92,10 +92,10 @@ const PackageReclaim = ({
         <div className="mt-4 mb-5">
           <RadioButton
             label=""
-            error={currentError?.homeCarePackageId}
-            onChange={(value) => changePackageType('homeCarePackageId', value)}
+            error={currentError?.type}
+            onChange={(value) => changePackageType('type', value)}
             options={reclaimAmountOptions}
-            selectedValue={packageReclaim.homeCarePackageId}
+            selectedValue={packageReclaim.type}
           />
         </div>
         {packageReclaim.type && (

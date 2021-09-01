@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import BaseField from './baseComponents/BaseField';
 import ErrorField from './ErrorField';
 import { isFunction } from '../api/Utils/FuncUtils';
@@ -19,16 +19,12 @@ const RadioButton = ({
   tooltipText = '',
   onChange = () => {},
 }) => {
-  const [radioValue, setRadioValue] = useState(selectedValue);
   const hasSelectedValue =
-    radioValue !== undefined && options.find((option) => option.value === selectedValue) !== undefined;
-
-  // let hasSelectedValue = radioValue !== undefined;
+    selectedValue !== undefined && options.find((option) => option.value === selectedValue) !== undefined;
 
   const radioChange = (radioItemValue) => {
     if (isFunction(setError)) setError();
     onChange(radioItemValue);
-    setRadioValue(radioItemValue);
   };
 
   const innerClass = `radio-button ${className}`;
@@ -45,7 +41,7 @@ const RadioButton = ({
                 onClick={() => radioChange(radioItem.value)}
               >
                 <div
-                  className={`radio-select-cont${hasSelectedValue && radioValue === radioItem.value ? ' is-active' : ''}`}
+                  className={`radio-select-cont${hasSelectedValue && selectedValue === radioItem.value ? ' is-active' : ''}`}
                 >
                   <div className="radio-item-selected" />
                 </div>

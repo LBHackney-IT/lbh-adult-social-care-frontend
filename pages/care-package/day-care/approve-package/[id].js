@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import Layout from '../../../../components/Layout/Layout';
 import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
 import DayCarePackageBreakdown from '../../../../components/DayCare/DayCarePackageBreakdown';
@@ -8,7 +8,6 @@ import DayCarePackageElementCostings from '../../../../components/DayCare/DayCar
 import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
 import TitleHeader from '../../../../components/TitleHeader';
 import DayCareSummary from '../../../../components/DayCare/DayCareSummary';
-import TextArea from '../../../../components/TextArea';
 import {
   approveDayCarePackageContents,
   dayCarePackageContentsRequestClarification,
@@ -16,13 +15,13 @@ import {
 } from '../../../../api/CarePackages/DayCareApi';
 import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
 import withSession from '../../../../lib/session';
-import { formatCareDatePeriod, getErrorResponse, getUserSession } from '../../../../service/helpers'
+import { formatCareDatePeriod, getErrorResponse, getUserSession } from '../../../../service/helpers';
 import fieldValidator from '../../../../service/inputValidator';
-import useDayCareApi from '../../../../api/SWR/useDayCareApi'
+import useDayCareApi from '../../../../api/SWR/useDayCareApi';
 import { formatApprovalHistory, formatDayCareOpportunities } from '../../../../service/formatItems';
 import { addNotification } from '../../../../reducers/notificationsReducer';
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem'
-import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation'
+import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
+import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res }) => {
@@ -40,7 +39,6 @@ const DayCareApprovePackage = () => {
   const [daysSelected, setDaysSelected] = useState([]);
   const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
   const [opportunityEntries, setOpportunityEntries] = useState([]);
-  const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
 
   const { data: dayCarePackage } = useDayCareApi.approvalDetails(dayCarePackageId);
@@ -99,7 +97,6 @@ const DayCareApprovePackage = () => {
     }
     dayCarePackageContentsRequestClarification(dayCarePackageId, requestInformationText)
       .then(() => {
-        setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
