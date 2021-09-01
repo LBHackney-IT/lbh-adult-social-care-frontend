@@ -20,6 +20,7 @@ import Link from './lettering/Link';
 import Timeline from './Timeline';
 import Conversation from './Conversation';
 import { Table } from './Table';
+import { Pagination } from './Pagination';
 
 export {
   Conversation,
@@ -43,5 +44,6 @@ export {
   Tab,
   Tag,
   Select,
+  Pagination,
   Table,
 };
