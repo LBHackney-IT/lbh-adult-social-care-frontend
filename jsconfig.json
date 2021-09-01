@@ -5,7 +5,8 @@
       "@components": ["components/"],
       "@constants": ["constants/"],
       "@routes": ["routes/"],
-      "@api": ["api/"],
+      "@api": ["api/"]
     }
-  }
+  },
+  "exclude": ["node_modules", "build"]
 }
