@@ -16,6 +16,7 @@ import Select from './Select';
 import Hint from './Hint';
 import Label from './Label';
 import ErrorMessage from './ErrorMessage';
+import { Table } from './Table';
 
 export {
   ErrorMessage,
@@ -36,4 +37,5 @@ export {
   Tab,
   Tag,
   Select,
+  Table,
 };
