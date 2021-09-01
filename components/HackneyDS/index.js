@@ -19,6 +19,7 @@ import ErrorMessage from './lettering/ErrorMessage';
 import Link from './lettering/Link';
 import Timeline from './Timeline';
 import Conversation from './Conversation';
+import { Table } from './Table';
 
 export {
   Conversation,
@@ -42,4 +43,5 @@ export {
   Tab,
   Tag,
   Select,
+  Table,
 };
