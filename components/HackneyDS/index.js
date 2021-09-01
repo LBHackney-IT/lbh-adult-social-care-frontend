@@ -17,6 +17,10 @@ import Hint from './Hint';
 import Label from './Label';
 import ErrorMessage from './ErrorMessage';
 import DateInput from './DateInput';
+import Details from './Details';
+import PageAnnouncement from './PageAnnouncement';
+import Pagination from './Pagination';
+import FormGroup from './FormGroup';
 
 export {
   ErrorMessage,
@@ -38,4 +42,8 @@ export {
   Tag,
   Select,
   DateInput,
+  Details,
+  PageAnnouncement,
+  Pagination,
+  FormGroup,
 };

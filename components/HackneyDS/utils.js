@@ -1,0 +1,1 @@
+export const getSlot = (children, name) => children.find((el) => el?.props.slot === name);

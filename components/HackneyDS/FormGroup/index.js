@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default function InputGroup({ children = [], title, hint, error }) {
+export default function InputGroup({ children = [], title, hint, error, className = '' }) {
   const nodeList = Array.isArray(children) ? children : [children];
-  const errorClassList = error ? ' govuk-form-group--error' : '';
+  const errorClassList = error ? 'govuk-form-group--error ' : '';
 
   return (
-    <div className={`govuk-form-group lbh-form-group${errorClassList}`}>
+    <div className={`govuk-form-group lbh-form-group ${errorClassList + className}`}>
       <fieldset className="govuk-fieldset lbh-fieldset">
         <legend className="govuk-fieldset__legend">{title}</legend>
         <span className="govuk-hint lbh-hint">{hint}</span>

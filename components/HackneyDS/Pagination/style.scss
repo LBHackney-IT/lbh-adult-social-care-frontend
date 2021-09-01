@@ -1,0 +1,78 @@
+.lbh-pagination {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  //   margin-top: 0.375rem;
+  font-family: Open Sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #0b0c0c;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.625rem;
+  padding: 10px 0;
+  &__item {
+    padding: 0;
+    display: inline-block;
+    margin-right: 7px;
+    &:first-of-type a,
+    &:last-of-type a {
+      padding: 0;
+    }
+  }
+  @media (min-width: 48.0625em) {
+    -ms-flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-direction: row;
+    -ms-flex-pack: justify;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+  }
+  @media (min-width: 40.0625em) {
+    -ms-flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-direction: row;
+    -ms-flex-pack: justify;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+  }
+  &__summary {
+    padding: 10px 0;
+    margin-top: auto;
+    -ms-flex-order: 2;
+    -webkit-box-ordinal-group: 3;
+    order: 2;
+    margin: auto 0;
+  }
+  &__link {
+    font-family: Open Sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 0 5px;
+    text-decoration: none;
+    display: inline-block;
+    user-select: none;
+    &,
+    &:link,
+    &:visited {
+      color: #025ea6;
+      cursor: pointer;
+    }
+    &--current,
+    &--current:focus,
+    &--current:hover,
+    &--current:link,
+    &--current:visited {
+      color: #0b0c0c;
+      font-weight: 600;
+      pointer-events: none;
+      cursor: default;
+    }
+  }
+}

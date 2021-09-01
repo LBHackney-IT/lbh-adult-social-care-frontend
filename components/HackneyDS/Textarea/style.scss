@@ -1,8 +1,4 @@
 .govuk-form-group {
-  &:last-of-type,
-  .lbh-form-group {
-    margin-bottom: 0;
-  }
   margin-bottom: 20px;
 
   &:after {
@@ -13,8 +9,6 @@
   &--error {
     padding-left: 15px;
     border-left: 5px solid #d4351c;
-    padding: 0;
-    border: 0;
     border-color: #be3a34;
   }
 }

@@ -14,12 +14,24 @@ export const Default = Template.bind({});
 Default.args = {
   children: (
     <>
-      <Input label="ex" handler={() => {}} id="ex1"/>
-      <Input label="ex" hint="Field hint" handler={() => {}} id="ex2"/>
-      <Input label="ex" error="Field error" hint="Field hint" handler={() => {}} id="ex"/>
+      <Input label="Example" handler={() => {}} id="ex1"/>
+      <Input label="Example" hint="Field hint" handler={() => {}} id="ex2"/>
+      <Input label="Example" error="Field error" hint="Field hint" handler={() => {}} id="ex"/>
     </>
   ).props.children,
   title: 'National Insurance number',
   hint: 'It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.',
   error: 'Error message goes here',
+};
+
+export const WithExtraClass = Template.bind({});
+
+WithExtraClass.args = {
+  children: (
+    <>
+      <Input label="Example" handler={() => {}} id="ex1"/>
+    </>
+  ).props.children,
+  title: 'National Insurance number',
+  className: 'extra-class'
 };

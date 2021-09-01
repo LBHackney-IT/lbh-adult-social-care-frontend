@@ -1,0 +1,35 @@
+.lbh-page-announcement {
+  margin-bottom: 2.25rem;
+  padding: 1.5625rem;
+  border: 1px solid #84bd00;
+  border-left-width: 6px;
+  background: rgba(164, 214, 94, 0.3);
+  &--warning {
+    border: 1px solid #be3a34;
+    border-left-width: 6px;
+    background: rgba(224, 60, 49, 0.2);
+  }
+  &--info {
+    border: 1px solid #025ea6;
+    border-left-width: 6px;
+    background: rgba(0, 133, 202, 0.1);
+    padding: 2.25rem 2.25rem 2.25rem 1.5625rem;
+  }
+
+  &__title {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.23rem;
+    font-weight: 700;
+  }
+  &__content {
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.1875rem;
+    line-height: 1.875rem;
+    font-weight: 400;
+    a:link {
+        color: #025ea6;
+        text-decoration: none;
+    }
+  }
+}

@@ -1,6 +1,12 @@
 import React, { useState, useReducer, useEffect, useMemo } from 'react';
 
-export default function DateInput({ id, name, value, error, handler = () => {} }) {
+export default function DateInput({
+  id,
+  name,
+  value,
+  error = { day: undefined, month: undefined, year: undefined },
+  handler = () => {},
+}) {
   const isDateValid = (d) => d?.getDate() && d?.getMonth() && d?.getYear();
 
   const initialDate = useMemo(() => {
@@ -28,7 +34,7 @@ export default function DateInput({ id, name, value, error, handler = () => {} }
     if (isDateValid(date)) handler(date);
   }, [date]);
 
-  const errorClassList = error ? ' govuk-input--error' : '';
+  const errorClassList = ' govuk-input--error';
 
   return (
     <div className="govuk-date-input lbh-date-input" id={id} name={name}>
@@ -38,7 +44,7 @@ export default function DateInput({ id, name, value, error, handler = () => {} }
             Day
           </label>
           <input
-            className={`govuk-input govuk-date-input__input govuk-input--width-2${errorClassList}`}
+            className={`govuk-input govuk-date-input__input govuk-input--width-2${error.day ? errorClassList : ''}`}
             name="dob-day"
             type="text"
             value={inputValues.day || ''}
@@ -53,7 +59,7 @@ export default function DateInput({ id, name, value, error, handler = () => {} }
             Month
           </label>
           <input
-            className={`govuk-input govuk-date-input__input govuk-input--width-2${errorClassList}`}
+            className={`govuk-input govuk-date-input__input govuk-input--width-2${error.month ? errorClassList : ''}`}
             name="dob-month"
             type="text"
             value={inputValues.month + 1 || ''}
@@ -68,7 +74,7 @@ export default function DateInput({ id, name, value, error, handler = () => {} }
             Year
           </label>
           <input
-            className={`govuk-input govuk-date-input__input govuk-input--width-4${errorClassList}`}
+            className={`govuk-input govuk-date-input__input govuk-input--width-4${error.year ? errorClassList : ''}`}
             name="dob-year"
             type="text"
             value={inputValues.year || ''}
