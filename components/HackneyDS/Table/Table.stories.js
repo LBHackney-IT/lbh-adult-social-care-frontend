@@ -1,0 +1,120 @@
+import { format } from 'date-fns';
+import React from 'react';
+import faker from 'faker';
+import { Table } from '.';
+import { getNumberWithCommas } from '../../../service/helpers';
+
+const createTableData = (records) => {
+  let tableData = [];
+  const genders = ['female', 'male'];
+  for (let index = 1; index < records + 1; index++) {
+    const id = index;
+    const joined = faker.date.past();
+    const name = faker.name.findName();
+    const gender = faker.random.arrayElement(genders);
+    const age = faker.datatype.number(100);
+    const total = faker.datatype.number(100000);
+    tableData = [...tableData, { id, joined, name, gender, age, total }];
+  }
+  return tableData;
+};
+
+const columns = [
+  {
+    Header: 'Id',
+    accessor: 'id',
+  },
+  {
+    Header: 'Name',
+    accessor: 'name',
+  },
+  {
+    Header: 'Age',
+    accessor: 'age',
+  },
+  {
+    Header: 'Gender',
+    accessor: 'gender',
+  },
+  {
+    Header: 'Joined',
+    accessor: 'joined',
+    Cell: ({ value }) => format(new Date(value), 'd/MM/Y'),
+  },
+  {
+    Header: 'Total',
+    accessor: 'total',
+    Cell: ({ value }) => `£${getNumberWithCommas(value)}`,
+  },
+];
+
+const data = createTableData(100);
+
+export default {
+  title: 'Hackney Design System/ Table',
+  component: Table,
+  argTypes: {
+    columns: {
+      control: false,
+    },
+  },
+};
+
+const Template = (args) => <Table {...args} />;
+
+export const Default = Template.bind({});
+Default.args = {
+  columns,
+  data,
+};
+
+const expandRowCallback = ({ row }) => (
+  <pre
+    style={{
+      fontSize: '10px',
+    }}
+  >
+    <code>{JSON.stringify({ values: row.values }, null, 2)}</code>
+  </pre>
+);
+
+const columns2 = [
+  {
+    Header: 'Id',
+    accessor: 'id',
+  },
+  {
+    Header: 'Name',
+    accessor: 'name',
+  },
+  {
+    Header: 'Age',
+    accessor: 'age',
+  },
+  {
+    Header: 'Gender',
+    accessor: 'gender',
+  },
+  {
+    Header: 'Joined',
+    accessor: 'joined',
+    Cell: ({ value }) => format(new Date(value), 'd/MM/Y'),
+  },
+  {
+    Header: 'Total',
+    accessor: 'total',
+    Cell: ({ value }) => `£${getNumberWithCommas(value)}`,
+  },
+  {
+    Header: () => null,
+    id: 'expander',
+    Cell: ({ row }) => <span {...row.getToggleRowExpandedProps()}>{row.isExpanded ? '👇' : '👉'}</span>,
+  },
+];
+
+export const WithExpansion = Template.bind({});
+WithExpansion.args = {
+  columns: columns2,
+  data,
+  expandRowCallback,
+};

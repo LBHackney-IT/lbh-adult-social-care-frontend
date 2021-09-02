@@ -22,6 +22,7 @@ import { addNotification } from 'reducers/notificationsReducer';
 import fieldValidator from 'service/inputValidator';
 import useResidentialCareApi from 'api/SWR/useResidentialCareApi'
 import CareSummary from 'components/ProposedPackages/CareSummary'
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -142,13 +143,10 @@ const ResidentialCare = () => {
     if (!formIsValid()) return;
 
     const residentialCareAdditionalNeeds = additionalNeedsEntries.map((item) => ({
-      isWeeklyCost: item.selectedCost === 1,
-      isOneOffCost: item.selectedCost === 2,
-      isFixedPeriod: item.selectedCost === 3,
+      additionalNeedsPaymentTypeId: item.selectedCost,
       startDate: item.selectedCost === 3 ? new Date(item.selectedPeriod.startDate).toJSON() : null,
       endDate: item.selectedCost === 3 ? new Date(item.selectedPeriod.endDate).toJSON() : null,
       needToAddress: item.needToAddress,
-      creatorId: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8',
     }));
 
     const packageReclaims = packagesReclaimed.map((reclaim) => ({
@@ -269,7 +267,7 @@ const ResidentialCare = () => {
         <CareSummary
           careType='Residential Care'
           startDate={startDate}
-          endDate={endDate}
+          endDate={getEnGBFormattedDate(endDate)}
           typeOfStayText={typeOfStayText}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}

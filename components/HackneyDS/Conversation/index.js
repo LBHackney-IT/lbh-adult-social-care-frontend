@@ -4,12 +4,18 @@ import { format } from 'date-fns';
 export default function Conversation({ conversation = [], hasDetails = true }) {
   return (
     <ul className="lbh-conversation">
-      {conversation.map(item => {
-        const isInBoundClass = item.inBound ? ' lbh-conversation__message--inbound' : '';
+      {conversation.map(({
+        inBound,
+        message,
+        messageFromId,
+        createdAt,
+        userName,
+      }) => {
+        const isInBoundClass = inBound ? ' lbh-conversation__message--inbound' : '';
         return (
           <li className={`lbh-conversation__message${isInBoundClass}`}>
-            <span className="govuk-visually-hidden">{item.messageFromId ? 'Sent: ' : 'Received: '}</span>
-            <p className="lbh-body">{item.message}</p>
+            <span className="govuk-visually-hidden">{messageFromId ? 'Sent: ' : 'Received: '}</span>
+            <p className="lbh-body">{message}</p>
             <>
               {hasDetails &&
                 <details className="lbh-conversation__details">
@@ -21,12 +27,14 @@ export default function Conversation({ conversation = [], hasDetails = true }) {
                   </summary>
                   <div className="lbh-conversation__metadata">
                     <p className="lbh-body-xs">
-                      Sent{' '}
-                      {format(item.createdAt, 'M')}{' '}
-                      {format(item.createdAt, 'MMM')}{' '}
-                      {format(item.createdAt, 'yyyy')}{' '}
-                      {format(item.createdAt, 'p').toLowerCase()}{' '}
-                      by <strong>{item.userName}</strong>
+                      Sent
+                      {` 
+                        ${format(createdAt, 'M')} 
+                        ${format(createdAt, 'MMM')} 
+                        ${format(createdAt, 'yyyy')} 
+                        ${format(createdAt, 'p').toLowerCase()} 
+                      ` }
+                      by <strong>{userName}</strong>
                     </p>
                   </div>
                 </details>

@@ -8,7 +8,8 @@
       "@api": ["api/"],
       "@reducers": ["reducers/"],
       "@lib": ["lib/"],
-      "@service": ["service/"],
+      "@service": ["service/"]
     }
-  }
+  },
+  "exclude": ["node_modules", "build"]
 }
