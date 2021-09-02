@@ -42,7 +42,7 @@ const PopupAddSupplier = ({ closePopup }) => {
     closePopup();
   };
 
-  const createPayRun = (
+  const addSupplierContent = (
     <div className="add-supplier">
       <Input
         value={supplierName}
@@ -139,7 +139,7 @@ const PopupAddSupplier = ({ closePopup }) => {
   return (
     <Popup
       closePopup={closePopup}
-      mainContent={createPayRun}
+      mainContent={addSupplierContent}
       title="Add New Supplier"
       firstButton={{ text: 'Cancel', onClick: closePopup }}
       secondButton={{ text: 'Add Supplier', onClick: addSupplier }}
