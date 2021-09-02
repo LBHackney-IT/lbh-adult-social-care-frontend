@@ -22,11 +22,7 @@ export default function Input({
         </label>
       )}
       {hint && <span className="govuk-hint lbh-hint">{hint}</span>}
-      {error && (
-        <span className="govuk-error-message lbh-error-message">
-          <span className="govuk-visually-hidden">{error}</span>
-        </span>
-      )}
+      {error && <span className="govuk-error-message lbh-error-message">{error}</span>}
       <input
         className={`govuk-input lbh-input ${(error ?? '') && 'govuk-input--error'}`}
         id={id}

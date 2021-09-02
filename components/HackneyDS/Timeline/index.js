@@ -4,13 +4,12 @@ import { Link } from '../index';
 export default function Timeline({ timelines = [] }) {
   return (
     <ol className="lbh-timeline">
-      {timelines.map(timeline => {
-        const gapBelowClass = timeline.gapBelow ? ' lbh-timeline__event--gap-below' : '';
-        const actionNeededClass = timeline.actionNeeded ? ' lbh-timeline__event--action-needed' : '';
-        const majorClass = timeline.major ? ' lbh-timeline__event--major' : '';
-        const minorClass = timeline.minor ? ' lbh-timeline__event--minor' : '';
+      {timelines.map(({ gapBelow, actionNeeded, major, minor, header, innerElements }) => {
+        const gapBelowClass = gapBelow ? ' lbh-timeline__event--gap-below' : '';
+        const actionNeededClass = actionNeeded ? ' lbh-timeline__event--action-needed' : '';
+        const majorClass = major ? ' lbh-timeline__event--major' : '';
+        const minorClass = minor ? ' lbh-timeline__event--minor' : '';
         const calcClasses = `${actionNeededClass}${majorClass}${minorClass}${gapBelowClass}`;
-        const { header } = timeline;
         return (
           <li className={`lbh-timeline__event${calcClasses}`}>
             {header &&
@@ -23,7 +22,7 @@ export default function Timeline({ timelines = [] }) {
                 }
               </h3>
             }
-            {timeline.innerElements.map(element => {
+            {innerElements.map(element => {
               if(element.text) {
                 return (
                   <p className={element.rewriteClass || 'lbh-body'}>
