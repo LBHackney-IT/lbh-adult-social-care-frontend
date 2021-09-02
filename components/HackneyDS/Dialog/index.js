@@ -8,7 +8,7 @@ export default function Dialog({ children, onClick, isOpen }) {
       <div data-reach-dialog-overlay>
         <div aria-modal="true" role="dialog" className="lbh-dialog" data-reach-dialog-content>
           {children}
-          <button className="lbh-dialog__close" type="button" onClick={() => onClick(false)}>
+          <button className="lbh-dialog__close" type="button" onClick={onClick}>
             <span className="govuk-visually-hidden">Close</span>
             <svg width="18" height="18" viewBox="0 0 13 13" fill="none">
               <path
