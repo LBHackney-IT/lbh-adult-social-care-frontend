@@ -11,6 +11,8 @@ const ApprovalHistory = ({
   boxClasses,
   approvalData,
 }) => {
+  if(!history?.length) return React.Fragment;
+
   const datePeriod = formatCareDatePeriod(approvalData?.startDate, approvalData?.endDate);
   return (
     <div className="approval-history">

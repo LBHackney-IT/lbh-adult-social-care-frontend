@@ -1,20 +1,23 @@
-import React, { useState } from 'react'
-import { getServiceTypeCareTimes } from '../../../../service/homeCareServiceHelper';
-import { PERSONAL_CARE_MODE } from '../../../../service/homeCarePickerHelper';
-import Layout from '../../../../components/Layout/Layout';
-import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
-import HomeCarePackageElementCostings from '../../../../components/HomeCare/HomeCarePackageElementCostings';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import { getUserSession } from '../../../../service/helpers';
-import withSession from '../../../../lib/session';
-import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem'
-import { Button } from '../../../../components/Button'
-import DaySummary from '../../../../components/HomeCare/DaySummary'
-import TitleHeader from '../../../../components/TitleHeader'
-import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation'
-import { dayCarePackageCommercialsRequestClarification } from '../../../../api/CarePackages/DayCareApi'
-import fieldValidator from '../../../../service/inputValidator'
+import React, { useState } from 'react';
+import { getServiceTypeCareTimes } from 'service/homeCareServiceHelper';
+import { PERSONAL_CARE_MODE } from 'service/homeCarePickerHelper';
+import Layout from 'components/Layout/Layout';
+import HomeCarePackageBreakdown from 'components/HomeCare/HomeCarePackageBreakdown';
+import HomeCarePackageElementCostings from 'components/HomeCare/HomeCarePackageElementCostings';
+import PackageApprovalHistorySummary from 'components/PackageApprovalHistorySummary';
+import { getUserSession } from 'service/helpers';
+import withSession from 'lib/session';
+import useHomeCareApi from 'api/SWR/useHomeCareApi';
+import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
+import { Button } from 'components/Button';
+import DaySummary from 'components/HomeCare/DaySummary';
+import TitleHeader from 'components/TitleHeader';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
+import fieldValidator from 'service/inputValidator';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { postRequestMoreInformation } from '../../../../api/CarePackages/HomeCareApi';
+import { addNotification } from '../../../../reducers/notificationsReducer';
 
 const approvalHistoryEntries = [
   {
@@ -64,8 +67,9 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 
 // eslint-disable-next-line no-shadow
 const HomeCareApproveBrokered = () => {
-  // const router = useRouter();
-  // const id = router.query.id;
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const homeCarePackageId = router.query.id;
   const { data: homeCareServices } = useHomeCareApi.getAllServices();
   const { data: homeCareTimeShiftsData } = useHomeCareApi.getAllTimeShiftSlots();
   const [errorFields, setErrorFields] = useState({
@@ -84,7 +88,11 @@ const HomeCareApproveBrokered = () => {
     });
   };
 
-  const handleRequestMoreInformation = () => {
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
+  const handleRequestMoreInformation = async () => {
     const { validFields, hasErrors } = fieldValidator([{
       name: 'requestInformationText', value: requestInformationText, rules: ['empty'],
     }]);
@@ -92,7 +100,16 @@ const HomeCareApproveBrokered = () => {
     setErrorFields(validFields);
 
     if(hasErrors) return;
-    console.log('request more information info');
+
+    try {
+      await postRequestMoreInformation({
+        requestInformationText,
+        homeCarePackageId,
+      });
+      pushNotification('Success', 'success');
+    } catch (e) {
+      pushNotification(e);
+    }
   };
 
   return (

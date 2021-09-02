@@ -235,6 +235,22 @@ const createHomeCareBrokerageInfo = ({ id, postData }) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const postRequestMoreInformation = ({ homeCarePackageId, informationText }) => {
+  const options = {
+    url: `${HOME_CARE_BROKERAGE_URL}/home-care-request-more-information`,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    data: {
+      homeCarePackageId,
+      informationText,
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 const getHomeCareBrokerageApprovePackage = async (packageId) => {
   const response = await axios
     .get(`${HOME_CARE_BROKERAGE_URL}/${packageId}/approve-package`, {
@@ -258,4 +274,5 @@ export {
   getHomeCarePackageDetailsForBrokerage,
   createHomeCareBrokerageInfo,
   changeHomeCareBrokerageStatus,
+  postRequestMoreInformation,
 };

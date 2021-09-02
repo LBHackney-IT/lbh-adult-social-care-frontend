@@ -1,17 +1,17 @@
-import React, { useMemo, useState } from 'react'
-import Layout from '../../components/Layout/Layout';
-import withSession from '../../lib/session';
-import { getUserSession } from '../../service/helpers';
-import CareSetup from '../../components/Setup/CareSetup';
+import React, { useMemo, useState } from 'react';
+import Layout from 'components/Layout/Layout';
+import withSession from 'lib/session';
+import { getUserSession } from 'service/helpers';
+import CareSetup from 'components/Setup/CareSetup';
 import {
   DAY_CARE_ROUTE,
   HOME_CARE_ROUTE,
   NURSING_CARE_ROUTE,
   RESIDENTIAL_CARE_ROUTE
-} from '../../routes/RouteConstants';
-import useResidentialCareApi from '../../api/SWR/useResidentialCareApi';
-import useNursingCareApi from '../../api/SWR/useNursingCareApi';
-import { mapTypeOfCareIdOptions } from '../../api/Mappers/optionsMapper'
+} from 'routes/RouteConstants';
+import useResidentialCareApi from 'api/SWR/useResidentialCareApi';
+import useNursingCareApi from 'api/SWR/useNursingCareApi';
+import { mapTypeOfCareIdOptions } from 'api/Mappers/optionsMapper';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

@@ -3,10 +3,10 @@ import { SWRConfig } from 'swr';
 import '/styles/globals.scss';
 import 'bulma/css/bulma.css';
 import { Provider } from 'react-redux';
+import AdditionalHeader from 'components/AdditionalHeader';
+import CustomNotification from 'components/Notifications';
+import fetcher from 'api/SWR/fetcher';
 import { useStore } from '../store';
-import AdditionalHeader from '../components/AdditionalHeader';
-import CustomNotification from '../components/Notifications';
-import fetcher from '../api/SWR/fetcher';
 
 const swrOptions = {
   errorRetryCount: 3,
