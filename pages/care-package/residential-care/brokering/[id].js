@@ -13,13 +13,13 @@ import {
 import { getAgeFromDateString, getEnGBFormattedDate } from 'api/Utils/FuncUtils';
 import Layout from 'components/Layout/Layout';
 import PackagesResidentialCare from 'components/packages/residential-care';
-import { mapCareAdditionalNeedsEntries } from 'api/Mappers/CarePackageMapper';
 import { mapCarePackageApprovalHistory } from 'api/Mappers/optionsMapper';
 import withSession from 'lib/session';
 import { selectBrokerage } from 'reducers/brokerageReducer';
 import { addNotification } from 'reducers/notificationsReducer';
 import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
 import { getLoggedInUser, getUserSession, uniqueID } from 'service/helpers';
+import { mapCareAdditionalNeedsEntries } from '../../../../api/Mappers/CarePackageMapper';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -34,12 +34,10 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
 
   try {
     // Call to api to get package
-    const result = await getResidentialCarePackageDetailsForBrokerage(
+    data.residentialCarePackage = await getResidentialCarePackageDetailsForBrokerage(
       residentialCarePackageId,
       req.cookies[HASC_TOKEN_ID]
     );
-    data.additionalNeedsEntries = mapCareAdditionalNeedsEntries(result?.residentialCareAdditionalNeeds);
-    data.residentialCarePackage = result;
   } catch (error) {
     data.errorData.push(`Retrieve residential care package details failed. ${error}`);
   }
@@ -58,10 +56,11 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
 
 const ResidentialCareBrokering = ({
   residentialCarePackage,
-  additionalNeedsEntries,
   approvalHistoryEntries,
   loggedInUserId,
 }) => {
+  const { residentialCarePackage: carePackage } = residentialCarePackage;
+  const additionalNeedsEntries = mapCareAdditionalNeedsEntries(carePackage?.residentialCareAdditionalNeeds);
   const router = useRouter();
   const dispatch = useDispatch();
   const [initialPackageReclaim] = useState({
