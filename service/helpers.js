@@ -1,5 +1,6 @@
-import { getEnGBFormattedDate } from '../api/Utils/FuncUtils'
-import { maxStringLength } from '../constants/variables'
+import { getEnGBFormattedDate } from 'api/Utils/FuncUtils';
+import { maxStringLength } from 'constants/variables';
+import { add } from 'date-fns';
 
 const chr4 = () => Math.random().toString(16).slice(-4);
 
@@ -16,25 +17,24 @@ const formatDateWithSign = (date, sign = '/') => {
 
 const getFutureDate = (time) => {
   const {
-    year: yearFuture = 0,
-    month: monthFuture = 0,
-    days: daysFuture = 0,
-    hours: hoursFuture = 0,
-    minutes: minutesFuture = 0,
-    seconds: secondsFuture = 0,
-    milliseconds: millisecondsFuture = 0,
+    years = 0,
+    months = 0,
+    days = 0,
+    weeks = 0,
+    hours = 0,
+    minutes = 0,
+    seconds = 0,
   } = time;
 
-  const newDate = new Date();
-  const year = newDate.getFullYear() + yearFuture;
-  const month = newDate.getMonth() + monthFuture;
-  const days = newDate.getDate() + daysFuture;
-  const hours = newDate.getHours() + hoursFuture;
-  const minutes = newDate.getMinutes() + minutesFuture;
-  const seconds = newDate.getSeconds() + secondsFuture;
-  const milliseconds = newDate.getMilliseconds() + millisecondsFuture;
-
-  return new Date(year, month, days, hours, minutes, seconds, milliseconds);
+  return add(new Date(), {
+    years,
+    months,
+    weeks,
+    days,
+    hours,
+    minutes,
+    seconds,
+  });
 }
 
 const formatStringLength = (string, collapsedText, isSlicedText) => {

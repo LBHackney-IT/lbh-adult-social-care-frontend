@@ -1,27 +1,27 @@
-import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
-import React, { useState } from 'react';
-import { HASC_TOKEN_ID } from 'api/BaseApi';
+import { useRouter } from 'next/router'
+import { useDispatch } from 'react-redux'
+import React, { useState } from 'react'
+import { HASC_TOKEN_ID } from 'api/BaseApi'
 import {
   getResidentialCarePackageApprovalHistory,
   getResidentialCarePackageApprovalPackageContent,
   residentialCareApprovePackageContent,
   residentialCareChangeStatus,
   residentialCareRequestClarification,
-} from 'api/CarePackages/ResidentialCareApi';
+} from 'api/CarePackages/ResidentialCareApi'
 import { getAgeFromDateString, getEnGBFormattedDate } from 'api/Utils/FuncUtils'
-import Layout from 'components/Layout/Layout';
-import ResidentialCareSummary from 'components/ResidentialCare/ResidentialCareSummary';
-import TitleHeader from 'components/TitleHeader';
-import withSession from 'lib/session';
+import Layout from 'components/Layout/Layout'
+import ResidentialCareSummary from 'components/ResidentialCare/ResidentialCareSummary'
+import TitleHeader from 'components/TitleHeader'
+import withSession from 'lib/session'
 import { getErrorResponse, getUserSession } from 'service/helpers'
-import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
-import { addNotification } from 'reducers/notificationsReducer';
+import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants'
+import { addNotification } from 'reducers/notificationsReducer'
 import { Button } from 'components/Button'
 import ApprovalHistory from 'components/ProposedPackages/ApprovalHistory'
-import optionsMapper from 'api/Mappers/optionsMapper'
 import fieldValidator from 'service/inputValidator'
 import RequestMoreInformation from 'components/Approver/RequestMoreInformation'
+import { mapCareAdditionalNeedsEntries } from '../../../../api/Mappers/CarePackageMapper'
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -33,20 +33,10 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
   };
 
   try {
-    const residentialCarePackage = await getResidentialCarePackageApprovalPackageContent(
+    data.residentialCarePackage = await getResidentialCarePackageApprovalPackageContent(
       residentialCarePackageId,
       req.cookies[HASC_TOKEN_ID]
     );
-
-    const newAdditionalNeedsEntries = optionsMapper({
-      id: 'id',
-      isWeeklyCost: 'isWeeklyCost',
-      isOneOffCost: 'isOneOffCost',
-      needToAddress: 'needToAddress',
-    }, residentialCarePackage.residentialCarePackage.residentialCareAdditionalNeeds);
-
-    data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
-    data.residentialCarePackage = residentialCarePackage;
   } catch (error) {
     data.errorData.push(`Retrieve residential care package details failed. ${error}`);
   }
@@ -67,10 +57,9 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
   return { props: { ...data } };
 });
 
-const ResidentialCareApprovePackage = ({
-  residentialCarePackage,
-  additionalNeedsEntriesData,
-}) => {
+const ResidentialCareApprovePackage = ({ residentialCarePackage }) => {
+  const { residentialCarePackage: carePackage } = residentialCarePackage;
+  const additionalNeedsEntriesData = mapCareAdditionalNeedsEntries(carePackage?.residentialCareAdditionalNeeds);
   const router = useRouter();
   const dispatch = useDispatch();
   const residentialCarePackageId = router.query.id;

@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import RadioButton, { yesNoValues } from '../RadioButton';
 import CarePackageSetup from '../CarePackages/CarePackageSetup';
 import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
 import fieldValidator from '../../service/inputValidator';
 import DateSetup from './DateSetup';
-import { getFutureDate, includeString } from '../../service/helpers'
-import { RESIDENTIAL_CARE_ROUTE } from '../../routes/RouteConstants'
+import { getFutureDate, includeString } from '../../service/helpers';
+import { RESIDENTIAL_CARE_ROUTE } from '../../routes/RouteConstants';
 
 const CareSetup = ({
   errors,
@@ -74,8 +74,8 @@ const CareSetup = ({
   };
 
   const typeOfStayIdMaxDates = {
-    1: getFutureDate({ days: 7 * 6}),
-    2: getFutureDate({ days: 7 * 52}),
+    1: getFutureDate({ weeks: 5}),
+    2: getFutureDate({ weeks: 51}),
     3: undefined,
   };
 
