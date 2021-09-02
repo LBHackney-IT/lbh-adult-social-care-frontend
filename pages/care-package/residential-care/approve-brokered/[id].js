@@ -1,25 +1,26 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux'
-import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
+import { HASC_TOKEN_ID } from 'api/BaseApi';
 import {
   getResidentialCarePackageApprovalHistory,
   getResidentialCarePackageApproveBrokered,
   residentialCareApproveCommercials,
   residentialCareChangeStatus,
   residentialCareClarifyCommercial,
-} from '../../../../api/CarePackages/ResidentialCareApi';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils'
-import Layout from '../../../../components/Layout/Layout';
-import ResidentialCareSummary from '../../../../components/ResidentialCare/ResidentialCareSummary';
-import TextArea from '../../../../components/TextArea';
-import TitleHeader from '../../../../components/TitleHeader';
-import withSession from '../../../../lib/session';
-import { getUserSession } from '../../../../service/helpers';
-import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import ApprovalHistory from '../../../../components/ProposedPackages/ApprovalHistory'
-import { Button } from '../../../../components/Button'
+} from 'api/CarePackages/ResidentialCareApi';
+import { getAgeFromDateString, getEnGBFormattedDate } from 'api/Utils/FuncUtils';
+import Layout from 'components/Layout/Layout';
+import ResidentialCareSummary from 'components/ResidentialCare/ResidentialCareSummary';
+import TitleHeader from 'components/TitleHeader';
+import withSession from 'lib/session';
+import { getErrorResponse, getUserSession } from 'service/helpers';
+import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
+import { addNotification } from 'reducers/notificationsReducer';
+import ApprovalHistory from 'components/ProposedPackages/ApprovalHistory';
+import { Button } from 'components/Button';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
+import fieldValidator from 'service/inputValidator';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -78,7 +79,24 @@ const ResidentialCareApproveBrokered = ({
   const [errors, setErrors] = useState(errorData);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
   const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
+  const [errorFields, setErrorFields] = useState({
+    requestInformationText: '',
+  });
   const [requestInformationText, setRequestInformationText] = useState(undefined);
+
+  const changeErrorFields = (field) => {
+    setErrorFields({
+      ...errorFields,
+      [field]: '',
+    });
+  };
+
+  const updateErrorFields = (errors) => {
+    setErrorFields({
+      ...errorFields,
+      ...getErrorResponse(errors),
+    });
+  };
 
   const residentialCarePackageData = residentialCarePackage?.residentialCarePackage;
 
@@ -109,6 +127,13 @@ const ResidentialCareApproveBrokered = ({
   };
 
   const handleRequestMoreInformation = () => {
+    const { validFields, hasErrors } = fieldValidator([{
+      name: 'requestInformationText', value: requestInformationText, rules: ['empty'],
+    }]);
+    setErrorFields(validFields);
+
+    if(hasErrors) return;
+
     residentialCareClarifyCommercial(residentialCarePackageId, requestInformationText)
       .then(() => {
         setDisplayMoreInfoForm(false);
@@ -116,6 +141,7 @@ const ResidentialCareApproveBrokered = ({
       })
       .catch((error) => {
         pushNotification(error);
+        updateErrorFields(error)
         setErrors([...errors, `Status change failed. ${error}`]);
       });
   };
@@ -160,23 +186,16 @@ const ResidentialCareApproveBrokered = ({
 
         <div className="button-group mb-5">
           <Button className="gray" onClick={handleRejectPackage}>Deny</Button>
-          <Button onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)} className="gray">
-            {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
-          </Button>
           <Button onClick={handleApprovePackageCommercials}>Approve Commercials</Button>
         </div>
 
-        <div className="columns">
-          <div className="column">
-            <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">Request more information</p>
-              <TextArea label="" rows={5} placeholder="Add details..." onChange={setRequestInformationText} />
-              <button type="button" className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
-                Request more information
-              </button>
-            </div>
-          </div>
-        </div>
+        <RequestMoreInformation
+          requestMoreInformationText={requestInformationText}
+          setRequestInformationText={setRequestInformationText}
+          errorFields={errorFields}
+          changeErrorFields={changeErrorFields}
+          handleRequestMoreInformation={handleRequestMoreInformation}
+        />
       </div>
     </Layout>
   );

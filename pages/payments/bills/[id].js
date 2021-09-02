@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Breadcrumbs from '../../../components/Breadcrumbs';
-import Pagination from '../../../components/Payments/Pagination';
+import Breadcrumbs from 'components/Breadcrumbs';
+import Pagination from 'components/Payments/Pagination';
+import BillsHeader from 'components/Bills/BillsHeader';
+import PopupBillsPayDownload from 'components/Bills/PopupBillsPayDownload';
+import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import { getUserSession } from 'service/helpers';
+import withSession from 'lib/session';
+import { PAYMENTS_BILLS_ROUTE } from 'routes/RouteConstants';
+import Table from 'components/Table';
 import { payRunTableData } from '../../../testData/testDataPayRuns';
-import BillsHeader from '../../../components/Bills/BillsHeader';
-import PopupBillsPayDownload from '../../../components/Bills/PopupBillsPayDownload';
-import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { getUserSession } from '../../../service/helpers';
-import withSession from '../../../lib/session';
-import { PAYMENTS_BILLS_ROUTE } from '../../../routes/RouteConstants';
-import Table from '../../../components/Table'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

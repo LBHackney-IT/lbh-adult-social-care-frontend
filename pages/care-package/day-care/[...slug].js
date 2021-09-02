@@ -1,25 +1,25 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import Layout from '../../../components/Layout/Layout';
-import TextArea from '../../../components/TextArea';
-import { days } from '../../../components/daysData';
-import Checkbox from '../../../components/Checkbox';
-import RadioButton, { yesNoValues } from '../../../components/RadioButton';
-import { createDayCarePackage } from '../../../api/CarePackages/DayCareApi';
-import DayCareOpportunities from '../../../components/DayCare/DayCareOpportunities';
-import { Button } from '../../../components/Button';
-import { addNotification } from '../../../reducers/notificationsReducer';
-import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
-import TitleHeader from '../../../components/TitleHeader';
-import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
-import DayCareSummary from '../../../components/DayCare/DayCareSummary';
-import DayCareCollegeAsyncSearch from '../../../components/DayCare/DayCareCollegeAsyncSearch';
-import { formatCareDatePeriod, getUserSession } from '../../../service/helpers'
-import withSession from '../../../lib/session';
-import fieldValidator from '../../../service/inputValidator';
-import ErrorField from '../../../components/ErrorField';
-import useDayCareApi from '../../../api/SWR/useDayCareApi'
+import Layout from 'components/Layout/Layout';
+import TextArea from 'components/TextArea';
+import { days } from 'components/daysData';
+import Checkbox from 'components/Checkbox';
+import RadioButton, { yesNoValues } from 'components/RadioButton';
+import { createDayCarePackage } from 'api/CarePackages/DayCareApi';
+import DayCareOpportunities from 'components/DayCare/DayCareOpportunities';
+import { Button } from 'components/Button';
+import { addNotification } from 'reducers/notificationsReducer';
+import { CARE_PACKAGE_ROUTE } from 'routes/RouteConstants';
+import TitleHeader from 'components/TitleHeader';
+import PackageReclaims from 'components/CarePackages/PackageReclaims';
+import DayCareSummary from 'components/DayCare/DayCareSummary';
+import DayCareCollegeAsyncSearch from 'components/DayCare/DayCareCollegeAsyncSearch';
+import { formatCareDatePeriod, getUserSession } from 'service/helpers';
+import withSession from 'lib/session';
+import fieldValidator from 'service/inputValidator';
+import ErrorField from 'components/ErrorField';
+import useDayCareApi from 'api/SWR/useDayCareApi';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

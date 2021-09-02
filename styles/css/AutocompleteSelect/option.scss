@@ -5,6 +5,10 @@ $option-hover-color: #176e4f4b;
   &-wrapper {
     min-width: 300px;
     cursor: pointer;
+
+    @include media-mobile {
+      min-width: 220px;
+    }
     &:focus {
       border: none;
     }
@@ -45,6 +49,10 @@ $option-hover-color: #176e4f4b;
 
     &__menu {
       min-width: 300px;
+
+      @include media-mobile {
+        min-width: 220px;
+      }
       .custom-option {
         cursor: pointer;
         display: flex;

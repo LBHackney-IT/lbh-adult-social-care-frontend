@@ -51,14 +51,6 @@ const PayRunCollapsedContent = ({ invoice = {} }) => {
               {getNumberWithCommas(totalToPay)}
             </p>
           </div>
-          {/* <div key={care.id} className="table__row-collapsed-main-item"> */}
-          {/*  <p> */}
-          {/*    {care.itemName} */}
-          {/*  </p> */}
-          {/*  <p>{care.cost}</p> */}
-          {/*  <p>{care.qty}</p> */}
-          {/*  <p>{care.serviceUser}</p> */}
-          {/* </div> */}
         </div>
       </div>
     </>

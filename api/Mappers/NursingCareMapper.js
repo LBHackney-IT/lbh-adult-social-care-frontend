@@ -9,14 +9,4 @@ const mapNursingCareStageOptions = (stageOptions = []) =>
     value: option?.id,
   }));
 
-const mapDetailsForBrokerage = (detailsForBrokerageOptions = []) =>
-  detailsForBrokerageOptions.map(
-    (additionalNeedsItem) => ({
-      id: additionalNeedsItem.id,
-      isWeeklyCost: additionalNeedsItem.isWeeklyCost,
-      isOneOffCost: additionalNeedsItem.isOneOffCost,
-      needToAddress: additionalNeedsItem.needToAddress,
-    })
-);
-
-export { mapBrokerageSupplierOptions, mapNursingCareStageOptions, mapDetailsForBrokerage };
+export { mapBrokerageSupplierOptions, mapNursingCareStageOptions };
