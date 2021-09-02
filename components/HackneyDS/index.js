@@ -22,8 +22,12 @@ import Conversation from './Conversation';
 import { Table } from './Table';
 import { Pagination } from './Pagination';
 import SearchBox from './SearchBox';
+import RadioItem from './RadioItem';
+import RadioGroup from './RadioGroup';
 
 export {
+  RadioGroup,
+  RadioItem,
   Conversation,
   Link,
   Timeline,

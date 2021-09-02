@@ -1,0 +1,118 @@
+import React, { useState } from 'react';
+import RadioGroup from './index';
+
+export default {
+  title: 'Hackney Design System/RadioGroup',
+  component: RadioGroup,
+  argTypes: {},
+};
+
+const Template = (args) => {
+  const [value, setValue] = useState(args.value || 'item1');
+
+  const handle = (name) => {
+    setValue(name)
+  };
+
+  return <RadioGroup {...args} handle={handle} value={value} />;
+}
+
+export const Default = Template.bind({});
+Default.args = {
+  name: 'radioGroup',
+  items: [
+    { id: 'item1', label: 'Item 1' },
+    { id: 'item2', label: 'Item 2' },
+    { id: 'item3', label: 'Item 3' },
+  ],
+  className: '',
+};
+
+export const HintRadioItem = Template.bind({});
+HintRadioItem.args = {
+  name: 'radioGroup',
+  items: [
+    { id: 'item1', label: 'Item 1' },
+    { id: 'item2', label: 'Item 2', hint: 'Hint item 2' },
+    { id: 'item3', label: 'Item 3' },
+  ],
+  className: '',
+};
+
+export const DisabledRadio = Template.bind({});
+DisabledRadio.args = {
+  name: 'radioGroup',
+  items: [
+    { id: 'item1', label: 'Item 1' },
+    { id: 'item2', disabled: true, label: 'Item 2' },
+    { id: 'item3', label: 'Item 3' },
+  ],
+};
+
+export const Divider = Template.bind({});
+Divider.args = {
+  name: 'radioGroup',
+  items: [
+    { id: 'item1', label: 'Item 1' },
+    { id: 'divider1', divider: 'I am divider' },
+    { id: 'item2', label: 'Item 2' },
+    { id: 'item3', label: 'Item 3' },
+  ],
+};
+
+export const AllFieldsetAttributes = Template.bind({});
+AllFieldsetAttributes.args = {
+  error: 'Error',
+  title: 'Title',
+  hint: 'Hint',
+  name: 'radioGroup',
+  items: [
+    { id: 'item1', label: 'Item 1' },
+    { id: 'item2', label: 'Item 2' },
+    { id: 'item3', label: 'Item 3' },
+  ],
+};
+
+export const ConditionComponent = Template.bind({});
+ConditionComponent.args = {
+  title: 'Title',
+  name: 'radioGroup',
+  items: [
+    {
+      id: 'item1',
+      label: 'Email',
+      condition: {
+        id: 'condition1',
+        label: 'Email',
+        type: 'email',
+        value: 'test@mail.ru',
+        handle: (value) => console.log(value),
+      },
+    },
+    {
+      id: 'item2',
+      label: 'Phone',
+      condition: {
+        id: 'condition2',
+        label: 'Phone Number',
+        error: 'Wrong phone number',
+        type: 'tel',
+        value: '8-800',
+        handle: (value) => console.log(value),
+      },
+    },
+    { id: 'item3', label: 'Item 3' },
+  ],
+};
+
+export const RadioGroupSmall = Template.bind({});
+RadioGroupSmall.args = {
+  title: 'Title',
+  small: true,
+  name: 'radioGroup',
+  items: [
+    { id: 'item1', label: 'Email' },
+    { id: 'item2', label: 'Phone' },
+    { id: 'item3', label: 'Item 3' },
+  ],
+};
