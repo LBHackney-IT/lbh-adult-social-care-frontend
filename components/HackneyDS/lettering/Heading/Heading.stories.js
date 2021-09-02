@@ -19,25 +19,23 @@ NoSizeSpecified.args = {
 export const SmallHeading = Template.bind({});
 SmallHeading.args = {
   children: 'Small Heading',
-  size: 's'
+  size: 's',
 };
 
 export const MediumHeading = Template.bind({});
 MediumHeading.args = {
   children: 'Medium Heading',
-  size: 'm'
+  size: 'm',
 };
 
 export const LargeHeading = Template.bind({});
 LargeHeading.args = {
   children: 'Large Heading',
-  size: 'l'
+  size: 'l',
 };
-
 
 export const ExtraLargeHeading = Template.bind({});
 ExtraLargeHeading.args = {
   children: 'Extra Large Heading',
-  size: 'xl'
+  size: 'xl',
 };
-
