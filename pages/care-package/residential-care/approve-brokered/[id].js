@@ -1,26 +1,26 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux'
-import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
+import { HASC_TOKEN_ID } from 'api/BaseApi';
 import {
   getResidentialCarePackageApprovalHistory,
   getResidentialCarePackageApproveBrokered,
   residentialCareApproveCommercials,
   residentialCareChangeStatus,
   residentialCareClarifyCommercial,
-} from '../../../../api/CarePackages/ResidentialCareApi';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils'
-import Layout from '../../../../components/Layout/Layout';
-import ResidentialCareSummary from '../../../../components/ResidentialCare/ResidentialCareSummary';
-import TitleHeader from '../../../../components/TitleHeader';
-import withSession from '../../../../lib/session';
-import { getErrorResponse, getUserSession } from '../../../../service/helpers'
-import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import ApprovalHistory from '../../../../components/ProposedPackages/ApprovalHistory'
-import { Button } from '../../../../components/Button'
-import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation'
-import fieldValidator from '../../../../service/inputValidator'
+} from 'api/CarePackages/ResidentialCareApi';
+import { getAgeFromDateString, getEnGBFormattedDate } from 'api/Utils/FuncUtils';
+import Layout from 'components/Layout/Layout';
+import ResidentialCareSummary from 'components/ResidentialCare/ResidentialCareSummary';
+import TitleHeader from 'components/TitleHeader';
+import withSession from 'lib/session';
+import { getErrorResponse, getUserSession } from 'service/helpers';
+import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
+import { addNotification } from 'reducers/notificationsReducer';
+import ApprovalHistory from 'components/ProposedPackages/ApprovalHistory';
+import { Button } from 'components/Button';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
+import fieldValidator from 'service/inputValidator';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
