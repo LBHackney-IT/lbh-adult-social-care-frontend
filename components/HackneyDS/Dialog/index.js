@@ -23,7 +23,7 @@ export default function Dialog({ children, control, isOpen }) {
           </button>
         </div>
       </div>,
-      document.querySelector('body')
+      document.body
     )
   );
 }
