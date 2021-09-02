@@ -11,6 +11,11 @@ export default {
 
 const Template = (args) => <Heading {...args} />;
 
+export const NoSizeSpecified = Template.bind({});
+NoSizeSpecified.args = {
+  children: 'Default/No Size Specified',
+};
+
 export const SmallHeading = Template.bind({});
 SmallHeading.args = {
   children: 'Small Heading',
