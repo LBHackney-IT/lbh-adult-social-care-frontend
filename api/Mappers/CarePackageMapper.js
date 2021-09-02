@@ -11,13 +11,13 @@ const mapCareStageOptions = (stageOptions = []) =>
     value: option?.packageStatusId
 }));
 
-const mapCareAdditionalNeedsEntries = (detailsForBrokerageOptions = []) =>
-  detailsForBrokerageOptions.map(
+const mapCareAdditionalNeedsEntries = (additionalNeedsEntries = []) =>
+  additionalNeedsEntries.map(
     (additionalNeedsItem) => ({
-      id: additionalNeedsItem.id,
-      isWeeklyCost: additionalNeedsItem.isWeeklyCost,
-      isOneOffCost: additionalNeedsItem.isOneOffCost,
-      needToAddress: additionalNeedsItem.needToAddress,
+      id: additionalNeedsItem?.id || null,
+      isWeeklyCost: additionalNeedsItem?.isWeeklyCost || null,
+      isOneOffCost: additionalNeedsItem?.isOneOffCost || null,
+      needToAddress: additionalNeedsItem?.needToAddress || null,
   }));
 
 export { mapCareApprovalHistoryItems, mapCareStageOptions, mapCareAdditionalNeedsEntries };

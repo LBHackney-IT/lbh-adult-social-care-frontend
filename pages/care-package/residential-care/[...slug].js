@@ -1,27 +1,28 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import Layout from '../../../components/Layout/Layout';
-import TextArea from '../../../components/TextArea';
-import Dropdown from '../../../components/Dropdown';
+import Layout from 'components/Layout/Layout';
+import TextArea from 'components/TextArea';
+import Dropdown from 'components/Dropdown';
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
-} from '../../../components/CarePackages/AdditionalNeedsEntries';
+} from 'components/CarePackages/AdditionalNeedsEntries';
 import {
   createResidentialCarePackage,
   createResidentialCarePackageReclaim,
   getResidentialCareAdditionalNeedsCostOptions,
-} from '../../../api/CarePackages/ResidentialCareApi';
-import TitleHeader from '../../../components/TitleHeader';
-import { Button } from '../../../components/Button';
-import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
-import { formatCareDatePeriod, getUserSession } from '../../../service/helpers'
-import withSession from '../../../lib/session';
-import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
-import { addNotification } from '../../../reducers/notificationsReducer';
-import fieldValidator from '../../../service/inputValidator';
-import useResidentialCareApi from '../../../api/SWR/useResidentialCareApi'
-import CareSummary from '../../../components/ProposedPackages/CareSummary'
+} from 'api/CarePackages/ResidentialCareApi';
+import TitleHeader from 'components/TitleHeader';
+import { Button } from 'components/Button';
+import { CARE_PACKAGE_ROUTE } from 'routes/RouteConstants';
+import { formatCareDatePeriod, getUserSession } from 'service/helpers'
+import withSession from 'lib/session';
+import PackageReclaims from 'components/CarePackages/PackageReclaims';
+import { addNotification } from 'reducers/notificationsReducer';
+import fieldValidator from 'service/inputValidator';
+import useResidentialCareApi from 'api/SWR/useResidentialCareApi'
+import CareSummary from 'components/ProposedPackages/CareSummary'
+import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -142,13 +143,10 @@ const ResidentialCare = () => {
     if (!formIsValid()) return;
 
     const residentialCareAdditionalNeeds = additionalNeedsEntries.map((item) => ({
-      isWeeklyCost: item.selectedCost === 1,
-      isOneOffCost: item.selectedCost === 2,
-      isFixedPeriod: item.selectedCost === 3,
+      additionalNeedsPaymentTypeId: item.selectedCost,
       startDate: item.selectedCost === 3 ? new Date(item.selectedPeriod.startDate).toJSON() : null,
       endDate: item.selectedCost === 3 ? new Date(item.selectedPeriod.endDate).toJSON() : null,
       needToAddress: item.needToAddress,
-      creatorId: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8',
     }));
 
     const packageReclaims = packagesReclaimed.map((reclaim) => ({
@@ -269,7 +267,7 @@ const ResidentialCare = () => {
         <CareSummary
           careType='Residential Care'
           startDate={startDate}
-          endDate={endDate}
+          endDate={getEnGBFormattedDate(endDate)}
           typeOfStayText={typeOfStayText}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}

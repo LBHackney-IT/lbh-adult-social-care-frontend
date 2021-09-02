@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Breadcrumbs from '../../../components/Breadcrumbs';
-import PopupInvoiceChat from '../../../components/Chat/PopupInvoiceChat';
-import Pagination from '../../../components/Payments/Pagination';
+import Breadcrumbs from 'components/Breadcrumbs';
+import PopupInvoiceChat from 'components/Chat/PopupInvoiceChat';
+import Pagination from 'components/Payments/Pagination';
+import SupplierReturnsLevelInsight from 'components/SupplierDashboard/SupplierReturnsLevelInsight';
+import SupplierReturnDashboardTable from 'components/SupplierDashboard/SupplierReturnsDashboardTable';
+import SupplierReturnsDashboardInnerHeader from 'components/SupplierDashboard/SupplierReturnsDashboardInnerHeader';
+import ChatButton from 'components/PayRuns/ChatButton';
+import { getUserSession } from 'service/helpers';
+import withSession from 'lib/session';
 import { supplierReturnsDashboardTableData, testDataHelpMessages } from '../../../testData/testDataPayRuns';
-import SupplierReturnsLevelInsight from '../../../components/SupplierDashboard/SupplierReturnsLevelInsight';
-import SupplierReturnsDashboardInnerHeader from '../../../components/SupplierDashboard/SupplierReturnsDashboardInnerHeader';
-import ChatButton from '../../../components/PayRuns/ChatButton';
-import { formatStatus, getUserSession } from '../../../service/helpers'
-import withSession from '../../../lib/session';
-import Table from '../../../components/Table'
-import SupplierReturnsCollapsedContainer from '../../../components/SupplierDashboard/SupplierReturnsCollapsedContainer'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

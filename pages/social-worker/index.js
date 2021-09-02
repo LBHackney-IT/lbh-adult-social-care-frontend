@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import Pagination from '../../components/Payments/Pagination';
-import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import { getUserSession, formatDate, formatStatus } from '../../service/helpers'
-import useSocialWorkerApi from '../../api/SWR/useSocialWorkerApi';
-import withSession from '../../lib/session';
+import Pagination from 'components/Payments/Pagination';
+import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import { getUserSession, formatDate, formatStatus } from 'service/helpers';
+import useSocialWorkerApi from 'api/SWR/useSocialWorkerApi';
+import withSession from 'lib/session';
 import {
   RESIDENTIAL_CARE_ROUTE,
   NURSING_CARE_ROUTE,
   RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE,
   NURSING_CARE_APPROVE_PACKAGE_ROUTE,
-} from '../../routes/RouteConstants';
-import Table from '../../components/Table';
-import Inputs from '../../components/Inputs';
-import { checkEmptyFields } from '../../service/inputValidator';
-import { DATA_TYPES } from '../../api/Utils/CommonOptions';
-import { sortArray } from '../../api/Utils/FuncUtils';
+} from 'routes/RouteConstants';
+import Table from 'components/Table';
+import Inputs from 'components/Inputs';
+import { checkEmptyFields } from 'service/inputValidator';
+import { DATA_TYPES } from 'api/Utils/CommonOptions';
+import { sortArray } from 'api/Utils/FuncUtils';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

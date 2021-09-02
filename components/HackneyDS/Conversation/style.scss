@@ -2,7 +2,6 @@
   margin-top: 10px;
 }
 
-.govuk-radios__input:checked + .govuk-radios__label:after,
 .lbh-conversation__message:hover summary,
 .lbh-conversation__summary:focus {
   opacity: 1;
@@ -15,9 +14,7 @@
 
 .lbh-conversation__details,
 .lbh-dialog__close svg,
-.lbh-dialog__title,
-.lbh-tabs .govuk-tabs__list-item,
-.lbh-tabs .govuk-tabs__panel {
+.lbh-dialog__title {
   margin-top: 0;
 }
 
@@ -120,8 +117,7 @@
   display: block;
   z-index: 1;
 }
-.lbh-dialog__close,
-.lbh-search-box {
+.lbh-dialog__close {
   display: -ms-inline-flexbox;
   display: -webkit-inline-box;
 }
@@ -163,8 +159,6 @@
 .lbh-dialog__actions * {
   margin-top: 1rem;
 }
-.lbh-dialog__actions :first-child,
-.lbh-pagination * + *,
-.lbh-search-box svg {
+.lbh-dialog__actions :first-child {
   margin-top: 0;
 }
