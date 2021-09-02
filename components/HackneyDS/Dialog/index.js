@@ -1,17 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { createPortal } from 'react-dom';
 
-const el = document.querySelector('body');
-
 export default function Dialog({ children, control, isOpen }) {
-  const containerRef = useRef(document.createElement('div'));
-  useEffect(() => {
-    el.appendChild(containerRef.current);
-    return () => {
-      el.removeChild(containerRef.current);
-    };
-  });
-
   return (
     isOpen &&
     createPortal(
@@ -33,7 +23,7 @@ export default function Dialog({ children, control, isOpen }) {
           </button>
         </div>
       </div>,
-      containerRef.current
+      document.querySelector('body')
     )
   );
 }
