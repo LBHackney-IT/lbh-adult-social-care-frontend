@@ -38,9 +38,8 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
       residentialCarePackageId,
       req.cookies[HASC_TOKEN_ID]
     );
-    const newAdditionalNeedsEntries = mapCareAdditionalNeedsEntries(result.residentialCarePackage.residentialCareAdditionalNeeds);
+    data.additionalNeedsEntries = mapCareAdditionalNeedsEntries(result?.residentialCareAdditionalNeeds);
     data.residentialCarePackage = result;
-    data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch (error) {
     data.errorData.push(`Retrieve residential care package details failed. ${error}`);
   }
@@ -145,15 +144,11 @@ const ResidentialCareBrokering = ({
       clientSummaryInfo={{
         client: residentialCarePackage?.residentialCarePackage?.clientName,
         hackneyId: residentialCarePackage?.residentialCarePackage?.clientHackneyId,
-        age:
-          residentialCarePackage?.residentialCarePackage &&
-          getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
+        age: getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
         preferredContact: residentialCarePackage?.residentialCarePackage?.clientPreferredContact,
         canSpeakEnglish: residentialCarePackage?.residentialCarePackage?.clientCanSpeakEnglish,
         packagesCount: 4,
-        dateOfBirth:
-          residentialCarePackage?.residentialCarePackage &&
-          getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
+        dateOfBirth: getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
         postcode: residentialCarePackage?.residentialCarePackage?.clientPostCode,
         title: 'Residential Care Brokering',
       }}
