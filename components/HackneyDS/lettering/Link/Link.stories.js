@@ -16,6 +16,6 @@ const Template = (args) => <Link {...args} />;
 export const Default = Template.bind({});
 
 Default.args = {
-  children: 'Default label text',
+  children: 'Default link text',
   className: '',
 };
