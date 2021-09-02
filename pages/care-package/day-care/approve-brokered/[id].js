@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import Layout from '../../../../components/Layout/Layout';
-import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TitleHeader from '../../../../components/TitleHeader';
-import DayCareSummary from '../../../../components/DayCare/DayCareSummary';
-import TextArea from '../../../../components/TextArea';
+import Layout from 'components/Layout/Layout';
+import PackageCostBox from 'components/DayCare/PackageCostBox';
+import PackageApprovalHistorySummary from 'components/PackageApprovalHistorySummary';
+import TitleHeader from 'components/TitleHeader';
+import DayCareSummary from 'components/DayCare/DayCareSummary';
 import {
   dayCarePackageApproveCommercials,
   dayCarePackageCommercialsRequestClarification,
   dayCarePackageRejectCommercials,
-} from '../../../../api/CarePackages/DayCareApi';
-import withSession from '../../../../lib/session';
-import { formatCareDatePeriod, getErrorResponse, getUserSession } from '../../../../service/helpers'
-import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
-import useDayCareApi from '../../../../api/SWR/useDayCareApi';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { formatApprovalHistory, formatDayCareOpportunities } from '../../../../service/formatItems'
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem'
-import { Button } from '../../../../components/Button'
-import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation'
-import fieldValidator from '../../../../service/inputValidator'
+} from 'api/CarePackages/DayCareApi';
+import withSession from 'lib/session';
+import { formatCareDatePeriod, getErrorResponse, getUserSession } from 'service/helpers';
+import { getSelectedDate } from 'api/Utils/CommonOptions';
+import useDayCareApi from 'api/SWR/useDayCareApi';
+import { addNotification } from 'reducers/notificationsReducer';
+import { formatApprovalHistory, formatDayCareOpportunities } from 'service/formatItems';
+import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
+import { Button } from 'components/Button';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
+import fieldValidator from 'service/inputValidator';
 
 // get server side props before render
 export const getServerSideProps = withSession(async ({ req, res }) => {

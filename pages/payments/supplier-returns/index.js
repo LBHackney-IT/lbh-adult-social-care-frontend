@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import SupplierReturnsTable from '../../../components/SupplierReturns/SupplierReturnsTable';
-import Pagination from '../../../components/Payments/Pagination';
+import SupplierReturnsTable from 'components/SupplierReturns/SupplierReturnsTable';
+import Pagination from 'components/Payments/Pagination';
+import SupplierInnerHeader from 'components/SupplierReturns/SupplierInnerHeader';
+import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import { changeSupplierReturns } from 'reducers/supplierReturnsReducer';
+import { getUserSession } from 'service/helpers';
+import withSession from 'lib/session';
 import { supplierReturnsTableData } from '../../../testData/testDataPayRuns';
-import SupplierInnerHeader from '../../../components/SupplierReturns/SupplierInnerHeader';
-import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { changeSupplierReturns } from '../../../reducers/supplierReturnsReducer';
-import { getUserSession } from '../../../service/helpers';
-import withSession from '../../../lib/session';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

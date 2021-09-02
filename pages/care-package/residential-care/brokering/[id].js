@@ -1,27 +1,25 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
-import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
+import { HASC_TOKEN_ID } from 'api/BaseApi';
+import { getHomeCareSummaryData } from 'api/CarePackages/HomeCareApi';
 import {
   createResidentialCareBrokerageInfo,
   getResidentialCarePackageApprovalHistory,
   getResidentialCarePackageDetailsForBrokerage,
   residentialCareChangeStage,
   residentialCareChangeStatus,
-} from '../../../../api/CarePackages/ResidentialCareApi';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
-import Layout from '../../../../components/Layout/Layout';
-import PackagesResidentialCare from '../../../../components/packages/residential-care';
-import withSession from '../../../../lib/session';
-import { selectBrokerage } from '../../../../reducers/brokerageReducer';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
-import useSuppliersApi from '../../../../api/SWR/useSuppliersApi';
-import useBaseApi from '../../../../api/SWR/useBaseApi';
-import { mapCarePackageApprovalHistory } from '../../../../api/Mappers/optionsMapper';
-import { mapCareAdditionalNeedsEntries } from '../../../../api/Mappers/CarePackageMapper'
+} from 'api/CarePackages/ResidentialCareApi';
+import { getAgeFromDateString, getEnGBFormattedDate } from 'api/Utils/FuncUtils';
+import Layout from 'components/Layout/Layout';
+import PackagesResidentialCare from 'components/packages/residential-care';
+import { mapCareAdditionalNeedsEntries } from 'api/Mappers/CarePackageMapper';
+import { mapCarePackageApprovalHistory } from 'api/Mappers/optionsMapper';
+import withSession from 'lib/session';
+import { selectBrokerage } from 'reducers/brokerageReducer';
+import { addNotification } from 'reducers/notificationsReducer';
+import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
+import { getLoggedInUser, getUserSession, uniqueID } from 'service/helpers';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -40,9 +38,8 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
       residentialCarePackageId,
       req.cookies[HASC_TOKEN_ID]
     );
-    const newAdditionalNeedsEntries = mapCareAdditionalNeedsEntries(result.residentialCarePackage.residentialCareAdditionalNeeds);
+    data.additionalNeedsEntries = mapCareAdditionalNeedsEntries(result?.residentialCareAdditionalNeeds);
     data.residentialCarePackage = result;
-    data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch (error) {
     data.errorData.push(`Retrieve residential care package details failed. ${error}`);
   }
@@ -80,8 +77,6 @@ const ResidentialCareBrokering = ({
   const [tab, setTab] = useState('approvalHistory');
   const [summaryData, setSummaryData] = useState([]);
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
-  const { data: stageOptions } = useBaseApi.stages();
-  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
@@ -149,15 +144,11 @@ const ResidentialCareBrokering = ({
       clientSummaryInfo={{
         client: residentialCarePackage?.residentialCarePackage?.clientName,
         hackneyId: residentialCarePackage?.residentialCarePackage?.clientHackneyId,
-        age:
-          residentialCarePackage?.residentialCarePackage &&
-          getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
+        age: getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
         preferredContact: residentialCarePackage?.residentialCarePackage?.clientPreferredContact,
         canSpeakEnglish: residentialCarePackage?.residentialCarePackage?.clientCanSpeakEnglish,
         packagesCount: 4,
-        dateOfBirth:
-          residentialCarePackage?.residentialCarePackage &&
-          getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
+        dateOfBirth: getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
         postcode: residentialCarePackage?.residentialCarePackage?.clientPostCode,
         title: 'Residential Care Brokering',
       }}
@@ -173,8 +164,6 @@ const ResidentialCareBrokering = ({
         summaryData={summaryData}
         approvalHistory={approvalHistoryEntries}
         residentialCarePackage={residentialCarePackage}
-        supplierOptions={supplierOptions}
-        stageOptions={stageOptions}
         residentialCareSummary={{
           additionalNeedsEntries,
           needToAddress: residentialCarePackage?.residentialCarePackage?.needToAddress,

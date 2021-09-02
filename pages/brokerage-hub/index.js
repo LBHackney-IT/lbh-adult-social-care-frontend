@@ -1,26 +1,26 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import { addNotification } from '../../reducers/notificationsReducer';
-import DashboardTabs from '../../components/Dashboard/Tabs';
-import Table from '../../components/Table';
-import Inputs from '../../components/Inputs';
-import { putBrokeredPackagesAssign } from '../../api/Dashboard/brokeredPackages';
-import { formatDate, formatForDropDownOptions, formatStatus } from '../../service/helpers';
-import CustomDropDown from '../../components/CustomDropdown';
-import Pagination from '../../components/Payments/Pagination';
+import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import { addNotification } from 'reducers/notificationsReducer';
+import DashboardTabs from 'components/Dashboard/Tabs';
+import Table from 'components/Table';
+import Inputs from 'components/Inputs';
+import { putBrokeredPackagesAssign } from 'api/Dashboard/brokeredPackages';
+import { formatDate, formatForDropDownOptions, formatStatus } from 'service/helpers';
+import CustomDropDown from 'components/CustomDropdown';
+import Pagination from 'components/Payments/Pagination';
 import {
   NURSING_CARE_APPROVE_BROKERED_ROUTE,
   NURSING_CARE_BROKERING_ROUTE,
   RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE,
   RESIDENTIAL_CARE_BROKERING_ROUTE,
-} from '../../routes/RouteConstants';
-import { DEFAULT_PAGE_SIZE } from '../../constants/variables';
-import { checkEmptyFields } from '../../service/inputValidator';
-import { sortArray } from '../../api/Utils/FuncUtils';
-import { DATA_TYPES } from '../../api/Utils/CommonOptions';
-import useBrokeredPackageApi from '../../api/SWR/useBrokeredPackagesApi'
+} from 'routes/RouteConstants';
+import { DEFAULT_PAGE_SIZE } from 'constants/variables';
+import { checkEmptyFields } from 'service/inputValidator';
+import { sortArray } from 'api/Utils/FuncUtils';
+import { DATA_TYPES } from 'api/Utils/CommonOptions';
+import useBrokeredPackageApi from 'api/SWR/useBrokeredPackagesApi';
 
 const BrokerageHubPage = () => {
   const dispatch = useDispatch();

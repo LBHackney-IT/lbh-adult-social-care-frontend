@@ -1,28 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux'
-import Layout from '../../../../components/Layout/Layout';
-import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
-import DayCarePackageBreakdown from '../../../../components/DayCare/DayCarePackageBreakdown';
-import DayCarePackageElementCostings from '../../../../components/DayCare/DayCarePackageElementCostings';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TitleHeader from '../../../../components/TitleHeader';
-import DayCareSummary from '../../../../components/DayCare/DayCareSummary';
-import TextArea from '../../../../components/TextArea';
+import { useDispatch } from 'react-redux';
+import Layout from 'components/Layout/Layout';
+import PackageCostBox from 'components/DayCare/PackageCostBox';
+import DayCarePackageBreakdown from 'components/DayCare/DayCarePackageBreakdown';
+import DayCarePackageElementCostings from 'components/DayCare/DayCarePackageElementCostings';
+import PackageApprovalHistorySummary from 'components/PackageApprovalHistorySummary';
+import TitleHeader from 'components/TitleHeader';
+import DayCareSummary from 'components/DayCare/DayCareSummary';
 import {
   approveDayCarePackageContents,
   dayCarePackageContentsRequestClarification,
   dayCarePackageRejectContents,
-} from '../../../../api/CarePackages/DayCareApi';
-import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
-import withSession from '../../../../lib/session';
-import { formatCareDatePeriod, getErrorResponse, getUserSession } from '../../../../service/helpers'
-import fieldValidator from '../../../../service/inputValidator';
-import useDayCareApi from '../../../../api/SWR/useDayCareApi'
-import { formatApprovalHistory, formatDayCareOpportunities } from '../../../../service/formatItems';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem'
-import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation'
+} from 'api/CarePackages/DayCareApi';
+import { getSelectedDate } from 'api/Utils/CommonOptions';
+import withSession from 'lib/session';
+import { formatCareDatePeriod, getErrorResponse, getUserSession } from 'service/helpers';
+import fieldValidator from 'service/inputValidator';
+import useDayCareApi from 'api/SWR/useDayCareApi';
+import { formatApprovalHistory, formatDayCareOpportunities } from 'service/formatItems';
+import { addNotification } from 'reducers/notificationsReducer';
+import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res }) => {

@@ -6,6 +6,9 @@
       "@constants": ["constants/"],
       "@routes": ["routes/"],
       "@api": ["api/"],
+      "@reducers": ["reducers/"],
+      "@lib": ["lib/"],
+      "@service": ["service/"],
     }
   }
 }
