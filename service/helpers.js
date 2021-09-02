@@ -1,6 +1,6 @@
-import { getEnGBFormattedDate } from 'api/Utils/FuncUtils';
-import { maxStringLength } from 'constants/variables';
 import { add } from 'date-fns';
+import { getEnGBFormattedDate } from '../api/Utils/FuncUtils';
+import { maxStringLength } from '../constants/variables';
 
 const chr4 = () => Math.random().toString(16).slice(-4);
 
