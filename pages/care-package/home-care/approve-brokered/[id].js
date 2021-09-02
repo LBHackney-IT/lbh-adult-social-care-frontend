@@ -15,9 +15,9 @@ import TitleHeader from 'components/TitleHeader';
 import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
 import fieldValidator from 'service/inputValidator';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import { postRequestMoreInformation } from '../../../../api/CarePackages/HomeCareApi';
 import { addNotification } from '../../../../reducers/notificationsReducer';
-import { useDispatch } from 'react-redux'
 
 const approvalHistoryEntries = [
   {
