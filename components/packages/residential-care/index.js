@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { getEnGBFormattedDate } from 'api/Utils/FuncUtils';
+import { currency } from 'constants/strings';
+import { addNotification } from 'reducers/notificationsReducer';
+import useBaseApi from 'api/SWR/useBaseApi';
+import useSuppliersApi from 'api/SWR/useSuppliersApi';
 import Dropdown from '../../Dropdown';
 import DatePick from '../../DatePick';
-import { currency } from 'constants/strings';
 import EuroInput from '../../EuroInput';
 import { Button } from '../../Button';
 import PackageReclaim from '../../PackageReclaim';
-import { getEnGBFormattedDate } from 'api/Utils/FuncUtils';
 import ResidentialCareSummary from '../../ResidentialCare/ResidentialCareSummary';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
 import AutocompleteSelect from '../../AutocompleteSelect';
 import ApprovalHistory from '../../ProposedPackages/ApprovalHistory';
 import PopupAddSupplier from '../../PopupAddSupplier';
-import { addNotification } from 'reducers/notificationsReducer';
-import useBaseApi from 'api/SWR/useBaseApi';
-import useSuppliersApi from 'api/SWR/useSuppliersApi';
 
 const PackagesResidentialCare = ({
   tab,
@@ -249,7 +249,7 @@ const PackagesResidentialCare = ({
                 </p>
               </div>
               {additionalNeedsOneOff.map((i, idx) => (
-                <div className="row-container full-width">
+                <div key={`${i}${idx}`} className="row-container full-width">
                   <h2 className="hackney-text-black font-weight-bold pt-5">
                     Additional needs payment ({i.additionalNeedsPaymentTypeName})
                   </h2>
