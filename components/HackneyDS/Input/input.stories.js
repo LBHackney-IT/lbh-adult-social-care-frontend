@@ -1,5 +1,6 @@
 import React from 'react';
 import { Input } from '../index';
+import { CrossIcon, SearchIcon } from '../icons'
 
 export default {
   title: 'Hackney Design System/Input',

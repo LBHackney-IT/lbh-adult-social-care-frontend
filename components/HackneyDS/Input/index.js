@@ -6,11 +6,10 @@ export default function Input({
   name,
   type = 'text',
   hint,
+  placeholder = '',
   error,
   value,
-  handler = () => {
-    throw new Error('Handler function is not defined');
-  },
+  handler,
 }) {
   const dataProvider = useRef();
 
@@ -27,6 +26,7 @@ export default function Input({
         className={`govuk-input lbh-input ${(error ?? '') && 'govuk-input--error'}`}
         id={id}
         name={name}
+        placeholder={placeholder}
         type={type}
         ref={dataProvider}
         value={value}

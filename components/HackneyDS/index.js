@@ -21,6 +21,7 @@ import Timeline from './Timeline';
 import Conversation from './Conversation';
 import { Table } from './Table';
 import { Pagination } from './Pagination';
+import SearchBox from './SearchBox';
 
 export {
   Conversation,
@@ -31,6 +32,7 @@ export {
   Hint,
   Input,
   Button,
+  SearchBox,
   Accordion,
   Announcement,
   BackLink,
