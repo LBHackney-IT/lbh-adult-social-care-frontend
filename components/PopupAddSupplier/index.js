@@ -8,7 +8,7 @@ import Popup from '../Popup';
 import useBrokeredPackageApi from '../../api/SWR/useBrokeredPackagesApi'
 import optionsMapper from '../../api/Mappers/optionsMapper'
 
-const PopupAddSupplier = ({ closePopup }) => {
+const PopupAddSupplier = ({ closePopup, getSuppliers }) => {
   const [supplierName, setSupplierName] = useState('');
   const [packageTypeId, setPackageTypeId] = useState('');
   const [isSupplierInternal, setIsSupplierInternal] = useState(false);
@@ -39,6 +39,7 @@ const PopupAddSupplier = ({ closePopup }) => {
       isSupplierInternal,
       hasSupplierFrameworkContractedRates,
     });
+    await getSuppliers();
     closePopup();
   };
 

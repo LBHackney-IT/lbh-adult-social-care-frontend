@@ -35,7 +35,7 @@ const PackagesNursingCare = ({
   const [coreCost, setCoreCost] = useState({
     costPerWeek: nursingCarePackage?.nursingCore || '',
   });
-  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
+  const { mutate: getSuppliers, data: { data: supplierOptions }} = useSuppliersApi.supplierList();
   const { data: stageOptions } = useDayCareApi.brokerAgeStages();
   const [popupAddSupplier, setPopupAddSupplier] = useState(false);
 
@@ -145,7 +145,7 @@ const PackagesNursingCare = ({
 
   return (
     <>
-      {popupAddSupplier && <PopupAddSupplier closePopup={() => setPopupAddSupplier(false)} />}
+      {popupAddSupplier && <PopupAddSupplier getSuppliers={getSuppliers} closePopup={() => setPopupAddSupplier(false)} />}
       <div className="mt-5 mb-5 person-care">
         <div className="column proposed-packages__header is-flex is-justify-content-space-between">
           <div>
@@ -195,6 +195,7 @@ const PackagesNursingCare = ({
               <h2 className="pt-5 hackney-text-black font-weight-bold">Nursing Core</h2>
               <div className="is-flex is-flex-wrap-wrap is-align-items-center">
                 <EuroInput
+                  maxLength={6}
                   onChange={(value) => changeElementsData(setCoreCost, coreCost, 'costPerWeek', value)}
                   classes="mr-6"
                   label="Cost per week"
@@ -210,6 +211,7 @@ const PackagesNursingCare = ({
               <h2 className="pt-5 hackney-text-black font-weight-bold">Additional needs payment</h2>
               <div className="is-align-items-center is-flex is-flex-wrap-wrap">
                 <EuroInput
+                  maxLength={6}
                   classes="mr-6"
                   value={additionalPayment.costPerWeek}
                   onChange={(value) =>
@@ -233,6 +235,7 @@ const PackagesNursingCare = ({
               <h2 className="hackney-text-black font-weight-bold pt-5">Additional needs payment (one off)</h2>
               <div className="is-flex is-flex-wrap-wrap is-align-items-center">
                 <EuroInput
+                  maxLength={6}
                   value={additionalPaymentOneOff.oneOf}
                   label="One Off"
                   onChange={(value) =>
@@ -288,6 +291,7 @@ const PackagesNursingCare = ({
             <>
               <div className='is-flex is-flex-wrap-wrap is-align-items-center mr-5'>
                 <EuroInput
+                  maxLength={6}
                   onBlur={() => {
                     if(fncCostPerWeek < initialFncCostPerWeek) {
                       setFncCostPerWeek(initialFncCostPerWeek);

@@ -32,57 +32,6 @@ const ApproverHubPage = () => {
   });
   const router = useRouter();
 
-  const onClickTableRow = (rowItems) => {
-    const packageType = packageTypeOptions.find(item => item.id === rowItems.packageTypeId);
-    if(includeString(packageType.packageType.toLowerCase(), 'residential')) {
-      switch (tab) {
-        case 'new': {
-          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
-          break;
-        }
-        case 'clarification': {
-          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
-          break;
-        }
-        case 'awaitingBrokerage': {
-          router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`);
-          break;
-        }
-        case 'reviewCommercials': {
-          router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`);
-          break;
-        }
-        default: {
-          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
-          break;
-        }
-      }
-    } else {
-      switch (tab) {
-        case 'new': {
-          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
-          break;
-        }
-        case 'clarification': {
-          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
-          break;
-        }
-        case 'awaitingBrokerage': {
-          router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`);
-          break;
-        }
-        case 'reviewCommercials': {
-          router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`);
-          break;
-        }
-        default: {
-          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
-          break;
-        }
-      }
-    }
-  };
-
   const [filters, setFilters] = useState({ ...initialFilters });
   const [requestFilters, setRequestFilters] = useState({
     ...initialFilters,
@@ -228,6 +177,57 @@ const ApproverHubPage = () => {
     ],
   };
 
+  const onClickTableRow = (rowItems) => {
+    const packageType = packageTypeOptions.find(item => item.id === rowItems.packageTypeId);
+    if(includeString(packageType.packageType.toLowerCase(), 'residential')) {
+      switch (tab) {
+        case 'new': {
+          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
+          break;
+        }
+        case 'clarification': {
+          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
+          break;
+        }
+        case 'awaitingBrokerage': {
+          router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`);
+          break;
+        }
+        case 'reviewCommercials': {
+          router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`);
+          break;
+        }
+        default: {
+          router.push(`${RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
+          break;
+        }
+      }
+    } else {
+      switch (tab) {
+        case 'new': {
+          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
+          break;
+        }
+        case 'clarification': {
+          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
+          break;
+        }
+        case 'awaitingBrokerage': {
+          router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`);
+          break;
+        }
+        case 'reviewCommercials': {
+          router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`);
+          break;
+        }
+        default: {
+          router.push(`${NURSING_CARE_APPROVE_PACKAGE_ROUTE}/${rowItems.packageId}`);
+          break;
+        }
+      }
+    }
+  };
+
   const sortBy = (field, value) => {
     setSort({ value, name: field });
   };
@@ -260,7 +260,13 @@ const ApproverHubPage = () => {
     setPage(chosenPage);
   };
 
-  const isLoadingData = Object.values(tabsTable).every((item) => !item);
+  const isLoadingData = (
+    approvedNew?.every((item) => !item) &&
+    approvedClarification?.every((item) => !item) &&
+    approvedAwaitingBrokerage?.every((item) => !item) &&
+    approvedReviewCommercials?.every((item) => !item) &&
+    approvedCompleted?.every((item) => !item)
+  );
 
   return (
     <div className="approver-hub-page max-desktop-width">

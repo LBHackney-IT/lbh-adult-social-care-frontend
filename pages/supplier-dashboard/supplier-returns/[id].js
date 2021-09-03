@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Breadcrumbs from 'components/Breadcrumbs';
 import PopupInvoiceChat from 'components/Chat/PopupInvoiceChat';
 import Pagination from 'components/Payments/Pagination';
 import SupplierReturnsLevelInsight from 'components/SupplierDashboard/SupplierReturnsLevelInsight';
-import SupplierReturnDashboardTable from 'components/SupplierDashboard/SupplierReturnsDashboardTable';
 import SupplierReturnsDashboardInnerHeader from 'components/SupplierDashboard/SupplierReturnsDashboardInnerHeader';
 import ChatButton from 'components/PayRuns/ChatButton';
 import { getUserSession } from 'service/helpers';
 import withSession from 'lib/session';
 import { supplierReturnsDashboardTableData, testDataHelpMessages } from '../../../testData/testDataPayRuns';
+import Table from '../../../components/Table'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -37,8 +37,8 @@ const SupplierReturnsDashboard = () => {
   const [openedHelpChat, setOpenedHelpChat] = useState({});
 
   const [breadcrumbs] = useState([
-    { text: 'Payments', onClick: () => router.push('/payments/pay-runs') },
-    { text: `Pay Run ${router.query.id}` },
+    { text: 'Supplier dashboard', onClick: () => router.push('/supplier-dashboard') },
+    { text: `Supplier return ${router.query.id}` },
   ]);
 
   const [sort, setSort] = useState({
@@ -60,7 +60,7 @@ const SupplierReturnsDashboard = () => {
 
   const actionButton = {
     classes: 'outline green mr-auto',
-    onClick: () => console.log('Accept all selected', checkedRows),
+    onClick: () => alert('Accept all selected', checkedRows),
     text: 'Accept all selected',
   };
 
@@ -76,26 +76,35 @@ const SupplierReturnsDashboard = () => {
 
   const makeServiceAction = (item, service, actionName) => {
     if (actionName === 'submit') {
-      console.log(`make service action ${actionName} with item: `, item);
-      console.log(`service: `, service);
+      alert(`make service action ${actionName} with item: `, item);
+      alert(`service: `, service);
     } else if (actionName === 'resubmit') {
-      console.log(`make service action ${actionName} with item: `, item);
-      console.log(`service: `, service);
+      alert(`make service action ${actionName} with item: `, item);
+      alert(`service: `, service);
     } else {
-      console.log('make service action not found');
+      alert('make service action not found');
     }
   };
 
-  const chatActions = [
+  const [chatActions] = useState([
     { id: 'action1', onClick: (item) => openChat(item), className: 'chat-icon', Component: ChatButton },
-  ];
+  ]);
 
-  useEffect(() => {
-    router.replace(`${pathname}?page=1`);
-  }, []);
+  const [actions] = useState({
+    'not-submitted': {
+      text: 'Submit',
+      actionName: 'submit',
+    },
+    disputed: {
+      text: 'Resubmit',
+      actionName: 'resubmit',
+    },
+  });
+
+  const [chatStatuses] = useState(['disputed']);
 
   return (
-    <div className="supplier-returns supplier-returns-dashboard max-desktop-width">
+    <div className="supplier-returns max-desktop-width">
       {openedPopup === 'help-chat' && (
         <PopupInvoiceChat
           closePopup={closeHelpChat}
@@ -106,17 +115,44 @@ const SupplierReturnsDashboard = () => {
           messages={testDataHelpMessages}
         />
       )}
-      {!!breadcrumbs.length && <Breadcrumbs classes="p-3" values={breadcrumbs} />}
+      {!!breadcrumbs.length && <Breadcrumbs className="p-3" values={breadcrumbs} />}
       <SupplierReturnsDashboardInnerHeader />
-      <SupplierReturnDashboardTable
+      <Table
         rows={supplierReturnsDashboardTableData}
-        careType="Residential"
+        rowsRules={{
+          id: {
+            type: 'checkbox',
+            onChange: (_, item) => onCheckRow(item.id),
+            getValue: (value) => checkedRows.includes(value),
+          },
+          services: {
+            getHide: () => true,
+          },
+          status: {
+            getClassName: (item) => `${item} table__row-item-status`,
+            getValue: (value) => formatStatus(value).slice(0,1).toUpperCase() + formatStatus(value).slice(1, value.length),
+          }
+        }}
+        fields={{
+          id: 'id',
+          serviceUser: 'serviceUser',
+          packageId: 'packageId',
+          packageType: 'packageType',
+          weeklyValue: 'weeklyValue',
+          status: 'status',
+          services: 'services',
+        }}
+        getCollapsedContainer={(supplierReturn) => (
+          <SupplierReturnsCollapsedContainer
+            makeAction={makeServiceAction}
+            openChat={openChat}
+            actions={actions}
+            chatStatuses={chatStatuses}
+            supplierReturn={supplierReturn}
+          />
+        )}
         checkedRows={checkedRows}
-        setCheckedRows={onCheckRow}
-        openChat={openChat}
-        makeAction={makeServiceAction}
-        additionalActions={chatActions}
-        isIgnoreId
+        changeAllChecked={setCheckedRows}
         canCollapseRows
         sortBy={sortBy}
         sorts={sorts}
