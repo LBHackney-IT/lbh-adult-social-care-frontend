@@ -113,7 +113,6 @@ const columns2 = [
     id: 'expander',
     Cell: ({ row }) => (
       <span {...row.getToggleRowExpandedProps()}>
-        {' '}
         {row.isExpanded ? <MdExpandLess size="24px" /> : <MdExpandMore size="24px" />}
       </span>
     ),
