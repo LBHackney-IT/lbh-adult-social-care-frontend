@@ -24,6 +24,7 @@ import { Pagination } from './Pagination';
 import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 import { Heading } from './lettering/Heading';
 import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
+import InsetText from './InsetText';
 
 export {
   Conversation,
@@ -51,5 +52,6 @@ export {
   Table,
   HorizontalSeparator,
   Heading,
-  IndeterminateCheckbox
+  IndeterminateCheckbox,
+  InsetText,
 };
