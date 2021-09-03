@@ -1,8 +1,10 @@
 import { format } from 'date-fns';
 import React from 'react';
 import faker from 'faker';
+import { MdExpandLess, MdExpandMore } from 'react-icons/md';
 import { Table } from '.';
 import { getNumberWithCommas } from '../../../service/helpers';
+import { IndeterminateCheckbox } from './IndeterminateCheckbox';
 
 const createTableData = (records) => {
   let tableData = [];
@@ -66,6 +68,7 @@ export const Default = Template.bind({});
 Default.args = {
   columns,
   data,
+  hasRowSelection: false,
 };
 
 const expandRowCallback = ({ row }) => (
@@ -108,7 +111,12 @@ const columns2 = [
   {
     Header: () => null,
     id: 'expander',
-    Cell: ({ row }) => <span {...row.getToggleRowExpandedProps()}>{row.isExpanded ? '👇' : '👉'}</span>,
+    Cell: ({ row }) => (
+      <span {...row.getToggleRowExpandedProps()}>
+        {' '}
+        {row.isExpanded ? <MdExpandLess size="24px" /> : <MdExpandMore size="24px" />}
+      </span>
+    ),
   },
 ];
 
@@ -117,4 +125,45 @@ WithExpansion.args = {
   columns: columns2,
   data,
   expandRowCallback,
+  hasRowSelection: false,
+};
+
+const columns3 = [
+  {
+    id: 'selection',
+    Header: ({ getToggleAllRowsSelectedProps }) => <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} small />,
+    Cell: ({ row }) => <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} small />,
+  },
+  {
+    Header: 'Id',
+    accessor: 'id',
+  },
+  {
+    Header: 'Name',
+    accessor: 'name',
+  },
+  {
+    Header: 'Age',
+    accessor: 'age',
+  },
+  {
+    Header: 'Gender',
+    accessor: 'gender',
+  },
+  {
+    Header: 'Joined',
+    accessor: 'joined',
+    Cell: ({ value }) => format(new Date(value), 'd/MM/Y'),
+  },
+  {
+    Header: 'Total',
+    accessor: 'total',
+    Cell: ({ value }) => `£${getNumberWithCommas(value)}`,
+  },
+];
+
+export const WithRowSelection = Template.bind({});
+WithRowSelection.args = {
+  columns: columns3,
+  data,
 };
