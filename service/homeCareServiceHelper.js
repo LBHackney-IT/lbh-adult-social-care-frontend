@@ -101,7 +101,7 @@ const careTimes = [
 const getServiceTypeCareTimes = (serviceTypeId) => {
   return careTimes.find((item) => {
     return item.serviceTypeId === serviceTypeId;
-  });
+  }) || {};
 };
 
 const getServiceTimes = (homeCareServices, selectedServiceTypeId) => {

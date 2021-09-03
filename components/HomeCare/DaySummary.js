@@ -86,15 +86,14 @@ const DaySummary = ({ daySummaryItem, edit = (item) => console.log(item), remove
               <div className="column">
                 <span>Need Addressing</span>
                 <p>
-                  {formattedNeedAddressing}{' '}
-                  {formattedNeedAddressing.length !== careSummary.needAddressing.length && (addressTextCollapsed ? (
+                  {`${formattedNeedAddressing} `}
+                  {formattedNeedAddressing.length !== careSummary?.needAddressing?.length && (addressTextCollapsed ? (
                     <span
                       className="day-summary__action-button"
                       onClick={() => showMore(openedAddressText, setOpenedAddressText, careSummary.id)}
                       role="presentation"
                     >
-                      {' '}
-                      More...
+                      {' More...'}
                     </span>
                   ) : (
                     <span
@@ -102,8 +101,7 @@ const DaySummary = ({ daySummaryItem, edit = (item) => console.log(item), remove
                       onClick={() => collapse(openedAddressText, setOpenedAddressText, careSummary.id)}
                       role="presentation"
                     >
-                      {' '}
-                      Collapse
+                      {' Collapse'}
                     </span>
                   ))}
                 </p>
@@ -152,15 +150,14 @@ const DaySummary = ({ daySummaryItem, edit = (item) => console.log(item), remove
               <div className="column">
                 <span>What should be done</span>
                 <p>
-                  {whatShouldBeDone}{' '}
-                  {whatShouldBeDone.length !== careSummary.whatShouldBeDone.length && (beDoneTextCollapsed ? (
+                  {`${whatShouldBeDone} `}
+                  {whatShouldBeDone.length !== careSummary?.whatShouldBeDone?.length && (beDoneTextCollapsed ? (
                     <span
                       className="day-summary__action-button"
                       onClick={() => showMore(openedBeDoneText, setOpenedBeDoneText, careSummary.id)}
                       role="presentation"
                     >
-                      {' '}
-                      More...
+                      {' More...'}
                     </span>
                   ) : (
                     <span
@@ -168,8 +165,7 @@ const DaySummary = ({ daySummaryItem, edit = (item) => console.log(item), remove
                       onClick={() => collapse(openedBeDoneText, setOpenedBeDoneText, careSummary.id)}
                       role="presentation"
                     >
-                      {' '}
-                      Collapse
+                      {' Collapse'}
                     </span>
                   ))}
                 </p>

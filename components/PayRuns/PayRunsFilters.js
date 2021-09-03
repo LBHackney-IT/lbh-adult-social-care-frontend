@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 import Input from '../Input';
 import Dropdown from '../Dropdown';
 import { Button } from '../Button';
-import DatePick from '../DatePick'
+import DatePick from '../DatePick';
 
 const PayRunsFilters = ({
   filters,

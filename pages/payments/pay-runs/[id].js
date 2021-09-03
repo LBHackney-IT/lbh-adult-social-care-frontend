@@ -10,32 +10,32 @@ import {
   kickPayRunBackToDraft,
   rejectInvoicePayment,
   submitPayRunForApproval,
-} from '../../../api/Payments/PayRunApi';
-import Breadcrumbs from '../../../components/Breadcrumbs';
-import Pagination from '../../../components/Payments/Pagination';
-import { addNotification } from '../../../reducers/notificationsReducer';
-import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
-import PayRunsLevelInsight from '../../../components/PayRuns/PayRunsLevelInsight';
-import PayRunHeader from '../../../components/PayRuns/PayRunHeader';
-import PopupHoldPayment from '../../../components/PayRuns/PopupHoldPayment';
-import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { formatStatus, getUserSession, getNumberWithCommas } from '../../../service/helpers';
-import withSession from '../../../lib/session';
-import Table from '../../../components/Table';
-import CustomDropDown from '../../../components/CustomDropdown';
-import { currency } from '../../../constants/strings';
-import PayRunCollapsedContent from '../../../components/PayRuns/PayRunCollapsedContent';
-import { useInvoicePaymentStatuses, usePaymentDepartments } from '../../../api/SWR';
+} from 'api/Payments/PayRunApi';
+import Breadcrumbs from 'components/Breadcrumbs';
+import Pagination from 'components/Payments/Pagination';
+import { addNotification } from 'reducers/notificationsReducer';
+import PopupCreatePayRun from 'components/PayRuns/PopupCreatePayRun';
+import PayRunsLevelInsight from 'components/PayRuns/PayRunsLevelInsight';
+import PayRunHeader from 'components/PayRuns/PayRunHeader';
+import PopupHoldPayment from 'components/PayRuns/PopupHoldPayment';
+import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import { formatStatus, getUserSession, getNumberWithCommas } from 'service/helpers';
+import withSession from 'lib/session';
+import Table from 'components/Table';
+import CustomDropDown from 'components/CustomDropdown';
+import { currency } from 'constants/strings';
+import PayRunCollapsedContent from 'components/PayRuns/PayRunCollapsedContent';
+import { useInvoicePaymentStatuses, usePaymentDepartments } from 'api/SWR';
 import {
   usePayRunSummaryInsights,
   useSinglePayRunDetails,
   useUniquePayRunPackageTypes,
   useUniquePayRunSuppliers,
-} from '../../../api/SWR/transactions/payrun/usePayRunApi';
-import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
-import { sortArray } from '../../../api/Utils/FuncUtils';
-import PopupDownloadCEDER from '../../../components/Payments/PopupDownloadCEDER';
-import { invoiceStatusIdByString } from '../../../constants/variables';
+} from 'api/SWR/transactions/payrun/usePayRunApi';
+import { DATA_TYPES } from 'api/Utils/CommonOptions';
+import { sortArray } from 'api/Utils/FuncUtils';
+import PopupDownloadCEDER from 'components/Payments/PopupDownloadCEDER';
+import { invoiceStatusIdByString } from 'constants/variables';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

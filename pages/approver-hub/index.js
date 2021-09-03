@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
-import Pagination from '../../components/Payments/Pagination';
-import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import DashboardTabs from '../../components/Dashboard/Tabs';
-import Table from '../../components/Table';
-import { formatDate, formatForDropDownOptions, includeString } from '../../service/helpers'
-import Inputs from '../../components/Inputs';
+import Pagination from 'components/Payments/Pagination';
+import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import DashboardTabs from 'components/Dashboard/Tabs';
+import Table from 'components/Table';
+import { formatDate, formatForDropDownOptions, includeString } from 'service/helpers';
+import Inputs from 'components/Inputs';
 import {
   RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE,
   RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE,
@@ -13,13 +13,13 @@ import {
   NURSING_CARE_APPROVE_PACKAGE_ROUTE,
   NURSING_CARE_APPROVE_BROKERED_ROUTE,
   NURSING_CARE_BROKERING_ROUTE,
-} from '../../routes/RouteConstants';
-import { currency } from '../../constants/strings';
-import { DEFAULT_PAGE_SIZE } from '../../constants/variables';
-import { checkEmptyFields } from '../../service/inputValidator';
-import { sortArray } from '../../api/Utils/FuncUtils';
-import { DATA_TYPES } from '../../api/Utils/CommonOptions';
-import useApprovedPackageApi from '../../api/SWR/useApprovedPackagesApi';
+} from 'routes/RouteConstants';
+import { currency } from 'constants/strings';
+import { DEFAULT_PAGE_SIZE } from 'constants/variables';
+import { checkEmptyFields } from 'service/inputValidator';
+import { sortArray } from 'api/Utils/FuncUtils';
+import { DATA_TYPES } from 'api/Utils/CommonOptions';
+import useApprovedPackageApi from 'api/SWR/useApprovedPackagesApi';
 
 const ApproverHubPage = () => {
   const [initialFilters] = useState({

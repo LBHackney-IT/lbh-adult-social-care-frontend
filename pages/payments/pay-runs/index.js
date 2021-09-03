@@ -6,26 +6,26 @@ import {
   PAY_RUN_TYPES,
   releaseHeldInvoices,
   releaseSingleHeldInvoice,
-} from '../../../api/Payments/PayRunApi';
-import PopupInvoiceChat from '../../../components/Chat/PopupInvoiceChat';
-import PayRunsHeader from '../../../components/PayRuns/PayRunsHeader';
-import PaymentsTabs from '../../../components/Payments/PaymentsTabs';
-import PayRunTable from '../../../components/PayRuns/PayRunTable';
-import Pagination from '../../../components/Payments/Pagination';
-import Table from '../../../components/Table';
-import { addNotification } from '../../../reducers/notificationsReducer';
-import PopupCreatePayRun from '../../../components/PayRuns/PopupCreatePayRun';
-import ChatButton from '../../../components/PayRuns/ChatButton';
-import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { formatStatus, getLoggedInUser, getUserSession, getNumberWithCommas } from '../../../service/helpers'
-import withSession from '../../../lib/session';
-import { getEnGBFormattedDate, sortArray } from '../../../api/Utils/FuncUtils';
-import { DATA_TYPES } from '../../../api/Utils/CommonOptions';
-import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from '../../../api/Mappers/PayRunMapper';
-import { useHeldInvoicePayments, usePaymentDepartments } from '../../../api/SWR';
-import { usePayRunSubTypes, usePayRunTypes, useUniquePayRunStatuses } from '../../../api/SWR/transactions/payrun/usePayRunApi';
-import usePayRunsSummaryList from '../../../api/SWR/transactions/usePayRunsSummaryList';
-import useGroupedData from '../../../service/useGroupPayRun';
+} from 'api/Payments/PayRunApi';
+import PopupInvoiceChat from 'components/Chat/PopupInvoiceChat';
+import PayRunsHeader from 'components/PayRuns/PayRunsHeader';
+import PaymentsTabs from 'components/Payments/PaymentsTabs';
+import PayRunTable from 'components/PayRuns/PayRunTable';
+import Pagination from 'components/Payments/Pagination';
+import Table from 'components/Table';
+import { addNotification } from 'reducers/notificationsReducer';
+import PopupCreatePayRun from 'components/PayRuns/PopupCreatePayRun';
+import ChatButton from 'components/PayRuns/ChatButton';
+import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import { formatStatus, getLoggedInUser, getUserSession, getNumberWithCommas } from 'service/helpers';
+import withSession from 'lib/session';
+import { getEnGBFormattedDate, sortArray } from 'api/Utils/FuncUtils';
+import { DATA_TYPES } from 'api/Utils/CommonOptions';
+import { mapPayRunStatuses, mapPayRunSubTypeOptions, mapPayRunTypeOptions } from 'api/Mappers/PayRunMapper';
+import { useHeldInvoicePayments, usePaymentDepartments } from 'api/SWR';
+import { usePayRunSubTypes, usePayRunTypes, useUniquePayRunStatuses } from 'api/SWR/transactions/payrun/usePayRunApi';
+import usePayRunsSummaryList from 'api/SWR/transactions/usePayRunsSummaryList';
+import useGroupedData from 'service/useGroupPayRun';
 
 const PAYMENT_TABS = [
   { text: 'Pay Runs', value: 'pay-runs' },
@@ -132,6 +132,8 @@ const PayRunsPage = ({ loggedInUserId, loggedInUserName }) => {
   const { data: payRunSubTypes } = usePayRunSubTypes();
   const { options: waitingOnOptions } = usePaymentDepartments();
   const { data: uniquePayRunStatuses } = useUniquePayRunStatuses();
+
+  console.log('main filters', filters);
 
   const { data: heldPayments, mutate: refetchHeldPayments } = useHeldInvoicePayments({
     ...filters,

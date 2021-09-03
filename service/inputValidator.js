@@ -5,12 +5,12 @@
 //  {name: 'password', value: 'SoMePASS', rules: ['empty', 'password']}
 // ]
 
-const fieldValidator = (inputs = [], additionalRules = []) => {
+const fieldValidator = (inputs = [], additionalRules = [], generalRules = ['empty']) => {
   const validFields = {};
   let hasErrors = false;
   inputs.forEach((item) => {
     validFields[item.name] = '';
-    if (item.rules.includes('empty')) {
+    if (generalRules.includes('empty') || item.rules.includes('empty')) {
       if (item.value === undefined || item.value === '') {
         validFields[item.name] = 'Required field';
         hasErrors = true;

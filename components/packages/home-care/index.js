@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
+import { useRouter } from 'next/router';
 import { currency } from '../../../constants/strings';
 import DatePick from '../../DatePick';
 import Dropdown from '../../Dropdown';
@@ -14,23 +14,11 @@ import { addNotification } from '../../../reducers/notificationsReducer';
 import { getErrorResponse } from '../../../service/helpers';
 import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
-import { useRouter } from 'next/router'
-
-const stageOptions = [
-  { text: 'New', value: 1 },
-  { text: 'Assigned', value: 2 },
-  { text: 'Querying', value: 3 },
-  { text: 'Supplier Sourced', value: 4 },
-  { text: 'Pricing agreed', value: 5 },
-  { text: 'Submitted For Approver', value: 6 },
-];
-
-const supplierOptions = [
-  { text: 'Supplier type 1', value: 1 },
-  { text: 'Supplier type 2', value: 2 },
-  { text: 'Supplier type 3', value: 3 },
-  { text: 'Supplier type 4', value: 4 },
-];
+import AutocompleteSelect from '../../AutocompleteSelect'
+import useSuppliersApi from '../../../api/SWR/useSuppliersApi'
+import PopupAddSupplier from '../../PopupAddSupplier'
+import useDayCareApi from '../../../api/SWR/useDayCareApi'
+import { mapCareStageOptions } from '../../../api/Mappers/CarePackageMapper'
 
 const PackagesHomeCare = ({
   tab,
@@ -45,6 +33,8 @@ const PackagesHomeCare = ({
   homeCareSummary,
 }) => {
   const dispatch = useDispatch();
+  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
+  const { data: stageOptions } = useDayCareApi.brokerAgeStages();
   const [elementsData, setElementsData] = useState({
     '30mCall': {
       value: 0,
@@ -96,6 +86,7 @@ const PackagesHomeCare = ({
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
+  const [popupAddSupplier, setPopupAddSupplier] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
 
   const changeElementsData = (field, data) => {
@@ -159,6 +150,7 @@ const PackagesHomeCare = ({
 
   return (
     <>
+      {popupAddSupplier && <PopupAddSupplier closePopup={() => setPopupAddSupplier(false)} />}
       <div className="mb-5 person-care tabs-border">
         <div className="column proposed-packages__header is-flex is-justify-content-space-between">
           <div>
@@ -171,20 +163,22 @@ const PackagesHomeCare = ({
             label=""
             className='stage-dropdown'
             initialText="Stage"
-            options={stageOptions}
+            options={mapCareStageOptions(stageOptions)}
             selectedValue={selectedStageType}
             onOptionSelect={onChangeStatus}
           />
         </div>
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap proposed-packages__supplier-settings">
-            <Dropdown
-              label=""
-              initialText="Supplier (please select)"
-              options={supplierOptions}
-              onOptionSelect={(option) => setSelectedSupplierType(option)}
-              selectedValue={selectedSupplierType}
-            />
+            <Button className='mr-3' onClick={() => setPopupAddSupplier(true)}>New Supplier</Button>
+            <div className='mr-3'>
+              <AutocompleteSelect
+                placeholder="Supplier (please select)"
+                options={supplierOptions}
+                selectProvider={setSelectedSupplierType}
+                value={selectedSupplierType}
+              />
+            </div>
             <span className="mr-3">
               <DatePick label="Start Date" dateValue={startDate} setDate={setStartDate} />
             </span>

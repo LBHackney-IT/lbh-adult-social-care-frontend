@@ -1,9 +1,9 @@
 import React from 'react';
-import ClientSummary from '../../components/ClientSummary';
-import Dropdown from '../../components/Dropdown';
-import Layout from '../../components/Layout/Layout';
-import withSession from '../../lib/session';
-import { getUserSession } from '../../service/helpers';
+import ClientSummary from 'components/ClientSummary';
+import Dropdown from 'components/Dropdown';
+import Layout from 'components/Layout/Layout';
+import withSession from 'lib/session';
+import { getUserSession } from 'service/helpers';
 
 // TODO remove
 const assessmentTypes = [
