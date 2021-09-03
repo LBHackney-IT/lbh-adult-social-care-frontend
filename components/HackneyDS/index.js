@@ -21,8 +21,10 @@ import Timeline from './Timeline';
 import Conversation from './Conversation';
 import { Table } from './Table';
 import { Pagination } from './Pagination';
+import Tip from './Tip';
 
 export {
+  Tip,
   Conversation,
   Link,
   Timeline,
