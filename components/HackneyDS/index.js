@@ -24,6 +24,7 @@ import { Pagination } from './Pagination';
 import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 import { Heading } from './lettering/Heading';
 import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
+import WarningText from './WarningText';
 
 export {
   Conversation,
@@ -47,6 +48,7 @@ export {
   Tab,
   Tag,
   Select,
+  WarningText,
   Pagination,
   Table,
   HorizontalSeparator,
