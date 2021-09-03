@@ -68,7 +68,6 @@ export const Default = Template.bind({});
 Default.args = {
   columns,
   data,
-  hasRowSelection: false,
 };
 
 const expandRowCallback = ({ row }) => (
@@ -124,7 +123,6 @@ WithExpansion.args = {
   columns: columns2,
   data,
   expandRowCallback,
-  hasRowSelection: false,
 };
 
 const columns3 = [
