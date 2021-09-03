@@ -97,10 +97,6 @@ const PackagesResidentialCare = ({
     dispatch(addNotification({ text, className }));
   };
 
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
-  };
-
   useEffect(() => {
     setEndDateEnabled(!residentialCarePackageData?.residentialCarePackage?.endDate);
 
