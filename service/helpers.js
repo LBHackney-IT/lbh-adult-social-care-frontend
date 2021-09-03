@@ -38,6 +38,8 @@ const getFutureDate = (time) => {
 }
 
 const formatStringLength = (string, collapsedText, isSlicedText) => {
+  if(!string) return '';
+
   if (string.length > maxStringLength && collapsedText && isSlicedText) {
     return `${string.slice(0, maxStringLength)}`;
   }
