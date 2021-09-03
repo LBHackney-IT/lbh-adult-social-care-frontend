@@ -21,6 +21,7 @@ import Timeline from './Timeline';
 import Conversation from './Conversation';
 import { Table } from './Table';
 import { Pagination } from './Pagination';
+import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 
 export {
   Conversation,
@@ -46,4 +47,5 @@ export {
   Select,
   Pagination,
   Table,
+  HorizontalSeparator
 };
