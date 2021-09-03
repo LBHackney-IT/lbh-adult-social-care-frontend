@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CarePickerTimeSlot from './CarePickerTimeSlot';
 import LegendItem from './LegendItem';
 import RadioButton from '../RadioButton';
+import ErrorField from '../ErrorField'
 
 const minutesOrHoursOptions = [
   { text: 'Minutes', value: 1 },
@@ -9,6 +10,7 @@ const minutesOrHoursOptions = [
 ];
 
 const WeekCarePicker = ({
+  error,
   homeCareServices,
   homeCareTimeShifts,
   currentMode,
@@ -46,6 +48,7 @@ const WeekCarePicker = ({
         </div>
       </div>
       <div className="week-care-picker mt-4">
+        {error && <ErrorField text='You need to choose at least one variant' />}
         <div className="columns header-columns">
           <div className="column" />
           {weekDays.map((weekDayItem) => {

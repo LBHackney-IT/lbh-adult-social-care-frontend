@@ -39,7 +39,6 @@ const DayCareApprovePackage = () => {
   const [daysSelected, setDaysSelected] = useState([]);
   const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
   const [opportunityEntries, setOpportunityEntries] = useState([]);
-  const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
 
   const { data: dayCarePackage } = useDayCareApi.approvalDetails(dayCarePackageId);
@@ -98,7 +97,6 @@ const DayCareApprovePackage = () => {
     }
     dayCarePackageContentsRequestClarification(dayCarePackageId, requestInformationText)
       .then(() => {
-        setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {

@@ -60,7 +60,10 @@ const PackagesDayCare = ({
   });
 
   const packageDetails = dayCarePackage?.packageDetails;
-  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
+  const {
+    mutate: getSuppliers,
+    data: { data: supplierOptions }
+  } = useSuppliersApi.supplierList();
   const { data: stageOptions } = useDayCareApi.brokerAgeStages();
 
   const [selectedStageType, setSelectedStageType] = useState(0);
@@ -172,7 +175,7 @@ const PackagesDayCare = ({
 
   return (
     <>
-      {popupAddSupplier && <PopupAddSupplier closePopup={() => setPopupAddSupplier(false)} />}
+      {popupAddSupplier && <PopupAddSupplier getSuppliers={getSuppliers} closePopup={() => setPopupAddSupplier(false)} />}
       <div className="mt-5 mb-5 person-care">
         <div className="column proposed-packages__header is-flex is-justify-content-space-between">
           <div>
