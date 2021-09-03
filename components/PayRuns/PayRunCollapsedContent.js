@@ -6,7 +6,6 @@ const PayRunCollapsedContent = ({ invoice = {} }) => {
   if (!invoiceItems) return React.Fragment;
 
   const invoiceClaimedByHackney = invoiceItems.filter(item => item.claimedBy === 'Hackney');
-  const invoiceClaimedByOther = invoiceItems.filter(item => item.claimedBy !== 'Hackney');
 
   return (
     <>
@@ -19,7 +18,7 @@ const PayRunCollapsedContent = ({ invoice = {} }) => {
         </div>
         <div className="table__row-collapsed-main">
           <PayRunInvoiceItems
-            invoiceItems={invoiceClaimedByOther}
+            invoiceItems={!invoiceClaimedByHackney}
             totalToText='Total to pay'
           />
           {!!invoiceClaimedByHackney.length &&
