@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 
 export default function Input({
   label,
-  placeholder,
   id = 'lbh-input',
   name,
   type = 'text',
@@ -28,7 +27,6 @@ export default function Input({
         id={id}
         placeholder={placeholder}
         name={name}
-        placeholder={placeholder}
         type={type}
         ref={dataProvider}
         value={value}
