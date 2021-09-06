@@ -5,9 +5,9 @@ export default {
   title: 'Hackney Design System/SimplePagination',
   component: SimplePagination,
   argTypes: {
-    onPageChange: {
-      control: false,
-    },
+    totalCount: { type: 'number' },
+    currentPage: { type: 'number' },
+    showPageNumber: { type: 'boolean' },
   },
 };
 
