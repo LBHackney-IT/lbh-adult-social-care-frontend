@@ -14,8 +14,13 @@
 @import "./lettering/Hint/style";
 @import "./lettering/Label/style";
 @import "./lettering/ErrorMessage/style";
+@import "./lettering/Heading/style";
 @import "./Timeline/style";
 @import "./Conversation/style";
 @import "./lettering/Link/style";
 @import "./SearchBox/style";
 @import "RadioItem/style";
+
+@import "./Panel/style.scss";
+@import "./Layout/HorizontalSeparator/style.scss";
+@import "./WarningText/style";

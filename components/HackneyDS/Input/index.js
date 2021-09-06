@@ -27,8 +27,8 @@ export default function Input({
       <input
         className={`govuk-input lbh-input ${(error ?? '') && 'govuk-input--error'}`}
         id={id}
-        name={name}
         placeholder={placeholder}
+        name={name}
         type={type}
         ref={dataProvider}
         value={value}

@@ -1,27 +1,27 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import Layout from '../../../components/Layout/Layout';
-import TextArea from '../../../components/TextArea';
-import Dropdown from '../../../components/Dropdown';
+import Layout from 'components/Layout/Layout';
+import TextArea from 'components/TextArea';
+import Dropdown from 'components/Dropdown';
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
-} from '../../../components/CarePackages/AdditionalNeedsEntries';
+} from 'components/CarePackages/AdditionalNeedsEntries';
 import {
   createResidentialCarePackage,
   createResidentialCarePackageReclaim,
   getResidentialCareAdditionalNeedsCostOptions,
-} from '../../../api/CarePackages/ResidentialCareApi';
-import TitleHeader from '../../../components/TitleHeader';
-import { Button } from '../../../components/Button';
-import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
-import { formatCareDatePeriod, getUserSession } from '../../../service/helpers'
-import withSession from '../../../lib/session';
-import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
-import { addNotification } from '../../../reducers/notificationsReducer';
-import fieldValidator from '../../../service/inputValidator';
-import useResidentialCareApi from '../../../api/SWR/useResidentialCareApi'
-import CareSummary from '../../../components/ProposedPackages/CareSummary'
+} from 'api/CarePackages/ResidentialCareApi';
+import TitleHeader from 'components/TitleHeader';
+import { Button } from 'components/Button';
+import { CARE_PACKAGE_ROUTE } from 'routes/RouteConstants';
+import { formatCareDatePeriod, getUserSession } from 'service/helpers'
+import withSession from 'lib/session';
+import PackageReclaims from 'components/CarePackages/PackageReclaims';
+import { addNotification } from 'reducers/notificationsReducer';
+import fieldValidator from 'service/inputValidator';
+import useResidentialCareApi from 'api/SWR/useResidentialCareApi'
+import CareSummary from 'components/ProposedPackages/CareSummary'
 import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils'
 
 export const getServerSideProps = withSession(async ({ req, res }) => {

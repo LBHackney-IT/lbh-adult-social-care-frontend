@@ -1,16 +1,30 @@
 import React from 'react';
-import { useTable, usePagination, useExpanded } from 'react-table';
+import { useTable, useExpanded, useRowSelect } from 'react-table';
 
-export const Table = ({ columns, data, expandRowCallback }) => {
-  const { getTableProps, getTableBodyProps, headerGroups, prepareRow, visibleColumns, rows } = useTable(
+export const Table = ({ columns, data, expandRowCallback, setSelectedRows, hasFooter }) => {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    visibleColumns,
+    rows,
+    footerGroups,
+    selectedFlatRows,
+    state: { selectedRowIds },
+  } = useTable(
     {
       columns,
       data,
       initialState: { pageIndex: 2 },
     },
     useExpanded,
-    usePagination
+    useRowSelect
   );
+
+  React.useEffect(() => {
+    if (setSelectedRows) setSelectedRows(selectedFlatRows);
+  }, [setSelectedRows, selectedRowIds]);
 
   const renderRowSubComponent = React.useCallback(expandRowCallback, []);
 
@@ -50,6 +64,19 @@ export const Table = ({ columns, data, expandRowCallback }) => {
           );
         })}
       </tbody>
+      {hasFooter && (
+        <tfoot className="govuk-table__head">
+          {footerGroups.map((group) => (
+            <tr className="govuk-table__row" {...group.getFooterGroupProps()}>
+              {group.headers.map((column) => (
+                <td className="govuk-table__footer" {...column.getFooterProps()}>
+                  {column.render('Footer')}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tfoot>
+      )}
     </table>
   );
 };

@@ -23,10 +23,12 @@ import { Table } from './Table';
 import { Pagination } from './Pagination';
 import SearchBox from './SearchBox';
 import RadioItem from './RadioItem';
-import RadioGroup from './RadioGroup';
+import { HorizontalSeparator } from './Layout/HorizontalSeparator';
+import { Heading } from './lettering/Heading';
+import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
+import WarningText from './WarningText';
 
 export {
-  RadioGroup,
   RadioItem,
   Conversation,
   Link,
@@ -50,6 +52,10 @@ export {
   Tab,
   Tag,
   Select,
+  WarningText,
   Pagination,
   Table,
+  HorizontalSeparator,
+  Heading,
+  IndeterminateCheckbox
 };

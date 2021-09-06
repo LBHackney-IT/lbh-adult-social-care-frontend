@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { getUserSession } from '../../service/helpers';
-import withSession from '../../lib/session';
-import Loading from '../../components/Loading'
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { getUserSession } from 'service/helpers';
+import withSession from 'lib/session';
+import Loading from 'components/Loading';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

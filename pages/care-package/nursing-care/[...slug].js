@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import Dropdown from '../../../components/Dropdown';
-import TextArea from '../../../components/TextArea';
-import Layout from '../../../components/Layout/Layout';
+import Dropdown from 'components/Dropdown';
+import TextArea from 'components/TextArea';
+import Layout from 'components/Layout/Layout';
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
-} from '../../../components/CarePackages/AdditionalNeedsEntries';
-import TitleHeader from '../../../components/TitleHeader';
-import { Button } from '../../../components/Button';
+} from 'components/CarePackages/AdditionalNeedsEntries';
+import TitleHeader from 'components/TitleHeader';
+import { Button } from 'components/Button';
 import {
   createNursingCarePackage,
   createNursingCarePackageReclaim,
-} from '../../../api/CarePackages/NursingCareApi';
-import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
-import { addNotification } from '../../../reducers/notificationsReducer';
-import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
-import { formatCareDatePeriod, getLoggedInUser, getUserSession } from '../../../service/helpers'
-import withSession from '../../../lib/session';
-import fieldValidator from '../../../service/inputValidator';
-import { selectUser } from '../../../reducers/userReducer';
-import useNursingCareApi from '../../../api/SWR/useNursingCareApi'
-import CareSummary from '../../../components/ProposedPackages/CareSummary'
+} from 'api/CarePackages/NursingCareApi';
+import PackageReclaims from 'components/CarePackages/PackageReclaims';
+import { addNotification } from 'reducers/notificationsReducer';
+import { CARE_PACKAGE_ROUTE } from 'routes/RouteConstants';
+import { formatCareDatePeriod, getLoggedInUser, getUserSession } from 'service/helpers';
+import withSession from 'lib/session';
+import fieldValidator from 'service/inputValidator';
+import { selectUser } from 'reducers/userReducer';
+import useNursingCareApi from 'api/SWR/useNursingCareApi';
+import CareSummary from 'components/ProposedPackages/CareSummary';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

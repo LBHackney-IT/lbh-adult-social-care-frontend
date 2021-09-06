@@ -1,29 +1,29 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
+import { HASC_TOKEN_ID } from 'api/BaseApi';
 import {
   getNursingCarePackageApprovalHistory,
   getNursingCarePackageApproveCommercial,
   nursingCareApproveCommercials,
   nursingCareChangeStatus,
   nursingCareClarifyCommercial,
-} from '../../../../api/CarePackages/NursingCareApi';
-import { stringIsNullOrEmpty } from '../../../../api/Utils/FuncUtils';
-import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
-import Layout from '../../../../components/Layout/Layout';
-import NursingCareSummary from '../../../../components/NursingCare/NursingCareSummary';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TitleHeader from '../../../../components/TitleHeader';
-import withSession from '../../../../lib/session';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import { formatCareDatePeriod, getErrorResponse, getUserSession } from '../../../../service/helpers'
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
-import { Button } from '../../../../components/Button'
-import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation'
-import { mapCareAdditionalNeedsEntries } from '../../../../api/Mappers/CarePackageMapper'
-import fieldValidator from '../../../../service/inputValidator'
+} from 'api/CarePackages/NursingCareApi';
+import { stringIsNullOrEmpty } from 'api/Utils/FuncUtils';
+import PackageCostBox from 'components/DayCare/PackageCostBox';
+import Layout from 'components/Layout/Layout';
+import NursingCareSummary from 'components/NursingCare/NursingCareSummary';
+import PackageApprovalHistorySummary from 'components/PackageApprovalHistorySummary';
+import TitleHeader from 'components/TitleHeader';
+import withSession from 'lib/session';
+import { addNotification } from 'reducers/notificationsReducer';
+import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
+import { formatCareDatePeriod, getErrorResponse, getUserSession } from 'service/helpers';
+import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
+import { Button } from 'components/Button';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
+import { mapCareAdditionalNeedsEntries } from 'api/Mappers/CarePackageMapper';
+import fieldValidator from 'service/inputValidator';
 
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
   const isRedirect = getUserSession({ req, res });
