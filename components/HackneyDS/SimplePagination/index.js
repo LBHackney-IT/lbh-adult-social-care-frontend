@@ -15,7 +15,7 @@ export const SimplePagination = ({
     <nav className="lbh-simple-pagination">
       {
         currentPage > 1 &&
-        <a className="lbh-simple-pagination__link" href="#">
+        <a className="lbh-simple-pagination__link" href={currentPage - 1}>
           <svg width="11" height="19" viewBox="0 0 11 19" fill="none">
             <path d="M10 1L2 9.5L10 18" strokeWidth="2" />
           </svg>
@@ -29,7 +29,7 @@ export const SimplePagination = ({
         currentPage < totalCount &&
         <a
           className="lbh-simple-pagination__link lbh-simple-pagination__link--next"
-          href="#"
+          href={currentPage + 1}
         >
           {nextText}
           <span className="lbh-simple-pagination__title">
