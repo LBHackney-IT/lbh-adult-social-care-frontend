@@ -25,8 +25,10 @@ import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 import { Heading } from './lettering/Heading';
 import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
 import WarningText from './WarningText';
+import { SimplePagination } from './SimplePagination';
 
 export {
+  SimplePagination,
   Conversation,
   Link,
   Timeline,
