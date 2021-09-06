@@ -25,6 +25,7 @@ import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 import { Heading } from './lettering/Heading';
 import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
 import WarningText from './WarningText';
+import { ContactBlock } from './ContactBlock';
 
 export {
   Conversation,
@@ -53,5 +54,6 @@ export {
   Table,
   HorizontalSeparator,
   Heading,
-  IndeterminateCheckbox
+  IndeterminateCheckbox,
+  ContactBlock,
 };

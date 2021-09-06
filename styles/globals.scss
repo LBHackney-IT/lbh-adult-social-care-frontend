@@ -1,3 +1,4 @@
+@import "css/HackneyDS/hackneyGlobal";
 @import 'css/variables';
 @import "css/shortcuts";
 @import 'css/media-breakpoints';
@@ -47,6 +48,7 @@
 @import "css/AutocompleteSelect/option.scss";
 @import "css/HackneyDS/styles.scss";
 @import "../components/HackneyDS/styles.scss";
+@import "../node_modules/leaflet/dist/leaflet.css";
 
 * {
   font-family: 'OpenSans', sans-serif !important;

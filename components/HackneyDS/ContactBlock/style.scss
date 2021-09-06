@@ -1,0 +1,210 @@
+.lbh-contact {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.lbh-contact__fill,
+.lbh-search-box__action:hover svg * {
+  fill: #525a5b;
+}
+
+.lbh-contact__list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.lbh-contact {
+  display: flex;
+  border-top: 4px solid #00664f;
+  -ms-flex-direction: column;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+}
+
+.lbh-contact__title {
+  margin-top: 1.125rem;
+  -ms-flex-order: 1;
+  -webkit-box-ordinal-group: 2;
+  order: 1;
+}
+.lbh-contact__social {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  margin: 2.25rem 0 0;
+  -ms-flex-order: 3;
+  -webkit-box-ordinal-group: 4;
+  order: 3;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+  align-items: center;
+}
+.lbh-contact__social-title {
+  margin: 0;
+}
+.lbh-contact__social-link {
+  display: block;
+  margin: auto 0 auto 0.75rem;
+}
+.lbh-contact__social-link-text {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+.lbh-contact__social-link-icon {
+  display: block;
+  width: 1.875rem;
+  height: 1.875rem;
+  margin-top: 0;
+}
+.lbh-contact__social-link:hover .lbh-contact__fill {
+  fill: #00b341;
+}
+.lbh-contact__details {
+  -ms-flex-order: 2;
+  -webkit-box-ordinal-group: 3;
+  order: 2;
+}
+.lbh-contact__block {
+  padding-left: 2.25rem;
+}
+.lbh-contact__block + .lbh-contact__block {
+  margin-top: 1.5rem;
+}
+.lbh-contact__block-title {
+  position: relative;
+  margin-bottom: 0.375rem;
+}
+.lbh-contact .leaflet-control-zoom-out,
+.lbh-contact__address,
+.lbh-contact__block:first-child .lbh-contact__block-title {
+  margin-top: 0;
+}
+.lbh-contact__block-title:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: -2.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.lbh-contact__list-item {
+  margin: 0;
+  padding: 0;
+}
+.lbh-contact__address,
+.lbh-contact__email,
+.lbh-contact__list-item,
+.lbh-contact__telephone {
+  font-family: Open Sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #0b0c0c;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+}
+
+.lbh-contact__address span {
+  display: block;
+  margin-top: 0;
+}
+.lbh-contact__address span:first-child {
+  font-weight: 600;
+}
+.lbh-contact__email,
+.lbh-contact__telephone {
+  color: #0b0c0c;
+  text-decoration: none;
+  cursor: default;
+}
+.lbh-contact__email {
+  word-break: break-word;
+}
+.lbh-contact__map-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 400px;
+  -ms-flex-order: 4;
+  -webkit-box-ordinal-group: 5;
+  order: 4;
+}
+.lbh-contact__map {
+  width: 100%;
+  height: 100%;
+}
+.lbh-contact .leaflet-marker-icon {
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+.lbh-contact__directions {
+  display: block;
+  margin-top: 0.75rem;
+  text-align: right;
+}
+
+@media (min-width: 48.0625em) {
+  .lbh-contact {
+    display: block;
+    overflow: hidden;
+  }
+  .lbh-contact__title {
+    margin-top: 2.25rem;
+    margin-right: 2.25rem;
+    float: left;
+  }
+  .lbh-contact__social {
+    margin: 2.8125rem 0;
+    float: right;
+  }
+  .lbh-contact__details {
+    box-sizing: border-box;
+    width: 33.333%;
+    padding-right: 1.125rem;
+    float: left;
+    clear: both;
+  }
+  .lbh-contact__map-container {
+    box-sizing: border-box;
+    width: 66.666%;
+    padding-left: 1.125rem;
+    float: right;
+  }
+}
+
+.lbh-contact__block-title--address:before {
+ background: url('../../../public/images/icons/icon_address.svg');
+ background-repeat: no-repeat;
+}
+.lbh-contact__block-title--email:before {
+ background: url('../../../public/images/icons/icon_email.svg');
+ background-repeat: no-repeat;
+}
+.lbh-contact__block-title--telephone:before {
+ background: url('../../../public/images/icons/icon_phone.svg');
+ background-repeat: no-repeat;
+}
+.lbh-contact__block-title--notes:before {
+ background: url('../../../public/images/icons/icon_notes.svg');
+ background-repeat: no-repeat;
+}
+.lbh-contact__block-title--opening-times:before {
+ background: url('../../../public/images/icons/icon_times.svg');
+ background-repeat: no-repeat;
+}

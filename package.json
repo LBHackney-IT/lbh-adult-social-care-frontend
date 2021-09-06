@@ -12,6 +12,7 @@
     "faker": "^5.5.3",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
+    "leaflet": "^1.7.1",
     "lodash.groupby": "^4.6.0",
     "lodash.last": "^3.0.0",
     "lodash.omit": "^4.5.0",
