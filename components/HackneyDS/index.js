@@ -26,6 +26,7 @@ import { Heading } from './lettering/Heading';
 import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
 import WarningText from './WarningText';
 import { SimplePagination } from './SimplePagination';
+import { SummaryList } from './SummaryList';
 
 export {
   SimplePagination,
@@ -55,5 +56,6 @@ export {
   Table,
   HorizontalSeparator,
   Heading,
-  IndeterminateCheckbox
+  IndeterminateCheckbox,
+  SummaryList,
 };

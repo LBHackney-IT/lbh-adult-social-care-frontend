@@ -1,0 +1,132 @@
+.govuk-summary-list__value > p,
+.lbh-pagination__summary {
+  margin-bottom: 10px;
+}
+
+.govuk-summary-list__actions,
+.govuk-summary-list__key,
+.govuk-summary-list__value {
+  margin: 0;
+}
+
+.govuk-summary-list__value > :last-child,
+.lbh-summary-list {
+  margin-bottom: 0;
+}
+
+.lbh-summary-list .govuk-summary-list__key {
+  font-weight: 600;
+}
+
+.govuk-summary-list {
+  font-family: Open Sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #0b0c0c;
+}
+
+.govuk-summary-list {
+  font-weight: 400;
+  margin: 0 0 20px;
+}
+.govuk-summary-list__actions {
+  margin-bottom: 15px;
+}
+.govuk-summary-list__key,
+.govuk-summary-list__value {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.govuk-summary-list__key {
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+.govuk-summary-list__actions-list {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.govuk-summary-list__actions-list-item {
+  display: inline;
+  margin-right: 10px;
+  padding-right: 10px;
+}
+.govuk-summary-list__actions-list-item:not(:last-child) {
+  border-right: 1px solid #b1b4b6;
+}
+.govuk-summary-list__actions-list-item:last-child {
+  margin-right: 0;
+  padding-right: 0;
+  border: 0;
+}
+
+@media (min-width: 40.0625em) {
+  .govuk-summary-list {
+    font-size: 1.1875rem;
+    line-height: 1.3157894737;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin-bottom: 30px;
+  }
+  .govuk-summary-list__row {
+    display: table-row;
+  }
+  .govuk-summary-list__actions,
+  .govuk-summary-list__key,
+  .govuk-summary-list__value {
+    display: table-cell;
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #b1b4b6;
+  }
+  .govuk-summary-list__actions {
+    width: 20%;
+    padding-right: 0;
+    text-align: right;
+  }
+  .govuk-summary-list__key {
+    width: 30%;
+  }
+  .govuk-summary-list__value {
+    width: 50%;
+  }
+  .govuk-summary-list__value:last-child {
+    width: 70%;
+  }
+  .govuk-summary-list--no-border .govuk-summary-list__actions,
+  .govuk-summary-list--no-border .govuk-summary-list__key,
+  .govuk-summary-list--no-border .govuk-summary-list__value,
+  .govuk-summary-list__row--no-border .govuk-summary-list__actions,
+  .govuk-summary-list__row--no-border .govuk-summary-list__key,
+  .govuk-summary-list__row--no-border .govuk-summary-list__value {
+    padding-bottom: 11px;
+    border: 0;
+  }
+}
+
+@media (max-width: 40.0525em) {
+  .govuk-summary-list__row {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #b1b4b6;
+  }
+  .govuk-summary-list__value {
+    margin-bottom: 15px;
+  }
+  .govuk-summary-list--no-border .govuk-summary-list__row,
+  .govuk-summary-list__row--no-border {
+    border: 0;
+  }
+}
+
+@media print {
+  .govuk-summary-list {
+    font-family: sans-serif;
+    font-size: 14pt;
+    line-height: 1.15;
+    color: #000;
+  }
+}
