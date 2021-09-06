@@ -1,27 +1,27 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
+import { HASC_TOKEN_ID } from 'api/BaseApi';
 import {
   getNursingCarePackageApprovalHistory,
   getNursingCarePackageApprovalPackageContent,
   nursingCareApprovePackageContent,
   nursingCareChangeStatus,
   nursingCareRequestClarification,
-} from '../../../../api/CarePackages/NursingCareApi';
-import { getEnGBFormattedDate, stringIsNullOrEmpty } from '../../../../api/Utils/FuncUtils';
-import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
-import Layout from '../../../../components/Layout/Layout';
-import NursingCareSummary from '../../../../components/NursingCare/NursingCareSummary';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TitleHeader from '../../../../components/TitleHeader';
-import withSession from '../../../../lib/session';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import { getErrorResponse, getUserSession } from '../../../../service/helpers'
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
-import fieldValidator from '../../../../service/inputValidator'
-import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation'
+} from 'api/CarePackages/NursingCareApi';
+import { getEnGBFormattedDate, stringIsNullOrEmpty } from 'api/Utils/FuncUtils';
+import PackageCostBox from 'components/DayCare/PackageCostBox';
+import Layout from 'components/Layout/Layout';
+import NursingCareSummary from 'components/NursingCare/NursingCareSummary';
+import PackageApprovalHistorySummary from 'components/PackageApprovalHistorySummary';
+import TitleHeader from 'components/TitleHeader';
+import withSession from 'lib/session';
+import { addNotification } from 'reducers/notificationsReducer';
+import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
+import { getErrorResponse, getUserSession } from 'service/helpers';
+import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
+import fieldValidator from 'service/inputValidator';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {

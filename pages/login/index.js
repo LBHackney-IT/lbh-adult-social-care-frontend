@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import Header from '../../components/Layout/Header';
-import useUser from '../../api/SWR/useUser';
-import { userLogin } from '../../reducers/userReducer';
+import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import Header from 'components/Layout/Header';
+import useUser from 'api/SWR/useUser';
+import { userLogin } from 'reducers/userReducer';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
