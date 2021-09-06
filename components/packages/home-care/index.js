@@ -33,7 +33,8 @@ const PackagesHomeCare = ({
   homeCareSummary,
 }) => {
   const dispatch = useDispatch();
-  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
+  const {
+    mutate: getSuppliers, data: { data: supplierOptions }} = useSuppliersApi.supplierList();
   const { data: stageOptions } = useDayCareApi.brokerAgeStages();
   const [elementsData, setElementsData] = useState({
     '30mCall': {
@@ -150,7 +151,7 @@ const PackagesHomeCare = ({
 
   return (
     <>
-      {popupAddSupplier && <PopupAddSupplier closePopup={() => setPopupAddSupplier(false)} />}
+      {popupAddSupplier && <PopupAddSupplier getSuppliers={getSuppliers} closePopup={() => setPopupAddSupplier(false)} />}
       <div className="mb-5 person-care tabs-border">
         <div className="column proposed-packages__header is-flex is-justify-content-space-between">
           <div>

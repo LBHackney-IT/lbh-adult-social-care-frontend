@@ -15,22 +15,26 @@ const Input = ({
   search,
   onBlur = () => {},
   error,
+  maxLength,
   setError,
   postSign = '',
   type = 'text',
 }) => {
   const searchRef = useRef(null);
   const onChangeInput = (event) => {
-    const {
-      target: { value },
-    } = event;
+    const { target: { value } } = event;
     event.preventDefault();
     let formattedValue = value;
     for(const sign of preSign) {
       formattedValue = formattedValue.replace(sign, '');
     }
+    const formattedAfterPreSign = formattedValue;
     for(const sign of postSign) {
       formattedValue = formattedValue.replace(sign, '');
+    }
+
+    if(preSign && postSign && formattedAfterPreSign === formattedValue) {
+      formattedValue = formattedValue.slice(0, -1);
     }
 
     setError && setError();
@@ -52,6 +56,7 @@ const Input = ({
           className="custom-input input"
           placeholder={placeholder}
           onChange={onChangeInput}
+          maxLength={maxLength}
           value={`${preSign}${value}${postSign}`}
           type={type}
           ref={searchRef}

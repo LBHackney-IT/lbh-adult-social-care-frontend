@@ -80,7 +80,7 @@ const SupplierReturn = () => {
 
   return (
     <div className="supplier-return supplier-returns-dashboard">
-      {!!breadcrumbs.length && <Breadcrumbs classes="p-3" values={breadcrumbs} />}
+      {!!breadcrumbs.length && <Breadcrumbs className="p-3" values={breadcrumbs} />}
       <SupplierReturnsInnerHeader />
       <SupplierReturnTable
         rows={supplierReturnTableData}

@@ -105,7 +105,7 @@ const BillPage = () => {
           changeReason={(value) => setReason(value)}
         />
       )}
-      {!!breadcrumbs.length && <Breadcrumbs classes="p-3" values={breadcrumbs} />}
+      {!!breadcrumbs.length && <Breadcrumbs className="p-3" values={breadcrumbs} />}
       <BillsHeader
         actionButtonText={headerOptions.actionButtonText}
         clickActionButton={headerOptions.clickActionButton}

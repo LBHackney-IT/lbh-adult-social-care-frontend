@@ -16,7 +16,7 @@ export default {
   },
 };
 
-const Template = (args) => <Tip light {...args} />;
+const Template = (args) => <div style={{width: '50%', display: 'flex'}}><Tip light {...args} /></div>;
 
 export const Default = Template.bind({});
 Default.args = {

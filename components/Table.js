@@ -77,7 +77,11 @@ const Table = ({
                     }
                     index += 1;
 
-                    const currentValue = (currentRowRule?.getValue && currentRowRule.getValue(value, item)) || value;
+                    let currentValue = value;
+                    if(currentRowRule?.getValue) {
+                      currentValue = currentRowRule.getValue(value, item)
+                    }
+
                     const calculatedClassName = currentRowRule?.getClassName
                       ? currentRowRule.getClassName(value, item).toLowerCase()
                       : '';
