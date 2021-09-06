@@ -253,6 +253,7 @@ const PackagesDayCare = ({
                 <p>{corePackageSelectedDaysPerWeek}</p>
               </BaseField>
               <Input
+                maxLength={6}
                 value={transport.costPerDay}
                 onChange={(value) => changeElementsData(setTransport, transport, 'costPerDay', value)}
                 label="Cost per week"
@@ -274,11 +275,13 @@ const PackagesDayCare = ({
                 onOptionSelect={(value) => changeElementsData(setTransportEscort, transportEscort, 'supplier', value)}
               />
               <Input
+                maxLength={6}
                 value={transportEscort.hoursPerWeek}
                 label="Hours per week"
                 onChange={(value) => changeElementsData(setTransportEscort, transportEscort, 'hoursPerWeek', value)}
               />
               <Input
+                maxLength={6}
                 value={transportEscort.costPerWeek}
                 label="Cost per week"
                 onChange={(value) => changeElementsData(setTransportEscort, transportEscort, 'costPerWeek', value)}
@@ -302,6 +305,7 @@ const PackagesDayCare = ({
                 selectedValue={dayCareOpportunities.supplier}
               />
               <Input
+                maxLength={6}
                 label="Hours per week"
                 value={dayCareOpportunities.hoursPerWeek}
                 onChange={(value) =>
@@ -309,6 +313,7 @@ const PackagesDayCare = ({
                 }
               />
               <Input
+                maxLength={6}
                 label="Cost per hour"
                 value={dayCareOpportunities.costPerHour}
                 onChange={(value) =>
@@ -332,11 +337,13 @@ const PackagesDayCare = ({
                 selectedValue={escort.supplier}
               />
               <Input
+                maxLength={6}
                 value={escort.hoursPerWeek}
                 label="Hours per week"
                 onChange={(value) => changeElementsData(setEscort, escort, 'hoursPerWeek', value)}
               />
               <Input
+                maxLength={6}
                 value={escort.costPerHour}
                 label="Cost per hour"
                 onChange={(value) => changeElementsData(setEscort, escort, 'costPerHour', value)}
