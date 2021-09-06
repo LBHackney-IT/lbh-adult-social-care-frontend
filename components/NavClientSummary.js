@@ -43,7 +43,7 @@ const NavClientSummary = ({
         </div>}
         {dateOfBirth && <div className="client-prop">
           <p>DOB:</p>
-          <div>{dateOfBirth}</div>
+          <div suppressHydrationWarning>{dateOfBirth}</div>
         </div>}
         {postcode && <div className="client-prop">
           <p>POSTCODE:</p>

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import Breadcrumbs from '../../../../components/Breadcrumbs';
-import AddBillTable from '../../../../components/Bills/AddBillTable';
-import AddBillAttachedFiles from '../../../../components/Bills/AddBillAttachedFiles';
-import AddBillInvoiceDetails from '../../../../components/Bills/AddBillInvoiceDetails';
-import AddBillInvoiceFor from '../../../../components/Bills/AddBillInvoiceFor';
-import AddBillTotalInfo from '../../../../components/Bills/AddBillTotalInfo';
+import Breadcrumbs from 'components/Breadcrumbs';
+import AddBillTable from 'components/Bills/AddBillTable';
+import AddBillAttachedFiles from 'components/Bills/AddBillAttachedFiles';
+import AddBillInvoiceDetails from 'components/Bills/AddBillInvoiceDetails';
+import AddBillInvoiceFor from 'components/Bills/AddBillInvoiceFor';
+import AddBillTotalInfo from 'components/Bills/AddBillTotalInfo';
+import withSession from 'lib/session';
+import { getUserSession } from 'service/helpers';
+import fieldValidator from 'service/inputValidator';
 import { addBillPackageInfoTestData } from '../../../../testData/billsTestData';
-import withSession from '../../../../lib/session';
-import { getUserSession } from '../../../../service/helpers';
-import fieldValidator from '../../../../service/inputValidator';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

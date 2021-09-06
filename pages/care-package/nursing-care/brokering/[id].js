@@ -1,29 +1,29 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
-import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
+import { HASC_TOKEN_ID } from 'api/BaseApi';
+import { getHomeCareSummaryData } from 'api/CarePackages/HomeCareApi';
 import {
   createNursingCareBrokerageInfo,
   getNursingCarePackageApprovalHistory,
   getNursingCarePackageDetailsForBrokerage,
   nursingCareChangeStage,
   nursingCareChangeStatus,
-} from '../../../../api/CarePackages/NursingCareApi';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
-import Layout from '../../../../components/Layout/Layout';
-import PackagesNursingCare from '../../../../components/packages/nursing-care';
-import withSession from '../../../../lib/session';
-import { selectBrokerage } from '../../../../reducers/brokerageReducer';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
-import useSuppliersApi from '../../../../api/SWR/useSuppliersApi'
-import useBaseApi from '../../../../api/SWR/useBaseApi'
+} from 'api/CarePackages/NursingCareApi';
+import { getAgeFromDateString, getEnGBFormattedDate } from 'api/Utils/FuncUtils';
+import Layout from 'components/Layout/Layout';
+import PackagesNursingCare from 'components/packages/nursing-care';
+import withSession from 'lib/session';
+import { selectBrokerage } from 'reducers/brokerageReducer';
+import { addNotification } from 'reducers/notificationsReducer';
+import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
+import { getLoggedInUser, getUserSession, uniqueID } from 'service/helpers';
+import useSuppliersApi from 'api/SWR/useSuppliersApi';
+import useBaseApi from 'api/SWR/useBaseApi';
 import {
   mapCareAdditionalNeedsEntries,
   mapCareApprovalHistoryItems
-} from '../../../../api/Mappers/CarePackageMapper'
+} from 'api/Mappers/CarePackageMapper';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {

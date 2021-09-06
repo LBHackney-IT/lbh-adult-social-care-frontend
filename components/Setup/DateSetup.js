@@ -40,11 +40,8 @@ const DateSetup = ({
         <span className="mr-3">
           <DatePick
             label="Start Date"
-            disabled={disabledStartDate}
             error={errorFields.startDate}
             minDate={new Date()}
-            maxDate={startMaxDate}
-            classes={disabledStartDate ? 'disabled' : ''}
             setError={() => changeErrorFields('startDate')}
             dateValue={startDate}
             setDate={setStartDate}
@@ -56,6 +53,7 @@ const DateSetup = ({
             dateValue={!isFixedPeriod ? '' : endDate}
             disabled={disabledEndDate}
             minDate={startDate}
+            maxDate={startMaxDate}
             classes={`${!isFixedPeriod ? ' datepicker-ongoing' : ''}${disabledStartDate ? ' disabled' : ''}`}
             setDate={setEndDate}
             error={errorFields.endDate}

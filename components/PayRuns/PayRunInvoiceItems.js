@@ -1,6 +1,6 @@
 import React from 'react';
-import { currency } from '../../constants/strings';
-import { getNumberWithCommas } from '../../service/helpers';
+import { currency } from 'constants/strings';
+import { getNumberWithCommas } from 'service/helpers';
 
 const PayRunInvoiceItems = ({
   invoiceItems = [],
