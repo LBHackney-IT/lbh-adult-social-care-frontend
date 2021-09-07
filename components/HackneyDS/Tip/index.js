@@ -2,7 +2,7 @@ import React from "react";
 import { Tooltip } from 'react-tippy';
 import 'react-tippy/dist/tippy.css';
 
-export default function Tip({
+export const Tip = ({
   content,
   children,
   light = false,
@@ -13,7 +13,7 @@ export default function Tip({
   interactive = false,
   className = '',
   arrow = true,
-}) {
+}) => {
   let theme = 'dark';
   if(light) theme = 'light';
   if(transparent) theme = 'transparent';
@@ -32,4 +32,4 @@ export default function Tip({
       {children}
     </Tooltip>
   );
-}
+};

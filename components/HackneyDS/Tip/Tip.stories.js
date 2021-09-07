@@ -1,5 +1,5 @@
 import React from 'react';
-import Tip from './index';
+import { Tip } from './index';
 
 export default {
   title: 'Hackney Design System/Tip',

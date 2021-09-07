@@ -21,7 +21,7 @@ import Timeline from './Timeline';
 import Conversation from './Conversation';
 import { Table } from './Table';
 import { Pagination } from './Pagination';
-import Tip from './Tip';
+import { Tip } from './Tip';
 import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 import { Heading } from './lettering/Heading';
 import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
