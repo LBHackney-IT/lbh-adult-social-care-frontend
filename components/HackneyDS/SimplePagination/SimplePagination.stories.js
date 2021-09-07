@@ -18,6 +18,7 @@ Default.args = {
   totalCount: 3,
   currentPage: 2,
   titles: ['Title here'],
+  changePage: (page) => alert(page),
 };
 
 export const FirstPage = Template.bind({});
