@@ -5,18 +5,9 @@ export default {
   title: 'Hackney Design System/SummaryList',
   component: SummaryList,
   argTypes: {
-    summaryList: {
-      type: 'data',
-      key: { type: 'string' },
-      value: { type: 'any' },
-      noRowBorder: { type: 'boolean' },
-      actions: {
-        name: { type: 'string' },
-        onClick: { type: 'function' },
-        href: { type: 'string' },
-      }
+    noBorder: {
+      type: 'boolean',
     },
-    noBorder: { type: 'boolean' },
   },
 };
 
