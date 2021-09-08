@@ -12,10 +12,11 @@ import ProposedPackagesTab from '../ProposedPackagesTabs';
 import AutocompleteSelect from '../../AutocompleteSelect';
 import ApprovalHistory from '../../ProposedPackages/ApprovalHistory'
 import { addNotification } from '../../../reducers/notificationsReducer';
-import CustomDropDown from '../../CustomDropdown'
-import PopupAddSupplier from '../../PopupAddSupplier'
-import useSuppliersApi from '../../../api/SWR/useSuppliersApi'
-import useDayCareApi from '../../../api/SWR/useDayCareApi'
+import CustomDropDown from '../../CustomDropdown';
+import PopupAddSupplier from '../../PopupAddSupplier';
+import useSuppliersApi from '../../../api/SWR/useSuppliersApi';
+import useDayCareApi from '../../../api/SWR/useDayCareApi';
+import { mapCareStageOptions } from '../../../api/Mappers/CarePackageMapper';
 
 const PackagesNursingCare = ({
   tab,
@@ -59,12 +60,8 @@ const PackagesNursingCare = ({
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
   const [selectedStageType, setSelectedStageType] = useState(nursingCarePackage?.stageId);
   const [selectedSupplierType, setSelectedSupplierType] = useState(nursingCarePackage?.supplierId);
-  const [startDate, setStartDate] = useState(
-    (nursingCarePackage && new Date(nursingCarePackage?.nursingCarePackage?.startDate)) || undefined
-  );
-  const [endDate, setEndDate] = useState(
-    (nursingCarePackage && new Date(nursingCarePackage?.nursingCarePackage?.endDate)) || undefined
-  );
+  const [startDate, setStartDate] = useState(undefined);
+  const [endDate, setEndDate] = useState(undefined);
   const [endDateDisabled, setEndDateDisabled] = useState(!nursingCarePackage?.nursingCarePackage?.endDate);
 
   const [coreCostTotal, setCoreCostTotal] = useState(0);
@@ -157,7 +154,7 @@ const PackagesNursingCare = ({
           <Dropdown
             label=""
             initialText="Stage"
-            options={stageOptions}
+            options={mapCareStageOptions(stageOptions)}
             selectedValue={selectedStageType}
             onOptionSelect={(option) => handleBrokerageStageChange(option)}
           />
