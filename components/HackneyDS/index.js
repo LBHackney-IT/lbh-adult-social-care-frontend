@@ -25,6 +25,7 @@ import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 import { Heading } from './lettering/Heading';
 import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
 import Header from './Header';
+import InsetText from './InsetText';
 import WarningText from './WarningText';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
@@ -59,5 +60,6 @@ export {
   HorizontalSeparator,
   Heading,
   IndeterminateCheckbox,
+  InsetText,
   Header
 };
