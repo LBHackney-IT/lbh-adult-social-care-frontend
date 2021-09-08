@@ -1,7 +1,9 @@
 import React from 'react';
+import SummaryListItem from './SummaryListItem'
 
 export const SummaryList = ({ summaryList, noBorder = false }) => {
   const noBorderClass = noBorder ? ' govuk-summary-list--no-border' : '';
+
   return (
     <dl className={`govuk-summary-list lbh-summary-list${noBorderClass}`}>
       {summaryList.map(({
@@ -23,22 +25,10 @@ export const SummaryList = ({ summaryList, noBorder = false }) => {
             {!actions ? <span className="govuk-summary-list__actions"/> :
               <dd className={`govuk-summary-list__actions ${actionsClassName}`}>
                 <ul className="govuk-summary-list__actions-list">
-                  {actions.map(action => (
-                    <li key={action.name} className="govuk-summary-list__actions-list-item">
-                      <a
-                        onClick={(e) => {
-                          if(action.handler) {
-                            e.preventDefault();
-                            action.handler();
-                          }
-                        }}
-                        className="govuk-link"
-                        href={action.href || '#'}
-                      >
-                        {action.name}<span className="govuk-visually-hidden"> {key.toLowerCase()}</span>
-                      </a>
-                    </li>
-                  ))}
+                  {actions.map(({ name, href, handler }) => (
+                      <SummaryListItem handler={handler} name={name} key={key} href={href} />
+                    )
+                  )}
                 </ul>
               </dd>
             }
