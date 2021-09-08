@@ -25,6 +25,7 @@ import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 import { Heading } from './lettering/Heading';
 import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
 import Header from './Header';
+import WarningText from './WarningText';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 
@@ -52,6 +53,7 @@ export {
   Tab,
   Tag,
   Select,
+  WarningText,
   Pagination,
   Table,
   HorizontalSeparator,

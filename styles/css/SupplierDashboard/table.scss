@@ -1,55 +1,29 @@
 .supplier-dashboard {
-  .sort {
-    &:nth-child(1) {
-      width: 145px;
-    }
-    &:nth-child(2) {
-      width: 100px;
-    }
-    &:nth-child(3) {
-      width: 117px;
-    }
-    &:nth-child(4) {
-      width: 80px;
-    }
-    &:nth-child(5) {
-      width: 87px;
-    }
-    &:nth-child(6) {
-      width: 80px;
-    }
-    &:nth-child(7) {
-      width: 80px;
-    }
-    &:nth-child(8) {
-      width: 100px;
-    }
-  }
 
-  .table__row-item {
-    &:nth-child(1) {
+  .table__row-column {
+    &-1 {
       width: 145px;
     }
-    &:nth-child(2) {
+    &-2 {
       width: 100px;
     }
-    &:nth-child(3) {
+    &-3 {
       width: 117px;
     }
-    &:nth-child(4) {
+    &-4 {
       width: 80px;
     }
-    &:nth-child(5) {
+    &-5 {
       width: 87px;
     }
-    &:nth-child(6) {
+    &-6 {
       width: 80px;
     }
-    &:nth-child(7) {
+    &-7 {
       width: 80px;
     }
-    &:nth-child(8) {
-      width: 100px;
+    &-8 {
+      width: 132px;
     }
   }
 }

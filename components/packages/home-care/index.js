@@ -33,7 +33,8 @@ const PackagesHomeCare = ({
   homeCareSummary,
 }) => {
   const dispatch = useDispatch();
-  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
+  const {
+    mutate: getSuppliers, data: { data: supplierOptions }} = useSuppliersApi.supplierList();
   const { data: stageOptions } = useDayCareApi.brokerAgeStages();
   const [elementsData, setElementsData] = useState({
     '30mCall': {
@@ -75,14 +76,9 @@ const PackagesHomeCare = ({
   });
   const router = useRouter();
   const homeCarePackageData = homeCarePackage?.homeCarePackage;
-  const [startDate, setStartDate] = useState(
-    (homeCarePackage && new Date(homeCarePackageData?.startDate)) || undefined
-  );
-  const [endDate, setEndDate] = useState(
-    (homeCarePackage && new Date(homeCarePackageData?.endDate)) || undefined
-  );
+  const [startDate, setStartDate] = useState(undefined);
+  const [endDate, setEndDate] = useState(undefined);
   const [endDateEnabled, setEndDateEnabled] = useState(!homeCarePackageData?.endDate);
-
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
@@ -143,14 +139,14 @@ const PackagesHomeCare = ({
   useEffect(() => {
     setEndDateEnabled(!homeCarePackageData?.endDate);
 
-    setEndDate((homeCarePackage && new Date(homeCarePackageData?.endDate)) || undefined);
+    setEndDate((homeCarePackageData && new Date(homeCarePackageData?.endDate)) || undefined);
 
-    setStartDate((homeCarePackage && new Date(homeCarePackageData?.startDate)) || undefined);
+    setStartDate((homeCarePackageData && new Date(homeCarePackageData?.startDate)) || undefined);
   }, [homeCarePackageData]);
 
   return (
     <>
-      {popupAddSupplier && <PopupAddSupplier closePopup={() => setPopupAddSupplier(false)} />}
+      {popupAddSupplier && <PopupAddSupplier getSuppliers={getSuppliers} closePopup={() => setPopupAddSupplier(false)} />}
       <div className="mb-5 person-care tabs-border">
         <div className="column proposed-packages__header is-flex is-justify-content-space-between">
           <div>
@@ -170,8 +166,8 @@ const PackagesHomeCare = ({
         </div>
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap proposed-packages__supplier-settings">
-            <Button className='mr-3' onClick={() => setPopupAddSupplier(true)}>New Supplier</Button>
-            <div className='mr-3'>
+            <div className="mr-3 is-flex is-align-items-flex-end">
+              <Button className='mr-3' onClick={() => setPopupAddSupplier(true)}>New Supplier</Button>
               <AutocompleteSelect
                 placeholder="Supplier (please select)"
                 options={supplierOptions}

@@ -24,6 +24,10 @@ import { getServiceTimes } from 'service/homeCareServiceHelper';
 import { SOCIAL_WORKER_ROUTE } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import useHomeCareApi from 'api/SWR/useHomeCareApi';
+import usePrimarySupportReason from 'api/SWR/package/usePrimarySupportReason';
+import optionsMapper from 'api/Mappers/optionsMapper';
+import fieldValidator from 'service/inputValidator';
+import ErrorField from 'components/ErrorField';
 
 const initialPackageReclaim = {
   homeCarePackageId: '1',
@@ -31,6 +35,7 @@ const initialPackageReclaim = {
   reclaimCategoryId: 0,
   reclaimAmountOptionId: 0,
   notes: '',
+  type: '',
   amount: '',
 };
 
@@ -53,25 +58,35 @@ const HomeCare = ({ loggedInUserId }) => {
   const dispatch = useDispatch();
   const [isImmediate, isS117, isFixedPeriod, startDate, endDate] = router.query.slug;
 
+  const { data: primarySupportReasons } = usePrimarySupportReason();
+
   // State
   const [homeCareTimeShifts, setHomeCareTimeShifts] = useState([]);
   const [weekDaysValue, setWeekDaysValue] = useState(weekDays);
   const [selectedCareType, setSelectedCareType] = useState(1);
   const [selectedPrimaryCareTime, setSelectedPrimaryCareTime] = useState(30);
-  const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] = useState(30);
+  const [selectedSecondaryCareTime, setSelectedSecondaryCareTime] = useState(0);
   const [homeCareSummaryData, setHomeCareSummaryData] = useState(undefined);
   const [carePackageId, setCarePackageId] = useState(undefined);
-  const [packageReclaims, setPackageReclaims] = useState([{ ...initialPackageReclaim }]);
+  const [packageReclaims, setPackageReclaims] = useState([{...initialPackageReclaim}]);
+  const [errorPackageReclaims, setErrorPackageReclaims] = useState([]);
+  const [weekCarePickerError, setWeekCarePickerError] = useState(false);
   const [isReclaimed, setIsReclaimed] = useState(null);
   const [times, setTimes] = useState(undefined);
   const [secondaryTimes, setSecondaryTimes] = useState(undefined);
+  const [primarySupportReason, setPrimarySupportReason] = useState(null);
 
   const addPackageReclaim = () => {
     setPackageReclaims([...packageReclaims, { ...initialPackageReclaim, id: uniqueID() }]);
   };
 
   const removePackageReclaim = (id) => {
-    const newPackagesReclaim = packageReclaims.filter((item) => item.id !== id);
+    let removedPackageIndex;
+    const newPackagesReclaim = packageReclaims.filter((item, index) => {
+      removedPackageIndex = index;
+      return item.id !== id;
+    });
+    setErrorPackageReclaims((prevState => prevState.filter((_, index) => index !== removedPackageIndex)));
     setPackageReclaims(newPackagesReclaim);
   };
 
@@ -118,7 +133,7 @@ const HomeCare = ({ loggedInUserId }) => {
           ...params,
         });
 
-        setCarePackageId(carePackageCreateResult?.packageId);
+        setCarePackageId(carePackageCreateResult?.id);
       })();
     }
   }, [carePackageId, startDate, endDate, isImmediate, isS117, isFixedPeriod]);
@@ -126,11 +141,13 @@ const HomeCare = ({ loggedInUserId }) => {
   // Option selecting
   useEffect(() => {
     if (times && times.length > 0) {
-      setSelectedPrimaryCareTime(times[0].value);
+      const [{ value: primaryCareType }] = times;
+      setSelectedPrimaryCareTime(primaryCareType);
     }
 
     if (secondaryTimes && secondaryTimes.length > 0) {
-      setSelectedSecondaryCareTime(secondaryTimes[1].value);
+      const [{ value: secondaryCareTime }] = times;
+      setSelectedSecondaryCareTime(secondaryCareTime);
     }
   }, [times, secondaryTimes]);
 
@@ -142,6 +159,7 @@ const HomeCare = ({ loggedInUserId }) => {
 
   // Handle a care picker cell click
   const onCarePickerClick = (weekSlotId, dayId) => {
+    setWeekCarePickerError(false);
     const weekSlot = homeCareTimeShifts.find((item) => item.id === weekSlotId);
     const weekSlotDayItem = weekSlot?.days?.find((item) => item.id === dayId);
     let newWeekSlotDayItem;
@@ -233,6 +251,10 @@ const HomeCare = ({ loggedInUserId }) => {
     calculateTotalTimePerDay(newWeekSlotsValue);
   };
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
   // Recalculate the total time per day
   const calculateTotalTimePerDay = (newWeekSlotsValue) => {
     setWeekDaysValue(
@@ -264,6 +286,27 @@ const HomeCare = ({ loggedInUserId }) => {
 
   // Add to package
   const addToPackageClick = async () => {
+    let hasSomeErrors = false;
+    let validPackageFields = [];
+
+    if(isReclaimed) {
+      validPackageFields = packageReclaims.map(item => {
+        const { hasErrors, validFields } = fieldValidator([
+          { name: 'amount', value: item.amount },
+          { name: 'type', value: item.type },
+          { name: 'reclaimAmountOptionId', value: item.reclaimAmountOptionId },
+          { name: 'reclaimCategoryId', value: item.reclaimCategoryId },
+        ], [], ['empty']);
+        if(hasErrors) {
+          hasSomeErrors = true;
+        }
+
+        return validFields;
+      });
+
+      setErrorPackageReclaims(validPackageFields);
+    }
+
     const slots = [];
 
     homeCareTimeShifts.forEach((timeShiftItem) => {
@@ -304,9 +347,12 @@ const HomeCare = ({ loggedInUserId }) => {
       slots,
     };
 
-    const pushNotification = (text, className = 'error') => {
-      dispatch(addNotification({ text, className }));
-    };
+    if(!slots.length) {
+      setWeekCarePickerError(true);
+      hasSomeErrors = true;
+    }
+
+    if(hasSomeErrors) return;
 
     try {
       const summaryData = await postHomeCareTimeSlots(postData);
@@ -317,6 +363,12 @@ const HomeCare = ({ loggedInUserId }) => {
       console.log('error post time slots', error, error?.response);
     }
   };
+
+  useEffect(() => {
+    if(primarySupportReasons.length) {
+      setPrimarySupportReason(primarySupportReasons[0].primarySupportReasonId);
+    }
+  }, [primarySupportReasons]);
 
   const datePeriod = formatCareDatePeriod(startDate, endDate);
 
@@ -382,6 +434,25 @@ const HomeCare = ({ loggedInUserId }) => {
               </div>
             </div>
           ) : null}
+          {primarySupportReasons.length ? (
+            <div className="home-care-option">
+              <div>
+                <Dropdown
+                  includeInitialText={false}
+                  label="Primary Support Reasons"
+                  options={optionsMapper({
+                    text: 'primarySupportReasonName',
+                    value: 'primarySupportReasonId',
+                  }, primarySupportReasons)}
+                  selectedValue={primarySupportReason}
+                  onOptionSelect={(option) => {
+                    setPrimarySupportReason(option);
+                  }}
+                  buttonStyle={{ minWidth: '200px' }}
+                />
+              </div>
+            </div>
+          ) : null}
         </div>
         <div className="columns mt-2">
           <div className="column">
@@ -399,6 +470,7 @@ const HomeCare = ({ loggedInUserId }) => {
         <div className="mt-2">
           {homeCareServices !== undefined && homeCareTimeShifts !== undefined ? (
             <WeekCarePicker
+              error={weekCarePickerError}
               homeCareServices={homeCareServices}
               homeCareTimeShifts={homeCareTimeShifts}
               currentMode={selectedCareType}
@@ -407,22 +479,22 @@ const HomeCare = ({ loggedInUserId }) => {
             />
           ) : null}
         </div>
-        <div className="level mt-4">
-          <div className="level-item level-right">
-            <Button onClick={addToPackageClick}>Add to package</Button>
-          </div>
-        </div>
         <ShouldPackageReclaim isReclaimed={isReclaimed} className="mt-6" setIsReclaimed={changeIsPackageReclaimed} />
         {isReclaimed && (
           <div>
-            {packageReclaims.map((item, index) => (
-              <PackageReclaim
-                remove={index !== 0 ? () => removePackageReclaim(item.id) : undefined}
-                key={item.id}
-                packageReclaim={item}
-                setPackageReclaim={changePackageReclaim(item.id)}
-              />
-            ))}
+            {packageReclaims.map((item, index) => {
+              return (
+                <PackageReclaim
+                  index={index}
+                  error={errorPackageReclaims}
+                  setError={setErrorPackageReclaims}
+                  remove={index !== 0 ? () => removePackageReclaim(item.id) : undefined}
+                  key={item.id}
+                  packageReclaim={item}
+                  setPackageReclaim={changePackageReclaim(item.id)}
+                />
+              )
+            })}
             <p onClick={addPackageReclaim} className="action-button-text">
               + Add another reclaim
             </p>
@@ -434,6 +506,12 @@ const HomeCare = ({ loggedInUserId }) => {
             <SummaryDataList summaryData={homeCareSummaryData} />
           </div>
         ) : null}
+        <div className="level mt-4">
+          {(weekCarePickerError || !!errorPackageReclaims.length) && <ErrorField text='There are some errors above' />}
+          <div className="level-item level-right">
+            <Button onClick={addToPackageClick}>Add to package</Button>
+          </div>
+        </div>
       </div>
     </Layout>
   );

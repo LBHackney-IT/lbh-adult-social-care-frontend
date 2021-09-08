@@ -18,7 +18,7 @@
   &--inactive {
     background-color: #505a5f;
   }
-  &--grey {
+  &--gray {
     color: #383f43;
     background: #eeefef;
   }
@@ -94,9 +94,13 @@
     background-color: #be3a34;
     color: #fff;
   }
-  &--grey {
+  &--gray {
     background-color: #bfc1c3;
     color: #0b0c0c;
+  }
+  &--blue {
+    background-color: #025ea6;
+    color: #fff;
   }
 
   @media (min-width: 40.0625em) {

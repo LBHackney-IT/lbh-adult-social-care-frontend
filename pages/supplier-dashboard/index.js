@@ -47,20 +47,38 @@ const SupplierDashboard = () => {
   };
 
   useEffect(() => {
-    router.replace(`${router.pathname}?page=1`);
-  }, []);
-
-  useEffect(() => {
     console.log('change sort', sort);
   }, [sort]);
 
   return (
     <div className="supplier-dashboard max-desktop-width">
       <SupplierDashboardInnerHeader />
-      <SupplierDashboardTable
-        isIgnoreId={true}
+      <Table
         onClickTableRow={onClickTableRow}
         rows={supplierDashboardTableData}
+        rowsRules={{
+          id: {
+            getHide: () => true,
+          },
+          weekCommencing: {
+            getValue: (value) => formatDate(value),
+          },
+          status: {
+            getClassName: (value) => `${value} table__row-item-status`,
+            getValue: (value) => formatStatus(value).slice(0, 1).toUpperCase() + formatStatus(value).slice(1, value.length),
+          },
+        }}
+        fields={{
+          id: 'id',
+          weekCommencing: 'weekCommencing',
+          value: 'value',
+          totalPackages: 'totalPackages',
+          returned: 'returned',
+          inDispute: 'inDispute',
+          accepted: 'accepted',
+          paid: 'paid',
+          status: 'status',
+        }}
         sortBy={sortBy}
         sorts={sorts}
       />

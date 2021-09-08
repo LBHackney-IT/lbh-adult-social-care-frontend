@@ -1,18 +1,7 @@
 import React from 'react';
 
-export default function Tag({ children, green, gray, yellow, red, className = ''}) {
-  let color = '';
-
-  if(green) {
-    color = 'green';
-  } else if(yellow) {
-    color = 'yellow';
-  } else if(red) {
-    color = 'red';
-  } else if(gray) {
-    color = 'gray';
-  }
-
+export default function Tag({ children, color, className = '' }) {
+  // available colors = green, gray, yellow, red, blue
   const outerClass = className ? ` ${className}` : '';
   const tagColorClass = color ? ` lbh-tag--${color}` : '';
 
