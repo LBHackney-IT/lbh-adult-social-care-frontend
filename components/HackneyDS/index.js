@@ -13,6 +13,7 @@ import { Tabs } from './Tabs';
 import { Tab } from './Tabs/Tab';
 import Tag from './Tag';
 import Select from './Select';
+import Dialog from './Dialog';
 import Hint from './lettering/Hint';
 import Label from './lettering/Label';
 import ErrorMessage from './lettering/ErrorMessage';
@@ -54,6 +55,7 @@ export {
   Tab,
   Tag,
   Select,
+  Dialog,
   WarningText,
   Pagination,
   Table,
