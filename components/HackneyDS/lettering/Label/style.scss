@@ -10,7 +10,7 @@
 }
 
 .govuk-label {
-  margin-bottom: 5px;
+  margin: 0;
   font-family: Open Sans;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -58,7 +58,6 @@
   }
 
   @media (min-width: 40.0625em) {
-    font-size: 1.1875rem;
     line-height: 1.3157894737;
 
     .lbh-form-group &.govuk-date-input__label,
