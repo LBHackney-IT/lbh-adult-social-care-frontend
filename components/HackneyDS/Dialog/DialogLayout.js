@@ -3,8 +3,8 @@ import React from 'react';
 export default function DialogLayout({
   title,
   body,
-  'submit-label': submitLabel,
-  'decline-label': declineLabel,
+  submitLabel,
+  declineLabel,
   action = {},
 }) {
   const { submit, decline } = action;

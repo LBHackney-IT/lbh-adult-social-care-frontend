@@ -13,6 +13,11 @@ import DayCareSummary from '../../DayCare/DayCareSummary';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
 import { formatCareDatePeriod } from '../../../service/helpers'
 import ClientSummaryItem from '../../CarePackages/ClientSummaryItem'
+import PopupAddSupplier from '../../PopupAddSupplier'
+import AutocompleteSelect from '../../AutocompleteSelect'
+import useSuppliersApi from '../../../api/SWR/useSuppliersApi'
+import useDayCareApi from '../../../api/SWR/useDayCareApi'
+import { mapCareStageOptions } from '../../../api/Mappers/CarePackageMapper'
 
 const PackagesDayCare = ({
   tab,
@@ -24,8 +29,6 @@ const PackagesDayCare = ({
   approvalHistory,
   dayCarePackage,
   dayCareSummary,
-  supplierOptions = [],
-  stageOptions = [],
   createBrokerageInfo = () => {},
   changePackageBrokeringStatus = () => {},
 }) => {
@@ -57,6 +60,11 @@ const PackagesDayCare = ({
   });
 
   const packageDetails = dayCarePackage?.packageDetails;
+  const {
+    mutate: getSuppliers,
+    data: { data: supplierOptions }
+  } = useSuppliersApi.supplierList();
+  const { data: stageOptions } = useDayCareApi.brokerAgeStages();
 
   const [selectedStageType, setSelectedStageType] = useState(0);
   const [selectedSupplierType, setSelectedSupplierType] = useState(0);
@@ -78,6 +86,7 @@ const PackagesDayCare = ({
   const [dayCareOpportunitiesCostTotal, setDayCareOpportunitiesCostTotal] = useState(0);
   const [escortCostTotal, setEscortCostTotal] = useState(0);
   const [totalPackageCost, setTotalPackageCost] = useState(0);
+  const [popupAddSupplier, setPopupAddSupplier] = useState(false);
 
   const changeElementsData = (setter, getter, field, data) => {
     setter({ ...getter, [field]: data });
@@ -166,6 +175,7 @@ const PackagesDayCare = ({
 
   return (
     <>
+      {popupAddSupplier && <PopupAddSupplier getSuppliers={getSuppliers} closePopup={() => setPopupAddSupplier(false)} />}
       <div className="mt-5 mb-5 person-care">
         <div className="column proposed-packages__header is-flex is-justify-content-space-between">
           <div>
@@ -177,7 +187,7 @@ const PackagesDayCare = ({
           <Dropdown
             label=""
             initialText="Stage"
-            options={stageOptions}
+            options={mapCareStageOptions(stageOptions)}
             selectedValue={selectedStageType}
             onOptionSelect={(option) => handleBrokerageStageChange(option)}
           />
@@ -185,13 +195,12 @@ const PackagesDayCare = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <div className="mr-3 is-flex is-align-items-flex-end">
-              <Dropdown
-                label=""
-                classes="day-care-packages__fixed-dropdown"
-                initialText="Supplier (please select)"
+              <Button className='mr-3' onClick={() => setPopupAddSupplier(true)}>New Supplier</Button>
+              <AutocompleteSelect
+                placeholder="Supplier (please select)"
                 options={supplierOptions}
-                onOptionSelect={setSelectedSupplierType}
-                selectedValue={selectedSupplierType}
+                selectProvider={setSelectedSupplierType}
+                value={selectedSupplierType}
               />
             </div>
             <span className="mr-3">
@@ -244,6 +253,7 @@ const PackagesDayCare = ({
                 <p>{corePackageSelectedDaysPerWeek}</p>
               </BaseField>
               <Input
+                maxLength={6}
                 value={transport.costPerDay}
                 onChange={(value) => changeElementsData(setTransport, transport, 'costPerDay', value)}
                 label="Cost per week"
@@ -265,11 +275,13 @@ const PackagesDayCare = ({
                 onOptionSelect={(value) => changeElementsData(setTransportEscort, transportEscort, 'supplier', value)}
               />
               <Input
+                maxLength={6}
                 value={transportEscort.hoursPerWeek}
                 label="Hours per week"
                 onChange={(value) => changeElementsData(setTransportEscort, transportEscort, 'hoursPerWeek', value)}
               />
               <Input
+                maxLength={6}
                 value={transportEscort.costPerWeek}
                 label="Cost per week"
                 onChange={(value) => changeElementsData(setTransportEscort, transportEscort, 'costPerWeek', value)}
@@ -293,6 +305,7 @@ const PackagesDayCare = ({
                 selectedValue={dayCareOpportunities.supplier}
               />
               <Input
+                maxLength={6}
                 label="Hours per week"
                 value={dayCareOpportunities.hoursPerWeek}
                 onChange={(value) =>
@@ -300,6 +313,7 @@ const PackagesDayCare = ({
                 }
               />
               <Input
+                maxLength={6}
                 label="Cost per hour"
                 value={dayCareOpportunities.costPerHour}
                 onChange={(value) =>
@@ -323,11 +337,13 @@ const PackagesDayCare = ({
                 selectedValue={escort.supplier}
               />
               <Input
+                maxLength={6}
                 value={escort.hoursPerWeek}
                 label="Hours per week"
                 onChange={(value) => changeElementsData(setEscort, escort, 'hoursPerWeek', value)}
               />
               <Input
+                maxLength={6}
                 value={escort.costPerHour}
                 label="Cost per hour"
                 onChange={(value) => changeElementsData(setEscort, escort, 'costPerHour', value)}

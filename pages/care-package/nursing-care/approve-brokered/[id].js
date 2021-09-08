@@ -1,27 +1,29 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
+import { HASC_TOKEN_ID } from 'api/BaseApi';
 import {
   getNursingCarePackageApprovalHistory,
   getNursingCarePackageApproveCommercial,
   nursingCareApproveCommercials,
   nursingCareChangeStatus,
   nursingCareClarifyCommercial,
-} from '../../../../api/CarePackages/NursingCareApi';
-import { stringIsNullOrEmpty } from '../../../../api/Utils/FuncUtils';
-import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
-import Layout from '../../../../components/Layout/Layout';
-import NursingCareSummary from '../../../../components/NursingCare/NursingCareSummary';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TextArea from '../../../../components/TextArea';
-import TitleHeader from '../../../../components/TitleHeader';
-import withSession from '../../../../lib/session';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import { formatCareDatePeriod, getUserSession } from '../../../../service/helpers'
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
-import { Button } from '../../../../components/Button'
+} from 'api/CarePackages/NursingCareApi';
+import { stringIsNullOrEmpty } from 'api/Utils/FuncUtils';
+import PackageCostBox from 'components/DayCare/PackageCostBox';
+import Layout from 'components/Layout/Layout';
+import NursingCareSummary from 'components/NursingCare/NursingCareSummary';
+import PackageApprovalHistorySummary from 'components/PackageApprovalHistorySummary';
+import TitleHeader from 'components/TitleHeader';
+import withSession from 'lib/session';
+import { addNotification } from 'reducers/notificationsReducer';
+import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
+import { formatCareDatePeriod, getErrorResponse, getUserSession } from 'service/helpers';
+import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
+import { Button } from 'components/Button';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
+import { mapCareAdditionalNeedsEntries } from 'api/Mappers/CarePackageMapper';
+import fieldValidator from 'service/inputValidator';
 
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
   const isRedirect = getUserSession({ req, res });
@@ -36,14 +38,8 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
       nursingCarePackageId,
       req.cookies[HASC_TOKEN_ID]
     );
-    const newAdditionalNeedsEntries = nursingCarePackage.nursingCarePackage.nursingCareAdditionalNeeds.map(
-      (additionalneedsItem) => ({
-        id: additionalneedsItem.id,
-        isWeeklyCost: additionalneedsItem.isWeeklyCost,
-        isOneOffCost: additionalneedsItem.isOneOffCost,
-        needToAddress: additionalneedsItem.needToAddress,
-      })
-    );
+    const newAdditionalNeedsEntries =
+      mapCareAdditionalNeedsEntries(nursingCarePackage?.nursingCarePackage?.nursingCareAdditionalNeeds);
 
     data.nursingCarePackage = nursingCarePackage;
     data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
@@ -73,8 +69,25 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
   const nursingCarePackageId = router.query.id;
   const [errors, setErrors] = useState([]);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
-  const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
+  const [errorFields, setErrorFields] = useState({
+    requestInformationText: '',
+  });
   const [requestInformationText, setRequestInformationText] = useState(undefined);
+
+  const changeErrorFields = (field) => {
+    setErrorFields({
+      ...errorFields,
+      [field]: '',
+    });
+  };
+
+  const updateErrorFields = (errors, field) => {
+    const newErrors = field ? {[field]: errors} : getErrorResponse(errors);
+    setErrorFields({
+      ...errorFields,
+      ...newErrors,
+    });
+  };
 
   const {
     hasDischargePackage = false,
@@ -113,13 +126,20 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
   };
 
   const handleRequestMoreInformation = () => {
+    const { validFields, hasErrors } = fieldValidator([{
+      name: 'requestMreInformation', value: requestInformationText, rules: ['empty'],
+    }]);
+    setErrorFields(validFields);
+
+    if(hasErrors) return;
+
     nursingCareClarifyCommercial(nursingCarePackageId, requestInformationText)
       .then(() => {
-        setDisplayMoreInfoForm(false);
         router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
         pushNotification(error);
+        updateErrorFields(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
@@ -210,29 +230,17 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
           <Button className="gray" onClick={handleRejectPackage}>
             Deny
           </Button>
-          <Button
-            onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
-            className="gray"
-          >
-            {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
-          </Button>
           <Button className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
             Approve Commercials
           </Button>
         </div>
-        {displayMoreInfoForm && (
-          <div className="columns">
-            <div className="column">
-              <div className="mt-1">
-                <p className="font-size-16px font-weight-bold">Request more information</p>
-                <TextArea label="" rows={5} placeholder="Add details..." onChange={setRequestInformationText} />
-                <button type="button" className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
-                  Request more information
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <RequestMoreInformation
+          requestMoreInformationText={requestInformationText}
+          setRequestInformationText={setRequestInformationText}
+          errorFields={errorFields}
+          changeErrorFields={changeErrorFields}
+          handleRequestMoreInformation={handleRequestMoreInformation}
+        />
       </div>
     </Layout>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import RadioButton from '../RadioButton';
 import DatePick from '../DatePick';
 import { getFixedPeriodOptions } from '../../api/Utils/CommonOptions';
@@ -16,14 +16,6 @@ const DateSetup = ({
   endDate,
   setEndDate,
 }) => {
-  useEffect(() => {
-    if (isFixedPeriod === true) {
-      setEndDate(new Date());
-    } else {
-      setEndDate('');
-    }
-  }, [isFixedPeriod]);
-
   const disabledEndDate = !isFixedPeriod || disabledStartDate;
 
   return (
@@ -36,6 +28,9 @@ const DateSetup = ({
           setError={() => changeErrorFields('isFixedPeriod')}
           onChange={(value) => {
             setIsFixedPeriod(value);
+            if(value) {
+              setEndDate(startDate)
+            }
             changeErrorFields('endDate');
           }}
           selectedValue={isFixedPeriod}
@@ -45,11 +40,8 @@ const DateSetup = ({
         <span className="mr-3">
           <DatePick
             label="Start Date"
-            disabled={disabledStartDate}
             error={errorFields.startDate}
             minDate={new Date()}
-            maxDate={startMaxDate}
-            classes={disabledStartDate ? 'disabled' : ''}
             setError={() => changeErrorFields('startDate')}
             dateValue={startDate}
             setDate={setStartDate}
@@ -61,6 +53,7 @@ const DateSetup = ({
             dateValue={!isFixedPeriod ? '' : endDate}
             disabled={disabledEndDate}
             minDate={startDate}
+            maxDate={startMaxDate}
             classes={`${!isFixedPeriod ? ' datepicker-ongoing' : ''}${disabledStartDate ? ' disabled' : ''}`}
             setDate={setEndDate}
             error={errorFields.endDate}

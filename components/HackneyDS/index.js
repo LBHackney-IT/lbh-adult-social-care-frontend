@@ -22,6 +22,10 @@ import Timeline from './Timeline';
 import Conversation from './Conversation';
 import { Table } from './Table';
 import { Pagination } from './Pagination';
+import { HorizontalSeparator } from './Layout/HorizontalSeparator';
+import { Heading } from './lettering/Heading';
+import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
+import WarningText from './WarningText';
 
 export {
   Conversation,
@@ -46,6 +50,10 @@ export {
   Tag,
   Select,
   Dialog,
+  WarningText,
   Pagination,
   Table,
+  HorizontalSeparator,
+  Heading,
+  IndeterminateCheckbox
 };

@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import Layout from '../../../../components/Layout/Layout';
-import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TitleHeader from '../../../../components/TitleHeader';
-import DayCareSummary from '../../../../components/DayCare/DayCareSummary';
-import TextArea from '../../../../components/TextArea';
+import Layout from 'components/Layout/Layout';
+import PackageCostBox from 'components/DayCare/PackageCostBox';
+import PackageApprovalHistorySummary from 'components/PackageApprovalHistorySummary';
+import TitleHeader from 'components/TitleHeader';
+import DayCareSummary from 'components/DayCare/DayCareSummary';
 import {
   dayCarePackageApproveCommercials,
   dayCarePackageCommercialsRequestClarification,
   dayCarePackageRejectCommercials,
-} from '../../../../api/CarePackages/DayCareApi';
-import withSession from '../../../../lib/session';
-import { formatCareDatePeriod, getErrorResponse, getUserSession } from '../../../../service/helpers'
-import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
-import useDayCareApi from '../../../../api/SWR/useDayCareApi';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { formatApprovalHistory, formatDayCareOpportunities } from '../../../../service/formatItems'
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem'
-import { Button } from '../../../../components/Button'
+} from 'api/CarePackages/DayCareApi';
+import withSession from 'lib/session';
+import { formatCareDatePeriod, getErrorResponse, getUserSession } from 'service/helpers';
+import { getSelectedDate } from 'api/Utils/CommonOptions';
+import useDayCareApi from 'api/SWR/useDayCareApi';
+import { addNotification } from 'reducers/notificationsReducer';
+import { formatApprovalHistory, formatDayCareOpportunities } from 'service/formatItems';
+import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
+import { Button } from 'components/Button';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
+import fieldValidator from 'service/inputValidator';
 
 // get server side props before render
 export const getServerSideProps = withSession(async ({ req, res }) => {
@@ -32,12 +33,10 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 const DayCareApproveBrokered = () => {
   const router = useRouter();
   const dayCarePackageId = router.query.id;
-  const [errors, setErrors] = useState(errorData || []);
   const dispatch = useDispatch();
   const [daysSelected, setDaysSelected] = useState([]);
   const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
   const [opportunityEntries, setOpportunityEntries] = useState([]);
-  const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
   const [errorFields, setErrorFields] = useState({
     requestInformationText: '',
@@ -85,9 +84,16 @@ const DayCareApproveBrokered = () => {
       .catch((error) => pushNotification(error));
   };
   const handleRequestMoreInformation = () => {
+    const { validFields, hasErrors } = fieldValidator([{
+      name: 'requestInformationText', value: requestInformationText, rules: ['empty'],
+    }]);
+
+    setErrorFields(validFields);
+
+    if(hasErrors) return;
+
     dayCarePackageCommercialsRequestClarification(dayCarePackageId, requestInformationText)
       .then(() => {
-        setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
@@ -95,6 +101,7 @@ const DayCareApproveBrokered = () => {
         updateErrorFields(error);
       });
   };
+
   const handleApprovePackageCommercials = () => {
     dayCarePackageApproveCommercials(dayCarePackageId)
       .then(() => {
@@ -174,32 +181,16 @@ const DayCareApproveBrokered = () => {
 
         <div className='button-group'>
           <Button className="gray" onClick={handleRejectPackage}>Deny</Button>
-          <Button onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)} className="gray">
-            {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
-          </Button>
           <Button onClick={handleApprovePackageCommercials}>Approve Commercials</Button>
         </div>
 
-        {displayMoreInfoForm && (
-          <div className="columns">
-            <div className="column">
-              <div className="mt-1">
-                <p className="font-size-16px font-weight-bold">Request more information</p>
-                <TextArea
-                  error={errorFields.requestInformationText}
-                  setError={() => changeErrorFields('changeErrorFields')}
-                  label=""
-                  rows={5}
-                  placeholder="Add details..."
-                  onChange={setRequestInformationText}
-                />
-                <button className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
-                  Request more information
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <RequestMoreInformation
+          requestMoreInformationText={requestInformationText}
+          setRequestInformationText={setRequestInformationText}
+          errorFields={errorFields}
+          changeErrorFields={changeErrorFields}
+          handleRequestMoreInformation={handleRequestMoreInformation}
+        />
       </div>
     </Layout>
   );

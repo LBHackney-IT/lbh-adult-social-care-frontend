@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import SupplierDashboardTable from '../../components/SupplierDashboard/SupplierDashboardTable';
-import Pagination from '../../components/Payments/Pagination';
+import SupplierDashboardTable from 'components/SupplierDashboard/SupplierDashboardTable';
+import Pagination from 'components/Payments/Pagination';
+import SupplierDashboardInnerHeader from 'components/SupplierDashboard/SupplierDashboardInnerHeader';
+import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import { changeSupplierReturnsDashboard } from 'reducers/supplierDashboardReducer';
+import withSession from 'lib/session';
+import { getUserSession } from 'service/helpers';
 import { supplierDashboardTableData } from '../../testData/testDataPayRuns';
-import SupplierDashboardInnerHeader from '../../components/SupplierDashboard/SupplierDashboardInnerHeader';
-import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import { changeSupplierReturnsDashboard } from '../../reducers/supplierDashboardReducer';
-import withSession from '../../lib/session';
-import { getUserSession } from '../../service/helpers';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -47,20 +47,38 @@ const SupplierDashboard = () => {
   };
 
   useEffect(() => {
-    router.replace(`${router.pathname}?page=1`);
-  }, []);
-
-  useEffect(() => {
     console.log('change sort', sort);
   }, [sort]);
 
   return (
     <div className="supplier-dashboard max-desktop-width">
       <SupplierDashboardInnerHeader />
-      <SupplierDashboardTable
-        isIgnoreId={true}
+      <Table
         onClickTableRow={onClickTableRow}
         rows={supplierDashboardTableData}
+        rowsRules={{
+          id: {
+            getHide: () => true,
+          },
+          weekCommencing: {
+            getValue: (value) => formatDate(value),
+          },
+          status: {
+            getClassName: (value) => `${value} table__row-item-status`,
+            getValue: (value) => formatStatus(value).slice(0, 1).toUpperCase() + formatStatus(value).slice(1, value.length),
+          },
+        }}
+        fields={{
+          id: 'id',
+          weekCommencing: 'weekCommencing',
+          value: 'value',
+          totalPackages: 'totalPackages',
+          returned: 'returned',
+          inDispute: 'inDispute',
+          accepted: 'accepted',
+          paid: 'paid',
+          status: 'status',
+        }}
         sortBy={sortBy}
         sorts={sorts}
       />

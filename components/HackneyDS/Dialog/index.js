@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react'
 import { createPortal } from 'react-dom';
 
-export default function Dialog({ children, onClick, isOpen }) {
+export default function Dialog({ children, onClose, isOpen }) {
+
+  useEffect(() => {
+    const onClickOutside = (e) => {
+      if (e.target.classList.contains('lbh-dialog-container')) {
+        onClose();
+      }
+    };
+    window.addEventListener('click', onClickOutside);
+
+    return () => {
+      window.removeEventListener('click', onClickOutside);
+    };
+  }, [onClose]);
+
   return (
     isOpen &&
     createPortal(
-      <div data-reach-dialog-overlay>
+      <div className='lbh-dialog-container' data-reach-dialog-overlay>
         <div aria-modal="true" role="dialog" className="lbh-dialog" data-reach-dialog-content>
           {children}
-          <button className="lbh-dialog__close" type="button" onClick={onClick}>
+          <button className="lbh-dialog__close" type="button" onClick={onClose}>
             <span className="govuk-visually-hidden">Close</span>
             <svg width="18" height="18" viewBox="0 0 13 13" fill="none">
               <path

@@ -12,7 +12,11 @@ import ProposedPackagesTab from '../ProposedPackagesTabs';
 import AutocompleteSelect from '../../AutocompleteSelect';
 import ApprovalHistory from '../../ProposedPackages/ApprovalHistory'
 import { addNotification } from '../../../reducers/notificationsReducer';
-import CustomDropDown from '../../CustomDropdown'
+import CustomDropDown from '../../CustomDropdown';
+import PopupAddSupplier from '../../PopupAddSupplier';
+import useSuppliersApi from '../../../api/SWR/useSuppliersApi';
+import useDayCareApi from '../../../api/SWR/useDayCareApi';
+import { mapCareStageOptions } from '../../../api/Mappers/CarePackageMapper';
 
 const PackagesNursingCare = ({
   tab,
@@ -24,8 +28,6 @@ const PackagesNursingCare = ({
   approvalHistory,
   nursingCarePackage,
   nursingCareSummary,
-  supplierOptions = [],
-  stageOptions = [],
   createBrokerageInfo = () => {},
   changePackageBrokeringStage = () => {},
   loggedInUserId,
@@ -34,6 +36,9 @@ const PackagesNursingCare = ({
   const [coreCost, setCoreCost] = useState({
     costPerWeek: nursingCarePackage?.nursingCore || '',
   });
+  const { mutate: getSuppliers, data: { data: supplierOptions }} = useSuppliersApi.supplierList();
+  const { data: stageOptions } = useDayCareApi.brokerAgeStages();
+  const [popupAddSupplier, setPopupAddSupplier] = useState(false);
 
   const [additionalPayment, setAdditionalPayment] = useState({
     costPerWeek: nursingCarePackage?.additionalNeedsPayment || '',
@@ -55,12 +60,8 @@ const PackagesNursingCare = ({
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
   const [selectedStageType, setSelectedStageType] = useState(nursingCarePackage?.stageId);
   const [selectedSupplierType, setSelectedSupplierType] = useState(nursingCarePackage?.supplierId);
-  const [startDate, setStartDate] = useState(
-    (nursingCarePackage && new Date(nursingCarePackage?.nursingCarePackage?.startDate)) || undefined
-  );
-  const [endDate, setEndDate] = useState(
-    (nursingCarePackage && new Date(nursingCarePackage?.nursingCarePackage?.endDate)) || undefined
-  );
+  const [startDate, setStartDate] = useState(undefined);
+  const [endDate, setEndDate] = useState(undefined);
   const [endDateDisabled, setEndDateDisabled] = useState(!nursingCarePackage?.nursingCarePackage?.endDate);
 
   const [coreCostTotal, setCoreCostTotal] = useState(0);
@@ -141,6 +142,7 @@ const PackagesNursingCare = ({
 
   return (
     <>
+      {popupAddSupplier && <PopupAddSupplier getSuppliers={getSuppliers} closePopup={() => setPopupAddSupplier(false)} />}
       <div className="mt-5 mb-5 person-care">
         <div className="column proposed-packages__header is-flex is-justify-content-space-between">
           <div>
@@ -152,7 +154,7 @@ const PackagesNursingCare = ({
           <Dropdown
             label=""
             initialText="Stage"
-            options={stageOptions}
+            options={mapCareStageOptions(stageOptions)}
             selectedValue={selectedStageType}
             onOptionSelect={(option) => handleBrokerageStageChange(option)}
           />
@@ -160,6 +162,7 @@ const PackagesNursingCare = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <div className="mr-3 is-flex is-align-items-flex-end">
+              <Button className='mr-3' onClick={() => setPopupAddSupplier(true)}>New Supplier</Button>
               <AutocompleteSelect
                 placeholder="Supplier (please select)"
                 options={supplierOptions}
@@ -189,6 +192,7 @@ const PackagesNursingCare = ({
               <h2 className="pt-5 hackney-text-black font-weight-bold">Nursing Core</h2>
               <div className="is-flex is-flex-wrap-wrap is-align-items-center">
                 <EuroInput
+                  maxLength={6}
                   onChange={(value) => changeElementsData(setCoreCost, coreCost, 'costPerWeek', value)}
                   classes="mr-6"
                   label="Cost per week"
@@ -204,6 +208,7 @@ const PackagesNursingCare = ({
               <h2 className="pt-5 hackney-text-black font-weight-bold">Additional needs payment</h2>
               <div className="is-align-items-center is-flex is-flex-wrap-wrap">
                 <EuroInput
+                  maxLength={6}
                   classes="mr-6"
                   value={additionalPayment.costPerWeek}
                   onChange={(value) =>
@@ -227,6 +232,7 @@ const PackagesNursingCare = ({
               <h2 className="hackney-text-black font-weight-bold pt-5">Additional needs payment (one off)</h2>
               <div className="is-flex is-flex-wrap-wrap is-align-items-center">
                 <EuroInput
+                  maxLength={6}
                   value={additionalPaymentOneOff.oneOf}
                   label="One Off"
                   onChange={(value) =>
@@ -282,6 +288,7 @@ const PackagesNursingCare = ({
             <>
               <div className='is-flex is-flex-wrap-wrap is-align-items-center mr-5'>
                 <EuroInput
+                  maxLength={6}
                   onBlur={() => {
                     if(fncCostPerWeek < initialFncCostPerWeek) {
                       setFncCostPerWeek(initialFncCostPerWeek);

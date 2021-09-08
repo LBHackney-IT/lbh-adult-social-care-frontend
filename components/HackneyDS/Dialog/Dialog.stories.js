@@ -16,7 +16,7 @@ const Template = (args) => {
   return (
     <>
       <Button handler={() => setOpen(true)}>Emit Dialog</Button>
-      <Dialog isOpen={isOpen} onClick={() => setOpen(false)}>
+      <Dialog isOpen={isOpen} onClose={() => setOpen(false)}>
         <DialogLayout
           {...args}
           action={{
@@ -40,6 +40,6 @@ export const Default = Template.bind({});
 Default.args = {
   title: 'Are you sure?',
   body: 'The record will be permanently deleted.',
-  'submit-label': 'Yes, delete',
-  'decline-label': 'No, cancel',
+  'submitLabel': 'Yes, delete',
+  'declineLabel': 'No, cancel',
 };

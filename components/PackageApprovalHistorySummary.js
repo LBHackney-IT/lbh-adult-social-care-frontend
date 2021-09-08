@@ -8,7 +8,7 @@ const PackageApprovalHistorySummary = ({ approvalHistoryEntries = [] }) => (
       <p className="font-weight-bold hackney-text-green">APPROVAL HISTORY</p>
       <div className="font-size-14px">
         {approvalHistoryEntries.map((entry, index) => (
-          <div className="columns" key={index}>
+          <div className="columns" key={entry.id ?? index}>
             <p className="column is-2 font-weight-bold">{entry.eventDate}</p>
             <p className="column is-8">
               <span>{entry.eventMessage}</span>
