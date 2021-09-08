@@ -26,6 +26,8 @@ import SearchBox from './SearchBox';
 import RadioItem from './RadioItem';
 import { Tip } from './Tip';
 import { HorizontalSeparator } from './Layout/HorizontalSeparator';
+import { VerticalSeparator } from './Layout/VerticalSeparator';
+import { Container } from './Layout/Container';
 import { Heading } from './lettering/Heading';
 import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
 import Header from './Header';
@@ -34,6 +36,8 @@ import WarningText from './WarningText';
 import RadioGroup from './RadioGroup';
 import { SimplePagination } from './SimplePagination';
 import { SummaryList } from './SummaryList';
+import { FileUpload } from './FileUpload/FileUpload';
+
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 
@@ -71,9 +75,12 @@ export {
   Pagination,
   Table,
   HorizontalSeparator,
+  VerticalSeparator,
   Heading,
   IndeterminateCheckbox,
   InsetText,
   Header,
   SummaryList,
+  FileUpload,
+  Container
 };
