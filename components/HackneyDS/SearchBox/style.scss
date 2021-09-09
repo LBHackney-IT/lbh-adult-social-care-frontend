@@ -13,7 +13,16 @@
 
 .lbh-search-box {
   position: relative;
+  display: flex;
+  flex-wrap: wrap;
+
+  & > label, & > .lbh-hint, & > .lbh-error-message {
+    flex-basis: 100%;
+  }
+}
+.lbh-search-box__container {
   display: inline-flex;
+  position: relative;
 }
 .lbh-search-box + .lbh-table {
   margin-top: 15px;
