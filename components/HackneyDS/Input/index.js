@@ -2,16 +2,14 @@ import React, { useRef } from 'react';
 
 export default function Input({
   label,
-  placeholder,
   id = 'lbh-input',
   name,
   type = 'text',
   hint,
+  placeholder = '',
   error,
   value,
-  handler = () => {
-    throw new Error('Handler function is not defined');
-  },
+  handler,
 }) {
   const dataProvider = useRef();
 
