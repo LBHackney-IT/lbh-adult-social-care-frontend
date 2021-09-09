@@ -77,7 +77,7 @@ const BillPage = () => {
   };
 
   const actionButton = {
-    classes: 'outline green',
+    className: 'outline green',
     onClick: () => console.log('Accept all selected', checkedRows),
     text: 'Accept all selected',
   };

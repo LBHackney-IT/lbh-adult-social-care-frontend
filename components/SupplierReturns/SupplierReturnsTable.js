@@ -9,7 +9,7 @@ const SupplierReturnsTable = ({
   setCheckedRows,
   rows,
   isIgnoreId = false,
-  classes = '',
+  className = '',
   sortBy,
   sorts,
 }) => {
@@ -20,7 +20,7 @@ const SupplierReturnsTable = ({
   };
 
   return (
-    <div className={`table ${classes}`}>
+    <div className={`table ${className}`}>
       <SupplierSortTable checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
       {rows.map((item) => {
         const rowStatus = item.status ? ` ${item.status}` : '';

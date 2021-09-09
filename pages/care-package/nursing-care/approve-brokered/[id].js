@@ -23,7 +23,7 @@ import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
 import { Button } from 'components/Button';
 import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
 import { mapCareAdditionalNeedsEntries } from 'api/Mappers/CarePackageMapper';
-import fieldValidator from 'service/inputValidator';
+import formValidator from 'service/formValidator';
 
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
   const isRedirect = getUserSession({ req, res });
@@ -126,9 +126,7 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
   };
 
   const handleRequestMoreInformation = () => {
-    const { validFields, hasErrors } = fieldValidator([{
-      name: 'requestMreInformation', value: requestInformationText, rules: ['empty'],
-    }]);
+    const { validFields, hasErrors } = formValidator({ form: { requestInformationText } });
     setErrorFields(validFields);
 
     if(hasErrors) return;

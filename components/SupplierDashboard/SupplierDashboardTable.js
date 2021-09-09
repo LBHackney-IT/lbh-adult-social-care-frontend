@@ -9,7 +9,7 @@ const SupplierDashboardTable = ({
   setCheckedRows,
   rows,
   isIgnoreId = false,
-  classes = '',
+  className = '',
   canCollapseRows = false,
   sortBy,
   sorts,
@@ -33,7 +33,7 @@ const SupplierDashboardTable = ({
   };
 
   return (
-    <div className={`table ${classes}`}>
+    <div className={`table ${className}`}>
       <SupplierReturnsDashboardSortTable checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
       {rows.map((item) => {
         const collapsedRow = collapsedRows.includes(item.id);

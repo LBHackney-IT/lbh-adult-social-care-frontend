@@ -8,13 +8,13 @@ const BillsTable = ({
   setCheckedRows,
   rows,
   isIgnoreId = false,
-  classes = '',
+  className = '',
   clickRow = () => {},
   sortBy,
   sorts,
 }) => {
   return (
-    <div className={`table ${classes}`}>
+    <div className={`table ${className}`}>
       <BillsSortTable checkedRows={checkedRows} sortBy={sortBy} sorts={sorts} />
       {rows.map((item) => {
         const rowStatus = item.status ? ` ${item.status}` : '';

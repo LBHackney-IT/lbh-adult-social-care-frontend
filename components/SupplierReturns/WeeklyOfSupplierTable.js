@@ -18,7 +18,7 @@ const WeeklyOfSupplierTable = ({
   makeAction,
   requestsQue,
   isIgnoreId = false,
-  classes = '',
+  className = '',
   canCollapseRows = false,
   sortBy,
   actionAllServices,
@@ -43,7 +43,7 @@ const WeeklyOfSupplierTable = ({
   };
 
   return (
-    <div className={`table ${classes}`}>
+    <div className={`table ${className}`}>
       <WeekOfSupplierSortTable
         checkedRows={checkedRows}
         setCheckedRows={changeCheckedRowsState}
@@ -201,7 +201,7 @@ const WeeklyOfSupplierTable = ({
                               </Button>
                             )}
                             <ChatButton
-                              classes={!chatStatuses.includes(service.status) && 'hide'}
+                              className={!chatStatuses.includes(service.status) && 'hide'}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 openChat(service);

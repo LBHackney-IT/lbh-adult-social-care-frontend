@@ -1,8 +1,8 @@
 import React from 'react';
 import AddBillSortTable from './AddBillSortTable';
 
-const AddBillTable = ({ rows = [], isIgnoreId = false, classes = '', sorts }) => (
-  <div className={`table ${classes}`}>
+const AddBillTable = ({ rows = [], isIgnoreId = false, className = '', sorts }) => (
+  <div className={`table ${className}`}>
     <p className="table__title">Day Care Invoice from Care Homes Ltd For Mrs Jones</p>
     <AddBillSortTable sorts={sorts} />
     {!rows?.length ? (

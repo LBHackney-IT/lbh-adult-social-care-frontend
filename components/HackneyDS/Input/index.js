@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
-export default function Input({
+export const Input = ({
   label,
   placeholder,
   id = 'lbh-input',
@@ -8,14 +8,12 @@ export default function Input({
   type = 'text',
   hint,
   error,
+  ref,
   value,
   handler = () => {
     throw new Error('Handler function is not defined');
   },
-}) {
-  const dataProvider = useRef();
-
-  return (
+}) => (
     <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}`}>
       {label && (
         <label className="govuk-label lbh-label" htmlFor={id}>
@@ -30,10 +28,9 @@ export default function Input({
         placeholder={placeholder}
         name={name}
         type={type}
-        ref={dataProvider}
+        ref={ref}
         value={value}
         onChange={(e) => handler(e.target.value)}
       />
     </div>
-  );
-}
+);

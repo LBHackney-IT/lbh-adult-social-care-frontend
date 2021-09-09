@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import { selectNursingTypeOfStayOptions } from '../../reducers/carePackageSlice';
-import { NURSING_CARE_ROUTE } from '../../routes/RouteConstants';
+import { selectNursingTypeOfStayOptions } from 'reducers/carePackageSlice';
+import { NURSING_CARE_ROUTE } from 'routes/RouteConstants';
 import RadioButton, { yesNoValues } from '../RadioButton';
 import CarePackageSetup from '../CarePackages/CarePackageSetup';
 import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
-import fieldValidator from '../../service/inputValidator';
+import formValidator from 'service/formValidator';
 import DateSetup from './DateSetup';
 
 const NursingCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => {
@@ -29,6 +29,7 @@ const NursingCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) 
     isS117: '',
     isFixedPeriod: '',
     startDate: '',
+    endDate: '',
     careTypes: '',
     isRespiteCare: '',
     isImmediateOrReEnablement: '',
@@ -45,16 +46,20 @@ const NursingCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) 
   // Handle build click
   const onBuildClick = () => {
     // Get the parameters for the home care package route
-    const { validFields, hasErrors } = fieldValidator([
-      { name: 'isImmediateOrReEnablement', value: isImmediateOrReEnablement, rules: ['empty'] },
-      { name: 'isS117', value: isS117, rules: ['empty'] },
-      { name: 'isFixedPeriod', value: isFixedPeriod, rules: ['empty'] },
-      { name: 'isDischargePackage', value: isDischargePackage, rules: ['empty'] },
-      { name: 'isRespiteCare', value: isRespiteCare, rules: ['empty'] },
-      { name: 'startDate', value: startDate, rules: ['empty'] },
-      // { name: 'endDate', value: endDate, rules: ['empty'] },
-      { name: 'careTypes', value: selectedCareType, rules: ['empty'] },
-    ]);
+    const { validFields, hasErrors } = formValidator({
+      form: {
+        isImmediateOrReEnablement,
+        isS117,
+        isFixedPeriod,
+        isDischargePackage,
+        isRespiteCare,
+        startDate,
+        endDate,
+        selectedCareType,
+      },
+      ignoreInputs: isFixedPeriod ? [] : ['endDate']
+    });
+
     if (hasErrors) {
       setErrorFields(validFields);
       return;

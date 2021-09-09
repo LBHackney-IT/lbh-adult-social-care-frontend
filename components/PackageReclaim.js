@@ -82,7 +82,7 @@ const PackageReclaim = ({
           />
         </div>
         <TextArea
-          classes="package-reclaim__notes"
+          className="package-reclaim__notes"
           rows={5}
           error={currentError?.notes}
           label="Add notes"

@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom';
 
-export default function Dialog({ children, onClose, isOpen }) {
+export default function Dialog({ children, onClose, isOpen, className = '' }) {
+  const [windowState, setWindowState] = useState();
 
   useEffect(() => {
     const onClickOutside = (e) => {
@@ -9,6 +10,7 @@ export default function Dialog({ children, onClose, isOpen }) {
         onClose();
       }
     };
+    setWindowState(window);
     window.addEventListener('click', onClickOutside);
 
     return () => {
@@ -16,10 +18,12 @@ export default function Dialog({ children, onClose, isOpen }) {
     };
   }, [onClose]);
 
+  if(!windowState) return <></>;
+
   return (
     isOpen &&
     createPortal(
-      <div className='lbh-dialog-container' data-reach-dialog-overlay>
+      <div className={`lbh-dialog-container ${className}`} data-reach-dialog-overlay>
         <div aria-modal="true" role="dialog" className="lbh-dialog" data-reach-dialog-content>
           {children}
           <button className="lbh-dialog__close" type="button" onClick={onClose}>
@@ -37,7 +41,7 @@ export default function Dialog({ children, onClose, isOpen }) {
           </button>
         </div>
       </div>,
-      document.body
+      window?.document?.body
     )
   );
 }

@@ -3,7 +3,7 @@ import { Button } from '../Button';
 import { uniqueID } from '../../service/helpers';
 
 const Pagination = ({
-  classes,
+  className,
   totalPages = 1,
   changePagination,
   actionButton,
@@ -25,9 +25,9 @@ const Pagination = ({
   const toCalc = to || currentPage * pageSize > totalCount ? totalCount : currentPage * pageSize;
 
   return (
-    <div className={`table-pagination${classes ? ` ${classes}` : ''}`}>
+    <div className={`table-pagination${className ? ` ${className}` : ''}`}>
       {actionButton && (
-        <Button disabled={actionButton.disabled} className={actionButton.classes} onClick={actionButton.onClick}>
+        <Button disabled={actionButton.disabled} className={actionButton.className} onClick={actionButton.onClick}>
           {actionButton.text}
         </Button>
       )}

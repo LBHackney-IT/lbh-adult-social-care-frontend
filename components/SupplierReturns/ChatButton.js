@@ -1,8 +1,8 @@
 import React from 'react';
 import { ChatIcon } from '../Icons';
 
-const ChatButton = ({ onClick = () => {}, classes = '' }) => (
-  <div onClick={onClick} className={`chat-button ${classes}`}>
+const ChatButton = ({ onClick = () => {}, className = '' }) => (
+  <div onClick={onClick} className={`chat-button ${className}`}>
     <ChatIcon />
   </div>
 );

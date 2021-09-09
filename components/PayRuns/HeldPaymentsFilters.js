@@ -25,7 +25,7 @@ const HeldPaymentsFilters = ({ filters, changeFilter, clearFilters, applyFilters
     <>
       <div className="held-payments__filters">
         <DatePick
-          classes='pay-run__filter-item mr-3'
+          className='pay-run__filter-item mr-3'
           dateValue={filters.dateFrom}
           placeholder='Data range'
           startDate={filters.dateFrom}
@@ -69,7 +69,7 @@ const HeldPaymentsFilters = ({ filters, changeFilter, clearFilters, applyFilters
               key={key}
               initialText={text}
               options={options}
-              classes="pay-runs__dropdown-type mr-3"
+              className="pay-runs__dropdown-type mr-3"
               selectedValue={filters[key]}
               onOptionSelect={(option) => changeFilter(key, option)}
             />

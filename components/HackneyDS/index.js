@@ -1,4 +1,4 @@
-import Input from './Input';
+import { Input } from './Input';
 import Button from './Button';
 import Accordion from './Accordion';
 import Announcement from './Announcement';
@@ -28,6 +28,7 @@ import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
 import Header from './Header';
 import InsetText from './InsetText';
 import WarningText from './WarningText';
+import { EditElementModal } from './EditElementModal';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 
@@ -63,5 +64,6 @@ export {
   Heading,
   IndeterminateCheckbox,
   InsetText,
-  Header
+  Header,
+  EditElementModal,
 };
