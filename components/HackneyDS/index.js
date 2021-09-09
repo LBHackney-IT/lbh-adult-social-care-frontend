@@ -28,6 +28,7 @@ import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
 import Header from './Header';
 import InsetText from './InsetText';
 import WarningText from './WarningText';
+import SearchBox from './SearchBox';
 import { SimplePagination } from './SimplePagination';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
@@ -44,6 +45,7 @@ export {
   Hint,
   Input,
   Button,
+  SearchBox,
   Accordion,
   Announcement,
   BackLink,
