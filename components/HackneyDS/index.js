@@ -13,6 +13,7 @@ import { Tabs } from './Tabs';
 import { Tab } from './Tabs/Tab';
 import Tag from './Tag';
 import Select from './Select';
+import Dialog from './Dialog';
 import Hint from './lettering/Hint';
 import Label from './lettering/Label';
 import ErrorMessage from './lettering/ErrorMessage';
@@ -24,9 +25,14 @@ import { Pagination } from './Pagination';
 import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 import { Heading } from './lettering/Heading';
 import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
+import Header from './Header';
 import InsetText from './InsetText';
 import WarningText from './WarningText';
 import SearchBox from './SearchBox';
+
+export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
+
+export const getMultipleSlot = (nodeList = [], name) => nodeList.filter((el) => el.props.slot === name);
 
 export {
   Conversation,
@@ -51,6 +57,7 @@ export {
   Tab,
   Tag,
   Select,
+  Dialog,
   WarningText,
   Pagination,
   Table,
@@ -58,4 +65,5 @@ export {
   Heading,
   IndeterminateCheckbox,
   InsetText,
+  Header
 };
