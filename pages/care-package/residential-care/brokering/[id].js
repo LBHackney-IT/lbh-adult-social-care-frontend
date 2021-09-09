@@ -1,25 +1,25 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
-import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
+import { HASC_TOKEN_ID } from 'api/BaseApi';
+import { getHomeCareSummaryData } from 'api/CarePackages/HomeCareApi';
 import {
   createResidentialCareBrokerageInfo,
   getResidentialCarePackageApprovalHistory,
   getResidentialCarePackageDetailsForBrokerage,
   residentialCareChangeStage,
   residentialCareChangeStatus,
-} from '../../../../api/CarePackages/ResidentialCareApi';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
-import Layout from '../../../../components/Layout/Layout';
-import PackagesResidentialCare from '../../../../components/packages/residential-care';
-import withSession from '../../../../lib/session';
-import { selectBrokerage } from '../../../../reducers/brokerageReducer';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import { getLoggedInUser, getUserSession, uniqueID } from '../../../../service/helpers';
-import { mapCarePackageApprovalHistory } from '../../../../api/Mappers/optionsMapper';
-import { mapCareAdditionalNeedsEntries } from '../../../../api/Mappers/CarePackageMapper'
+} from 'api/CarePackages/ResidentialCareApi';
+import { getAgeFromDateString, getEnGBFormattedDate } from 'api/Utils/FuncUtils';
+import Layout from 'components/Layout/Layout';
+import PackagesResidentialCare from 'components/packages/residential-care';
+import { mapCarePackageApprovalHistory } from 'api/Mappers/optionsMapper';
+import withSession from 'lib/session';
+import { selectBrokerage } from 'reducers/brokerageReducer';
+import { addNotification } from 'reducers/notificationsReducer';
+import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
+import { getLoggedInUser, getUserSession, uniqueID } from 'service/helpers';
+import { mapCareAdditionalNeedsEntries } from '../../../../api/Mappers/CarePackageMapper';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -34,13 +34,10 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
 
   try {
     // Call to api to get package
-    const result = await getResidentialCarePackageDetailsForBrokerage(
+    data.residentialCarePackage = await getResidentialCarePackageDetailsForBrokerage(
       residentialCarePackageId,
       req.cookies[HASC_TOKEN_ID]
     );
-    const newAdditionalNeedsEntries = mapCareAdditionalNeedsEntries(result.residentialCarePackage.residentialCareAdditionalNeeds);
-    data.residentialCarePackage = result;
-    data.additionalNeedsEntries = newAdditionalNeedsEntries;
   } catch (error) {
     data.errorData.push(`Retrieve residential care package details failed. ${error}`);
   }
@@ -59,10 +56,11 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: re
 
 const ResidentialCareBrokering = ({
   residentialCarePackage,
-  additionalNeedsEntries,
   approvalHistoryEntries,
   loggedInUserId,
 }) => {
+  const { residentialCarePackage: carePackage } = residentialCarePackage;
+  const additionalNeedsEntries = mapCareAdditionalNeedsEntries(carePackage?.residentialCareAdditionalNeeds);
   const router = useRouter();
   const dispatch = useDispatch();
   const [initialPackageReclaim] = useState({
@@ -145,15 +143,11 @@ const ResidentialCareBrokering = ({
       clientSummaryInfo={{
         client: residentialCarePackage?.residentialCarePackage?.clientName,
         hackneyId: residentialCarePackage?.residentialCarePackage?.clientHackneyId,
-        age:
-          residentialCarePackage?.residentialCarePackage &&
-          getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
+        age: getAgeFromDateString(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
         preferredContact: residentialCarePackage?.residentialCarePackage?.clientPreferredContact,
         canSpeakEnglish: residentialCarePackage?.residentialCarePackage?.clientCanSpeakEnglish,
         packagesCount: 4,
-        dateOfBirth:
-          residentialCarePackage?.residentialCarePackage &&
-          getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
+        dateOfBirth: getEnGBFormattedDate(residentialCarePackage?.residentialCarePackage?.clientDateOfBirth),
         postcode: residentialCarePackage?.residentialCarePackage?.clientPostCode,
         title: 'Residential Care Brokering',
       }}

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/router'
-import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
-import Layout from '../../../../components/Layout/Layout';
-import PackagesHomeCare from '../../../../components/packages/home-care';
-import { getBrokerageSuccess, selectBrokerage } from '../../../../reducers/brokerageReducer';
-import { getUserSession, uniqueID } from '../../../../service/helpers';
-import withSession from '../../../../lib/session';
+import { useRouter } from 'next/router';
+import { getHomeCareSummaryData } from 'api/CarePackages/HomeCareApi';
+import Layout from 'components/Layout/Layout';
+import PackagesHomeCare from 'components/packages/home-care';
+import { getBrokerageSuccess, selectBrokerage } from 'reducers/brokerageReducer';
+import { getUserSession, uniqueID } from 'service/helpers';
+import withSession from 'lib/session';
 import {
   mapCareAdditionalNeedsEntries,
   mapCareApprovalHistoryItems
-} from '../../../../api/Mappers/CarePackageMapper'
-import useHomeCareApi from '../../../../api/SWR/useHomeCareApi'
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils'
+} from 'api/Mappers/CarePackageMapper';
+import useHomeCareApi from 'api/SWR/useHomeCareApi';
+import { getAgeFromDateString, getEnGBFormattedDate } from 'api/Utils/FuncUtils';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res }) => {

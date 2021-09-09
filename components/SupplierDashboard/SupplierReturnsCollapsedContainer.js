@@ -10,7 +10,7 @@ const SupplierReturnsCollapsedContainer = ({
   makeAction,
   openChat,
 }) => {
-  if(!supplierReturn?.services?.length) return React.Fragment;
+  if(!supplierReturn?.services?.length) return <></>;
 
   const [serviceValues, setServiceValues] = useState([]);
 

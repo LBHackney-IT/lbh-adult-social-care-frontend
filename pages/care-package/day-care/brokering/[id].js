@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import { getUserSession, uniqueID } from '../../../../service/helpers';
-import { getHomeCareSummaryData } from '../../../../api/CarePackages/HomeCareApi';
-import Layout from '../../../../components/Layout/Layout';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
-import { changeDayCarePackageStatus, createDayCareBrokerageInfo } from '../../../../api/CarePackages/DayCareApi';
-import { getInitialPackageReclaim } from '../../../../api/Utils/CommonOptions';
-import { mapDayCarePackageDetailsForBrokerage } from '../../../../api/Mappers/DayCareMapper';
-import { CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
-import PackagesDayCare from '../../../../components/packages/day-care';
-import withSession from '../../../../lib/session';
-import useDayCareApi from '../../../../api/SWR/useDayCareApi';
-import { addNotification } from '../../../../reducers/notificationsReducer';
+import { getUserSession, uniqueID } from 'service/helpers';
+import { getHomeCareSummaryData } from 'api/CarePackages/HomeCareApi';
+import Layout from 'components/Layout/Layout';
+import { getAgeFromDateString, getEnGBFormattedDate } from 'api/Utils/FuncUtils';
+import { changeDayCarePackageStatus, createDayCareBrokerageInfo } from 'api/CarePackages/DayCareApi';
+import { getInitialPackageReclaim } from 'api/Utils/CommonOptions';
+import { mapDayCarePackageDetailsForBrokerage } from 'api/Mappers/DayCareMapper';
+import { CARE_PACKAGE_ROUTE } from 'routes/RouteConstants';
+import PackagesDayCare from 'components/packages/day-care';
+import withSession from 'lib/session';
+import useDayCareApi from 'api/SWR/useDayCareApi';
+import { addNotification } from 'reducers/notificationsReducer';
 
 // start before render
 export const getServerSideProps = withSession(({ req, res }) => {

@@ -1,33 +1,33 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createHomeCarePackage, postHomeCareTimeSlots } from '../../../api/CarePackages/HomeCareApi';
-import { Button } from '../../../components/Button';
-import Dropdown from '../../../components/Dropdown';
-import ShouldPackageReclaim from '../../../components/HomeCare/ShouldPackageReclaim';
-import SummaryDataList from '../../../components/HomeCare/SummaryDataList';
-import WeekCarePicker from '../../../components/HomeCare/WeekCarePicker';
-import Layout from '../../../components/Layout/Layout';
-import PackageReclaim from '../../../components/PackageReclaim';
-import TextArea from '../../../components/TextArea';
-import TitleHeader from '../../../components/TitleHeader';
-import withSession from '../../../lib/session';
-import { formatCareDatePeriod, getLoggedInUser, getUserSession, uniqueID } from '../../../service/helpers';
+import { createHomeCarePackage, postHomeCareTimeSlots } from 'api/CarePackages/HomeCareApi';
+import { Button } from 'components/Button';
+import Dropdown from 'components/Dropdown';
+import ShouldPackageReclaim from 'components/HomeCare/ShouldPackageReclaim';
+import SummaryDataList from 'components/HomeCare/SummaryDataList';
+import WeekCarePicker from 'components/HomeCare/WeekCarePicker';
+import Layout from 'components/Layout/Layout';
+import PackageReclaim from 'components/PackageReclaim';
+import TextArea from 'components/TextArea';
+import TitleHeader from 'components/TitleHeader';
+import withSession from 'lib/session';
+import { formatCareDatePeriod, getLoggedInUser, getUserSession, uniqueID } from 'service/helpers';
 import {
   DOMESTIC_CARE_MODE,
   ESCORT_CARE_MODE, getWeekSlots,
   LIVE_IN_CARE_MODE,
   PERSONAL_CARE_MODE,
   weekDays,
-} from '../../../service/homeCarePickerHelper';
-import { getServiceTimes } from '../../../service/homeCareServiceHelper';
-import { SOCIAL_WORKER_ROUTE } from '../../../routes/RouteConstants';
-import { addNotification } from '../../../reducers/notificationsReducer';
-import useHomeCareApi from '../../../api/SWR/useHomeCareApi';
-import usePrimarySupportReason from '../../../api/SWR/package/usePrimarySupportReason'
-import optionsMapper from '../../../api/Mappers/optionsMapper'
-import fieldValidator from '../../../service/inputValidator'
-import ErrorField from '../../../components/ErrorField'
+} from 'service/homeCarePickerHelper';
+import { getServiceTimes } from 'service/homeCareServiceHelper';
+import { SOCIAL_WORKER_ROUTE } from 'routes/RouteConstants';
+import { addNotification } from 'reducers/notificationsReducer';
+import useHomeCareApi from 'api/SWR/useHomeCareApi';
+import usePrimarySupportReason from 'api/SWR/package/usePrimarySupportReason';
+import optionsMapper from 'api/Mappers/optionsMapper';
+import fieldValidator from 'service/inputValidator';
+import ErrorField from 'components/ErrorField';
 
 const initialPackageReclaim = {
   homeCarePackageId: '1',
@@ -141,11 +141,13 @@ const HomeCare = ({ loggedInUserId }) => {
   // Option selecting
   useEffect(() => {
     if (times && times.length > 0) {
-      setSelectedPrimaryCareTime(times[0].value);
+      const [{ value: primaryCareType }] = times;
+      setSelectedPrimaryCareTime(primaryCareType);
     }
 
     if (secondaryTimes && secondaryTimes.length > 0) {
-      setSelectedSecondaryCareTime(secondaryTimes[0].value);
+      const [{ value: secondaryCareTime }] = times;
+      setSelectedSecondaryCareTime(secondaryCareTime);
     }
   }, [times, secondaryTimes]);
 

@@ -20,7 +20,7 @@ const RadioButton = ({
   onChange = () => {},
 }) => {
   const hasSelectedValue =
-    selectedValue !== undefined && options.find((option) => option.value === selectedValue) !== undefined;
+    selectedValue ?? options.find((option) => option.value === selectedValue) !== undefined;
 
   const radioChange = (radioItemValue) => {
     if (isFunction(setError)) setError();

@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
-import Layout from '../../../../components/Layout/Layout';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import withSession from '../../../../lib/session';
-import { getErrorResponse, getUserSession } from '../../../../service/helpers';
-import useHomeCareApi from '../../../../api/SWR/useHomeCareApi';
-import { Button } from '../../../../components/Button';
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
-import TitleHeader from '../../../../components/TitleHeader';
-import DaySummary from '../../../../components/HomeCare/DaySummary';
+import HomeCarePackageBreakdown from 'components/HomeCare/HomeCarePackageBreakdown';
+import Layout from 'components/Layout/Layout';
+import PackageApprovalHistorySummary from 'components/PackageApprovalHistorySummary';
+import withSession from 'lib/session';
+import { getErrorResponse, getUserSession } from 'service/helpers';
+import useHomeCareApi from 'api/SWR/useHomeCareApi';
+import { Button } from 'components/Button';
+import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
+import TitleHeader from 'components/TitleHeader';
+import DaySummary from 'components/HomeCare/DaySummary';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
+import fieldValidator from 'service/inputValidator';
+import { nursingCareRequestClarification } from 'api/CarePackages/NursingCareApi';
+import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
+import { addNotification } from 'reducers/notificationsReducer';
+import { getServiceTypeCareTimes } from 'service/homeCareServiceHelper';
 import { testDataDaySummaries } from '../../../../testData/testDateHomeCare';
-import RequestMoreInformation from '../../../../components/Approver/RequestMoreInformation';
-import fieldValidator from '../../../../service/inputValidator';
-import { nursingCareRequestClarification } from '../../../../api/CarePackages/NursingCareApi';
-import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { getServiceTypeCareTimes } from '../../../../service/homeCareServiceHelper'
 
 const approvalHistoryEntries = [
   {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SearchBox } from '../index';
 
 export default {
@@ -12,14 +12,21 @@ const Template = (args) => {
   const clearFunc = () => setValue('');
   const localClear = args.clear && clearFunc;
 
+  useEffect(() => {
+    setValue(args.value);
+  }, [args?.value]);
+
   return <SearchBox {...args} clear={localClear} value={value} handler={setValue} />;
 }
 
 export const Default = Template.bind({});
 Default.args = {
-  label: 'Search',
+  label: 'Search label',
+  hint: 'Search hint',
+  error: 'Search error',
   id: 'search',
   name: 'search',
+  value: '',
   className: '',
   search: () => alert('Searching'),
   placeholder: 'Search...',
@@ -27,8 +34,11 @@ Default.args = {
 
 export const ClearButton = Template.bind({});
 ClearButton.args = {
-  label: 'Search',
+  label: 'Search label',
+  hint: 'Search hint',
+  error: 'Search error',
   id: 'search',
+  value: 'clear me',
   clear: () => {},
   name: 'search',
   placeholder: 'Search...',
