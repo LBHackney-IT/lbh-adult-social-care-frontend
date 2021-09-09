@@ -141,12 +141,12 @@ const HomeCare = ({ loggedInUserId }) => {
   // Option selecting
   useEffect(() => {
     if (times && times.length > 0) {
-      const [{ value: primaryCareType }] = times[0].value;
+      const [{ value: primaryCareType }] = times;
       setSelectedPrimaryCareTime(primaryCareType);
     }
 
     if (secondaryTimes && secondaryTimes.length > 0) {
-      const [{ value: secondaryCareTime }] = times[0].value;
+      const [{ value: secondaryCareTime }] = times;
       setSelectedSecondaryCareTime(secondaryCareTime);
     }
   }, [times, secondaryTimes]);
