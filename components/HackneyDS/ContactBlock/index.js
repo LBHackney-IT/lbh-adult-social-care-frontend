@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
-import L from 'leaflet';
+import React from 'react';
+import dynamic from "next/dynamic";
 import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon } from '../../Icons';
+
+const Map = dynamic(() => import("./LeafletMap"), { ssr: false });
 
 export const ContactBlock = ({
   withMap = false,
@@ -13,16 +15,6 @@ export const ContactBlock = ({
   addresses,
   notes,
 }) => {
-
-  useEffect(() => {
-    if(withMap) {
-      const map = L.map('map').setView(initialCoords, 13);
-      if(mapMarkers) {
-        mapMarkers.forEach(marker => L.marker(marker).addTo(map));
-      }
-    }
-  }, [withMap]);
-
   return (
     <section className="lbh-contact">
       <h2 className="lbh-heading-large-light lbh-contact__title">
@@ -151,26 +143,7 @@ export const ContactBlock = ({
           </ul>
         </div>}
       </div>
-      {withMap && <div className="lbh-contact__map-container">
-        <div
-          className="lbh-contact__map"
-          id="map"
-          data-module="lbh-map"
-          data-access-token="pk.eyJ1IjoibGJoZWxld2lzIiwiYSI6ImNqeXJkN25uNjA5M3Uzb251bWVyejJ3YW8ifQ.uzO8I54w64U6QkNknW32FA"
-          data-marker-lat="51.545386"
-          data-marker-lng="-0.057069"
-        />
-        <div className="lbh-contact__directions">
-          <a
-            href="https://goo.gl/maps/YHtCx2nqP2o57BZi6"
-            className="lbh-link"
-            rel="external"
-            title="View directions on Google Maps"
-          >
-            Get directions
-          </a>
-        </div>
-      </div>}
+      {withMap && <Map mapMarkers={mapMarkers} initialCoords={initialCoords} />}
     </section>
   )
 }
