@@ -280,38 +280,3 @@ html {
   border: 0 !important;
   white-space: nowrap !important;
 }
-
-@media print {
-  .govuk-\!-display-none-print {
-    display: none !important;
-  }
-  .govuk-\!-font-size-80 {
-    font-size: 53pt !important;
-    line-height: 1.1 !important;
-  }
-  .govuk-\!-font-size-48 {
-    font-size: 32pt !important;
-    line-height: 1.15 !important;
-  }
-  .govuk-\!-font-size-36 {
-    font-size: 24pt !important;
-    line-height: 1.05 !important;
-  }
-  .govuk-\!-font-size-24,
-  .govuk-\!-font-size-27 {
-    font-size: 18pt !important;
-    line-height: 1.15 !important;
-  }
-  .govuk-\!-font-size-19 {
-    font-size: 14pt !important;
-    line-height: 1.15 !important;
-  }
-  .govuk-\!-font-size-16 {
-    font-size: 14pt !important;
-    line-height: 1.2 !important;
-  }
-  .govuk-\!-font-size-14 {
-    font-size: 12pt !important;
-    line-height: 1.2 !important;
-  }
-}
