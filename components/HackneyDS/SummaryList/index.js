@@ -4,8 +4,6 @@ import SummaryListItem from './SummaryListItem'
 export const SummaryList = ({ summaryList, noBorder = false }) => {
   const noBorderClass = noBorder ? ' govuk-summary-list--no-border' : '';
 
-  console.log(summaryList);
-
   return (
     <dl className={`govuk-summary-list lbh-summary-list${noBorderClass}`}>
       {summaryList.map(({
@@ -28,7 +26,7 @@ export const SummaryList = ({ summaryList, noBorder = false }) => {
               <dd className={`govuk-summary-list__actions ${actionsClassName}`}>
                 <ul className="govuk-summary-list__actions-list">
                   {actions.map(({ name, href, handler }) => (
-                      <SummaryListItem handler={handler} name={name} keyText={key} href={href} />
+                      <SummaryListItem handler={handler} keyText={`${key}${name}`} name={name} key={`${key}${name}`} href={href} />
                     )
                   )}
                 </ul>

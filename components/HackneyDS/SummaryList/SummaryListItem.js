@@ -8,7 +8,7 @@ const SummaryListItem = ({ name, handler, href, keyText}) => {
     }
   }
   return (
-    <li key={name} className="govuk-summary-list__actions-list-item">
+    <li key={keyText} className="govuk-summary-list__actions-list-item">
       <a onClick={onClick} className="govuk-link" href={href || '#'}>
         {name}<span className="govuk-visually-hidden"> {keyText.toLowerCase()}</span>
       </a>
