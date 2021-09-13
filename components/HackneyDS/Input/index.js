@@ -2,17 +2,15 @@ import React from 'react';
 
 export const Input = ({
   label,
-  placeholder,
   id = 'lbh-input',
   name,
   type = 'text',
   hint,
+  placeholder = '',
   error,
   ref,
   value,
-  handler = () => {
-    throw new Error('Handler function is not defined');
-  },
+  handler,
 }) => (
     <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}`}>
       {label && (
