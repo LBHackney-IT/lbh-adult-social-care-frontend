@@ -28,7 +28,6 @@ import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
 import Header from './Header';
 import InsetText from './InsetText';
 import WarningText from './WarningText';
-import { EditElementModal } from './EditElementModal';
 import SearchBox from './SearchBox';
 import { SimplePagination } from './SimplePagination';
 
@@ -69,5 +68,4 @@ export {
   IndeterminateCheckbox,
   InsetText,
   Header,
-  EditElementModal,
 };
