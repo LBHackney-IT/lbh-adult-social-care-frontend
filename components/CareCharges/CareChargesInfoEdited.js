@@ -1,10 +1,10 @@
 import React from 'react';
-import { Input } from '../index';
-import RadioButton from '../../RadioButton';
-import { currency } from '../../../constants/strings';
-import EditElementDatePickers from './EditElementDatePickers';
+import { Input } from '../HackneyDS';
+import RadioButton from '../RadioButton';
+import { currency } from '../../constants/strings';
+import EditElementDatePickers from './EditElementModal/EditElementDatePickers';
 
-const CareChargesInfoEdited = ({ elements = [], onChangeInput, inputErrors = [] }) => {
+const CareChargesInfoEdited = ({ elements = [], onChangeInput, withoutEdit, inputErrors = [] }) => {
   if(elements.length === 0) return <></>;
 
   return <>
@@ -53,6 +53,7 @@ const CareChargesInfoEdited = ({ elements = [], onChangeInput, inputErrors = [] 
             onChangeInput={onChangeInput}
             inputErrors={inputErrors}
             index={index}
+            withoutEdit={withoutEdit}
             startDateId={startDateId}
             endDateId={endDateId}
             dateToWeeks={dateToWeeks}
