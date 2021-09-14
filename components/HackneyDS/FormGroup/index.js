@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function InputGroup({ children = [], title, hint, error }) {
+export default function FormGroup({ children = [], title, hint, error }) {
   const nodeList = Array.isArray(children) ? children : [children];
   const errorClassList = error ? ' govuk-form-group--error' : '';
 
