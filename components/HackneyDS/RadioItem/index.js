@@ -29,7 +29,7 @@ export default function RadioItem({
         aria-describedby={hint}
       />
       <Label htmlFor={id} className='govuk-radios__label'>
-        {labelHeading && <span className='govuk-heading-s govuk-!-margin-bottom-1'>
+        {labelHeading && <span className='govuk-heading-s mb-1'>
           {labelHeading}
         </span>}
         {label}
