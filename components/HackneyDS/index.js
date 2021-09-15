@@ -32,6 +32,7 @@ import Header from './Header';
 import InsetText from './InsetText';
 import WarningText from './WarningText';
 import { SimplePagination } from './SimplePagination';
+import { SummaryList } from './SummaryList';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 
@@ -72,4 +73,5 @@ export {
   IndeterminateCheckbox,
   InsetText,
   Header,
+  SummaryList,
 };
