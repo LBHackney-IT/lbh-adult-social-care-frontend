@@ -1,0 +1,121 @@
+.govuk-grid-row:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.govuk-grid-row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.govuk-grid-column-full,
+.govuk-grid-column-one-half,
+.govuk-grid-column-one-quarter,
+.govuk-grid-column-one-third,
+.govuk-grid-column-three-quarters,
+.govuk-grid-column-two-thirds {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 15px;
+}
+.govuk-grid-column-full-from-desktop,
+.govuk-grid-column-one-half-from-desktop,
+.govuk-grid-column-one-quarter-from-desktop,
+.govuk-grid-column-one-third-from-desktop,
+.govuk-grid-column-three-quarters-from-desktop,
+.govuk-grid-column-two-thirds-from-desktop {
+  box-sizing: border-box;
+  padding: 0 15px;
+}
+
+.lbh-stat {
+  padding: 20px;
+  background: #e7eaec;
+}
+.lbh-stat__value {
+  display: block;
+  font-size: 1.5rem;
+  line-height: 1.8125rem;
+  margin-bottom: 0.3125rem;
+}
+.lbh-stat__caption,
+.lbh-stat__value {
+  font-family: Open Sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #0b0c0c;
+  font-weight: 400;
+}
+.lbh-stat__caption {
+  font-size: 0.8125rem;
+  line-height: 1.1875rem;
+}
+
+@media (min-width: 40.0625em) {
+  .lbh-stat__caption {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .lbh-stat__value {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  * + [class|='govuk-grid-column'] {
+    margin-top: 0;
+  }
+
+  .govuk-grid-column-one-quarter {
+    width: 25%;
+    float: left;
+  }
+  .govuk-grid-column-one-third {
+    width: 33.3333%;
+    float: left;
+  }
+  .govuk-grid-column-one-half {
+    width: 50%;
+    float: left;
+  }
+  .govuk-grid-column-two-thirds {
+    width: 66.6666%;
+    float: left;
+  }
+  .govuk-grid-column-three-quarters {
+    width: 75%;
+    float: left;
+  }
+  .govuk-grid-column-full {
+    width: 100%;
+    float: left;
+  }
+}
+
+@media (min-width: 48.0625em) {
+  .govuk-grid-column-one-quarter-from-desktop {
+    width: 25%;
+    float: left;
+  }
+  .govuk-grid-column-one-third-from-desktop {
+    width: 33.3333%;
+    float: left;
+  }
+  .govuk-grid-column-one-half-from-desktop {
+    width: 50%;
+    float: left;
+  }
+  .govuk-grid-column-two-thirds-from-desktop {
+    width: 66.6666%;
+    float: left;
+  }
+  .govuk-grid-column-three-quarters-from-desktop {
+    width: 75%;
+    float: left;
+  }
+  .govuk-grid-column-full-from-desktop {
+    width: 100%;
+    float: left;
+  }
+}

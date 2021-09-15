@@ -1,7 +1,7 @@
 import React from 'react';
 import { HackneyLogo } from '../Icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { openMobileMenu, closeMobileMenu, selectMobileMenu } from '../../reducers/mobileMenuReducer';
+import { openMobileMenu, closeMobileMenu, selectMobileMenu } from 'reducers/mobileMenuReducer';
 import { useRouter } from 'next/router';
 
 const Header = () => {

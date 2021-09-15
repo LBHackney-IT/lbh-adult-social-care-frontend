@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
+import { formatDateWithSign, formatStatus, includeString } from 'service/helpers';
 import SupplierReturnsDashboardSortTable from './SupplierReturnsDashboardSortTable';
 import Checkbox from '../Checkbox';
 

@@ -5,7 +5,7 @@ import {
   ESCORT_CARE_MODE,
   LIVE_IN_CARE_MODE,
   PERSONAL_CARE_MODE,
-} from '../../service/homeCarePickerHelper';
+} from 'service/homeCarePickerHelper';
 
 const isPickerActive = (currentMode, { person, domestic, liveIn, escort }) => {
   switch (currentMode) {

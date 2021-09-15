@@ -1,6 +1,6 @@
 import React from 'react';
 import SortTable from '../SortTable';
-import { formatStatus } from '../../service/helpers';
+import { formatStatus } from 'service/helpers';
 
 const ApproverTable = ({ onClickTableRow, rows, classes = '', sortBy, sorts, clickPackageType }) => {
   const clickRow = (item) => {
