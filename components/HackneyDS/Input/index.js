@@ -9,10 +9,14 @@ export const Input = ({
   placeholder = '',
   error,
   ref,
+  className,
   value,
   handler,
-}) => (
-    <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}`}>
+}) => {
+  const outerClassName = className ? ` ${className}` : '';
+
+  return (
+    <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}${outerClassName}`}>
       {label && (
         <label className="govuk-label lbh-label" htmlFor={id}>
           {label}
@@ -31,4 +35,5 @@ export const Input = ({
         onChange={(e) => handler(e.target.value)}
       />
     </div>
-);
+  );
+}
