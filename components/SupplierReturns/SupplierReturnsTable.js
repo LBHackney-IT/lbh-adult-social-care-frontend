@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
+import { formatDateWithSign, formatStatus, includeString } from 'service/helpers';
 import SupplierSortTable from './SupplierSortTable';
 import Checkbox from '../Checkbox';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import RadioButton from '../RadioButton';
 import DatePick from '../DatePick';
-import { getFixedPeriodOptions } from '../../api/Utils/CommonOptions';
+import { getFixedPeriodOptions } from 'api/Utils/CommonOptions';
 
 const DateSetup = ({
   errorFields = {},
@@ -54,7 +54,7 @@ const DateSetup = ({
             disabled={disabledEndDate}
             minDate={startDate}
             maxDate={startMaxDate}
-            classes={`${!isFixedPeriod ? ' datepicker-ongoing' : ''}${disabledStartDate ? ' disabled' : ''}`}
+            className={`${!isFixedPeriod ? ' datepicker-ongoing' : ''}${disabledStartDate ? ' disabled' : ''}`}
             setDate={setEndDate}
             error={errorFields.endDate}
             setError={() => changeErrorFields('endDate')}

@@ -38,7 +38,7 @@ const CustomDropDown = ({
   };
 
   return (
-    <BaseField classes={`${className} dropdown-container`} label={label}>
+    <BaseField className={`${className} dropdown-container`} label={label}>
       <div tabIndex="0" onBlur={() => setIsActive(false)} className={`dropdown${isActive ? ' is-active' : ''}${isUp ? ' is-up' : ''}`}>
         <div className="dropdown-trigger" onClick={(event) => onTriggerClick(event)}>
           <div

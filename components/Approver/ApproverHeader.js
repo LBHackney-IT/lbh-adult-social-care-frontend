@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { AdultSocialCare, HackneyLogo } from '../Icons';
-import { includeString } from '../../service/helpers';
+import { includeString } from 'service/helpers';
 
 const ApproverHeader = () => {
   const router = useRouter();

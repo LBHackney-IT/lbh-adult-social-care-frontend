@@ -7,10 +7,17 @@ export const Input = ({
   type = 'text',
   hint,
   placeholder = '',
+  className = '',
   error,
   ref,
   value,
   handler,
+}) {
+  const dataProvider = useRef();
+  const outerClassName = className ? ` ${className}` : '';
+
+  return (
+    <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}${outerClassName}`}>
 }) => (
     <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}`}>
       {label && (
