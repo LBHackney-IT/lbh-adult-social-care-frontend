@@ -12,14 +12,10 @@ export const Input = ({
   ref,
   value,
   handler,
-}) {
-  const dataProvider = useRef();
+}) => {
   const outerClassName = className ? ` ${className}` : '';
-
   return (
     <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}${outerClassName}`}>
-}) => (
-    <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}`}>
       {label && (
         <label className="govuk-label lbh-label" htmlFor={id}>
           {label}
@@ -38,4 +34,5 @@ export const Input = ({
         onChange={(e) => handler(e.target.value)}
       />
     </div>
-);
+  );
+}
