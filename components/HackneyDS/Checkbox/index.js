@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Checkbox({ children, small, disabled, id, name, value, checked = false, handler = () => {} }) {
+export default function Checkbox({
+  children,
+  small,
+  disabled,
+  id,
+  name,
+  value,
+  checked = false,
+  handler = () => {},
+  className,
+}) {
   const smallClassList = small ? ' govuk-checkboxes--small' : '';
+  const outerClassName = className ? ` ${className}` : '';
 
   const [isChecked, setChecked] = useState(checked);
 
@@ -9,7 +20,7 @@ export default function Checkbox({ children, small, disabled, id, name, value, c
   useEffect(() => handler(isChecked), [isChecked]);
 
   return (
-    <div className={`govuk-checkboxes__item ${smallClassList}`}>
+    <div className={`govuk-checkboxes__item${smallClassList}${outerClassName}`}>
       <input
         className="govuk-checkboxes__input"
         id={id}
@@ -20,7 +31,7 @@ export default function Checkbox({ children, small, disabled, id, name, value, c
         checked={isChecked}
         onChange={(e) => setChecked(e.target.checked)}
       />
-      <label className="govuk-label govuk-checkboxes__label" htmlFor="checkbox">
+      <label className="govuk-label govuk-checkboxes__label" htmlFor={id}>
         {children}
       </label>
     </div>

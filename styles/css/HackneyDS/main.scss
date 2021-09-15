@@ -2388,7 +2388,7 @@ html {
   border-bottom-color: #81312f;
 }
 .lbh-header--purple:after {
-  border-bottom-color: #672146;
+  border-bottom-color: $lbh-e01;
 }
 .lbh-header__main {
   padding: 1rem 0 0.75rem;
@@ -2399,7 +2399,7 @@ html {
   background: #be3a34;
 }
 .lbh-header--purple .lbh-header__main {
-  background: #672146;
+  background: $lbh-e01;
 }
 .lbh-header__links a:focus,
 .lbh-header__title-link:focus,

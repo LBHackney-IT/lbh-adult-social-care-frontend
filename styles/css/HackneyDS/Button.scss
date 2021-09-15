@@ -26,6 +26,10 @@
   vertical-align: top;
   cursor: pointer;
   -webkit-appearance: none;
+
+  &.warning-button {
+    background-color: #81312F;
+  }
 }
 
 .govuk-button:active,
