@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Input from '../Input';
-import { formatStatus } from '../../service/helpers';
+import { formatStatus } from 'service/helpers';
 import ChatButton from './ChatButton';
 
 const SupplierReturnsCollapsedContainer = ({
@@ -49,7 +49,7 @@ const SupplierReturnsCollapsedContainer = ({
               <div className="table__row-collapsed-main-item-el">{service.packageHrs}</div>
               <div className="table__row-collapsed-main-item-el">
                 <Input
-                  classes={`${
+                  className={`${
                     parseInt(serviceValues[index]?.hrsDelivered, 10) > parseInt(serviceValues[index]?.packageHrs, 10)
                       ? 'table__row__wrong-input'
                       : ''
@@ -62,7 +62,7 @@ const SupplierReturnsCollapsedContainer = ({
               <div className="table__row-collapsed-main-item-el">{service.packageVisits}</div>
               <div className="table__row-collapsed-main-item-el">
                 <Input
-                  classes={`${
+                  className={`${
                     parseInt(serviceValues[index]?.actualVisits, 10) === 0 ? 'table__row__wrong-input' : ''
                   }`}
                   value={serviceValues[index]?.actualVisits}

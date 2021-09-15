@@ -9,7 +9,7 @@ const Input = ({
   placeholder = '',
   onChange = () => {},
   onClick,
-  classes = '',
+  className = '',
   value = '',
   preSign = '',
   search,
@@ -49,7 +49,7 @@ const Input = ({
   };
 
   return (
-    <BaseField onClick={focusInput} classes={`${classes}`} label={label}>
+    <BaseField onClick={focusInput} className={`${className}`} label={label}>
       <div className={search ? ' custom-input__search' : ''}>
         <input
           onBlur={onBlur}

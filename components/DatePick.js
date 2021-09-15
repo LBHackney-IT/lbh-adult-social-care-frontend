@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import BaseField from './baseComponents/BaseField';
 import ErrorField from './ErrorField';
 import 'react-datepicker/dist/react-datepicker.css';
+import { dateStringFormats } from '../constants/strings'
 
 const DatePick = ({
   selectsRange,
@@ -12,8 +13,9 @@ const DatePick = ({
   endDate = '',
   error,
   setError = () => {},
-  classes = '',
+  className = '',
   disabled = false,
+  dateFormat = dateStringFormats.dayMonthYear,
   label,
   minDate,
   maxDate,
@@ -21,10 +23,10 @@ const DatePick = ({
   dateValue,
 }) => {
   return (
-    <BaseField classes={`${classes} react-date-picker`} label={label} noInputStyle>
+    <BaseField className={`${className} react-date-picker`} label={label} noInputStyle>
       {dateValue?.toString() === 'Invalid Date' ? <p>Invalid Date</p> :
         <DatePicker
-          dateFormat="dd/MM/yyyy"
+          dateFormat={dateFormat}
           disabled={disabled}
           onChange={(value) => {
             setError();

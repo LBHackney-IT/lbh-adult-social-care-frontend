@@ -1,5 +1,5 @@
 import React from 'react';
-import { getEnGBFormattedDate } from '../../api/Utils/FuncUtils';
+import { getEnGBFormattedDate } from 'api/Utils/FuncUtils';
 
 const ResidentialCareApprovalTitle = ({ startDate, endDate }) => (
   <div className="columns">

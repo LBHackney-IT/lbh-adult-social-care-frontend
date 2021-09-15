@@ -209,7 +209,7 @@ const PackagesDayCare = ({
             <span className="mr-3">
               <DatePick
                 disabledLabel="Ongoing"
-                classes="datepicker-disabled datepicker-ongoing"
+                className="datepicker-disabled datepicker-ongoing"
                 label="End Date"
                 disabled={endDateEnabled}
                 dateValue={endDate}
@@ -224,15 +224,15 @@ const PackagesDayCare = ({
               <h2 className="text-title">Core cost</h2>
               <EuroInput
                 onChange={(value) => changeElementsData(setCoreCost, coreCost, 'costPerDay', value)}
-                classes="default-label day-care__fixed-dropdown-width"
+                className="default-label day-care__fixed-dropdown-width"
                 label="Cost per day"
                 value={coreCost.costPerDay}
               />
-              <BaseField label="Days per week" classes="day-care__min-space">
+              <BaseField label="Days per week" className="day-care__min-space">
                 <p>{corePackageSelectedDaysPerWeek}</p>
               </BaseField>
-              <BaseField classes="day-care__min-space" />
-              <BaseField classes="day-care__cost-week" label="Cost / week">
+              <BaseField className="day-care__min-space" />
+              <BaseField className="day-care__cost-week" label="Cost / week">
                 <p>
                   {currency.euro}
                   {coreCostTotal}
@@ -242,14 +242,14 @@ const PackagesDayCare = ({
             <hr className="horizontal-delimiter" />
             <div className="row-container day-care__transport">
               <Dropdown
-                classes="day-care__fixed-dropdown-width"
+                className="day-care__fixed-dropdown-width"
                 label="Transport"
                 initialText="Supplier (please select)"
                 options={supplierOptions}
                 selectedValue={transport.supplier}
                 onOptionSelect={(value) => changeElementsData(setTransport, transport, 'supplier', value)}
               />
-              <BaseField classes="day-care__min-space" label="Days per week">
+              <BaseField className="day-care__min-space" label="Days per week">
                 <p>{corePackageSelectedDaysPerWeek}</p>
               </BaseField>
               <Input
@@ -258,7 +258,7 @@ const PackagesDayCare = ({
                 onChange={(value) => changeElementsData(setTransport, transport, 'costPerDay', value)}
                 label="Cost per week"
               />
-              <BaseField label="Cost" classes="day-care__cost">
+              <BaseField label="Cost" className="day-care__cost">
                 <p>
                   {currency.euro}
                   {transportCostTotal}
@@ -267,7 +267,7 @@ const PackagesDayCare = ({
             </div>
             <div className="row-container day-care__transport-escort">
               <Dropdown
-                classes="label-bold day-care__fixed-dropdown-width"
+                className="label-bold day-care__fixed-dropdown-width"
                 label="Transport escort"
                 initialText="Select Supplier"
                 options={supplierOptions}
@@ -286,7 +286,7 @@ const PackagesDayCare = ({
                 label="Cost per week"
                 onChange={(value) => changeElementsData(setTransportEscort, transportEscort, 'costPerWeek', value)}
               />
-              <BaseField label="Cost" classes="day-care__cost">
+              <BaseField label="Cost" className="day-care__cost">
                 <p>
                   {currency.euro}
                   {transportEscortCostTotal}
@@ -295,7 +295,7 @@ const PackagesDayCare = ({
             </div>
             <div className="row-container day-care__opportunities">
               <Dropdown
-                classes="label-bold day-care__fixed-dropdown-width"
+                className="label-bold day-care__fixed-dropdown-width"
                 label="Dare care opportunities"
                 initialText="Select Supplier"
                 options={supplierOptions}
@@ -320,7 +320,7 @@ const PackagesDayCare = ({
                   changeElementsData(setDayCareOpportunities, dayCareOpportunities, 'costPerHour', value)
                 }
               />
-              <BaseField label="Cost" classes="day-care__cost">
+              <BaseField label="Cost" className="day-care__cost">
                 <p>
                   {currency.euro}
                   {dayCareOpportunitiesCostTotal}
@@ -329,7 +329,7 @@ const PackagesDayCare = ({
             </div>
             <div className="row-container day-care__escort">
               <Dropdown
-                classes="label-bold day-care__fixed-dropdown-width"
+                className="label-bold day-care__fixed-dropdown-width"
                 label="Escort"
                 initialText="Select Supplier"
                 options={supplierOptions}
@@ -348,7 +348,7 @@ const PackagesDayCare = ({
                 label="Cost per hour"
                 onChange={(value) => changeElementsData(setEscort, escort, 'costPerHour', value)}
               />
-              <BaseField label="Cost" classes="day-care__cost">
+              <BaseField label="Cost" className="day-care__cost">
                 <p>
                   {currency.euro}
                   {escortCostTotal}

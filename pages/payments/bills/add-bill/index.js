@@ -8,7 +8,7 @@ import AddBillInvoiceFor from 'components/Bills/AddBillInvoiceFor';
 import AddBillTotalInfo from 'components/Bills/AddBillTotalInfo';
 import withSession from 'lib/session';
 import { getUserSession } from 'service/helpers';
-import fieldValidator from 'service/inputValidator';
+import formValidator from 'service/formValidator';
 import { addBillPackageInfoTestData } from '../../../../testData/billsTestData';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
@@ -53,19 +53,16 @@ const AddBill = () => {
 
   const invoiceInputs = {
     packageId: {
-      rules: ['empty'],
       value: inputs.packageId,
       error: inputsError.packageId,
       onChange: (value) => onSetPackageId(value, 'packageId'),
     },
     serviceFrom: {
-      rules: ['empty'],
       value: inputs.serviceFrom,
       error: inputsError.serviceFrom,
       onChange: (value) => changeInputs(value, 'serviceFrom'),
     },
     serviceTo: {
-      rules: ['empty'],
       value: inputs.serviceTo,
       error: inputsError.serviceTo,
       onChange: (value) => changeInputs(value, 'serviceTo'),
@@ -74,19 +71,16 @@ const AddBill = () => {
 
   const detailsInputs = {
     invRef: {
-      rules: ['empty'],
       value: inputs.invRef,
       error: inputsError.invRef,
       onChange: (value) => changeInputs(value, 'invRef'),
     },
     invoiceDate: {
-      rules: ['empty'],
       value: inputs.invoiceDate,
       error: inputsError.invoiceDate,
       onChange: (value) => changeInputs(value, 'invoiceDate'),
     },
     invoiceDue: {
-      rules: ['empty'],
       value: inputs.invoiceDue,
       error: inputsError.invoiceDue,
       onChange: (value) => changeInputs(value, 'invoiceDue'),
@@ -96,11 +90,12 @@ const AddBill = () => {
   const [breadcrumbs] = useState([{ text: 'Bills', onClick: () => router.back() }, { text: 'Add Id' }]);
 
   const addBill = () => {
-    const arrayInputs = [];
-    for (const i in { ...invoiceInputs, ...detailsInputs }) {
-      arrayInputs.push(invoiceInputs[i]);
+    const form = {};
+    const allInputs = { ...invoiceInputs, ...detailsInputs };
+    for (const name in allInputs) {
+      form[name] = allInputs[name];
     }
-    const { validFields, hasError } = fieldValidator(arrayInputs);
+    const { validFields, hasError } = formValidator({ form });
     if (hasError) {
       setInputsError(validFields);
     }

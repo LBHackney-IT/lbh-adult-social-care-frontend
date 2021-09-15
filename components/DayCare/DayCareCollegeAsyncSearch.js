@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AsyncSelect from 'react-select/async';
 import { Button } from '../Button';
 import DayCareCreateCollege from './DayCareCreateCollege';
-import useDayCareApi from '../../api/SWR/useDayCareApi'
+import useDayCareApi from 'api/SWR/useDayCareApi';
 
 const DayCareCollegeAsyncSearch = ({ setSelectedCollege = () => {}, classNames = 'is-3' }) => {
   // set default query terms

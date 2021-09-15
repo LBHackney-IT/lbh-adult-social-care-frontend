@@ -4,9 +4,9 @@ import { differenceInDays } from 'date-fns';
 import DatePick from '../DatePick';
 import Popup from '../Popup';
 import RadioButton from '../RadioButton';
-import { createNewPayRun, getDateOfLastPayRun, PAY_RUN_TYPES } from '../../api/Payments/PayRunApi';
-import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
-import { addNotification } from '../../reducers/notificationsReducer';
+import { createNewPayRun, getDateOfLastPayRun, PAY_RUN_TYPES } from 'api/Payments/PayRunApi';
+import { stringIsNullOrEmpty } from 'api/Utils/FuncUtils';
+import { addNotification } from 'reducers/notificationsReducer';
 
 const PopupCreatePayRun = ({ date, updateData, setDate, closePopup, regularCycles, changeRegularCycles }) => {
   const dispatch = useDispatch();

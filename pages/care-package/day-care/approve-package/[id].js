@@ -16,7 +16,7 @@ import {
 import { getSelectedDate } from 'api/Utils/CommonOptions';
 import withSession from 'lib/session';
 import { formatCareDatePeriod, getErrorResponse, getUserSession } from 'service/helpers';
-import fieldValidator from 'service/inputValidator';
+import formValidator from 'service/formValidator';
 import useDayCareApi from 'api/SWR/useDayCareApi';
 import { formatApprovalHistory, formatDayCareOpportunities } from 'service/formatItems';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -88,9 +88,7 @@ const DayCareApprovePackage = () => {
       .catch((error) => pushNotification(error));
   };
   const handleRequestMoreInformation = () => {
-    const { validFields, hasErrors } = fieldValidator([
-      { name: 'requestInformationText', value: requestInformationText, rules: ['empty'] },
-    ]);
+    const { validFields, hasErrors } = formValidator({ requestInformationText });
     if (hasErrors) {
       setErrorFields(validFields);
       return;

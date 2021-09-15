@@ -12,7 +12,7 @@ import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
 import TitleHeader from 'components/TitleHeader';
 import DaySummary from 'components/HomeCare/DaySummary';
 import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
-import fieldValidator from 'service/inputValidator';
+import formValidator from 'service/formValidator';
 import { nursingCareRequestClarification } from 'api/CarePackages/NursingCareApi';
 import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -87,9 +87,7 @@ const HomeCareApprovePackage = () => {
   };
 
   const handleRequestMoreInformation = () => {
-    const { validFields, hasErrors } = fieldValidator([{
-      name: 'requestInformationText', value: requestInformationText, rules: ['empty'],
-    }]);
+    const { validFields, hasErrors } = formValidator({ form: { requestInformationText }});
     setErrorFields(validFields);
 
     if(hasErrors) return;

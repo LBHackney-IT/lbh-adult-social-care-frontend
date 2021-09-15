@@ -62,21 +62,21 @@ const WeekOfSupplierViewInnerHeader = ({
           <div className="supplier-returns__dropdowns">
             <Dropdown
               initialText="Service user"
-              classes="mr-3"
+              className="mr-3"
               options={typeOptions}
               selectedValue={filters.serviceUser}
               onOptionSelect={(option) => changeFilter('serviceUser', option)}
             />
             <Dropdown
               initialText="Package ID"
-              classes="mr-3"
+              className="mr-3"
               options={statusOptions}
               selectedValue={filters.packageId}
               onOptionSelect={(option) => changeFilter('packageId', option)}
             />
             <Dropdown
               initialText="Supplier"
-              classes="mr-3"
+              className="mr-3"
               options={supplierOptions}
               selectedValue={filters.supplier}
               onOptionSelect={(option) => changeFilter('supplier', option)}

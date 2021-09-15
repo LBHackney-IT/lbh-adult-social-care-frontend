@@ -176,7 +176,7 @@ const PackagesNursingCare = ({
             <span className="mr-3">
               <DatePick
                 disabledLabel="Ongoing"
-                classes="datepicker-disabled datepicker-ongoing"
+                className="datepicker-disabled datepicker-ongoing"
                 label="End Date"
                 disabled={endDateDisabled}
                 dateValue={endDateDisabled ? '' : endDate}
@@ -194,7 +194,7 @@ const PackagesNursingCare = ({
                 <EuroInput
                   maxLength={6}
                   onChange={(value) => changeElementsData(setCoreCost, coreCost, 'costPerWeek', value)}
-                  classes="mr-6"
+                  className="mr-6"
                   label="Cost per week"
                   value={coreCost.costPerWeek}
                 />
@@ -209,7 +209,7 @@ const PackagesNursingCare = ({
               <div className="is-align-items-center is-flex is-flex-wrap-wrap">
                 <EuroInput
                   maxLength={6}
-                  classes="mr-6"
+                  className="mr-6"
                   value={additionalPayment.costPerWeek}
                   onChange={(value) =>
                     changeElementsData(setAdditionalPayment, additionalPayment, 'costPerWeek', value)
@@ -238,7 +238,7 @@ const PackagesNursingCare = ({
                   onChange={(value) =>
                     changeElementsData(setAdditionalPaymentOneOff, additionalPaymentOneOff, 'oneOf', value)
                   }
-                  classes="mr-6"
+                  className="mr-6"
                 />
                 <p className="pt-5">
                   {currency.euro}

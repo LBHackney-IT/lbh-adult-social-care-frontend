@@ -1,4 +1,4 @@
-import Input from './Input';
+import { Input } from './Input';
 import Button from './Button';
 import Accordion from './Accordion';
 import Announcement from './Announcement';
@@ -73,5 +73,5 @@ export {
   Heading,
   IndeterminateCheckbox,
   InsetText,
-  Header
+  Header,
 };

@@ -13,7 +13,7 @@ import { Button } from 'components/Button';
 import DaySummary from 'components/HomeCare/DaySummary';
 import TitleHeader from 'components/TitleHeader';
 import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
-import fieldValidator from 'service/inputValidator';
+import formValidator from 'service/formValidator';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { postRequestMoreInformation } from '../../../../api/CarePackages/HomeCareApi';
@@ -93,9 +93,7 @@ const HomeCareApproveBrokered = () => {
   };
 
   const handleRequestMoreInformation = async () => {
-    const { validFields, hasErrors } = fieldValidator([{
-      name: 'requestInformationText', value: requestInformationText, rules: ['empty'],
-    }]);
+    const { validFields, hasErrors } = formValidator({ form: { requestInformationText }});
 
     setErrorFields(validFields);
 

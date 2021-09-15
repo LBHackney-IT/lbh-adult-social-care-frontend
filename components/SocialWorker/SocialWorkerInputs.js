@@ -37,7 +37,7 @@ const SocialWorkerInputs = ({ statusOptions = [], searchTerm, searchFilters }) =
       </div>
       <div className="pay-runs__filters social-worker__filters">
         <Input
-          classes="mr-3"
+          className="mr-3"
           label="Search"
           value={filters.terms}
           search={searchId}
@@ -46,7 +46,7 @@ const SocialWorkerInputs = ({ statusOptions = [], searchTerm, searchFilters }) =
         />
         <Dropdown
           initialText="Status"
-          classes="mr-3"
+          className="mr-3"
           options={statusOptions}
           selectedValue={filters.status}
           onOptionSelect={(option) => changeFilter('status', option)}

@@ -17,7 +17,7 @@ import {
   RESIDENTIAL_CARE_BROKERING_ROUTE,
 } from 'routes/RouteConstants';
 import { DEFAULT_PAGE_SIZE } from 'constants/variables';
-import { checkEmptyFields } from 'service/inputValidator';
+import { checkEmptyFields } from 'service/formValidator';
 import { sortArray } from 'api/Utils/FuncUtils';
 import { DATA_TYPES } from 'api/Utils/CommonOptions';
 import useBrokeredPackageApi from 'api/SWR/useBrokeredPackagesApi';

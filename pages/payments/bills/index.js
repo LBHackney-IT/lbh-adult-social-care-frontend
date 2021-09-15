@@ -134,7 +134,7 @@ const Bills = () => {
         actionButton={{
           text: 'Pay selected bills',
           onClick: () => console.log('pay selected bills', checkedRows),
-          classes: 'bills__pay-selected-bills',
+          className: 'bills__pay-selected-bills',
         }}
         from={1}
         to={10}

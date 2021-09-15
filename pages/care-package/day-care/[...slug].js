@@ -17,7 +17,7 @@ import DayCareSummary from 'components/DayCare/DayCareSummary';
 import DayCareCollegeAsyncSearch from 'components/DayCare/DayCareCollegeAsyncSearch';
 import { formatCareDatePeriod, getUserSession } from 'service/helpers';
 import withSession from 'lib/session';
-import fieldValidator from 'service/inputValidator';
+import formValidator from 'service/formValidator';
 import ErrorField from 'components/ErrorField';
 import useDayCareApi from 'api/SWR/useDayCareApi';
 
@@ -137,40 +137,48 @@ const DayCare = () => {
   };
 
   const formHasErrors = () => {
-    const defaultFields = fieldValidator(
-      [
-        { name: 'transportNeeded', value: transportNeeded, rules: ['empty'] },
-        { name: 'transportEscortNeeded', value: transportEscortNeeded, rules: ['empty'] },
-        { name: 'escortNeeded', value: escortNeeded, rules: ['empty'] },
-        { name: 'termTimeConsideration', value: termTimeConsideration, rules: ['empty'] },
-        { name: 'needToAddress', value: needToAddress, rules: ['empty'] },
-        { name: 'daysSelected', value: daysSelected, rules: ['customEmpty'] },
-      ],
-      [{ name: 'customEmpty', text: 'Required field', valid: (item) => item.value.some((day) => day.checked) }]
-    );
+    const defaultFields = formValidator({
+      form: {
+        transportNeeded,
+        transportEscortNeeded,
+        escortNeeded,
+        termTimeConsideration,
+        needToAddress,
+        daysSelected,
+      },
+      customRules: [
+        {
+          name: 'customEmpty',
+          text: 'Required field',
+          valid: (item) => item.value.some((day) => day.checked)
+        }
+      ]
+    });
     setErrorFields(defaultFields.validFields);
 
     const packageReclaimsTimedArr = [];
     const opportunityEntriesTimedArr = [];
-    const packageReclaimsFieldsError = packagesReclaimed.map((item) => {
-      const valid = fieldValidator([
-        { name: 'from', value: item.from, rules: ['empty'] },
-        { name: 'category', value: item.category, rules: ['empty'] },
-        { name: 'type', value: item.type, rules: ['empty'] },
-        { name: 'notes', value: item.notes, rules: ['empty'] },
-        { name: 'amount', value: item.amount, rules: ['empty'] },
-      ]);
+    const packageReclaimsFieldsError = packagesReclaimed.map(({
+      from,
+      category,
+      type,
+      notes,
+      amount,
+    }) => {
+      const valid = formValidator({ form: { from, category, type, notes, amount } });
       packageReclaimsTimedArr.push(valid.validFields);
       return valid.hasErrors;
     });
     setPackageReclaimedError(packageReclaimsTimedArr);
 
     const opportunityEntriesFieldsError = opportunityEntries.map((item) => {
-      const valid = fieldValidator([
-        { name: 'howLongValue', value: item.howLongValue, rules: ['empty'] },
-        { name: 'timesPerMonthValue', value: item.timesPerMonthValue, rules: ['empty'] },
-        { name: 'needToAddress', value: item.needToAddress, rules: ['empty'] },
-      ]);
+      const valid = formValidator({
+        form: {
+          howLongValue: item.howLongValue,
+          timesPerMonthValue: item.timesPerMonthValue,
+          needToAddress: item.needToAddress,
+        }
+      });
       opportunityEntriesTimedArr.push(valid.validFields);
       return valid.hasErrors;
     });

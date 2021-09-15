@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { DAY_CARE_ROUTE } from '../../routes/RouteConstants';
+import { DAY_CARE_ROUTE } from 'routes/RouteConstants';
 import RadioButton, { yesNoValues } from '../RadioButton';
 import CarePackageSetup from '../CarePackages/CarePackageSetup';
 import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
-import fieldValidator from '../../service/inputValidator';
+import formValidator from 'service/formValidator';
 import DateSetup from './DateSetup';
 
 const DayCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => {
@@ -18,14 +18,9 @@ const DayCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => {
   // Handle build click
   const onBuildClick = () => {
     // Get the parameters for the home care package route
-    const { validFields, hasErrors } = fieldValidator([
-      { name: 'isImmediate', value: isImmediate, rules: ['empty'] },
-      { name: 'isS117', value: isS117, rules: ['empty'] },
-      { name: 'isFixedPeriod', value: isFixedPeriod, rules: ['empty'] },
-      { name: 'startDate', value: startDate, rules: ['empty'] },
-      { name: 'endDate', value: endDate, rules: ['empty'] },
-      { name: 'careTypes', value: selectedCareType, rules: ['empty'] },
-    ]);
+    const { validFields, hasErrors } = formValidator({
+      form: { isImmediate, isS117, isFixedPeriod, startDate, endDate, selectedCareType }
+    });
     if (hasErrors) {
       setErrorFields(validFields);
       return;
