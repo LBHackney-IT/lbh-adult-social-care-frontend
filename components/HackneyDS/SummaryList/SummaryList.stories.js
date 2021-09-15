@@ -77,23 +77,23 @@ OverriddenWidths.args = {
   summaryList: [
     {
       key: 'Name',
-      keyClassName: 'govuk-!-width-one-half',
-      valueClassName: 'govuk-!-width-one-quarter',
-      actionsClassName: 'govuk-!-width-one-half',
+      keyClassName: 'width-50',
+      valueClassName: 'width-25',
+      actionsClassName: 'width-50',
       value: 'First Name',
       actions: [ { name: 'Edit' }, { name: 'Delete'} ]
     },
     {
-      keyClassName: 'govuk-!-width-one-half',
-      valueClassName: 'govuk-!-width-one-quarter',
-      actionsClassName: 'govuk-!-width-one-half',
+      keyClassName: 'width-50',
+      valueClassName: 'width-25',
+      actionsClassName: 'width-50',
       key: 'Date of birth',
       value: '13/08/1980'
     },
     {
-      keyClassName: 'govuk-!-width-one-half',
-      valueClassName: 'govuk-!-width-one-quarter',
-      actionsClassName: 'govuk-!-width-one-half',
+      keyClassName: 'width-50',
+      valueClassName: 'width-25',
+      actionsClassName: 'width-50',
       key: 'Contact information',
       noBorderRow: true,
       value: ['email@email.com', 'Address 1', 'Address 2']
