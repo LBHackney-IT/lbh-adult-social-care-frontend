@@ -22,6 +22,9 @@ import Timeline from './Timeline';
 import Conversation from './Conversation';
 import { Table } from './Table';
 import { Pagination } from './Pagination';
+import SearchBox from './SearchBox';
+import RadioItem from './RadioItem';
+import { Tip } from './Tip';
 import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 import { Heading } from './lettering/Heading';
 import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
@@ -29,7 +32,6 @@ import Header from './Header';
 import InsetText from './InsetText';
 import WarningText from './WarningText';
 import { ContactBlock } from './ContactBlock';
-import SearchBox from './SearchBox';
 import { SimplePagination } from './SimplePagination';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
@@ -37,6 +39,8 @@ export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.s
 export const getMultipleSlot = (nodeList = [], name) => nodeList.filter((el) => el.props.slot === name);
 
 export {
+  Tip,
+  RadioItem,
   SimplePagination,
   Conversation,
   Link,
