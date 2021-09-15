@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from '../index';
 
 const SummaryListItem = ({ name, handler, href, keyText}) => {
   const onClick = (e) => {
@@ -9,9 +10,10 @@ const SummaryListItem = ({ name, handler, href, keyText}) => {
   }
   return (
     <li key={keyText} className="govuk-summary-list__actions-list-item">
-      <a onClick={onClick} className="govuk-link" href={href || '#'}>
-        {name}<span className="govuk-visually-hidden"> {keyText.toLowerCase()}</span>
-      </a>
+      <Link onClick={onClick} className="govuk-link" href={href || '#'}>
+        {name}
+        <span className="govuk-visually-hidden"> {keyText.toLowerCase()}</span>
+      </Link>
     </li>
   )
 };
