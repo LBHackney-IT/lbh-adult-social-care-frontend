@@ -1,4 +1,5 @@
 import React from 'react';
+import { HorizontalSeparator } from '../index';
 
 export default function FormGroup({ children = [], title, hint, error }) {
   const nodeList = Array.isArray(children) ? children : [children];
@@ -13,6 +14,7 @@ export default function FormGroup({ children = [], title, hint, error }) {
           <span className="govuk-visually-hidden">Error:</span>
           {error}
         </span>
+        <HorizontalSeparator height='10px' />
         {nodeList}
       </fieldset>
     </div>

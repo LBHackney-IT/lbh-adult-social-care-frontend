@@ -1,7 +1,7 @@
 import React from 'react';
 import FormGroup from '../FormGroup';
 import RadioItem from '../RadioItem';
-import { ErrorMessage, Label } from '../index'
+import { ErrorMessage, HorizontalSeparator, Label } from '../index';
 
 export default function RadioGroup({
   className = '',
@@ -49,6 +49,7 @@ export default function RadioGroup({
                 <div className="govuk-radios__conditional govuk-radios__conditional--hidden">
                   {condition.label && <Label htmlFor={condition.id}>{condition.label}</Label>}
                   {condition.error && <ErrorMessage>{condition.error}</ErrorMessage>}
+                  <HorizontalSeparator height='10px' />
                   <input
                     className={`govuk-input govuk-!-width-one-third${errorClass}`}
                     name={condition.id}
