@@ -32,21 +32,21 @@ const SupplierReturnsInnerHeader = ({ dateRangeOptions = [], careType, typeOptio
           <div className="supplier-returns__dropdowns">
             <Dropdown
               initialText="Service user"
-              classes="mr-3"
+              className="mr-3"
               options={typeOptions}
               selectedValue={filters.serviceUser}
               onOptionSelect={(option) => changeFilter('serviceUser', option)}
             />
             <Dropdown
               initialText="Supplier"
-              classes="mr-3"
+              className="mr-3"
               options={statusOptions}
               selectedValue={filters.supplier}
               onOptionSelect={(option) => changeFilter('supplier', option)}
             />
             <Dropdown
               initialText="Status"
-              classes="mr-3"
+              className="mr-3"
               options={dateRangeOptions}
               selectedValue={filters.status}
               onOptionSelect={(option) => changeFilter('status', option)}

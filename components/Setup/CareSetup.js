@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 import RadioButton, { yesNoValues } from '../RadioButton';
 import CarePackageSetup from '../CarePackages/CarePackageSetup';
 import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
-import fieldValidator from '../../service/inputValidator';
+import formValidator from 'service/formValidator';
 import DateSetup from './DateSetup';
-import { getFutureDate, includeString } from '../../service/helpers';
-import { RESIDENTIAL_CARE_ROUTE } from '../../routes/RouteConstants';
+import { incrementDate, includeString } from 'service/helpers';
+import { RESIDENTIAL_CARE_ROUTE } from 'routes/RouteConstants';
 
 const CareSetup = ({
   errors,
@@ -36,21 +36,22 @@ const CareSetup = ({
 
   // Handle build click
   const onBuildClick = () => {
-    const requiredFields = selectedCare.fields.map(field => {
-      let rules = ['empty'];
+    const inputRules = {};
+    const form = {};
+    const ignoreInputs = [];
+    selectedCare.fields.forEach(field => {
+      form[field] = values[field];
 
       if(includeString(field.toLowerCase(), 'date')) {
-        rules.push('null');
+        inputRules[field] = ['null'];
 
         if(field === 'endDate' && !values.isFixedPeriod) {
-          rules = [];
+          ignoreInputs.push(field);
         }
       }
-
-      return { name: field, value: values[field], rules }
     });
 
-    const { validFields, hasErrors } = fieldValidator(requiredFields);
+    const { validFields, hasErrors } = formValidator({ form, inputRules, ignoreInputs });
     if (hasErrors) {
       setErrors((prevValues) => ({
         ...prevValues,
@@ -74,8 +75,8 @@ const CareSetup = ({
   };
 
   const typeOfStayIdMaxDates = {
-    1: getFutureDate({ weeks: 5}),
-    2: getFutureDate({ weeks: 51}),
+    1: incrementDate({ incrementTime: { weeks: 5} }),
+    2: incrementDate({ incrementTime: { weeks: 51} }),
     3: undefined,
   };
 

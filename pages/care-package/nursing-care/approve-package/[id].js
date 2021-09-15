@@ -20,7 +20,7 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
 import { getErrorResponse, getUserSession } from 'service/helpers';
 import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
-import fieldValidator from 'service/inputValidator';
+import formValidator from 'service/formValidator';
 import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
 
 // start before render
@@ -132,9 +132,7 @@ const NursingCareApprovePackage = ({
   };
 
   const handleRequestMoreInformation = () => {
-    const { validFields, hasErrors } = fieldValidator([{
-      name: 'requestInformationText', value: requestInformationText, rules: ['empty'],
-    }]);
+    const { validFields, hasErrors } = formValidator({ form: { requestInformationText } });
     setErrorFields(validFields);
 
     if(hasErrors) return;

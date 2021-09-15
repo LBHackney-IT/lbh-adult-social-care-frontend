@@ -20,8 +20,8 @@ import { addNotification } from 'reducers/notificationsReducer';
 import ApprovalHistory from 'components/ProposedPackages/ApprovalHistory';
 import { Button } from 'components/Button';
 import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
-import fieldValidator from 'service/inputValidator';
-import { mapCareAdditionalNeedsEntries, mapCareApprovalHistoryItems } from '../../../../api/Mappers/CarePackageMapper';
+import formValidator from 'service/formValidator';
+import { mapCareAdditionalNeedsEntries, mapCareApprovalHistoryItems } from 'api/Mappers/CarePackageMapper';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
@@ -113,9 +113,8 @@ const ResidentialCareApproveBrokered = ({
   };
 
   const handleRequestMoreInformation = () => {
-    const { validFields, hasErrors } = fieldValidator([{
-      name: 'requestInformationText', value: requestInformationText, rules: ['empty'],
-    }]);
+    const { validFields, hasErrors } = formValidator({ form: { requestInformationText } });
+
     setErrorFields(validFields);
 
     if(hasErrors) return;

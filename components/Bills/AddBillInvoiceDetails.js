@@ -4,16 +4,16 @@ import DatePick from '../DatePick';
 import CardInfo from './CardInfo';
 
 const AddBillInvoiceDetails = ({ inputs }) => (
-  <CardInfo classes="invoice-details" title="Invoice Details">
+  <CardInfo className="invoice-details" title="Invoice Details">
     <DatePick
-      classes="invoice-details__date"
+      className="invoice-details__date"
       error={inputs?.invoiceDate.error}
       dateValue={inputs?.invoiceDate.value}
       setDate={inputs?.invoiceDate.onChange}
       label="Invoice Date"
     />
     <DatePick
-      classes="invoice-details__due"
+      className="invoice-details__due"
       error={inputs?.invoiceDue.error}
       dateValue={inputs?.invoiceDue.value}
       setDate={inputs?.invoiceDue.onChange}

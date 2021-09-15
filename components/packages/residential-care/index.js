@@ -214,7 +214,7 @@ const PackagesResidentialCare = ({
               <div className="is-flex is-flex-wrap-wrap is-align-items-center">
                 <EuroInput
                   onChange={(value) => changeElementsData(setCoreCost, coreCost, 'costPerWeek', +value)}
-                  classes="mr-6"
+                  className="mr-6"
                   label="Cost per week"
                   value={coreCost.costPerWeek}
                 />
@@ -229,7 +229,7 @@ const PackagesResidentialCare = ({
                 <h2 className="pt-5 hackney-text-black font-weight-bold">Additional needs payment</h2>
                 <div className="is-align-items-center is-flex is-flex-wrap-wrap">
                   <EuroInput
-                    classes="mr-6"
+                    className="mr-6"
                     value={i.additionalNeedsCost}
                     onChange={(value) => changeArrayData(setAdditionalNeedsWeekly, additionalNeedsWeekly, idx, +value)}
                     label="Cost per week"
@@ -258,7 +258,7 @@ const PackagesResidentialCare = ({
                       value={i.additionalNeedsCost}
                       label={i.additionalNeedsPaymentTypeName}
                       onChange={(value) => changeArrayData(setAdditionalNeedsOneOff, additionalNeedsOneOff, idx, +value)}
-                      classes="mr-6"
+                      className="mr-6"
                     />
                     <p className="pt-5">
                       {currency.euro}

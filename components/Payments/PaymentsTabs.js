@@ -1,12 +1,12 @@
 import React from 'react';
 
-const PaymentsTabs = ({ tabs = [], tab, changeTab, classes = '' }) => {
+const PaymentsTabs = ({ tabs = [], tab, changeTab, className = '' }) => {
   const onChangeTab = (tabName) => {
     changeTab(tabName);
   };
 
   return (
-    <div className={`payments__tabs ${classes}`}>
+    <div className={`payments__tabs ${className}`}>
       {tabs.map((item) => {
         const activeTab = tab === item.value;
         return (

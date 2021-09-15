@@ -111,7 +111,7 @@ const AdditionalNeedEntry = ({
         label="Need to Address"
         error={currentError?.needToAddress}
         rows={5}
-        classes='mb-3'
+        className='mb-3'
         placeholder="Add details..."
         onChange={onTextAreaChange}
       >

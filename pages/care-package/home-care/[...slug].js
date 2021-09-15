@@ -26,7 +26,7 @@ import { addNotification } from 'reducers/notificationsReducer';
 import useHomeCareApi from 'api/SWR/useHomeCareApi';
 import usePrimarySupportReason from 'api/SWR/package/usePrimarySupportReason';
 import optionsMapper from 'api/Mappers/optionsMapper';
-import fieldValidator from 'service/inputValidator';
+import formValidator from 'service/formValidator';
 import ErrorField from 'components/ErrorField';
 
 const initialPackageReclaim = {
@@ -291,7 +291,7 @@ const HomeCare = ({ loggedInUserId }) => {
 
     if(isReclaimed) {
       validPackageFields = packageReclaims.map(item => {
-        const { hasErrors, validFields } = fieldValidator([
+        const { hasErrors, validFields } = formValidator([
           { name: 'amount', value: item.amount },
           { name: 'type', value: item.type },
           { name: 'reclaimAmountOptionId', value: item.reclaimAmountOptionId },

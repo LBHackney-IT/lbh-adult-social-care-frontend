@@ -20,7 +20,7 @@ Default.args = {
   secondary: false,
   disabled: false,
   link: '',
-  'add-item': false,
+  addItem: false,
 };
 
 export const Secondary = Template.bind({});
@@ -30,7 +30,7 @@ Secondary.args = {
   secondary: true,
   disabled: false,
   link: '',
-  'add-item': false,
+  addItem: false,
 };
 
 export const Disabled = Template.bind({});
@@ -48,7 +48,7 @@ Link.args = {
   secondary: false,
   disabled: false,
   link: '/example',
-  'add-item': false,
+  addItem: false,
 };
 
 export const DisabledLink = Template.bind({});
@@ -58,7 +58,7 @@ DisabledLink.args = {
   secondary: false,
   disabled: true,
   link: '/example',
-  'add-item': false,
+  addItem: false,
 };
 
 export const AddAnotherItemButton = Template.bind({});
@@ -68,5 +68,5 @@ AddAnotherItemButton.args = {
   secondary: false,
   disabled: false,
   link: '',
-  'add-item': true,
+  addItem: true,
 };

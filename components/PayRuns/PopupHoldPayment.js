@@ -27,7 +27,7 @@ const PopupHoldPayment = ({
           selectedValue={actionRequiredBy}
         />
         <TextArea
-          classes="hold-payment__textarea"
+          className="hold-payment__textarea"
           rows={8}
           label="Enter reason for hold And suggested remedial action"
           onChange={(value) => changeReason(value)}

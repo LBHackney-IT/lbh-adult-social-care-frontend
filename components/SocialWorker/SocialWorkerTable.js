@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
+import { formatDateWithSign, formatStatus, includeString } from 'service/helpers';
 import SortTable from '../SortTable';
 
 const SocialWorkerTable = ({ onClickTableRow, rows, isIgnoreId = false, className = '', sortBy, sorts }) => {

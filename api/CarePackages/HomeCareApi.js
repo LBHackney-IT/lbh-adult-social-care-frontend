@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { format } from 'date-fns';
 import { UTC_DATE_FORMAT } from '../../Constants';
-import { weekDays } from '../../service/homeCarePickerHelper';
+import { weekDays } from 'service/homeCarePickerHelper';
 import { BASE_URL } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 

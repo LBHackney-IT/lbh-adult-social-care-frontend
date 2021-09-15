@@ -4,7 +4,7 @@ import DropZone from './DropZone';
 
 const PopupDocumentUploader = ({
   closePopup,
-  classes = '',
+  className = '',
   firstButton = { text: 'Upload evidence and more to be uploaded' },
   secondButton = { text: 'Upload evidence and mark done' },
   title = 'Document Uploader',
@@ -19,7 +19,7 @@ const PopupDocumentUploader = ({
     <Popup
       closePopup={closePopup}
       mainContent={popupMainContent}
-      className={`popup-document-uploader ${classes}`}
+      className={`popup-document-uploader ${className}`}
       title={title}
       firstButton={firstButton}
       secondButton={secondButton}

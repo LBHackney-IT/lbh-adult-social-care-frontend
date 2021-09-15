@@ -19,9 +19,6 @@ const RadioButton = ({
   tooltipText = '',
   onChange = () => {},
 }) => {
-  const hasSelectedValue =
-    selectedValue ?? options.find((option) => option.value === selectedValue) !== undefined;
-
   const radioChange = (radioItemValue) => {
     if (isFunction(setError)) setError();
     onChange(radioItemValue);
@@ -30,10 +27,9 @@ const RadioButton = ({
   const innerClass = `radio-button ${className}`;
 
   return (
-    <BaseField tooltipText={tooltipText} label={label} classes={innerClass}>
+    <BaseField tooltipText={tooltipText} label={label} className={innerClass}>
       <div className={`radio-cont${inline ? '' : ' not-inline'}`}>
-        {options.map((radioItem, index) => {
-          return (
+        {options.map((radioItem, index) => (
             <React.Fragment key={`${radioItem.value}${label}${radioItem.text}`}>
               {radioItem.header && radioItem.header}
               <label
@@ -41,15 +37,14 @@ const RadioButton = ({
                 onClick={() => radioChange(radioItem.value)}
               >
                 <div
-                  className={`radio-select-cont${hasSelectedValue && selectedValue === radioItem.value ? ' is-active' : ''}`}
+                  className={`radio-select-cont${selectedValue === radioItem.value ? ' is-active' : ''}`}
                 >
                   <div className="radio-item-selected" />
                 </div>
                 <p className='radio-item__text'>{radioItem.text}</p>
               </label>
             </React.Fragment>
-          )
-        })}
+        ))}
       </div>
       {error && <ErrorField text={error} />}
     </BaseField>
