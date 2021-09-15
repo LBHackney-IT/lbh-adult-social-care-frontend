@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import formValidator from '../../../service/formValidator';
-import CareChargesInfoStatic from '../CareChargesInfoStatic';
 import CareChargesInfoEdited from '../CareChargesInfoEdited';
 import { incrementDate } from '../../../service/helpers';
 import CareChargesModalActions from '../CareChargesModalActions';
@@ -10,9 +9,8 @@ import { ErrorMessage } from '../../HackneyDS/index';
 
 const AddElementContent = ({
   activeElements,
+  closeModal,
   headerText,
-  editStep,
-  setEditStep,
 }) => {
   const [initialInputs] = useState({
     value: '',
@@ -51,13 +49,9 @@ const AddElementContent = ({
     setInputErrors(cloneInputErrors);
   };
 
-  const confirm = () => alert('Confirm');
-
-  const editElement = () => setEditStep(true);
-
   const cancelAction = () => alert('Cancel');
 
-  const next = () => {
+  const savePackage = () => {
     let hasErrors = false;
     const newInputErrors = inputErrors.slice();
 
@@ -75,7 +69,7 @@ const AddElementContent = ({
       return;
     }
 
-    setEditStep(false);
+    alert('Saved success');
   };
 
   useEffect(() => {
@@ -91,21 +85,12 @@ const AddElementContent = ({
   return (
     <>
       <CareChargesModalTitle title={headerText} />
-      <CareChargesInfoTitle title={editStep ? 'ACTIVE ELEMENT' : 'PREVIOUS ELEMENT'} />
-      <CareChargesInfoStatic activeElements={activeElements} />
-      <CareChargesInfoTitle title={editStep ? 'EDITED ELEMENT' : 'NEW ELEMENT'} />
-      {editStep ?
-        <CareChargesInfoEdited
-          elements={inputs}
-          inputErrors={inputErrors}
-          onChangeInput={onChangeInput}
-        /> : <CareChargesInfoStatic activeElements={inputs} />
-      }
+      <CareChargesInfoTitle title='NEW ELEMENT' />
+      <CareChargesInfoEdited hasEditStyle={false} elements={inputs} inputErrors={inputErrors} onChangeInput={onChangeInput} />
       {inputHasErrors && <ErrorMessage>There some errors above</ErrorMessage>}
       <CareChargesModalActions
         actions={[
-          { title: editStep ? 'Next' : 'Confirm', handler: editStep ? next : confirm },
-          !editStep && { title: 'Edit', className: 'without-background', handler: editElement },
+          { title: 'Save and update package', handler: savePackage },
           { title: 'Cancel', handler: cancelAction, className: 'without-background' },
         ]}
       />

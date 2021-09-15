@@ -4,7 +4,7 @@ import RadioButton from '../RadioButton';
 import { currency } from '../../constants/strings';
 import EditElementDatePickers from './EditElementModal/EditElementDatePickers';
 
-const CareChargesInfoEdited = ({ elements = [], onChangeInput, withoutEdit, inputErrors = [] }) => {
+const CareChargesInfoEdited = ({ elements = [], hasEditStyle = true, onChangeInput, inputErrors = [] }) => {
   if(elements.length === 0) return <></>;
 
   return <>
@@ -45,6 +45,7 @@ const CareChargesInfoEdited = ({ elements = [], onChangeInput, withoutEdit, inpu
             onChange={newValue => onChangeInput('claimedBy', newValue, index)}
           />
           <EditElementDatePickers
+            hasEditStyle={hasEditStyle}
             dateFromWeeks={dateFromWeeks}
             startDate={startDate}
             endDate={endDate}
@@ -53,7 +54,6 @@ const CareChargesInfoEdited = ({ elements = [], onChangeInput, withoutEdit, inpu
             onChangeInput={onChangeInput}
             inputErrors={inputErrors}
             index={index}
-            withoutEdit={withoutEdit}
             startDateId={startDateId}
             endDateId={endDateId}
             dateToWeeks={dateToWeeks}
