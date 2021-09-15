@@ -5,14 +5,9 @@ export default {
   title: 'Hackney Design System/Tip',
   component: Tip,
   argTypes: {
-    className: { type: 'string' },
-    light: { type: 'boolean' },
-    transparent: { type: 'boolean' },
-    position: { type: 'string' },
-    hideOnClick: { type: 'boolean' },
-    trigger: { type: 'string' },
-    interactive: 'boolean',
-    arrow: { type: 'boolean' },
+    interactive: { control: false },
+    content: { control: false },
+    children: { control: false },
   },
 };
 
@@ -28,7 +23,6 @@ Default.args = {
       <p className="lbh-body-xs">Referred 8 Nov 2019</p>
     </>
   ),
-  contentId: 'tooltip1',
 };
 
 export const Interactive = Template.bind({});
@@ -46,5 +40,4 @@ Interactive.args = {
       <p className="lbh-body-xs">Referred 8 Nov 2019</p>
     </div>
   ),
-  contentId: 'tooltip1',
 };
