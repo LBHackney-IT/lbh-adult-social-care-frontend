@@ -1,6 +1,7 @@
 import { add } from 'date-fns';
 import { getEnGBFormattedDate } from '../api/Utils/FuncUtils';
 import { maxStringLength } from '../constants/variables';
+import { dateStringFormats } from '../constants/strings'
 
 const chr4 = () => Math.random().toString(16).slice(-4);
 
@@ -15,7 +16,7 @@ const formatDateWithSign = (date, sign = '/') => {
   return `${`00${day}`.slice(-2)}${sign}${`00${month}`.slice(-2)}${sign}${`00${year}`.slice(-2)}`;
 };
 
-const getFutureDate = (time) => {
+const incrementDate = ({ incrementTime, date = new Date() }) => {
   const {
     years = 0,
     months = 0,
@@ -24,9 +25,9 @@ const getFutureDate = (time) => {
     hours = 0,
     minutes = 0,
     seconds = 0,
-  } = time;
+  } = incrementTime;
 
-  return add(new Date(), {
+  return add(date, {
     years,
     months,
     weeks,
@@ -53,13 +54,25 @@ const formatCareDatePeriod = (startDate, endDate) => {
   };
 };
 
-const formatDate = (date, sign = '/') => {
+const formatDate = (date, sign = '/', format) => {
   const newDate = new Date(date);
   const day = newDate.getDate();
+  const dayString = `00${day}`.slice(-2);
   const month = newDate.getMonth() + 1;
+  const monthString = `00${month}`.slice(-2);
   const year = newDate.getFullYear();
 
-  return `${`00${day}`.slice(-2)}${sign}${`00${month}`.slice(-2)}${sign}${`${year}`}`;
+  const { dayMonthYear, monthDayYear } = dateStringFormats;
+
+  switch (format) {
+    case dayMonthYear: {
+      return `${dayString}${sign}${monthString}${sign}${year}`;
+    }
+    case monthDayYear: {
+      return `${monthString}${sign}${dayString}${sign}${year}`;
+    }
+    default: return `${dayString}${sign}${monthString}${sign}${year}`;
+  }
 };
 
 const includeString = (mainString, checkString) => mainString && mainString.indexOf(checkString) > -1;
@@ -177,5 +190,5 @@ export {
   getNumberWithCommas,
   formatCareDatePeriod,
   formatStringLength,
-  getFutureDate,
+  incrementDate,
 };

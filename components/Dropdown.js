@@ -45,7 +45,7 @@ const Dropdown = ({
   };
 
   return (
-    <BaseField classes={`${className} dropdown-container`} label={label}>
+    <BaseField className={`${className} dropdown-container`} label={label}>
       <div
         tabIndex="0"
         onBlur={() => setIsActive(false)}

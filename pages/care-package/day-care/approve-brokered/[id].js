@@ -20,7 +20,7 @@ import { formatApprovalHistory, formatDayCareOpportunities } from 'service/forma
 import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
 import { Button } from 'components/Button';
 import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
-import fieldValidator from 'service/inputValidator';
+import formValidator from 'service/formValidator';
 
 // get server side props before render
 export const getServerSideProps = withSession(async ({ req, res }) => {
@@ -84,9 +84,9 @@ const DayCareApproveBrokered = () => {
       .catch((error) => pushNotification(error));
   };
   const handleRequestMoreInformation = () => {
-    const { validFields, hasErrors } = fieldValidator([{
-      name: 'requestInformationText', value: requestInformationText, rules: ['empty'],
-    }]);
+    const { validFields, hasErrors } = formValidator({
+      form: { requestInformationText }
+    });
 
     setErrorFields(validFields);
 

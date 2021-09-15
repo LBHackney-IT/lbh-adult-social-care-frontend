@@ -13,7 +13,7 @@ import {
 } from 'routes/RouteConstants';
 import Table from 'components/Table';
 import Inputs from 'components/Inputs';
-import { checkEmptyFields } from 'service/inputValidator';
+import { checkEmptyFields } from 'service/formValidator';
 import { DATA_TYPES } from 'api/Utils/CommonOptions';
 import { sortArray } from 'api/Utils/FuncUtils';
 

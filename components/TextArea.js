@@ -7,7 +7,7 @@ const TextArea = ({
   label,
   placeholder = '',
   onChange = () => {},
-  classes = '',
+  className = '',
   value,
   error,
   setError,
@@ -20,7 +20,7 @@ const TextArea = ({
   };
 
   return (
-    <BaseField label={label} classes={classes}>
+    <BaseField label={label} className={className}>
       <textarea rows={rows} value={value} placeholder={placeholder} onChange={onTextAreaChange}>
         {children !== undefined ? children : null}
       </textarea>

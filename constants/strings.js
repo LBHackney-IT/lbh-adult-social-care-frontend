@@ -3,4 +3,9 @@ const currency = {
   dollar: '$',
 };
 
-export { currency };
+const dateStringFormats = {
+  dayMonthYear: 'dd/MM/yyyy',
+  monthDayYear: 'MM/dd/yyyy',
+};
+
+export { currency, dateStringFormats };

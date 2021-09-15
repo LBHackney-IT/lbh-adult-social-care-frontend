@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
-export default function Input({
+export const Input = ({
   label,
   id = 'lbh-input',
   name,
@@ -9,12 +9,11 @@ export default function Input({
   placeholder = '',
   className = '',
   error,
+  ref,
   value,
   handler,
-}) {
-  const dataProvider = useRef();
+}) => {
   const outerClassName = className ? ` ${className}` : '';
-
   return (
     <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}${outerClassName}`}>
       {label && (
@@ -30,7 +29,7 @@ export default function Input({
         placeholder={placeholder}
         name={name}
         type={type}
-        ref={dataProvider}
+        ref={ref}
         value={value}
         onChange={(e) => handler(e.target.value)}
       />

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button } from '../Button';
-import { formatCareDatePeriod } from '../../service/helpers'
+import { formatCareDatePeriod } from 'service/helpers';
 
 const ResidentialCareSummary = ({
   startDate,

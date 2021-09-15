@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
+import { formatDateWithSign, formatStatus, includeString } from 'service/helpers';
 import SupplierSortTable from './SupplierSortTable';
 import Checkbox from '../Checkbox';
 
@@ -10,7 +10,7 @@ const SupplierReturnTable = ({
   rows,
   additionalActions,
   isIgnoreId = false,
-  classes = '',
+  className = '',
   sortBy,
   sorts,
 }) => {
@@ -21,7 +21,7 @@ const SupplierReturnTable = ({
   };
 
   return (
-    <div className={`table ${classes}`}>
+    <div className={`table ${className}`}>
       <SupplierSortTable
         additionalActions={additionalActions}
         checkedRows={checkedRows}

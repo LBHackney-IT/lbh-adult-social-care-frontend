@@ -19,7 +19,7 @@ import { formatCareDatePeriod, getUserSession } from 'service/helpers'
 import withSession from 'lib/session';
 import PackageReclaims from 'components/CarePackages/PackageReclaims';
 import { addNotification } from 'reducers/notificationsReducer';
-import fieldValidator from 'service/inputValidator';
+import formValidator from 'service/formValidator';
 import useResidentialCareApi from 'api/SWR/useResidentialCareApi'
 import CareSummary from 'components/ProposedPackages/CareSummary'
 import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils'
@@ -94,10 +94,12 @@ const ResidentialCare = () => {
   };
 
   const formIsValid = () => {
-    const defaultErrors = fieldValidator([
-      { name: 'needToAddress', value: needToAddress, rules: ['empty'] },
-      { name: 'selectedCareHomeType', value: selectedCareHomeType, rules: ['empty'] },
-    ]);
+    const defaultErrors = formValidator({
+      form: {
+        needToAddress,
+        selectedCareHomeType,
+      },
+    });
 
     if (defaultErrors.hasErrors) {
       setErrorFields(defaultErrors.validFields);
@@ -105,12 +107,18 @@ const ResidentialCare = () => {
 
     const additionalNeedsTimedArr = [];
 
-    const additionalNeedsError = additionalNeedsEntries.map((item) => {
-      const valid = fieldValidator([
-        { name: 'selectedCost', value: item.selectedCost, rules: ['empty'] },
-        { name: 'selectedCostText', value: item.selectedCostText, rules: ['empty'] },
-        { name: 'needToAddress', value: item.needToAddress, rules: ['empty'] },
-      ]);
+    const additionalNeedsError = additionalNeedsEntries.map(({
+      selectedCost,
+      selectedCostText,
+      needToAddress: needToAddressEntry,
+    }) => {
+      const valid = formValidator({
+        form: {
+          selectedCost,
+          selectedCostText,
+          needToAddress: needToAddressEntry,
+        },
+      });
 
       additionalNeedsTimedArr.push(valid.validFields);
       return valid.hasErrors;
@@ -118,14 +126,14 @@ const ResidentialCare = () => {
     setAdditionalNeedsEntriesErrors(additionalNeedsTimedArr);
 
     const packageReclaimsTimedArr = [];
-    const packageReclaimsFieldsError = packagesReclaimed.map((item) => {
-      const valid = fieldValidator([
-        { name: 'from', value: item.from, rules: ['empty'] },
-        { name: 'category', value: item.category, rules: ['empty'] },
-        { name: 'type', value: item.type, rules: ['empty'] },
-        { name: 'notes', value: item.notes, rules: ['empty'] },
-        { name: 'amount', value: item.amount, rules: ['empty'] },
-      ]);
+    const packageReclaimsFieldsError = packagesReclaimed.map(({
+      from,
+      category,
+      type,
+      notes,
+      amount,
+    }) => {
+      const valid = formValidator({ form: { from, category, type, notes, amount } });
       packageReclaimsTimedArr.push(valid.validFields);
       return valid.hasErrors;
     });

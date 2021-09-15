@@ -207,9 +207,9 @@ const ChatSettingsIcon = ({ onClick = () => {} }) => (
     </div>
   );
 
-const UploadFilesIcon = ({ onClick = () => {}, classes = '' }) => (
+const UploadFilesIcon = ({ onClick = () => {}, className = '' }) => (
     <svg
-      className={classes}
+      className={className}
       onClick={onClick}
       width="30"
       height="30"
