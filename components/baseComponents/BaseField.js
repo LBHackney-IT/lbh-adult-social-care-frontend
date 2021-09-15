@@ -1,6 +1,6 @@
 import React from 'react';
 import { TooltipIcon } from '../Icons';
-import ReactTooltipNextJs from '../ReactTooltipNextJs';
+import { Tip } from '../HackneyDS';
 
 const BaseField = ({
   onClick = () => {},
@@ -21,10 +21,11 @@ const BaseField = ({
     <div onClick={onClick} className={`${innerClassName} ${className}`}>
       {hasLabel ? <label className="text-bold">
         <label>{label}</label>
-        {tooltipText && <TooltipIcon tooltipText={tooltipText} />}
+        <Tip interactive content={<p>{tooltipText}</p>}>
+          {tooltipText && <TooltipIcon tooltipText={tooltipText} />}
+        </Tip>
       </label> : null}
       {children}
-      <ReactTooltipNextJs backgroundColor='#525A5B' id={tooltipText} />
     </div>
   );
 };
