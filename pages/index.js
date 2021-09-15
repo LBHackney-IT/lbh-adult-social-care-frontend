@@ -16,7 +16,6 @@ export default function IndexPage() {
       <Head>
         <link href="/fonts/style.css" rel="stylesheet" />
       </Head>
-      <div id='modal' />
       <Loading className='loading-center' />
     </div>
   );
