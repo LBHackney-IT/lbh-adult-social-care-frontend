@@ -45,10 +45,10 @@ export const Table = ({ columns, data, expandRowCallback, setSelectedRows, hasFo
         ))}
       </thead>
       <tbody className={`govuk-table__body ${bodyClassName}`} {...getTableBodyProps()}>
-        {rows.map((row) => {
+        {rows.map((row, index) => {
           prepareRow(row);
           return (
-            <>
+            <React.Fragment key={index}>
               <tr className="govuk-table__row" {...row.getRowProps()}>
                 {row.cells.map((cell) => (
                   <td className={`govuk-table__cell ${cellClassName}`} {...cell.getCellProps()}>
@@ -63,7 +63,7 @@ export const Table = ({ columns, data, expandRowCallback, setSelectedRows, hasFo
                   </td>
                 </tr>
               )}
-            </>
+            </React.Fragment>
           );
         })}
       </tbody>
