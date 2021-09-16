@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Button } from '../Button';
 import Dropdown from '../Dropdown';
-import DatePick from '../DatePick'
-import CustomAsyncSelector from '../CustomAsyncSelect'
+import DatePick from '../DatePick';
+import CustomAsyncSelector from '../CustomAsyncSelect';
 
 const initialFilters = {
   serviceUser: '',
@@ -106,7 +106,7 @@ const PayRunHeader = ({
             onOptionSelect={(option) => changeFilter('status', option)}
           />
           <DatePick
-            classes='pay-run__filter-item mr-3'
+            className='pay-run__filter-item mr-3'
             dateValue={filters.dateFrom}
             placeholder='Data range'
             startDate={filters.dateFrom}

@@ -22,20 +22,28 @@ import Timeline from './Timeline';
 import Conversation from './Conversation';
 import { Table } from './Table';
 import { Pagination } from './Pagination';
+import SearchBox from './SearchBox';
+import RadioItem from './RadioItem';
+import { Tip } from './Tip';
 import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 import { Heading } from './lettering/Heading';
 import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
 import Header from './Header';
 import InsetText from './InsetText';
 import WarningText from './WarningText';
-import SearchBox from './SearchBox';
+import RadioGroup from './RadioGroup';
 import { SimplePagination } from './SimplePagination';
+import { SummaryList } from './SummaryList';
+import { EditElementModal } from '../CareCharges/EditElementModal';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 
 export const getMultipleSlot = (nodeList = [], name) => nodeList.filter((el) => el.props.slot === name);
 
 export {
+  Tip,
+  RadioGroup,
+  RadioItem,
   SimplePagination,
   Conversation,
   Link,
@@ -68,4 +76,6 @@ export {
   IndeterminateCheckbox,
   InsetText,
   Header,
+  SummaryList,
+  EditElementModal,
 };

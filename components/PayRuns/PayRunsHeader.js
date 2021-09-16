@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '../Button';
 import PayRunsFilters from './PayRunsFilters';
 import HeldPaymentsFilters from './HeldPaymentsFilters';
-import { checkEmptyFields } from '../../service/formValidator'
+import { checkEmptyFields } from 'service/formValidator';
 
 const initialFilters = {
   id: '',

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { createSupplier } from '../../api/CarePackages/SuppliersApi';
+import { createSupplier } from 'api/CarePackages/SuppliersApi';
 import { Input } from '../HackneyDS';
 import Dropdown from '../Dropdown';
 import RadioButton, { yesNoValues } from '../RadioButton';
 import HomeCareCostEntry from '../packages/home-care/components/CostEntry';
 import Popup from '../Popup';
-import useBrokeredPackageApi from '../../api/SWR/useBrokeredPackagesApi'
-import optionsMapper from '../../api/Mappers/optionsMapper'
+import useBrokeredPackageApi from 'api/SWR/useBrokeredPackagesApi';
+import optionsMapper from 'api/Mappers/optionsMapper';
 
 const PopupAddSupplier = ({ closePopup, getSuppliers }) => {
   const [supplierName, setSupplierName] = useState('');
