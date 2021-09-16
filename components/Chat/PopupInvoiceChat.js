@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import Popup from '../Popup';
 import Dropdown from '../Dropdown';
 import TextArea from '../TextArea';
 import { ChatSettingsIcon } from '../Icons';
-import { formatDateWithSign, scrollToElement } from '../../service/helpers'
-import { sendMessage } from '../../api/Payments/PayRunApi';
-import { addNotification } from '../../reducers/notificationsReducer';
+import { formatDateWithSign, scrollToElement } from 'service/helpers';
+import { sendMessage } from 'api/Payments/PayRunApi';
+import { addNotification } from 'reducers/notificationsReducer';
 
 const PopupInvoiceChat = ({
   closePopup,
@@ -97,7 +97,7 @@ const PopupInvoiceChat = ({
           <>
             <p>Assigned to:</p>
             <Dropdown
-              classes="hold-payment__dropdown"
+              className="hold-payment__dropdown"
               initialText="Change waiting on"
               onOptionSelect={(value) => changeWaitingOn(value)}
               options={waitingOnOptions}
@@ -106,7 +106,7 @@ const PopupInvoiceChat = ({
           </>
         )}
         <TextArea
-          classes="popup-invoice-chat__textarea"
+          className="popup-invoice-chat__textarea"
           rows={8}
           value={newMessageText}
           placeholder="New Message"

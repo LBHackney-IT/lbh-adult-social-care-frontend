@@ -1,8 +1,8 @@
 import React from 'react';
-import { Input } from '../HackneyDS';
-import RadioButton from '../RadioButton';
-import { currency } from '../../constants/strings';
-import EditElementDatePickers from './EditElementModal/EditElementDatePickers';
+import { Input } from '../../HackneyDS';
+import RadioButton from '../../RadioButton';
+import { currency } from '../../../constants/strings';
+import EditElementDatePickers from '../EditElementModal/EditElementDatePickers';
 
 const CareChargesInfoEdited = ({ elements = [], hasEditStyle = true, onChangeInput, inputErrors = [] }) => {
   if(elements.length === 0) return <></>;

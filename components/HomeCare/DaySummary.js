@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { formatStringLength } from '../../service/helpers'
-import TextArea from '../TextArea'
+import { formatStringLength } from 'service/helpers';
+import TextArea from '../TextArea';
 // {
 //       id: 1,
 //       dayId: 1,

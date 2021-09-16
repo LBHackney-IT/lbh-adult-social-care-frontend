@@ -12,6 +12,11 @@
     border: none;
     padding: 32px;
 
+    @media (max-width: 868px) {
+      width: initial;
+      max-width: 90%;
+    }
+
     .care-charges-modal__title {
       font-weight: bold;
       font-size: 24px;

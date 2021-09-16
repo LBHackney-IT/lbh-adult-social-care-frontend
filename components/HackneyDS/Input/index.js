@@ -14,7 +14,6 @@ export const Input = ({
   handler,
 }) => {
   const outerClassName = className ? ` ${className}` : '';
-
   return (
     <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}${outerClassName}`}>
       {label && (

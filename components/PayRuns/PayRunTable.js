@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useInvoiceStatusList } from '../../api/SWR';
+import { useInvoiceStatusList } from 'api/SWR';
 import Dropdown from '../Dropdown';
-import { formatDateWithSign, formatStatus, getNumberWithCommas, includeString } from '../../service/helpers';
+import { formatDateWithSign, formatStatus, getNumberWithCommas, includeString } from 'service/helpers';
 import PayRunSortTable from './PayRunSortTable';
 import Checkbox from '../Checkbox';
 import { Button } from '../Button';

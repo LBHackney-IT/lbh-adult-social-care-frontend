@@ -17,7 +17,7 @@ const PayRunsFilters = ({
     return (
       <>
           <Input
-            classes="mr-3"
+            className="mr-3"
             value={filters.id}
             search={searchId}
             placeholder="ID"
@@ -26,19 +26,19 @@ const PayRunsFilters = ({
           <Dropdown
             initialText="Type"
             options={typeOptions}
-            classes="pay-runs__dropdown-type mr-3"
+            className="pay-runs__dropdown-type mr-3"
             selectedValue={filters.type}
             onOptionSelect={(option) => changeFilter('type', option)}
           />
           <Dropdown
             initialText="Status"
-            classes="pay-runs__dropdown-status mr-3"
+            className="pay-runs__dropdown-status mr-3"
             options={statusOptions}
             selectedValue={filters.status}
             onOptionSelect={(option) => changeFilter('status', option)}
           />
           <DatePick
-            classes='pay-run__filter-item mr-3'
+            className='pay-run__filter-item mr-3'
             dateValue={filters.dateFrom}
             placeholder='Data range'
             startDate={filters.dateFrom}
