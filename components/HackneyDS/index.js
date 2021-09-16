@@ -31,6 +31,7 @@ import { IndeterminateCheckbox } from './Table/IndeterminateCheckbox';
 import Header from './Header';
 import InsetText from './InsetText';
 import WarningText from './WarningText';
+import RadioGroup from './RadioGroup';
 import { SimplePagination } from './SimplePagination';
 import { SummaryList } from './SummaryList';
 import { EditElementModal } from '../CareCharges/EditElementModal';
@@ -41,6 +42,7 @@ export const getMultipleSlot = (nodeList = [], name) => nodeList.filter((el) => 
 
 export {
   Tip,
+  RadioGroup,
   RadioItem,
   SimplePagination,
   Conversation,
