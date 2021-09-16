@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import formValidator from '../../../service/formValidator';
+import formValidator from 'service/formValidator';
 import CareChargesInfoStatic from '../CareChargesInfoStatic';
 import CareChargesInfoEdited from '../CareChargesInfoEdited';
-import { incrementDate } from '../../../service/helpers';
+import { incrementDate } from 'service/helpers';
 import CareChargesModalActions from '../CareChargesModalActions';
 import CareChargesInfoTitle from '../CareChargesInfoTitle';
 import CareChargesModalTitle from '../CareChargesModalTitle';
@@ -25,13 +25,13 @@ const EditElementContent = ({
     setInputHasErrors(false);
     const newInput = { ...inputs[index] };
     newInput[field] = value;
-    if(field === 'startDate') {
+    if (field === 'startDate') {
       const { dateFromWeeks } = newInput;
       const minEndDate = dateFromWeeks && incrementDate({
         incrementTime: { weeks: dateFromWeeks },
         date: value,
       });
-      if(dateFromWeeks) {
+      if (dateFromWeeks) {
         newInput.endDate = minEndDate;
       }
     }
@@ -57,13 +57,13 @@ const EditElementContent = ({
 
     inputs.forEach((input, index) => {
       const { validFields, hasErrors: hasLocalErrors } = formValidator({ form: input });
-      if(hasLocalErrors) {
+      if (hasLocalErrors) {
         hasErrors = true;
         newInputErrors.splice(index, 1, validFields);
       }
     });
 
-    if(hasErrors) {
+    if (hasErrors) {
       setInputHasErrors(true);
       setInputErrors(newInputErrors);
       return;
@@ -72,8 +72,8 @@ const EditElementContent = ({
   };
 
   useEffect(() => {
-    if(activeElements?.length) {
-      setInputs(activeElements.map((activeElement) => ({...activeElement, period: 'fixed-period'})));
+    if (activeElements?.length) {
+      setInputs(activeElements.map((activeElement) => ({ ...activeElement, period: 'fixed-period' })));
 
       setInputErrors(activeElements.map(() => ({
         ...initialInputs,
@@ -83,10 +83,10 @@ const EditElementContent = ({
 
   return (
     <>
-      <CareChargesModalTitle title={headerText} />
-      <CareChargesInfoTitle title='ACTIVE ELEMENT' />
-      <CareChargesInfoStatic activeElements={activeElements} />
-      <CareChargesInfoTitle title='EDITED ELEMENT' />
+      <CareChargesModalTitle title={headerText}/>
+      <CareChargesInfoTitle title='ACTIVE ELEMENT'/>
+      <CareChargesInfoStatic activeElements={activeElements}/>
+      <CareChargesInfoTitle title='EDITED ELEMENT'/>
       <CareChargesInfoEdited
         elements={inputs}
         inputErrors={inputErrors}
@@ -100,7 +100,7 @@ const EditElementContent = ({
         ]}
       />
     </>
-  )
+  );
 };
 
 export default EditElementContent;

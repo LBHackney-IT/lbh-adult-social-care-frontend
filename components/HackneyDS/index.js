@@ -33,6 +33,7 @@ import InsetText from './InsetText';
 import WarningText from './WarningText';
 import { SimplePagination } from './SimplePagination';
 import { SummaryList } from './SummaryList';
+import { EditElementModal } from '../CareCharges/EditElementModal';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 
@@ -74,4 +75,5 @@ export {
   InsetText,
   Header,
   SummaryList,
+  EditElementModal,
 };
