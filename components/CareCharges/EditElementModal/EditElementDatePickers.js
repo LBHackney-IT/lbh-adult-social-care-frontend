@@ -3,7 +3,6 @@ import RadioButton from '../../RadioButton';
 import React, { useState } from 'react';
 import { formatDate, incrementDate } from 'service/helpers';
 import { differenceInDays, differenceInWeeks, intervalToDuration } from 'date-fns';
-import BaseField from '../../baseComponents/BaseField';
 
 const EditElementDatePickers = ({
   index,
@@ -23,12 +22,12 @@ const EditElementDatePickers = ({
   const [editedElements, setEditedElements] = useState([]);
 
   const editDateAction = (isEdit, id) => {
-    if(isEdit) {
+    if (isEdit) {
       setEditedElements(prevState => ([...prevState, id]));
     } else {
       setEditedElements(elements.filter(item => item !== id));
     }
-  }
+  };
 
   const minStartDate = previousEndDate && incrementDate({
     incrementTime: { days: 1 },
@@ -97,7 +96,7 @@ const EditElementDatePickers = ({
           <>
             <RadioButton
               options={[
-                { value: 'ongoing', text: 'Ongoing'},
+                { value: 'ongoing', text: 'Ongoing' },
                 { value: 'fixed-period', text: 'Fixed Period' },
               ]}
               selectedValue={period}
@@ -107,28 +106,26 @@ const EditElementDatePickers = ({
               }}
             />
             {period === 'fixed-period' &&
-              <div className='edit-element__end-date'>
-                <DatePick
-                  error={inputErrors[index].endDate}
-                  setDate={(newValue) => onChangeInput('endDate', newValue, index)}
-                  dateValue={endDate}
-                  label='End date'
-                  minDate={minEndDate}
-                  maxDate={maxEndDate}
-                />
-                <BaseField label=''>
-                  <p className='edit-element__end-date-distance'>
-                    ({endDateDistance.months} {endDateDistance.months === 1 ? 'month' : 'months'} {endDateDistance.days}
-                    {endDateDistance.days === 1 ? ' day' : ' days'})
-                  </p>
-                </BaseField>
-              </div>
+            <div className='edit-element__end-date'>
+              <DatePick
+                error={inputErrors[index].endDate}
+                setDate={(newValue) => onChangeInput('endDate', newValue, index)}
+                dateValue={endDate}
+                label='End date'
+                minDate={minEndDate}
+                maxDate={maxEndDate}
+              />
+              <p className='edit-element__end-date-distance'>
+                ({endDateDistance.months} {endDateDistance.months === 1 ? 'month' : 'months'} {endDateDistance.days}
+                {endDateDistance.days === 1 ? ' day' : ' days'})
+              </p>
+            </div>
             }
           </>
         )
       }
     </div>
-  )
+  );
 };
 
 export default EditElementDatePickers;

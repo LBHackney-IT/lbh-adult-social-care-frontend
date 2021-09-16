@@ -5,7 +5,7 @@ import { currency } from '../../constants/strings';
 import EditElementDatePickers from './EditElementModal/EditElementDatePickers';
 
 const CareChargesInfoEdited = ({ elements = [], hasEditStyle = true, onChangeInput, inputErrors = [] }) => {
-  if(elements.length === 0) return <></>;
+  if (elements.length === 0) return <></>;
 
   return <>
     {elements.map(({
@@ -38,7 +38,7 @@ const CareChargesInfoEdited = ({ elements = [], hasEditStyle = true, onChangeInp
           />
           <RadioButton
             options={[
-              { value: 'gross', text: 'Gross'},
+              { value: 'gross', text: 'Gross' },
               { value: 'net', text: 'Net' },
             ]}
             selectedValue={claimedBy}
@@ -57,12 +57,12 @@ const CareChargesInfoEdited = ({ elements = [], hasEditStyle = true, onChangeInp
             startDateId={startDateId}
             endDateId={endDateId}
             dateToWeeks={dateToWeeks}
-            previousEndDate={index !== 0 && elements[index-1].endDate}
+            previousEndDate={index !== 0 && elements[index - 1].endDate}
           />
         </div>
-      )
+      );
     })}
-  </>
+  </>;
 };
 
 export default CareChargesInfoEdited;

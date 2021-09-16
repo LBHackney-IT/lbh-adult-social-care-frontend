@@ -2,7 +2,7 @@ import React from 'react';
 import { formatDate } from '../../service/helpers';
 import { currency } from '../../constants/strings';
 
-const CareChargesInfoStatic = ({ activeElements = [] }) => (
+const CareChargesInfoStatic = ({ activeElements = [], children }) => (
     <>
       {activeElements.map(({
         name,
@@ -40,6 +40,7 @@ const CareChargesInfoStatic = ({ activeElements = [] }) => (
                 <p className='text-capitalize'>{claimedBy}</p>
               </div>
             </div>
+            {children}
           </div>
         )
       })}

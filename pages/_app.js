@@ -7,7 +7,6 @@ import AdditionalHeader from 'components/AdditionalHeader';
 import CustomNotification from 'components/Notifications';
 import fetcher from 'api/SWR/fetcher';
 import { useStore } from '../store';
-import { CancelElementModal } from '../components/CareCharges/CancelElementModal'
 
 const swrOptions = {
   errorRetryCount: 3,
@@ -15,15 +14,14 @@ const swrOptions = {
   fetcher,
 };
 
-export default function App({ Component, pageProps }) {
+export default function App ({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState);
 
   return (
     <Provider store={store}>
       <SWRConfig value={swrOptions}>
-        <CustomNotification />
-        <AdditionalHeader />
-        <CancelElementModal />
+        <CustomNotification/>
+        <AdditionalHeader/>
         <Component {...pageProps} />
       </SWRConfig>
     </Provider>

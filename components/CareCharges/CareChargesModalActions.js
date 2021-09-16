@@ -1,16 +1,16 @@
 import React from 'react';
 import { Button } from '../HackneyDS';
 
-const CareChargesModalActions = ({ actions = []}) => {
+const CareChargesModalActions = ({ actions = [] }) => {
   return (
     <div className='care-charges-modal__actions'>
       {actions.map(({ handler, title, className }) => (
-        handler ? <Button handler={handler} className={className}>
+        handler ? <Button key={title} handler={handler} className={className}>
           {title}
-        </Button> : <></>
+        </Button> : <React.Fragment key={title}/>
       ))}
     </div>
-  )
+  );
 };
 
 export default CareChargesModalActions;
