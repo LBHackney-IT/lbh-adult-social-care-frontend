@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTable, useExpanded, useRowSelect } from 'react-table';
 
-export const Table = ({ columns, data, expandRowCallback, setSelectedRows, hasFooter }) => {
+export const Table = ({ columns, data, expandRowCallback, setSelectedRows, hasFooter, headerClassName='', bodyClassName='', footerClassName='', cellClassName=''}) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -30,25 +30,28 @@ export const Table = ({ columns, data, expandRowCallback, setSelectedRows, hasFo
 
   return (
     <table className="govuk-table lbh-table" {...getTableProps()}>
-      <thead className="govuk-table__head">
+      <thead className={`govuk-table__head ${headerClassName}`}>
         {headerGroups.map((headerGroup) => (
           <tr className="govuk-table__row" {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
-              <th scope="col" className="govuk-table__header" {...column.getHeaderProps()}>
+              <th
+                scope="col"
+                {...column.getHeaderProps([{ className: `govuk-table__header ${column.className}` }])}
+              >
                 {column.render('Header')}
               </th>
             ))}
           </tr>
         ))}
       </thead>
-      <tbody className="govuk-table__body" {...getTableBodyProps()}>
-        {rows.map((row) => {
+      <tbody className={`govuk-table__body ${bodyClassName}`} {...getTableBodyProps()}>
+        {rows.map((row, index) => {
           prepareRow(row);
           return (
-            <>
+            <React.Fragment key={index}>
               <tr className="govuk-table__row" {...row.getRowProps()}>
                 {row.cells.map((cell) => (
-                  <td className="govuk-table__cell" {...cell.getCellProps()}>
+                  <td className={`govuk-table__cell ${cellClassName}`} {...cell.getCellProps()}>
                     {cell.render('Cell')}
                   </td>
                 ))}
@@ -60,12 +63,12 @@ export const Table = ({ columns, data, expandRowCallback, setSelectedRows, hasFo
                   </td>
                 </tr>
               )}
-            </>
+            </React.Fragment>
           );
         })}
       </tbody>
       {hasFooter && (
-        <tfoot className="govuk-table__head">
+        <tfoot className={`govuk-table__head ${footerClassName}`}>
           {footerGroups.map((group) => (
             <tr className="govuk-table__row" {...group.getFooterGroupProps()}>
               {group.headers.map((column) => (
