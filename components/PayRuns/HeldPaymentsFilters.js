@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React from 'react';
 import AsyncSelect from 'react-select/async';
-import { BASE_URL } from '../../api/BaseApi';
-import { usePackageGetAll, usePaymentDepartments } from '../../api/SWR';
+import { BASE_URL } from 'api/BaseApi';
+import { usePackageGetAll, usePaymentDepartments } from 'api/SWR';
 import { Button } from '../Button';
 import DatePick from '../DatePick';
 import Dropdown from '../Dropdown';

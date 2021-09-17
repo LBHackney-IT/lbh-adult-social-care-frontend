@@ -7,14 +7,13 @@ export const Input = ({
   type = 'text',
   hint,
   placeholder = '',
+  className = '',
   error,
   ref,
-  className,
   value,
   handler,
 }) => {
   const outerClassName = className ? ` ${className}` : '';
-
   return (
     <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}${outerClassName}`}>
       {label && (

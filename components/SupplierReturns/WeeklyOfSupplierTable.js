@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
+import { formatDateWithSign, formatStatus, includeString } from 'service/helpers';
 import Checkbox from '../Checkbox';
 import ChatButton from './ChatButton';
 import { Button } from '../Button';

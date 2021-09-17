@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { HackneyFullLogo } from '../Icons';
-import { includeString } from '../../service/helpers';
+import { includeString } from 'service/helpers';
 
 const paymentsRoutes = [
   // { route: 'pay-runs', name: 'Pay Runs' },
