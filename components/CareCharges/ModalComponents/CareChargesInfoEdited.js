@@ -31,6 +31,7 @@ const CareChargesInfoEdited = ({ elements = [], onChangeInput, withoutEdit, inpu
           <Input
             error={inputErrors[index].value}
             name='value'
+            id={id}
             value={value}
             label='Value'
             placeholder={`${currency.euro}500`}

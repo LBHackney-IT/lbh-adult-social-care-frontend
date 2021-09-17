@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import BaseField from './baseComponents/BaseField';
 import ErrorField from './ErrorField';
 import 'react-datepicker/dist/react-datepicker.css';
-import { dateStringFormats } from '../constants/strings'
+import { dateStringFormats } from '../constants/strings';
 
 const DatePick = ({
   selectsRange,
@@ -46,6 +46,6 @@ const DatePick = ({
       {error && <ErrorField text={error} />}
     </BaseField>
   );
-}
+};
 
 export default DatePick;
