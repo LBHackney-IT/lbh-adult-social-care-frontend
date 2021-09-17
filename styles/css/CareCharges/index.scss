@@ -63,6 +63,11 @@
   }
 
   .care-charges-modal__actions {
+    @include media-mobile {
+      display: flex;
+      flex-direction: column;
+    }
+
     button:not(button:first-of-type) {
       margin-left: 10px;
 
