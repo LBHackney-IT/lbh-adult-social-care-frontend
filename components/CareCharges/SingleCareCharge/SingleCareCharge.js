@@ -1,8 +1,8 @@
 import React from 'react';
 import faker from 'faker';
 import { Heading, Label, HorizontalSeparator, VerticalSeparator, Button, Container } from '../../HackneyDS';
-import { ClientDetails } from '../ClientDetails/ClientDetails';
-import { PackageDetails } from '../PackageDetails/PackageDetails';
+import { ClientDetails } from './ClientDetails/ClientDetails';
+import { PackageDetails } from './PackageDetails/PackageDetails';
 import { SingleCareChargeTable } from './SingleCareChargeTable';
 
 export const SingleCareCharge = () => {
