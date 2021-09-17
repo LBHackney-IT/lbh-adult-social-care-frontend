@@ -4,33 +4,29 @@ import React from 'react';
 import { Table, Heading, Label, HorizontalSeparator, VerticalSeparator, Container } from '../../HackneyDS';
 import { ClientStatus } from '../SingleCareCharge/ClientStatus/ClientStatus';
 
+const generateCareChargeTableData = (count) => {
+  const status = ['new', 'existing'];
+  const tableData = [];
+  for (let index = 0; index < count; index++) {
+    const rowData = {
+      clientName: faker.name.findName(),
+      clientStatus: status[Math.round(Math.random())],
+      dateOfBirth: faker.date.past(100),
+      address: faker.address.streetAddress(),
+      mosaicId: faker.random.alphaNumeric(6),
+      cederId: faker.random.alphaNumeric(7),
+      packageType: 'Residential Care',
+      startDate: faker.date.past(5),
+      lastModified: faker.date.past(1),
+      author: faker.name.findName(),
+    };
+    tableData.push(rowData);
+  }
+  return tableData;
+}
+
 export const CareChargeTable = () => {
-  const data = [
-    {
-      clientName: faker.name.findName(),
-      clientStatus: 'new',
-      dateOfBirth: faker.date.past(100),
-      address: faker.address.streetAddress(),
-      mosaicId: faker.random.alphaNumeric(6),
-      cederId: faker.random.alphaNumeric(7),
-      packageType: 'Residential Care',
-      startDate: faker.date.past(5),
-      lastModified: faker.date.past(1),
-      author: faker.name.findName(),
-    },
-    {
-      clientName: faker.name.findName(),
-      clientStatus: 'new',
-      dateOfBirth: faker.date.past(100),
-      address: faker.address.streetAddress(),
-      mosaicId: faker.random.alphaNumeric(6),
-      cederId: faker.random.alphaNumeric(7),
-      packageType: 'Residential Care',
-      startDate: faker.date.past(5),
-      lastModified: faker.date.past(1),
-      author: faker.name.findName(),
-    },
-  ];
+  const data = generateCareChargeTableData(100);
   const columns = [
     {
       accessor: 'dateOfBirth',
@@ -41,9 +37,9 @@ export const CareChargeTable = () => {
               {props.row.original.clientName}
             </Heading>
             <VerticalSeparator width="10px"/>
-            <ClientStatus status="new" />
+            <ClientStatus status={props.row.original.clientStatus} />
           </Container>
-          <HorizontalSeparator height="20px" />
+          <HorizontalSeparator height="12px" />
           <Label>{format(props.row.original.dateOfBirth, 'dd.MM.yyyy')}</Label>
           <HorizontalSeparator height="5px" />
           <Label>{props.row.original.address}</Label>
@@ -101,5 +97,5 @@ export const CareChargeTable = () => {
       ),
     },
   ];
-  return <Table data={data} columns={columns} cellClassName="bottom-aligned" />;
+  return <Table data={data} columns={columns} cellClassName="bottom-aligned" hasHeader={false} noHeader/>;
 };
