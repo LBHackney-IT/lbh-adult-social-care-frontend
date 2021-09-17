@@ -12,7 +12,7 @@ const generateCareChargeTableData = (count) => {
       clientName: faker.name.findName(),
       clientStatus: status[Math.round(Math.random())],
       dateOfBirth: faker.date.past(100),
-      address: faker.address.streetAddress(),
+      address: `${faker.address.streetAddress()}, ${faker.address.zipCode()}`,
       mosaicId: faker.random.alphaNumeric(6),
       cederId: faker.random.alphaNumeric(7),
       packageType: 'Residential Care',
@@ -23,26 +23,26 @@ const generateCareChargeTableData = (count) => {
     tableData.push(rowData);
   }
   return tableData;
-}
+};
 
 export const CareChargeTable = () => {
   const data = generateCareChargeTableData(100);
   const columns = [
     {
       accessor: 'dateOfBirth',
-      Cell: (props) => (
+      Cell: ({ row }) => (
         <>
-          <Container display="flex" alignItems='center'>
+          <Container display="flex" alignItems="center">
             <Heading size="m" color="#00664F">
-              {props.row.original.clientName}
+              {row.original.clientName}
             </Heading>
-            <VerticalSeparator width="10px"/>
-            <ClientStatus status={props.row.original.clientStatus} />
+            <VerticalSeparator width="10px" />
+            <ClientStatus status={row.original.clientStatus} />
           </Container>
           <HorizontalSeparator height="12px" />
-          <Label>{format(props.row.original.dateOfBirth, 'dd.MM.yyyy')}</Label>
+          <Label>{format(row.original.dateOfBirth, 'dd.MM.yyyy')}</Label>
           <HorizontalSeparator height="5px" />
-          <Label>{props.row.original.address}</Label>
+          <Label>{row.original.address}</Label>
         </>
       ),
     },
@@ -97,5 +97,5 @@ export const CareChargeTable = () => {
       ),
     },
   ];
-  return <Table data={data} columns={columns} cellClassName="bottom-aligned" hasHeader={false} noHeader/>;
+  return <Table data={data} columns={columns} cellClassName="bottom-aligned" hasHeader={false} noHeader />;
 };
