@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { HackneyFullLogo } from '../Icons';
-import { includeString } from '../../service/helpers';
-import { ACTIVE_PACKAGES_ROUTE, PAYMENTS_ROUTE, SUPPLIER_DASHBOARD_ROUTE } from '../../routes/RouteConstants';
+import { includeString } from 'service/helpers';
+import { ACTIVE_PACKAGES_ROUTE, PAYMENTS_ROUTE, SUPPLIER_DASHBOARD_ROUTE } from 'routes/RouteConstants';
 
 const supplierRoutes = [
   { route: SUPPLIER_DASHBOARD_ROUTE, name: 'Supplier Returns' },

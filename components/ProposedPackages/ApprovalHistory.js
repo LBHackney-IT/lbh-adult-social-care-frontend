@@ -1,9 +1,9 @@
 import React from 'react';
-import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils'
+import { stringIsNullOrEmpty } from 'api/Utils/FuncUtils';
 import PackageCostBox from '../DayCare/PackageCostBox';
 import PackageApprovalHistorySummary from '../PackageApprovalHistorySummary';
-import { formatCareDatePeriod } from '../../service/helpers'
-import ClientSummaryItem from '../CarePackages/ClientSummaryItem'
+import { formatCareDatePeriod } from 'service/helpers';
+import ClientSummaryItem from '../CarePackages/ClientSummaryItem';
 
 const ApprovalHistory = ({
   history = [],

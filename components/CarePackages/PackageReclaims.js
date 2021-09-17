@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PackageReclaim from '../PackageReclaim';
-import { getInitialPackageReclaim } from '../../api/Utils/CommonOptions';
-import { uniqueID } from '../../service/helpers';
+import { getInitialPackageReclaim } from 'api/Utils/CommonOptions';
+import { uniqueID } from 'service/helpers';
 import {
   getReclaimAmountOptions,
   getReclaimFromCategories,
   getReclaimFromOptions,
-} from '../../api/CarePackages/PackageReclaimApi';
+} from 'api/CarePackages/PackageReclaimApi';
 import ShouldPackageReclaim from '../HomeCare/ShouldPackageReclaim';
 
 const PackageReclaims = ({

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import * as RouteConstants from '../../routes/RouteConstants';
-import { selectMobileMenu } from '../../reducers/mobileMenuReducer';
+import * as RouteConstants from 'routes/RouteConstants';
+import { selectMobileMenu } from 'reducers/mobileMenuReducer';
 import NavClientSummary from '../NavClientSummary';
 
 const NavItem = ({ children, to, params = '' }) => {
