@@ -29,6 +29,7 @@ const columns = [
   {
     Header: 'Name',
     accessor: 'name',
+    className: 'absorb-width',
   },
   {
     Header: 'Age',
@@ -88,6 +89,7 @@ const columns2 = [
   {
     Header: 'Name',
     accessor: 'name',
+    className: 'absorb-width',
   },
   {
     Header: 'Age',
@@ -138,6 +140,7 @@ const columns3 = [
   {
     Header: 'Name',
     accessor: 'name',
+    className: 'absorb-width',
   },
   {
     Header: 'Age',
