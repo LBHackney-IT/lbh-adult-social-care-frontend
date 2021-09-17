@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import CareChargesInfoStatic from '../CareChargesInfoStatic';
-import { incrementDate } from '../../../service/helpers';
 import CareChargesModalActions from '../CareChargesModalActions';
 import CareChargesInfoTitle from '../CareChargesInfoTitle';
 import CareChargesModalTitle from '../CareChargesModalTitle';
 import DatePick from '../../DatePick';
-import { intervalToDuration } from 'date-fns';
+import { addWeeks, intervalToDuration } from 'date-fns';
 
 const EndElementContent = ({ activeElements, headerText }) => {
   const [endDate, setEndDate] = useState(null);
@@ -14,14 +13,8 @@ const EndElementContent = ({ activeElements, headerText }) => {
   const minDateFromWeeks = activeElements[0]?.dateFromWeeks;
   const minDateToWeeks = activeElements[0]?.dateToWeeks;
 
-  const minEndDate = minDateFromWeeks && incrementDate({
-    incrementTime: { weeks: minDateFromWeeks },
-    date: startDate,
-  });
-  const maxEndDate = minDateToWeeks && incrementDate({
-    incrementTime: { weeks: minDateToWeeks },
-    date: startDate,
-  });
+  const minEndDate = minDateFromWeeks && addWeeks(startDate, minDateFromWeeks);
+  const maxEndDate = minDateToWeeks && addWeeks(startDate, minDateToWeeks);
 
   const endDateDistance = useMemo(() => (
     intervalToDuration({
