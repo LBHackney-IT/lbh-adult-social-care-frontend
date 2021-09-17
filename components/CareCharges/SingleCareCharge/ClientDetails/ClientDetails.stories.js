@@ -3,7 +3,7 @@ import faker from 'faker';
 import { ClientDetails } from './ClientDetails';
 
 export default {
-  title: 'Pages/CareCharges/ClientDetails',
+  title: 'Pages/CareCharges/SingleCareCharge/ClientDetails',
   component: ClientDetails,
   argTypes: {
     ClientDetails: {},
