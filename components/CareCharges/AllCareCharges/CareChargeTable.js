@@ -13,7 +13,7 @@ const generateCareChargeTableData = (count) => {
       clientStatus: status[Math.round(Math.random())],
       dateOfBirth: faker.date.past(100),
       address: `${faker.address.streetAddress()}, ${faker.address.zipCode()}`,
-      mosaicId: faker.random.alphaNumeric(6),
+      mosaicId: Math.floor(Math.random() * 1000000),
       cederId: faker.random.alphaNumeric(7),
       packageType: 'Residential Care',
       startDate: faker.date.past(5),
