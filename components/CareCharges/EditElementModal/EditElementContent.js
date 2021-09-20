@@ -8,7 +8,12 @@ import { ErrorMessage } from '../../HackneyDS/index';
 import { object, string } from 'yup';
 import { addWeeks } from 'date-fns';
 
-const EditElementContent = ({ activeElements, headerText }) => {
+const EditElementContent = ({
+  activeElements,
+  headerText,
+  editStep,
+  setEditStep,
+}) => {
   const [initialInputs] = useState({
     value: '',
     startDate: '',
@@ -43,6 +48,10 @@ const EditElementContent = ({ activeElements, headerText }) => {
     setInputErrors(cloneInputErrors);
   };
 
+  const confirm = () => alert('Confirm');
+
+  const editElement = () => setEditStep(true);
+
   const cancelAction = () => alert('Cancel');
 
   const next = async () => {
@@ -70,7 +79,8 @@ const EditElementContent = ({ activeElements, headerText }) => {
       setInputErrors(newInputErrors);
       return;
     }
-    alert('next successful');
+
+    setEditStep(false);
   };
 
   useEffect(() => {
@@ -86,18 +96,21 @@ const EditElementContent = ({ activeElements, headerText }) => {
   return (
     <>
       <CareChargesModalTitle title={headerText}/>
-      <CareChargesInfoTitle title='ACTIVE ELEMENT'/>
+      <CareChargesInfoTitle title={editStep ? 'ACTIVE ELEMENT' : 'PREVIOUS ELEMENT'}/>
       <CareChargesInfoStatic activeElements={activeElements}/>
-      <CareChargesInfoTitle title='EDITED ELEMENT'/>
-      <CareChargesInfoEdited
-        elements={inputs}
-        inputErrors={inputErrors}
-        onChangeInput={onChangeInput}
-      />
+      <CareChargesInfoTitle title={editStep ? 'EDITED ELEMENT' : 'NEW ELEMENT'}/>
+      {editStep ?
+        <CareChargesInfoEdited
+          elements={inputs}
+          inputErrors={inputErrors}
+          onChangeInput={onChangeInput}
+        /> : <CareChargesInfoStatic activeElements={inputs}/>
+      }
       {inputHasErrors && <ErrorMessage>There some errors above</ErrorMessage>}
       <CareChargesModalActions
         actions={[
-          { title: 'Next', handler: next },
+          { title: editStep ? 'Next' : 'Confirm', handler: editStep ? next : confirm },
+          !editStep && { title: 'Edit', className: 'without-background', handler: editElement },
           { title: 'Cancel', handler: cancelAction, className: 'without-background' },
         ]}
       />

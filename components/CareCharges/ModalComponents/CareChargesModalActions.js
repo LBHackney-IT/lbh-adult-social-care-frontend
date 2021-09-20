@@ -4,10 +4,10 @@ import { Button } from '../../HackneyDS';
 const CareChargesModalActions = ({ actions = [] }) => {
   return (
     <div className='care-charges-modal__actions'>
-      {actions.map(({ handler, title, className }) => (
+      {actions.map(({ handler, title, className }, index) => (
         handler ? <Button key={title} handler={handler} className={className}>
           {title}
-        </Button> : <React.Fragment key={title}></React.Fragment>
+        </Button> : <React.Fragment key={title || index} />
       ))}
     </div>
   );
