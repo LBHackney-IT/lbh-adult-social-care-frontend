@@ -16,8 +16,6 @@ import PopupAddSupplier from '../../PopupAddSupplier';
 import useSuppliersApi from 'api/SWR/useSuppliersApi';
 import useDayCareApi from 'api/SWR/useDayCareApi';
 import { mapCareStageOptions } from 'api/Mappers/CarePackageMapper';
-import TextArea from '../../TextArea';
-import { Container, Input, RadioGroup } from '../../HackneyDS';
 import FundedNursingCare from '../../CarePackages/FundedNursingCare/FundedNursingCare';
 import NursingCareCharges from '../../CarePackages/CareCharges/NursingCareCharges';
 
@@ -49,7 +47,7 @@ const PackagesNursingCare = ({
     provisionalCost: '',
     reasonCollectingCharges: '',
   });
-  const [collectingCharges, setCollectingCharges] = useState(false);
+  const [collectingCharges, setCollectingCharges] = useState('hackney-council');
 
   const [additionalPayment, setAdditionalPayment] = useState({
     costPerWeek: nursingCarePackage?.additionalNeedsPayment || '',

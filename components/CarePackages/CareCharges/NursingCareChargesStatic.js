@@ -4,7 +4,7 @@ import { SingleCareChargeTable } from '../../CareCharges/SingleCareCharge/Single
 import { currency } from 'constants/strings';
 import { Tag } from '../../HackneyDS';
 import { format } from 'date-fns';
-import { getNumberWithCommas } from 'service/helpers';
+import { formatStatus, getNumberWithCommas } from 'service/helpers';
 
 const NursingCareChargesStatic = ({ collectingCharges, tableData }) => {
   const [totalCost, setTotalCost] = useState(0);
@@ -63,7 +63,7 @@ const NursingCareChargesStatic = ({ collectingCharges, tableData }) => {
         </p>
       </Container>
       <p className='mt-4 mb-1 text-black'>Who is collecting these care charges</p>
-      <p className='font-weight-bold mb-6 text-black'>{collectingCharges}</p>
+      <p className='font-weight-bold mb-6 text-black'>{formatStatus(collectingCharges, '-', true)}</p>
     </>
   );
 };
