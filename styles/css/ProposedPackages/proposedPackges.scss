@@ -182,14 +182,54 @@
   }
 }
 
+.nursing-care-charges__textarea {
+  textarea {
+    height: 100px;
+  }
+}
+
+.notes-button {
+
+}
+
+.nursing-care-charges {
+  .table-header {
+    th {
+      color: white;
+    }
+  }
+}
+
+.nursing-care-charges__total-cost {
+  margin-top: 3px;
+  background-color: $lbh-light-gray2;
+}
+
 .proposed-packages__elements {
   .funded-nursing-care {
     margin-bottom: 60px;
+
     p {
       height: 42px;
     }
     .custom-input {
       height: 42px;
+    }
+
+    .funded-nursing-care__table {
+      margin-bottom: 20px;
+
+      .table-header {
+        th {
+          color: white;
+        }
+      }
+
+      & > p {
+        background: $lbh-light-gray2;
+        height: initial;
+        padding: 20px;
+      }
     }
   }
   & > h2 {

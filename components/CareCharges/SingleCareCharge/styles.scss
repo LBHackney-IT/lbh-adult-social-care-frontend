@@ -23,6 +23,13 @@
   border: none;
 }
 
+.text-required-after {
+  &:after {
+    content: '*';
+    color: $lbh-red;
+  }
+}
+
 .govuk-table__row:hover .icon-button{
 opacity: 1;
 }

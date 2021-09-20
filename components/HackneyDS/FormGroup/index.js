@@ -14,7 +14,7 @@ export default function FormGroup({ children = [], title, hint, error }) {
           <span className="govuk-visually-hidden">Error:</span>
           {error}
         </span>
-        <HorizontalSeparator height='10px' />
+        {(hint || error || title) && <HorizontalSeparator height='10px' />}
         {nodeList}
       </fieldset>
     </div>
