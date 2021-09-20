@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import CareChargesInfoEdited from '../ModalComponents/CareChargesInfoEdited';
-import { incrementDate } from '../../../service/helpers';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import { ErrorMessage } from '../../HackneyDS/index';
 import { object, string } from 'yup';
+import { addWeeks } from 'date-fns';
 
 const EditElementContent = ({
   activeElements,
@@ -29,10 +29,7 @@ const EditElementContent = ({
     newInput[field] = value;
     if (field === 'startDate') {
       const { dateFromWeeks } = newInput;
-      const minEndDate = dateFromWeeks && incrementDate({
-        incrementTime: { weeks: dateFromWeeks },
-        date: value,
-      });
+      const minEndDate = dateFromWeeks && addWeeks(value, dateFromWeeks);
       if (dateFromWeeks) {
         newInput.endDate = minEndDate;
       }

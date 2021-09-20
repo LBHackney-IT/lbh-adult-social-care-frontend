@@ -34,6 +34,7 @@ const CareChargesInfoEdited = ({ elements = [], onChangeInput, withoutEdit, inpu
             id={id}
             value={value}
             label='Value'
+            type='number'
             placeholder={`${currency.euro}500`}
             handler={newValue => onChangeInput('value', newValue, index)}
           />
