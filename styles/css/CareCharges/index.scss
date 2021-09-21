@@ -1,0 +1,174 @@
+.care-charges-modal {
+  * {
+    box-sizing: border-box;
+  }
+
+  .govuk-form-group {
+    max-width: 217px;
+  }
+
+  .lbh-dialog {
+    background: #F1F1F1;
+    border: none;
+    padding: 32px;
+
+    @media (max-width: 868px) {
+      width: initial;
+      max-width: 90%;
+    }
+
+    .care-charges-modal__title {
+      font-weight: bold;
+      font-size: 24px;
+      line-height: 34px;
+      color: black;
+      margin-bottom: 30px;
+    }
+  }
+
+  .lbh-dialog__close {
+    display: none;
+  }
+
+  .care-charges-modal__date-info {
+    font-size: 14px;
+  }
+
+  .care-charges-modal__value {
+    margin-right: 24px;
+
+    @include media-mobile {
+      margin-right: 0;
+      display: flex;
+      font-size: 14px;
+    }
+
+    p:first-of-type {
+      color: black;
+      font-weight: bold;
+
+      @include media-mobile {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .care-charges-modal__values {
+    display: flex;
+
+    @include media-mobile {
+      flex-wrap: wrap;
+      flex-direction: column;
+    }
+  }
+
+  .care-charges-modal__actions {
+    @include media-mobile {
+      display: flex;
+      flex-direction: column;
+    }
+
+    button:not(button:first-of-type) {
+      margin-left: 10px;
+
+      @include media-mobile {
+        margin-left: initial;
+      }
+    }
+
+    .without-background {
+      background: none;
+      color: black;
+      box-shadow: none;
+
+      @include media-mobile {
+        margin-top: 10px;
+      }
+
+      &:hover {
+        background-color: $lbh-gray-text !important;
+      }
+    }
+  }
+
+  .care-charges-modal__date-action {
+    margin-left: 4px;
+    font-weight: bold;
+    color: $lbh-primary-button;
+    text-decoration: underline;
+    text-decoration-color: $lbh-primary-button;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .care-charges-modal__date-pickers {
+    margin-bottom: 32px;
+    display: flex;
+    flex-direction: column;
+
+    .care-charges-modal__value {
+      margin-bottom: 16px;
+
+      @include media-mobile {
+        flex-direction: column;
+      }
+    }
+
+    .react-date-picker {
+      max-width: 217px;
+      margin-bottom: 16px;
+
+      &:first-of-type {
+        margin-right: 13px;
+      }
+    }
+  }
+
+  .care-charges-modal__info {
+    border: 1px solid $lbh-gray-border-2;
+    padding: 24px;
+    box-sizing: border-box;
+    margin-bottom: 32px;
+
+    .govuk-form-group, .radio-button {
+      &:not(&:last-of-type) {
+        margin-bottom: 16px;
+      }
+    }
+  }
+
+  .care-charges-modal__info-title {
+    font-size: 14px;
+    color: $lbh-primary-button;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+
+  .care-charges-modal__content {
+    margin-bottom: 16px;
+
+    p:first-of-type {
+      font-weight: bold;
+      color: black;
+    }
+    p:last-of-type {
+      font-size: 14px;
+      color: $lbh-text-colour;
+      opacity: 0.75;
+      line-height: 22px;
+    }
+  }
+
+  .edit-element__end-date {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .edit-element__end-date-distance {
+      font-size: 14px;
+      color: $lbh-secondary-text-colour;
+    }
+  }
+}

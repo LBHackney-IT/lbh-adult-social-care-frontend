@@ -1,7 +1,6 @@
-import { add } from 'date-fns';
+import { add, format } from 'date-fns';
 import { getEnGBFormattedDate } from '../api/Utils/FuncUtils';
 import { maxStringLength } from '../constants/variables';
-import { dateStringFormats } from '../constants/strings'
 
 const chr4 = () => Math.random().toString(16).slice(-4);
 
@@ -54,26 +53,11 @@ const formatCareDatePeriod = (startDate, endDate) => {
   };
 };
 
-const formatDate = (date, sign = '/', format) => {
-  const newDate = new Date(date);
-  const day = newDate.getDate();
-  const dayString = `00${day}`.slice(-2);
-  const month = newDate.getMonth() + 1;
-  const monthString = `00${month}`.slice(-2);
-  const year = newDate.getFullYear();
-
-  const { dayMonthYear, monthDayYear } = dateStringFormats;
-
-  switch (format) {
-    case dayMonthYear: {
-      return `${dayString}${sign}${monthString}${sign}${year}`;
-    }
-    case monthDayYear: {
-      return `${monthString}${sign}${dayString}${sign}${year}`;
-    }
-    default: return `${dayString}${sign}${monthString}${sign}${year}`;
-  }
-};
+const formatDate = (
+  date,
+  sign = '/',
+  formatString = 'd.MM.Y'
+) => (date && format(new Date(date), formatString));
 
 const includeString = (mainString, checkString) => mainString && mainString.indexOf(checkString) > -1;
 
