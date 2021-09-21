@@ -6,6 +6,10 @@
 
   width: 509px;
   height: 187px;
+
+  @include media-mobile {
+    width: 100%;
+  }
 }
 
 .files-drop-zone__icon {

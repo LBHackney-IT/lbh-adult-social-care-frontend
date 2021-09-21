@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import DatePicker from 'react-datepicker';
 import BaseField from './baseComponents/BaseField';
 import ErrorField from './ErrorField';
 import 'react-datepicker/dist/react-datepicker.css';
-import { dateStringFormats } from '../constants/strings'
+import { dateStringFormats } from '../constants/strings';
 
 const DatePick = ({
   selectsRange,
@@ -22,6 +22,12 @@ const DatePick = ({
   setDate,
   dateValue,
 }) => {
+  const CustomInput = forwardRef(({ value, onClick }, ref) => (
+    <button className="datepicker-custom-input" onClick={onClick} ref={ref}>
+      {value}
+    </button>
+  ));
+
   return (
     <BaseField className={`${className} react-date-picker`} label={label} noInputStyle>
       {dateValue?.toString() === 'Invalid Date' ? <p>Invalid Date</p> :
@@ -37,6 +43,7 @@ const DatePick = ({
           minDate={minDate}
           maxDate={maxDate}
           selectsRange={selectsRange}
+          customInput={<CustomInput />}
           selected={dateValue}
           inline={inline}
           placeholderText={placeholder}
@@ -46,6 +53,6 @@ const DatePick = ({
       {error && <ErrorField text={error} />}
     </BaseField>
   );
-}
+};
 
 export default DatePick;

@@ -38,3 +38,18 @@ textarea {
 .textarea {
   box-shadow: none !important;
 }
+
+.lbh-form-group.with-sign {
+  position: relative;
+  &::before {
+    content: attr(data-presign);
+    position: absolute;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    left: 8px;
+  }
+  .govuk-input {
+    padding-left: 15px;
+  }
+}

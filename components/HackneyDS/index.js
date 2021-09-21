@@ -37,7 +37,8 @@ import RadioGroup from './RadioGroup';
 import { SimplePagination } from './SimplePagination';
 import { SummaryList } from './SummaryList';
 import { FileUpload } from './FileUpload/FileUpload';
-
+import { EditElementModal } from '../CareCharges/EditElementModal';
+import { FundedNursingCare } from '../CarePackages/FundedNursingCare/FundedNursingCare';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 
@@ -82,5 +83,7 @@ export {
   Header,
   SummaryList,
   FileUpload,
-  Container
+  Container,
+  EditElementModal,
+  FundedNursingCare,
 };
