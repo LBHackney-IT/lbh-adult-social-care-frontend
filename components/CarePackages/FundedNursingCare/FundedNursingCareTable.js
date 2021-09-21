@@ -25,9 +25,12 @@ export const FundedNursingCareTable = ({ data }) => {
       Header: 'Weekly cost',
       accessor: 'weeklyCost',
       Cell: ({ value }) => (
-        <p className='is-flex is-align-items-center'>
-          {currency.euro}{value}<span className='hackney-text-green font-weight-bold ml-3'>NET OFF</span>
-        </p>
+        <span className='funded-nursing-care__weekly-cost'>
+          {currency.euro}{value}
+          <span className='hackney-text-green font-weight-bold '>
+            NET OFF
+          </span>
+        </span>
       )
     },
     {
@@ -45,10 +48,10 @@ export const FundedNursingCareTable = ({ data }) => {
       accessor: 'notes',
       Cell: () => (
         <div
-          className='align-right is-flex is-align-items-center is-clickable'
+          className='notes-button'
           onClick={() => setIsOpenNotes(!isOpenNotes)}
         >
-          <p className='link-button mr-3 is-flex is-align-items-center'>Notes</p>
+          <span className='link-button'>Notes</span>
           <ToggleBlueIcon className={isOpenNotes ? '' : 'icon-animation-rotation-negative'}/>
         </div>
       ),
@@ -63,7 +66,7 @@ export const FundedNursingCareTable = ({ data }) => {
         bodyClassName="table-body"
         cellClassName="no-borders"
       />
-      {isOpenNotes && <p>{data[0].notes}</p>}
+      {isOpenNotes && <p className='funded-nursing-care__notes'>{data[0].notes}</p>}
     </div>
   );
 };

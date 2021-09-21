@@ -16,8 +16,8 @@ import PopupAddSupplier from '../../PopupAddSupplier';
 import useSuppliersApi from 'api/SWR/useSuppliersApi';
 import useDayCareApi from 'api/SWR/useDayCareApi';
 import { mapCareStageOptions } from 'api/Mappers/CarePackageMapper';
-import FundedNursingCare from '../../CarePackages/FundedNursingCare/FundedNursingCare';
-import NursingCareCharges from '../../CarePackages/CareCharges/NursingCareCharges';
+import { NursingCareCharges } from '../../CarePackages/CareCharges/NursingCareCharges';
+import { FundedNursingCare } from '../../HackneyDS';
 
 const PackagesNursingCare = ({
   tab,
@@ -79,7 +79,7 @@ const PackagesNursingCare = ({
   const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
   const [additionalOneOffCostTotal, setAdditionalNeedsOneOffCostTotal] = useState(0);
   const [paidToCareHome, setPaidToCareHome] = useState(0);
-  const [hasFNCAssessment, setHasFNCAssessment] = useState('yes');
+  const [hasFNCAssessment, setHasFNCAssessment] = useState('');
   const [uploadFNCAssessment, setUploadFNCAssessment] = useState(null);
 
   const changeElementsData = (setter, getter, field, data) => {
@@ -90,10 +90,7 @@ const PackagesNursingCare = ({
     dispatch(addNotification({ text, className }));
   };
 
-  const getFiles = (files) => {
-    console.log(files);
-    setUploadFNCAssessment(files);
-  };
+  const getFiles = (files) => setUploadFNCAssessment(files);
 
   useEffect(() => {
     setEndDateDisabled(!nursingCarePackage?.nursingCarePackage?.endDate);
