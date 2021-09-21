@@ -10,12 +10,19 @@ export const Input = ({
   className = '',
   error,
   ref,
+  preSign = '',
   value,
   handler,
 }) => {
   const outerClassName = className ? ` ${className}` : '';
+  const errorClass = error ? ' govuk-form-group--error' : '';
+  const signClass = preSign ? ' with-sign' : '';
+
   return (
-    <div className={`govuk-form-group lbh-form-group ${(error ?? '') && 'govuk-form-group--error'}${outerClassName}`}>
+    <div
+      data-presign={preSign}
+      className={`govuk-form-group lbh-form-group${errorClass}${signClass} ${outerClassName}`}
+    >
       {label && (
         <label className="govuk-label lbh-label" htmlFor={id}>
           {label}

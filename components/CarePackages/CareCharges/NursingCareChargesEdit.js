@@ -3,6 +3,7 @@ import { Container } from '../../HackneyDS/Layout/Container';
 import { Input } from '../../HackneyDS/Input';
 import { RadioGroup } from '../../HackneyDS';
 import TextArea from '../../TextArea';
+import { currency } from '../../../constants/strings';
 
 const NursingCareChargesEdit = ({
   provisionalAge,
@@ -17,18 +18,24 @@ const NursingCareChargesEdit = ({
   return (
     <>
       <Container display='flex'>
-        <Container className='mr-6' display='flex' flexDirection='column'>
+        <Container className='nursing-care-charges__container' display='flex' flexDirection='column'>
           <p className='text-black'>Provisional care charge (pre-assessement)</p>
-          <Container height='66px' display='flex' alignItems='center'>
-            <p className='mr-3 '>Age {provisionalAge}</p>
+          <Container className='nursing-care-charges__age' display='flex' alignItems='center'>
+            <p>Age {provisionalAge}</p>
             <Input
+              type='number'
+              preSign={currency.euro}
               handler={setProvisionalCost}
               error={careChargeErrors.provisionalCost}
               value={provisionalCost}
             />
           </Container>
         </Container>
-        <Container display='flex' flexDirection='column'>
+        <Container
+          className='nursing-care-charges__container nursing-care-charges__collecting-charges'
+          display='flex'
+          flexDirection='column'
+        >
           <p className='text-black'>Who is collecting these care charges</p>
           <RadioGroup
             small
@@ -42,7 +49,7 @@ const NursingCareChargesEdit = ({
           />
         </Container>
       </Container>
-      <Container className='mb-5' display='flex' flexDirection='column'>
+      <Container display='flex' flexDirection='column'>
         <p className='text-required-after'>Why is Hackney collecting these care charges?</p>
         <TextArea
           className='nursing-care-charges__textarea'

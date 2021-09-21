@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from '../../HackneyDS/Layout/Container';
 import { SingleCareChargeTable } from '../../CareCharges/SingleCareCharge/SingleCareChargeTable';
-import { currency } from 'constants/strings';
+import { currency } from '../../../constants/strings';
 import { Tag } from '../../HackneyDS';
 import { format } from 'date-fns';
-import { formatStatus, getNumberWithCommas } from 'service/helpers';
+import { formatStatus, getNumberWithCommas } from '../../../service/helpers';
 
 const NursingCareChargesStatic = ({ collectingCharges, tableData }) => {
   const [totalCost, setTotalCost] = useState(0);
@@ -58,12 +58,12 @@ const NursingCareChargesStatic = ({ collectingCharges, tableData }) => {
       <Container padding='20px' className='nursing-care-charges__total-cost' display='flex' justifyContent='flex-end'>
         <p className='font-weight-bold text-black'>
           Provider paid
-          <span className='hackney-text-green ml-2 mr-5'> NET OFF </span>
+          <span className='hackney-text-green'> NET OFF </span>
           {currency.euro}{totalCost}
         </p>
       </Container>
-      <p className='mt-4 mb-1 text-black'>Who is collecting these care charges</p>
-      <p className='font-weight-bold mb-6 text-black'>{formatStatus(collectingCharges, '-', true)}</p>
+      <p className='text-black font-size-16px'>Who is collecting these care charges</p>
+      <p className='font-weight-bold text-black font-size-14px'>{formatStatus(collectingCharges, '-', true)}</p>
     </>
   );
 };

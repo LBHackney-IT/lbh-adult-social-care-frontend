@@ -1,7 +1,7 @@
 import React from 'react';
 
-export const FileUpload = () => (
-  <div className="govuk-form-group lbh-form-group">
+export const FileUpload = ({ className = '' }) => (
+  <div className={`govuk-form-group lbh-form-group ${className}`}>
     <label className="file-upload" htmlFor="file-upload-1">
       Choose File
     </label>
