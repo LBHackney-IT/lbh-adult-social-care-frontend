@@ -16,7 +16,6 @@ import PopupAddSupplier from '../../PopupAddSupplier';
 import useSuppliersApi from 'api/SWR/useSuppliersApi';
 import useDayCareApi from 'api/SWR/useDayCareApi';
 import { mapCareStageOptions } from 'api/Mappers/CarePackageMapper';
-import { NursingCareCharges } from '../../CarePackages/CareCharges/NursingCareCharges';
 import { FundedNursingCare } from '../../HackneyDS';
 
 const PackagesNursingCare = ({
@@ -277,16 +276,6 @@ const PackagesNursingCare = ({
             hasFNCAssessment={hasFNCAssessment}
             setUploadFNCAssessment={setUploadFNCAssessment}
             uploadFNCAssessment={uploadFNCAssessment}
-          />
-          <NursingCareCharges
-            careChargeErrors={careChargeErrors}
-            collectingCharges={collectingCharges}
-            provisionalAge={provisionalAge}
-            provisionalCost={provisionalCost}
-            reasonCollectingCharges={reasonCollectingCharges}
-            setCollectingCharges={setCollectingCharges}
-            setProvisionalCost={setProvisionalCost}
-            setReasonCollectingCharges={setReasonCollectingCharges}
           />
           <div className="is-flex is-justify-content-space-between is-align-content-center is-align-items-center">
             <Button onClick={addPackageReclaim} className="outline green">
