@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from './index';
 
 export default {
@@ -12,7 +12,6 @@ const Template = (args) => {
     value: '',
     onChangeValue: (value) => setDay(prevState => ({ ...prevState, value, error: '' })),
     error: '',
-    ...args.day
   });
 
   const [month, setMonth] = useState({
@@ -28,6 +27,23 @@ const Template = (args) => {
     error: '',
     ...args.year
   });
+
+  useEffect(() => {
+    setDay(prevState => ({
+      ...prevState,
+      ...args.day,
+    }));
+
+    setMonth(prevState => ({
+      ...prevState,
+      ...args.month,
+    }));
+
+    setYear(prevState => ({
+      ...prevState,
+      ...args.year,
+    }));
+  }, [args.year, args.day, args.month]);
 
   return (
     <DatePicker
@@ -58,7 +74,7 @@ ErrorDay.args = {
 export const ErrorMonth = Template.bind({});
 ErrorMonth.args = {
   formId: 'error-month',
-  day: { label: 'Valid day' },
+  day: { label: 'Day' },
   month: { error: 'Error month' },
   year: { error: 'Error year' }
 };
@@ -66,8 +82,8 @@ ErrorMonth.args = {
 export const ErrorYear = Template.bind({});
 ErrorYear.args = {
   formId: 'error-year',
-  day: { label: 'Valid day' },
-  month: { label: 'Valid month' },
+  day: { label: 'Day' },
+  month: { label: 'Month' },
   year: { error: 'Error year' }
 };
 
@@ -76,7 +92,7 @@ LabelHintError.args = {
   formId: 'label-hint-error',
   label: 'Label',
   hint: 'Hint',
-  day: { label: 'Valid day' },
-  month: { label: 'Valid month' },
+  day: { label: 'Day' },
+  month: { label: 'Month' },
   year: { error: 'Error year' }
 };
