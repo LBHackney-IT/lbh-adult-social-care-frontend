@@ -1,5 +1,5 @@
 @import 'css/variables';
-@import "css/shortcuts";
+@import 'css/shortcuts';
 @import 'css/media-breakpoints';
 @import 'css/borders';
 @import 'css/typography';
@@ -42,12 +42,13 @@
 @import 'css/inputs';
 @import 'css/BrokerageHub/index';
 @import 'css/notifications';
-@import "css/loading";
-@import "css/CareCharges/index";
-@import "css/search-selector";
-@import "css/AutocompleteSelect/option.scss";
-@import "css/HackneyDS/styles.scss";
-@import "../components/HackneyDS/styles.scss";
+@import 'css/loading';
+@import 'css/search-selector';
+@import 'css/AutocompleteSelect/option.scss';
+@import 'css/HackneyDS/styles.scss';
+@import '../components/HackneyDS/styles.scss';
+@import 'css/CareCharges/index';
+@import '../components/CareCharges/SingleCareCharge/styles.scss';
 
 * {
   font-family: 'OpenSans', sans-serif !important;

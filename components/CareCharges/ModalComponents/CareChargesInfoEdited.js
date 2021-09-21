@@ -4,7 +4,12 @@ import RadioButton from '../../RadioButton';
 import { currency } from '../../../constants/strings';
 import EditElementDatePickers from '../EditElementModal/EditElementDatePickers';
 
-const CareChargesInfoEdited = ({ elements = [], hasEditStyle = true, onChangeInput, inputErrors = [] }) => {
+const CareChargesInfoEdited = ({
+  elements = [],
+  hasEditStyle = true,
+  onChangeInput,
+  inputErrors = []
+}) => {
   if(elements.length === 0) return <></>;
 
   return <>
@@ -31,8 +36,10 @@ const CareChargesInfoEdited = ({ elements = [], hasEditStyle = true, onChangeInp
           <Input
             error={inputErrors[index].value}
             name='value'
+            id={id}
             value={value}
             label='Value'
+            type='number'
             placeholder={`${currency.euro}500`}
             handler={newValue => onChangeInput('value', newValue, index)}
           />

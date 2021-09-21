@@ -24,7 +24,7 @@ Default.args = {
       value: '200',
       claimedBy: 'gross',
       startDate: new Date(2021, 2, 1),
-      endDate: new Date(2021, 5, 1),
+      endDate: new Date(2021, 3, 1),
     },
     {
       id: 2,

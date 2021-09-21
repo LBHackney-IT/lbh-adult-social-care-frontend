@@ -1,8 +1,8 @@
 import DatePick from '../../DatePick';
 import RadioButton from '../../RadioButton';
 import React, { useState } from 'react';
-import { formatDate, incrementDate } from '../../../service/helpers';
-import { differenceInDays, differenceInWeeks, intervalToDuration } from 'date-fns';
+import { formatDate } from '../../../service/helpers';
+import { addDays, addWeeks, differenceInDays, differenceInWeeks, intervalToDuration } from 'date-fns';
 import BaseField from '../../baseComponents/BaseField';
 
 const EditElementDatePickers = ({
@@ -30,23 +30,14 @@ const EditElementDatePickers = ({
     }
   };
 
-  const minStartDate = previousEndDate && incrementDate({
-    incrementTime: { days: 1 },
-    date: previousEndDate
-  });
-  const minEndDate = dateFromWeeks && incrementDate({
-    incrementTime: { weeks: dateFromWeeks },
-    date: startDate,
-  });
-  const maxEndDate = dateToWeeks && incrementDate({
-    incrementTime: { weeks: dateToWeeks },
-    date: startDate,
-  });
+  const minStartDate = previousEndDate && addDays(previousEndDate, 1);
+  const minEndDate = dateFromWeeks && addWeeks(startDate, dateFromWeeks);
+  const maxEndDate = dateToWeeks && addWeeks(startDate, dateToWeeks);
   const daysFromPrevious = previousEndDate && differenceInDays(startDate, previousEndDate);
   const endDateDistance = intervalToDuration({ start: startDate, end: endDate });
   const weeksFromStart = differenceInWeeks(endDate, startDate);
-  const formattedStartDate = formatDate(startDate, '.');
-  const formattedEndDate = formatDate(endDate, '.');
+  const formattedStartDate = formatDate(startDate);
+  const formattedEndDate = formatDate(endDate);
   const isEditStartDate = !editedElements.includes(startDateId) && hasEditStyle;
   const isEditEndDate = !editedElements.includes(endDateId) && hasEditStyle;
   return (

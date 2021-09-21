@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import EditElementContent from './EditElementContent';
 import { Dialog } from '../../HackneyDS';
 
