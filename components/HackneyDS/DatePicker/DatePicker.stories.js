@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DatePicker from './index';
+import FormGroup from '../FormGroup';
 
 export default {
   title: 'Hackney Design System/DatePicker',
@@ -45,13 +46,17 @@ const Template = (args) => {
     }));
   }, [args.year, args.day, args.month]);
 
+  const error = day.error || month.error || year.error;
+
   return (
-    <DatePicker
-      {...args}
-      day={day}
-      month={month}
-      year={year}
-    />
+    <FormGroup label='Form label' error={error}>
+      <DatePicker
+        {...args}
+        day={day}
+        month={month}
+        year={year}
+      />
+    </FormGroup>
   );
 };
 
@@ -90,8 +95,6 @@ ErrorYear.args = {
 export const LabelHintError = Template.bind({});
 LabelHintError.args = {
   formId: 'label-hint-error',
-  label: 'Label',
-  hint: 'Hint',
   day: { label: 'Day' },
   month: { label: 'Month' },
   year: { error: 'Error year' }

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import FormGroup from '../FormGroup';
+import React, { useState } from 'react';
 import { DatePickerCalendarIcon } from '../../Icons';
 import DatePick from '../../DatePick';
 import { uniqueID } from '../../../service/helpers';
+import { Label } from '../index';
 
 export default function DatePicker ({
   className = '',
@@ -24,15 +24,13 @@ export default function DatePicker ({
     { name: 'year', id: `${formId}-year`, visible: true, ...year },
   ];
 
-  const error = day.error || month.error || year.error;
-
   const clickIcon = () => {
     setIsOpenCalendar(true);
     onClickIcon();
   };
 
   const changeCalendarInput = (date) => {
-    const values = [date.getDate(), date.getMonth() + 1, date.getFullYear()];
+    const values = [date.getDate(), date.getMonth() + 1, date.getFullYear().toString().slice(2, 4)];
     inputs.forEach((item, index) => {
       if (item.onChangeValue) {
         item.onChangeValue(values[index]);
@@ -42,68 +40,63 @@ export default function DatePicker ({
 
   const currentDate = new Date();
   const calendarValue = new Date(
-    year.value || currentDate.getFullYear(),
+    (year.value && `20${year.value}`) || currentDate.getFullYear(),
     month.value || currentDate.getMonth() + 1,
     day.value || currentDate.getDate(),
   );
 
   return (
-    <FormGroup className={className} label={label} error={error} hint={hint}>
-      <div className="govuk-date-input lbh-date-input" id={`${formId}-errors`}>
-        {inputs.map((input) => {
-          if (!input.visible) return null;
+    <div className={`${className} govuk-date-input lbh-date-input`} id={`${formId}-errors`}>
+      {label && <Label>{label}</Label>}
+      {hint && <Label>{hint}</Label>}
+      {inputs.map((input) => {
+        if (!input.visible) return null;
 
-          const errorClass = input.error ? 'govuk-input--error ' : '';
+        const errorClass = input.error ? 'govuk-input--error ' : '';
 
-          return (
-            <div key={input.id} className="govuk-date-input__item">
-              <label className="govuk-label govuk-date-input__label" htmlFor={input.id}>
-                {input.label}
-              </label>
-              <input
-                className={`${errorClass}govuk-input govuk-date-input__input ${input.className}`}
-                id={input.id}
-                value={input.value}
-                onChange={e => {
-                  if (input.onChange) {
-                    input.onChange(e);
-                  }
-                  if (input.onChangeValue) {
-                    let slicedValue;
-                    if (input.name === 'year') {
-                      slicedValue = e.target.value.slice(0, 4);
-                    } else {
-                      slicedValue = e.target.value.slice(0, 2);
-                    }
-                    input.onChangeValue(slicedValue);
-                  }
-                }}
-                min={1}
-                step={1}
-                name={input.name}
-                type="number"
-              />
-            </div>
-          );
-        })}
-        {IconComponent &&
-        <div id={calendarId} className='date-picker__calendar-container'>
-          <IconComponent onClick={clickIcon} className={iconClassName}/>
-          {isOpenCalendar &&
-          <DatePick
-            onClickOutside={() => {
-              if(isOpenCalendar) {
-                setIsOpenCalendar(false);
-              }
-            }}
-            startDate={calendarValue}
-            inline
-            dateValue={calendarValue}
-            setDate={changeCalendarInput}
-          />}
-        </div>
-        }
+        return (
+          <div key={input.id} className="govuk-date-input__item">
+            {input.label && <label className="govuk-label govuk-date-input__label" htmlFor={input.id}>
+              {input.label}
+            </label>}
+            <input
+              className={`${errorClass}govuk-input govuk-date-input__input ${input.className}`}
+              id={input.id}
+              value={input.value}
+              onChange={e => {
+                if (input.onChange) {
+                  input.onChange(e);
+                }
+                if (input.onChangeValue) {
+                  const slicedValue = e.target.value.slice(0, 2);
+                  input.onChangeValue(slicedValue);
+                }
+              }}
+              min={1}
+              step={1}
+              name={input.name}
+              type="number"
+            />
+          </div>
+        );
+      })}
+      {IconComponent &&
+      <div id={calendarId} className='date-picker__calendar-container'>
+        <IconComponent onClick={clickIcon} className={iconClassName}/>
+        {isOpenCalendar &&
+        <DatePick
+          onClickOutside={() => {
+            if (isOpenCalendar) {
+              setIsOpenCalendar(false);
+            }
+          }}
+          startDate={calendarValue}
+          inline
+          dateValue={calendarValue}
+          setDate={changeCalendarInput}
+        />}
       </div>
-    </FormGroup>
+      }
+    </div>
   );
 }
