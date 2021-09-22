@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { DatePickerCalendarIcon } from '../../Icons';
 import DatePick from '../../DatePick';
-import { uniqueID } from '../../../service/helpers';
 import { Label } from '../index';
 
 export default function DatePicker ({
@@ -17,7 +16,6 @@ export default function DatePicker ({
   hint,
 }) {
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
-  const [calendarId] = useState(uniqueID());
   const inputs = [
     { name: 'day', id: `${formId}-day`, visible: true, ...day },
     { name: 'month', id: `${formId}-month`, visible: true, ...month },
@@ -81,7 +79,7 @@ export default function DatePicker ({
         );
       })}
       {IconComponent &&
-      <div id={calendarId} className='date-picker__calendar-container'>
+      <div className='date-picker__calendar-container'>
         <IconComponent onClick={clickIcon} className={iconClassName}/>
         {isOpenCalendar &&
         <DatePick
