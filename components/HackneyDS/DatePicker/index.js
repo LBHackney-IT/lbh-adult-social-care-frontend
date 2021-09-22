@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FormGroup from '../FormGroup';
 import { DatePickerCalendarIcon } from '../../Icons';
 import DatePick from '../../DatePick';
+import { uniqueID } from '../../../service/helpers';
 
 export default function DatePicker ({
   className = '',
@@ -15,10 +16,8 @@ export default function DatePicker ({
   year,
   hint,
 }) {
-  const calendarContainerRef = useRef(null);
-  const [isMouseLeave, setMouseLeave] = useState(false);
-  const [isCalendarBlur, setIsCalendarBlur] = useState(false);
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
+  const [calendarId] = useState(uniqueID());
   const inputs = [
     { name: 'day', id: `${formId}-day`, visible: true, ...day },
     { name: 'month', id: `${formId}-month`, visible: true, ...month },
@@ -40,14 +39,6 @@ export default function DatePicker ({
       }
     });
   };
-
-  const onBlurCalendar = () => setIsCalendarBlur(true);
-
-  useEffect(() => {
-    if (IconComponent && isMouseLeave && isCalendarBlur) {
-      setIsOpenCalendar(false);
-    }
-  }, [IconComponent, isMouseLeave, isCalendarBlur]);
 
   const currentDate = new Date();
   const calendarValue = new Date(
@@ -96,24 +87,15 @@ export default function DatePicker ({
           );
         })}
         {IconComponent &&
-        <div
-          ref={calendarContainerRef}
-          onMouseLeave={() => {
-            setMouseLeave(true);
-            setIsCalendarBlur(false);
-            calendarContainerRef.current.focus();
-          }}
-          onMouseEnter={() => {
-            setMouseLeave(false);
-            setIsCalendarBlur(false);
-          }}
-          className='date-picker__calendar-container'
-          tabIndex={-1}
-          onBlur={onBlurCalendar}
-        >
+        <div id={calendarId} className='date-picker__calendar-container'>
           <IconComponent onClick={clickIcon} className={iconClassName}/>
           {isOpenCalendar &&
           <DatePick
+            onClickOutside={() => {
+              if(isOpenCalendar) {
+                setIsOpenCalendar(false);
+              }
+            }}
             startDate={calendarValue}
             inline
             dateValue={calendarValue}

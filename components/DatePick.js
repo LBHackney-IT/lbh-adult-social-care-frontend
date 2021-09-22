@@ -15,6 +15,7 @@ const DatePick = ({
   setError = () => {},
   className = '',
   disabled = false,
+  onClickOutside,
   dateFormat = dateStringFormats.dayMonthYear,
   label,
   minDate,
@@ -41,6 +42,7 @@ const DatePick = ({
           startDate={startDate}
           endDate={endDate}
           minDate={minDate}
+          onClickOutside={onClickOutside}
           maxDate={maxDate}
           selectsRange={selectsRange}
           customInput={<CustomInput />}
