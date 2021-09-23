@@ -4,6 +4,22 @@
 
 .govuk-date-input {
   font-size: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  & > .govuk-label {
+    width: 100%;
+  }
+
+  .govuk-date-input__item {
+    display: flex;
+    align-items: center;
+
+    .govuk-label.govuk-date-input__label {
+      margin: 0 8px 0 0;
+    }
+  }
 }
 
 .lbh-form-group .govuk-label.govuk-date-input__label {
@@ -35,10 +51,6 @@
   margin-bottom: 0;
   width: 49px;
   text-align: center;
-
-  &[name="year"] {
-    width: 61px;
-  }
 }
 
 .govuk-date-input__item {
