@@ -1,0 +1,20 @@
+.user-details {
+  display: flex;
+  flex-wrap: wrap;
+
+  & > h3 {
+    width: 100%;
+  }
+
+  & > div {
+    font-size: 19px;
+
+    &:not(&:last-of-type) {
+      margin-right: 32px;
+    }
+
+    p:first-of-type {
+      font-weight: bold;
+    }
+  }
+}

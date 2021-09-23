@@ -1,0 +1,24 @@
+.core-package-details {
+  .lbh-select {
+    width: 434px;
+
+    &:first-of-type {
+      margin-bottom: 16px;
+    }
+  }
+}
+
+.core-package-details__further-title {
+  margin-bottom: 16px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.core-package-details__further-sub-title {
+  margin-bottom: 16px;
+  font-size: 19px;
+}
+
+.core-package-details__checkboxes {
+  margin-bottom: 48px;
+}
