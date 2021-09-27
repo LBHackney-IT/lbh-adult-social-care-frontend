@@ -1,5 +1,5 @@
-import { Container } from '../HackneyDS/Layout/Container';
-import { Select } from '../HackneyDS';
+import { Container } from '../../HackneyDS/Layout/Container';
+import { Select } from '../../HackneyDS';
 import React from 'react';
 
 const CorePackageSelectors = ({

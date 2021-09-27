@@ -16,5 +16,9 @@
     p:first-of-type {
       font-weight: bold;
     }
+
+    p:last-of-type {
+      color: $lbh-gray1;
+    }
   }
 }

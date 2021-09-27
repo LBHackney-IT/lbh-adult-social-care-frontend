@@ -1,7 +1,7 @@
 import React from 'react';
-import { Header } from '../HackneyDS';
+import { Header } from '../../HackneyDS';
 
-const BuildCarePackageHeader = () => {
+const RemoveApprovalsHeader = () => {
   return (
     <Header bottomLines={false}>
       <p slot='service-name'>Adult Social Care</p>
@@ -12,4 +12,4 @@ const BuildCarePackageHeader = () => {
   );
 };
 
-export default BuildCarePackageHeader;
+export default RemoveApprovalsHeader;

@@ -53,11 +53,7 @@ const formatCareDatePeriod = (startDate, endDate) => {
   };
 };
 
-const formatDate = (
-  date,
-  sign = '/',
-  formatString = 'd.MM.Y'
-) => (date && format(new Date(date), formatString));
+const formatDate = ( date, formatString = 'dd.MM.yy') => date && format(new Date(date), formatString);
 
 const includeString = (mainString, checkString) => mainString && mainString.indexOf(checkString) > -1;
 

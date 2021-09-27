@@ -240,7 +240,7 @@ const ApproverHubPage = () => {
       getClassName: () => 'link-button',
     },
     lastUpdated: {
-      getValue: (value) => formatDate(value, '/'),
+      getValue: (value) => formatDate(value, 'dd/MM/yy'),
     },
     careValue: {
       getClassName: () => 'text-bold',

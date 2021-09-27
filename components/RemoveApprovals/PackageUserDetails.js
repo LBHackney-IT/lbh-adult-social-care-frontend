@@ -3,7 +3,7 @@ import { formatDate } from '../../service/helpers';
 import { getAgeFromDateString } from '../../api/Utils/FuncUtils';
 import React from 'react';
 
-const CorePackageUserDetails = ({ client, hackneyId, dateOfBirth, postcode }) => (
+const PackageUserDetails = ({ client, hackneyId, dateOfBirth, postcode }) => (
   <Container className='user-details remove-approvals__default-container'>
     <h3>Service user details</h3>
     <Container>
@@ -17,8 +17,8 @@ const CorePackageUserDetails = ({ client, hackneyId, dateOfBirth, postcode }) =>
     <Container>
       <p>Age</p>
       <p>
-        {formatDate(dateOfBirth, '/')}
-        {getAgeFromDateString(dateOfBirth)}
+        {formatDate(dateOfBirth, 'dd/MM/yy')}
+        {` (${getAgeFromDateString(dateOfBirth)}`}
       </p>
     </Container>
     <Container>
@@ -28,4 +28,4 @@ const CorePackageUserDetails = ({ client, hackneyId, dateOfBirth, postcode }) =>
   </Container>
 );
 
-export default CorePackageUserDetails;
+export default PackageUserDetails;

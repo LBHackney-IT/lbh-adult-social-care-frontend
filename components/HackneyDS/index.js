@@ -38,7 +38,7 @@ import { SimplePagination } from './SimplePagination';
 import { SummaryList } from './SummaryList';
 import { FileUpload } from './FileUpload/FileUpload';
 import { EditElementModal } from '../CareCharges/EditElementModal';
-import { CorePackageDetails } from '../CorePackageDetails';
+import { CorePackageDetails } from '../RemoveApprovals/CorePackageDetails';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 

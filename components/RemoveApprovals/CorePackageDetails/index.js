@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import BuildCarePackageHeader from '../BuildCarePackage/BuildCarePackageHeader';
-import { Button, Checkbox, Container, ErrorMessage } from '../HackneyDS';
+import RemoveApprovalsHeader from '../RemoveApprovalsHeader/RemoveApprovalsHeader';
+import { Button, Checkbox, Container, ErrorMessage } from '../../HackneyDS';
 import { object, string } from 'yup';
-import CorePackageUserDetails from './CorePackageUserDetails';
+import PackageUserDetails from '../PackageUserDetails';
 import CorePackageSelectors from './CorePackageSelectors';
 
 export const CorePackageDetails = ({
@@ -73,13 +73,13 @@ export const CorePackageDetails = ({
 
   return (
     <div className='core-package-details'>
-      <BuildCarePackageHeader/>
+      <RemoveApprovalsHeader/>
       <Container className='remove-approvals__container'>
-        <Container className='remove-approvals-header remove-approvals__default-container'>
+        <Container className='remove-approvals__container-header remove-approvals__default-container'>
           <p>Build a care package</p>
           <h2>Core package details</h2>
         </Container>
-        <CorePackageUserDetails {...userDetails} />
+        <PackageUserDetails {...userDetails} />
         <CorePackageSelectors
           packageTypeOptions={packageTypeOptions}
           packageType={packageType}
