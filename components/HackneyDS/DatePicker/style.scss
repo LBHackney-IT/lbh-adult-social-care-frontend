@@ -2,6 +2,10 @@
   display: block;
 }
 
+.govuk-date-input__hint {
+  width: 100%;
+}
+
 .govuk-date-input {
   font-size: 0;
   display: flex;
@@ -70,6 +74,10 @@
 .date-picker__calendar-container {
   display: inline-block;
   position: relative;
+
+  & > svg:hover {
+    cursor: pointer;
+  }
 
   .react-date-picker {
     position: absolute;

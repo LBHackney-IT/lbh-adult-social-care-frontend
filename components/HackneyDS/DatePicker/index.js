@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { DatePickerCalendarIcon } from '../../Icons';
 import DatePick from '../../DatePick';
-import { Label } from '../index';
+import { Label, Hint } from '../index';
 
 export default function DatePicker ({
   className = '',
   label,
   formId,
+  hint,
   day,
   month,
   IconComponent = DatePickerCalendarIcon,
   iconClassName,
   onClickIcon = () => {},
   year,
-  hint,
 }) {
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
   const inputs = [
@@ -47,8 +47,8 @@ export default function DatePicker ({
 
   return (
     <div className={`${className} govuk-date-input lbh-date-input`} id={`${formId}-errors`}>
-      {label && <Label>{label}</Label>}
-      {hint && <Label>{hint}</Label>}
+      {label && <Label className='govuk-date-input__label'>{label}</Label>}
+      {hint && <Hint className='govuk-date-input__hint'>{hint}</Hint>}
       {inputs.map((input) => {
         if (!input.visible) return null;
 
