@@ -108,6 +108,10 @@
     display: flex;
     flex-direction: column;
 
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+
     .care-charges-modal__value {
       margin-bottom: 16px;
 
