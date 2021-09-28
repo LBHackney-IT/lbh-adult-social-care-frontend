@@ -14,12 +14,12 @@ const Template = (args) => {
   const [hasFNCAssessment, setHasFNCAssessment] = useState(hasFNCAssessment || '');
   const [uploadFNCAssessment, setUploadFNCAssessment] = useState(null);
 
-  const getFiles = (files) => setUploadFNCAssessment(files);
+  const getFile = (file) => setUploadFNCAssessment(file);
 
   return (
     <FundedNursingCare
       {...args}
-      getFiles={getFiles}
+      getFile={getFile}
       setHasFNCAssessment={setHasFNCAssessment}
       hasFNCAssessment={hasFNCAssessment}
       setUploadFNCAssessment={setUploadFNCAssessment}

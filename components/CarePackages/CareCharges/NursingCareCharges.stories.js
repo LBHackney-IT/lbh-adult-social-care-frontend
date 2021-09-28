@@ -74,6 +74,7 @@ AfterCareChargeTeam.args = {
       startDate: faker.date.past(20),
       endDate: faker.date.future(20),
       cost: -200,
+      creditRiskAdjustment: 'net-off',
     },
   ],
 };

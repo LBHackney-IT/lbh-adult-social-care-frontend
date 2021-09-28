@@ -29,6 +29,19 @@ const NursingCareChargesStatic = ({ collectingCharges, tableData }) => {
     {
       Header: 'Element',
       accessor: 'element',
+      Cell: ({ value, row: { original } }) => (
+        <p>
+          {value}
+          {original?.creditRiskAdjustment &&
+            <>
+              <br/>
+              <span className='hackney-text-green font-weight-bold font-size-12px'>
+                {formatStatus(original.creditRiskAdjustment).toUpperCase()}
+              </span>
+            </>
+          }
+        </p>
+      ),
       className: 'absorb-width',
     },
     {

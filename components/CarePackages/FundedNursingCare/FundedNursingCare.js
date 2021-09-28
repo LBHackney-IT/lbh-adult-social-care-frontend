@@ -9,7 +9,7 @@ export const FundedNursingCare = ({
   uploadFNCAssessment,
   setUploadFNCAssessment,
   tableData,
-  getFiles,
+  getFile,
 }) => {
   const [urlFile, setUrlFile] = useState(null);
 
@@ -18,8 +18,6 @@ export const FundedNursingCare = ({
       setUrlFile(window.URL.revokeObjectURL(uploadFNCAssessment));
     }
   }, [uploadFNCAssessment]);
-
-  console.log(hasFNCAssessment);
 
   const fileName = uploadFNCAssessment && (uploadFNCAssessment?.name || uploadFNCAssessment[0]?.name);
 
@@ -53,7 +51,7 @@ export const FundedNursingCare = ({
                 <Link className='file-link link-button text-blue' href={urlFile || fileLink}>{fileName}</Link>
                 <p className='link-button text-black' onClick={() => setUploadFNCAssessment(null)}>Remove</p>
               </Container>
-              : <FileUpload className='funded-nursing-care__file-upload' />
+              : <FileUpload getFile={getFile} className='funded-nursing-care__file-upload' />
             }
           </Container>
         }
