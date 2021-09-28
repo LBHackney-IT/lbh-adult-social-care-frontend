@@ -25,13 +25,13 @@ const AddElementContent = ({
     setInputHasErrors(false);
     const newInput = { ...inputs[index] };
     newInput[field] = value;
-    if(field === 'startDate') {
+    if (field === 'startDate') {
       const { dateFromWeeks } = newInput;
       const minEndDate = dateFromWeeks && incrementDate({
         incrementTime: { weeks: dateFromWeeks },
         date: value,
       });
-      if(dateFromWeeks) {
+      if (dateFromWeeks) {
         newInput.endDate = minEndDate;
       }
     }
@@ -57,13 +57,13 @@ const AddElementContent = ({
 
     inputs.forEach((input, index) => {
       const { validFields, hasErrors: hasLocalErrors } = formValidator({ form: input });
-      if(hasLocalErrors) {
+      if (hasLocalErrors) {
         hasErrors = true;
         newInputErrors.splice(index, 1, validFields);
       }
     });
 
-    if(hasErrors) {
+    if (hasErrors) {
       setInputHasErrors(true);
       setInputErrors(newInputErrors);
       return;
@@ -73,8 +73,8 @@ const AddElementContent = ({
   };
 
   useEffect(() => {
-    if(activeElements?.length) {
-      setInputs(activeElements.map((activeElement) => ({...activeElement, period: 'fixed-period'})));
+    if (activeElements?.length) {
+      setInputs(activeElements.map((activeElement) => ({ ...activeElement, period: 'fixed-period' })));
 
       setInputErrors(activeElements.map(() => ({
         ...initialInputs,
@@ -84,9 +84,14 @@ const AddElementContent = ({
 
   return (
     <>
-      <CareChargesModalTitle title={headerText} />
-      <CareChargesInfoTitle title='NEW ELEMENT' />
-      <CareChargesInfoEdited hasEditStyle={false} elements={inputs} inputErrors={inputErrors} onChangeInput={onChangeInput} />
+      <CareChargesModalTitle title={headerText}/>
+      <CareChargesInfoTitle title='NEW ELEMENT'/>
+      <CareChargesInfoEdited
+        hasEditStyle={false}
+        elements={inputs}
+        inputErrors={inputErrors}
+        onChangeInput={onChangeInput}
+      />
       {inputHasErrors && <ErrorMessage>There some errors above</ErrorMessage>}
       <CareChargesModalActions
         actions={[
@@ -95,7 +100,7 @@ const AddElementContent = ({
         ]}
       />
     </>
-  )
+  );
 };
 
 export default AddElementContent;

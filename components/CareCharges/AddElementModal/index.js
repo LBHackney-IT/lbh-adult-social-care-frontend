@@ -28,5 +28,5 @@ export const AddElementModal = ({ isOpened = true, activeElements = testActiveEl
         headerText='Set up a new element'
       />
     </Dialog>
-  )
+  );
 };

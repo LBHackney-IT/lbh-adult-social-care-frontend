@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import EditElementContent from './EditElementContent';
-import { Dialog } from '../../HackneyDS'
+import { Dialog } from '../../HackneyDS';
 
 const testActiveElements = [
   {
@@ -46,5 +46,5 @@ export const EditElementModal = ({ isOpened = true, activeElements = testActiveE
         headerText='Edit element'
       />
     </Dialog>
-  )
+  );
 };

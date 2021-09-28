@@ -1,8 +1,8 @@
 import DatePick from '../../DatePick';
 import RadioButton from '../../RadioButton';
 import React, { useState } from 'react';
-import { formatDate, incrementDate } from 'service/helpers';
-import { differenceInDays, differenceInWeeks, intervalToDuration } from 'date-fns';
+import { formatDate } from '../../../service/helpers';
+import { addDays, addWeeks, differenceInDays, differenceInWeeks, intervalToDuration } from 'date-fns';
 import BaseField from '../../baseComponents/BaseField';
 
 const EditElementDatePickers = ({
@@ -23,30 +23,21 @@ const EditElementDatePickers = ({
   const [editedElements, setEditedElements] = useState([]);
 
   const editDateAction = (isEdit, id) => {
-    if(isEdit) {
+    if (isEdit) {
       setEditedElements(prevState => ([...prevState, id]));
     } else {
       setEditedElements(elements.filter(item => item !== id));
     }
-  }
+  };
 
-  const minStartDate = previousEndDate && incrementDate({
-    incrementTime: { days: 1 },
-    date: previousEndDate
-  });
-  const minEndDate = dateFromWeeks && incrementDate({
-    incrementTime: { weeks: dateFromWeeks },
-    date: startDate,
-  });
-  const maxEndDate = dateToWeeks && incrementDate({
-    incrementTime: { weeks: dateToWeeks },
-    date: startDate,
-  });
+  const minStartDate = previousEndDate && addDays(previousEndDate, 1);
+  const minEndDate = dateFromWeeks && addWeeks(startDate, dateFromWeeks);
+  const maxEndDate = dateToWeeks && addWeeks(startDate, dateToWeeks);
   const daysFromPrevious = previousEndDate && differenceInDays(startDate, previousEndDate);
   const endDateDistance = intervalToDuration({ start: startDate, end: endDate });
   const weeksFromStart = differenceInWeeks(endDate, startDate);
-  const formattedStartDate = formatDate(startDate, '.');
-  const formattedEndDate = formatDate(endDate, '.');
+  const formattedStartDate = formatDate(startDate);
+  const formattedEndDate = formatDate(endDate);
   const isEditStartDate = !editedElements.includes(startDateId) && hasEditStyle;
   const isEditEndDate = !editedElements.includes(endDateId) && hasEditStyle;
   return (
@@ -97,7 +88,7 @@ const EditElementDatePickers = ({
           <>
             <RadioButton
               options={[
-                { value: 'ongoing', text: 'Ongoing'},
+                { value: 'ongoing', text: 'Ongoing' },
                 { value: 'fixed-period', text: 'Fixed Period' },
               ]}
               selectedValue={period}
@@ -107,28 +98,28 @@ const EditElementDatePickers = ({
               }}
             />
             {period === 'fixed-period' &&
-              <div className='edit-element__end-date'>
-                <DatePick
-                  error={inputErrors[index].endDate}
-                  setDate={(newValue) => onChangeInput('endDate', newValue, index)}
-                  dateValue={endDate}
-                  label='End date'
-                  minDate={minEndDate}
-                  maxDate={maxEndDate}
-                />
-                <BaseField label=''>
-                  <p className='edit-element__end-date-distance'>
-                    ({endDateDistance.months} {endDateDistance.months === 1 ? 'month' : 'months'} {endDateDistance.days}
-                    {endDateDistance.days === 1 ? ' day' : ' days'})
-                  </p>
-                </BaseField>
-              </div>
+            <div className='edit-element__end-date'>
+              <DatePick
+                error={inputErrors[index].endDate}
+                setDate={(newValue) => onChangeInput('endDate', newValue, index)}
+                dateValue={endDate}
+                label='End date'
+                minDate={minEndDate}
+                maxDate={maxEndDate}
+              />
+              <BaseField label=''>
+                <p className='edit-element__end-date-distance'>
+                  ({endDateDistance.months} {endDateDistance.months === 1 ? 'month' : 'months'} {endDateDistance.days}
+                  {endDateDistance.days === 1 ? ' day' : ' days'})
+                </p>
+              </BaseField>
+            </div>
             }
           </>
         )
       }
     </div>
-  )
+  );
 };
 
 export default EditElementDatePickers;

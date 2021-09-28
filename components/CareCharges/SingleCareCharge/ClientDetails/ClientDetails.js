@@ -1,6 +1,6 @@
 import { differenceInYears, format } from 'date-fns';
 import React from 'react';
-import { Heading, Label, HorizontalSeparator, VerticalSeparator, Container } from '../../HackneyDS';
+import { Heading, Label, HorizontalSeparator, VerticalSeparator, Container } from '../../../HackneyDS';
 import { ClientStatus } from '../ClientStatus/ClientStatus';
 
 export const ClientDetails = ({ clientDetails }) =>

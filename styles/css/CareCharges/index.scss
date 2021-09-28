@@ -13,8 +13,8 @@
     padding: 32px;
 
     @media (max-width: 868px) {
-      max-width: 90%;
       width: initial;
+      max-width: 90%;
     }
 
     .care-charges-modal__title {
@@ -63,9 +63,15 @@
   }
 
   .care-charges-modal__actions {
+    @include media-mobile {
+      display: flex;
+      flex-direction: column;
+    }
+
     button {
       height: 42px;
     }
+
     button:not(button:first-of-type) {
       margin-left: 10px;
 
@@ -105,6 +111,10 @@
     margin-bottom: 32px;
     display: flex;
     flex-direction: column;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
 
     .care-charges-modal__value {
       margin-bottom: 16px;
