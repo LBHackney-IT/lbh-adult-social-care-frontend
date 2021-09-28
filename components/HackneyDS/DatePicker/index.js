@@ -60,13 +60,14 @@ export default function DatePicker ({
             <input
               className={`${errorClass}govuk-input govuk-date-input__input ${input.className}`}
               id={input.id}
-              value={input.value}
+              value={`00${input.value}`.slice(-2)}
               onChange={e => {
+                console.log(e.target.value);
                 if (input.onChange) {
                   input.onChange(e);
                 }
                 if (input.onChangeValue) {
-                  const slicedValue = e.target.value.slice(0, 2);
+                  const slicedValue = e.target.value.slice(1, 3);
                   input.onChangeValue(slicedValue);
                 }
               }}
