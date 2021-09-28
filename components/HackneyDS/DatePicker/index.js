@@ -36,11 +36,13 @@ export default function DatePicker ({
     });
   };
 
+  const replaceFirstZero = (string) => string && (string[0] === '0' ? string.replace('0', '') : string);
+
   const currentDate = new Date();
   const calendarValue = new Date(
     (year.value && `20${year.value}`) || currentDate.getFullYear(),
-    month.value || currentDate.getMonth() + 1,
-    day.value || currentDate.getDate(),
+    month.value ? replaceFirstZero(month.value) - 1 : currentDate.getMonth(),
+    day.value ? replaceFirstZero(day.value) : currentDate.getDate(),
   );
 
   return (
@@ -62,7 +64,6 @@ export default function DatePicker ({
               id={input.id}
               value={`00${input.value}`.slice(-2)}
               onChange={e => {
-                console.log(e.target.value);
                 if (input.onChange) {
                   input.onChange(e);
                 }
