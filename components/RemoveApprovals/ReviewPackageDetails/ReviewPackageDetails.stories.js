@@ -2,7 +2,7 @@ import React from 'react';
 import { ReviewPackageDetails } from './index';
 
 export default {
-  title: 'Hackney Design System/Remove Approvals/ReviewPackageDetails',
+  title: 'Pages/Remove Approvals/ReviewPackageDetails',
   component: ReviewPackageDetails,
   argTypes: {
     controls: null,
@@ -58,11 +58,13 @@ const testPackageInfoItems = [
     id: 2,
     items: [
       {
+        id: '1',
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
         price: 300,
       },
       {
+        id: '2',
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
         price: 300,
@@ -76,6 +78,7 @@ const testPackageInfoItems = [
     id: 3,
     items: [
       {
+        id: '3',
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
         price: 187.60,
@@ -89,6 +92,7 @@ const testPackageInfoItems = [
     id: 4,
     items: [
       {
+        id: '5',
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
         price: 100.50,

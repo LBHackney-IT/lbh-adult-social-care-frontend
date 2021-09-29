@@ -20,9 +20,9 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
 
   const goBack = () => router.back();
 
-  const editItem = itemId => alert(`package info id: ${itemId}`);
+  const editItem = itemId => alert(`Edit package info id: ${itemId}`);
 
-  const removeItem = itemId => alert(`package info id: ${itemId}`);
+  const removeItem = itemId => alert(`Remove package info id: ${itemId}`);
 
   const submitForApproval = () => alert('Submit for approval');
 
@@ -38,7 +38,7 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
         <Container className='review-package-details__main-container'>
           <Container className='review-package-details__links'>
             {links.map(link => (
-              <p>— <Link href={link.href}>{link.text}</Link></p>
+              <p key={link.text}>— <Link href={link.href}>{link.text}</Link></p>
             ))}
           </Container>
           <Container className='review-package-details__cost-info'>
@@ -55,7 +55,7 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
             <Container className='review-package-details__summary'>
               <h3 className='font-weight-bold'>Summary</h3>
               {summary.map(item => (
-                <p className={item.className || ''}>
+                <p key={item.key} className={item.className || ''}>
                   {`${item.key}`}
                   <span className='text-lbh-f01'>{currency.euro}{item.value}</span>
                 </p>
