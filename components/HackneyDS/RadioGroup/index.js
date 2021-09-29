@@ -3,12 +3,12 @@ import FormGroup from '../FormGroup';
 import RadioItem from '../RadioItem';
 import { ErrorMessage, HorizontalSeparator, Label } from '../index';
 
-export default function RadioGroup ({
+export default function RadioGroup({
   className = '',
   items = [],
   value,
   inline = false,
-  title,
+  label,
   error,
   handle,
   name,
@@ -20,13 +20,13 @@ export default function RadioGroup ({
   const smallRadioGroupClass = small ? ' govuk-radios--small' : '';
 
   return (
-    <FormGroup title={title} error={error} className={outerClassName} hint={hint}>
-      <div className={`govuk-radios lbh-radios${inlineClassName}${smallRadioGroupClass}`}>
-        {items.map((item) => {
+    <FormGroup label={label} error={error} className={outerClassName} hint={hint}>
+      <div className={`govuk-radios lbh-radios${outerClassName}${inlineClassName}${smallRadioGroupClass}`}>
+      {items.map((item) => {
           const { condition } = item;
           const errorClass = condition?.error ? ' govuk-input--error' : '';
 
-          if (item.divider) {
+          if(item.divider) {
             return (
               <div key={item.id} className="govuk-radios__divider">{item.divider}</div>
             );
@@ -49,7 +49,7 @@ export default function RadioGroup ({
                 <div className="govuk-radios__conditional govuk-radios__conditional--hidden">
                   {condition.label && <Label htmlFor={condition.id}>{condition.label}</Label>}
                   {condition.error && <ErrorMessage>{condition.error}</ErrorMessage>}
-                  <HorizontalSeparator height='10px'/>
+                  <HorizontalSeparator height='10px' />
                   <input
                     className={`govuk-input govuk-!-width-one-third${errorClass}`}
                     name={condition.id}

@@ -101,7 +101,7 @@ Divider.args = {
 export const AllFieldsetAttributes = Template.bind({});
 AllFieldsetAttributes.args = {
   error: 'Error',
-  title: 'Title',
+  label: 'Label',
   hint: 'Hint',
   name: 'radioGroup',
   items: [
@@ -113,7 +113,7 @@ AllFieldsetAttributes.args = {
 
 export const ConditionComponent = Template.bind({});
 ConditionComponent.args = {
-  title: 'Title',
+  label: 'Label',
   name: 'radioGroup',
   items: [
     {
@@ -145,7 +145,7 @@ ConditionComponent.args = {
 
 export const RadioGroupSmall = Template.bind({});
 RadioGroupSmall.args = {
-  title: 'Title',
+  label: 'Label',
   small: true,
   name: 'radioGroup',
   items: [
