@@ -9,7 +9,7 @@ export default function FormGroup ({ children = [], label, hint, error, classNam
   return (
     <div className={`govuk-form-group lbh-form-group${errorClassList}${outerClassName}`}>
       <fieldset className="govuk-fieldset lbh-fieldset">
-        <legend className="govuk-fieldset__legend">{label}</legend>
+        <label className="govuk-fieldset__legend">{label}</label>
         <span className="govuk-hint lbh-hint">{hint}</span>
         <span className="govuk-error-message">
           <span className="govuk-visually-hidden">Error:</span>

@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { DatePickerCalendarIcon } from '../../Icons';
 import DatePick from '../../DatePick';
-import { Label } from '../index';
+import { Label, Hint } from '../index';
 
 export default function DatePicker ({
   className = '',
   label,
   formId,
+  hint,
   day,
   month,
   IconComponent = DatePickerCalendarIcon,
   iconClassName,
   onClickIcon = () => {},
   year,
-  hint,
 }) {
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
   const inputs = [
@@ -36,17 +36,19 @@ export default function DatePicker ({
     });
   };
 
+  const replaceFirstZero = (string) => string && (string[0] === '0' ? string.replace('0', '') : string);
+
   const currentDate = new Date();
   const calendarValue = new Date(
     (year.value && `20${year.value}`) || currentDate.getFullYear(),
-    month.value || currentDate.getMonth() + 1,
-    day.value || currentDate.getDate(),
+    month.value ? replaceFirstZero(month.value) - 1 : currentDate.getMonth(),
+    day.value ? replaceFirstZero(day.value) : currentDate.getDate(),
   );
 
   return (
     <div className={`${className} govuk-date-input lbh-date-input`} id={`${formId}-errors`}>
-      {label && <Label>{label}</Label>}
-      {hint && <Label>{hint}</Label>}
+      {label && <Label className='govuk-date-input__label'>{label}</Label>}
+      {hint && <Hint className='govuk-date-input__hint'>{hint}</Hint>}
       {inputs.map((input) => {
         if (!input.visible) return null;
 
@@ -60,13 +62,13 @@ export default function DatePicker ({
             <input
               className={`${errorClass}govuk-input govuk-date-input__input ${input.className}`}
               id={input.id}
-              value={input.value}
+              value={`00${input.value}`.slice(-2)}
               onChange={e => {
                 if (input.onChange) {
                   input.onChange(e);
                 }
                 if (input.onChangeValue) {
-                  const slicedValue = e.target.value.slice(0, 2);
+                  const slicedValue = e.target.value.slice(1, 3);
                   input.onChangeValue(slicedValue);
                 }
               }}
