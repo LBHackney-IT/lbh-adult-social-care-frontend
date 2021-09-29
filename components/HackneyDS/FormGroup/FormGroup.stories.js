@@ -19,7 +19,7 @@ Default.args = {
       <Input label="ex" error="Field error" hint="Field hint" handler={() => {}} id="ex"/>
     </>
   ).props.children,
-  title: 'National Insurance number',
+  label: 'National Insurance number',
   hint: 'It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.',
   error: 'Error message goes here',
 };
