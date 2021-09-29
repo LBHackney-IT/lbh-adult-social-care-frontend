@@ -49,7 +49,7 @@ const Template = (args) => {
   const error = day.error || month.error || year.error;
 
   return (
-    <FormGroup label='Form label' error={error}>
+    <FormGroup label='Form label' hint='Form hint' error={error}>
       <DatePicker
         {...args}
         day={day}
@@ -95,7 +95,9 @@ ErrorYear.args = {
 export const LabelHintError = Template.bind({});
 LabelHintError.args = {
   formId: 'label-hint-error',
+  hint: 'Date picker hint',
+  label: 'Date picker label',
   day: { label: 'Day' },
   month: { label: 'Month' },
-  year: { error: 'Error year' }
+  year: { error: 'Error year', label: 'Year' }
 };
