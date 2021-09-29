@@ -8,7 +8,7 @@ export default function RadioGroup({
   items = [],
   value,
   inline = false,
-  title,
+  label,
   error,
   handle,
   name,
@@ -20,7 +20,7 @@ export default function RadioGroup({
   const smallRadioGroupClass = small ? ' govuk-radios--small' : '';
 
   return (
-    <FormGroup title={title} error={error} hint={hint}>
+    <FormGroup label={label} error={error} hint={hint}>
       <div className={`govuk-radios lbh-radios${outerClassName}${inlineClassName}${smallRadioGroupClass}`}>
         {items.map((item) => {
           const { condition } = item;
