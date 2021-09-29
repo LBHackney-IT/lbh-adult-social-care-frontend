@@ -41,7 +41,7 @@ const CancelElementContent = ({
       <div className={canceledContribution ? '' : 'opacity-3'}>
         <CareChargesInfoStatic activeElements={secondElement} />
       </div>
-      <p className='warning-text has-text-weight-bold mb-5'>
+      <p className='text-warning has-text-weight-bold'>
         Warning: This will cancel the element, all<br/>
         transactions will be reversed
       </p>

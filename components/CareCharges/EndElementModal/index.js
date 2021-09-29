@@ -32,7 +32,7 @@ export const EndElementModal = ({ isOpened = true, activeElements = testActiveEl
   const closeModal = () => setOpenedModal(false);
 
   return (
-    <Dialog className='care-charges-modal' isOpen={isOpened || openedModal} onClose={closeModal}>
+    <Dialog className='care-charges-modal end-element-modal' isOpen={isOpened || openedModal} onClose={closeModal}>
       <EndElementContent
         closeModal={closeModal}
         activeElements={activeElements}

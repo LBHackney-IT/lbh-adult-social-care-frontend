@@ -1,3 +1,4 @@
+@import "cancel-element-modal";
 .care-charges-modal {
   * {
     box-sizing: border-box;
@@ -50,6 +51,11 @@
       @include media-mobile {
         margin-right: 8px;
       }
+    }
+
+    p:last-of-type {
+      color: $lbh-secondary-text-colour;
+      font-size: 14px;
     }
   }
 
@@ -175,6 +181,12 @@
       margin-top: 24px;
       margin-left: 24px;
       color: $lbh-secondary-text-colour;
+    }
+  }
+
+  &.end-element-modal {
+    .edit-element__end-date {
+      margin-top: 8px;
     }
   }
 }

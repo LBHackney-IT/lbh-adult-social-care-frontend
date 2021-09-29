@@ -39,6 +39,8 @@ import { SummaryList } from './SummaryList';
 import { FileUpload } from './FileUpload/FileUpload';
 import { EditElementModal } from '../CareCharges/EditElementModal';
 import { AddElementModal } from '../CareCharges/AddElementModal';
+import { CancelElementModal } from '../CareCharges/CancelElementModal';
+import { EndElementModal } from '../CareCharges/EndElementModal';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 
@@ -86,4 +88,6 @@ export {
   Container,
   EditElementModal,
   AddElementModal,
+  CancelElementModal,
+  EndElementModal,
 };

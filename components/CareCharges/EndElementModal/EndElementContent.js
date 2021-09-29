@@ -40,7 +40,7 @@ const EndElementContent = ({ activeElements, headerText }) => {
       <CareChargesInfoTitle title='Elements to be ended'/>
       <CareChargesInfoStatic activeElements={activeElements.slice(0, 1)}>
         {endDateDistance &&
-        <div className='edit-element__end-date mt-4'>
+        <div className='edit-element__end-date'>
           <DatePick
             setDate={setEndDate}
             dateValue={endDate}
