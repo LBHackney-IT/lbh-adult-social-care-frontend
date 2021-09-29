@@ -34,7 +34,7 @@ export const CancelElementModal = ({ isOpened = true, firstElement = testFirstEl
   const closeModal = () => setOpenedModal(false);
 
   return (
-    <Dialog className='care-charges-modal' isOpen={isOpened || openedModal} onClose={closeModal}>
+    <Dialog className='care-charges-modal cancel-element-modal' isOpen={isOpened || openedModal} onClose={closeModal}>
       <CancelElementContent
         closeModal={closeModal}
         firstElement={firstElement}

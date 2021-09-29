@@ -1,3 +1,4 @@
+@import "cancel-element-modal";
 .care-charges-modal {
   * {
     box-sizing: border-box;
@@ -66,10 +67,6 @@
     @include media-mobile {
       display: flex;
       flex-direction: column;
-    }
-
-    button {
-      height: 42px;
     }
 
     button:not(button:first-of-type) {
@@ -199,3 +196,4 @@
     }
   }
 }
+
