@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heading, Label, HorizontalSeparator, VerticalSeparator, Link, FileUpload, Container } from '../../HackneyDS';
+import { Heading, Label, HorizontalSeparator, VerticalSeparator, Link, FileUpload, Container } from '../../../HackneyDS';
 
 export const PackageDetails = ({ packageDetails }) =>
   packageDetails ? (

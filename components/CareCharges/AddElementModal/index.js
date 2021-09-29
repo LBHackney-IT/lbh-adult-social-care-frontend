@@ -2,20 +2,7 @@ import React, { useState } from 'react';
 import AddElementContent from './AddElementContent';
 import { Dialog } from '../../HackneyDS';
 
-const testActiveElements = [
-  {
-    id: 1,
-    name: 'Residential SU contribution',
-    property: 'Without Property',
-    dateFromWeeks: 0,
-    value: '200',
-    claimedBy: 'gross',
-    startDate: new Date(),
-    endDate: new Date(),
-  },
-];
-
-export const AddElementModal = ({ isOpened = true, activeElements = testActiveElements }) => {
+export const AddElementModal = ({ isOpened = true, activeElements }) => {
   const [openedModal, setOpenedModal] = useState(true);
 
   const closeModal = () => setOpenedModal(false);
@@ -28,5 +15,5 @@ export const AddElementModal = ({ isOpened = true, activeElements = testActiveEl
         headerText='Set up a new element'
       />
     </Dialog>
-  )
+  );
 };

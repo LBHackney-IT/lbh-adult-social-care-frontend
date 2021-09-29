@@ -11,6 +11,6 @@ export default {
 
 const Template = (args) => <SingleCareCharge {...args} />;
 
-export const Default = Template.bind({});
-Default.args = {
+export const Page = Template.bind({});
+Page.args = {
 };

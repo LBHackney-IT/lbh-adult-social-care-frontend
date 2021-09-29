@@ -7,9 +7,9 @@ export const Input = ({
   type = 'text',
   hint,
   placeholder = '',
-  className = '',
   error,
   ref,
+  className,
   value,
   handler,
 }) => {

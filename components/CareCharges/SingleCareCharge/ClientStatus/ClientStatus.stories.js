@@ -2,7 +2,7 @@ import React from 'react';
 import { ClientStatus } from './ClientStatus';
 
 export default {
-  title: 'Pages/CareCharges/ClientStatus',
+  title: 'Pages/CareCharges/SingleCareCharge/ClientStatus',
   component: ClientStatus,
   argTypes: {
     ClientStatus: {},
