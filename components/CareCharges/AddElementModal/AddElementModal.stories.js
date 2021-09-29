@@ -5,7 +5,7 @@ export default {
   title: 'Pages/CareCharges/AddElementModal',
   component: AddElementModal,
   argTypes: {
-    EditElementModal: {},
+    AddElementModal: {},
   },
 };
 
@@ -13,7 +13,6 @@ const Template = (args) => <AddElementModal {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  isEditStep: true,
   activeElements: [
     {
       id: 1,
