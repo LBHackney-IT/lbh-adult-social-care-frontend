@@ -28,8 +28,8 @@ const testSupportReasonOptions = [
 ];
 
 const testPackageTypeOptions = [
-  { value: 'package-type-1', text: 'Package type 1' },
-  { value: 'package-type-2', text: 'Package type 2' }
+  { value: 'package-type-1', label: 'Package type', text: 'Package type 1' },
+  { value: 'package-type-2', label: 'Primary support reason', text: 'Package type 2' }
 ];
 
 const testCheckboxOptions = [

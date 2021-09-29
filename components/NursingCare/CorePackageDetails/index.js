@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import BuildCarePackageHeader from '../../BuildCarePackage/BuildCarePackageHeader';
-import { Button, Checkbox, Container, ErrorMessage, HorizontalSeparator, RadioGroup, Select } from '../../HackneyDS';
+import {
+  Button,
+  Checkbox,
+  Container,
+  ErrorMessage,
+  HorizontalSeparator,
+  Label,
+  RadioGroup,
+  Select
+} from '../../HackneyDS';
 import { formatDate } from '../../../service/helpers';
 import { getAgeFromDateString } from '../../../api/Utils/FuncUtils';
 import { object, string } from 'yup';
@@ -112,7 +121,8 @@ export const CorePackageDetails = ({
         </Container>
         <Container className=' remove-approvals__default-container'>
           <h3>Package type</h3>
-          <Container display='flex' flexDirection='column'>
+          <Container className='remove-approvals__selectors' display='flex' flexDirection='column'>
+            <Label>Package type</Label>
             <Select
               error={errors.packageType}
               onChange={({ target: { value } }) => {
@@ -122,6 +132,7 @@ export const CorePackageDetails = ({
               value={packageType.value}
               options={packageTypeOptions}
             />
+            <Label>Primary support reason</Label>
             <Select
               error={errors.supportReason}
               onChange={({ target: { value } }) => {
