@@ -18,7 +18,7 @@ const EditElementDatePickers = ({
   inputErrors,
   onChangeInput,
   elements,
-  withoutEdit,
+  hasEditStyle,
 }) => {
   const [editedElements, setEditedElements] = useState([]);
 
@@ -38,8 +38,8 @@ const EditElementDatePickers = ({
   const weeksFromStart = differenceInWeeks(endDate, startDate);
   const formattedStartDate = formatDate(startDate);
   const formattedEndDate = formatDate(endDate);
-  const isEditStartDate = !editedElements.includes(startDateId) && !withoutEdit;
-  const isEditEndDate = !editedElements.includes(endDateId) && !withoutEdit;
+  const isEditStartDate = !editedElements.includes(startDateId) && hasEditStyle;
+  const isEditEndDate = !editedElements.includes(endDateId) && hasEditStyle;
   return (
     <div className='care-charges-modal__date-pickers'>
       {isEditStartDate ?
