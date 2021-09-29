@@ -19,8 +19,6 @@ export const FundedNursingCare = ({
     }
   }, [uploadFNCAssessment]);
 
-  console.log(hasFNCAssessment);
-
   const fileName = uploadFNCAssessment && (uploadFNCAssessment?.name || uploadFNCAssessment[0]?.name);
 
   const fileLink = uploadFNCAssessment?.url;
@@ -42,7 +40,7 @@ export const FundedNursingCare = ({
           ]}
           handle={setHasFNCAssessment}
           inline
-          title='Has a FNC assessment been carried out?'
+          label='Has a FNC assessment been carried out?'
           small
         />
         {hasFNCAssessment !== 'no' &&
