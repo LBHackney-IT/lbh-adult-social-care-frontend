@@ -53,6 +53,12 @@ const DatePickerCalendarIcon = ({ onClick = () => {}, className = '' }) => (
   </svg>
 );
 
+const ToggleBlueIcon = ({ className = '' }) => (
+  <svg width="18" className={`toggle-blue-icon ${className}`} height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1.90798e-07 2L2.38498e-08 16C1.06966e-08 17.103 0.897 18 2 18L16 18C17.103 18 18 17.103 18 16L18 2C18 0.897 17.103 2.03951e-07 16 1.90798e-07L2 2.38498e-08C0.897 1.06966e-08 2.03951e-07 0.896999 1.90798e-07 2ZM13.996 10.582L12.582 11.996L9 8.414L5.425 11.989L4.011 10.575L9 5.586L13.996 10.582Z" fill="#025EA6"/>
+  </svg>
+);
+
 const HackneyFullLogo = () => {
   const router = useRouter();
   return (
@@ -262,4 +268,5 @@ export {
   TooltipIcon,
   DatePickerCalendarIcon,
   SelectArrowTriangle,
+  ToggleBlueIcon,
 };
