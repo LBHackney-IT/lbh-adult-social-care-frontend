@@ -20,10 +20,7 @@ import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
 import { getLoggedInUser, getUserSession, uniqueID } from 'service/helpers';
 import useSuppliersApi from 'api/SWR/useSuppliersApi';
 import useBaseApi from 'api/SWR/useBaseApi';
-import {
-  mapCareAdditionalNeedsEntries,
-  mapCareApprovalHistoryItems
-} from 'api/Mappers/CarePackageMapper';
+import { mapCareAdditionalNeedsEntries, mapCareApprovalHistoryItems } from 'api/Mappers/CarePackageMapper';
 
 // start before render
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
@@ -80,11 +77,11 @@ const NursingCareBrokering = ({
   const [summaryData, setSummaryData] = useState([]);
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
   const { data: stageOptions } = useBaseApi.stages();
-  const { data: { data: supplierOptions }} = useSuppliersApi.supplierList();
+  const { data: { data: supplierOptions } } = useSuppliersApi.supplierList();
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
-  }
+  };
 
   const createBrokerageInfo = (nursingCarePackageId, brokerageInfoForCreation) => {
     createNursingCareBrokerageInfo(nursingCarePackageId, brokerageInfoForCreation)
