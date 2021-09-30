@@ -1,9 +1,36 @@
 .core-package-details {
-  .lbh-select {
+  .select-container {
     width: 434px;
+
+    select {
+      width: 100%;
+    }
 
     &:first-of-type {
       margin-bottom: 16px;
+    }
+  }
+}
+
+.core-package-details__radio-group {
+  margin-bottom: 58px;
+}
+
+.core-package-details__selector {
+  & > label {
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  select {
+    font-size: 14px;
+
+    & {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      text-indent: 1px;
+      text-overflow: '';
     }
   }
 }

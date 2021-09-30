@@ -35,6 +35,12 @@ const AdultSocialCare = () => (
   </svg>
 );
 
+const SelectArrowTriangle = () => (
+  <svg width="10" height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0L5 5L10 0H0Z" fill="black"/>
+  </svg>
+);
+
 const TooltipIcon = ({ tooltipText }) => (
   <svg className='tooltip-icon' data-for={tooltipText} data-tip={tooltipText} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M7.33301 12H8.66634V10.6667H7.33301V12ZM7.99967 1.33334C4.31967 1.33334 1.33301 4.32 1.33301 8C1.33301 11.68 4.31967 14.6667 7.99967 14.6667C11.6797 14.6667 14.6663 11.68 14.6663 8C14.6663 4.32 11.6797 1.33334 7.99967 1.33334ZM7.99967 13.3333C5.05967 13.3333 2.66634 10.94 2.66634 8C2.66634 5.06 5.05967 2.66667 7.99967 2.66667C10.9397 2.66667 13.333 5.06 13.333 8C13.333 10.94 10.9397 13.3333 7.99967 13.3333ZM7.99967 4C6.52634 4 5.33301 5.19334 5.33301 6.66667H6.66634C6.66634 5.93334 7.26634 5.33334 7.99967 5.33334C8.73301 5.33334 9.33301 5.93334 9.33301 6.66667C9.33301 8 7.33301 7.83334 7.33301 10H8.66634C8.66634 8.5 10.6663 8.33334 10.6663 6.66667C10.6663 5.19334 9.47301 4 7.99967 4Z" fill="#025EA6"/>
@@ -255,4 +261,5 @@ export {
   ArrowLeftGreenIcon,
   TooltipIcon,
   DatePickerCalendarIcon,
+  SelectArrowTriangle,
 };
