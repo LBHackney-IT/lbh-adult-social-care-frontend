@@ -10,6 +10,7 @@ export const Container = ({
   flexDirection,
   flex,
   justifyContent,
+  className = '',
 }) => (
-  <div style={{ padding, background, width, display, alignItems, flexDirection, flex, justifyContent }}>{children}</div>
+  <div className={className} style={{ padding, background, width, display, alignItems, flexDirection, flex, justifyContent }}>{children}</div>
 );

@@ -181,10 +181,10 @@ const BrokerageHubPage = () => {
       getValue: (value) => `#${value}`,
     },
     startDate: {
-      getValue: (value) => `${formatDate(value, '/')}`,
+      getValue: (value) => `${formatDate(value, 'dd/MM/yy')}`,
     },
     lastUpdated: {
-      getValue: (value) => `${formatDate(value, '/')}`,
+      getValue: (value) => `${formatDate(value, 'dd/MM/yy')}`,
     },
     owner: {
       getComponent: (item, b, tableClass) => {

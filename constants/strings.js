@@ -4,8 +4,10 @@ const currency = {
 };
 
 const dateStringFormats = {
-  dayMonthYear: 'dd/MM/yyyy',
-  monthDayYear: 'MM/dd/yyyy',
+  dayMonthYearSlash: 'dd/MM/yyyy',
+  dayMonthYearDot: 'dd.MM.yyyy',
+  monthDayYearSlash: 'MM/dd/yyyy',
+  monthDayYearDot: 'MM.dd.yyyy',
 };
 
 export { currency, dateStringFormats };
