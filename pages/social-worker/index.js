@@ -77,7 +77,7 @@ const SocialWorkerDashboardPage = () => {
       getHide: () => true,
     },
     dateOfBirth: {
-      getValue: (value) => `${formatDate(value, '/')}`,
+      getValue: (value) => `${formatDate(value, 'dd/MM/yy')}`,
     },
     statusName: {
       getClassName: (value) => `${formatStatus(value)} table__row-item-status`,

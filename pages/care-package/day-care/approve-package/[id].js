@@ -88,7 +88,7 @@ const DayCareApprovePackage = () => {
       .catch((error) => pushNotification(error));
   };
   const handleRequestMoreInformation = () => {
-    const { validFields, hasErrors } = formValidator({ requestInformationText });
+    const { validFields, hasErrors } = formValidator({ form: { requestInformationText } });
     if (hasErrors) {
       setErrorFields(validFields);
       return;

@@ -1,19 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-export default function Textarea({ 'max-count': maxCount, rows = 5, id, name, value, handler = () => {} }) {
-  const [currentValue, setCurrentValue] = useState(value);
-  useEffect(() => setCurrentValue(value), [value]);
-  useEffect(() => handler(currentValue), [currentValue]);
-  const getCount = () => maxCount - currentValue.length;
+export default function Textarea ({
+  maxCount,
+  rows = 5,
+  id,
+  name,
+  value,
+  className = '',
+  handler = () => {}
+}) {
+  const getCount = () => maxCount - value.length;
   return (
-    <div className="govuk-form-group lbh-form-group">
+    <div className={`govuk-form-group lbh-form-group ${className}`}>
       <textarea
         className="govuk-textarea lbh-textarea hds-textarea"
         id={id}
         name={name}
         rows={rows}
-        value={currentValue}
-        onChange={(e) => setCurrentValue(e.target.value)}
+        value={value}
+        onChange={(e) => handler(e.target.value)}
       />
       {!!maxCount && (
         <span

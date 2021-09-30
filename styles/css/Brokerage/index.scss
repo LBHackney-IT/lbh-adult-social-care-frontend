@@ -1,0 +1,23 @@
+@import "brokerage__container-header";
+@import "user-details";
+@import "core-package-details";
+
+.brokerage__container {
+  padding: 60px;
+
+  @include media-mobile {
+    padding: 8px;
+  }
+}
+
+.brokerage__container {
+  padding-bottom: 48px;
+  margin-bottom: 48px;
+  border-bottom: 1px solid #BFC1C3;
+
+  & > h3 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+}

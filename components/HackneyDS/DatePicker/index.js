@@ -1,23 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
-import FormGroup from '../FormGroup';
+import React, { useState } from 'react';
 import { DatePickerCalendarIcon } from '../../Icons';
 import DatePick from '../../DatePick';
+import { Label, Hint } from '../index';
 
 export default function DatePicker ({
   className = '',
   label,
   formId,
+  hint,
   day,
   month,
   IconComponent = DatePickerCalendarIcon,
   iconClassName,
   onClickIcon = () => {},
   year,
-  hint,
 }) {
-  const calendarContainerRef = useRef(null);
-  const [isMouseLeave, setMouseLeave] = useState(false);
-  const [isCalendarBlur, setIsCalendarBlur] = useState(false);
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
   const inputs = [
     { name: 'day', id: `${formId}-day`, visible: true, ...day },
@@ -25,15 +22,13 @@ export default function DatePicker ({
     { name: 'year', id: `${formId}-year`, visible: true, ...year },
   ];
 
-  const error = day.error || month.error || year.error;
-
   const clickIcon = () => {
     setIsOpenCalendar(true);
     onClickIcon();
   };
 
   const changeCalendarInput = (date) => {
-    const values = [date.getDate(), date.getMonth() + 1, date.getFullYear()];
+    const values = [date.getDate(), date.getMonth() + 1, date.getFullYear().toString().slice(2, 4)];
     inputs.forEach((item, index) => {
       if (item.onChangeValue) {
         item.onChangeValue(values[index]);
@@ -41,87 +36,67 @@ export default function DatePicker ({
     });
   };
 
-  const onBlurCalendar = () => setIsCalendarBlur(true);
-
-  useEffect(() => {
-    if (IconComponent && isMouseLeave && isCalendarBlur) {
-      setIsOpenCalendar(false);
-    }
-  }, [IconComponent, isMouseLeave, isCalendarBlur]);
+  const replaceFirstZero = (string) => string && (string[0] === '0' ? string.replace('0', '') : string);
 
   const currentDate = new Date();
   const calendarValue = new Date(
-    year.value || currentDate.getFullYear(),
-    month.value || currentDate.getMonth() + 1,
-    day.value || currentDate.getDate(),
+    (year.value && `20${year.value}`) || currentDate.getFullYear(),
+    month.value ? replaceFirstZero(month.value) - 1 : currentDate.getMonth(),
+    day.value ? replaceFirstZero(day.value) : currentDate.getDate(),
   );
 
   return (
-    <FormGroup className={className} label={label} error={error} hint={hint}>
-      <div className="govuk-date-input lbh-date-input" id={`${formId}-errors`}>
-        {inputs.map((input) => {
-          if (!input.visible) return null;
+    <div className={`${className} govuk-date-input lbh-date-input`} id={`${formId}-errors`}>
+      {label && <Label className='govuk-date-input__label'>{label}</Label>}
+      {hint && <Hint className='govuk-date-input__hint'>{hint}</Hint>}
+      {inputs.map((input) => {
+        if (!input.visible) return null;
 
-          const errorClass = input.error ? 'govuk-input--error ' : '';
+        const errorClass = input.error ? 'govuk-input--error ' : '';
 
-          return (
-            <div key={input.id} className="govuk-date-input__item">
-              <label className="govuk-label govuk-date-input__label" htmlFor={input.id}>
-                {input.label}
-              </label>
-              <input
-                className={`${errorClass}govuk-input govuk-date-input__input ${input.className}`}
-                id={input.id}
-                value={input.value}
-                onChange={e => {
-                  if (input.onChange) {
-                    input.onChange(e);
-                  }
-                  if (input.onChangeValue) {
-                    let slicedValue;
-                    if (input.name === 'year') {
-                      slicedValue = e.target.value.slice(0, 4);
-                    } else {
-                      slicedValue = e.target.value.slice(0, 2);
-                    }
-                    input.onChangeValue(slicedValue);
-                  }
-                }}
-                min={1}
-                step={1}
-                name={input.name}
-                type="number"
-              />
-            </div>
-          );
-        })}
-        {IconComponent &&
-        <div
-          ref={calendarContainerRef}
-          onMouseLeave={() => {
-            setMouseLeave(true);
-            setIsCalendarBlur(false);
-            calendarContainerRef.current.focus();
+        return (
+          <div key={input.id} className="govuk-date-input__item">
+            {input.label && <label className="govuk-label govuk-date-input__label" htmlFor={input.id}>
+              {input.label}
+            </label>}
+            <input
+              className={`${errorClass}govuk-input govuk-date-input__input ${input.className}`}
+              id={input.id}
+              value={`00${input.value}`.slice(-2)}
+              onChange={e => {
+                if (input.onChange) {
+                  input.onChange(e);
+                }
+                if (input.onChangeValue) {
+                  const slicedValue = e.target.value.slice(1, 3);
+                  input.onChangeValue(slicedValue);
+                }
+              }}
+              min={1}
+              step={1}
+              name={input.name}
+              type="number"
+            />
+          </div>
+        );
+      })}
+      {IconComponent &&
+      <div className='date-picker__calendar-container'>
+        <IconComponent onClick={clickIcon} className={iconClassName}/>
+        {isOpenCalendar &&
+        <DatePick
+          onClickOutside={() => {
+            if (isOpenCalendar) {
+              setIsOpenCalendar(false);
+            }
           }}
-          onMouseEnter={() => {
-            setMouseLeave(false);
-            setIsCalendarBlur(false);
-          }}
-          className='date-picker__calendar-container'
-          tabIndex={-1}
-          onBlur={onBlurCalendar}
-        >
-          <IconComponent onClick={clickIcon} className={iconClassName}/>
-          {isOpenCalendar &&
-          <DatePick
-            startDate={calendarValue}
-            inline
-            dateValue={calendarValue}
-            setDate={changeCalendarInput}
-          />}
-        </div>
-        }
+          startDate={calendarValue}
+          inline
+          dateValue={calendarValue}
+          setDate={changeCalendarInput}
+        />}
       </div>
-    </FormGroup>
+      }
+    </div>
   );
 }
