@@ -2,7 +2,7 @@ import React from 'react';
 import { ReviewPackageDetails } from './index';
 
 export default {
-  title: 'Hackney Design System/Remove Approvals/ReviewPackageDetails',
+  title: 'Pages/Remove Approvals/ReviewPackageDetails',
   component: ReviewPackageDetails,
   argTypes: {
     controls: null,

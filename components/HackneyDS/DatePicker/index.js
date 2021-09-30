@@ -1,25 +1,60 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DatePickerCalendarIcon } from '../../Icons';
 import DatePick from '../../DatePick';
-import { Label, Hint } from '../index';
+import { Hint, Label } from '../index';
 
 export default function DatePicker ({
   className = '',
   label,
   formId,
   hint,
-  day,
-  month,
+  date,
+  setDate,
   IconComponent = DatePickerCalendarIcon,
   iconClassName,
+  day = {},
+  month = {},
+  year = {},
   onClickIcon = () => {},
-  year,
 }) {
+  const actualDate = new Date();
+
+  const [localDay, setLocalDay] = useState({
+    value: '',
+    onChangeValue: (value) => setDate(new Date(
+      date?.getFullYear() || actualDate.getFullYear(),
+      date?.getMonth() || actualDate.getMonth(),
+      value
+    )),
+    error: '',
+  });
+
+
+  const [localMonth, setLocalMonth] = useState({
+    value: '',
+    onChangeValue: (value) => setDate(new Date(
+      date?.getFullYear() || actualDate.getFullYear(),
+      value - 1 === -1 ? value : value - 1,
+      date?.getDate() || actualDate.getDate(),
+    )),
+    error: '',
+  });
+
+  const [localYear, setLocalYear] = useState({
+    value: '',
+    onChangeValue: (value) => setDate(new Date(
+      value,
+      date?.getMonth() || actualDate.getMonth(),
+      date?.getDate() || actualDate.getDate(),
+    )),
+    error: '',
+  });
+
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
   const inputs = [
-    { name: 'day', id: `${formId}-day`, visible: true, ...day },
-    { name: 'month', id: `${formId}-month`, visible: true, ...month },
-    { name: 'year', id: `${formId}-year`, visible: true, ...year },
+    { name: 'day', id: `${formId}-day`, visible: true, ...day, ...localDay },
+    { name: 'month', id: `${formId}-month`, visible: true, ...month, localMonth },
+    { name: 'year', id: `${formId}-year`, visible: true, ...year, localYear },
   ];
 
   const clickIcon = () => {
@@ -27,28 +62,20 @@ export default function DatePicker ({
     onClickIcon();
   };
 
-  const changeCalendarInput = (date) => {
-    const values = [date.getDate(), date.getMonth() + 1, date.getFullYear().toString().slice(2, 4)];
-    inputs.forEach((item, index) => {
-      if (item.onChangeValue) {
-        item.onChangeValue(values[index]);
-      }
-    });
-  };
+  const changeCalendarInput = (newDate) => setDate(newDate);
 
-  const replaceFirstZero = (string) => string && (string[0] === '0' ? string.replace('0', '') : string);
-
-  const currentDate = new Date();
-  const calendarValue = new Date(
-    (year.value && `20${year.value}`) || currentDate.getFullYear(),
-    month.value ? replaceFirstZero(month.value) - 1 : currentDate.getMonth(),
-    day.value ? replaceFirstZero(day.value) : currentDate.getDate(),
-  );
+  useEffect(() => {
+    if (date) {
+      setLocalDay(prevState => ({ ...prevState, value: date.getDate(), error: '' }));
+      setLocalMonth(prevState => ({ ...prevState, value: date.getMonth() + 1, error: '' }));
+      setLocalYear(prevState => ({ ...prevState, value: date.getFullYear(), error: '' }));
+    }
+  }, [date]);
 
   return (
     <div className={`${className} govuk-date-input lbh-date-input`} id={`${formId}-errors`}>
-      {label && <Label className='govuk-date-input__label'>{label}</Label>}
-      {hint && <Hint className='govuk-date-input__hint'>{hint}</Hint>}
+      {label && <Label className="govuk-date-input__label">{label}</Label>}
+      {hint && <Hint className="govuk-date-input__hint">{hint}</Hint>}
       {inputs.map((input) => {
         if (!input.visible) return null;
 
@@ -81,7 +108,7 @@ export default function DatePicker ({
         );
       })}
       {IconComponent &&
-      <div className='date-picker__calendar-container'>
+      <div className="date-picker__calendar-container">
         <IconComponent onClick={clickIcon} className={iconClassName}/>
         {isOpenCalendar &&
         <DatePick
@@ -90,9 +117,9 @@ export default function DatePicker ({
               setIsOpenCalendar(false);
             }
           }}
-          startDate={calendarValue}
+          startDate={date}
           inline
-          dateValue={calendarValue}
+          dateValue={date}
           setDate={changeCalendarInput}
         />}
       </div>

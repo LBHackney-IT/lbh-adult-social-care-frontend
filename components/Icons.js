@@ -41,6 +41,12 @@ const TooltipIcon = ({ tooltipText }) => (
   </svg>
 );
 
+const CollapseGreenDownIcon = () => (
+  <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10.59 0.589844L6 5.16984L1.41 0.589844L0 1.99984L6 7.99984L12 1.99984L10.59 0.589844Z" fill="#00664F"/>
+  </svg>
+);
+
 const DatePickerCalendarIcon = ({ onClick = () => {}, className = '' }) => (
   <svg className={className} onClick={onClick} width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M2 8H16V10H18V4C18 2.9 17.1 2 16 2H15V0H13V2H5V0H3V2H2C0.89 2 0.00999999 2.9 0.00999999 4L0 18C0 19.1 0.89 20 2 20H9V18H2V8ZM2 4H16V6H2V4ZM19.84 14.28L19.13 14.99L17.01 12.87L17.72 12.16C18.11 11.77 18.74 11.77 19.13 12.16L19.84 12.87C20.23 13.26 20.23 13.89 19.84 14.28ZM16.3 13.58L18.42 15.7L13.12 21H11V18.88L16.3 13.58Z" fill="black"/>
@@ -255,4 +261,5 @@ export {
   ArrowLeftGreenIcon,
   TooltipIcon,
   DatePickerCalendarIcon,
+  CollapseGreenDownIcon,
 };

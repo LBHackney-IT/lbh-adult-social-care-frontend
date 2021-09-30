@@ -22,3 +22,31 @@
     margin-bottom: 16px;
   }
 }
+
+.remove-approvals__item-title {
+  font-size: 30px;
+  margin-bottom: 28px;
+  font-weight: bold;
+  color: $lbh-text-colour,
+}
+
+.remove-approvals__package-dates {
+  width: 100%;
+
+  .lbh-date-input {
+    margin-right: 32px;
+  }
+
+  &.lbh-form-group .govuk-label.govuk-date-input__label {
+    font-weight: initial;
+  }
+
+  fieldset {
+    display: flex;
+    flex-wrap: wrap;
+
+    & > label.govuk-fieldset__legend {
+      font-size: 19px;
+    }
+  }
+}

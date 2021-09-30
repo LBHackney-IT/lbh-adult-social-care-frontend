@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from '../Button';
-import { uniqueID } from 'service/helpers';
 
 const Pagination = ({
   className,
@@ -13,7 +12,7 @@ const Pagination = ({
   currentPage = 1,
   totalCount = 0,
 }) => {
-  if(totalCount === 0) {
+  if (totalCount === 0) {
     return <></>;
   }
 
@@ -37,7 +36,7 @@ const Pagination = ({
       <div className="table-pagination-actions">
         {totalCount === 0 ? (
           <Button
-            key={uniqueID()}
+            key='page-1'
             onClick={() => onChangePagination(1)}
             className="table-pagination-button table-pagination-item-active"
           >
@@ -48,7 +47,7 @@ const Pagination = ({
             const currentPageClass = String(item + 1) === String(currentPage) ? ' table-pagination-item-active' : '';
             return (
               <Button
-                key={uniqueID()}
+                key={`page-${item+1}`}
                 onClick={() => onChangePagination(item + 1)}
                 className={`table-pagination-button${currentPageClass}`}
               >

@@ -2,7 +2,7 @@ import React from 'react';
 import { CorePackageDetails } from './index';
 
 export default {
-  title: 'Hackney Design System/Remove Approvals/CorePackageDetails',
+  title: 'Pages/Remove Approvals/CorePackageDetails',
   component: CorePackageDetails,
   argTypes: {
     checked: { type: 'boolean' },
