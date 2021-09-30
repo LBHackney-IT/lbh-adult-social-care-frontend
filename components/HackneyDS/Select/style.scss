@@ -43,3 +43,21 @@
     font-size: 14pt;
   }
 }
+
+.select-container {
+  position: relative;
+  width: fit-content;
+
+  select {
+    width: 100%;
+  }
+
+  .select-icon {
+    position: absolute;
+    right: 16px;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+}
