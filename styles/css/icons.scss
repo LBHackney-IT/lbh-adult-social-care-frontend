@@ -1,0 +1,11 @@
+.icon-animation-rotation {
+  transform: rotate(180deg);
+}
+
+.icon-animation-rotation-negative {
+  transform: rotate(-180deg);
+}
+
+.icon-transition {
+  transition: 0.3s ease;
+}
