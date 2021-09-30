@@ -1,0 +1,12 @@
+.options-element-modal {
+  &.care-charges-modal {
+    .govuk-form-group {
+      max-width: initial;
+    }
+  }
+
+
+  .govuk-radios__item {
+    margin-bottom: 16px;
+  }
+}
