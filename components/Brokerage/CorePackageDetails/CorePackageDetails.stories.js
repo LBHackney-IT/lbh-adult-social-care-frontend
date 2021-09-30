@@ -2,7 +2,7 @@ import React from 'react';
 import { CorePackageDetails } from './index';
 
 export default {
-  title: 'Pages/Remove Approvals/CorePackageDetails',
+  title: 'Pages/Brokerage/CorePackageDetails',
   component: CorePackageDetails,
   argTypes: {
     checked: { type: 'boolean' },

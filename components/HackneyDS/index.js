@@ -39,7 +39,7 @@ import { SummaryList } from './SummaryList';
 import { FileUpload } from './FileUpload/FileUpload';
 import { EditElementModal } from '../CareCharges/EditElementModal';
 import { AddElementModal } from '../CareCharges/AddElementModal';
-import { CorePackageDetails } from '../RemoveApprovals/CorePackageDetails';
+import { CorePackageDetails } from '../Brokerage/CorePackageDetails';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 

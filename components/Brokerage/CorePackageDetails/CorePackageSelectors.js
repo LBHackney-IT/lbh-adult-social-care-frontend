@@ -12,7 +12,7 @@ const CorePackageSelectors = ({
   supportReason,
   supportReasonOptions,
 }) => (
-  <Container className=' remove-approvals__default-container'>
+  <Container className=' brokerage__default-container'>
     <h3>Package type</h3>
     <Container display='flex' flexDirection='column'>
       <Container display='flex' flexDirection='column'>

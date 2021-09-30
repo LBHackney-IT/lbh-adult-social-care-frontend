@@ -3,8 +3,8 @@ import DatePicker from '../HackneyDS/DatePicker';
 import { Checkbox } from '../HackneyDS';
 import React from 'react';
 
-const RemoveApprovalsPackageDates = ({ dates, setDates, isOngoing, setIsOngoing }) => (
-  <FormGroup className="remove-approvals__package-dates" label="Package dates">
+const BrokeragePackageDates = ({ dates, setDates, isOngoing, setIsOngoing }) => (
+  <FormGroup className="brokerage__package-dates" label="Package dates">
     <DatePicker
       day={dates.dayFrom}
       date={dates.dateFrom}
@@ -33,4 +33,4 @@ const RemoveApprovalsPackageDates = ({ dates, setDates, isOngoing, setIsOngoing 
   </FormGroup>
 );
 
-export default RemoveApprovalsPackageDates;
+export default BrokeragePackageDates;

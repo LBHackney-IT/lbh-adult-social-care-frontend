@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import RemoveApprovalsHeader from '../RemoveApprovalsHeader/RemoveApprovalsHeader';
+import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, ErrorMessage } from '../../HackneyDS';
 import { object, string } from 'yup';
 import PackageUserDetails from '../PackageUserDetails';
@@ -73,9 +73,9 @@ export const CorePackageDetails = ({
 
   return (
     <div className='core-package-details'>
-      <RemoveApprovalsHeader/>
-      <Container className='remove-approvals__container'>
-        <Container className='remove-approvals__container-header remove-approvals__default-container'>
+      <BrokerageHeader/>
+      <Container className='brokerage__container'>
+        <Container className='brokerage__container-header brokerage__default-container'>
           <p>Build a care package</p>
           <h2>Core package details</h2>
         </Container>

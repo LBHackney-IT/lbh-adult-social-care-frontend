@@ -4,7 +4,7 @@ import { getAgeFromDateString } from '../../api/Utils/FuncUtils';
 import React from 'react';
 
 const PackageUserDetails = ({ client, hackneyId, dateOfBirth, postcode }) => (
-  <Container className='user-details remove-approvals__default-container'>
+  <Container className='user-details brokerage__default-container'>
     <h3>Service user details</h3>
     <Container>
       <p>Client</p>

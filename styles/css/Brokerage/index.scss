@@ -1,9 +1,9 @@
-@import "remove-approvals__container-header";
+@import "brokerage__container-header";
 @import "user-details";
 @import "core-package-details";
 @import "review-package-details";
 
-.remove-approvals__container {
+.brokerage__container {
   padding: 60px;
 
   @include media-mobile {
@@ -11,7 +11,7 @@
   }
 }
 
-.remove-approvals__default-container {
+.brokerage__default-container {
   padding-bottom: 48px;
   margin-bottom: 48px;
   border-bottom: 1px solid #BFC1C3;
@@ -23,14 +23,14 @@
   }
 }
 
-.remove-approvals__item-title {
+.brokerage__item-title {
   font-size: 30px;
   margin-bottom: 28px;
   font-weight: bold;
   color: $lbh-text-colour,
 }
 
-.remove-approvals__package-dates {
+.brokerage__package-dates {
   width: 100%;
 
   .lbh-date-input {

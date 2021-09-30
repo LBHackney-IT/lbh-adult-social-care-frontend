@@ -25,7 +25,7 @@ const SupplierLookUpSelector = ({
     <Container className="supplier-look-up-selector">
       {items.map(({ id, name, address, sites }) => {
         return (
-          <Container className='remove-approvals__action-card'>
+          <Container className='brokerage__action-card'>
             <p>{name} <span>{id}</span></p>
             <p>{address}</p>
             {sites ?

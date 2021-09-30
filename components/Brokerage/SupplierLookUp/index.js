@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import RemoveApprovalsHeader from '../RemoveApprovalsHeader/RemoveApprovalsHeader';
+import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Container } from '../../HackneyDS';
-import RemoveApprovalsPackageDates from '../RemoveApprovalsPackageDates';
-import RemoveApprovalsSearchSupplier from './RemoveApprovalsSearchSupplier';
+import BrokeragePackageDates from '../BrokeragePackageDates';
+import BrokerageSearchSupplier from './BrokerageSearchSupplier';
 
 export const SupplierLookUp = ({ searchResults }) => {
   const [isOngoing, setIsOngoing] = useState(false);
@@ -29,22 +29,22 @@ export const SupplierLookUp = ({ searchResults }) => {
 
   return (
     <div className="supplier-look-up">
-      <RemoveApprovalsHeader/>
-      <Container className="remove-approvals__container">
-        <Container className="remove-approvals__container-header remove-approvals__default-container">
+      <BrokerageHeader/>
+      <Container className="brokerage__container">
+        <Container className="brokerage__container-header brokerage__default-container">
           <p>Build a care package</p>
           <h2>Broker package</h2>
         </Container>
         <Container>
-          <h3 className='remove-approvals__item-title'>Nursing Care</h3>
-          <RemoveApprovalsPackageDates
+          <h3 className='brokerage__item-title'>Nursing Care</h3>
+          <BrokeragePackageDates
             dates={packageDates}
             setDates={setPackageDates}
             isOngoing={isOngoing}
             setIsOngoing={setIsOngoing}
           />
         </Container>
-        <RemoveApprovalsSearchSupplier
+        <BrokerageSearchSupplier
           searchResults={searchResults}
           setSelectedItem={setSelectedItem}
         />

@@ -2,7 +2,7 @@ import React from 'react';
 import { SupplierLookUp } from './index';
 
 export default {
-  title: 'Pages/Remove Approvals/SupplierLookUp',
+  title: 'Pages/Brokerage/SupplierLookUp',
   component: SupplierLookUp,
   argTypes: {
     controls: null,

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import RemoveApprovalsHeader from '../RemoveApprovalsHeader/RemoveApprovalsHeader';
+import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Container, Link } from '../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import { useRouter } from 'next/router';
 import ReviewPackageInfo from './ReviewPackageInfo';
-import RemoveApprovalsBorderCost from '../RemoveApprovalsBorderCost';
+import BrokerageBorderCost from '../BrokerageBorderCost';
 import { currency } from '../../../constants/strings';
 
 export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summary = [], }) => {
@@ -28,9 +28,9 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
 
   return (
     <div className='review-package-details'>
-      <RemoveApprovalsHeader/>
-      <Container className='remove-approvals__container'>
-        <Container className='remove-approvals__container-header remove-approvals__default-container'>
+      <BrokerageHeader/>
+      <Container className='brokerage__container'>
+        <Container className='brokerage__container-header brokerage__default-container'>
           <p>Build a care package</p>
           <h2>Review package details</h2>
         </Container>
@@ -45,7 +45,7 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
             {packageInfoItems.map(({ id: itemId, headerTitle, items, totalCost, totalCostHeader }) => (
               <Container key={headerTitle} className='review-package-details__cost-info-item'>
                 <ReviewPackageInfo headerTitle={headerTitle} items={items}/>
-                <RemoveApprovalsBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader}/>
+                <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader}/>
                 <Container className='review-package-details__items-actions' display='flex'>
                   <p onClick={() => editItem(itemId)} className='link-button'>Edit</p>
                   <p onClick={() => removeItem(itemId)} className='link-button red'>Remove</p>

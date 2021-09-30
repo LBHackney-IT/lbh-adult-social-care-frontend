@@ -2,7 +2,7 @@ import React from 'react';
 import { ReviewPackageDetails } from './index';
 
 export default {
-  title: 'Pages/Remove Approvals/ReviewPackageDetails',
+  title: 'Pages/Brokerage/ReviewPackageDetails',
   component: ReviewPackageDetails,
   argTypes: {
     controls: null,
@@ -20,12 +20,12 @@ const testSummary = [
   { key: 'Cost', value: '10' },
   { key: 'FNC payment', value: '10' },
   { key: 'Additional weekly cost', value: '10' },
-  { key: 'Sub total cost of package', value: '120', className: 'remove-approvals__summary-cost' },
+  { key: 'Sub total cost of package', value: '120', className: 'brokerage__summary-cost' },
   { key: 'FNC (net collected at source)', value: '10' },
   { key: 'Care charges (gross collected from service user)', value: '10' },
-  { key: 'Sub reclaimed by Hackney', value: '20', className: 'remove-approvals__summary-cost' },
-  { key: 'Total weekly cost', value: '100', className: 'remove-approvals__summary-cost' },
-  { key: 'Total one off payment', value: '10', className: 'remove-approvals__summary-cost' },
+  { key: 'Sub reclaimed by Hackney', value: '20', className: 'brokerage__summary-cost' },
+  { key: 'Total weekly cost', value: '100', className: 'brokerage__summary-cost' },
+  { key: 'Total one off payment', value: '10', className: 'brokerage__summary-cost' },
 ];
 
 const testPackageInfoItems = [

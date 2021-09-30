@@ -19,42 +19,71 @@ export default function DatePicker ({
 }) {
   const actualDate = new Date();
 
+  //get value 01 return 1, get value 10 return 10
+  const replaceFirstZero = (string) => string && (string[0] === '0' ? string.replace('0', '') : string);
+
+  const getValidMonth = (monthValue) => {
+    // if value more then 11 return 0 (date.getMonth() start from 0) January
+    // get value 02 format to 2 and 2-1=1 February
+    const validMonth = replaceFirstZero(monthValue) - 1 > 11 ? 0 : replaceFirstZero(monthValue) - 1;
+    return Number(validMonth) < 0 ? 0 : Number(validMonth);
+  }
+
+  const getValidDay = (dayValue) => {
+    const formatDay = dayValue && replaceFirstZero(dayValue);
+    const lastDayInMonth = date && new Date(date.getFullYear(), date.getMonth(), 0).getDate();
+    const validDay = formatDay && lastDayInMonth && (lastDayInMonth < formatDay) ? 1 : formatDay;
+    return Number(validDay) || 1
+  }
+
+  const getValidYear = (dayValue) => (
+    dayValue ? `20${dayValue}` : 0
+  );
+
+  const onChangeDay = value => {
+    setDate(new Date(
+      date?.getFullYear() || 0,
+      date?.getMonth() || 0,
+      getValidDay(value)
+    ));
+  };
+
+  const onChangeMonth = (value) => {
+    setDate(new Date(
+      date?.getFullYear() || actualDate.getFullYear(),
+      getValidMonth(value),
+      date?.getDate() || actualDate.getDate(),
+    ));
+  };
+
+  const onChangeYear = (value) => {
+    setDate(new Date(
+      getValidYear(value),
+      date?.getMonth() || 0,
+      date?.getDate() || 1,
+    ));
+  };
+
   const [localDay, setLocalDay] = useState({
     value: '',
-    onChangeValue: (value) => setDate(new Date(
-      date?.getFullYear() || actualDate.getFullYear(),
-      date?.getMonth() || actualDate.getMonth(),
-      value
-    )),
     error: '',
   });
 
-
   const [localMonth, setLocalMonth] = useState({
     value: '',
-    onChangeValue: (value) => setDate(new Date(
-      date?.getFullYear() || actualDate.getFullYear(),
-      value - 1 === -1 ? value : value - 1,
-      date?.getDate() || actualDate.getDate(),
-    )),
     error: '',
   });
 
   const [localYear, setLocalYear] = useState({
     value: '',
-    onChangeValue: (value) => setDate(new Date(
-      value,
-      date?.getMonth() || actualDate.getMonth(),
-      date?.getDate() || actualDate.getDate(),
-    )),
     error: '',
   });
 
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
   const inputs = [
-    { name: 'day', id: `${formId}-day`, visible: true, ...day, ...localDay },
-    { name: 'month', id: `${formId}-month`, visible: true, ...month, localMonth },
-    { name: 'year', id: `${formId}-year`, visible: true, ...year, localYear },
+    { name: 'day', id: `${formId}-day`, visible: true, ...day, ...localDay, onChangeValue: onChangeDay },
+    { name: 'month', id: `${formId}-month`, visible: true, ...month, ...localMonth, onChangeValue: onChangeMonth },
+    { name: 'year', id: `${formId}-year`, visible: true, ...year, ...localYear, onChangeValue: onChangeYear },
   ];
 
   const clickIcon = () => {
@@ -68,7 +97,7 @@ export default function DatePicker ({
     if (date) {
       setLocalDay(prevState => ({ ...prevState, value: date.getDate(), error: '' }));
       setLocalMonth(prevState => ({ ...prevState, value: date.getMonth() + 1, error: '' }));
-      setLocalYear(prevState => ({ ...prevState, value: date.getFullYear(), error: '' }));
+      setLocalYear(prevState => ({ ...prevState, value: date.getFullYear().toString().slice(2, 4), error: '' }));
     }
   }, [date]);
 
@@ -78,7 +107,6 @@ export default function DatePicker ({
       {hint && <Hint className="govuk-date-input__hint">{hint}</Hint>}
       {inputs.map((input) => {
         if (!input.visible) return null;
-
         const errorClass = input.error ? 'govuk-input--error ' : '';
 
         return (
@@ -92,7 +120,7 @@ export default function DatePicker ({
               value={`00${input.value}`.slice(-2)}
               onChange={e => {
                 if (input.onChange) {
-                  input.onChange(e);
+                  return input.onChange(e);
                 }
                 if (input.onChangeValue) {
                   const slicedValue = e.target.value.slice(1, 3);

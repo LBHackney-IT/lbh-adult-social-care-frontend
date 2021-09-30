@@ -73,7 +73,7 @@
   margin-bottom: 10px;
 }
 
-.remove-approvals__border-cost {
+.brokerage__border-cost {
   padding: 24px 0;
   border-bottom: 1px solid $lbh-gray-border-2;
   border-top: 1px solid $lbh-gray-border-2;
@@ -114,7 +114,7 @@
       margin-left: 10px;
     }
 
-    &.remove-approvals__summary-cost {
+    &.brokerage__summary-cost {
       font-weight: bold;
 
       &:not(&:last-of-type) {

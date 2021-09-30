@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header } from '../../HackneyDS';
 
-const RemoveApprovalsHeader = () => {
+const BrokerageHeader = () => {
   return (
     <Header bottomLines={false}>
       <p slot='service-name'>Adult Social Care</p>
@@ -12,4 +12,4 @@ const RemoveApprovalsHeader = () => {
   );
 };
 
-export default RemoveApprovalsHeader;
+export default BrokerageHeader;

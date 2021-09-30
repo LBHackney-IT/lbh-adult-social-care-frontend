@@ -2,7 +2,7 @@ import { SearchBox } from '../../HackneyDS';
 import SupplierLookUpSelector from './SupplierLookUpSelector';
 import React, { useState } from 'react';
 
-const RemoveApprovalsSearchSupplier = ({ searchResults, setSelectedItem }) => {
+const BrokerageSearchSupplier = ({ searchResults, setSelectedItem }) => {
   const [supplierSearch, setSupplierSearch] = useState('');
 
   const onSearchSupplier = () => {
@@ -30,4 +30,4 @@ const RemoveApprovalsSearchSupplier = ({ searchResults, setSelectedItem }) => {
   );
 };
 
-export default RemoveApprovalsSearchSupplier;
+export default BrokerageSearchSupplier;
