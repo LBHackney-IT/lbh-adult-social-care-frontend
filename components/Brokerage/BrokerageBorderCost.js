@@ -2,7 +2,7 @@ import React from 'react';
 import { currency } from '../../constants/strings';
 import { Container } from '../HackneyDS';
 
-const CarePackageBorderCost = ({ totalCostHeader, totalCost }) => {
+const BrokerageBorderCost = ({ totalCostHeader, totalCost }) => {
   return (
     <Container className='brokerage__border-cost' display='flex'>
       <p>{totalCostHeader}</p>
@@ -11,4 +11,4 @@ const CarePackageBorderCost = ({ totalCostHeader, totalCost }) => {
   );
 };
 
-export default CarePackageBorderCost;
+export default BrokerageBorderCost;

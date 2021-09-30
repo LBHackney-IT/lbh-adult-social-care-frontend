@@ -4,7 +4,7 @@ import { Button, Container, Link } from '../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import { useRouter } from 'next/router';
 import ReviewPackageInfo from './ReviewPackageInfo';
-import CarePackageBorderCost from '../CarePackageBorderCost';
+import BrokerageBorderCost from '../BrokerageBorderCost';
 import { currency } from '../../../constants/strings';
 
 export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summary = [], }) => {
@@ -29,7 +29,7 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
   return (
     <div className='review-package-details'>
       <BrokerageHeader/>
-      <Container className='brokerage__container'>
+      <Container className='brokerage__container-main'>
         <Container className='brokerage__container-header brokerage__container'>
           <p>Build a care package</p>
           <h2>Review package details</h2>
@@ -58,7 +58,7 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
                     <span className='text-lbh-f01 font-weight-bold'>{currency.euro}{costOfPlacement}</span>
                   </p>
                 }
-                {totalCost && <CarePackageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader}/>}
+                {totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader}/>}
                 {totalCost &&
                   <Container className='review-package-details__items-actions' display='flex'>
                     <p onClick={() => editItem(itemId)} className='link-button'>Edit</p>

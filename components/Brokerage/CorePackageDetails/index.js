@@ -5,7 +5,7 @@ import { object, string } from 'yup';
 import PackageUserDetails from '../PackageUserDetails';
 import CorePackageSelectors from './CorePackageSelectors';
 
-export const CorePackageDetails = ({
+const CorePackageDetails = ({
   userDetails,
   supportReasonOptions,
   checkboxOptions,
@@ -74,7 +74,7 @@ export const CorePackageDetails = ({
   return (
     <div className='core-package-details'>
       <BrokerageHeader/>
-      <Container className='brokerage__container'>
+      <Container className='brokerage__container-main'>
         <Container className='brokerage__container-header brokerage__container'>
           <p>Build a care package</p>
           <h2>Core package details</h2>
@@ -116,3 +116,5 @@ export const CorePackageDetails = ({
     </div>
   );
 };
+
+export default CorePackageDetails;
