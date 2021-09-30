@@ -38,6 +38,7 @@ import { SimplePagination } from './SimplePagination';
 import { SummaryList } from './SummaryList';
 import { FileUpload } from './FileUpload/FileUpload';
 import { EditElementModal } from '../CareCharges/EditElementModal';
+import { FundedNursingCare } from '../CarePackages/FundedNursingCare/FundedNursingCare';
 import { AddElementModal } from '../CareCharges/AddElementModal';
 import { OptionsElementModal } from '../CareCharges/OptionsElementModal';
 
@@ -88,4 +89,5 @@ export {
   EditElementModal,
   AddElementModal,
   OptionsElementModal,
+  FundedNursingCare,
 };

@@ -29,6 +29,37 @@
   width: auto;
 }
 
+button {
+  &.outline {
+    background: transparent;
+    border: 1px solid;
+    box-shadow: none;
+
+    &:hover {
+      transform: scale(1.03);
+    }
+
+    &.green {
+      color: $lbh-green1;
+      border-color: $lbh-green1;
+    }
+
+    &.red {
+      color: red;
+      border-color: red;
+    }
+
+    &.gray {
+      color: $lbh-gray-text;
+      border-color: $lbh-gray-text;
+    }
+
+    &:active, &:hover, &:link, &:visited {
+      color: white;
+    }
+  }
+}
+
 .govuk-button:active,
 .govuk-button:hover,
 .govuk-button:link,
