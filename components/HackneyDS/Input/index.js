@@ -20,17 +20,14 @@ export const Input = ({
   const signClass = preSign ? ' with-sign' : '';
 
   const onChange = e => {
-    if(onChangeValue) {
+    if (onChangeValue) {
       return onChangeValue(e.target.value);
     }
     handler(e);
-  }
+  };
 
   return (
-    <div
-      data-presign={preSign}
-      className={`govuk-form-group lbh-form-group${errorClass}${signClass} ${outerClassName}`}
-    >
+    <div className={`govuk-form-group lbh-form-group${errorClass}${signClass} ${outerClassName}`}>
       {label && (
         <label className="govuk-label lbh-label" htmlFor={id}>
           {label}
@@ -38,16 +35,18 @@ export const Input = ({
       )}
       {hint && <span className="govuk-hint lbh-hint">{hint}</span>}
       {error && <span className="govuk-error-message lbh-error-message">{error}</span>}
-      <input
-        className={`govuk-input lbh-input ${(error ?? '') && 'govuk-input--error'}`}
-        id={id}
-        placeholder={placeholder}
-        name={name}
-        type={type}
-        ref={ref}
-        value={value}
-        onChange={onChange}
-      />
+      <div className='input-container' data-presign={preSign}>
+        <input
+          className={`govuk-input lbh-input ${(error ?? '') && 'govuk-input--error'}`}
+          id={id}
+          placeholder={placeholder}
+          name={name}
+          type={type}
+          ref={ref}
+          value={value}
+          onChange={onChange}
+        />
+      </div>
     </div>
   );
-}
+};

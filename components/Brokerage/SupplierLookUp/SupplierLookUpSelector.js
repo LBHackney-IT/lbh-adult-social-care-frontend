@@ -24,7 +24,8 @@ const SupplierLookUpSelector = ({
 
   return (
     <Container className="supplier-look-up-selector">
-      {items.map(({ id, name, address, sites }) => {
+      {items.map((item) => {
+        const { id, name, address, sites } = item;
         const isExpandedItem = expandedItems.includes(id);
         return (
           <>
@@ -42,13 +43,13 @@ const SupplierLookUpSelector = ({
                   <p>{isExpandedItem ? 'Collapse' : 'Expand'}</p>
                   <CollapseGreenDownIcon/>
                 </Container>
-                : <p onClick={() => setSelectedItem(id)} className="link-button hackney-btn-green">Select</p>
+                : <p onClick={() => setSelectedItem(item)} className="link-button hackney-btn-green">Select</p>
               }
             </Container>
             {isExpandedItem &&
             <Container className="brokerage__action-card-inner-container">
-              {sites.map(({ name, id, address }) => (
-                <BrokerageActionCard id={id} name={name} setSelectedItem={setSelectedItem} address={address}/>
+              {sites.map((site) => (
+                <BrokerageActionCard cardInfo={site} setSelectedItem={setSelectedItem} />
               ))}
             </Container>
             }

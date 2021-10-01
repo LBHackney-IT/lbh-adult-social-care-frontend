@@ -3,15 +3,13 @@ import { Container, Input } from '../../HackneyDS';
 import BrokerageActionCard from '../BrokerageActionCard';
 import { currency } from '../../../constants/strings';
 
-const SupplierLookUpSelected = ({ name, id, address, setSelectedItem }) => {
+const SupplierLookUpSelected = ({ cardInfo, setSelectedItem }) => {
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
   return (
     <Container>
       <h3>Supplier</h3>
       <BrokerageActionCard
-        name={name}
-        id={id}
-        address={address}
+        cardInfo={cardInfo}
         actionsComponent={<p onClick={() => setSelectedItem('')} className='link-button red'>Remove</p>}
       />
       <Input
@@ -24,3 +22,5 @@ const SupplierLookUpSelected = ({ name, id, address, setSelectedItem }) => {
     </Container>
   );
 };
+
+export default SupplierLookUpSelected;

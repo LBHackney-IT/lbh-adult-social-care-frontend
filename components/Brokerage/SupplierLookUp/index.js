@@ -3,6 +3,7 @@ import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Container } from '../../HackneyDS';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import BrokerageSearchSupplier from './BrokerageSearchSupplier';
+import SupplierLookUpSelected from './SupplierLookUpSelected';
 
 export const SupplierLookUp = ({ searchResults }) => {
   const [isOngoing, setIsOngoing] = useState(false);
@@ -39,17 +40,21 @@ export const SupplierLookUp = ({ searchResults }) => {
           <h3 className="brokerage__item-title">Nursing Care</h3>
           <BrokeragePackageDates
             dates={packageDates}
-            label='Package dates'
+            label="Package dates"
             setDates={setPackageDates}
             isOngoing={isOngoing}
             setIsOngoing={setIsOngoing}
           />
         </Container>
-        <BrokerageSearchSupplier
-          searchResults={searchResults}
-          setSelectedItem={setSelectedItem}
-        />
-        <Container className='brokerage__actions'>
+        {
+          selectedItem ?
+            <SupplierLookUpSelected
+              setSelectedItem={setSelectedItem}
+              cardInfo={selectedItem}
+            />
+            : <BrokerageSearchSupplier searchResults={searchResults} setSelectedItem={setSelectedItem}/>
+        }
+        <Container className="brokerage__actions">
           <Button handler={clickBack} className="brokerage__back-button">Back</Button>
           <Button handler={clickSave}>Save and continue</Button>
         </Container>

@@ -39,7 +39,7 @@ textarea {
   box-shadow: none !important;
 }
 
-.lbh-form-group.with-sign {
+.lbh-form-group.with-sign .input-container {
   position: relative;
   &::before {
     content: attr(data-presign);
@@ -50,6 +50,6 @@ textarea {
     left: 8px;
   }
   .govuk-input {
-    padding-left: 15px;
+    padding-left: 16px;
   }
 }

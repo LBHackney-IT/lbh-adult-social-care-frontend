@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import ReviewPackageInfo from './ReviewPackageInfo';
 import BrokerageBorderCost from '../BrokerageBorderCost';
 import { currency } from '../../../constants/strings';
+import BrokerageTotalCost from '../BrokerageTotalCost';
 
 export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summary = [], }) => {
   const router = useRouter();
@@ -27,21 +28,21 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
   const submitForApproval = () => alert('Submit for approval');
 
   return (
-    <div className='review-package-details'>
+    <div className="review-package-details">
       <BrokerageHeader/>
-      <Container className='brokerage__container-main'>
-        <Container className='brokerage__container-header brokerage__container'>
+      <Container className="brokerage__container-main">
+        <Container className="brokerage__container-header brokerage__container">
           <p>Build a care package</p>
           <h2>Review package details</h2>
         </Container>
         <PackageUserDetails {...userDetails} />
-        <Container className='review-package-details__main-container'>
-          <Container className='review-package-details__links'>
+        <Container className="review-package-details__main-container">
+          <Container className="review-package-details__links">
             {links.map(link => (
               <p key={link.text}>— <Link href={link.href}>{link.text}</Link></p>
             ))}
           </Container>
-          <Container className='review-package-details__cost-info'>
+          <Container className="review-package-details__cost-info">
             {packageInfoItems.map(({
               id: itemId,
               headerTitle,
@@ -50,33 +51,30 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
               totalCostHeader,
               costOfPlacement,
             }) => (
-              <Container key={headerTitle} className='review-package-details__cost-info-item'>
+              <Container key={headerTitle} className="review-package-details__cost-info-item">
                 <ReviewPackageInfo headerTitle={headerTitle} items={items}/>
                 {costOfPlacement &&
-                  <p className='brokerage__cost-of-placement'>
-                    Cost of placement
-                    <span className='text-lbh-f01 font-weight-bold'>{currency.euro}{costOfPlacement}</span>
-                  </p>
+                <p className="brokerage__cost-of-placement">
+                  Cost of placement
+                  <span className="text-lbh-f01 font-weight-bold">{currency.euro}{costOfPlacement}</span>
+                </p>
                 }
                 {totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader}/>}
                 {totalCost &&
-                  <Container className='review-package-details__items-actions' display='flex'>
-                    <p onClick={() => editItem(itemId)} className='link-button'>Edit</p>
-                    <p onClick={() => removeItem(itemId)} className='link-button red'>Remove</p>
-                  </Container>
+                <Container className="review-package-details__items-actions" display="flex">
+                  <p onClick={() => editItem(itemId)} className="link-button">Edit</p>
+                  <p onClick={() => removeItem(itemId)} className="link-button red">Remove</p>
+                </Container>
                 }
               </Container>
             ))}
-            <Container className='review-package-details__summary'>
-              <h3 className='font-weight-bold'>Summary</h3>
-              {summary.map(item => (
-                <p key={item.key} className={item.className || ''}>
-                  {`${item.key}`}
-                  <span className='text-lbh-f01'>{currency.euro}{item.value}</span>
-                </p>
+            <Container className="review-package-details__summary">
+              <h3 className="font-weight-bold">Summary</h3>
+              {summary.map(({ key, value, className }) => (
+                <BrokerageTotalCost value={value} name={key} className={className}/>
               ))}
             </Container>
-            <Container className='review-package-details__actions' display='flex'>
+            <Container className="review-package-details__actions" display="flex">
               <Button handler={goBack}>Back</Button>
               <Button handler={submitForApproval}>Submit for approval</Button>
             </Container>
