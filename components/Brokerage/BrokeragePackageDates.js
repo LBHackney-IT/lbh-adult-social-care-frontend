@@ -14,6 +14,7 @@ const BrokeragePackageDates = ({ dates, setDates, isOngoing, setIsOngoing }) => 
       }))}
     />
     <DatePicker
+      disabled={isOngoing}
       day={dates.dayTo}
       date={dates.dateTo}
       setDate={(date) => setDates(prevState => ({
@@ -22,13 +23,18 @@ const BrokeragePackageDates = ({ dates, setDates, isOngoing, setIsOngoing }) => 
       }))}
     />
     {setIsOngoing &&
-      <Checkbox
-        value={isOngoing}
-        id="package-dates-id"
-        onChangeValue={value => setIsOngoing(value)}
-        checked={isOngoing}
-        label="Ongoing"
-      />
+    <Checkbox
+      value={isOngoing}
+      id="package-dates-id"
+      onChangeValue={(value) => {
+        setIsOngoing(value);
+        setDates(prevState => ({
+          ...prevState,
+          dateTo: null,
+        }));
+      }}
+      label="Ongoing"
+    />
     }
   </FormGroup>
 );

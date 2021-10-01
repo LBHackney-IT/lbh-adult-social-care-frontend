@@ -1,10 +1,24 @@
 .supplier-look-up {
+  .supplier-search-button {
+    font-size: 16px;
+    margin-top: auto;
+
+    height: 38px;
+    width: 100px;
+    margin-bottom: 2px;
+  }
+
   .govuk-form-group.brokerage__package-dates {
     margin-bottom: 32px;
   }
 
   .lbh-search-box__container {
     width: 335px;
+    height: 40px;
+
+    input {
+      height: 40px;
+    }
   }
 
   .lbh-search-box {
@@ -29,10 +43,4 @@
 
 .supplier-search-for {
   text-decoration: underline;
-}
-
-.supplier-search-button {
-  height: fit-content;
-  font-size: 16px;
-  margin-top: auto;
 }

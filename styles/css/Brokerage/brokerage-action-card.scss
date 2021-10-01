@@ -66,6 +66,13 @@
 
   & > svg {
     margin-left: 12px;
+    transition: 0.2s ease;
+  }
+
+  &.expanded {
+    & > svg {
+      transform: rotate(180deg);
+    }
   }
 }
 

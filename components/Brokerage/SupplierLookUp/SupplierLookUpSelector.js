@@ -10,35 +10,41 @@ const SupplierLookUpSelector = ({
   pageSize = 10,
   totalPages,
 }) => {
-  const [collapsedItems, setCollapsedItems] = useState([]);
+  const [expandedItems, setExpandedItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const changeCollapsedItems = id => {
-    if (collapsedItems.includes(id)) {
-      setCollapsedItems(collapsedItems.filter(item => item !== id));
+  const changExpandedItems = id => {
+    if (expandedItems.includes(id)) {
+      setExpandedItems(expandedItems.filter(item => item !== id));
     } else {
-      setCollapsedItems([...collapsedItems, id]);
+      setExpandedItems([...expandedItems, id]);
     }
   };
 
   return (
     <Container className="supplier-look-up-selector">
       {items.map(({ id, name, address, sites }) => {
+        const isExpandedItem = expandedItems.includes(id);
         return (
           <>
             <Container className="brokerage__action-card">
               <p className="brokerage__action-card-name">{name}<span>{id}</span></p>
               <p className="brokerage__action-card-address">{address}</p>
               {sites ?
-                <Container onClick={() => changeCollapsedItems(id)} className="brokerage__action-card--actions" display="flex" alignItems="center">
+                <Container
+                  onClick={() => changExpandedItems(id)}
+                  className={`brokerage__action-card--actions${isExpandedItem ? ' expanded' : ''}`}
+                  display="flex"
+                  alignItems="center"
+                >
                   <p>{sites.length} sites</p>
-                  <p>Collapse</p>
+                  <p>{isExpandedItem ? 'Collapse' : 'Expand'}</p>
                   <CollapseGreenDownIcon/>
                 </Container>
                 : <p onClick={() => setSelectedItem(id)} className="link-button hackney-btn-green">Select</p>
               }
             </Container>
-            {collapsedItems.includes(id) &&
+            {isExpandedItem &&
               <Container className='brokerage__action-card-inner-container'>
                 {sites.map(({ name, id, address }) => (
                 <Container className="brokerage__action-card">

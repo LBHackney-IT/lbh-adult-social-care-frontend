@@ -5,6 +5,7 @@ import { Hint, Label } from '../index';
 import { lastDayOfMonth } from 'date-fns';
 
 export default function DatePicker ({
+  disabled,
   className = '',
   label,
   formId,
@@ -18,6 +19,8 @@ export default function DatePicker ({
   year = {},
   onClickIcon = () => {},
 }) {
+  const outerClass = className ? ` ${className}` : '';
+  const disabledClass = disabled ? ' disabled' : '';
   const actualDate = new Date();
 
   //get value 01 return 1, get value 10 return 10
@@ -28,14 +31,14 @@ export default function DatePicker ({
     // get value 02 format to 2 and 2-1=1 February
     const validMonth = replaceFirstZero(monthValue) - 1 > 11 ? 0 : replaceFirstZero(monthValue) - 1;
     return Number(validMonth) < 0 ? 0 : Number(validMonth);
-  }
+  };
 
   const getValidDay = (dayValue) => {
     const formatDay = dayValue && replaceFirstZero(dayValue);
     const lastDayInMonth = date && lastDayOfMonth(date).getDate();
     const validDay = formatDay && lastDayInMonth && (lastDayInMonth < formatDay) ? 1 : formatDay;
-    return Number(validDay) || 1
-  }
+    return Number(validDay) || 1;
+  };
 
   const getValidYear = (dayValue) => (
     dayValue ? `20${dayValue}` : 0
@@ -64,6 +67,11 @@ export default function DatePicker ({
       date?.getDate() || 1,
     ));
   };
+
+  const [initialDateState] = useState({
+    value: '',
+    error: '',
+  });
 
   const [localDay, setLocalDay] = useState({
     value: '',
@@ -99,11 +107,15 @@ export default function DatePicker ({
       setLocalDay(prevState => ({ ...prevState, value: date.getDate(), error: '' }));
       setLocalMonth(prevState => ({ ...prevState, value: date.getMonth() + 1, error: '' }));
       setLocalYear(prevState => ({ ...prevState, value: date.getFullYear().toString().slice(2, 4), error: '' }));
+    } else {
+      setLocalDay({...initialDateState});
+      setLocalMonth({...initialDateState});
+      setLocalYear({...initialDateState});
     }
   }, [date]);
 
   return (
-    <div className={`${className} govuk-date-input lbh-date-input`} id={`${formId}-errors`}>
+    <div className={`govuk-date-input lbh-date-input${disabledClass}${outerClass}`} id={`${formId}-errors`}>
       {label && <Label className="govuk-date-input__label">{label}</Label>}
       {hint && <Hint className="govuk-date-input__hint">{hint}</Hint>}
       {inputs.map((input) => {
@@ -118,6 +130,7 @@ export default function DatePicker ({
             <input
               className={`${errorClass}govuk-input govuk-date-input__input ${input.className}`}
               id={input.id}
+              disabled={disabled}
               value={`00${input.value}`.slice(-2)}
               onChange={e => {
                 if (input.onChange) {
