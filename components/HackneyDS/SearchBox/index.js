@@ -43,7 +43,7 @@ export default function SearchBox ({
       {error && <ErrorMessage>{error}</ErrorMessage>}
       <div className="lbh-search-box__container">
         <input
-          className="govuk-input lbh-input govuk-input--width-10"
+          className="govuk-input lbh-input"
           id={id}
           value={value}
           name={name}

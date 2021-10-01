@@ -1,0 +1,38 @@
+.supplier-look-up {
+  .govuk-form-group.brokerage__package-dates {
+    margin-bottom: 32px;
+  }
+
+  .lbh-search-box__container {
+    width: 335px;
+  }
+
+  .lbh-search-box {
+    & > label {
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+  }
+
+  .supplier-search-box {
+    margin-right: 8px;
+  }
+
+  .supplier-search-box__results {
+    font-size: 16px;
+    font-weight: 400;
+    color: $lbh-secondary-text-colour;
+    margin-top: 32px;
+    margin-bottom: 8px;
+  }
+}
+
+.supplier-search-for {
+  text-decoration: underline;
+}
+
+.supplier-search-button {
+  height: fit-content;
+  font-size: 16px;
+  margin-top: auto;
+}

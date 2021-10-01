@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DatePickerCalendarIcon } from '../../Icons';
 import DatePick from '../../DatePick';
 import { Hint, Label } from '../index';
+import { lastDayOfMonth } from 'date-fns';
 
 export default function DatePicker ({
   className = '',
@@ -23,7 +24,7 @@ export default function DatePicker ({
   const replaceFirstZero = (string) => string && (string[0] === '0' ? string.replace('0', '') : string);
 
   const getValidMonth = (monthValue) => {
-    // if value more then 11 return 0 (date.getMonth() start from 0) January
+    // if value more then 11 return 0 (date.getMonth() start from 0) 11 December and max number of month
     // get value 02 format to 2 and 2-1=1 February
     const validMonth = replaceFirstZero(monthValue) - 1 > 11 ? 0 : replaceFirstZero(monthValue) - 1;
     return Number(validMonth) < 0 ? 0 : Number(validMonth);
@@ -31,7 +32,7 @@ export default function DatePicker ({
 
   const getValidDay = (dayValue) => {
     const formatDay = dayValue && replaceFirstZero(dayValue);
-    const lastDayInMonth = date && new Date(date.getFullYear(), date.getMonth(), 0).getDate();
+    const lastDayInMonth = date && lastDayOfMonth(date).getDate();
     const validDay = formatDay && lastDayInMonth && (lastDayInMonth < formatDay) ? 1 : formatDay;
     return Number(validDay) || 1
   }

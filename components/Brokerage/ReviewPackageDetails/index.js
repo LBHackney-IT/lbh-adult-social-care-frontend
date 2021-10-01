@@ -30,7 +30,7 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
     <div className='review-package-details'>
       <BrokerageHeader/>
       <Container className='brokerage__container'>
-        <Container className='brokerage__container-header brokerage__default-container'>
+        <Container className='brokerage-container-header brokerage__default-container'>
           <p>Build a care package</p>
           <h2>Review package details</h2>
         </Container>

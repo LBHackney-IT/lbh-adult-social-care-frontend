@@ -15,9 +15,9 @@ const SupplierLookUpSelector = ({
 
   const changeCollapsedItems = id => {
     if (collapsedItems.includes(id)) {
-      setSelectedItem(collapsedItems.filter(item => item !== id));
+      setCollapsedItems(collapsedItems.filter(item => item !== id));
     } else {
-      setSelectedItem([...collapsedItems, id]);
+      setCollapsedItems([...collapsedItems, id]);
     }
   };
 
@@ -25,29 +25,32 @@ const SupplierLookUpSelector = ({
     <Container className="supplier-look-up-selector">
       {items.map(({ id, name, address, sites }) => {
         return (
-          <Container className='brokerage__action-card'>
-            <p>{name} <span>{id}</span></p>
-            <p>{address}</p>
-            {sites ?
-              <Container>
-                <p>{sites.length} sites</p>
-                <Container>
-                  <p onClick={() => changeCollapsedItems(id)}>Collapse</p>
+          <>
+            <Container className="brokerage__action-card">
+              <p className="brokerage__action-card-name">{name}<span>{id}</span></p>
+              <p className="brokerage__action-card-address">{address}</p>
+              {sites ?
+                <Container onClick={() => changeCollapsedItems(id)} className="brokerage__action-card--actions" display="flex" alignItems="center">
+                  <p>{sites.length} sites</p>
+                  <p>Collapse</p>
                   <CollapseGreenDownIcon/>
                 </Container>
-              </Container>
-              : <p onClick={() => setSelectedItem(id)} className="link-button hackney-btn-green">Select</p>
-            }
+                : <p onClick={() => setSelectedItem(id)} className="link-button hackney-btn-green">Select</p>
+              }
+            </Container>
             {collapsedItems.includes(id) &&
-            sites.map(site => (
-              <Container>
-                <p>{site.name} <span>{site.id}</span></p>
-                <p>{site.address}</p>
-                <p onClick={() => setSelectedItem(site.id)} className="link-button hackney-btn-green">Select</p>
+              <Container className='brokerage__action-card-inner-container'>
+                {sites.map(({ name, id, address }) => (
+                <Container className="brokerage__action-card">
+                  <p className='brokerage__action-card-name'>{name} <span>{id}</span></p>
+                  <p className='brokerage__action-card-address'>{address}</p>
+                  <p onClick={() => setSelectedItem(id)} className="link-button hackney-btn-green">Select</p>
+                </Container>
+                ))}
               </Container>
-            ))
+
             }
-          </Container>
+          </>
         );
       })}
       <Pagination
