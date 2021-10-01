@@ -106,16 +106,13 @@ const CorePackageDetails = ({
             {checkboxOptions.map(item => (
               <Checkbox
                 key={item.id}
-                value={item.id}
+                value={furtherDetails.includes(item.id)}
                 handler={() => changeCheckbox(item.id)}
-                checked={furtherDetails.includes(item.id)}
                 id={item.id}
-              >
-                {item.label}
-              </Checkbox>
+                label={item.label}
+              />
             ))}
           </Container>
-
         </Container>
         {Object.values(errors).some(error => !!error) &&
         <ErrorMessage>There is some errors above</ErrorMessage>

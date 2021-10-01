@@ -8,7 +8,6 @@ export default function Checkbox ({
   id,
   name,
   value,
-  checked = false,
   handler = () => {}
 }) {
   const smallClassList = small ? ' govuk-checkboxes--small' : '';
@@ -22,10 +21,10 @@ export default function Checkbox ({
         type="checkbox"
         value={value}
         disabled={disabled}
-        checked={checked}
+        checked={value}
         onChange={e => {
           if (onChangeValue) {
-            return onChangeValue(e.target.value);
+            return onChangeValue(e.target.checked);
           }
           handler(e);
         }}
