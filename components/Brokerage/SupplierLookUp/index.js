@@ -36,8 +36,8 @@ export const SupplierLookUp = ({ searchResults }) => {
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader/>
-      <Container className="brokerage__container">
-        <Container className="brokerage-container-header brokerage__default-container">
+      <Container className="brokerage__container-main">
+        <Container className="brokerage__container-header brokerage__container">
           <p>Build a care package</p>
           <h2>Broker package</h2>
         </Container>

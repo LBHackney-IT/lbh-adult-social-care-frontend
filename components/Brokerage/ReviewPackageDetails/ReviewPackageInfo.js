@@ -54,7 +54,12 @@ const ReviewPackageInfo = ({ headerTitle, items }) => {
                   <p className='link-button'>Core package details</p>
                   <CaretDownIcon/>
                 </div>
-                {openedId && <p>{serviceUserNeed}</p>}
+                {openedId &&
+                  <>
+                    <p>{serviceUserNeed.term}</p>
+                    <p>{serviceUserNeed.careType}</p>
+                  </>
+                }
               </Container>
             )}
           </Container>

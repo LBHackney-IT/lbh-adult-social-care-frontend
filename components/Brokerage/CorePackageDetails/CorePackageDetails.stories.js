@@ -1,5 +1,5 @@
 import React from 'react';
-import { CorePackageDetails } from './index';
+import CorePackageDetails from './index';
 
 export default {
   title: 'Pages/Brokerage/CorePackageDetails',

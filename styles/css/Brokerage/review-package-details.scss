@@ -25,6 +25,7 @@
   display: flex;
   align-items: center;
   width: fit-content;
+  margin-bottom: 8px;
 
   .link-button {
     margin-right: 6px;
@@ -92,6 +93,21 @@
 
 .review-package-details__cost-info-item {
   margin-bottom: 60px;
+}
+
+.brokerage__cost-of-placement {
+  padding-top: 24px;
+  font-size: 24px;
+  border-top: 1px solid $lbh-gray-border-2;
+
+  color: $lbh-black1;
+
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    font-weight: bold;
+  }
 }
 
 .review-package-details__summary {

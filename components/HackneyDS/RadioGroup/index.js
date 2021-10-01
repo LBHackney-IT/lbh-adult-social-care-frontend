@@ -20,16 +20,16 @@ export default function RadioGroup({
   const smallRadioGroupClass = small ? ' govuk-radios--small' : '';
 
   return (
-    <FormGroup label={label} error={error} hint={hint}>
+    <FormGroup label={label} error={error} className={outerClassName} hint={hint}>
       <div className={`govuk-radios lbh-radios${outerClassName}${inlineClassName}${smallRadioGroupClass}`}>
-        {items.map((item) => {
+      {items.map((item) => {
           const { condition } = item;
           const errorClass = condition?.error ? ' govuk-input--error' : '';
 
           if(item.divider) {
             return (
               <div key={item.id} className="govuk-radios__divider">{item.divider}</div>
-            )
+            );
           }
           return (
             <React.Fragment key={item.id}>
@@ -61,7 +61,7 @@ export default function RadioGroup({
                 </div>
               )}
             </React.Fragment>
-          )
+          );
         })}
       </div>
     </FormGroup>

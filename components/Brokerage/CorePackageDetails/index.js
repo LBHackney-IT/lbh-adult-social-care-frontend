@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
-import { Button, Checkbox, Container, ErrorMessage } from '../../HackneyDS';
+import { Button, Checkbox, Container, ErrorMessage, RadioGroup } from '../../HackneyDS';
 import { object, string } from 'yup';
 import PackageUserDetails from '../PackageUserDetails';
 import CorePackageSelectors from './CorePackageSelectors';
 
-export const CorePackageDetails = ({
+const CorePackageDetails = ({
   userDetails,
   supportReasonOptions,
   checkboxOptions,
   packageTypeOptions,
+  packageScheduleOptions,
 }) => {
   const [supportReason, setSupportReason] = useState('');
   const [packageType, setPackageType] = useState('');
   const [furtherDetails, setFurtherDetails] = useState([]);
+  const [packageSchedule, setPackageSchedule] = useState(null);
   const [errors, setErrors] = useState({
     packageType: '',
     supportReason: '',
@@ -72,10 +74,10 @@ export const CorePackageDetails = ({
   }, [packageTypeOptions]);
 
   return (
-    <div className='core-package-details'>
+    <div className="core-package-details">
       <BrokerageHeader/>
-      <Container className='brokerage__container'>
-        <Container className='brokerage-container-header brokerage__default-container'>
+      <Container className="brokerage__container-main">
+        <Container className="brokerage__container-header brokerage__container">
           <p>Build a care package</p>
           <h2>Core package details</h2>
         </Container>
@@ -90,10 +92,17 @@ export const CorePackageDetails = ({
           supportReason={supportReason}
           supportReasonOptions={supportReasonOptions}
         />
+        <RadioGroup
+          className='core-package-details__radio-group'
+          items={packageScheduleOptions}
+          value={packageSchedule}
+          handle={setPackageSchedule}
+          label='Packaging scheduling'
+        />
         <Container>
-          <h3 className='core-package-details__further-title'>Further details</h3>
-          <p className='core-package-details__further-sub-title'>Select all that apply</p>
-          <Container className='core-package-details__checkboxes'>
+          <h3 className="core-package-details__further-title">Further details</h3>
+          <p className="core-package-details__further-sub-title">Select all that apply</p>
+          <Container className="core-package-details__checkboxes">
             {checkboxOptions.map(item => (
               <Checkbox
                 key={item.id}
@@ -116,3 +125,5 @@ export const CorePackageDetails = ({
     </div>
   );
 };
+
+export default CorePackageDetails;

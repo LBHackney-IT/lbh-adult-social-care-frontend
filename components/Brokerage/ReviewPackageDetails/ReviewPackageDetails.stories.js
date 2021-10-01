@@ -32,37 +32,34 @@ const testPackageInfoItems = [
   {
     headerTitle: 'Residential',
     id: 1,
+    costOfPlacement: 300,
     items: [
       {
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
-        price: 300,
         title: 'Supplier',
         place: 'Bupa Care Home Luke Site 1',
         id: '123456789',
         address: '15 Atherden Rd, Lower Clapton, London E5 0QP',
-        serviceUserNeed: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-         sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-           nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-             pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-              culpa qui officia deserunt mollit anim id est laborum.`,
+        serviceUserNeed: {
+          term: 'Long term 52+ weeks',
+          careType: 'Respite Care',
+        },
       }
     ],
-    totalCostHeader: 'Weekly Cost',
-    totalCost: '300',
   },
   {
     headerTitle: 'Weekly Additional Need',
     id: 2,
     items: [
       {
+        id: '1',
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
         price: 300,
       },
       {
+        id: '2',
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
         price: 300,
@@ -76,6 +73,7 @@ const testPackageInfoItems = [
     id: 3,
     items: [
       {
+        id: '3',
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
         price: 187.60,
@@ -89,6 +87,7 @@ const testPackageInfoItems = [
     id: 4,
     items: [
       {
+        id: '5',
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
         price: 100.50,

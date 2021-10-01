@@ -35,6 +35,12 @@ const AdultSocialCare = () => (
   </svg>
 );
 
+const SelectArrowTriangle = () => (
+  <svg width="10" height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0L5 5L10 0H0Z" fill="black"/>
+  </svg>
+);
+
 const TooltipIcon = ({ tooltipText }) => (
   <svg className='tooltip-icon' data-for={tooltipText} data-tip={tooltipText} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M7.33301 12H8.66634V10.6667H7.33301V12ZM7.99967 1.33334C4.31967 1.33334 1.33301 4.32 1.33301 8C1.33301 11.68 4.31967 14.6667 7.99967 14.6667C11.6797 14.6667 14.6663 11.68 14.6663 8C14.6663 4.32 11.6797 1.33334 7.99967 1.33334ZM7.99967 13.3333C5.05967 13.3333 2.66634 10.94 2.66634 8C2.66634 5.06 5.05967 2.66667 7.99967 2.66667C10.9397 2.66667 13.333 5.06 13.333 8C13.333 10.94 10.9397 13.3333 7.99967 13.3333ZM7.99967 4C6.52634 4 5.33301 5.19334 5.33301 6.66667H6.66634C6.66634 5.93334 7.26634 5.33334 7.99967 5.33334C8.73301 5.33334 9.33301 5.93334 9.33301 6.66667C9.33301 8 7.33301 7.83334 7.33301 10H8.66634C8.66634 8.5 10.6663 8.33334 10.6663 6.66667C10.6663 5.19334 9.47301 4 7.99967 4Z" fill="#025EA6"/>
@@ -50,6 +56,12 @@ const CollapseGreenDownIcon = () => (
 const DatePickerCalendarIcon = ({ onClick = () => {}, className = '' }) => (
   <svg className={className} onClick={onClick} width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M2 8H16V10H18V4C18 2.9 17.1 2 16 2H15V0H13V2H5V0H3V2H2C0.89 2 0.00999999 2.9 0.00999999 4L0 18C0 19.1 0.89 20 2 20H9V18H2V8ZM2 4H16V6H2V4ZM19.84 14.28L19.13 14.99L17.01 12.87L17.72 12.16C18.11 11.77 18.74 11.77 19.13 12.16L19.84 12.87C20.23 13.26 20.23 13.89 19.84 14.28ZM16.3 13.58L18.42 15.7L13.12 21H11V18.88L16.3 13.58Z" fill="black"/>
+  </svg>
+);
+
+const ToggleBlueIcon = ({ className = '' }) => (
+  <svg width="18" className={`toggle-blue-icon ${className}`} height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1.90798e-07 2L2.38498e-08 16C1.06966e-08 17.103 0.897 18 2 18L16 18C17.103 18 18 17.103 18 16L18 2C18 0.897 17.103 2.03951e-07 16 1.90798e-07L2 2.38498e-08C0.897 1.06966e-08 2.03951e-07 0.896999 1.90798e-07 2ZM13.996 10.582L12.582 11.996L9 8.414L5.425 11.989L4.011 10.575L9 5.586L13.996 10.582Z" fill="#025EA6"/>
   </svg>
 );
 
@@ -261,5 +273,7 @@ export {
   ArrowLeftGreenIcon,
   TooltipIcon,
   DatePickerCalendarIcon,
+  SelectArrowTriangle,
+  ToggleBlueIcon,
   CollapseGreenDownIcon,
 };

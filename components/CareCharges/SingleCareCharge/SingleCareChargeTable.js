@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { MdEdit } from 'react-icons/md';
 import { getNumberWithCommas } from '../../../service/helpers';
 import { Table, Tag } from '../../HackneyDS/index';
 
-export const SingleCareChargeTable = ({ data }) => {
-  const columns = [
+export const SingleCareChargeTable = ({ data, columns, hasFooter }) => {
+
+  const [localColumns] = useState([
     {
       Header: 'Status',
       accessor: 'status',
@@ -59,16 +60,17 @@ export const SingleCareChargeTable = ({ data }) => {
         </span>
       ),
     },
-  ];
+  ]);
+
   return (
     <Table
-      columns={columns}
+      columns={columns || localColumns}
       data={data}
       headerClassName="table-header"
       bodyClassName="table-body"
       cellClassName="no-borders"
       footerClassName="table-footer"
-      hasFooter
+      hasFooter={hasFooter}
     />
   );
 };
