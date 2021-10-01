@@ -11,12 +11,6 @@ export const SupplierLookUp = ({ searchResults }) => {
   const [packageDates, setPackageDates] = useState({
     dateFrom: null,
     dateTo: null,
-    dayFrom: {
-      label: 'From',
-    },
-    dayTo: {
-      label: 'To',
-    }
   });
 
   const clickBack = () => {
@@ -45,6 +39,7 @@ export const SupplierLookUp = ({ searchResults }) => {
           <h3 className="brokerage__item-title">Nursing Care</h3>
           <BrokeragePackageDates
             dates={packageDates}
+            label='Package dates'
             setDates={setPackageDates}
             isOngoing={isOngoing}
             setIsOngoing={setIsOngoing}

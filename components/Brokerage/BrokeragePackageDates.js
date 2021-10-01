@@ -3,10 +3,10 @@ import DatePicker from '../HackneyDS/DatePicker';
 import { Checkbox } from '../HackneyDS';
 import React from 'react';
 
-const BrokeragePackageDates = ({ dates, setDates, isOngoing, setIsOngoing }) => (
-  <FormGroup className="brokerage__package-dates" label="Package dates">
+const BrokeragePackageDates = ({ dates, setDates, isOngoing, setIsOngoing, label }) => (
+  <FormGroup className="brokerage__package-dates" label={label}>
     <DatePicker
-      day={dates.dayFrom}
+      day={{ label: 'From' }}
       date={dates.dateFrom}
       setDate={(date) => setDates(prevState => ({
         ...prevState,
@@ -15,7 +15,7 @@ const BrokeragePackageDates = ({ dates, setDates, isOngoing, setIsOngoing }) => 
     />
     <DatePicker
       disabled={isOngoing}
-      day={dates.dayTo}
+      day={{ label: 'To' }}
       date={dates.dateTo}
       setDate={(date) => setDates(prevState => ({
         ...prevState,

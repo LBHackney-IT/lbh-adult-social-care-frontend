@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container } from '../../HackneyDS';
 import { CollapseGreenDownIcon } from '../../Icons';
 import Pagination from '../../Payments/Pagination';
+import BrokerageActionCard from '../BrokerageActionCard';
 
 const SupplierLookUpSelector = ({
   items,
@@ -45,16 +46,11 @@ const SupplierLookUpSelector = ({
               }
             </Container>
             {isExpandedItem &&
-              <Container className='brokerage__action-card-inner-container'>
-                {sites.map(({ name, id, address }) => (
-                <Container className="brokerage__action-card">
-                  <p className='brokerage__action-card-name'>{name} <span>{id}</span></p>
-                  <p className='brokerage__action-card-address'>{address}</p>
-                  <p onClick={() => setSelectedItem(id)} className="link-button hackney-btn-green">Select</p>
-                </Container>
-                ))}
-              </Container>
-
+            <Container className="brokerage__action-card-inner-container">
+              {sites.map(({ name, id, address }) => (
+                <BrokerageActionCard id={id} name={name} setSelectedItem={setSelectedItem} address={address}/>
+              ))}
+            </Container>
             }
           </>
         );

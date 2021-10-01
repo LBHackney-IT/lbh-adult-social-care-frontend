@@ -13,10 +13,18 @@ export const Input = ({
   preSign = '',
   value,
   handler,
+  onChangeValue,
 }) => {
   const outerClassName = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-form-group--error' : '';
   const signClass = preSign ? ' with-sign' : '';
+
+  const onChange = e => {
+    if(onChangeValue) {
+      return onChangeValue(e.target.value);
+    }
+    handler(e);
+  }
 
   return (
     <div
@@ -38,7 +46,7 @@ export const Input = ({
         type={type}
         ref={ref}
         value={value}
-        onChange={(e) => handler(e.target.value)}
+        onChange={onChange}
       />
     </div>
   );
