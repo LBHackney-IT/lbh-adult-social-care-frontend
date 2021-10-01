@@ -21,9 +21,9 @@
   line-height: 1.1875;
   display: inline-block;
   position: relative;
-  width: 100px;
+  width: auto;
+  padding: 0 1.375rem;
   height: 40px;
-  padding: 0;
   border: 2px solid transparent;
   border-radius: 0;
   color: #fff;
@@ -33,6 +33,12 @@
   vertical-align: top;
   cursor: pointer;
   -webkit-appearance: none;
+}
+
+a.lbh-button {
+  display: flex;
+  align-items: center;
+  width: fit-content;
 }
 
 button {
@@ -210,7 +216,6 @@ button {
   box-shadow: 0 2px 0 #328472;
 }
 .lbh-button--start {
-  padding: 0.9375rem 1.5rem 0.8125rem;
   font-size: 1.6875rem;
   font-weight: 600;
   line-height: 1.875rem;
@@ -229,7 +234,6 @@ button {
 .lbh-button--secondary,
 .lbh-button--secondary:link,
 .lbh-button--secondary:visited {
-  padding: 0.8125rem 1.375rem 0.6875rem;
   border: 1px solid #00664f;
   color: #00664f;
   background: #fff;
