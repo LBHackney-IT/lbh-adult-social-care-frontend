@@ -27,7 +27,7 @@ Default.args = {
 export const WithCounter = Template.bind({});
 
 WithCounter.args = {
-  'max-count': 30,
+  maxCount: 30,
   rows: 5,
   value: 'Initial value',
   handler: () => {},

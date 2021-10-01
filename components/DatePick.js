@@ -16,7 +16,7 @@ const DatePick = ({
   className = '',
   disabled = false,
   onClickOutside,
-  dateFormat = dateStringFormats.dayMonthYear,
+  dateFormat = dateStringFormats.dayMonthYearSlash,
   label,
   minDate,
   maxDate,

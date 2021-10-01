@@ -1,14 +1,15 @@
 import React from 'react';
 import { getSlot, getMultipleSlot } from '../index';
 
-export default function Header({ children = [], fixed, purple }) {
+export default function Header({ children = [], bottomLines = true, fixed, purple }) {
+  const bottomLinesClass = bottomLines ? ' bottom-lines' : ''
   const fixedClassList = fixed ? ' lbh-header--fixed' : '';
   const shortServiceNodeList = ' lbh-header__service-name--short';
   const purpleSchemeNodeList = purple ? ' lbh-header--purple' : '';
   const nodeList = Array.isArray(children) ? children : [children];
 
   return (
-    <header className={`lbh-header${fixedClassList + purpleSchemeNodeList}`}>
+    <header className={`lbh-header${bottomLinesClass}${fixedClassList + purpleSchemeNodeList}`}>
       <div className="lbh-header__main">
         <div className="lbh-header__wrapper">
           <h1 className="lbh-header__title">

@@ -11,6 +11,13 @@
   padding: 5px;
   border: 2px solid #0b0c0c;
 
+  & {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+  }
+
   &:focus {
     outline: #ffc845 solid 3px;
     outline-offset: 0;
@@ -41,5 +48,25 @@
     line-height: 1.25;
     font-family: sans-serif;
     font-size: 14pt;
+  }
+}
+
+.select-container {
+  position: relative;
+  min-width: 128px;
+  width: fit-content;
+
+  select {
+    width: 100%;
+  }
+
+  .select-icon {
+    position: absolute;
+    right: 16px;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
   }
 }

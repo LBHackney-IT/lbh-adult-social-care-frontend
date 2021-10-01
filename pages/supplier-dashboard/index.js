@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import SupplierDashboardTable from 'components/SupplierDashboard/SupplierDashboardTable';
 import Pagination from 'components/Payments/Pagination';
 import SupplierDashboardInnerHeader from 'components/SupplierDashboard/SupplierDashboardInnerHeader';
 import HackneyFooterInfo from 'components/HackneyFooterInfo';
 import { changeSupplierReturnsDashboard } from 'reducers/supplierDashboardReducer';
 import withSession from 'lib/session';
-import { getUserSession } from 'service/helpers';
+import { formatDate, formatStatus, getUserSession } from 'service/helpers';
 import { supplierDashboardTableData } from '../../testData/testDataPayRuns';
+import Table from '../../components/Table';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -52,7 +52,7 @@ const SupplierDashboard = () => {
 
   return (
     <div className="supplier-dashboard max-desktop-width">
-      <SupplierDashboardInnerHeader />
+      <SupplierDashboardInnerHeader/>
       <Table
         onClickTableRow={onClickTableRow}
         rows={supplierDashboardTableData}
@@ -82,8 +82,8 @@ const SupplierDashboard = () => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination from={1} to={10} pageSize={10} totalCount={30} />
-      <HackneyFooterInfo />
+      <Pagination from={1} to={10} pageSize={10} totalCount={30}/>
+      <HackneyFooterInfo/>
     </div>
   );
 };

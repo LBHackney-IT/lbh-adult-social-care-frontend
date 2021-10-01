@@ -1,19 +1,21 @@
 .lbh-header {
-  &:before {
-    bottom: 3px;
-    border-bottom: 3px solid #00b341;
-  }
-  &:after {
-    bottom: 9px;
-    border-bottom: 4px solid #00664f;
-  }
-  &:after,
-  &:before {
-    content: '';
-    display: block;
-    position: absolute;
-    right: 0;
-    left: 0;
+  &.bottom-lines {
+    &:before {
+      bottom: 3px;
+      border-bottom: 3px solid #00b341;
+    }
+    &:after {
+      bottom: 9px;
+      border-bottom: 4px solid #00664f;
+    }
+    &:after,
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      right: 0;
+      left: 0;
+    }
   }
   &--fixed {
     position: fixed;
@@ -27,9 +29,13 @@
   position: relative;
   z-index: 4;
   margin-top: 0;
-  padding-bottom: 1.3125rem;
-  border-bottom: 2px solid #84bd00;
   background: #fff;
+
+  &.bottom-lines {
+    padding-bottom: 1.3125rem;
+    border-bottom: 2px solid #84bd00;
+  }
+
   & + .lbh-phase-banner {
     margin-top: 0.3125rem;
   }
