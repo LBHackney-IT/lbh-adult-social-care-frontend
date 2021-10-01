@@ -25,6 +25,8 @@ const BrokerageSearchSupplier = ({
           onChangeValue={value => setSupplierSearch(value)}
           label="Supplier"
           search={onSearchSupplier}
+          searchIcon={null}
+          clearIcon={<p className='lbh-primary-button'>Clear</p>}
           clear={() => setSupplierSearch('')}
           value={supplierSearch}
           className='supplier-search-box'

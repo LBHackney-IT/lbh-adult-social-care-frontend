@@ -52,10 +52,10 @@ export default function SearchBox ({
           type="search"
           placeholder={placeholder}
         />
-        <button onClick={buttonHandler} className="lbh-search-box__action">
+        <div onClick={buttonHandler} className="lbh-search-box__action">
           <span className="govuk-visually-hidden">{value ? 'Clear search' : 'Search'}</span>
           {value && clear ? clearIcon : searchIcon}
-        </button>
+        </div>
       </div>
     </div>
   );
