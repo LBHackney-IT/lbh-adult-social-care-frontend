@@ -47,6 +47,7 @@ textarea {
     height: 100%;
     display: flex;
     align-items: center;
+    box-sizing: border-box;
     left: 8px;
   }
   .govuk-input {

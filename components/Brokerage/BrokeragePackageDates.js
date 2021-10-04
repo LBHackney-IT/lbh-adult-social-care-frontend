@@ -3,40 +3,40 @@ import DatePicker from '../HackneyDS/DatePicker';
 import { Checkbox } from '../HackneyDS';
 import React from 'react';
 
-const BrokeragePackageDates = ({ dates, setDates, isOngoing, setIsOngoing, label }) => (
-  <FormGroup className="brokerage__package-dates" label={label}>
-    <DatePicker
-      day={{ label: 'From' }}
-      date={dates.dateFrom}
-      setDate={(date) => setDates(prevState => ({
-        ...prevState,
-        dateFrom: date,
-      }))}
-    />
-    <DatePicker
-      disabled={isOngoing}
-      day={{ label: 'To' }}
-      date={dates.dateTo}
-      setDate={(date) => setDates(prevState => ({
-        ...prevState,
-        dateTo: date,
-      }))}
-    />
-    {setIsOngoing &&
-    <Checkbox
-      value={isOngoing}
-      id="package-dates-id"
-      onChangeValue={(value) => {
-        setIsOngoing(value);
-        setDates(prevState => ({
-          ...prevState,
-          dateTo: null,
-        }));
-      }}
-      label="Ongoing"
-    />
-    }
-  </FormGroup>
-);
+const BrokeragePackageDates = ({
+  dates,
+  setDates,
+  isOngoing,
+  setIsOngoing,
+  label,
+  checkboxId = 'package-dates-id',
+  hasOngoing = true,
+}) => {
+  const dateToError = !isOngoing && dates.dateTo - dates.dateFrom < 0 ? 'Date to less then date from' : '';
+  return (
+    <FormGroup error={dateToError} className="brokerage__package-dates" label={label}>
+      <DatePicker
+        day={{ label: 'From' }}
+        date={dates.dateFrom}
+        setDate={(date) => setDates('dateFrom', date)}
+      />
+      <DatePicker
+        disabled={isOngoing}
+        day={{ label: 'To' }}
+        minDate={dates.dateFrom}
+        date={dates.dateTo}
+        setDate={(date) => setDates('dateTo', date)}
+      />
+      {hasOngoing &&
+      <Checkbox
+        value={isOngoing}
+        id={checkboxId}
+        onChangeValue={value => setIsOngoing(value)}
+        label="Ongoing"
+      />
+      }
+    </FormGroup>
+  );
+}
 
 export default BrokeragePackageDates;

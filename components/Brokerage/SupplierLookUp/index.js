@@ -8,6 +8,20 @@ import SupplierLookUpSelected from './SupplierLookUpSelected';
 export const SupplierLookUp = ({ searchResults }) => {
   const [isOngoing, setIsOngoing] = useState(false);
   const [selectedItem, setSelectedItem] = useState('');
+  const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
+  const [initialNeed] = useState({
+    cost: 0,
+    dates: {
+      dateFrom: null,
+      dateTo: null
+    },
+    isOngoing: false,
+  });
+
+  const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed }]);
+  const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed }]);
+  const [weeklyTotalCost, setWeeklyTotalCost] = useState(0);
+  const [oneOfTotalCost, setOneOfTotalCost] = useState(0);
 
   const [packageDates, setPackageDates] = useState({
     dateFrom: null,
@@ -22,11 +36,48 @@ export const SupplierLookUp = ({ searchResults }) => {
     alert('Click save');
   };
 
-  useEffect(() => {
-    if (selectedItem) {
-      alert(selectedItem);
+  const changeNeed = (getter, setter, field, value, index) => {
+    const cloneNeed = { ...getter[index] };
+    if (field === 'cost') {
+      cloneNeed.cost = value;
+    } else if (field === 'isOngoing') {
+      cloneNeed.isOngoing = value;
+    } else {
+      cloneNeed.dates = { ...cloneNeed.dates, [field]: value };
     }
-  }, [selectedItem]);
+    const cloneNeeds = getter.slice();
+    cloneNeeds.splice(index, 1, cloneNeed);
+    setter(cloneNeeds);
+  };
+
+  const addNeed = (setter) => {
+    setter(prevState => ([
+      ...prevState,
+      { ...initialNeed },
+    ]));
+  };
+
+  const removeNeed = (getter, setter, index) => {
+    const copyGetter = getter.slice();
+    copyGetter.splice(index, 1);
+    setter(copyGetter);
+  };
+
+  useEffect(() => {
+    let totalCost = Number(supplierWeeklyCost);
+    if (weeklyNeeds) {
+      weeklyNeeds.forEach(item => totalCost += Number(item.cost));
+    }
+    setWeeklyTotalCost(totalCost);
+  }, [supplierWeeklyCost, weeklyNeeds]);
+
+  useEffect(() => {
+    let totalCost = Number(supplierWeeklyCost);
+    if (oneOffNeeds) {
+      oneOffNeeds.forEach(item => totalCost += Number(item.cost));
+    }
+    setOneOfTotalCost(totalCost);
+  }, [supplierWeeklyCost, oneOffNeeds]);
 
   return (
     <div className="supplier-look-up brokerage">
@@ -41,7 +92,7 @@ export const SupplierLookUp = ({ searchResults }) => {
           <BrokeragePackageDates
             dates={packageDates}
             label="Package dates"
-            setDates={setPackageDates}
+            setDates={(field, date) => setPackageDates(prevState => ({ ...prevState, [field]: date }))}
             isOngoing={isOngoing}
             setIsOngoing={setIsOngoing}
           />
@@ -49,6 +100,17 @@ export const SupplierLookUp = ({ searchResults }) => {
         {
           selectedItem ?
             <SupplierLookUpSelected
+              addNeed={addNeed}
+              weeklyNeeds={weeklyNeeds}
+              oneOffNeeds={oneOffNeeds}
+              setWeeklyNeeds={setWeeklyNeeds}
+              setOneOffNeeds={setOneOffNeeds}
+              oneOffTotalCost={oneOfTotalCost}
+              weeklyTotalCost={weeklyTotalCost}
+              supplierWeeklyCost={supplierWeeklyCost}
+              setSupplierWeeklyCost={setSupplierWeeklyCost}
+              changeNeed={changeNeed}
+              removeNeed={removeNeed}
               setSelectedItem={setSelectedItem}
               cardInfo={selectedItem}
             />

@@ -14,14 +14,22 @@ export default function FormGroup ({
 
   return (
     <div className={`govuk-form-group lbh-form-group${errorClassList}${outerClassName}`}>
-    <fieldset className="govuk-fieldset lbh-fieldset">
-        <label className="govuk-fieldset__legend">{label}</label>
-        {hint && <span className="govuk-hint lbh-hint">{hint}</span>}
+      <fieldset className="govuk-fieldset lbh-fieldset">
+        {label &&
+        <>
+          <label className="govuk-fieldset__legend">{label}</label>
+          <HorizontalSeparator/>
+        </>
+        }
+        {hint && <>
+          <span className="govuk-hint lbh-hint">{hint}</span>
+          <HorizontalSeparator/>
+        </>}
         {error && <span className="govuk-error-message">
           <span className="govuk-visually-hidden">Error:</span>
           {error}
         </span>}
-        {(hint || error || label) && <HorizontalSeparator height='10px' />}
+        {(hint || error || label) && <HorizontalSeparator height="10px"/>}
         {nodeList}
       </fieldset>
     </div>

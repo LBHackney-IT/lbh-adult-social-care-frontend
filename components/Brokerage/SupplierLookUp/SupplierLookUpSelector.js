@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container } from '../../HackneyDS';
 import { CollapseGreenDownIcon } from '../../Icons';
 import Pagination from '../../Payments/Pagination';
-import BrokerageActionCard from '../BrokerageActionCard';
+import BrokerageSupplierCard from '../BrokerageSupplierCard';
 
 const SupplierLookUpSelector = ({
   items,
@@ -28,14 +28,14 @@ const SupplierLookUpSelector = ({
         const { id, name, address, sites } = item;
         const isExpandedItem = expandedItems.includes(id);
         return (
-          <>
-            <Container className="brokerage__action-card">
-              <p className="brokerage__action-card-name">{name}<span>{id}</span></p>
-              <p className="brokerage__action-card-address">{address}</p>
+          <React.Fragment key={id}>
+            <Container className="brokerage__supplier-card">
+              <p className="brokerage__supplier-card-name">{name}<span>{id}</span></p>
+              <p className="brokerage__supplier-card-address">{address}</p>
               {sites ?
                 <Container
                   onClick={() => changExpandedItems(id)}
-                  className={`brokerage__action-card--actions${isExpandedItem ? ' expanded' : ''}`}
+                  className={`brokerage__supplier-card--actions${isExpandedItem ? ' expanded' : ''}`}
                   display="flex"
                   alignItems="center"
                 >
@@ -47,13 +47,17 @@ const SupplierLookUpSelector = ({
               }
             </Container>
             {isExpandedItem &&
-            <Container className="brokerage__action-card-inner-container">
+            <Container className="brokerage__supplier-card-inner-container">
               {sites.map((site) => (
-                <BrokerageActionCard cardInfo={site} setSelectedItem={setSelectedItem} />
+                <BrokerageSupplierCard
+                  key={site.id}
+                  cardInfo={site}
+                  setSelectedItem={setSelectedItem}
+                />
               ))}
             </Container>
             }
-          </>
+          </React.Fragment>
         );
       })}
       <Pagination

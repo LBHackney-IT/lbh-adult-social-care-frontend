@@ -1,4 +1,13 @@
 .supplier-look-up {
+
+  .with-sign {
+    font-size: 14px;
+
+    input {
+      font-size: 14px;
+    }
+  }
+
   .supplier-search-button {
     font-size: 16px;
     margin-top: auto;
@@ -39,8 +48,32 @@
     margin-top: 32px;
     margin-bottom: 8px;
   }
+
+  .brokerage__weekly-cost {
+    margin-bottom: 60px;
+  }
+}
+
+.supplier-look-up__weekly-cost {
+  border-bottom: 1px solid $lbh-light-gray-border;
+  padding-bottom: 60px;
+
+  &.govuk-form-group {
+    margin-bottom: 60px;
+  }
 }
 
 .supplier-search-for {
   text-decoration: underline;
+}
+
+.supplier-look-up__selected-title {
+  font-size: 19px;
+  margin-bottom: 16px;
+}
+
+.supplier-look-up__selected {
+  .brokerage__supplier-card {
+    margin-bottom: 32px;
+  }
 }

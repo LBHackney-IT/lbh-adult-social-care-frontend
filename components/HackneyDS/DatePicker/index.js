@@ -9,6 +9,7 @@ export default function DatePicker ({
   className = '',
   label,
   formId,
+  minDate,
   hint,
   date,
   setDate,
@@ -108,9 +109,9 @@ export default function DatePicker ({
       setLocalMonth(prevState => ({ ...prevState, value: date.getMonth() + 1, error: '' }));
       setLocalYear(prevState => ({ ...prevState, value: date.getFullYear().toString().slice(2, 4), error: '' }));
     } else {
-      setLocalDay({...initialDateState});
-      setLocalMonth({...initialDateState});
-      setLocalYear({...initialDateState});
+      setLocalDay({ ...initialDateState });
+      setLocalMonth({ ...initialDateState });
+      setLocalYear({ ...initialDateState });
     }
   }, [date]);
 
@@ -161,6 +162,7 @@ export default function DatePicker ({
           }}
           startDate={date}
           inline
+          minDate={minDate}
           dateValue={date}
           setDate={changeCalendarInput}
         />}

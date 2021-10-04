@@ -1,13 +1,13 @@
-.brokerage__action-card {
+.brokerage__supplier-card {
   padding: 26px 16px;
   background: $lbh-light-gray;
   margin-bottom: 4px;
 }
 
-.brokerage__action-card-inner-container {
+.brokerage__supplier-card-inner-container {
   margin-left: 32px;
 
-  .brokerage__action-card {
+  .brokerage__supplier-card {
     &:first-of-type {
       margin-top: 8px;
     }
@@ -54,7 +54,8 @@
   }
 }
 
-.brokerage__action-card--actions {
+.brokerage__supplier-card--actions {
+  width: fit-content !important;
   color: $lbh-secondary-text-colour;
   &:hover {
     cursor: pointer;
@@ -76,7 +77,7 @@
   }
 }
 
-.brokerage__action-card-name {
+.brokerage__supplier-card-name {
   font-size: 18px;
   margin-bottom: 8px;
 
@@ -87,7 +88,7 @@
   }
 }
 
-.brokerage__action-card-address {
+.brokerage__supplier-card-address {
   font-size: 16px;
   color: $lbh-secondary-text-colour;
   margin-bottom: 8px;
