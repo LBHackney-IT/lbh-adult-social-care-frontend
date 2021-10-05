@@ -15,9 +15,11 @@ const Template = (args) => {
     setDate(args.date);
   }, [args.date]);
 
+  const error = args.day?.error || args.month?.error || args.year?.error;
+
   return (
-    <FormGroup label='Form label' hint='Form hint' error={args.error}>
-      <DatePicker{...args} />
+    <FormGroup label='Form label' hint='Form hint' error={error}>
+      <DatePicker {...args} date={date} setDate={setDate} />
     </FormGroup>
   );
 };

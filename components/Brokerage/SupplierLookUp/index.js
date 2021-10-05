@@ -4,6 +4,7 @@ import { Button, Container } from '../../HackneyDS';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import BrokerageSearchSupplier from './BrokerageSearchSupplier';
 import SupplierLookUpSelected from './SupplierLookUpSelected';
+import BrokerageContainerHeader from '../BrokerageContainerHeader';
 
 export const SupplierLookUp = ({ searchResults }) => {
   const [isOngoing, setIsOngoing] = useState(false);
@@ -83,10 +84,7 @@ export const SupplierLookUp = ({ searchResults }) => {
     <div className="supplier-look-up brokerage">
       <BrokerageHeader/>
       <Container className="brokerage__container-main">
-        <Container className="brokerage__container-header brokerage__container">
-          <p>Build a care package</p>
-          <h2>Broker package</h2>
-        </Container>
+        <BrokerageContainerHeader title='Broker package' />
         <Container>
           <h3 className="brokerage__item-title">Nursing Care</h3>
           <BrokeragePackageDates

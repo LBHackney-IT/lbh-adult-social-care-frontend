@@ -20,6 +20,7 @@ export default function DatePicker ({
   year = {},
   onClickIcon = () => {},
 }) {
+
   const outerClass = className ? ` ${className}` : '';
   const disabledClass = disabled ? ' disabled' : '';
   const actualDate = new Date();
@@ -91,9 +92,9 @@ export default function DatePicker ({
 
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
   const inputs = [
-    { name: 'day', id: `${formId}-day`, visible: true, ...day, ...localDay, onChangeValue: onChangeDay },
-    { name: 'month', id: `${formId}-month`, visible: true, ...month, ...localMonth, onChangeValue: onChangeMonth },
-    { name: 'year', id: `${formId}-year`, visible: true, ...year, ...localYear, onChangeValue: onChangeYear },
+    { name: 'day', id: `${formId}-day`, visible: true, ...localDay, ...day, onChangeValue: onChangeDay },
+    { name: 'month', id: `${formId}-month`, visible: true, ...localMonth, ...month, onChangeValue: onChangeMonth },
+    { name: 'year', id: `${formId}-year`, visible: true, ...localYear, ...year, onChangeValue: onChangeYear },
   ];
 
   const clickIcon = () => {

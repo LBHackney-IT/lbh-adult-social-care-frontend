@@ -8,13 +8,14 @@ const BrokeragePackageDates = ({
   setDates,
   isOngoing,
   setIsOngoing,
+  error,
   label,
   checkboxId = 'package-dates-id',
   hasOngoing = true,
 }) => {
-  const dateToError = !isOngoing && dates.dateTo - dates.dateFrom < 0 ? 'Date to less then date from' : '';
+  const dateToError = !isOngoing && dates.dateTo < dates.dateFrom ? '(Date to) less then (date from)' : '';
   return (
-    <FormGroup error={dateToError} className="brokerage__package-dates" label={label}>
+    <FormGroup error={error || dateToError} className="brokerage__package-dates" label={label}>
       <DatePicker
         day={{ label: 'From' }}
         date={dates.dateFrom}
