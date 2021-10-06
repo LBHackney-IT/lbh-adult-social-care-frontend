@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, Input, Label, RadioGroup, Select, Textarea } from '../../HackneyDS';
+import { Button, Container, ErrorMessage, Input, Label, RadioGroup, Select, Textarea } from '../../HackneyDS';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
@@ -14,6 +14,7 @@ const CareCharges = ({ reasonsCollecting, defaultCost = 84.4 }) => {
   const [errors, setErrors] = useState({
     collectedBy: '',
     costPerWeek: '',
+    reasonCollecting: '',
   });
 
   const [collectedBy, setCollectedBy] = useState('');
@@ -42,6 +43,14 @@ const CareCharges = ({ reasonsCollecting, defaultCost = 84.4 }) => {
       },
     ];
 
+    if (collectedBy === 'hackney') {
+      validFields.push({
+        schema: requiredSchema.string,
+        value: reasonCollecting,
+        field: 'reasonCollecting',
+      });
+    }
+
     let hasErrors = false;
     let localErrors = {};
     for await (let { schema, value, field } of validFields) {
@@ -69,10 +78,10 @@ const CareCharges = ({ reasonsCollecting, defaultCost = 84.4 }) => {
         <BrokerageContainerHeader title="Funded Nursing Care"/>
         <Container>
           <h3 className="brokerage__item-title">Care charges</h3>
-          <p className='care-charges-hint'>Provisional care charge (pre-assessement)</p>
+          <p className="care-charges-hint">Provisional care charge (pre-assessement)</p>
           <Input
             onChangeValue={setCostPerWeek}
-            className='care-charges__cost-input'
+            className="care-charges__cost-input"
             value={costPerWeek}
             label="Cost per week"
             error={errors.costPerWeek}
@@ -98,18 +107,25 @@ const CareCharges = ({ reasonsCollecting, defaultCost = 84.4 }) => {
               { id: 'supplier', label: 'Supplier (net)' },
             ]}
           />
-          <Label className="reason-collecting" htmlFor="reason-collecting">
-            Why is
-            <span className="text-capitalize"> {collectedBy} </span>
-            collecting these care charges?
-          </Label>
-          <Select
-            id="reason-collecting"
-            options={reasonsCollecting}
-            value={collectedBy}
-            onChangeValue={setReasonCollecting}
-          />
-          <Textarea className='care-charges__textarea' handler={setNotes} value={notes}/>
+          {
+            collectedBy === 'hackney' &&
+            <>
+              <Label className="reason-collecting text-required-after" htmlFor="reason-collecting">
+                Why is Hackney collecting these care charges?
+              </Label>
+              {errors.reasonCollecting && <ErrorMessage>{errors.reasonCollecting}</ErrorMessage>}
+              <Select
+                id="reason-collecting"
+                options={reasonsCollecting}
+                value={reasonCollecting}
+                onChangeValue={value => {
+                  setReasonCollecting(value);
+                  changeError('reasonCollecting');
+                }}
+              />
+            </>
+          }
+          <Textarea className="care-charges__textarea" handler={setNotes} value={notes}/>
           <BrokerageTotalCost
             name={`Funding per week ${collectedBy ? `(${collectedByType[collectedBy]})` : ''}`}
             className="brokerage__border-cost"

@@ -74,7 +74,7 @@ const CorePackageDetails = ({
   }, [packageTypeOptions]);
 
   return (
-    <div className="core-package-details">
+    <div className="core-package-details brokerage">
       <BrokerageHeader/>
       <Container className="brokerage__container-main">
         <Container className="brokerage__container-header brokerage__container">

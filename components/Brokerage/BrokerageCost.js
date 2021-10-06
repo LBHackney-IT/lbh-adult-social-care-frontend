@@ -3,7 +3,8 @@ import { Container, Input } from '../HackneyDS';
 import { SelectArrowTriangle } from '../Icons';
 import BrokeragePackageDates from './BrokeragePackageDates';
 import { currency } from '../../constants/strings';
-import BrokerageTotalCost from './BrokerageTotalCost';
+import { uniqueID } from '../../service/helpers';
+import BrokerageBorderCost from './BrokerageBorderCost';
 
 const BrokerageCost = ({
   title,
@@ -33,7 +34,7 @@ const BrokerageCost = ({
       {expanded &&
         <>
         {getter.map((item, index) => (
-          <>
+          <React.Fragment key={uniqueID()}>
             <BrokeragePackageDates
               dates={item.dates}
               setDates={(field, date) => changeNeed(getter, setter, field, date, index)}
@@ -56,12 +57,12 @@ const BrokerageCost = ({
               <p onClick={() => addNeed(setter)} className="text-green">{addNeedText}</p>
             </Container>
 
-          </>
+          </React.Fragment>
           ))}
-          <BrokerageTotalCost
-            name={totalCostName}
+          <BrokerageBorderCost
+            totalCostHeader={totalCostName}
             className="brokerage__border-cost"
-            value={totalCost}
+            totalCost={totalCost}
           />
         </>
       }
