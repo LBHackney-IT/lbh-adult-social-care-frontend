@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '../Button';
-import { uniqueID } from 'service/helpers';
+import { uniqueID } from '../../service/helpers';
 
 const Pagination = ({
   className,

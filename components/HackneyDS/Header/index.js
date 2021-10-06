@@ -1,7 +1,7 @@
 import React from 'react';
 import { getSlot, getMultipleSlot } from '../index';
 
-export default function Header({ children = [], bottomLines = true, fixed, purple }) {
+export default function Header({ children = [], links = [], bottomLines = true, fixed, purple }) {
   const bottomLinesClass = bottomLines ? ' bottom-lines' : ''
   const fixedClassList = fixed ? ' lbh-header--fixed' : '';
   const shortServiceNodeList = ' lbh-header__service-name--short';
@@ -52,7 +52,12 @@ export default function Header({ children = [], bottomLines = true, fixed, purpl
               </span>
             </a>
           </h1>
-          <div className="lbh-header__links">{getMultipleSlot(nodeList, 'link')}</div>
+          <div className="lbh-header__links">
+            {getMultipleSlot(nodeList, 'link')}
+            {links.map(({ href, text }) => (
+              <a href={href} slot="link">{text}</a>
+            ))}
+          </div>
         </div>
       </div>
     </header>
