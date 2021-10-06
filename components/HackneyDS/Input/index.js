@@ -12,6 +12,7 @@ export const Input = ({
   className,
   preSign = '',
   value,
+  onBlur,
   handler,
   onChangeValue,
 }) => {
@@ -37,6 +38,7 @@ export const Input = ({
       {error && <span className="govuk-error-message lbh-error-message">{error}</span>}
       <div className='input-container' data-presign={preSign}>
         <input
+          onBlur={onBlur}
           className={`govuk-input lbh-input ${(error ?? '') && 'govuk-input--error'}`}
           id={id}
           placeholder={placeholder}

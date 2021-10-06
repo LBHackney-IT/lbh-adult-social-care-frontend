@@ -39,6 +39,12 @@
 }
 
 .brokerage__actions {
+  @include media-small-ipod-down {
+    button:first-of-type {
+      margin-bottom: 14px;
+    }
+  }
+
   button {
     width: 226px;
     font-size: 19px;

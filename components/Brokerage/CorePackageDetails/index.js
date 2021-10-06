@@ -58,7 +58,7 @@ const CorePackageDetails = ({
       return;
     }
 
-    console.log('save and continue');
+    alert('save and continue');
   };
 
   useEffect(() => {
