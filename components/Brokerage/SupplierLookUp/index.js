@@ -8,7 +8,7 @@ import BrokerageContainerHeader from '../BrokerageContainerHeader';
 
 export const SupplierLookUp = ({ searchResults }) => {
   const [isOngoing, setIsOngoing] = useState(false);
-  const [selectedItem, setSelectedItem] = useState('');
+  const [selectedItem, setSelectedItem] = useState(null);
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
   const [initialNeed] = useState({
     cost: 0,
@@ -30,6 +30,10 @@ export const SupplierLookUp = ({ searchResults }) => {
   });
 
   const clickBack = () => {
+    if(selectedItem) {
+      setSelectedItem(null);
+      return;
+    }
     alert('Click back');
   };
 
