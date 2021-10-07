@@ -57,6 +57,13 @@ const formatDate = ( date, formatString = 'dd.MM.yy') => date && format(new Date
 
 const includeString = (mainString, checkString) => mainString && mainString.indexOf(checkString) > -1;
 
+const getUrlFromFile = file => {
+  if(!file) return '';
+  if(file?.url) return file.url;
+
+  return window.URL.revokeObjectURL(file);
+}
+
 const formatStatus = (status, sign = '-', isUpperCase) => {
   if(!status) return '';
   if(status.indexOf('-') > -1) {
@@ -171,4 +178,5 @@ export {
   formatCareDatePeriod,
   formatStringLength,
   incrementDate,
+  getUrlFromFile,
 };

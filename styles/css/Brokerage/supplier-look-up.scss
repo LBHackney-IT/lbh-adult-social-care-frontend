@@ -1,0 +1,105 @@
+.supplier-look-up {
+
+  .is-new-supplier {
+    display: flex;
+    margin-top: 23px;
+    margin-bottom: 25px;
+
+    .govuk-checkboxes__item {
+      margin-right: 12px;
+
+      .govuk-checkboxes__label {
+        padding: 0;
+      }
+    }
+
+    .is-new-supplier-text {
+      font-size: 16px;
+      p:last-of-type {
+        color: $lbh-secondary-text-colour;
+      }
+    }
+
+    .link-button {
+      &.green {
+        color: $lbh-primary-button;
+      }
+    }
+  }
+  .with-sign {
+    font-size: 14px;
+
+    input {
+      font-size: 14px;
+    }
+  }
+
+  .supplier-search-button {
+    font-size: 16px;
+    margin-top: auto;
+
+    height: 38px;
+    width: 100px;
+    margin-bottom: 2px;
+  }
+
+  .govuk-form-group.brokerage__package-dates {
+    margin-bottom: 32px;
+  }
+
+  .lbh-search-box__container {
+    width: 335px;
+    height: 40px;
+
+    input {
+      height: 40px;
+    }
+  }
+
+  .lbh-search-box {
+    & > label {
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+  }
+
+  .supplier-search-box {
+    margin-right: 8px;
+  }
+
+  .supplier-search-box__results {
+    font-size: 16px;
+    font-weight: 400;
+    color: $lbh-secondary-text-colour;
+    margin-top: 32px;
+    margin-bottom: 8px;
+  }
+
+  .brokerage__weekly-cost {
+    margin-bottom: 60px;
+  }
+}
+
+.supplier-look-up__weekly-cost {
+  border-bottom: 1px solid $lbh-light-gray-border;
+  padding-bottom: 60px;
+
+  &.govuk-form-group {
+    margin-bottom: 60px;
+  }
+}
+
+.supplier-search-for {
+  text-decoration: underline;
+}
+
+.supplier-look-up__selected-title {
+  font-size: 19px;
+  margin-bottom: 16px;
+}
+
+.supplier-look-up__selected {
+  .brokerage__supplier-card {
+    margin-bottom: 32px;
+  }
+}

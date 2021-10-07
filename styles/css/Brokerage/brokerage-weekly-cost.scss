@@ -1,0 +1,17 @@
+.brokerage__weekly-cost {
+  & > h2 {
+    font-size: 30px;
+    color: $lbh-black1;
+
+    span {
+      font-size: 16px;
+      margin-left: 16px;
+      display: flex;
+      align-items: center;
+
+      svg {
+        margin-left: 4px;
+      }
+    }
+  }
+}

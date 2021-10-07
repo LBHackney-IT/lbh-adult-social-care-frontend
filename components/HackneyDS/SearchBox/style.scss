@@ -14,14 +14,15 @@
 .lbh-search-box {
   position: relative;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
 
   & > label, & > .lbh-hint, & > .lbh-error-message {
     flex-basis: 100%;
   }
 }
 .lbh-search-box__container {
-  display: inline-flex;
+  display: flex;
+  align-items: center;
   position: relative;
 }
 .lbh-search-box + .lbh-table {

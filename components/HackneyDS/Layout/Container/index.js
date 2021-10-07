@@ -8,10 +8,26 @@ export const Container = ({
   height,
   display,
   alignItems,
+  onClick = () => {},
   flexDirection,
   flex,
-  className = '',
   justifyContent,
+  className = '',
 }) => (
-  <div className={className} style={{ padding, height, background, width, display, alignItems, flexDirection, flex, justifyContent }}>{children}</div>
+  <div
+    onClick={onClick}
+    className={className}
+    style={{
+      padding,
+      background,
+      height,
+      width,
+      display,
+      alignItems,
+      flexDirection,
+      flex,
+      justifyContent
+    }}>
+    {children}
+  </div>
 );

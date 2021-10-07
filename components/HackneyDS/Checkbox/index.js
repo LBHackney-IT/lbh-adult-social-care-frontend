@@ -1,6 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-export default function Checkbox({ children, small, disabled, id, name, value, checked = false, handler = () => {} }) {
+export default function Checkbox ({
+  label,
+  onChangeValue,
+  small,
+  disabled,
+  id,
+  name,
+  value,
+  handler = () => {}
+}) {
   const smallClassList = small ? ' govuk-checkboxes--small' : '';
 
   return (
@@ -9,14 +18,19 @@ export default function Checkbox({ children, small, disabled, id, name, value, c
         className="govuk-checkboxes__input"
         id={id}
         name={name}
-        type='checkbox'
+        type="checkbox"
         value={value}
         disabled={disabled}
-        checked={checked}
-        onChange={handler}
+        checked={value}
+        onChange={e => {
+          if (onChangeValue) {
+            return onChangeValue(e.target.checked);
+          }
+          handler(e);
+        }}
       />
       <label className="govuk-label govuk-checkboxes__label" htmlFor={id}>
-        {children}
+        {label}
       </label>
     </div>
   );

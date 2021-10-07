@@ -12,6 +12,12 @@
   align-items: center;
   flex-wrap: wrap;
 
+  &.disabled {
+    opacity: 0.3;
+    user-select: none;
+    pointer-events: none;
+  }
+
   & > .govuk-label {
     width: 100%;
   }

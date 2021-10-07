@@ -3,10 +3,12 @@ import { SelectArrowTriangle } from '../../Icons';
 
 export default function Select({
   onChange = () => {},
+  onChangeValue,
   value = { text: '', value: '' },
   className = '',
   disabledOptions = [],
   options = [],
+  id = 'select-id',
   error,
   IconComponent = <SelectArrowTriangle />,
 }) {
@@ -15,7 +17,18 @@ export default function Select({
   const errorDescribedBy = error ? { 'aria-describedby': ' govuk-select--error' } : {};
   return (
     <div className='select-container'>
-      <select {...errorDescribedBy} onChange={onChange} defaultValue={value} className={`govuk-select lbh-select${outerClass}${errorClass}`}>
+      <select
+        id={id}
+        {...errorDescribedBy}
+        onChange={(e) => {
+          if(onChangeValue) {
+            return onChangeValue(e.target.value);
+          }
+          onChange(e);
+        }}
+        defaultValue={value}
+        className={`govuk-select lbh-select${outerClass}${errorClass}`}
+      >
         {options.map(option => {
           const isDisabledOption = disabledOptions.some(disabledOption => (
             disabledOption === option.value

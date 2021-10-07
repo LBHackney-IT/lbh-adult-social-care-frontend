@@ -7,7 +7,7 @@ export default function Textarea ({
   name,
   value,
   className = '',
-  handler = () => {}
+  handler = () => {},
 }) {
   const getCount = () => maxCount - value.length;
   return (

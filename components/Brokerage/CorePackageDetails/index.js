@@ -58,7 +58,7 @@ const CorePackageDetails = ({
       return;
     }
 
-    console.log('save and continue');
+    alert('save and continue');
   };
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const CorePackageDetails = ({
   }, [packageTypeOptions]);
 
   return (
-    <div className="core-package-details">
+    <div className="core-package-details brokerage">
       <BrokerageHeader/>
       <Container className="brokerage__container-main">
         <Container className="brokerage__container-header brokerage__container">
@@ -106,21 +106,18 @@ const CorePackageDetails = ({
             {checkboxOptions.map(item => (
               <Checkbox
                 key={item.id}
-                value={item.id}
+                value={furtherDetails.includes(item.id)}
                 handler={() => changeCheckbox(item.id)}
-                checked={furtherDetails.includes(item.id)}
                 id={item.id}
-              >
-                {item.label}
-              </Checkbox>
+                label={item.label}
+              />
             ))}
           </Container>
-
         </Container>
         {Object.values(errors).some(error => !!error) &&
         <ErrorMessage>There is some errors above</ErrorMessage>
         }
-        <Button handler={saveAndContinue}>Save and continue</Button>
+        <Button className='core-package-details__button' handler={saveAndContinue}>Save and continue</Button>
       </Container>
     </div>
   );

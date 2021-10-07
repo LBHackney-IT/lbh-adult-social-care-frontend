@@ -90,5 +90,9 @@
 
   &.red {
     color: $lbh-link-red;
+
+    &:hover {
+      color: $lbh-link-red;
+    }
   }
 }
