@@ -14,7 +14,7 @@ const Template = (args) => <FundedNursingCare {...args} />;
 export const Default = Template.bind({});
 Default.args = {
   collectedByOptions: [
-    { text: 'By Net', value: 'net' },
-    { text: 'By Gross', value: 'gross' },
+    { value: 'hackney', text: 'Hackney council (gross)' },
+    { value: 'supplier', text: 'Supplier (net)' },
   ]
 };

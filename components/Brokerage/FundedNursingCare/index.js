@@ -9,6 +9,10 @@ import UrlFromFile from '../../UrlFromFile';
 import { requiredSchema } from '../../../constants/schemas';
 
 const FundedNursingCare = ({ collectedByOptions }) => {
+  const [collectedByType] = useState({
+    hackney: 'gross',
+    supplier: 'net',
+  })
   const [dates, setDates] = useState({
     dateFrom: null,
     dateTo: null,
@@ -26,8 +30,8 @@ const FundedNursingCare = ({ collectedByOptions }) => {
   const [isOngoing, setIsOngoing] = useState(false);
 
   const collectedByCost = () => {
-    if (collectedBy === 'net') return -187;
-    if (collectedBy === 'gross') return 187;
+    if (collectedByType[collectedBy] === 'net') return -187;
+    if (collectedByType[collectedBy] === 'gross') return 187;
     return null;
   };
 
@@ -144,7 +148,7 @@ const FundedNursingCare = ({ collectedByOptions }) => {
             </FormGroup>}
           </FormGroup>
           <BrokerageTotalCost
-            name={`Funded per week ${collectedBy ? `(${collectedBy})` : ''}`}
+            name={`Funded per week ${collectedByType[collectedBy] ? `(${collectedByType[collectedBy]})` : ''}`}
             className="brokerage__border-cost"
             value={collectedByCost()}
           />
