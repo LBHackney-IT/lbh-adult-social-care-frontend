@@ -1,8 +1,10 @@
 .supplier-look-up {
+  .supplier-search-container {
+    margin-bottom: 23px;
+  }
 
   .is-new-supplier {
     display: flex;
-    margin-top: 23px;
     margin-bottom: 25px;
 
     .govuk-checkboxes__item {
