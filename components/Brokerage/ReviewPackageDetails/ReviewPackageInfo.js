@@ -16,11 +16,11 @@ const ReviewPackageInfo = ({ headerTitle, items }) => {
   };
 
   return (
-    <Container className='review-package-details__items-container'>
+    <Container className="review-package-details__items-container">
       <h3>{headerTitle}</h3>
-      {items.map(({
-        dateFrom,
-        dateTo,
+      {items?.map(({
+        startDate,
+        endDate,
         price,
         title,
         address,
@@ -30,40 +30,40 @@ const ReviewPackageInfo = ({ headerTitle, items }) => {
       }) => {
         const openedId = openedServiceUserNeed.includes(id);
         return (
-          <Container className='review-package-details__items' key={id}>
-            <Container className='review-package-details__items-date' display='flex' justifyContent='space-between'>
+          <Container className="review-package-details__items" key={id}>
+            <Container className="review-package-details__items-date" display="flex" justifyContent="space-between">
               <p>
-                {formatDate(dateFrom, dateStringFormats.dayMonthYearSlash)}
-                {` - `}
-                {formatDate(dateTo, dateStringFormats.dayMonthYearSlash)}</p>
-              {price && <p className='text-lbh-f01'>{currency.euro}{price}</p>}
+                {formatDate(startDate, dateStringFormats.dayMonthYearSlash)}
+                {endDate && ` - `}
+                {endDate && formatDate(endDate, dateStringFormats.dayMonthYearSlash)}</p>
+              {price && <p className="text-lbh-f01">{currency.euro}{price}</p>}
             </Container>
-            {title && <p className='review-package-details__items-title font-weight-bold'>{title}</p>}
+            {title && <p className="review-package-details__items-title font-weight-bold">{title}</p>}
             {address &&
             <Container>
-              <p className='review-package-details__items-place'>{place} {id}</p>
-              <p className='review-package-details__items-address'>{address}</p>
+              <p className="review-package-details__items-place">{place} {id}</p>
+              <p className="review-package-details__items-address">{address}</p>
             </Container>
             }
             {serviceUserNeed && (
-              <Container className='review-package-details__accordion'>
+              <Container className="review-package-details__accordion">
                 <div
                   onClick={() => changeOpenedService(id)}
                   className={`review-package-details__accordion-info${openedId ? ' accordion-opened' : ''}`}
                 >
-                  <p className='link-button'>Core package details</p>
+                  <p className="link-button">Core package details</p>
                   <CaretDownIcon/>
                 </div>
                 {openedId &&
-                  <>
-                    <p>{serviceUserNeed.term}</p>
-                    <p>{serviceUserNeed.careType}</p>
-                  </>
+                <>
+                  <p>{serviceUserNeed.term}</p>
+                  <p>{serviceUserNeed.careType}</p>
+                </>
                 }
               </Container>
             )}
           </Container>
-        )
+        );
       })}
     </Container>
   );

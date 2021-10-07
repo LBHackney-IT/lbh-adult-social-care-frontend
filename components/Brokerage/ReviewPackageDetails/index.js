@@ -7,9 +7,11 @@ import ReviewPackageInfo from './ReviewPackageInfo';
 import BrokerageBorderCost from '../BrokerageBorderCost';
 import { currency } from '../../../constants/strings';
 import BrokerageTotalCost from '../BrokerageTotalCost';
+import { BROKER_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 
 export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summary = [], }) => {
   const router = useRouter();
+  const packageId = router.query.id;
 
   const [links] = useState([
     { text: 'Care Package', href: 'care-package' },
@@ -21,9 +23,7 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
 
   const goBack = () => router.back();
 
-  const editItem = itemId => alert(`Edit package info id: ${itemId}`);
-
-  const removeItem = itemId => alert(`Remove package info id: ${itemId}`);
+  const redirectToBrokerPackage = itemId => router.push(`${BROKER_PACKAGE_ROUTE}/${packageId}/${itemId}`);
 
   const submitForApproval = () => alert('Submit for approval');
 
@@ -39,7 +39,7 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
         <Container className="review-package-details__main-container">
           <Container className="review-package-details__links">
             {links.map(link => (
-              <p key={link.text}>— <Link href={link.href}>{link.text}</Link></p>
+              <p key={link.text}>— <Link className='link-button' href={link.href}>{link.text}</Link></p>
             ))}
           </Container>
           <Container className="review-package-details__cost-info">
@@ -50,6 +50,7 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
               totalCost,
               totalCostHeader,
               costOfPlacement,
+              totalCostComponent,
             }) => (
               <Container key={headerTitle} className="review-package-details__cost-info-item">
                 <ReviewPackageInfo headerTitle={headerTitle} items={items}/>
@@ -60,18 +61,19 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
                 </p>
                 }
                 {totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader}/>}
+                {totalCostComponent && totalCostComponent}
                 {totalCost &&
                 <Container className="review-package-details__items-actions" display="flex">
-                  <p onClick={() => editItem(itemId)} className="link-button">Edit</p>
-                  <p onClick={() => removeItem(itemId)} className="link-button red">Remove</p>
+                  <p onClick={() => redirectToBrokerPackage(itemId)} className="link-button">Edit</p>
+                  <p onClick={() => redirectToBrokerPackage(itemId)} className="link-button red">Remove</p>
                 </Container>
                 }
               </Container>
             ))}
             <Container className="review-package-details__summary">
               <h3 className="font-weight-bold">Summary</h3>
-              {summary.map(({ key, value, className }) => (
-                <BrokerageTotalCost value={value} name={key} className={className}/>
+              {summary.map(({ key, value, className, id }) => (
+                <BrokerageTotalCost key={id} value={value} name={key} className={className}/>
               ))}
             </Container>
             <Container className="review-package-details__actions" display="flex">

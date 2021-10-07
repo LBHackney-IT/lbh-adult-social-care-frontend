@@ -7,6 +7,8 @@ const APPROVER_HUB_ROUTE = '/approver-hub';
 const BROKERAGE_HUB_ROUTE = '/brokerage-hub';
 const PROPOSED_PACKAGES_ROUTE = '/proposed-packages';
 const HOME_CARE_ROUTE = `${CARE_PACKAGE_ROUTE}/home-care`;
+const BROKERAGE_ROUTE = `${CARE_PACKAGE_ROUTE}/brokerage`;
+const BROKER_PACKAGE_ROUTE = `${CARE_PACKAGE_ROUTE}/brokerage/broker-package`;
 const HOME_CARE_APPROVE_PACKAGE_ROUTE = `${HOME_CARE_ROUTE}/approve-package`;
 const HOME_CARE_APPROVE_BROKERED_ROUTE = `${HOME_CARE_ROUTE}/approve-brokered`;
 const NURSING_CARE_ROUTE = `${CARE_PACKAGE_ROUTE}/nursing-care`;
@@ -75,5 +77,7 @@ export {
   ACTIVE_PACKAGES_ROUTE,
   SOCIAL_WORKER_ROUTE,
   APPROVER_HUB_ROUTE,
-  BROKERAGE_HUB_ROUTE
+  BROKERAGE_HUB_ROUTE,
+  BROKER_PACKAGE_ROUTE,
+  BROKERAGE_ROUTE,
 };
