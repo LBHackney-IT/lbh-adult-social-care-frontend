@@ -1,0 +1,58 @@
+@import "brokerage-container-header";
+@import "user-details";
+@import "core-package-details";
+@import "review-package-details";
+@import "supplier-look-up";
+@import "brokerage-action-card";
+@import "brokerage-cost";
+@import "funded-nursing-care";
+@import "brokerage-submit-for-approval-popup";
+@import "care-charges";
+
+.brokerage__container-main {
+  padding: 60px;
+
+  @include media-mobile {
+    padding: 8px;
+  }
+}
+
+.brokerage__container {
+  padding-bottom: 48px;
+  margin-bottom: 48px;
+  border-bottom: 1px solid #BFC1C3;
+
+  & > h3 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+}
+
+.brokerage__item-title {
+  font-size: 30px;
+  margin-bottom: 28px;
+  font-weight: bold;
+  color: $lbh-text-colour,
+}
+
+.brokerage__package-dates {
+  width: 100%;
+
+  .lbh-date-input {
+    margin-right: 32px;
+  }
+
+  &.lbh-form-group .govuk-label.govuk-date-input__label {
+    font-weight: initial;
+  }
+
+  fieldset {
+    display: flex;
+    flex-wrap: wrap;
+
+    & > label.govuk-fieldset__legend {
+      font-size: 19px;
+    }
+  }
+}

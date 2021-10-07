@@ -9,53 +9,17 @@ export default {
 };
 
 const Template = (args) => {
-  const [day, setDay] = useState({
-    value: '',
-    onChangeValue: (value) => setDay(prevState => ({ ...prevState, value, error: '' })),
-    error: '',
-  });
-
-  const [month, setMonth] = useState({
-    value: '',
-    onChangeValue: (value) => setMonth(prevState => ({ ...prevState, value, error: '' })),
-    error: '',
-    ...args.month
-  });
-
-  const [year, setYear] = useState({
-    value: '',
-    onChangeValue: (value) => setYear(prevState => ({ ...prevState, value, error: '' })),
-    error: '',
-    ...args.year
-  });
+  const [date, setDate] = useState(null);
 
   useEffect(() => {
-    setDay(prevState => ({
-      ...prevState,
-      ...args.day,
-    }));
+    setDate(args.date);
+  }, [args.date]);
 
-    setMonth(prevState => ({
-      ...prevState,
-      ...args.month,
-    }));
-
-    setYear(prevState => ({
-      ...prevState,
-      ...args.year,
-    }));
-  }, [args.year, args.day, args.month]);
-
-  const error = day.error || month.error || year.error;
+  const error = args.day?.error || args.month?.error || args.year?.error;
 
   return (
     <FormGroup label='Form label' hint='Form hint' error={error}>
-      <DatePicker
-        {...args}
-        day={day}
-        month={month}
-        year={year}
-      />
+      <DatePicker {...args} date={date} setDate={setDate} />
     </FormGroup>
   );
 };
@@ -63,9 +27,6 @@ const Template = (args) => {
 export const Default = Template.bind({});
 Default.args = {
   formId: 'date-picker',
-  day: {},
-  month: {},
-  year: {}
 };
 
 export const ErrorDay = Template.bind({});

@@ -1,4 +1,5 @@
 @import "cancel-element-modal";
+@import "options-element-modal";
 .care-charges-modal {
   * {
     box-sizing: border-box;
@@ -69,8 +70,9 @@
   }
 
   .care-charges-modal__actions {
+    display: flex;
+
     @include media-mobile {
-      display: flex;
       flex-direction: column;
     }
 
@@ -206,6 +208,58 @@
     &:after {
       top: 17px;
       left: 8px;
+    }
+  }
+}
+
+.nursing-care-charges__textarea {
+  textarea {
+    height: 100px;
+    margin-top: 9px;
+  }
+}
+
+.nursing-care-charges {
+  .table-header {
+    th {
+      color: white;
+    }
+  }
+}
+
+.nursing-care-charges__container {
+  & > p {
+    margin-bottom: 20px;
+  }
+  margin-bottom: 16px;
+}
+
+.nursing-care-charges__total-cost {
+  margin-top: 3px;
+  margin-bottom: 8px;
+  background-color: $lbh-light-gray2;
+
+  p {
+    font-size: 16px;
+  }
+}
+
+.nursing-care-charges__collecting-charges {
+  margin-left: 40px;
+}
+
+.nursing-care-charges__age {
+  & > p {
+    margin-right: 12px;
+  }
+
+  .lbh-form-group {
+    width: 150px;
+    font-size: 14px;
+
+    input {
+      padding: 10px;
+      font-size: 14px;
     }
   }
 }

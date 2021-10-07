@@ -3,6 +3,7 @@ import React from 'react';
 export default function Button({
   children,
   secondary,
+  clearClass,
   disabled,
   link,
   className,
@@ -12,6 +13,7 @@ export default function Button({
   const outerClassName = className ? ` ${className}` : '';
   const secondaryClassList = secondary ? ' govuk-secondary lbh-button--secondary' : '';
   const disabledClassList = disabled ? ' lbh-button--disabled govuk-button--disabled' : '';
+  const mainClass = clearClass ? '' : 'govuk-button lbh-button';
   const addItemClassList = addItem ? ' lbh-button--add' : '';
   const calculateClassNames = `${outerClassName}${secondaryClassList}${disabledClassList}${addItemClassList}`;
   const addItemIcon = (
@@ -26,7 +28,7 @@ export default function Button({
       href={link}
       role="button"
       draggable="false"
-      className={`govuk-button lbh-button${secondaryClassList + disabledClassList}`}
+      className={`${mainClass}${secondaryClassList + disabledClassList}`}
       data-module="govuk-button"
     >
       {children}
@@ -34,7 +36,7 @@ export default function Button({
   ) : (
     <button
       type="button"
-      className={`govuk-button lbh-button${calculateClassNames}`}
+      className={`${mainClass}${calculateClassNames}`}
       data-module="govuk-button"
       aria-disabled={disabled}
       disabled={disabled}

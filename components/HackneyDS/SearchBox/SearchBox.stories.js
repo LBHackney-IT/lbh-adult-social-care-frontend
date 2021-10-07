@@ -16,7 +16,7 @@ const Template = (args) => {
     setValue(args.value);
   }, [args?.value]);
 
-  return <SearchBox {...args} clear={localClear} value={value} handler={setValue} />;
+  return <SearchBox {...args} clear={localClear} value={value} onChangeValue={setValue} />;
 }
 
 export const Default = Template.bind({});

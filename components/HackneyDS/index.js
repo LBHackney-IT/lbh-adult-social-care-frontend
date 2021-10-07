@@ -38,9 +38,11 @@ import { SimplePagination } from './SimplePagination';
 import { SummaryList } from './SummaryList';
 import { FileUpload } from './FileUpload/FileUpload';
 import { EditElementModal } from '../CareCharges/EditElementModal';
+import { FundedNursingCare } from '../CarePackages/FundedNursingCare/FundedNursingCare';
 import { AddElementModal } from '../CareCharges/AddElementModal';
 import { CancelElementModal } from '../CareCharges/CancelElementModal';
 import { EndElementModal } from '../CareCharges/EndElementModal';
+import { OptionsElementModal } from '../CareCharges/OptionsElementModal';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 
@@ -88,6 +90,8 @@ export {
   Container,
   EditElementModal,
   AddElementModal,
+  OptionsElementModal,
+  FundedNursingCare,
   CancelElementModal,
   EndElementModal,
 };

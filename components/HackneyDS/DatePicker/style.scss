@@ -12,6 +12,12 @@
   align-items: center;
   flex-wrap: wrap;
 
+  &.disabled {
+    opacity: 0.3;
+    user-select: none;
+    pointer-events: none;
+  }
+
   & > .govuk-label {
     width: 100%;
   }
@@ -74,6 +80,7 @@
 .date-picker__calendar-container {
   display: inline-block;
   position: relative;
+  z-index: 2;
 
   & > svg:hover {
     cursor: pointer;

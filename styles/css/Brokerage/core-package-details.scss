@@ -1,0 +1,47 @@
+.core-package-details {
+  .select-container {
+    width: 434px;
+
+    select {
+      width: 100%;
+    }
+
+    &:first-of-type {
+      margin-bottom: 16px;
+    }
+  }
+  .core-package-details__button {
+    width: 226px;
+  }
+}
+
+.core-package-details__radio-group {
+  margin-bottom: 58px;
+}
+
+.core-package-details__selector {
+  & > label {
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  select {
+    font-size: 14px;
+  }
+}
+
+.core-package-details__further-title {
+  margin-bottom: 16px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.core-package-details__further-sub-title {
+  margin-bottom: 16px;
+  font-size: 19px;
+}
+
+.core-package-details__checkboxes {
+  margin-bottom: 48px;
+}

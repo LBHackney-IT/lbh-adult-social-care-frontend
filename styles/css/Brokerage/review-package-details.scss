@@ -1,0 +1,179 @@
+.review-package-details__links {
+  margin-right: 30px;
+  p:not(p:last-of-type) {
+    margin-bottom: 24px;
+  }
+
+  @include media-small-ipod-up {
+    width: 220px;
+  }
+
+  width: 100px;
+}
+
+.review-package-details__cost-info {
+  @include media-small-ipod-up {
+    width: calc(100% - 250px) !important;
+  }
+}
+
+.review-package-details__accordion {
+  margin-bottom: 24px;
+}
+
+.review-package-details__accordion-info {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 8px;
+
+  .link-button {
+    margin-right: 6px;
+  }
+
+  svg {
+    transition: 0.2s ease;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &.accordion-opened {
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.review-package-details__items-container {
+  & > h3 {
+    font-weight: bold;
+    color: black;
+    font-size: 30px;
+    margin-bottom: 24px;
+  }
+}
+
+.review-package-details__items-date {
+  margin-bottom: 24px;
+  font-size: 24px;
+  color: $lbh-text-colour;
+}
+
+.review-package-details__items-title {
+  color: black;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.review-package-details__items-place {
+  margin-bottom: 10px;
+}
+
+.review-package-details__items-address {
+  margin-bottom: 10px;
+}
+
+.brokerage__border-cost {
+  padding: 24px 0;
+  border-bottom: 1px solid $lbh-gray-border-2;
+  border-top: 1px solid $lbh-gray-border-2;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+
+  font-size: 24px;
+}
+
+.review-package-details__items-actions {
+  p:first-of-type {
+    margin-right: 24px;
+  }
+}
+
+.review-package-details__cost-info-item {
+  margin-bottom: 60px;
+}
+
+.brokerage__cost-of-placement {
+  padding-top: 24px;
+  font-size: 24px;
+  border-top: 1px solid $lbh-gray-border-2;
+
+  color: $lbh-black1;
+
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    font-weight: bold;
+  }
+}
+
+.review-package-details__summary {
+  margin-bottom: 60px;
+  padding: 24px;
+  background: $lbh-light-gray2;
+  & > h3 {
+    font-size: 30px;
+    color: black;
+    margin-bottom: 16px;
+  }
+
+  p {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    font-size: 24px;
+
+    span {
+      margin-left: 10px;
+    }
+
+    &.brokerage__summary-cost {
+      font-weight: bold;
+
+      &:not(&:last-of-type) {
+        padding-bottom: 16px;
+        border-bottom: 1px solid $lbh-gray-border-2;
+      }
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.review-package-details__actions {
+  @include media-small-ipod-down {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  button {
+    @include media-small-ipod-up {
+      width: 226px;
+    }
+
+    @include media-small-ipod-down {
+      width: 100%;
+      &:first-of-type {
+        margin-top: 32px;
+      }
+    }
+
+    &:first-of-type {
+      margin-right: 32px;
+      background-color: $lbh-secondary-text-colour;
+
+      &:hover {
+        background-color: $lbh-card-gray;
+      }
+    }
+  }
+}
+
+.review-package-details__main-container {
+  @include media-small-ipod-up {
+    display: flex;
+  }
+}

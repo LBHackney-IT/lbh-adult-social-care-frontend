@@ -31,13 +31,11 @@ const CancelElementContent = ({
       <Checkbox
         small
         className='care-charges-modal__cancel-checkbox'
-        handler={(checked) => setCanceledContribution(checked)}
+        onChangeValue={setCanceledContribution}
         value={canceledContribution}
-        checked={canceledContribution}
         id='cancelContribution'
-      >
-        Cancel 13+ contribution
-      </Checkbox>
+        label='Cancel 13+ contribution'
+      />
       <div className={canceledContribution ? '' : 'opacity-3'}>
         <CareChargesInfoStatic activeElements={secondElement} />
       </div>

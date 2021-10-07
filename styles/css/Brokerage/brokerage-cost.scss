@@ -1,0 +1,49 @@
+.brokerage__cost-title {
+  display: flex;
+  margin-bottom: 24px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.brokerage__cost-expand {
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+  font-size: 16px;
+
+  svg {
+    margin-left: 4px;
+  }
+}
+
+.brokerage__cost-margin {
+  margin-bottom: 32px;
+}
+
+.brokerage__cost-input {
+  width: 368px;
+  .lbh-label {
+    font-size: 19px;
+    font-weight: 600;
+  }
+}
+
+.brokerage__cost-title {
+  width: fit-content;
+}
+
+.brokerage__cost-add-need {
+  font-size: 16px;
+  margin-top: 24px;
+  margin-bottom: 32px;
+
+  .red {
+    margin-right: 16px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
