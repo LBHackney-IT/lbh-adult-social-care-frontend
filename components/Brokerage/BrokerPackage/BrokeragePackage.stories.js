@@ -1,15 +1,15 @@
 import React from 'react';
-import { SupplierLookUp } from './index';
+import { BrokerPackage } from './index';
 
 export default {
-  title: 'Pages/Brokerage/SupplierLookUp',
-  component: SupplierLookUp,
+  title: 'Pages/Brokerage/BrokerPackage',
+  component: BrokerPackage,
   argTypes: {
     controls: null,
   },
 };
 
-const Template = (args) => <SupplierLookUp {...args} />;
+const Template = (args) => <BrokerPackage {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

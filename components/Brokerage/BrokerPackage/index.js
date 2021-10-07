@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
-import { Button, Container } from '../../HackneyDS';
+import { Button, Checkbox, Container, SearchBox } from '../../HackneyDS';
 import BrokeragePackageDates from '../BrokeragePackageDates';
-import BrokerageSearchSupplier from './BrokerageSearchSupplier';
-import SupplierLookUpSelected from './SupplierLookUpSelected';
+import BrokerPackageCost from './BrokerPackageCost';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
+import BrokerPackageSelector from './BrokerPackageSelector';
 
-export const SupplierLookUp = ({ searchResults }) => {
+export const BrokerPackage = ({ searchResult, careName = 'Nursing Care' }) => {
   const [isOngoing, setIsOngoing] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
+  const [supplierSearch, setSupplierSearch] = useState('');
+  const [selectedItem, setSelectedItem] = useState(null);
   const [initialNeed] = useState({
     cost: 0,
     dates: {
@@ -23,17 +24,18 @@ export const SupplierLookUp = ({ searchResults }) => {
   const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed }]);
   const [weeklyTotalCost, setWeeklyTotalCost] = useState(0);
   const [oneOfTotalCost, setOneOfTotalCost] = useState(0);
+  const [isNewSupplier, setIsNewSupplier] = useState(false);
 
   const [packageDates, setPackageDates] = useState({
     dateFrom: null,
     dateTo: null,
   });
 
+  const onSearchSupplier = () => {
+    alert('search supplier');
+  };
+
   const clickBack = () => {
-    if(selectedItem) {
-      setSelectedItem(null);
-      return;
-    }
     alert('Click back');
   };
 
@@ -88,9 +90,9 @@ export const SupplierLookUp = ({ searchResults }) => {
     <div className="supplier-look-up brokerage">
       <BrokerageHeader/>
       <Container className="brokerage__container-main">
-        <BrokerageContainerHeader title='Broker package' />
+        <BrokerageContainerHeader title="Broker package"/>
         <Container>
-          <h3 className="brokerage__item-title">Nursing Care</h3>
+          <h3 className="brokerage__item-title">{careName}</h3>
           <BrokeragePackageDates
             dates={packageDates}
             label="Package dates"
@@ -99,24 +101,54 @@ export const SupplierLookUp = ({ searchResults }) => {
             setIsOngoing={setIsOngoing}
           />
         </Container>
-        {
-          selectedItem ?
-            <SupplierLookUpSelected
-              addNeed={addNeed}
-              weeklyNeeds={weeklyNeeds}
-              oneOffNeeds={oneOffNeeds}
-              setWeeklyNeeds={setWeeklyNeeds}
-              setOneOffNeeds={setOneOffNeeds}
-              oneOffTotalCost={oneOfTotalCost}
-              weeklyTotalCost={weeklyTotalCost}
-              supplierWeeklyCost={supplierWeeklyCost}
-              setSupplierWeeklyCost={setSupplierWeeklyCost}
-              changeNeed={changeNeed}
-              removeNeed={removeNeed}
-              setSelectedItem={setSelectedItem}
-              cardInfo={selectedItem}
+        <>
+          <Container display='flex'>
+            <SearchBox
+              onChangeValue={value => setSupplierSearch(value)}
+              label="Supplier"
+              search={onSearchSupplier}
+              searchIcon={null}
+              clearIcon={<p className='lbh-primary-button'>Clear</p>}
+              clear={() => setSupplierSearch('')}
+              value={supplierSearch}
+              className='supplier-search-box'
+              id="supplier-search-box"
             />
-            : <BrokerageSearchSupplier searchResults={searchResults} setSelectedItem={setSelectedItem}/>
+            <Button className='supplier-search-button' handler={() => alert('Search')}>Search</Button>
+          </Container>
+          {
+            supplierSearch &&
+            <Container className='is-new-supplier'>
+              <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
+              <Container className='is-new-supplier-text' display='flex' flexDirection='column'>
+                <p>This is a new supplier</p>
+                <p>Contact <span className='link-button green'>claire.surname.hackney.gov.uk</span> to add a new supplier</p>
+              </Container>
+            </Container>
+          }
+        </>
+        {searchResult ?
+          <BrokerPackageSelector
+            pageSize={searchResult.pageSize}
+            totalCount={searchResult.totalCount}
+            totalPages={searchResult.totalPages}
+            items={searchResult.data}
+            setSelectedItem={setSelectedItem}
+          />
+          :
+          <BrokerPackageCost
+            addNeed={addNeed}
+            weeklyNeeds={weeklyNeeds}
+            oneOffNeeds={oneOffNeeds}
+            setWeeklyNeeds={setWeeklyNeeds}
+            setOneOffNeeds={setOneOffNeeds}
+            oneOffTotalCost={oneOfTotalCost}
+            weeklyTotalCost={weeklyTotalCost}
+            supplierWeeklyCost={supplierWeeklyCost}
+            setSupplierWeeklyCost={setSupplierWeeklyCost}
+            changeNeed={changeNeed}
+            removeNeed={removeNeed}
+          />
         }
         <Container className="brokerage__actions">
           <Button handler={clickBack} className="brokerage__back-button">Back</Button>

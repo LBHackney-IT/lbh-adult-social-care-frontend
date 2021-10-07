@@ -4,7 +4,7 @@ import BrokerageSupplierCard from '../BrokerageSupplierCard';
 import { currency } from '../../../constants/strings';
 import BrokerageCost from '../BrokerageCost';
 
-const SupplierLookUpSelected = ({
+const BrokerPackageCost = ({
   cardInfo,
   addNeed,
   weeklyNeeds,
@@ -20,11 +20,15 @@ const SupplierLookUpSelected = ({
   setSupplierWeeklyCost,
 }) => (
   <Container className="supplier-look-up__selected">
-    <h3 className="supplier-look-up__selected-title">Supplier</h3>
-    <BrokerageSupplierCard
-      cardInfo={cardInfo}
-      actionsComponent={<p onClick={() => setSelectedItem('')} className="link-button red">Remove</p>}
-    />
+    {cardInfo &&
+      <>
+        <h3 className="supplier-look-up__selected-title">Supplier</h3>
+        <BrokerageSupplierCard
+          cardInfo={cardInfo}
+          actionsComponent={<p onClick={() => setSelectedItem('')} className="link-button red">Remove</p>}
+        />
+      </>
+    }
     <Input
       id="supplier-weekly-cost"
       className="supplier-look-up__weekly-cost"
@@ -63,4 +67,4 @@ const SupplierLookUpSelected = ({
   </Container>
 );
 
-export default SupplierLookUpSelected;
+export default BrokerPackageCost;
