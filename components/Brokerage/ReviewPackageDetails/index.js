@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import ReviewPackageInfo from './ReviewPackageInfo';
 import BrokerageBorderCost from '../BrokerageBorderCost';
 import { currency } from '../../../constants/strings';
-import BrokerageTotalCost from '../BrokerageTotalCost';
 
 export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summary = [], }) => {
   const router = useRouter();
@@ -71,7 +70,7 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
             <Container className="review-package-details__summary">
               <h3 className="font-weight-bold">Summary</h3>
               {summary.map(({ key, value, className }) => (
-                <BrokerageTotalCost value={value} name={key} className={className}/>
+                <BrokerageBorderCost totalCost={value} totalCostHeader={key} className={`${className} without-border`}/>
               ))}
             </Container>
             <Container className="review-package-details__actions" display="flex">

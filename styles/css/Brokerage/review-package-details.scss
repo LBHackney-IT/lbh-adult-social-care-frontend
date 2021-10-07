@@ -83,6 +83,12 @@
   justify-content: space-between;
 
   font-size: 24px;
+
+  &.without-border {
+    border: none;
+    margin-bottom: 0;
+    padding: 0;
+  }
 }
 
 .review-package-details__items-actions {
@@ -114,6 +120,24 @@
   margin-bottom: 60px;
   padding: 24px;
   background: $lbh-light-gray2;
+
+  .brokerage__summary-cost {
+    font-weight: bold;
+    margin-bottom: 16px;
+
+    p {
+      margin-bottom: 0;
+    }
+
+    &:not(&:last-of-type) {
+      padding-bottom: 16px;
+      border-bottom: 1px solid $lbh-gray-border-2;
+    }
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
   & > h3 {
     font-size: 30px;
     color: black;
@@ -128,18 +152,6 @@
 
     span {
       margin-left: 10px;
-    }
-
-    &.brokerage__summary-cost {
-      font-weight: bold;
-
-      &:not(&:last-of-type) {
-        padding-bottom: 16px;
-        border-bottom: 1px solid $lbh-gray-border-2;
-      }
-      &:last-of-type {
-        margin-bottom: 0;
-      }
     }
   }
 }
