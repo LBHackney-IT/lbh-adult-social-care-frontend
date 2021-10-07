@@ -12,7 +12,7 @@ const BrokerPackagePage = () => {
     console.log(data);
   }, [data]);
 
-  return <BrokerPackage careName="Nursing care"/>;
+  return <BrokerPackage searchResults={} careName="Nursing care"/>;
 };
 
 export default BrokerPackagePage;
