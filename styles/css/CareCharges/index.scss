@@ -1,3 +1,4 @@
+@import "cancel-element-modal";
 @import "options-element-modal";
 .care-charges-modal {
   * {
@@ -51,6 +52,11 @@
       @include media-mobile {
         margin-right: 8px;
       }
+    }
+
+    p:last-of-type {
+      color: $lbh-secondary-text-colour;
+      font-size: 14px;
     }
   }
 
@@ -174,7 +180,34 @@
 
     .edit-element__end-date-distance {
       font-size: 14px;
+      margin-top: 24px;
+      margin-left: 24px;
       color: $lbh-secondary-text-colour;
+    }
+  }
+
+  &.end-element-modal {
+    .edit-element__end-date {
+      margin-top: 8px;
+    }
+  }
+}
+
+.care-charges-modal__cancel-checkbox.govuk-checkboxes__item {
+  margin-bottom: 32px;
+
+  .govuk-checkboxes__label {
+    font-size: 16px;
+    padding-top: 13px;
+
+    &:before {
+      width: 27px;
+      height: 27px;
+    }
+
+    &:after {
+      top: 17px;
+      left: 8px;
     }
   }
 }

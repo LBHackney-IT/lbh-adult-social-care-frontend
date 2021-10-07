@@ -14,14 +14,14 @@ const swrOptions = {
   fetcher,
 };
 
-export default function App({ Component, pageProps }) {
+export default function App ({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState);
 
   return (
     <Provider store={store}>
       <SWRConfig value={swrOptions}>
-        <CustomNotification />
-        <AdditionalHeader />
+        <CustomNotification/>
+        <AdditionalHeader/>
         <Component {...pageProps} />
       </SWRConfig>
     </Provider>

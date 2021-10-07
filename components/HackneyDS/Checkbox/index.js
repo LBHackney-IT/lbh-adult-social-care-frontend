@@ -8,12 +8,14 @@ export default function Checkbox ({
   id,
   name,
   value,
-  handler = () => {}
+  handler = () => {},
+  className,
 }) {
   const smallClassList = small ? ' govuk-checkboxes--small' : '';
+  const outerClassName = className ? ` ${className}` : '';
 
   return (
-    <div className={`govuk-checkboxes__item ${smallClassList}`}>
+    <div className={`govuk-checkboxes__item${smallClassList}${outerClassName}`}>
       <input
         className="govuk-checkboxes__input"
         id={id}

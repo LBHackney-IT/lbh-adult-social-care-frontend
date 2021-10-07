@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import EditElementContent from './EditElementContent';
+import React, { useState } from 'react';
+import EndElementContent from './EndElementContent';
 import { Dialog } from '../../HackneyDS';
 
 const testActiveElements = [
@@ -26,25 +26,18 @@ const testActiveElements = [
   }
 ];
 
-export const EditElementModal = ({ isOpened = true, activeElements = testActiveElements, isEditStep = true }) => {
+export const EndElementModal = ({ isOpened = true, activeElements = testActiveElements }) => {
   const [openedModal, setOpenedModal] = useState(true);
-  const [editStep, setEditStep] = useState(isEditStep);
 
   const closeModal = () => setOpenedModal(false);
 
-  useEffect(() => {
-    setEditStep(isEditStep);
-  }, [isEditStep]);
-
   return (
-    <Dialog className='care-charges-modal' isOpen={isOpened || openedModal} onClose={closeModal}>
-      <EditElementContent
-        editStep={editStep}
-        setEditStep={setEditStep}
+    <Dialog className='care-charges-modal end-element-modal' isOpen={isOpened || openedModal} onClose={closeModal}>
+      <EndElementContent
         closeModal={closeModal}
         activeElements={activeElements}
-        headerText='Edit element'
+        headerText='End current element'
       />
     </Dialog>
-  );
+  )
 };

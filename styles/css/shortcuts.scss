@@ -2,3 +2,9 @@
 .ml-auto {margin-left: auto}
 .mt-auto {margin-top: auto}
 .mb-auto {margin-bottom: auto}
+
+.opacity {
+  &-3 {
+    opacity: 0.3;
+  }
+}
