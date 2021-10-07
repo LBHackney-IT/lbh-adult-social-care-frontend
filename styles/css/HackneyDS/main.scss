@@ -1707,6 +1707,9 @@ html {
 .lbh-form-group.lbh-form-group--date-input .govuk-fieldset__legend {
   margin-bottom: 0;
 }
+.govuk-checkboxes__item {
+  width: fit-content;
+}
 .govuk-checkboxes--small .govuk-checkboxes__item {
   min-height: 0;
   margin-bottom: 0;

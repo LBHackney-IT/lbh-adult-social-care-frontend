@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Checkbox from '.';
 
 export default {
@@ -15,37 +15,46 @@ export default {
   },
 };
 
-const Template = (args) => <Checkbox {...args} />;
+const Template = (args) => {
+  const [checked, setChecked] = useState(false);
+
+  const onChangeValue = (value) => {
+    setChecked(value);
+  }
+
+  useEffect(() => {
+    setChecked(args.value);
+  }, [args.value]);
+
+  return <Checkbox id='stories-checkbox' {...args} value={checked} onChangeValue={onChangeValue} />;
+};
 
 export const Default = Template.bind({});
 
 Default.args = {
-  children: 'Default',
-  checked: false,
-  value: 'default-checkbox',
+  label: 'Default',
+  value: false,
   small: false,
   disabled: false,
-  handler() {},
+  handler () {},
 };
 
 export const Disabled = Template.bind({});
 
 Disabled.args = {
-  children: 'Disabled',
-  checked: false,
-  value: 'disabled-checkbox',
+  label: 'Disabled',
+  value: false,
   small: false,
   disabled: true,
-  handler() {},
+  handler () {},
 };
 
 export const Small = Template.bind({});
 
 Small.args = {
-  children: 'Small',
-  checked: false,
-  value: 'small-checkbox',
+  label: 'Small',
+  value: false,
   small: true,
   disabled: false,
-  handler() {},
+  handler () {},
 };

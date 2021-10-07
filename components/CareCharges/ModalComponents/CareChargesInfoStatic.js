@@ -14,8 +14,8 @@ const CareChargesInfoStatic = ({ activeElements = [] }) => (
         period,
         id,
       }) => {
-        const formattedStartDate = formatDate(startDate, '.');
-        const formattedEndDate = period === 'ongoing' ? period : formatDate(endDate, '.');
+        const formattedStartDate = formatDate(startDate);
+        const formattedEndDate = period === 'ongoing' ? period : formatDate(endDate);
         return (
           <div key={`${name}${property}${id}`} className='care-charges-modal__info'>
             <div className='care-charges-modal__content'>
