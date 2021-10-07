@@ -64,8 +64,9 @@
   }
 
   .care-charges-modal__actions {
+    display: flex;
+
     @include media-mobile {
-      display: flex;
       flex-direction: column;
     }
 
