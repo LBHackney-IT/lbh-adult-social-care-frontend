@@ -6,7 +6,7 @@ import BrokerPackageCost from './BrokerPackageCost';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
 
-export const BrokerPackage = ({ searchResult, careName = 'Nursing Care' }) => {
+export const BrokerPackage = ({ searchResults, careName = 'Nursing Care' }) => {
   const [isOngoing, setIsOngoing] = useState(false);
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
   const [supplierSearch, setSupplierSearch] = useState('');
@@ -102,7 +102,7 @@ export const BrokerPackage = ({ searchResult, careName = 'Nursing Care' }) => {
           />
         </Container>
         <>
-          <Container display='flex'>
+          <Container className='supplier-search-container' display='flex'>
             <SearchBox
               onChangeValue={value => setSupplierSearch(value)}
               label="Supplier"
@@ -117,7 +117,7 @@ export const BrokerPackage = ({ searchResult, careName = 'Nursing Care' }) => {
             <Button className='supplier-search-button' handler={() => alert('Search')}>Search</Button>
           </Container>
           {
-            supplierSearch &&
+            !supplierSearch &&
             <Container className='is-new-supplier'>
               <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
               <Container className='is-new-supplier-text' display='flex' flexDirection='column'>
@@ -127,16 +127,18 @@ export const BrokerPackage = ({ searchResult, careName = 'Nursing Care' }) => {
             </Container>
           }
         </>
-        {searchResult ?
+        {searchResults && supplierSearch && !selectedItem ?
           <BrokerPackageSelector
-            pageSize={searchResult.pageSize}
-            totalCount={searchResult.totalCount}
-            totalPages={searchResult.totalPages}
-            items={searchResult.data}
+            pageSize={searchResults.pageSize}
+            totalCount={searchResults.totalCount}
+            totalPages={searchResults.totalPages}
+            items={searchResults.items}
             setSelectedItem={setSelectedItem}
           />
           :
           <BrokerPackageCost
+            setSelectedItem={setSelectedItem}
+            cardInfo={selectedItem}
             addNeed={addNeed}
             weeklyNeeds={weeklyNeeds}
             oneOffNeeds={oneOffNeeds}
