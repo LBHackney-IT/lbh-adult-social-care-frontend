@@ -1,23 +1,60 @@
 import React, { useEffect } from 'react';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import FundedNursingCare from 'components/Brokerage/FundedNursingCare';
 import { useRouter } from 'next/router';
-import { changeCarePackageDetails } from 'api/CarePackages/CarePackage';
+import { useDispatch } from 'react-redux';
+import { createCarePackageReclaimFnc, updateCarePackageReclaimFnc } from 'api/CarePackages/CarePackageReclaim';
+import useReclaimApi from 'api/SWR/CarePackage/useReclaimApi';
+import { addNotification } from 'reducers/notificationsReducer';
 
-const BrokerPackagePage = () => {
+const FundedNursingCarePage = () => {
   const router = useRouter();
   const carePackageId = router.query.id;
-  const { data } = useCarePackageApi.details(carePackageId);
+  const dispatch = useDispatch();
+  const { data: carePackageReclaimFnc } = useReclaimApi.fnc(carePackageId);
+  const { data: activeFncPrice } = useReclaimApi.activeFncPrice(carePackageId);
 
-  const changeDetailsExample = async () => {
-    await changeCarePackageDetails({ data: 'exampleData' }, carePackageId);
+  const collectedByOptions = [
+    { text: 'Select One', value: null },
+    { text: 'Supplier', value: '1' },
+    { text: 'Hackney', value: '2' },
+  ];
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
   };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  const createFundedNursingCare = (packageId, fundedNursingCareCreation) => {
+    createCarePackageReclaimFnc(packageId, fundedNursingCareCreation)
+      .then(() => {
+        pushNotification(`Funded Nursing Care created successfully`, 'success');
+      })
+      .catch((error) => {
+        pushNotification(error);
+      });
+  };
 
-  return <FundedNursingCare/>;
+  const updateFundedNursingCare = (packageId, fundedNursingCareUpdate) => {
+    updateCarePackageReclaimFnc(packageId, fundedNursingCareUpdate)
+      .then(() => {
+        pushNotification(`Funded Nursing Care updated successfully`, 'success');
+      })
+      .catch((error) => {
+        pushNotification(error);
+      });
+  };
+
+  useEffect(() => {});
+
+  return (
+    <FundedNursingCare
+      carePackageId={carePackageId}
+      collectedByOptions={collectedByOptions}
+      activeFncPrice={activeFncPrice}
+      carePackageReclaimFnc={carePackageReclaimFnc}
+      createFundedNursingCare={createFundedNursingCare}
+      updateFundedNursingCare={updateFundedNursingCare}
+    />
+  );
 };
 
-export default BrokerPackagePage;
+export default FundedNursingCarePage;

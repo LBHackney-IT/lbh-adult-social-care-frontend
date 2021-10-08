@@ -14,7 +14,14 @@ const submitCarePackage = ({ data, packageId }) => {
   return axiosRequest({ url, data, method: requestMethods.post });
 };
 
-export {
-  changeCarePackageDetails,
-  submitCarePackage,
+const createCoreCarePackage = ({ data }) => {
+  const url = `${CARE_PACKAGE_URL}`;
+  return axiosRequest({ url, data, method: requestMethods.post });
 };
+
+const updateCoreCarePackage = ({ data, packageId }) => {
+  const url = `${CARE_PACKAGE_URL}/${packageId}`;
+  return axiosRequest({ url, data, method: requestMethods.put });
+};
+
+export { changeCarePackageDetails, submitCarePackage, createCoreCarePackage, updateCoreCarePackage };

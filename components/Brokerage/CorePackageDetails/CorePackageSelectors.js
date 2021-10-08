@@ -1,7 +1,5 @@
-import { Container } from '../../HackneyDS';
-import { Select } from '../../HackneyDS';
 import React from 'react';
-import { SelectArrowTriangle } from '../../Icons';
+import { Container, Select } from '../../HackneyDS';
 
 const CorePackageSelectors = ({
   errors,
@@ -13,10 +11,10 @@ const CorePackageSelectors = ({
   supportReason,
   supportReasonOptions,
 }) => (
-  <Container className='brokerage__container'>
+  <Container className="brokerage__container">
     <h3>Package type</h3>
-    <Container display='flex' flexDirection='column'>
-      <Container className='core-package-details__selector' display='flex' flexDirection='column'>
+    <Container display="flex" flexDirection="column">
+      <Container className="core-package-details__selector" display="flex" flexDirection="column">
         <label>Package type</label>
         <Select
           error={errors.packageType}
@@ -24,24 +22,24 @@ const CorePackageSelectors = ({
             setPackageType(value);
             changeError('packageType');
           }}
-          value={packageType.value}
+          value={packageType?.value}
           options={packageTypeOptions}
         />
       </Container>
-      {supportReason &&
-      <Container className='core-package-details__selector' display='flex' flexDirection='column'>
-        <label>Primary support reason</label>
-        <Select
-          error={errors.supportReason}
-          onChange={({ target: { value } }) => {
-            setSupportReason(value);
-            changeError('supportReason');
-          }}
-          value={supportReason.value}
-          options={supportReasonOptions}
-        />
-      </Container>
-      }
+      {supportReason && (
+        <Container className="core-package-details__selector" display="flex" flexDirection="column">
+          <label>Primary support reason</label>
+          <Select
+            error={errors.supportReason}
+            onChange={({ target: { value } }) => {
+              setSupportReason(value);
+              changeError('supportReason');
+            }}
+            value={supportReason.value}
+            options={supportReasonOptions}
+          />
+        </Container>
+      )}
     </Container>
   </Container>
 );
