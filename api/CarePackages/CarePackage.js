@@ -9,12 +9,12 @@ const changeCarePackageDetails = ({ data, packageId }) => {
   return axiosRequest({ url, data, method: requestMethods.put });
 };
 
-const carePackageSubmitForApproval = ({ data, packageId }) => {
+const submitCarePackage = ({ data, packageId }) => {
   const url = `${CARE_PACKAGE_URL}/${packageId}/submit`;
   return axiosRequest({ url, data, method: requestMethods.post });
 };
 
 export {
   changeCarePackageDetails,
-  carePackageSubmitForApproval,
+  submitCarePackage,
 };
