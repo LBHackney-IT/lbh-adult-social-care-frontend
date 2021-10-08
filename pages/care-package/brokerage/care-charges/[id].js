@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import useCarePackageApi from 'api/SWR/CarePackage/useBrokerageApi';
+import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { useRouter } from 'next/router';
 import CareCharges from 'components/Brokerage/CareCharges';
 import { changeCarePackageDetails } from 'api/CarePackages/CarePackage';
