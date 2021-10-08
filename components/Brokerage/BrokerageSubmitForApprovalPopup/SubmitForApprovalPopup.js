@@ -3,10 +3,7 @@ import Popup from '../../Popup';
 import { Button, Container, Select, Textarea } from '../../HackneyDS';
 import FormGroup from '../../HackneyDS/FormGroup';
 
-const SubmitForApprovalPopup = ({ onSubmit, closePopup, approvedByOptions = [] }) => {
-  const [approvedBy, setApprovedBy] = useState('');
-  const [notes, setNotes] = useState('');
-
+const SubmitForApprovalPopup = ({ approvedBy, setApprovedBy, notes, setNotes, onSubmit, closePopup, approvedByOptions = [] }) => {
   const popupMainContent = (
     <Container>
       <FormGroup className="brokerage__approved-by-select" label="To be approved by">
