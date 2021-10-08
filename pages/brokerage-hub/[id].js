@@ -1,5 +1,5 @@
 import BrokerageHeader from 'components/Brokerage/BrokerageHeader/BrokerageHeader';
-import PackageUserDetails from 'components/Brokerage/PackageUserDetails';
+import ServiceUserDetails from 'components/Brokerage/BrokerageHub/ServiceUserDetails';
 import { Button, Container, Heading, Hint, HorizontalSeparator, Link, VerticalSeparator } from 'components/HackneyDS';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -24,11 +24,11 @@ const PackageRequestPage = () => {
         ]}
       />
       <Container padding="60px">
-        <PackageUserDetails
+        <ServiceUserDetails
           dateOfBirth={packageData.dateOfBirth}
-          postcode={packageData.address}
+          address={packageData.address}
           hackneyId={packageData.hackneyId}
-          client={packageData.serviceUserName}
+          serviceUserName={packageData.serviceUserName}
         />
         <Container padding="24px" background="#F8F8F8">
           <Heading size="l">New Package Request</Heading>
