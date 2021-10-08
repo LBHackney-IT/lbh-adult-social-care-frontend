@@ -189,6 +189,7 @@ export const BrokerPackage = ({
   };
 
   const changeNeed = (getter, setter, field, value, index) => {
+    console.log(field, value);
     const cloneNeed = { ...getter[index] };
     if (field === 'cost') {
       cloneNeed.cost = value;
@@ -318,7 +319,8 @@ export const BrokerPackage = ({
         }
         <Container className="brokerage__actions">
           <Button handler={clickBack} className="brokerage__back-button">Back</Button>
-          <Button handler={clickSave}>Save and continue</Button>
+          <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost} handler={clickSave}>Save and
+            continue</Button>
         </Container>
       </Container>
     </div>
