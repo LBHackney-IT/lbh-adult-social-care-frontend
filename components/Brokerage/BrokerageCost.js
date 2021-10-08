@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Container, Input } from '../HackneyDS';
+import { Container, ErrorMessage, Input } from '../HackneyDS';
 import { SelectArrowTriangle } from '../Icons';
 import BrokeragePackageDates from './BrokeragePackageDates';
 import { currency } from '../../constants/strings';
 import { uniqueID } from '../../service/helpers';
 import BrokerageBorderCost from './BrokerageBorderCost';
+import FormGroup from '../HackneyDS/FormGroup';
 
 const BrokerageCost = ({
   title,
@@ -28,40 +29,46 @@ const BrokerageCost = ({
         {title}
         <span className="text-blue brokerage__cost-expand">
           {expanded ? 'Collapse' : 'Expand'}
-          <SelectArrowTriangle className={`icon-transition${expanded ? ' icon-animation-rotation' : ''}`}/>
+          <SelectArrowTriangle className={`icon-transition${expanded ? ' icon-animation-rotation' : ''}`} />
         </span>
       </h2>
-      {expanded &&
+      {expanded && (
         <>
-        {getter.map(({ id, isOngoing, cost, startDate, endDate }, index) => (
-          <React.Fragment key={id}>
-            <BrokeragePackageDates
-              dates={{ startDate, endDate }}
-              fields={{
-                dateFrom: 'startDate',
-                dateTo: 'endDate',
-              }}
-              setDates={(field, date) => changeNeed(getter, setter, field, date, index)}
-              checkboxId={`${name}-checkbox-${index}`}
-              label="Dates"
-              hasOngoing={hasOngoing}
-              isOngoing={isOngoing}
-              setIsOngoing={(value) => changeNeed(getter, setter, 'isOngoing', value, index)}
-            />
-            <Input
-              id={`supplier-cost-${name}-${index}`}
-              preSign={currency.euro}
-              className="brokerage__cost-input"
-              label={labelInputCost}
-              value={cost}
-              onChangeValue={(value) => changeNeed(getter, setter, 'cost', value, index)}
-            />
-            <Container className='brokerage__cost-add-need' display='flex'>
-              {index !== 0 && <p onClick={() => removeNeed(getter, setter, index)} className="link-button red">Remove</p>}
-              <p onClick={() => addNeed(setter)} className="text-green">{addNeedText}</p>
-            </Container>
-
-          </React.Fragment>
+          {getter.map(({ id, isOngoing, cost, startDate, endDate, errorCost, errorStartDate }, index) => (
+            <FormGroup error={errorCost || errorStartDate ? 'Some validations error' : ''} key={id}>
+              <BrokeragePackageDates
+                dates={{ startDate, endDate }}
+                fields={{
+                  dateFrom: 'startDate',
+                  dateTo: 'endDate',
+                }}
+                setDates={(field, date) => changeNeed(getter, setter, field, date, index)}
+                checkboxId={`${name}-checkbox-${index}`}
+                label="Dates"
+                hasOngoing={hasOngoing}
+                isOngoing={isOngoing}
+                setIsOngoing={(value) => changeNeed(getter, setter, 'isOngoing', value, index)}
+              />
+              <Input
+                id={`supplier-cost-${name}-${index}`}
+                preSign={currency.euro}
+                className="brokerage__cost-input"
+                label={labelInputCost}
+                value={cost}
+                error={errorCost}
+                onChangeValue={(value) => changeNeed(getter, setter, 'cost', value, index)}
+              />
+              <Container className="brokerage__cost-add-need" display="flex">
+                {index !== 0 && (
+                  <p onClick={() => removeNeed(getter, setter, index)} className="link-button red">
+                    Remove
+                  </p>
+                )}
+                <p onClick={() => addNeed(setter)} className="text-green">
+                  {addNeedText}
+                </p>
+              </Container>
+            </FormGroup>
           ))}
           <BrokerageBorderCost
             totalCostHeader={totalCostName}
@@ -69,7 +76,7 @@ const BrokerageCost = ({
             totalCost={totalCost}
           />
         </>
-      }
+      )}
     </Container>
   );
 };

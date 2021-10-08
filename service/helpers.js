@@ -15,6 +15,8 @@ const formatDateWithSign = (date, sign = '/') => {
   return `${`00${day}`.slice(-2)}${sign}${`00${month}`.slice(-2)}${sign}${`00${year}`.slice(-2)}`;
 };
 
+const dateStringToDate = (dateString) => dateString ? new Date(dateString) : null;
+
 const incrementDate = ({ incrementTime, date = new Date() }) => {
   const {
     years = 0,
@@ -179,4 +181,5 @@ export {
   formatStringLength,
   incrementDate,
   getUrlFromFile,
+  dateStringToDate,
 };

@@ -4,6 +4,7 @@ import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, ErrorMessage, RadioGroup } from '../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import CorePackageSelectors from './CorePackageSelectors';
+import ServiceUserDetails from '../BrokerageHub/ServiceUserDetails';
 
 const CorePackageDetails = ({
   userDetails,
@@ -92,6 +93,7 @@ const CorePackageDetails = ({
     }
   }, [packageTypeOptions]);
 
+  console.log(userDetails);
   return (
     <div className="core-package-details brokerage">
       <BrokerageHeader />
@@ -100,7 +102,12 @@ const CorePackageDetails = ({
           <p>Build a care package</p>
           <h2>Core package details</h2>
         </Container>
-        <PackageUserDetails {...userDetails} />
+        <ServiceUserDetails
+          dateOfBirth={userDetails.dateOfBirth}
+          address={userDetails.postcode}
+          hackneyId={userDetails.hackneyId}
+          serviceUserName={userDetails.client}
+        />
         <CorePackageSelectors
           packageTypeOptions={packageTypeOptions}
           packageType={packageType}
