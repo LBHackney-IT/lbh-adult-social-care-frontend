@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Popup from '../../Popup';
 import { Button, Container, Select, Textarea } from '../../HackneyDS';
 import FormGroup from '../../HackneyDS/FormGroup';
-import { carePackageSubmitForApproval } from '../../../api/CarePackages/CarePackage';
+import { submitCarePackage } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
 import { BROKERAGE_HUB_ROUTE } from '../../../routes/RouteConstants';
@@ -16,7 +16,7 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
 
   const submit = async () => {
     try {
-      await carePackageSubmitForApproval({
+      await submitCarePackage({
         packageId,
         data: { approverId, notes }
       });
