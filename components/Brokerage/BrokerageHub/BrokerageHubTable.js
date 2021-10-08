@@ -10,7 +10,7 @@ const tagColors = {
   approved: 'gray',
 };
 
-export const BrokerageHubTable = ({ data }) => {
+export const BrokerageHubTable = ({ onRowClick, data }) => {
   const columns = [
     {
       accessor: 'packageStatus',
@@ -68,7 +68,7 @@ export const BrokerageHubTable = ({ data }) => {
   ];
   return (
     <div className="brokerage-hub__table">
-      <Table hasHeader={false} columns={columns} data={data} cellClassName='brokerage-hub__cell'/>
+      <Table onRowClick={onRowClick} hasHeader={false} columns={columns} data={data} cellClassName='brokerage-hub__cell'/>
     </div>
   );
 };

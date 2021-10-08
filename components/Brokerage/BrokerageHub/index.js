@@ -5,21 +5,20 @@ import Pagination from '../../Payments/Pagination';
 import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
 import { BrokerageHubTable } from './BrokerageHubTable';
+import { useRouter } from 'next/router';
 
-export const BrokerageHub = ({
-  items,
-  searchResults: {
-    pageSize,
-    totalPages,
-    totalCount,
-  },
-  statusOptions,
-}) => {
+export const BrokerageHub = ({ items, searchResults: { pageSize, totalPages, totalCount }, statusOptions }) => {
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [status, setStatus] = useState('');
   const [searchPackages, setSearchPackages] = useState('');
   const [dateFrom, setDateFrom] = useState(null);
   const [dateTo, setDateTo] = useState(null);
+
+  const onRowClick = (rowItem) => {
+    console.log(rowItem);
+    router.push({ pathname: `${router.pathname}/${rowItem.packageId}`, query:  rowItem });
+  };
 
   const findServiceUser = async () => {
     alert('Find a service user');
@@ -41,26 +40,17 @@ export const BrokerageHub = ({
           <Button handler={findServiceUser}>Find a service user</Button>
         </Container>
         <Container className="brokerage-hub__filters">
-          <SearchBox
-            placeholder="Search"
-            label="Search packages"
-            handler={setSearchPackages}
-            value={searchPackages}
-          />
+          <SearchBox placeholder="Search" label="Search packages" handler={setSearchPackages} value={searchPackages} />
           <FormGroup className="form-group--inline-label brokerage-hub__form-status" label="Status">
-            <Select
-              options={statusOptions}
-              value={status}
-              onChange={({ target: { value } }) => setStatus(value)}
-            />
+            <Select options={statusOptions} value={status} onChange={({ target: { value } }) => setStatus(value)} />
           </FormGroup>
           <FormGroup className="form-group--inline-label brokerage-hub__date-from" label="From">
             <DatePick
               placeholder="Select date"
               startDate={dateFrom}
               dateValue={dateFrom}
-              setDate={value => {
-                if(value > dateTo) {
+              setDate={(value) => {
+                if (value > dateTo) {
                   setDateTo(value);
                 }
                 setDateFrom(value);
@@ -77,8 +67,8 @@ export const BrokerageHub = ({
             />
           </FormGroup>
         </Container>
-        {items && <BrokerageHubTable data={items}/>}
-        <HorizontalSeparator height='20px'/>
+        {items && <BrokerageHubTable onRowClick={onRowClick} data={items} />}
+        <HorizontalSeparator height="20px" />
         <Pagination
           pageSize={pageSize}
           totalPages={totalPages}
