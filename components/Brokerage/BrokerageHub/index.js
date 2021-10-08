@@ -6,7 +6,7 @@ import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
 import { BrokerageHubTable } from './BrokerageHubTable';
 
-const BrokerageHub = ({
+export const BrokerageHub = ({
   searchResults: {
     items,
     pageSize,
@@ -98,5 +98,3 @@ const BrokerageHub = ({
     </div>
   );
 };
-
-export default BrokerageHub;
