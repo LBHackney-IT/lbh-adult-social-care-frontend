@@ -25,14 +25,14 @@ export const BrokerageHub = ({ items, searchResults: { pageSize, totalPages, tot
 
   return (
     <div className="brokerage-hub">
-      {/* <BrokerageHeader
+      <BrokerageHeader
         links={[
           { text: 'Broker Assistance', href: 'broker-assistance' },
           { text: 'Broker Portal', href: 'broker-portal' },
           { text: 'Care Charge Team', href: 'care-charge-team' },
           { text: 'Log Out', href: 'logout' },
         ]}
-      /> */}
+      />
       <Container className="brokerage__container-main">
         <Container className="brokerage-hub__header">
           <h2>Broker Portal</h2>

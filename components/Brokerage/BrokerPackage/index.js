@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../HackneyDS';
 import BrokeragePackageDates from '../BrokeragePackageDates';
@@ -6,9 +8,7 @@ import BrokerPackageCost from './BrokerPackageCost';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
 import { CORE_PACKAGE_DETAILS_ROUTE } from '../../../routes/RouteConstants';
-import { useRouter } from 'next/router';
 import { updateCoreCarePackage } from '../../../api/CarePackages/CarePackage';
-import { useDispatch } from 'react-redux';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../Constants';
 import { dateStringToDate, uniqueID } from '../../../service/helpers';
