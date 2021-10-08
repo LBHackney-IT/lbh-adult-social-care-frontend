@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Container, Input } from '../HackneyDS';
+import { Container, ErrorMessage, Input } from '../HackneyDS';
 import { SelectArrowTriangle } from '../Icons';
 import BrokeragePackageDates from './BrokeragePackageDates';
 import { currency } from '../../constants/strings';
 import { uniqueID } from '../../service/helpers';
 import BrokerageBorderCost from './BrokerageBorderCost';
+import FormGroup from '../HackneyDS/FormGroup';
 
 const BrokerageCost = ({
   title,
@@ -33,10 +34,11 @@ const BrokerageCost = ({
       </h2>
       {expanded &&
         <>
-        {getter.map(({ id, isOngoing, cost, startDate, endDate }, index) => (
-          <React.Fragment key={id}>
+        {getter.map(({ id, isOngoing, cost, startDate, endDate, errorCost, errorStartDate }, index) => (
+          <FormGroup error={errorCost || errorStartDate ? 'Some validations error' : ''} key={id}>
             <BrokeragePackageDates
               dates={{ startDate, endDate }}
+              error={errorStartDate}
               fields={{
                 dateFrom: 'startDate',
                 dateTo: 'endDate',
@@ -54,6 +56,7 @@ const BrokerageCost = ({
               className="brokerage__cost-input"
               label={labelInputCost}
               value={cost}
+              error={errorCost}
               onChangeValue={(value) => changeNeed(getter, setter, 'cost', value, index)}
             />
             <Container className='brokerage__cost-add-need' display='flex'>
@@ -61,7 +64,7 @@ const BrokerageCost = ({
               <p onClick={() => addNeed(setter)} className="text-green">{addNeedText}</p>
             </Container>
 
-          </React.Fragment>
+          </FormGroup>
           ))}
           <BrokerageBorderCost
             totalCostHeader={totalCostName}

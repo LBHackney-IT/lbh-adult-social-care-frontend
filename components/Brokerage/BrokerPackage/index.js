@@ -11,30 +11,37 @@ import { changeCarePackageDetails } from '../../../api/CarePackages/CarePackage'
 import { useDispatch } from 'react-redux';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../Constants';
-import { uniqueID } from '../../../service/helpers';
+import { dateStringToDate, uniqueID } from '../../../service/helpers';
 import Loading from '../../Loading';
 
 export const BrokerPackage = ({
   supplierSearch,
+  getDetails,
   packageId,
   setSupplierSearch,
+  showSearchResults,
+  setShowSearchResults,
   detailsData,
   currentPage,
   setCurrentPage,
   searchResults,
+  selectedItem,
+  setSelectedItem,
   onSearchSupplier,
   careName = 'Nursing Care'
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
-  const [selectedItem, setSelectedItem] = useState(null);
   const [initialNeed] = useState({
     cost: 0,
     startDate: null,
     endDate: null,
     isOngoing: false,
+    errorCost: '',
+    errorStartDate: '',
   });
 
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
@@ -52,13 +59,25 @@ export const BrokerPackage = ({
     router.push(`${CORE_PACKAGE_DETAILS_ROUTE}/${packageId}`);
   };
 
+  const removeSupplierCard = () => {
+    setSelectedItem('');
+    setShowSearchResults(false);
+    setSupplierSearch('');
+    getDetails();
+  };
+
+  const clearSearch = () => {
+    setShowSearchResults(false);
+    setSupplierSearch('');
+  };
+
   useEffect(() => {
     if (detailsData) {
       setPackageDates({
-        endDate: detailsData.endDate,
-        startDate: detailsData.startDate,
+        endDate: dateStringToDate(detailsData.endDate),
+        startDate: dateStringToDate(detailsData.startDate),
       });
-      if(!detailsData.endDate) {
+      if (!detailsData.endDate) {
         setIsOngoing(true);
       }
 
@@ -67,9 +86,24 @@ export const BrokerPackage = ({
       if (detailsData.details) {
         const weeklyDetails = detailsData.details
           .filter(item => item.costPeriod === 2)
-          .map(item => ({ ...item, isOngoing: !item.endDate}));
+          .map(item => ({
+            ...item,
+            startDate: dateStringToDate(item.startDate),
+            endDate: dateStringToDate(item.endDate),
+            isOngoing: !item.endDate,
+            errorCost: '',
+            errorStartDate: '',
+          }));
 
-        const oneOffDetails = detailsData.details.filter(item => item.costPeriod === 3);
+        const oneOffDetails = detailsData.details
+          .filter(item => item.costPeriod === 3)
+          .map(item => ({
+            ...item,
+            startDate: dateStringToDate(item.startDate),
+            endDate: dateStringToDate(item.endDate),
+            errorCost: '',
+            errorStartDate: '',
+          }));
 
         setWeeklyNeeds(weeklyDetails);
         setOneOffNeeds(oneOffDetails);
@@ -77,7 +111,32 @@ export const BrokerPackage = ({
     }
   }, [detailsData]);
 
+  const checkNeedsErrors = (needs) => {
+    let hasErrors = false;
+    const checkedNeeds = needs.map(item => {
+      const errorCost = !item.cost ? 'Invalid cost' : '';
+      const errorStartDate = !item.startDate ? 'Invalid start date' : '';
+      if (errorCost || errorStartDate) {
+        hasErrors = true;
+      }
+      return {
+        ...item,
+        errorCost,
+        errorStartDate,
+      };
+    });
+    return { checkedNeeds, hasErrors };
+  };
+
   const clickSave = async () => {
+    const checkedWeeklyDetails = checkNeedsErrors(weeklyNeeds);
+    const checkOneOffDetails = checkNeedsErrors(oneOffNeeds);
+
+    setWeeklyNeeds(checkedWeeklyDetails.checkedNeeds);
+    setOneOffNeeds(checkOneOffDetails.checkedNeeds);
+
+    if (checkedWeeklyDetails.hasErrors || checkOneOffDetails.hasErrors) return;
+
     const weeklyDetails = weeklyNeeds
       .filter(item => item.cost !== 0)
       .map(({ cost, id, endDate, startDate }) => ({
@@ -100,12 +159,14 @@ export const BrokerPackage = ({
         type: brokerageTypeOptions.additionalNeed,
       }));
 
+    setLoading(true);
+
     try {
       await changeCarePackageDetails({
         data: {
           coreCost: supplierWeeklyCost,
           startDate: packageDates.startDate,
-          endDate: packageDates.endDate,
+          endDate: isOngoing ? null : packageDates.endDate,
           supplierId: selectedItem.id,
           details: [...weeklyDetails, ...oneOffDetails]
         },
@@ -115,17 +176,17 @@ export const BrokerPackage = ({
     } catch (e) {
       dispatch(addNotification({ text: e }));
     }
+    setLoading(false);
   };
 
   const changeNeed = (getter, setter, field, value, index) => {
-    console.log(field, value);
     const cloneNeed = { ...getter[index] };
     if (field === 'cost') {
       cloneNeed.cost = value;
     } else if (field === 'isOngoing') {
       cloneNeed.isOngoing = value;
     } else {
-      cloneNeed.dates = { ...cloneNeed.dates, [field]: value };
+      cloneNeed[field] = value;
     }
     const cloneNeeds = getter.slice();
     cloneNeeds.splice(index, 1, cloneNeed);
@@ -168,7 +229,7 @@ export const BrokerPackage = ({
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader/>
-      {detailsData === undefined && <Loading className='loading-center' />}
+      {(loading || detailsData === undefined) && <Loading className="loading-center"/>}
       <Container className="brokerage__container-main">
         <BrokerageContainerHeader title="Broker package"/>
         <Container>
@@ -193,7 +254,7 @@ export const BrokerPackage = ({
               label="Supplier"
               searchIcon={null}
               clearIcon={<p className="lbh-primary-button">Clear</p>}
-              clear={() => setSupplierSearch('')}
+              clear={clearSearch}
               value={supplierSearch}
               className="supplier-search-box"
               id="supplier-search-box"
@@ -203,18 +264,20 @@ export const BrokerPackage = ({
           }
 
           {
-            !supplierSearch &&
+            !supplierSearch && !selectedItem &&
             <Container className="is-new-supplier">
               <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier}/>
               <Container className="is-new-supplier-text" display="flex" flexDirection="column">
                 <p>This is a new supplier</p>
-                <p>Contact <span className="link-button green">claire.surname.hackney.gov.uk</span> to add a new
-                  supplier</p>
+                <p>Contact <span className="link-button green">
+                  claire.surname.hackney.gov.uk
+                </span> to add a new supplier
+                </p>
               </Container>
             </Container>
           }
         </>
-        {searchResults && supplierSearch && !selectedItem ?
+        {searchResults && supplierSearch && !selectedItem || (showSearchResults && searchResults) ?
           <BrokerPackageSelector
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
@@ -222,11 +285,14 @@ export const BrokerPackage = ({
             totalCount={searchResults?.pagingMetaData?.totalCount}
             totalPages={searchResults?.pagingMetaData?.totalPages}
             items={searchResults?.data}
-            setSelectedItem={setSelectedItem}
+            setSelectedItem={(value) => {
+              setSelectedItem(value);
+              setShowSearchResults(false);
+            }}
           />
           :
           <BrokerPackageCost
-            setSelectedItem={setSelectedItem}
+            removeSupplierCard={removeSupplierCard}
             cardInfo={selectedItem}
             addNeed={addNeed}
             weeklyNeeds={weeklyNeeds}
@@ -243,8 +309,7 @@ export const BrokerPackage = ({
         }
         <Container className="brokerage__actions">
           <Button handler={clickBack} className="brokerage__back-button">Back</Button>
-          <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost} handler={clickSave}>Save and
-            continue</Button>
+          <Button handler={clickSave}>Save and continue</Button>
         </Container>
       </Container>
     </div>

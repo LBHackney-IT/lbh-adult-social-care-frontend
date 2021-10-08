@@ -13,11 +13,11 @@ const BrokerPackageCost = ({
   changeNeed,
   setWeeklyNeeds,
   setOneOffNeeds,
-  setSelectedItem,
   weeklyTotalCost,
   oneOffTotalCost,
   supplierWeeklyCost,
   setSupplierWeeklyCost,
+  removeSupplierCard,
 }) => (
   <Container className="supplier-look-up__selected">
     {cardInfo &&
@@ -25,7 +25,7 @@ const BrokerPackageCost = ({
         <h3 className="supplier-look-up__selected-title">Supplier</h3>
         <BrokerageSupplierCard
           cardInfo={cardInfo}
-          actionsComponent={<p onClick={() => setSelectedItem('')} className="link-button red">Remove</p>}
+          actionsComponent={<p onClick={removeSupplierCard} className="link-button red">Remove</p>}
         />
       </>
     }
