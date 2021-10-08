@@ -16,7 +16,7 @@ export const BrokerageHub = ({ items, searchResults: { pageSize, totalPages, tot
   const [dateTo, setDateTo] = useState(null);
 
   const onRowClick = (rowItem) => {
-    router.push({ pathname: `${router.pathname}/${rowItem.packageId}`, query:  rowItem });
+    router.push({ pathname: `${router.pathname}/${rowItem.packageId}`, query: rowItem });
   };
 
   const findServiceUser = async () => {
@@ -33,7 +33,7 @@ export const BrokerageHub = ({ items, searchResults: { pageSize, totalPages, tot
           { text: 'Log Out', href: 'logout' },
         ]}
       />
-      <Container className="brokerage__container-main">
+      <Container background="#FAFAFA" padding='60px 60px 30px 60px'>
         <Container className="brokerage-hub__header">
           <h2>Broker Portal</h2>
           <Button handler={findServiceUser}>Find a service user</Button>
@@ -66,15 +66,17 @@ export const BrokerageHub = ({ items, searchResults: { pageSize, totalPages, tot
             />
           </FormGroup>
         </Container>
-        {items && <BrokerageHubTable onRowClick={onRowClick} data={items} />}
-        <HorizontalSeparator height="20px" />
-        <Pagination
-          pageSize={pageSize}
-          totalPages={totalPages}
-          currentPage={currentPage}
-          totalCount={totalCount}
-          changePagination={setCurrentPage}
-        />
+      </Container>
+      <Container padding='30px 60px 60px 60px'>
+      {items && <BrokerageHubTable onRowClick={onRowClick} data={items} />}
+      <HorizontalSeparator height="20px" />
+      <Pagination
+        pageSize={pageSize}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        totalCount={totalCount}
+        changePagination={setCurrentPage}
+      />
       </Container>
     </div>
   );
