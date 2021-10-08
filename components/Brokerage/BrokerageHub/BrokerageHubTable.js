@@ -10,40 +10,42 @@ const tagColors = {
   approved: 'gray',
 };
 
-export const BrokerageHubTable = ({ data }) => {
+export const BrokerageHubTable = ({ onRowClick, data }) => {
   const columns = [
     {
       accessor: 'packageStatus',
-      Cell: ({ value, row: { original }}) => {
-        return (
-          <Container>
-            <Container className='status-info' display="flex">
-              <p className='brokerage-hub--user-name font-size-19px font-weight-bold text-green'>{original.userName}</p>
-              <Tag className='text-capitalize with-border' color={tagColors[value]}>{formatStatus(value)}</Tag>
-            </Container>
-            <p className='brokerage-hub--birthdate'>{formatDate(original.dateOfBirth)}</p>
-            <p className='brokerage-hub--address'>{original.address}</p>
+      Cell: ({ value, row: { original } }) => (
+        <Container>
+          <Container className="status-info" display="flex">
+            <p className="brokerage-hub--user-name font-size-19px font-weight-bold text-green">
+              {original.serviceUserName}
+            </p>
+            <Tag className="text-capitalize with-border" color={tagColors[value]}>
+              {formatStatus(original.packageStatus)}
+            </Tag>
           </Container>
-        );
-      },
+          <p className="brokerage-hub--birthdate">{formatDate(original.dateOfBirth)}</p>
+          <p className="brokerage-hub--address">{original.address}</p>
+        </Container>
+      ),
     },
     {
-      accessor: 'mosaicId',
+      accessor: 'hackneyId',
       Cell: ({ value }) => (
         <Container className="brokerage-hub__cell-with-title">
           <h3>MosaicID</h3>
           <p>#{value}</p>
         </Container>
-      )
+      ),
     },
     {
-      accessor: 'packageName',
+      accessor: 'packageType',
       Cell: ({ value }) => (
         <Container className="brokerage-hub__cell-with-title">
           <h3>Package</h3>
           <p>{value}</p>
         </Container>
-      )
+      ),
     },
     {
       accessor: 'brokerName',
@@ -52,10 +54,10 @@ export const BrokerageHubTable = ({ data }) => {
           <h3>Broker</h3>
           <p>{value}</p>
         </Container>
-      )
+      ),
     },
     {
-      accessor: 'assigned',
+      accessor: 'dateAssigned',
       Cell: ({ value }) => (
         <Container className="brokerage-hub__cell-with-title">
           <h3>Assigned</h3>
@@ -66,7 +68,7 @@ export const BrokerageHubTable = ({ data }) => {
   ];
   return (
     <div className="brokerage-hub__table">
-      <Table hasHeader={false} columns={columns} data={data} />
+      <Table onRowClick={onRowClick} hasHeader={false} columns={columns} data={data} cellClassName='brokerage-hub__cell'/>
     </div>
   );
 };
