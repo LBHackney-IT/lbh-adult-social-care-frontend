@@ -64,6 +64,7 @@ export const BrokerPackage = ({
     setShowSearchResults(false);
     setSupplierSearch('');
     getDetails();
+    composeDetailsData();
   };
 
   const clearSearch = () => {
@@ -71,7 +72,7 @@ export const BrokerPackage = ({
     setSupplierSearch('');
   };
 
-  useEffect(() => {
+  const composeDetailsData = () => {
     if (detailsData) {
       setPackageDates({
         endDate: dateStringToDate(detailsData.endDate),
@@ -109,6 +110,10 @@ export const BrokerPackage = ({
         setOneOffNeeds(oneOffDetails);
       }
     }
+  }
+
+  useEffect(() => {
+    composeDetailsData()
   }, [detailsData]);
 
   const checkNeedsErrors = (needs) => {
