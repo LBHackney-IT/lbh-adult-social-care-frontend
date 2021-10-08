@@ -4,7 +4,7 @@ import { getAgeFromDateString } from '../../api/Utils/FuncUtils';
 import React from 'react';
 
 const PackageUserDetails = ({ client, hackneyId, dateOfBirth, postcode }) => (
-  <Container className='user-details brokerage__container'>
+  <Container className="user-details brokerage__container">
     <h3>Service user details</h3>
     <Container>
       <p>Client</p>
@@ -18,7 +18,7 @@ const PackageUserDetails = ({ client, hackneyId, dateOfBirth, postcode }) => (
       <p>Age</p>
       <p>
         {formatDate(dateOfBirth, 'dd/MM/yy')}
-        {` (${getAgeFromDateString(dateOfBirth)}`}
+        {` (${getAgeFromDateString(dateOfBirth)})`}
       </p>
     </Container>
     <Container>
