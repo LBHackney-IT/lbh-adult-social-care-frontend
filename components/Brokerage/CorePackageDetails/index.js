@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { object, string } from 'yup';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, ErrorMessage, RadioGroup } from '../../HackneyDS';
-import { object, string } from 'yup';
 import PackageUserDetails from '../PackageUserDetails';
 import CorePackageSelectors from './CorePackageSelectors';
 
@@ -11,6 +11,7 @@ const CorePackageDetails = ({
   checkboxOptions,
   packageTypeOptions,
   packageScheduleOptions,
+  saveCorePackage = () => {},
 }) => {
   const [supportReason, setSupportReason] = useState('');
   const [packageType, setPackageType] = useState('');
@@ -23,14 +24,14 @@ const CorePackageDetails = ({
 
   const changeCheckbox = (id) => {
     if (furtherDetails.includes(id)) {
-      setFurtherDetails(prevState => prevState.filter(item => item !== id));
+      setFurtherDetails((prevState) => prevState.filter((item) => item !== id));
     } else {
       setFurtherDetails([...furtherDetails, id]);
     }
   };
 
   const changeError = (field, value = '') => {
-    setErrors(prevState => ({
+    setErrors((prevState) => ({
       ...prevState,
       [field]: value,
     }));
@@ -48,7 +49,7 @@ const CorePackageDetails = ({
     const validPackageType = await schemaPackageType.isValid({ packageType });
     const validSupportReason = await schemaSupportReason.isValid({ supportReason });
 
-    const hasErrors = [validPackageType, validSupportReason, validPackageSchedule].some(item => !item);
+    const hasErrors = [validPackageType, validSupportReason].some((item) => !item);
 
     if (hasErrors) {
       setErrors({
@@ -58,7 +59,25 @@ const CorePackageDetails = ({
       return;
     }
 
-    alert('save and continue');
+    const currentSettings = {};
+    furtherDetails.forEach((setting) => {
+      currentSettings[setting] = true;
+    });
+
+    const allSettings = checkboxOptions.map((cb) => cb.id);
+    const missingSettings = allSettings.filter((x) => !currentSettings[x]);
+    missingSettings.forEach((setting) => {
+      currentSettings[setting] = false;
+    });
+
+    const packageToCreate = {
+      packageScheduling: packageSchedule,
+      primarySupportReasonId: supportReason,
+      packageType,
+      ...currentSettings,
+    };
+
+    saveCorePackage(packageToCreate);
   };
 
   useEffect(() => {
@@ -75,7 +94,7 @@ const CorePackageDetails = ({
 
   return (
     <div className="core-package-details brokerage">
-      <BrokerageHeader/>
+      <BrokerageHeader />
       <Container className="brokerage__container-main">
         <Container className="brokerage__container-header brokerage__container">
           <p>Build a care package</p>
@@ -93,17 +112,17 @@ const CorePackageDetails = ({
           supportReasonOptions={supportReasonOptions}
         />
         <RadioGroup
-          className='core-package-details__radio-group'
+          className="core-package-details__radio-group"
           items={packageScheduleOptions}
           value={packageSchedule}
           handle={setPackageSchedule}
-          label='Packaging scheduling'
+          label="Packaging scheduling"
         />
         <Container>
           <h3 className="core-package-details__further-title">Further details</h3>
           <p className="core-package-details__further-sub-title">Select all that apply</p>
           <Container className="core-package-details__checkboxes">
-            {checkboxOptions.map(item => (
+            {checkboxOptions.map((item) => (
               <Checkbox
                 key={item.id}
                 value={furtherDetails.includes(item.id)}
@@ -114,10 +133,10 @@ const CorePackageDetails = ({
             ))}
           </Container>
         </Container>
-        {Object.values(errors).some(error => !!error) &&
-        <ErrorMessage>There is some errors above</ErrorMessage>
-        }
-        <Button className='core-package-details__button' handler={saveAndContinue}>Save and continue</Button>
+        {Object.values(errors).some((error) => !!error) && <ErrorMessage>There is some errors above</ErrorMessage>}
+        <Button className="core-package-details__button" handler={saveAndContinue}>
+          Save and continue
+        </Button>
       </Container>
     </div>
   );
