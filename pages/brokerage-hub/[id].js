@@ -1,6 +1,5 @@
 import PackageUserDetails from 'components/Brokerage/PackageUserDetails';
 import { Button, Container, Heading, Hint, HorizontalSeparator, Link, VerticalSeparator } from 'components/HackneyDS';
-import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -8,6 +7,10 @@ const PackageRequestPage = () => {
   const router = useRouter();
   const packageData = router.query;
   console.log(packageData);
+
+  const handleClick = () => {
+    router.push(`/care-package/service-users/${packageData.serviceUserId}/core-package-details`);
+  };
 
   return (
     <Container padding="60px">
@@ -30,7 +33,9 @@ const PackageRequestPage = () => {
           <Container>
             <Heading size="m">Care Plan</Heading>
             <HorizontalSeparator height="5px" />
-            <Link href='https://nudgedigital.slack.com/files/U01388KUH1A/F02EC73NV0S/care_act_assessment.pdf'>View</Link>
+            <Link href="https://nudgedigital.slack.com/files/U01388KUH1A/F02EC73NV0S/care_act_assessment.pdf">
+              View
+            </Link>
           </Container>
           <VerticalSeparator width="60px" />
           <Container>
@@ -39,7 +44,7 @@ const PackageRequestPage = () => {
             <Hint>{packageData.dateAssigned}</Hint>
           </Container>
         </Container>
-        <Button>Create package</Button>
+        <Button handler={handleClick}>Create package</Button>
       </Container>
     </Container>
   );

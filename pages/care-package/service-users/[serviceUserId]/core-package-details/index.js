@@ -30,7 +30,7 @@ const CorePackageDetailsPage = () => {
   const { options: packageTypes = [] } = usePackageGetAll();
   const { data: primarySupportReasons = [] } = usePrimarySupportReason();
   // const { data: client = {} } = useGetServiceUserApi.single(serviceUserId);
-  const { data: client = {} } = useGetServiceUserApi.single('aee45700-af9b-4ab5-bb43-535adbdcfb80'); // TODO: Fixing the value for demo. When find service user is implemented and request redirected with a valid user id, this will be disabled
+  const { data: client = {} } = useGetServiceUserApi.single(serviceUserId); // TODO: Fixing the value for demo. When find service user is implemented and request redirected with a valid user id, this will be disabled
 
   const handleCreateCoreCarePackage = (data = {}) => {
     const packageToCreate = {
