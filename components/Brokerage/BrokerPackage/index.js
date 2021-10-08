@@ -129,6 +129,10 @@ export const BrokerPackage = ({
   };
 
   const clickSave = async () => {
+    if(!isNewSupplier && !selectedItem?.id) {
+      dispatch(addNotification({ text: 'No supplier selected' }))
+      return
+    }
     const checkedWeeklyDetails = checkNeedsErrors(weeklyNeeds);
     const checkOneOffDetails = checkNeedsErrors(oneOffNeeds);
 
@@ -140,7 +144,7 @@ export const BrokerPackage = ({
     const weeklyDetails = weeklyNeeds
       .filter(item => item.cost !== 0)
       .map(({ cost, id, endDate, startDate }) => ({
-        id: id,
+        id,
         cost: cost,
         startDate,
         endDate: isOngoing ? null : endDate,
