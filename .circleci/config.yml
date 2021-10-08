@@ -82,7 +82,7 @@ jobs:
 
       - run:
           name: Pull owasp zap docker image
-          command: docker pull owasp/zap2docker-stable
+          command: docker pull owasp/zap2docker-stable:2.10.0
 
       - run:
           name: ZAP baseline test of application
