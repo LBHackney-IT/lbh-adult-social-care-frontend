@@ -1,13 +1,13 @@
 import React from 'react';
 import { ReviewPackageDetails } from './index';
 
-export default {
-  title: 'Pages/Brokerage/ReviewPackageDetails',
-  component: ReviewPackageDetails,
-  argTypes: {
-    controls: null,
-  },
-};
+// export default {
+//   title: 'Pages/Brokerage/ReviewPackageDetails',
+//   component: ReviewPackageDetails,
+//   argTypes: {
+//     controls: null,
+//   },
+// };
 
 const testUserDetails = {
   client: 'James Stevens',
