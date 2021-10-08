@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
-import useCarePackageApi from '../../../../api/SWR/CarePackage/useCarePackageApi';
+import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { useRouter } from 'next/router';
-import { ReviewPackageDetails } from '../../../../components/Brokerage/ReviewPackageDetails';
-import BrokerageBorderCost from '../../../../components/Brokerage/BrokerageBorderCost';
+import { ReviewPackageDetails } from 'components/Brokerage/ReviewPackageDetails';
+import BrokerageBorderCost from 'components/Brokerage/BrokerageBorderCost';
 
 const settingsTypes = [
   { field: 'hasRespiteCare', text: 'Respite Care' },
   { field: 'hasDischargePackage', text: 'Discharge Package' },
-  { field: 'isImmediate', text: 'Immediate' },
+  { field: 'hospitalAvoidance', text: 'Hospital Avoidance' },
   { field: 'isReEnablement', text: 'ReEnabled' },
   { field: 'isS117Client', text: 'S117' }
 ];
@@ -16,12 +16,14 @@ const ReviewPackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.id;
   const { data } = useCarePackageApi.summary(carePackageId);
+  const { data: detailsData } = useCarePackageApi.details(carePackageId);
+
+  const checkSettings = (settings) => settings && settingsTypes.find(item => settings[item.field] === true)?.text;
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    console.log(detailsData);
+  }, [detailsData])
 
-  const checkSettings = (settings) => settingsTypes.find(item => settings[item.field] === true)?.text;
 
   const summary = [
     { id: 1, key: 'Cost of placement', value: data?.costOfPlacement },
@@ -59,7 +61,7 @@ const ReviewPackageDetailsPage = () => {
   const packageInfoItems = [
     {
       headerTitle: data?.packageType,
-      id: 1,
+      id: 'care-package',
       costOfPlacement: data?.costOfPlacement,
       items: [
         {
@@ -67,7 +69,7 @@ const ReviewPackageDetailsPage = () => {
           endDate: data?.endDate,
           title: 'Supplier',
           place: data?.supplier?.place,
-          id: data?.supplier?.id,
+          id: data?.supplier?.creatorId,
           address: `${data?.supplier?.supplierName}, ${data?.supplier?.address}`,
           serviceUserNeed: {
             term: data?.primarySupportReason,
@@ -78,21 +80,21 @@ const ReviewPackageDetailsPage = () => {
     },
     {
       headerTitle: 'Weekly Additional Need',
-      id: 2,
+      id: 'weekly-additional-need',
       items: data?.additionalWeeklyNeeds,
       totalCostHeader: `Total (${data?.additionalWeeklyNeeds <= 0 ? 'Net Off' : 'Gross'})`,
       totalCost: data?.additionalWeeklyCost
     },
     {
       headerTitle: 'One Off Additional Need',
-      id: 3,
+      id: 'on-off-additional-need',
       items: data?.additionalOneOffNeeds,
       totalCostHeader: `Total (${data?.additionalOneOffCost <= 0 ? 'Net Off' : 'Gross'})`,
       totalCost: data?.additionalOneOffCost,
     },
     {
       headerTitle: 'Care Charges',
-      id: 4,
+      id: 'care-charges',
       items: data?.careCharges,
       totalCostComponent:
         <>
@@ -105,7 +107,13 @@ const ReviewPackageDetailsPage = () => {
     },
   ];
 
-  return <ReviewPackageDetails packageInfoItems={packageInfoItems} userDetails={data?.serviceUser} summary={summary}/>;
+  return (
+    <ReviewPackageDetails
+      supplierName={data?.supplier?.supplierName}
+      packageInfoItems={packageInfoItems}
+      userDetails={data?.serviceUser} summary={summary}
+    />
+  );
 };
 
 export default ReviewPackageDetailsPage;

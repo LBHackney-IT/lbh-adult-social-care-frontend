@@ -8,9 +8,16 @@
 @import "funded-nursing-care";
 @import "brokerage-submit-for-approval-popup";
 @import "care-charges";
+@import "brokerage-hub";
+@import "brokerage-weekly-cost";
 
 .brokerage__container-main {
   padding: 60px;
+
+  @include media-desktop {
+    width: 70%;
+    margin: 0 auto;
+  }
 
   @include media-mobile {
     padding: 8px;

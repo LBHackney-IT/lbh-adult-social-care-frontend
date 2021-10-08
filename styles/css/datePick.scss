@@ -11,11 +11,15 @@
     position: absolute;
     pointer-events: none;
     right: 11px;
-    width: 20px;
-    height: 20px;
-    background: url('../../public/images/icons/calendar_icon.svg');
+    width: 24px;
+    height: 24px;
+    background: url('../../public/images/icons/icon_hakcney_calendar.svg');
     cursor: text;
   }
+}
+
+.control .react-datepicker-popper {
+  z-index: 4;
 }
 
 .datepicker-disabled {
@@ -84,6 +88,9 @@
   }
 }
 
+.datepicker-custom-input-placeholder {
+  color: $lbh-gray1;
+}
 
 .datepicker-custom-input {
   width: 100%;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTable, useExpanded, useRowSelect } from 'react-table';
 
-export const Table = ({ columns, data, expandRowCallback, setSelectedRows, hasFooter, headerClassName='', bodyClassName='', footerClassName='', cellClassName=''}) => {
+export const Table = ({ hasHeader = true, columns, data, expandRowCallback, setSelectedRows, hasFooter, headerClassName='', bodyClassName='', footerClassName='', cellClassName=''}) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -30,7 +30,7 @@ export const Table = ({ columns, data, expandRowCallback, setSelectedRows, hasFo
 
   return (
     <table className="govuk-table lbh-table" {...getTableProps()}>
-      <thead className={`govuk-table__head ${headerClassName}`}>
+      {hasHeader && <thead className={`govuk-table__head ${headerClassName}`}>
         {headerGroups.map((headerGroup) => (
           <tr className="govuk-table__row" {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
@@ -43,7 +43,7 @@ export const Table = ({ columns, data, expandRowCallback, setSelectedRows, hasFo
             ))}
           </tr>
         ))}
-      </thead>
+      </thead>}
       <tbody className={`govuk-table__body ${bodyClassName}`} {...getTableBodyProps()}>
         {rows.map((row, index) => {
           prepareRow(row);

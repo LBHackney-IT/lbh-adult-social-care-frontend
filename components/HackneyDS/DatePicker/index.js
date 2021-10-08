@@ -106,9 +106,10 @@ export default function DatePicker ({
 
   useEffect(() => {
     if (date) {
-      setLocalDay(prevState => ({ ...prevState, value: date.getDate(), error: '' }));
-      setLocalMonth(prevState => ({ ...prevState, value: date.getMonth() + 1, error: '' }));
-      setLocalYear(prevState => ({ ...prevState, value: date.getFullYear().toString().slice(2, 4), error: '' }));
+      const formatDate = new Date(date);
+      setLocalDay(prevState => ({ ...prevState, value: formatDate.getDate(), error: '' }));
+      setLocalMonth(prevState => ({ ...prevState, value: formatDate.getMonth() + 1, error: '' }));
+      setLocalYear(prevState => ({ ...prevState, value: formatDate.getFullYear().toString().slice(2, 4), error: '' }));
     } else {
       setLocalDay({ ...initialDateState });
       setLocalMonth({ ...initialDateState });

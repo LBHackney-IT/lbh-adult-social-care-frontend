@@ -33,15 +33,19 @@ const BrokerageCost = ({
       </h2>
       {expanded &&
         <>
-        {getter.map((item, index) => (
-          <React.Fragment key={uniqueID()}>
+        {getter.map(({ id, isOngoing, cost, startDate, endDate }, index) => (
+          <React.Fragment key={id}>
             <BrokeragePackageDates
-              dates={item.dates}
+              dates={{ startDate, endDate }}
+              fields={{
+                dateFrom: 'startDate',
+                dateTo: 'endDate',
+              }}
               setDates={(field, date) => changeNeed(getter, setter, field, date, index)}
               checkboxId={`${name}-checkbox-${index}`}
               label="Dates"
               hasOngoing={hasOngoing}
-              isOngoing={item.isOngoing}
+              isOngoing={isOngoing}
               setIsOngoing={(value) => changeNeed(getter, setter, 'isOngoing', value, index)}
             />
             <Input
@@ -49,7 +53,7 @@ const BrokerageCost = ({
               preSign={currency.euro}
               className="brokerage__cost-input"
               label={labelInputCost}
-              value={item.cost}
+              value={cost}
               onChangeValue={(value) => changeNeed(getter, setter, 'cost', value, index)}
             />
             <Container className='brokerage__cost-add-need' display='flex'>

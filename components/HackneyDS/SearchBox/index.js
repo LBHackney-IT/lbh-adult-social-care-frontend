@@ -25,7 +25,7 @@ export default function SearchBox ({
     if (clear && value) {
       clear();
     } else {
-      search();
+      search && search();
     }
   };
 

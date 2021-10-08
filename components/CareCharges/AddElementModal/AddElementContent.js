@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import formValidator from '../../../service/formValidator';
-import CareChargesInfoEdited from '../ModalComponents/CareChargesInfoEdited';
+import CareChargesInfoEdited from '../CareChargesInfoEdited';
 import { incrementDate } from '../../../service/helpers';
-import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
-import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
-import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
+import CareChargesModalActions from '../CareChargesModalActions';
+import CareChargesInfoTitle from '../CareChargesInfoTitle';
+import CareChargesModalTitle from '../CareChargesModalTitle';
 import { ErrorMessage } from '../../HackneyDS/index';
 
 const AddElementContent = ({

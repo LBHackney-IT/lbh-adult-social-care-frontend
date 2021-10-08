@@ -1,5 +1,33 @@
 .supplier-look-up {
+  .supplier-search-container {
+    margin-bottom: 23px;
+  }
 
+  .is-new-supplier {
+    display: flex;
+    margin-bottom: 25px;
+
+    .govuk-checkboxes__item {
+      margin-right: 12px;
+
+      .govuk-checkboxes__label {
+        padding: 0;
+      }
+    }
+
+    .is-new-supplier-text {
+      font-size: 16px;
+      p:last-of-type {
+        color: $lbh-secondary-text-colour;
+      }
+    }
+
+    .link-button {
+      &.green {
+        color: $lbh-primary-button;
+      }
+    }
+  }
   .with-sign {
     font-size: 14px;
 

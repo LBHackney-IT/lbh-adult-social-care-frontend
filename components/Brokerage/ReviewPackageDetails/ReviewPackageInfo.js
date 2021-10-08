@@ -4,7 +4,7 @@ import { formatDate } from '../../../service/helpers';
 import { currency, dateStringFormats } from '../../../constants/strings';
 import { CaretDownIcon } from '../../Icons';
 
-const ReviewPackageInfo = ({ headerTitle, items }) => {
+const ReviewPackageInfo = ({ headerTitle, items, containerId }) => {
   const [openedServiceUserNeed, setOpenedServiceUserNeed] = useState([]);
 
   const changeOpenedService = (id) => {
@@ -17,11 +17,11 @@ const ReviewPackageInfo = ({ headerTitle, items }) => {
 
   return (
     <Container className="review-package-details__items-container">
-      <h3>{headerTitle}</h3>
+      <h3 id={containerId}>{headerTitle}</h3>
       {items?.map(({
         startDate,
         endDate,
-        price,
+        cost,
         title,
         address,
         serviceUserNeed,
@@ -29,6 +29,7 @@ const ReviewPackageInfo = ({ headerTitle, items }) => {
         id,
       }) => {
         const openedId = openedServiceUserNeed.includes(id);
+        const minusSign = cost < 0 ? '-' : '';
         return (
           <Container className="review-package-details__items" key={id}>
             <Container className="review-package-details__items-date" display="flex" justifyContent="space-between">
@@ -36,7 +37,7 @@ const ReviewPackageInfo = ({ headerTitle, items }) => {
                 {formatDate(startDate, dateStringFormats.dayMonthYearSlash)}
                 {endDate && ` - `}
                 {endDate && formatDate(endDate, dateStringFormats.dayMonthYearSlash)}</p>
-              {price && <p className="text-lbh-f01">{currency.euro}{price}</p>}
+              {cost && <p className="text-lbh-f01">{minusSign}{currency.euro}{cost ? Math.abs(cost) : 0}</p>}
             </Container>
             {title && <p className="review-package-details__items-title font-weight-bold">{title}</p>}
             {address &&
