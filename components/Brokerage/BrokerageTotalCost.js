@@ -2,11 +2,13 @@ import { currency } from '../../constants/strings';
 import React from 'react';
 
 const BrokerageTotalCost = ({ name, className, value }) => {
+  if(!name) return <></>;
+
   const minusSign = value < 0 ? '-' : '';
   return (
-    <p key={name} className={className || ''}>
+    <p className={className || ''}>
       {`${name}`}
-      {value && <span className="text-lbh-f01">{minusSign}{currency.euro}{Math.abs(value)}</span>}
+      <span className="text-lbh-f01">{minusSign}{currency.euro}{value ? Math.abs(value) : 0}</span>
     </p>
   );
 }

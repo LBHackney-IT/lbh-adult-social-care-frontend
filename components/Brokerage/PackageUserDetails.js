@@ -3,12 +3,12 @@ import { formatDate } from '../../service/helpers';
 import { getAgeFromDateString } from '../../api/Utils/FuncUtils';
 import React from 'react';
 
-const PackageUserDetails = ({ client, hackneyId, dateOfBirth, postcode }) => (
-  <Container className="user-details brokerage__container">
+const PackageUserDetails = ({ firstName, lastName, hackneyId, dateOfBirth, postCode }) => (
+  <Container className='user-details brokerage__container'>
     <h3>Service user details</h3>
     <Container>
       <p>Client</p>
-      <p>{client}</p>
+      <p>{firstName} {lastName}</p>
     </Container>
     <Container>
       <p>Hackney ID</p>
@@ -23,7 +23,7 @@ const PackageUserDetails = ({ client, hackneyId, dateOfBirth, postcode }) => (
     </Container>
     <Container>
       <p>Postcode</p>
-      <p>{postcode}</p>
+      <p>{postCode}</p>
     </Container>
   </Container>
 );

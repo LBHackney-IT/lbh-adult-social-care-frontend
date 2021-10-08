@@ -45,7 +45,7 @@ const axiosRequest = (options = {}) => {
   const localOptions = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json;charset=UTF-8',
+      'Content-Type': 'application/json',
       ...headers,
     },
     method: requestMethods.get,

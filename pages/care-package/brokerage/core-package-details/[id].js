@@ -1,23 +1,24 @@
 import React, { useEffect } from 'react';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { useRouter } from 'next/router';
-import CareCharges from 'components/Brokerage/CareCharges';
-import { changeCarePackageDetails } from 'api/CarePackages/CarePackage';
+import CorePackageDetails from 'components/Brokerage/CorePackageDetails';
 
-const CareChargesPage = () => {
+const CorePackagePage = () => {
   const router = useRouter();
   const carePackageId = router.query.id;
   const { data } = useCarePackageApi.details(carePackageId);
-
-  const changeDetailsExample = async () => {
-    await changeCarePackageDetails({ data: 'exampleData' }, carePackageId);
-  };
 
   useEffect(() => {
     console.log(data);
   }, [data]);
 
-  return <CareCharges />;
+  return <CorePackageDetails
+    userDetails={data.serviceUser}
+    supportReasonOptions={[]}
+    checkboxOptions={[]}
+    packageTypeOptions={[]}
+    packageScheduleOptions={[]}
+  />;
 };
 
-export default CareChargesPage;
+export default CorePackagePage;

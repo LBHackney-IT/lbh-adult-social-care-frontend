@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrokerPackage } from './index';
 
-export default {
-  title: 'Pages/Brokerage/BrokerPackage',
-  component: BrokerPackage,
-  argTypes: {
-    controls: null,
-  },
-};
+// export default {
+//   title: 'Pages/Brokerage/BrokerPackage',
+//   component: BrokerPackage,
+//   argTypes: {
+//     controls: null,
+//   },
+// };
 
 const Template = (args) => <BrokerPackage {...args} />;
 
