@@ -3,11 +3,9 @@ import Popup from '../../Popup';
 import { Button, Container, Select, Textarea } from '../../HackneyDS';
 import FormGroup from '../../HackneyDS/FormGroup';
 
-const SubmitForApprovalPopup = ({ closePopup, approvedByOptions = [] }) => {
+const SubmitForApprovalPopup = ({ onSubmit, closePopup, approvedByOptions = [] }) => {
   const [approvedBy, setApprovedBy] = useState('');
   const [notes, setNotes] = useState('');
-
-  const submit = () => alert('Submit');
 
   const popupMainContent = (
     <Container>
@@ -22,7 +20,7 @@ const SubmitForApprovalPopup = ({ closePopup, approvedByOptions = [] }) => {
         <Textarea value={notes} handler={setNotes}/>
       </FormGroup>
       <Container className='brokerage__actions'>
-        <Button handler={submit}>Submit</Button>
+        <Button handler={onSubmit}>Submit</Button>
         <Button handler={closePopup} className="link-button red">Cancel</Button>
       </Container>
     </Container>
