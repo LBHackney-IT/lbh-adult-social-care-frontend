@@ -16,7 +16,6 @@ export const BrokerageHub = ({ items, searchResults: { pageSize, totalPages, tot
   const [dateTo, setDateTo] = useState(null);
 
   const onRowClick = (rowItem) => {
-    console.log(rowItem);
     router.push({ pathname: `${router.pathname}/${rowItem.packageId}`, query:  rowItem });
   };
 
