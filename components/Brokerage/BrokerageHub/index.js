@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
-import { Button, Container, SearchBox, Select } from '../../HackneyDS';
+import { Button, Container, HorizontalSeparator, SearchBox, Select } from '../../HackneyDS';
 import Pagination from '../../Payments/Pagination';
 import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
 import { BrokerageHubTable } from './BrokerageHubTable';
 
 export const BrokerageHub = ({
+  items,
   searchResults: {
-    items,
     pageSize,
     totalPages,
     totalCount,
   },
   statusOptions,
-  brokerOptions,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [status, setStatus] = useState('');
   const [searchPackages, setSearchPackages] = useState('');
-  const [broker, setBroker] = useState('');
   const [dateFrom, setDateFrom] = useState(null);
   const [dateTo, setDateTo] = useState(null);
 
@@ -29,14 +27,14 @@ export const BrokerageHub = ({
 
   return (
     <div className="brokerage-hub">
-      <BrokerageHeader
+      {/* <BrokerageHeader
         links={[
           { text: 'Broker Assistance', href: 'broker-assistance' },
           { text: 'Broker Portal', href: 'broker-portal' },
           { text: 'Care Charge Team', href: 'care-charge-team' },
           { text: 'Log Out', href: 'logout' },
         ]}
-      />
+      /> */}
       <Container className="brokerage__container-main">
         <Container className="brokerage-hub__header">
           <h2>Broker Portal</h2>
@@ -54,13 +52,6 @@ export const BrokerageHub = ({
               options={statusOptions}
               value={status}
               onChange={({ target: { value } }) => setStatus(value)}
-            />
-          </FormGroup>
-          <FormGroup className="form-group--inline-label" label="Broker">
-            <Select
-              options={brokerOptions}
-              value={broker}
-              onChange={({ target: { value } }) => setBroker(value)}
             />
           </FormGroup>
           <FormGroup className="form-group--inline-label brokerage-hub__date-from" label="From">
@@ -86,7 +77,8 @@ export const BrokerageHub = ({
             />
           </FormGroup>
         </Container>
-        <BrokerageHubTable data={items}/>
+        {items && <BrokerageHubTable data={items}/>}
+        <HorizontalSeparator height='20px'/>
         <Pagination
           pageSize={pageSize}
           totalPages={totalPages}
