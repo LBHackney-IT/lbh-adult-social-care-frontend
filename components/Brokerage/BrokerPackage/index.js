@@ -7,7 +7,7 @@ import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
 import { CORE_PACKAGE_DETAILS_ROUTE } from '../../../routes/RouteConstants';
 import { useRouter } from 'next/router';
-import { changeCarePackageDetails } from '../../../api/CarePackages/CarePackage';
+import { updateCoreCarePackage } from '../../../api/CarePackages/CarePackage';
 import { useDispatch } from 'react-redux';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../Constants';
@@ -162,7 +162,7 @@ export const BrokerPackage = ({
     setLoading(true);
 
     try {
-      await changeCarePackageDetails({
+      await updateCoreCarePackage({
         data: {
           coreCost: supplierWeeklyCost,
           startDate: packageDates.startDate,

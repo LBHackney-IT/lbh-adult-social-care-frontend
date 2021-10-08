@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import useCarePackageApi from 'api/SWR/CarePackage/useBrokerageApi';
+import useCarePackageApi from '../../../../api/SWR/CarePackage/useCarePackageApi';
 import { useRouter } from 'next/router';
 import CareCharges from 'components/Brokerage/CareCharges';
-import { changeCarePackageDetails } from 'api/CarePackages/CarePackage';
+import { updateCoreCarePackage } from 'api/CarePackages/CarePackage';
 
 const CareChargesPage = () => {
   const router = useRouter();
@@ -10,7 +10,7 @@ const CareChargesPage = () => {
   const { data } = useCarePackageApi.details(carePackageId);
 
   const changeDetailsExample = async () => {
-    await changeCarePackageDetails({ data: 'exampleData' }, carePackageId);
+    await updateCoreCarePackage({ data: 'exampleData' }, carePackageId);
   };
 
   useEffect(() => {
