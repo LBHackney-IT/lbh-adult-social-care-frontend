@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Container, FileUpload, Label, RadioGroup, Select, Textarea } from '../../HackneyDS';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
@@ -8,14 +8,21 @@ import FormGroup from '../../HackneyDS/FormGroup';
 import UrlFromFile from '../../UrlFromFile';
 import { requiredSchema } from '../../../constants/schemas';
 
-const FundedNursingCare = ({ collectedByOptions }) => {
+const FundedNursingCare = ({ 
+  carePackageId,
+  collectedByOptions,
+  activeFncPrice,
+  carePackageReclaimFnc,
+  createFundedNursingCare = () => {},
+  updateFundedNursingCare = () => {},
+}) => {
   const [collectedByType] = useState({
     hackney: 'gross',
     supplier: 'net',
   })
   const [dates, setDates] = useState({
-    dateFrom: null,
-    dateTo: null,
+    dateFrom: carePackageReclaimFnc?.startDate || null,
+    dateTo: carePackageReclaimFnc?.endDate || null,
   });
   const [errors, setErrors] = useState({
     hasFNC: '',
@@ -24,16 +31,10 @@ const FundedNursingCare = ({ collectedByOptions }) => {
     notes: '',
   });
   const [hasFNC, setHasFNC] = useState();
-  const [collectedBy, setCollectedBy] = useState('');
+  const [collectedBy, setCollectedBy] = useState();
   const [notes, setNotes] = useState('');
   const [file, setFile] = useState(null);
   const [isOngoing, setIsOngoing] = useState(false);
-
-  const collectedByCost = () => {
-    if (collectedByType[collectedBy] === 'net') return -187;
-    if (collectedByType[collectedBy] === 'gross') return 187;
-    return null;
-  };
 
   const clickBack = () => {
     alert('Click back');
@@ -79,7 +80,35 @@ const FundedNursingCare = ({ collectedByOptions }) => {
 
     if (hasErrors) return;
 
-    alert('Save and continue');
+    const fundedNursingCareCreation = {
+      carePackageId: carePackageId,
+      cost: activeFncPrice,
+      claimCollector: collectedBy,
+      supplierId: 1, //To be removed
+      status: 1, // Set active status ?
+      type: 1, // Set type of reclaim ?
+      startDate: dates.dateFrom,
+      endDate: dates.dateTo,
+      description: notes      
+    };
+
+    const fundedNursingCareUpdate = {
+      id: carePackageReclaimFnc.id,
+      cost: activeFncPrice,
+      claimCollector: collectedBy,
+      supplierId: 1, //To be removed
+      status: 1, // Set active status ?
+      type: 1,  // Set type of reclaim ?
+      startDate: dates.dateFrom,
+      endDate: dates.dateTo,
+      description: notes      
+    };
+
+    if (!carePackageReclaimFnc?.id) {
+      createFundedNursingCare(carePackageId, fundedNursingCareCreation);
+      return;
+    }
+    updateFundedNursingCare(carePackageId, fundedNursingCareUpdate);
   };
 
   const changeError = (field, value = '') => {
@@ -150,7 +179,7 @@ const FundedNursingCare = ({ collectedByOptions }) => {
           <BrokerageTotalCost
             name={`Funded per week ${collectedByType[collectedBy] ? `(${collectedByType[collectedBy]})` : ''}`}
             className="brokerage__border-cost"
-            value={collectedByCost()}
+            value={activeFncPrice}
           />
           <Container className="brokerage__actions">
             <Button handler={clickBack} className="brokerage__back-button">Back</Button>
