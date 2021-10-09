@@ -6,6 +6,8 @@ const CARE_PACKAGES_URL = '/care-packages';
 const useCarePackageApi = {
   summary: (carePackageId) =>
     useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/summary` : null),
+  coreSettings: (carePackageId) =>
+    useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/core` : null),
   details: (packageId) => useGetData(packageId !== undefined ? `${CARE_PACKAGES_URL}/${packageId}/details` : null),
   suppliers: ({ supplierName }) => useGetData(`/suppliers${getQueryParamsFromObject({ supplierName })}`),
 };
