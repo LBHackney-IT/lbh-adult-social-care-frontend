@@ -149,7 +149,7 @@ export const BrokerPackage = ({
     const weeklyDetails = weeklyNeeds
       .filter(item => item.cost !== 0)
       .map(({ cost, id, endDate, startDate }) => ({
-        id,
+        // id,
         cost: cost,
         startDate,
         endDate: isOngoing ? null : endDate,
@@ -160,7 +160,7 @@ export const BrokerPackage = ({
     const oneOffDetails = oneOffNeeds
       .filter(item => item.cost !== 0)
       .map(({ cost, endDate, startDate, id }) => ({
-        id,
+        // id,
         cost,
         startDate,
         endDate,
@@ -179,9 +179,10 @@ export const BrokerPackage = ({
           supplierId: selectedItem.id,
           details: [...weeklyDetails, ...oneOffDetails]
         },
-        packageId,
+        packageId:packageId[0],
       });
       dispatch(addNotification({ text: 'Success', className: 'success' }));
+      router.push(`/care-package/brokerage/funded-nursing-care/${packageId[0]}`);
     } catch (e) {
       dispatch(addNotification({ text: e }));
     }

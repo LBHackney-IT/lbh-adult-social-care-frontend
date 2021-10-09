@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Select } from '../../HackneyDS';
 
 const CorePackageSelectors = ({
@@ -22,7 +22,7 @@ const CorePackageSelectors = ({
             setPackageType(value);
             changeError('packageType');
           }}
-          value={packageType?.value}
+          value={packageType}
           options={packageTypeOptions}
         />
       </Container>
@@ -35,7 +35,7 @@ const CorePackageSelectors = ({
               setSupportReason(value);
               changeError('supportReason');
             }}
-            value={supportReason.value}
+            value={supportReason}
             options={supportReasonOptions}
           />
         </Container>

@@ -16,36 +16,30 @@ export default function Select({
   const errorClass = error ? ' govuk-select--error' : '';
   const errorDescribedBy = error ? { 'aria-describedby': ' govuk-select--error' } : {};
   return (
-    <div className='select-container'>
+    <div className="select-container">
       <select
         id={id}
         {...errorDescribedBy}
         onChange={(e) => {
-          if(onChangeValue) {
+          if (onChangeValue) {
             return onChangeValue(e.target.value);
           }
           onChange(e);
         }}
-        defaultValue={value}
+        value={value}
         className={`govuk-select lbh-select${outerClass}${errorClass}`}
       >
-        {options.map(option => {
-          const isDisabledOption = disabledOptions.some(disabledOption => (
-            disabledOption === option.value
-          ));
+        {options.map((option) => {
+          const isDisabledOption = disabledOptions.some((disabledOption) => disabledOption === option.value);
 
           return (
-            <option
-              disabled={isDisabledOption}
-              key={option.text}
-              value={option.value}
-            >
+            <option disabled={isDisabledOption} key={option.text} value={option.value}>
               {option.text}
             </option>
-          )
+          );
         })}
       </select>
-      {IconComponent && <div className='select-icon'>{IconComponent}</div>}
+      {IconComponent && <div className="select-icon">{IconComponent}</div>}
     </div>
-  )
+  );
 }
