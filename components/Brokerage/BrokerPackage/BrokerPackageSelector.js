@@ -10,9 +10,10 @@ const SupplierLookUpSelector = ({
   totalCount,
   pageSize = 10,
   totalPages,
+  currentPage,
+  setCurrentPage,
 }) => {
   const [expandedItems, setExpandedItems] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const changExpandedItems = id => {
     if (expandedItems.includes(id)) {
@@ -24,13 +25,13 @@ const SupplierLookUpSelector = ({
 
   return (
     <Container className="supplier-look-up-selector">
-      {items.map((item) => {
-        const { id, name, address, sites } = item;
+      {items?.map((item) => {
+        const { id, supplierName, address, sites } = item;
         const isExpandedItem = expandedItems.includes(id);
         return (
           <React.Fragment key={id}>
             <Container className="brokerage__supplier-card">
-              <p className="brokerage__supplier-card-name">{name}<span>{id}</span></p>
+              <p className="brokerage__supplier-card-name">{supplierName}<span>{id}</span></p>
               <p className="brokerage__supplier-card-address">{address}</p>
               {sites ?
                 <Container

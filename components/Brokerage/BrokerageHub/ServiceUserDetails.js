@@ -1,14 +1,14 @@
-import { Container } from '../HackneyDS';
-import { formatDate } from '../../service/helpers';
-import { getAgeFromDateString } from '../../api/Utils/FuncUtils';
 import React from 'react';
+import { Container } from 'components/HackneyDS';
+import { formatDate } from 'service/helpers';
+import { getAgeFromDateString } from 'api/Utils/FuncUtils';
 
-const PackageUserDetails = ({ firstName, lastName, hackneyId, dateOfBirth, postCode }) => (
+const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address }) => (
   <Container className='user-details brokerage__container'>
     <h3>Service user details</h3>
     <Container>
       <p>Client</p>
-      <p>{firstName} {lastName}</p>
+      <p>{serviceUserName}</p>
     </Container>
     <Container>
       <p>Hackney ID</p>
@@ -23,9 +23,9 @@ const PackageUserDetails = ({ firstName, lastName, hackneyId, dateOfBirth, postC
     </Container>
     <Container>
       <p>Postcode</p>
-      <p>{postCode}</p>
+      <p>{address}</p>
     </Container>
   </Container>
 );
 
-export default PackageUserDetails;
+export default ServiceUserDetails;

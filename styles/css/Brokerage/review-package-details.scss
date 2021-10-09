@@ -1,4 +1,9 @@
 .review-package-details__links {
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 500px;
+
   margin-right: 30px;
   p:not(p:last-of-type) {
     margin-bottom: 24px;

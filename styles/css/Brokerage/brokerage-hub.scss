@@ -46,6 +46,7 @@
 
   .govuk-table__cell {
     vertical-align: bottom;
+    cursor: pointer;
 
     .lbh-tag {
       box-sizing: border-box;
@@ -55,12 +56,12 @@
     }
 
     &:last-of-type {
-      padding-right: 0;
+      // padding-right: 0;
       text-align: right;
     }
 
     &:first-of-type {
-      padding-left: 0;
+      // padding-left: 0;
     }
   }
 
@@ -93,13 +94,12 @@
   }
 
   .brokerage-hub__date-from {
-    margin-right: 46px;
+    margin-right: 19px;
   }
 
   .brokerage-hub__filters {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 50px;
 
     .form-group--inline-label {
       display: flex;
@@ -155,8 +155,4 @@
     font-size: 16px;
     color: $lbh-secondary-text-colour;
   }
-}
-
-.brokerage-hub__table {
-  margin-bottom: 32px;
 }

@@ -1,13 +1,13 @@
 import React from 'react';
 import SubmitForApprovalPopup from './SubmitForApprovalPopup';
 
-export default {
-  title: 'Pages/Brokerage/SubmitForApprovalPopup',
-  component: SubmitForApprovalPopup,
-  argTypes: {
-    controls: null,
-  },
-};
+// export default {
+//   title: 'Pages/Brokerage/SubmitForApprovalPopup',
+//   component: SubmitForApprovalPopup,
+//   argTypes: {
+//     controls: null,
+//   },
+// };
 
 const Template = (args) => <SubmitForApprovalPopup {...args} />;
 
