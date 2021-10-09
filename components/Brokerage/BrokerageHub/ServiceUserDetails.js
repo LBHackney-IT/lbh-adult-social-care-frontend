@@ -3,8 +3,9 @@ import { Container } from 'components/HackneyDS';
 import { formatDate } from 'service/helpers';
 import { getAgeFromDateString } from 'api/Utils/FuncUtils';
 
+const placeHolderBirthDate = new Date(1990, 10, 10);
 const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address }) => (
-  <Container className='user-details brokerage__container'>
+  <Container className="user-details brokerage__container">
     <h3>Service user details</h3>
     <Container>
       <p>Client</p>
@@ -17,8 +18,8 @@ const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address }
     <Container>
       <p>Age</p>
       <p>
-        {formatDate(dateOfBirth, 'dd/MM/yy')}
-        {` (${getAgeFromDateString(dateOfBirth)})`}
+        {formatDate(dateOfBirth || placeHolderBirthDate, 'dd/MM/yy')}
+        {` (${getAgeFromDateString(dateOfBirth || placeHolderBirthDate)})`}
       </p>
     </Container>
     <Container>

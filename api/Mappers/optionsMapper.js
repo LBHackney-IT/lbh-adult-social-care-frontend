@@ -39,7 +39,7 @@ const mapPackageSchedulingOptions = (schedulingOptions = []) =>
 
 const mapServiceUserBasicInfo = (userResponse) => ({
   id: userResponse?.id,
-  dateOfBirth: getEnGBFormattedDate(userResponse?.dateOfBirth || new Date()),
+  dateOfBirth: userResponse?.dateOfBirth || new Date(),
   client: `${userResponse?.firstName} ${userResponse?.lastName}`,
   hackneyId: userResponse?.hackneyId,
   postcode: userResponse?.postCode,

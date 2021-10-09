@@ -32,6 +32,6 @@ export default withSession(async (req, res) => {
     res.json(user);
   } catch (error) {
     const { response: fetchResponse } = error;
-    res.status(fetchResponse?.status || 500).json(error.data);
+    res.status(fetchResponse?.status || 400).json(error.data);
   }
 });

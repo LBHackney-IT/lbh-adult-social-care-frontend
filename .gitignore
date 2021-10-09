@@ -33,3 +33,4 @@ yarn-error.log*
 /.history
 
 /.storybook-static
+/storybook-static

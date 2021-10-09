@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { object, string } from 'yup';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, ErrorMessage, RadioGroup } from '../../HackneyDS';
-import PackageUserDetails from '../PackageUserDetails';
 import CorePackageSelectors from './CorePackageSelectors';
 import ServiceUserDetails from '../BrokerageHub/ServiceUserDetails';
 
@@ -13,11 +12,17 @@ const CorePackageDetails = ({
   packageTypeOptions,
   packageScheduleOptions,
   saveCorePackage = () => {},
+  defaultValues = {
+    supportReason: '',
+    packageType: '',
+    furtherDetails: [],
+    packageSchedule: null,
+  },
 }) => {
-  const [supportReason, setSupportReason] = useState('');
-  const [packageType, setPackageType] = useState('');
-  const [furtherDetails, setFurtherDetails] = useState([]);
-  const [packageSchedule, setPackageSchedule] = useState(null);
+  const [supportReason, setSupportReason] = useState(defaultValues.supportReason);
+  const [packageType, setPackageType] = useState(defaultValues.packageType);
+  const [furtherDetails, setFurtherDetails] = useState(defaultValues.furtherDetails);
+  const [packageSchedule, setPackageSchedule] = useState(defaultValues.packageSchedule);
   const [errors, setErrors] = useState({
     packageType: '',
     supportReason: '',
@@ -83,17 +88,30 @@ const CorePackageDetails = ({
 
   useEffect(() => {
     if (supportReasonOptions) {
-      setSupportReason(supportReasonOptions[0]?.value);
+      if (defaultValues.supportReason !== '') {
+        setSupportReason(defaultValues.supportReason);
+      } else {
+        setSupportReason(supportReasonOptions[0]?.value);
+      }
     }
-  }, [supportReasonOptions]);
+  }, [defaultValues, supportReasonOptions]);
 
   useEffect(() => {
     if (packageTypeOptions) {
-      setPackageType(packageTypeOptions[0]?.value);
+      if (defaultValues.packageType !== '') {
+        setPackageType(defaultValues.packageType);
+      } else {
+        setPackageType(packageTypeOptions[0]?.value);
+      }
     }
-  }, [packageTypeOptions]);
+  }, [defaultValues, packageTypeOptions]);
 
-  console.log(userDetails);
+  useEffect(() => {
+    if (packageType !== defaultValues.packageType) setPackageType(defaultValues.packageType);
+    if (packageSchedule !== defaultValues.packageSchedule) setPackageSchedule(defaultValues.packageSchedule);
+    if (furtherDetails.length !== defaultValues.furtherDetails.length) setFurtherDetails(defaultValues.furtherDetails);
+  }, [defaultValues]);
+
   return (
     <div className="core-package-details brokerage">
       <BrokerageHeader />
@@ -103,10 +121,10 @@ const CorePackageDetails = ({
           <h2>Core package details</h2>
         </Container>
         <ServiceUserDetails
-          dateOfBirth={userDetails.dateOfBirth}
-          address={userDetails.postcode}
-          hackneyId={userDetails.hackneyId}
-          serviceUserName={userDetails.client}
+          dateOfBirth={userDetails?.dateOfBirth}
+          address={userDetails?.postcode}
+          hackneyId={userDetails?.hackneyId}
+          serviceUserName={userDetails?.client}
         />
         <CorePackageSelectors
           packageTypeOptions={packageTypeOptions}
