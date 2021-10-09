@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Container, ErrorMessage, Input, Label, RadioGroup, Select, Textarea } from '../../HackneyDS';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
@@ -6,7 +6,14 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import { requiredSchema } from '../../../constants/schemas';
 import { currency } from '../../../constants/strings';
 
-const CareCharges = ({ reasonsCollecting, defaultCost = 84.4 }) => {
+const CareCharges = ({ 
+  carePackageId,
+  reasonsCollecting, 
+  calculatedCost,
+  carePackageReclaimCareCharge,
+  createCareCharge = () => {},
+  updateCareCharge = () => {},
+}) => {
   const [collectedByType] = useState({
     supplier: 'net',
     hackney: 'gross',
@@ -20,9 +27,7 @@ const CareCharges = ({ reasonsCollecting, defaultCost = 84.4 }) => {
   const [collectedBy, setCollectedBy] = useState('');
   const [reasonCollecting, setReasonCollecting] = useState('');
   const [notes, setNotes] = useState('');
-
-  const [costPerWeek, setCostPerWeek] = useState(defaultCost);
-
+  const [costPerWeek, setCostPerWeek] = useState(calculatedCost);
   const finalCost = collectedBy === 'hackney' ? -costPerWeek : costPerWeek;
 
   const clickBack = () => {
@@ -64,18 +69,52 @@ const CareCharges = ({ reasonsCollecting, defaultCost = 84.4 }) => {
 
     if (hasErrors) return;
 
-    alert(`Save and continue with final cost: ${finalCost}`);
+    const careChargeCreation = {
+      carePackageId: carePackageId,
+      cost: costPerWeek,
+      claimCollector: collectedBy,
+      supplierId: 1, //fix value to be removed after updating API side
+      status: 1, //fix value to be removed after updating API side
+      type: 1, //fix value to be removed after updating API side
+      subType: 1, //fix value to be removed after updating API side
+      description: notes,
+      claimReason: reasonCollecting
+    };
+
+    const careChargeUpdate = {
+      id: carePackageReclaimCareCharge.id,
+      cost: costPerWeek,
+      claimCollector: collectedBy,
+      supplierId: 1, //fix value to be removed after updating API side
+      status: 1, //fix value to be removed after updating API side
+      type: 1,  //fix value to be removed after updating API side
+      subType: 1, //fix value to be removed after updating API side
+      description: notes,
+      claimReason: reasonCollecting      
+    };
+
+    if (!carePackageReclaimCareCharge?.id) {
+      createCareCharge(carePackageId, careChargeCreation);
+      return;
+    }
+    updateCareCharge(carePackageId, careChargeUpdate);
   };
 
   const changeError = (field, value = '') => {
     setErrors(prevState => ({ ...prevState, [field]: value }));
   };
 
+  useEffect(() => {
+    if (calculatedCost) {
+      setCostPerWeek(calculatedCost);
+    }
+  }, [calculatedCost]);
+
   return (
     <Container className="brokerage__care-charges">
       <BrokerageHeader/>
       <Container className="brokerage__container-main">
-        <BrokerageContainerHeader title="Funded Nursing Care"/>
+        <BrokerageContainerHeader title="Care Charges"/>
         <Container>
           <h3 className="brokerage__item-title">Care charges</h3>
           <p className="care-charges-hint">Provisional care charge (pre-assessement)</p>
@@ -88,8 +127,8 @@ const CareCharges = ({ reasonsCollecting, defaultCost = 84.4 }) => {
             hint="Auto calculated on age"
             preSign={currency.euro}
             onBlur={() => {
-              if (costPerWeek < defaultCost) {
-                setCostPerWeek(defaultCost);
+              if (costPerWeek < calculatedCost) {
+                setCostPerWeek(calculatedCost);
               }
             }}
           />
