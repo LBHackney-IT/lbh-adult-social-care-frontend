@@ -6,6 +6,7 @@ import { getSuppliers } from 'api/CarePackages/SuppliersApi';
 
 const BrokerPackagePage = () => {
   const router = useRouter();
+  const newPackageId = router.query.slug;
   const [packageId, supplierName] = router?.query?.slug || [];
   const [supplierSearch, setSupplierSearch] = useState(supplierName);
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,7 +47,7 @@ const BrokerPackagePage = () => {
       setSupplierSearch={setSupplierSearch}
       supplierName={supplierName}
       detailsData={detailsData}
-      packageId={packageId}
+      packageId={newPackageId}
       searchResults={searchResults}
       careName="Nursing care"
     />

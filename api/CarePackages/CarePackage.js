@@ -20,7 +20,8 @@ const createCoreCarePackage = ({ data }) => {
 };
 
 const updateCoreCarePackage = ({ data, packageId }) => {
-  const url = `${CARE_PACKAGE_URL}/${packageId}`;
+  console.log('acutal pid', packageId);
+  const url = `${CARE_PACKAGE_URL}/${packageId}/details`;
   return axiosRequest({ url, data, method: requestMethods.put });
 };
 

@@ -80,7 +80,7 @@ const CorePackageDetailsPage = () => {
       createCoreCarePackage({ data: packageToCreate })
         .then(({ id }) => {
           // move to brokerage page
-          router.push(`${CARE_PACKAGE_ROUTE}/brokerage/broker-package/${id}`);
+          router.push({ pathname: `${CARE_PACKAGE_ROUTE}/brokerage/broker-package/${id}`, query:id});
           pushNotification('Package saved.', 'success');
         })
         .catch((error) => {
