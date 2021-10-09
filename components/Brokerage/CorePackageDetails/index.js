@@ -103,10 +103,10 @@ const CorePackageDetails = ({
           <h2>Core package details</h2>
         </Container>
         <ServiceUserDetails
-          dateOfBirth={userDetails.dateOfBirth}
-          address={userDetails.postcode}
-          hackneyId={userDetails.hackneyId}
-          serviceUserName={userDetails.client}
+          dateOfBirth={userDetails?.dateOfBirth}
+          address={userDetails?.postcode}
+          hackneyId={userDetails?.hackneyId}
+          serviceUserName={userDetails?.client}
         />
         <CorePackageSelectors
           packageTypeOptions={packageTypeOptions}
