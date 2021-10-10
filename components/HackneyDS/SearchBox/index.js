@@ -1,22 +1,24 @@
 import React, { useRef } from 'react';
+// eslint-disable-next-line import/no-cycle
 import { ErrorMessage, Hint, Label } from '../index';
 import { CrossIcon, SearchIcon } from '../icons';
+import { isFunction } from '../../../api/Utils/FuncUtils';
 
-export default function SearchBox ({
+export default function SearchBox({
   label = 'Search',
   id = 'search',
   name = 'search',
   hint,
   error,
   className = '',
-  value,
+  value = '',
   placeholder = 'Search...',
   handler,
   onChangeValue,
   clear,
   search,
-  searchIcon = <SearchIcon/>,
-  clearIcon = <CrossIcon/>,
+  searchIcon = <SearchIcon />,
+  clearIcon = <CrossIcon />,
 }) {
   const dataProvider = useRef();
   const outerClassName = className ? ` ${className}` : '';
@@ -24,9 +26,10 @@ export default function SearchBox ({
   const buttonHandler = () => {
     if (clear && value) {
       clear();
-    } else {
-      search && search();
+      return;
     }
+
+    if (isFunction(search)) search();
   };
 
   const onChange = (e) => {
@@ -52,7 +55,7 @@ export default function SearchBox ({
           type="search"
           placeholder={placeholder}
         />
-        <div onClick={buttonHandler} className="lbh-search-box__action">
+        <div role="presentation" onClick={buttonHandler} className="lbh-search-box__action">
           <span className="govuk-visually-hidden">{value ? 'Clear search' : 'Search'}</span>
           {value && clear ? clearIcon : searchIcon}
         </div>

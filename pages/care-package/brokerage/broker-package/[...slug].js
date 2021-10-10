@@ -8,13 +8,16 @@ const BrokerPackagePage = () => {
   const router = useRouter();
   const newPackageId = router.query.slug;
   const [packageId, supplierName] = router?.query?.slug || [];
-  const [supplierSearch, setSupplierSearch] = useState(supplierName);
+  const [supplierSearch, setSupplierSearch] = useState(supplierName || '');
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState(supplierName);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const { mutate: getDetails, data: detailsData } = useCarePackageApi.details(packageId);
+  const { mutate: getDetails, data: detailsData = {} } = useCarePackageApi.details(packageId);
   const { data: searchResults } = useCarePackageApi.suppliers({ supplierName: search });
+  const { data: selectedSupplier, mutate: getSelectedSupplierDetails } = useCarePackageApi.singleSupplier(
+    detailsData?.supplierId
+  );
 
   const onSearchSupplier = () => {
     setSearch(supplierSearch);
@@ -29,9 +32,24 @@ const BrokerPackagePage = () => {
         .then(({ data }) => {
           setSelectedItem(data.data[0]);
         })
-        .catch(e => console.log(e));
+        .catch((e) => console.log(e));
     }
   }, [supplierName]);
+
+  useEffect(() => {
+    if (!Number.isNaN(detailsData?.supplierId)) {
+      // Get supplier details
+      getSelectedSupplierDetails();
+    }
+  }, [detailsData]);
+
+  useEffect(() => {
+    if (typeof selectedSupplier === 'object' && Object.keys(selectedSupplier).length > 0) {
+      setSelectedItem(selectedSupplier);
+      setSearch(selectedSupplier?.supplierName);
+      setSupplierSearch(selectedSupplier?.supplierName);
+    }
+  }, [selectedSupplier]);
 
   return (
     <BrokerPackage
@@ -43,9 +61,9 @@ const BrokerPackagePage = () => {
       getDetails={getDetails}
       setSelectedItem={setSelectedItem}
       selectedItem={selectedItem}
-      supplierSearch={supplierSearch}
+      supplierSearch={supplierSearch || ''}
       setSupplierSearch={setSupplierSearch}
-      supplierName={supplierName}
+      supplierName={supplierName || ''}
       detailsData={detailsData}
       packageId={newPackageId}
       searchResults={searchResults}

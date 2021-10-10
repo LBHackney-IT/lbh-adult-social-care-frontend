@@ -20,9 +20,19 @@ const createCoreCarePackage = ({ data }) => {
 };
 
 const updateCoreCarePackage = ({ data, packageId }) => {
-  console.log('acutal pid', packageId);
+  const url = `${CARE_PACKAGE_URL}/${packageId}`;
+  return axiosRequest({ url, data, method: requestMethods.put });
+};
+
+const updateCarePackageCosts = ({ data, packageId }) => {
   const url = `${CARE_PACKAGE_URL}/${packageId}/details`;
   return axiosRequest({ url, data, method: requestMethods.put });
 };
 
-export { changeCarePackageDetails, submitCarePackage, createCoreCarePackage, updateCoreCarePackage };
+export {
+  changeCarePackageDetails,
+  submitCarePackage,
+  createCoreCarePackage,
+  updateCoreCarePackage,
+  updateCarePackageCosts,
+};
