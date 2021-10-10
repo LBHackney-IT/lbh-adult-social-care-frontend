@@ -8,7 +8,7 @@ import BrokerPackageCost from './BrokerPackageCost';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
 import { CORE_PACKAGE_DETAILS_ROUTE } from '../../../routes/RouteConstants';
-import { updateCoreCarePackage } from '../../../api/CarePackages/CarePackage';
+import { updateCarePackageCosts } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../Constants';
 import { dateStringToDate, uniqueID } from '../../../service/helpers';
@@ -28,7 +28,7 @@ export const BrokerPackage = ({
   selectedItem,
   setSelectedItem,
   onSearchSupplier,
-  careName = 'Nursing Care'
+  careName = 'Nursing Care',
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -86,8 +86,8 @@ export const BrokerPackage = ({
 
       if (detailsData.details) {
         const weeklyDetails = detailsData.details
-          .filter(item => item.costPeriod === 2)
-          .map(item => ({
+          .filter((item) => item.costPeriod === 2)
+          .map((item) => ({
             ...item,
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
@@ -97,8 +97,8 @@ export const BrokerPackage = ({
           }));
 
         const oneOffDetails = detailsData.details
-          .filter(item => item.costPeriod === 3)
-          .map(item => ({
+          .filter((item) => item.costPeriod === 3)
+          .map((item) => ({
             ...item,
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
@@ -110,15 +110,15 @@ export const BrokerPackage = ({
         setOneOffNeeds(oneOffDetails);
       }
     }
-  }
+  };
 
   useEffect(() => {
-    composeDetailsData()
+    composeDetailsData();
   }, [detailsData]);
 
   const checkNeedsErrors = (needs) => {
     let hasErrors = false;
-    const checkedNeeds = needs.map(item => {
+    const checkedNeeds = needs.map((item) => {
       const errorCost = !item.cost ? 'Invalid cost' : '';
       const errorStartDate = !item.startDate ? 'Invalid start date' : '';
       if (errorCost || errorStartDate) {
@@ -134,9 +134,9 @@ export const BrokerPackage = ({
   };
 
   const clickSave = async () => {
-    if(!isNewSupplier && !selectedItem?.id) {
-      dispatch(addNotification({ text: 'No supplier selected' }))
-      return
+    if (!isNewSupplier && !selectedItem?.id) {
+      dispatch(addNotification({ text: 'No supplier selected' }));
+      return;
     }
     const checkedWeeklyDetails = checkNeedsErrors(weeklyNeeds);
     const checkOneOffDetails = checkNeedsErrors(oneOffNeeds);
@@ -147,7 +147,7 @@ export const BrokerPackage = ({
     if (checkedWeeklyDetails.hasErrors || checkOneOffDetails.hasErrors) return;
 
     const weeklyDetails = weeklyNeeds
-      .filter(item => item.cost !== 0)
+      .filter((item) => item.cost !== 0)
       .map(({ cost, id, endDate, startDate }) => ({
         // id,
         cost: cost,
@@ -158,7 +158,7 @@ export const BrokerPackage = ({
       }));
 
     const oneOffDetails = oneOffNeeds
-      .filter(item => item.cost !== 0)
+      .filter((item) => item.cost !== 0)
       .map(({ cost, endDate, startDate, id }) => ({
         // id,
         cost,
@@ -171,15 +171,15 @@ export const BrokerPackage = ({
     setLoading(true);
 
     try {
-      await updateCoreCarePackage({
+      await updateCarePackageCosts({
         data: {
           coreCost: supplierWeeklyCost,
           startDate: packageDates.startDate,
           endDate: isOngoing ? null : packageDates.endDate,
           supplierId: selectedItem.id,
-          details: [...weeklyDetails, ...oneOffDetails]
+          details: [...weeklyDetails, ...oneOffDetails],
         },
-        packageId:packageId[0],
+        packageId: packageId[0],
       });
       dispatch(addNotification({ text: 'Success', className: 'success' }));
       router.push(`/care-package/brokerage/funded-nursing-care/${packageId[0]}`);
@@ -205,10 +205,7 @@ export const BrokerPackage = ({
   };
 
   const addNeed = (setter) => {
-    setter(prevState => ([
-      ...prevState,
-      { ...initialNeed, id: uniqueID() },
-    ]));
+    setter((prevState) => [...prevState, { ...initialNeed, id: uniqueID() }]);
   };
 
   const removeNeed = (getter, setter, index) => {
@@ -218,17 +215,22 @@ export const BrokerPackage = ({
   };
 
   useEffect(() => {
-    let totalCost = Number(supplierWeeklyCost);
+    let totalCost = 0;
     if (weeklyNeeds) {
-      weeklyNeeds.forEach(item => totalCost += Number(item.cost));
+      weeklyNeeds.forEach((item) => {
+        totalCost += Number(item.cost);
+      });
     }
     setWeeklyTotalCost(totalCost);
   }, [supplierWeeklyCost, weeklyNeeds]);
 
   useEffect(() => {
-    let totalCost = Number(supplierWeeklyCost);
+    // let totalCost = Number(supplierWeeklyCost);
+    let totalCost = 0;
     if (oneOffNeeds) {
-      oneOffNeeds.forEach(item => totalCost += Number(item.cost));
+      oneOffNeeds.forEach((item) => {
+        totalCost += Number(item.cost);
+      });
     }
     setOneOfTotalCost(totalCost);
   }, [supplierWeeklyCost, oneOffNeeds]);
@@ -239,10 +241,10 @@ export const BrokerPackage = ({
 
   return (
     <div className="supplier-look-up brokerage">
-      <BrokerageHeader/>
-      {(loading || detailsData === undefined) && <Loading className="loading-center"/>}
+      <BrokerageHeader />
+      {(loading || detailsData === undefined) && <Loading className="loading-center" />}
       <Container className="brokerage__container-main">
-        <BrokerageContainerHeader title="Broker package"/>
+        <BrokerageContainerHeader title="Broker package" />
         <Container>
           <h3 className="brokerage__item-title">{careName}</h3>
           <BrokeragePackageDates
@@ -252,43 +254,43 @@ export const BrokerPackage = ({
             }}
             dates={packageDates}
             label="Package dates"
-            setDates={(field, date) => setPackageDates(prevState => ({ ...prevState, [field]: date }))}
+            setDates={(field, date) => setPackageDates((prevState) => ({ ...prevState, [field]: date }))}
             isOngoing={isOngoing}
             setIsOngoing={setIsOngoing}
           />
         </Container>
         <>
-          {!selectedItem &&
-          <Container className="supplier-search-container" display="flex">
-            <SearchBox
-              onChangeValue={value => setSupplierSearch(value)}
-              label="Supplier"
-              searchIcon={null}
-              clearIcon={<p className="lbh-primary-button">Clear</p>}
-              clear={clearSearch}
-              value={supplierSearch}
-              className="supplier-search-box"
-              id="supplier-search-box"
-            />
-            <Button className="supplier-search-button" handler={onSearchSupplier}>Search</Button>
-          </Container>
-          }
+          {!selectedItem && (
+            <Container className="supplier-search-container" display="flex">
+              <SearchBox
+                onChangeValue={(value) => setSupplierSearch(value)}
+                label="Supplier"
+                searchIcon={null}
+                clearIcon={<p className="lbh-primary-button">Clear</p>}
+                clear={clearSearch}
+                value={supplierSearch}
+                className="supplier-search-box"
+                id="supplier-search-box"
+              />
+              <Button className="supplier-search-button" handler={onSearchSupplier}>
+                Search
+              </Button>
+            </Container>
+          )}
 
-          {
-            !supplierSearch && !selectedItem &&
+          {!supplierSearch && !selectedItem && (
             <Container className="is-new-supplier">
-              <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier}/>
+              <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
               <Container className="is-new-supplier-text" display="flex" flexDirection="column">
                 <p>This is a new supplier</p>
-                <p>Contact <span className="link-button green">
-                  claire.surname.hackney.gov.uk
-                </span> to add a new supplier
+                <p>
+                  Contact <span className="link-button green">claire.surname.hackney.gov.uk</span> to add a new supplier
                 </p>
               </Container>
             </Container>
-          }
+          )}
         </>
-        {searchResults && supplierSearch && !selectedItem || (showSearchResults && searchResults) ?
+        {(searchResults && supplierSearch && !selectedItem) || (showSearchResults && searchResults) ? (
           <BrokerPackageSelector
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
@@ -301,7 +303,7 @@ export const BrokerPackage = ({
               setShowSearchResults(false);
             }}
           />
-          :
+        ) : (
           <BrokerPackageCost
             removeSupplierCard={removeSupplierCard}
             cardInfo={selectedItem}
@@ -317,11 +319,14 @@ export const BrokerPackage = ({
             changeNeed={changeNeed}
             removeNeed={removeNeed}
           />
-        }
+        )}
         <Container className="brokerage__actions">
-          <Button handler={clickBack} className="brokerage__back-button">Back</Button>
-          <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost} handler={clickSave}>Save and
-            continue</Button>
+          <Button handler={clickBack} className="brokerage__back-button">
+            Back
+          </Button>
+          <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost} handler={clickSave}>
+            Save and continue
+          </Button>
         </Container>
       </Container>
     </div>

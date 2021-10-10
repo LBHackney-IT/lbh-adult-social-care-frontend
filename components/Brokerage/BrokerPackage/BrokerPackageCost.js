@@ -20,15 +20,19 @@ const BrokerPackageCost = ({
   removeSupplierCard,
 }) => (
   <Container className="supplier-look-up__selected">
-    {cardInfo &&
+    {cardInfo && (
       <>
         <h3 className="supplier-look-up__selected-title">Supplier</h3>
         <BrokerageSupplierCard
           cardInfo={cardInfo}
-          actionsComponent={<p onClick={removeSupplierCard} className="link-button red">Remove</p>}
+          actionsComponent={
+            <p role="presentation" onClick={removeSupplierCard} className="link-button red">
+              Remove
+            </p>
+          }
         />
       </>
-    }
+    )}
     <Input
       id="supplier-weekly-cost"
       className="supplier-look-up__weekly-cost"
