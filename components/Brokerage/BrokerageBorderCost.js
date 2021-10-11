@@ -8,7 +8,7 @@ const BrokerageBorderCost = ({ totalCostHeader, totalCost }) => {
   return (
     <Container className='brokerage__border-cost' display='flex'>
       <p>{totalCostHeader}</p>
-      <p className='text-lbh-f01 font-weight-bold'>{minusSign}{currency.euro}{totalCost ? Math.abs(totalCost.toFixed(2)) : 0}</p>
+      <p className='text-lbh-f01 font-weight-bold'>{minusSign}{currency.euro}{totalCost ? Math.abs(totalCost).toFixed(2) : 0}</p>
     </Container>
   );
 };
