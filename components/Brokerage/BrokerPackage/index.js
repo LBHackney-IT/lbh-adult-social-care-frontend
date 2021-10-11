@@ -42,8 +42,8 @@ export const BrokerPackage = ({
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
   const [initialNeed] = useState({
     cost: 0,
-    startDate: null,
-    endDate: null,
+    startDate: new Date(),
+    endDate: new Date(),
     isOngoing: false,
     errorCost: '',
     errorStartDate: '',
@@ -255,7 +255,7 @@ export const BrokerPackage = ({
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
-      <Container maxWidth='1080px' margin='0 auto' padding='60px'>
+      <Container maxWidth="1080px" margin="0 auto" padding="60px">
         {(loading || detailsData === undefined) && <Loading className="loading-center" />}
         <Container className="brokerage__container-main">
           <BrokerageContainerHeader title="Broker package" />
