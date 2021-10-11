@@ -48,7 +48,7 @@ export default function SearchBox({
         <input
           className="govuk-input lbh-input"
           id={id}
-          value={value}
+          value={value || ''}
           name={name}
           onChange={onChange}
           ref={dataProvider}

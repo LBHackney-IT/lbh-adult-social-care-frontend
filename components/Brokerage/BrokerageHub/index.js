@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Container, HorizontalSeparator, SearchBox, Select } from '../../HackneyDS';
 import Pagination from '../../Payments/Pagination';
 import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
 import { BrokerageHubTable } from './BrokerageHubTable';
-import { useRouter } from 'next/router';
 
 export const BrokerageHub = ({
   items,
   pageNumber,
   setPageNumber,
   paginationData: { pageSize, totalPages, totalCount },
-  statusOptions
+  statusOptions,
 }) => {
   const router = useRouter();
   const [status, setStatus] = useState('');
@@ -21,7 +21,11 @@ export const BrokerageHub = ({
   const [dateTo, setDateTo] = useState(null);
 
   const onRowClick = (rowItem) => {
-    router.push({ pathname: `${router.pathname}/${rowItem.packageId}`, query: rowItem });
+    // router.push({ pathname: `${router.pathname}/${rowItem.packageId}`, query: rowItem });
+    router.push({
+      pathname: `care-package/service-users/${rowItem?.serviceUserId}/core-package-details`,
+      query: { packageId: rowItem.packageId },
+    });
   };
 
   const findServiceUser = async () => {

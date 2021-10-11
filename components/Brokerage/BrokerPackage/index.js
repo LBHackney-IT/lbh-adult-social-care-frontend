@@ -7,7 +7,7 @@ import BrokeragePackageDates from '../BrokeragePackageDates';
 import BrokerPackageCost from './BrokerPackageCost';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { CORE_PACKAGE_DETAILS_ROUTE } from '../../../routes/RouteConstants';
+import { CARE_PACKAGE_ROUTE, CORE_PACKAGE_DETAILS_ROUTE } from '../../../routes/RouteConstants';
 import { updateCarePackageCosts } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../Constants';
@@ -29,6 +29,11 @@ export const BrokerPackage = ({
   setSelectedItem,
   onSearchSupplier,
   careName = 'Nursing Care',
+  carePackageCore = {
+    packageType: undefined,
+    serviceUserId: undefined,
+  },
+  packageType,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -56,7 +61,12 @@ export const BrokerPackage = ({
   });
 
   const clickBack = () => {
-    router.push(`${CORE_PACKAGE_DETAILS_ROUTE}/${packageId}`);
+    // router.push(`${CORE_PACKAGE_DETAILS_ROUTE}/${packageId}`);
+    router.push(
+      `${CARE_PACKAGE_ROUTE}/service-users/${carePackageCore.serviceUserId}/core-package-details?packageId=${
+        packageId || ''
+      }`
+    );
   };
 
   const removeSupplierCard = () => {
@@ -182,7 +192,11 @@ export const BrokerPackage = ({
         packageId: packageId[0],
       });
       dispatch(addNotification({ text: 'Success', className: 'success' }));
-      router.push(`/care-package/brokerage/funded-nursing-care/${packageId[0]}`);
+      if (packageType === 4) {
+        router.push(`/care-package/brokerage/funded-nursing-care/${packageId[0]}`);
+      } else {
+        router.push(`/care-package/brokerage/care-charges/${packageId[0]}`);
+      }
     } catch (e) {
       dispatch(addNotification({ text: e }));
     }
