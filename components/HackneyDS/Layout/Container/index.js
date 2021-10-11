@@ -12,6 +12,8 @@ export const Container = ({
   flexDirection,
   flex,
   justifyContent,
+  maxWidth,
+  margin,
   className = '',
 }) => (
   <div
@@ -26,7 +28,9 @@ export const Container = ({
       alignItems,
       flexDirection,
       flex,
-      justifyContent
+      justifyContent,
+      maxWidth,
+      margin
     }}>
     {children}
   </div>

@@ -115,7 +115,7 @@ const CorePackageDetails = ({
   return (
     <div className="core-package-details brokerage">
       <BrokerageHeader />
-      <Container className="brokerage__container-main">
+      <Container maxWidth='1080px' margin='0 auto' padding='60px'>
         <Container className="brokerage__container-header brokerage__container">
           <p>Build a care package</p>
           <h2>Core package details</h2>

@@ -37,7 +37,7 @@ export const ReviewPackageDetails = ({
       {isOpenedPopup &&
       <SubmitForApprovalPopup packageId={packageId} closePopup={() => setIsOpenedPopup(false)}/>}
       <BrokerageHeader/>
-      <Container className="brokerage__container-main">
+      <Container maxWidth='1080px' margin='0 auto' padding='60px'>
         <Container className="brokerage__container-header brokerage__container">
           <p>Build a care package</p>
           <h2>Review package details</h2>

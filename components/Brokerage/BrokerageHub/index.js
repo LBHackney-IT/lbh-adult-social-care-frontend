@@ -12,7 +12,7 @@ export const BrokerageHub = ({
   pageNumber,
   setPageNumber,
   paginationData: { pageSize, totalPages, totalCount },
-  statusOptions
+  statusOptions,
 }) => {
   const router = useRouter();
   const [status, setStatus] = useState('');
@@ -30,49 +30,49 @@ export const BrokerageHub = ({
 
   return (
     <div className="brokerage-hub">
-      <BrokerageHeader
-        links={[
-          { text: 'Broker Assistance', href: 'broker-assistance' },
-          { text: 'Broker Portal', href: 'broker-portal' },
-          { text: 'Care Charge Team', href: 'care-charge-team' },
-          { text: 'Log Out', href: 'logout' },
-        ]}
-      />
-      <Container background="#FAFAFA" padding="60px 60px 30px 60px">
-        <Container className="brokerage-hub__header">
-          <h2>Broker Portal</h2>
-          <Button handler={findServiceUser}>Find a service user</Button>
-        </Container>
-        <Container className="brokerage-hub__filters">
-          <SearchBox placeholder="Search" label="Search packages" handler={setSearchPackages} value={searchPackages} />
-          <FormGroup className="form-group--inline-label brokerage-hub__form-status" label="Status">
-            <Select options={statusOptions} value={status} onChange={({ target: { value } }) => setStatus(value)} />
-          </FormGroup>
-          <FormGroup className="form-group--inline-label brokerage-hub__date-from" label="From">
-            <DatePick
-              placeholder="Select date"
-              startDate={dateFrom}
-              dateValue={dateFrom}
-              setDate={(value) => {
-                if (value > dateTo) {
-                  setDateTo(value);
-                }
-                setDateFrom(value);
-              }}
+      <BrokerageHeader />
+      <Container background="#FAFAFA">
+        <Container maxWidth="1080px" margin="0 auto" padding="30px 60px">
+          <Container className="brokerage-hub__header">
+            <h2>Broker Portal</h2>
+            <Button handler={findServiceUser}>Find a service user</Button>
+          </Container>
+          <Container className="brokerage-hub__filters">
+            <SearchBox
+              placeholder="Search"
+              label="Search packages"
+              handler={setSearchPackages}
+              value={searchPackages}
             />
-          </FormGroup>
-          <FormGroup className="form-group--inline-label" label="To">
-            <DatePick
-              placeholder="Select date"
-              startDate={dateTo}
-              dateValue={dateTo}
-              minDate={dateFrom}
-              setDate={setDateTo}
-            />
-          </FormGroup>
+            <FormGroup className="form-group--inline-label brokerage-hub__form-status" label="Status">
+              <Select options={statusOptions} value={status} onChange={({ target: { value } }) => setStatus(value)} />
+            </FormGroup>
+            <FormGroup className="form-group--inline-label brokerage-hub__date-from" label="From">
+              <DatePick
+                placeholder="Select date"
+                startDate={dateFrom}
+                dateValue={dateFrom}
+                setDate={(value) => {
+                  if (value > dateTo) {
+                    setDateTo(value);
+                  }
+                  setDateFrom(value);
+                }}
+              />
+            </FormGroup>
+            <FormGroup className="form-group--inline-label" label="To">
+              <DatePick
+                placeholder="Select date"
+                startDate={dateTo}
+                dateValue={dateTo}
+                minDate={dateFrom}
+                setDate={setDateTo}
+              />
+            </FormGroup>
+          </Container>
         </Container>
       </Container>
-      <Container padding="30px 60px 60px 60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="60px">
         {items && <BrokerageHubTable onRowClick={onRowClick} data={items} />}
         <HorizontalSeparator height="20px" />
         <Pagination
