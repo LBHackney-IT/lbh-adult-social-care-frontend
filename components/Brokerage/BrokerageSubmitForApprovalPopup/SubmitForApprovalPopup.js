@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
 import Popup from '../../Popup';
 import { Button, Container, Select, Textarea } from '../../HackneyDS';
 import FormGroup from '../../HackneyDS/FormGroup';
 import { submitCarePackage } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
-import { BROKERAGE_HUB_ROUTE } from '../../../routes/RouteConstants';
 
 const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
   const dispatch = useDispatch();
   const [notes, setNotes] = useState('');
-  const router = useRouter();
 
   const [approverOptions] = useState([
     { text: 'Furkan Kayar', value: 'aee45700-af9b-4ab5-bb43-535adbdcfb84' },

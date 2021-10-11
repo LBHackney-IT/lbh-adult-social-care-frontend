@@ -1,4 +1,6 @@
 const LOGIN_ROUTE = '/login';
+const LOGOUT_ROUTE = '/logout';
+const BROKERAGE_HUB_ROUTE = `/`;
 const LOGIN_CALL_BACK_ROUTE = '/login-callback';
 const CARE_PACKAGE_ROUTE = '/care-package';
 const ACTIVE_PACKAGES_ROUTE = '/active-packages';
@@ -43,6 +45,7 @@ const SUPPLIER_RETURNS_DASHBOARD_ROUTE = `${SUPPLIER_DASHBOARD_ROUTE}/supplier-r
 
 export {
   LOGIN_ROUTE,
+  LOGOUT_ROUTE,
   LOGIN_CALL_BACK_ROUTE,
   HOME_CARE_ROUTE,
   HOME_CARE_APPROVE_PACKAGE_ROUTE,

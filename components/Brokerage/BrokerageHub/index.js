@@ -8,8 +8,14 @@ import { BrokerageHubTable } from './BrokerageHubTable';
 import { useRouter } from 'next/router';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
 import Breadcrumbs from '../../Breadcrumbs';
+import {
+  APPROVER_HUB_ROUTE,
+  BROKERAGE_HUB_ROUTE,
+  CARE_PACKAGE_ROUTE,
+  LOGOUT_ROUTE
+} from '../../../routes/RouteConstants';
 
-export const BrokerageHub = ({
+export const BrokerageHubPage = ({
   items,
   pageNumber,
   setPageNumber,
@@ -23,7 +29,6 @@ export const BrokerageHub = ({
   const router = useRouter();
 
   const onRowClick = (rowItem) => {
-    // router.push({ pathname: `${router.pathname}/${rowItem.packageId}`, query: rowItem });
     router.push({
       pathname: `care-package/service-users/${rowItem?.serviceUserId}/core-package-details`,
       query: { packageId: rowItem.packageId },
@@ -42,19 +47,18 @@ export const BrokerageHub = ({
     { text: 'Broker Portal' },
   ]);
 
+  const [links] = [
+    { text: 'Broker Portal', href: BROKERAGE_HUB_ROUTE },
+    { text: 'Care Charges', href: CARE_PACKAGE_ROUTE },
+    { text: 'Approvals', href: APPROVER_HUB_ROUTE },
+    { text: 'Log Out', href: LOGOUT_ROUTE },
+  ];
+
   return (
     <div className="brokerage-hub">
-      <BrokerageHeader
-        serviceName=''
-        links={[
-          { text: 'Broker Assistance', href: 'broker-assistance' },
-          { text: 'Broker Portal', href: 'broker-portal' },
-          { text: 'Care Charge Team', href: 'care-charge-team' },
-          { text: 'Log Out', href: 'logout' },
-        ]}
-      />
+      <BrokerageHeader serviceName="" links={links}/>
       <Container padding="8px 60px 0 60px">
-        <Breadcrumbs values={breadcrumbs} />
+        <Breadcrumbs values={breadcrumbs}/>
       </Container>
       <Container padding="30px 60px 60px 60px">
         <Container maxWidth="1080px" margin="0 auto 16px auto" className="brokerage-hub__header">

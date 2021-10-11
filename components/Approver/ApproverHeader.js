@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
-import { AdultSocialCare, HackneyLogo } from '../Icons';
 import { includeString } from 'service/helpers';
+import { CARE_PACKAGE_ROUTE, LOGOUT_ROUTE } from '../../routes/RouteConstants';
+import { AdultSocialCare, HackneyLogo } from '../Icons';
+
+const socialWorkerRoutes = [
+  { route: CARE_PACKAGE_ROUTE, name: 'New Package' },
+  { route: LOGOUT_ROUTE, name: 'Log Out' },
+];
 
 const ApproverHeader = () => {
   const router = useRouter();
-
-  const [socialWorkerRoutes] = useState([
-    { route: '/care-package', name: 'New Package' },
-    { route: '/logout', name: 'Log Out' },
-  ]);
 
   const changeRoute = (route) => {
     router.push(route);
@@ -17,7 +18,7 @@ const ApproverHeader = () => {
 
   return (
     <div className="default-logo-header">
-      <div onClick={() => router.push('/care-package')} className="hackney-adult-logo is-clickable">
+      <div onClick={() => router.push(CARE_PACKAGE_ROUTE)} className="hackney-adult-logo is-clickable">
         <HackneyLogo />
         <span>|</span>
         <AdultSocialCare />
@@ -26,7 +27,8 @@ const ApproverHeader = () => {
         {socialWorkerRoutes.map((item) => {
           const isActiveRoute = includeString(router.pathname, item?.route);
           return (
-            <p key={item?.name}
+            <p
+              key={item?.name}
               onClick={() => changeRoute(item?.route)}
               className={`default-logo-header-item${isActiveRoute ? ' default-logo-header-active-item' : ''}`}
             >
