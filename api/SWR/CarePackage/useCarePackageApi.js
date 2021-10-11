@@ -10,7 +10,9 @@ const useCarePackageApi = {
     useGetData(`${CARE_PACKAGES_URL}/broker-view${getQueryParamsFromObject({ pageNumber, status, toDate, fromDate, serviceUserId })}`)
   ),
   coreSettings: (carePackageId) =>
-    useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/core` : null),
+    useGetData(
+      carePackageId !== undefined || carePackageId !== 'undefined' ? `${CARE_PACKAGES_URL}/${carePackageId}/core` : null
+    ),
   details: (packageId) => useGetData(packageId !== undefined ? `${CARE_PACKAGES_URL}/${packageId}/details` : null),
   suppliers: ({ supplierName }) => useGetData(`/suppliers${getQueryParamsFromObject({ supplierName })}`),
   singleSupplier: (supplierId) => useGetData(supplierId !== undefined ? `/suppliers/${supplierId}` : null),

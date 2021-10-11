@@ -42,11 +42,13 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
         />
       </FormGroup>
       <FormGroup className="brokerage__add-notes" label="Add notes">
-        <Textarea value={notes} handler={setNotes}/>
+        <Textarea value={notes} handler={setNotes} />
       </FormGroup>
       <Container className="brokerage__actions">
         <Button handler={submit}>Submit</Button>
-        <Button handler={closePopup} className="link-button red">Cancel</Button>
+        <Button handler={closePopup} className="link-button red">
+          Cancel
+        </Button>
       </Container>
     </Container>
   );

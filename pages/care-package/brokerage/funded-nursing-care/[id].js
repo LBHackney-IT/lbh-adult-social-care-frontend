@@ -27,6 +27,7 @@ const FundedNursingCarePage = () => {
     createCarePackageReclaimFnc(packageId, fundedNursingCareCreation)
       .then(() => {
         pushNotification(`Funded Nursing Care created successfully`, 'success');
+        router.push(`/care-package/brokerage/care-charges/${carePackageId}`);
       })
       .catch((error) => {
         pushNotification(error);
@@ -37,6 +38,7 @@ const FundedNursingCarePage = () => {
     updateCarePackageReclaimFnc(packageId, fundedNursingCareUpdate)
       .then(() => {
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
+        router.push(`/care-package/brokerage/care-charges/${carePackageId}`);
       })
       .catch((error) => {
         pushNotification(error);
