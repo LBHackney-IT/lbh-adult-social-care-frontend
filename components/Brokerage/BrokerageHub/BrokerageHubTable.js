@@ -3,11 +3,11 @@ import { Container, Table, Tag } from '../../HackneyDS';
 import { formatDate, formatStatus } from '../../../service/helpers';
 
 const tagColors = {
-  new: 'green',
-  'in-progress': 'yellow',
-  'waiting-approval': 'blue',
-  'not-approved': 'red',
-  approved: 'gray',
+  New: 'green',
+  'In progress': 'yellow',
+  'Waiting for approval': 'blue',
+  'Not approved': 'red',
+  Approved: 'gray',
 };
 
 export const BrokerageHubTable = ({ onRowClick, data }) => {
@@ -21,7 +21,7 @@ export const BrokerageHubTable = ({ onRowClick, data }) => {
               {original.serviceUserName}
             </p>
             <Tag className="text-capitalize with-border" color={tagColors[value]}>
-              {formatStatus(original.packageStatus)}
+              {original.packageStatus}
             </Tag>
           </Container>
           <p className="brokerage-hub--birthdate">{formatDate(original.dateOfBirth)}</p>

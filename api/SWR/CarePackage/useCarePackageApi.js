@@ -6,8 +6,8 @@ const CARE_PACKAGES_URL = '/care-packages';
 const useCarePackageApi = {
   summary: (carePackageId) =>
     useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/summary` : null),
-  brokerView: ({ pageNumber }) => (
-    useGetData(`${CARE_PACKAGES_URL}/broker-view${getQueryParamsFromObject({ pageNumber })}`)
+  brokerView: ({ pageNumber, toDate, fromDate, status, serviceUserId }) => (
+    useGetData(`${CARE_PACKAGES_URL}/broker-view${getQueryParamsFromObject({ pageNumber, status, toDate, fromDate, serviceUserId })}`)
   ),
   coreSettings: (carePackageId) =>
     useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/core` : null),

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrokerageHub as BrokerageHubPage } from 'components/Brokerage/BrokerageHub';
 import useCarePackageApi from '../../api/SWR/CarePackage/useCarePackageApi';
 
@@ -10,15 +10,36 @@ const BrokerageHub = () => {
     totalPages: 0,
     pageSize: 0,
   });
-  const { data } = useCarePackageApi.brokerView({ pageNumber });
+  const [initialFilters] = useState({
+    status: '',
+    dateFrom: null,
+    dateTo: null,
+    serviceUserId: '',
+  });
+  const [filters, setFilters] = useState({ ...initialFilters });
+  const [apiFilters, setApiFilters] = useState({ ...initialFilters });
+  const { data } = useCarePackageApi.brokerView({
+    pageNumber,
+    status: apiFilters.status,
+    toDate: apiFilters.dateTo ? apiFilters.dateTo.toJSON() : null,
+    fromDate: apiFilters.dateFrom ? apiFilters.dateFrom.toJSON() : null,
+    serviceUserId: apiFilters.serviceUser?.id,
+  });
 
-  React.useEffect(() => {
+  const clearFilter = () => {
+    setFilters({ ...initialFilters });
+    setApiFilters({ ...initialFilters });
+  };
+
+  const findServiceUser = () => setApiFilters(filters);
+
+  useEffect(() => {
     if (data) {
       setPackageData(data.packages);
     }
   }, [data]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (data.pagingMetaData) {
       setPaginationData({
         totalCount: data.pagingMetaData.totalCount,
@@ -29,6 +50,7 @@ const BrokerageHub = () => {
   }, [data]);
 
   const statusOptions = [
+    { text: 'All', value: '' },
     { text: 'New', value: '1' },
     { text: 'In Progress', value: '2' },
     { text: 'Submitted For Approval', value: '3' },
@@ -45,6 +67,10 @@ const BrokerageHub = () => {
 
   return (
     <BrokerageHubPage
+      findServiceUser={findServiceUser}
+      filters={filters}
+      clearFilter={clearFilter}
+      setFilters={setFilters}
       pageNumber={pageNumber}
       setPageNumber={setPageNumber}
       statusOptions={statusOptions}

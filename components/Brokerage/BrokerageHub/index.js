@@ -1,31 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
-import { Button, Container, HorizontalSeparator, SearchBox, Select } from '../../HackneyDS';
+import { Button, Container, HorizontalSeparator, Select } from '../../HackneyDS';
 import Pagination from '../../Payments/Pagination';
 import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
 import { BrokerageHubTable } from './BrokerageHubTable';
 import { useRouter } from 'next/router';
+import Loading from '../../Loading';
+import CustomAsyncSelector from '../../CustomAsyncSelect';
 
 export const BrokerageHub = ({
   items,
   pageNumber,
   setPageNumber,
   paginationData: { pageSize, totalPages, totalCount },
-  statusOptions
+  statusOptions,
+  filters,
+  setFilters,
+  clearFilter,
+  findServiceUser,
 }) => {
   const router = useRouter();
-  const [status, setStatus] = useState('');
-  const [searchPackages, setSearchPackages] = useState('');
-  const [dateFrom, setDateFrom] = useState(null);
-  const [dateTo, setDateTo] = useState(null);
 
   const onRowClick = (rowItem) => {
     router.push({ pathname: `${router.pathname}/${rowItem.packageId}`, query: rowItem });
   };
 
-  const findServiceUser = async () => {
-    alert('Find a service user');
+  const changeFilterFiled = (field, value) => {
+    setFilters(prevState => ({
+      ...prevState,
+      [field]: value,
+    }));
   };
 
   return (
@@ -44,37 +49,58 @@ export const BrokerageHub = ({
           <Button handler={findServiceUser}>Find a service user</Button>
         </Container>
         <Container className="brokerage-hub__filters">
-          <SearchBox placeholder="Search" label="Search packages" handler={setSearchPackages} value={searchPackages} />
+          <CustomAsyncSelector
+            onChange={(option) => changeFilterFiled('serviceUser', option)}
+            placeholder="Service User"
+            getOptionLabel={option => `${option.firstName} ${option.lastName}`}
+            endpoint={{
+              endpointName: '/clients/get-all',
+              filterKey: 'clientName',
+            }}
+            value={filters.serviceUser}
+          />
           <FormGroup className="form-group--inline-label brokerage-hub__form-status" label="Status">
-            <Select options={statusOptions} value={status} onChange={({ target: { value } }) => setStatus(value)} />
+            <Select
+              options={statusOptions}
+              value={filters.status}
+              onChange={({ target: { value } }) => changeFilterFiled('status', value)}
+            />
           </FormGroup>
           <FormGroup className="form-group--inline-label brokerage-hub__date-from" label="From">
             <DatePick
               placeholder="Select date"
-              startDate={dateFrom}
-              dateValue={dateFrom}
+              startDate={filters.dateFrom}
+              dateValue={filters.dateFrom}
               setDate={(value) => {
-                if (value > dateTo) {
-                  setDateTo(value);
+                if (value > filters.dateTo) {
+                  return setFilters(prevState => ({
+                    ...prevState,
+                    dateTo: value,
+                    dateFrom: value,
+                  }));
                 }
-                setDateFrom(value);
+                changeFilterFiled('dateFrom', value);
               }}
             />
           </FormGroup>
           <FormGroup className="form-group--inline-label" label="To">
             <DatePick
               placeholder="Select date"
-              startDate={dateTo}
-              dateValue={dateTo}
-              minDate={dateFrom}
-              setDate={setDateTo}
+              startDate={filters.dateTo}
+              dateValue={filters.dateTo}
+              minDate={filters.dateFrom}
+              setDate={(value) => changeFilterFiled('dateTo', value)}
             />
           </FormGroup>
+          {Object.values(filters).some(item => !!item) &&
+            <Button className="outline gray clear-filter-button" handler={clearFilter}>Clear</Button>
+          }
         </Container>
       </Container>
       <Container padding="30px 60px 60px 60px">
-        {items && <BrokerageHubTable onRowClick={onRowClick} data={items} />}
-        <HorizontalSeparator height="20px" />
+        {items === undefined && <Loading className="table-loading"/>}
+        {items && <BrokerageHubTable onRowClick={onRowClick} data={items}/>}
+        <HorizontalSeparator height="20px"/>
         <Pagination
           pageSize={pageSize}
           totalPages={totalPages}

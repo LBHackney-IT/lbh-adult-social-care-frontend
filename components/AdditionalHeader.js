@@ -17,7 +17,6 @@ const AdditionalHeader = () => {
     { route: SUPPLIER_DASHBOARD_ROUTE, component: <SupplierDashboardHeader /> },
     { route: SOCIAL_WORKER_ROUTE, component: <ApproverHeader /> },
     { route: APPROVER_HUB_ROUTE, component: <ApproverHeader /> },
-    { route: BROKERAGE_HUB_ROUTE, component: <ApproverHeader /> },
   ];
   const header = headers.find((headerProps) => router.pathname.indexOf(headerProps.route) > -1);
   return <>{header?.component}</>;

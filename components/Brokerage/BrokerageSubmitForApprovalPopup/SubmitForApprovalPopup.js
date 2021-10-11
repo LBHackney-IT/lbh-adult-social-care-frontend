@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import Popup from '../../Popup';
@@ -10,9 +10,14 @@ import { BROKERAGE_HUB_ROUTE } from '../../../routes/RouteConstants';
 
 const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
   const dispatch = useDispatch();
-  const [approverId, setApproverId] = useState('');
   const [notes, setNotes] = useState('');
   const router = useRouter();
+
+  const [approverOptions] = useState([
+    { text: 'Furkan Kayar', value: 'aee45700-af9b-4ab5-bb43-535adbdcfb84' },
+    { text: 'Duncan Okeno', value: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8' }
+  ]);
+  const [approverId, setApproverId] = useState('');
 
   const submit = async () => {
     try {
@@ -31,10 +36,7 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
     <Container>
       <FormGroup className="brokerage__approved-by-select" label="To be approved by">
         <Select
-          options={[
-            { text: 'Furkan Kayar', value: 'aee45700-af9b-4ab5-bb43-535adbdcfb84' },
-            { text: 'Duncan Okeno', value: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8' }
-          ]}
+          options={approverOptions}
           value={approverId}
           onChangeValue={setApproverId}
         />
