@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrokerageHub as BrokerageHubPage } from 'components/Brokerage/BrokerageHub';
-import { useGetData } from 'api/SWR';
+import useCarePackageApi from '../../api/SWR/CarePackage/useCarePackageApi';
 
 const BrokerageHub = () => {
   const [packageData, setPackageData] = React.useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
   const [paginationData, setPaginationData] = React.useState({
     totalCount: 0,
     totalPages: 0,
     pageSize: 0,
   });
-  const getBrokerageData = () => useGetData(`care-packages/broker-view`);
-  const { data } = getBrokerageData();
+  const { data } = useCarePackageApi.brokerView({ pageNumber });
 
   React.useEffect(() => {
     if (data) {
@@ -45,10 +45,12 @@ const BrokerageHub = () => {
 
   return (
     <BrokerageHubPage
+      pageNumber={pageNumber}
+      setPageNumber={setPageNumber}
       statusOptions={statusOptions}
       brokerOptions={brokerOptions}
       items={packageData}
-      searchResults={paginationData}
+      paginationData={paginationData}
     />
   );
 };

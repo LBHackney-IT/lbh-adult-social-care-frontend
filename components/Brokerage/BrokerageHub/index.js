@@ -7,9 +7,14 @@ import DatePick from '../../DatePick';
 import { BrokerageHubTable } from './BrokerageHubTable';
 import { useRouter } from 'next/router';
 
-export const BrokerageHub = ({ items, searchResults: { pageSize, totalPages, totalCount }, statusOptions }) => {
+export const BrokerageHub = ({
+  items,
+  pageNumber,
+  setPageNumber,
+  paginationData: { pageSize, totalPages, totalCount },
+  statusOptions
+}) => {
   const router = useRouter();
-  const [currentPage, setCurrentPage] = useState(1);
   const [status, setStatus] = useState('');
   const [searchPackages, setSearchPackages] = useState('');
   const [dateFrom, setDateFrom] = useState(null);
@@ -73,9 +78,9 @@ export const BrokerageHub = ({ items, searchResults: { pageSize, totalPages, tot
         <Pagination
           pageSize={pageSize}
           totalPages={totalPages}
-          currentPage={currentPage}
+          currentPage={pageNumber}
           totalCount={totalCount}
-          changePagination={setCurrentPage}
+          changePagination={setPageNumber}
         />
       </Container>
     </div>
