@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Button, Container, ErrorMessage, Input, Label, RadioGroup, Select, Textarea } from '../../HackneyDS';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import { requiredSchema } from '../../../constants/schemas';
 import { currency } from '../../../constants/strings';
-import { useRouter } from 'next/router';
 
 const CareCharges = ({
   carePackageId,
@@ -72,13 +72,13 @@ const CareCharges = ({
     if (hasErrors) return;
 
     const careChargeCreation = {
-      carePackageId: carePackageId,
+      carePackageId,
       cost: costPerWeek,
       claimCollector: collectedBy,
-      supplierId: 1, //fix value to be removed after updating API side
-      status: 1, //fix value to be removed after updating API side
-      type: 1, //fix value to be removed after updating API side
-      subType: 1, //fix value to be removed after updating API side
+      supplierId: 1, // fix value to be removed after updating API side
+      status: 1, // fix value to be removed after updating API side
+      type: 2, // fix value to be removed after updating API side
+      subType: 1, // fix value to be removed after updating API side
       description: notes,
       claimReason: reasonCollecting,
     };
@@ -87,10 +87,10 @@ const CareCharges = ({
       id: carePackageReclaimCareCharge.id,
       cost: costPerWeek,
       claimCollector: collectedBy,
-      supplierId: 1, //fix value to be removed after updating API side
-      status: 1, //fix value to be removed after updating API side
-      type: 1, //fix value to be removed after updating API side
-      subType: 1, //fix value to be removed after updating API side
+      supplierId: 1, // fix value to be removed after updating API side
+      status: 1, // fix value to be removed after updating API side
+      type: 2, // fix value to be removed after updating API side
+      subType: 1, // fix value to be removed after updating API side
       description: notes,
       claimReason: reasonCollecting,
     };
