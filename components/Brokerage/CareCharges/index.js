@@ -75,7 +75,7 @@ const CareCharges = ({
       claimCollector: collectedBy,
       supplierId: 1, //fix value to be removed after updating API side
       status: 1, //fix value to be removed after updating API side
-      type: 1, //fix value to be removed after updating API side
+      type: 2, //fix value to be removed after updating API side
       subType: 1, //fix value to be removed after updating API side
       description: notes,
       claimReason: reasonCollecting
@@ -87,7 +87,7 @@ const CareCharges = ({
       claimCollector: collectedBy,
       supplierId: 1, //fix value to be removed after updating API side
       status: 1, //fix value to be removed after updating API side
-      type: 1,  //fix value to be removed after updating API side
+      type: 2,  //fix value to be removed after updating API side
       subType: 1, //fix value to be removed after updating API side
       description: notes,
       claimReason: reasonCollecting      

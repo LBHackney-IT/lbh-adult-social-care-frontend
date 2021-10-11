@@ -1,12 +1,14 @@
 import React from 'react';
 import { Container, Table, Tag } from '../../HackneyDS';
-import { formatDate, formatStatus } from '../../../service/helpers';
+import { formatDate } from '../../../service/helpers';
 
 const tagColors = {
   New: 'green',
-  'In progress': 'yellow',
-  'Waiting for approval': 'blue',
-  'Not approved': 'red',
+  'In Progress': 'yellow',
+  'Waiting For Approval': 'blue',
+  'Not Approved': 'red',
+  Ended: 'red',
+  Cancelled: 'red',
   Approved: 'gray',
 };
 
@@ -68,7 +70,13 @@ export const BrokerageHubTable = ({ onRowClick, data }) => {
   ];
   return (
     <div className="brokerage-hub__table">
-      <Table onRowClick={onRowClick} hasHeader={false} columns={columns} data={data} cellClassName='brokerage-hub__cell'/>
+      <Table
+        onRowClick={onRowClick}
+        hasHeader={false}
+        columns={columns}
+        data={data}
+        cellClassName="brokerage-hub__cell"
+      />
     </div>
   );
 };
