@@ -29,8 +29,14 @@ const BrokerageHub = () => {
   }, [data]);
 
   const statusOptions = [
-    { text: 'Status-1', value: 'status-1' },
-    { text: 'Status-2', value: 'status-2' },
+    { text: 'New', value: '1' },
+    { text: 'In Progress', value: '2' },
+    { text: 'Submitted For Approval', value: '3' },
+    { text: 'Approved', value: '4' },
+    { text: 'Not Approved', value: '5' },
+    { text: 'Ended', value: '6' },
+    { text: 'Cancelled', value: '7' },
+
   ];
   const brokerOptions = [
     { text: 'Broker-1', value: 'broker-1' },
