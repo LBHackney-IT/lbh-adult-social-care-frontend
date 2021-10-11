@@ -8,6 +8,8 @@ import { BrokerageHubTable } from 'components/Brokerage/BrokerageHub/BrokerageHu
 import { Button, Container, HorizontalSeparator, SearchBox, Select } from 'components/HackneyDS';
 import { CARE_PACKAGE_ROUTE, APPROVER_HUB_ROUTE, BROKERAGE_HUB_ROUTE, LOGOUT_ROUTE } from 'routes/RouteConstants';
 import useCarePackageApi from '../api/SWR/CarePackage/useCarePackageApi';
+import withSession from '../lib/session';
+import { getUserSession } from '../service/helpers';
 
 const statusOptions = [
   { text: 'New', value: '1' },
@@ -25,6 +27,12 @@ const links = [
   { text: 'Approvals', href: APPROVER_HUB_ROUTE },
   { text: 'Log Out', href: LOGOUT_ROUTE },
 ];
+
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+  return { props: {} };
+});
 
 const BrokerageHub = () => {
   const [pageNumber, setPageNumber] = useState(1);
