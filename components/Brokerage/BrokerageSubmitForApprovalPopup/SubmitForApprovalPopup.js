@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import Popup from '../../Popup';
 import { Button, Container, Select, Textarea } from '../../HackneyDS';
 import FormGroup from '../../HackneyDS/FormGroup';
 import { submitCarePackage } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
+import { BROKERAGE_HUB_ROUTE } from '../../../routes/RouteConstants';
 
 const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const [approverId, setApproverId] = useState('');
   const [notes, setNotes] = useState('');
