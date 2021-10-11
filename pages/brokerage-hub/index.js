@@ -30,10 +30,10 @@ const BrokerageHub = () => {
 
   const statusOptions = [
     { text: 'New', value: '1' },
-    { text: 'InProgress', value: '2' },
-    { text: 'SubmittedForApproval', value: '3' },
+    { text: 'In Progress', value: '2' },
+    { text: 'Submitted For Approval', value: '3' },
     { text: 'Approved', value: '4' },
-    { text: 'NotApproved', value: '5' },
+    { text: 'Not Approved', value: '5' },
     { text: 'Ended', value: '6' },
     { text: 'Cancelled', value: '7' },
 
