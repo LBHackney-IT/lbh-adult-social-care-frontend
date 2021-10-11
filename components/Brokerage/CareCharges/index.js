@@ -20,10 +20,6 @@ const CareCharges = ({
     supplier: 'net',
     hackney: 'gross',
   });
-  const [claimCollector] = useState({
-    hackney: 2,
-    supplier: 1,
-  });
   const [errors, setErrors] = useState({
     collectedBy: '',
     costPerWeek: '',
@@ -78,7 +74,7 @@ const CareCharges = ({
     const careChargeCreation = {
       carePackageId,
       cost: costPerWeek,
-      claimCollector: claimCollector[collectedBy],
+      claimCollector: collectedBy,
       supplierId: 1, // fix value to be removed after updating API side
       status: 1, // fix value to be removed after updating API side
       type: 2, // fix value to be removed after updating API side
@@ -90,7 +86,7 @@ const CareCharges = ({
     const careChargeUpdate = {
       id: carePackageReclaimCareCharge.id,
       cost: costPerWeek,
-      claimCollector: claimCollector[collectedBy],
+      claimCollector: collectedBy,
       supplierId: 1, // fix value to be removed after updating API side
       status: 1, // fix value to be removed after updating API side
       type: 2, // fix value to be removed after updating API side
@@ -115,6 +111,23 @@ const CareCharges = ({
       setCostPerWeek(calculatedCost);
     }
   }, [calculatedCost]);
+
+  const composecarePackageReclaimCareChargeData = () => {
+    if (carePackageReclaimCareCharge) {
+      setNotes(carePackageReclaimCareCharge.description);
+      if (carePackageReclaimCareCharge.claimCollector === 2) {
+        setCollectedBy('hackney');
+      }
+      else{
+        setCollectedBy('supplier');
+      }
+      setReasonCollecting(carePackageReclaimCareCharge.claimReason);
+    }
+  };
+
+  useEffect(() => {
+    composecarePackageReclaimCareChargeData();
+  }, [carePackageReclaimCareCharge]);
 
   return (
     <Container className="brokerage__care-charges">
