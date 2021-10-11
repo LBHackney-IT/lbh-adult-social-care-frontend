@@ -60,7 +60,7 @@ export default function Header({ children = [], links = [], bottomLines = true, 
           <div className="lbh-header__links">
             {getMultipleSlot(nodeList, 'link')}
 
-            {links.map(({ href, text }) => (
+            {links?.map(({ href, text }) => (
               <Link key={href} href={href}>
                 <a slot="link">{text}</a>
               </Link>

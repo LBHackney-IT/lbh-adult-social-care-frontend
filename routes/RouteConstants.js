@@ -6,7 +6,6 @@ const CARE_PACKAGE_ROUTE = '/care-package';
 const ACTIVE_PACKAGES_ROUTE = '/active-packages';
 const SOCIAL_WORKER_ROUTE = '/social-worker';
 const APPROVER_HUB_ROUTE = '/approver-hub';
-const BROKERAGE_HUB_ROUTE = '/brokerage-hub';
 const PROPOSED_PACKAGES_ROUTE = '/proposed-packages';
 const HOME_CARE_ROUTE = `${CARE_PACKAGE_ROUTE}/home-care`;
 const BROKERAGE_ROUTE = `${CARE_PACKAGE_ROUTE}/brokerage`;

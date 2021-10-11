@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Container, HorizontalSeparator, Select } from '../../HackneyDS';
 import Pagination from '../../Payments/Pagination';
@@ -7,7 +7,6 @@ import DatePick from '../../DatePick';
 import { BrokerageHubTable } from './BrokerageHubTable';
 import { useRouter } from 'next/router';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
-import Breadcrumbs from '../../Breadcrumbs';
 import {
   APPROVER_HUB_ROUTE,
   BROKERAGE_HUB_ROUTE,
@@ -27,6 +26,7 @@ export const BrokerageHubPage = ({
   findServiceUser,
 }) => {
   const router = useRouter();
+  const selectorRef = useRef(null);
 
   const onRowClick = (rowItem) => {
     router.push({
@@ -42,24 +42,19 @@ export const BrokerageHubPage = ({
     }));
   };
 
-  const [breadcrumbs] = useState([
-    { text: 'Home', onClick: () => router.push('#') },
-    { text: 'Broker Portal' },
-  ]);
-
-  const [links] = [
+  const [links] = useState([
     { text: 'Broker Portal', href: BROKERAGE_HUB_ROUTE },
     { text: 'Care Charges', href: CARE_PACKAGE_ROUTE },
     { text: 'Approvals', href: APPROVER_HUB_ROUTE },
     { text: 'Log Out', href: LOGOUT_ROUTE },
-  ];
+  ]);
 
   return (
     <div className="brokerage-hub">
       <BrokerageHeader serviceName="" links={links}/>
-      <Container padding="8px 60px 0 60px">
-        <Breadcrumbs values={breadcrumbs}/>
-      </Container>
+      {/*<Container padding="8px 60px 0 60px">*/}
+      {/*  <Breadcrumbs values={breadcrumbs}/>*/}
+      {/*</Container>*/}
       <Container padding="30px 60px 60px 60px">
         <Container maxWidth="1080px" margin="0 auto 16px auto" className="brokerage-hub__header">
           <h2>Broker Portal</h2>
@@ -67,6 +62,7 @@ export const BrokerageHubPage = ({
         </Container>
         <Container maxWidth="1080px" margin="0 auto" className="brokerage-hub__filters">
           <CustomAsyncSelector
+            innerRef={selectorRef}
             onChange={(option) => changeFilterFiled('serviceUser', option)}
             placeholder="Service User"
             getOptionLabel={option => `${option.firstName} ${option.lastName}`}
@@ -110,7 +106,10 @@ export const BrokerageHubPage = ({
             />
           </FormGroup>
           {Object.values(filters).some(item => !!item) &&
-          <Button className="outline gray clear-filter-button" handler={clearFilter}>Clear</Button>
+          <Button className="outline gray clear-filter-button" handler={() => {
+            clearFilter()
+            selectorRef.current?.select?.select?.clearValue();
+          }}>Clear</Button>
           }
         </Container>
       </Container>
