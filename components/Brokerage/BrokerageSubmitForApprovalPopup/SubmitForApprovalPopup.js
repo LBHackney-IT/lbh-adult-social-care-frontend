@@ -18,10 +18,10 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
     try {
       await submitCarePackage({
         packageId,
-        data: { approverId, notes }
+        data: { approverId, notes },
       });
       dispatch(addNotification({ text: 'Success', className: 'success' }));
-      router.push(BROKERAGE_HUB_ROUTE);
+      router.push(`/brokerage-hub`);
     } catch (e) {
       dispatch(addNotification({ text: e || 'Something went wrong' }));
     }
@@ -32,19 +32,22 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
       <FormGroup className="brokerage__approved-by-select" label="To be approved by">
         <Select
           options={[
+            { text: 'Pick one', value: null },
             { text: 'Furkan Kayar', value: 'aee45700-af9b-4ab5-bb43-535adbdcfb84' },
-            { text: 'Duncan Okeno', value: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8' }
+            { text: 'Duncan Okeno', value: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8' },
           ]}
           value={approverId}
           onChangeValue={setApproverId}
         />
       </FormGroup>
       <FormGroup className="brokerage__add-notes" label="Add notes">
-        <Textarea value={notes} handler={setNotes}/>
+        <Textarea value={notes} handler={setNotes} />
       </FormGroup>
       <Container className="brokerage__actions">
         <Button handler={submit}>Submit</Button>
-        <Button handler={closePopup} className="link-button red">Cancel</Button>
+        <Button handler={closePopup} className="link-button red">
+          Cancel
+        </Button>
       </Container>
     </Container>
   );
