@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { getSlot, getMultipleSlot } from '../index';
+import { getSlot, getMultipleSlot, Container } from '../index';
 
 export default function Header({ children = [], links = [], bottomLines = true, fixed, purple }) {
   const bottomLinesClass = bottomLines ? ' bottom-lines' : '';
@@ -12,6 +12,7 @@ export default function Header({ children = [], links = [], bottomLines = true, 
   return (
     <header className={`lbh-header${bottomLinesClass}${fixedClassList + purpleSchemeNodeList}`}>
       <div className="lbh-header__main">
+      <Container maxWidth='1080px' margin='0 auto' padding='0 60px'>
         <div className="lbh-header__wrapper">
           <h1 className="lbh-header__title">
             <Link href="/">
@@ -66,6 +67,7 @@ export default function Header({ children = [], links = [], bottomLines = true, 
             ))}
           </div>
         </div>
+        </Container>
       </div>
     </header>
   );

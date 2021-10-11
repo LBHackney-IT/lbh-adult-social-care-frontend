@@ -18,6 +18,7 @@ const BrokerPackagePage = () => {
   const { data: selectedSupplier, mutate: getSelectedSupplierDetails } = useCarePackageApi.singleSupplier(
     detailsData?.supplierId
   );
+  const { data: carePackageCore = { packageType: '', serviceUserId: '' } } = useCarePackageApi.coreSettings(packageId);
 
   const onSearchSupplier = () => {
     setSearch(supplierSearch);
@@ -68,6 +69,8 @@ const BrokerPackagePage = () => {
       packageId={newPackageId}
       searchResults={searchResults}
       careName="Nursing care"
+      packageType={carePackageCore?.packageType}
+      carePackageCore={carePackageCore}
     />
   );
 };

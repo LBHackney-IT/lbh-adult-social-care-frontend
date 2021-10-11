@@ -12,8 +12,6 @@
 @import "brokerage-weekly-cost";
 
 .brokerage__container-main {
-  padding: 60px;
-
   @include media-desktop {
     width: 70%;
     margin: 0 auto;

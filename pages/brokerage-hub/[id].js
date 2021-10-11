@@ -14,15 +14,8 @@ const PackageRequestPage = () => {
 
   return (
     <>
-      <BrokerageHeader
-        links={[
-          { text: 'Broker Assistance', href: 'broker-assistance' },
-          { text: 'Broker Portal', href: 'broker-portal' },
-          { text: 'Care Charge Team', href: 'care-charge-team' },
-          { text: 'Log Out', href: 'logout' },
-        ]}
-      />
-      <Container padding="60px">
+      <BrokerageHeader />
+      <Container padding="60px" maxWidth="1080px" margin="0 auto">
         <ServiceUserDetails
           dateOfBirth={packageData.dateOfBirth}
           address={packageData.address}

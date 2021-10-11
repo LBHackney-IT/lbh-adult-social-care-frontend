@@ -123,7 +123,7 @@ const FundedNursingCare = ({
   return (
     <Container className="brokerage__funded-nursing-care">
       <BrokerageHeader/>
-      <Container className="brokerage__container-main">
+      <Container maxWidth='1080px' margin='0 auto' padding='60px'>
         <BrokerageContainerHeader title="Funded Nursing Care"/>
         <Container>
           <h3 className="brokerage__item-title">Funded Nursing Care</h3>
