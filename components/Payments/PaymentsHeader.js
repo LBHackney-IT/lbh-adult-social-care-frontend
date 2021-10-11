@@ -1,7 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { HackneyFullLogo } from '../Icons';
 import { includeString } from 'service/helpers';
+import { LOGOUT_ROUTE } from '../../routes/RouteConstants';
+import { HackneyFullLogo } from '../Icons';
 
 const paymentsRoutes = [
   // { route: 'pay-runs', name: 'Pay Runs' },
@@ -16,7 +17,7 @@ const PaymentsHeader = () => {
 
   const changeRoute = (route) => {
     if (route === 'logout') {
-      router.push('/logout');
+      router.push(LOGOUT_ROUTE);
     } else {
       router.push(`/payments/${route}`);
     }

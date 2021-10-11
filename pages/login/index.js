@@ -11,7 +11,7 @@ const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 const Login = () => {
   const dispatch = useDispatch();
   const { mutateUser } = useUser({
-    redirectTo: '/care-package',
+    redirectTo: '/',
     redirectIfFound: true,
   });
 
