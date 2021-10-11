@@ -20,11 +20,6 @@ const ReviewPackageDetailsPage = () => {
 
   const checkSettings = (settings) => settings && settingsTypes.find(item => settings[item.field] === true)?.text;
 
-  useEffect(() => {
-    console.log(detailsData);
-  }, [detailsData])
-
-
   const summary = [
     { id: 1, key: 'Cost of placement', value: data?.costOfPlacement },
     { id: 2, key: 'FNC payment', value: data?.fncPayment },

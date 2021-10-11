@@ -8,10 +8,6 @@ const CorePackagePage = () => {
   const carePackageId = router.query.id;
   const { data } = useCarePackageApi.details(carePackageId);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   return <CorePackageDetails
     userDetails={data.serviceUser}
     supportReasonOptions={[]}
