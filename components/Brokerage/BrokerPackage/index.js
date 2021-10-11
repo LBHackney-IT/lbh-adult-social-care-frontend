@@ -190,7 +190,6 @@ export const BrokerPackage = ({
   };
 
   const changeNeed = (getter, setter, field, value, index) => {
-    console.log(field, value);
     const cloneNeed = { ...getter[index] };
     if (field === 'cost') {
       cloneNeed.cost = value;

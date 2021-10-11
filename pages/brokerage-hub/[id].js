@@ -7,7 +7,6 @@ import React from 'react';
 const PackageRequestPage = () => {
   const router = useRouter();
   const packageData = router.query;
-  console.log(packageData);
 
   const handleClick = () => {
     router.push(`/care-package/service-users/${packageData.serviceUserId}/core-package-details`);
