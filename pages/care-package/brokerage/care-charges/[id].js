@@ -12,15 +12,18 @@ import { useDispatch } from 'react-redux';
 const CareChargesPage = () => {
   const router = useRouter();
   const carePackageId = router.query.id;
-  const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e';
+  const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e'; //todo to be removed
   const dispatch = useDispatch();
   const { data: carePackageReclaimCareCharge } = useReclaimApi.careCharge(carePackageId);
   const { data: calculatedCost } = useReclaimApi.calculatedCost(carePackageId, serviceUserId);
 
   const collectingReasonOptions = [
     { text: 'Select One', value: null },
-    { text: 'Test Data 1', value: '1' },
-    { text: 'Test Data 2', value: '2' },
+    { text: 'Service user unable to manage finances', value: '1' },
+    { text: 'Agreement with provider to pay gross', value: '2' },
+    { text: 'Service user or family declining payment', value: '3' },
+    { text: 'Finance managed by CFAT', value: '4' },
+    { text: 'Other', value: '5' },
   ];
 
   const pushNotification = (text, className = 'error') => {

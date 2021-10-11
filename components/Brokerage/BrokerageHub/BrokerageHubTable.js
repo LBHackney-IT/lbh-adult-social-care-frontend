@@ -1,13 +1,15 @@
 import React from 'react';
 import { Container, Table, Tag } from '../../HackneyDS';
-import { formatDate, formatStatus } from '../../../service/helpers';
+import { formatDate } from '../../../service/helpers';
 
 const tagColors = {
-  new: 'green',
-  'in-progress': 'yellow',
-  'waiting-approval': 'blue',
-  'not-approved': 'red',
-  approved: 'gray',
+  New: 'green',
+  'In Progress': 'yellow',
+  'Waiting For Approval': 'blue',
+  'Not Approved': 'red',
+  Ended: 'red',
+  Cancelled: 'red',
+  Approved: 'gray',
 };
 
 export const BrokerageHubTable = ({ onRowClick, data }) => {
@@ -21,7 +23,7 @@ export const BrokerageHubTable = ({ onRowClick, data }) => {
               {original.serviceUserName}
             </p>
             <Tag className="text-capitalize with-border" color={tagColors[value]}>
-              {formatStatus(original.packageStatus)}
+              {original.packageStatus}
             </Tag>
           </Container>
           <p className="brokerage-hub--birthdate">{formatDate(original.dateOfBirth)}</p>
@@ -68,7 +70,13 @@ export const BrokerageHubTable = ({ onRowClick, data }) => {
   ];
   return (
     <div className="brokerage-hub__table">
-      <Table onRowClick={onRowClick} hasHeader={false} columns={columns} data={data} cellClassName='brokerage-hub__cell'/>
+      <Table
+        onRowClick={onRowClick}
+        hasHeader={false}
+        columns={columns}
+        data={data}
+        cellClassName="brokerage-hub__cell"
+      />
     </div>
   );
 };
