@@ -7,6 +7,7 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import FormGroup from '../../HackneyDS/FormGroup';
 import UrlFromFile from '../../UrlFromFile';
 import { requiredSchema } from '../../../constants/schemas';
+import { isFunction } from '../../../api/Utils/FuncUtils';
 
 const FundedNursingCare = ({
   carePackageId,
@@ -15,6 +16,7 @@ const FundedNursingCare = ({
   carePackageReclaimFnc,
   createFundedNursingCare = () => {},
   updateFundedNursingCare = () => {},
+  goBack = () => {},
 }) => {
   const [collectedByType] = useState({
     hackney: 'gross',
@@ -37,7 +39,7 @@ const FundedNursingCare = ({
   const [isOngoing, setIsOngoing] = useState(false);
 
   const clickBack = () => {
-    alert('Click back');
+    if (isFunction(goBack())) goBack();
   };
 
   const clickSave = async () => {

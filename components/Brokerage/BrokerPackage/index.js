@@ -56,8 +56,8 @@ export const BrokerPackage = ({
   const [isNewSupplier, setIsNewSupplier] = useState(false);
 
   const [packageDates, setPackageDates] = useState({
-    endDate: null,
-    startDate: null,
+    endDate: new Date(),
+    startDate: new Date(),
   });
 
   const clickBack = () => {
@@ -85,8 +85,8 @@ export const BrokerPackage = ({
   const composeDetailsData = () => {
     if (detailsData) {
       setPackageDates({
-        endDate: dateStringToDate(detailsData.endDate),
-        startDate: dateStringToDate(detailsData.startDate),
+        endDate: dateStringToDate(detailsData.endDate || new Date()),
+        startDate: dateStringToDate(detailsData.startDate || new Date()),
       });
       if (!detailsData.endDate) {
         setIsOngoing(true);

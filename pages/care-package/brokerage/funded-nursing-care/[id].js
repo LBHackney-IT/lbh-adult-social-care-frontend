@@ -47,6 +47,10 @@ const FundedNursingCarePage = () => {
 
   useEffect(() => {});
 
+  const handleBackButton = () => {
+    router.back();
+  };
+
   return (
     <FundedNursingCare
       carePackageId={carePackageId}
@@ -55,6 +59,7 @@ const FundedNursingCarePage = () => {
       carePackageReclaimFnc={carePackageReclaimFnc}
       createFundedNursingCare={createFundedNursingCare}
       updateFundedNursingCare={updateFundedNursingCare}
+      goBack={handleBackButton}
     />
   );
 };

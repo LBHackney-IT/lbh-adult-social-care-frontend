@@ -5,15 +5,17 @@ import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import { requiredSchema } from '../../../constants/schemas';
 import { currency } from '../../../constants/strings';
+import { useRouter } from 'next/router';
 
-const CareCharges = ({ 
+const CareCharges = ({
   carePackageId,
-  reasonsCollecting, 
+  reasonsCollecting,
   calculatedCost,
   carePackageReclaimCareCharge,
   createCareCharge = () => {},
   updateCareCharge = () => {},
 }) => {
+  const router = useRouter();
   const [collectedByType] = useState({
     supplier: 'net',
     hackney: 'gross',
@@ -31,7 +33,7 @@ const CareCharges = ({
   const finalCost = collectedBy === 'hackney' ? -costPerWeek : costPerWeek;
 
   const clickBack = () => {
-    alert('Click back');
+    router.back();
   };
 
   const clickSave = async () => {
@@ -44,7 +46,7 @@ const CareCharges = ({
       {
         schema: requiredSchema.string,
         value: collectedBy,
-        field: 'collectedBy'
+        field: 'collectedBy',
       },
     ];
 
@@ -65,7 +67,7 @@ const CareCharges = ({
         localErrors[field] = 'Required field';
       }
     }
-    setErrors(prevState => ({ ...prevState, ...localErrors }));
+    setErrors((prevState) => ({ ...prevState, ...localErrors }));
 
     if (hasErrors) return;
 
@@ -78,7 +80,7 @@ const CareCharges = ({
       type: 1, //fix value to be removed after updating API side
       subType: 1, //fix value to be removed after updating API side
       description: notes,
-      claimReason: reasonCollecting
+      claimReason: reasonCollecting,
     };
 
     const careChargeUpdate = {
@@ -87,10 +89,10 @@ const CareCharges = ({
       claimCollector: collectedBy,
       supplierId: 1, //fix value to be removed after updating API side
       status: 1, //fix value to be removed after updating API side
-      type: 1,  //fix value to be removed after updating API side
+      type: 1, //fix value to be removed after updating API side
       subType: 1, //fix value to be removed after updating API side
       description: notes,
-      claimReason: reasonCollecting      
+      claimReason: reasonCollecting,
     };
 
     if (!carePackageReclaimCareCharge?.id) {
@@ -101,7 +103,7 @@ const CareCharges = ({
   };
 
   const changeError = (field, value = '') => {
-    setErrors(prevState => ({ ...prevState, [field]: value }));
+    setErrors((prevState) => ({ ...prevState, [field]: value }));
   };
 
   useEffect(() => {
@@ -112,9 +114,9 @@ const CareCharges = ({
 
   return (
     <Container className="brokerage__care-charges">
-      <BrokerageHeader/>
-      <Container maxWidth='1080px' margin='0 auto' padding='60px'>
-        <BrokerageContainerHeader title="Care Charges"/>
+      <BrokerageHeader />
+      <Container maxWidth="1080px" margin="0 auto" padding="60px">
+        <BrokerageContainerHeader title="Care Charges" />
         <Container>
           <h3 className="brokerage__item-title">Care charges</h3>
           <p className="care-charges-hint">Provisional care charge (pre-assessement)</p>
@@ -133,7 +135,7 @@ const CareCharges = ({
             }}
           />
           <RadioGroup
-            handle={value => {
+            handle={(value) => {
               changeError('collectedBy');
               setCollectedBy(value);
             }}
@@ -146,8 +148,7 @@ const CareCharges = ({
               { id: 'supplier', label: 'Supplier (net)' },
             ]}
           />
-          {
-            collectedBy === 'hackney' &&
+          {collectedBy === 'hackney' && (
             <>
               <Label className="reason-collecting text-required-after" htmlFor="reason-collecting">
                 Why is Hackney collecting these care charges?
@@ -157,21 +158,23 @@ const CareCharges = ({
                 id="reason-collecting"
                 options={reasonsCollecting}
                 value={reasonCollecting}
-                onChangeValue={value => {
+                onChangeValue={(value) => {
                   setReasonCollecting(value);
                   changeError('reasonCollecting');
                 }}
               />
             </>
-          }
-          <Textarea className="care-charges__textarea" handler={setNotes} value={notes}/>
+          )}
+          <Textarea className="care-charges__textarea" handler={setNotes} value={notes} />
           <BrokerageTotalCost
             name={`Funding per week ${collectedBy ? `(${collectedByType[collectedBy]})` : ''}`}
             className="brokerage__border-cost"
             value={finalCost}
           />
           <Container className="brokerage__actions">
-            <Button handler={clickBack} className="brokerage__back-button">Back</Button>
+            <Button handler={clickBack} className="brokerage__back-button">
+              Back
+            </Button>
             <Button handler={clickSave}>Save and review</Button>
           </Container>
         </Container>
