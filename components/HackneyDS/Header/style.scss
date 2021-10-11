@@ -4,10 +4,12 @@
       bottom: 3px;
       border-bottom: 3px solid #00b341;
     }
+
     &:after {
       bottom: 9px;
       border-bottom: 4px solid #00664f;
     }
+
     &:after,
     &:before {
       content: '';
@@ -17,6 +19,7 @@
       left: 0;
     }
   }
+
   &--fixed {
     position: fixed;
     top: 0;
@@ -36,14 +39,13 @@
   & + .lbh-phase-banner {
     margin-top: 0.3125rem;
   }
+
   &__main {
-    @media (min-width: 40.0625em) {
-      padding: 1.25rem 0 0.75rem;
-    }
     padding: 1rem 0 0.75rem;
     color: #fff;
     background: #0b0c0c;
   }
+
   &__wrapper {
     display: -ms-flexbox;
     display: -webkit-box;
@@ -52,6 +54,7 @@
     -webkit-box-pack: justify;
     justify-content: space-between;
   }
+
   &__logo {
     text-decoration: none !important;
     display: block;
@@ -78,6 +81,7 @@
       white-space: nowrap !important;
     }
   }
+
   &__title {
     display: inline-block;
     margin-top: 0;
@@ -102,14 +106,13 @@
         align-items: flex-start;
       }
     }
+
     &-link:focus {
       color: #0b0c0c;
       box-shadow: 0 -2px #ffc845, 0 4px #0b0c0c;
     }
-    &-link:hover {
-      border-bottom-color: #fff;
-    }
   }
+
   &__service-name {
     margin-bottom: 0;
     color: #fff;
@@ -117,12 +120,7 @@
     font-family: Open Sans;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    .lbh-header__title-link:hover & {
-      text-decoration: 1px underline solid #00664f;
-      &--short {
-        text-decoration: 2px underline solid #00664f;
-      }
-    }
+
     @media (min-width: 48.0625em) {
       margin-top: 0;
       padding-top: 0.5rem;
@@ -131,6 +129,7 @@
       letter-spacing: -0.04375rem;
       line-height: 1.4375rem;
     }
+
     &--short {
       padding-top: 0.0625rem;
       font-size: 1.8125rem;
@@ -141,6 +140,7 @@
       text-transform: uppercase;
     }
   }
+
   &__links {
     font-size: 1.1875rem;
     line-height: 1.875rem;
@@ -150,23 +150,29 @@
     margin-top: 0;
     -ms-flex-align: start;
     -webkit-box-align: start;
-    align-items: flex-start;
     -ms-flex-pack: justify;
+    align-items: center;
     -webkit-box-pack: justify;
     justify-content: space-between;
     font-size: 1rem;
     line-height: 1.625rem;
-    margin-top: 0.5rem;
     padding: 0.25rem 0;
+
     a + a,
     a + p,
     p + a,
     p + p {
       margin-left: 1.125rem;
     }
+
     a {
       text-decoration: none;
+
+      &:hover {
+        color: #fff;
+      }
     }
+
     a,
     p,
     .lbh-header__service-name {
@@ -177,22 +183,23 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
-    @media (min-width: 40.0625em) {
-      font-size: 1.1875rem;
-      line-height: 1.875rem;
-    }
   }
+
   &--purple {
     border-bottom-color: #df1995;
+
     &:before {
       border-bottom-color: #aa0061;
     }
+
     &:after {
       border-bottom-color: $lbh-e01;
     }
+
     .lbh-header__main {
       background: $lbh-e01;
     }
+
     .lbh-header__service-name {
       color: #f8e08e;
     }

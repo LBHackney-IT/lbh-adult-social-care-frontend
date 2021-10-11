@@ -1,14 +1,14 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { HackneyFullLogo } from '../Icons';
 import { includeString } from 'service/helpers';
-import { ACTIVE_PACKAGES_ROUTE, PAYMENTS_ROUTE, SUPPLIER_DASHBOARD_ROUTE } from 'routes/RouteConstants';
+import { ACTIVE_PACKAGES_ROUTE, LOGOUT_ROUTE, PAYMENTS_ROUTE, SUPPLIER_DASHBOARD_ROUTE } from 'routes/RouteConstants';
+import { HackneyFullLogo } from '../Icons';
 
 const supplierRoutes = [
   { route: SUPPLIER_DASHBOARD_ROUTE, name: 'Supplier Returns' },
   { route: ACTIVE_PACKAGES_ROUTE, name: 'Active Packages' },
   { route: PAYMENTS_ROUTE, name: 'Payments' },
-  { route: '/logout', name: 'Log Out' },
+  { route: LOGOUT_ROUTE, name: 'Log Out' },
 ];
 
 const SupplierDashboardHeader = () => {
