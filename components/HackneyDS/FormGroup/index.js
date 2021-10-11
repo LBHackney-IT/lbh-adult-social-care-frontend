@@ -4,6 +4,7 @@ import { HorizontalSeparator } from '../index';
 export default function FormGroup ({
   children = [],
   label,
+  required,
   hint,
   error,
   className = ''
@@ -17,7 +18,7 @@ export default function FormGroup ({
       <fieldset className="govuk-fieldset lbh-fieldset">
         {label &&
         <>
-          <label className="govuk-fieldset__legend">{label}</label>
+          <label className={`govuk-fieldset__legend${required ? ' text-required-after' : ''}`}>{label}</label>
           <HorizontalSeparator/>
         </>
         }

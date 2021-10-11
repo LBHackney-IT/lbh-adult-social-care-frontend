@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, FileUpload, Label, RadioGroup, Select, Textarea } from '../../HackneyDS';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
-import BrokerageContainerHeader from '../BrokerageContainerHeader';
+import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import FormGroup from '../../HackneyDS/FormGroup';
@@ -124,7 +124,7 @@ const FundedNursingCare = ({
     <Container className="brokerage__funded-nursing-care">
       <BrokerageHeader/>
       <Container className="brokerage__container-main">
-        <BrokerageContainerHeader title="Funded Nursing Care"/>
+        <TitleSubtitleHeader title='Build a care package' subTitle="Funded Nursing Care"/>
         <Container>
           <h3 className="brokerage__item-title">Funded Nursing Care</h3>
           <RadioGroup

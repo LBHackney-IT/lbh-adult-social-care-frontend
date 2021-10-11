@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, ErrorMessage, Input, Label, RadioGroup, Select, Textarea } from '../../HackneyDS';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
-import BrokerageContainerHeader from '../BrokerageContainerHeader';
+import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import { requiredSchema } from '../../../constants/schemas';
 import { currency } from '../../../constants/strings';
@@ -114,7 +114,7 @@ const CareCharges = ({
     <Container className="brokerage__care-charges">
       <BrokerageHeader/>
       <Container className="brokerage__container-main">
-        <BrokerageContainerHeader title="Care Charges"/>
+        <TitleSubtitleHeader title='Build a care package' subTitle="Care Charges"/>
         <Container>
           <h3 className="brokerage__item-title">Care charges</h3>
           <p className="care-charges-hint">Provisional care charge (pre-assessement)</p>

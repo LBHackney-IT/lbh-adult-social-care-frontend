@@ -7,10 +7,10 @@ const defaultLinks = [
   { href: '#', text: 'Log out' },
 ];
 
-const BrokerageHeader = ({ links = defaultLinks }) => {
+const BrokerageHeader = ({ links = defaultLinks, className, serviceName = 'Adult Social Care' }) => {
   return (
-    <Header links={links} bottomLines={false}>
-      <p slot="service-name">Adult Social Care</p>
+    <Header links={links} bottomLines={false} className={className ? ` ${className}` : ''}>
+      <p slot="service-name">{serviceName}</p>
     </Header>
   );
 };

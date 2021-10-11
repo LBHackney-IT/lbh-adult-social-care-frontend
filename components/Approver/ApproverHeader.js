@@ -28,7 +28,7 @@ const ApproverHeader = () => {
           return (
             <p key={item?.name}
               onClick={() => changeRoute(item?.route)}
-              className={`default-logo-header-item${isActiveRoute ? ' default-logo-header-active-item' : ''}`}
+              className={`default-logo-header-item${isActiveRoute ? ' default-logo-Header-active-item' : ''}`}
             >
               {item?.name}
             </p>

@@ -5,7 +5,7 @@ import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../HackneyDS';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import BrokerPackageCost from './BrokerPackageCost';
-import BrokerageContainerHeader from '../BrokerageContainerHeader';
+import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
 import { CORE_PACKAGE_DETAILS_ROUTE } from '../../../routes/RouteConstants';
 import { updateCarePackageCosts } from '../../../api/CarePackages/CarePackage';
@@ -244,7 +244,7 @@ export const BrokerPackage = ({
       <BrokerageHeader />
       {(loading || detailsData === undefined) && <Loading className="loading-center" />}
       <Container className="brokerage__container-main">
-        <BrokerageContainerHeader title="Broker package" />
+        <TitleSubtitleHeader title='Build a care package' subTitle="Broker package" />
         <Container>
           <h3 className="brokerage__item-title">{careName}</h3>
           <BrokeragePackageDates

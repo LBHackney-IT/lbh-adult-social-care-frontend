@@ -1,7 +1,7 @@
 import React from 'react';
-import { Container } from 'components/HackneyDS';
-import { formatDate } from 'service/helpers';
-import { getAgeFromDateString } from 'api/Utils/FuncUtils';
+import { Container } from '../../HackneyDS';
+import { formatDate } from '../../../service/helpers';
+import { getAgeFromDateString } from '../../../api/Utils/FuncUtils';
 
 const placeHolderBirthDate = new Date(1990, 10, 10);
 const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address }) => (
