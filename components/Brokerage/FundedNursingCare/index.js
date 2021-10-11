@@ -8,6 +8,7 @@ import FormGroup from '../../HackneyDS/FormGroup';
 import UrlFromFile from '../../UrlFromFile';
 import { requiredSchema } from '../../../constants/schemas';
 import { isFunction } from '../../../api/Utils/FuncUtils';
+import { dateStringToDate } from '../../../service/helpers';
 
 const FundedNursingCare = ({
   carePackageId,
@@ -23,8 +24,8 @@ const FundedNursingCare = ({
     supplier: 'net',
   });
   const [dates, setDates] = useState({
-    dateFrom: carePackageReclaimFnc?.startDate || new Date(),
-    dateTo: carePackageReclaimFnc?.endDate || new Date(),
+    dateFrom: new Date(),
+    dateTo: new Date()
   });
   const [errors, setErrors] = useState({
     hasFNC: '',
@@ -121,6 +122,25 @@ const FundedNursingCare = ({
     changeError(field, '');
     setDates((prevState) => ({ ...prevState, [field]: value }));
   };
+
+  const composecarePackageReclaimFncData = () => {
+    if (carePackageReclaimFnc) {
+      setDates({
+        dateFrom: dateStringToDate(carePackageReclaimFnc.startDate),
+        dateTo: dateStringToDate(carePackageReclaimFnc.endDate),
+      });
+      if (!carePackageReclaimFnc.endDate) {
+        setIsOngoing(true);
+      }
+
+      setNotes(carePackageReclaimFnc.description);
+      setCollectedBy(carePackageReclaimFnc.claimCollector);
+    }
+  };
+
+  useEffect(() => {
+    composecarePackageReclaimFncData();
+  }, [carePackageReclaimFnc]);
 
   return (
     <Container className="brokerage__funded-nursing-care">
