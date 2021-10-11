@@ -33,7 +33,7 @@ const FundedNursingCare = ({
     dateTo: '',
     notes: '',
   });
-  const [hasFNC, setHasFNC] = useState();
+  const [hasFNC, setHasFNC] = useState('yes');
   const [collectedBy, setCollectedBy] = useState();
   const [notes, setNotes] = useState('');
   const [file, setFile] = useState(null);
@@ -123,7 +123,7 @@ const FundedNursingCare = ({
     setDates((prevState) => ({ ...prevState, [field]: value }));
   };
 
-  const composecarePackageReclaimFncData = () => {
+  const composeCarePackageReclaimFncData = () => {
     if (carePackageReclaimFnc) {
       setDates({
         dateFrom: dateStringToDate(carePackageReclaimFnc.startDate),
@@ -139,7 +139,7 @@ const FundedNursingCare = ({
   };
 
   useEffect(() => {
-    composecarePackageReclaimFncData();
+    composeCarePackageReclaimFncData();
   }, [carePackageReclaimFnc]);
 
   return (
