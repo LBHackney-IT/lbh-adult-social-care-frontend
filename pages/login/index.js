@@ -43,7 +43,12 @@ const Login = () => {
           <h2>Sign In</h2>
           <p>Please sign in with your Hackney email account.</p>
           <p>Please contact your manager if you have issues signing in.</p>
-          <a className="button button-base" href={`${hackneyAuthLink}${origin}/login`} target="_self">
+          <a
+            className="button button-base"
+            href={`${hackneyAuthLink}${origin}/login`}
+            rel="noopener noreferrer"
+            target="_self"
+          >
             <strong>Sign in with Google</strong>
           </a>
         </div>
