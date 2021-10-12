@@ -23,7 +23,7 @@ export const BrokerageHubPage = ({
   filters,
   setFilters,
   clearFilter,
-  findServiceUser,
+  createNewPackage,
   onRowClick = () => {},
 }) => {
   const selectorRef = useRef(null);
@@ -60,7 +60,7 @@ export const BrokerageHubPage = ({
           className="brokerage-hub__header"
         >
           <h2>Broker Portal</h2>
-          <Button handler={findServiceUser}>Find a service user</Button>
+          <Button handler={createNewPackage}>Create New Package</Button>
         </Container>
         <Container maxWidth="1080px" margin="0 auto" className="brokerage-hub__filters" padding="0 60px 30px 60px">
           <CustomAsyncSelector
