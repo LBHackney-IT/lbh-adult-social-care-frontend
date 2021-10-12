@@ -124,6 +124,10 @@ export const BrokerPackage = ({
     }
   };
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
   useEffect(() => {
     composeDetailsData();
   }, [detailsData]);
@@ -157,7 +161,7 @@ export const BrokerPackage = ({
 
   const clickSave = async () => {
     if (!isNewSupplier && !selectedItem?.id) {
-      dispatch(addNotification({ text: 'No supplier selected' }));
+      pushNotification('No supplier selected');
       return;
     }
     const checkedWeeklyDetails = checkNeedsErrors(weeklyNeeds);
@@ -166,7 +170,10 @@ export const BrokerPackage = ({
     setWeeklyNeeds(checkedWeeklyDetails.checkedNeeds);
     setOneOffNeeds(checkOneOffDetails.checkedNeeds);
 
-    if (checkedWeeklyDetails.hasErrors || checkOneOffDetails.hasErrors) return;
+    if (checkedWeeklyDetails.hasErrors || checkOneOffDetails.hasErrors) {
+      pushNotification('Some validation errors above');
+      return;
+    }
 
     const weeklyDetails = weeklyNeeds
       .filter((item) => item.cost !== 0)
@@ -203,14 +210,14 @@ export const BrokerPackage = ({
         },
         packageId: packageId[0],
       });
-      dispatch(addNotification({ text: 'Success', className: 'success' }));
+      pushNotification('Success', 'success');
       if (packageType === 4) {
         router.push(`/care-package/brokerage/funded-nursing-care/${packageId[0]}`);
       } else {
         router.push(`/care-package/brokerage/care-charges/${packageId[0]}`);
       }
     } catch (e) {
-      dispatch(addNotification({ text: e }));
+      pushNotification(e);
     }
     setLoading(false);
   };
