@@ -12,9 +12,10 @@ const loadOptions = async (searchText, endpoint) => {
   return data.data;
 };
 
-const CustomAsyncSelector = ({ onChange, value, placeholder, getOptionLabel, endpoint }) => (
+const CustomAsyncSelector = ({ innerRef, clear = () => {}, onChange, value, placeholder, getOptionLabel, endpoint }) => (
   <AsyncSelect
     instanceId={endpoint.filterKey}
+    ref={innerRef}
     onChange={(option) => onChange(option)}
     getOptionValue={(option) => option.id}
     getOptionLabel={(option) => getOptionLabel(option)}
@@ -23,6 +24,7 @@ const CustomAsyncSelector = ({ onChange, value, placeholder, getOptionLabel, end
     classNamePrefix="custom-async-selector"
     className="custom-async-selector"
     value={value}
+    clearValue={clear}
     placeholder={placeholder}
     defaultOptions
     cacheOptions

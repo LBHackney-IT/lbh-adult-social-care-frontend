@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SelectArrowTriangle } from '../../Icons';
 
-export default function Select({
+export default function Select ({
   onChange = () => {},
   onChangeValue,
   value = { text: '', value: '' },
@@ -10,11 +10,18 @@ export default function Select({
   options = [],
   id = 'select-id',
   error,
-  IconComponent = <SelectArrowTriangle />,
+  IconComponent = <SelectArrowTriangle/>,
 }) {
   const outerClass = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-select--error' : '';
   const errorDescribedBy = error ? { 'aria-describedby': ' govuk-select--error' } : {};
+
+  useEffect(() => {
+    if (options && onChangeValue) {
+      onChangeValue(options[0].value);
+    }
+  }, [options]);
+
   return (
     <div className="select-container">
       <select
