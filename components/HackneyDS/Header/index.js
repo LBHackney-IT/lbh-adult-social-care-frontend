@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { BROKERAGE_HUB_ROUTE } from 'routes/RouteConstants';
+import { BROKERAGE_HUB_ROUTE } from '../../../routes/RouteConstants';
 import { getSlot, getMultipleSlot, Container } from '../index';
 
 export default function Header({ children = [], links = [], bottomLines = true, fixed, purple }) {
