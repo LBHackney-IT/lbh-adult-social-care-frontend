@@ -50,13 +50,14 @@ const CareCharges = ({
       },
     ];
 
-    if (collectedBy === 'hackney') {
-      validFields.push({
-        schema: requiredSchema.string,
-        value: reasonCollecting,
-        field: 'reasonCollecting',
-      });
-    }
+    // if (collectedBy === 'hackney') {
+    //   console.log(reasonCollecting);
+    //   validFields.push({
+    //     schema: requiredSchema.string,
+    //     value: reasonCollecting,
+    //     field: 'reasonCollecting',
+    //   });
+    // }
 
     let hasErrors = false;
     let localErrors = {};
