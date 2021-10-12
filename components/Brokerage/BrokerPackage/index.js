@@ -7,7 +7,7 @@ import BrokeragePackageDates from '../BrokeragePackageDates';
 import BrokerPackageCost from './BrokerPackageCost';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { CARE_PACKAGE_ROUTE, CORE_PACKAGE_DETAILS_ROUTE } from '../../../routes/RouteConstants';
+import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import { updateCarePackageCosts } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../Constants';
@@ -247,6 +247,20 @@ export const BrokerPackage = ({
     setIsOngoing(!detailsData?.endDate);
   }, [detailsData?.endDate]);
 
+  const getPackageType = (packageTypeValue) => {
+    switch (packageTypeValue) {
+      case 1:
+        return 'Home Care';
+      case 2:
+        return 'Residential Care';
+      case 3:
+        return 'Day Care';
+      case 4:
+        return 'Nursing Care Package';
+      default:
+        return 'Package Type not found';
+    }
+  };
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
@@ -255,7 +269,7 @@ export const BrokerPackage = ({
         <Container className="brokerage__container-main">
           <BrokerageContainerHeader title="Broker package" />
           <Container>
-            <h3 className="brokerage__item-title">{careName}</h3>
+            <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
               fields={{
                 dateFrom: 'startDate',
