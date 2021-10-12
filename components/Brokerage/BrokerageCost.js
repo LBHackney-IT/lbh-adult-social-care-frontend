@@ -34,8 +34,8 @@ const BrokerageCost = ({
       </h2>
       {expanded && (
         <>
-          {getter.map(({ id, isOngoing, cost, startDate, endDate, errorCost, errorStartDate }, index) => (
-            <FormGroup error={errorCost || errorStartDate ? 'Some validations error' : ''} key={id}>
+          {getter.map(({ id, isOngoing, cost, startDate, endDate, errorStartDate }, index) => (
+            <FormGroup error={errorStartDate ? 'Some validations error' : ''} key={id}>
               <BrokeragePackageDates
                 dates={{ startDate, endDate }}
                 fields={{
@@ -55,7 +55,6 @@ const BrokerageCost = ({
                 className="brokerage__cost-input"
                 label={labelInputCost}
                 value={cost}
-                error={errorCost}
                 onChangeValue={(value) => changeNeed(getter, setter, 'cost', value, index)}
               />
               <Container className="brokerage__cost-add-need" display="flex">

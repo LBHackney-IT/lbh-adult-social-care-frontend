@@ -45,7 +45,6 @@ export const BrokerPackage = ({
     startDate: new Date(),
     endDate: new Date(),
     isOngoing: false,
-    errorCost: '',
     errorStartDate: '',
   });
 
@@ -102,7 +101,6 @@ export const BrokerPackage = ({
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
             isOngoing: !item.endDate,
-            errorCost: '',
             errorStartDate: '',
           }));
 
@@ -112,7 +110,6 @@ export const BrokerPackage = ({
             ...item,
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
-            errorCost: '',
             errorStartDate: '',
           }));
 
@@ -129,14 +126,12 @@ export const BrokerPackage = ({
   const checkNeedsErrors = (needs) => {
     let hasErrors = false;
     const checkedNeeds = needs.map((item) => {
-      const errorCost = !item.cost ? 'Invalid cost' : '';
       const errorStartDate = !item.startDate ? 'Invalid start date' : '';
-      if (errorCost || errorStartDate) {
+      if (errorStartDate) {
         hasErrors = true;
       }
       return {
         ...item,
-        errorCost,
         errorStartDate,
       };
     });
