@@ -55,12 +55,12 @@ export const BrokerageHubPage = ({
       {/*<Container padding="8px 60px 0 60px">*/}
       {/*  <Breadcrumbs values={breadcrumbs}/>*/}
       {/*</Container>*/}
-      <Container padding="30px 60px 60px 60px">
-        <Container maxWidth="1080px" margin="0 auto 16px auto" className="brokerage-hub__header">
+      <Container background="#FAFAFA" >
+        <Container maxWidth="1080px" margin="0 auto 16px auto" padding='30px 60px 15px 60px' className="brokerage-hub__header">
           <h2>Broker Portal</h2>
           <Button handler={findServiceUser}>Find a service user</Button>
         </Container>
-        <Container maxWidth="1080px" margin="0 auto" className="brokerage-hub__filters">
+        <Container maxWidth="1080px" margin="0 auto" className="brokerage-hub__filters" padding='0 60px 30px 60px'>
           <CustomAsyncSelector
             innerRef={selectorRef}
             onChange={(option) => changeFilterFiled('serviceUser', option)}
