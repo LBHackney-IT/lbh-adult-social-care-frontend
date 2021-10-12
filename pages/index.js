@@ -1,128 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import useCarePackageApi from '../api/SWR/CarePackage/useCarePackageApi';
-import withSession from '../lib/session';
-import { getUserSession } from '../service/helpers';
-import { BrokerageHubPage } from '../components/Brokerage/BrokerageHub';
-import { createCoreCarePackage } from '../api/CarePackages/CarePackage';
-import { CARE_PACKAGE_ROUTE } from '../routes/RouteConstants';
-import { addNotification } from '../reducers/notificationsReducer';
-import { useDispatch } from 'react-redux';
+import { LOGIN_ROUTE } from 'routes/RouteConstants';
+import Loading from 'components/Loading';
 
-export const getServerSideProps = withSession(async ({ req, res }) => {
-  const isRedirect = getUserSession({ req, res });
-  if (isRedirect) return { props: {} };
-  return { props: {} };
-});
-
-const BrokerageHub = () => {
-  const dispatch = useDispatch();
+export default function IndexPage() {
   const router = useRouter();
-  const [packageData, setPackageData] = React.useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [paginationData, setPaginationData] = React.useState({
-    totalCount: 0,
-    totalPages: 0,
-    pageSize: 0,
-  });
-  const [initialFilters] = useState({
-    status: '',
-    dateFrom: null,
-    dateTo: null,
-    serviceUserId: '',
-  });
-  const [apiFilters, setApiFilters] = useState({ ...initialFilters });
-  const { data } = useCarePackageApi.brokerView({
-    pageNumber,
-    status: apiFilters.status,
-    toDate: apiFilters.dateTo ? apiFilters.dateTo.toJSON() : null,
-    fromDate: apiFilters.dateFrom ? apiFilters.dateFrom.toJSON() : null,
-    serviceUserId: apiFilters.serviceUser?.id,
-  });
-
-  const clearFilter = () => {
-    setApiFilters({ ...initialFilters });
-  };
 
   useEffect(() => {
-    if (data) {
-      setPackageData(data.packages);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (data.pagingMetaData) {
-      setPaginationData({
-        totalCount: data.pagingMetaData.totalCount,
-        totalPages: data.pagingMetaData.totalPages,
-        pageSize: data.pagingMetaData.pageSize,
-      });
-    }
-  }, [data]);
-
-  const statusOptions = [
-    { text: 'All', value: '' },
-    { text: 'New', value: '1' },
-    { text: 'In Progress', value: '2' },
-    { text: 'Submitted For Approval', value: '3' },
-    { text: 'Approved', value: '4' },
-    { text: 'Not Approved', value: '5' },
-    { text: 'Ended', value: '6' },
-    { text: 'Cancelled', value: '7' },
-  ];
-
-  const handleRowClick = (rowItem) => {
-    router.push({
-      pathname: `care-package/service-users/${rowItem?.serviceUserId}/core-package-details`,
-      query: { packageId: rowItem.packageId },
-    });
-  };
-
-  // const findServiceUser = () => setApiFilters(filters);
-  const createNewPackage = () => {
-    const dummyPackageToCreate = {
-      serviceUserId: 'aee45700-af9b-4ab5-bb43-535adbdcfb84',
-      hasRespiteCare: false,
-      hasDischargePackage: false,
-      packageScheduling: 1,
-      primarySupportReasonId: 1,
-      packageType: 2,
-      hospitalAvoidance: false,
-      isReEnablement: false,
-      isS117Client: false,
-    };
-    createCoreCarePackage({ data: dummyPackageToCreate })
-      .then(({ id, serviceUserId }) => {
-        // Dummy package created, go to package builder
-        router.push({
-          pathname: `care-package/service-users/${serviceUserId}/core-package-details`,
-          query: { packageId: id },
-        });
-        pushNotification('Package created.', 'success');
-      })
-      .catch((error) => {
-        pushNotification(error);
-      });
-  };
-
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
-  };
+    router.replace(LOGIN_ROUTE);
+  }, []);
 
   return (
-    <BrokerageHubPage
-      createNewPackage={createNewPackage}
-      filters={apiFilters}
-      clearFilter={clearFilter}
-      setFilters={setApiFilters}
-      pageNumber={pageNumber}
-      setPageNumber={setPageNumber}
-      statusOptions={statusOptions}
-      items={packageData}
-      paginationData={paginationData}
-      onRowClick={handleRowClick}
-    />
+    <div>
+      <Head>
+        <link href="/fonts/style.css" rel="stylesheet" />
+      </Head>
+      <div id="modal" />
+      <Loading className="loading-center" />
+    </div>
   );
-};
-
-export default BrokerageHub;
+}
