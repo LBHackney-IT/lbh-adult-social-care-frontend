@@ -5,14 +5,14 @@ import Pagination from '../../Payments/Pagination';
 import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
 import { BrokerageHubTable } from './BrokerageHubTable';
-import { useRouter } from 'next/router';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
 import {
   APPROVER_HUB_ROUTE,
   BROKERAGE_HUB_ROUTE,
   CARE_PACKAGE_ROUTE,
-  LOGOUT_ROUTE
+  LOGOUT_ROUTE,
 } from '../../../routes/RouteConstants';
+import { isFunction } from '../../../api/Utils/FuncUtils';
 
 export const BrokerageHubPage = ({
   items,
@@ -24,19 +24,16 @@ export const BrokerageHubPage = ({
   setFilters,
   clearFilter,
   findServiceUser,
+  onRowClick = () => {},
 }) => {
-  const router = useRouter();
   const selectorRef = useRef(null);
 
-  const onRowClick = (rowItem) => {
-    router.push({
-      pathname: `care-package/service-users/${rowItem?.serviceUserId}/core-package-details`,
-      query: { packageId: rowItem.packageId },
-    });
+  const handleRowClick = (rowItem) => {
+    if (isFunction(onRowClick)) onRowClick(rowItem);
   };
 
   const changeFilterFiled = (field, value) => {
-    setFilters(prevState => ({
+    setFilters((prevState) => ({
       ...prevState,
       [field]: value,
     }));
@@ -51,21 +48,26 @@ export const BrokerageHubPage = ({
 
   return (
     <div className="brokerage-hub">
-      <BrokerageHeader serviceName="" links={links}/>
-      {/*<Container padding="8px 60px 0 60px">*/}
-      {/*  <Breadcrumbs values={breadcrumbs}/>*/}
-      {/*</Container>*/}
-      <Container background="#FAFAFA" >
-        <Container maxWidth="1080px" margin="0 auto 16px auto" padding='30px 60px 15px 60px' className="brokerage-hub__header">
+      <BrokerageHeader serviceName="" links={links} />
+      {/* <Container padding="8px 60px 0 60px"> */}
+      {/*  <Breadcrumbs values={breadcrumbs}/> */}
+      {/* </Container> */}
+      <Container background="#FAFAFA">
+        <Container
+          maxWidth="1080px"
+          margin="0 auto 16px auto"
+          padding="30px 60px 15px 60px"
+          className="brokerage-hub__header"
+        >
           <h2>Broker Portal</h2>
           <Button handler={findServiceUser}>Find a service user</Button>
         </Container>
-        <Container maxWidth="1080px" margin="0 auto" className="brokerage-hub__filters" padding='0 60px 30px 60px'>
+        <Container maxWidth="1080px" margin="0 auto" className="brokerage-hub__filters" padding="0 60px 30px 60px">
           <CustomAsyncSelector
             innerRef={selectorRef}
             onChange={(option) => changeFilterFiled('serviceUser', option)}
             placeholder="Service User"
-            getOptionLabel={option => `${option.firstName} ${option.lastName}`}
+            getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
             endpoint={{
               endpointName: '/clients/get-all',
               filterKey: 'clientName',
@@ -86,7 +88,7 @@ export const BrokerageHubPage = ({
               dateValue={filters.dateFrom}
               setDate={(value) => {
                 if (value > filters.dateTo) {
-                  return setFilters(prevState => ({
+                  return setFilters((prevState) => ({
                     ...prevState,
                     dateTo: value,
                     dateFrom: value,
@@ -105,17 +107,22 @@ export const BrokerageHubPage = ({
               setDate={(value) => changeFilterFiled('dateTo', value)}
             />
           </FormGroup>
-          {Object.values(filters).some(item => !!item) &&
-          <Button className="outline gray clear-filter-button" handler={() => {
-            clearFilter()
-            selectorRef.current?.select?.select?.clearValue();
-          }}>Clear</Button>
-          }
+          {Object.values(filters).some((item) => !!item) && (
+            <Button
+              className="outline gray clear-filter-button"
+              handler={() => {
+                clearFilter();
+                selectorRef.current?.select?.select?.clearValue();
+              }}
+            >
+              Clear
+            </Button>
+          )}
         </Container>
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
-        {items && <BrokerageHubTable onRowClick={onRowClick} data={items}/>}
-        <HorizontalSeparator height="20px"/>
+        {items && <BrokerageHubTable onRowClick={handleRowClick} data={items} />}
+        <HorizontalSeparator height="20px" />
         <Pagination
           pageSize={pageSize}
           totalPages={totalPages}

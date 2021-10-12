@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import useCarePackageApi from '../api/SWR/CarePackage/useCarePackageApi';
 import withSession from '../lib/session';
 import { getUserSession } from '../service/helpers';
@@ -11,6 +12,7 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 });
 
 const BrokerageHub = () => {
+  const router = useRouter();
   const [packageData, setPackageData] = React.useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [paginationData, setPaginationData] = React.useState({
@@ -42,7 +44,6 @@ const BrokerageHub = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       setPackageData(data.packages);
     }
   }, [data]);
@@ -68,6 +69,13 @@ const BrokerageHub = () => {
     { text: 'Cancelled', value: '7' },
   ];
 
+  const handleRowClick = (rowItem) => {
+    router.push({
+      pathname: `care-package/service-users/${rowItem?.serviceUserId}/core-package-details`,
+      query: { packageId: rowItem.packageId },
+    });
+  };
+
   return (
     <BrokerageHubPage
       findServiceUser={findServiceUser}
@@ -79,6 +87,7 @@ const BrokerageHub = () => {
       statusOptions={statusOptions}
       items={packageData}
       paginationData={paginationData}
+      onRowClick={handleRowClick}
     />
   );
 };
