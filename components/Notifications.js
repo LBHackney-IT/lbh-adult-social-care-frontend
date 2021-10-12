@@ -41,9 +41,9 @@ const CustomNotification = ({ className = '' }) => {
     return (
       <div className='notifications'>
         {showedNotifications.map(item => (
-            <div key={item.text.toString()} className={allClasses}>
+            <div key={item?.text?.toString() || 'error'} className={allClasses}>
               <div>
-                <p>{item.text.toString()}</p>
+                <p>{item?.text?.toString() || 'Something went wrong'}</p>
                 <span className="notification-close" onClick={() => closeNotification(item)}>
                   +
                 </span>
