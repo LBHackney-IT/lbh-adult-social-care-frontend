@@ -20,6 +20,10 @@ const CareCharges = ({
     supplier: 'net',
     hackney: 'gross',
   });
+  const [claimCollector] = useState({
+    hackney: 2,
+    supplier: 1,
+  });
   const [errors, setErrors] = useState({
     collectedBy: '',
     costPerWeek: '',
@@ -74,7 +78,7 @@ const CareCharges = ({
     const careChargeCreation = {
       carePackageId,
       cost: costPerWeek,
-      claimCollector: collectedBy,
+      claimCollector: claimCollector[collectedBy],
       supplierId: 1, // fix value to be removed after updating API side
       status: 1, // fix value to be removed after updating API side
       type: 2, // fix value to be removed after updating API side
@@ -86,7 +90,7 @@ const CareCharges = ({
     const careChargeUpdate = {
       id: carePackageReclaimCareCharge.id,
       cost: costPerWeek,
-      claimCollector: collectedBy,
+      claimCollector: claimCollector[collectedBy],
       supplierId: 1, // fix value to be removed after updating API side
       status: 1, // fix value to be removed after updating API side
       type: 2, // fix value to be removed after updating API side

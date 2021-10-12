@@ -7,7 +7,7 @@ import BrokeragePackageDates from '../BrokeragePackageDates';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { CARE_PACKAGE_ROUTE, CORE_PACKAGE_DETAILS_ROUTE } from '../../../routes/RouteConstants';
+import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import { updateCarePackageCosts } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../Constants';
@@ -45,7 +45,6 @@ export const BrokerPackage = ({
     startDate: new Date(),
     endDate: new Date(),
     isOngoing: false,
-    errorCost: '',
     errorStartDate: '',
   });
 
@@ -102,7 +101,6 @@ export const BrokerPackage = ({
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
             isOngoing: !item.endDate,
-            errorCost: '',
             errorStartDate: '',
           }));
 
@@ -112,7 +110,6 @@ export const BrokerPackage = ({
             ...item,
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
-            errorCost: '',
             errorStartDate: '',
           }));
 
@@ -129,14 +126,12 @@ export const BrokerPackage = ({
   const checkNeedsErrors = (needs) => {
     let hasErrors = false;
     const checkedNeeds = needs.map((item) => {
-      const errorCost = !item.cost ? 'Invalid cost' : '';
       const errorStartDate = !item.startDate ? 'Invalid start date' : '';
-      if (errorCost || errorStartDate) {
+      if (errorStartDate) {
         hasErrors = true;
       }
       return {
         ...item,
-        errorCost,
         errorStartDate,
       };
     });
@@ -252,6 +247,20 @@ export const BrokerPackage = ({
     setIsOngoing(!detailsData?.endDate);
   }, [detailsData?.endDate]);
 
+  const getPackageType = (packageTypeValue) => {
+    switch (packageTypeValue) {
+      case 1:
+        return 'Home Care';
+      case 2:
+        return 'Residential Care';
+      case 3:
+        return 'Day Care';
+      case 4:
+        return 'Nursing Care Package';
+      default:
+        return 'Package Type not found';
+    }
+  };
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
@@ -260,7 +269,7 @@ export const BrokerPackage = ({
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title='Build a care package' subTitle="Broker package" />
           <Container>
-            <h3 className="brokerage__item-title">{careName}</h3>
+            <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
               fields={{
                 dateFrom: 'startDate',

@@ -21,5 +21,5 @@ export default function useUser({ redirectTo = false, redirectIfFound = false } 
     }
   }, [user, redirectIfFound, redirectTo]);
 
-  return { user, mutateUser };
+  return { user: user?.data ?? user, mutateUser };
 }

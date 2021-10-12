@@ -1,6 +1,6 @@
 const LOGIN_ROUTE = '/login';
 const LOGOUT_ROUTE = '/logout';
-const BROKERAGE_HUB_ROUTE = `/`;
+const BROKERAGE_HUB_ROUTE = '/brokerage-hub';
 const LOGIN_CALL_BACK_ROUTE = '/login-callback';
 const CARE_PACKAGE_ROUTE = '/care-package';
 const ACTIVE_PACKAGES_ROUTE = '/active-packages';

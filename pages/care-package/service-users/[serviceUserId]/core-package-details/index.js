@@ -57,12 +57,7 @@ const CorePackageDetailsPage = () => {
 
   const handleCreateCoreCarePackage = (data = {}) => {
     if (packageId !== undefined) {
-      const packageToUpdate = {
-        ...data,
-        packageType: carePackageCore.packageType,
-      };
-
-      updateCoreCarePackage({ data: packageToUpdate, packageId })
+      updateCoreCarePackage({ data, packageId })
         .then(({ id }) => {
           // move to brokerage page
           router.push(`${CARE_PACKAGE_ROUTE}/brokerage/broker-package/${id}`);
@@ -80,7 +75,7 @@ const CorePackageDetailsPage = () => {
       createCoreCarePackage({ data: packageToCreate })
         .then(({ id }) => {
           // move to brokerage page
-          router.push({ pathname: `${CARE_PACKAGE_ROUTE}/brokerage/broker-package/${id}`, query:id});
+          router.push({ pathname: `${CARE_PACKAGE_ROUTE}/brokerage/broker-package/${id}`, query: id });
           pushNotification('Package saved.', 'success');
         })
         .catch((error) => {

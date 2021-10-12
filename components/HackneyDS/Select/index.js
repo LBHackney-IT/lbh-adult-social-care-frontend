@@ -16,12 +16,6 @@ export default function Select ({
   const errorClass = error ? ' govuk-select--error' : '';
   const errorDescribedBy = error ? { 'aria-describedby': ' govuk-select--error' } : {};
 
-  useEffect(() => {
-    if (options && onChangeValue) {
-      onChangeValue(options[0].value);
-    }
-  }, [options]);
-
   return (
     <div className="select-container">
       <select
