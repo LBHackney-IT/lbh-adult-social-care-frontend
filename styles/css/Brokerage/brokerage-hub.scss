@@ -101,10 +101,30 @@
     display: flex;
     flex-wrap: wrap;
 
+    .clear-filter-button {
+      width: 80px;
+      height: 40px;
+    }
+
+    .custom-async-selector {
+      margin-right: 20px;
+
+      .custom-async-selector__control {
+        border: 2px solid black !important;
+        border-radius: 0 !important;
+      }
+
+      .custom-async-selector__menu {
+        border: 2px solid black !important;
+        border-radius: 0 !important;
+      }
+    }
+
     .form-group--inline-label {
       display: flex;
       align-items: flex-end;
 
+      margin-right: 20px;
       margin-bottom: 20px;
     }
 
