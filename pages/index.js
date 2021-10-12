@@ -24,7 +24,6 @@ const BrokerageHub = () => {
     dateTo: null,
     serviceUserId: '',
   });
-  const [filters, setFilters] = useState({ ...initialFilters });
   const [apiFilters, setApiFilters] = useState({ ...initialFilters });
   const { data } = useCarePackageApi.brokerView({
     pageNumber,
@@ -35,14 +34,15 @@ const BrokerageHub = () => {
   });
 
   const clearFilter = () => {
-    setFilters({ ...initialFilters });
     setApiFilters({ ...initialFilters });
   };
 
-  const findServiceUser = () => setApiFilters(filters);
+  // const findServiceUser = () => setApiFilters(filters);
+  const findServiceUser = () => {};
 
   useEffect(() => {
     if (data) {
+      console.log(data);
       setPackageData(data.packages);
     }
   }, [data]);
@@ -71,9 +71,9 @@ const BrokerageHub = () => {
   return (
     <BrokerageHubPage
       findServiceUser={findServiceUser}
-      filters={filters}
+      filters={apiFilters}
       clearFilter={clearFilter}
-      setFilters={setFilters}
+      setFilters={setApiFilters}
       pageNumber={pageNumber}
       setPageNumber={setPageNumber}
       statusOptions={statusOptions}
