@@ -95,4 +95,12 @@
       color: $lbh-link-red;
     }
   }
+
+  &.green {
+    color: $lbh-green1;
+
+    &:hover {
+      color: $lbh-green1;
+    }
+  }
 }

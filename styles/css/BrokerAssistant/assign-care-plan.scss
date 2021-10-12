@@ -1,0 +1,16 @@
+.assign-care-plan {
+  .select-container {
+
+    @include media-small-ipod-up {
+      width: 434px;
+    }
+
+    @include media-small-ipod-down {
+      width: 100%;
+    }
+  }
+
+  .govuk-fieldset .govuk-fieldset__legend {
+    font-size: 19px;
+  }
+}

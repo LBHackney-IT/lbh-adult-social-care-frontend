@@ -1,0 +1,25 @@
+.upload-green-button {
+  margin-bottom: 47px;
+
+  .govuk-fieldset .govuk-fieldset__legend {
+    font-size: 19px;
+  }
+
+  .file-upload-form {
+    width: 220px;
+    .file-upload {
+      padding: initial;
+      div {
+        font-size: 19px;
+        background: transparent;
+        border: 1px solid $lbh-green1;
+        color: $lbh-green1;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+      }
+    }
+  }
+}

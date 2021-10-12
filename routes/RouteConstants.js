@@ -26,6 +26,9 @@ const DAY_CARE_APPROVE_PACKAGE_ROUTER = `${DAY_CARE_ROUTE}/approve-package/:dayC
 const DAY_CARE_BROKERING_PACKAGE_ROUTER = `${DAY_CARE_ROUTE}/brokering/:dayCarePackageId`;
 const DAY_CARE_APPROVE_BROKERED_ROUTER = `${DAY_CARE_ROUTE}/approve-brokered/:dayCarePackageId`;
 const CLIENT_HISTORY_ROUTER = '/client-history';
+const CARE_CHARGES_ROUTE = `${BROKERAGE_ROUTE}/care-charges`;
+const FINANCE_ROUTE = '/finance';
+const APPROVALS_ROUTE = '/finance';
 
 const PAYMENTS_ROUTE = '/payments';
 const PAYMENTS_PAY_RUNS_ROUTE = `${PAYMENTS_ROUTE}/pay-runs`;
@@ -84,4 +87,6 @@ export {
   BROKER_PACKAGE_ROUTE,
   BROKERAGE_ROUTE,
   CORE_PACKAGE_DETAILS_ROUTE,
+  CARE_CHARGES_ROUTE,
+  FINANCE_ROUTE,
 };

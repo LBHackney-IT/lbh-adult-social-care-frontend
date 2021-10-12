@@ -4,9 +4,15 @@ import { formatDate }  from '../../../service/helpers';
 import { Container } from '../../HackneyDS';
 
 const placeHolderBirthDate = new Date(1990, 10, 10);
-const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address }) => (
+const ServiceUserDetails = ({
+  serviceUserName,
+  hackneyId,
+  dateOfBirth,
+  address,
+  title = 'Service user details'
+}) => (
   <Container className="user-details brokerage__container">
-    <h3>Service user details</h3>
+    {title && <h3>{title}</h3>}
     <Container>
       <p>Client</p>
       <p>{serviceUserName}</p>
