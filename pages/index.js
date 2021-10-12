@@ -4,6 +4,10 @@ import useCarePackageApi from '../api/SWR/CarePackage/useCarePackageApi';
 import withSession from '../lib/session';
 import { getUserSession } from '../service/helpers';
 import { BrokerageHubPage } from '../components/Brokerage/BrokerageHub';
+import { createCoreCarePackage } from '../api/CarePackages/CarePackage';
+import { CARE_PACKAGE_ROUTE } from '../routes/RouteConstants';
+import { addNotification } from '../reducers/notificationsReducer';
+import { useDispatch } from 'react-redux';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -12,6 +16,7 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
 });
 
 const BrokerageHub = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [packageData, setPackageData] = React.useState([]);
   const [pageNumber, setPageNumber] = useState(1);
@@ -38,9 +43,6 @@ const BrokerageHub = () => {
   const clearFilter = () => {
     setApiFilters({ ...initialFilters });
   };
-
-  // const findServiceUser = () => setApiFilters(filters);
-  const findServiceUser = () => {};
 
   useEffect(() => {
     if (data) {
@@ -76,9 +78,40 @@ const BrokerageHub = () => {
     });
   };
 
+  // const findServiceUser = () => setApiFilters(filters);
+  const createNewPackage = () => {
+    const dummyPackageToCreate = {
+      serviceUserId: 'aee45700-af9b-4ab5-bb43-535adbdcfb84',
+      hasRespiteCare: false,
+      hasDischargePackage: false,
+      packageScheduling: 1,
+      primarySupportReasonId: 1,
+      packageType: 2,
+      hospitalAvoidance: false,
+      isReEnablement: false,
+      isS117Client: false,
+    };
+    createCoreCarePackage({ data: dummyPackageToCreate })
+      .then(({ id, serviceUserId }) => {
+        // Dummy package created, go to package builder
+        router.push({
+          pathname: `care-package/service-users/${serviceUserId}/core-package-details`,
+          query: { packageId: id },
+        });
+        pushNotification('Package created.', 'success');
+      })
+      .catch((error) => {
+        pushNotification(error);
+      });
+  };
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
   return (
     <BrokerageHubPage
-      findServiceUser={findServiceUser}
+      createNewPackage={createNewPackage}
       filters={apiFilters}
       clearFilter={clearFilter}
       setFilters={setApiFilters}
