@@ -8,6 +8,7 @@ const BrokeragePackageDates = ({
   setDates,
   isOngoing,
   setIsOngoing,
+  startMinDate,
   error,
   fields = {
     dateTo: 'dateTo',
@@ -22,6 +23,7 @@ const BrokeragePackageDates = ({
     <FormGroup error={error || dateToError} className="brokerage__package-dates" label={label}>
       <DatePicker
         day={{ label: 'From' }}
+        minDate={startMinDate}
         date={dates[fields.dateFrom]}
         setDate={(date) => setDates(fields.dateFrom, date)}
       />

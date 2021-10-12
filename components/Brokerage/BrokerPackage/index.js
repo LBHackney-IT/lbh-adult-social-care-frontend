@@ -7,7 +7,7 @@ import BrokeragePackageDates from '../BrokeragePackageDates';
 import BrokerPackageCost from './BrokerPackageCost';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { CARE_PACKAGE_ROUTE, CORE_PACKAGE_DETAILS_ROUTE } from '../../../routes/RouteConstants';
+import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import { updateCarePackageCosts } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../Constants';
@@ -47,6 +47,7 @@ export const BrokerPackage = ({
     isOngoing: false,
     errorCost: '',
     errorStartDate: '',
+    errorEndDate: '',
   });
 
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
@@ -61,7 +62,6 @@ export const BrokerPackage = ({
   });
 
   const clickBack = () => {
-    // router.push(`${CORE_PACKAGE_DETAILS_ROUTE}/${packageId}`);
     router.push(
       `${CARE_PACKAGE_ROUTE}/service-users/${carePackageCore.serviceUserId}/core-package-details?packageId=${
         packageId || ''
@@ -104,6 +104,7 @@ export const BrokerPackage = ({
             isOngoing: !item.endDate,
             errorCost: '',
             errorStartDate: '',
+            errorEndDate: '',
           }));
 
         const oneOffDetails = detailsData.details
@@ -114,6 +115,7 @@ export const BrokerPackage = ({
             endDate: dateStringToDate(item.endDate),
             errorCost: '',
             errorStartDate: '',
+            errorEndDate: '',
           }));
 
         setWeeklyNeeds(weeklyDetails);
@@ -130,13 +132,23 @@ export const BrokerPackage = ({
     let hasErrors = false;
     const checkedNeeds = needs.map((item) => {
       const errorCost = !item.cost ? 'Invalid cost' : '';
-      const errorStartDate = !item.startDate ? 'Invalid start date' : '';
+      let errorStartDate = '';
+      let errorEndDate = '';
+      if (!item.startDate || ((item.startDate && item.endDate) && item.startDate > item.endDate)) {
+        errorStartDate = 'Invalid start date';
+      } else if (item.startDate < packageDates.endDate) {
+        errorStartDate = 'Start date should be later then core date';
+      }
+      if (item.startDate && item.startDate < packageDates.endDate) {
+        errorEndDate = 'End date should be later then core date';
+      }
       if (errorCost || errorStartDate) {
         hasErrors = true;
       }
       return {
         ...item,
         errorCost,
+        errorEndDate,
         errorStartDate,
       };
     });
@@ -248,17 +260,13 @@ export const BrokerPackage = ({
     setOneOfTotalCost(totalCost);
   }, [supplierWeeklyCost, oneOffNeeds]);
 
-  useEffect(() => {
-    setIsOngoing(!detailsData?.endDate);
-  }, [detailsData?.endDate]);
-
   return (
     <div className="supplier-look-up brokerage">
-      <BrokerageHeader />
+      <BrokerageHeader/>
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        {(loading || detailsData === undefined) && <Loading className="loading-center" />}
+        {(loading || detailsData === undefined) && <Loading className="loading-center"/>}
         <Container className="brokerage__container-main">
-          <BrokerageContainerHeader title="Broker package" />
+          <BrokerageContainerHeader title="Broker package"/>
           <Container>
             <h3 className="brokerage__item-title">{careName}</h3>
             <BrokeragePackageDates
@@ -294,7 +302,7 @@ export const BrokerPackage = ({
 
             {!supplierSearch && !selectedItem && (
               <Container className="is-new-supplier">
-                <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
+                <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier}/>
                 <Container className="is-new-supplier-text" display="flex" flexDirection="column">
                   <p>This is a new supplier</p>
                   <p>
@@ -322,6 +330,7 @@ export const BrokerPackage = ({
             <BrokerPackageCost
               removeSupplierCard={removeSupplierCard}
               cardInfo={selectedItem}
+              corePackageDates={packageDates}
               addNeed={addNeed}
               weeklyNeeds={weeklyNeeds}
               oneOffNeeds={oneOffNeeds}
