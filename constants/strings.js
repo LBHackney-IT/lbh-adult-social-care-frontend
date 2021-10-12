@@ -3,6 +3,11 @@ const currency = {
   dollar: '$',
 };
 
-const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const dateStringFormats = {
+  dayMonthYearSlash: 'dd/MM/yyyy',
+  dayMonthYearDot: 'dd.MM.yyyy',
+  monthDayYearSlash: 'MM/dd/yyyy',
+  monthDayYearDot: 'MM.dd.yyyy',
+};
 
-export { currency, shortMonths };
+export { currency, dateStringFormats };

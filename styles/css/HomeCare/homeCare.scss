@@ -22,11 +22,13 @@ $escort: #ffa9a9;
 .home-care-options {
   .home-care-option {
     margin-right: 20px;
+    margin-top: 10px;
   }
 }
 
 .legend-items {
   display: flex;
+  flex-wrap: wrap;
 
   .legend-item {
     display: flex;
@@ -43,6 +45,50 @@ $escort: #ffa9a9;
 }
 
 .week-care-picker {
+  @include media-max-ipod-down {
+    overflow: auto;
+    max-height: 350px;
+  }
+
+  .columns {
+    display: flex;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+  }
+  .time-slot-cont {
+    min-width: fit-content;
+    .column:first-of-type {
+      position: sticky;
+      left: -2px;
+      background-color: white;
+      z-index: 2;
+    }
+  }
+
+  .header-columns {
+    position: sticky;
+    top: -2px;
+    display: flex;
+    background: white;
+    min-width: fit-content;
+
+    .column:first-of-type {
+      position: sticky;
+      left: 0;
+      top: 0;
+      z-index: 2;
+      background: white;
+    }
+  }
+
+  .week-slot-labels {
+    flex-direction: column;
+  }
+  .column {
+    min-width: 124px;
+    display: flex;
+  }
   .header-columns {
     margin-bottom: 0;
 
@@ -158,6 +204,10 @@ $escort: #ffa9a9;
     align-items: center;
     margin-top: 32px;
     margin-bottom: 16px;
+
+    & > span {
+      margin-right: 5px;
+    }
 
     label {
       font-weight: bold;

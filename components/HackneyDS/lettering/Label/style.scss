@@ -1,0 +1,76 @@
+.lbh-label {
+  color: #0b0c0c;
+  line-height: 1.625rem;
+  margin-bottom: 0.375rem;
+
+  @media (min-width: 40.0625em) {
+    font-size: 1.1875rem;
+    line-height: 1.875rem;
+  }
+}
+
+.govuk-label {
+  margin: 0 0 .375rem;
+  font-family: Open Sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 1rem;
+  line-height: 1.25;
+  display: block;
+  font-weight: 400;
+  color: #0b0c0c;
+
+  .lbh-form-group &.govuk-date-input__label {
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: Open Sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .lbh-form-group &.govuk-date-input__label {
+    color: #0b0c0c;
+    line-height: 1.625rem;
+  }
+
+  .lbh-form-group &.govuk-date-input__label {
+    margin-bottom: 0.375rem;
+    display: block;
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    margin-top: 0.75rem;
+  }
+
+  .lbh-radios & {
+    font-size: 1rem;
+    font-family: Open Sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .lbh-radios & {
+    color: #0b0c0c;
+    font-weight: 400;
+    line-height: 1.625rem;
+    margin-top: 0;
+    margin-bottom: 0.375rem;
+  }
+
+  @media (min-width: 40.0625em) {
+    line-height: 1.3157894737;
+
+    .lbh-form-group &.govuk-date-input__label,
+    .lbh-radios & {
+      font-size: 1.25rem;
+      line-height: 1.5rem;
+    }
+  }
+
+  @media print {
+    color: #000;
+    font-family: sans-serif;
+    font-size: 14pt;
+    line-height: 1.15;
+  }
+}

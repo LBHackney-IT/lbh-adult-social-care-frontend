@@ -1,28 +1,31 @@
 import React, { useState } from 'react';
+import { useInvoiceStatusList } from 'api/SWR';
 import Dropdown from '../Dropdown';
-import { formatDateWithSign, formatStatus, includeString } from '../../service/helpers';
+import { formatDateWithSign, formatStatus, getNumberWithCommas, includeString } from 'service/helpers';
 import PayRunSortTable from './PayRunSortTable';
-import { shortMonths } from '../../constants/strings';
 import Checkbox from '../Checkbox';
 import { Button } from '../Button';
+import Loading from '../Loading';
 
 const PayRunTable = ({
   onClickTableRow,
   checkedRows,
+  loading,
   setCheckedRows,
   changeAllChecked,
   rows = [],
   release,
+  releaseAllSelected,
   additionalActions,
-  isIgnoreId = false,
   isStatusDropDown = false,
   className = '',
   canCollapseRows = false,
-  careType,
   sortBy,
   selectStatus,
   sorts,
 }) => {
+  const { data: invoiceStatuses } = useInvoiceStatusList();
+
   const [collapsedRows, setCollapsedRows] = useState([]);
 
   const collapseRows = (id) => {
@@ -37,7 +40,7 @@ const PayRunTable = ({
     if (onClickTableRow) {
       onClickTableRow(item);
     } else if (canCollapseRows) {
-      collapseRows(item.id);
+      collapseRows(item.key);
     }
   };
 
@@ -52,12 +55,15 @@ const PayRunTable = ({
         sortBy={sortBy}
         sorts={sorts}
       />
+
+      {loading && <Loading className="table-loading" />}
       {!rows.length ? (
         <p>No Table Data</p>
       ) : (
         rows.map((item) => {
-          const collapsedRow = collapsedRows.includes(item.id);
+          const collapsedRow = collapsedRows.includes(item.key);
           const rowStatus = item.status ? ` ${item.status}` : '';
+
           return (
             <div key={item.id} className={`table__row${collapsedRow ? ' collapsed' : ''}${rowStatus}`}>
               <div
@@ -67,33 +73,36 @@ const PayRunTable = ({
                 {checkedRows && (
                   <div className="table__row-item table__row-item-checkbox">
                     <Checkbox
-                      checked={checkedRows.includes(item.id)}
+                      checked={checkedRows.includes(item.key)}
                       onChange={(value, event) => {
                         event.stopPropagation();
-                        setCheckedRows(item.id);
+                        setCheckedRows(item.key);
                       }}
                     />
                   </div>
                 )}
-                {Object.getOwnPropertyNames(item).map((rowItemName) => {
-                  if (
-                    Array.isArray(item[rowItemName]) ||
-                    item[rowItemName]?.id !== undefined ||
-                    (isIgnoreId && rowItemName === 'id')
-                  ) {
-                    return <React.Fragment key={`${rowItemName}${item.id}`} />;
-                  }
-                  const value = includeString(rowItemName.toLowerCase(), 'date')
-                    ? formatDateWithSign(item[rowItemName])
-                    : item[rowItemName];
-                  const isStatus = rowItemName === 'status';
-                  const formattedStatus = isStatus && formatStatus(item[rowItemName]);
-                  const statusItemClass = isStatus ? ` table__row-item-status ${item[rowItemName]}` : '';
+
+                {Object.keys(item).map((rowItemKey) => {
+                  if (['key', 'invoices'].includes(rowItemKey)) return null;
+
+                  const value = includeString(rowItemKey.toLowerCase(), 'date')
+                    ? formatDateWithSign(item[rowItemKey])
+                    : item[rowItemKey];
+
+                  const isStatus = rowItemKey === 'invoiceStatusId';
+                  const status = invoiceStatuses.find((el) => el.statusId === item.invoiceStatusId);
+                  const formattedStatus = isStatus && formatStatus(status?.statusName, '-', true);
+                  const statusItemClass = isStatus
+                    ? `table__row-item-status ${status?.statusName?.toLowerCase() ?? ''}`
+                    : '';
+
+                  const isCurrency = typeof item[rowItemKey] === 'number' && !isStatus;
+
                   if (isStatusDropDown && isStatus) {
                     return (
                       <Dropdown
-                        key={`${rowItemName}${item.id}`}
-                        className={`table__row-item${statusItemClass}`}
+                        key={`${rowItemKey}${item.id}`}
+                        className={`table__row-item ${statusItemClass}`}
                         options={[
                           { text: 'Accepted', value: 'accepted' },
                           { text: 'Held', value: 'held' },
@@ -108,37 +117,39 @@ const PayRunTable = ({
                   }
 
                   return (
-                    <div key={`${rowItemName}${item.id}`} className={`table__row-item${statusItemClass}`}>
-                      <p>{isStatus ? formattedStatus : value}</p>
+                    <div key={`${rowItemKey}${item.id}`} className={`table__row-item ${statusItemClass}`}>
+                      {isCurrency ? <p>£{getNumberWithCommas(value)}</p> : <p>{isStatus ? formattedStatus : value}</p>}
                     </div>
                   );
                 })}
-                {additionalActions &&
-                  additionalActions.map((action) => {
-                    const { Component } = action;
-                    return (
-                      <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
-                        <Component
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            action.onClick(item);
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
+
+                {additionalActions?.map((action) => {
+                  const { Component } = action;
+                  return (
+                    <div key={`${action.id}`} className={`table__row-item ${action.className}`}>
+                      <Component
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          action.onClick(item);
+                        }}
+                      />
+                    </div>
+                  );
+                })}
               </div>
+
               {canCollapseRows && collapsedRow && (
                 <div className="table__row-collapsed">
-                  {item.invoiceItems.map((care) => (
-                    <div key={care.id} className="table__row-collapsed-container">
+                  {item.invoices.map((invoice) => (
+                    <div key={invoice.invoiceId} className="table__row-collapsed-container">
                       <div className="table__row-collapsed-header">
                         <div className="table__row-collapsed-header-left">
-                          <p>{care.userName}</p>
-                          <p>{care.supplier}</p>
+                          <p>{item.serviceUserName}</p>
+                          <p>{item.supplierName}</p>
                         </div>
-                        <p>{care.id}</p>
+                        <p>{invoice.invoiceNumber}</p>
                       </div>
+
                       <div className="table__row-collapsed-main">
                         <div className="table__row-collapsed-main-header">
                           <p>Item</p>
@@ -146,30 +157,23 @@ const PayRunTable = ({
                           <p>Qty</p>
                           <p>Total</p>
                         </div>
-                        {care.items.map((personInfo) => {
-                          const dateFrom = new Date(personInfo.dateFrom);
-                          const dateTo = new Date(personInfo.dateTo);
-                          return (
-                            <div key={personInfo.id} className="table__row-collapsed-main-item">
-                              <p>
-                                {careType} care per week
-                                <br />
-                                {dateFrom.getDate()} {shortMonths[dateFrom.getMonth()]}-{dateTo.getDate()}{' '}
-                                {shortMonths[dateTo.getMonth()]} {dateTo.getFullYear()}
-                              </p>
-                              <p>{personInfo.cost}</p>
-                              <p>{personInfo.qty}</p>
-                              <p>{personInfo.serviceUser}</p>
-                            </div>
-                          );
-                        })}
+
+                        {invoice.invoiceItems.map((invoiceItem) => (
+                          <div key={invoiceItem.invoiceItemId} className="table__row-collapsed-main-item">
+                            <p>{invoiceItem.itemName}</p>
+                            <p>£{getNumberWithCommas(invoiceItem.pricePerUnit)}</p>
+                            <p>{invoiceItem.quantity}</p>
+                            <p>£{getNumberWithCommas(invoiceItem.totalPrice)}</p>
+                          </div>
+                        ))}
                       </div>
+
                       {release && (
                         <Button
-                          className="outline green table__row-release-button"
+                          className="outline green"
                           onClick={(e) => {
                             e.stopPropagation();
-                            release(item, care);
+                            release(item, invoice);
                           }}
                         >
                           Release
@@ -182,6 +186,18 @@ const PayRunTable = ({
             </div>
           );
         })
+      )}
+
+      {checkedRows.length > 0 && (
+        <Button
+          className="outline green table__row-release-all"
+          onClick={(e) => {
+            e.stopPropagation();
+            releaseAllSelected(rows);
+          }}
+        >
+          Release all selected
+        </Button>
       )}
     </div>
   );

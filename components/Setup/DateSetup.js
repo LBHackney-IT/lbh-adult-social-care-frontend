@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import RadioButton from '../RadioButton';
 import DatePick from '../DatePick';
-import { getFixedPeriodOptions } from '../../api/Utils/CommonOptions';
+import { getFixedPeriodOptions } from 'api/Utils/CommonOptions';
 
 const DateSetup = ({
   errorFields = {},
@@ -9,18 +9,14 @@ const DateSetup = ({
   changeErrorFields,
   setIsFixedPeriod,
   isFixedPeriod,
+  disabledStartDate,
   startDate,
   setStartDate,
+  startMaxDate,
   endDate,
   setEndDate,
 }) => {
-  useEffect(() => {
-    if (isFixedPeriod === true) {
-      setEndDate(new Date());
-    } else {
-      setEndDate('');
-    }
-  }, [isFixedPeriod]);
+  const disabledEndDate = !isFixedPeriod || disabledStartDate;
 
   return (
     <div className="column">
@@ -30,7 +26,13 @@ const DateSetup = ({
           options={fixedPeriodOptions}
           error={errorFields.isFixedPeriod}
           setError={() => changeErrorFields('isFixedPeriod')}
-          onChange={setIsFixedPeriod}
+          onChange={(value) => {
+            setIsFixedPeriod(value);
+            if(value) {
+              setEndDate(startDate)
+            }
+            changeErrorFields('endDate');
+          }}
           selectedValue={isFixedPeriod}
         />
       </div>
@@ -39,6 +41,7 @@ const DateSetup = ({
           <DatePick
             label="Start Date"
             error={errorFields.startDate}
+            minDate={new Date()}
             setError={() => changeErrorFields('startDate')}
             dateValue={startDate}
             setDate={setStartDate}
@@ -48,8 +51,10 @@ const DateSetup = ({
           <DatePick
             label="End Date"
             dateValue={!isFixedPeriod ? '' : endDate}
-            disabled={!isFixedPeriod}
-            classes={!isFixedPeriod ? 'datepicker-ongoing' : ''}
+            disabled={disabledEndDate}
+            minDate={startDate}
+            maxDate={startMaxDate}
+            className={`${!isFixedPeriod ? ' datepicker-ongoing' : ''}${disabledStartDate ? ' disabled' : ''}`}
             setDate={setEndDate}
             error={errorFields.endDate}
             setError={() => changeErrorFields('endDate')}

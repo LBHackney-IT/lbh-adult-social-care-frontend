@@ -5,12 +5,12 @@ import {
   ESCORT_CARE_MODE,
   LIVE_IN_CARE_MODE,
   PERSONAL_CARE_MODE,
-} from '../../service/homeCarePickerHelper';
+} from 'service/homeCarePickerHelper';
 
 const isPickerActive = (currentMode, { person, domestic, liveIn, escort }) => {
   switch (currentMode) {
     case PERSONAL_CARE_MODE: {
-      return person.primary > 0;
+      return person?.primary > 0;
     }
     case DOMESTIC_CARE_MODE: {
       return domestic > 0;
@@ -27,7 +27,7 @@ const isPickerActive = (currentMode, { person, domestic, liveIn, escort }) => {
   }
 };
 
-const CarePicker = ({ currentMode, dayId, onClick, selectedValues }) => {
+const CarePicker = ({ currentMode, dayId, onClick, selectedValues = {} }) => {
   const { person, domestic, liveIn, escort } = selectedValues;
   const isActive = isPickerActive(currentMode, selectedValues);
 
@@ -35,14 +35,14 @@ const CarePicker = ({ currentMode, dayId, onClick, selectedValues }) => {
     onClick(dayId);
   };
 
-  const hasPersonalSecondary = person.primary > 0 && person.secondary > 0;
+  const hasPersonalSecondary = person?.primary > 0 && person?.secondary > 0;
 
   return (
     <div className={`care-picker${isActive ? ' is-active' : ''}`} onClick={onPickerClick} role="presentation">
       <div className="pickers-cont">
         <div className={`picker-item ${hasPersonalSecondary ? 'is-split' : 'personal-home-care'}`}>
-          {person.primary > 0 ? <span className="personal-home-care">{person.primary}</span> : null}
-          {hasPersonalSecondary ? <span className="personal-home-care is-final">{person.secondary}</span> : null}
+          {person?.primary > 0 ? <span className="personal-home-care">{person?.primary}</span> : null}
+          {hasPersonalSecondary ? <span className="personal-home-care is-final">{person?.secondary}</span> : null}
         </div>
         <div className="domestic-home-care picker-item">{domestic > 0 ? domestic : ''}</div>
       </div>
@@ -87,11 +87,11 @@ const CarePickerTimeSlot = ({ homeCareServices, currentMode, weekSlotItem, onCli
 
   return (
     <div className="columns">
-      <div className="column week-slot-labels">
-        <span>{weekSlotItem.timeSlotShiftName}</span>
-        <span>{weekSlotItem.timeSlotTimeLabel}</span>
+      <div className="column is-flex-wrap-wrap week-slot-labels">
+        <p>{weekSlotItem.timeSlotShiftName}</p>
+        <p> {weekSlotItem.timeSlotTimeLabel}</p>
       </div>
-      {weekSlotItem.days.map((weekSlotDayItem) => (
+      {weekSlotItem?.days?.map((weekSlotDayItem) => (
         <div className="column" key={weekSlotItem.id + weekSlotDayItem.id}>
           {!weekSlotItem.linkedToHomeCareServiceTypeId ? (
             <CarePicker
@@ -102,9 +102,9 @@ const CarePickerTimeSlot = ({ homeCareServices, currentMode, weekSlotItem, onCli
             />
           ) : (
             <CareTimeDropdown
-              minuteOptions={
-                homeCareServices.find((item) => item.id === weekSlotItem.linkedToHomeCareServiceTypeId).minutes
-              }
+              minuteOptions={homeCareServices.find((item) => (
+                item.id === weekSlotItem.linkedToHomeCareServiceTypeId
+              ))?.minutes || []}
               weekSlotId={weekSlotItem.id}
               dayId={weekSlotDayItem.id}
               onChange={onCarePickerDropdownSelect}

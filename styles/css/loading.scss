@@ -1,0 +1,26 @@
+.loading {
+  width: 32px;
+  height: 32px;
+  -webkit-animation: rotation 1s infinite linear;
+  @keyframes rotation {
+    from {
+      -webkit-transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(359deg);
+    }
+  }
+
+  &-center {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    transform: translate(50%, 50%);
+  }
+}
+
+.table-loading {
+  width: 100%;
+}

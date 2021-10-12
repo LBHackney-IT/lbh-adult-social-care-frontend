@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import SupplierReturnsTable from '../../../components/SupplierReturns/SupplierReturnsTable';
-import Pagination from '../../../components/Payments/Pagination';
+import SupplierReturnsTable from 'components/SupplierReturns/SupplierReturnsTable';
+import Pagination from 'components/Payments/Pagination';
+import SupplierInnerHeader from 'components/SupplierReturns/SupplierInnerHeader';
+import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import { changeSupplierReturns } from 'reducers/supplierReturnsReducer';
+import { getUserSession } from 'service/helpers';
+import withSession from 'lib/session';
 import { supplierReturnsTableData } from '../../../testData/testDataPayRuns';
-import SupplierInnerHeader from '../../../components/SupplierReturns/SupplierInnerHeader';
-import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { changeSupplierReturns } from '../../../reducers/supplierReturnsReducer';
-import { getUserSession } from '../../../service/helpers';
-import withSession from '../../../lib/session';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -34,7 +34,7 @@ const SupplierReturns = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'weekCommencing',
   });
 
@@ -51,10 +51,6 @@ const SupplierReturns = () => {
     router.replace(`${router.pathname}?page=1`);
   }, []);
 
-  useEffect(() => {
-    console.log('change sort', sort);
-  }, [sort]);
-
   return (
     <div className="supplier-dashboard supplier-returns">
       <SupplierInnerHeader />
@@ -66,7 +62,7 @@ const SupplierReturns = () => {
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination from={1} to={10} pageSize={10} totalCount={30} />
       <HackneyFooterInfo />
     </div>
   );

@@ -29,7 +29,7 @@ jobs:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
-          command: yarn
+          command: yarn install --frozen-lockfile
       - run:
           name: Set GitHub username and email
           command: git config user.email "ci@hackney.gov.uk" && git config user.name "lbhackney-automation"
@@ -82,7 +82,7 @@ jobs:
 
       - run:
           name: Pull owasp zap docker image
-          command: docker pull owasp/zap2docker-stable
+          command: docker pull owasp/zap2docker-stable:2.10.0
 
       - run:
           name: ZAP baseline test of application
@@ -94,7 +94,8 @@ jobs:
           # Link to above:https://github.com/zaproxy/zaproxy/blob/main/docker/zap-baseline.py#L31-L35
           command: |
               (
-                docker run -t owasp/zap2docker-stable zap-baseline.py \
+                docker run -t owasp/zap2docker-stable:2.10.0 zap-baseline.py \
+                -j \
                 -u https://raw.githubusercontent.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}/zap-baseline.conf \
                 -t http://$(ip -f inet -o addr show docker0 | awk '{print $4}' | cut -d '/' -f 1):3000 || \
                 if [[ $? == 0 || $? == 2 ]]; then exit 0; else exit 1; fi;
@@ -106,7 +107,7 @@ jobs:
       - *attach_workspace
       - run:
           name: deploy
-          command: yarn --frozen-lockfile --production=true && sudo npm i -g serverless && sls deploy --stage staging
+          command: yarn install --production --ignore-scripts --prefer-offline && sudo npm i -g serverless && sls deploy --stage staging
 
   build-deploy-production:
     executor: aws-cli/default
@@ -114,7 +115,7 @@ jobs:
       - *attach_workspace
       - run:
           name: deploy
-          command: yarn --frozen-lockfile --production=true && sudo npm i -g serverless && sls deploy --stage production
+          command: yarn install --production --ignore-scripts --prefer-offline && sudo npm i -g serverless && sls deploy --stage production
 
   generate-draft-github-release:
     executor: aws-cli/default
@@ -179,6 +180,19 @@ jobs:
           paths:
             - project/build
 
+  chromatic-deployment: 
+    docker:
+      - image: circleci/node:12
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn install
+      - run: yarn chromatic --project-token=${CHROMATIC_PROJECT_TOKEN} --exit-zero-on-changes
+
   # get-environment-variables:
   #   executor: aws-cli/default
   #   steps:
@@ -217,6 +231,9 @@ workflows:
       - build:
           requires:
             - install-dependencies
+      - chromatic-deployment:
+          requires:
+            - build
       - owasp-zap-baseline-scan:
           requires:
             - build

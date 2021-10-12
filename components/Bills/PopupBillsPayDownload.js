@@ -5,7 +5,7 @@ import TextArea from '../TextArea';
 const PopupBillsPayDownload = ({ closePopup, payBills }) => {
   const createPayRun = (
     <div className="pay-bills">
-      <TextArea classes="pay-bills__textarea" rows={8}>
+      <TextArea className="pay-bills__textarea" rows={8}>
         {payBills}
       </TextArea>
     </div>

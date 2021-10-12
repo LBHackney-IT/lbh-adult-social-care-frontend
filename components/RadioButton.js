@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import BaseField from './baseComponents/BaseField';
 import ErrorField from './ErrorField';
 import { isFunction } from '../api/Utils/FuncUtils';
@@ -16,36 +16,34 @@ const RadioButton = ({
   className = '',
   setError,
   inline = true,
+  tooltipText = '',
   onChange = () => {},
 }) => {
-  const [radioValue, setRadioValue] = useState(selectedValue);
-  const hasSelectedValue =
-    radioValue !== undefined && options.find((option) => option.value === selectedValue) !== undefined;
-
-  // let hasSelectedValue = radioValue !== undefined;
-
   const radioChange = (radioItemValue) => {
     if (isFunction(setError)) setError();
     onChange(radioItemValue);
-    setRadioValue(radioItemValue);
   };
 
+  const innerClass = `radio-button ${className}`;
+
   return (
-    <BaseField label={label} classes={className}>
+    <BaseField tooltipText={tooltipText} label={label} className={innerClass}>
       <div className={`radio-cont${inline ? '' : ' not-inline'}`}>
         {options.map((radioItem, index) => (
-          <label
-            key={radioItem.value}
-            className={`radio-item${index !== options.length ? ' is-first' : ''}`}
-            onClick={() => radioChange(radioItem.value)}
-          >
-            <div
-              className={`radio-select-cont${hasSelectedValue && radioValue === radioItem.value ? ' is-active' : ''}`}
-            >
-              <div className="radio-item-selected" />
-            </div>
-            {radioItem.text}
-          </label>
+            <React.Fragment key={`${radioItem.value}${label}${radioItem.text}`}>
+              {radioItem.header && radioItem.header}
+              <label
+                className={`radio-item${index !== options.length ? ' is-first' : ''}`}
+                onClick={() => radioChange(radioItem.value)}
+              >
+                <div
+                  className={`radio-select-cont${selectedValue === radioItem.value ? ' is-active' : ''}`}
+                >
+                  <div className="radio-item-selected" />
+                </div>
+                <p className='radio-item__text'>{radioItem.text}</p>
+              </label>
+            </React.Fragment>
         ))}
       </div>
       {error && <ErrorField text={error} />}

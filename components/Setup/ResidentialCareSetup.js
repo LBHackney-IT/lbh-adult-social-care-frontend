@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import { selectResidentialTypeOfStayOptions } from '../../reducers/carePackageSlice';
-import { RESIDENTIAL_CARE_ROUTE } from '../../routes/RouteConstants';
+import { selectResidentialTypeOfStayOptions } from 'reducers/carePackageSlice';
+import { RESIDENTIAL_CARE_ROUTE } from 'routes/RouteConstants';
 import RadioButton, { yesNoValues } from '../RadioButton';
 import CarePackageSetup from '../CarePackages/CarePackageSetup';
 import CareSelectDropdown from '../CarePackages/CareSelectDropdown';
-import fieldValidator from '../../service/inputValidator';
+import formValidator from 'service/formValidator';
 import DateSetup from './DateSetup';
 
 const ResidentialCareSetup = ({ careTypes, selectedCareType, setSelectedCareType }) => {
@@ -45,16 +45,19 @@ const ResidentialCareSetup = ({ careTypes, selectedCareType, setSelectedCareType
 
   // Handle build click
   const onBuildClick = () => {
-    const { validFields, hasErrors } = fieldValidator([
-      { name: 'isImmediateOrReEnablement', value: isImmediateOrReEnablement, rules: ['empty'] },
-      { name: 'isS117', value: isS117, rules: ['empty'] },
-      { name: 'typeOfStayId', value: typeOfStayId, rules: ['empty'] },
-      { name: 'hasDischargePackage', value: hasDischargePackage, rules: ['empty'] },
-      { name: 'hasRespiteCare', value: hasRespiteCare, rules: ['empty'] },
-      { name: 'startDate', value: startDate, rules: ['empty'] },
-      // { name: 'endDate', value: endDate, rules: ['empty'] },
-      { name: 'careTypes', value: selectedCareType, rules: ['empty'] },
-    ]);
+    const { validFields, hasErrors } = formValidator({
+      form: {
+        isImmediateOrReEnablement,
+        isS117,
+        typeOfStayId,
+        hasRespiteCare,
+        hasDischargePackage,
+        startDate,
+        endDate,
+        selectedCareType
+      },
+      ignoreInputs: isFixedPeriod ? [] : ['endDate'],
+    });
     if (hasErrors) {
       setErrorFields(validFields);
       return;
@@ -73,7 +76,7 @@ const ResidentialCareSetup = ({ careTypes, selectedCareType, setSelectedCareType
     <CarePackageSetup onBuildClick={onBuildClick}>
       <div className="level" />
       <div className="columns">
-        <div className="column is-5">
+        <div className="column">
           <CareSelectDropdown
             initialText={null}
             error={errorFields.careTypes}

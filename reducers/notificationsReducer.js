@@ -10,39 +10,36 @@ import { createSlice } from '@reduxjs/toolkit';
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState: {
+    notificationsLimit: 2,
     notifications: [],
     showedNotifications: [],
     logoutNotification: '',
   },
   reducers: {
     showNotification: (state, { payload }) => {
-      const cloneNotifications = state.showedNotifications.slice();
-      cloneNotifications.push(payload);
       return {
         ...state,
-        showedNotifications: cloneNotifications,
+        showedNotifications: [...state.showedNotifications, payload],
+        notifications: state.notifications.slice(1, state.notifications.length),
       };
     },
     removeNotification: (state, { payload }) => {
-      const cloneNotifications = state.notifications.filter((notification) => notification.text !== payload.text);
       const cloneShowed = state.showedNotifications.filter((showed) => showed.text !== payload.text);
       return {
         ...state,
-        notifications: cloneNotifications,
         showedNotifications: cloneShowed,
       };
     },
     addNotification: (state, { payload }) => {
-      const cloneNotifications = state.notifications.slice();
-      cloneNotifications.push({
-        time: 4000,
-        className: 'error',
-        text: 'Something went wrong',
-        ...payload,
-      });
       return {
         ...state,
-        notifications: cloneNotifications,
+        notifications: [...state.notifications, {
+          // time: 'debugger',
+          time: 4000,
+          className: 'error',
+          text: 'Something went wrong',
+          ...payload,
+        }],
         logoutNotification: payload?.text === 'logout' ? 'logout' : '',
       };
     },

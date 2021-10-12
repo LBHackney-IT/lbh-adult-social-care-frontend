@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../Popup';
-import Dropdown from '../Dropdown';
 import TextArea from '../TextArea';
+import CustomDropDown from '../CustomDropdown'
 
 const PopupHoldPayment = ({
   closePopup,
@@ -9,20 +9,25 @@ const PopupHoldPayment = ({
   actionRequiredBy,
   actionRequiredByOptions,
   reason,
+  holdInvoice,
   changeReason,
 }) => {
   const createPayRun = (
     <div className="hold-payment">
       <div className="create-pay-run__regular-cycles">
-        <Dropdown
-          classes="hold-payment__dropdown"
+        <CustomDropDown
+          className="hold-payment__dropdown"
           label="Action required by"
+          fields={{
+            value: 'departmentId',
+            text: 'departmentName',
+          }}
           onOptionSelect={(value) => changeActionRequiredBy(value)}
           options={actionRequiredByOptions}
           selectedValue={actionRequiredBy}
         />
         <TextArea
-          classes="hold-payment__textarea"
+          className="hold-payment__textarea"
           rows={8}
           label="Enter reason for hold And suggested remedial action"
           onChange={(value) => changeReason(value)}
@@ -38,8 +43,8 @@ const PopupHoldPayment = ({
       closePopup={closePopup}
       mainContent={createPayRun}
       title="Hold Payment"
-      firstButton={{ text: 'Cancel' }}
-      secondButton={{ text: 'Hold' }}
+      firstButton={{ text: 'Cancel', onClick: closePopup }}
+      secondButton={{ text: 'Hold', onClick: holdInvoice }}
     />
   );
 };

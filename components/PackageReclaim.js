@@ -67,22 +67,22 @@ const PackageReclaim = ({
           <Dropdown
             label="Reclaim from"
             initialText="Select"
-            error={currentError?.from}
+            error={currentError?.reclaimFromId}
             options={reclaimFromOptions}
-            onOptionSelect={(value) => changePackageType('from', value)}
-            selectedValue={packageReclaim.from}
+            onOptionSelect={(value) => changePackageType('reclaimFromId', value)}
+            selectedValue={packageReclaim.reclaimFromId}
           />
           <Dropdown
             label="Reclaim category"
             initialText="Select"
-            error={currentError?.category}
+            error={currentError?.reclaimCategoryId}
             options={reclaimFromCategoryOptions}
-            onOptionSelect={(value) => changePackageType('category', value)}
-            selectedValue={packageReclaim.category}
+            onOptionSelect={(value) => changePackageType('reclaimCategoryId', value)}
+            selectedValue={packageReclaim.reclaimCategoryId}
           />
         </div>
         <TextArea
-          classes="package-reclaim__notes"
+          className="package-reclaim__notes"
           rows={5}
           error={currentError?.notes}
           label="Add notes"

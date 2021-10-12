@@ -3,18 +3,25 @@ import { SWRConfig } from 'swr';
 import '/styles/globals.scss';
 import 'bulma/css/bulma.css';
 import { Provider } from 'react-redux';
+import AdditionalHeader from 'components/AdditionalHeader';
+import CustomNotification from 'components/Notifications';
+import fetcher from 'api/SWR/fetcher';
 import { useStore } from '../store';
-import AdditionalHeader from '../components/AdditionalHeader';
-import CustomNotification from '../components/Notifications';
 
-export default function App({ Component, pageProps }) {
+const swrOptions = {
+  errorRetryCount: 3,
+  revalidateOnMount: true,
+  fetcher,
+};
+
+export default function App ({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState);
 
   return (
     <Provider store={store}>
-      <SWRConfig value={{}}>
-        <CustomNotification />
-        <AdditionalHeader />
+      <SWRConfig value={swrOptions}>
+        <CustomNotification/>
+        <AdditionalHeader/>
         <Component {...pageProps} />
       </SWRConfig>
     </Provider>

@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Dropdown from '../../Dropdown';
 import DatePick from '../../DatePick';
 import EuroInput from '../../EuroInput';
 import { Button } from '../../Button';
-import { currency } from '../../../constants/strings';
+import { currency } from 'constants/strings';
 import PackageReclaim from '../../PackageReclaim';
-import ClientSummary from '../../ClientSummary';
-import { getAgeFromDateString, getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
+import { getEnGBFormattedDate } from 'api/Utils/FuncUtils';
 import NursingCareSummary from '../../NursingCare/NursingCareSummary';
-import PackageApprovalHistorySummary from '../../PackageApprovalHistorySummary';
-import PackageCostBox from '../../DayCare/PackageCostBox';
 import ProposedPackagesTab from '../ProposedPackagesTabs';
+import AutocompleteSelect from '../../AutocompleteSelect';
+import ApprovalHistory from '../../ProposedPackages/ApprovalHistory';
+import { addNotification } from 'reducers/notificationsReducer';
+import PopupAddSupplier from '../../PopupAddSupplier';
+import useSuppliersApi from 'api/SWR/useSuppliersApi';
+import useDayCareApi from 'api/SWR/useDayCareApi';
+import { mapCareStageOptions } from 'api/Mappers/CarePackageMapper';
+import { FundedNursingCare } from '../../HackneyDS';
 
 const PackagesNursingCare = ({
   tab,
@@ -22,33 +28,48 @@ const PackagesNursingCare = ({
   approvalHistory,
   nursingCarePackage,
   nursingCareSummary,
-  supplierOptions = [],
-  stageOptions = [],
   createBrokerageInfo = () => {},
   changePackageBrokeringStage = () => {},
   loggedInUserId,
 }) => {
+  const dispatch = useDispatch();
   const [coreCost, setCoreCost] = useState({
-    costPerWeek: nursingCarePackage?.nursingCore || 0,
+    costPerWeek: nursingCarePackage?.nursingCore || '',
   });
+  const [reasonCollectingCharges, setReasonCollectingCharges] = useState('');
+  const { mutate: getSuppliers, data: { data: supplierOptions } } = useSuppliersApi.supplierList();
+  const { data: stageOptions } = useDayCareApi.brokerAgeStages();
+  const [popupAddSupplier, setPopupAddSupplier] = useState(false);
+  const [provisionalAge, setProvisionalAge] = useState('25-29');
+  const [provisionalCost, setProvisionalCost] = useState('');
+  const [careChargeErrors, setCareChargeErrors] = useState({
+    provisionalCost: '',
+    reasonCollectingCharges: '',
+  });
+  const [collectingCharges, setCollectingCharges] = useState('hackney-council');
 
   const [additionalPayment, setAdditionalPayment] = useState({
-    costPerWeek: nursingCarePackage?.additionalNeedsPayment || 0,
+    costPerWeek: nursingCarePackage?.additionalNeedsPayment || '',
   });
 
   const [additionalPaymentOneOff, setAdditionalPaymentOneOff] = useState({
-    oneOf: nursingCarePackage?.additionalNeedsPaymentOneOff || 0,
+    oneOf: nursingCarePackage?.additionalNeedsPaymentOneOff || '',
+  });
+
+  const [initialFncCostPerWeek] = useState(187.60);
+
+  const [fncCostPerWeek, setFncCostPerWeek] = useState(initialFncCostPerWeek);
+
+  const [collectedBy, setCollectedBy] = useState({
+    value: 'supplier',
+    text: 'Supplier'
   });
 
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState([]);
   const [selectedStageType, setSelectedStageType] = useState(nursingCarePackage?.stageId);
   const [selectedSupplierType, setSelectedSupplierType] = useState(nursingCarePackage?.supplierId);
-  const [startDate, setStartDate] = useState(
-    (nursingCarePackage && new Date(nursingCarePackage?.nursingCarePackage?.startDate)) || undefined
-  );
-  const [endDate, setEndDate] = useState(
-    (nursingCarePackage && new Date(nursingCarePackage?.nursingCarePackage?.endDate)) || undefined
-  );
+  const [startDate, setStartDate] = useState(undefined);
+  const [endDate, setEndDate] = useState(undefined);
   const [endDateDisabled, setEndDateDisabled] = useState(!nursingCarePackage?.nursingCarePackage?.endDate);
 
   const [coreCostTotal, setCoreCostTotal] = useState(0);
@@ -56,10 +77,19 @@ const PackagesNursingCare = ({
   const [weeklyCostTotal, setWeeklyTotalCost] = useState(0);
   const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
   const [additionalOneOffCostTotal, setAdditionalNeedsOneOffCostTotal] = useState(0);
+  const [paidToCareHome, setPaidToCareHome] = useState(0);
+  const [hasFNCAssessment, setHasFNCAssessment] = useState('');
+  const [uploadFNCAssessment, setUploadFNCAssessment] = useState(null);
 
   const changeElementsData = (setter, getter, field, data) => {
     setter({ ...getter, [field]: data });
   };
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
+  const getFiles = (files) => setUploadFNCAssessment(files);
 
   useEffect(() => {
     setEndDateDisabled(!nursingCarePackage?.nursingCarePackage?.endDate);
@@ -82,6 +112,10 @@ const PackagesNursingCare = ({
   }, [additionalPaymentOneOff]);
 
   useEffect(() => {
+    setPaidToCareHome((Number(fncCostPerWeek) - initialFncCostPerWeek).toFixed(2));
+  }, [fncCostPerWeek]);
+
+  useEffect(() => {
     setWeeklyTotalCost(coreCostTotal + additionalCostTotal);
   }, [coreCostTotal, additionalCostTotal]);
 
@@ -89,12 +123,11 @@ const PackagesNursingCare = ({
     setOneOffTotalCost(additionalPaymentOneOff);
   }, [additionalPaymentOneOff]);
 
-  const formIsValid = (brokerageInfoForCreation) =>
-    !!(
-      !Number.isNaN(Number(brokerageInfoForCreation?.nursingCore)) &&
-      !Number.isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
-      !Number.isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
-    );
+  const formIsValid = (brokerageInfoForCreation) => !!(
+    !Number.isNaN(Number(brokerageInfoForCreation?.nursingCore)) &&
+    !Number.isNaN(Number(brokerageInfoForCreation?.additionalNeedsPayment)) &&
+    !Number.isNaN(Number(brokerageInfoForCreation?.additionalNeedsPaymentOneOff))
+  );
 
   const handleSaveBrokerage = (event) => {
     event.preventDefault();
@@ -110,7 +143,7 @@ const PackagesNursingCare = ({
     if (formIsValid(brokerageInfoForCreation)) {
       createBrokerageInfo(nursingCarePackage?.nursingCarePackageId, brokerageInfoForCreation);
     } else {
-      alert('Invalid form. Check to ensure all values are set correctly');
+      pushNotification('Invalid form. Check to ensure all values are set correctly');
     }
   };
 
@@ -121,6 +154,8 @@ const PackagesNursingCare = ({
 
   return (
     <>
+      {popupAddSupplier &&
+      <PopupAddSupplier getSuppliers={getSuppliers} closePopup={() => setPopupAddSupplier(false)}/>}
       <div className="mt-5 mb-5 person-care">
         <div className="column proposed-packages__header is-flex is-justify-content-space-between">
           <div>
@@ -132,7 +167,7 @@ const PackagesNursingCare = ({
           <Dropdown
             label=""
             initialText="Stage"
-            options={stageOptions}
+            options={mapCareStageOptions(stageOptions)}
             selectedValue={selectedStageType}
             onOptionSelect={(option) => handleBrokerageStageChange(option)}
           />
@@ -140,21 +175,21 @@ const PackagesNursingCare = ({
         <div className="column">
           <div className="is-flex is-flex-wrap-wrap">
             <div className="mr-3 is-flex is-align-items-flex-end">
-              <Dropdown
-                label=""
-                initialText="Supplier (please select)"
+              <Button className='mr-3' onClick={() => setPopupAddSupplier(true)}>New Supplier</Button>
+              <AutocompleteSelect
+                placeholder="Supplier (please select)"
                 options={supplierOptions}
-                onOptionSelect={setSelectedSupplierType}
-                selectedValue={selectedSupplierType}
+                selectProvider={setSelectedSupplierType}
+                value={selectedSupplierType}
               />
             </div>
             <span className="mr-3">
-              <DatePick label="Start Date" dateValue={startDate} setDate={setStartDate} />
+              <DatePick label="Start Date" dateValue={startDate} setDate={setStartDate}/>
             </span>
             <span className="mr-3">
               <DatePick
                 disabledLabel="Ongoing"
-                classes="datepicker-disabled datepicker-ongoing"
+                className="datepicker-disabled datepicker-ongoing"
                 label="End Date"
                 disabled={endDateDisabled}
                 dateValue={endDateDisabled ? '' : endDate}
@@ -166,12 +201,14 @@ const PackagesNursingCare = ({
         <div className="proposed-packages__elements column">
           <div className="mb-4">
             <h2 className="text-align-right font-weight-bold hackney-text-black">Cost / week</h2>
-            <div className="row-container residential_care__core is-flex is-align-items-center is-flex-wrap-wrap is-justify-content-space-between">
+            <div
+              className="row-container residential_care__core is-flex is-align-items-center is-flex-wrap-wrap is-justify-content-space-between">
               <h2 className="pt-5 hackney-text-black font-weight-bold">Nursing Core</h2>
               <div className="is-flex is-flex-wrap-wrap is-align-items-center">
                 <EuroInput
+                  maxLength={6}
                   onChange={(value) => changeElementsData(setCoreCost, coreCost, 'costPerWeek', value)}
-                  classes="mr-6"
+                  className="mr-6"
                   label="Cost per week"
                   value={coreCost.costPerWeek}
                 />
@@ -185,7 +222,8 @@ const PackagesNursingCare = ({
               <h2 className="pt-5 hackney-text-black font-weight-bold">Additional needs payment</h2>
               <div className="is-align-items-center is-flex is-flex-wrap-wrap">
                 <EuroInput
-                  classes="mr-6"
+                  maxLength={6}
+                  className="mr-6"
                   value={additionalPayment.costPerWeek}
                   onChange={(value) =>
                     changeElementsData(setAdditionalPayment, additionalPayment, 'costPerWeek', value)
@@ -208,12 +246,13 @@ const PackagesNursingCare = ({
               <h2 className="hackney-text-black font-weight-bold pt-5">Additional needs payment (one off)</h2>
               <div className="is-flex is-flex-wrap-wrap is-align-items-center">
                 <EuroInput
+                  maxLength={6}
                   value={additionalPaymentOneOff.oneOf}
                   label="One Off"
                   onChange={(value) =>
                     changeElementsData(setAdditionalPaymentOneOff, additionalPaymentOneOff, 'oneOf', value)
                   }
-                  classes="mr-6"
+                  className="mr-6"
                 />
                 <p className="pt-5">
                   {currency.euro}
@@ -224,26 +263,24 @@ const PackagesNursingCare = ({
           </div>
           <div className="proposed-packages__total-cost day-care__total-cost">
             <p>
-              One Of Total{' '}
+              One off Total{' '}
               <span>
                 {currency.euro}
                 {additionalOneOffCostTotal}
               </span>
             </p>
           </div>
-          <div>
-            <div className="mt-4 is-flex is-align-items-center is-justify-content-space-between">
-              <p className="package-reclaim__text">
-                Should the cost of this package be reclaimed in part or full from another body, e.g. NHS, CCG, another
-                LA ?
-              </p>
-              <Button onClick={addPackageReclaim} className="outline green">
-                Add reclaim
-              </Button>
-            </div>
-            <hr className="horizontal-delimiter" />
-          </div>
-          <div className="is-flex is-justify-content-flex-end is-align-content-center is-align-items-center">
+          <FundedNursingCare
+            getFiles={getFiles}
+            setHasFNCAssessment={setHasFNCAssessment}
+            hasFNCAssessment={hasFNCAssessment}
+            setUploadFNCAssessment={setUploadFNCAssessment}
+            uploadFNCAssessment={uploadFNCAssessment}
+          />
+          <div className="is-flex is-justify-content-space-between is-align-content-center is-align-items-center">
+            <Button onClick={addPackageReclaim} className="outline green">
+              Add reclaim
+            </Button>
             <Button onClick={handleSaveBrokerage} className="button hackney-btn-green">
               Submit for approval
             </Button>
@@ -264,12 +301,12 @@ const PackagesNursingCare = ({
             </div>
           )}
         </div>
-        <ProposedPackagesTab tab={tab} changeTab={changeTab} />
+        <ProposedPackagesTab tab={tab} changeTab={changeTab}/>
       </div>
       {tab === 'approvalHistory' ? (
         <ApprovalHistory
           history={approvalHistory}
-          nursingCarePackage={nursingCarePackage}
+          approvalData={nursingCarePackage?.nursingCarePackage}
           costSummary={{
             costOfCarePerWeek: coreCostTotal,
             anpPerWeek: additionalCostTotal,
@@ -295,70 +332,5 @@ const PackagesNursingCare = ({
     </>
   );
 };
-
-const ApprovalHistory = ({ history, nursingCarePackage = undefined, costSummary }) => (
-  <div className="approval-history">
-    <h2>
-      Nursing Care{' '}
-      <span>
-        ({nursingCarePackage?.nursingCarePackage?.isFixedPeriodOrOngoing ? 'Fixed Period' : 'Ongoing'} -{' '}
-        {nursingCarePackage?.nursingCarePackage.termTimeConsiderationOption})
-      </span>
-    </h2>
-    <ClientSummary
-      client={nursingCarePackage?.nursingCarePackage?.clientName}
-      hackneyId={nursingCarePackage?.nursingCarePackage?.clientHackneyId}
-      age={
-        nursingCarePackage?.nursingCarePackage &&
-        getAgeFromDateString(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth)
-      }
-      sourcingCare="hackney"
-      dateOfBirth={
-        nursingCarePackage?.nursingCarePackage &&
-        getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.clientDateOfBirth)
-      }
-      postcode={nursingCarePackage?.nursingCarePackage?.clientPostCode}
-    />
-    <div className="care-info">
-      <div>
-        <p>STARTS</p>
-        <p>{getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.startDate)}</p>
-      </div>
-      <div>
-        <p>ENDS</p>
-        <p>
-          {nursingCarePackage?.nursingCarePackage?.endDate !== null
-            ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage?.endDate)
-            : 'Ongoing'}
-        </p>
-      </div>
-      <div>
-        <p>DAYS/WEEK</p>
-        <p />
-      </div>
-    </div>
-    <div className="columns font-size-12px">
-      <div className="column">
-        <div className="is-flex is-flex-wrap-wrap">
-          <PackageCostBox title="COST OF CARE / WK" cost={costSummary?.costOfCarePerWeek ?? 0.0} costType="ESTIMATE" />
-          <PackageCostBox title="ANP / WK" cost={costSummary?.anpPerWeek ?? 0.0} costType="ESTIMATE" />
-          <PackageCostBox
-            boxClass="hackney-package-cost-yellow-box"
-            title="ONE OFF COSTS"
-            cost={costSummary?.oneOffCost ?? 0.0}
-            costType="ESTIMATE"
-          />
-          <PackageCostBox
-            boxClass="hackney-package-cost-yellow-box"
-            title="TOTAL / WK"
-            cost={costSummary?.totalCostPerWeek ?? 0.0}
-            costType="ESTIMATE"
-          />
-        </div>
-      </div>
-    </div>
-    <PackageApprovalHistorySummary approvalHistoryEntries={history} />
-  </div>
-);
 
 export default PackagesNursingCare;

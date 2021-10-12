@@ -1,5 +1,5 @@
 import React from 'react';
-import { getEnGBFormattedDate } from '../../api/Utils/FuncUtils';
+import { getEnGBFormattedDate } from 'api/Utils/FuncUtils';
 
 const CareTitle = ({ children, startDate, endDate }) => (
   <div className="care-title">

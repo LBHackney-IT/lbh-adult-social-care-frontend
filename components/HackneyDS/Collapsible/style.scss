@@ -1,0 +1,60 @@
+.lbh-collapsible {
+  &__button {
+    width: 100%;
+    background: none;
+    padding: 0 0 12px;
+    margin-bottom: 10px;
+    text-align: left;
+    cursor: pointer;
+    border: none;
+    border-bottom: 3px solid #0b0c0c;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-pack: justify;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    -webkit-box-align: center;
+    align-items: center;
+    svg {
+      margin: 0;
+      width: 20px;
+      height: 20px;
+      top: unset;
+      fill: none;
+      stroke: #0b0c0c;
+    }
+    &:focus {
+      outline: 0;
+      border-color: #ffc845;
+      svg {
+        stroke: #ffc845;
+      }
+    }
+    &[aria-expanded='false'] svg {
+      -webkit-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+    &__content {
+      margin-top: 15px;
+      margin-bottom: 35px;
+    }
+  }
+  &__heading {
+    font-weight: 600;
+    margin: 0;
+    font-family: Open Sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: block;
+    color: #0b0c0c;
+  }
+  @media (min-width: 40.0625em) {
+    &__heading {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+  }
+}

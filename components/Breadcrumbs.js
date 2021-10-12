@@ -1,4 +1,5 @@
 import React from 'react';
+import { BreadcrumbsChevron } from './Icons';
 
 const Breadcrumbs = ({ values, className = '' }) => (
   <div className={`breadcrumbs${className ? ` ${className}` : ''}`}>
@@ -12,7 +13,7 @@ const Breadcrumbs = ({ values, className = '' }) => (
           >
             {item.text}
           </p>
-          {!isLastItem && <span> › </span>}
+          {!isLastItem && <BreadcrumbsChevron />}
         </div>
       );
     })}

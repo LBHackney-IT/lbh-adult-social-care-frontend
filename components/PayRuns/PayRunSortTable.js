@@ -14,7 +14,7 @@ const PayRunSortTable = ({ changeAllChecked, checkedRows = [], rows = [], sorts,
               if (checkedRows.length === rows.length) {
                 changeAllChecked([]);
               } else {
-                changeAllChecked(rows.map((item) => item.id));
+                changeAllChecked(rows.map((item) => item.key));
               }
             }}
           />
@@ -22,16 +22,21 @@ const PayRunSortTable = ({ changeAllChecked, checkedRows = [], rows = [], sorts,
       ) : (
         <div className="sort sort-checkbox" />
       ))}
+
     {sorts.map((item) => (
       <div key={item.name} className="sort">
         <p className="sort__sort-name">{item.text}</p>
+
         <div className="sort__actions">
-          <CaretDownIcon onClick={() => sortBy(item.name, 'increase')} />
-          <CaretDownIcon onClick={() => sortBy(item.name, 'decrease')} />
+          <CaretDownIcon onClick={() => sortBy(item.name, 'ascending')} />
+          <CaretDownIcon onClick={() => sortBy(item.name, 'descending')} />
         </div>
       </div>
     ))}
-    {additionalActions && additionalActions.map((item) => <div key={item.id} className="sort" />)}
+
+    {additionalActions?.map((item) => (
+      <div key={item.id} className="sort" />
+    ))}
   </div>
 );
 

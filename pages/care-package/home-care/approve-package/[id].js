@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import {
-  getHomeCarePackageDetailsForBrokerage,
-  getHomeCareServices,
-  getHomeCareTimeSlotShifts,
-} from '../../../../api/CarePackages/HomeCareApi';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
-import HomeCareApprovalTitle from '../../../../components/HomeCare/HomeCareApprovalTitle';
-import HomeCarePackageBreakdown from '../../../../components/HomeCare/HomeCarePackageBreakdown';
-import HomeCarePackageDetails from '../../../../components/HomeCare/HomeCarePackageDetails';
-import Layout from '../../../../components/Layout/Layout';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TextArea from '../../../../components/TextArea';
-import withSession from '../../../../lib/session';
-import { getUserSession } from '../../../../service/helpers';
-import { PERSONAL_CARE_MODE } from '../../../../service/homeCarePickerHelper';
-import { getServiceTypeCareTimes } from '../../../../service/homeCareServiceHelper';
+import { useDispatch } from 'react-redux';
+import HomeCarePackageBreakdown from 'components/HomeCare/HomeCarePackageBreakdown';
+import Layout from 'components/Layout/Layout';
+import PackageApprovalHistorySummary from 'components/PackageApprovalHistorySummary';
+import withSession from 'lib/session';
+import { getErrorResponse, getUserSession } from 'service/helpers';
+import useHomeCareApi from 'api/SWR/useHomeCareApi';
+import { Button } from 'components/Button';
+import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
+import TitleHeader from 'components/TitleHeader';
+import DaySummary from 'components/HomeCare/DaySummary';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
+import formValidator from 'service/formValidator';
+import { nursingCareRequestClarification } from 'api/CarePackages/NursingCareApi';
+import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
+import { addNotification } from 'reducers/notificationsReducer';
+import { getServiceTypeCareTimes } from 'service/homeCareServiceHelper';
+import { testDataDaySummaries } from '../../../../testData/testDateHomeCare';
 
 const approvalHistoryEntries = [
   {
@@ -36,93 +38,104 @@ const approvalHistoryEntries = [
   },
 ];
 
-export const getServerSideProps = withSession(async ({ req, res }) => {
+export const getServerSideProps = withSession(({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
 
-  const data = {
-    errorData: [],
-  };
-
-  try {
-    // Call to api to get package
-    data.homeCareServices = await getHomeCareServices();
-  } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
-  }
-
-  try {
-    // Get home care time shifts
-    data.homeCareTimeShiftsData = await getHomeCareTimeSlotShifts();
-  } catch (error) {
-    data.errorData.push(`Retrieve home care time shift details failed. ${error.message}`);
-  }
-
-  return { props: { ...data, approvalHistoryEntries } };
+  return { props: {} };
 });
 
 // eslint-disable-next-line no-unused-vars,no-shadow
-const HomeCareApprovePackage = ({ approvalHistoryEntries, homeCareTimeShiftsData, homeCareServices }) => {
+const HomeCareApprovePackage = () => {
   // Route
   const router = useRouter();
+  const dispatch = useDispatch();
   const homeCarePackageId = router.query.id;
 
-  // State
-  const [packageData, setPackageData] = useState(undefined);
+  const { data: homeCareTimeShiftsData } = useHomeCareApi.getAllTimeShiftSlots();
+  const { data: homeCareServices } = useHomeCareApi.getAllServices();
+  const { data: packageData } = useHomeCareApi.detailsForBrokerage(homeCarePackageId);
+  const [homeCareSummaryData, setHomeCareSummaryData] = useState([]);
+  const [errorFields, setErrorFields] = useState({
+    requestInformationText: '',
+  });
+  const [requestInformationText, setRequestInformationText] = useState(undefined);
 
-  // On load retrieve package
+  const changeErrorFields = (field) => {
+    setErrorFields({
+      ...errorFields,
+      [field]: '',
+    });
+  };
+
+  const updateErrorFields = (errors, field) => {
+    const newErrors = field ? {[field]: errors} : getErrorResponse(errors);
+    setErrorFields({
+      ...errorFields,
+      ...newErrors,
+    });
+  };
+
+  const { times, secondaryTimes } = getServiceTypeCareTimes(homeCarePackageId);
+
+  const editDaySummary = (daySummary, value) => {
+    daySummary.needToAddress = value;
+  };
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
+  const handleRequestMoreInformation = () => {
+    const { validFields, hasErrors } = formValidator({ form: { requestInformationText }});
+    setErrorFields(validFields);
+
+    if(hasErrors) return;
+
+    nursingCareRequestClarification(homeCarePackageId, requestInformationText)
+      .then(() => {
+        router.push(`${APPROVER_HUB_ROUTE}`);
+      })
+      .catch((error) => {
+        pushNotification(error);
+        updateErrorFields(error);
+      });
+  };
+
   useEffect(() => {
-    if (!packageData) {
-      (async function retrieveData() {
-        setPackageData(await getHomeCarePackageDetailsForBrokerage(homeCarePackageId));
-      })();
-    }
-  }, [homeCarePackageId, packageData]);
-
-  const { times, secondaryTimes } = getServiceTypeCareTimes(PERSONAL_CARE_MODE);
+    setHomeCareSummaryData(testDataDaySummaries);
+  }, [testDataDaySummaries]);
 
   return (
-    <Layout headerTitle="HOME CARE PACKAGE APPROVAL">
+    <Layout
+      clientSummaryInfo={{
+        whoIsSourcing: 'hackney',
+        client: 'James Stephens',
+        title: `Home Care`,
+        hackneyId: '#786288',
+        age: '91',
+        dateOfBirth: '09/12/1972',
+        postcode: 'E9 6EY',
+      }}
+    >
       <div className="hackney-text-black font-size-12px">
-        <HomeCareApprovalTitle />
-        <ApprovalClientSummary />
-
-        <div className="columns">
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">HOURS PER WEEK</p>
-                    <p className="font-size-14px">18</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">COST OF CARE</p>
-                    <p className="font-size-14px">£1,982</p>
-                    <p className="font-weight-bold hackney-text-green">ESTIMATE</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column" />
-          <div className="column" />
-          <div className="column" />
+        <div className='client-summary mb-5'>
+          <ClientSummaryItem itemDetail={18} itemName='HOURS PER WEEK' />
+          <ClientSummaryItem itemDetail='£1,982' itemName='COST OF CARE' />
         </div>
 
         <HomeCarePackageBreakdown />
 
         <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
 
-        <HomeCarePackageDetails />
+        <TitleHeader>Package Details</TitleHeader>
+        {homeCareSummaryData?.length ? homeCareSummaryData.map((summaryItem) => (
+          <DaySummary
+            key={summaryItem.id}
+            daySummaryItem={summaryItem}
+            edit={editDaySummary}
+          />
+        )) : <p className='mt-3 pl-4'>No package details</p>}
 
         <div className="columns mb-4">
           <div className="column">
@@ -136,28 +149,19 @@ const HomeCareApprovePackage = ({ approvalHistoryEntries, homeCareTimeShiftsData
               /> */}
             </div>
 
-            <div className="level mt-3">
-              <div className="level-left" />
-              <div className="level-right">
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Deny</button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light">Request more information</button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green">Approve to be brokered</button>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-1">
-              <p className="font-size-16px font-weight-bold">Request more information</p>
-              <TextArea label="" rows={5} placeholder="Add details..." />
-              <button className="button hackney-btn-green">Request more information</button>
+            <div className='button-group mb-5'>
+              <Button className='gray'>Deny</Button>
+              <Button>Approve to be brokered</Button>
             </div>
           </div>
         </div>
+        <RequestMoreInformation
+          requestMoreInformationText={requestInformationText}
+          setRequestInformationText={setRequestInformationText}
+          errorFields={errorFields}
+          changeErrorFields={changeErrorFields}
+          handleRequestMoreInformation={handleRequestMoreInformation}
+        />
       </div>
     </Layout>
   );

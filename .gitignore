@@ -30,3 +30,7 @@ yarn-error.log*
 
 /.idea
 /.vs
+/.history
+
+/.storybook-static
+/storybook-static

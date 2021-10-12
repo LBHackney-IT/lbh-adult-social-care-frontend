@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../Button';
-import Input from '../Input';
 import Dropdown from '../Dropdown';
+import DatePick from '../DatePick';
+import CustomAsyncSelector from '../CustomAsyncSelect';
 
 const initialFilters = {
   serviceUser: '',
@@ -10,26 +11,24 @@ const initialFilters = {
   supplier: '',
   type: '',
   status: '',
-  dateRange: '',
+  dateFrom: '',
+  dateTo: '',
 };
 
 const PayRunHeader = ({
-  supplierOptions = [],
-  dateRangeOptions = [],
+  payRunDetails,
+  changeFilters,
   typeOptions = [],
   statusOptions = [],
   actionButtonText = '',
-  filter,
+  filter = () => {},
   clickActionButton = () => {},
 }) => {
   const [filters, setFilters] = useState({ ...initialFilters });
+  const [hasFields, setHasFields] = useState(false);
 
   const applyFilters = () => {
-    filter();
-  };
-
-  const searchId = () => {
-    console.log('search by id', filters.id);
+    filter(filters);
   };
 
   const changeFilter = (field, value) => {
@@ -39,66 +38,96 @@ const PayRunHeader = ({
     });
   };
 
+  useEffect(() => {
+    changeFilters(filters)
+    for(const name in filters) {
+      if(filters[name]) {
+        setHasFields(true);
+        break;
+      }
+    }
+  }, [filters]);
+
   return (
     <div className="pay-runs__header p-3 pay-run__header">
       <div className="pay-runs__new-pay">
-        <p className="title">Pay Runs</p>
-        <Button onClick={clickActionButton}>{actionButtonText}</Button>
+        <span className="pay-runs__new-pay_container">
+          <p className="title">Pay Run {payRunDetails?.payRunId}</p>
+          <p className="subtitle">{payRunDetails?.payRunStatusName}</p>
+        </span>
+        {actionButtonText && <Button onClick={clickActionButton}>{actionButtonText}</Button>}
       </div>
       <div>
-        <div className="pay-run__searches mb-3">
-          <Input
-            classes="mr-3 pay-run__filter-item"
-            value={filters.id}
-            search={searchId}
-            placeholder="Service User"
-            onChange={(value) => changeFilter('serviceUser', value)}
+        <div className="pay-run__searches">
+          <CustomAsyncSelector
+            onChange={(option) => changeFilter('serviceUser', option)}
+            placeholder='Service User'
+            getOptionLabel={option =>  `${option.firstName} ${option.lastName}`}
+            endpoint={{
+              endpointName: '/clients/get-all',
+              filterKey: 'clientName',
+            }}
+            value={filters.serviceUser}
           />
-          <Input
-            classes="mr-3 pay-run__filter-item"
-            value={filters.id}
-            search={searchId}
-            placeholder="Invoice No"
-            onChange={(value) => changeFilter('invoiceNo', value)}
+          <CustomAsyncSelector
+            value={filters.supplier}
+            getOptionLabel={option => option.supplierName}
+            onChange={(option) => changeFilter('supplier', option)}
+            placeholder='Supplier'
+            endpoint={{
+              endpointName: '/suppliers/get-all',
+              filterKey: 'supplierName',
+            }}
           />
-          <Input
-            classes="mr-3 pay-run__filter-item"
-            value={filters.id}
-            search={searchId}
-            placeholder="Package ID"
-            onChange={(value) => changeFilter('packageId', value)}
+          <CustomAsyncSelector
+            value={filters.invoiceNo}
+            getOptionLabel={option => option.invoiceNo}
+            onChange={(option) => changeFilter('invoiceNo', option)}
+            placeholder='Invoice Number'
+            endpoint={{
+              endpointName: '/invoiceNo/get-all',
+              filterKey: 'invoiceNo',
+            }}
           />
         </div>
         <div className="pay-run__dropdowns">
           <Dropdown
-            initialText="Supplier"
-            classes="pay-run__filter-item mr-3"
-            options={supplierOptions}
-            selectedValue={filters.supplier}
-            onOptionSelect={(option) => changeFilter('supplier', option)}
-          />
-          <Dropdown
             initialText="Type"
-            classes="pay-run__filter-item mr-3"
+            className="pay-run__filter-item mr-3"
             options={typeOptions}
             selectedValue={filters.type}
             onOptionSelect={(option) => changeFilter('type', option)}
           />
           <Dropdown
             initialText="Status"
-            classes="pay-run__filter-item mr-3"
+            className="pay-run__filter-item mr-3"
             options={statusOptions}
             selectedValue={filters.status}
             onOptionSelect={(option) => changeFilter('status', option)}
           />
-          <Dropdown
-            initialText="Date range"
-            classes="pay-run__filter-item mr-3"
-            options={dateRangeOptions}
-            selectedValue={filters.dateRange}
-            onOptionSelect={(option) => changeFilter('dateRange', option)}
+          <DatePick
+            className='pay-run__filter-item mr-3'
+            dateValue={filters.dateFrom}
+            placeholder='Data range'
+            startDate={filters.dateFrom}
+            endDate={filters.dateTo}
+            setDate={(value) => {
+              setFilters({
+                ...filters,
+                dateFrom: value[0],
+                dateTo: value[1],
+              })
+            }}
+            selectsRange
           />
-          <Button onClick={applyFilters}>Filter</Button>
+          <div className='inputs__button-container'>
+            <Button onClick={applyFilters}>Filter</Button>
+            {hasFields && <Button className='outline gray ml-3' onClick={() => {
+              setFilters({...initialFilters})
+              setHasFields(false);
+            }}>Clear</Button> }
+          </div>
+
         </div>
       </div>
     </div>

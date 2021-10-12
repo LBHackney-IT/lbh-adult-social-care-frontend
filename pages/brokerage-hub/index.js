@@ -1,297 +1,127 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import HackneyFooterInfo from '../../components/HackneyFooterInfo';
-import { addNotification } from '../../reducers/notificationsReducer';
-import DashboardTabs from '../../components/Dashboard/Tabs';
-import Table from '../../components/Table';
-import Inputs from '../../components/Inputs';
-import {
-  getBrokeredPackagesBrokeredDone,
-  getBrokeredPackagesBrokeredInProgress,
-  getBrokeredPackagesBrokeredNew,
-  getBrokeredPackagesPackageTypes,
-  getBrokeredPackagesSocialWorkers,
-  getBrokeredPackagesStages,
-  putBrokeredPackagesAssign,
-} from '../../api/Dashboard/brokeredPackages';
-import { formatDate } from '../../service/helpers';
-import { currency } from '../../constants/strings';
-import CustomDropDown from '../../components/CustomDropdown';
-import Pagination from '../../components/Payments/Pagination';
 import { useRouter } from 'next/router';
-import { RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE, RESIDENTIAL_CARE_BROKERING_ROUTE, NURSING_CARE_BROKERING_ROUTE, NURSING_CARE_APPROVE_BROKERED_ROUTE } from '../../routes/RouteConstants';
+import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
+import withSession from 'lib/session';
+import { getUserSession } from 'service/helpers';
+import { BrokerageHubPage } from 'components/Brokerage/BrokerageHub';
+import { createCoreCarePackage } from 'api/CarePackages/CarePackage';
+import { addNotification } from 'reducers/notificationsReducer';
+import { useDispatch } from 'react-redux';
 
-const BrokerageHubPage = () => {
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const isRedirect = getUserSession({ req, res });
+  if (isRedirect) return { props: {} };
+  return { props: {} };
+});
+
+const BrokerageHub = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const [packageData, setPackageData] = React.useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [paginationData, setPaginationData] = React.useState({
+    totalCount: 0,
+    totalPages: 0,
+    pageSize: 0,
+  });
   const [initialFilters] = useState({
-    PackageId: '',
-    TypeOfCare: '',
-    Stage: '',
-    SocialWorker: '',
-    HackneyId: '',
+    status: '',
+    dateFrom: null,
+    dateTo: null,
+    serviceUserId: '',
+  });
+  const [apiFilters, setApiFilters] = useState({ ...initialFilters });
+  const { data } = useCarePackageApi.brokerView({
+    pageNumber,
+    status: apiFilters.status,
+    toDate: apiFilters.dateTo ? apiFilters.dateTo.toJSON() : null,
+    fromDate: apiFilters.dateFrom ? apiFilters.dateFrom.toJSON() : null,
+    serviceUserId: apiFilters.serviceUser?.id,
   });
 
-  const router = useRouter();
-
-  const onClickTableRow = (rowItems) => {
-    if(rowItems.packageTypeId === 3)
-    {
-      if(tab === "new")
-      router.push(`${RESIDENTIAL_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
-      else if(tab === "inProgress")
-      router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
-      else if(tab === "done")
-      router.push(`${RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
-    }
-    else{
-      if(tab === "new")
-      router.push(`${NURSING_CARE_BROKERING_ROUTE}/${rowItems.packageId}`)
-      else if(tab === "inProgress")
-      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
-      else if(tab === "done")
-      router.push(`${NURSING_CARE_APPROVE_BROKERED_ROUTE}/${rowItems.packageId}`)
-    }
+  const clearFilter = () => {
+    setApiFilters({ ...initialFilters });
   };
 
-  const [filters, setFilters] = useState({ ...initialFilters });
-  const [timer, setTimer] = useState(null);
-  const [stageOptions, setStagesOptions] = useState([]);
-  const [socialWorkerOptions, setSocialWorkersOptions] = useState([]);
-  const [packageId, setPackageValue] = useState();
+  useEffect(() => {
+    if (data) {
+      setPackageData(data.packages);
+    }
+  }, [data]);
 
-  const [sorts] = useState([
-    { name: 'packageType', text: 'Package Type' },
-    { name: 'startDate', text: 'Start Date' },
-    { name: 'serviceUser', text: 'Service User' },
-    { name: 'stage', text: 'Stage', className: 'table__row-item-justify-center' },
-    { name: 'owner', text: 'OWNER' },
-    { name: 'hackneyReferenceNumber', text: 'HACKNEY REFERENCE NUMBER' },
-    { name: 'lastUpdated', text: 'LAST UPDATED' },
-    { name: 'daysSinceApproval', text: 'DAYS SINCE APPROVAL' },
-  ]);
+  useEffect(() => {
+    if (data.pagingMetaData) {
+      setPaginationData({
+        totalCount: data.pagingMetaData.totalCount,
+        totalPages: data.pagingMetaData.totalPages,
+        pageSize: data.pagingMetaData.pageSize,
+      });
+    }
+  }, [data]);
 
-  const [inputs] = useState({
-    inputs: [
-      {
-        label: 'Search',
-        name: 'clientName',
-        placeholder: 'Search...',
-        search: () => makeTabRequest(),
-        className: 'mr-3',
-      },
-    ],
-    dropdowns: [
-      { options: [], initialText: 'Type of care', name: 'TypeOfCare', className: 'mr-3' },
-      { options: [], initialText: 'Stage', name: 'Stage', className: 'mr-3' },
-      { options: [], initialText: 'Social Worker', name: 'SocialWorker', className: 'mr-3' },
-    ],
-    buttons: [{ initialText: 'Filter', name: 'button-1', className: 'mt-auto', onClick: () => makeTabRequest() }],
-  });
-
-  const [tab, setTab] = useState('new');
-  const [page, setPage] = useState(1);
-  const [pagingMetaData, setPagingMetaData] = useState({
-    new: {},
-    inProgress: {},
-    done: {},
-  });
-
-  const [tabsRequests] = useState({
-    new: getBrokeredPackagesBrokeredNew,
-    inProgress: getBrokeredPackagesBrokeredInProgress,
-    done: getBrokeredPackagesBrokeredDone,
-  });
-
-  const [tabsTable, setTabsTable] = useState({
-    new: [],
-    inProgress: [],
-    done: [],
-  });
-
-  const tabs = [
-    { value: 'new', text: `New${tabsTable.new.length ? ` (${tabsTable.new.length})` : ''}` },
-    {
-      value: 'inProgress',
-      text: `In Progress ${tabsTable.inProgress.length ? ` (${tabsTable.inProgress.length})` : ''}`,
-    },
-    { value: 'done', text: `Done${tabsTable.done.length ? ` (${tabsTable.done.length})` : ''}` },
+  const statusOptions = [
+    { text: 'All', value: '' },
+    { text: 'New', value: '1' },
+    { text: 'In Progress', value: '2' },
+    { text: 'Submitted For Approval', value: '3' },
+    { text: 'Approved', value: '4' },
+    { text: 'Not Approved', value: '5' },
+    { text: 'Ended', value: '6' },
+    { text: 'Cancelled', value: '7' },
   ];
 
-  const [sort, setSort] = useState({
-    value: 'increase',
-    name: 'id',
-  });
+  const handleRowClick = (rowItem) => {
+    router.push({
+      pathname: `care-package/service-users/${rowItem?.serviceUserId}/core-package-details`,
+      query: { packageId: rowItem.packageId },
+    });
+  };
+
+  // const findServiceUser = () => setApiFilters(filters);
+  const createNewPackage = () => {
+    const dummyPackageToCreate = {
+      serviceUserId: 'aee45700-af9b-4ab5-bb43-535adbdcfb84',
+      hasRespiteCare: false,
+      hasDischargePackage: false,
+      packageScheduling: 1,
+      primarySupportReasonId: 1,
+      packageType: 2,
+      hospitalAvoidance: false,
+      isReEnablement: false,
+      isS117Client: false,
+    };
+    createCoreCarePackage({ data: dummyPackageToCreate })
+      .then(({ id, serviceUserId }) => {
+        // Dummy package created, go to package builder
+        router.push({
+          pathname: `care-package/service-users/${serviceUserId}/core-package-details`,
+          query: { packageId: id },
+        });
+        pushNotification('Package created.', 'success');
+      })
+      .catch((error) => {
+        pushNotification(error);
+      });
+  };
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
   };
 
-  const sortBy = (field, value) => {
-    setSort({ value, name: field });
-  };
-
-  const setPackageId = (packageId) => {
-    setPackageValue(packageId);
-  };
-
-  const brokeredPackagesAssign = (option) => {
-    putBrokeredPackagesAssign(packageId, option.id)
-      .then(() => pushNotification('Assigned success'))
-      .catch(() => pushNotification('Assign fail'));
-  };
-
-  const makeTabRequest = () => {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    setTimer(
-      setTimeout(() => {
-        const setInitialOptions = (tag, response) => {
-          if (tag === 'Stage') {
-            inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ stageName, id }) => ({
-              text: stageName,
-              value: id,
-            }));
-          }
-          if (tag === 'TypeOfCare') {
-            inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ packageType, id }) => ({
-              text: packageType,
-              value: id,
-            }));
-          }
-          if (tag === 'SocialWorker') {
-            inputs.dropdowns.find((el) => el.name === tag).options = response.map(({ userName, id }) => ({
-              text: userName,
-              value: id,
-            }));
-          }
-        };
-        getBrokeredPackagesStages()
-          .then((res) => {
-            setInitialOptions('Stage', res);
-            setStagesOptions(res);
-          })
-          .catch(() => pushNotification('Can not get stages'));
-
-        getBrokeredPackagesPackageTypes()
-          .then((res) => {
-            setInitialOptions('TypeOfCare', res);
-            changeInputs('TypeOfCare', res);
-          })
-          .catch(() => pushNotification('Can not get Package Type'));
-
-        getBrokeredPackagesSocialWorkers()
-        .then((res) => {
-          setInitialOptions('SocialWorker', res)
-          setSocialWorkersOptions(res)})
-        .catch(() => pushNotification('Can not get social workers'));
-
-        tabsRequests[tab]({
-          ...filters,
-          PageNumber: page,
-          OrderBy: sort.name,
-          PageSize : 50,
-        }).then((res) => {
-          setTabsTable({
-            ...tabsTable,
-            [tab]: res.data,
-          });
-          setPagingMetaData({
-            ...pagingMetaData,
-            [tab]: res.pagingMetaData,
-          });
-        });
-      }, 500)
-    );
-  };
-
-  useEffect(() => {
-    makeTabRequest();
-  }, [page, tab, sort]);
-
-  const tableRows = tabsTable[tab];
-
-  const rowsRules = {
-    packageId: {
-      hide: true,
-    },
-    startDate: {
-      getValue: (value) => `${formatDate(value, '/')}`,
-    },
-    lastUpdated: {
-      getValue: (value) => `${formatDate(value, '/')}`,
-    },
-    owner: {
-      getComponent: (item) => {
-        return (
-          <CustomDropDown
-            onOptionSelect={brokeredPackagesAssign}
-            key={setPackageId(item.packageId)}
-            options={socialWorkerOptions}
-            className="table__row-item"
-            fields={{
-              value: 'id',
-              text: 'userName',
-            }}
-            initialText=""
-            selectedValue={item.stage}
-          />
-        );
-      },
-    },
-    stage: {
-      getClassName: (value) => `${value} table__row-item-status`,
-    },
-  };
-
-  const changeInputs = (field, value) => {
-    setFilters({
-      ...filters,
-      [field]: value,
-    });
-  };
-
-    //todo refactor
-    const changePage = (page) => {
-      setPage(page);
-      makeTabRequest()
-    };
-  
-
-  const { pageSize, totalCount, totalPages } = pagingMetaData[tab];
-
   return (
-    <div className="brokerage-hub-page">
-      <Inputs inputs={inputs} changeInputs={changeInputs} values={filters} title="Brokerage Hub" />
-      <DashboardTabs tabs={tabs} changeTab={setTab} tab={tab} />
-      <Table
-        rows={tableRows}
-        rowsRules={rowsRules}
-        fields={{
-          id: 'packageId',
-          packageType: 'packageType',
-          startDate: 'startDate',
-          serviceUser: 'serviceUser',
-          stage: 'stage',
-          owner: 'owner',
-          hackneyReferenceNumber: 'hackneyId',
-          lastUpdated: 'lastUpdated',
-          daysSinceApproval: 'daysSinceApproval',
-        }}
-        sortBy={sortBy}
-        sorts={sorts}
-        onClickTableRow={onClickTableRow}
-      />
-      <Pagination
-        changePagination={changePage}
-        totalPages={totalPages}
-        currentPage={page}
-        itemsCount={pageSize}
-        totalCount={totalCount}
-      />
-      <HackneyFooterInfo />
-    </div>
+    <BrokerageHubPage
+      createNewPackage={createNewPackage}
+      filters={apiFilters}
+      clearFilter={clearFilter}
+      setFilters={setApiFilters}
+      pageNumber={pageNumber}
+      setPageNumber={setPageNumber}
+      statusOptions={statusOptions}
+      items={packageData}
+      paginationData={paginationData}
+      onRowClick={handleRowClick}
+    />
   );
 };
 
-export default BrokerageHubPage;
+export default BrokerageHub;

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Input from '../Input';
 import DatePick from '../DatePick';
 import { Button } from '../Button';
-import { createDayCareCollege } from '../../api/CarePackages/DayCareApi';
-import fieldValidator from '../../service/inputValidator';
+import { createDayCareCollege } from 'api/CarePackages/DayCareApi';
+import formValidator from 'service/formValidator';
+import { addNotification } from 'reducers/notificationsReducer';
 
 const DayCareCreateCollege = ({ newName = undefined, onCreated = () => {}, onCancelled = () => {} }) => {
+  const dispatch = useDispatch();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [collegeName, setCollegeName] = useState(newName);
@@ -22,12 +25,12 @@ const DayCareCreateCollege = ({ newName = undefined, onCreated = () => {}, onCan
     });
   };
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
   const handleSaveCollege = () => {
-    const { validFields, hasErrors } = fieldValidator([
-      { name: 'startDate', value: startDate, rules: ['empty'] },
-      { name: 'endDate', value: endDate, rules: ['empty'] },
-      { name: 'collegeName', value: collegeName, rules: ['empty'] },
-    ]);
+    const { validFields, hasErrors } = formValidator({ form: { startDate, endDate, collegeName } });
     setErrorFields(validFields);
     if (!hasErrors) return;
     const collegeToCreate = {
@@ -43,7 +46,7 @@ const DayCareCreateCollege = ({ newName = undefined, onCreated = () => {}, onCan
         onCreated();
       })
       .catch((error) => {
-        console.log(error);
+        pushNotification(error);
         onCancelled();
       });
   };
@@ -59,7 +62,7 @@ const DayCareCreateCollege = ({ newName = undefined, onCreated = () => {}, onCan
           setError={() => changeErrorFields('collageName', [])}
           onChange={setCollegeName}
           type="text"
-          classes="max-w-200px"
+          className="max-w-200px"
         />
 
         <DatePick
@@ -68,7 +71,7 @@ const DayCareCreateCollege = ({ newName = undefined, onCreated = () => {}, onCan
           dateValue={endDate}
           setDate={setEndDate}
           setError={() => changeErrorFields('endDate', [])}
-          classes="max-w-200px"
+          className="max-w-200px"
         />
       </div>
       <div className="column is-8">
@@ -78,7 +81,7 @@ const DayCareCreateCollege = ({ newName = undefined, onCreated = () => {}, onCan
           setError={() => changeErrorFields('startDate', [])}
           error={errorFields.endDate}
           setDate={setStartDate}
-          classes="max-w-200px"
+          className="max-w-200px"
         />
         <div>
           <Button className="button hackney-btn-green mt-2 mr-3" onClick={handleSaveCollege}>

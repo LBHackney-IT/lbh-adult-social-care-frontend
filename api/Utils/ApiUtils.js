@@ -3,6 +3,7 @@ import axios from 'axios';
 import { requestMethods } from '../../constants/variables';
 
 async function handleResponse(response) {
+  console.log(`response`, response)
   if (response.status === 200 || response.status === 201 || response.status === 204) return response.data;
   if (response.status === 400) {
     // So, a server-side validation error occurred.
@@ -44,7 +45,7 @@ const axiosRequest = (options = {}) => {
   const localOptions = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json;charset=UTF-8',
+      'Content-Type': 'application/json',
       ...headers,
     },
     method: requestMethods.get,
@@ -63,16 +64,18 @@ const axiosRequest = (options = {}) => {
 
   return a string '?payRunId=very-long-id-1234&orderBy=cost'
  */
-const getQueryParamsFromObject = (params = {}) => {
+const getQueryParamsFromObject = (params = {}, addEmptyString, signs = {}) => {
   let string = '';
   let count = 0;
   for (const i in params) {
-    if (params[i]) {
+    if (params[i] || (addEmptyString && params[i] === '')) {
       const paramString = `${i}=${params[i]}`;
       if (count === 0) {
-        string = `?${string}${paramString}`;
+        const sign = signs?.firstSign || '?';
+        string = `${sign}${string}${paramString}`;
       } else {
-        string = `${string}&${paramString}`;
+        const sign = signs?.generalSign || '&';
+        string = `${string}${sign}${paramString}`;
       }
       count += 1;
     }
@@ -80,4 +83,6 @@ const getQueryParamsFromObject = (params = {}) => {
   return string;
 };
 
-export { handleError, handleResponse, axiosRequest, getQueryParamsFromObject };
+const axiosFetcher = (url) => axios.get(url).then(handleResponse).catch(handleError);
+
+export { handleError, handleResponse, axiosRequest, getQueryParamsFromObject, axiosFetcher };

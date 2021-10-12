@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '../Button';
 import PayRunsFilters from './PayRunsFilters';
 import HeldPaymentsFilters from './HeldPaymentsFilters';
+import { checkEmptyFields } from 'service/formValidator';
 
 const initialFilters = {
   id: '',
   type: '',
   status: '',
-  dateStart: '',
-  dateEnd: '',
-  date: '',
-  dateRange: '',
+  dateFrom: null,
+  dateTo: null,
   serviceType: '',
   waitingOn: '',
   serviceUser: '',
@@ -21,13 +20,7 @@ const initialFilters = {
 const PayRunsHeader = ({
   typeOptions = [],
   statusOptions = [],
-  dateRangeOptions = [],
-  dateOptions = [],
-  serviceTypesOptions = [],
   releaseHolds,
-  serviceUserOptions = [],
-  supplierOptions = [],
-  waitingOnOptions = [],
   setOpenedPopup,
   apply,
   tab,
@@ -35,7 +28,7 @@ const PayRunsHeader = ({
   const [filters, setFilters] = useState({ ...initialFilters });
 
   const applyFilters = () => {
-    apply();
+    apply?.(filters);
   };
 
   const searchId = () => {
@@ -43,11 +36,27 @@ const PayRunsHeader = ({
   };
 
   const changeFilter = (field, value) => {
-    setFilters({
-      ...filters,
+    setFilters((prevFilters) => ({
+      ...prevFilters,
       [field]: value,
-    });
+    }));
   };
+
+  const [hasFields, setHasFields] = useState(false);
+
+  const clearFilters = () => {
+    setHasFields(false);
+    setFilters({...initialFilters});
+  }
+
+  useEffect(() => {
+    const empty = checkEmptyFields(filters);
+    if(empty) {
+      setHasFields(false);
+    } else {
+      setHasFields(true);
+    }
+  }, [filters]);
 
   const tabInfos = {
     'pay-runs': {
@@ -58,11 +67,12 @@ const PayRunsHeader = ({
       },
       filtersComponent: (
         <PayRunsFilters
-          dateOptions={dateOptions}
           statusOptions={statusOptions}
           applyFilters={applyFilters}
+          hasFields={hasFields}
           changeFilter={changeFilter}
           filters={filters}
+          clearFilters={clearFilters}
           searchId={searchId}
           typeOptions={typeOptions}
         />
@@ -71,26 +81,21 @@ const PayRunsHeader = ({
     'held-payments': {
       title: 'Held Payments',
       actionButtonText: 'Pay Released Holds',
-      clickActionButton: () => releaseHolds(),
+      clickActionButton: releaseHolds,
       filtersComponent: (
         <HeldPaymentsFilters
-          dateRangeOptions={dateRangeOptions}
-          statusOptions={statusOptions}
-          applyFilters={applyFilters}
-          serviceTypesOptions={serviceTypesOptions}
-          serviceUserOptions={serviceUserOptions}
-          supplierOptions={supplierOptions}
-          waitingOnOptions={waitingOnOptions}
-          changeFilter={changeFilter}
           filters={filters}
-          typeOptions={typeOptions}
+          applyFilters={applyFilters}
+          clearFilters={clearFilters}
+          hasFields={hasFields}
+          changeFilter={changeFilter}
         />
       ),
     },
   };
 
   useEffect(() => {
-    setFilters({ ...initialFilters });
+    clearFilters()
   }, [tab]);
 
   return (
@@ -99,6 +104,7 @@ const PayRunsHeader = ({
         <p className="title">{tabInfos[tab].title}</p>
         <Button onClick={tabInfos[tab].clickActionButton}>{tabInfos[tab].actionButtonText}</Button>
       </div>
+
       <div className="pay-runs__filters">
         <p className="pay-runs__filters-title">Filter by</p>
         {tabInfos[tab].filtersComponent}

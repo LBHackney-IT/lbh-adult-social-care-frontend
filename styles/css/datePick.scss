@@ -9,12 +9,17 @@
   &::after {
     content: '';
     position: absolute;
+    pointer-events: none;
     right: 11px;
-    width: 20px;
-    height: 20px;
-    background: url('/images/icons/calendar_icon.svg');
+    width: 24px;
+    height: 24px;
+    background: url('../../public/images/icons/icon_hakcney_calendar.svg');
     cursor: text;
   }
+}
+
+.control .react-datepicker-popper {
+  z-index: 4;
 }
 
 .datepicker-disabled {
@@ -62,6 +67,7 @@
 }
 
 .react-date-picker__input {
+  box-sizing: border-box;
   outline: none !important;
   box-shadow: unset !important;
   position: relative;
@@ -74,4 +80,24 @@
   display: flex;
   justify-content: space-between;
   padding-left: 10px;
+
+  &::placeholder {
+    font-size: 16px;
+    font-family: "OpenSans", sans-serif;
+    color: $lbh-black1;
+  }
+}
+
+.datepicker-custom-input-placeholder {
+  color: $lbh-gray1;
+}
+
+.datepicker-custom-input {
+  width: 100%;
+  padding: 8px;
+  height: 40px;
+  text-align: left;
+  background: white;
+  min-width: 120px;
+  border: 2px solid black;
 }

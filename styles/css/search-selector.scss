@@ -1,0 +1,43 @@
+.custom-async-selector {
+  margin-right: 8px;
+
+  &__control {
+    width: 185px;
+    height: 42px;
+    border-color: #bfc1c3 !important;
+    border-radius: 3px !important;
+    box-shadow: none !important;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    .custom-async-selector__value-container {
+      &:hover {
+        cursor: text;
+      }
+    }
+
+    &--menu-is-open {
+      .custom-async-selector__indicators svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  &__option {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__placeholder {
+    color: #363636 !important;
+  }
+
+  &__indicators svg {
+    margin: 0 10px;
+
+    transition: 0.2s ease;
+  }
+}

@@ -9,7 +9,7 @@ switch (process.env.NEXT_PUBLIC_STAGE) {
     break;
   }
   case 'local': {
-    baseUrl = 'http://localhost:5000/api';
+    baseUrl = process.env.NEXT_PUBLIC_AWS_ENDPOINT || 'http://localhost:5000/api';
     break;
   }
   case 'production': {
@@ -29,6 +29,16 @@ axios.interceptors.request.use((config) => {
   const token = Cookies.get(HASC_TOKEN_ID);
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
+});
+
+axios.interceptors.response.use(null, async (error) => {
+  // redirect to login to refresh hascToken since it is expired
+  if (error?.response?.status === 401) {
+    Cookies.remove('hascToken');
+    await axios.get('/api/logout');
+    window.location.pathname = '/login';
+  }
+  return Promise.reject(error);
 });
 
 export { BASE_URL, HASC_TOKEN_ID };

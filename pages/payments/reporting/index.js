@@ -1,6 +1,6 @@
 import React from 'react';
-import { getUserSession } from '../../../service/helpers';
-import withSession from '../../../lib/session';
+import { getUserSession } from 'service/helpers';
+import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });

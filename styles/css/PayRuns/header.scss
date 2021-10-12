@@ -1,7 +1,18 @@
+.pay-runs__new-pay_container {
+  display: flex;
+  flex-direction: column;
+
+  .subtitle {
+    font-weight: 100;
+    font-size: 1.6rem;
+  }
+}
+
 .pay-runs__new-pay {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .pay-runs__header {
@@ -13,8 +24,9 @@
   display: flex;
   flex-wrap: wrap;
 
-  .control {
+  .control, .held-payments-select {
     margin-right: 8px;
+    margin-bottom: 20px;
   }
 
   .custom-input__search {
@@ -35,6 +47,12 @@
     .button {
       width: 157px;
       height: 42px;
+
+      span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
   }
 }
@@ -51,7 +69,6 @@
       width: 220px;
       padding-left: 10px;
       padding-right: 10px;
-
       span {
         font-size: 14px;
       }
@@ -84,17 +101,24 @@
     margin-right: 8px;
   }
 
-  .dropdown button.button {
+  .dropdown .button {
     height: 42px;
+    width: 220px;
   }
 }
 
 .held-payments__filters {
   display: flex;
-  height: 42px;
+  flex-wrap: wrap;
+
+  .held-payments-select__menu {
+    top: 74%;
+    margin-top: 0;
+  }
 
   label.checkbox {
     align-items: flex-end;
+
     .checkbox-check {
       height: 19px;
       width: 19px;
@@ -109,8 +133,27 @@
   }
 }
 
-.held-payments__tab-class {
-  .pay-runs__filters {
-    justify-content: space-between;
+.held-payments__date-picker .react-date-picker__input {
+  width: 200px;
+  height: 42px;
+}
+
+.held-payments-select {
+  margin-right: 8px;
+
+  &__control {
+    width: 185px;
+    height: 42px;
+    border-color: #bfc1c3 !important;
+    border-radius: 3px !important;
+    box-shadow: none !important;
+  }
+
+  &__placeholder {
+    color: #363636 !important;
+  }
+
+  &__indicators svg {
+    margin: 0 10px;
   }
 }

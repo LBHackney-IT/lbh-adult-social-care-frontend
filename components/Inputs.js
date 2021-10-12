@@ -7,7 +7,6 @@ import { Button } from './Button';
   EXAMPLE
 
   {
-    title: 'Approver Hub',
     inputs: {
       inputs: [
         {label: 'Search', placeholder: 'Search...', search: () => console.log('search for item'), className: 'mr-3'}
@@ -32,7 +31,7 @@ const Inputs = ({ title, inputs, changeInputs, className = '', values }) => {
             <Dropdown
               key={item.name}
               initialText={item.initialText}
-              classes={item.className}
+              className={item.className}
               options={item.options}
               selectedValue={values[item.name]}
               onOptionSelect={(option) => changeInputs(item.name, option)}
@@ -46,7 +45,7 @@ const Inputs = ({ title, inputs, changeInputs, className = '', values }) => {
           inputsComponent.push(
             <Input
               key={item.name}
-              classes={item.className}
+              className={item.className}
               label={item.label}
               value={values[item.name]}
               search={item.search}

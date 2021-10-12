@@ -1,34 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import moment from 'moment';
+import { differenceInDays } from 'date-fns';
 import DatePick from '../DatePick';
 import Popup from '../Popup';
 import RadioButton from '../RadioButton';
-import { createNewPayRun, getDateOfLastPayRun } from '../../api/Payments/PayRunApi';
-import { stringIsNullOrEmpty } from '../../api/Utils/FuncUtils';
-import { addNotification } from '../../reducers/notificationsReducer';
+import { createNewPayRun, getDateOfLastPayRun, PAY_RUN_TYPES } from 'api/Payments/PayRunApi';
+import { stringIsNullOrEmpty } from 'api/Utils/FuncUtils';
+import { addNotification } from 'reducers/notificationsReducer';
 
-const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPayRunType }) => {
+const PopupCreatePayRun = ({ date, updateData, setDate, closePopup, regularCycles, changeRegularCycles }) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState([]);
+  const [emptyField, setEmptyField] = useState(false);
   const [daysFromLastPayRun, setDaysFromLastPayRun] = useState('XX');
 
   useEffect(() => {
     retrieveDateOfLastPayRun();
-  }, [newPayRunType]);
+  }, [regularCycles, date]);
 
   const calculateDaysFromLastPayRun = (dateOfLastPayRun) => {
     if (!dateOfLastPayRun) {
       setDaysFromLastPayRun('0');
     } else {
-      // Calculate date difference
-      /* const start = moment(dateOfLastPayRun).format('L');
-      const end = moment(date).format('L'); */
-      const start = moment(dateOfLastPayRun).startOf('day');
-      const end = moment(date).startOf('day');
-      const duration = moment.duration(end.diff(start));
-      const days = duration.asDays();
-      setDaysFromLastPayRun(days.toString());
+      const difference = differenceInDays(dateOfLastPayRun, date);
+      setDaysFromLastPayRun(difference.toString());
     }
   };
 
@@ -38,14 +33,24 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
         <p className="create-pay-run__title">Regular Cycles:</p>
         <p className="create-pay-run__text">NB - pay cycles will always include released holds.</p>
         <RadioButton
+          error={emptyField ? 'Required field' : ''}
           inline={false}
           options={[
-            { value: 'ResidentialRecurring', text: `Residential Recurring (3 releases)` },
-            { value: 'DirectPayments', text: 'Direct Payments' },
-            { value: 'HomeCare', text: 'Home care' },
+            { value: PAY_RUN_TYPES.RESIDENTIAL_RECURRING, text: `Residential Recurring (3 releases)` },
+            { value: PAY_RUN_TYPES.DIRECT_PAYMENTS, text: 'Direct Payments' },
+            { value: PAY_RUN_TYPES.HOME_CARE, text: 'Home care' },
+            {
+              header: <p className="create-pay-run__title mt-5">Ad Hoc and Releases</p>,
+              value: PAY_RUN_TYPES.RESIDENTIAL_RELEASE_HOLDS,
+              text: `Residential released holds`
+            },
+            { value: PAY_RUN_TYPES.DIRECT_PAYMENTS_RELEASE_HOLDS, text: 'Direct payments released holds' },
           ]}
-          selectedValue={newPayRunType}
-          onChange={(value) => setNewPayRunType(value)}
+          selectedValue={regularCycles}
+          onChange={(value) => {
+            changeRegularCycles(value);
+            setEmptyField(false);
+          }}
         />
       </div>
       <div className="create-pay-run__run-to">
@@ -55,39 +60,34 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
           <span>{daysFromLastPayRun}</span> days since last cycle
         </p>
       </div>
-      <div className="create-pay-run__hoc-releases">
-        <p className="create-pay-run__title">Ad Hoc and Releases</p>
-        <RadioButton
-          inline={false}
-          options={[
-            { value: 'ResidentialReleaseHolds', text: `Residential released holds` },
-            { value: 'DirectPaymentsReleaseHolds', text: 'Direct payments released holds' },
-          ]}
-          selectedValue={newPayRunType}
-          onChange={(value) => setNewPayRunType(value)}
-        />
-      </div>
     </div>
   );
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  }
+
   const postNewPayRun = () => {
-    const payRunType = newPayRunType;
+    const payRunType = regularCycles;
     if (!stringIsNullOrEmpty(payRunType)) {
       createNewPayRun(payRunType, date)
-        .then((payRunId) => {
-          dispatch(addNotification({ text: `Pay run created. ${payRunId}`, className: 'success' }));
+        .then(async (payRunId) => {
+          closePopup();
+          await updateData();
+          pushNotification(`Pay run created. ${payRunId}`,'success');
         })
-        .catch((err) => {
-          dispatch(addNotification({ text: `Create pay run failed. ${err.message}` }));
-          setErrors([...errors, `Create pay run failed. ${err.message}`]);
+        .catch((error) => {
+          pushNotification(error)
+          setErrors([...errors, error]);
         });
     } else {
+      setEmptyField(true);
       setErrors([...errors, 'Pay run not selected']);
     }
   };
 
   const retrieveDateOfLastPayRun = () => {
-    const payRunType = newPayRunType;
+    const payRunType = regularCycles;
     if (!stringIsNullOrEmpty(payRunType)) {
       getDateOfLastPayRun(payRunType)
         .then((payRun) => {
@@ -97,9 +97,9 @@ const PopupCreatePayRun = ({ date, setDate, closePopup, newPayRunType, setNewPay
             calculateDaysFromLastPayRun(null);
           }
         })
-        .catch((err) => {
+        .catch((error) => {
           setDaysFromLastPayRun('XX');
-          dispatch(addNotification({ text: `Failed to fetch date of last pay run. ${err.message}` }));
+          pushNotification(error);
         });
     }
   };

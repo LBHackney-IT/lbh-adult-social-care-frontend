@@ -72,60 +72,55 @@ const AdditionalNeedEntry = ({
   const currentError = index !== undefined && error !== undefined && error[index];
 
   return (
-    <>
+    <div className='mb-6'>
       <div className="mb-2">
         <SectionHeading>Additional needs</SectionHeading>
       </div>
-      <div className="columns">
-        <div className="column care-cost-col">
-          <RadioButton
-            label="This cost is:"
-            inline={false}
-            error={currentError?.selectedCost}
-            options={costOptions}
-            selectedValue={entry.selectedCost}
-            onChange={onRadioBtnChange}
-          />
-          {isFixedPeriodCost && (
-            <div className="mb-3">
-              <div className="is-flex">
-                <span className="mr-3">
-                  <DatePick
-                    error={currentError?.startDate}
-                    label="Start date"
-                    dateValue={startDate}
-                    setDate={onStartDateChange}
-                  />
-                </span>
-                <span>
-                  <DatePick
-                    error={currentError?.endDate}
-                    label="End date"
-                    dateValue={endDate}
-                    setDate={onEndDateChange}
-                  />
-                </span>
-              </div>
+      <div className="care-cost-col mb-3">
+        <RadioButton
+          label="This cost is:"
+          error={currentError?.selectedCost}
+          options={costOptions}
+          selectedValue={entry.selectedCost}
+          onChange={onRadioBtnChange}
+        />
+        {isFixedPeriodCost && (
+          <div className="mb-3">
+            <div className="is-flex">
+              <span className="mr-3">
+                <DatePick
+                  error={currentError?.startDate}
+                  label="Start date"
+                  dateValue={startDate}
+                  setDate={onStartDateChange}
+                />
+              </span>
+              <span>
+                <DatePick
+                  error={currentError?.endDate}
+                  label="End date"
+                  dateValue={endDate}
+                  setDate={onEndDateChange}
+                />
+              </span>
             </div>
-          )}
-          <Button onClick={() => removeEntry(entry.id)} linkBtn>
-            Remove Need
-          </Button>
-        </div>
-        <div className="column">
-          <TextArea
-            label="Need to Address"
-            error={currentError?.needToAddress}
-            rows={5}
-            placeholder="Add details..."
-            onChange={onTextAreaChange}
-          >
-            {entry.needToAddress}
-          </TextArea>
-        </div>
-        <div className="column is-2" />
+          </div>
+        )}
       </div>
-    </>
+      <TextArea
+        label="Need to Address"
+        error={currentError?.needToAddress}
+        rows={5}
+        className='mb-3'
+        placeholder="Add details..."
+        onChange={onTextAreaChange}
+      >
+        {entry.needToAddress}
+      </TextArea>
+      <Button className='red' onClick={() => removeEntry(entry.id)} linkBtn>
+        Remove Need
+      </Button>
+    </div>
   );
 };
 
@@ -179,15 +174,29 @@ const AdditionalNeeds = ({ costOptions, entries, error, setError, setAdditionalN
   );
 };
 
-const getInitialAdditionalNeedsArray = () => [
+const responseInit = () => [
   {
-    id: 1,
-    selectedCost: undefined,
-    selectedCostText: undefined,
-    selectedPeriod: undefined,
-    needToAddress: undefined,
+    additionalNeedsPaymentTypeId: 2,
+    optionName: 'example1',
+  },
+  {
+    additionalNeedsPaymentTypeId: 3,
+    optionName: 'example2',
+  },
+  {
+    additionalNeedsPaymentTypeId: 2,
+    optionName: 'example3',
   },
 ];
 
+const getInitialAdditionalNeedsArray = () =>
+  responseInit().map((need, idx) => ({
+    id: idx + 1,
+    selectedCost: need.additionalNeedsPaymentTypeId || undefined,
+    selectedCostText: need.optionName || undefined,
+    selectedPeriod: undefined,
+    needToAddress: undefined,
+  }));
+
 export default AdditionalNeeds;
-export { getInitialAdditionalNeedsArray };
+export { getInitialAdditionalNeedsArray, responseInit };

@@ -9,22 +9,33 @@ const Input = ({
   placeholder = '',
   onChange = () => {},
   onClick,
-  classes = '',
+  className = '',
   value = '',
   preSign = '',
   search,
+  onBlur = () => {},
   error,
+  maxLength,
   setError,
   postSign = '',
   type = 'text',
 }) => {
   const searchRef = useRef(null);
   const onChangeInput = (event) => {
-    const {
-      target: { value },
-    } = event;
+    const { target: { value } } = event;
     event.preventDefault();
-    const formattedValue = value.replace(preSign, '').replace(postSign, '');
+    let formattedValue = value;
+    for(const sign of preSign) {
+      formattedValue = formattedValue.replace(sign, '');
+    }
+    const formattedAfterPreSign = formattedValue;
+    for(const sign of postSign) {
+      formattedValue = formattedValue.replace(sign, '');
+    }
+
+    if(preSign && postSign && formattedAfterPreSign === formattedValue) {
+      formattedValue = formattedValue.slice(0, -1);
+    }
 
     setError && setError();
     onChange(formattedValue);
@@ -38,12 +49,14 @@ const Input = ({
   };
 
   return (
-    <BaseField onClick={focusInput} classes={`${classes}`} label={label}>
+    <BaseField onClick={focusInput} className={`${className}`} label={label}>
       <div className={search ? ' custom-input__search' : ''}>
         <input
+          onBlur={onBlur}
           className="custom-input input"
           placeholder={placeholder}
           onChange={onChangeInput}
+          maxLength={maxLength}
           value={`${preSign}${value}${postSign}`}
           type={type}
           ref={searchRef}

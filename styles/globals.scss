@@ -1,8 +1,11 @@
 @import 'css/variables';
+@import 'css/shortcuts';
 @import 'css/media-breakpoints';
 @import 'css/borders';
 @import 'css/typography';
+@import "css/icons";
 @import 'css/table';
+@import 'css/table2.scss';
 @import 'css/button';
 @import 'css/checkbox';
 @import 'css/clientSummary';
@@ -14,6 +17,7 @@
 @import '../public/fonts/fonts';
 @import 'css/dropdown';
 @import 'css/field';
+@import "css/Brokerage/index";
 @import 'css/ErrorField/error-field';
 @import 'css/CarePackages/index';
 @import 'css/ProposedPackages/index';
@@ -28,6 +32,7 @@
 @import 'css/Layout/layout';
 @import 'css/WeekOfSupplier/index';
 @import 'css/SupplierReturns/table';
+@import "css/url-from-file";
 @import 'css/Login/login';
 @import 'css/popup';
 @import 'css/sectionHeading';
@@ -35,10 +40,18 @@
 @import 'css/not-found-page';
 @import 'css/SocialWorker/index';
 @import 'css/Dashboard/index';
+@import 'css/PopupAddSupplier/index';
 @import 'css/Approver/index';
 @import 'css/inputs';
 @import 'css/BrokerageHub/index';
 @import 'css/notifications';
+@import 'css/loading';
+@import 'css/search-selector';
+@import 'css/AutocompleteSelect/option.scss';
+@import 'css/HackneyDS/styles.scss';
+@import '../components/HackneyDS/styles.scss';
+@import 'css/CareCharges/index';
+@import '../components/CareCharges/SingleCareCharge/styles.scss';
 
 * {
   font-family: 'OpenSans', sans-serif !important;
@@ -65,14 +78,14 @@ button {
   }
 }
 
-.mr-auto {
-  margin-right: auto;
-}
-
 .border-radius-0 {
   p {
     border-radius: 0 !important;
   }
+}
+
+.display-none {
+  display: none !important;
 }
 
 .hide {
@@ -80,4 +93,9 @@ button {
   user-select: none;
   pointer-events: none;
   cursor: initial;
+}
+
+.max-desktop-width {
+  max-width: 1200px;
+  margin: 0 auto;
 }

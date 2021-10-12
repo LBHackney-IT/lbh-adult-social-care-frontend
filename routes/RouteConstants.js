@@ -1,12 +1,16 @@
 const LOGIN_ROUTE = '/login';
+const LOGOUT_ROUTE = '/logout';
+const BROKERAGE_HUB_ROUTE = '/brokerage-hub';
 const LOGIN_CALL_BACK_ROUTE = '/login-callback';
 const CARE_PACKAGE_ROUTE = '/care-package';
 const ACTIVE_PACKAGES_ROUTE = '/active-packages';
 const SOCIAL_WORKER_ROUTE = '/social-worker';
 const APPROVER_HUB_ROUTE = '/approver-hub';
-const BROKERAGE_HUB_ROUTE = '/brokerage-hub';
 const PROPOSED_PACKAGES_ROUTE = '/proposed-packages';
 const HOME_CARE_ROUTE = `${CARE_PACKAGE_ROUTE}/home-care`;
+const BROKERAGE_ROUTE = `${CARE_PACKAGE_ROUTE}/brokerage`;
+const BROKER_PACKAGE_ROUTE = `${BROKERAGE_ROUTE}/broker-package`;
+const CORE_PACKAGE_DETAILS_ROUTE = `${BROKERAGE_ROUTE}/core-package-details`;
 const HOME_CARE_APPROVE_PACKAGE_ROUTE = `${HOME_CARE_ROUTE}/approve-package`;
 const HOME_CARE_APPROVE_BROKERED_ROUTE = `${HOME_CARE_ROUTE}/approve-brokered`;
 const NURSING_CARE_ROUTE = `${CARE_PACKAGE_ROUTE}/nursing-care`;
@@ -40,6 +44,7 @@ const SUPPLIER_RETURNS_DASHBOARD_ROUTE = `${SUPPLIER_DASHBOARD_ROUTE}/supplier-r
 
 export {
   LOGIN_ROUTE,
+  LOGOUT_ROUTE,
   LOGIN_CALL_BACK_ROUTE,
   HOME_CARE_ROUTE,
   HOME_CARE_APPROVE_PACKAGE_ROUTE,
@@ -75,5 +80,8 @@ export {
   ACTIVE_PACKAGES_ROUTE,
   SOCIAL_WORKER_ROUTE,
   APPROVER_HUB_ROUTE,
-  BROKERAGE_HUB_ROUTE
+  BROKERAGE_HUB_ROUTE,
+  BROKER_PACKAGE_ROUTE,
+  BROKERAGE_ROUTE,
+  CORE_PACKAGE_DETAILS_ROUTE,
 };

@@ -1,28 +1,29 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { HASC_TOKEN_ID } from '../../../../api/BaseApi';
+import { HASC_TOKEN_ID } from 'api/BaseApi';
 import {
   getNursingCarePackageApprovalHistory,
   getNursingCarePackageApproveCommercial,
   nursingCareApproveCommercials,
   nursingCareChangeStatus,
   nursingCareClarifyCommercial,
-} from '../../../../api/CarePackages/NursingCareApi';
-import { getEnGBFormattedDate, stringIsNullOrEmpty } from '../../../../api/Utils/FuncUtils';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
-import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
-import Layout from '../../../../components/Layout/Layout';
-import NursingCareApprovalTitle from '../../../../components/NursingCare/NursingCareApprovalTitle';
-import NursingCareSummary from '../../../../components/NursingCare/NursingCareSummary';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TextArea from '../../../../components/TextArea';
-import TitleHeader from '../../../../components/TitleHeader';
-import withSession from '../../../../lib/session';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { APPROVER_HUB_ROUTE } from '../../../../routes/RouteConstants';
-import { getUserSession } from '../../../../service/helpers';
-import ClientSummaryItem from '../../../../components/CarePackages/ClientSummaryItem';
+} from 'api/CarePackages/NursingCareApi';
+import { stringIsNullOrEmpty } from 'api/Utils/FuncUtils';
+import PackageCostBox from 'components/DayCare/PackageCostBox';
+import Layout from 'components/Layout/Layout';
+import NursingCareSummary from 'components/NursingCare/NursingCareSummary';
+import PackageApprovalHistorySummary from 'components/PackageApprovalHistorySummary';
+import TitleHeader from 'components/TitleHeader';
+import withSession from 'lib/session';
+import { addNotification } from 'reducers/notificationsReducer';
+import { APPROVER_HUB_ROUTE } from 'routes/RouteConstants';
+import { formatCareDatePeriod, getErrorResponse, getUserSession } from 'service/helpers';
+import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
+import { Button } from 'components/Button';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
+import { mapCareAdditionalNeedsEntries } from 'api/Mappers/CarePackageMapper';
+import formValidator from 'service/formValidator';
 
 export const getServerSideProps = withSession(async ({ req, res, query: { id: nursingCarePackageId } }) => {
   const isRedirect = getUserSession({ req, res });
@@ -37,14 +38,8 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
       nursingCarePackageId,
       req.cookies[HASC_TOKEN_ID]
     );
-    const newAdditionalNeedsEntries = nursingCarePackage.nursingCarePackage.nursingCareAdditionalNeeds.map(
-      (additionalneedsItem) => ({
-        id: additionalneedsItem.id,
-        isWeeklyCost: additionalneedsItem.isWeeklyCost,
-        isOneOffCost: additionalneedsItem.isOneOffCost,
-        needToAddress: additionalneedsItem.needToAddress,
-      })
-    );
+    const newAdditionalNeedsEntries =
+      mapCareAdditionalNeedsEntries(nursingCarePackage?.nursingCarePackage?.nursingCareAdditionalNeeds);
 
     data.nursingCarePackage = nursingCarePackage;
     data.additionalNeedsEntriesData = newAdditionalNeedsEntries.slice();
@@ -71,13 +66,28 @@ export const getServerSideProps = withSession(async ({ req, res, query: { id: nu
 const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntriesData, approvalHistoryEntries }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-
   const nursingCarePackageId = router.query.id;
-
   const [errors, setErrors] = useState([]);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(additionalNeedsEntriesData);
-  const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
+  const [errorFields, setErrorFields] = useState({
+    requestInformationText: '',
+  });
   const [requestInformationText, setRequestInformationText] = useState(undefined);
+
+  const changeErrorFields = (field) => {
+    setErrorFields({
+      ...errorFields,
+      [field]: '',
+    });
+  };
+
+  const updateErrorFields = (errors, field) => {
+    const newErrors = field ? {[field]: errors} : getErrorResponse(errors);
+    setErrorFields({
+      ...errorFields,
+      ...newErrors,
+    });
+  };
 
   const {
     hasDischargePackage = false,
@@ -85,16 +95,20 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
     isThisAnImmediateService = false,
     isThisUserUnderS117 = false,
     typeOfStayOptionName = '',
-  } = nursingCarePackage?.nursingCarePackage;
+  } = nursingCarePackage?.nursingCarePackage || {};
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
 
   const handleRejectPackage = () => {
     nursingCareChangeStatus(nursingCarePackageId, 10)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
-        dispatch(addNotification({ text: 'Status change success.', className: 'success' }));
+        pushNotification('Status change success.','success');
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
+        pushNotification(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
@@ -102,59 +116,63 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
   const handleApprovePackageCommercials = () => {
     nursingCareApproveCommercials(nursingCarePackageId)
       .then(() => {
-        dispatch(addNotification({ text: 'Status change success.', className: 'success' }));
+        pushNotification('Status change success.','success');
         router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
+        pushNotification(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
 
   const handleRequestMoreInformation = () => {
+    const { validFields, hasErrors } = formValidator({ form: { requestInformationText } });
+    setErrorFields(validFields);
+
+    if(hasErrors) return;
+
     nursingCareClarifyCommercial(nursingCarePackageId, requestInformationText)
       .then(() => {
-        setDisplayMoreInfoForm(false);
         router.push(`${APPROVER_HUB_ROUTE}`);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Status change failed. ${error.message}` }));
+        pushNotification(error);
+        updateErrorFields(error);
         setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
 
-  return (
-    <Layout headerTitle="NURSING CARE BROKERED">
-      <div className="hackney-text-black font-size-12px">
-        <NursingCareApprovalTitle
-          startDate={nursingCarePackage?.nursingCarePackage.startDate}
-          endDate={
-            nursingCarePackage?.nursingCarePackage.endDate !== null
-              ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
-              : 'Ongoing'
-          }
-        />
-        <ApprovalClientSummary />
+  const datePeriod = formatCareDatePeriod(
+    nursingCarePackage?.nursingCarePackage.startDate,
+    nursingCarePackage?.nursingCarePackage.endDate
+  );
 
-        <div className="columns">
+  return (
+    <Layout
+      clientSummaryInfo={{
+        whoIsSourcing: 'hackney',
+        client: 'James Stephens',
+        title: `Nursing Care (${datePeriod.startDate} - ${datePeriod.endDate})`,
+        hackneyId: '#786288',
+        age: '91',
+        dateOfBirth: '09/12/1972',
+        postcode: 'E9 6EY',
+      }}
+      headerTitle="NURSING CARE BROKERED">
+      <div className="hackney-text-black font-size-12px">
+        <div className="client-summary">
           <ClientSummaryItem
             itemName="STARTS"
-            itemDetail={getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.startDate)}
+            itemDetail={datePeriod.startDate}
           />
           <ClientSummaryItem
             itemName="ENDS"
-            itemDetail={
-              nursingCarePackage?.nursingCarePackage.endDate !== null
-                ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
-                : 'Ongoing'
-            }
+            itemDetail={datePeriod.endDate}
           />
           <ClientSummaryItem itemName="DAYS/WEEK" itemDetail="3" />
           <ClientSummaryItem itemName="RESPITE CARE" itemDetail={hasRespiteCare === true ? 'yes' : 'no'} />
           <ClientSummaryItem itemName="DISCHARGE PACKAGE" itemDetail={hasDischargePackage === true ? 'yes' : 'no'} />
-        </div>
 
-        <div className="columns mt-4 flex flex-wrap">
           <ClientSummaryItem
             itemName="IMMEDIATE / RE-ENABLEMENT PACKAGE"
             itemDetail={isThisAnImmediateService === true ? 'Immediate' : 'Re-enablement'}
@@ -164,35 +182,29 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
             itemName="TYPE OF STAY"
             itemDetail={!stringIsNullOrEmpty(typeOfStayOptionName) ? typeOfStayOptionName : ''}
           />
-          <div className="column" />
-          <div className="column" />
+          <ClientSummaryItem />
+          <ClientSummaryItem />
         </div>
 
-        <div className="columns">
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-light-green-box"
-              title="COST OF CARE / WK"
-              cost={nursingCarePackage?.costOfCare}
-              costType="ACTUAL"
-            />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-light-green-box"
-              title="ANP / WK"
-              cost={nursingCarePackage?.costOfAdditionalNeeds}
-              costType="ACTUAL"
-            />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-green-box"
-              title="TOTAL / WK"
-              cost={nursingCarePackage?.totalPerWeek}
-              costType="ACTUAL"
-            />
-          </div>
+        <div className="package-cost-box__group mb-5">
+          <PackageCostBox
+            boxClass="hackney-package-cost-light-green-box"
+            title="COST OF CARE / WK"
+            cost={nursingCarePackage?.costOfCare}
+            costType="ACTUAL"
+          />
+          <PackageCostBox
+            boxClass="hackney-package-cost-light-green-box"
+            title="ANP / WK"
+            cost={nursingCarePackage?.costOfAdditionalNeeds}
+            costType="ACTUAL"
+          />
+          <PackageCostBox
+            boxClass="hackney-package-cost-green-box"
+            title="TOTAL / WK"
+            cost={nursingCarePackage?.totalPerWeek}
+            costType="ACTUAL"
+          />
         </div>
 
         <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
@@ -202,12 +214,8 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
             <div className="mt-4 mb-1">
               <TitleHeader>Package Details</TitleHeader>
               <NursingCareSummary
-                startDate={nursingCarePackage?.nursingCarePackage.startDate}
-                endDate={
-                  nursingCarePackage?.nursingCarePackage.endDate !== null
-                    ? getEnGBFormattedDate(nursingCarePackage?.nursingCarePackage.endDate)
-                    : 'Ongoing'
-                }
+                startDate={datePeriod.startDate}
+                endDate={datePeriod.endDate}
                 additionalNeedsEntries={additionalNeedsEntries}
                 setAdditionalNeedsEntries={setAdditionalNeedsEntries}
                 needToAddress={nursingCarePackage?.nursingCarePackage.needToAddress}
@@ -216,48 +224,21 @@ const NursingCareApproveBrokered = ({ nursingCarePackage, additionalNeedsEntries
           </div>
         </div>
 
-        <div className="columns">
-          <div className="column">
-            <div className="level mt-3">
-              <div className="level-left" />
-              <div className="level-right">
-                <div className="level-item  mr-2">
-                  <button type="button" className="button hackney-btn-light" onClick={handleRejectPackage}>
-                    Deny
-                  </button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button
-                    type="button"
-                    onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
-                    className="button hackney-btn-light"
-                  >
-                    {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
-                  </button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button type="button" className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
-                    Approve Commercials
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className='button-group is-justify-content-flex-end'>
+          <Button className="gray" onClick={handleRejectPackage}>
+            Deny
+          </Button>
+          <Button className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
+            Approve Commercials
+          </Button>
         </div>
-
-        {displayMoreInfoForm && (
-          <div className="columns">
-            <div className="column">
-              <div className="mt-1">
-                <p className="font-size-16px font-weight-bold">Request more information</p>
-                <TextArea label="" rows={5} placeholder="Add details..." onChange={setRequestInformationText} />
-                <button type="button" className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
-                  Request more information
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <RequestMoreInformation
+          requestMoreInformationText={requestInformationText}
+          setRequestInformationText={setRequestInformationText}
+          errorFields={errorFields}
+          changeErrorFields={changeErrorFields}
+          handleRequestMoreInformation={handleRequestMoreInformation}
+        />
       </div>
     </Layout>
   );

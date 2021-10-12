@@ -1,6 +1,6 @@
 import React from 'react';
 import SortTable from '../SortTable';
-import { formatStatus } from '../../service/helpers';
+import { formatStatus } from 'service/helpers';
 
 const ApproverTable = ({ onClickTableRow, rows, classes = '', sortBy, sorts, clickPackageType }) => {
   const clickRow = (item) => {
@@ -27,7 +27,7 @@ const ApproverTable = ({ onClickTableRow, rows, classes = '', sortBy, sorts, cli
                     value = formatStatus(value);
                     additionalClasses += 'link-button';
                     onClick = (e) => {
-                      e.stopPropagation();
+                      //e.stopPropagation();
                       clickPackageType(item[rowItemName]);
                     };
                   }

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import BillsHeader from '../../../components/Bills/BillsHeader';
-import PaymentsTabs from '../../../components/Payments/PaymentsTabs';
-import BillsTable from '../../../components/Bills/BillsTable';
-import Pagination from '../../../components/Payments/Pagination';
+import BillsHeader from 'components/Bills/BillsHeader';
+import PaymentsTabs from 'components/Payments/PaymentsTabs';
+import Pagination from 'components/Payments/Pagination';
+import PopupBillsPayDownload from 'components/Bills/PopupBillsPayDownload';
+import BillsFilters from 'components/Bills/BillsFilters';
+import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import { getUserSession } from 'service/helpers';
+import withSession from 'lib/session';
+import Table from 'components/Table';
 import { billsPayRunsTableData, billsTableData } from '../../../testData/billsTestData';
-import PopupBillsPayDownload from '../../../components/Bills/PopupBillsPayDownload';
-import BillsFilters from '../../../components/Bills/BillsFilters';
-import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { getUserSession } from '../../../service/helpers';
-import withSession from '../../../lib/session';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -60,7 +60,7 @@ const Bills = () => {
   const [checkedRows, setCheckedRows] = useState([]);
   const [tab, changeTab] = useState('bills');
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'ref',
   });
 
@@ -122,11 +122,10 @@ const Bills = () => {
         dateRangeOptions={[]}
         packageIdOptions={[]}
       />
-      <BillsTable
+      <Table
         checkedRows={checkedRows}
         setCheckedRows={onCheckRows}
-        isIgnoreId={true}
-        classes={tabsClasses[tab]}
+        className={tabsClasses[tab]}
         rows={isBillsTab ? billsTableData : billsPayRunsTableData}
         sortBy={sortBy}
         sorts={sortsTab[tab]}
@@ -135,11 +134,11 @@ const Bills = () => {
         actionButton={{
           text: 'Pay selected bills',
           onClick: () => console.log('pay selected bills', checkedRows),
-          classes: 'bills__pay-selected-bills',
+          className: 'bills__pay-selected-bills',
         }}
         from={1}
         to={10}
-        itemsCount={10}
+        pageSize={10}
         totalCount={30}
       />
       <HackneyFooterInfo />

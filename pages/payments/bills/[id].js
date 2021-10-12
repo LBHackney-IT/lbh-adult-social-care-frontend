@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Breadcrumbs from '../../../components/Breadcrumbs';
-import BillsTable from '../../../components/Bills/BillsTable';
-import Pagination from '../../../components/Payments/Pagination';
+import Breadcrumbs from 'components/Breadcrumbs';
+import Pagination from 'components/Payments/Pagination';
+import BillsHeader from 'components/Bills/BillsHeader';
+import PopupBillsPayDownload from 'components/Bills/PopupBillsPayDownload';
+import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import { getUserSession } from 'service/helpers';
+import withSession from 'lib/session';
+import { PAYMENTS_BILLS_ROUTE } from 'routes/RouteConstants';
+import Table from 'components/Table';
 import { payRunTableData } from '../../../testData/testDataPayRuns';
-import BillsHeader from '../../../components/Bills/BillsHeader';
-import PopupBillsPayDownload from '../../../components/Bills/PopupBillsPayDownload';
-import HackneyFooterInfo from '../../../components/HackneyFooterInfo';
-import { getUserSession } from '../../../service/helpers';
-import withSession from '../../../lib/session';
-import { PAYMENTS_BILLS_ROUTE } from '../../../routes/RouteConstants';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -54,7 +54,7 @@ const BillPage = () => {
   ]);
 
   const [sort, setSort] = useState({
-    value: 'increase',
+    value: 'ascending',
     name: 'id',
   });
 
@@ -77,7 +77,7 @@ const BillPage = () => {
   };
 
   const actionButton = {
-    classes: 'outline green',
+    className: 'outline green',
     onClick: () => console.log('Accept all selected', checkedRows),
     text: 'Accept all selected',
   };
@@ -105,23 +105,29 @@ const BillPage = () => {
           changeReason={(value) => setReason(value)}
         />
       )}
-      {!!breadcrumbs.length && <Breadcrumbs classes="p-3" values={breadcrumbs} />}
+      {!!breadcrumbs.length && <Breadcrumbs className="p-3" values={breadcrumbs} />}
       <BillsHeader
         actionButtonText={headerOptions.actionButtonText}
         clickActionButton={headerOptions.clickActionButton}
       />
-      <BillsTable
+
+      // Todo format table with correct data
+      <Table
         rows={payRunTableData}
-        careType="Residential"
-        isStatusDropDown
+        fields={{
+          id: 'billsId',
+          serviceUserName: 'serviceUserName',
+          invoiceId: 'invoiceId',
+          packageTypeName: 'packageTypeName',
+          paidCount: 'paidCount',
+          statusName: 'statusName',
+        }}
         checkedRows={checkedRows}
         setCheckedRows={onCheckRow}
-        isIgnoreId
-        canCollapseRows
         sortBy={sortBy}
         sorts={sorts}
       />
-      <Pagination pathname={pathname} actionButton={actionButton} from={1} to={10} itemsCount={10} totalCount={30} />
+      <Pagination pathname={pathname} actionButton={actionButton} pageSize={10} totalCount={30} />
       <HackneyFooterInfo />
     </div>
   );

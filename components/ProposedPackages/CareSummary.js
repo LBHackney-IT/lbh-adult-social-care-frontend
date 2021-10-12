@@ -1,6 +1,6 @@
 import React from 'react';
-import { getEnGBFormattedDate } from '../../api/Utils/FuncUtils';
 import { Button } from '../Button';
+import { formatCareDatePeriod } from 'service/helpers';
 
 const CareSummary = ({
   startDate,
@@ -16,6 +16,10 @@ const CareSummary = ({
     setAdditionalNeedsEntries([...newEntries]);
   };
 
+  const renderDate = (dateString) => dateString && new Date(dateString).toLocaleDateString('en-GB');
+
+  const datePeriod = formatCareDatePeriod(startDate, endDate);
+
   return (
     <div className="day-summary hackney-text-black font-size-14px">
       <div className="columns is-mobile">
@@ -23,7 +27,7 @@ const CareSummary = ({
           <div>
             <span className="font-weight-bold mr-2 font-size-16px">{careType}</span>
             <span className="font-size-16px">
-              {getEnGBFormattedDate(startDate)} {endDate ? ` - ${endDate}` : null}
+              {datePeriod.startDate} - {datePeriod.endDate}
             </span>
           </div>
         </div>
@@ -57,6 +61,11 @@ const CareSummary = ({
               {additionalNeedsEntries.map((entry) => (
                 <div className="column is-half" key={entry.id}>
                   <p className="font-weight-bold mb-2">{entry.selectedCostText} cost</p>
+                  {entry.selectedPeriod && (
+                    <p>
+                      {renderDate(entry.selectedPeriod.startDate)}- {renderDate(entry.selectedPeriod.endDate)}
+                    </p>
+                  )}
                   <p>{entry.needToAddress}</p>
                   <div>
                     <Button linkBtn className="mr-2">

@@ -7,42 +7,49 @@ const CustomNotification = ({ className = '' }) => {
   const [timer, setTimer] = useState(null);
   const dispatch = useDispatch();
 
-  const closeNotification = () => {
+  const closeNotification = (notification) => {
     if (timer) {
       clearTimeout(timer);
     }
-    dispatch(removeNotification(notifications[0]));
+    dispatch(removeNotification(notification));
   };
 
   useEffect(() => {
-    if (!showedNotifications.length && notifications[0]) {
+    if(!showedNotifications.length) return;
+    if (showedNotifications[0].time === 'debugger') return;
+
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    setTimer(
+      setTimeout(() => {
+        dispatch(removeNotification(showedNotifications[0]));
+      }, showedNotifications[0].time)
+    );
+  }, [showedNotifications]);
+
+  useEffect(() => {
+    if (notifications[0] && !showedNotifications.length) {
       dispatch(showNotification(notifications[0]));
-
-      if (notifications[0].time === 'debugger') return;
-
-      if (timer) {
-        clearTimeout(timer);
-      }
-
-      setTimer(
-        setTimeout(() => {
-          dispatch(removeNotification(notifications[0]));
-        }, notifications[0].time)
-      );
     }
   }, [notifications, showedNotifications, dispatch]);
 
-  const allClasses = `notification ${notifications[0] ? notifications[0].className || '' : ''} ${className}`;
+  const allClasses = `notification ${showedNotifications[0] ? showedNotifications[0].className || '' : ''} ${className}`;
 
-  if (notifications[0]?.text) {
+  if (showedNotifications?.length) {
     return (
-      <div className={allClasses}>
-        <div>
-          <p>{notifications[0].text}</p>
-          <span className="notification-close" onClick={closeNotification}>
-            +
-          </span>
-        </div>
+      <div className='notifications'>
+        {showedNotifications.map(item => (
+            <div key={item?.text?.toString() || 'error'} className={allClasses}>
+              <div>
+                <p>{item?.text?.toString() || 'Something went wrong'}</p>
+                <span className="notification-close" onClick={() => closeNotification(item)}>
+                  +
+                </span>
+              </div>
+            </div>
+          ))}
       </div>
     );
   }

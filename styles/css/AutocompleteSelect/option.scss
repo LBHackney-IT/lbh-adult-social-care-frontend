@@ -1,0 +1,75 @@
+$monogram-size: 40px;
+$option-hover-color: #176e4f4b;
+
+.custom-autocomplete {
+  &-wrapper {
+    min-width: 300px;
+    cursor: pointer;
+
+    @include media-mobile {
+      min-width: 220px;
+    }
+    &:focus {
+      border: none;
+    }
+  }
+  &-monogram {
+    display: inline-flex;
+    height: $monogram-size;
+    width: $monogram-size;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    background-color: #5f9ea0;
+    color: #fff;
+  }
+  &-selector {
+    height: 100%;
+    & &__control--is-focused {
+      box-shadow: none;
+      border-color: inherit;
+      &:hover {
+          border-color: inherit;
+      }
+    }
+    & &__control {
+        cursor: pointer;
+    }
+
+    &__control &__value-container {
+      padding-bottom: calc(0.5em - 4px);
+      padding-left: 1em;
+      padding-right: 1em;
+    }
+
+    &__control &__single-value {
+      display: inline-block;
+      max-width: 130px;
+    }
+
+    &__menu {
+      min-width: 300px;
+
+      @include media-mobile {
+        min-width: 220px;
+      }
+      .custom-option {
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 10px;
+        &__label {
+          align-self: center;
+        }
+        &:hover {
+          background-color: $option-hover-color;
+        }
+      }
+    }
+
+    &__placeholder {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}

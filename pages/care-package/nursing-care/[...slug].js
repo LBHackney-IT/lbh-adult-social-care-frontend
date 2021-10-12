@@ -1,30 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEnGBFormattedDate } from '../../../api/Utils/FuncUtils';
-import ClientSummary from '../../../components/ClientSummary';
-import Dropdown from '../../../components/Dropdown';
-import TextArea from '../../../components/TextArea';
-import Layout from '../../../components/Layout/Layout';
+import Dropdown from 'components/Dropdown';
+import TextArea from 'components/TextArea';
+import Layout from 'components/Layout/Layout';
 import AdditionalNeeds, {
   getInitialAdditionalNeedsArray,
-} from '../../../components/CarePackages/AdditionalNeedsEntries';
-import CareTitle from '../../../components/CarePackages/CareTitle';
-import TitleHeader from '../../../components/TitleHeader';
-import NursingCareSummary from '../../../components/NursingCare/NursingCareSummary';
-import { Button } from '../../../components/Button';
+} from 'components/CarePackages/AdditionalNeedsEntries';
+import TitleHeader from 'components/TitleHeader';
+import { Button } from 'components/Button';
 import {
   createNursingCarePackage,
   createNursingCarePackageReclaim,
-  getTypeOfNursingHomeOptions,
-} from '../../../api/CarePackages/NursingCareApi';
-import PackageReclaims from '../../../components/CarePackages/PackageReclaims';
-import { addNotification } from '../../../reducers/notificationsReducer';
-import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
-import { getLoggedInUser, getUserSession } from '../../../service/helpers';
-import withSession from '../../../lib/session';
-import fieldValidator from '../../../service/inputValidator';
-import { selectUser } from '../../../reducers/userReducer';
+} from 'api/CarePackages/NursingCareApi';
+import PackageReclaims from 'components/CarePackages/PackageReclaims';
+import { addNotification } from 'reducers/notificationsReducer';
+import { CARE_PACKAGE_ROUTE } from 'routes/RouteConstants';
+import { formatCareDatePeriod, getLoggedInUser, getUserSession } from 'service/helpers';
+import withSession from 'lib/session';
+import formValidator from 'service/formValidator';
+import { selectUser } from 'reducers/userReducer';
+import useNursingCareApi from 'api/SWR/useNursingCareApi';
+import CareSummary from 'components/ProposedPackages/CareSummary';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -70,14 +67,13 @@ const NursingCare = () => {
   hasDischargePackage = isTrueParse(hasDischargePackage);
 
   // State
-  const [careHomeTypes, setCareHomeTypes] = useState([]);
   const [errors, setErrors] = useState([]);
   const [needToAddress, setNeedToAddress] = useState(undefined);
   const [selectedNursingHomeType, setSelectedNursingHomeType] = useState(1);
   const [additionalNeedsEntries, setAdditionalNeedsEntries] = useState(getInitialAdditionalNeedsArray());
-
   const [additionalNeedsEntriesErrors, setAdditionalNeedsEntriesErrors] = useState([]);
   const [packageReclaimedError, setPackageReclaimedError] = useState([]);
+  const { data: careHomeTypesOptions } = useNursingCareApi.typeOfNursingCareHomes();
 
   const dispatch = useDispatch();
 
@@ -89,31 +85,8 @@ const NursingCare = () => {
   // Package reclaim
   const [packagesReclaimed, setPackagesReclaimed] = useState([]);
 
-  const retrieveTypeOfNursingHomeOptions = () => {
-    getTypeOfNursingHomeOptions()
-      .then((res) => {
-        const options = res.map((option) => ({
-          text: option.typeOfCareHomeName,
-          value: option.typeOfCareHomeId,
-        }));
-        setCareHomeTypes(options);
-      })
-      .catch((error) => {
-        setErrors([...errors, `Retrieve nursing care home type options failed. ${error.message}`]);
-      });
-  };
-
-  useEffect(() => {
-    if (careHomeTypes.length === 0 || careHomeTypes.length === 1) {
-      retrieveTypeOfNursingHomeOptions();
-    }
-  }, [careHomeTypes]);
-
   const formIsValid = () => {
-    const defaultErrors = fieldValidator([
-      { name: 'needToAddress', value: needToAddress, rules: ['empty'] },
-      { name: 'selectedNursingHomeType', value: selectedNursingHomeType, rules: ['empty'] },
-    ]);
+    const defaultErrors = formValidator({ form: { needToAddress, selectedNursingHomeType } });
 
     if (defaultErrors.hasErrors) {
       setErrorFields(defaultErrors.validFields);
@@ -121,12 +94,12 @@ const NursingCare = () => {
 
     const additionalNeedsTimedArr = [];
 
-    const additionalNeedsError = additionalNeedsEntries.map((item) => {
-      const valid = fieldValidator([
-        { name: 'selectedCost', value: item.selectedCost, rules: ['empty'] },
-        { name: 'selectedCostText', value: item.selectedCostText, rules: ['empty'] },
-        { name: 'needToAddress', value: item.needToAddress, rules: ['empty'] },
-      ]);
+    const additionalNeedsError = additionalNeedsEntries.map(({
+      selectedCost,
+      selectedCostText,
+      needToAddress: needToAddressEntry,
+    }) => {
+      const valid = formValidator({ form: { selectedCost, selectedCostText, needToAddress: needToAddressEntry }});
 
       additionalNeedsTimedArr.push(valid.validFields);
       return valid.hasErrors;
@@ -134,14 +107,14 @@ const NursingCare = () => {
     setAdditionalNeedsEntriesErrors(additionalNeedsTimedArr);
 
     const packageReclaimsTimedArr = [];
-    const packageReclaimsFieldsError = packagesReclaimed.map((item) => {
-      const valid = fieldValidator([
-        { name: 'from', value: item.from, rules: ['empty'] },
-        { name: 'category', value: item.category, rules: ['empty'] },
-        { name: 'type', value: item.type, rules: ['empty'] },
-        { name: 'notes', value: item.notes, rules: ['empty'] },
-        { name: 'amount', value: item.amount, rules: ['empty'] },
-      ]);
+    const packageReclaimsFieldsError = packagesReclaimed.map(({
+      from,
+      category,
+      type,
+      notes,
+      amount,
+    }) => {
+      const valid = formValidator({ form: { from, category, type, notes, amount } });
       packageReclaimsTimedArr.push(valid.validFields);
       return valid.hasErrors;
     });
@@ -194,9 +167,13 @@ const NursingCare = () => {
       packageReclaims,
     };
 
+    const pushNotification = (text, className = 'error') => {
+      dispatch(addNotification({ text, className }));
+    };
+
     createNursingCarePackage(nursingCarePackageToCreate)
       .catch((error) => {
-        dispatch(addNotification({ text: `Create package failed. ${error.message ?? ''}` }));
+        pushNotification(error);
         setErrors([...errors, `Create package failed. ${error.message}`]);
         throw new Error();
       })
@@ -215,26 +192,29 @@ const NursingCare = () => {
         return Promise.all(requests);
       })
       .catch((error) => {
-        dispatch(addNotification({ text: `Create reclaims failed. ${error.message ?? ''}` }));
+        pushNotification(error);
         setErrors([...errors, `Create reclaims failed. ${error.message}`]);
       })
       .then(() => {
         router.push(`${CARE_PACKAGE_ROUTE}`);
-        dispatch(addNotification({ text: 'Package saved', className: 'success' }));
+        pushNotification('Package saved.', 'success');
       });
   };
 
+  const datePeriod = formatCareDatePeriod(startDate, endDate);
+
   return (
-    <Layout headerTitle="BUILD A CARE PACKAGE">
-      <ClientSummary client="James Stephens" hackneyId="786288" age="91" dateOfBirth="09/12/1972" postcode="E9 6EY">
-        Care Package
-      </ClientSummary>
-      <div className="mt-5 mb-5">
-        <CareTitle startDate={startDate} endDate={endDate}>
-          Nursing Care
-        </CareTitle>
-      </div>
-      <div className="mt-4 columns">
+    <Layout
+      clientSummaryInfo={{
+        client: "James Stephens",
+        hackneyId: "786288",
+        age: "91",
+        title: `BUILD A CARE PACKAGE (${datePeriod.startDate} - ${datePeriod.endDate})`,
+        dateOfBirth: "09/12/1972",
+        postcode: "E9 6EY",
+      }}
+    >
+      <div className="mt-4 columns nursing-care">
         <div className="column">
           <TextArea
             label="Need to Address"
@@ -249,12 +229,11 @@ const NursingCare = () => {
           <Dropdown
             initialText={null}
             label="Type of nursing home"
-            options={careHomeTypes}
+            options={careHomeTypesOptions}
             selectedValue={selectedNursingHomeType}
             error={errorFields.selectedNursingHomeType}
             setError={() => changeErrorField('selectedNursingHomeType')}
             onOptionSelect={(option) => setSelectedNursingHomeType(option)}
-            buttonStyle={{ width: '240px' }}
           />
         </div>
       </div>
@@ -279,9 +258,9 @@ const NursingCare = () => {
 
       <div className="mt-4 mb-4">
         <TitleHeader>Package Details</TitleHeader>
-        <NursingCareSummary
+        <CareSummary
           startDate={startDate}
-          endDate={getEnGBFormattedDate(endDate)}
+          endDate={endDate}
           needToAddress={needToAddress}
           additionalNeedsEntries={additionalNeedsEntries}
           setAdditionalNeedsEntries={setAdditionalNeedsEntries}

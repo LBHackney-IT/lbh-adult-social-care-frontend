@@ -1,74 +1,62 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import { getEnGBFormattedDate } from '../../../../api/Utils/FuncUtils';
-import Layout from '../../../../components/Layout/Layout';
-import DayCareApprovalTitle from '../../../../components/DayCare/DayCareApprovalTitle';
-import ApprovalClientSummary from '../../../../components/ApprovalClientSummary';
-import PackageCostBox from '../../../../components/DayCare/PackageCostBox';
-import PackageApprovalHistorySummary from '../../../../components/PackageApprovalHistorySummary';
-import TitleHeader from '../../../../components/TitleHeader';
-import DayCareSummary from '../../../../components/DayCare/DayCareSummary';
-import TextArea from '../../../../components/TextArea';
+import Layout from 'components/Layout/Layout';
+import PackageCostBox from 'components/DayCare/PackageCostBox';
+import PackageApprovalHistorySummary from 'components/PackageApprovalHistorySummary';
+import TitleHeader from 'components/TitleHeader';
+import DayCareSummary from 'components/DayCare/DayCareSummary';
 import {
   dayCarePackageApproveCommercials,
   dayCarePackageCommercialsRequestClarification,
   dayCarePackageRejectCommercials,
-  getDayCarePackageApprovalDetails,
-} from '../../../../api/CarePackages/DayCareApi';
-import withSession from '../../../../lib/session';
-import { getErrorResponse, getUserSession } from '../../../../service/helpers';
-import { getSelectedDate } from '../../../../api/Utils/CommonOptions';
+} from 'api/CarePackages/DayCareApi';
+import withSession from 'lib/session';
+import { formatCareDatePeriod, getErrorResponse, getUserSession } from 'service/helpers';
+import { getSelectedDate } from 'api/Utils/CommonOptions';
+import useDayCareApi from 'api/SWR/useDayCareApi';
+import { addNotification } from 'reducers/notificationsReducer';
+import { formatApprovalHistory, formatDayCareOpportunities } from 'service/formatItems';
+import ClientSummaryItem from 'components/CarePackages/ClientSummaryItem';
+import { Button } from 'components/Button';
+import RequestMoreInformation from 'components/Approver/RequestMoreInformation';
+import formValidator from 'service/formValidator';
 
 // get server side props before render
-export const getServerSideProps = withSession(async ({ req, res, query: { id: residentialCarePackageId } }) => {
+export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
   if (isRedirect) return { props: {} };
 
-  const data = {
-    errorData: [],
-  };
-  try {
-    const dayCarePackage = await getDayCarePackageApprovalDetails(residentialCarePackageId);
-    // Update approve-package state
-    const newApprovalHistoryItems = dayCarePackage.packageApprovalHistory.map((historyItem) => ({
-      eventDate: new Date(historyItem.dateCreated).toLocaleDateString('en-GB'),
-      eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
-      eventSubMessage: historyItem.logSubText,
-    }));
-
-    const newOpportunityEntries = dayCarePackage.packageDetails.dayCareOpportunities.map((opportunityItem) => ({
-      id: opportunityItem.dayCarePackageOpportunityId,
-      howLongValue: opportunityItem.howLong.optionName,
-      timesPerMonthValue: opportunityItem.howManyTimesPerMonth.optionName,
-      needToAddress: opportunityItem.opportunitiesNeedToAddress,
-    }));
-
-    data.approvalHistoryEntries = newApprovalHistoryItems.slice();
-    data.opportunityEntries = newOpportunityEntries.slice();
-    data.daysSelected = getSelectedDate(dayCarePackage);
-    data.dayCarePackage = dayCarePackage;
-  } catch (error) {
-    data.errorData.push(`Retrieve day care package details failed. ${error.message}`);
-  }
-
-  return { props: { data } };
+  return { props: {} };
 });
 
-const DayCareApproveBrokered = ({
-  dayCarePackage,
-  daysSelected,
-  approvalHistoryEntries,
-  opportunityEntries,
-  errorData,
-}) => {
+const DayCareApproveBrokered = () => {
   const router = useRouter();
   const dayCarePackageId = router.query.id;
-  const [errors, setErrors] = useState(errorData);
-  const [displayMoreInfoForm, setDisplayMoreInfoForm] = useState(false);
+  const dispatch = useDispatch();
+  const [daysSelected, setDaysSelected] = useState([]);
+  const [approvalHistoryEntries, setApprovalHistoryEntries] = useState([]);
+  const [opportunityEntries, setOpportunityEntries] = useState([]);
   const [requestInformationText, setRequestInformationText] = useState(undefined);
   const [errorFields, setErrorFields] = useState({
     requestInformationText: '',
   });
+
+  const { data: dayCarePackage } = useDayCareApi.approvalDetails(dayCarePackageId);
+
+  const packageDetails = dayCarePackage?.packageDetails;
+  const costSummary = dayCarePackage?.costSummary;
+
+  useEffect(() => {
+    if(packageDetails) {
+      const newApprovalHistoryItems = formatApprovalHistory(dayCarePackage?.packageApprovalHistory);
+      setApprovalHistoryEntries(newApprovalHistoryItems);
+
+      const newOpportunityEntries = formatDayCareOpportunities(packageDetails?.dayCareOpportunities);
+      setOpportunityEntries(newOpportunityEntries);
+      setDaysSelected(getSelectedDate(dayCarePackage));
+    }
+  }, [dayCarePackage]);
 
   const changeErrorFields = (field) => {
     setErrorFields({
@@ -84,125 +72,94 @@ const DayCareApproveBrokered = ({
     });
   };
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
   const handleRejectPackage = () => {
     dayCarePackageRejectCommercials(dayCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
-      .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
-      });
+      .catch((error) => pushNotification(error));
   };
   const handleRequestMoreInformation = () => {
+    const { validFields, hasErrors } = formValidator({
+      form: { requestInformationText }
+    });
+
+    setErrorFields(validFields);
+
+    if(hasErrors) return;
+
     dayCarePackageCommercialsRequestClarification(dayCarePackageId, requestInformationText)
       .then(() => {
-        setDisplayMoreInfoForm(false);
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
       .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
+        pushNotification(error);
         updateErrorFields(error);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
       });
   };
+
   const handleApprovePackageCommercials = () => {
     dayCarePackageApproveCommercials(dayCarePackageId)
       .then(() => {
         // router.push(`${CARE_PACKAGE_ROUTE}`);
       })
-      .catch((error) => {
-        alert(`Status change failed. ${error.message}`);
-        setErrors([...errors, `Status change failed. ${error.message}`]);
-      });
+      .catch((error) => pushNotification(error));
   };
-  return (
-    <Layout headerTitle="DAY CARE APPROVAL">
-      <div className="hackney-text-black font-size-12px">
-        <DayCareApprovalTitle
-          termTimeConsiderationOption={dayCarePackage?.packageDetails.termTimeConsiderationOptionName}
-          isFixedPeriodOrOngoing={dayCarePackage?.packageDetails.isFixedPeriodOrOngoing}
-        />
-        <ApprovalClientSummary />
 
-        <div className="columns">
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">STARTS</p>
-                    <p className="font-size-14px">{getEnGBFormattedDate(dayCarePackage?.packageDetails.startDate)}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">ENDS</p>
-                    <p className="font-size-14px">
-                      {dayCarePackage?.packageDetails.endDate !== null
-                        ? dayCarePackage?.packageDetails.endDate
-                        : 'Ongoing'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="level">
-              <div className="level-left">
-                <div className="level-item">
-                  <div>
-                    <p className="font-weight-bold hackney-text-green">DAYS/WEEK</p>
-                    <p className="font-size-14px">3</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column" />
-          <div className="column" />
+  const datePeriod = formatCareDatePeriod(
+    packageDetails?.startDate,
+    packageDetails?.endDate,
+  );
+
+  const periodText = packageDetails?.isFixedPeriodOrOngoing ? 'Fixed Period' : 'Ongoing';
+
+  return (
+    <Layout clientSummaryInfo={{
+      whoIsSourcing: 'hackney',
+      client: 'James Stephens',
+      title: `Nursing Care (${periodText} - ${packageDetails?.termTimeConsiderationOptionName})`,
+      hackneyId: '#786288',
+      age: '91',
+      dateOfBirth: '09/12/1972',
+      postcode: 'E9 6EY',
+    }}
+    >
+      <div className="hackney-text-black font-size-12px">
+        <div className='client-summary mb-5'>
+          <ClientSummaryItem itemDetail={datePeriod.startDate} itemName='STARTS' />
+          <ClientSummaryItem itemDetail={datePeriod.endDate} itemName='ENDS' />
+          <ClientSummaryItem itemDetail={3} itemName='DAYS/WEEK' />
         </div>
 
-        <div className="columns">
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-light-green-box"
-              title="COST OF CARE / WK"
-              cost={dayCarePackage?.costSummary.costOfCarePerWeek}
-              costType="ACTUAL"
-            />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-light-green-box"
-              title="ANP / WK"
-              cost={dayCarePackage?.costSummary.anpPerWeek}
-              costType="ACTUAL"
-            />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-light-green-box"
-              title="TRANSPORT / WK"
-              cost={dayCarePackage?.costSummary.transportCostPerWeek}
-              costType="ACTUAL"
-            />
-          </div>
-          <div className="column">
-            <PackageCostBox
-              boxClass="hackney-package-cost-green-box"
-              title="TOTAL / WK"
-              cost={dayCarePackage?.costSummary.totalCostPerWeek}
-              costType="ACTUAL"
-            />
-          </div>
+        <div className="package-cost-box__group mb-5">
+          <PackageCostBox
+            boxClass="hackney-package-cost-light-green-box"
+            title="COST OF CARE / WK"
+            cost={costSummary?.costOfCarePerWeek}
+            costType="ACTUAL"
+          />
+          <PackageCostBox
+            boxClass="hackney-package-cost-light-green-box"
+            title="ANP / WK"
+            cost={costSummary?.anpPerWeek}
+            costType="ACTUAL"
+          />
+          <PackageCostBox
+            boxClass="hackney-package-cost-light-green-box"
+            title="TRANSPORT / WK"
+            cost={costSummary?.transportCostPerWeek}
+            costType="ACTUAL"
+          />
+          <PackageCostBox
+            boxClass="hackney-package-cost-green-box"
+            title="TOTAL / WK"
+            cost={costSummary?.totalCostPerWeek}
+            costType="ACTUAL"
+          />
         </div>
 
         <PackageApprovalHistorySummary approvalHistoryEntries={approvalHistoryEntries} />
@@ -213,8 +170,8 @@ const DayCareApproveBrokered = ({
               <TitleHeader>Package Details</TitleHeader>
               <DayCareSummary
                 opportunityEntries={opportunityEntries}
-                needToAddress={dayCarePackage?.packageDetails.needToAddress}
-                transportNeeded={dayCarePackage?.packageDetails.transportNeeded}
+                needToAddress={packageDetails?.needToAddress}
+                transportNeeded={packageDetails?.transportNeeded}
                 daysSelected={daysSelected}
                 deleteOpportunity={() => {}}
               />
@@ -222,54 +179,18 @@ const DayCareApproveBrokered = ({
           </div>
         </div>
 
-        <div className="columns">
-          <div className="column">
-            <div className="level mt-3">
-              <div className="level-left" />
-              <div className="level-right">
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-light" onClick={handleRejectPackage}>
-                    Deny
-                  </button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button
-                    onClick={() => setDisplayMoreInfoForm(!displayMoreInfoForm)}
-                    className="button hackney-btn-light"
-                  >
-                    {displayMoreInfoForm ? 'Hide Request more information' : 'Request More Information'}
-                  </button>
-                </div>
-                <div className="level-item  mr-2">
-                  <button className="button hackney-btn-green" onClick={handleApprovePackageCommercials}>
-                    Approve Commercials
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className='button-group'>
+          <Button className="gray" onClick={handleRejectPackage}>Deny</Button>
+          <Button onClick={handleApprovePackageCommercials}>Approve Commercials</Button>
         </div>
 
-        {displayMoreInfoForm && (
-          <div className="columns">
-            <div className="column">
-              <div className="mt-1">
-                <p className="font-size-16px font-weight-bold">Request more information</p>
-                <TextArea
-                  error={errorFields.requestInformationText}
-                  setError={() => changeErrorFields('changeErrorFields')}
-                  label=""
-                  rows={5}
-                  placeholder="Add details..."
-                  onChange={setRequestInformationText}
-                />
-                <button className="button hackney-btn-green" onClick={handleRequestMoreInformation}>
-                  Request more information
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <RequestMoreInformation
+          requestMoreInformationText={requestInformationText}
+          setRequestInformationText={setRequestInformationText}
+          errorFields={errorFields}
+          changeErrorFields={changeErrorFields}
+          handleRequestMoreInformation={handleRequestMoreInformation}
+        />
       </div>
     </Layout>
   );

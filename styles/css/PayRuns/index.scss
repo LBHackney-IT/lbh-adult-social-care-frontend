@@ -9,7 +9,24 @@
 @import 'tabs';
 
 .pay-runs {
-  height: calc(100vh - 79px);
   display: flex;
+  min-height: calc(100vh - 79px);
   flex-direction: column;
+
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pay-run {
+  .pay-run__searches {
+    .custom-async-selector {
+      margin-bottom: 10px;
+    }
+  }
+
+  .pay-run__dropdowns {
+    .control {
+      margin-bottom: 10px;
+    }
+  }
 }

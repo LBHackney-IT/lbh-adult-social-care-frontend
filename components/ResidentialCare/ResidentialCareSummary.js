@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { getEnGBFormattedDate } from '../../api/Utils/FuncUtils';
 import { Button } from '../Button';
+import { formatCareDatePeriod } from 'service/helpers';
 
 const ResidentialCareSummary = ({
   startDate,
@@ -11,6 +11,7 @@ const ResidentialCareSummary = ({
   setAdditionalNeedsEntries = () => {},
 }) => {
   const renderDate = (dateString) => dateString && new Date(dateString).toLocaleDateString('en-GB');
+  const periodData = formatCareDatePeriod(startDate, endDate);
 
   useEffect(() => {}, [additionalNeedsEntries]);
 
@@ -27,7 +28,7 @@ const ResidentialCareSummary = ({
           <div>
             <span className="font-weight-bold font-size-24px mr-2">Residential Care</span>
             <span className="font-size-16px">
-              {getEnGBFormattedDate(startDate)} {endDate ? ` - ${endDate}` : null}
+              {periodData?.startDate} - {periodData.endDate}
             </span>
           </div>
         </div>

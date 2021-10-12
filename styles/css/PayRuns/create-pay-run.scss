@@ -10,6 +10,10 @@
 
 .create-pay-run__regular-cycles {
   flex-basis: 50%;
+
+  @include media-small-ipod-down {
+    flex-basis: 100%;
+  }
 }
 
 .create-pay-run__title {

@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-
+import React, { useState } from 'react';
 import BaseField from './baseComponents/BaseField';
-import OutsideTrigger from './OutsideTrigger';
 import { CaretDownIcon } from './Icons';
 import ErrorField from './ErrorField';
 
@@ -23,15 +21,9 @@ const CustomDropDown = ({
   setError,
   buttonClassName = '',
 }) => {
-  if (initialText) {
-    options.unshift({
-      [fields.value]: null,
-      [fields.text]: initialText,
-    });
-  }
+  const localOptions = options.slice();
 
   const [isActive, setIsActive] = useState(false);
-  const [selectedOption, setSelectedOption] = useState({});
 
   const onTriggerClick = (event) => {
     event.stopPropagation();
@@ -40,23 +32,16 @@ const CustomDropDown = ({
 
   const onOptionClick = (event, option) => {
     event.stopPropagation();
-    setSelectedOption(option);
     onOptionSelect(option);
     setError && setError();
     setIsActive(false);
   };
 
-  useEffect(() => {
-    const initialSelectedOption =
-      options.find((item) => item[fields.value] === selectedValue || item[fields.text] === selectedValue) || options[0];
-    setSelectedOption(initialSelectedOption);
-  }, [selectedValue]);
-
   return (
-    <BaseField classes={`${className} dropdown-container`} label={label}>
-      <div className={`dropdown${isActive ? ' is-active' : ''}${isUp ? ' is-up' : ''}`}>
+    <BaseField className={`${className} dropdown-container`} label={label}>
+      <div tabIndex="0" onBlur={() => setIsActive(false)} className={`dropdown${isActive ? ' is-active' : ''}${isUp ? ' is-up' : ''}`}>
         <div className="dropdown-trigger" onClick={(event) => onTriggerClick(event)}>
-          <button
+          <div
             className={`button ${buttonClassName}`}
             aria-haspopup="true"
             aria-controls="dropdown-menu"
@@ -66,27 +51,30 @@ const CustomDropDown = ({
               children
             ) : (
               <>
-                <span>{selectedOption[fields.text]}</span>
+                <span>{selectedValue ? selectedValue[fields.text] : initialText}</span>
                 <span className="icon">
                   <CaretDownIcon />
                 </span>
               </>
             )}
-          </button>
-        </div>
-        <OutsideTrigger onClick={() => setIsActive(false)} className="dropdown-menu" id="dropdown-menu" role="menu">
-          <div className="dropdown-content">
-            {options.map((optionItem) => (
-              <div
-                key={optionItem[fields.text]}
-                className="dropdown-item"
-                onClick={(event) => onOptionClick(event, optionItem)}
-              >
-                {optionItem[fields.text]}
-              </div>
-            ))}
           </div>
-        </OutsideTrigger>
+        </div>
+        <div className="dropdown-menu" id="dropdown-menu" role="menu">
+          <div className="dropdown-content">
+            {localOptions.map((optionItem) => {
+              const activeItemClass = (selectedValue && optionItem[fields.value] === selectedValue[fields.value]) ? ' dropdown-item-active' : '';
+              return (
+                <div
+                  key={optionItem[fields.value]}
+                  className={`dropdown-item${activeItemClass}`}
+                  onClick={(event) => onOptionClick(event, optionItem)}
+                >
+                  {optionItem[fields.text]}
+                </div>
+              )
+            })}
+          </div>
+        </div>
       </div>
       {error && <ErrorField text={error} />}
     </BaseField>

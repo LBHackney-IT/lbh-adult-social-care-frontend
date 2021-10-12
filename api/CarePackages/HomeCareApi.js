@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { format } from 'date-fns';
 import { UTC_DATE_FORMAT } from '../../Constants';
-import { weekDays } from '../../service/homeCarePickerHelper';
+import { weekDays } from 'service/homeCarePickerHelper';
 import { BASE_URL } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 
@@ -12,32 +12,37 @@ const HOME_CARE_PACKAGE_SLOTS_URL = `${BASE_URL}/v1/homeCarePackageSlots`;
 const HOME_CARE_TIME_SLOT_SHIFTS_URL = `${BASE_URL}/v1/timeSlotShifts`;
 
 // Home care packages
-const createHomeCarePackage = async (startDate, endDate, isImmediate, isS117, isFixedPeriod) => {
-  const response = await axios
-    .post(
-      HOME_CARE_URL,
-      {
-        IsThisuserUnderS117: isS117,
-        IsThisAnImmediateService: isImmediate,
-        IsFixedPeriod: isFixedPeriod,
-        IsOngoingPeriod: !isFixedPeriod,
-        StartDate: format(startDate, UTC_DATE_FORMAT),
-        EndDate: format(endDate, UTC_DATE_FORMAT),
-        CreatorId: 0,
-        UpdatorId: 0,
-        // TODO client
-        ClientId: '694f4adc-f2d8-4422-97c8-08d9057550ea',
-        // TODO status
-        StatusId: 1,
-      }
-    )
-    .catch((error) => {
-      // Error
-      // TODO
-      console.log(error);
-    });
-
-  return response?.data;
+const createHomeCarePackage = async ({
+  startDate,
+  endDate,
+  isImmediate,
+  isS117,
+  isFixedPeriod,
+  creatorId,
+  clientId,
+  packageReclaims,
+}) => {
+  try {
+    const response = await axios
+      .post(
+        HOME_CARE_URL,
+        {
+          isThisClientUnderS117: isS117,
+          isThisAnImmediateService: isImmediate,
+          isFixedPeriod,
+          isOngoingPeriod: !isFixedPeriod,
+          startDate: startDate ? format(new Date(startDate), UTC_DATE_FORMAT) : '',
+          endDate: endDate ? format(new Date(endDate), UTC_DATE_FORMAT) : '',
+          creatorId,
+          clientId,
+          statusId: 1,
+          packageReclaims,
+        }
+      )
+    return response?.data;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 // Home care services
@@ -230,6 +235,22 @@ const createHomeCareBrokerageInfo = ({ id, postData }) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+const postRequestMoreInformation = ({ homeCarePackageId, informationText }) => {
+  const options = {
+    url: `${HOME_CARE_BROKERAGE_URL}/home-care-request-more-information`,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    data: {
+      homeCarePackageId,
+      informationText,
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 const getHomeCareBrokerageApprovePackage = async (packageId) => {
   const response = await axios
     .get(`${HOME_CARE_BROKERAGE_URL}/${packageId}/approve-package`, {
@@ -253,4 +274,5 @@ export {
   getHomeCarePackageDetailsForBrokerage,
   createHomeCareBrokerageInfo,
   changeHomeCareBrokerageStatus,
+  postRequestMoreInformation,
 };

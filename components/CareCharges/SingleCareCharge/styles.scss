@@ -1,0 +1,55 @@
+@import './ClientStatus/styles.scss';
+
+.absorb-width {
+  width: 100%;
+}
+
+.tag-full-width{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-header{
+  background:black;
+  color: white;
+}
+
+.table-body, .table-footer{
+  background: #F8F8F8;
+}
+
+.no-borders{
+  border: none;
+}
+
+.text-required-after {
+  &:after {
+    content: '*';
+    color: $lbh-red;
+  }
+}
+
+.govuk-table__row:hover .icon-button{
+opacity: 1;
+}
+
+tbody > .govuk-table__row:hover{
+  background: #e7e7e7;
+}
+
+.icon-button{
+  opacity: 0;
+  border:none;
+  background:none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.align-right{
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+}

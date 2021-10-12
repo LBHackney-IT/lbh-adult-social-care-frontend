@@ -1,82 +1,133 @@
 import React, { useState } from 'react';
 import SortTable from './SortTable';
 import Checkbox from './Checkbox';
+import Loading from './Loading'
 
 const Table = ({
   changeAllChecked,
   onClickTableRow,
-  fields = { id: 'id' },
+  fields = { id: 'id', tab: 'default' },
   rows = [],
   rowsRules = {},
   className = '',
   sortBy,
+  checkedRule,
   sorts,
+  checkedRows,
   canCollapseRows,
-  collapsedContainer,
+  getCollapsedContainer,
+  loading,
 }) => {
   const [defaultFields] = useState(fields);
+  const { tab } = fields;
 
   const clickRow = (item) => {
     if (onClickTableRow) {
       onClickTableRow(item);
     }
+    if(canCollapseRows) {
+      collapseRows(item[fields.id])
+    }
+  };
+
+  const [collapsedRows, setCollapsedRows] = useState([]);
+
+  const collapseRows = (id) => {
+    if (collapsedRows.includes(id)) {
+      setCollapsedRows(collapsedRows.filter((rowId) => String(rowId) !== String(id)));
+    } else {
+      setCollapsedRows([...collapsedRows, id]);
+    }
   };
 
   return (
-    <div className={`table ${className}`}>
-      <SortTable changeAllChecked={changeAllChecked} rows={rows} sortBy={sortBy} sorts={sorts} />
-      {!rows.length ? (
-        <p className="ml-2">No Table Data</p>
-      ) : (
-        rows.map((item) => {
-          const id = item[defaultFields.id];
-          return (
-            <div key={id} className="table__row">
-              <div onClick={() => clickRow(item)} className="table__row-column-items">
-                {Object.values(defaultFields).map((rowItemName) => {
-                  const currentRowRule = rowsRules[rowItemName] || '';
-                  const value = item[rowItemName];
+    <>
+      {loading && !rows.length ? <Loading className='table-loading' /> : (
+        <div className={`table ${className}`}>
+          {loading && rows.length && <Loading className='table-loading' />}
+          <SortTable
+            fields={fields}
+            checkedRule={checkedRule}
+            checkedRows={checkedRows}
+            changeAllChecked={changeAllChecked}
+            rows={rows}
+            sortBy={sortBy}
+            sorts={sorts}
+          />
+          {!rows.length ? (<p className="ml-2">No Table Data</p>) :
+            (<div className='table__row-container'>
+              {rows.map((item) => {
+              const id = item[defaultFields.id];
+              const collapsedRow = collapsedRows.includes(item[fields.id]);
+              const collapsedClass = collapsedRow ? ' collapsed' : '';
+              const rowClass = rowsRules.getClassName && rowsRules.getClassName(item);
+              let index = 0;
 
-                  if (currentRowRule?.hide) return <React.Fragment key={`${rowItemName}${id}`} />;
+              return (<div key={id} className={`table__row${collapsedClass} ${rowClass || ''}`}>
+                <div onClick={() => clickRow(item)} className="table__row-column-items" role="presentation">
+                  {Object.values(defaultFields).map((rowItemName) => {
+                    const columnClass = ` table__row-column-${index+1}`;
+                    const currentRowRule = rowsRules[rowItemName] || '';
+                    const value = item[rowItemName];
+                    const key = `${tab}${rowItemName}${value}${id}`;
 
-                  const currentValue = (currentRowRule?.getValue && currentRowRule.getValue(value)) || value;
-                  const calculatedClassName = currentRowRule?.getClassName
-                    ? currentRowRule.getClassName(value).toLowerCase()
-                    : '';
+                    if (currentRowRule?.getHide) {
+                      const isHide = currentRowRule?.getHide(value, item);
+                      if(isHide) return <React.Fragment key={key} />;
+                    }
+                    index += 1;
 
-                  const getComponent = currentRowRule?.getComponent;
-                  if (getComponent) {
-                    return getComponent(item, currentRowRule);
-                  }
+                    let currentValue = value;
+                    if(currentRowRule?.getValue) {
+                      currentValue = currentRowRule.getValue(value, item)
+                    }
 
-                  if (currentRowRule?.type === 'checkbox')
-                    return (
-                      <Checkbox key={`${rowItemName}${id}`} onChange={currentRowRule.onChange} checked={currentValue} />
-                    );
+                    const calculatedClassName = currentRowRule?.getClassName
+                      ? currentRowRule.getClassName(value, item).toLowerCase()
+                      : '';
 
-                  return (
-                    <div
+                    const getComponent = currentRowRule?.getComponent;
+                    if (getComponent) {
+                      const rowComponent = getComponent(item, currentRowRule, columnClass);
+                      if(rowComponent) return rowComponent;
+                    }
+
+                    if (currentRowRule?.type === 'checkbox') {
+                      return (<div key={key} className={`table__row-item-checkbox table__row-item${columnClass}`}>
+                        <Checkbox
+                          className={calculatedClassName}
+                          onChange={(checkedValue, event) => {
+                            event.stopPropagation();
+                            currentRowRule.onChange(checkedValue, item)
+                          }}
+                          checked={currentValue}
+                        />
+                      </div>);
+                    }
+
+                    return (<div
+                      role="presentation"
                       onClick={(e) => {
                         if (!currentRowRule.onClick) return;
                         e.stopPropagation();
                         currentRowRule.onClick(item, value);
                       }}
-                      key={`${value}${id}`}
-                      className={`table__row-item ${calculatedClassName}`}
+                      key={key}
+                      className={`table__row-item${columnClass} ${calculatedClassName}`}
                     >
                       <p>{currentValue || '—'}</p>
-                    </div>
-                  );
-                })}
-              </div>
-              {canCollapseRows && collapsedContainer && (
-                <div className="table__row-collapsed">{collapsedContainer}</div>
-              )}
+                    </div>);
+                  })}
+                </div>
+                {canCollapseRows && collapsedRow && getCollapsedContainer && (
+                  <div className="table__row-collapsed">{getCollapsedContainer(item)}</div>
+                )}
+              </div>)})}
             </div>
-          );
-        })
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
@@ -93,22 +144,24 @@ export default Table;
     dob: 'dob',
   }
 
-
   const rowsRules = {
-    typeOfCare: {
+    getClassName: (item) => return 'new-row-class',
+    clientName: {
       getClassName: () => 'link-button',
       onClick: (item, prop) => console.log(item, prop),
     },
-    id: {
-      hide: true,
+    payRunId: {
+      getHide: (value, item) => true,
     },
-    stage: {
-      getValue: (value) => `${value}%`,
-      getComponent: (cellItem, cellRule) => <SomeComponent className={cellRule.className} someValue={cellItem.someValue} />,
-      getClassName: (value) => `${value} table__row-item-status`,
+    checkboxField: {
+      type: 'checkbox',
+      getValue: (value, item) => checked,
+      getClassName: (value, item) => `custom-checkbox ${item.statusName}`,
+      onChange: (value, item) => setChecked(item.id),
     },
-    owner: {
-      value: customValue
-      getClassName: (value) => `${value} table__row-item-status border-radius-0`,
+    dob: {
+      getValue: (value, item) => `${value}%`,
+      getComponent: (cellItem, cellRule, tableClass) => <SomeComponent className={cellRule.className} someValue={cellItem.someValue} />,
+      getClassName: (value, item) => `${value} table__row-item-status`,
     },
  */

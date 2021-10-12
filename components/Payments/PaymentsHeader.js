@@ -1,13 +1,14 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import { includeString } from 'service/helpers';
+import { LOGOUT_ROUTE } from '../../routes/RouteConstants';
 import { HackneyFullLogo } from '../Icons';
-import { includeString } from '../../service/helpers';
 
 const paymentsRoutes = [
-  { route: 'pay-runs', name: 'Pay Runs' },
-  { route: 'care-charges', name: 'Care Charges' },
-  { route: 'reclaims', name: 'Reclaims' },
-  { route: 'reporting', name: 'Reporting' },
+  // { route: 'pay-runs', name: 'Pay Runs' },
+  // { route: 'care-charges', name: 'Care Charges' },
+  // { route: 'reclaims', name: 'Reclaims' },
+  // { route: 'reporting', name: 'Reporting' },
   { route: 'logout', name: 'Log Out' },
 ];
 
@@ -16,7 +17,7 @@ const PaymentsHeader = () => {
 
   const changeRoute = (route) => {
     if (route === 'logout') {
-      router.push('/logout');
+      router.push(LOGOUT_ROUTE);
     } else {
       router.push(`/payments/${route}`);
     }
