@@ -3,7 +3,6 @@ import { Container, ErrorMessage, Input } from '../HackneyDS';
 import { SelectArrowTriangle } from '../Icons';
 import BrokeragePackageDates from './BrokeragePackageDates';
 import { currency } from '../../constants/strings';
-import { uniqueID } from '../../service/helpers';
 import BrokerageBorderCost from './BrokerageBorderCost';
 import FormGroup from '../HackneyDS/FormGroup';
 
