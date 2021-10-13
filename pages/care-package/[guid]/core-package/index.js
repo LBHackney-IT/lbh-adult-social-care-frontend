@@ -5,7 +5,7 @@ import useCarePackageOptions from 'api/SWR/CarePackage/useCarePackageOptions';
 import { usePackageGetAll } from 'api/SWR';
 import usePrimarySupportReason from 'api/SWR/package/usePrimarySupportReason';
 import { addNotification } from 'reducers/notificationsReducer';
-import { CARE_PACKAGE_ROUTE } from 'routes/RouteConstants';
+import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import { createCoreCarePackage, updateCoreCarePackage } from 'api/CarePackages/CarePackage';
 import CorePackageDetails from 'components/Brokerage/CorePackageDetails';
 import useGetServiceUserApi from 'api/SWR/Common/UseGetServiceUserApi';
@@ -58,8 +58,7 @@ const CorePackageDetailsPage = () => {
     if (packageId !== undefined) {
       updateCoreCarePackage({ data, packageId })
         .then(({ id }) => {
-          // move to brokerage page
-          router.push(`${CARE_PACKAGE_ROUTE}/brokerage/broker-package/${id}`);
+          router.push(getBrokerPackageRoute(id));
           pushNotification('Package saved.', 'success');
         })
         .catch((error) => {
@@ -73,8 +72,7 @@ const CorePackageDetailsPage = () => {
 
       createCoreCarePackage({ data: packageToCreate })
         .then(({ id }) => {
-          // move to brokerage page
-          router.push({ pathname: `${CARE_PACKAGE_ROUTE}/brokerage/broker-package/${id}`, query: id });
+          router.push(getBrokerPackageRoute(id));
           pushNotification('Package saved.', 'success');
         })
         .catch((error) => {

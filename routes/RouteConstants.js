@@ -4,6 +4,7 @@ export const BROKER_PORTAL_ROUTE = '/broker-portal';
 export const CARE_PACKAGE_ROUTE = '/care-package';
 export const getCarePackageReviewRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/review`;
 export const getCorePackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/core-package`;
+export const getBrokerPackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-package`;
 
 export const BROKERAGE_ROUTE = `${CARE_PACKAGE_ROUTE}/brokerage`;
 export const BROKER_PACKAGE_ROUTE = `${BROKERAGE_ROUTE}/broker-package`;
