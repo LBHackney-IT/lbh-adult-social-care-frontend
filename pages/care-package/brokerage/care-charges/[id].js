@@ -8,6 +8,7 @@ import {
 import useReclaimApi from 'api/SWR/CarePackage/useReclaimApi';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
+import { getCarePackageReviewRoute } from '../../../../routes/RouteConstants';
 
 const CareChargesPage = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const CareChargesPage = () => {
     dispatch(addNotification({ text, className }));
   };
 
-  const reviewPageLink = `/care-package/${carePackageId}/review`;
+  const reviewPageLink = getCarePackageReviewRoute(carePackageId);
 
   const createCareCharge = (packageId, careChargeCreation) => {
     createCarePackageReclaimCareCharge(packageId, careChargeCreation)
