@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { getBrokerPackageRoute } from 'routes/RouteConstants';
+import { getBrokerPackageRoute } from '../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Container, Link } from '../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';

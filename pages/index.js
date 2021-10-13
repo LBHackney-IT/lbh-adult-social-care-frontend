@@ -6,7 +6,7 @@ import Loading from 'components/Loading';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service/helpers';
 
-export const getServerSideProps = withSession(async ({ req }) => {
+export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
 
   if (!user) {
