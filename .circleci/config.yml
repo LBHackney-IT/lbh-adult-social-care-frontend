@@ -271,8 +271,6 @@ workflows:
                 - main
       - assume-role-production:
           context: api-assume-role-social-care-production-context
-          requires:
-            - build-deploy-staging
           filters:
             branches:
               only: main
