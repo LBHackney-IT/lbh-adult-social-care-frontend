@@ -72,8 +72,6 @@ export const BrokerPackage = ({
     setSelectedItem('');
     setShowSearchResults(false);
     setSupplierSearch('');
-    getDetails();
-    composeDetailsData();
   };
 
   const clearSearch = () => {
@@ -87,6 +85,7 @@ export const BrokerPackage = ({
         endDate: dateStringToDate(detailsData.endDate || new Date()),
         startDate: dateStringToDate(detailsData.startDate || new Date()),
       });
+
       if (!detailsData.endDate) {
         setIsOngoing(true);
       }
