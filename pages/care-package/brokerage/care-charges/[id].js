@@ -34,7 +34,7 @@ const CareChargesPage = () => {
     createCarePackageReclaimCareCharge(packageId, careChargeCreation)
       .then(() => {
         pushNotification(`Care charge created successfully`, 'success');
-        router.push(`/care-package/brokerage/review-package-details/${carePackageId}`);
+        router.push(`/care-package/brokerage/package-details/${carePackageId}`);
       })
       .catch((error) => {
         pushNotification(error);
@@ -45,7 +45,7 @@ const CareChargesPage = () => {
     updateCarePackageReclaimCareCharge(packageId, careChargeUpdate)
       .then(() => {
         pushNotification(`Care charge updated successfully`, 'success');
-        router.push(`/care-package/brokerage/review-package-details/${carePackageId}`);
+        router.push(`/care-package/brokerage/package-details/${carePackageId}`);
       })
       .catch((error) => {
         pushNotification(error);

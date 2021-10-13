@@ -43,6 +43,7 @@ import { AddElementModal } from '../CareCharges/AddElementModal';
 import { CancelElementModal } from '../CareCharges/CancelElementModal';
 import { EndElementModal } from '../CareCharges/EndElementModal';
 import { OptionsElementModal } from '../CareCharges/OptionsElementModal';
+import { SingleAccordion } from './SingleAccordion';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 
@@ -94,4 +95,5 @@ export {
   FundedNursingCare,
   CancelElementModal,
   EndElementModal,
+  SingleAccordion,
 };

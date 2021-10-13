@@ -1,13 +1,13 @@
 import React from 'react';
-import { ReviewPackageDetails } from './index';
+import { PackageDetails } from './index';
 
-// export default {
-//   title: 'Pages/Brokerage/ReviewPackageDetails',
-//   component: ReviewPackageDetails,
-//   argTypes: {
-//     controls: null,
-//   },
-// };
+export default {
+  title: 'Pages/Brokerage/PackageDetails',
+  component: PackageDetails,
+  argTypes: {
+    controls: null,
+  },
+};
 
 const testUserDetails = {
   client: 'James Stevens',
@@ -98,7 +98,7 @@ const testPackageInfoItems = [
   },
 ];
 
-const Template = (args) => <ReviewPackageDetails {...args} />;
+const Template = (args) => <PackageDetails {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

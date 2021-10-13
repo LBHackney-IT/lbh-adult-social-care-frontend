@@ -1,4 +1,4 @@
-.review-package-details__links {
+.package-details__links {
   position: sticky;
   top: 0;
   left: 0;
@@ -16,17 +16,17 @@
   width: 100px;
 }
 
-.review-package-details__cost-info {
+.package-details__cost-info {
   @include media-small-ipod-up {
     width: calc(100% - 250px) !important;
   }
 }
 
-.review-package-details__accordion {
+.package-details__accordion {
   margin-bottom: 24px;
 }
 
-.review-package-details__accordion-info {
+.single-accordion-info {
   display: flex;
   align-items: center;
   width: fit-content;
@@ -50,7 +50,7 @@
   }
 }
 
-.review-package-details__items-container {
+.package-details__items-container {
   & > h3 {
     font-weight: bold;
     color: black;
@@ -59,23 +59,23 @@
   }
 }
 
-.review-package-details__items-date {
+.package-details__items-date {
   margin-bottom: 24px;
   font-size: 24px;
   color: $lbh-text-colour;
 }
 
-.review-package-details__items-title {
+.package-details__items-title {
   color: black;
   font-size: 18px;
   margin-bottom: 10px;
 }
 
-.review-package-details__items-place {
+.package-details__items-place {
   margin-bottom: 10px;
 }
 
-.review-package-details__items-address {
+.package-details__items-address {
   margin-bottom: 10px;
 }
 
@@ -90,13 +90,13 @@
   font-size: 24px;
 }
 
-.review-package-details__items-actions {
+.package-details__items-actions {
   p:first-of-type {
     margin-right: 24px;
   }
 }
 
-.review-package-details__cost-info-item {
+.package-details__cost-info-item {
   margin-bottom: 60px;
 }
 
@@ -115,7 +115,7 @@
   }
 }
 
-.review-package-details__summary {
+.package-details__summary {
   margin-bottom: 60px;
   padding: 24px;
   background: $lbh-light-gray2;
@@ -149,7 +149,7 @@
   }
 }
 
-.review-package-details__actions {
+.package-details__actions {
   @include media-small-ipod-down {
     display: flex;
     flex-direction: column-reverse;
@@ -177,8 +177,14 @@
   }
 }
 
-.review-package-details__main-container {
+.package-details__main-container {
   @include media-small-ipod-up {
     display: flex;
   }
+}
+
+.package-details__buttons {
+  display: flex;
+  flex-wrap: wrap;
+
 }
