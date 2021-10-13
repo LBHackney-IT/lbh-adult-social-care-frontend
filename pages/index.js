@@ -4,11 +4,20 @@ import { useRouter } from 'next/router';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 import Loading from 'components/Loading';
 import withSession from 'lib/session';
-import { getUserSession } from 'service/helpers';
+import { getLoggedInUser } from 'service/helpers';
 
-export const getServerSideProps = withSession(async ({ req, res }) => {
-  const isRedirect = getUserSession({ req, res });
-  if (isRedirect) return { props: {} };
+export const getServerSideProps = withSession(async ({ req }) => {
+  const user = getLoggedInUser({ req });
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
   return { props: {} };
 });
 
