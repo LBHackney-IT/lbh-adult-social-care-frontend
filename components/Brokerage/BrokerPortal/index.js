@@ -4,12 +4,12 @@ import { Button, Container, HorizontalSeparator, Select } from '../../HackneyDS'
 import Pagination from '../../Payments/Pagination';
 import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
-import { BrokerageHubTable } from './BrokerageHubTable';
+import { BrokerPortalTable } from './BrokerPortalTable';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
 import { LOGOUT_ROUTE } from '../../../routes/RouteConstants';
 import { isFunction } from '../../../api/Utils/FuncUtils';
 
-export const BrokerageHubPage = ({
+export const BrokerPortalPage = ({
   items,
   pageNumber,
   setPageNumber,
@@ -108,7 +108,7 @@ export const BrokerageHubPage = ({
         </Container>
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
-        {items && <BrokerageHubTable onRowClick={handleRowClick} data={items} />}
+        {items && <BrokerPortalTable onRowClick={handleRowClick} data={items} />}
         <HorizontalSeparator height="20px" />
         <Pagination
           pageSize={pageSize}
