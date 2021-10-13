@@ -6,6 +6,7 @@ export const getCarePackageReviewRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/re
 export const getCorePackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/core-package`;
 export const getBrokerPackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-package`;
 export const getFundedNursingCareRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-fnc`;
+export const getCareChargesRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-care-charges`;
 
 export const BROKERAGE_ROUTE = `${CARE_PACKAGE_ROUTE}/brokerage`;
 export const BROKER_PACKAGE_ROUTE = `${BROKERAGE_ROUTE}/broker-package`;

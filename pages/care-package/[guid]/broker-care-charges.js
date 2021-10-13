@@ -7,13 +7,15 @@ import {
 } from 'api/CarePackages/CarePackageReclaim';
 import useReclaimApi from 'api/SWR/CarePackage/useReclaimApi';
 import { addNotification } from 'reducers/notificationsReducer';
+import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { useDispatch } from 'react-redux';
-import { getCarePackageReviewRoute } from '../../../../routes/RouteConstants';
 
 const CareChargesPage = () => {
   const router = useRouter();
-  const carePackageId = router.query.id;
+  const carePackageId = router.query.guid;
+
   const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e'; // todo to be removed
+
   const dispatch = useDispatch();
   const { data: carePackageReclaimCareCharge } = useReclaimApi.careCharge(carePackageId);
   const { data: calculatedCost } = useReclaimApi.calculatedCost(carePackageId, serviceUserId);
@@ -57,7 +59,6 @@ const CareChargesPage = () => {
 
   return (
     <CareCharges
-      carePackageId={carePackageId}
       reasonsCollecting={collectingReasonOptions}
       calculatedCost={calculatedCost}
       carePackageReclaimCareCharge={carePackageReclaimCareCharge}

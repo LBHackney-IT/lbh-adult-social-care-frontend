@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
+import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../HackneyDS';
 import BrokeragePackageDates from '../BrokeragePackageDates';
@@ -183,11 +183,8 @@ export const BrokerPackage = ({
         packageId,
       });
       dispatch(addNotification({ text: 'Success', className: 'success' }));
-      if (packageType === 4) {
-        router.push(getFundedNursingCareRoute(packageId));
-      } else {
-        router.push(`/care-package/brokerage/care-charges/${packageId}`);
-      }
+
+      router.push(packageType === 4 ? getFundedNursingCareRoute(packageId) : getCareChargesRoute(packageId));
     } catch (e) {
       dispatch(addNotification({ text: e }));
     }

@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { createCarePackageReclaimFnc, updateCarePackageReclaimFnc } from 'api/CarePackages/CarePackageReclaim';
 import useReclaimApi from 'api/SWR/CarePackage/useReclaimApi';
 import { addNotification } from 'reducers/notificationsReducer';
+import { getCareChargesRoute } from 'routes/RouteConstants';
 
 const FundedNursingCarePage = () => {
   const router = useRouter();
@@ -28,7 +29,7 @@ const FundedNursingCarePage = () => {
     createCarePackageReclaimFnc(packageId, fundedNursingCareCreation)
       .then(() => {
         pushNotification(`Funded Nursing Care created successfully`, 'success');
-        router.push(`/care-package/brokerage/care-charges/${carePackageId}`);
+        router.push(getCareChargesRoute(carePackageId));
       })
       .catch((error) => {
         pushNotification(error);
@@ -39,7 +40,7 @@ const FundedNursingCarePage = () => {
     updateCarePackageReclaimFnc(packageId, fundedNursingCareUpdate)
       .then(() => {
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
-        router.push(`/care-package/brokerage/care-charges/${carePackageId}`);
+        router.push(getCareChargesRoute(carePackageId));
       })
       .catch((error) => {
         pushNotification(error);
