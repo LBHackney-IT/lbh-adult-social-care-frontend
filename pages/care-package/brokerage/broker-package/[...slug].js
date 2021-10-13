@@ -59,7 +59,6 @@ const BrokerPackagePage = () => {
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
       onSearchSupplier={onSearchSupplier}
-      getDetails={getDetails}
       setSelectedItem={setSelectedItem}
       selectedItem={selectedItem}
       supplierSearch={supplierSearch || ''}
@@ -68,7 +67,6 @@ const BrokerPackagePage = () => {
       detailsData={detailsData}
       packageId={newPackageId}
       searchResults={searchResults}
-      careName="Nursing care"
       packageType={carePackageCore?.packageType}
       carePackageCore={carePackageCore}
     />

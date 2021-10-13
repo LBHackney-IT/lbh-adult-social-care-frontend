@@ -40,11 +40,6 @@ const formatStringLength = (string, collapsedText, isSlicedText) => {
   return string;
 };
 
-const formatCareDatePeriod = (startDate, endDate) => ({
-  startDate: getEnGBFormattedDate(startDate, ' '),
-  endDate: endDate ? getEnGBFormattedDate(endDate, ' ') : 'Ongoing',
-});
-
 const formatDate = (date, formatString = 'dd.MM.yy') => date && format(new Date(date), formatString);
 
 const includeString = (mainString, checkString) => mainString && mainString.indexOf(checkString) > -1;
@@ -102,19 +97,6 @@ const getLoggedInUser = ({ req }) => {
   return user;
 };
 
-function formatForDropDownOptions(fields, res) {
-  if (!res) return [];
-  const localFields = {
-    text: 'text',
-    value: 'id',
-    ...fields,
-  };
-  return res.map((item) => ({
-    text: item[localFields.text],
-    value: item[localFields.value],
-  }));
-}
-
 /**
  behavior: auto or smooth
  block: start, center, end, or nearest
@@ -146,27 +128,18 @@ const sortTableByKey = (input, sort) => {
   });
 };
 
-const deleteSpaces = (str) => str.replace(/\s/g, '');
-
-const getErrorResponse = (error) => error?.response?.data || {}; // { firstName: 'First Name must be more then 10 symbols', secondName: 'Second Name must be more then 10 symbols'
-
 const getNumberWithCommas = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 export {
   uniqueID,
-  deleteSpaces,
   formatDateWithSign,
   formatStatus,
   includeString,
   getUserSession,
-  getErrorResponse,
   formatDate,
   getLoggedInUser,
-  sortTableByKey,
-  formatForDropDownOptions,
   scrollToElement,
   getNumberWithCommas,
-  formatCareDatePeriod,
   formatStringLength,
   incrementDate,
   getUrlFromFile,

@@ -16,7 +16,6 @@ import Loading from '../../Loading';
 
 export const BrokerPackage = ({
   supplierSearch,
-  getDetails,
   packageId,
   setSupplierSearch,
   showSearchResults,
@@ -28,7 +27,6 @@ export const BrokerPackage = ({
   selectedItem,
   setSelectedItem,
   onSearchSupplier,
-  careName = 'Nursing Care',
   carePackageCore = {
     packageType: undefined,
     serviceUserId: undefined,
@@ -60,7 +58,6 @@ export const BrokerPackage = ({
   });
 
   const clickBack = () => {
-    // router.push(`${CORE_PACKAGE_DETAILS_ROUTE}/${packageId}`);
     router.push(
       `${CARE_PACKAGE_ROUTE}/service-users/${carePackageCore.serviceUserId}/core-package-details?packageId=${
         packageId || ''
@@ -232,7 +229,6 @@ export const BrokerPackage = ({
   }, [supplierWeeklyCost, weeklyNeeds]);
 
   useEffect(() => {
-    // let totalCost = Number(supplierWeeklyCost);
     let totalCost = 0;
     if (oneOffNeeds) {
       oneOffNeeds.forEach((item) => {
