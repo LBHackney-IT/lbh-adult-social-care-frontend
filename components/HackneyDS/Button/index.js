@@ -6,6 +6,8 @@ export default function Button({
   clearClass,
   disabled,
   link,
+  rel,
+  target,
   className,
   addItem,
   handler = () => {},
@@ -24,6 +26,8 @@ export default function Button({
   );
   return link ? (
     <a
+      rel={rel}
+      target={target}
       onClick={(e) => disabled && e.preventDefault()}
       href={link}
       role="button"

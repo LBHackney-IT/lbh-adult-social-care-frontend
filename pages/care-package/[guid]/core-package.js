@@ -7,10 +7,10 @@ import usePrimarySupportReason from 'api/SWR/package/usePrimarySupportReason';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import { createCoreCarePackage, updateCoreCarePackage } from 'api/CarePackages/CarePackage';
-import CorePackageDetails from 'components/Brokerage/CorePackageDetails';
 import useGetServiceUserApi from 'api/SWR/Common/UseGetServiceUserApi';
 import optionsMapper, { mapPackageSchedulingOptions, mapServiceUserBasicInfo } from 'api/Mappers/optionsMapper';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
+import CorePackageDetails from 'components/Pages/CarePackages/CorePackageDetails';
 
 const packageSettingOptions = [
   { id: 'hasRespiteCare', label: 'Respite care' },

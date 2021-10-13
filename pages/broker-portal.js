@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import withSession from 'lib/session';
 import { getUserSession } from 'service/helpers';
-import { BrokerPortalPage } from 'components/Brokerage/BrokerPortal';
+import { BrokerPortalPage } from 'components/Pages/BrokerPortal';
 import { createCoreCarePackage } from 'api/CarePackages/CarePackage';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';

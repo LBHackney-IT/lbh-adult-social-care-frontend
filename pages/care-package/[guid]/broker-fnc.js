@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import FundedNursingCare from 'components/Brokerage/FundedNursingCare';
+import FundedNursingCare from 'components/Pages/CarePackages/FundedNursingCare';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { createCarePackageReclaimFnc, updateCarePackageReclaimFnc } from 'api/CarePackages/CarePackageReclaim';
