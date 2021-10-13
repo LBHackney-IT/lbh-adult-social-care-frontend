@@ -4,9 +4,16 @@ import FormGroup from '../../HackneyDS/FormGroup';
 import { requiredSchema } from '../../../constants/schemas';
 import BrokerageHeader from '../../Brokerage/BrokerageHeader/BrokerageHeader';
 import TitleSubtitleHeader from '../../Brokerage/TitleSubtitleHeader';
-import ServiceUserDetails from '../../Brokerage/BrokerageHub/ServiceUserDetails';
+import ServiceUserDetails from '../../Brokerage/BrokerPortal/ServiceUserDetails';
 import Breadcrumbs from '../../Breadcrumbs';
 import { useRouter } from 'next/router';
+import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
+
+const breadcrumbs = [
+  { text: 'Home', href: CARE_PACKAGE_ROUTE },
+  { text: 'Broker portal', href: BROKER_PORTAL_ROUTE },
+  { text: 'Assign and attach a care plan' },
+];
 
 const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
   const [errors, setErrors] = useState({
@@ -19,10 +26,6 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
   const [notes, setNotes] = useState('');
   const [file, setFile] = useState(null);
   const router = useRouter();
-
-  const clickBack = () => {
-    alert('Click back');
-  };
 
   const clickSave = async () => {
     const validFields = [
@@ -58,12 +61,6 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
   const changeError = (field, value = '') => {
     setErrors(prevState => ({ ...prevState, [field]: value }));
   };
-
-  const [breadcrumbs] = useState([
-    { text: 'Home', onClick: () => router.push('/care-package') },
-    { text: 'Broker portal', onClick: () => router.push('/broker-portal') },
-    { text: 'Assign and attach a care plan' },
-  ]);
 
   return (
     <Container className="assign-care-plan">

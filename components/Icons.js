@@ -1,11 +1,11 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 
-const BreadcrumbChevron = () => (
+const BreadcrumbsChevron = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M9 18L15 12L9 6" stroke="#525A5B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M9 18L15 12L9 6" stroke="#525A5B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
-);
+)
 
 const HackneyLogo = ({ className = '', onClick = () => {} }) => (
     <svg
@@ -282,5 +282,5 @@ export {
   SelectArrowTriangle,
   ToggleBlueIcon,
   CollapseGreenDownIcon,
-  BreadcrumbChevron,
+  BreadcrumbsChevron,
 };
