@@ -14,10 +14,12 @@ const Template = (args) => <AssignCarePlan {...args} />;
 export const Default = Template.bind({});
 Default.args = {
   brokerOptions: [
+    { value: '', text: 'Select one' },
     { value: 'broker-1', text: 'Broker 1' },
     { value: 'broker-2', text: 'Broker 2' },
   ],
   packageTypeOptions: [
+    { value: '', text: 'Select one' },
     { value: 'package-1', text: 'Package 1' },
     { value: 'package-2', text: 'Package 2' },
   ],

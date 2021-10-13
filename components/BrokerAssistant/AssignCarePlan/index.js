@@ -76,7 +76,7 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
       </Container>
       {
         assignedCarePlan ?
-          <Container className='brokerage__container-main'>
+          <Container padding='60px' className='brokerage__container-main'>
             <Announcement className="success mb">
               <div slot="title">Success!</div>
               <div slot="content">Care plan assigned to {broker}</div>
@@ -84,7 +84,7 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
             <Button className='mt-60' handler={() => router.replace('broker-portal')}>Back to Broker Portal</Button>
           </Container>
           :
-          <Container className="brokerage__container-main">
+          <Container padding='0 60px' className="brokerage__container-main">
             <TitleSubtitleHeader
               title="Assign a care plan to brokerage"
               subTitle="Assign and attach a care plan"
