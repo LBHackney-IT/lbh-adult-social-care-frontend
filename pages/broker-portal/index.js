@@ -7,6 +7,7 @@ import { BrokerPortalPage } from 'components/Brokerage/BrokerPortal';
 import { createCoreCarePackage } from 'api/CarePackages/CarePackage';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
+import { getCorePackageRoute } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -70,10 +71,10 @@ const BrokerPortal = () => {
     { text: 'Cancelled', value: '7' },
   ];
 
-  const handleRowClick = (rowItem) => {
+  const handleRowClick = ({ serviceUserId, packageId }) => {
     router.push({
-      pathname: `care-package/service-users/${rowItem?.serviceUserId}/core-package-details`,
-      query: { packageId: rowItem.packageId },
+      pathname: getCorePackageRoute(serviceUserId),
+      query: { packageId },
     });
   };
 
@@ -94,7 +95,7 @@ const BrokerPortal = () => {
       .then(({ id, serviceUserId }) => {
         // Dummy package created, go to package builder
         router.push({
-          pathname: `care-package/service-users/${serviceUserId}/core-package-details`,
+          pathname: getCorePackageRoute(serviceUserId),
           query: { packageId: id },
         });
         pushNotification('Package created.', 'success');

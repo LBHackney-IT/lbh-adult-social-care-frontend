@@ -7,7 +7,7 @@ import BrokeragePackageDates from '../BrokeragePackageDates';
 import BrokerPackageCost from './BrokerPackageCost';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
+import { getCorePackageRoute } from '../../../routes/RouteConstants';
 import { updateCarePackageCosts } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../Constants';
@@ -58,11 +58,10 @@ export const BrokerPackage = ({
   });
 
   const clickBack = () => {
-    router.push(
-      `${CARE_PACKAGE_ROUTE}/service-users/${carePackageCore.serviceUserId}/core-package-details?packageId=${
-        packageId || ''
-      }`
-    );
+    router.push({
+      pathname: getCorePackageRoute(carePackageCore.serviceUserId),
+      query: { packageId },
+    });
   };
 
   const removeSupplierCard = () => {
@@ -151,7 +150,7 @@ export const BrokerPackage = ({
       .filter((item) => item.cost !== 0)
       .map(({ cost, id, endDate, startDate }) => ({
         // id,
-        cost: cost,
+        cost,
         startDate,
         endDate: isOngoing ? null : endDate,
         costPeriod: costPeriods.weekly,

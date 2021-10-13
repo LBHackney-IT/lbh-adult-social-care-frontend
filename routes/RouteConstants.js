@@ -2,7 +2,8 @@ export const LOGOUT_ROUTE = '/logout';
 export const BROKER_PORTAL_ROUTE = '/broker-portal';
 
 export const CARE_PACKAGE_ROUTE = '/care-package';
-export const getCarePackageReviewRoute = (id) => `/care-package/${id}/review`;
+export const getCarePackageReviewRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/review`;
+export const getCorePackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/core-package`;
 
 export const BROKERAGE_ROUTE = `${CARE_PACKAGE_ROUTE}/brokerage`;
 export const BROKER_PACKAGE_ROUTE = `${BROKERAGE_ROUTE}/broker-package`;
