@@ -71,10 +71,10 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
                   {totalCostComponent && totalCostComponent}
                   {totalCost && (
                     <Container className="review-package-details__items-actions" display="flex">
-                      <p onClick={() => redirectToBrokerPackage()} className="link-button">
+                      <p onClick={redirectToBrokerPackage} className="link-button">
                         Edit
                       </p>
-                      <p onClick={() => redirectToBrokerPackage()} className="link-button red">
+                      <p onClick={redirectToBrokerPackage} className="link-button red">
                         Remove
                       </p>
                     </Container>
