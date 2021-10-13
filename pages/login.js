@@ -5,14 +5,13 @@ import HackneyFooterInfo from 'components/HackneyFooterInfo';
 import Header from 'components/Layout/Header';
 import useUser from 'api/SWR/useUser';
 import { userLogin } from 'reducers/userReducer';
-import { BROKERAGE_HUB_ROUTE } from 'routes/RouteConstants';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
 const Login = () => {
   const dispatch = useDispatch();
   const { user, mutateUser } = useUser({
-    redirectTo: BROKERAGE_HUB_ROUTE,
+    redirectTo: '/',
     redirectIfFound: true,
   });
 

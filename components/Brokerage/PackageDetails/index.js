@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { getBrokerPackageRoute } from '../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Container, Link } from '../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
-import { useRouter } from 'next/router';
 import PackageInfo from './PackageInfo';
 import BrokerageBorderCost from '../BrokerageBorderCost';
 import { currency } from '../../../constants/strings';
 import BrokerageTotalCost from '../BrokerageTotalCost';
-import { BROKER_PACKAGE_ROUTE, BROKERAGE_HUB_ROUTE } from '../../../routes/RouteConstants';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
 import Breadcrumbs from '../../Breadcrumbs';
 
-export const PackageDetails = ({
-  userDetails,
-  packageInfoItems = [],
-  summary = [],
-  supplierName,
-}) => {
+export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summary = [], supplierName }) => {
   const router = useRouter();
-  const packageId = router?.query?.id;
+  const packageId = router.query.guid;
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
 
   const [links] = useState([
@@ -38,7 +33,12 @@ export const PackageDetails = ({
 
   const goBack = () => router.back();
 
-  const redirectToBrokerPackage = () => router.push(`${BROKER_PACKAGE_ROUTE}/${packageId}/${supplierName}`);
+  const redirectToBrokerPackage = () => {
+    router.push({
+      pathname: getBrokerPackageRoute(packageId),
+      query: { supplierName },
+    });
+  };
 
   return (
     <div className="package-details">
@@ -98,7 +98,7 @@ export const PackageDetails = ({
             <Container className="package-details__summary">
               <h3 id="summary" className="font-weight-bold">Summary</h3>
               {summary.map(({ key, value, className, id }) => (
-                <BrokerageTotalCost key={id} value={value} name={key} className={className}/>
+                <BrokerageTotalCost key={id} value={value} name={key} className={className} />
               ))}
             </Container>
             <Container className="package-details__actions" display="flex">

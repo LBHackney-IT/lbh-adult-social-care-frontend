@@ -3,10 +3,11 @@ import { useRouter } from 'next/router';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import withSession from 'lib/session';
 import { getUserSession } from 'service/helpers';
-import { BrokerageHubPage } from 'components/Brokerage/BrokerageHub';
+import { BrokerPortalPage } from 'components/Brokerage/BrokerPortal';
 import { createCoreCarePackage } from 'api/CarePackages/CarePackage';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
+import { getCorePackageRoute } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(async ({ req, res }) => {
   const isRedirect = getUserSession({ req, res });
@@ -14,7 +15,7 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
   return { props: {} };
 });
 
-const BrokerageHub = () => {
+const BrokerPortal = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [packageData, setPackageData] = React.useState([]);
@@ -70,10 +71,10 @@ const BrokerageHub = () => {
     { text: 'Cancelled', value: '7' },
   ];
 
-  const handleRowClick = (rowItem) => {
+  const handleRowClick = ({ serviceUserId, packageId }) => {
     router.push({
-      pathname: `care-package/service-users/${rowItem?.serviceUserId}/core-package-details`,
-      query: { packageId: rowItem.packageId },
+      pathname: getCorePackageRoute(serviceUserId),
+      query: { packageId },
     });
   };
 
@@ -94,7 +95,7 @@ const BrokerageHub = () => {
       .then(({ id, serviceUserId }) => {
         // Dummy package created, go to package builder
         router.push({
-          pathname: `care-package/service-users/${serviceUserId}/core-package-details`,
+          pathname: getCorePackageRoute(serviceUserId),
           query: { packageId: id },
         });
         pushNotification('Package created.', 'success');
@@ -109,7 +110,7 @@ const BrokerageHub = () => {
   };
 
   return (
-    <BrokerageHubPage
+    <BrokerPortalPage
       createNewPackage={createNewPackage}
       filters={apiFilters}
       clearFilter={clearFilter}
@@ -124,4 +125,4 @@ const BrokerageHub = () => {
   );
 };
 
-export default BrokerageHub;
+export default BrokerPortal;
