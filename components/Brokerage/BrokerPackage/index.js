@@ -81,12 +81,15 @@ export const BrokerPackage = ({
     setSupplierSearch('');
   };
 
-  const composeDetailsData = () => {
+  const composeDetailsData = (updatePackageDates) => {
     if (detailsData) {
-      setPackageDates({
-        endDate: dateStringToDate(detailsData.endDate || new Date()),
-        startDate: dateStringToDate(detailsData.startDate || new Date()),
-      });
+      if(updatePackageDates) {
+        setPackageDates({
+          endDate: dateStringToDate(detailsData.endDate || new Date()),
+          startDate: dateStringToDate(detailsData.startDate || new Date()),
+        });
+      }
+
       if (!detailsData.endDate) {
         setIsOngoing(true);
       }
@@ -120,7 +123,7 @@ export const BrokerPackage = ({
   };
 
   useEffect(() => {
-    composeDetailsData();
+    composeDetailsData(true);
   }, [detailsData]);
 
   const checkNeedsErrors = (needs) => {
