@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../HackneyDS';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import { updateCarePackageCosts } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../Constants';
@@ -16,8 +16,6 @@ import Loading from '../../Loading';
 
 export const BrokerPackage = ({
   supplierSearch,
-  getDetails,
-  packageId,
   setSupplierSearch,
   showSearchResults,
   setShowSearchResults,
@@ -28,7 +26,6 @@ export const BrokerPackage = ({
   selectedItem,
   setSelectedItem,
   onSearchSupplier,
-  careName = 'Nursing Care',
   carePackageCore = {
     packageType: undefined,
     serviceUserId: undefined,
@@ -36,6 +33,8 @@ export const BrokerPackage = ({
   packageType,
 }) => {
   const router = useRouter();
+  const { guid: packageId } = router.query;
+
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
@@ -60,20 +59,16 @@ export const BrokerPackage = ({
   });
 
   const clickBack = () => {
-    // router.push(`${CORE_PACKAGE_DETAILS_ROUTE}/${packageId}`);
-    router.push(
-      `${CARE_PACKAGE_ROUTE}/service-users/${carePackageCore.serviceUserId}/core-package-details?packageId=${
-        packageId || ''
-      }`
-    );
+    router.push({
+      pathname: getCorePackageRoute(carePackageCore.serviceUserId),
+      query: { packageId },
+    });
   };
 
   const removeSupplierCard = () => {
     setSelectedItem('');
     setShowSearchResults(false);
     setSupplierSearch('');
-    getDetails();
-    composeDetailsData();
   };
 
   const clearSearch = () => {
@@ -87,6 +82,7 @@ export const BrokerPackage = ({
         endDate: dateStringToDate(detailsData.endDate || new Date()),
         startDate: dateStringToDate(detailsData.startDate || new Date()),
       });
+
       if (!detailsData.endDate) {
         setIsOngoing(true);
       }
@@ -155,7 +151,7 @@ export const BrokerPackage = ({
       .filter((item) => item.cost !== 0)
       .map(({ cost, id, endDate, startDate }) => ({
         // id,
-        cost: cost,
+        cost,
         startDate,
         endDate: isOngoing ? null : endDate,
         costPeriod: costPeriods.weekly,
@@ -184,14 +180,11 @@ export const BrokerPackage = ({
           supplierId: selectedItem.id,
           details: [...weeklyDetails, ...oneOffDetails],
         },
-        packageId: packageId[0],
+        packageId,
       });
       dispatch(addNotification({ text: 'Success', className: 'success' }));
-      if (packageType === 4) {
-        router.push(`/care-package/brokerage/funded-nursing-care/${packageId[0]}`);
-      } else {
-        router.push(`/care-package/brokerage/care-charges/${packageId[0]}`);
-      }
+
+      router.push(packageType === 4 ? getFundedNursingCareRoute(packageId) : getCareChargesRoute(packageId));
     } catch (e) {
       dispatch(addNotification({ text: e }));
     }
@@ -233,7 +226,6 @@ export const BrokerPackage = ({
   }, [supplierWeeklyCost, weeklyNeeds]);
 
   useEffect(() => {
-    // let totalCost = Number(supplierWeeklyCost);
     let totalCost = 0;
     if (oneOffNeeds) {
       oneOffNeeds.forEach((item) => {

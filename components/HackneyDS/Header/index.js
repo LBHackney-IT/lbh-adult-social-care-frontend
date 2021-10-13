@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { BROKERAGE_HUB_ROUTE } from '../../../routes/RouteConstants';
+import { BROKER_PORTAL_ROUTE } from '../../../routes/RouteConstants';
 import { getSlot, getMultipleSlot, Container } from '../index';
 
 export default function Header({
@@ -23,7 +23,7 @@ export default function Header({
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <div className="lbh-header__wrapper">
             <h1 className="lbh-header__title">
-              <Link href={BROKERAGE_HUB_ROUTE}>
+              <Link href={BROKER_PORTAL_ROUTE}>
                 <a className="lbh-header__title-link">
                   <svg
                     className="lbh-header__logo"

@@ -1,17 +1,10 @@
 import { useState } from 'react';
-import {
-  APPROVER_HUB_ROUTE,
-  BROKER_PACKAGE_ROUTE,
-  BROKERAGE_HUB_ROUTE,
-  CARE_PACKAGE_ROUTE,
-  FINANCE_ROUTE,
-  LOGOUT_ROUTE
-} from '../../../routes/RouteConstants';
+import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE, LOGOUT_ROUTE } from '../../../routes/RouteConstants';
 import { Button, Container, Header, Input } from '../../HackneyDS';
 import Breadcrumbs from '../../Breadcrumbs';
 import { useRouter } from 'next/router';
 import DatePicker from '../../HackneyDS/DatePicker';
-import ServiceUserDetails from '../../Brokerage/BrokerageHub/ServiceUserDetails';
+import ServiceUserDetails from '../../Brokerage/BrokerPortal/ServiceUserDetails';
 import Pagination from '../../Payments/Pagination';
 import Loading from '../../Loading';
 import FormGroup from '../../HackneyDS/FormGroup';
@@ -35,10 +28,8 @@ const SearchServiceUser = ({
   const [filters, setFilters] = useState({ ...initialFilters });
   const [searchFilters, setSearchFilters] = useState({ ...initialFilters });
   const [links] = useState([
-    { text: 'Broker Portal', href: BROKERAGE_HUB_ROUTE },
+    { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
     { text: 'Care Charges', href: CARE_PACKAGE_ROUTE },
-    { text: 'Approvals', href: APPROVER_HUB_ROUTE },
-    { text: 'Finance', href: FINANCE_ROUTE },
     { text: 'Log Out', href: LOGOUT_ROUTE },
   ]);
 

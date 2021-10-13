@@ -8,7 +8,6 @@ import { requiredSchema } from '../../../constants/schemas';
 import { currency } from '../../../constants/strings';
 
 const CareCharges = ({
-  carePackageId,
   reasonsCollecting,
   calculatedCost,
   carePackageReclaimCareCharge,
@@ -16,6 +15,8 @@ const CareCharges = ({
   updateCareCharge = () => {},
 }) => {
   const router = useRouter();
+  const carePackageId = router.query.guid;
+
   const [collectedByType] = useState({
     supplier: 'net',
     hackney: 'gross',
@@ -63,8 +64,8 @@ const CareCharges = ({
     }
 
     let hasErrors = false;
-    let localErrors = {};
-    for await (let { schema, value, field } of validFields) {
+    const localErrors = {};
+    for await (const { schema, value, field } of validFields) {
       const isValid = await schema.isValid({ value });
       if (!isValid) {
         hasErrors = true;
@@ -121,8 +122,7 @@ const CareCharges = ({
       setNotes(carePackageReclaimCareCharge.description);
       if (carePackageReclaimCareCharge.claimCollector === 2) {
         setCollectedBy('hackney');
-      }
-      else{
+      } else {
         setCollectedBy('supplier');
       }
       setReasonCollecting(carePackageReclaimCareCharge.claimReason);
