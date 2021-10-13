@@ -12,7 +12,7 @@ const tagColors = {
   Approved: 'gray',
 };
 
-export const BrokerageHubTable = ({ onRowClick, data }) => {
+export const BrokerPortalTable = ({ onRowClick, data }) => {
   const columns = [
     {
       accessor: 'packageStatus',

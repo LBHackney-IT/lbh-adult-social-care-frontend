@@ -1,12 +1,12 @@
 import Head from 'next/head';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { BROKERAGE_HUB_ROUTE } from 'routes/RouteConstants';
+import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 import Loading from 'components/Loading';
 import withSession from 'lib/session';
-import { getLoggedInUser } from '../service/helpers';
+import { getLoggedInUser } from 'service/helpers';
 
-export const getServerSideProps = withSession(async ({ req }) => {
+export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
 
   if (!user) {
@@ -25,7 +25,7 @@ export default function IndexPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(BROKERAGE_HUB_ROUTE);
+    router.replace(BROKER_PORTAL_ROUTE);
   }, []);
 
   return (

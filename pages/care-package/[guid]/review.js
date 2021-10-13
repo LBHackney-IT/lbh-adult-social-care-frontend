@@ -1,6 +1,6 @@
 import React from 'react';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { useRouter } from 'next/router';
+import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { ReviewPackageDetails } from 'components/Brokerage/ReviewPackageDetails';
 import BrokerageBorderCost from 'components/Brokerage/BrokerageBorderCost';
 
@@ -14,9 +14,9 @@ const settingsTypes = [
 
 const ReviewPackageDetailsPage = () => {
   const router = useRouter();
-  const carePackageId = router.query.id;
+  const carePackageId = router.query.guid;
+
   const { data } = useCarePackageApi.summary(carePackageId);
-  // const { data: detailsData } = useCarePackageApi.details(carePackageId);
 
   const checkSettings = (settings) => settings && settingsTypes.find((item) => settings[item.field] === true)?.text;
 
