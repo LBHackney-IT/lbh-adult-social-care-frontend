@@ -9,7 +9,11 @@ const Logout = () => {
   useEffect(() => {
     const logout = async () => {
       try {
-        Cookies.remove('hackneyToken', { domain: '.hackney.gov.uk' });
+        const isDev = process.env.NODE_ENV === 'development';
+        Cookies.remove('hackneyToken', {
+          domain: isDev ? 'localhost' : '.hackney.gov.uk',
+        });
+
         await axios.get('/api/logout');
         router.reload();
       } catch (error) {
