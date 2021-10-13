@@ -72,8 +72,6 @@ export const BrokerPackage = ({
     setSelectedItem('');
     setShowSearchResults(false);
     setSupplierSearch('');
-    getDetails();
-    composeDetailsData();
   };
 
   const clearSearch = () => {
@@ -81,14 +79,12 @@ export const BrokerPackage = ({
     setSupplierSearch('');
   };
 
-  const composeDetailsData = (updatePackageDates) => {
+  const composeDetailsData = () => {
     if (detailsData) {
-      if(updatePackageDates) {
-        setPackageDates({
-          endDate: dateStringToDate(detailsData.endDate || new Date()),
-          startDate: dateStringToDate(detailsData.startDate || new Date()),
-        });
-      }
+      setPackageDates({
+        endDate: dateStringToDate(detailsData.endDate || new Date()),
+        startDate: dateStringToDate(detailsData.startDate || new Date()),
+      });
 
       if (!detailsData.endDate) {
         setIsOngoing(true);
@@ -123,7 +119,7 @@ export const BrokerPackage = ({
   };
 
   useEffect(() => {
-    composeDetailsData(true);
+    composeDetailsData();
   }, [detailsData]);
 
   const checkNeedsErrors = (needs) => {
