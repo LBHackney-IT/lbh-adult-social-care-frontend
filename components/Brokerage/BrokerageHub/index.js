@@ -6,12 +6,7 @@ import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
 import { BrokerageHubTable } from './BrokerageHubTable';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
-import {
-  APPROVER_HUB_ROUTE,
-  BROKERAGE_HUB_ROUTE,
-  CARE_PACKAGE_ROUTE,
-  LOGOUT_ROUTE,
-} from '../../../routes/RouteConstants';
+import { LOGOUT_ROUTE } from '../../../routes/RouteConstants';
 import { isFunction } from '../../../api/Utils/FuncUtils';
 
 export const BrokerageHubPage = ({
@@ -39,19 +34,11 @@ export const BrokerageHubPage = ({
     }));
   };
 
-  const [links] = useState([
-    { text: 'Broker Portal', href: BROKERAGE_HUB_ROUTE },
-    { text: 'Care Charges', href: CARE_PACKAGE_ROUTE },
-    { text: 'Approvals', href: APPROVER_HUB_ROUTE },
-    { text: 'Log Out', href: LOGOUT_ROUTE },
-  ]);
+  const [links] = useState([{ text: 'Log out', href: LOGOUT_ROUTE }]);
 
   return (
     <div className="brokerage-hub">
       <BrokerageHeader serviceName="" links={links} />
-      {/* <Container padding="8px 60px 0 60px"> */}
-      {/*  <Breadcrumbs values={breadcrumbs}/> */}
-      {/* </Container> */}
       <Container background="#FAFAFA">
         <Container
           maxWidth="1080px"
