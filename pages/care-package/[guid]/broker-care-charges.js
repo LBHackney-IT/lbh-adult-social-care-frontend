@@ -7,7 +7,7 @@ import {
 } from 'api/CarePackages/CarePackageReclaim';
 import useReclaimApi from 'api/SWR/CarePackage/useReclaimApi';
 import { addNotification } from 'reducers/notificationsReducer';
-import { getCarePackageReviewRoute } from 'routes/RouteConstants';
+import { getCarePackageDetailsRoute } from 'routes/RouteConstants';
 import { useDispatch } from 'react-redux';
 
 const CareChargesPage = () => {
@@ -33,13 +33,13 @@ const CareChargesPage = () => {
     dispatch(addNotification({ text, className }));
   };
 
-  const reviewPageLink = getCarePackageReviewRoute(carePackageId);
+  const packageDetailsPageLink = getCarePackageDetailsRoute(carePackageId);
 
   const createCareCharge = (packageId, careChargeCreation) => {
     createCarePackageReclaimCareCharge(packageId, careChargeCreation)
       .then(() => {
         pushNotification(`Care charge created successfully`, 'success');
-        router.push(reviewPageLink);
+        router.push(packageDetailsPageLink);
       })
       .catch((error) => {
         pushNotification(error);
@@ -50,7 +50,7 @@ const CareChargesPage = () => {
     updateCarePackageReclaimCareCharge(packageId, careChargeUpdate)
       .then(() => {
         pushNotification(`Care charge updated successfully`, 'success');
-        router.push(reviewPageLink);
+        router.push(packageDetailsPageLink);
       })
       .catch((error) => {
         pushNotification(error);

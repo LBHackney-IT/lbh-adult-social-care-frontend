@@ -1,13 +1,13 @@
 import React from 'react';
 import CareCharges from './index';
 
-export default {
-  title: 'Pages/Brokerage/CareCharges',
-  component: CareCharges,
-  argTypes: {
-    controls: null,
-  },
-};
+// export default {
+//   title: 'Pages/Brokerage/CareCharges',
+//   component: CareCharges,
+//   argTypes: {
+//     controls: null,
+//   },
+// };
 
 const Template = (args) => <CareCharges {...args} />;
 

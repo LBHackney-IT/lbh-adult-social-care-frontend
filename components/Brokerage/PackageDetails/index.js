@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { getBrokerPackageRoute } from '../../../routes/RouteConstants';
+import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE, getBrokerPackageRoute } from '../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Container, Link } from '../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
@@ -11,25 +11,19 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
 import Breadcrumbs from '../../Breadcrumbs';
 
-export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summary = [], supplierName }) => {
+const links = [
+  { text: 'Care Package', href: '#care-package' },
+  { text: 'Weekly Additional Need', href: '#weekly-additional-need' },
+  { text: 'One Off Additional Need', href: '#on-off-additional-need' },
+  { text: 'Funded Nursing Care', href: '#funded-nursing-care' },
+  { text: 'Care charges', href: '#care-charges' },
+  { text: 'Summary', href: '#summary' },
+];
+
+export const PackageDetails = ({ userDetails, packageInfoItems = [], summary = [], supplierName }) => {
   const router = useRouter();
   const packageId = router.query.guid;
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
-
-  const [links] = useState([
-    { text: 'Care Package', href: '#care-package' },
-    { text: 'Weekly Additional Need', href: '#weekly-additional-need' },
-    { text: 'One Off Additional Need', href: '#on-off-additional-need' },
-    { text: 'Funded Nursing Care', href: '#funded-nursing-care' },
-    { text: 'Care charges', href: '#care-charges' },
-    { text: 'Summary', href: '#summary' },
-  ]);
-
-  const [breadcrumbs] = useState([
-    { text: 'Home', onClick: () => router.push('/') },
-    { text: 'Broker Portal', onClick: () => router.push(BROKERAGE_HUB_ROUTE) },
-    { text: 'Full overview' },
-  ]);
 
   const goBack = () => router.back();
 
@@ -39,6 +33,12 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
       query: { supplierName },
     });
   };
+
+  const breadcrumbs = [
+    { text: 'Home', onClick:  router.push(CARE_PACKAGE_ROUTE)},
+    { text: 'Broker Portal', onClick: router.push(BROKER_PORTAL_ROUTE) },
+    { text: 'Full overview' },
+  ];
 
   return (
     <div className="package-details">

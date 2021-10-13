@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { PackageDetails } from './index';
 import BrokerageBorderCost from '../BrokerageBorderCost';
 
-export default {
-  title: 'Pages/Brokerage/PackageDetails',
-  component: PackageDetails,
-  argTypes: {
-    controls: null,
-  },
-};
+// export default {
+//   title: 'Pages/Brokerage/PackageDetails',
+//   component: PackageDetails,
+//   argTypes: {
+//     controls: null,
+//   },
+// };
 
 const testUserDetails = {
   client: 'James Stevens',
@@ -67,13 +67,13 @@ const testPackageInfoItems = [
         id: '1',
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
-        price: 300,
+        cost: 300,
       },
       {
         id: '2',
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
-        price: 300,
+        cost: 300,
       }
     ],
     totalCostHeader: 'Total weekly need (Net Off)',
@@ -87,7 +87,7 @@ const testPackageInfoItems = [
         id: '3',
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
-        price: 187.60,
+        cost: 187.60,
       }
     ],
     totalCostHeader: 'Total (Net Off)',
@@ -123,7 +123,7 @@ const testPackageInfoItems = [
         id: '5',
         dateFrom: new Date(2021, 6, 1),
         dateTo: new Date(2021, 9, 1),
-        price: 100.50,
+        cost: 100.50,
       }
     ],
     details: (
