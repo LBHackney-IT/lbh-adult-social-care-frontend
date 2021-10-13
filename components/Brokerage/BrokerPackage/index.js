@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import { getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../HackneyDS';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import BrokerPackageCost from './BrokerPackageCost';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { getCorePackageRoute } from '../../../routes/RouteConstants';
 import { updateCarePackageCosts } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../Constants';
@@ -16,7 +16,6 @@ import Loading from '../../Loading';
 
 export const BrokerPackage = ({
   supplierSearch,
-  packageId,
   setSupplierSearch,
   showSearchResults,
   setShowSearchResults,
@@ -34,6 +33,8 @@ export const BrokerPackage = ({
   packageType,
 }) => {
   const router = useRouter();
+  const { guid: packageId } = router.query;
+
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
@@ -179,13 +180,13 @@ export const BrokerPackage = ({
           supplierId: selectedItem.id,
           details: [...weeklyDetails, ...oneOffDetails],
         },
-        packageId: packageId[0],
+        packageId,
       });
       dispatch(addNotification({ text: 'Success', className: 'success' }));
       if (packageType === 4) {
-        router.push(`/care-package/brokerage/funded-nursing-care/${packageId[0]}`);
+        router.push(getFundedNursingCareRoute(packageId));
       } else {
-        router.push(`/care-package/brokerage/care-charges/${packageId[0]}`);
+        router.push(`/care-package/brokerage/care-charges/${packageId}`);
       }
     } catch (e) {
       dispatch(addNotification({ text: e }));

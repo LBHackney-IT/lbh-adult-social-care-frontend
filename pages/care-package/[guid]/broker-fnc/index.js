@@ -8,7 +8,8 @@ import { addNotification } from 'reducers/notificationsReducer';
 
 const FundedNursingCarePage = () => {
   const router = useRouter();
-  const carePackageId = router.query.id;
+  const carePackageId = router.query.guid;
+
   const dispatch = useDispatch();
   const { data: carePackageReclaimFnc } = useReclaimApi.fnc(carePackageId);
   const { data: activeFncPrice } = useReclaimApi.activeFncPrice(carePackageId);

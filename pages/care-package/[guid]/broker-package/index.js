@@ -65,7 +65,6 @@ const BrokerPackagePage = () => {
       setSupplierSearch={setSupplierSearch}
       supplierName={supplierName || ''}
       detailsData={detailsData}
-      packageId={packageId}
       searchResults={searchResults}
       packageType={carePackageCore?.packageType}
       carePackageCore={carePackageCore}
