@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PackageDetails } from './index';
+import BrokerageBorderCost from '../BrokerageBorderCost';
 
 export default {
   title: 'Pages/Brokerage/PackageDetails',
@@ -28,6 +29,16 @@ const testSummary = [
   { key: 'Total one off payment', value: '10', className: 'brokerage__summary-cost' },
 ];
 
+const fundedNursingCareClaimCollector = {
+  2: 'Hackney Council (gross/net)',
+  1: 'Supplier (gross/net)',
+};
+
+const careChargesClaimCollector = {
+  2: 'Hackney Council (gross)',
+  1: 'Supplier (net)',
+};
+
 const testPackageInfoItems = [
   {
     headerTitle: 'Residential',
@@ -43,7 +54,7 @@ const testPackageInfoItems = [
         address: '15 Atherden Rd, Lower Clapton, London E5 0QP',
         serviceUserNeed: {
           term: 'Long term 52+ weeks',
-          careType: 'Respite Care',
+          careType: ['Respite Care'],
         },
       }
     ],
@@ -80,7 +91,29 @@ const testPackageInfoItems = [
       }
     ],
     totalCostHeader: 'Total (Net Off)',
-    totalCost: 187.60
+    details: (
+      <>
+        <p>
+          <span className="font-weight-bold">FNC assessment been carried out: </span>
+          Yes
+        </p>
+        <p>
+          <span className="font-weight-bold">Collected by: </span>
+          {fundedNursingCareClaimCollector[1]}
+        </p>
+        <p>
+          <span className="font-weight-bold">FNC assessment: </span>
+          <span className="link-button text-blue">View</span>
+        </p>
+      </>
+    ),
+    totalCostComponent: (
+      <>
+        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Gross)"/>
+        <br/>
+        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Net Off)"/>
+      </>
+    ),
   },
   {
     headerTitle: 'Care Charges',
@@ -93,8 +126,26 @@ const testPackageInfoItems = [
         price: 100.50,
       }
     ],
-    totalCostHeader: 'Total (Net Off)',
-    totalCost: 100.50
+    details: (
+      <>
+        <p>
+          <span className="font-weight-bold">Provisional care charge (pre-assessement)</span>
+        </p>
+        <p>
+          <span className="font-weight-bold">Collected by: </span>
+          {careChargesClaimCollector[2]}
+        </p>
+        <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
+        <p>Service user unable to manage finances</p>
+      </>
+    ),
+    totalCostComponent: (
+      <>
+        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Gross)"/>
+        <br/>
+        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Net Off)"/>
+      </>
+    ),
   },
 ];
 
