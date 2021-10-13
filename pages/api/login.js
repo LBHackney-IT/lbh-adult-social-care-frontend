@@ -1,21 +1,14 @@
 import Cookies from 'cookies';
-import withSession from '../../lib/session';
 import { hackneyGoogleLogin } from 'api/Users/AuthApi';
 import { HASC_TOKEN_ID } from 'api/BaseApi';
+import withSession from 'lib/session';
 
 export default withSession(async (req, res) => {
   const { hackneyToken } = req.cookies;
 
   try {
-    // checking if token is valid and return user token
-    /* await axios.get(`${RESIDENTIAL_CARE_URL}/type-of-stay-options`, {
-      headers: {
-        Authorization: `Bearer ${hackneyToken}`,
-      },
-    }); */
     const userRes = await hackneyGoogleLogin(hackneyToken);
 
-    // const tokenData = jwt.decode(hackneyToken);
     const user = { isLoggedIn: true, ...userRes };
 
     req.session.set('user', user);
@@ -28,7 +21,6 @@ export default withSession(async (req, res) => {
       httpOnly: false, // true by default
       sameSite: 'lax',
     });
-    // cookieCutter.set(HASC_TOKEN_ID, user?.token);
     res.json(user);
   } catch (error) {
     const { response: fetchResponse } = error;
