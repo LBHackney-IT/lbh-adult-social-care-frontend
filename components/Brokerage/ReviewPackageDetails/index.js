@@ -12,7 +12,7 @@ import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitFor
 
 export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summary = [], supplierName }) => {
   const router = useRouter();
-  const packageId = router.query.id;
+  const packageId = router.query.guid;
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
 
   const [links] = useState([

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import Popup from '../../Popup';
@@ -8,16 +8,17 @@ import { submitCarePackage } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { BROKER_PORTAL_ROUTE } from '../../../routes/RouteConstants';
 
+const approverOptions = [
+  { text: 'Furkan Kayar', value: 'aee45700-af9b-4ab5-bb43-535adbdcfb84' },
+  { text: 'Duncan Okeno', value: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8' },
+];
+
 const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [notes, setNotes] = useState('');
 
-  const [approverOptions] = useState([
-    { text: 'Furkan Kayar', value: 'aee45700-af9b-4ab5-bb43-535adbdcfb84' },
-    { text: 'Duncan Okeno', value: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8' },
-  ]);
-  const [approverId, setApproverId] = useState('');
+  const [approverId, setApproverId] = useState(approverOptions[0].value);
+  const [notes, setNotes] = useState('');
 
   const submit = async () => {
     try {
