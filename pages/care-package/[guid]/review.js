@@ -14,7 +14,7 @@ const settingsTypes = [
 
 const PackageDetailsPage = () => {
   const router = useRouter();
-  const carePackageId = router.query.id;
+  const carePackageId = router.query.guid;
   const { data } = useCarePackageApi.summary(carePackageId);
 
   const [fundedNursingCareClaimCollector] = useState({
@@ -121,12 +121,12 @@ const PackageDetailsPage = () => {
       ),
       totalCostComponent: (
         <>
-          {data?.hackneyReclaims?.fnc !== 0 && (
-            <BrokerageBorderCost totalCost={data?.hackneyReclaims?.fnc} totalCostHeader="Total (Gross)"/>
+          {data?.hackneyReclaims?.fnc && data.hackneyReclaims?.fnc !== 0 && (
+            <BrokerageBorderCost totalCost={data?.hackneyReclaims?.fnc.toFixed(2)} totalCostHeader="Total (Gross)"/>
           )}
           {!!data?.supplierReclaims?.fnc && !!data?.hackneyReclaims?.fnc && <br/>}
-          {data?.supplierReclaims?.fnc !== 0 && (
-            <BrokerageBorderCost totalCost={data?.supplierReclaims?.fnc} totalCostHeader="Total (Net Off)"/>
+          {data.supplierReclaims?.fnc && data.supplierReclaims.fnc !== 0 && (
+            <BrokerageBorderCost totalCost={data?.supplierReclaims?.fnc.toFixed(2)} totalCostHeader="Total (Net Off)"/>
           )}
         </>
       ),
@@ -150,12 +150,12 @@ const PackageDetailsPage = () => {
       ),
       totalCostComponent: (
         <>
-          {data?.hackneyReclaims?.careCharge !== 0 && (
-            <BrokerageBorderCost totalCost={data?.hackneyReclaims?.careCharge} totalCostHeader="Total (Gross)"/>
+          {data?.hackneyReclaims?.careCharge && data.hackneyReclaims?.careCharge !== 0 && (
+            <BrokerageBorderCost totalCost={data?.hackneyReclaims?.careCharge.toFixed(2)} totalCostHeader="Total (Gross)"/>
           )}
           {!!data?.supplierReclaims?.careCharge && !!data?.hackneyReclaims?.careCharge && <br/>}
-          {data?.supplierReclaims?.careCharge !== 0 && (
-            <BrokerageBorderCost totalCost={data?.supplierReclaims?.careCharge} totalCostHeader="Total (Net Off)"/>
+          {data?.supplierReclaims?.careCharge && data.supplierReclaims?.careCharge !== 0 && (
+            <BrokerageBorderCost totalCost={data?.supplierReclaims?.careCharge.toFixed(2)} totalCostHeader="Total (Net Off)"/>
           )}
         </>
       ),

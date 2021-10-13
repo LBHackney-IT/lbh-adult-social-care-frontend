@@ -48,7 +48,7 @@ const PackageInfo = ({ headerTitle, items, containerId, details }) => {
                 {endDate && ` - `}
                 {endDate && formatDate(endDate, dateStringFormats.dayMonthYearSlash)}
               </p>
-              {cost && <p className="text-lbh-f01">{minusSign}{currency.euro}{cost ? Math.abs(cost) : 0}</p>}
+              {cost && <p className="text-lbh-f01">{minusSign}{currency.euro}{cost ? Math.abs(cost).toFixed(2) : 0}</p>}
             </Container>
             {details}
             {description &&

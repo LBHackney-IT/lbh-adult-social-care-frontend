@@ -20,6 +20,12 @@ const links = [
   { text: 'Summary', href: '#summary' },
 ];
 
+const breadcrumbs = [
+  { text: 'Home', href:  CARE_PACKAGE_ROUTE },
+  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
+  { text: 'Full overview' },
+];
+
 export const PackageDetails = ({ userDetails, packageInfoItems = [], summary = [], supplierName }) => {
   const router = useRouter();
   const packageId = router.query.guid;
@@ -34,12 +40,6 @@ export const PackageDetails = ({ userDetails, packageInfoItems = [], summary = [
     });
   };
 
-  const breadcrumbs = [
-    { text: 'Home', onClick:  router.push(CARE_PACKAGE_ROUTE)},
-    { text: 'Broker Portal', onClick: router.push(BROKER_PORTAL_ROUTE) },
-    { text: 'Full overview' },
-  ];
-
   return (
     <div className="package-details">
       {isOpenedPopup && (
@@ -50,7 +50,7 @@ export const PackageDetails = ({ userDetails, packageInfoItems = [], summary = [
       )}
       <BrokerageHeader/>
       <Container padding='8px 60px 0 60px'>
-        <Breadcrumbs values={breadcrumbs}/>
+        <Breadcrumbs values={breadcrumbs} />
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
         <Container className="brokerage__container-header brokerage__container">
@@ -81,7 +81,7 @@ export const PackageDetails = ({ userDetails, packageInfoItems = [], summary = [
                   {!!costOfPlacement &&
                   <p className="brokerage__cost-of-placement">
                     Cost of placement
-                    <span className="text-lbh-f01 font-weight-bold">{currency.euro}{costOfPlacement}</span>
+                    <span className="text-lbh-f01 font-weight-bold">{currency.euro}{costOfPlacement.toFixed(2)}</span>
                   </p>
                   }
                   {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader}/>}

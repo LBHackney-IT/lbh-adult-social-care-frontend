@@ -7,12 +7,12 @@ const Breadcrumbs = ({ values, className = '' }) => (
       const isLastItem = index + 1 === values.length;
       return (
         <div key={item.text}>
-          <p
-            onClick={() => item.onClick && item.onClick()}
-            className={`breadcrumbs__item${item.onClick ? ' text-underline green' : ''}`}
-          >
-            {item.text}
-          </p>
+          {item.href ? (
+            <a href={item.href} className="breadcrumbs__item text-underline green">
+              {item.text}
+            </a>
+          ) : <p className="breadcrumbs__item">{item.text}</p>
+          }
           {!isLastItem && <BreadcrumbsChevron />}
         </div>
       );
