@@ -3,7 +3,6 @@ import { Container, ErrorMessage, Input } from '../HackneyDS';
 import { SelectArrowTriangle } from '../Icons';
 import BrokeragePackageDates from './BrokeragePackageDates';
 import { currency } from '../../constants/strings';
-import { uniqueID } from '../../service/helpers';
 import BrokerageBorderCost from './BrokerageBorderCost';
 import FormGroup from '../HackneyDS/FormGroup';
 
@@ -35,8 +34,8 @@ const BrokerageCost = ({
       </h2>
       {expanded && (
         <>
-          {getter.map(({ id, isOngoing, cost, startDate, endDate, errorCost, errorStartDate, errorEndDate }, index) => (
-            <FormGroup error={errorCost || errorStartDate ? 'Some validations error' : ''} key={id}>
+          {getter.map(({ id, errorEndDate, isOngoing, cost, startDate, endDate, errorStartDate }, index) => (
+            <FormGroup error={errorStartDate ? 'Some validations error' : ''} key={id}>
               <BrokeragePackageDates
                 startMinDate={corePackageDates.endDate}
                 dates={{ startDate, endDate }}
@@ -58,7 +57,6 @@ const BrokerageCost = ({
                 className="brokerage__cost-input"
                 label={labelInputCost}
                 value={cost}
-                error={errorCost}
                 onChangeValue={(value) => changeNeed(getter, setter, 'cost', value, index)}
               />
               <Container className="brokerage__cost-add-need" display="flex">

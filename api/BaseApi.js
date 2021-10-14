@@ -12,10 +12,10 @@ switch (process.env.NEXT_PUBLIC_STAGE) {
     baseUrl = process.env.NEXT_PUBLIC_AWS_ENDPOINT || 'http://localhost:5000/api';
     break;
   }
-  case 'production': {
-    baseUrl = 'https://dz58oqus03.execute-api.eu-west-2.amazonaws.com/production/api';
-    break;
-  }
+  // case 'production': {
+  //   baseUrl = 'https://dz58oqus03.execute-api.eu-west-2.amazonaws.com/production/api';
+  //   break;
+  // }
   default: {
     baseUrl = 'https://zqf7j796y5.execute-api.eu-west-2.amazonaws.com/staging/api';
     break;

@@ -9,7 +9,7 @@ const links = [
   { to: RouteConstants.CARE_PACKAGE_ROUTE, label: 'Care Package' },
   { to: RouteConstants.SOCIAL_WORKER_ROUTE, label: 'Social Worker' },
   { to: RouteConstants.APPROVER_HUB_ROUTE, label: 'Approver Hub' },
-  { to: RouteConstants.BROKERAGE_HUB_ROUTE, label: 'Brokerage Hub' },
+  { to: RouteConstants.BROKER_PORTAL_ROUTE, label: 'Brokerage Hub' },
 ];
 
 const NavItem = ({ children, to, params = '' }) => {

@@ -3,7 +3,7 @@ import { object, string } from 'yup';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, ErrorMessage, RadioGroup } from '../../HackneyDS';
 import CorePackageSelectors from './CorePackageSelectors';
-import ServiceUserDetails from '../BrokerageHub/ServiceUserDetails';
+import ServiceUserDetails from '../BrokerPortal/ServiceUserDetails';
 
 const CorePackageDetails = ({
   userDetails,
@@ -115,7 +115,7 @@ const CorePackageDetails = ({
   return (
     <div className="core-package-details brokerage">
       <BrokerageHeader />
-      <Container maxWidth='1080px' margin='0 auto' padding='60px'>
+      <Container maxWidth="1080px" margin="0 auto" padding="60px">
         <Container className="brokerage__container-header brokerage__container">
           <p>Build a care package</p>
           <h2>Core package details</h2>

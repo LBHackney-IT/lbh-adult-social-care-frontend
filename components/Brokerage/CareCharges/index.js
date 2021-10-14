@@ -8,7 +8,6 @@ import { requiredSchema } from '../../../constants/schemas';
 import { currency } from '../../../constants/strings';
 
 const CareCharges = ({
-  carePackageId,
   reasonsCollecting,
   calculatedCost,
   carePackageReclaimCareCharge,
@@ -16,9 +15,15 @@ const CareCharges = ({
   updateCareCharge = () => {},
 }) => {
   const router = useRouter();
+  const carePackageId = router.query.guid;
+
   const [collectedByType] = useState({
     supplier: 'net',
     hackney: 'gross',
+  });
+  const [claimCollector] = useState({
+    hackney: 2,
+    supplier: 1,
   });
   const [errors, setErrors] = useState({
     collectedBy: '',
@@ -59,8 +64,8 @@ const CareCharges = ({
     }
 
     let hasErrors = false;
-    let localErrors = {};
-    for await (let { schema, value, field } of validFields) {
+    const localErrors = {};
+    for await (const { schema, value, field } of validFields) {
       const isValid = await schema.isValid({ value });
       if (!isValid) {
         hasErrors = true;
@@ -74,7 +79,7 @@ const CareCharges = ({
     const careChargeCreation = {
       carePackageId,
       cost: costPerWeek,
-      claimCollector: collectedBy,
+      claimCollector: claimCollector[collectedBy],
       supplierId: 1, // fix value to be removed after updating API side
       status: 1, // fix value to be removed after updating API side
       type: 2, // fix value to be removed after updating API side
@@ -86,7 +91,7 @@ const CareCharges = ({
     const careChargeUpdate = {
       id: carePackageReclaimCareCharge.id,
       cost: costPerWeek,
-      claimCollector: collectedBy,
+      claimCollector: claimCollector[collectedBy],
       supplierId: 1, // fix value to be removed after updating API side
       status: 1, // fix value to be removed after updating API side
       type: 2, // fix value to be removed after updating API side
@@ -117,8 +122,7 @@ const CareCharges = ({
       setNotes(carePackageReclaimCareCharge.description);
       if (carePackageReclaimCareCharge.claimCollector === 2) {
         setCollectedBy('hackney');
-      }
-      else{
+      } else {
         setCollectedBy('supplier');
       }
       setReasonCollecting(carePackageReclaimCareCharge.claimReason);

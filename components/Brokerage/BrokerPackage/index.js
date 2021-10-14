@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import {
+  getCorePackageRoute,
+  getCareChargesRoute,
+  getFundedNursingCareRoute,
+} from '../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../HackneyDS';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import BrokerPackageCost from './BrokerPackageCost';
 import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { CARE_PACKAGE_ROUTE } from '../../../routes/RouteConstants';
 import { updateCarePackageCosts } from '../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../Constants';
@@ -16,8 +20,6 @@ import Loading from '../../Loading';
 
 export const BrokerPackage = ({
   supplierSearch,
-  getDetails,
-  packageId,
   setSupplierSearch,
   showSearchResults,
   setShowSearchResults,
@@ -28,7 +30,6 @@ export const BrokerPackage = ({
   selectedItem,
   setSelectedItem,
   onSearchSupplier,
-  careName = 'Nursing Care',
   carePackageCore = {
     packageType: undefined,
     serviceUserId: undefined,
@@ -36,6 +37,8 @@ export const BrokerPackage = ({
   packageType,
 }) => {
   const router = useRouter();
+  const { guid: packageId } = router.query;
+
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
@@ -45,7 +48,6 @@ export const BrokerPackage = ({
     startDate: new Date(),
     endDate: new Date(),
     isOngoing: false,
-    errorCost: '',
     errorStartDate: '',
     errorEndDate: '',
   });
@@ -62,19 +64,16 @@ export const BrokerPackage = ({
   });
 
   const clickBack = () => {
-    router.push(
-      `${CARE_PACKAGE_ROUTE}/service-users/${carePackageCore.serviceUserId}/core-package-details?packageId=${
-        packageId || ''
-      }`
-    );
+    router.push({
+      pathname: getCorePackageRoute(carePackageCore.serviceUserId),
+      query: { packageId },
+    });
   };
 
   const removeSupplierCard = () => {
     setSelectedItem('');
     setShowSearchResults(false);
     setSupplierSearch('');
-    getDetails();
-    composeDetailsData();
   };
 
   const clearSearch = () => {
@@ -88,6 +87,7 @@ export const BrokerPackage = ({
         endDate: dateStringToDate(detailsData.endDate || new Date()),
         startDate: dateStringToDate(detailsData.startDate || new Date()),
       });
+
       if (!detailsData.endDate) {
         setIsOngoing(true);
       }
@@ -102,7 +102,6 @@ export const BrokerPackage = ({
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
             isOngoing: !item.endDate,
-            errorCost: '',
             errorStartDate: '',
             errorEndDate: '',
           }));
@@ -113,7 +112,6 @@ export const BrokerPackage = ({
             ...item,
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
-            errorCost: '',
             errorStartDate: '',
             errorEndDate: '',
           }));
@@ -135,7 +133,6 @@ export const BrokerPackage = ({
   const checkNeedsErrors = (needs) => {
     let hasErrors = false;
     const checkedNeeds = needs.map((item) => {
-      const errorCost = !item.cost ? 'Invalid cost' : '';
       let errorStartDate = '';
       let errorEndDate = '';
       if (!item.startDate || ((item.startDate && item.endDate) && item.startDate > item.endDate)) {
@@ -146,12 +143,11 @@ export const BrokerPackage = ({
       if (item.startDate && item.startDate < packageDates.endDate) {
         errorEndDate = 'End date should be later then core date';
       }
-      if (errorCost || errorStartDate) {
+      if (errorStartDate || errorEndDate) {
         hasErrors = true;
       }
       return {
         ...item,
-        errorCost,
         errorEndDate,
         errorStartDate,
       };
@@ -179,7 +175,7 @@ export const BrokerPackage = ({
       .filter((item) => item.cost !== 0)
       .map(({ cost, id, endDate, startDate }) => ({
         // id,
-        cost: cost,
+        cost,
         startDate,
         endDate: isOngoing ? null : endDate,
         costPeriod: costPeriods.weekly,
@@ -208,14 +204,11 @@ export const BrokerPackage = ({
           supplierId: selectedItem.id,
           details: [...weeklyDetails, ...oneOffDetails],
         },
-        packageId: packageId[0],
+        packageId,
       });
       pushNotification('Success', 'success');
-      if (packageType === 4) {
-        router.push(`/care-package/brokerage/funded-nursing-care/${packageId[0]}`);
-      } else {
-        router.push(`/care-package/brokerage/care-charges/${packageId[0]}`);
-      }
+
+      router.push(packageType === 4 ? getFundedNursingCareRoute(packageId) : getCareChargesRoute(packageId));
     } catch (e) {
       pushNotification(e);
     }
@@ -257,7 +250,6 @@ export const BrokerPackage = ({
   }, [supplierWeeklyCost, weeklyNeeds]);
 
   useEffect(() => {
-    // let totalCost = Number(supplierWeeklyCost);
     let totalCost = 0;
     if (oneOffNeeds) {
       oneOffNeeds.forEach((item) => {
@@ -267,15 +259,33 @@ export const BrokerPackage = ({
     setOneOfTotalCost(totalCost);
   }, [supplierWeeklyCost, oneOffNeeds]);
 
+  useEffect(() => {
+    setIsOngoing(!detailsData?.endDate);
+  }, [detailsData?.endDate]);
+
+  const getPackageType = (packageTypeValue) => {
+    switch (packageTypeValue) {
+      case 1:
+        return 'Home Care';
+      case 2:
+        return 'Residential Care';
+      case 3:
+        return 'Day Care';
+      case 4:
+        return 'Nursing Care Package';
+      default:
+        return 'Package Type not found';
+    }
+  };
   return (
     <div className="supplier-look-up brokerage">
-      <BrokerageHeader/>
+      <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        {(loading || detailsData === undefined) && <Loading className="loading-center"/>}
+        {(loading || detailsData === undefined) && <Loading className="loading-center" />}
         <Container className="brokerage__container-main">
-          <BrokerageContainerHeader title="Broker package"/>
+          <BrokerageContainerHeader title="Broker package" />
           <Container>
-            <h3 className="brokerage__item-title">{careName}</h3>
+            <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
               fields={{
                 dateFrom: 'startDate',
@@ -309,7 +319,7 @@ export const BrokerPackage = ({
 
             {!supplierSearch && !selectedItem && (
               <Container className="is-new-supplier">
-                <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier}/>
+                <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
                 <Container className="is-new-supplier-text" display="flex" flexDirection="column">
                   <p>This is a new supplier</p>
                   <p>

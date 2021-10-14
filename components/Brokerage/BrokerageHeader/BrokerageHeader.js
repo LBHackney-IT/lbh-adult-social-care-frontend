@@ -8,9 +8,9 @@ const defaultLinks = [
 ];
 
 const BrokerageHeader = ({ links = defaultLinks, serviceName = 'Adult Social Care' }) => (
-    <Header links={links} bottomLines={false}>
-      <p slot="service-name">{serviceName}</p>
-    </Header>
-  );
+  <Header links={links} bottomLines={false}>
+    <p slot="service-name">{serviceName}</p>
+  </Header>
+);
 
 export default BrokerageHeader;
