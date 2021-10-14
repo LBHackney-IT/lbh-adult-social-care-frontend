@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import BrokerageHeader from '../CarePackages/BrokerageHeader/BrokerageHeader';
 import { Button, Container, HorizontalSeparator, Select } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
@@ -7,38 +7,43 @@ import DatePick from '../../DatePick';
 import { BrokerPortalTable } from './BrokerPortalTable';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
 import { LOGOUT_ROUTE } from '../../../routes/RouteConstants';
-import { isFunction } from '../../../api/Utils/FuncUtils';
+
+const statusOptions = [
+  { text: 'All', value: '' },
+  { text: 'New', value: '1' },
+  { text: 'In Progress', value: '2' },
+  { text: 'Submitted For Approval', value: '3' },
+  { text: 'Approved', value: '4' },
+  { text: 'Not Approved', value: '5' },
+  { text: 'Ended', value: '6' },
+  { text: 'Cancelled', value: '7' },
+];
+
+const links = [{ text: 'Log out', href: LOGOUT_ROUTE }];
 
 export const BrokerPortalPage = ({
   items,
   pageNumber,
   setPageNumber,
   paginationData: { pageSize, totalPages, totalCount },
-  statusOptions,
   filters,
   setFilters,
   clearFilter,
-  createNewPackage,
   onRowClick = () => {},
 }) => {
   const selectorRef = useRef(null);
 
-  const handleRowClick = (rowItem) => {
-    if (isFunction(onRowClick)) onRowClick(rowItem);
-  };
-
-  const changeFilterFiled = (field, value) => {
+  const changeFilterField = (field, value) => {
     setFilters((prevState) => ({
       ...prevState,
       [field]: value,
     }));
   };
 
-  const [links] = useState([{ text: 'Log out', href: LOGOUT_ROUTE }]);
-
   return (
     <div className="brokerage-hub">
       <BrokerageHeader serviceName="" links={links} />
+
       <Container background="#FAFAFA">
         <Container
           maxWidth="1080px"
@@ -47,12 +52,13 @@ export const BrokerPortalPage = ({
           className="brokerage-hub__header"
         >
           <h2>Broker Portal</h2>
-          <Button handler={createNewPackage}>Create New Package</Button>
+          <Button handler={() => {}}>test</Button>
         </Container>
+
         <Container maxWidth="1080px" margin="0 auto" className="brokerage-hub__filters" padding="0 60px 30px 60px">
           <CustomAsyncSelector
             innerRef={selectorRef}
-            onChange={(option) => changeFilterFiled('serviceUser', option)}
+            onChange={(option) => changeFilterField('serviceUser', option)}
             placeholder="Service User"
             getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
             endpoint={{
@@ -61,13 +67,15 @@ export const BrokerPortalPage = ({
             }}
             value={filters.serviceUser}
           />
+
           <FormGroup className="form-group--inline-label brokerage-hub__form-status" label="Status">
             <Select
               options={statusOptions}
               value={filters.status}
-              onChange={({ target: { value } }) => changeFilterFiled('status', value)}
+              onChange={({ target: { value } }) => changeFilterField('status', value)}
             />
           </FormGroup>
+
           <FormGroup className="form-group--inline-label" label="From">
             <DatePick
               placeholder="Select date"
@@ -75,25 +83,28 @@ export const BrokerPortalPage = ({
               dateValue={filters.dateFrom}
               setDate={(value) => {
                 if (value > filters.dateTo) {
-                  return setFilters((prevState) => ({
+                  setFilters((prevState) => ({
                     ...prevState,
                     dateTo: value,
                     dateFrom: value,
                   }));
+                } else {
+                  changeFilterField('dateFrom', value);
                 }
-                changeFilterFiled('dateFrom', value);
               }}
             />
           </FormGroup>
+
           <FormGroup className="form-group--inline-label" label="To">
             <DatePick
               placeholder="Select date"
               startDate={filters.dateTo}
               dateValue={filters.dateTo}
               minDate={filters.dateFrom}
-              setDate={(value) => changeFilterFiled('dateTo', value)}
+              setDate={(value) => changeFilterField('dateTo', value)}
             />
           </FormGroup>
+
           {Object.values(filters).some((item) => !!item) && (
             <Button
               className="outline gray clear-filter-button"
@@ -107,8 +118,9 @@ export const BrokerPortalPage = ({
           )}
         </Container>
       </Container>
+
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
-        {items && <BrokerPortalTable onRowClick={handleRowClick} data={items} />}
+        {items && <BrokerPortalTable onRowClick={onRowClick} data={items} />}
         <HorizontalSeparator height="20px" />
         <AlternativePagination
           pageSize={pageSize}

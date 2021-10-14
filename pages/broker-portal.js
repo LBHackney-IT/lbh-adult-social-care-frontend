@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service/helpers';
-import { BrokerPortalPage } from 'components/Pages/BrokerPortal';
-import { createCoreCarePackage } from 'api/CarePackages/CarePackage';
-import { addNotification } from 'reducers/notificationsReducer';
-import { useDispatch } from 'react-redux';
 import { getCorePackageRoute } from 'routes/RouteConstants';
+import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
+import { BrokerPortalPage } from 'components/Pages/BrokerPortal';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -22,106 +19,54 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
+const initialFilters = {
+  status: '',
+  dateFrom: null,
+  dateTo: null,
+  serviceUser: null,
+};
+
 const BrokerPortal = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
-  const [packageData, setPackageData] = React.useState([]);
+
   const [pageNumber, setPageNumber] = useState(1);
-  const [paginationData, setPaginationData] = React.useState({
-    totalCount: 0,
-    totalPages: 0,
-    pageSize: 0,
-  });
-  const [initialFilters] = useState({
-    status: '',
-    dateFrom: null,
-    dateTo: null,
-    serviceUserId: '',
-  });
-  const [apiFilters, setApiFilters] = useState({ ...initialFilters });
+
+  const [filters, setFilters] = useState(initialFilters);
+  const { serviceUser, dateTo, dateFrom, status } = filters;
+
   const { data } = useCarePackageApi.brokerView({
+    fromDate: dateFrom ? dateFrom.toJSON() : null,
+    toDate: dateTo ? dateTo.toJSON() : null,
+    serviceUserId: serviceUser?.id,
     pageNumber,
-    status: apiFilters.status,
-    toDate: apiFilters.dateTo ? apiFilters.dateTo.toJSON() : null,
-    fromDate: apiFilters.dateFrom ? apiFilters.dateFrom.toJSON() : null,
-    serviceUserId: apiFilters.serviceUser?.id,
+    status,
   });
 
-  const clearFilter = () => {
-    setApiFilters({ ...initialFilters });
-  };
+  const {
+    packages = [],
+    pagingMetaData = {
+      totalCount: 0,
+      totalPages: 0,
+      pageSize: 0,
+    },
+  } = data;
 
-  useEffect(() => {
-    if (data) {
-      setPackageData(data.packages);
-    }
-  }, [data]);
+  const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
-  useEffect(() => {
-    if (data.pagingMetaData) {
-      setPaginationData({
-        totalCount: data.pagingMetaData.totalCount,
-        totalPages: data.pagingMetaData.totalPages,
-        pageSize: data.pagingMetaData.pageSize,
-      });
-    }
-  }, [data]);
-
-  const statusOptions = [
-    { text: 'All', value: '' },
-    { text: 'New', value: '1' },
-    { text: 'In Progress', value: '2' },
-    { text: 'Submitted For Approval', value: '3' },
-    { text: 'Approved', value: '4' },
-    { text: 'Not Approved', value: '5' },
-    { text: 'Ended', value: '6' },
-    { text: 'Cancelled', value: '7' },
-  ];
-
-  const handleRowClick = ({ packageId }) => {
+  const onRowClick = useCallback(({ packageId }) => {
     router.push(getCorePackageRoute(packageId));
-  };
-
-  const createNewPackage = () => {
-    const dummyPackageToCreate = {
-      serviceUserId: 'aee45700-af9b-4ab5-bb43-535adbdcfb84',
-      hasRespiteCare: false,
-      hasDischargePackage: false,
-      packageScheduling: 1,
-      primarySupportReasonId: 1,
-      packageType: 2,
-      hospitalAvoidance: false,
-      isReEnablement: false,
-      isS117Client: false,
-    };
-
-    createCoreCarePackage({ data: dummyPackageToCreate })
-      .then(({ id }) => {
-        // Dummy package created, go to package builder
-        router.push(getCorePackageRoute(id));
-        pushNotification('Package created.', 'success');
-      })
-      .catch((error) => {
-        pushNotification(error);
-      });
-  };
-
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
-  };
+  }, []);
 
   return (
     <BrokerPortalPage
-      createNewPackage={createNewPackage}
-      filters={apiFilters}
-      clearFilter={clearFilter}
-      setFilters={setApiFilters}
+      filters={filters}
+      clearFilter={clearFilters}
+      setFilters={setFilters}
       pageNumber={pageNumber}
       setPageNumber={setPageNumber}
-      statusOptions={statusOptions}
-      items={packageData}
-      paginationData={paginationData}
-      onRowClick={handleRowClick}
+      items={packages}
+      paginationData={pagingMetaData}
+      onRowClick={onRowClick}
     />
   );
 };
