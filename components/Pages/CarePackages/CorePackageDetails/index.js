@@ -21,7 +21,7 @@ const CorePackageDetails = ({
 }) => {
   const [supportReason, setSupportReason] = useState(defaultValues.supportReason);
   const [packageType, setPackageType] = useState(defaultValues.packageType);
-  const [furtherDetails, setFurtherDetails] = useState(defaultValues.furtherDetails);
+  const [furtherDetails, setFurtherDetails] = useState([...defaultValues.furtherDetails]);
   const [packageSchedule, setPackageSchedule] = useState(defaultValues.packageSchedule);
   const [errors, setErrors] = useState({
     packageType: '',
@@ -85,6 +85,26 @@ const CorePackageDetails = ({
 
     saveCorePackage(packageToCreate);
   };
+
+  useEffect(() => {
+    if (supportReasonOptions) {
+      if (defaultValues.supportReason !== '') {
+        setSupportReason(defaultValues.supportReason);
+      } else {
+        setSupportReason(supportReasonOptions[0]?.value);
+      }
+    }
+  }, [defaultValues, supportReasonOptions]);
+
+  useEffect(() => {
+    if (packageTypeOptions) {
+      if (defaultValues.packageType !== '') {
+        setPackageType(defaultValues.packageType);
+      } else {
+        setPackageType(packageTypeOptions[0]?.value);
+      }
+    }
+  }, [defaultValues, packageTypeOptions]);
 
   return (
     <div className="core-package-details brokerage">

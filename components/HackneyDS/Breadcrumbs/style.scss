@@ -7,11 +7,16 @@
   line-height: 1.1428571429;
   color: #0b0c0c;
 
+  &__default-text {
+    color: $lbh-secondary-text-colour;
+  }
+
   &__list,
   .lbh-contact__list {
     margin: 0;
     padding: 0;
     list-style-type: none;
+    display: flex;
   }
   &__list:after,
   .govuk-fieldset:after {
@@ -20,22 +25,9 @@
     clear: both;
   }
   &__list-item {
-    display: inline-block;
+    display: flex;
     position: relative;
-    margin-left: 10px;
-    padding-left: 15.655px;
-    float: left;
-  }
-  &__list-item:before {
-    top: 0;
-    bottom: 0;
-    left: -3.31px;
-    height: 7px;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-    border: solid #505a5f;
-    border-width: 1px 1px 0 0;
+    margin-bottom: 8px;
   }
   &__list-item:first-child {
     margin-left: 0;
@@ -45,23 +37,23 @@
     content: none;
     display: none;
   }
-  &__link {
+  a {
     font-family: Open Sans;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  &__link:focus {
+  a:focus {
     outline: transparent solid 3px;
     background-color: #ffc845;
     box-shadow: 0 -2px #ffc845, 0 4px #0b0c0c;
     text-decoration: none;
   }
-  &__link:active,
-  &__link:focus,
-  &__link:hover,
-  &__link:link,
-  &__link:visited {
-    color: #0b0c0c;
+  a:active,
+  a:focus,
+  a:hover,
+  a:link,
+  a:visited {
+    color: $lbh-primary-button;
   }
   &__list-item:before {
     content: '';
@@ -70,15 +62,14 @@
     display: block;
     position: absolute;
   }
-  &__link--available {
-    color: #025ea6;
+  a {
+    color: $lbh-primary-button;
     cursor: pointer;
   }
-  .lbh-breadcrumbs &__link {
+  .lbh-breadcrumbs a {
     font-family: Open Sans;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-weight: 600;
     text-decoration: none;
     &:hover,
     &:active {

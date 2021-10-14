@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button } from './HackneyDS';
 
-
 const AlternativePagination = ({
   className,
   totalPages = 1,

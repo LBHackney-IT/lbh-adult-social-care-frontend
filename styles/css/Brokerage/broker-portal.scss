@@ -1,4 +1,4 @@
-.brokerage-hub {
+.broker-portal {
   .table-pagination {
     padding: 0;
   }
@@ -15,13 +15,16 @@
 
   .table-pagination-actions {
     display: flex;
+
     button {
       &:hover {
         cursor: pointer;
       }
+
       // border: 1px solid $lbh-light-gray-border;
       margin-left: 2px;
     }
+
     button:last-of-type {
       margin-right: 0;
     }
@@ -41,6 +44,7 @@
     font-size: 16px;
     color: $lbh-secondary-text-colour;
   }
+
   .brokerage-hub--user-name {
     display: flex;
     align-items: center;
@@ -67,12 +71,14 @@
     flex-direction: column;
     flex-wrap: initial;
     margin-right: 19px;
+
     label {
       font-size: 19px;
       font-weight: 600;
       margin-bottom: 8px;
     }
   }
+
   .lbh-search-box__action {
     background: $lbh-green1;
     margin: 1px;
@@ -97,7 +103,29 @@
 
   .brokerage-hub__filters {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    margin: 0 60px;
+
+    h2 {
+      color: black;
+      margin-bottom: 8px;
+      font-weight: 600;
+      line-height: 20px;
+      font-size: 19px;
+    }
+
+    .brokerage-hub__filters-block {
+      display: flex;
+      column-gap: 20px;
+
+      &:first-of-type {
+        margin-bottom: 25px;
+      }
+    }
+
+    .govuk-form-group {
+      margin: 0;
+    }
 
     .clear-filter-button {
       width: 80px;
@@ -105,8 +133,6 @@
     }
 
     .custom-async-selector {
-      margin-right: 20px;
-
       .custom-async-selector__control {
         border: 2px solid black !important;
         border-radius: 0 !important;
@@ -121,9 +147,6 @@
     .form-group--inline-label {
       display: flex;
       align-items: flex-end;
-
-      margin-right: 20px;
-      margin-bottom: 20px;
     }
 
     .govuk-fieldset__legend {
@@ -137,7 +160,7 @@
     }
 
     .select-container {
-      width: 200px;
+      width: 260px;
     }
   }
 }
@@ -156,10 +179,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin: 30px 60px 10px;
 
-  h2 {
+  h1 {
+    color: #0b0c0c;
     font-size: 36px;
+    line-height: 40px;
   }
 }
 
@@ -169,6 +194,7 @@
     color: black;
     margin-bottom: 8px;
   }
+
   p {
     font-size: 16px;
     color: $lbh-secondary-text-colour;

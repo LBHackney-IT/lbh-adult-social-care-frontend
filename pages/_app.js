@@ -1,7 +1,6 @@
 import React from 'react';
 import { SWRConfig } from 'swr';
 import '/styles/globals.scss';
-import 'bulma/css/bulma.css';
 import { Provider } from 'react-redux';
 
 import CustomNotification from 'components/Notifications';

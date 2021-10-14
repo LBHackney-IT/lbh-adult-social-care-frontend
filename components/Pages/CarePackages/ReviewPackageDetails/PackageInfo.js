@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
-import { Container } from '../../../HackneyDS';
+import React, { useState, memo } from 'react';
+import { Container, SingleAccordion } from '../../../HackneyDS';
 import { formatDate } from '../../../../service/helpers';
 import { currency, dateStringFormats } from '../../../../constants/strings';
-import { CaretDownIcon } from '../../../Icons';
 
-const ReviewPackageInfo = ({ headerTitle, items, containerId }) => {
+const PackageInfo = ({ headerTitle, items, containerId, details }) => {
   const [openedServiceUserNeed, setOpenedServiceUserNeed] = useState([]);
+  const [openedDetails, setOpenedDetails] = useState([]);
 
   const changeOpenedService = (id) => {
     if (openedServiceUserNeed.includes(id)) {
       setOpenedServiceUserNeed(openedServiceUserNeed.filter(item => item !== id));
     } else {
       setOpenedServiceUserNeed([...openedServiceUserNeed, id]);
+    }
+  };
+
+  const changeOpenedDetails = (id) => {
+    if (openedDetails.includes(id)) {
+      setOpenedDetails(openedDetails.filter(item => item !== id));
+    } else {
+      setOpenedDetails([...openedDetails, id]);
     }
   };
 
@@ -27,8 +35,10 @@ const ReviewPackageInfo = ({ headerTitle, items, containerId }) => {
         serviceUserNeed,
         place,
         id,
+        description,
       }) => {
-        const openedId = openedServiceUserNeed.includes(id);
+        const openedServiceUserId = openedServiceUserNeed.includes(id);
+        const openedDetailsId = openedDetails.includes(id);
         const minusSign = cost < 0 ? '-' : '';
         return (
           <Container className="review-package-details__items" key={id}>
@@ -36,9 +46,20 @@ const ReviewPackageInfo = ({ headerTitle, items, containerId }) => {
               <p>
                 {formatDate(startDate, dateStringFormats.dayMonthYearSlash)}
                 {endDate && ` - `}
-                {endDate && formatDate(endDate, dateStringFormats.dayMonthYearSlash)}</p>
-              {cost && <p className="text-lbh-f01">{minusSign}{currency.euro}{cost ? Math.abs(cost) : 0}</p>}
+                {endDate && formatDate(endDate, dateStringFormats.dayMonthYearSlash)}
+              </p>
+              {cost && <p className="text-lbh-f01">{minusSign}{currency.euro}{cost ? Math.abs(cost).toFixed(2) : 0}</p>}
             </Container>
+            {details}
+            {description &&
+            <SingleAccordion
+              title="Notes"
+              onClick={() => changeOpenedDetails(id)}
+              isOpened={openedDetailsId}
+            >
+              <p>{description}</p>
+            </SingleAccordion>
+            }
             {title && <p className="review-package-details__items-title font-weight-bold">{title}</p>}
             {address &&
             <Container>
@@ -47,21 +68,14 @@ const ReviewPackageInfo = ({ headerTitle, items, containerId }) => {
             </Container>
             }
             {serviceUserNeed && (
-              <Container className="review-package-details__accordion">
-                <div
-                  onClick={() => changeOpenedService(id)}
-                  className={`review-package-details__accordion-info${openedId ? ' accordion-opened' : ''}`}
-                >
-                  <p className="link-button">Core package details</p>
-                  <CaretDownIcon/>
-                </div>
-                {openedId &&
-                <>
-                  <p>{serviceUserNeed.term}</p>
-                  <p>{serviceUserNeed.careType}</p>
-                </>
-                }
-              </Container>
+              <SingleAccordion
+                title="Core package details"
+                onClick={() => changeOpenedService(id)}
+                isOpened={openedServiceUserId}
+              >
+                <p>{serviceUserNeed.term}</p>
+                {serviceUserNeed?.careType?.map(careType => <p>{careType}</p>)}
+              </SingleAccordion>
             )}
           </Container>
         );
@@ -70,4 +84,4 @@ const ReviewPackageInfo = ({ headerTitle, items, containerId }) => {
   );
 };
 
-export default ReviewPackageInfo;
+export default memo(PackageInfo);

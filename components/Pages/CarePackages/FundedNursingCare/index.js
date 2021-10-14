@@ -7,7 +7,7 @@ import { isFunction } from '../../../../api/Utils/FuncUtils';
 import { dateStringToDate } from '../../../../service/helpers';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
-import BrokerageContainerHeader from '../BrokerageContainerHeader';
+import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 
 const FundedNursingCare = ({
@@ -146,7 +146,7 @@ const FundedNursingCare = ({
     <Container className="brokerage__funded-nursing-care">
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        <BrokerageContainerHeader title="Funded Nursing Care" />
+        <TitleSubtitleHeader title='Build a care package' subTitle="Funded Nursing Care"/>
         <Container>
           <h3 className="brokerage__item-title">Funded Nursing Care</h3>
           <RadioGroup

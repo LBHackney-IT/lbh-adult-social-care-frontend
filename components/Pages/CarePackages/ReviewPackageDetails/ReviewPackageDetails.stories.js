@@ -1,13 +1,14 @@
 import React from 'react';
+import BrokerageBorderCost from '../BrokerageBorderCost';
 import { ReviewPackageDetails } from './index';
 
-// export default {
-//   title: 'Pages/Brokerage/ReviewPackageDetails',
-//   component: ReviewPackageDetails,
-//   argTypes: {
-//     controls: null,
-//   },
-// };
+export default {
+  title: 'Pages/Brokerage/ReviewPackageDetails',
+  component: ReviewPackageDetails,
+  argTypes: {
+    controls: null,
+  },
+};
 
 const testUserDetails = {
   client: 'James Stevens',
@@ -28,6 +29,16 @@ const testSummary = [
   { key: 'Total one off payment', value: '10', className: 'brokerage__summary-cost' },
 ];
 
+const fundedNursingCareClaimCollector = {
+  2: 'Hackney Council (gross/net)',
+  1: 'Supplier (gross/net)',
+};
+
+const careChargesClaimCollector = {
+  2: 'Hackney Council (gross)',
+  1: 'Supplier (net)',
+};
+
 const testPackageInfoItems = [
   {
     headerTitle: 'Residential',
@@ -35,15 +46,15 @@ const testPackageInfoItems = [
     costOfPlacement: 300,
     items: [
       {
-        dateFrom: new Date(2021, 6, 1),
-        dateTo: new Date(2021, 9, 1),
+        startDate: new Date(2021, 6, 1),
+        endDate: new Date(2021, 9, 1),
         title: 'Supplier',
         place: 'Bupa Care Home Luke Site 1',
         id: '123456789',
         address: '15 Atherden Rd, Lower Clapton, London E5 0QP',
         serviceUserNeed: {
           term: 'Long term 52+ weeks',
-          careType: 'Respite Care',
+          careType: ['Respite Care'],
         },
       }
     ],
@@ -54,15 +65,15 @@ const testPackageInfoItems = [
     items: [
       {
         id: '1',
-        dateFrom: new Date(2021, 6, 1),
-        dateTo: new Date(2021, 9, 1),
-        price: 300,
+        startDate: new Date(2021, 6, 1),
+        endDate: new Date(2021, 9, 1),
+        cost: 300,
       },
       {
         id: '2',
-        dateFrom: new Date(2021, 6, 1),
-        dateTo: new Date(2021, 9, 1),
-        price: 300,
+        startDate: new Date(2021, 6, 1),
+        endDate: new Date(2021, 9, 1),
+        cost: 300,
       }
     ],
     totalCostHeader: 'Total weekly need (Net Off)',
@@ -74,13 +85,35 @@ const testPackageInfoItems = [
     items: [
       {
         id: '3',
-        dateFrom: new Date(2021, 6, 1),
-        dateTo: new Date(2021, 9, 1),
-        price: 187.60,
+        startDate: new Date(2021, 6, 1),
+        endDate: new Date(2021, 9, 1),
+        cost: 187.60,
       }
     ],
     totalCostHeader: 'Total (Net Off)',
-    totalCost: 187.60
+    details: (
+      <>
+        <p>
+          <span className="font-weight-bold">FNC assessment been carried out: </span>
+          Yes
+        </p>
+        <p>
+          <span className="font-weight-bold">Collected by: </span>
+          {fundedNursingCareClaimCollector[1]}
+        </p>
+        <p className='mb-3'>
+          <span className="font-weight-bold">FNC assessment: </span>
+          <span className="link-button text-blue">View</span>
+        </p>
+      </>
+    ),
+    totalCostComponent: (
+      <>
+        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Gross)"/>
+        <br/>
+        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Net Off)"/>
+      </>
+    ),
   },
   {
     headerTitle: 'Care Charges',
@@ -88,13 +121,31 @@ const testPackageInfoItems = [
     items: [
       {
         id: '5',
-        dateFrom: new Date(2021, 6, 1),
-        dateTo: new Date(2021, 9, 1),
-        price: 100.50,
+        startDate: new Date(2021, 6, 1),
+        endDate: new Date(2021, 9, 1),
+        cost: 100.50,
       }
     ],
-    totalCostHeader: 'Total (Net Off)',
-    totalCost: 100.50
+    details: (
+      <>
+        <p>
+          <span className="font-weight-bold">Provisional care charge (pre-assessement)</span>
+        </p>
+        <p>
+          <span className="font-weight-bold">Collected by: </span>
+          {careChargesClaimCollector[2]}
+        </p>
+        <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
+        <p className='mb-3'>Service user unable to manage finances</p>
+      </>
+    ),
+    totalCostComponent: (
+      <>
+        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Gross)"/>
+        <br/>
+        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Net Off)"/>
+      </>
+    ),
   },
 ];
 
@@ -104,5 +155,9 @@ export const Default = Template.bind({});
 Default.args = {
   userDetails: testUserDetails,
   summary: testSummary,
+  packageId: 1,
   packageInfoItems: testPackageInfoItems,
+  title: 'Nursing Care',
+  subTitle: 'Package details',
+  goBack: () => alert('Go back'),
 };

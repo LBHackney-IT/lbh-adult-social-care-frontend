@@ -33,13 +33,13 @@ const CareChargesPage = () => {
     dispatch(addNotification({ text, className }));
   };
 
-  const reviewPageLink = getCarePackageReviewRoute(carePackageId);
+  const packageReviewPageLink = getCarePackageReviewRoute(carePackageId);
 
   const createCareCharge = (packageId, careChargeCreation) => {
     createCarePackageReclaimCareCharge(packageId, careChargeCreation)
       .then(() => {
         pushNotification(`Care charge created successfully`, 'success');
-        router.push(reviewPageLink);
+        router.push(packageReviewPageLink);
       })
       .catch((error) => {
         pushNotification(error);
@@ -50,7 +50,7 @@ const CareChargesPage = () => {
     updateCarePackageReclaimCareCharge(packageId, careChargeUpdate)
       .then(() => {
         pushNotification(`Care charge updated successfully`, 'success');
-        router.push(reviewPageLink);
+        router.push(packageReviewPageLink);
       })
       .catch((error) => {
         pushNotification(error);

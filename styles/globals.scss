@@ -18,6 +18,9 @@
 @import 'css/dropdown';
 @import 'css/field';
 @import "css/Brokerage/index";
+@import "css/Header/title-subtitle-header";
+@import "css/file-upload";
+@import "css/BrokerAssistant/assign-care-plan";
 @import 'css/ErrorField/error-field';
 @import 'css/CarePackages/index';
 @import 'css/ProposedPackages/index';
@@ -101,3 +104,5 @@ button {
   max-width: 1200px;
   margin: 0 auto;
 }
+
+@import "~bulma/css/bulma.min.css";
