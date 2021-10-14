@@ -1,8 +1,9 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
-import { ReviewPackageDetails } from 'components/Brokerage/ReviewPackageDetails';
-import BrokerageBorderCost from 'components/Brokerage/BrokerageBorderCost';
+import { ReviewPackageDetails } from 'components/Pages/CarePackages/ReviewPackageDetails';
+import BrokerageBorderCost from 'components/Pages/CarePackages/BrokerageBorderCost';
+
 
 const settingsTypes = [
   { field: 'hasRespiteCare', text: 'Respite Care' },

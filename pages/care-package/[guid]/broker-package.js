@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { BrokerPackage } from 'components/Brokerage/BrokerPackage';
 import { useRouter } from 'next/router';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { getSuppliers } from 'api/CarePackages/SuppliersApi';
+import { BrokerPackage } from 'components/Pages/CarePackages/BrokerPackage';
 
 const BrokerPackagePage = () => {
   const router = useRouter();
