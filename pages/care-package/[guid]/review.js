@@ -186,7 +186,6 @@ const ReviewPackageDetailsPage = () => {
     <ReviewPackageDetails
       subTitle="Review package details"
       packageId={carePackageId}
-      supplierName={data?.supplier?.supplierName}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
       summary={summary}
