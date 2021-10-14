@@ -77,7 +77,7 @@
   }
 }
 
-.link-button {
+a.link-button, .link-button {
   font-size: 14px;
   line-height: 20px;
   text-decoration-line: underline;
@@ -88,10 +88,14 @@
   box-shadow: none !important;
   cursor: pointer;
 
+  &:link, &:visited, &:active, &:hover {
+    color: $lbh-link;
+  }
+
   &.red {
     color: $lbh-link-red;
 
-    &:hover {
+    &:link, &:visited, &:active, &:hover {
       color: $lbh-link-red;
     }
   }

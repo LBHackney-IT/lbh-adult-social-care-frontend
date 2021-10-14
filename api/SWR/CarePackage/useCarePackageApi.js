@@ -15,7 +15,9 @@ const useCarePackageApi = {
         toDate,
         fromDate,
         serviceUserId,
-      })}`
+      })}`,
+      '',
+      {}
     ),
 
   coreSettings: (carePackageId) =>

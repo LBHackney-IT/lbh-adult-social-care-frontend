@@ -105,7 +105,9 @@ jobs:
     executor: aws-cli/default
     steps:
       - *attach_workspace
-      - run: |
+      - run:
+          name: Update environment
+          command: |
             rm -f .env.production
             touch .env.production
             echo "SECRET_COOKIE_PASSWORD=\"$SECRET_COOKIE_PASSWORD\"" > .env.production
@@ -119,12 +121,14 @@ jobs:
     executor: aws-cli/default
     steps:
       - *attach_workspace
-      - run: |
-          rm -f .env.production
-          touch .env.production
-          echo "SECRET_COOKIE_PASSWORD=\"$SECRET_COOKIE_PASSWORD\"" > .env.production
-          echo "NEXT_PUBLIC_STAGE=\"production\"" >> .env.production
-          yarn build
+      - run:
+          name: Update environment
+          command: |
+            rm -f .env.production
+            touch .env.production
+            echo "SECRET_COOKIE_PASSWORD=\"$SECRET_COOKIE_PASSWORD\"" > .env.production
+            echo "NEXT_PUBLIC_STAGE=\"production\"" >> .env.production
+            yarn build
       - run:
           name: deploy
           command: yarn install --production --ignore-scripts --prefer-offline && sudo npm i -g serverless && sls deploy --stage production
@@ -268,7 +272,7 @@ workflows:
             branches:
               only:
                 - develop
-                - main
+#                - main
       # - get-environment-variables:
       #     requires:
       #       - assume-role-staging
@@ -280,7 +284,7 @@ workflows:
             branches:
               only:
                 - develop
-                - main
+#                - main
       - assume-role-production:
           context: api-assume-role-social-care-production-context
           filters:

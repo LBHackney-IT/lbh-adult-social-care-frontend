@@ -15,10 +15,10 @@
 
   &__list,
   .lbh-contact__list {
-    display: flex;
     margin: 0;
     padding: 0;
     list-style-type: none;
+    display: flex;
   }
   &__list:after,
   .govuk-fieldset:after {
@@ -29,10 +29,7 @@
   &__list-item {
     display: flex;
     position: relative;
-
-    &:not(&:last-of-type) {
-      margin-right: 2px;
-    }
+    margin-bottom: 8px;
   }
   &__list-item:first-child {
     margin-left: 0;
@@ -46,12 +43,12 @@
     font-family: Open Sans;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    margin-right: 2px;
   }
   &__link:focus {
     outline: transparent solid 3px;
     background-color: #ffc845;
     box-shadow: 0 -2px #ffc845, 0 4px #0b0c0c;
+    text-decoration: none;
   }
   &__link:active,
   &__link:focus,
@@ -75,7 +72,7 @@
     font-family: Open Sans;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-weight: 600;
+    text-decoration: none;
     &:hover,
     &:active {
       color: #0085ca;
