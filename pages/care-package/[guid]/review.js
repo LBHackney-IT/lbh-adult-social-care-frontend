@@ -188,6 +188,7 @@ const ReviewPackageDetailsPage = () => {
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
+      goBack={router.back}
       summary={summary}
     />
   );

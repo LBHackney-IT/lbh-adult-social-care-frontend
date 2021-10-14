@@ -159,4 +159,5 @@ Default.args = {
   packageInfoItems: testPackageInfoItems,
   title: 'Nursing Care',
   subTitle: 'Package details',
+  goBack: () => alert('Go back'),
 };
