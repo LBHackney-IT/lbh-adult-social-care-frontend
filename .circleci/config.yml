@@ -105,6 +105,12 @@ jobs:
     executor: aws-cli/default
     steps:
       - *attach_workspace
+      - run: |
+            rm -f .env.production
+            touch .env.production
+            echo "SECRET_COOKIE_PASSWORD=\"$SECRET_COOKIE_PASSWORD\"" > .env.production
+            echo "NEXT_PUBLIC_STAGE=\"staging\"" >> .env.production
+            yarn build
       - run:
           name: deploy
           command: yarn install --production --ignore-scripts --prefer-offline && sudo npm i -g serverless && sls deploy --stage staging
@@ -113,6 +119,12 @@ jobs:
     executor: aws-cli/default
     steps:
       - *attach_workspace
+      - run: |
+          rm -f .env.production
+          touch .env.production
+          echo "SECRET_COOKIE_PASSWORD=\"$SECRET_COOKIE_PASSWORD\"" > .env.production
+          echo "NEXT_PUBLIC_STAGE=\"production\"" >> .env.production
+          yarn build
       - run:
           name: deploy
           command: yarn install --production --ignore-scripts --prefer-offline && sudo npm i -g serverless && sls deploy --stage production
@@ -180,7 +192,7 @@ jobs:
           paths:
             - project/build
 
-  chromatic-deployment: 
+  chromatic-deployment:
     docker:
       - image: circleci/node:12
     working_directory: ~/repo
@@ -254,7 +266,7 @@ workflows:
           context: mosaic-staging-context
           filters:
             branches:
-              only: 
+              only:
                 - develop
                 - main
       # - get-environment-variables:
@@ -266,7 +278,7 @@ workflows:
             - owasp-zap-baseline-scan
           filters:
             branches:
-              only: 
+              only:
                 - develop
                 - main
       - assume-role-production:

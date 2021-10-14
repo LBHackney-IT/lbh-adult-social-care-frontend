@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import useCarePackageOptions from 'api/SWR/CarePackage/useCarePackageOptions';
 import { usePackageGetAll } from 'api/SWR';
+import useCarePackageOptions from 'api/SWR/CarePackage/useCarePackageOptions';
 import usePrimarySupportReason from 'api/SWR/package/usePrimarySupportReason';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
@@ -32,26 +32,18 @@ const CorePackagePage = () => {
   const { data: schedulingOptions } = useCarePackageOptions.packageSchedulingOptions();
   const { options: packageTypes = [] } = usePackageGetAll();
   const { data: primarySupportReasons = [] } = usePrimarySupportReason();
-  const { data: carePackageCore = {} } = useCarePackageApi.coreSettings(packageId);
+
   const { data: packageInfo = {} } = useCarePackageApi.singlePackageInfo(packageId);
 
-  const [currentPackageCoreSettings, setCurrentPackageCoreSettings] = useState({
-    supportReason: '',
-    packageType: '',
-    furtherDetails: [],
-    packageSchedule: null,
-  });
-
-  useEffect(() => {
-    if (packageId !== undefined && Object.keys(carePackageCore).length > 0) {
-      setCurrentPackageCoreSettings({
-        supportReason: carePackageCore.primarySupportReasonId,
-        packageType: carePackageCore.packageType,
-        furtherDetails: getCurrentSelectedSettings(carePackageCore),
-        packageSchedule: carePackageCore.packageScheduling,
-      });
-    }
-  }, [carePackageCore]);
+  const currentPackageCoreSettings = useMemo(
+    () => ({
+      supportReason: packageInfo.primarySupportReasonId ?? '',
+      packageType: packageInfo.packageType ?? '',
+      furtherDetails: getCurrentSelectedSettings(packageInfo.settings),
+      packageSchedule: packageInfo.packageScheduling,
+    }),
+    [packageInfo]
+  );
 
   const updatePackage = async (data = {}) => {
     try {

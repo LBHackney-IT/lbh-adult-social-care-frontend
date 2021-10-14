@@ -65,7 +65,7 @@
     position: absolute;
   }
   &__link--available {
-    color: #025ea6;
+    color: $lbh-primary-button;
     cursor: pointer;
   }
   .lbh-breadcrumbs &__link {

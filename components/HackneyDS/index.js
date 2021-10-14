@@ -37,6 +37,7 @@ import RadioGroup from './RadioGroup';
 import { SimplePagination } from './SimplePagination';
 import { SummaryList } from './SummaryList';
 import { FileUpload } from './FileUpload/FileUpload';
+import { UploadGreenButton } from './UploadGreenButton';
 import { SingleAccordion } from './SingleAccordion';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
@@ -84,4 +85,5 @@ export {
   FileUpload,
   Container,
   SingleAccordion,
+  UploadGreenButton,
 };

@@ -5,13 +5,13 @@ import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } f
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
 import BrokerPackageCost from './BrokerPackageCost';
+import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
 import { updateCarePackageCosts } from '../../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
 import { dateStringToDate, uniqueID } from '../../../../service/helpers';
 import Loading from '../../../Loading';
-import BrokerageContainerHeader from '../BrokerageContainerHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 
 export const BrokerPackage = ({
@@ -256,7 +256,7 @@ export const BrokerPackage = ({
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
         {(loading || detailsData === undefined) && <Loading className="loading-center" />}
         <Container className="brokerage__container-main">
-          <BrokerageContainerHeader title="Broker package" />
+          <TitleSubtitleHeader title='Build a care package' subTitle="Broker package" />
           <Container>
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
