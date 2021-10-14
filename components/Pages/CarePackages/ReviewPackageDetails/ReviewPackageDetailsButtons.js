@@ -1,5 +1,5 @@
 import { Button, Container } from '../../../HackneyDS';
-import React from 'react';
+import React, { memo } from 'react';
 
 const ReviewPackageDetailsButtons = ({ edit, cancel, end }) => (
   <Container className="review-package-details__buttons">
@@ -9,4 +9,4 @@ const ReviewPackageDetailsButtons = ({ edit, cancel, end }) => (
   </Container>
 );
 
-export default ReviewPackageDetailsButtons;
+export default memo(ReviewPackageDetailsButtons);

@@ -30,21 +30,13 @@ export const ReviewPackageDetails = ({
   packageId,
   packageInfoItems = [],
   summary = [],
-  supplierName,
   title = 'Nursing Care',
   subTitle = 'Package details',
 }) => {
   const router = useRouter();
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
 
-  const goBack = () => router.back();
-
-  const redirectToBrokerPackage = () => {
-    router.push({
-      pathname: getBrokerPackageRoute(packageId),
-      query: { supplierName },
-    });
-  };
+  const redirectToBrokerPackage = () => router.push(getBrokerPackageRoute(packageId));
 
   return (
     <div className="review-package-details">
@@ -108,7 +100,7 @@ export const ReviewPackageDetails = ({
               ))}
             </Container>
             <Container className="review-package-details__actions" display="flex">
-              <Button handler={goBack}>Back</Button>
+              <Button handler={router.back}>Back</Button>
               <Button handler={() => setIsOpenedPopup(true)}>Submit for approval</Button>
             </Container>
           </Container>

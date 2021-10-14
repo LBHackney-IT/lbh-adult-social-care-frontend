@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { useRouter } from 'next/router';
 import BrokerageBorderCost from 'components/Pages/CarePackages/BrokerageBorderCost';
@@ -12,23 +12,23 @@ const settingsTypes = [
   { field: 'isS117Client', text: 'S117' },
 ];
 
+const fundedNursingCareClaimCollector = {
+  2: 'Hackney Council (gross/net)',
+  1: 'Supplier (gross/net)',
+};
+
+const careChargesClaimCollector = {
+  2: 'Hackney Council (gross)',
+  1: 'Supplier (net)',
+};
+
 const ReviewPackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
   const { data } = useCarePackageApi.summary(carePackageId);
 
-  const [fundedNursingCareClaimCollector] = useState({
-    2: 'Hackney Council (gross/net)',
-    1: 'Supplier (gross/net)',
-  });
-
-  const [careChargesClaimCollector] = useState({
-    2: 'Hackney Council (gross)',
-    1: 'Supplier (net)',
-  });
-
   const checkSettings = (settings) => settings && settingsTypes
-    .filter((item) => settings[item.field] === true)
+    .filter((item) => settings[item.field])
     .map(item => settingsTypes.find(setting => setting[item])?.text);
 
   const summary = [
@@ -121,7 +121,7 @@ const ReviewPackageDetailsPage = () => {
             <span className="font-weight-bold">Collected by: </span>
             {fundedNursingCareClaimCollector[data.fundedNursingCare?.claimCollector]}
           </p>
-          <p className='mb-3'>
+          <p className="mb-3">
             <span className="font-weight-bold">FNC assessment: </span>
             <span className="link-button text-blue">View</span>
           </p>
@@ -130,11 +130,17 @@ const ReviewPackageDetailsPage = () => {
       totalCostComponent: (
         <>
           {data?.hackneyReclaims?.fnc !== undefined && data.hackneyReclaims?.fnc !== 0 && (
-            <BrokerageBorderCost totalCost={data?.hackneyReclaims?.fnc.toFixed(2)} totalCostHeader="Total (Gross)"/>
+            <BrokerageBorderCost
+              totalCost={data?.hackneyReclaims?.fnc.toFixed(2)}
+              totalCostHeader="Total (Gross)"
+            />
           )}
           {data?.supplierReclaims?.fnc !== undefined && !!data?.hackneyReclaims?.fnc && <br/>}
           {data?.supplierReclaims?.fnc !== undefined && data.supplierReclaims.fnc !== 0 && (
-            <BrokerageBorderCost totalCost={data?.supplierReclaims?.fnc.toFixed(2)} totalCostHeader="Total (Net Off)"/>
+            <BrokerageBorderCost
+              totalCost={data?.supplierReclaims?.fnc.toFixed(2)}
+              totalCostHeader="Total (Net Off)"
+            />
           )}
         </>
       ),
@@ -153,17 +159,23 @@ const ReviewPackageDetailsPage = () => {
             {careChargesClaimCollector[data.fundedNursingCare.claimCollector]}
           </p>}
           <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
-          <p className='mb-3'>Service user unable to manage finances</p>
+          <p className="mb-3">Service user unable to manage finances</p>
         </>
       ),
       totalCostComponent: (
         <>
           {data?.hackneyReclaims?.careCharge !== undefined && data.hackneyReclaims?.careCharge !== 0 && (
-            <BrokerageBorderCost totalCost={data?.hackneyReclaims?.careCharge.toFixed(2)} totalCostHeader="Total (Gross)"/>
+            <BrokerageBorderCost
+              totalCost={data?.hackneyReclaims?.careCharge.toFixed(2)}
+              totalCostHeader="Total (Gross)"
+            />
           )}
           {data?.supplierReclaims?.careCharge !== undefined && data?.hackneyReclaims?.careCharge !== undefined && <br/>}
           {data?.supplierReclaims?.careCharge !== undefined && data.supplierReclaims?.careCharge !== 0 && (
-            <BrokerageBorderCost totalCost={data?.supplierReclaims?.careCharge.toFixed(2)} totalCostHeader="Total (Net Off)"/>
+            <BrokerageBorderCost
+              totalCost={data?.supplierReclaims?.careCharge.toFixed(2)}
+              totalCostHeader="Total (Net Off)"
+            />
           )}
         </>
       ),
@@ -172,7 +184,7 @@ const ReviewPackageDetailsPage = () => {
 
   return (
     <ReviewPackageDetails
-      subTitle='Review package details'
+      subTitle="Review package details"
       packageId={carePackageId}
       supplierName={data?.supplier?.supplierName}
       packageInfoItems={packageInfoItems}

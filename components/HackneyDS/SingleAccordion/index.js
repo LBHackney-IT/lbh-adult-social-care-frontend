@@ -9,7 +9,7 @@ export const SingleAccordion = ({ buttonComponent, className = '', title, onClic
       className={`single-accordion-info${isOpened ? ' accordion-opened' : ''}`}
     >
       {title && <p className="link-button">{title}</p>}
-      {buttonComponent && buttonComponent}
+      {buttonComponent}
       <CaretDownIcon/>
     </div>
     {isOpened && children}

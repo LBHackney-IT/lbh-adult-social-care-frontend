@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Container, SingleAccordion } from '../../../HackneyDS';
 import { formatDate } from '../../../../service/helpers';
 import { currency, dateStringFormats } from '../../../../constants/strings';
@@ -74,10 +74,7 @@ const PackageInfo = ({ headerTitle, items, containerId, details }) => {
                 isOpened={openedServiceUserId}
               >
                 <p>{serviceUserNeed.term}</p>
-                {!!serviceUserNeed?.careType?.length &&
-                serviceUserNeed.careType.map(careType => (
-                  <p>{careType}</p>
-                ))}
+                {serviceUserNeed?.careType?.map(careType => <p>{careType}</p>)}
               </SingleAccordion>
             )}
           </Container>
@@ -87,4 +84,4 @@ const PackageInfo = ({ headerTitle, items, containerId, details }) => {
   );
 };
 
-export default PackageInfo;
+export default memo(PackageInfo);
