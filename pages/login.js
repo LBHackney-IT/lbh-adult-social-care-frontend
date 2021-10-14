@@ -2,9 +2,9 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import HackneyFooterInfo from 'components/HackneyFooterInfo';
-import Header from 'components/Layout/Header';
 import useUser from 'api/SWR/useUser';
 import { userLogin } from 'reducers/userReducer';
+import { Header } from 'components/HackneyDS';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
@@ -37,8 +37,7 @@ const Login = () => {
 
   return (
     <div className="login-page">
-      <Header showPageHeader={false} />
-
+      <Header />
       {!user?.isLoggedIn && (
         <div className="login-page__form-container">
           <div className="login-page__form">
