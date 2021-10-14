@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { BROKER_PORTAL_ROUTE } from '../../../routes/RouteConstants';
 import { getSlot, getMultipleSlot, Container } from '../index';
 
-export default function Header({ children = [], links = [], bottomLines = true, fixed, purple }) {
+export default function Header({ children = [], links = [], bottomLines = false, fixed, purple }) {
   const bottomLinesClass = bottomLines ? ' bottom-lines' : '';
   const fixedClassList = fixed ? ' lbh-header--fixed' : '';
   const shortServiceNodeList = ' lbh-header__service-name--short';

@@ -86,32 +86,6 @@ const CorePackageDetails = ({
     saveCorePackage(packageToCreate);
   };
 
-  useEffect(() => {
-    if (supportReasonOptions) {
-      if (defaultValues.supportReason !== '') {
-        setSupportReason(defaultValues.supportReason);
-      } else {
-        setSupportReason(supportReasonOptions[0]?.value);
-      }
-    }
-  }, [defaultValues, supportReasonOptions]);
-
-  useEffect(() => {
-    if (packageTypeOptions) {
-      if (defaultValues.packageType !== '') {
-        setPackageType(defaultValues.packageType);
-      } else {
-        setPackageType(packageTypeOptions[0]?.value);
-      }
-    }
-  }, [defaultValues, packageTypeOptions]);
-
-  useEffect(() => {
-    if (packageType !== defaultValues.packageType) setPackageType(defaultValues.packageType);
-    if (packageSchedule !== defaultValues.packageSchedule) setPackageSchedule(defaultValues.packageSchedule);
-    if (furtherDetails.length !== defaultValues.furtherDetails.length) setFurtherDetails(defaultValues.furtherDetails);
-  }, [defaultValues]);
-
   return (
     <div className="core-package-details brokerage">
       <BrokerageHeader />

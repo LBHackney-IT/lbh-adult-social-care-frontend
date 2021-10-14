@@ -16,7 +16,6 @@ const FundedNursingCarePage = () => {
   const { data: activeFncPrice } = useReclaimApi.activeFncPrice(carePackageId);
 
   const collectedByOptions = [
-    { text: 'Select One', value: null },
     { text: 'Supplier', value: '1' },
     { text: 'Hackney', value: '2' },
   ];
