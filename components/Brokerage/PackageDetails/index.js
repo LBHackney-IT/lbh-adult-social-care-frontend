@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE, getBrokerPackageRoute } from '../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
-import { Button, Container, Link } from '../../HackneyDS';
+import { Button, Container, Link, Breadcrumbs } from '../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import PackageInfo from './PackageInfo';
 import BrokerageBorderCost from '../BrokerageBorderCost';
 import { currency } from '../../../constants/strings';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
-import Breadcrumbs from '../../Breadcrumbs';
 
 const links = [
   { text: 'Care Package', href: '#care-package' },
@@ -26,9 +25,16 @@ const breadcrumbs = [
   { text: 'Full overview' },
 ];
 
-export const PackageDetails = ({ userDetails, packageInfoItems = [], summary = [], supplierName }) => {
+export const PackageDetails = ({
+  userDetails,
+  packageId,
+  packageInfoItems = [],
+  summary = [],
+  supplierName,
+  title = 'Nursing Care',
+  subTitle = 'Package details',
+}) => {
   const router = useRouter();
-  const packageId = router.query.guid;
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
 
   const goBack = () => router.back();
@@ -54,8 +60,8 @@ export const PackageDetails = ({ userDetails, packageInfoItems = [], summary = [
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
         <Container className="brokerage__container-header brokerage__container">
-          <p>Nursing Care</p>
-          <h2>Package details <span className="text-blue font-size-19px">Package history</span></h2>
+          <p>{title}</p>
+          <h2>{subTitle} <span className="text-blue font-size-19px">Package history</span></h2>
         </Container>
         <PackageUserDetails {...userDetails} />
         <Container className="package-details__main-container">

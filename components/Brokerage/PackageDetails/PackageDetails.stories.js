@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { PackageDetails } from './index';
 import BrokerageBorderCost from '../BrokerageBorderCost';
 
-// export default {
-//   title: 'Pages/Brokerage/PackageDetails',
-//   component: PackageDetails,
-//   argTypes: {
-//     controls: null,
-//   },
-// };
+export default {
+  title: 'Pages/Brokerage/PackageDetails',
+  component: PackageDetails,
+  argTypes: {
+    controls: null,
+  },
+};
 
 const testUserDetails = {
   client: 'James Stevens',
@@ -46,8 +46,8 @@ const testPackageInfoItems = [
     costOfPlacement: 300,
     items: [
       {
-        dateFrom: new Date(2021, 6, 1),
-        dateTo: new Date(2021, 9, 1),
+        startDate: new Date(2021, 6, 1),
+        endDate: new Date(2021, 9, 1),
         title: 'Supplier',
         place: 'Bupa Care Home Luke Site 1',
         id: '123456789',
@@ -65,14 +65,14 @@ const testPackageInfoItems = [
     items: [
       {
         id: '1',
-        dateFrom: new Date(2021, 6, 1),
-        dateTo: new Date(2021, 9, 1),
+        startDate: new Date(2021, 6, 1),
+        endDate: new Date(2021, 9, 1),
         cost: 300,
       },
       {
         id: '2',
-        dateFrom: new Date(2021, 6, 1),
-        dateTo: new Date(2021, 9, 1),
+        startDate: new Date(2021, 6, 1),
+        endDate: new Date(2021, 9, 1),
         cost: 300,
       }
     ],
@@ -85,8 +85,8 @@ const testPackageInfoItems = [
     items: [
       {
         id: '3',
-        dateFrom: new Date(2021, 6, 1),
-        dateTo: new Date(2021, 9, 1),
+        startDate: new Date(2021, 6, 1),
+        endDate: new Date(2021, 9, 1),
         cost: 187.60,
       }
     ],
@@ -121,8 +121,8 @@ const testPackageInfoItems = [
     items: [
       {
         id: '5',
-        dateFrom: new Date(2021, 6, 1),
-        dateTo: new Date(2021, 9, 1),
+        startDate: new Date(2021, 6, 1),
+        endDate: new Date(2021, 9, 1),
         cost: 100.50,
       }
     ],
@@ -155,5 +155,8 @@ export const Default = Template.bind({});
 Default.args = {
   userDetails: testUserDetails,
   summary: testSummary,
+  packageId: 1,
   packageInfoItems: testPackageInfoItems,
+  title: 'Nursing Care',
+  subTitle: 'Package details',
 };

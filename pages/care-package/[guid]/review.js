@@ -12,7 +12,7 @@ const settingsTypes = [
   { field: 'isS117Client', text: 'S117' },
 ];
 
-const PackageDetailsPage = () => {
+const ReviewPackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
   const { data } = useCarePackageApi.summary(carePackageId);
@@ -36,7 +36,11 @@ const PackageDetailsPage = () => {
     { id: 2, key: 'FNC payment', value: data?.fncPayment },
     { id: 3, key: 'Additional weekly cost', value: data?.additionalWeeklyCost },
     { id: 4, key: 'Sub total cost of package', value: data?.subTotalCost, className: 'brokerage__summary-cost' },
-    { id: 5, key: data?.hackneyReclaims?.fnc && 'FNC (net collected at source)', value: data?.hackneyReclaims?.fnc },
+    {
+      id: 5,
+      key: data?.hackneyReclaims?.fnc && 'FNC (net collected at source)',
+      value: data?.hackneyReclaims?.fnc
+    },
     {
       id: 6,
       key: data?.hackneyReclaims?.careCharge && 'Care charges (gross collected from service user)',
@@ -48,11 +52,15 @@ const PackageDetailsPage = () => {
       value: data?.hackneyReclaims?.subTotal,
       className: 'brokerage__summary-cost',
     },
-    { id: 8, key: data?.supplierReclaims?.fnc && 'FNC (net collected at source)', value: data?.supplierReclaims?.fnc },
+    {
+      id: 8,
+      key: data?.supplierReclaims?.fnc && 'FNC (net collected at source)',
+      value: data?.supplierReclaims?.fnc
+    },
     {
       id: 9,
-      key: data?.supplierReclaims?.careCharges && 'Care charges (Net collected at source)',
-      value: data?.supplierReclaims?.careCharges,
+      key: data?.supplierReclaims?.careCharge && 'Care charges (Net collected at source)',
+      value: data?.supplierReclaims?.careCharge,
     },
     {
       id: 10,
@@ -113,7 +121,7 @@ const PackageDetailsPage = () => {
             <span className="font-weight-bold">Collected by: </span>
             {fundedNursingCareClaimCollector[data.fundedNursingCare?.claimCollector]}
           </p>
-          <p>
+          <p className='mb-3'>
             <span className="font-weight-bold">FNC assessment: </span>
             <span className="link-button text-blue">View</span>
           </p>
@@ -145,7 +153,7 @@ const PackageDetailsPage = () => {
             {careChargesClaimCollector[data.fundedNursingCare.claimCollector]}
           </p>}
           <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
-          <p>Service user unable to manage finances</p>
+          <p className='mb-3'>Service user unable to manage finances</p>
         </>
       ),
       totalCostComponent: (
@@ -164,6 +172,8 @@ const PackageDetailsPage = () => {
 
   return (
     <PackageDetails
+      subTitle='Review package details'
+      packageId={carePackageId}
       supplierName={data?.supplier?.supplierName}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
@@ -172,4 +182,4 @@ const PackageDetailsPage = () => {
   );
 };
 
-export default PackageDetailsPage;
+export default ReviewPackageDetailsPage;

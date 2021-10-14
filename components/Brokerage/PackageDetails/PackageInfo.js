@@ -53,7 +53,6 @@ const PackageInfo = ({ headerTitle, items, containerId, details }) => {
             {details}
             {description &&
             <SingleAccordion
-              className='mt-3'
               title="Notes"
               onClick={() => changeOpenedDetails(id)}
               isOpened={openedDetailsId}
