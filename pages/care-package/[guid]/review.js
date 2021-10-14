@@ -129,11 +129,11 @@ const ReviewPackageDetailsPage = () => {
       ),
       totalCostComponent: (
         <>
-          {data?.hackneyReclaims?.fnc && data.hackneyReclaims?.fnc !== 0 && (
+          {data?.hackneyReclaims?.fnc !== undefined && data.hackneyReclaims?.fnc !== 0 && (
             <BrokerageBorderCost totalCost={data?.hackneyReclaims?.fnc.toFixed(2)} totalCostHeader="Total (Gross)"/>
           )}
-          {!!data?.supplierReclaims?.fnc && !!data?.hackneyReclaims?.fnc && <br/>}
-          {data.supplierReclaims?.fnc && data.supplierReclaims.fnc !== 0 && (
+          {data?.supplierReclaims?.fnc !== undefined && !!data?.hackneyReclaims?.fnc && <br/>}
+          {data?.supplierReclaims?.fnc !== undefined && data.supplierReclaims.fnc !== 0 && (
             <BrokerageBorderCost totalCost={data?.supplierReclaims?.fnc.toFixed(2)} totalCostHeader="Total (Net Off)"/>
           )}
         </>
@@ -158,11 +158,11 @@ const ReviewPackageDetailsPage = () => {
       ),
       totalCostComponent: (
         <>
-          {data?.hackneyReclaims?.careCharge && data.hackneyReclaims?.careCharge !== 0 && (
+          {data?.hackneyReclaims?.careCharge !== undefined && data.hackneyReclaims?.careCharge !== 0 && (
             <BrokerageBorderCost totalCost={data?.hackneyReclaims?.careCharge.toFixed(2)} totalCostHeader="Total (Gross)"/>
           )}
-          {!!data?.supplierReclaims?.careCharge && !!data?.hackneyReclaims?.careCharge && <br/>}
-          {data?.supplierReclaims?.careCharge && data.supplierReclaims?.careCharge !== 0 && (
+          {data?.supplierReclaims?.careCharge !== undefined && data?.hackneyReclaims?.careCharge !== undefined && <br/>}
+          {data?.supplierReclaims?.careCharge !== undefined && data.supplierReclaims?.careCharge !== 0 && (
             <BrokerageBorderCost totalCost={data?.supplierReclaims?.careCharge.toFixed(2)} totalCostHeader="Total (Net Off)"/>
           )}
         </>

@@ -101,7 +101,7 @@ const testPackageInfoItems = [
           <span className="font-weight-bold">Collected by: </span>
           {fundedNursingCareClaimCollector[1]}
         </p>
-        <p>
+        <p className='mb-3'>
           <span className="font-weight-bold">FNC assessment: </span>
           <span className="link-button text-blue">View</span>
         </p>
@@ -136,7 +136,7 @@ const testPackageInfoItems = [
           {careChargesClaimCollector[2]}
         </p>
         <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
-        <p>Service user unable to manage finances</p>
+        <p className='mb-3'>Service user unable to manage finances</p>
       </>
     ),
     totalCostComponent: (
