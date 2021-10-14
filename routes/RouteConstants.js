@@ -1,4 +1,5 @@
 export const BROKER_PORTAL_ROUTE = '/broker-portal';
+export const BROKER_PORTAL_SEARCH_ROUTE = '/broker-portal/search';
 
 export const CARE_PACKAGE_ROUTE = '/care-package';
 export const getCarePackageReviewRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/review`;
