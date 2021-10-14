@@ -9,15 +9,8 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
 import { getCorePackageRoute } from 'routes/RouteConstants';
 
-// export const getServerSideProps = withSession(async ({ req, res }) => {
-//   const isRedirect = getUserSession({ req, res });
-//   if (isRedirect) return { props: {} };
-//   return { props: {} };
-// });
-
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-
   if (!user) {
     return {
       redirect: {
@@ -26,7 +19,6 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-
   return { props: {} };
 });
 
