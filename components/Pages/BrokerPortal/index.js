@@ -49,6 +49,8 @@ export const BrokerPortalPage = ({
     router.push(BROKER_PORTAL_SEARCH_ROUTE);
   }, []);
 
+  const shouldShowClear = Object.values(filters).some((item) => !!item);
+
   return (
     <div className="broker-portal">
       <BrokerageHeader serviceName="" links={links} />
@@ -118,19 +120,19 @@ export const BrokerPortalPage = ({
                 setDate={(value) => changeFilterField('dateTo', value)}
               />
             </FormGroup>
-          </div>
 
-          {Object.values(filters).some((item) => !!item) && (
-            <Button
-              className="outline gray clear-filter-button"
-              handler={() => {
-                clearFilter();
-                selectorRef.current?.select?.select?.clearValue();
-              }}
-            >
-              Clear
-            </Button>
-          )}
+            {shouldShowClear && (
+              <Button
+                className="outline gray clear-filter-button"
+                handler={() => {
+                  clearFilter();
+                  selectorRef.current?.select?.select?.clearValue();
+                }}
+              >
+                Clear
+              </Button>
+            )}
+          </div>
         </Container>
       </Container>
 
