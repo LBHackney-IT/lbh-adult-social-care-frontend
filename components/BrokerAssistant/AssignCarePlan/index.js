@@ -81,7 +81,7 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
               <div slot="title">Success!</div>
               <div slot="content">Care plan assigned to {broker}</div>
             </Announcement>
-            <Button className='mt-60' handler={() => router.replace('broker-portal')}>Back to Broker Portal</Button>
+            <Button className='mt-60' handler={() => router.replace(BROKER_PORTAL_ROUTE)}>Back to Broker Portal</Button>
           </Container>
           :
           <Container padding='0 60px' className="brokerage__container-main">
