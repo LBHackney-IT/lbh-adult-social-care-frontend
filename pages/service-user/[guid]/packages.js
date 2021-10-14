@@ -2,11 +2,11 @@ import React from 'react';
 import BrokerageHeader from 'components/Pages/CarePackages/BrokerageHeader/BrokerageHeader';
 import { Breadcrumbs, Container, HorizontalSeparator } from 'components/HackneyDS';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
-import BrokerageContainerHeader from 'components/Pages/CarePackages/BrokerageContainerHeader';
 import ServiceUserDetails from 'components/Pages/BrokerPortal/ServiceUserDetails';
 import { useRouter } from 'next/router';
 import { PackageRequest } from 'components/Pages/ServiceUser/Packages/PackageRequest';
 import { CareDetails } from 'components/Pages/ServiceUser/Packages/CareDetails';
+import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
 
 const Packages = () => {
   const router = useRouter();
@@ -68,8 +68,8 @@ const Packages = () => {
       <Container maxWidth="1080px" margin="0 auto" padding="8px 60px 0 60px">
         <Breadcrumbs values={breadcrumbs} />
       </Container>
-      <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
-        <BrokerageContainerHeader title="All package details" subtitle="Full overview" />
+      <Container maxWidth="1080px" margin="0 auto" padding="0px 60px 60px 60px">
+        <TitleSubtitleHeader title="All package details" subTitle="Full overview" />
         <ServiceUserDetails
           dateOfBirth={serviceUserData.dateOfBirth}
           serviceUserName={serviceUserData.serviceUserName}
