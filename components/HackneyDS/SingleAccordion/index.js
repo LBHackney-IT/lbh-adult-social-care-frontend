@@ -3,7 +3,7 @@ import { CaretDownIcon } from '../../Icons';
 import { Container } from '../Layout/Container';
 
 export const SingleAccordion = ({ buttonComponent, className = '', title, onClick, isOpened, children }) => (
-  <Container className={`package-details__accordion${className ? ` ${className}` : ''}`}>
+  <Container className={`review-package-details__accordion${className ? ` ${className}` : ''}`}>
     <div
       onClick={onClick}
       className={`single-accordion-info${isOpened ? ' accordion-opened' : ''}`}

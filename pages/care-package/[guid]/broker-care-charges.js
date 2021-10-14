@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import CareCharges from 'components/Brokerage/CareCharges';
+
 import {
   createCarePackageReclaimCareCharge,
   updateCarePackageReclaimCareCharge,
@@ -9,6 +9,7 @@ import useReclaimApi from 'api/SWR/CarePackage/useReclaimApi';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { useDispatch } from 'react-redux';
+import CareCharges from 'components/Pages/CarePackages/CareCharges';
 
 const CareChargesPage = () => {
   const router = useRouter();

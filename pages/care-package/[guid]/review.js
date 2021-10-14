@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { useRouter } from 'next/router';
-import { PackageDetails } from 'components/Brokerage/PackageDetails';
-import BrokerageBorderCost from 'components/Brokerage/BrokerageBorderCost';
+import BrokerageBorderCost from 'components/Pages/CarePackages/BrokerageBorderCost';
+import { ReviewPackageDetails } from '../../../components/Pages/CarePackages/ReviewPackageDetails';
 
 const settingsTypes = [
   { field: 'hasRespiteCare', text: 'Respite Care' },
@@ -171,7 +171,7 @@ const ReviewPackageDetailsPage = () => {
   ];
 
   return (
-    <PackageDetails
+    <ReviewPackageDetails
       subTitle='Review package details'
       packageId={carePackageId}
       supplierName={data?.supplier?.supplierName}
