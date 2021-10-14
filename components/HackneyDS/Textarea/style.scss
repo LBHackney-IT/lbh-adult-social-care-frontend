@@ -1,10 +1,4 @@
 .govuk-form-group {
-  &:last-of-type,
-  .lbh-form-group {
-    margin-bottom: 0;
-  }
-  margin-bottom: 20px;
-
   &:after {
     content: '';
     display: block;

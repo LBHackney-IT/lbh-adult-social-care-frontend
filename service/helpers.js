@@ -15,18 +15,10 @@ const formatDateWithSign = (date, sign = '/') => {
   return `${`00${day}`.slice(-2)}${sign}${`00${month}`.slice(-2)}${sign}${`00${year}`.slice(-2)}`;
 };
 
-const dateStringToDate = (dateString) => dateString ? new Date(dateString) : null;
+const dateStringToDate = (dateString) => (dateString ? new Date(dateString) : null);
 
 const incrementDate = ({ incrementTime, date = new Date() }) => {
-  const {
-    years = 0,
-    months = 0,
-    days = 0,
-    weeks = 0,
-    hours = 0,
-    minutes = 0,
-    seconds = 0,
-  } = incrementTime;
+  const { years = 0, months = 0, days = 0, weeks = 0, hours = 0, minutes = 0, seconds = 0 } = incrementTime;
 
   return add(date, {
     years,
@@ -37,10 +29,10 @@ const incrementDate = ({ incrementTime, date = new Date() }) => {
     minutes,
     seconds,
   });
-}
+};
 
 const formatStringLength = (string, collapsedText, isSlicedText) => {
-  if(!string) return '';
+  if (!string) return '';
 
   if (string.length > maxStringLength && collapsedText && isSlicedText) {
     return `${string.slice(0, maxStringLength)}`;
@@ -48,27 +40,20 @@ const formatStringLength = (string, collapsedText, isSlicedText) => {
   return string;
 };
 
-const formatCareDatePeriod = (startDate, endDate) => {
-  return {
-    startDate: getEnGBFormattedDate(startDate, ' '),
-    endDate: endDate ? getEnGBFormattedDate(endDate, ' ') : 'Ongoing'
-  };
-};
-
-const formatDate = ( date, formatString = 'dd.MM.yy') => date && format(new Date(date), formatString);
+const formatDate = (date, formatString = 'dd.MM.yy') => date && format(new Date(date), formatString);
 
 const includeString = (mainString, checkString) => mainString && mainString.indexOf(checkString) > -1;
 
-const getUrlFromFile = file => {
-  if(!file) return '';
-  if(file?.url) return file.url;
+const getUrlFromFile = (file) => {
+  if (!file) return '';
+  if (file?.url) return file.url;
 
   return window.URL.revokeObjectURL(file);
-}
+};
 
 const formatStatus = (status, sign = '-', isUpperCase) => {
-  if(!status) return '';
-  if(status.indexOf('-') > -1) {
+  if (!status) return '';
+  if (status.indexOf('-') > -1) {
     return status
       .split('-')
       .map((text) => text.slice(0, 1).toUpperCase() + text.slice(1, text.length))
@@ -76,16 +61,16 @@ const formatStatus = (status, sign = '-', isUpperCase) => {
   }
 
   let newStatus = '';
-  for(const i of status) {
-    if(i !== '' && i !== ' ') {
-      if(i === i.toUpperCase() && i !== status[0].toUpperCase()) {
+  for (const i of status) {
+    if (i !== '' && i !== ' ') {
+      if (i === i.toUpperCase() && i !== status[0].toUpperCase()) {
         newStatus += sign;
       }
       newStatus += i;
     }
   }
   return isUpperCase ? newStatus : newStatus.toLowerCase();
-}
+};
 
 // check user session
 // if no user, then redirect to Login Page
@@ -95,7 +80,6 @@ const getUserSession = ({ req, res }) => {
   if (user === undefined) {
     res.setHeader('location', '/login');
     res.statusCode = 302;
-    res.end();
 
     return true;
   }
@@ -113,23 +97,10 @@ const getLoggedInUser = ({ req }) => {
   return user;
 };
 
-function formatForDropDownOptions(fields, res) {
-  if(!res) return [];
-  const localFields = {
-    text: 'text',
-    value: 'id',
-    ...fields,
-  };
-  return res.map((item) => ({
-    text: item[localFields.text],
-    value: item[localFields.value],
-  }));
-}
-
 /**
-  behavior: auto or smooth
-  block: start, center, end, or nearest
-  inline: start, center, end, or nearest
+ behavior: auto or smooth
+ block: start, center, end, or nearest
+ inline: start, center, end, or nearest
  */
 const scrollToElement = ({ element, behavior = 'smooth', block = 'center', inline = 'end' }) => {
   element?.scrollIntoView({
@@ -157,27 +128,18 @@ const sortTableByKey = (input, sort) => {
   });
 };
 
-const deleteSpaces = (str) => str.replace(/\s/g, '');
-
-const getErrorResponse = (error) => error?.response?.data || {}; // { firstName: 'First Name must be more then 10 symbols', secondName: 'Second Name must be more then 10 symbols'
-
-const getNumberWithCommas = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const getNumberWithCommas = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 export {
   uniqueID,
-  deleteSpaces,
   formatDateWithSign,
   formatStatus,
   includeString,
   getUserSession,
-  getErrorResponse,
   formatDate,
   getLoggedInUser,
-  sortTableByKey,
-  formatForDropDownOptions,
   scrollToElement,
   getNumberWithCommas,
-  formatCareDatePeriod,
   formatStringLength,
   incrementDate,
   getUrlFromFile,

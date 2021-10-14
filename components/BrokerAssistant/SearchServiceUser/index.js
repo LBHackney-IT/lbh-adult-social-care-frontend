@@ -1,21 +1,24 @@
 import { useState } from 'react';
-import {
-  APPROVER_HUB_ROUTE,
-  BROKER_PACKAGE_ROUTE,
-  BROKERAGE_HUB_ROUTE,
-  CARE_PACKAGE_ROUTE,
-  FINANCE_ROUTE,
-  LOGOUT_ROUTE
-} from '../../../routes/RouteConstants';
-import { Button, Container, Header, Input } from '../../HackneyDS';
-import Breadcrumbs from '../../Breadcrumbs';
-import { useRouter } from 'next/router';
+import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE, LOGOUT_ROUTE } from '../../../routes/RouteConstants';
+import { Button, Container, Header, Input, Breadcrumbs } from '../../HackneyDS';
 import DatePicker from '../../HackneyDS/DatePicker';
-import ServiceUserDetails from '../../Brokerage/BrokerageHub/ServiceUserDetails';
-import Pagination from '../../Payments/Pagination';
+import ServiceUserDetails from '../../Pages/BrokerPortal/ServiceUserDetails';
+import AlternativePagination from '../../AlternativePagination';
 import Loading from '../../Loading';
 import FormGroup from '../../HackneyDS/FormGroup';
 import SearchResult from '../../SearchResult';
+
+const links = [
+  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
+  { text: 'Care Charges', href: CARE_PACKAGE_ROUTE },
+  { text: 'Log Out', href: LOGOUT_ROUTE },
+];
+
+const breadcrumbs = [
+  { text: 'Home', href: '/' },
+  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
+  { text: 'Search for a service user' },
+];
 
 const SearchServiceUser = ({
   searchResults,
@@ -24,7 +27,6 @@ const SearchServiceUser = ({
   totalCount,
   totalPages,
 }) => {
-  const router = useRouter();
   const [initialFilters] = useState({
     postcode: '',
     firstName: '',
@@ -34,13 +36,6 @@ const SearchServiceUser = ({
   });
   const [filters, setFilters] = useState({ ...initialFilters });
   const [searchFilters, setSearchFilters] = useState({ ...initialFilters });
-  const [links] = useState([
-    { text: 'Broker Portal', href: BROKERAGE_HUB_ROUTE },
-    { text: 'Care Charges', href: CARE_PACKAGE_ROUTE },
-    { text: 'Approvals', href: APPROVER_HUB_ROUTE },
-    { text: 'Finance', href: FINANCE_ROUTE },
-    { text: 'Log Out', href: LOGOUT_ROUTE },
-  ]);
 
   const changeFilters = (field, value) => {
     setFilters(prevState => ({
@@ -56,20 +51,12 @@ const SearchServiceUser = ({
     alert(item);
   };
 
-  const pushRoute = route => router.push(route);
-
-  const [breadcrumbs] = useState([
-    { text: 'Home', onClick: () => pushRoute('/') },
-    { text: 'Broker Portal', onClick: () => pushRoute(BROKER_PACKAGE_ROUTE) },
-    { text: 'Search for a service user' },
-  ]);
-
   const onSearch = () => setSearchFilters({ ...filters });
 
   return (
     <Container className="search-service-user">
       <Header links={links}/>
-      <Container padding="8px 60px 0 60px">
+      <Container maxWidth='1080px' margin='0 auto' padding="8px 60px 0 60px">
         <Breadcrumbs values={breadcrumbs}/>
         <Container padding="60px 0 0">
           <h3 className="search-service-user__title">Search for a service user</h3>
@@ -123,7 +110,7 @@ const SearchServiceUser = ({
               </Container>
             </Container>
           ))}
-          <Pagination
+          <AlternativePagination
             totalPages={totalPages}
             totalCount={totalCount}
             pageSize={10}

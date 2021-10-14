@@ -1,14 +1,31 @@
 import Head from 'next/head';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { LOGIN_ROUTE } from 'routes/RouteConstants';
+import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 import Loading from 'components/Loading';
+import withSession from 'lib/session';
+import { getLoggedInUser } from 'service/helpers';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
+});
 
 export default function IndexPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(LOGIN_ROUTE);
+    router.replace(BROKER_PORTAL_ROUTE);
   }, []);
 
   return (
