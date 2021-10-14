@@ -10,26 +10,22 @@ import { currency } from '../../../constants/strings';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
 
-export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summary = [], supplierName }) => {
+const links = [
+  { text: 'Care Package', href: '#care-package' },
+  { text: 'Weekly Additional Need', href: '#weekly-additional-need' },
+  { text: 'One Off Additional Need', href: '#on-off-additional-need' },
+  { text: 'Care charges', href: '#care-charges' },
+  { text: 'Summary', href: '#summary' },
+];
+
+export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summary = [] }) => {
   const router = useRouter();
   const packageId = router.query.guid;
+
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
 
-  const [links] = useState([
-    { text: 'Care Package', href: '#care-package' },
-    { text: 'Weekly Additional Need', href: '#weekly-additional-need' },
-    { text: 'One Off Additional Need', href: '#on-off-additional-need' },
-    { text: 'Care charges', href: '#care-charges' },
-    { text: 'Summary', href: '#summary' },
-  ]);
-
-  const goBack = () => router.back();
-
   const redirectToBrokerPackage = () => {
-    router.push({
-      pathname: getBrokerPackageRoute(packageId),
-      query: { supplierName },
-    });
+    router.push(getBrokerPackageRoute(packageId));
   };
 
   return (
@@ -91,7 +87,7 @@ export const ReviewPackageDetails = ({ userDetails, packageInfoItems = [], summa
               ))}
             </Container>
             <Container className="review-package-details__actions" display="flex">
-              <Button handler={goBack}>Back</Button>
+              <Button handler={router.back}>Back</Button>
               <Button handler={() => setIsOpenedPopup(true)}>Submit for approval</Button>
             </Container>
           </Container>

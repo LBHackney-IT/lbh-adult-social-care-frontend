@@ -105,14 +105,7 @@ const ReviewPackageDetailsPage = () => {
     },
   ];
 
-  return (
-    <ReviewPackageDetails
-      supplierName={data?.supplier?.supplierName}
-      packageInfoItems={packageInfoItems}
-      userDetails={data?.serviceUser}
-      summary={summary}
-    />
-  );
+  return <ReviewPackageDetails packageInfoItems={packageInfoItems} userDetails={data?.serviceUser} summary={summary} />;
 };
 
 export default ReviewPackageDetailsPage;
