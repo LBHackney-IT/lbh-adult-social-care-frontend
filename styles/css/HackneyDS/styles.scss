@@ -47,10 +47,6 @@
   list-style-type: decimal;
 }
 
-.govuk-form-group {
-  margin-bottom: 20px;
-}
-
 .govuk-form-group:after {
   content: '';
   display: block;
@@ -275,10 +271,6 @@
   .lbh-list {
     font-size: 1.1875rem;
     line-height: 1.4375rem;
-  }
-
-  .govuk-form-group {
-    margin-bottom: 30px;
   }
 
   .lbh-form-group .govuk-fieldset__legend {

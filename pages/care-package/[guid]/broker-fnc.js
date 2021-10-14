@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import FundedNursingCare from 'components/Brokerage/FundedNursingCare';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { createCarePackageReclaimFnc, updateCarePackageReclaimFnc } from 'api/CarePackages/CarePackageReclaim';
+import { getCareChargesRoute } from 'routes/RouteConstants';
 import useReclaimApi from 'api/SWR/CarePackage/useReclaimApi';
 import { addNotification } from 'reducers/notificationsReducer';
-import { getCareChargesRoute } from 'routes/RouteConstants';
+import { createCarePackageReclaimFnc, updateCarePackageReclaimFnc } from 'api/CarePackages/CarePackageReclaim';
+import FundedNursingCare from 'components/Pages/CarePackages/FundedNursingCare';
 
 const FundedNursingCarePage = () => {
   const router = useRouter();

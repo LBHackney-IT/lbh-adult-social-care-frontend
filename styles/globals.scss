@@ -36,6 +36,7 @@
 @import 'css/Login/login';
 @import 'css/popup';
 @import 'css/sectionHeading';
+@import "css/title-subtitle";
 @import 'css/PayRuns/index';
 @import 'css/not-found-page';
 @import 'css/SocialWorker/index';
@@ -51,7 +52,7 @@
 @import 'css/HackneyDS/styles.scss';
 @import '../components/HackneyDS/styles.scss';
 @import 'css/CareCharges/index';
-@import '../components/CareCharges/SingleCareCharge/styles.scss';
+@import '../components/Pages/CareCharges/SingleCareCharge/styles.scss';
 @import "css/container";
 
 * {
