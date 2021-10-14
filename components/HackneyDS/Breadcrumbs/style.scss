@@ -9,8 +9,13 @@
   margin-top: 15px;
   margin-bottom: 10px;
 
+  &__default-text {
+    color: $lbh-secondary-text-colour;
+  }
+
   &__list,
   .lbh-contact__list {
+    display: flex;
     margin: 0;
     padding: 0;
     list-style-type: none;
@@ -22,23 +27,12 @@
     clear: both;
   }
   &__list-item {
-    display: inline-block;
+    display: flex;
     position: relative;
-    margin-bottom: 5px;
-    margin-left: 10px;
-    padding-left: 15.655px;
-    float: left;
-  }
-  &__list-item:before {
-    top: 0;
-    bottom: 0;
-    left: -3.31px;
-    height: 7px;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-    border: solid #505a5f;
-    border-width: 1px 1px 0 0;
+
+    &:not(&:last-of-type) {
+      margin-right: 2px;
+    }
   }
   &__list-item:first-child {
     margin-left: 0;
@@ -52,19 +46,19 @@
     font-family: Open Sans;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    margin-right: 2px;
   }
   &__link:focus {
     outline: transparent solid 3px;
     background-color: #ffc845;
     box-shadow: 0 -2px #ffc845, 0 4px #0b0c0c;
-    text-decoration: none;
   }
   &__link:active,
   &__link:focus,
   &__link:hover,
   &__link:link,
   &__link:visited {
-    color: #0b0c0c;
+    color: $lbh-primary-button;
   }
   &__list-item:before {
     content: '';
@@ -82,7 +76,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 600;
-    text-decoration: none;
     &:hover,
     &:active {
       color: #0085ca;
