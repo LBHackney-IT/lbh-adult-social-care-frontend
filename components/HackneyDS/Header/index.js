@@ -3,7 +3,14 @@ import Link from 'next/link';
 import { BROKER_PORTAL_ROUTE } from '../../../routes/RouteConstants';
 import { getSlot, getMultipleSlot, Container } from '../index';
 
-export default function Header({ children = [], links = [], bottomLines = true, fixed, purple }) {
+export default function Header({
+  children = [],
+  links = [],
+  bottomLines = true,
+  fixed,
+  purple,
+  className,
+}) {
   const bottomLinesClass = bottomLines ? ' bottom-lines' : '';
   const fixedClassList = fixed ? ' lbh-header--fixed' : '';
   const shortServiceNodeList = ' lbh-header__service-name--short';
@@ -11,7 +18,7 @@ export default function Header({ children = [], links = [], bottomLines = true, 
   const nodeList = Array.isArray(children) ? children : [children];
 
   return (
-    <header className={`lbh-header${bottomLinesClass}${fixedClassList + purpleSchemeNodeList}`}>
+    <header className={`lbh-header${bottomLinesClass}${fixedClassList + purpleSchemeNodeList}${className}`}>
       <div className="lbh-header__main">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <div className="lbh-header__wrapper">
