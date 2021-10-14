@@ -59,10 +59,7 @@ export const BrokerPackage = ({
   });
 
   const clickBack = () => {
-    router.push({
-      pathname: getCorePackageRoute(carePackageCore.serviceUserId),
-      query: { packageId },
-    });
+    router.push(getCorePackageRoute(packageId));
   };
 
   const removeSupplierCard = () => {

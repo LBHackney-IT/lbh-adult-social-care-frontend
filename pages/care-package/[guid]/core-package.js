@@ -6,8 +6,7 @@ import { usePackageGetAll } from 'api/SWR';
 import usePrimarySupportReason from 'api/SWR/package/usePrimarySupportReason';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
-import { createCoreCarePackage, updateCoreCarePackage } from 'api/CarePackages/CarePackage';
-import useGetServiceUserApi from 'api/SWR/Common/UseGetServiceUserApi';
+import { updateCoreCarePackage } from 'api/CarePackages/CarePackage';
 import optionsMapper, { mapPackageSchedulingOptions, mapServiceUserBasicInfo } from 'api/Mappers/optionsMapper';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import CorePackageDetails from 'components/Pages/CarePackages/CorePackageDetails';
@@ -24,17 +23,17 @@ const settingKeys = ['hasRespiteCare', 'hospitalAvoidance', 'hasDischargePackage
 
 const getCurrentSelectedSettings = (carePackage = {}) => settingKeys.filter((setting) => carePackage[setting] === true);
 
-const CorePackageDetailsPage = () => {
+const CorePackagePage = () => {
   const dispatch = useDispatch();
 
   const router = useRouter();
-  const { guid: serviceUserId, packageId } = router.query;
+  const { guid: packageId } = router.query;
 
   const { data: schedulingOptions } = useCarePackageOptions.packageSchedulingOptions();
   const { options: packageTypes = [] } = usePackageGetAll();
   const { data: primarySupportReasons = [] } = usePrimarySupportReason();
   const { data: carePackageCore = {} } = useCarePackageApi.coreSettings(packageId);
-  const { data: client = {} } = useGetServiceUserApi.single(serviceUserId);
+  const { data: packageInfo = {} } = useCarePackageApi.singlePackageInfo(packageId);
 
   const [currentPackageCoreSettings, setCurrentPackageCoreSettings] = useState({
     supportReason: '',
@@ -54,30 +53,13 @@ const CorePackageDetailsPage = () => {
     }
   }, [carePackageCore]);
 
-  const handleCreateCoreCarePackage = (data = {}) => {
-    if (packageId !== undefined) {
-      updateCoreCarePackage({ data, packageId })
-        .then(({ id }) => {
-          router.push(getBrokerPackageRoute(id));
-          pushNotification('Package saved.', 'success');
-        })
-        .catch((error) => {
-          pushNotification(error);
-        });
-    } else {
-      const packageToCreate = {
-        ...data,
-        serviceUserId,
-      };
-
-      createCoreCarePackage({ data: packageToCreate })
-        .then(({ id }) => {
-          router.push(getBrokerPackageRoute(id));
-          pushNotification('Package saved.', 'success');
-        })
-        .catch((error) => {
-          pushNotification(error);
-        });
+  const updatePackage = async (data = {}) => {
+    try {
+      const { id } = await updateCoreCarePackage({ data, packageId });
+      router.push(getBrokerPackageRoute(id));
+      pushNotification('Package saved.', 'success');
+    } catch (error) {
+      pushNotification(error);
     }
   };
 
@@ -85,9 +67,8 @@ const CorePackageDetailsPage = () => {
     dispatch(addNotification({ text, className }));
   };
 
-  const args = {
-    // userDetails: testUserDetails,
-    userDetails: mapServiceUserBasicInfo(client),
+  const props = {
+    userDetails: mapServiceUserBasicInfo(packageInfo.serviceUser),
     packageScheduleOptions: mapPackageSchedulingOptions(schedulingOptions || []),
     supportReasonOptions: optionsMapper(
       {
@@ -98,11 +79,11 @@ const CorePackageDetailsPage = () => {
     ),
     checkboxOptions: packageSettingOptions,
     packageTypeOptions: packageTypes,
-    saveCorePackage: handleCreateCoreCarePackage,
+    saveCorePackage: updatePackage,
     defaultValues: currentPackageCoreSettings,
   };
 
-  return <CorePackageDetails {...args} />;
+  return <CorePackageDetails {...props} />;
 };
 
-export default CorePackageDetailsPage;
+export default CorePackagePage;

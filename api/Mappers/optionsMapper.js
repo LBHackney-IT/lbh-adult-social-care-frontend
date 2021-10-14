@@ -1,15 +1,14 @@
-import { getEnGBFormattedDate } from '../Utils/FuncUtils';
 import React from 'react';
+import { getEnGBFormattedDate } from '../Utils/FuncUtils';
 
-const optionsMapper = (fields, data = []) => {
-  return data.map((item) => {
+const optionsMapper = (fields, data = []) =>
+  data.map((item) => {
     const mapObject = {};
     for (const field in fields) {
       mapObject[field] = item[fields[field]];
     }
     return mapObject;
   });
-};
 
 const mapTypeOfCareIdOptions = (options) =>
   options.map((option) => ({
@@ -40,7 +39,7 @@ const mapPackageSchedulingOptions = (schedulingOptions = []) =>
 const mapServiceUserBasicInfo = (userResponse) => ({
   id: userResponse?.id,
   dateOfBirth: userResponse?.dateOfBirth || new Date(),
-  client: `${userResponse?.firstName} ${userResponse?.lastName}`,
+  client: `${userResponse?.firstName ?? ''} ${userResponse?.lastName ?? ''}`,
   hackneyId: userResponse?.hackneyId,
   postcode: userResponse?.postCode,
 });

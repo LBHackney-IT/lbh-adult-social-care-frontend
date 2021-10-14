@@ -78,14 +78,10 @@ const BrokerPortal = () => {
     { text: 'Cancelled', value: '7' },
   ];
 
-  const handleRowClick = ({ serviceUserId, packageId }) => {
-    router.push({
-      pathname: getCorePackageRoute(serviceUserId),
-      query: { packageId },
-    });
+  const handleRowClick = ({ packageId }) => {
+    router.push(getCorePackageRoute(packageId));
   };
 
-  // const findServiceUser = () => setApiFilters(filters);
   const createNewPackage = () => {
     const dummyPackageToCreate = {
       serviceUserId: 'aee45700-af9b-4ab5-bb43-535adbdcfb84',
@@ -98,13 +94,11 @@ const BrokerPortal = () => {
       isReEnablement: false,
       isS117Client: false,
     };
+
     createCoreCarePackage({ data: dummyPackageToCreate })
-      .then(({ id, serviceUserId }) => {
+      .then(({ id }) => {
         // Dummy package created, go to package builder
-        router.push({
-          pathname: getCorePackageRoute(serviceUserId),
-          query: { packageId: id },
-        });
+        router.push(getCorePackageRoute(id));
         pushNotification('Package created.', 'success');
       })
       .catch((error) => {
