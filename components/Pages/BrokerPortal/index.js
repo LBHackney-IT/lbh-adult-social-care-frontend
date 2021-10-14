@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useCallback, useRef } from 'react';
 import BrokerageHeader from '../CarePackages/BrokerageHeader/BrokerageHeader';
-import { Button, Container, HorizontalSeparator, Select } from '../../HackneyDS';
+import { Breadcrumbs, Button, Container, HorizontalSeparator, Select } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
 import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
@@ -21,6 +21,8 @@ const statusOptions = [
 ];
 
 const links = [{ text: 'Log out', href: LOGOUT_ROUTE }];
+
+const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Portal' }];
 
 export const BrokerPortalPage = ({
   items,
@@ -52,6 +54,10 @@ export const BrokerPortalPage = ({
       <BrokerageHeader serviceName="" links={links} />
 
       <Container maxWidth="1080px" margin="0 auto">
+        <Container className="px-60">
+          <Breadcrumbs values={breadcrumbs} />
+        </Container>
+
         <Container className="brokerage-hub__header">
           <h1>Broker Portal</h1>
           <Button handler={goToBrokerPortalSearch}>Find a service user</Button>
