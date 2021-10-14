@@ -2,7 +2,22 @@ import React from 'react';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { useRouter } from 'next/router';
 import BrokerageBorderCost from 'components/Pages/CarePackages/BrokerageBorderCost';
-import { ReviewPackageDetails } from '../../../components/Pages/CarePackages/ReviewPackageDetails';
+import { ReviewPackageDetails } from 'components/Pages/CarePackages/ReviewPackageDetails';
+import { getLoggedInUser } from 'service/helpers';
+import withSession from 'lib/session';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const settingsTypes = [
   { field: 'hasRespiteCare', text: 'Respite Care' },

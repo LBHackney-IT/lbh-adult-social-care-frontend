@@ -1,5 +1,4 @@
 import { add, format } from 'date-fns';
-import { getEnGBFormattedDate } from '../api/Utils/FuncUtils';
 import { maxStringLength } from '../constants/variables';
 
 const chr4 = () => Math.random().toString(16).slice(-4);
@@ -72,28 +71,9 @@ const formatStatus = (status, sign = '-', isUpperCase) => {
   return isUpperCase ? newStatus : newStatus.toLowerCase();
 };
 
-// check user session
-// if no user, then redirect to Login Page
-const getUserSession = ({ req, res }) => {
-  const user = req.session.get('user');
-
-  if (user === undefined) {
-    res.setHeader('location', '/login');
-    res.statusCode = 302;
-
-    return true;
-  }
-
-  return false;
-};
-
 const getLoggedInUser = ({ req }) => {
   const user = req.session.get('user');
-
-  if (user === undefined) {
-    return null;
-  }
-
+  if (user === undefined) return null;
   return user;
 };
 
@@ -135,7 +115,6 @@ export {
   formatDateWithSign,
   formatStatus,
   includeString,
-  getUserSession,
   formatDate,
   getLoggedInUser,
   scrollToElement,
