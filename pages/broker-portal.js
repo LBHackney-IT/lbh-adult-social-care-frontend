@@ -2,16 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import withSession from 'lib/session';
-import { getUserSession } from 'service/helpers';
-import { BrokerPortalPage } from 'components/Brokerage/BrokerPortal';
+import { getLoggedInUser } from 'service/helpers';
+import { BrokerPortalPage } from 'components/Pages/BrokerPortal';
 import { createCoreCarePackage } from 'api/CarePackages/CarePackage';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
 import { getCorePackageRoute } from 'routes/RouteConstants';
 
-export const getServerSideProps = withSession(async ({ req, res }) => {
-  const isRedirect = getUserSession({ req, res });
-  if (isRedirect) return { props: {} };
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
   return { props: {} };
 });
 
@@ -71,14 +78,10 @@ const BrokerPortal = () => {
     { text: 'Cancelled', value: '7' },
   ];
 
-  const handleRowClick = ({ serviceUserId, packageId }) => {
-    router.push({
-      pathname: getCorePackageRoute(serviceUserId),
-      query: { packageId },
-    });
+  const handleRowClick = ({ packageId }) => {
+    router.push(getCorePackageRoute(packageId));
   };
 
-  // const findServiceUser = () => setApiFilters(filters);
   const createNewPackage = () => {
     const dummyPackageToCreate = {
       serviceUserId: 'aee45700-af9b-4ab5-bb43-535adbdcfb84',
@@ -91,13 +94,11 @@ const BrokerPortal = () => {
       isReEnablement: false,
       isS117Client: false,
     };
+
     createCoreCarePackage({ data: dummyPackageToCreate })
-      .then(({ id, serviceUserId }) => {
+      .then(({ id }) => {
         // Dummy package created, go to package builder
-        router.push({
-          pathname: getCorePackageRoute(serviceUserId),
-          query: { packageId: id },
-        });
+        router.push(getCorePackageRoute(id));
         pushNotification('Package created.', 'success');
       })
       .catch((error) => {
