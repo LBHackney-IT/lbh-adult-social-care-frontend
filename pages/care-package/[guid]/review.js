@@ -4,7 +4,6 @@ import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { ReviewPackageDetails } from 'components/Pages/CarePackages/ReviewPackageDetails';
 import BrokerageBorderCost from 'components/Pages/CarePackages/BrokerageBorderCost';
 
-
 const settingsTypes = [
   { field: 'hasRespiteCare', text: 'Respite Care' },
   { field: 'hasDischargePackage', text: 'Discharge Package' },
