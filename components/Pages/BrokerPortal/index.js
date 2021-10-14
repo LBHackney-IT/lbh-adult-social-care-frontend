@@ -55,84 +55,86 @@ export const BrokerPortalPage = ({
     <div className="broker-portal">
       <BrokerageHeader serviceName="" links={links} />
 
-      <Container maxWidth="1080px" margin="0 auto">
-        <Container className="px-60">
-          <Breadcrumbs values={breadcrumbs} />
-        </Container>
+      <Container background="#FAFAFA" padding="0 0 30px">
+        <Container maxWidth="1080px" margin="0 auto">
+          <Container className="px-60">
+            <Breadcrumbs values={breadcrumbs} />
+          </Container>
 
-        <Container className="brokerage-hub__header">
-          <h1>Broker Portal</h1>
-          <Button handler={goToBrokerPortalSearch}>Find a service user</Button>
-        </Container>
+          <Container className="brokerage-hub__header">
+            <h1>Broker Portal</h1>
+            <Button handler={goToBrokerPortalSearch}>Find a service user</Button>
+          </Container>
 
-        <Container className="brokerage-hub__filters">
-          <h2>Search Packages</h2>
+          <Container className="brokerage-hub__filters">
+            <h2>Search Packages</h2>
 
-          <div className="brokerage-hub__filters-block">
-            <FormGroup className="form-group--inline-label brokerage-hub__form-status" label="Status">
-              <Select
-                options={statusOptions}
-                value={filters.status}
-                onChange={({ target: { value } }) => changeFilterField('status', value)}
-              />
-            </FormGroup>
+            <div className="brokerage-hub__filters-block">
+              <FormGroup className="form-group--inline-label brokerage-hub__form-status" label="Status">
+                <Select
+                  options={statusOptions}
+                  value={filters.status}
+                  onChange={({ target: { value } }) => changeFilterField('status', value)}
+                />
+              </FormGroup>
 
-            <FormGroup className="form-group--inline-label" label="Broker">
-              <CustomAsyncSelector
-                innerRef={selectorRef}
-                onChange={(option) => changeFilterField('serviceUser', option)}
-                getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
-                endpoint={{
-                  endpointName: '/clients/get-all',
-                  filterKey: 'clientName',
-                }}
-                value={filters.serviceUser}
-              />
-            </FormGroup>
-          </div>
+              <FormGroup className="form-group--inline-label" label="Broker">
+                <CustomAsyncSelector
+                  innerRef={selectorRef}
+                  onChange={(option) => changeFilterField('serviceUser', option)}
+                  getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
+                  endpoint={{
+                    endpointName: '/clients/get-all',
+                    filterKey: 'clientName',
+                  }}
+                  value={filters.serviceUser}
+                />
+              </FormGroup>
+            </div>
 
-          <div className="brokerage-hub__filters-block">
-            <FormGroup className="form-group--inline-label" label="From">
-              <DatePick
-                placeholder="Select date"
-                startDate={filters.dateFrom}
-                dateValue={filters.dateFrom}
-                setDate={(value) => {
-                  if (value > filters.dateTo) {
-                    setFilters((prevState) => ({
-                      ...prevState,
-                      dateTo: value,
-                      dateFrom: value,
-                    }));
-                  } else {
-                    changeFilterField('dateFrom', value);
-                  }
-                }}
-              />
-            </FormGroup>
+            <div className="brokerage-hub__filters-block">
+              <FormGroup className="form-group--inline-label" label="From">
+                <DatePick
+                  placeholder="Select date"
+                  startDate={filters.dateFrom}
+                  dateValue={filters.dateFrom}
+                  setDate={(value) => {
+                    if (value > filters.dateTo) {
+                      setFilters((prevState) => ({
+                        ...prevState,
+                        dateTo: value,
+                        dateFrom: value,
+                      }));
+                    } else {
+                      changeFilterField('dateFrom', value);
+                    }
+                  }}
+                />
+              </FormGroup>
 
-            <FormGroup className="form-group--inline-label" label="To">
-              <DatePick
-                placeholder="Select date"
-                startDate={filters.dateTo}
-                dateValue={filters.dateTo}
-                minDate={filters.dateFrom}
-                setDate={(value) => changeFilterField('dateTo', value)}
-              />
-            </FormGroup>
+              <FormGroup className="form-group--inline-label" label="To">
+                <DatePick
+                  placeholder="Select date"
+                  startDate={filters.dateTo}
+                  dateValue={filters.dateTo}
+                  minDate={filters.dateFrom}
+                  setDate={(value) => changeFilterField('dateTo', value)}
+                />
+              </FormGroup>
 
-            {shouldShowClear && (
-              <Button
-                className="outline gray clear-filter-button"
-                handler={() => {
-                  clearFilter();
-                  selectorRef.current?.select?.select?.clearValue();
-                }}
-              >
-                Clear
-              </Button>
-            )}
-          </div>
+              {shouldShowClear && (
+                <Button
+                  className="outline gray clear-filter-button"
+                  handler={() => {
+                    clearFilter();
+                    selectorRef.current?.select?.select?.clearValue();
+                  }}
+                >
+                  Clear
+                </Button>
+              )}
+            </div>
+          </Container>
         </Container>
       </Container>
 
