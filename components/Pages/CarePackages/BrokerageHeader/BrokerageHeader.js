@@ -11,11 +11,13 @@ const links = [
   { href: LOGOUT_ROUTE, text: 'Log out' },
 ];
 
-const BrokerageHeader = ({ className, serviceName = '' }) => {
+const BrokerageHeader = ({ className }) => {
   return (
-    <Header links={links} bottomLines={false} className={className ? ` ${className}` : ''}>
-      <p slot="service-name">{serviceName}</p>
-    </Header>
+    <Header
+      links={links}
+      bottomLines={false}
+      className={className ? ` ${className}` : ''}
+    />
   );
 };
 
