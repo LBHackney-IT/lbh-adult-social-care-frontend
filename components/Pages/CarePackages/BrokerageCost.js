@@ -12,6 +12,7 @@ const BrokerageCost = ({
   getter,
   setter,
   name,
+  corePackageDates,
   removeNeed,
   labelInputCost,
   addNeedText,
@@ -33,14 +34,16 @@ const BrokerageCost = ({
       </h2>
       {expanded && (
         <>
-          {getter.map(({ id, isOngoing, cost, startDate, endDate, errorStartDate }, index) => (
+          {getter.map(({ id, errorEndDate, isOngoing, cost, startDate, endDate, errorStartDate }, index) => (
             <FormGroup error={errorStartDate ? 'Some validations error' : ''} key={id}>
               <BrokeragePackageDates
+                startMinDate={corePackageDates.endDate}
                 dates={{ startDate, endDate }}
                 fields={{
                   dateFrom: 'startDate',
                   dateTo: 'endDate',
                 }}
+                error={errorEndDate || errorStartDate}
                 setDates={(field, date) => changeNeed(getter, setter, field, date, index)}
                 checkboxId={`${name}-checkbox-${index}`}
                 label="Dates"

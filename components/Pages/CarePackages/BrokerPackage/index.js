@@ -20,6 +20,7 @@ const initialNeed = {
   endDate: new Date(),
   isOngoing: false,
   errorStartDate: '',
+  errorEndDate: '',
 };
 
 export const BrokerPackage = ({
@@ -96,6 +97,7 @@ export const BrokerPackage = ({
             endDate: dateStringToDate(item.endDate),
             isOngoing: !item.endDate,
             errorStartDate: '',
+            errorEndDate: '',
           }));
 
         const oneOffDetails = detailsData.details
@@ -105,12 +107,17 @@ export const BrokerPackage = ({
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
             errorStartDate: '',
+            errorEndDate: '',
           }));
 
         setWeeklyNeeds(weeklyDetails);
         setOneOffNeeds(oneOffDetails);
       }
     }
+  };
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
   };
 
   useEffect(() => {
@@ -120,12 +127,22 @@ export const BrokerPackage = ({
   const checkNeedsErrors = (needs) => {
     let hasErrors = false;
     const checkedNeeds = needs.map((item) => {
-      const errorStartDate = !item.startDate ? 'Invalid start date' : '';
-      if (errorStartDate) {
+      let errorStartDate = '';
+      let errorEndDate = '';
+      if (!item.startDate || ((item.startDate && item.endDate) && item.startDate > item.endDate)) {
+        errorStartDate = 'Invalid start date';
+      } else if (item.startDate < packageDates.endDate) {
+        errorStartDate = 'Start date should be later then core date';
+      }
+      if (item.startDate && item.startDate < packageDates.endDate) {
+        errorEndDate = 'End date should be later then core date';
+      }
+      if (errorStartDate || errorEndDate) {
         hasErrors = true;
       }
       return {
         ...item,
+        errorEndDate,
         errorStartDate,
       };
     });
@@ -134,7 +151,7 @@ export const BrokerPackage = ({
 
   const clickSave = async () => {
     if (!isNewSupplier && !selectedItem?.id) {
-      dispatch(addNotification({ text: 'No supplier selected' }));
+      pushNotification('No supplier selected');
       return;
     }
     const checkedWeeklyDetails = checkNeedsErrors(weeklyNeeds);
@@ -143,7 +160,10 @@ export const BrokerPackage = ({
     setWeeklyNeeds(checkedWeeklyDetails.checkedNeeds);
     setOneOffNeeds(checkOneOffDetails.checkedNeeds);
 
-    if (checkedWeeklyDetails.hasErrors || checkOneOffDetails.hasErrors) return;
+    if (checkedWeeklyDetails.hasErrors || checkOneOffDetails.hasErrors) {
+      pushNotification('Some validation errors above');
+      return;
+    }
 
     const weeklyDetails = weeklyNeeds
       .filter((item) => item.cost !== 0)
@@ -180,11 +200,11 @@ export const BrokerPackage = ({
         },
         packageId,
       });
-      dispatch(addNotification({ text: 'Success', className: 'success' }));
+      pushNotification('Success', 'success');
 
       router.push(packageType === 4 ? getFundedNursingCareRoute(packageId) : getCareChargesRoute(packageId));
     } catch (e) {
-      dispatch(addNotification({ text: e }));
+      pushNotification(e);
     }
     setLoading(false);
   };
@@ -321,6 +341,7 @@ export const BrokerPackage = ({
             <BrokerPackageCost
               removeSupplierCard={removeSupplierCard}
               cardInfo={selectedItem}
+              corePackageDates={packageDates}
               addNeed={addNeed}
               weeklyNeeds={weeklyNeeds}
               oneOffNeeds={oneOffNeeds}
