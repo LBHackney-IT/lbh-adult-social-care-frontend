@@ -24,6 +24,7 @@ const BrokerPackagePage = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { data: detailsData } = useCarePackageApi.details(packageId);
 
@@ -38,7 +39,8 @@ const BrokerPackagePage = () => {
 
   return (
     <BrokerPackage
-      loading={selectedSupplier || detailsData}
+      loading={selectedSupplier || detailsData || loading}
+      setLoading={setLoading}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
       setSelectedItem={setSelectedItem}

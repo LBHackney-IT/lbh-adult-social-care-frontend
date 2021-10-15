@@ -214,7 +214,7 @@ const FundedNursingCare = ({
             <Button handler={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button handler={clickSave}>Save and continue</Button>
+            <Button disabled={loading} isLoading={loading} handler={clickSave}>Save and continue</Button>
           </Container>
         </Container>
       </Container>
