@@ -72,11 +72,9 @@ const Packages = () => {
     <>
       <BrokerageHeader />
 
-      <Container maxWidth="1080px" margin="0 auto" padding="8px 60px 0 60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0 60px">
         <Breadcrumbs values={breadcrumbs} />
-      </Container>
 
-      <Container maxWidth="1080px" margin="0 auto" padding="0px 60px 60px 60px">
         <TitleSubtitleHeader title="All package details" subTitle="Full overview" />
 
         <ServiceUserDetails

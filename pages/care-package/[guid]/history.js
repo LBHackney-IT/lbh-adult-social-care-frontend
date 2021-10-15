@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { Breadcrumbs, Container } from 'components/HackneyDS';
 import BrokerageHeader from 'components/Pages/CarePackages/BrokerageHeader/BrokerageHeader';
 import { BROKER_PORTAL_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
+import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
+import Overview from 'components/Pages/CarePackages/History/Overview';
 import { getLoggedInUser } from 'service/helpers';
 import withSession from 'lib/session';
 
@@ -40,10 +42,12 @@ const History = () => {
     <div>
       <BrokerageHeader />
 
-      <Container maxWidth="1080px" margin="0 auto">
-        <Container className="px-60 pt-10">
-          <Breadcrumbs values={breadcrumbs} />
-        </Container>
+      <Container maxWidth="1080px" margin="10px auto" padding="0 60px">
+        <Breadcrumbs values={breadcrumbs} />
+
+        <TitleSubtitleHeader subTitle="Package history" title="Nursing care" />
+
+        <Overview />
       </Container>
     </div>
   );
