@@ -20,8 +20,6 @@ const statusOptions = [
   { text: 'Cancelled', value: '7' },
 ];
 
-const links = [{ text: 'Log out', href: LOGOUT_ROUTE }];
-
 const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Portal' }];
 
 export const BrokerPortalPage = ({
@@ -62,8 +60,7 @@ export const BrokerPortalPage = ({
 
   return (
     <div className="broker-portal">
-      <BrokerageHeader serviceName="" links={links} />
-
+      <BrokerageHeader />
       <Container background="#FAFAFA" padding="0 0 55px">
         <Container maxWidth="1080px" margin="0 auto">
           <Container className="px-60 pt-10">
