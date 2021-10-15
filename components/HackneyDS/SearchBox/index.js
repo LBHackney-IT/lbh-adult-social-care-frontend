@@ -39,6 +39,10 @@ export default function SearchBox({
     handler(e);
   };
 
+  const onEnterPress = ({ key }) => {
+    if (key === 'Enter' && search) search?.();
+  };
+
   return (
     <div className={`govuk-form-group lbh-form-group lbh-search-box${outerClassName}`}>
       {label && <Label htmlFor={id}>{label}</Label>}
@@ -51,6 +55,7 @@ export default function SearchBox({
           value={value || ''}
           name={name}
           onChange={onChange}
+          onKeyPress={onEnterPress}
           ref={dataProvider}
           type="search"
           placeholder={placeholder}

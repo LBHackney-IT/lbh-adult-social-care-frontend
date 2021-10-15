@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import BrokerageHeader from '../CarePackages/BrokerageHeader/BrokerageHeader';
-import { Breadcrumbs, Button, Container, HorizontalSeparator, Select } from '../../HackneyDS';
+import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
 import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
@@ -34,16 +34,25 @@ export const BrokerPortalPage = ({
   clearFilter,
   onRowClick = () => {},
 }) => {
+  const [searchText, setSearchText] = useState('');
+
   const router = useRouter();
 
   const selectorRef = useRef(null);
 
-  const changeFilterField = (field, value) => {
-    setFilters((prevState) => ({
-      ...prevState,
-      [field]: value,
-    }));
-  };
+  const changeFilterField = useCallback(
+    (field, value) => {
+      setFilters((prevState) => ({
+        ...prevState,
+        [field]: value,
+      }));
+    },
+    [setFilters]
+  );
+
+  const onSearch = useCallback(() => {
+    changeFilterField('serviceUserName', searchText);
+  }, [changeFilterField, searchText]);
 
   const goToBrokerPortalSearch = useCallback(() => {
     router.push(BROKER_PORTAL_SEARCH_ROUTE);
@@ -57,7 +66,7 @@ export const BrokerPortalPage = ({
 
       <Container background="#FAFAFA" padding="0 0 55px">
         <Container maxWidth="1080px" margin="0 auto">
-          <Container className="px-60">
+          <Container className="px-60 pt-10">
             <Breadcrumbs values={breadcrumbs} />
           </Container>
 
@@ -67,9 +76,11 @@ export const BrokerPortalPage = ({
           </Container>
 
           <Container className="brokerage-hub__filters">
-            <h2>Search Packages</h2>
-
             <div className="brokerage-hub__filters-block">
+              <FormGroup className="form-group--inline-label">
+                <SearchBox label="Search Packages" value={searchText} onChangeValue={setSearchText} search={onSearch} />
+              </FormGroup>
+
               <FormGroup className="form-group--inline-label brokerage-hub__form-status" label="Status">
                 <Select
                   options={statusOptions}
@@ -81,13 +92,13 @@ export const BrokerPortalPage = ({
               <FormGroup className="form-group--inline-label" label="Broker">
                 <CustomAsyncSelector
                   innerRef={selectorRef}
-                  onChange={(option) => changeFilterField('serviceUser', option)}
+                  onChange={(option) => changeFilterField('broker', option)}
                   getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
                   endpoint={{
                     endpointName: '/clients/get-all',
                     filterKey: 'clientName',
                   }}
-                  value={filters.serviceUser}
+                  value={filters.broker}
                 />
               </FormGroup>
             </div>

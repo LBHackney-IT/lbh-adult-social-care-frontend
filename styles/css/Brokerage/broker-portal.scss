@@ -106,14 +106,6 @@
     flex-direction: column;
     margin: 0 60px;
 
-    h2 {
-      color: black;
-      margin-bottom: 8px;
-      font-weight: 600;
-      line-height: 20px;
-      font-size: 19px;
-    }
-
     .brokerage-hub__filters-block {
       display: flex;
       column-gap: 20px;
@@ -161,6 +153,10 @@
 
     .select-container {
       width: 260px;
+
+      select {
+        height: 40px;
+      }
     }
   }
 }
