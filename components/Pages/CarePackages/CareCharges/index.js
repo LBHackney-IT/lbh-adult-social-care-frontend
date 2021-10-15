@@ -6,6 +6,7 @@ import { currency } from '../../../../constants/strings';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
+import Loading from '../../../Loading';
 
 const CareCharges = ({
   reasonsCollecting,
@@ -13,6 +14,7 @@ const CareCharges = ({
   carePackageReclaimCareCharge,
   createCareCharge = () => {},
   updateCareCharge = () => {},
+  loading,
 }) => {
   const router = useRouter();
   const carePackageId = router.query.guid;
@@ -137,6 +139,7 @@ const CareCharges = ({
     <Container className="brokerage__care-charges">
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
+        <Loading isLoading={loading} className="loading-center" />
         <TitleSubtitleHeader title='Build a care package' subTitle="Care Charges"/>
         <Container>
           <h3 className="brokerage__item-title">Care charges</h3>

@@ -6,7 +6,7 @@ const usePackageGetAll = () => {
 
   const options = useMemo(() => data.map((type) => ({ value: type.id, text: type.name })), [data]);
 
-  return { data, options };
+  return { data, options, packageGetAllLoading: !!data };
 };
 
 export default usePackageGetAll;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BrokerageHeader from 'components/Pages/CarePackages/BrokerageHeader/BrokerageHeader';
 import { Breadcrumbs, Container, HorizontalSeparator } from 'components/HackneyDS';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { PackageRequest } from 'components/Pages/ServiceUser/Packages/PackageRequest';
 import { CareDetails } from 'components/Pages/ServiceUser/Packages/CareDetails';
 import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
+import Loading from '../../../components/Loading';
 
 const nursingData = [
   {
@@ -61,6 +62,7 @@ const breadcrumbs = [
 
 const Packages = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const serviceUserData = router.query;
 
   return (
@@ -71,6 +73,7 @@ const Packages = () => {
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="0px 60px 60px 60px">
         <TitleSubtitleHeader title="All package details" subTitle="Full overview" />
+        <Loading className='loading-center' isLoading={loading} />
         <ServiceUserDetails
           dateOfBirth={serviceUserData.dateOfBirth}
           serviceUserName={serviceUserData.serviceUserName}

@@ -38,6 +38,7 @@ const BrokerPackagePage = () => {
 
   return (
     <BrokerPackage
+      loading={selectedSupplier || detailsData}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
       setSelectedItem={setSelectedItem}

@@ -7,7 +7,8 @@ import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
 import { BrokerPortalTable } from './BrokerPortalTable';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
-import { BROKER_PORTAL_SEARCH_ROUTE, LOGOUT_ROUTE } from '../../../routes/RouteConstants';
+import { BROKER_PORTAL_SEARCH_ROUTE } from '../../../routes/RouteConstants';
+import Loading from '../../Loading';
 
 const statusOptions = [
   { text: 'All', value: '' },
@@ -31,6 +32,7 @@ export const BrokerPortalPage = ({
   setFilters,
   clearFilter,
   onRowClick = () => {},
+  loading,
 }) => {
   const [searchText, setSearchText] = useState('');
 
@@ -60,10 +62,11 @@ export const BrokerPortalPage = ({
 
   return (
     <div className="broker-portal">
+      <Loading isLoading={loading} className='loading-center' />
       <BrokerageHeader />
       <Container background="#FAFAFA" padding="0 0 55px">
         <Container maxWidth="1080px" margin="0 auto">
-          <Container className="px-60 pt-10">
+          <Container padding='8px 60px 0 60px'>
             <Breadcrumbs values={breadcrumbs} />
           </Container>
 
