@@ -13,7 +13,7 @@ const statusOptions = [
   { text: 'All', value: '' },
   { text: 'New', value: '1' },
   { text: 'In Progress', value: '2' },
-  { text: 'Submitted For Approval', value: '3' },
+  { text: 'Waiting For Approval', value: '3' },
   { text: 'Approved', value: '4' },
   { text: 'Not Approved', value: '5' },
   { text: 'Ended', value: '6' },
@@ -67,18 +67,18 @@ export const BrokerPortalPage = ({
             <Breadcrumbs values={breadcrumbs} />
           </Container>
 
-          <Container className="brokerage-hub__header">
+          <Container className="brokerage-portal__header">
             <h1>Broker Portal</h1>
             <Button handler={goToBrokerPortalSearch}>Find a service user</Button>
           </Container>
 
-          <Container className="brokerage-hub__filters">
-            <div className="brokerage-hub__filters-block">
+          <Container className="brokerage-portal__filters">
+            <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label">
                 <SearchBox label="Search Packages" value={searchText} onChangeValue={setSearchText} search={onSearch} />
               </FormGroup>
 
-              <FormGroup className="form-group--inline-label brokerage-hub__form-status" label="Status">
+              <FormGroup className="form-group--inline-label brokerage-portal__form-status" label="Status">
                 <Select
                   options={statusOptions}
                   value={filters.status}
@@ -100,7 +100,7 @@ export const BrokerPortalPage = ({
               </FormGroup>
             </div>
 
-            <div className="brokerage-hub__filters-block">
+            <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label" label="From">
                 <DatePick
                   placeholder="Select date"
