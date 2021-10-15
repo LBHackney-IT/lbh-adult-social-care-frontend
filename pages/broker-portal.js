@@ -24,6 +24,7 @@ const initialFilters = {
   dateFrom: null,
   dateTo: null,
   broker: null,
+  serviceUserName: '',
 };
 
 const BrokerPortal = () => {
@@ -32,12 +33,13 @@ const BrokerPortal = () => {
   const [pageNumber, setPageNumber] = useState(1);
 
   const [filters, setFilters] = useState(initialFilters);
-  const { broker, dateTo, dateFrom, status } = filters;
+  const { broker, dateTo, dateFrom, status, serviceUserName } = filters;
 
   const { data } = useCarePackageApi.brokerView({
     fromDate: dateFrom ? dateFrom.toJSON() : null,
     toDate: dateTo ? dateTo.toJSON() : null,
     brokerId: broker?.id,
+    serviceUserName,
     pageNumber,
     status,
   });
@@ -53,9 +55,13 @@ const BrokerPortal = () => {
 
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
-  const handleRowClick = (rowInfo) => {
-    if (rowInfo) router.push({ pathname: getServiceUserPackagesRoute(rowInfo.serviceUserId), query: rowInfo });
-  };
+  const handleRowClick = useCallback((rowInfo) => {
+    if (rowInfo)
+      router.push({
+        pathname: getServiceUserPackagesRoute(rowInfo.serviceUserId),
+        query: rowInfo,
+      });
+  }, []);
 
   return (
     <BrokerPortalPage
