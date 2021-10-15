@@ -161,6 +161,10 @@
 
     .select-container {
       width: 260px;
+
+      select {
+        height: 40px;
+      }
     }
   }
 }

@@ -57,7 +57,7 @@ export const BrokerPortalPage = ({
 
       <Container background="#FAFAFA" padding="0 0 55px">
         <Container maxWidth="1080px" margin="0 auto">
-          <Container className="px-60">
+          <Container className="px-60 pt-10">
             <Breadcrumbs values={breadcrumbs} />
           </Container>
 
@@ -81,13 +81,13 @@ export const BrokerPortalPage = ({
               <FormGroup className="form-group--inline-label" label="Broker">
                 <CustomAsyncSelector
                   innerRef={selectorRef}
-                  onChange={(option) => changeFilterField('serviceUser', option)}
+                  onChange={(option) => changeFilterField('broker', option)}
                   getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
                   endpoint={{
                     endpointName: '/clients/get-all',
                     filterKey: 'clientName',
                   }}
-                  value={filters.serviceUser}
+                  value={filters.broker}
                 />
               </FormGroup>
             </div>
