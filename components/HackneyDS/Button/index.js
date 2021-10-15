@@ -1,4 +1,5 @@
 import React from 'react';
+import Loading from '../../Loading';
 
 export default function Button({
   children,
@@ -10,6 +11,8 @@ export default function Button({
   target,
   className,
   addItem,
+  LoadingComponent = Loading,
+  isLoading,
   handler = () => {},
 }) {
   const outerClassName = className ? ` ${className}` : '';
@@ -47,6 +50,7 @@ export default function Button({
       onClick={handler}
     >
       {addItem && addItemIcon}
+      <LoadingComponent isLoading={isLoading} />
       {children}
     </button>
   );
