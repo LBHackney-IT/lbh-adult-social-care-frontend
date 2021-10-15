@@ -7,16 +7,17 @@ import CareChargesInfoTitle from '../CareChargesInfoTitle';
 import CareChargesModalTitle from '../CareChargesModalTitle';
 import { ErrorMessage } from '../../../HackneyDS/index';
 
+const initialInputs = {
+  value: '',
+  startDate: '',
+  endDate: '',
+};
+
 const AddElementContent = ({
   activeElements,
   closeModal,
   headerText,
 }) => {
-  const [initialInputs] = useState({
-    value: '',
-    startDate: '',
-    endDate: '',
-  });
   const [inputs, setInputs] = useState([]);
   const [inputHasErrors, setInputHasErrors] = useState(false);
   const [inputErrors, setInputErrors] = useState([]);

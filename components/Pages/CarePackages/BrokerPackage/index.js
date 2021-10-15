@@ -14,6 +14,15 @@ import { dateStringToDate, uniqueID } from '../../../../service/helpers';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 
+const initialNeed = {
+  cost: 0,
+  startDate: new Date(),
+  endDate: new Date(),
+  isOngoing: false,
+  errorStartDate: '',
+  errorEndDate: '',
+};
+
 export const BrokerPackage = ({
   supplierSearch,
   setSupplierSearch,
@@ -39,14 +48,6 @@ export const BrokerPackage = ({
   const [loading, setLoading] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
-  const [initialNeed] = useState({
-    cost: 0,
-    startDate: new Date(),
-    endDate: new Date(),
-    isOngoing: false,
-    errorStartDate: '',
-    errorEndDate: '',
-  });
 
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
