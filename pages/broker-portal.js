@@ -56,11 +56,7 @@ const BrokerPortal = () => {
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
   const handleRowClick = useCallback((rowInfo) => {
-    if (rowInfo)
-      router.push({
-        pathname: getServiceUserPackagesRoute(rowInfo.serviceUserId),
-        query: rowInfo,
-      });
+    router.push(getServiceUserPackagesRoute(rowInfo.packageId));
   }, []);
 
   return (
