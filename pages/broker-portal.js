@@ -7,6 +7,7 @@ import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { BrokerPortalPage } from 'components/Pages/BrokerPortal';
 import { createCoreCarePackage } from 'api/CarePackages/CarePackage';
 import { addNotification } from 'reducers/notificationsReducer';
+import { useDispatch } from 'react-redux';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -30,6 +31,7 @@ const initialFilters = {
 
 const BrokerPortal = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [pageNumber, setPageNumber] = useState(1);
 
