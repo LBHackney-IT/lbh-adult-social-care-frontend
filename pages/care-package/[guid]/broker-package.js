@@ -22,49 +22,29 @@ const BrokerPackagePage = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const [supplierSearch, setSupplierSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [search, setSearch] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
-  const [showSearchResults, setShowSearchResults] = useState(false);
 
   const { data: detailsData } = useCarePackageApi.details(packageId);
-  const { data: searchResults } = useCarePackageApi.suppliers({ supplierName: search });
-  const { data: carePackageCore = { packageType: '', serviceUserId: '' } } = useCarePackageApi.coreSettings(packageId);
 
   const { data: selectedSupplier } = useCarePackageApi.singleSupplier(detailsData.supplierId);
   const { supplierName } = selectedSupplier;
 
-  const onSearchSupplier = () => {
-    setSearch(supplierSearch);
-    setShowSearchResults(true);
-  };
-
   useEffect(() => {
     if (Object.keys(selectedSupplier).length > 0) {
       setSelectedItem(selectedSupplier);
-      setSearch(supplierName);
-      setSupplierSearch(supplierName);
     }
   }, [selectedSupplier]);
 
   return (
     <BrokerPackage
-      loading={selectedSupplier || carePackageCore || searchResults}
-      showSearchResults={showSearchResults}
-      setShowSearchResults={setShowSearchResults}
+      loading={selectedSupplier || detailsData}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
-      onSearchSupplier={onSearchSupplier}
       setSelectedItem={setSelectedItem}
       selectedItem={selectedItem}
-      supplierSearch={supplierSearch || ''}
-      setSupplierSearch={setSupplierSearch}
       supplierName={supplierName || ''}
       detailsData={detailsData}
-      searchResults={searchResults}
-      packageType={carePackageCore?.packageType}
-      carePackageCore={carePackageCore}
     />
   );
 };

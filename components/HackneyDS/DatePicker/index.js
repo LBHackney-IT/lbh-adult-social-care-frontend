@@ -4,6 +4,11 @@ import DatePick from '../../DatePick';
 import { Hint, Label } from '../index';
 import { lastDayOfMonth } from 'date-fns';
 
+const initialDateState = {
+  value: '',
+  error: '',
+};
+
 export default function DatePicker ({
   disabled,
   className = '',
@@ -69,11 +74,6 @@ export default function DatePicker ({
       date?.getDate() || 1,
     ));
   };
-
-  const [initialDateState] = useState({
-    value: '',
-    error: '',
-  });
 
   const [localDay, setLocalDay] = useState({
     value: '',

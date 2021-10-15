@@ -48,7 +48,7 @@ const CorePackagePage = () => {
   const { options: packageTypes = [], packageGetAllLoading } = usePackageGetAll();
   const { data: primarySupportReasons = [], primarySupportReasonLoading } = usePrimarySupportReason();
 
-  const { data: packageInfo = {}, singlePackageInfoLoading } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo, singlePackageInfoLoading } = useCarePackageApi.singlePackageInfo(packageId);
 
   const [loading, setLoading] = useState(false);
 
@@ -92,7 +92,7 @@ const CorePackagePage = () => {
     packageTypeOptions: packageTypes,
     saveCorePackage: updatePackage,
     defaultValues: currentPackageCoreSettings,
-    loading: schedulingOptions || loading || packageGetAllLoading ||
+    loading: !schedulingOptions || loading || packageGetAllLoading ||
       primarySupportReasonLoading || singlePackageInfoLoading,
   };
 

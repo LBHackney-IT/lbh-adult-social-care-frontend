@@ -9,60 +9,61 @@ import { CareDetails } from 'components/Pages/ServiceUser/Packages/CareDetails';
 import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
 import Loading from '../../../components/Loading';
 
+const nursingData = [
+  {
+    status: 'End',
+    element: 'Nursing Care',
+    startDate: new Date().toISOString(),
+    endDate: new Date().toISOString(),
+    weeklyCost: 1000,
+  },
+  {
+    status: 'End',
+    element: 'Additional needs payment / wk',
+    startDate: new Date().toISOString(),
+    endDate: new Date().toISOString(),
+    weeklyCost: 100,
+  },
+  {
+    status: 'End',
+    element: 'Residential SU contribution',
+    startDate: new Date().toISOString(),
+    endDate: new Date().toISOString(),
+    weeklyCost: -100,
+  },
+  {
+    status: 'Cancelled',
+    element: 'Residential SU contribution',
+    startDate: new Date().toISOString(),
+    endDate: new Date().toISOString(),
+    weeklyCost: -200,
+  },
+  {
+    status: 'End',
+    element: 'Residential SU contribution',
+    startDate: new Date().toISOString(),
+    endDate: new Date().toISOString(),
+    weeklyCost: -500,
+  },
+  {
+    status: 'End',
+    element: 'Residential SU contribution',
+    startDate: new Date().toISOString(),
+    endDate: new Date().toISOString(),
+    weeklyCost: -500,
+  },
+];
+
+const breadcrumbs = [
+  { text: 'Home', href: '/' },
+  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
+  { text: 'Full overview' },
+];
+
 const Packages = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const serviceUserData = router.query;
-  const breadcrumbs = [
-    { text: 'Home', href: '/' },
-    { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
-    { text: 'Full overview' },
-  ];
-
-  const nursingData = [
-    {
-      status: 'End',
-      element: 'Nursing Care',
-      startDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
-      weeklyCost: 1000,
-    },
-    {
-      status: 'End',
-      element: 'Additional needs payment / wk',
-      startDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
-      weeklyCost: 100,
-    },
-    {
-      status: 'End',
-      element: 'Residential SU contribution',
-      startDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
-      weeklyCost: -100,
-    },
-    {
-      status: 'Cancelled',
-      element: 'Residential SU contribution',
-      startDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
-      weeklyCost: -200,
-    },
-    {
-      status: 'End',
-      element: 'Residential SU contribution',
-      startDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
-      weeklyCost: -500,
-    },
-    {
-      status: 'End',
-      element: 'Residential SU contribution',
-      startDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
-      weeklyCost: -500,
-    },
-  ];
 
   return (
     <>
@@ -79,7 +80,7 @@ const Packages = () => {
           hackneyId={serviceUserData.hackneyId}
           address={serviceUserData.address}
         />
-        <PackageRequest serviceUserData={serviceUserData} />
+        <PackageRequest />
         <HorizontalSeparator height="48px" />
         <CareDetails title="Nursing Care" data={nursingData} />
       </Container>

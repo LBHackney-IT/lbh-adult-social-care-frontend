@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import useCarePackageApi from '../../../../api/SWR/CarePackage/useCarePackageApi';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
@@ -14,39 +15,24 @@ import { dateStringToDate, uniqueID } from '../../../../service/helpers';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 
-export const BrokerPackage = ({
-  supplierSearch,
-  setSupplierSearch,
-  showSearchResults,
-  setShowSearchResults,
-  detailsData,
-  currentPage,
-  setCurrentPage,
-  searchResults,
-  selectedItem,
-  setSelectedItem,
-  onSearchSupplier,
-  carePackageCore = {
-    packageType: undefined,
-    serviceUserId: undefined,
-  },
-  packageType,
-}) => {
+const initialNeed = {
+  cost: 0,
+  startDate: new Date(),
+  endDate: new Date(),
+  isOngoing: false,
+  errorStartDate: '',
+  errorEndDate: '',
+};
+
+export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, selectedItem, setSelectedItem }) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
   const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
-  const [initialNeed] = useState({
-    cost: 0,
-    startDate: new Date(),
-    endDate: new Date(),
-    isOngoing: false,
-    errorStartDate: '',
-    errorEndDate: '',
-  });
 
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
@@ -59,6 +45,23 @@ export const BrokerPackage = ({
     startDate: new Date(),
   });
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchText, setSearchText] = useState('');
+  const [showSearchResults, setShowSearchResults] = useState(false);
+
+  const onSearchSupplier = () => {
+    setSearchQuery(searchText);
+    setShowSearchResults(true);
+  };
+
+  const { data: searchResults } = useCarePackageApi.suppliers({
+    supplierName: searchQuery,
+    shouldFetch: showSearchResults,
+  });
+
+  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { packageType } = packageInfo;
+
   const clickBack = () => {
     router.push(getCorePackageRoute(packageId));
   };
@@ -66,12 +69,12 @@ export const BrokerPackage = ({
   const removeSupplierCard = () => {
     setSelectedItem('');
     setShowSearchResults(false);
-    setSupplierSearch('');
+    setSearchText('');
   };
 
   const clearSearch = () => {
     setShowSearchResults(false);
-    setSupplierSearch('');
+    setSearchText('');
   };
 
   const composeDetailsData = () => {
@@ -115,20 +118,20 @@ export const BrokerPackage = ({
     }
   };
 
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
-  };
-
   useEffect(() => {
     composeDetailsData();
   }, [detailsData]);
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
 
   const checkNeedsErrors = (needs) => {
     let hasErrors = false;
     const checkedNeeds = needs.map((item) => {
       let errorStartDate = '';
       let errorEndDate = '';
-      if (!item.startDate || ((item.startDate && item.endDate) && item.startDate > item.endDate)) {
+      if (!item.startDate || (item.startDate && item.endDate && item.startDate > item.endDate)) {
         errorStartDate = 'Invalid start date';
       } else if (item.startDate < packageDates.endDate) {
         errorStartDate = 'Start date should be later then core date';
@@ -166,7 +169,7 @@ export const BrokerPackage = ({
 
     const weeklyDetails = weeklyNeeds
       .filter((item) => item.cost !== 0)
-      .map(({ cost, id, endDate, startDate }) => ({
+      .map(({ cost, endDate, startDate }) => ({
         // id,
         cost,
         startDate,
@@ -177,7 +180,7 @@ export const BrokerPackage = ({
 
     const oneOffDetails = oneOffNeeds
       .filter((item) => item.cost !== 0)
-      .map(({ cost, endDate, startDate, id }) => ({
+      .map(({ cost, endDate, startDate }) => ({
         // id,
         cost,
         startDate,
@@ -270,13 +273,14 @@ export const BrokerPackage = ({
         return 'Package Type not found';
     }
   };
+
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
         <Loading className="loading-center" isLoading={loading || detailsData === undefined} />
         <Container className="brokerage__container-main">
-          <TitleSubtitleHeader title='Build a care package' subTitle="Broker package" />
+          <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
           <Container>
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
@@ -295,12 +299,12 @@ export const BrokerPackage = ({
             {!selectedItem && (
               <Container className="supplier-search-container" display="flex">
                 <SearchBox
-                  onChangeValue={(value) => setSupplierSearch(value)}
+                  onChangeValue={(value) => setSearchText(value)}
                   label="Supplier"
                   searchIcon={null}
                   clearIcon={<p className="lbh-primary-button">Clear</p>}
                   clear={clearSearch}
-                  value={supplierSearch}
+                  value={searchText}
                   className="supplier-search-box"
                   id="supplier-search-box"
                 />
@@ -310,7 +314,7 @@ export const BrokerPackage = ({
               </Container>
             )}
 
-            {!supplierSearch && !selectedItem && (
+            {!searchText && !selectedItem && (
               <Container className="is-new-supplier">
                 <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
                 <Container className="is-new-supplier-text" display="flex" flexDirection="column">
@@ -323,7 +327,7 @@ export const BrokerPackage = ({
               </Container>
             )}
           </>
-          {(searchResults && supplierSearch && !selectedItem) || (showSearchResults && searchResults) ? (
+          {(searchResults && searchText && !selectedItem) || (showSearchResults && searchResults) ? (
             <BrokerPackageSelector
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
