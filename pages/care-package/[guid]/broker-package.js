@@ -2,6 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { BrokerPackage } from 'components/Pages/CarePackages/BrokerPackage';
+import { getLoggedInUser } from 'service/helpers';
+import withSession from 'lib/session';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const BrokerPackagePage = () => {
   const router = useRouter();

@@ -10,6 +10,21 @@ import { updateCoreCarePackage } from 'api/CarePackages/CarePackage';
 import optionsMapper, { mapPackageSchedulingOptions, mapServiceUserBasicInfo } from 'api/Mappers/optionsMapper';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import CorePackageDetails from 'components/Pages/CarePackages/CorePackageDetails';
+import { getLoggedInUser } from 'service/helpers';
+import withSession from 'lib/session';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const packageSettingOptions = [
   { id: 'hasRespiteCare', label: 'Respite care' },

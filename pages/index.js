@@ -8,7 +8,6 @@ import { getLoggedInUser } from 'service/helpers';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-
   if (!user) {
     return {
       redirect: {
@@ -17,7 +16,6 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-
   return { props: {} };
 });
 

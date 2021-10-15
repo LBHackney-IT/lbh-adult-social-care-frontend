@@ -5,8 +5,23 @@ import HackneyFooterInfo from 'components/HackneyFooterInfo';
 import useUser from 'api/SWR/useUser';
 import { userLogin } from 'reducers/userReducer';
 import { Header } from 'components/HackneyDS';
+import { getLoggedInUser } from 'service/helpers';
+import withSession from 'lib/session';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (user) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const Login = () => {
   const dispatch = useDispatch();
