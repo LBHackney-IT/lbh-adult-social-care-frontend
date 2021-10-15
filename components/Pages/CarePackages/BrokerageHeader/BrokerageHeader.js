@@ -11,14 +11,6 @@ const links = [
   { href: LOGOUT_ROUTE, text: 'Log out' },
 ];
 
-const BrokerageHeader = ({ className }) => {
-  return (
-    <Header
-      links={links}
-      bottomLines={false}
-      className={className ? ` ${className}` : ''}
-    />
-  );
-};
+const BrokerageHeader = ({ className }) => <Header links={links} bottomLines={false} className={className} />;
 
 export default BrokerageHeader;
