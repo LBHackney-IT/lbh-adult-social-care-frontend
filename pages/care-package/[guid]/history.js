@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useRouter } from 'next/router';
 import { Breadcrumbs, Container } from 'components/HackneyDS';
 import BrokerageHeader from 'components/Pages/CarePackages/BrokerageHeader/BrokerageHeader';
+import { BROKER_PORTAL_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { getLoggedInUser } from 'service/helpers';
 import withSession from 'lib/session';
 
@@ -17,19 +19,34 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
-const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Portal' }];
+const History = () => {
+  const router = useRouter();
+  const { guid: packageId } = router.query;
 
-const History = () => (
-  <div>
-    <BrokerageHeader />
+  const breadcrumbs = useMemo(
+    () => [
+      { text: 'Home', href: '/' },
+      { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
+      {
+        text: 'Full Overview',
+        href: getServiceUserPackagesRoute(packageId),
+      },
+    ],
+    [packageId]
+  );
 
-    <Container maxWidth="1080px" margin="0 auto">
-      <Container className="px-60 pt-10">
-        <Breadcrumbs values={breadcrumbs} />
+  return (
+    <div>
+      <BrokerageHeader />
+
+      <Container maxWidth="1080px" margin="0 auto">
+        <Container className="px-60 pt-10">
+          <Breadcrumbs values={breadcrumbs} />
+        </Container>
       </Container>
-    </Container>
-  </div>
-);
+    </div>
+  );
+};
 
 History.propTypes = {};
 
