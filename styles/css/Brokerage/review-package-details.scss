@@ -26,7 +26,7 @@
   margin-bottom: 24px;
 }
 
-.review-package-details__accordion-info {
+.single-accordion-info {
   display: flex;
   align-items: center;
   width: fit-content;
@@ -181,4 +181,9 @@
   @include media-small-ipod-up {
     display: flex;
   }
+}
+
+.review-package-details__buttons {
+  display: flex;
+  flex-wrap: wrap;
 }

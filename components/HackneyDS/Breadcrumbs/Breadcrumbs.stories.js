@@ -14,15 +14,10 @@ Default.args = {
   values: [
     {
       text: 'Section',
-      onClick() {
-        alert(this.text);
-      },
+      href: '#',
     },
     {
       text: 'Second Part',
-      onClick() {
-        alert(this.text);
-      },
     },
   ],
 };

@@ -106,6 +106,14 @@ jobs:
     steps:
       - *attach_workspace
       - run:
+          name: Update environment
+          command: |
+            rm -f .env.production
+            touch .env.production
+            echo "SECRET_COOKIE_PASSWORD=\"$SECRET_COOKIE_PASSWORD\"" > .env.production
+            echo "NEXT_PUBLIC_STAGE=\"staging\"" >> .env.production
+            yarn build
+      - run:
           name: deploy
           command: yarn install --production --ignore-scripts --prefer-offline && sudo npm i -g serverless && sls deploy --stage staging
 
@@ -113,6 +121,14 @@ jobs:
     executor: aws-cli/default
     steps:
       - *attach_workspace
+      - run:
+          name: Update environment
+          command: |
+            rm -f .env.production
+            touch .env.production
+            echo "SECRET_COOKIE_PASSWORD=\"$SECRET_COOKIE_PASSWORD\"" > .env.production
+            echo "NEXT_PUBLIC_STAGE=\"production\"" >> .env.production
+            yarn build
       - run:
           name: deploy
           command: yarn install --production --ignore-scripts --prefer-offline && sudo npm i -g serverless && sls deploy --stage production
@@ -180,7 +196,7 @@ jobs:
           paths:
             - project/build
 
-  chromatic-deployment: 
+  chromatic-deployment:
     docker:
       - image: circleci/node:12
     working_directory: ~/repo
@@ -254,9 +270,9 @@ workflows:
           context: mosaic-staging-context
           filters:
             branches:
-              only: 
+              only:
                 - develop
-                - main
+#                - main
       # - get-environment-variables:
       #     requires:
       #       - assume-role-staging
@@ -266,13 +282,11 @@ workflows:
             - owasp-zap-baseline-scan
           filters:
             branches:
-              only: 
+              only:
                 - develop
-                - main
+#                - main
       - assume-role-production:
           context: api-assume-role-social-care-production-context
-          requires:
-            - build-deploy-staging
           filters:
             branches:
               only: main

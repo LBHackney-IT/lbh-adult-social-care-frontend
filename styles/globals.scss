@@ -56,7 +56,8 @@
 @import 'css/HackneyDS/styles.scss';
 @import '../components/HackneyDS/styles.scss';
 @import 'css/CareCharges/index';
-@import '../components/CareCharges/SingleCareCharge/styles.scss';
+@import '../components/Pages/CareCharges/SingleCareCharge/styles.scss';
+@import '../components/Pages/ServiceUser/Packages/style.scss';
 
 * {
   font-family: 'OpenSans', sans-serif !important;
@@ -104,3 +105,5 @@ button {
   max-width: 1200px;
   margin: 0 auto;
 }
+
+@import "~bulma/css/bulma.min.css";

@@ -1,0 +1,202 @@
+.broker-portal {
+  .table-pagination {
+    padding: 0;
+  }
+
+  .status-info {
+    margin-bottom: 6px;
+  }
+
+  .table-pagination-info {
+    font-size: 16px;
+    color: black;
+    opacity: 0.5;
+  }
+
+  .table-pagination-actions {
+    display: flex;
+
+    button {
+      &:hover {
+        cursor: pointer;
+      }
+
+      // border: 1px solid $lbh-light-gray-border;
+      margin-left: 2px;
+    }
+
+    button:last-of-type {
+      margin-right: 0;
+    }
+  }
+
+  .table-pagination-item-active {
+    border: 1px solid $lbh-primary-button;
+  }
+
+  .brokerage-hub--birthdate {
+    margin-bottom: 7px;
+    font-size: 16px;
+    color: $lbh-secondary-text-colour;
+  }
+
+  .brokerage-hub--address {
+    font-size: 16px;
+    color: $lbh-secondary-text-colour;
+  }
+
+  .brokerage-hub--user-name {
+    display: flex;
+    align-items: center;
+  }
+
+  .govuk-table__cell {
+    vertical-align: bottom;
+    cursor: pointer;
+
+    .lbh-tag {
+      box-sizing: border-box;
+      margin-left: 8px;
+      padding: 0 4px;
+      font-size: 11px;
+    }
+
+    &:last-of-type {
+      // padding-right: 0;
+      text-align: right;
+    }
+  }
+
+  .lbh-search-box {
+    flex-direction: column;
+    flex-wrap: initial;
+    margin-right: 19px;
+
+    label {
+      font-size: 19px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+  }
+
+  .lbh-search-box__action {
+    background: $lbh-green1;
+    margin: 1px;
+    padding: 7px;
+  }
+
+  .brokerage-hub__form-status {
+    margin-right: 19px;
+  }
+
+  .datepicker-custom-input {
+    border: 2px solid black;
+  }
+
+  .react-date-picker {
+    width: 200px;
+  }
+
+  .brokerage-hub__date-from {
+    margin-right: 19px;
+  }
+
+  .brokerage-hub__filters {
+    display: flex;
+    flex-direction: column;
+    margin: 0 60px;
+
+    h2 {
+      color: black;
+      margin-bottom: 8px;
+      font-weight: 600;
+      line-height: 20px;
+      font-size: 19px;
+    }
+
+    .brokerage-hub__filters-block {
+      display: flex;
+      column-gap: 20px;
+
+      &:first-of-type {
+        margin-bottom: 25px;
+      }
+    }
+
+    .govuk-form-group {
+      margin: 0;
+    }
+
+    .clear-filter-button {
+      width: 80px;
+      height: 40px;
+    }
+
+    .custom-async-selector {
+      .custom-async-selector__control {
+        border: 2px solid black !important;
+        border-radius: 0 !important;
+      }
+
+      .custom-async-selector__menu {
+        border: 2px solid black !important;
+        border-radius: 0 !important;
+      }
+    }
+
+    .form-group--inline-label {
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .govuk-fieldset__legend {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      color: black;
+    }
+
+    .select-container {
+      width: 260px;
+    }
+  }
+}
+
+.form-group--inline-label {
+  & > fieldset {
+    display: flex;
+
+    .horizontal-separator {
+      display: none;
+    }
+  }
+}
+
+.brokerage-hub__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 30px 60px 10px;
+
+  h1 {
+    color: #0b0c0c;
+    font-size: 36px;
+    line-height: 40px;
+  }
+}
+
+.brokerage-hub__cell-with-title {
+  h3 {
+    font-size: 14px;
+    color: black;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 16px;
+    color: $lbh-secondary-text-colour;
+  }
+}

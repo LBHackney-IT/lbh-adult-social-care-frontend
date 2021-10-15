@@ -12,6 +12,8 @@ export const Container = ({
   flexDirection,
   flex,
   justifyContent,
+  border,
+  borderBottom,
   maxWidth,
   margin,
   className = '',
@@ -29,9 +31,12 @@ export const Container = ({
       flexDirection,
       flex,
       justifyContent,
+      border,
+      borderBottom,
       maxWidth,
-      margin
-    }}>
+      margin,
+    }}
+  >
     {children}
   </div>
 );

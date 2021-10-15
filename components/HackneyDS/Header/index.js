@@ -7,9 +7,9 @@ export default function Header({
   children = [],
   links = [],
   bottomLines = true,
-  className,
   fixed,
-  purple
+  purple,
+  className,
 }) {
   const bottomLinesClass = bottomLines ? ' bottom-lines' : '';
   const fixedClassList = fixed ? ' lbh-header--fixed' : '';

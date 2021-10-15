@@ -37,13 +37,8 @@ import RadioGroup from './RadioGroup';
 import { SimplePagination } from './SimplePagination';
 import { SummaryList } from './SummaryList';
 import { FileUpload } from './FileUpload/FileUpload';
-import { EditElementModal } from '../CareCharges/EditElementModal';
-import { FundedNursingCare } from '../CarePackages/FundedNursingCare/FundedNursingCare';
-import { AddElementModal } from '../CareCharges/AddElementModal';
-import { CancelElementModal } from '../CareCharges/CancelElementModal';
-import { EndElementModal } from '../CareCharges/EndElementModal';
-import { OptionsElementModal } from '../CareCharges/OptionsElementModal';
 import { UploadGreenButton } from './UploadGreenButton';
+import { SingleAccordion } from './SingleAccordion';
 
 export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
 
@@ -89,11 +84,6 @@ export {
   SummaryList,
   FileUpload,
   Container,
-  EditElementModal,
-  AddElementModal,
-  OptionsElementModal,
-  FundedNursingCare,
-  CancelElementModal,
-  EndElementModal,
+  SingleAccordion,
   UploadGreenButton,
 };

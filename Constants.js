@@ -1,5 +1,3 @@
-const UTC_DATE_FORMAT = 'yyyy/MM/dd';
-
 const costPeriods = {
   hourly: 1,
   weekly: 2,
@@ -12,4 +10,4 @@ const brokerageTypeOptions = {
   additionalNeed: 2,
 };
 
-export { UTC_DATE_FORMAT, costPeriods, brokerageTypeOptions };
+export { costPeriods, brokerageTypeOptions };

@@ -5,6 +5,12 @@
     margin-bottom: 48px;
   }
 
+  .clear-button {
+    height: 44px;
+    margin-top: auto;
+    margin-bottom: 48px;
+  }
+
   .user-details {
     border-bottom: none;
     margin-bottom: 0;
@@ -37,6 +43,7 @@
 .search-service-user__title {
   font-size: 48px;
   font-weight: 400;
+  margin-bottom: 32px;
 }
 
 .search-service-user__filters {
