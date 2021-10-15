@@ -8,6 +8,7 @@ export default function Select ({
   className = '',
   disabledOptions = [],
   options = [],
+  emptyElement = { text: 'Select one', value: null },
   id = 'select-id',
   error,
   IconComponent = <SelectArrowTriangle/>,
@@ -30,6 +31,7 @@ export default function Select ({
         value={value}
         className={`govuk-select lbh-select${outerClass}${errorClass}`}
       >
+        {emptyElement && <option value={emptyElement.value}>{emptyElement.text}</option>}
         {options.map((option) => {
           const isDisabledOption = disabledOptions.some((disabledOption) => disabledOption === option.value);
 

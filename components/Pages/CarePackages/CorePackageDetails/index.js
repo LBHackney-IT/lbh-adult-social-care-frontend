@@ -106,12 +106,6 @@ const CorePackageDetails = ({
     }
   }, [defaultValues, packageTypeOptions]);
 
-  // useEffect(() => {
-  //   if (packageType !== defaultValues.packageType) setPackageType(defaultValues.packageType);
-  //   if (packageSchedule !== defaultValues.packageSchedule) setPackageSchedule(defaultValues.packageSchedule);
-  //   if (furtherDetails.length !== defaultValues.furtherDetails.length) setFurtherDetails(defaultValues.furtherDetails);
-  // }, [defaultValues]);
-
   return (
     <div className="core-package-details brokerage">
       <BrokerageHeader />

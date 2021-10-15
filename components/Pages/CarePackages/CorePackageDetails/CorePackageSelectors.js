@@ -26,7 +26,7 @@ const CorePackageSelectors = ({
           options={packageTypeOptions}
         />
       </Container>
-      {supportReason && (
+      {supportReasonOptions && (
         <Container className="core-package-details__selector" display="flex" flexDirection="column">
           <label>Primary support reason</label>
           <Select

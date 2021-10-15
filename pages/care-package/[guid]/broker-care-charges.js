@@ -37,7 +37,6 @@ const CareChargesPage = () => {
   const { data: calculatedCost } = useReclaimApi.calculatedCost(carePackageId, serviceUserId);
 
   const collectingReasonOptions = [
-    { text: 'Select One', value: null },
     { text: 'Service user unable to manage finances', value: '1' },
     { text: 'Agreement with provider to pay gross', value: '2' },
     { text: 'Service user or family declining payment', value: '3' },
