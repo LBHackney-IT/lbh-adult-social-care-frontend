@@ -9,4 +9,7 @@ export const getBrokerPackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker
 export const getFundedNursingCareRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-fnc`;
 export const getCareChargesRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-care-charges`;
 
+export const SERVICE_USER_ROUTE = '/service-user';
+export const getServiceUserPackagesRoute = (id) => `${SERVICE_USER_ROUTE}/${id}/packages`;
+
 export const LOGOUT_ROUTE = '/logout';

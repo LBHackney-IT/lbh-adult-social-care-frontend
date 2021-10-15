@@ -140,7 +140,6 @@ export const BrokerPortalPage = ({
 
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
         {items && <BrokerPortalTable onRowClick={onRowClick} data={items} />}
-
         <HorizontalSeparator height="20px" />
 
         <AlternativePagination

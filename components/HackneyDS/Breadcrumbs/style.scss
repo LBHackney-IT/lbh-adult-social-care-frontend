@@ -39,22 +39,22 @@
     content: none;
     display: none;
   }
-  &__link {
+  a {
     font-family: Open Sans;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  &__link:focus {
+  a:focus {
     outline: transparent solid 3px;
     background-color: #ffc845;
     box-shadow: 0 -2px #ffc845, 0 4px #0b0c0c;
     text-decoration: none;
   }
-  &__link:active,
-  &__link:focus,
-  &__link:hover,
-  &__link:link,
-  &__link:visited {
+  a:active,
+  a:focus,
+  a:hover,
+  a:link,
+  a:visited {
     color: $lbh-primary-button;
   }
   &__list-item:before {
@@ -64,11 +64,11 @@
     display: block;
     position: absolute;
   }
-  &__link--available {
+  a {
     color: $lbh-primary-button;
     cursor: pointer;
   }
-  .lbh-breadcrumbs &__link {
+  .lbh-breadcrumbs a {
     font-family: Open Sans;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
