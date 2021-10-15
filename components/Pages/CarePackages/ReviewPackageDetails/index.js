@@ -46,7 +46,7 @@ export const ReviewPackageDetails = ({
           closePopup={() => setIsOpenedPopup(false)}
         />
       )}
-      <BrokerageHeader serviceName='' />
+      <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding='8px 60px 0 60px'>
         <Breadcrumbs values={breadcrumbs} />
       </Container>
