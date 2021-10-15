@@ -30,7 +30,10 @@ const useCarePackageApi = {
     useGetData(packageId !== undefined ? `${CARE_PACKAGES_URL}/${packageId}/details` : null, '', {}),
   suppliers: ({ supplierName }) => useGetData(`/suppliers${getQueryParamsFromObject({ supplierName })}`),
   singleSupplier: (supplierId) => useGetData(supplierId ? `/suppliers/${supplierId}` : null, '', {}),
-  singlePackageInfo: (packageId) => useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}` : null),
+  singlePackageInfo: (packageId) => {
+    const response = useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}` : null)
+    return { ...response, singlePackageInfo: !!response.data};
+  },
 };
 
 export default useCarePackageApi;

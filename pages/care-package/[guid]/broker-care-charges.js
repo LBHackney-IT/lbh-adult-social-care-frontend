@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import {
@@ -29,6 +29,7 @@ export const getServerSideProps = withSession(({ req }) => {
 const CareChargesPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
+  const [loading, setLoading] = useState(false);
 
   const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e'; // todo to be removed
 
@@ -50,30 +51,33 @@ const CareChargesPage = () => {
 
   const packageReviewPageLink = getCarePackageReviewRoute(carePackageId);
 
-  const createCareCharge = (packageId, careChargeCreation) => {
-    createCarePackageReclaimCareCharge(packageId, careChargeCreation)
-      .then(() => {
-        pushNotification(`Care charge created successfully`, 'success');
-        router.push(packageReviewPageLink);
-      })
-      .catch((error) => {
-        pushNotification(error);
-      });
-  };
+  const createCareCharge = async (packageId, careChargeCreation) => {
+    setLoading(true);
+    try {
+      await createCarePackageReclaimCareCharge(packageId, careChargeCreation)
+      pushNotification(`Care charge created successfully`, 'success');
+      router.push(packageReviewPageLink);
+    } catch (e) {
+      pushNotification(e);
+    }
+    setLoading(false);
+  }
 
-  const updateCareCharge = (packageId, careChargeUpdate) => {
-    updateCarePackageReclaimCareCharge(packageId, careChargeUpdate)
-      .then(() => {
-        pushNotification(`Care charge updated successfully`, 'success');
-        router.push(packageReviewPageLink);
-      })
-      .catch((error) => {
-        pushNotification(error);
-      });
+  const updateCareCharge = async (packageId, careChargeUpdate) => {
+    setLoading(true);
+    try {
+      await updateCarePackageReclaimCareCharge(packageId, careChargeUpdate)
+      pushNotification(`Care charge updated successfully`, 'success');
+      router.push(packageReviewPageLink);
+    } catch (e) {
+      pushNotification(e);
+    }
+    setLoading(false);
   };
 
   return (
     <CareCharges
+      loading={loading || carePackageReclaimCareCharge === undefined || calculatedCost === undefined}
       reasonsCollecting={collectingReasonOptions}
       calculatedCost={calculatedCost}
       carePackageReclaimCareCharge={carePackageReclaimCareCharge}

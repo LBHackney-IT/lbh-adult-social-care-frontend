@@ -50,6 +50,7 @@ const BrokerPackagePage = () => {
 
   return (
     <BrokerPackage
+      loading={selectedSupplier || carePackageCore || searchResults}
       showSearchResults={showSearchResults}
       setShowSearchResults={setShowSearchResults}
       currentPage={currentPage}

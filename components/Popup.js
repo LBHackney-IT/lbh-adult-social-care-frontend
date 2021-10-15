@@ -20,7 +20,7 @@ const Popup = ({ mainContent, loading, firstButton, className = '', secondButton
   return (
     <div className={`popup ${className}`}>
       <div className="popup__inner-content">
-        {loading && <Loading />}
+        <Loading className='loading-center' isLoading={loading} />
         <div className="popup__header">
           <p className="popup__header-title">{title}</p>
           <div onClick={closePopup} className="popup__close-button" role="presentation">

@@ -65,6 +65,7 @@ const BrokerPortal = () => {
 
   return (
     <BrokerPortalPage
+      loading={!data.packages}
       filters={filters}
       clearFilter={clearFilters}
       setFilters={setFilters}
