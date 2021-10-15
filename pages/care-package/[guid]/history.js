@@ -4,6 +4,7 @@ import { Breadcrumbs, Container } from 'components/HackneyDS';
 import BrokerageHeader from 'components/Pages/CarePackages/BrokerageHeader/BrokerageHeader';
 import { BROKER_PORTAL_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
+import HistoryList from 'components/Pages/CarePackages/History/HistoryList';
 import Overview from 'components/Pages/CarePackages/History/Overview';
 import { getLoggedInUser } from 'service/helpers';
 import withSession from 'lib/session';
@@ -48,6 +49,8 @@ const History = () => {
         <TitleSubtitleHeader subTitle="Package history" title="Nursing care" />
 
         <Overview />
+
+        <HistoryList />
       </Container>
     </div>
   );
