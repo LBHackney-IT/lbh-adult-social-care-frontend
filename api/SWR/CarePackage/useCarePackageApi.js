@@ -7,14 +7,15 @@ const useCarePackageApi = {
   summary: (carePackageId) =>
     useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/summary` : null),
 
-  brokerView: ({ pageNumber, toDate, fromDate, status, serviceUserId }) =>
+  brokerView: ({ pageNumber, toDate, fromDate, status, serviceUserName, brokerId }) =>
     useGetData(
       `${CARE_PACKAGES_URL}/broker-view${getQueryParamsFromObject({
         pageNumber,
         status,
         toDate,
         fromDate,
-        serviceUserId,
+        serviceUserName,
+        brokerId,
       })}`,
       '',
       {}

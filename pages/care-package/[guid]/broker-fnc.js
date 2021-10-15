@@ -6,6 +6,21 @@ import useReclaimApi from 'api/SWR/CarePackage/useReclaimApi';
 import { addNotification } from 'reducers/notificationsReducer';
 import { createCarePackageReclaimFnc, updateCarePackageReclaimFnc } from 'api/CarePackages/CarePackageReclaim';
 import FundedNursingCare from 'components/Pages/CarePackages/FundedNursingCare';
+import { getLoggedInUser } from 'service/helpers';
+import withSession from 'lib/session';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const FundedNursingCarePage = () => {
   const router = useRouter();

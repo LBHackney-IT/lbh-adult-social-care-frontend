@@ -10,6 +10,21 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { useDispatch } from 'react-redux';
 import CareCharges from 'components/Pages/CarePackages/CareCharges';
+import { getLoggedInUser } from 'service/helpers';
+import withSession from 'lib/session';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const CareChargesPage = () => {
   const router = useRouter();
