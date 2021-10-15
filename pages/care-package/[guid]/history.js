@@ -31,6 +31,7 @@ const History = () => {
         text: 'Full Overview',
         href: getServiceUserPackagesRoute(packageId),
       },
+      { text: 'Package History' },
     ],
     [packageId]
   );
