@@ -28,6 +28,13 @@ const initialFilters = {
   dateOfBirth: null,
 };
 
+const inputs = [
+  { label: 'First name', key: 'firstName' },
+  { label: 'Last name', key: 'lastName' },
+  { label: 'Hackney ID', key: 'hackneyId' },
+  { label: 'Date of birth', key: 'dateOfBirth' },
+];
+
 const SearchServiceUser = ({
   searchResults,
   pageNumber,
@@ -47,13 +54,6 @@ const SearchServiceUser = ({
   };
 
   const onSearch = () => setSearchFilters({ ...filters });
-
-  const inputs = [
-    { label: 'First name', key: 'firstName' },
-    { label: 'Last name', key: 'lastName' },
-    { label: 'Hackney ID', key: 'hackneyId' },
-    { label: 'Date of birth', key: 'dateOfBirth' },
-  ];
 
   return (
     <Container className="search-service-user">
