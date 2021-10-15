@@ -28,7 +28,7 @@ export const PackageRequest = () => {
   return (
     <Container border="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
       <Container display="flex" alignItems="center">
-        <Tag className="text-capitalize with-border" color={tagColors[packageStatus]}>
+        <Tag className="text-capitalize outline" color={tagColors[packageStatus]}>
           {packageStatus}
         </Tag>
         <VerticalSeparator width="10px" />
