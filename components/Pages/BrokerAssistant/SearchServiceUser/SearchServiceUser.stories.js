@@ -19,20 +19,24 @@ export const Default = Template.bind({});
 Default.args = {
   totalCount: 3,
   totalPages: 3,
+  pushRoute: (item) => alert(`push route with id: ${item.id}`),
   searchResults: [
     {
+      id: 1,
       address: 'E9 6EY',
       userName: faker.name.findName(),
       dateOfBirth: new Date(1972, 12, 9),
       hackneyId: '786288',
     },
     {
+      id: 2,
       address: 'E9 6EY',
       userName: faker.name.findName(),
       dateOfBirth: new Date(1972, 12, 9),
       hackneyId: '786288',
     },
     {
+      id: 3,
       address: 'E9 6EY',
       userName: faker.name.findName(),
       dateOfBirth: new Date(1972, 12, 9),

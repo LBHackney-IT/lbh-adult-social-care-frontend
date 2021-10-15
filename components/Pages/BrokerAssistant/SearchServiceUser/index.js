@@ -20,22 +20,24 @@ const breadcrumbs = [
   { text: 'Search for a service user' },
 ];
 
+const initialFilters = {
+  postcode: '',
+  firstName: '',
+  lastName: '',
+  hackneyId: '',
+  dateOfBirth: null,
+};
+
 const SearchServiceUser = ({
   searchResults,
   pageNumber,
   setPageNumber,
   totalCount,
   totalPages,
+  pushRoute,
 }) => {
-  const [initialFilters] = useState({
-    postcode: '',
-    firstName: '',
-    lastName: '',
-    hackneyId: '',
-    dateOfBirth: null,
-  });
-  const [filters, setFilters] = useState({ ...initialFilters });
-  const [searchFilters, setSearchFilters] = useState({ ...initialFilters });
+  const [filters, setFilters] = useState(initialFilters);
+  const [searchFilters, setSearchFilters] = useState(initialFilters);
 
   const changeFilters = (field, value) => {
     setFilters(prevState => ({
@@ -44,14 +46,14 @@ const SearchServiceUser = ({
     }));
   };
 
-  const allocateToBroker = (item) => {
-    alert(item);
-  };
-  const viewPackageHistory = (item) => {
-    alert(item);
-  };
-
   const onSearch = () => setSearchFilters({ ...filters });
+
+  const inputs = [
+    { label: 'First name', key: 'firstName' },
+    { label: 'Last name', key: 'lastName' },
+    { label: 'Hackney ID', key: 'hackneyId' },
+    { label: 'Date of birth', key: 'dateOfBirth' },
+  ];
 
   return (
     <Container className="search-service-user">
@@ -61,21 +63,14 @@ const SearchServiceUser = ({
         <Container padding="60px 0 0">
           <h3 className="search-service-user__title">Search for a service user</h3>
           <Container className="search-service-user__filters">
-            <Input
-              value={filters.firstName}
-              onChangeValue={value => changeFilters('firstName', value)}
-              label="First name"
-            />
-            <Input
-              value={filters.lastName}
-              onChangeValue={value => changeFilters('lastName', value)}
-              label="Last name"
-            />
-            <Input
-              value={filters.hackneyId}
-              onChangeValue={value => changeFilters('hackneyId', value)}
-              label="Hackney ID"
-            />
+            {inputs.map(({ key, label }) => (
+              <Input
+                key={key}
+                value={filters[key]}
+                onChangeValue={value => changeFilters(key, value)}
+                label={label}
+              />
+            ))}
             <FormGroup>
               <DatePicker
                 setDate={(value) => changeFilters('dateOfBirth', value)}
@@ -105,8 +100,8 @@ const SearchServiceUser = ({
                 title=""
               />
               <Container className="actions">
-                <p onClick={() => allocateToBroker(item)} className="link-button green">Allocate to broker</p>
-                <p onClick={() => viewPackageHistory(item)} className="link-button green">View package history</p>
+                <p onClick={() => pushRoute(item)} className="link-button green">Allocate to broker</p>
+                <p onClick={() => pushRoute(item)} className="link-button green">View package history</p>
               </Container>
             </Container>
           ))}

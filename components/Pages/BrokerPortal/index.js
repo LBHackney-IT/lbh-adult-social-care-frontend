@@ -54,8 +54,7 @@ export const BrokerPortalPage = ({
   return (
     <div className="broker-portal">
       <BrokerageHeader serviceName="" links={links} />
-
-      <Container background="#FAFAFA" padding="0 0 55px">
+      <Container background="#FAFAFA" padding="10px 0 55px">
         <Container maxWidth="1080px" margin="0 auto">
           <Container className="px-60">
             <Breadcrumbs values={breadcrumbs} />
