@@ -15,8 +15,14 @@
   }
 }
 
+.table-pagination-actions {
+  display: flex;
+}
+
 .table-pagination-info {
   margin-right: 15px;
+  font-size: 14px;
+  color: $lbh-secondary-text-colour;
 }
 
 .table-pagination-button.button.button-base {
@@ -28,4 +34,18 @@
 .table-pagination-item-active.button.button-base {
   background-color: $lbh-green1;
   color: white;
+}
+
+.table-pagination-button {
+  display: flex;
+  align-items: center;
+  border: 1px solid $lbh-gray-border;
+
+  &:not(&:last-of-type) {
+    margin-right: 8px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
 }

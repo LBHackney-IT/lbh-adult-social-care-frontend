@@ -8,17 +8,18 @@ import { ErrorMessage } from '../../../HackneyDS/index';
 import { object, string } from 'yup';
 import { addWeeks } from 'date-fns';
 
+const initialInputs = {
+  value: '',
+  startDate: '',
+  endDate: '',
+};
+
 const EditElementContent = ({
   activeElements,
   headerText,
   editStep,
   setEditStep,
 }) => {
-  const [initialInputs] = useState({
-    value: '',
-    startDate: '',
-    endDate: '',
-  });
   const [inputs, setInputs] = useState([]);
   const [inputHasErrors, setInputHasErrors] = useState(false);
   const [inputErrors, setInputErrors] = useState([]);
