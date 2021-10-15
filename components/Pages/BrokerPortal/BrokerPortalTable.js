@@ -19,22 +19,22 @@ export const BrokerPortalTable = ({ onRowClick, data }) => {
       Cell: ({ value, row: { original } }) => (
         <Container>
           <Container className="status-info" display="flex">
-            <p className="brokerage-hub--user-name font-size-19px font-weight-bold text-green">
+            <p className="brokerage-portal--user-name font-size-19px font-weight-bold text-green">
               {original.serviceUserName}
             </p>
-            <Tag className="text-capitalize with-border" color={tagColors[value]}>
+            <Tag className="text-capitalize outline" color={tagColors[value]}>
               {original.packageStatus}
             </Tag>
           </Container>
-          <p className="brokerage-hub--birthdate">{formatDate(original.dateOfBirth)}</p>
-          <p className="brokerage-hub--address">{original.address}</p>
+          <p className="brokerage-portal--birthdate">{formatDate(original.dateOfBirth)}</p>
+          <p className="brokerage-portal--address">{original.address}</p>
         </Container>
       ),
     },
     {
       accessor: 'hackneyId',
       Cell: ({ value }) => (
-        <Container className="brokerage-hub__cell-with-title">
+        <Container className="brokerage-portal__cell-with-title">
           <h3>MosaicID</h3>
           <p>#{value}</p>
         </Container>
@@ -43,7 +43,7 @@ export const BrokerPortalTable = ({ onRowClick, data }) => {
     {
       accessor: 'packageType',
       Cell: ({ value }) => (
-        <Container className="brokerage-hub__cell-with-title">
+        <Container className="brokerage-portal__cell-with-title">
           <h3>Package</h3>
           <p>{value}</p>
         </Container>
@@ -52,7 +52,7 @@ export const BrokerPortalTable = ({ onRowClick, data }) => {
     {
       accessor: 'brokerName',
       Cell: ({ value }) => (
-        <Container className="brokerage-hub__cell-with-title">
+        <Container className="brokerage-portal__cell-with-title">
           <h3>Broker</h3>
           <p>{value}</p>
         </Container>
@@ -61,7 +61,7 @@ export const BrokerPortalTable = ({ onRowClick, data }) => {
     {
       accessor: 'dateAssigned',
       Cell: ({ value }) => (
-        <Container className="brokerage-hub__cell-with-title">
+        <Container className="brokerage-portal__cell-with-title">
           <h3>Assigned</h3>
           <p>{formatDate(value)}</p>
         </Container>
@@ -69,13 +69,13 @@ export const BrokerPortalTable = ({ onRowClick, data }) => {
     },
   ];
   return (
-    <div className="brokerage-hub__table">
+    <div className="brokerage-portal__table">
       <Table
         onRowClick={onRowClick}
         hasHeader={false}
         columns={columns}
         data={data}
-        cellClassName="brokerage-hub__cell"
+        cellClassName="brokerage-portal__cell"
       />
     </div>
   );

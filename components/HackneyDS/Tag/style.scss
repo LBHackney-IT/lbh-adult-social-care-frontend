@@ -82,7 +82,7 @@
   text-transform: none;
   letter-spacing: normal;
 
-  &.with-border {
+  &.outline {
     border-radius: 4px;
   }
 
@@ -90,7 +90,7 @@
     background-color: #00664f;
     color: #fff;
 
-    &.with-border {
+    &.outline {
       color: $lbh-primary-button;
       background: $lbh-light-green;
       border: 1px solid $lbh-primary-button;
@@ -100,7 +100,7 @@
     background-color: #f8e08e;
     color: #0b0c0c;
 
-    &.with-border {
+    &.outline {
       color: $lbh-secondary-text-colour;
       background: $lbh-light-yellow;
       border: 1px solid $lbh-yellow;
@@ -110,7 +110,7 @@
     background-color: #be3a34;
     color: #fff;
 
-    &.with-border {
+    &.outline {
       color: $lbh-red;
       background: $lbh-light-red;
       border: 1px solid $lbh-red;
@@ -120,7 +120,7 @@
     background-color: #bfc1c3;
     color: #0b0c0c;
 
-    &.with-border {
+    &.outline {
       color: $lbh-gray1;
       background: $lbh-light-gray2;
       border: 1px solid $lbh-gray1;
@@ -130,7 +130,7 @@
     background-color: #025ea6;
     color: #fff;
 
-    &.with-border {
+    &.outline {
       color: $lbh-link;
       background: $lbh-light-blue;
       border: 1px solid $lbh-link;

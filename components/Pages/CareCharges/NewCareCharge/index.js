@@ -78,7 +78,7 @@ export const NewCareCharge = ({
               {statusIds.map(statusId => (
                 <Tag
                   key={statusId}
-                  className="with-border"
+                  className="outline"
                   color={getTagColorFromStatusId(statusId)}
                 >
                   {getTagDisplayTextFromStatusId(statusId)}
