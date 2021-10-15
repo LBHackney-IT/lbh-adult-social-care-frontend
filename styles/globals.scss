@@ -39,6 +39,7 @@
 @import 'css/Login/login';
 @import 'css/popup';
 @import 'css/sectionHeading';
+@import "css/title-subtitle";
 @import 'css/PayRuns/index';
 @import 'css/not-found-page';
 @import 'css/SocialWorker/index';
@@ -56,6 +57,7 @@
 @import 'css/CareCharges/index';
 @import '../components/Pages/CareCharges/SingleCareCharge/styles.scss';
 @import '../components/Pages/ServiceUser/Packages/style.scss';
+@import "css/container";
 
 * {
   font-family: 'OpenSans', sans-serif !important;

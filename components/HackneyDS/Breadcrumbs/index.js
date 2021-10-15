@@ -11,10 +11,7 @@ export default function Breadcrumbs({ values }) {
             return (
               <li className="govuk-breadcrumbs__list-item" key={text}>
                 {href ? (
-                  <Link
-                    href={href}
-                    className="govuk-breadcrumbs__link govuk-breadcrumbs__link--available"
-                  >
+                  <Link href={href}>
                     {text}
                   </Link>
                 ) : <p className="govuk-breadcrumbs__default-text">{text}</p>
