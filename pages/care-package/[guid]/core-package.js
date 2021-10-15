@@ -48,7 +48,7 @@ const CorePackagePage = () => {
   const { options: packageTypes = [] } = usePackageGetAll();
   const { data: primarySupportReasons = [] } = usePrimarySupportReason();
 
-  const { data: packageInfo = {} } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
 
   const currentPackageCoreSettings = useMemo(
     () => ({

@@ -21,16 +21,14 @@ const useCarePackageApi = {
       {}
     ),
 
-  coreSettings: (carePackageId) =>
-    useGetData(
-      carePackageId !== undefined || carePackageId !== 'undefined' ? `${CARE_PACKAGES_URL}/${carePackageId}/core` : null
-    ),
-
   details: (packageId) =>
     useGetData(packageId !== undefined ? `${CARE_PACKAGES_URL}/${packageId}/details` : null, '', {}),
-  suppliers: ({ supplierName }) => useGetData(`/suppliers${getQueryParamsFromObject({ supplierName })}`),
+
+  suppliers: ({ supplierName, shouldFetch }) =>
+    useGetData(shouldFetch ? `/suppliers${getQueryParamsFromObject({ supplierName })}` : null),
+
   singleSupplier: (supplierId) => useGetData(supplierId ? `/suppliers/${supplierId}` : null, '', {}),
-  singlePackageInfo: (packageId) => useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}` : null),
+  singlePackageInfo: (packageId) => useGetData(`${CARE_PACKAGES_URL}/${packageId}`, '', {}),
 };
 
 export default useCarePackageApi;

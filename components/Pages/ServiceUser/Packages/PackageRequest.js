@@ -5,27 +5,31 @@ import { CaretDownIcon } from 'components/Icons';
 import { formatDate } from 'service/helpers';
 import { useRouter } from 'next/router';
 
-export const PackageRequest = ({ serviceUserData }) => {
+const tagColors = {
+  New: 'green',
+  'In Progress': 'yellow',
+  'Waiting For Approval': 'blue',
+  'Not Approved': 'red',
+  Ended: 'red',
+  Cancelled: 'red',
+  Approved: 'gray',
+};
+
+export const PackageRequest = () => {
   const router = useRouter();
+  const { dateAssigned, packageId, packageStatus, packageType } = router.query;
+
   const [isExpanded, setExpanded] = useState(false);
-  const tagColors = {
-    New: 'green',
-    'In Progress': 'yellow',
-    'Waiting For Approval': 'blue',
-    'Not Approved': 'red',
-    Ended: 'red',
-    Cancelled: 'red',
-    Approved: 'gray',
-  };
-  const handleClick = (packageStatus) => {
-    router.push(getCorePackageRoute(serviceUserData.packageId));
+
+  const handleClick = () => {
+    router.push(getCorePackageRoute(packageId));
   };
 
   return (
     <Container border="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
       <Container display="flex" alignItems="center">
-        <Tag className="text-capitalize with-border" color={tagColors[serviceUserData.packageStatus]}>
-          {serviceUserData.packageStatus}
+        <Tag className="text-capitalize with-border" color={tagColors[packageStatus]}>
+          {packageStatus}
         </Tag>
         <VerticalSeparator width="10px" />
         <Heading size="l">Package request</Heading>
@@ -35,7 +39,7 @@ export const PackageRequest = ({ serviceUserData }) => {
         <Container className="user-details">
           <Container>
             <p>Package</p>
-            <p>{serviceUserData.packageType}</p>
+            <p>{packageType}</p>
           </Container>
           <Container>
             <p>Care Plan</p>
@@ -43,10 +47,10 @@ export const PackageRequest = ({ serviceUserData }) => {
           </Container>
           <Container>
             <p>Assigned</p>
-            <p>{formatDate(serviceUserData.dateAssigned)}</p>
+            <p>{formatDate(dateAssigned)}</p>
           </Container>
         </Container>
-        <Button handler={() => handleClick(serviceUserData.packageStatus)}>Create Package</Button>
+        <Button handler={handleClick}>Create Package</Button>
       </Container>
       <HorizontalSeparator height="10px" />
       <Container>
