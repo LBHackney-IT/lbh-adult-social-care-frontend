@@ -28,7 +28,7 @@ const useCarePackageApi = {
     useGetData(shouldFetch ? `/suppliers${getQueryParamsFromObject({ supplierName })}` : null),
 
   singleSupplier: (supplierId) => useGetData(supplierId ? `/suppliers/${supplierId}` : null, '', {}),
-  singlePackageInfo: (packageId) =>  useGetData(`${CARE_PACKAGES_URL}/${packageId}`, '', {}),
+  singlePackageInfo: (packageId) => useGetData(`${CARE_PACKAGES_URL}/${packageId}`, '', {}),
 };
 
 export default useCarePackageApi;
