@@ -8,7 +8,6 @@ import { getLoggedInUser } from 'service/helpers';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-
   if (!user) {
     return {
       redirect: {
@@ -17,7 +16,6 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-
   return { props: {} };
 });
 
@@ -34,7 +32,7 @@ export default function IndexPage() {
         <link href="/fonts/style.css" rel="stylesheet" />
       </Head>
       <div id="modal" />
-      <Loading className="loading-center" />
+      <Loading />
     </div>
   );
 }

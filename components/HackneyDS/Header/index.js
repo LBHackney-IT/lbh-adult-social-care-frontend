@@ -6,7 +6,7 @@ import { getSlot, getMultipleSlot, Container } from '../index';
 export default function Header({
   children = [],
   links = [],
-  bottomLines = true,
+  bottomLines = false,
   fixed,
   purple,
   className,
@@ -16,9 +16,10 @@ export default function Header({
   const shortServiceNodeList = ' lbh-header__service-name--short';
   const purpleSchemeNodeList = purple ? ' lbh-header--purple' : '';
   const nodeList = Array.isArray(children) ? children : [children];
+  const outerClassName = className ? ` ${className}` : '';
 
   return (
-    <header className={`lbh-header${bottomLinesClass}${fixedClassList + purpleSchemeNodeList}${className}`}>
+    <header className={`lbh-header${bottomLinesClass}${fixedClassList + purpleSchemeNodeList}${outerClassName}`}>
       <div className="lbh-header__main">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <div className="lbh-header__wrapper">

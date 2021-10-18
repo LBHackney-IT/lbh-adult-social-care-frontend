@@ -39,7 +39,7 @@ function maintenanceMode() {
       '/login',
       '/logout',
       '/index',
-      '/search',
+      '/master-search',
       '/my-records',
       '/workers',
       '/workers/:slug*',

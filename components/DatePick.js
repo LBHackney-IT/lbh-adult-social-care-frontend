@@ -22,6 +22,7 @@ const DatePick = ({
   maxDate,
   setDate,
   dateValue,
+  useDefaultInput,
 }) => {
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
     <button className="datepicker-custom-input" onClick={onClick} ref={ref}>
@@ -45,10 +46,13 @@ const DatePick = ({
           onClickOutside={onClickOutside}
           maxDate={maxDate}
           selectsRange={selectsRange}
-          customInput={<CustomInput />}
+          customInput={!useDefaultInput && <CustomInput />}
           selected={dateValue}
           inline={inline}
           placeholderText={placeholder}
+          showMonthDropdown
+          showYearDropdown
+          dropdownMode="select"
           className="react-date-picker__input"
         />
       }

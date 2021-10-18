@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { useRouter } from 'next/router';
 import BrokerageBorderCost from 'components/Pages/CarePackages/BrokerageBorderCost';
-import { ReviewPackageDetails } from '../../../components/Pages/CarePackages/ReviewPackageDetails';
+import { ReviewPackageDetails } from 'components/Pages/CarePackages/ReviewPackageDetails';
+import { getLoggedInUser } from 'service/helpers';
+import withSession from 'lib/session';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const settingsTypes = [
   { field: 'hasRespiteCare', text: 'Respite Care' },
@@ -25,7 +40,7 @@ const careChargesClaimCollector = {
 const ReviewPackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
-  const { data } = useCarePackageApi.summary(carePackageId);
+  const { data, isLoading: summaryLoading } = useCarePackageApi.summary(carePackageId);
 
   const checkSettings = (settings) => settings && settingsTypes
     .filter((item) => settings[item.field])
@@ -184,6 +199,7 @@ const ReviewPackageDetailsPage = () => {
 
   return (
     <ReviewPackageDetails
+      loading={summaryLoading}
       subTitle="Review package details"
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}

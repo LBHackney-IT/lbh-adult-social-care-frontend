@@ -34,18 +34,18 @@
     border: 1px solid $lbh-primary-button;
   }
 
-  .brokerage-hub--birthdate {
+  .brokerage-portal--birthdate {
     margin-bottom: 7px;
     font-size: 16px;
     color: $lbh-secondary-text-colour;
   }
 
-  .brokerage-hub--address {
+  .brokerage-portal--address {
     font-size: 16px;
     color: $lbh-secondary-text-colour;
   }
 
-  .brokerage-hub--user-name {
+  .brokerage-portal--user-name {
     display: flex;
     align-items: center;
   }
@@ -53,6 +53,7 @@
   .govuk-table__cell {
     vertical-align: bottom;
     cursor: pointer;
+    padding: 27px 0 21px 0;
 
     .lbh-tag {
       box-sizing: border-box;
@@ -85,7 +86,7 @@
     padding: 7px;
   }
 
-  .brokerage-hub__form-status {
+  .brokerage-portal__form-status {
     margin-right: 19px;
   }
 
@@ -97,24 +98,16 @@
     width: 200px;
   }
 
-  .brokerage-hub__date-from {
+  .brokerage-portal__date-from {
     margin-right: 19px;
   }
 
-  .brokerage-hub__filters {
+  .brokerage-portal__filters {
     display: flex;
     flex-direction: column;
     margin: 0 60px;
 
-    h2 {
-      color: black;
-      margin-bottom: 8px;
-      font-weight: 600;
-      line-height: 20px;
-      font-size: 19px;
-    }
-
-    .brokerage-hub__filters-block {
+    .brokerage-portal__filters-block {
       display: flex;
       column-gap: 20px;
 
@@ -161,6 +154,10 @@
 
     .select-container {
       width: 260px;
+
+      select {
+        height: 40px;
+      }
     }
   }
 }
@@ -175,7 +172,7 @@
   }
 }
 
-.brokerage-hub__header {
+.brokerage-portal__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -188,11 +185,12 @@
   }
 }
 
-.brokerage-hub__cell-with-title {
+.brokerage-portal__cell-with-title {
   h3 {
     font-size: 14px;
     color: black;
     margin-bottom: 8px;
+    font-weight: 700;
   }
 
   p {

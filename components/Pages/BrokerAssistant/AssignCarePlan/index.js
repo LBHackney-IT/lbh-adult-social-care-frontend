@@ -71,13 +71,7 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
 
   return (
     <Container className="assign-care-plan">
-      <BrokerageHeader serviceName="" links={[
-        { href: 'broker-portal', text: 'Broker portal' },
-        { href: 'care-charges', text: 'Care charges' },
-        { href: 'approvals', text: 'Approvals' },
-        { href: 'finance', text: 'Finance' },
-        { href: 'logout', text: 'Log Out' },
-      ]}/>
+      <BrokerageHeader />
       <Container className="px-60 pt-10">
         <Breadcrumbs values={breadcrumbs}/>
       </Container>

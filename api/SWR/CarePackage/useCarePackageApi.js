@@ -7,39 +7,64 @@ const useCarePackageApi = {
   summary: (carePackageId) =>
     useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/summary` : null),
 
-  brokerView: ({ pageNumber, toDate, fromDate, status, serviceUserId }) =>
+  brokerView: ({ pageNumber, toDate, fromDate, status, serviceUserName, brokerId }) =>
     useGetData(
       `${CARE_PACKAGES_URL}/broker-view${getQueryParamsFromObject({
         pageNumber,
         status,
         toDate,
         fromDate,
-        serviceUserId,
+        serviceUserName,
+        brokerId,
       })}`,
       '',
       {}
     ),
 
-  coreSettings: (carePackageId) =>
-    useGetData(
-      carePackageId !== undefined || carePackageId !== 'undefined' ? `${CARE_PACKAGES_URL}/${carePackageId}/core` : null
-    ),
-
   details: (packageId) =>
     useGetData(packageId !== undefined ? `${CARE_PACKAGES_URL}/${packageId}/details` : null, '', {}),
-  suppliers: ({ supplierName }) => useGetData(`/suppliers${getQueryParamsFromObject({ supplierName })}`),
-  serviceUser: ({ firstName, lastName, hackneyId, dateOfBirth, postcode, pageNumber }) => (
-    useGetData(`/service-user${getQueryParamsFromObject({
+
+  suppliers: ({ supplierName, shouldFetch }) =>
+    useGetData(shouldFetch ? `/suppliers${getQueryParamsFromObject({ supplierName })}` : null),
+
+  singleSupplier: (supplierId) => useGetData(supplierId ? `/suppliers/${supplierId}` : null, '', {}),
+  singlePackageInfo: (packageId) => {
+    const response = useGetData(`${CARE_PACKAGES_URL}/${packageId}`, '', {});
+    return { ...response, singlePackageInfoLoading: !!response.data};
+  },
+  serviceUser: ({ hackneyId }, shouldFetch) => (
+    useGetData(shouldFetch ? `/service-user/${hackneyId}` : null, 'Can not get service user', {})
+  ),
+  serviceUserSearch: ({
+    firstName,
+    lastName,
+    hackneyId,
+    dateOfBirth,
+    postcode,
+    pageNumber,
+    pageSize,
+    orderBy
+  }, shouldFetch) => (
+    useGetData(shouldFetch ? `/service-user/search${getQueryParamsFromObject({
       firstName,
       lastName,
       hackneyId,
       dateOfBirth,
       postcode,
       pageNumber,
-    })}`, 'Can not get service user', { data: [], pagingMetaData: {}})
+      pageSize,
+      orderBy,
+    })}` : null, 'Can not get service user', { data: [], pagingMetaData: {}})
   ),
-  singleSupplier: (supplierId) => useGetData(supplierId ? `/suppliers/${supplierId}` : null, '', {}),
-  singlePackageInfo: (packageId) => useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}` : null),
+  serviceUserMasterSearch: ({ firstName, lastName, hackneyId, dateOfBirth, postcode }, shouldFetch) => (
+    useGetData(shouldFetch ? `/service-user/master-search${getQueryParamsFromObject({
+      firstName,
+      lastName,
+      hackneyId,
+      dateOfBirth,
+      postcode,
+    })}` : null, 'Can not get service user', { residents: [] })
+  ),
 };
 
 export default useCarePackageApi;

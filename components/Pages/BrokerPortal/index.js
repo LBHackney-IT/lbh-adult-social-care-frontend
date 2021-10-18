@@ -1,26 +1,25 @@
 import { useRouter } from 'next/router';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import BrokerageHeader from '../CarePackages/BrokerageHeader/BrokerageHeader';
-import { Breadcrumbs, Button, Container, HorizontalSeparator, Select } from '../../HackneyDS';
+import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
 import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
 import { BrokerPortalTable } from './BrokerPortalTable';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
-import { BROKER_PORTAL_SEARCH_ROUTE, LOGOUT_ROUTE } from '../../../routes/RouteConstants';
+import Loading from '../../Loading';
+import { SERVICE_USER_MASTER_SEARCH_ROUTE, SERVICE_USER_SEARCH_ROUTE } from '../../../routes/RouteConstants';
 
 const statusOptions = [
   { text: 'All', value: '' },
   { text: 'New', value: '1' },
   { text: 'In Progress', value: '2' },
-  { text: 'Submitted For Approval', value: '3' },
+  { text: 'Waiting For Approval', value: '3' },
   { text: 'Approved', value: '4' },
   { text: 'Not Approved', value: '5' },
   { text: 'Ended', value: '6' },
   { text: 'Cancelled', value: '7' },
 ];
-
-const links = [{ text: 'Log out', href: LOGOUT_ROUTE }];
 
 const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Portal' }];
 
@@ -33,45 +32,58 @@ export const BrokerPortalPage = ({
   setFilters,
   clearFilter,
   onRowClick = () => {},
+  loading,
 }) => {
+  const [searchText, setSearchText] = useState('');
+
   const router = useRouter();
 
   const selectorRef = useRef(null);
 
-  const changeFilterField = (field, value) => {
-    setFilters((prevState) => ({
-      ...prevState,
-      [field]: value,
-    }));
-  };
+  const changeFilterField = useCallback(
+    (field, value) => {
+      setFilters((prevState) => ({
+        ...prevState,
+        [field]: value,
+      }));
+    },
+    [setFilters]
+  );
+
+  const onSearch = useCallback(() => {
+    changeFilterField('serviceUserName', searchText);
+  }, [changeFilterField, searchText]);
 
   const goToBrokerPortalSearch = useCallback(() => {
-    router.push(BROKER_PORTAL_SEARCH_ROUTE);
+    router.push(SERVICE_USER_MASTER_SEARCH_ROUTE);
   }, []);
 
   const shouldShowClear = Object.values(filters).some((item) => !!item);
 
   return (
     <div className="broker-portal">
-      <BrokerageHeader serviceName="" links={links} />
-
+      <Loading isLoading={loading} />
+      <BrokerageHeader />
       <Container background="#FAFAFA" padding="0 0 55px">
         <Container maxWidth="1080px" margin="0 auto">
-          <Container className="px-60">
+          <Container padding='10px 60px 0px'>
             <Breadcrumbs values={breadcrumbs} />
           </Container>
 
-          <Container className="brokerage-hub__header">
+          <Container className="brokerage-portal__header">
             <h1>Broker Portal</h1>
             <Button handler={goToBrokerPortalSearch}>Find a service user</Button>
           </Container>
 
-          <Container className="brokerage-hub__filters">
-            <h2>Search Packages</h2>
+          <Container className="brokerage-portal__filters">
+            <div className="brokerage-portal__filters-block">
+              <FormGroup className="form-group--inline-label">
+                <SearchBox label="Search Packages" value={searchText} onChangeValue={setSearchText} search={onSearch} />
+              </FormGroup>
 
-            <div className="brokerage-hub__filters-block">
-              <FormGroup className="form-group--inline-label brokerage-hub__form-status" label="Status">
+              <FormGroup className="form-group--inline-label brokerage-portal__form-status" label="Status">
                 <Select
+                  emptyElement={null}
                   options={statusOptions}
                   value={filters.status}
                   onChange={({ target: { value } }) => changeFilterField('status', value)}
@@ -81,18 +93,18 @@ export const BrokerPortalPage = ({
               <FormGroup className="form-group--inline-label" label="Broker">
                 <CustomAsyncSelector
                   innerRef={selectorRef}
-                  onChange={(option) => changeFilterField('serviceUser', option)}
+                  onChange={(option) => changeFilterField('broker', option)}
                   getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
                   endpoint={{
                     endpointName: '/clients/get-all',
                     filterKey: 'clientName',
                   }}
-                  value={filters.serviceUser}
+                  value={filters.broker}
                 />
               </FormGroup>
             </div>
 
-            <div className="brokerage-hub__filters-block">
+            <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label" label="From">
                 <DatePick
                   placeholder="Select date"

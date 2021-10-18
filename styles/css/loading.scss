@@ -2,6 +2,9 @@
   width: 32px;
   height: 32px;
   -webkit-animation: rotation 1s infinite linear;
+  margin: auto;
+  display: block;
+  shape-rendering: auto;
   @keyframes rotation {
     from {
       -webkit-transform: rotate(0deg);
@@ -18,6 +21,10 @@
     width: 50px;
     height: 50px;
     transform: translate(50%, 50%);
+  }
+
+  &-center-container {
+    position: absolute;
   }
 }
 
