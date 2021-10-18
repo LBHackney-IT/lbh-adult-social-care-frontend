@@ -24,9 +24,9 @@ Default.args = {
     { value: 'package-2', text: 'Package 2' },
   ],
   userDetails: {
-    address: 'E9 6EY',
-    userName: 'James Stevens',
+    postcode: 'E9 6EY',
+    client: 'James Stevens',
     dateOfBirth: new Date(1972, 12, 9),
     hackneyId: '786288',
-  }
+  },
 };

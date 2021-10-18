@@ -21,9 +21,7 @@ const AssignPackage = () => {
   const userDetails = useMemo(() => mapServiceUserBasicInfo(packageInfo.serviceUser), [packageInfo.serviceUser]);
 
   return (
-    <div>
-      <AssignCarePlan userDetails={userDetails} brokerOptions={brokerOptions} packageTypeOptions={packageTypeOptions} />
-    </div>
+    <AssignCarePlan userDetails={userDetails} brokerOptions={brokerOptions} packageTypeOptions={packageTypeOptions} />
   );
 };
 
