@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
+import { useCarePackageApi } from 'api';
 import { BrokerPackage } from 'components/Pages/CarePackages/BrokerPackage';
 import { getLoggedInUser } from 'service/helpers';
 import withSession from 'lib/session';

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import useCarePackageApi from '../../../../api/SWR/CarePackage/useCarePackageApi';
+import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { updateCarePackageCosts } from '../../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
 import { dateStringToDate, uniqueID } from '../../../../service/helpers';

@@ -1,35 +1,31 @@
+import { useRouter } from 'next/router';
 import React, { memo } from 'react';
+import { useCarePackageApi } from 'api';
+import { formatDate } from 'service/helpers';
 
-const testHistoryData = new Array(10).fill('').map(() => ({
-  date: '06.06.2022',
-  name: 'Remika',
-  text: 'Cancelled care charges',
-  description:
-    Math.random() > 0.3
-      ? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer convallis' +
-        ' vel elit sed interdum. Quisque sagittis, orci eu imperdiet porta, risus quam dignissim felis, id interdum' +
-        ' justo nunc sed ligula. Phasellus urna orci, aliquet id tincidunt vel, viverra aliquet magna. Nam sagittis' +
-        ' elementum nunc, sit amet dignissim tortor bibendum nec'
-      : '',
-}));
+const HistoryList = () => {
+  const router = useRouter();
+  const { guid: packageId } = router.query;
 
-const HistoryList = () => (
-  <div className="history__list">
-    {/* todo: replace index with ID during integration */}
-    {testHistoryData.map((item, index) => (
-      <div key={index}>
-        <p>{item.date}</p>
+  const { data } = useCarePackageApi.history(packageId);
 
-        <div>
-          <span>{item.name}</span>
-          <span className="history__list-dot">•</span>
-          <span>{item.text}</span>
+  return (
+    <div className="history__list">
+      {data.history?.map((item) => (
+        <div key={item.id}>
+          <p>{formatDate(item.dateCreated)}</p>
+
+          <div>
+            <span>{item.creatorName}</span>
+            <span className="history__list-dot">•</span>
+            <span>{item.description}</span>
+          </div>
+
+          {item.requestMoreInformation && <span>{item.requestMoreInformation}</span>}
         </div>
-
-        {item.description && <span>{item.description}</span>}
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
+};
 
 export default memo(HistoryList);
