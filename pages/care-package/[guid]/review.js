@@ -40,7 +40,7 @@ const careChargesClaimCollector = {
 const ReviewPackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
-  const { data, isValidating: summaryLoading } = useCarePackageApi.summary(carePackageId);
+  const { data, isLoading: summaryLoading } = useCarePackageApi.summary(carePackageId);
 
   const checkSettings = (settings) => settings && settingsTypes
     .filter((item) => settings[item.field])

@@ -32,8 +32,8 @@ const FundedNursingCarePage = () => {
   const carePackageId = router.query.guid;
 
   const dispatch = useDispatch();
-  const { data: carePackageReclaimFnc, isValidating: fncLoading } = useReclaimApi.fnc(carePackageId);
-  const { data: activeFncPrice, isValidating: fncPriceLoading } = useReclaimApi.activeFncPrice(carePackageId);
+  const { data: carePackageReclaimFnc, isLoading: fncLoading } = useReclaimApi.fnc(carePackageId);
+  const { data: activeFncPrice, isLoading: fncPriceLoading } = useReclaimApi.activeFncPrice(carePackageId);
   const [loading, setLoading] = useState(false);
 
   const pushNotification = (text, className = 'error') => {

@@ -66,7 +66,7 @@ const Packages = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { data: packageInfo, isValidating: packageInfoLoading } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo, isLoading: packageInfoLoading } = useCarePackageApi.singlePackageInfo(packageId);
   const { client, dateOfBirth, hackneyId, postcode } = mapServiceUserBasicInfo(packageInfo.serviceUser);
 
   return (

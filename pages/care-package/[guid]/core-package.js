@@ -44,11 +44,11 @@ const CorePackagePage = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { data: schedulingOptions, isValidating: schedulingLoading } = useCarePackageOptions.packageSchedulingOptions();
-  const { options: packageTypes = [], isValidating: packageGetAllLoading } = usePackageGetAll();
-  const { data: primarySupportReasons = [], isValidating: primarySupportReasonLoading } = usePrimarySupportReason();
+  const { data: schedulingOptions, isLoading: schedulingLoading } = useCarePackageOptions.packageSchedulingOptions();
+  const { options: packageTypes = [], isLoading: packageGetAllLoading } = usePackageGetAll();
+  const { data: primarySupportReasons = [], isLoading: primarySupportReasonLoading } = usePrimarySupportReason();
 
-  const { data: packageInfo, isValidating: singlePackageInfoLoading } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo, isLoading: singlePackageInfoLoading } = useCarePackageApi.singlePackageInfo(packageId);
 
   const [loading, setLoading] = useState(false);
 
