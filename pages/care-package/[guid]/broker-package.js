@@ -25,9 +25,9 @@ const BrokerPackagePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const { data: detailsData } = useCarePackageApi.details(packageId);
+  const { data: detailsData, isValidating: detailsLoading } = useCarePackageApi.details(packageId);
 
-  const { data: selectedSupplier } = useCarePackageApi.singleSupplier(detailsData.supplierId);
+  const { data: selectedSupplier, isValidating: singleSupplierLoading } = useCarePackageApi.singleSupplier(detailsData.supplierId);
   const { supplierName } = selectedSupplier;
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const BrokerPackagePage = () => {
 
   return (
     <BrokerPackage
-      loading={selectedSupplier || detailsData}
+      loading={detailsLoading || singleSupplierLoading}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
       setSelectedItem={setSelectedItem}

@@ -44,11 +44,11 @@ const CorePackagePage = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { data: schedulingOptions } = useCarePackageOptions.packageSchedulingOptions();
-  const { options: packageTypes = [], packageGetAllLoading } = usePackageGetAll();
-  const { data: primarySupportReasons = [], primarySupportReasonLoading } = usePrimarySupportReason();
+  const { data: schedulingOptions, isValidating: schedulingLoading } = useCarePackageOptions.packageSchedulingOptions();
+  const { options: packageTypes = [], isValidating: packageGetAllLoading } = usePackageGetAll();
+  const { data: primarySupportReasons = [], isValidating: primarySupportReasonLoading } = usePrimarySupportReason();
 
-  const { data: packageInfo, singlePackageInfoLoading } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo, isValidating: singlePackageInfoLoading } = useCarePackageApi.singlePackageInfo(packageId);
 
   const [loading, setLoading] = useState(false);
 
@@ -92,7 +92,7 @@ const CorePackagePage = () => {
     packageTypeOptions: packageTypes,
     saveCorePackage: updatePackage,
     defaultValues: currentPackageCoreSettings,
-    loading: !schedulingOptions || loading || packageGetAllLoading ||
+    loading: schedulingLoading || loading || packageGetAllLoading ||
       primarySupportReasonLoading || singlePackageInfoLoading,
   };
 

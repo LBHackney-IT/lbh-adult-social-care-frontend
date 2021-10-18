@@ -139,7 +139,7 @@ const CareCharges = ({
     <Container className="brokerage__care-charges">
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        <Loading isLoading={loading} className="loading-center" />
+        <Loading isLoading={loading} />
         <TitleSubtitleHeader title='Build a care package' subTitle="Care Charges"/>
         <Container>
           <h3 className="brokerage__item-title">Care charges</h3>

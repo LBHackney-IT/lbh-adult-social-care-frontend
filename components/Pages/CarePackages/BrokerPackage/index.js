@@ -278,7 +278,7 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        <Loading className="loading-center" isLoading={loading || detailsData === undefined} />
+        <Loading isLoading={loading || detailsData === undefined} />
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
           <Container>

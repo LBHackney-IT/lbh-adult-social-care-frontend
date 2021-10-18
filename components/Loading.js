@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Loading = ({ className = '', isLoading }) => {
-  if(!isLoading) return <></>;
+const Loading = ({ className = 'loading-center', isLoading }) => {
+  if(!isLoading) return null;
   return (
     <svg className={`loading ${className}`}
          style={{ margin: 'auto', display: 'block', shapeRendering: 'auto' }}
