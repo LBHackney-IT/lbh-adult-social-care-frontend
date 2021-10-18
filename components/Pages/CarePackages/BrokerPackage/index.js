@@ -24,13 +24,12 @@ const initialNeed = {
   errorEndDate: '',
 };
 
-export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, selectedItem, setSelectedItem }) => {
+export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, setCurrentPage, selectedItem, setSelectedItem }) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
 

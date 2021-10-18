@@ -66,7 +66,7 @@ export const BrokerPortalPage = ({
       <BrokerageHeader />
       <Container background="#FAFAFA" padding="0 0 55px">
         <Container maxWidth="1080px" margin="0 auto">
-          <Container padding='10px 60px 0x'>
+          <Container padding='10px 60px 0px'>
             <Breadcrumbs values={breadcrumbs} />
           </Container>
 
