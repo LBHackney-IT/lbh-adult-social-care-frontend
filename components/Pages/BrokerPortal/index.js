@@ -62,11 +62,11 @@ export const BrokerPortalPage = ({
 
   return (
     <div className="broker-portal">
-      <Loading isLoading={loading} className='loading-center' />
+      <Loading isLoading={loading} />
       <BrokerageHeader />
       <Container background="#FAFAFA" padding="0 0 55px">
         <Container maxWidth="1080px" margin="0 auto">
-          <Container padding='8px 60px 0 60px'>
+          <Container padding='10px 60px 0px'>
             <Breadcrumbs values={breadcrumbs} />
           </Container>
 
@@ -83,6 +83,7 @@ export const BrokerPortalPage = ({
 
               <FormGroup className="form-group--inline-label brokerage-portal__form-status" label="Status">
                 <Select
+                  emptyElement={null}
                   options={statusOptions}
                   value={filters.status}
                   onChange={({ target: { value } }) => changeFilterField('status', value)}

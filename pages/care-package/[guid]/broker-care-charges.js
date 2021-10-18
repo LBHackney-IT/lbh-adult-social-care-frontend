@@ -34,8 +34,8 @@ const CareChargesPage = () => {
   const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e'; // todo to be removed
 
   const dispatch = useDispatch();
-  const { data: carePackageReclaimCareCharge } = useReclaimApi.careCharge(carePackageId);
-  const { data: calculatedCost } = useReclaimApi.calculatedCost(carePackageId, serviceUserId);
+  const { data: carePackageReclaimCareCharge, isLoading: careChargeLoading } = useReclaimApi.careCharge(carePackageId);
+  const { data: calculatedCost, isLoading: calculatedCostLoading } = useReclaimApi.calculatedCost(carePackageId, serviceUserId);
 
   const collectingReasonOptions = [
     { text: 'Service user unable to manage finances', value: '1' },
@@ -77,7 +77,7 @@ const CareChargesPage = () => {
 
   return (
     <CareCharges
-      loading={loading || carePackageReclaimCareCharge === undefined || calculatedCost === undefined}
+      loading={loading || calculatedCostLoading || careChargeLoading}
       reasonsCollecting={collectingReasonOptions}
       calculatedCost={calculatedCost}
       carePackageReclaimCareCharge={carePackageReclaimCareCharge}

@@ -23,12 +23,12 @@ const BrokerPackagePage = () => {
   const { guid: packageId } = router.query;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
-  const { data: detailsData } = useCarePackageApi.details(packageId);
+  const { data: detailsData, isLoading: detailsLoading } = useCarePackageApi.details(packageId);
 
-  const { data: selectedSupplier } = useCarePackageApi.singleSupplier(detailsData.supplierId);
+  const { data: selectedSupplier, isLoading: singleSupplierLoading } = useCarePackageApi.singleSupplier(detailsData.supplierId);
   const { supplierName } = selectedSupplier;
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const BrokerPackagePage = () => {
 
   return (
     <BrokerPackage
-      loading={selectedSupplier || detailsData || loading}
+      loading={detailsLoading || singleSupplierLoading || loading}
       setLoading={setLoading}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}

@@ -1,9 +1,10 @@
 import React from 'react';
 
-const Loading = ({ className = '', isLoading }) => {
-  if(!isLoading) return <></>;
+const Loading = ({ className = 'loading-center', isLoading }) => {
+  if(!isLoading) return null;
   return (
     <svg className={`loading ${className}`}
+         style={{ margin: 'auto', display: 'block', shapeRendering: 'auto' }}
          width="200px"
          height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
       <g transform="translate(80,50)">

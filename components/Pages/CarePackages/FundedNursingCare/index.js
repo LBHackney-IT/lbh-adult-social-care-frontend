@@ -146,7 +146,7 @@ const FundedNursingCare = ({
 
   return (
     <Container className="brokerage__funded-nursing-care">
-      <Loading isLoading={loading} className="loading-center" />
+      <Loading isLoading={loading} />
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
         <TitleSubtitleHeader title='Build a care package' subTitle="Funded Nursing Care"/>

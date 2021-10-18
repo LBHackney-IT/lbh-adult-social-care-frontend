@@ -39,7 +39,7 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
 
   const popupMainContent = (
     <Container>
-      <Loading isLoading={loading} className="loading-center" />
+      <Loading isLoading={loading} />
       <FormGroup className="brokerage__approved-by-select" label="To be approved by">
         <Select options={approverOptions} value={approverId} onChangeValue={setApproverId} />
       </FormGroup>
