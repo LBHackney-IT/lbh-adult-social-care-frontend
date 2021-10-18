@@ -1,19 +1,11 @@
 import React, { useState } from 'react';
-import {
-  Announcement,
-  Button,
-  Container,
-  Select,
-  Textarea,
-  UploadGreenButton,
-  Breadcrumbs
-} from '../../../HackneyDS';
+import { useRouter } from 'next/router';
+import { Announcement, Button, Container, Select, Textarea, Breadcrumbs } from '../../../HackneyDS';
 import FormGroup from '../../../HackneyDS/FormGroup';
 import { requiredSchema } from '../../../../constants/schemas';
 import BrokerageHeader from '../../CarePackages/BrokerageHeader/BrokerageHeader';
 import TitleSubtitleHeader from '../../CarePackages/TitleSubtitleHeader';
-import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
-import { useRouter } from 'next/router';
+import ServiceUserDetails from '../ServiceUserDetails';
 import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 
 const breadcrumbs = [
@@ -23,15 +15,17 @@ const breadcrumbs = [
 ];
 
 const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
+  const [assignedCarePlan, setAssignedCarePlan] = useState(false);
+
+  const [packageType, setPackageType] = useState();
+  const [broker, setBroker] = useState();
+  const [notes, setNotes] = useState('');
+
   const [errors, setErrors] = useState({
     broker: '',
     packageType: '',
   });
-  const [packageType, setPackageType] = useState();
-  const [broker, setBroker] = useState();
-  const [assignedCarePlan, setAssignedCarePlan] = useState(false);
-  const [notes, setNotes] = useState('');
-  const [file, setFile] = useState(null);
+
   const router = useRouter();
 
   const clickSave = async () => {
@@ -39,67 +33,71 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
       {
         schema: requiredSchema.string,
         value: broker,
-        field: 'broker'
+        field: 'broker',
       },
       {
         schema: requiredSchema.string,
         value: packageType,
-        field: 'packageType'
+        field: 'packageType',
       },
     ];
 
     let hasErrors = false;
-    let localErrors = {};
-    for await (let { schema, value, field } of validFields) {
+    const localErrors = {};
+
+    for await (const { schema, value, field } of validFields) {
       const isValid = await schema.isValid({ value });
       if (!isValid) {
         hasErrors = true;
         localErrors[field] = 'Required field';
       }
     }
-    setErrors(prevState => ({ ...prevState, ...localErrors }));
+
+    setErrors((prevState) => ({ ...prevState, ...localErrors }));
 
     if (hasErrors) return;
 
-    alert('Assign care plan');
     setAssignedCarePlan(true);
   };
 
   const changeError = (field, value = '') => {
-    setErrors(prevState => ({ ...prevState, [field]: value }));
+    setErrors((prevState) => ({ ...prevState, [field]: value }));
   };
 
   return (
     <Container className="assign-care-plan">
       <BrokerageHeader />
-      <Container className="px-60 pt-10">
-        <Breadcrumbs values={breadcrumbs}/>
-      </Container>
-      {
-        assignedCarePlan ?
-          <Container padding='60px' className='brokerage__container-main'>
+
+      <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
+        <Breadcrumbs values={breadcrumbs} />
+
+        {assignedCarePlan ? (
+          <Container className="brokerage__container-main">
             <Announcement className="success mb">
               <div slot="title">Success!</div>
               <div slot="content">Care plan assigned to {broker}</div>
             </Announcement>
-            <Button className='mt-60' handler={() => router.replace(BROKER_PORTAL_ROUTE)}>Back to Broker Portal</Button>
+
+            <Button className="mt-60" handler={() => router.replace(BROKER_PORTAL_ROUTE)}>
+              Back to Broker Portal
+            </Button>
           </Container>
-          :
-          <Container padding='0 60px' className="brokerage__container-main">
-            <TitleSubtitleHeader
-              title="Assign a care plan to brokerage"
-              subTitle="Assign and attach a care plan"
-            />
+        ) : (
+          <Container className="brokerage__container-main">
+            <TitleSubtitleHeader title="Assign a care plan to brokerage" subTitle="Assign and attach a care plan" />
+
             <ServiceUserDetails
-              address={userDetails.address}
-              serviceUserName={userDetails.userName}
+              address={userDetails.postcode}
+              serviceUserName={userDetails.client}
               dateOfBirth={userDetails.dateOfBirth}
               hackneyId={userDetails.hackneyId}
             />
+
             <Container>
               <Container className="brokerage__container">
                 <h3>Assign broker</h3>
-                <FormGroup error={errors.broker} required label="Select broker">
+
+                <FormGroup error={errors.broker} required label="Select broker" className="assign-care-plan__select">
                   <Select
                     id="select-broker"
                     options={brokerOptions}
@@ -110,9 +108,10 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
                     }}
                   />
                 </FormGroup>
+
                 <FormGroup error={errors.packageType} required label="What package type?">
                   <Select
-                    id="select-broker"
+                    id="select-package"
                     options={packageTypeOptions}
                     value={packageType}
                     onChangeValue={(value) => {
@@ -122,19 +121,26 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
                   />
                 </FormGroup>
               </Container>
-              <Container className="brokerage__container">
-                <h3>Support plan and care package</h3>
-                <UploadGreenButton label="Upload social worker care plan" file={file} setFile={setFile}/>
-              </Container>
-              <FormGroup label="Add notes">
-                <Textarea handler={setNotes} value={notes}/>
-              </FormGroup>
+
+              {/* Feature temporarily postponed */}
+
+              {/* <Container className="brokerage__container"> */}
+              {/*  <h3>Support plan and care package</h3> */}
+              {/*  <UploadGreenButton label="Upload social worker care plan" file={file} setFile={setFile} /> */}
+              {/* </Container> */}
+
+              <div className="assign-care-plan__notes">
+                <h3>Add notes</h3>
+                <Textarea handler={setNotes} value={notes} rows={3} />
+              </div>
+
               <Container className="brokerage__actions">
                 <Button handler={clickSave}>Assign care plan</Button>
               </Container>
             </Container>
           </Container>
-      }
+        )}
+      </Container>
     </Container>
   );
 };
