@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { BROKER_PORTAL_ROUTE, getBrokerPackageRoute } from '../../../../routes/RouteConstants';
+import { BROKER_PORTAL_ROUTE, getBrokerPackageRoute, getHistoryRoute } from '../../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Container, Link, Breadcrumbs } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
@@ -20,7 +20,7 @@ const links = [
 ];
 
 const breadcrumbs = [
-  { text: 'Home', href:  '/' },
+  { text: 'Home', href: '/' },
   { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
   { text: 'Full overview' },
 ];
@@ -36,65 +36,82 @@ export const ReviewPackageDetails = ({
 }) => {
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
 
-  const redirectToBrokerPackage = () => router.push(getBrokerPackageRoute(packageId));
+  const router = useRouter();
+
+  const goToBrokerPackage = () => router.push(getBrokerPackageRoute(packageId));
+  const goToHistory = () => router.push(getHistoryRoute(packageId));
 
   return (
     <div className="review-package-details">
-      {isOpenedPopup && (
-        <SubmitForApprovalPopup
-          packageId={packageId}
-          closePopup={() => setIsOpenedPopup(false)}
-        />
-      )}
+      {isOpenedPopup && <SubmitForApprovalPopup packageId={packageId} closePopup={() => setIsOpenedPopup(false)} />}
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding='8px 60px 0 60px'>
+      <Container maxWidth="1080px" margin="0 auto" padding="8px 60px 0 60px">
         <Breadcrumbs values={breadcrumbs} />
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
         <Container className="brokerage__container-header brokerage__container">
           <p>{title}</p>
-          <h2>{subTitle} <span className="text-blue font-size-19px">Package history</span></h2>
+          <h2>
+            {subTitle}{' '}
+            <span onClick={goToHistory} className="text-blue font-size-19px package-history-link">
+              Package history
+            </span>
+          </h2>
         </Container>
         <PackageUserDetails {...userDetails} />
         <Container className="review-package-details__main-container">
           <Container className="review-package-details__links">
-            {links.map(link => (
-              <p key={link.text}>— <Link className="link-button" href={link.href}>{link.text}</Link></p>
+            {links.map((link) => (
+              <p key={link.text}>
+                —{' '}
+                <Link className="link-button" href={link.href}>
+                  {link.text}
+                </Link>
+              </p>
             ))}
           </Container>
           <Container className="review-package-details__cost-info">
-            {packageInfoItems.map(({
-              id: itemId,
-              headerTitle,
-              items,
-              totalCost,
-              totalCostHeader,
-              costOfPlacement,
-              totalCostComponent,
-              details,
-            }) => {
-              return (
+            {packageInfoItems.map(
+              ({
+                id: itemId,
+                headerTitle,
+                items,
+                totalCost,
+                totalCostHeader,
+                costOfPlacement,
+                totalCostComponent,
+                details,
+              }) => (
                 <Container key={itemId} className="review-package-details__cost-info-item">
-                  <PackageInfo details={details} containerId={itemId} headerTitle={headerTitle} items={items}/>
-                  {!!costOfPlacement &&
-                  <p className="brokerage__cost-of-placement">
-                    Cost of placement
-                    <span className="text-lbh-f01 font-weight-bold">{currency.euro}{costOfPlacement.toFixed(2)}</span>
-                  </p>
-                  }
-                  {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader}/>}
+                  <PackageInfo details={details} containerId={itemId} headerTitle={headerTitle} items={items} />
+                  {!!costOfPlacement && (
+                    <p className="brokerage__cost-of-placement">
+                      Cost of placement
+                      <span className="text-lbh-f01 font-weight-bold">
+                        {currency.euro}
+                        {costOfPlacement.toFixed(2)}
+                      </span>
+                    </p>
+                  )}
+                  {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader} />}
                   {totalCostComponent}
-                  {!!totalCost &&
-                  <Container className="review-package-details__items-actions" display="flex">
-                    <p onClick={() => redirectToBrokerPackage()} className="link-button">Edit</p>
-                    <p onClick={() => redirectToBrokerPackage()} className="link-button red">Remove</p>
-                  </Container>
-                  }
+                  {!!totalCost && (
+                    <Container className="review-package-details__items-actions" display="flex">
+                      <p onClick={goToBrokerPackage} className="link-button">
+                        Edit
+                      </p>
+                      <p onClick={goToBrokerPackage} className="link-button red">
+                        Remove
+                      </p>
+                    </Container>
+                  )}
                 </Container>
-              );
-            })}
+              )
+            )}
             <Container className="review-package-details__summary">
-              <h3 id="summary" className="font-weight-bold">Summary</h3>
+              <h3 id="summary" className="font-weight-bold">
+                Summary
+              </h3>
               {summary.map(({ key, value, className, id }) => (
                 <BrokerageTotalCost key={id} value={value} name={key} className={className} />
               ))}
