@@ -1,19 +1,50 @@
 import React from 'react';
 import { Breadcrumbs, Button, Container, Header, Select, Tag } from '../../../HackneyDS';
-import { CARE_PACKAGE_ROUTE, LOGOUT_ROUTE } from '../../../../routes/RouteConstants';
+import {
+  APPROVALS_ROUTE,
+  BROKER_ASSISTANT_ROUTE,
+  BROKER_PORTAL_ROUTE, CARE_CHARGE_ROUTE,
+  CARE_PACKAGE_ROUTE, FINANCE_ROUTE,
+  LOGOUT_ROUTE
+} from '../../../../routes/RouteConstants';
+import { getServiceUserPackagesRoute } from '../../../../routes/RouteConstants';
 import AlternativePagination from '../../../AlternativePagination';
 import { formatDate } from '../../../../service/helpers';
 import TitleSubtitle from './TitleSubtitle';
-import { getTagColorFromStatusId, getTagDisplayTextFromStatusId } from '../../../../service/getTagFromStatus';
 import FormGroup from '../../../HackneyDS/FormGroup';
+import Loading from '../../../Loading';
 
 const breadcrumbs = [{ text: 'Home', href: CARE_PACKAGE_ROUTE }, { text: 'Care Charges' }];
 
-const links = [{ text: 'Logout', href: LOGOUT_ROUTE }];
+const links = [
+  { text: 'Broker Assistant', href: BROKER_ASSISTANT_ROUTE },
+  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
+  { text: 'Care Charges', href: CARE_CHARGE_ROUTE },
+  { text: 'Approvals', href: FINANCE_ROUTE },
+  { text: 'Finance', href: APPROVALS_ROUTE },
+  { text: 'Logout', href: LOGOUT_ROUTE },
+];
+
+const statusIdParams = {
+  1: {
+    name: 'New',
+    color: 'yellow',
+  },
+  2: {
+    name: 'Existing',
+    color: 'gray',
+  },
+  3: {
+    name: 'S117',
+    color: 'red',
+  }
+}
 
 export const NewCareCharge = ({
+  isLoading,
   filters,
   setFilters,
+  clearFilters,
   searchResults: {
     data,
     pagingMetaData,
@@ -22,13 +53,15 @@ export const NewCareCharge = ({
   setPageNumber,
   statusOptions,
   dateOptions,
+  pushRoute,
   modifiedByOptions,
 }) => {
   const changeFilter = (field) => (value) => setFilters(prevState => ({ ...prevState, [field]: value }));
 
   return (
     <Container className="new-care-charge">
-      <Header links={links}/>
+      <Header links={links} />
+      <Loading isLoading={isLoading} />
       <Container background="#FAFAFA">
         <Container padding="9px 60px 32px 60px" className="centered-container">
           <Breadcrumbs values={breadcrumbs}/>
@@ -58,12 +91,16 @@ export const NewCareCharge = ({
                 value={filters.modifiedBy}
               />
             </FormGroup>
+            {Object.values(filters).some(item => item) && (
+              <Button className='outline gray' handler={clearFilters}>Clear</Button>
+            )}
           </Container>
         </Container>
       </Container>
-      <Container padding="9px 60px 32px 60px" className="centered-container">
+      <Container padding="10px 60px 32px" className="centered-container">
         {data?.map(({
-          statusIds,
+          statusId,
+          isS117,
           dateOfBirth,
           address,
           mosaicId,
@@ -72,18 +109,17 @@ export const NewCareCharge = ({
           lastModified,
           modifiedBy,
         }) => (
-          <Container key={mosaicId} className="new-care-charge__card">
+          <Container
+            onClick={() => pushRoute(getServiceUserPackagesRoute(mosaicId))}
+            key={mosaicId}
+            className="new-care-charge__card"
+          >
             <Container className="new-care-charge__card-title" display="flex">
               <p>Name</p>
-              {statusIds.map(statusId => (
-                <Tag
-                  key={statusId}
-                  className="outline"
-                  color={getTagColorFromStatusId(statusId)}
-                >
-                  {getTagDisplayTextFromStatusId(statusId)}
-                </Tag>
-              ))}
+              <Tag key={statusId} className="outline" color={statusIdParams[statusId].color}>
+                {statusIdParams[statusId].name}
+              </Tag>
+              {isS117 && <Tag key={statusId} className="outline" color='gray'>S117</Tag>}
             </Container>
             <p className='new-care-charge__card-date'>{formatDate(dateOfBirth)}</p>
             <p className='new-care-charge__card-address'>{address}</p>

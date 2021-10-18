@@ -48,6 +48,7 @@
 
 .new-care-charge__selectors {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
 
   .govuk-fieldset {

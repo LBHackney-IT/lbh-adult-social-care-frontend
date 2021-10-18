@@ -8,7 +8,7 @@ import DatePick from '../../DatePick';
 import { BrokerPortalTable } from './BrokerPortalTable';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
 import Loading from '../../Loading';
-import { SERVICE_USER_MASTER_SEARCH_ROUTE, SERVICE_USER_SEARCH_ROUTE } from '../../../routes/RouteConstants';
+import { SERVICE_USER_MASTER_SEARCH_ROUTE } from '../../../routes/RouteConstants';
 
 const statusOptions = [
   { text: 'All', value: '' },

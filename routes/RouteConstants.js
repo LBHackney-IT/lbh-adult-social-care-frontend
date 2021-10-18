@@ -14,4 +14,12 @@ export const SERVICE_USER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/search`;
 export const SERVICE_USER_MASTER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/master-search`;
 export const getServiceUserPackagesRoute = (id) => `${SERVICE_USER_ROUTE}/${id}/packages`;
 
+export const BROKER_ASSISTANT_ROUTE = '/broker-assistant';
+
+export const CARE_CHARGE_ROUTE = '/care-charge';
+
+export const FINANCE_ROUTE = '/finance';
+
+export const APPROVALS_ROUTE = '/approvals';
+
 export const LOGOUT_ROUTE = '/logout';
