@@ -3,10 +3,13 @@ import React from 'react';
 const Loading = ({ className = 'loading-center', isLoading }) => {
   if(!isLoading) return null;
   return (
-    <svg className={`loading ${className}`}
-         style={{ margin: 'auto', display: 'block', shapeRendering: 'auto' }}
-         width="200px"
-         height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+    <svg
+      className={`loading ${className}`}
+      width="200px"
+      height="200px"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="xMidYMid"
+    >
       <g transform="translate(80,50)">
         <g transform="rotate(0)">
           <circle cx="0" cy="0" r="6" fill="#00664f" fillOpacity="1">

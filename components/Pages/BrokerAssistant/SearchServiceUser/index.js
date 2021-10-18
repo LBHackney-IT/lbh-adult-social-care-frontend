@@ -6,12 +6,11 @@ import {
   getServiceUserPackagesRoute,
   getHistoryRoute,
   LOGOUT_ROUTE
-} from 'routes/RouteConstants';
+} from '../../../../routes/RouteConstants';
 import { Button, Container, Header, Input, Breadcrumbs } from '../../../HackneyDS';
 import DatePicker from '../../../HackneyDS/DatePicker';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
 import AlternativePagination from '../../../AlternativePagination';
-import Loading from '../../../Loading';
 import FormGroup from '../../../HackneyDS/FormGroup';
 import SearchResult from '../../../SearchResult';
 
@@ -49,7 +48,6 @@ const SearchServiceUser = ({
   <Container className="search-service-user">
     <Header links={links} />
     <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
-      <Loading isLoading={isLoading}/>
       <Breadcrumbs values={breadcrumbs}/>
       <Container padding="60px 0 0">
         <h3 className="search-service-user__title">Search for a service user</h3>
@@ -79,8 +77,7 @@ const SearchServiceUser = ({
           }
         </Container>
       </Container>
-      <Button className="search-service-user__button" handler={onSearch}>Search</Button>
-      {searchResults === undefined && <Loading className="table-loading"/>}
+      <Button isLoading={isLoading} disabled={isLoading} className="search-service-user__button" handler={onSearch}>Search</Button>
       {searchResults &&
       <Container>
         <SearchResult count={searchResults.length}/>

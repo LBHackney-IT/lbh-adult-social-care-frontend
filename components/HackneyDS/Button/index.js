@@ -50,7 +50,7 @@ export default function Button({
       onClick={handler}
     >
       {addItem && addItemIcon}
-      <LoadingComponent isLoading={isLoading} />
+      <LoadingComponent className='button-loading' isLoading={isLoading} />
       {children}
     </button>
   );
