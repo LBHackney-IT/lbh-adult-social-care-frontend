@@ -10,11 +10,11 @@ const Overview = () => {
   const { brokeredBy, assignedOn, approvedBy, approveOn } = data;
 
   const overviewData = [
-    { value: brokeredBy, label: 'Brokered by' },
-    { value: assignedOn, label: 'Assigned on' },
-    { value: approvedBy, label: 'Approved by' },
-    { value: approveOn, label: 'Approved on' },
-    { value: null, label: 'Care Plan' },
+    { value: brokeredBy ?? '-', label: 'Brokered by' },
+    { value: assignedOn ?? '-', label: 'Assigned on' },
+    { value: approvedBy ?? '-', label: 'Approved by' },
+    { value: approveOn ?? '-', label: 'Approved on' },
+    { value: '-', label: 'Care Plan' },
   ];
 
   return (
