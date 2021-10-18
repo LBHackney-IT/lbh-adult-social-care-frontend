@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Announcement, Button, Container, Select, Textarea, Breadcrumbs } from '../../../HackneyDS';
-import FormGroup from '../../../HackneyDS/FormGroup';
+import React, { useState } from 'react';
 import { requiredSchema } from '../../../../constants/schemas';
+import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
+import { Announcement, Breadcrumbs, Button, Container, Select, Textarea } from '../../../HackneyDS';
+import FormGroup from '../../../HackneyDS/FormGroup';
 import BrokerageHeader from '../../CarePackages/BrokerageHeader/BrokerageHeader';
 import TitleSubtitleHeader from '../../CarePackages/TitleSubtitleHeader';
 import ServiceUserDetails from '../ServiceUserDetails';
-import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 
 const breadcrumbs = [
   { text: 'Home', href: CARE_PACKAGE_ROUTE },
@@ -28,33 +28,33 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
 
   const router = useRouter();
 
-  const clickSave = async () => {
-    const validFields = [
-      {
-        schema: requiredSchema.string,
-        value: broker,
-        field: 'broker',
-      },
-      {
-        schema: requiredSchema.string,
-        value: packageType,
-        field: 'packageType',
-      },
-    ];
+  const validateFields = async (fields) => {
+    const validationResults = await Promise.all(
+      fields.map(async ({ field, value }) => ({
+        isValid: await requiredSchema.string.isValid({ value }),
+        field,
+      }))
+    );
 
-    let hasErrors = false;
-    const localErrors = {};
+    const hasErrors = validationResults.some((result) => !result.isValid);
 
-    for await (const { schema, value, field } of validFields) {
-      const isValid = await schema.isValid({ value });
-      if (!isValid) {
-        hasErrors = true;
-        localErrors[field] = 'Required field';
-      }
-    }
+    const localErrors = validationResults.reduce((acc, { field, isValid }) => {
+      if (!isValid) acc[field] = 'Required field';
+      return acc;
+    }, {});
 
     setErrors((prevState) => ({ ...prevState, ...localErrors }));
 
+    return hasErrors;
+  };
+
+  const clickSave = async () => {
+    const fields = [
+      { value: broker, field: 'broker' },
+      { value: packageType, field: 'packageType' },
+    ];
+
+    const hasErrors = validateFields(fields);
     if (hasErrors) return;
 
     setAssignedCarePlan(true);
