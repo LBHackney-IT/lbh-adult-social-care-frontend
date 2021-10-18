@@ -17,8 +17,8 @@ const breadcrumbs = [
 const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
   const [assignedCarePlan, setAssignedCarePlan] = useState(false);
 
-  const [packageType, setPackageType] = useState();
-  const [broker, setBroker] = useState();
+  const [packageType, setPackageType] = useState(null);
+  const [broker, setBroker] = useState(null);
   const [notes, setNotes] = useState('');
 
   const [errors, setErrors] = useState({
