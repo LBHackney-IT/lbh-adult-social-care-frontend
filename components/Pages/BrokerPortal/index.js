@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useCallback, useRef, useState } from 'react';
-import BrokerageHeader from '../CarePackages/BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../CarePackages/BrokerageHeader';
 import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
 import FormGroup from '../../HackneyDS/FormGroup';
@@ -66,7 +66,7 @@ export const BrokerPortalPage = ({
       <BrokerageHeader />
       <Container background="#FAFAFA" padding="0 0 55px">
         <Container maxWidth="1080px" margin="0 auto">
-          <Container padding='10px 60px 0px'>
+          <Container padding="10px 60px 0px">
             <Breadcrumbs values={breadcrumbs} />
           </Container>
 
@@ -165,3 +165,5 @@ export const BrokerPortalPage = ({
     </div>
   );
 };
+
+export default BrokerPortalPage;

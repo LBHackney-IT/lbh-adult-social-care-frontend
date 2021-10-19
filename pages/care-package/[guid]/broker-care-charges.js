@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import { CareCharges } from 'components';
 import { useReclaimApi, createCarePackageReclaimCareCharge, updateCarePackageReclaimCareCharge } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
-import CareCharges from 'components/Pages/CarePackages/CareCharges';
 import { getLoggedInUser } from 'service/helpers';
 import withSession from 'lib/session';
 
@@ -30,7 +30,10 @@ const CareChargesPage = () => {
 
   const dispatch = useDispatch();
   const { data: carePackageReclaimCareCharge, isLoading: careChargeLoading } = useReclaimApi.careCharge(carePackageId);
-  const { data: calculatedCost, isLoading: calculatedCostLoading } = useReclaimApi.calculatedCost(carePackageId, serviceUserId);
+  const { data: calculatedCost, isLoading: calculatedCostLoading } = useReclaimApi.calculatedCost(
+    carePackageId,
+    serviceUserId
+  );
 
   const collectingReasonOptions = [
     { text: 'Service user unable to manage finances', value: '1' },
@@ -49,19 +52,19 @@ const CareChargesPage = () => {
   const createCareCharge = async (packageId, careChargeCreation) => {
     setLoading(true);
     try {
-      await createCarePackageReclaimCareCharge(packageId, careChargeCreation)
+      await createCarePackageReclaimCareCharge(packageId, careChargeCreation);
       pushNotification(`Care charge created successfully`, 'success');
       router.push(packageReviewPageLink);
     } catch (e) {
       pushNotification(e);
     }
     setLoading(false);
-  }
+  };
 
   const updateCareCharge = async (packageId, careChargeUpdate) => {
     setLoading(true);
     try {
-      await updateCarePackageReclaimCareCharge(packageId, careChargeUpdate)
+      await updateCarePackageReclaimCareCharge(packageId, careChargeUpdate);
       pushNotification(`Care charge updated successfully`, 'success');
       router.push(packageReviewPageLink);
     } catch (e) {

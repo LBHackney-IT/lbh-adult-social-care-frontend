@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Button, Container, ErrorMessage, Input, Label, RadioGroup, Select, Textarea } from '../../../HackneyDS';
 import { requiredSchema } from '../../../../constants/schemas';
 import { currency } from '../../../../constants/strings';
-import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import Loading from '../../../Loading';

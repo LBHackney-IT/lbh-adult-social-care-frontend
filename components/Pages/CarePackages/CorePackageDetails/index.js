@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { object, string } from 'yup';
-import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../BrokerageHeader';
 import { Button, Checkbox, Container, ErrorMessage, RadioGroup } from '../../../HackneyDS';
 import CorePackageSelectors from './CorePackageSelectors';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';

@@ -6,7 +6,7 @@ import { isFunction } from '../../../../api';
 import { requiredSchema } from '../../../../constants/schemas';
 import { dateStringToDate } from '../../../../service/helpers';
 import BrokerageTotalCost from '../BrokerageTotalCost';
-import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import Loading from '../../../Loading';

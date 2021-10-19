@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useUser } from 'api';
-import HackneyFooterInfo from 'components/HackneyFooterInfo';
+import { HackneyFooterInfo, Header } from 'components';
 import { userLogin } from 'reducers/userReducer';
-import { Header } from 'components/HackneyDS';
 import { getLoggedInUser } from 'service/helpers';
 import withSession from 'lib/session';
 

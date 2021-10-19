@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Announcement, Button, Container, Select, Textarea, UploadGreenButton, Breadcrumbs } from '../../../HackneyDS';
 import FormGroup from '../../../HackneyDS/FormGroup';
 import { requiredSchema } from '../../../../constants/schemas';
-import BrokerageHeader from '../../CarePackages/BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../../CarePackages/BrokerageHeader';
 import TitleSubtitleHeader from '../../CarePackages/TitleSubtitleHeader';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
 import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
