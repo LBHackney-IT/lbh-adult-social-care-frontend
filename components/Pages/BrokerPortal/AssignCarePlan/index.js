@@ -57,7 +57,7 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
     return hasErrors;
   };
 
-  const clickSave = async () => {
+  const onSubmit = async () => {
     const fields = [
       { value: broker, field: 'broker' },
       { value: packageType, field: 'packageType' },
@@ -157,7 +157,7 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
               </div>
 
               <Container className="brokerage__actions">
-                <Button handler={clickSave}>Assign care plan</Button>
+                <Button handler={onSubmit}>Assign care plan</Button>
               </Container>
             </Container>
           </Container>
