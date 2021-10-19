@@ -3,8 +3,8 @@ import { SWRConfig } from 'swr';
 import '/styles/globals.scss';
 import { Provider } from 'react-redux';
 
+import { fetcher } from 'api';
 import CustomNotification from 'components/Notifications';
-import fetcher from 'api/SWR/fetcher';
 import { useStore } from '../store';
 
 const swrOptions = {
@@ -13,13 +13,13 @@ const swrOptions = {
   fetcher,
 };
 
-export default function App ({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState);
 
   return (
     <Provider store={store}>
       <SWRConfig value={swrOptions}>
-        <CustomNotification/>
+        <CustomNotification />
         <Component {...pageProps} />
       </SWRConfig>
     </Provider>
