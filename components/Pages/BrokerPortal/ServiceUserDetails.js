@@ -1,38 +1,38 @@
 import React from 'react';
 import { getAgeFromDateString } from '../../../api/Utils/FuncUtils';
-import { formatDate }  from '../../../service/helpers';
-import { Container } from '../../HackneyDS';
+import { formatDate } from '../../../service/helpers';
+import { Container, Heading, HorizontalSeparator, VerticalSeparator } from '../../HackneyDS';
 
 const placeHolderBirthDate = new Date(1990, 10, 10);
-const ServiceUserDetails = ({
-  serviceUserName,
-  hackneyId,
-  dateOfBirth,
-  address,
-  title = 'Service user details'
-}) => (
-  <Container className="user-details brokerage__container">
-    {title && <h3>{title}</h3>}
-    <Container>
-      <p>Client</p>
-      <p>{serviceUserName}</p>
+const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address, title = 'Service user details' }) => (
+  <>
+    {title && <Heading size="l">{title}</Heading>}
+    <HorizontalSeparator height="20px" />
+    <Container display="flex" className='brokerage__container'>
+      <Container>
+        <Heading size="m">Client</Heading>
+        <p>{serviceUserName}</p>
+      </Container>
+      <VerticalSeparator width='30px'/>
+      <Container>
+        <Heading size="m">Hackney ID</Heading>
+        <p>#{hackneyId}</p>
+      </Container>
+      <VerticalSeparator width='30px'/>
+      <Container>
+        <Heading size="m">Age</Heading>
+        <p>
+          {formatDate(dateOfBirth || placeHolderBirthDate, 'dd/MM/yy')}
+          {` (${getAgeFromDateString(dateOfBirth || placeHolderBirthDate)})`}
+        </p>
+      </Container>
+      <VerticalSeparator width='30px'/>
+      <Container>
+        <Heading size="m">Postcode</Heading>
+        <p>{address}</p>
+      </Container>
     </Container>
-    <Container>
-      <p>Hackney ID</p>
-      <p>#{hackneyId}</p>
-    </Container>
-    <Container>
-      <p>Age</p>
-      <p>
-        {formatDate(dateOfBirth || placeHolderBirthDate, 'dd/MM/yy')}
-        {` (${getAgeFromDateString(dateOfBirth || placeHolderBirthDate)})`}
-      </p>
-    </Container>
-    <Container>
-      <p>Postcode</p>
-      <p>{address}</p>
-    </Container>
-  </Container>
+  </>
 );
 
 export default ServiceUserDetails;

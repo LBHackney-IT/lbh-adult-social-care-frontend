@@ -10,6 +10,7 @@ export default function Button({
   target,
   className,
   addItem,
+  type='button',
   handler = () => {},
 }) {
   const outerClassName = className ? ` ${className}` : '';
@@ -39,7 +40,7 @@ export default function Button({
     </a>
   ) : (
     <button
-      type="button"
+      type={type}
       className={`${mainClass}${calculateClassNames}`}
       data-module="govuk-button"
       aria-disabled={disabled}

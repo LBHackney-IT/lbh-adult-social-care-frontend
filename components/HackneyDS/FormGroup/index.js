@@ -30,7 +30,7 @@ export default function FormGroup ({
           <span className="govuk-visually-hidden">Error:</span>
           {error}
         </span>}
-        {(hint || error || label) && <HorizontalSeparator height="10px"/>}
+        {(hint || error || label) && <HorizontalSeparator height="20px"/>}
         {nodeList}
       </fieldset>
     </div>

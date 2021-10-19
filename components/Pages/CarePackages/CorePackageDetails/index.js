@@ -106,6 +106,8 @@ const CorePackageDetails = ({
     }
   }, [defaultValues, packageTypeOptions]);
 
+  console.log('items: ', packageScheduleOptions, )
+
   return (
     <div className="core-package-details brokerage">
       <BrokerageHeader />
