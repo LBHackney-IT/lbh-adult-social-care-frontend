@@ -14,6 +14,14 @@ const formatDateWithSign = (date, sign = '/') => {
   return `${`00${day}`.slice(-2)}${sign}${`00${month}`.slice(-2)}${sign}${`00${year}`.slice(-2)}`;
 };
 
+const compareDescendingDMY = (startDate, endDate) => {
+  const resetStartDate = new Date(startDate);
+  const resetEndDate = new Date(endDate);
+  resetStartDate.setHours(0,0,0,0);
+  resetEndDate.setHours(0,0,0,0);
+  return resetStartDate < resetEndDate;
+};
+
 const dateStringToDate = (dateString) => (dateString ? new Date(dateString) : null);
 
 const incrementDate = ({ incrementTime, date = new Date() }) => {
@@ -123,4 +131,5 @@ export {
   incrementDate,
   getUrlFromFile,
   dateStringToDate,
+  compareDescendingDMY,
 };

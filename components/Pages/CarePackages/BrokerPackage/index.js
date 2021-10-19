@@ -11,7 +11,7 @@ import BrokerPackageSelector from './BrokerPackageSelector';
 import { updateCarePackageCosts } from '../../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
-import { dateStringToDate, uniqueID } from '../../../../service/helpers';
+import { compareDescendingDMY, dateStringToDate, uniqueID } from '../../../../service/helpers';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 
@@ -33,6 +33,7 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
   const [loading, setLoading] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
+  const [supplierWeeklyCostError, setSupplierWeeklyCostError] = useState('');
 
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
@@ -129,14 +130,15 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
   const checkNeedsErrors = (needs) => {
     let hasErrors = false;
     const checkedNeeds = needs.map((item) => {
+      const { startDate, endDate } = item;
       let errorStartDate = '';
       let errorEndDate = '';
-      if (!item.startDate || (item.startDate && item.endDate && item.startDate > item.endDate)) {
+      if (!startDate || (startDate && endDate && compareDescendingDMY(startDate, endDate))) {
         errorStartDate = 'Invalid start date';
-      } else if (item.startDate < packageDates.endDate) {
+      } else if (startDate && compareDescendingDMY(startDate, packageDates.endDate)) {
         errorStartDate = 'Start date should be later then core date';
       }
-      if (item.startDate && item.startDate < packageDates.endDate) {
+      if (endDate && compareDescendingDMY(endDate, packageDates.endDate)) {
         errorEndDate = 'End date should be later then core date';
       }
       if (errorStartDate || errorEndDate) {
@@ -161,6 +163,9 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
 
     setWeeklyNeeds(checkedWeeklyDetails.checkedNeeds);
     setOneOffNeeds(checkOneOffDetails.checkedNeeds);
+    if(!supplierWeeklyCost) {
+      setSupplierWeeklyCostError('The core cost field is required')
+    }
 
     if (checkedWeeklyDetails.hasErrors || checkOneOffDetails.hasErrors) {
       pushNotification('Some validation errors above');
@@ -342,11 +347,13 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
             />
           ) : (
             <BrokerPackageCost
+              setSupplierWeeklyCostError={setSupplierWeeklyCostError}
               removeSupplierCard={removeSupplierCard}
               cardInfo={selectedItem}
               corePackageDates={packageDates}
               addNeed={addNeed}
               weeklyNeeds={weeklyNeeds}
+              supplierWeeklyCostError={supplierWeeklyCostError}
               oneOffNeeds={oneOffNeeds}
               setWeeklyNeeds={setWeeklyNeeds}
               setOneOffNeeds={setOneOffNeeds}

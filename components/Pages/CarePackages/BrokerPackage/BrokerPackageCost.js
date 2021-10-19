@@ -18,7 +18,9 @@ const BrokerPackageCost = ({
   oneOffTotalCost,
   supplierWeeklyCost,
   setSupplierWeeklyCost,
+  supplierWeeklyCostError,
   removeSupplierCard,
+  setSupplierWeeklyCostError,
 }) => (
   <Container className="supplier-look-up__selected">
     {cardInfo && (
@@ -36,11 +38,16 @@ const BrokerPackageCost = ({
     )}
     <Input
       id="supplier-weekly-cost"
+      required
       className="supplier-look-up__weekly-cost"
+      error={supplierWeeklyCostError}
       preSign={currency.euro}
       label="Weekly Cost"
       value={supplierWeeklyCost}
-      onChangeValue={setSupplierWeeklyCost}
+      onChangeValue={(value => {
+        setSupplierWeeklyCost(value);
+        setSupplierWeeklyCostError('');
+      })}
     />
     <BrokerageCost
       name="weekly-additional"
