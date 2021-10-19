@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SelectArrowTriangle } from '../../Icons';
 
-export default function Select ({
+export default function Select({
   onChange = () => {},
   onChangeValue,
   value = { text: '', value: '' },
@@ -11,7 +11,7 @@ export default function Select ({
   emptyElement = { text: 'Select one', value: null },
   id = 'select-id',
   error,
-  IconComponent = <SelectArrowTriangle/>,
+  IconComponent = <SelectArrowTriangle />,
 }) {
   const outerClass = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-select--error' : '';

@@ -8,6 +8,8 @@ import Breadcrumbs from './Breadcrumbs';
 import Collapsible from './Collapsible';
 import Textarea from './Textarea';
 import Checkbox from './Checkbox';
+import FormGroup from './FormGroup';
+import DatePicker from './DatePicker';
 import CookieBanner from './CookieBanner';
 import { Tabs } from './Tabs';
 import { Tab } from './Tabs/Tab';
@@ -24,7 +26,7 @@ import { Table } from './Table';
 import { Pagination } from './Pagination';
 import SearchBox from './SearchBox';
 import RadioItem from './RadioItem';
-import { Tip } from './Tip';
+import Tip from './Tip';
 import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 import { VerticalSeparator } from './Layout/VerticalSeparator';
 import { Container } from './Layout/Container';
@@ -40,10 +42,6 @@ import { FileUpload } from './FileUpload/FileUpload';
 import { UploadGreenButton } from './UploadGreenButton';
 import { SingleAccordion } from './SingleAccordion';
 
-export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
-
-export const getMultipleSlot = (nodeList = [], name) => nodeList.filter((el) => el.props.slot === name);
-
 export {
   Tip,
   RadioGroup,
@@ -54,6 +52,7 @@ export {
   Timeline,
   ErrorMessage,
   Label,
+  DatePicker,
   Hint,
   Input,
   Button,
@@ -70,6 +69,7 @@ export {
   Tabs,
   Tab,
   Tag,
+  FormGroup,
   Select,
   Dialog,
   WarningText,
