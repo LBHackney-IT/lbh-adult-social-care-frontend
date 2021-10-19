@@ -6,12 +6,15 @@ const useGetData = (url, errorMessage, initialData = []) => {
   const response = useSWR(url, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
-    initialData,
   });
 
   useErrorNotification(response.error, errorMessage);
 
-  return { ...response, isLoading: !response.error && !response.data };
+  return {
+    ...response,
+    data: response.data || initialData,
+    isLoading: response.error === undefined && response.data === undefined && !!url
+  };
 };
 
 export default useGetData;
