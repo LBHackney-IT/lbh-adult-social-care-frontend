@@ -24,13 +24,12 @@ const initialNeed = {
   errorEndDate: '',
 };
 
-export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, selectedItem, setSelectedItem }) => {
+export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, setCurrentPage, selectedItem, setSelectedItem }) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
 
@@ -278,7 +277,7 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        {(loading || detailsData === undefined) && <Loading className="loading-center" />}
+        <Loading isLoading={loading} />
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
           <Container>
