@@ -9,7 +9,7 @@ import BrokerageHeader from 'components/Pages/CarePackages/BrokerageHeader/Broke
 import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
 import { requiredSchema } from 'constants/schemas';
 import { addNotification } from 'reducers/notificationsReducer';
-import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE } from 'routes/RouteConstants';
+import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 
 // todo: replace with data from API once available
 const brokerOptions = [
@@ -18,8 +18,8 @@ const brokerOptions = [
 ];
 
 const breadcrumbs = [
-  { text: 'Home', href: CARE_PACKAGE_ROUTE },
-  { text: 'Broker portal', href: BROKER_PORTAL_ROUTE },
+  { text: 'Home', href: BROKER_PORTAL_ROUTE },
+  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
   { text: 'Assign and attach a care plan' },
 ];
 
@@ -113,7 +113,7 @@ const AssignPackage = () => {
             </Button>
           </Container>
         ) : (
-          <Container className="brokerage__container-main">
+          <Container className="brokerage__container-main" margin="60px 0 0">
             <TitleSubtitleHeader title="Assign a care plan to brokerage" subTitle="Assign and attach a care plan" />
 
             <ServiceUserDetails
