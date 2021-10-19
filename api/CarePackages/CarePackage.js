@@ -29,6 +29,13 @@ const updateCarePackageCosts = ({ data, packageId }) => {
   return axiosRequest({ url, data, method: requestMethods.put });
 };
 
+export const assignToBroker = ({ data }) =>
+  axiosRequest({
+    url: `${CARE_PACKAGE_URL}/assign`,
+    method: requestMethods.post,
+    data,
+  });
+
 export {
   changeCarePackageDetails,
   submitCarePackage,

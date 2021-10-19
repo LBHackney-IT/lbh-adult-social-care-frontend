@@ -1,6 +1,10 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { assignToBroker } from '../../../../api/CarePackages/CarePackage';
+import useCarePackageApi from '../../../../api/SWR/CarePackage/useCarePackageApi';
 import { requiredSchema } from '../../../../constants/schemas';
+import { addNotification } from '../../../../reducers/notificationsReducer';
 import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 import { Announcement, Breadcrumbs, Button, Container, Select, Textarea } from '../../../HackneyDS';
 import FormGroup from '../../../HackneyDS/FormGroup';
@@ -26,7 +30,12 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
     packageType: '',
   });
 
+  const dispatch = useDispatch();
+
   const router = useRouter();
+  const { guid: packageId } = router.query;
+
+  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
 
   const validateFields = async (fields) => {
     const validationResults = await Promise.all(
@@ -54,10 +63,23 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
       { value: packageType, field: 'packageType' },
     ];
 
-    const hasErrors = validateFields(fields);
+    const hasErrors = await validateFields(fields);
     if (hasErrors) return;
 
-    setAssignedCarePlan(true);
+    const formData = new FormData();
+
+    formData.append('HackneyUserId', packageInfo.serviceUser.hackneyId);
+    formData.append('BrokerId', broker);
+    formData.append('PackageType', packageType);
+    formData.append('Notes', notes);
+
+    try {
+      await assignToBroker({ data: formData });
+      dispatch(addNotification({ text: 'Success', className: 'success' }));
+      setAssignedCarePlan(true);
+    } catch (error) {
+      dispatch(addNotification({ text: error, className: 'error' }));
+    }
   };
 
   const changeError = (field, value = '') => {
