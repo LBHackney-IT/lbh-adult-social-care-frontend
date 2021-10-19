@@ -9,6 +9,7 @@ import BrokerageBorderCost from '../BrokerageBorderCost';
 import { currency } from '../../../../constants/strings';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
+import Loading from '../../../Loading';
 
 const links = [
   { text: 'Care Package', href: '#care-package' },
@@ -33,6 +34,7 @@ export const ReviewPackageDetails = ({
   title = 'Nursing Care',
   subTitle = 'Package details',
   goBack,
+  loading,
 }) => {
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
 
@@ -43,9 +45,10 @@ export const ReviewPackageDetails = ({
 
   return (
     <div className="review-package-details">
+      <Loading isLoading={loading} />
       {isOpenedPopup && <SubmitForApprovalPopup packageId={packageId} closePopup={() => setIsOpenedPopup(false)} />}
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="8px 60px 0 60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
         <Breadcrumbs values={breadcrumbs} />
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="60px">

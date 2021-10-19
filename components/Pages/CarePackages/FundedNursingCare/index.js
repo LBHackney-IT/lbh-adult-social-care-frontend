@@ -9,6 +9,7 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
+import Loading from '../../../Loading';
 
 const FundedNursingCare = ({
   carePackageId,
@@ -18,6 +19,7 @@ const FundedNursingCare = ({
   createFundedNursingCare = () => {},
   updateFundedNursingCare = () => {},
   goBack = () => {},
+  loading,
 }) => {
   const [collectedByType] = useState({
     hackney: 'gross',
@@ -144,6 +146,7 @@ const FundedNursingCare = ({
 
   return (
     <Container className="brokerage__funded-nursing-care">
+      <Loading isLoading={loading} />
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
         <TitleSubtitleHeader title="Build a care package" subTitle="Funded Nursing Care" />

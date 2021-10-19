@@ -40,7 +40,7 @@ const careChargesClaimCollector = {
 const ReviewPackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
-  const { data } = useCarePackageApi.summary(carePackageId);
+  const { data, isLoading: summaryLoading } = useCarePackageApi.summary(carePackageId);
 
   const checkSettings = (settings) =>
     settings &&
@@ -199,6 +199,7 @@ const ReviewPackageDetailsPage = () => {
 
   return (
     <ReviewPackageDetails
+      loading={summaryLoading}
       subTitle="Review package details"
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}

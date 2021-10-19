@@ -51,7 +51,7 @@ const SearchServiceUser = ({ searchResults, pageNumber, setPageNumber, totalCoun
   return (
     <Container className="search-service-user">
       <Header links={links} />
-      <Container maxWidth="1080px" margin="0 auto" padding="8px 60px 0 60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
         <Breadcrumbs values={breadcrumbs} />
         <Container padding="60px 0 0">
           <h3 className="search-service-user__title">Search for a service user</h3>

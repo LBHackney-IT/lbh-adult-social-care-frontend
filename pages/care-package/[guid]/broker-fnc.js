@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { getCareChargesRoute } from 'routes/RouteConstants';
@@ -21,60 +21,58 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
+const collectedByOptions = [
+  { text: 'Supplier', value: '1' },
+  { text: 'Hackney', value: '2' },
+];
+
 const FundedNursingCarePage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
 
   const dispatch = useDispatch();
-  const { data: carePackageReclaimFnc } = useReclaimApi.fnc(carePackageId);
-  const { data: activeFncPrice } = useReclaimApi.activeFncPrice(carePackageId);
-
-  const collectedByOptions = [
-    { text: 'Supplier', value: '1' },
-    { text: 'Hackney', value: '2' },
-  ];
+  const { data: carePackageReclaimFnc, isLoading: fncLoading } = useReclaimApi.fnc(carePackageId);
+  const { data: activeFncPrice, isLoading: fncPriceLoading } = useReclaimApi.activeFncPrice(carePackageId);
+  const [loading, setLoading] = useState(false);
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
   };
 
-  const createFundedNursingCare = (packageId, fundedNursingCareCreation) => {
-    createCarePackageReclaimFnc(packageId, fundedNursingCareCreation)
-      .then(() => {
-        pushNotification(`Funded Nursing Care created successfully`, 'success');
-        router.push(getCareChargesRoute(carePackageId));
-      })
-      .catch((error) => {
-        pushNotification(error);
-      });
+  const createFundedNursingCare = async (packageId, fundedNursingCareCreation) => {
+    setLoading(true);
+    try {
+      await createCarePackageReclaimFnc(packageId, fundedNursingCareCreation)
+      pushNotification(`Funded Nursing Care created successfully`, 'success');
+      router.push(getCareChargesRoute(carePackageId));
+    } catch (e) {
+      pushNotification(e);
+    }
+    setLoading(false);
   };
 
-  const updateFundedNursingCare = (packageId, fundedNursingCareUpdate) => {
-    updateCarePackageReclaimFnc(packageId, fundedNursingCareUpdate)
-      .then(() => {
-        pushNotification(`Funded Nursing Care updated successfully`, 'success');
-        router.push(getCareChargesRoute(carePackageId));
-      })
-      .catch((error) => {
-        pushNotification(error);
-      });
-  };
-
-  useEffect(() => {});
-
-  const handleBackButton = () => {
-    router.back();
+  const updateFundedNursingCare = async (packageId, fundedNursingCareUpdate) => {
+    setLoading(true);
+    try {
+      await updateCarePackageReclaimFnc(packageId, fundedNursingCareUpdate)
+      pushNotification(`Funded Nursing Care updated successfully`, 'success');
+      router.push(getCareChargesRoute(carePackageId));
+    } catch (e) {
+      pushNotification(e);
+    }
+    setLoading(false);
   };
 
   return (
     <FundedNursingCare
+      loading={loading || fncLoading || fncPriceLoading}
       carePackageId={carePackageId}
       collectedByOptions={collectedByOptions}
       activeFncPrice={activeFncPrice}
       carePackageReclaimFnc={carePackageReclaimFnc}
       createFundedNursingCare={createFundedNursingCare}
       updateFundedNursingCare={updateFundedNursingCare}
-      goBack={handleBackButton}
+      goBack={router.back}
     />
   );
 };
