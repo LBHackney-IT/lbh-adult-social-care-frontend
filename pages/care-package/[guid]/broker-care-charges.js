@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-
-import {
-  createCarePackageReclaimCareCharge,
-  updateCarePackageReclaimCareCharge,
-} from 'api/CarePackages/CarePackageReclaim';
-import useReclaimApi from 'api/SWR/CarePackage/useReclaimApi';
+import { useDispatch } from 'react-redux';
+import { useReclaimApi, createCarePackageReclaimCareCharge, updateCarePackageReclaimCareCharge } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
-import { useDispatch } from 'react-redux';
 import CareCharges from 'components/Pages/CarePackages/CareCharges';
 import { getLoggedInUser } from 'service/helpers';
 import withSession from 'lib/session';

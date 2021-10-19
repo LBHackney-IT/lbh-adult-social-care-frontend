@@ -72,7 +72,7 @@ export const BrokerPortalPage = ({
 
           <Container className="brokerage-portal__header">
             <h1>Broker Portal</h1>
-            <Button handler={goToBrokerPortalSearch}>Find a service user</Button>
+            <Button onClick={goToBrokerPortalSearch}>Find a service user</Button>
           </Container>
 
           <Container className="brokerage-portal__filters">
@@ -137,7 +137,7 @@ export const BrokerPortalPage = ({
               {shouldShowClear && (
                 <Button
                   className="outline gray clear-filter-button"
-                  handler={() => {
+                  onClick={() => {
                     clearFilter();
                     selectorRef.current?.select?.select?.clearValue();
                   }}

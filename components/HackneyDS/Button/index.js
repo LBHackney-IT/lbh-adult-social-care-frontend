@@ -1,5 +1,6 @@
 import React from 'react';
 import Loading from '../../Loading';
+import { Container } from '../index';
 
 export default function Button({
   children,
@@ -11,9 +12,9 @@ export default function Button({
   target,
   className,
   addItem,
+  onClick = () => {},
   LoadingComponent = Loading,
   isLoading,
-  handler = () => {},
 }) {
   const outerClassName = className ? ` ${className}` : '';
   const secondaryClassList = secondary ? ' govuk-secondary lbh-button--secondary' : '';
@@ -47,11 +48,11 @@ export default function Button({
       data-module="govuk-button"
       aria-disabled={disabled}
       disabled={disabled}
-      onClick={handler}
+      onClick={onClick}
     >
+      {isLoading && <LoadingComponent className='loading-absolute-centered' isLoading={isLoading} />}
       {addItem && addItemIcon}
-      <LoadingComponent isLoading={isLoading} />
-      {children}
+      <Container className={isLoading ? 'hide' : ''}>{children}</Container>
     </button>
   );
 }

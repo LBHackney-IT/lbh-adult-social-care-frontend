@@ -1,7 +1,7 @@
 import React from 'react';
-import { getEnGBFormattedDate } from '../Utils/FuncUtils';
+import { getEnGBFormattedDate } from './Utils/FuncUtils';
 
-const optionsMapper = (fields, data = []) =>
+export const optionsMapper = (fields, data = []) =>
   data.map((item) => {
     const mapObject = {};
     for (const field in fields) {
@@ -10,20 +10,20 @@ const optionsMapper = (fields, data = []) =>
     return mapObject;
   });
 
-const mapTypeOfCareIdOptions = (options) =>
+export const mapTypeOfCareIdOptions = (options) =>
   options.map((option) => ({
     text: `${option.optionName} (${option.optionPeriod})`,
     value: option.typeOfStayOptionId,
   }));
 
-const mapCarePackageApprovalHistory = (approvalHistoryItems) =>
+export const mapCarePackageApprovalHistory = (approvalHistoryItems) =>
   approvalHistoryItems.map((historyItem) => ({
     eventDate: getEnGBFormattedDate(historyItem.dateCreated),
     eventMessage: `${historyItem.logText}. ${historyItem.creatorRole}`,
     eventSubMessage: historyItem.logSubText,
   })) || [];
 
-const mapPackageSchedulingOptions = (schedulingOptions = []) =>
+export const mapPackageSchedulingOptions = (schedulingOptions = []) =>
   schedulingOptions.map((option) => ({
     id: option.id,
     label: (
@@ -36,14 +36,10 @@ const mapPackageSchedulingOptions = (schedulingOptions = []) =>
     ),
   })) || [];
 
-const mapServiceUserBasicInfo = (userResponse) => ({
+export const mapServiceUserBasicInfo = (userResponse) => ({
   id: userResponse?.id,
   dateOfBirth: userResponse?.dateOfBirth || new Date(),
   client: `${userResponse?.firstName ?? ''} ${userResponse?.lastName ?? ''}`,
   hackneyId: userResponse?.hackneyId,
   postcode: userResponse?.postCode,
 });
-
-export default optionsMapper;
-
-export { mapCarePackageApprovalHistory, mapTypeOfCareIdOptions, mapPackageSchedulingOptions, mapServiceUserBasicInfo };

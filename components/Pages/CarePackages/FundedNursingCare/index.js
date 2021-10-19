@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Button, Container, FileUpload, Label, RadioGroup, Select, Textarea } from '../../../HackneyDS';
 import FormGroup from '../../../HackneyDS/FormGroup';
 import UrlFromFile from '../../../UrlFromFile';
+import { isFunction } from '@api';
 import { requiredSchema } from '../../../../constants/schemas';
-import { isFunction } from '../../../../api/Utils/FuncUtils';
 import { dateStringToDate } from '../../../../service/helpers';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
@@ -73,8 +73,8 @@ const FundedNursingCare = ({
     }
 
     let hasErrors = false;
-    let localErrors = {};
-    for await (let { schema, value, field } of validFields) {
+    const localErrors = {};
+    for await (const { schema, value, field } of validFields) {
       const isValid = await schema.isValid({ value });
       if (!isValid) {
         hasErrors = true;
@@ -89,7 +89,7 @@ const FundedNursingCare = ({
       carePackageId,
       cost: activeFncPrice,
       claimCollector: collectedBy,
-      supplierId: 1, //To be removed
+      supplierId: 1, // To be removed
       status: 1, // Set active status ?
       type: 1, // Set type of reclaim ?
       startDate: dates.dateFrom,
@@ -101,7 +101,7 @@ const FundedNursingCare = ({
       id: carePackageReclaimFnc.id,
       cost: activeFncPrice,
       claimCollector: collectedBy,
-      supplierId: 1, //To be removed
+      supplierId: 1, // To be removed
       status: 1, // Set active status ?
       type: 1, // Set type of reclaim ?
       startDate: dates.dateFrom,
@@ -149,7 +149,7 @@ const FundedNursingCare = ({
       <Loading isLoading={loading} />
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        <TitleSubtitleHeader title='Build a care package' subTitle="Funded Nursing Care"/>
+        <TitleSubtitleHeader title="Build a care package" subTitle="Funded Nursing Care" />
         <Container>
           <h3 className="brokerage__item-title">Funded Nursing Care</h3>
           <RadioGroup
@@ -211,10 +211,10 @@ const FundedNursingCare = ({
             value={activeFncPrice}
           />
           <Container className="brokerage__actions">
-            <Button handler={clickBack} className="brokerage__back-button">
+            <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button disabled={loading} isLoading={loading} handler={clickSave}>Save and continue</Button>
+            <Button disabled={loading} isLoading={loading} onClick={clickSave}>Save and continue</Button>
           </Container>
         </Container>
       </Container>

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import useCarePackageApi from '../../../../api/SWR/CarePackage/useCarePackageApi';
+import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { updateCarePackageCosts } from '../../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
 import { dateStringToDate, uniqueID } from '../../../../service/helpers';
@@ -307,7 +306,7 @@ export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, s
                   className="supplier-search-box"
                   id="supplier-search-box"
                 />
-                <Button className="supplier-search-button" handler={onSearchSupplier}>
+                <Button className="supplier-search-button" onClick={onSearchSupplier}>
                   Search
                 </Button>
               </Container>
@@ -358,13 +357,13 @@ export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, s
             />
           )}
           <Container className="brokerage__actions">
-            <Button handler={clickBack} className="brokerage__back-button">
+            <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
             <Button
               isLoading={loading}
               disabled={(!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost) || loading}
-              handler={clickSave}
+              onClick={clickSave}
             >
               Save and continue
             </Button>

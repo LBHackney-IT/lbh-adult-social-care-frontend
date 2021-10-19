@@ -1,11 +1,17 @@
-import { Button, Container } from '../../../HackneyDS';
 import React, { memo } from 'react';
+import { Button, Container } from '../../../HackneyDS';
 
 const ReviewPackageDetailsButtons = ({ edit, cancel, end }) => (
   <Container className="review-package-details__buttons">
-    <Button className='outline blue' handler={edit}>Edit</Button>
-    <Button className='outline red' handler={cancel}>Cancel</Button>
-    <Button className='outline blue' handler={end}>End</Button>
+    <Button className="outline blue" onClick={edit}>
+      Edit
+    </Button>
+    <Button className="outline red" onClick={cancel}>
+      Cancel
+    </Button>
+    <Button className="outline blue" onClick={end}>
+      End
+    </Button>
   </Container>
 );
 
