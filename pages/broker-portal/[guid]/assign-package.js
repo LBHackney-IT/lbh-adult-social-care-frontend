@@ -26,8 +26,8 @@ const breadcrumbs = [
 const AssignPackage = () => {
   const [assignedCarePlan, setAssignedCarePlan] = useState(false);
 
-  const [packageType, setPackageType] = useState(null);
-  const [broker, setBroker] = useState(null);
+  const [packageType, setPackageType] = useState('');
+  const [broker, setBroker] = useState('');
   const [notes, setNotes] = useState('');
 
   const [errors, setErrors] = useState({
