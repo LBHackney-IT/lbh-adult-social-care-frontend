@@ -94,7 +94,7 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
         <Breadcrumbs values={breadcrumbs} />
 
         {assignedCarePlan ? (
-          <Container className="brokerage__container-main">
+          <Container margin="60px 0 0" className="brokerage__container-main">
             <Announcement className="success mb">
               <div slot="title">Success!</div>
               <div slot="content">Care plan assigned to {broker}</div>
