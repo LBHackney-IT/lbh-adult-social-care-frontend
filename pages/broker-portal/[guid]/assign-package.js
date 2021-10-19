@@ -113,7 +113,7 @@ const AssignPackage = () => {
             </Button>
           </Container>
         ) : (
-          <Container className="brokerage__container-main" margin="60px 0 0">
+          <Container className="brokerage__container-main">
             <TitleSubtitleHeader title="Assign a care plan to brokerage" subTitle="Assign and attach a care plan" />
 
             <ServiceUserDetails

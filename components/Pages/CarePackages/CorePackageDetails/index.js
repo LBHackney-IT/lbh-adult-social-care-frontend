@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { object, string } from 'yup';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, ErrorMessage, RadioGroup } from '../../../HackneyDS';
+import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import CorePackageSelectors from './CorePackageSelectors';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
 import Loading from '../../../Loading';
@@ -111,12 +112,9 @@ const CorePackageDetails = ({
   return (
     <div className="core-package-details brokerage">
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="60px 60px 48px">
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
         <Loading isLoading={loading} />
-        <Container className="brokerage__container-header brokerage__container">
-          <p>Build a care package</p>
-          <h2>Core package details</h2>
-        </Container>
+        <TitleSubtitleHeader title="Build a care package" subTitle="Core package details" />
         <ServiceUserDetails
           dateOfBirth={userDetails?.dateOfBirth}
           address={userDetails?.postcode}
