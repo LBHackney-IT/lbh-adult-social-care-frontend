@@ -15,6 +15,7 @@ export default function Button({
   onClick = () => {},
   LoadingComponent = Loading,
   isLoading,
+  type='button',
 }) {
   const outerClassName = className ? ` ${className}` : '';
   const secondaryClassList = secondary ? ' govuk-secondary lbh-button--secondary' : '';
@@ -45,7 +46,7 @@ export default function Button({
     </a>
   ) : (
     <button
-      type="button"
+      type={type}
       className={`${mainClass}${calculateClassNames}`}
       data-module="govuk-button"
       aria-disabled={disabled}

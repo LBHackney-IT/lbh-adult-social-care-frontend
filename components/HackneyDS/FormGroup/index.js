@@ -27,7 +27,7 @@ export default function FormGroup({ children = [], label, required, hint, error,
             {error}
           </span>
         )}
-        {(hint || error || label) && <HorizontalSeparator height="10px" />}
+        {(hint || error || label) && <HorizontalSeparator height="20px" />}
         {nodeList}
       </fieldset>
     </div>
