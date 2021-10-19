@@ -31,6 +31,12 @@
   -webkit-appearance: none;
   width: auto;
 
+  &--disabled {
+    cursor: initial;
+    user-select: none;
+    pointer-events: none;
+  }
+
   .loading {
     width: 20px;
     height: 20px;

@@ -32,6 +32,7 @@ export default function Button({
     <a
       rel={rel}
       target={target}
+      aria-disabled={disabled}
       onClick={(e) => disabled && e.preventDefault()}
       href={link}
       role="button"
@@ -39,7 +40,8 @@ export default function Button({
       className={`${mainClass}${secondaryClassList + disabledClassList}`}
       data-module="govuk-button"
     >
-      {children}
+      {isLoading && <LoadingComponent className='loading-absolute-centered' isLoading={isLoading} />}
+      <Container className={isLoading ? 'hide' : ''}>{children}</Container>
     </a>
   ) : (
     <button
