@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import Popup from '../../../Popup';
-import { Button, Container, Select, Textarea } from '../../../HackneyDS';
+import { Button, Container, Dialog, Select, Textarea } from '../../../HackneyDS';
 import FormGroup from '../../../HackneyDS/FormGroup';
 import { submitCarePackage } from '../../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../../reducers/notificationsReducer';
@@ -33,30 +32,27 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
     }
   };
 
-  const popupMainContent = (
-    <Container>
-      <FormGroup className="brokerage__approved-by-select" label="To be approved by">
-        <Select options={approverOptions} value={approverId} onChangeValue={setApproverId} />
-      </FormGroup>
-      <FormGroup className="brokerage__add-notes" label="Add notes">
-        <Textarea value={notes} handler={setNotes} />
-      </FormGroup>
-      <Container className="brokerage__actions">
-        <Button handler={submit}>Submit</Button>
-        <Button handler={closePopup} className="link-button red">
-          Cancel
-        </Button>
-      </Container>
-    </Container>
-  );
-
   return (
-    <Popup
+    <Dialog
       className="brokerage__submit-for-approval"
       closePopup={closePopup}
-      mainContent={popupMainContent}
       title="Submit for approval"
-    />
+    >
+      <Container>
+        <FormGroup className="brokerage__approved-by-select" label="To be approved by">
+          <Select options={approverOptions} value={approverId} onChangeValue={setApproverId} />
+        </FormGroup>
+        <FormGroup className="brokerage__add-notes" label="Add notes">
+          <Textarea value={notes} handler={setNotes} />
+        </FormGroup>
+        <Container className="brokerage__actions">
+          <Button handler={submit}>Submit</Button>
+          <Button handler={closePopup} className="link-button red">
+            Cancel
+          </Button>
+        </Container>
+      </Container>
+    </Dialog>
   );
 };
 

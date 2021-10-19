@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { BROKER_PORTAL_ROUTE, getBrokerPackageRoute, getHistoryRoute } from '../../../../routes/RouteConstants';
+import {
+  BROKER_PORTAL_ROUTE,
+  getBrokerPackageRoute,
+  getCorePackageRoute,
+  getHistoryRoute
+} from '../../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Container, Link, Breadcrumbs } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
@@ -9,6 +14,10 @@ import BrokerageBorderCost from '../BrokerageBorderCost';
 import { currency } from '../../../../constants/strings';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
+import ReviewPackageDetailsButtons from './ReviewPackageDetailsButtons';
+import { EndElementModal } from '../../CareCharges/EndElementModal';
+import { CancelElementModal } from '../../CareCharges/CancelElementModal';
+import ActionCarePackageModal from '../../BrokerPortal/ActionCarePackageModal';
 
 const links = [
   { text: 'Care Package', href: '#care-package' },
@@ -29,34 +38,85 @@ export const ReviewPackageDetails = ({
   userDetails,
   packageId,
   packageInfoItems = [],
+  showEditActions,
+  className = '',
   summary = [],
   title = 'Nursing Care',
   subTitle = 'Package details',
   goBack,
 }) => {
-  const [isOpenedPopup, setIsOpenedPopup] = useState(false);
+  const [openedPopup, setOpenedPopup] = useState('');
 
   const router = useRouter();
+
+  const [actionNotes, setActionNotes] = useState({
+    endNotes: '',
+    cancelNotes: '',
+  });
 
   const goToBrokerPackage = () => router.push(getBrokerPackageRoute(packageId));
   const goToHistory = () => router.push(getHistoryRoute(packageId));
 
+  const closePopup = () => setOpenedPopup('');
+
+  const end = () => setOpenedPopup('end');
+  const cancel = () => setOpenedPopup('cancel');
+  const edit = () => router.push(getCorePackageRoute(packageId));
+
+  const cancelCarePackageActions = [
+    { title: 'End package', onClick: () => alert('end package') },
+    { title: 'Cancel', onClick: closePopup, className: 'link-button red' },
+  ];
+
+  const endCarePackageActions = [
+    { title: 'Cancel package', className: 'color-lbh-e01', onClick: () => alert('end package') },
+    { title: 'Back', onClick: closePopup, className: 'link-button black' },
+  ];
+
+  const changeActionNotes = (field, value) => {
+    setActionNotes(prevState => ({
+      ...prevState,
+      [field]: value,
+    }));
+  };
+
   return (
-    <div className="review-package-details">
-      {isOpenedPopup && <SubmitForApprovalPopup packageId={packageId} closePopup={() => setIsOpenedPopup(false)} />}
-      <BrokerageHeader />
+    <div className={`review-package-details ${className}`}>
+      {openedPopup === 'submit' && <SubmitForApprovalPopup packageId={packageId} closePopup={closePopup}/>}
+      <ActionCarePackageModal
+        className='package-details__action-modal'
+        title={`End ${title.toLowerCase()} package`}
+        close={closePopup}
+        notes={actionNotes.endNotes}
+        setNotes={(value) => changeActionNotes('endNotes', value)}
+        isOpened={openedPopup === 'end'}
+        actions={endCarePackageActions}
+      />
+      <ActionCarePackageModal
+        className='package-details__action-modal'
+        notes={actionNotes.cancelNotes}
+        setNotes={(value) => changeActionNotes('cancelNotes', value)}
+        title={`Cancel ${title.toLowerCase()} package`}
+        isOpened={openedPopup === 'cancel'}
+        close={closePopup}
+        actions={cancelCarePackageActions}
+      />
+      <BrokerageHeader/>
       <Container maxWidth="1080px" margin="0 auto" padding="8px 60px 0 60px">
-        <Breadcrumbs values={breadcrumbs} />
+        <Breadcrumbs values={breadcrumbs}/>
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
         <Container className="brokerage__container-header brokerage__container">
-          <p>{title}</p>
-          <h2>
-            {subTitle}{' '}
-            <span onClick={goToHistory} className="text-blue font-size-19px package-history-link">
-              Package history
-            </span>
-          </h2>
+          <Container>
+            <p>{title}</p>
+            <h2>
+              {subTitle}{' '}
+              <span onClick={goToHistory} className="text-blue font-size-19px package-history-link">
+            Package history
+          </span>
+            </h2>
+          </Container>
+          {showEditActions && <ReviewPackageDetailsButtons end={end} edit={edit} cancel={cancel}/>}
         </Container>
         <PackageUserDetails {...userDetails} />
         <Container className="review-package-details__main-container">
@@ -83,7 +143,7 @@ export const ReviewPackageDetails = ({
                 details,
               }) => (
                 <Container key={itemId} className="review-package-details__cost-info-item">
-                  <PackageInfo details={details} containerId={itemId} headerTitle={headerTitle} items={items} />
+                  <PackageInfo details={details} containerId={itemId} headerTitle={headerTitle} items={items}/>
                   {!!costOfPlacement && (
                     <p className="brokerage__cost-of-placement">
                       Cost of placement
@@ -93,7 +153,7 @@ export const ReviewPackageDetails = ({
                       </span>
                     </p>
                   )}
-                  {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader} />}
+                  {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader}/>}
                   {totalCostComponent}
                   {!!totalCost && (
                     <Container className="review-package-details__items-actions" display="flex">
@@ -113,13 +173,17 @@ export const ReviewPackageDetails = ({
                 Summary
               </h3>
               {summary.map(({ key, value, className, id }) => (
-                <BrokerageTotalCost key={id} value={value} name={key} className={className} />
+                <BrokerageTotalCost key={id} value={value} name={key} className={className}/>
               ))}
             </Container>
-            <Container className="review-package-details__actions" display="flex">
-              <Button handler={goBack}>Back</Button>
-              <Button handler={() => setIsOpenedPopup(true)}>Submit for approval</Button>
-            </Container>
+            {showEditActions ? (
+              <ReviewPackageDetailsButtons end={end} edit={edit} cancel={cancel}/>
+            ) : (
+              <Container className="review-package-details__actions" display="flex">
+                <Button handler={goBack}>Back</Button>
+                <Button handler={() => setOpenedPopup('submit')}>Submit for approval</Button>
+              </Container>
+            )}
           </Container>
         </Container>
       </Container>

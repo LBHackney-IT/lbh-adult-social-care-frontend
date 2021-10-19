@@ -56,13 +56,18 @@ button {
     }
 
     &.red {
-      color: red;
-      border-color: red;
+      color: $lbh-f01;
+      border-color: $lbh-f01;
     }
 
     &.gray {
       color: $lbh-gray-text;
       border-color: $lbh-gray-text;
+    }
+
+    &.blue {
+      color: $lbh-link;
+      border-color: $lbh-link
     }
 
     &:active, &:hover, &:link, &:visited {
