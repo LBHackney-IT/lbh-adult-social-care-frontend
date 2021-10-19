@@ -9,6 +9,7 @@ import { PackageRequest } from 'components/Pages/ServiceUser/Packages/PackageReq
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 import { mapServiceUserBasicInfo } from 'api/Mappers/optionsMapper';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
+import Loading from 'components/Loading';
 
 const nursingData = [
   {
@@ -65,17 +66,19 @@ const Packages = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo, isLoading: packageInfoLoading } = useCarePackageApi.singlePackageInfo(packageId);
   const { client, dateOfBirth, hackneyId, postcode } = mapServiceUserBasicInfo(packageInfo.serviceUser);
 
   return (
     <>
       <BrokerageHeader />
 
-      <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0 60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
         <Breadcrumbs values={breadcrumbs} />
 
         <TitleSubtitleHeader title="All package details" subTitle="Full overview" />
+
+        <Loading isLoading={packageInfoLoading} />
 
         <ServiceUserDetails
           dateOfBirth={dateOfBirth}
