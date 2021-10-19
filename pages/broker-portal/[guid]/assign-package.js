@@ -1,9 +1,7 @@
-import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
+import { useRouter } from 'next/router';
 import AssignCarePlan from 'components/Pages/BrokerPortal/AssignCarePlan';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
-import { mapServiceUserBasicInfo } from 'api/Mappers/optionsMapper';
-import { usePackageGetAll } from 'api/SWR';
+import { mapServiceUserBasicInfo, usePackageGetAll, useCarePackageApi } from 'api';
 
 // todo: replace with data from API once available
 const brokerOptions = [

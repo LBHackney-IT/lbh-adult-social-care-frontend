@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { assignToBroker } from '../../../../api/CarePackages/CarePackage';
-import useCarePackageApi from '../../../../api/SWR/CarePackage/useCarePackageApi';
 import { requiredSchema } from '../../../../constants/schemas';
+import { assignToBroker, useCarePackageApi } from '../../../../api';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE } from '../../../../routes/RouteConstants';
 import { Announcement, Breadcrumbs, Button, Container, Select, Textarea } from '../../../HackneyDS';
