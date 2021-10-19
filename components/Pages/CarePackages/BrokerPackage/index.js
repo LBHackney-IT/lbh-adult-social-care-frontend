@@ -307,7 +307,7 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
                   className="supplier-search-box"
                   id="supplier-search-box"
                 />
-                <Button className="supplier-search-button" handler={onSearchSupplier}>
+                <Button className="supplier-search-button" onClick={onSearchSupplier}>
                   Search
                 </Button>
               </Container>
@@ -358,10 +358,10 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
             />
           )}
           <Container className="brokerage__actions">
-            <Button handler={clickBack} className="brokerage__back-button">
+            <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost} handler={clickSave}>
+            <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost} onClick={clickSave}>
               Save and continue
             </Button>
           </Container>

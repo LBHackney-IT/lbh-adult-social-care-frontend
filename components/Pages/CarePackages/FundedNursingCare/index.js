@@ -208,10 +208,10 @@ const FundedNursingCare = ({
             value={activeFncPrice}
           />
           <Container className="brokerage__actions">
-            <Button handler={clickBack} className="brokerage__back-button">
+            <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button handler={clickSave}>Save and continue</Button>
+            <Button onClick={clickSave}>Save and continue</Button>
           </Container>
         </Container>
       </Container>

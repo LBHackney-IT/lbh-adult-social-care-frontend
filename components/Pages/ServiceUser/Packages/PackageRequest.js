@@ -53,7 +53,7 @@ export const PackageRequest = () => {
             <p>{formatDate(dateAssigned)}</p>
           </Container>
         </Container>
-        <Button handler={handleClick}>Create Package</Button>
+        <Button onClick={handleClick}>Create Package</Button>
       </Container>
       <HorizontalSeparator height="10px" />
       <Container>

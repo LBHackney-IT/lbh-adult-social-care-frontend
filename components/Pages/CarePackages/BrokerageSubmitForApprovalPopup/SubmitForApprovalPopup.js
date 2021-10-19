@@ -42,8 +42,8 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
         <Textarea value={notes} handler={setNotes} />
       </FormGroup>
       <Container className="brokerage__actions">
-        <Button handler={submit}>Submit</Button>
-        <Button handler={closePopup} className="link-button red">
+        <Button onClick={submit}>Submit</Button>
+        <Button onClick={closePopup} className="link-button red">
           Cancel
         </Button>
       </Container>

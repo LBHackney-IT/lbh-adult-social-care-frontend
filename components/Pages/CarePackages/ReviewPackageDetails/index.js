@@ -117,8 +117,8 @@ export const ReviewPackageDetails = ({
               ))}
             </Container>
             <Container className="review-package-details__actions" display="flex">
-              <Button handler={goBack}>Back</Button>
-              <Button handler={() => setIsOpenedPopup(true)}>Submit for approval</Button>
+              <Button onClick={goBack}>Back</Button>
+              <Button onClick={() => setIsOpenedPopup(true)}>Submit for approval</Button>
             </Container>
           </Container>
         </Container>

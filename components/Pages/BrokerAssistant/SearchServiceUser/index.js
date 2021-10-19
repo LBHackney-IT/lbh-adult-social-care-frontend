@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BROKER_PORTAL_ROUTE, CARE_PACKAGE_ROUTE, LOGOUT_ROUTE } from '../../../../routes/RouteConstants';
-import { Button, Container, Header, Input, Breadcrumbs } from '../../../HackneyDS'
+import { Button, Container, Header, Input, Breadcrumbs } from '../../../HackneyDS';
 import DatePicker from '../../../HackneyDS/DatePicker';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
 import AlternativePagination from '../../../AlternativePagination';
@@ -35,21 +35,14 @@ const inputs = [
   { label: 'Date of birth', key: 'dateOfBirth' },
 ];
 
-const SearchServiceUser = ({
-  searchResults,
-  pageNumber,
-  setPageNumber,
-  totalCount,
-  totalPages,
-  pushRoute,
-}) => {
+const SearchServiceUser = ({ searchResults, pageNumber, setPageNumber, totalCount, totalPages, pushRoute }) => {
   const [filters, setFilters] = useState(initialFilters);
   const [searchFilters, setSearchFilters] = useState(initialFilters);
 
   const changeFilters = (field, value) => {
-    setFilters(prevState => ({
+    setFilters((prevState) => ({
       ...prevState,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -57,9 +50,9 @@ const SearchServiceUser = ({
 
   return (
     <Container className="search-service-user">
-      <Header links={links}/>
-      <Container maxWidth='1080px' margin='0 auto' padding="8px 60px 0 60px">
-        <Breadcrumbs values={breadcrumbs}/>
+      <Header links={links} />
+      <Container maxWidth="1080px" margin="0 auto" padding="8px 60px 0 60px">
+        <Breadcrumbs values={breadcrumbs} />
         <Container padding="60px 0 0">
           <h3 className="search-service-user__title">Search for a service user</h3>
           <Container className="search-service-user__filters">
@@ -67,7 +60,7 @@ const SearchServiceUser = ({
               <Input
                 key={key}
                 value={filters[key]}
-                onChangeValue={value => changeFilters(key, value)}
+                onChangeValue={(value) => changeFilters(key, value)}
                 label={label}
               />
             ))}
@@ -85,35 +78,41 @@ const SearchServiceUser = ({
             />
           </Container>
         </Container>
-        <Button className="search-service-user__button" handler={onSearch}>Search</Button>
-        {searchResults === undefined && <Loading className="table-loading"/>}
-        {searchResults &&
-        <Container>
-          <SearchResult count={searchResults.length}/>
-          {searchResults.map(item => (
-            <Container className="search-service-user__card">
-              <ServiceUserDetails
-                hackneyId={item.hackneyId}
-                dateOfBirth={item.dateOfBirth}
-                serviceUserName={item.userName}
-                address={item.address}
-                title=""
-              />
-              <Container className="actions">
-                <p onClick={() => pushRoute(item)} className="link-button green">Allocate to broker</p>
-                <p onClick={() => pushRoute(item)} className="link-button green">View package history</p>
+        <Button className="search-service-user__button" onClick={onSearch}>
+          Search
+        </Button>
+        {searchResults === undefined && <Loading className="table-loading" />}
+        {searchResults && (
+          <Container>
+            <SearchResult count={searchResults.length} />
+            {searchResults.map((item) => (
+              <Container className="search-service-user__card">
+                <ServiceUserDetails
+                  hackneyId={item.hackneyId}
+                  dateOfBirth={item.dateOfBirth}
+                  serviceUserName={item.userName}
+                  address={item.address}
+                  title=""
+                />
+                <Container className="actions">
+                  <p onClick={() => pushRoute(item)} className="link-button green">
+                    Allocate to broker
+                  </p>
+                  <p onClick={() => pushRoute(item)} className="link-button green">
+                    View package history
+                  </p>
+                </Container>
               </Container>
-            </Container>
-          ))}
-          <AlternativePagination
-            totalPages={totalPages}
-            totalCount={totalCount}
-            pageSize={10}
-            currentPage={pageNumber}
-            changePagination={setPageNumber}
-          />
-        </Container>
-        }
+            ))}
+            <AlternativePagination
+              totalPages={totalPages}
+              totalCount={totalCount}
+              pageSize={10}
+              currentPage={pageNumber}
+              changePagination={setPageNumber}
+            />
+          </Container>
+        )}
       </Container>
     </Container>
   );
