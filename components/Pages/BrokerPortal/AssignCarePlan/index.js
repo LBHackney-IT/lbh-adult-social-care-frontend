@@ -74,7 +74,6 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
 
     try {
       await assignToBroker({ data: formData });
-      dispatch(addNotification({ text: 'Success', className: 'success' }));
       setAssignedCarePlan(true);
     } catch (error) {
       dispatch(addNotification({ text: error, className: 'error' }));
@@ -84,6 +83,8 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
   const changeError = (field, value = '') => {
     setErrors((prevState) => ({ ...prevState, [field]: value }));
   };
+
+  const brokerName = brokerOptions.find((el) => el.value === broker)?.text;
 
   return (
     <Container className="assign-care-plan">
@@ -96,10 +97,10 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
           <Container margin="60px 0 0" className="brokerage__container-main">
             <Announcement className="success mb">
               <div slot="title">Success!</div>
-              <div slot="content">Care plan assigned to {broker}</div>
+              <div slot="content">Care plan assigned to {brokerName}</div>
             </Announcement>
 
-            <Button className="mt-60" handler={() => router.replace(BROKER_PORTAL_ROUTE)}>
+            <Button className="mt-60" onClick={() => router.replace(BROKER_PORTAL_ROUTE)}>
               Back to Broker Portal
             </Button>
           </Container>
@@ -156,7 +157,7 @@ const AssignCarePlan = ({ brokerOptions, packageTypeOptions, userDetails }) => {
               </div>
 
               <Container className="brokerage__actions">
-                <Button handler={onSubmit}>Assign care plan</Button>
+                <Button onClick={onSubmit}>Assign care plan</Button>
               </Container>
             </Container>
           </Container>
