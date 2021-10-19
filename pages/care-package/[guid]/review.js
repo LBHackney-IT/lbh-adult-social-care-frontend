@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { useRouter } from 'next/router';
 import BrokerageBorderCost from 'components/Pages/CarePackages/BrokerageBorderCost';

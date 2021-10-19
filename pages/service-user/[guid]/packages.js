@@ -9,7 +9,7 @@ import { PackageRequest } from 'components/Pages/ServiceUser/Packages/PackageReq
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 import { mapServiceUserBasicInfo } from 'api/Mappers/optionsMapper';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
-import Loading from '../../../components/Loading';
+import Loading from 'components/Loading';
 
 const nursingData = [
   {
@@ -78,7 +78,7 @@ const Packages = () => {
 
         <TitleSubtitleHeader title="All package details" subTitle="Full overview" />
 
-        <Loading className='loading-center' isLoading={packageInfoLoading} />
+        <Loading isLoading={packageInfoLoading} />
 
         <ServiceUserDetails
           dateOfBirth={dateOfBirth}

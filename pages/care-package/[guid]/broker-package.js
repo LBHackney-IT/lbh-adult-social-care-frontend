@@ -25,6 +25,7 @@ const BrokerPackagePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { data: detailsData, isLoading: detailsLoading } = useCarePackageApi.details(packageId);
 
