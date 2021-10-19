@@ -1,14 +1,18 @@
 import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import { usePackageGetAll } from 'api/SWR';
-import useCarePackageOptions from 'api/SWR/CarePackage/useCarePackageOptions';
-import usePrimarySupportReason from 'api/SWR/package/usePrimarySupportReason';
+import {
+  optionsMapper,
+  usePackageGetAll,
+  useCarePackageApi,
+  useCarePackageOptions,
+  updateCoreCarePackage,
+  usePrimarySupportReason,
+  mapServiceUserBasicInfo,
+  mapPackageSchedulingOptions,
+} from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
-import { updateCoreCarePackage } from 'api/CarePackages/CarePackage';
-import optionsMapper, { mapPackageSchedulingOptions, mapServiceUserBasicInfo } from 'api/Mappers/optionsMapper';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import CorePackageDetails from 'components/Pages/CarePackages/CorePackageDetails';
 import { getLoggedInUser } from 'service/helpers';
 import withSession from 'lib/session';

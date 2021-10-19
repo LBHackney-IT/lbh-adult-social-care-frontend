@@ -5,7 +5,7 @@ import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const AUTH_URL = `${BASE_URL}/v1/auth`;
 
-const hackneyGoogleLogin = (hackneyToken) => {
+export const hackneyGoogleLogin = (hackneyToken) => {
   const options = {
     url: `${AUTH_URL}/google-login`,
     method: 'POST',
@@ -19,5 +19,3 @@ const hackneyGoogleLogin = (hackneyToken) => {
   };
   return axios(options).then(handleResponse).catch(handleError);
 };
-
-export { hackneyGoogleLogin };

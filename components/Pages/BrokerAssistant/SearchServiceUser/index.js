@@ -2,10 +2,10 @@ import React, { memo } from 'react';
 import {
   BROKER_PORTAL_ROUTE,
   CARE_PACKAGE_ROUTE,
-  getAssignPackageRoute,
+  LOGOUT_ROUTE,
   getServiceUserPackagesRoute,
   getHistoryRoute,
-  LOGOUT_ROUTE
+  getAssignPackageRoute,
 } from '../../../../routes/RouteConstants';
 import { Button, Container, Header, Input, Breadcrumbs } from '../../../HackneyDS';
 import DatePicker from '../../../HackneyDS/DatePicker';
@@ -48,7 +48,7 @@ const SearchServiceUser = ({
   <Container className="search-service-user">
     <Header links={links} />
     <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
-      <Breadcrumbs values={breadcrumbs}/>
+      <Breadcrumbs values={breadcrumbs} />
       <Container padding="60px 0 0">
         <h3 className="search-service-user__title">Search for a service user</h3>
         <Container className="search-service-user__filters">
@@ -73,11 +73,13 @@ const SearchServiceUser = ({
             onChangeValue={(value) => changeFilters('postcode', value)}
           />
           {Object.values(filters).some(value => value) &&
-          <Button handler={clearFilters} className="outline gray clear-button">Clear</Button>
+          <Button onClick={clearFilters} className="outline gray clear-button">Clear</Button>
           }
         </Container>
       </Container>
-      <Button isLoading={isLoading} disabled={isLoading} className="search-service-user__button" handler={onSearch}>Search</Button>
+      <Button isLoading={isLoading} disabled={isLoading} className="search-service-user__button" onClick={onSearch}>
+        Search
+      </Button>
       {searchResults &&
       <Container>
         <SearchResult count={searchResults.length}/>

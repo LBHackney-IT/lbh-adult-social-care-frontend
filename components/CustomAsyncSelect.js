@@ -1,8 +1,8 @@
-import React from 'react'
-import axios from 'axios'
+import React from 'react';
+import axios from 'axios';
 import AsyncSelect from 'react-select/async';
-import { BASE_URL } from '../api/BaseApi'
-import { CaretDownIcon } from './Icons'
+import { BASE_URL } from '../api';
+import { CaretDownIcon } from './Icons';
 
 const loadOptions = async (searchText, endpoint) => {
   const { filterKey, endpointName } = endpoint;
@@ -12,7 +12,15 @@ const loadOptions = async (searchText, endpoint) => {
   return data.data;
 };
 
-const CustomAsyncSelector = ({ innerRef, clear = () => {}, onChange, value, placeholder, getOptionLabel, endpoint }) => (
+const CustomAsyncSelector = ({
+  innerRef,
+  clear = () => {},
+  onChange,
+  value,
+  placeholder,
+  getOptionLabel,
+  endpoint,
+}) => (
   <AsyncSelect
     instanceId={endpoint.filterKey}
     ref={innerRef}

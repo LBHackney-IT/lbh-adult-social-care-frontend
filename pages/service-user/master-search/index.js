@@ -25,7 +25,6 @@ const BrokerPortalSearch = () => {
     dateOfBirth: filters?.dateOfBirth?.toJSON?.(),
   }, showSearchResults);
 
-
   const changeFilters = (field, value) => {
     setShowSearchResults(false);
     setFilters(prevState => ({
@@ -41,14 +40,14 @@ const BrokerPortalSearch = () => {
 
   const onSearch = () => setShowSearchResults(true);
 
-  const pushRoute = ({ hackneyId }, route) => router.push(route)
+  const pushRoute = ({ hackneyId }, route) => router.push(route);
 
   return (
     <SearchServiceUser
       isLoading={isLoading}
       filters={filters}
       pushRoute={pushRoute}
-      searchResults={searchResults?.slice((pageNumber-1) * 10, pageNumber * 10)}
+      searchResults={searchResults?.slice((pageNumber - 1) * 10, pageNumber * 10)}
       clearFilters={clearFilters}
       changeFilters={changeFilters}
       setPageNumber={setPageNumber}

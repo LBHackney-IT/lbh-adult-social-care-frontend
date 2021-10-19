@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 // eslint-disable-next-line import/no-cycle
 import { ErrorMessage, Hint, Label } from '../index';
 import { CrossIcon, SearchIcon } from '../icons';
-import { isFunction } from '../../../api/Utils/FuncUtils';
+import { isFunction } from '../../../api';
 
 export default function SearchBox({
   label = 'Search',

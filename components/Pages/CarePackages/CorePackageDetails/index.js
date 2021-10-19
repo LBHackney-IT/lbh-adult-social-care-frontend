@@ -159,7 +159,8 @@ const CorePackageDetails = ({
         <Button
           isLoading={loading}
           disabled={loading}
-          className="core-package-details__button" handler={saveAndContinue}
+          className="core-package-details__button"
+          onClick={saveAndContinue}
         >
           Save and continue
         </Button>
