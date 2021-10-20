@@ -2,14 +2,31 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@components": ["components/"],
-      "@constants": ["constants/"],
-      "@routes": ["routes/"],
-      "@api": ["api/"],
-      "@reducers": ["reducers/"],
-      "@lib": ["lib/"],
-      "@service": ["service/"]
+      "components": [
+        "components/"
+      ],
+      "constants": [
+        "constants/"
+      ],
+      "routes": [
+        "routes/"
+      ],
+      "api": [
+        "api/"
+      ],
+      "reducers": [
+        "reducers/"
+      ],
+      "lib": [
+        "lib/"
+      ],
+      "service": [
+        "service/"
+      ]
     }
   },
-  "exclude": ["node_modules", "build"]
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
 }
