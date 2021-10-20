@@ -1,10 +1,9 @@
 import React from 'react';
-import { useCarePackageApi } from 'api';
-import { useRouter } from 'next/router';
-import BrokerageBorderCost from 'components/Pages/CarePackages/BrokerageBorderCost';
-import { ReviewPackageDetails } from 'components/Pages/CarePackages/ReviewPackageDetails';
-import { getLoggedInUser } from 'service/helpers';
 import withSession from 'lib/session';
+import { useRouter } from 'next/router';
+import { useCarePackageApi } from 'api';
+import { getLoggedInUser } from 'service/helpers';
+import { BrokerageBorderCost, ReviewPackageDetails } from 'components';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });

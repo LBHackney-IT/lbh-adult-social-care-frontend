@@ -1,6 +1,6 @@
 import React from 'react';
+import { Button } from 'components';
 import { useRouter } from 'next/router';
-import { Button } from 'components/HackneyDS';
 
 export default function Custom404() {
   const router = useRouter();

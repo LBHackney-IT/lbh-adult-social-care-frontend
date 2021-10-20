@@ -1,5 +1,5 @@
 import React from 'react';
-import { AddElementModal } from './index';
+import AddElementModal from './index';
 
 export default {
   title: 'Pages/CareCharges/AddElementModal',

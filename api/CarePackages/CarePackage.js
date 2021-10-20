@@ -28,3 +28,10 @@ export const updateCarePackageCosts = ({ data, packageId }) => {
   const url = `${CARE_PACKAGE_URL}/${packageId}/details`;
   return axiosRequest({ url, data, method: requestMethods.put });
 };
+
+export const assignToBroker = ({ data }) =>
+  axiosRequest({
+    url: `${CARE_PACKAGE_URL}/assign`,
+    method: requestMethods.post,
+    data,
+  });

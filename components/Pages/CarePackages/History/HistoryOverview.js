@@ -8,7 +8,7 @@ const testOverviewData = [
   { value: 'View', label: 'Care Plan' },
 ];
 
-const Overview = () => (
+const HistoryOverview = () => (
   <div className="history__overview">
     <h3>Overview</h3>
 
@@ -23,4 +23,4 @@ const Overview = () => (
   </div>
 );
 
-export default memo(Overview);
+export default memo(HistoryOverview);

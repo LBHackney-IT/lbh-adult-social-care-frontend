@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
-import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
@@ -24,14 +24,14 @@ const initialNeed = {
   errorEndDate: '',
 };
 
-export const BrokerPackage = ({
+const BrokerPackage = ({
   detailsData,
   loading,
   setLoading,
   currentPage,
   setCurrentPage,
   selectedItem,
-  setSelectedItem
+  setSelectedItem,
 }) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
@@ -288,11 +288,11 @@ export const BrokerPackage = ({
 
   return (
     <div className="supplier-look-up brokerage">
-      <BrokerageHeader/>
-      <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        <Loading isLoading={loading}/>
+      <BrokerageHeader />
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+        <Loading isLoading={loading} />
         <Container className="brokerage__container-main">
-          <TitleSubtitleHeader title="Build a care package" subTitle="Broker package"/>
+          <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
           <Container>
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
@@ -328,7 +328,7 @@ export const BrokerPackage = ({
 
             {!searchText && !selectedItem && (
               <Container className="is-new-supplier">
-                <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier}/>
+                <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
                 <Container className="is-new-supplier-text" display="flex" flexDirection="column">
                   <p>This is a new supplier</p>
                   <p>
@@ -383,3 +383,5 @@ export const BrokerPackage = ({
     </div>
   );
 };
+
+export default BrokerPackage;

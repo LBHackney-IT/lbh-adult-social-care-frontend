@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { MdEdit } from 'react-icons/md';
 import { getNumberWithCommas } from '../../../../service/helpers';
-import { Table, Tag } from '../../../HackneyDS/index';
+import { Table, Tag } from '../../../HackneyDS';
 
 export const SingleCareChargeTable = ({ data, columns, hasFooter }) => {
-
   const [localColumns] = useState([
     {
       Header: 'Status',

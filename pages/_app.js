@@ -4,7 +4,7 @@ import '/styles/globals.scss';
 import { Provider } from 'react-redux';
 
 import { fetcher } from 'api';
-import CustomNotification from 'components/Notifications';
+import { CustomNotification } from 'components';
 import { useStore } from '../store';
 
 const swrOptions = {
