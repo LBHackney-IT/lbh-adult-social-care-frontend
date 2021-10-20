@@ -54,7 +54,7 @@ const BrokerPackage = ({
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchText, setSearchText] = useState('');
-  const debounceSearch = useDebounce(
+  useDebounce(
     () => setSearchQuery(searchText),
     1000,
     [searchText]
@@ -66,9 +66,9 @@ const BrokerPackage = ({
     setShowSearchResults(true);
   };
 
-  const { data: searchResults } = useCarePackageApi.suppliers({
+  const { data: searchResults, isLoading: suppliersLoading } = useCarePackageApi.suppliers({
     supplierName: searchQuery,
-    shouldFetch: searchQuery?.length > 1,
+    shouldFetch: searchQuery || showSearchResults,
   });
 
   const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
@@ -290,7 +290,7 @@ const BrokerPackage = ({
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
-        <Loading isLoading={loading} />
+        <Loading isLoading={loading || suppliersLoading} />
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
           <Container>
