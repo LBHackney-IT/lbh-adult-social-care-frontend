@@ -1,6 +1,6 @@
 import React from 'react';
+import { formatDate } from '../../../service';
 import { Container, Table, Tag } from '../../HackneyDS';
-import { formatDate } from '../../../service/helpers';
 
 const tagColors = {
   new: 'green',

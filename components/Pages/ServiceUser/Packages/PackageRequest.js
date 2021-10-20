@@ -3,8 +3,8 @@ import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSep
 import { useCarePackageApi } from 'api';
 import { getCorePackageRoute } from 'routes/RouteConstants';
 import { CaretDownIcon } from 'components/Icons';
-import { formatDate } from 'service/helpers';
 import { useRouter } from 'next/router';
+import { formatDate } from 'service';
 
 const tagColors = {
   New: 'green',
