@@ -1,4 +1,4 @@
-import { add, format } from 'date-fns';
+import { add, compareDesc, format } from 'date-fns';
 import { maxStringLength } from '../constants/variables';
 
 const chr4 = () => Math.random().toString(16).slice(-4);
@@ -19,7 +19,7 @@ const compareDescendingDMY = (startDate, endDate) => {
   const resetEndDate = new Date(endDate);
   resetStartDate.setHours(0,0,0,0);
   resetEndDate.setHours(0,0,0,0);
-  return resetStartDate < resetEndDate;
+  return compareDesc(resetStartDate, resetEndDate);
 };
 
 const dateStringToDate = (dateString) => (dateString ? new Date(dateString) : null);
