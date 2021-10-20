@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
+import { useCarePackageApi } from 'api';
 import { BrokerPackage } from 'components/Pages/CarePackages/BrokerPackage';
 import { getLoggedInUser } from 'service/helpers';
 import withSession from 'lib/session';
@@ -24,10 +24,11 @@ const BrokerPackagePage = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const { data: detailsData } = useCarePackageApi.details(packageId);
+  const { data: detailsData, isLoading: detailsLoading } = useCarePackageApi.details(packageId);
 
-  const { data: selectedSupplier } = useCarePackageApi.singleSupplier(detailsData.supplierId);
+  const { data: selectedSupplier, isLoading: singleSupplierLoading } = useCarePackageApi.singleSupplier(detailsData.supplierId);
   const { supplierName } = selectedSupplier;
 
   useEffect(() => {
@@ -38,6 +39,8 @@ const BrokerPackagePage = () => {
 
   return (
     <BrokerPackage
+      loading={detailsLoading || singleSupplierLoading || loading}
+      setLoading={setLoading}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
       setSelectedItem={setSelectedItem}

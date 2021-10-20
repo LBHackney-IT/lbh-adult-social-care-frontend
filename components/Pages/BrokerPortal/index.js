@@ -7,7 +7,8 @@ import FormGroup from '../../HackneyDS/FormGroup';
 import DatePick from '../../DatePick';
 import { BrokerPortalTable } from './BrokerPortalTable';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
-import { BROKER_PORTAL_SEARCH_ROUTE, LOGOUT_ROUTE } from '../../../routes/RouteConstants';
+import { BROKER_PORTAL_SEARCH_ROUTE } from '../../../routes/RouteConstants';
+import Loading from '../../Loading';
 
 const statusOptions = [
   { text: 'All', value: '' },
@@ -31,6 +32,7 @@ export const BrokerPortalPage = ({
   setFilters,
   clearFilter,
   onRowClick = () => {},
+  loading,
 }) => {
   const [searchText, setSearchText] = useState('');
 
@@ -60,16 +62,17 @@ export const BrokerPortalPage = ({
 
   return (
     <div className="broker-portal">
+      <Loading isLoading={loading} />
       <BrokerageHeader />
       <Container background="#FAFAFA" padding="0 0 55px">
         <Container maxWidth="1080px" margin="0 auto">
-          <Container className="px-60 pt-10">
+          <Container padding='10px 60px 0px'>
             <Breadcrumbs values={breadcrumbs} />
           </Container>
 
           <Container className="brokerage-portal__header">
             <h1>Broker Portal</h1>
-            <Button handler={goToBrokerPortalSearch}>Find a service user</Button>
+            <Button onClick={goToBrokerPortalSearch}>Find a service user</Button>
           </Container>
 
           <Container className="brokerage-portal__filters">
@@ -80,6 +83,7 @@ export const BrokerPortalPage = ({
 
               <FormGroup className="form-group--inline-label brokerage-portal__form-status" label="Status">
                 <Select
+                  emptyElement={null}
                   options={statusOptions}
                   value={filters.status}
                   onChange={({ target: { value } }) => changeFilterField('status', value)}
@@ -133,7 +137,7 @@ export const BrokerPortalPage = ({
               {shouldShowClear && (
                 <Button
                   className="outline gray clear-filter-button"
-                  handler={() => {
+                  onClick={() => {
                     clearFilter();
                     selectorRef.current?.select?.select?.clearValue();
                   }}

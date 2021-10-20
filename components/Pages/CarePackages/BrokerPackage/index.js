@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import useCarePackageApi from '../../../../api/SWR/CarePackage/useCarePackageApi';
+import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { updateCarePackageCosts } from '../../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
 import { dateStringToDate, uniqueID } from '../../../../service/helpers';
@@ -24,13 +23,12 @@ const initialNeed = {
   errorEndDate: '',
 };
 
-export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, selectedItem, setSelectedItem }) => {
+export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, setCurrentPage, selectedItem, setSelectedItem }) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
 
@@ -278,7 +276,7 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        {(loading || detailsData === undefined) && <Loading className="loading-center" />}
+        <Loading isLoading={loading} />
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
           <Container>
@@ -308,7 +306,7 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
                   className="supplier-search-box"
                   id="supplier-search-box"
                 />
-                <Button className="supplier-search-button" handler={onSearchSupplier}>
+                <Button className="supplier-search-button" onClick={onSearchSupplier}>
                   Search
                 </Button>
               </Container>
@@ -359,10 +357,10 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
             />
           )}
           <Container className="brokerage__actions">
-            <Button handler={clickBack} className="brokerage__back-button">
+            <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost} handler={clickSave}>
+            <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost} onClick={clickSave}>
               Save and continue
             </Button>
           </Container>

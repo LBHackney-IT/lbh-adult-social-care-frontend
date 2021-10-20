@@ -1,14 +1,18 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import { usePackageGetAll } from 'api/SWR';
-import useCarePackageOptions from 'api/SWR/CarePackage/useCarePackageOptions';
-import usePrimarySupportReason from 'api/SWR/package/usePrimarySupportReason';
+import {
+  optionsMapper,
+  usePackageGetAll,
+  useCarePackageApi,
+  useCarePackageOptions,
+  updateCoreCarePackage,
+  usePrimarySupportReason,
+  mapServiceUserBasicInfo,
+  mapPackageSchedulingOptions,
+} from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
-import { updateCoreCarePackage } from 'api/CarePackages/CarePackage';
-import optionsMapper, { mapPackageSchedulingOptions, mapServiceUserBasicInfo } from 'api/Mappers/optionsMapper';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import CorePackageDetails from 'components/Pages/CarePackages/CorePackageDetails';
 import { getLoggedInUser } from 'service/helpers';
 import withSession from 'lib/session';
@@ -44,11 +48,13 @@ const CorePackagePage = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { data: schedulingOptions } = useCarePackageOptions.packageSchedulingOptions();
-  const { options: packageTypes = [] } = usePackageGetAll();
-  const { data: primarySupportReasons = [] } = usePrimarySupportReason();
+  const { data: schedulingOptions, isLoading: schedulingLoading } = useCarePackageOptions.packageSchedulingOptions();
+  const { options: packageTypes = [], isLoading: packageGetAllLoading } = usePackageGetAll();
+  const { data: primarySupportReasons = [], isLoading: primarySupportReasonLoading } = usePrimarySupportReason();
 
-  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo, isLoading: singlePackageInfoLoading } = useCarePackageApi.singlePackageInfo(packageId);
+
+  const [loading, setLoading] = useState(false);
 
   const currentPackageCoreSettings = useMemo(
     () => ({
@@ -61,6 +67,7 @@ const CorePackagePage = () => {
   );
 
   const updatePackage = async (data = {}) => {
+    setLoading(true);
     try {
       const { id } = await updateCoreCarePackage({ data, packageId });
       router.push(getBrokerPackageRoute(id));
@@ -68,6 +75,7 @@ const CorePackagePage = () => {
     } catch (error) {
       pushNotification(error);
     }
+    setLoading(false);
   };
 
   const pushNotification = (text, className = 'error') => {
@@ -88,6 +96,8 @@ const CorePackagePage = () => {
     packageTypeOptions: packageTypes,
     saveCorePackage: updatePackage,
     defaultValues: currentPackageCoreSettings,
+    loading: schedulingLoading || loading || packageGetAllLoading ||
+      primarySupportReasonLoading || singlePackageInfoLoading,
   };
 
   return <CorePackageDetails {...props} />;

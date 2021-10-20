@@ -6,6 +6,7 @@ import { currency } from '../../../../constants/strings';
 import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
+import Loading from '../../../Loading';
 
 const CareCharges = ({
   reasonsCollecting,
@@ -13,6 +14,7 @@ const CareCharges = ({
   carePackageReclaimCareCharge,
   createCareCharge = () => {},
   updateCareCharge = () => {},
+  loading,
 }) => {
   const router = useRouter();
   const carePackageId = router.query.guid;
@@ -137,7 +139,8 @@ const CareCharges = ({
     <Container className="brokerage__care-charges">
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        <TitleSubtitleHeader title='Build a care package' subTitle="Care Charges"/>
+        <Loading isLoading={loading} />
+        <TitleSubtitleHeader title="Build a care package" subTitle="Care Charges" />
         <Container>
           <h3 className="brokerage__item-title">Care charges</h3>
           <p className="care-charges-hint">Provisional care charge (pre-assessement)</p>
@@ -193,10 +196,10 @@ const CareCharges = ({
             value={finalCost}
           />
           <Container className="brokerage__actions">
-            <Button handler={clickBack} className="brokerage__back-button">
+            <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button handler={clickSave}>Save and review</Button>
+            <Button onClick={clickSave}>Save and review</Button>
           </Container>
         </Container>
       </Container>
