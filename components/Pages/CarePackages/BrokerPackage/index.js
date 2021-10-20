@@ -38,8 +38,8 @@ const BrokerPackage = ({
   const dispatch = useDispatch();
 
   const [isOngoing, setIsOngoing] = useState(false);
-  const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
-  const [supplierWeeklyCostError, setSupplierWeeklyCostError] = useState('');
+  const [coreCost, setCoreCost] = useState(0);
+  const [coreCostError, setCoreCostError] = useState('');
 
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
@@ -95,7 +95,7 @@ const BrokerPackage = ({
         setIsOngoing(true);
       }
 
-      setSupplierWeeklyCost(detailsData.coreCost);
+      setCoreCost(detailsData.coreCost);
 
       if (detailsData.details) {
         const weeklyDetails = detailsData.details
@@ -169,8 +169,8 @@ const BrokerPackage = ({
 
     setWeeklyNeeds(checkedWeeklyDetails.checkedNeeds);
     setOneOffNeeds(checkOneOffDetails.checkedNeeds);
-    if(!supplierWeeklyCost) {
-      setSupplierWeeklyCostError('The core cost field is required')
+    if(!coreCost) {
+      setCoreCostError('The core cost field is required')
     }
 
     if (checkedWeeklyDetails.hasErrors || checkOneOffDetails.hasErrors) {
@@ -205,7 +205,7 @@ const BrokerPackage = ({
     try {
       await updateCarePackageCosts({
         data: {
-          coreCost: supplierWeeklyCost,
+          coreCost: coreCost,
           startDate: packageDates.startDate,
           endDate: isOngoing ? null : packageDates.endDate,
           supplierId: selectedItem.id,
@@ -254,7 +254,7 @@ const BrokerPackage = ({
       });
     }
     setWeeklyTotalCost(totalCost);
-  }, [supplierWeeklyCost, weeklyNeeds]);
+  }, [coreCost, weeklyNeeds]);
 
   useEffect(() => {
     let totalCost = 0;
@@ -264,7 +264,7 @@ const BrokerPackage = ({
       });
     }
     setOneOfTotalCost(totalCost);
-  }, [supplierWeeklyCost, oneOffNeeds]);
+  }, [coreCost, oneOffNeeds]);
 
   useEffect(() => {
     setIsOngoing(!detailsData?.endDate);
@@ -353,20 +353,20 @@ const BrokerPackage = ({
             />
           ) : (
             <BrokerPackageCost
-              setSupplierWeeklyCostError={setSupplierWeeklyCostError}
+              setCoreCostError={setCoreCostError}
               removeSupplierCard={removeSupplierCard}
               cardInfo={selectedItem}
               corePackageDates={packageDates}
               addNeed={addNeed}
               weeklyNeeds={weeklyNeeds}
-              supplierWeeklyCostError={supplierWeeklyCostError}
+              coreCostError={coreCostError}
               oneOffNeeds={oneOffNeeds}
               setWeeklyNeeds={setWeeklyNeeds}
               setOneOffNeeds={setOneOffNeeds}
               oneOffTotalCost={oneOfTotalCost}
               weeklyTotalCost={weeklyTotalCost}
-              supplierWeeklyCost={supplierWeeklyCost}
-              setSupplierWeeklyCost={setSupplierWeeklyCost}
+              coreCost={coreCost}
+              setCoreCost={setCoreCost}
               changeNeed={changeNeed}
               removeNeed={removeNeed}
             />
@@ -375,7 +375,7 @@ const BrokerPackage = ({
             <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost} onClick={clickSave}>
+            <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !coreCost} onClick={clickSave}>
               Save and continue
             </Button>
           </Container>
