@@ -41,6 +41,10 @@
     width: 20px;
     height: 20px;
     margin-right: 8px;
+
+    circle {
+      fill: $lbh-light-link;
+    }
   }
 
   &.warning-button {
