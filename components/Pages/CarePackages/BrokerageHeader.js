@@ -1,6 +1,6 @@
 import React from 'react';
-import { Header } from '../../../HackneyDS';
-import { BROKER_PORTAL_ROUTE, LOGOUT_ROUTE } from '../../../../routes/RouteConstants';
+import { Header } from '../../HackneyDS';
+import { BROKER_PORTAL_ROUTE, LOGOUT_ROUTE } from '../../../routes/RouteConstants';
 
 const links = [
   { href: BROKER_PORTAL_ROUTE, text: 'Broker Portal' },

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { object, string } from 'yup';
+import { addWeeks } from 'date-fns';
 import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import CareChargesInfoEdited from '../ModalComponents/CareChargesInfoEdited';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
-import { ErrorMessage } from '../../../HackneyDS/index';
-import { object, string } from 'yup';
-import { addWeeks } from 'date-fns';
+import { ErrorMessage } from '../../../HackneyDS';
 
 const initialInputs = {
   value: '',
@@ -14,12 +14,7 @@ const initialInputs = {
   endDate: '',
 };
 
-const EditElementContent = ({
-  activeElements,
-  headerText,
-  editStep,
-  setEditStep,
-}) => {
+const EditElementContent = ({ activeElements, headerText, editStep, setEditStep }) => {
   const [inputs, setInputs] = useState([]);
   const [inputHasErrors, setInputHasErrors] = useState(false);
   const [inputErrors, setInputErrors] = useState([]);
@@ -64,7 +59,7 @@ const EditElementContent = ({
     });
 
     let index = 0;
-    for await (let item of inputs) {
+    for await (const item of inputs) {
       const valid = await schema.isValid({ value: item.value });
       if (!valid) {
         hasErrors = true;
@@ -88,25 +83,25 @@ const EditElementContent = ({
     if (activeElements?.length) {
       setInputs(activeElements.map((activeElement) => ({ ...activeElement, period: 'fixed-period' })));
 
-      setInputErrors(activeElements.map(() => ({
-        ...initialInputs,
-      })));
+      setInputErrors(
+        activeElements.map(() => ({
+          ...initialInputs,
+        }))
+      );
     }
   }, [activeElements]);
 
   return (
     <>
-      <CareChargesModalTitle title={headerText}/>
-      <CareChargesInfoTitle title={editStep ? 'ACTIVE ELEMENT' : 'PREVIOUS ELEMENT'}/>
-      <CareChargesInfoStatic activeElements={activeElements}/>
-      <CareChargesInfoTitle title={editStep ? 'EDITED ELEMENT' : 'NEW ELEMENT'}/>
-      {editStep ?
-        <CareChargesInfoEdited
-          elements={inputs}
-          inputErrors={inputErrors}
-          onChangeInput={onChangeInput}
-        /> : <CareChargesInfoStatic activeElements={inputs}/>
-      }
+      <CareChargesModalTitle title={headerText} />
+      <CareChargesInfoTitle title={editStep ? 'ACTIVE ELEMENT' : 'PREVIOUS ELEMENT'} />
+      <CareChargesInfoStatic activeElements={activeElements} />
+      <CareChargesInfoTitle title={editStep ? 'EDITED ELEMENT' : 'NEW ELEMENT'} />
+      {editStep ? (
+        <CareChargesInfoEdited elements={inputs} inputErrors={inputErrors} onChangeInput={onChangeInput} />
+      ) : (
+        <CareChargesInfoStatic activeElements={inputs} />
+      )}
       {inputHasErrors && <ErrorMessage>There some errors above</ErrorMessage>}
       <CareChargesModalActions
         actions={[

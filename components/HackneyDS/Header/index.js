@@ -1,7 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { BROKER_PORTAL_ROUTE } from '../../../routes/RouteConstants';
-import { getSlot, Container } from '../index';
+import { getSlot } from '../helpers';
+import { Container } from '../Layout/Container';
 
 export default function Header({ children = [], links = [], bottomLines = true, fixed, purple, className }) {
   const bottomLinesClass = bottomLines ? ' bottom-lines' : '';

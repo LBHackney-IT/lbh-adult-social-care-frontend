@@ -1,6 +1,6 @@
 import React from 'react';
 import FormGroup from '.';
-import { Input } from '../index';
+import { Input } from '../Input';
 
 export default {
   title: 'Hackney Design System/FormGroup',
@@ -14,9 +14,9 @@ export const Default = Template.bind({});
 Default.args = {
   children: (
     <>
-      <Input label="ex" handler={() => {}} id="ex1"/>
-      <Input label="ex" hint="Field hint" handler={() => {}} id="ex2"/>
-      <Input label="ex" error="Field error" hint="Field hint" handler={() => {}} id="ex"/>
+      <Input label="ex" handler={() => {}} id="ex1" />
+      <Input label="ex" hint="Field hint" handler={() => {}} id="ex2" />
+      <Input label="ex" error="Field error" hint="Field hint" handler={() => {}} id="ex" />
     </>
   ).props.children,
   label: 'National Insurance number',

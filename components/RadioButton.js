@@ -1,5 +1,5 @@
 import React from 'react';
-import BaseField from './baseComponents/BaseField';
+import BaseField from './BaseField';
 import ErrorField from './ErrorField';
 import { isFunction } from '../api';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CancelElementModal } from '.';
+import CancelElementModal from './index';
 
 export default {
   title: 'Pages/CareCharges/CancelElementModal',

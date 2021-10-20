@@ -1,6 +1,6 @@
 import React from 'react';
 import BrokerageBorderCost from '../BrokerageBorderCost';
-import { ReviewPackageDetails } from './index';
+import ReviewPackageDetails from './index';
 
 export default {
   title: 'Pages/Brokerage/ReviewPackageDetails',
@@ -56,7 +56,7 @@ const testPackageInfoItems = [
           term: 'Long term 52+ weeks',
           careType: ['Respite Care'],
         },
-      }
+      },
     ],
   },
   {
@@ -74,10 +74,10 @@ const testPackageInfoItems = [
         startDate: new Date(2021, 6, 1),
         endDate: new Date(2021, 9, 1),
         cost: 300,
-      }
+      },
     ],
     totalCostHeader: 'Total weekly need (Net Off)',
-    totalCost: 375.20
+    totalCost: 375.2,
   },
   {
     headerTitle: 'One Off Additional Need',
@@ -87,8 +87,8 @@ const testPackageInfoItems = [
         id: '3',
         startDate: new Date(2021, 6, 1),
         endDate: new Date(2021, 9, 1),
-        cost: 187.60,
-      }
+        cost: 187.6,
+      },
     ],
     totalCostHeader: 'Total (Net Off)',
     details: (
@@ -101,7 +101,7 @@ const testPackageInfoItems = [
           <span className="font-weight-bold">Collected by: </span>
           {fundedNursingCareClaimCollector[1]}
         </p>
-        <p className='mb-3'>
+        <p className="mb-3">
           <span className="font-weight-bold">FNC assessment: </span>
           <span className="link-button text-blue">View</span>
         </p>
@@ -109,9 +109,9 @@ const testPackageInfoItems = [
     ),
     totalCostComponent: (
       <>
-        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Gross)"/>
-        <br/>
-        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Net Off)"/>
+        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Gross)" />
+        <br />
+        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Net Off)" />
       </>
     ),
   },
@@ -123,8 +123,8 @@ const testPackageInfoItems = [
         id: '5',
         startDate: new Date(2021, 6, 1),
         endDate: new Date(2021, 9, 1),
-        cost: 100.50,
-      }
+        cost: 100.5,
+      },
     ],
     details: (
       <>
@@ -136,14 +136,14 @@ const testPackageInfoItems = [
           {careChargesClaimCollector[2]}
         </p>
         <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
-        <p className='mb-3'>Service user unable to manage finances</p>
+        <p className="mb-3">Service user unable to manage finances</p>
       </>
     ),
     totalCostComponent: (
       <>
-        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Gross)"/>
-        <br/>
-        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Net Off)"/>
+        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Gross)" />
+        <br />
+        <BrokerageBorderCost totalCost={84.9} totalCostHeader="Total (Net Off)" />
       </>
     ),
   },

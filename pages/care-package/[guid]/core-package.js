@@ -11,9 +11,9 @@ import {
   mapServiceUserBasicInfo,
   mapPackageSchedulingOptions,
 } from 'api';
+import { CorePackageDetails } from 'components';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
-import CorePackageDetails from 'components/Pages/CarePackages/CorePackageDetails';
 import { getLoggedInUser } from 'service/helpers';
 import withSession from 'lib/session';
 
@@ -96,8 +96,8 @@ const CorePackagePage = () => {
     packageTypeOptions: packageTypes,
     saveCorePackage: updatePackage,
     defaultValues: currentPackageCoreSettings,
-    loading: schedulingLoading || loading || packageGetAllLoading ||
-      primarySupportReasonLoading || singlePackageInfoLoading,
+    loading:
+      schedulingLoading || loading || packageGetAllLoading || primarySupportReasonLoading || singlePackageInfoLoading,
   };
 
   return <CorePackageDetails {...props} />;

@@ -3,7 +3,7 @@ import { Checkbox, Container, Heading, HorizontalSeparator, Table, VerticalSepar
 import { CaretDownIcon } from 'components/Icons';
 import { formatDate, getNumberWithCommas } from 'service/helpers';
 
-export const CareDetails = ({ title, data }) => {
+const CareDetails = ({ title, data }) => {
   const [isExpanded, setExpanded] = useState(true);
 
   const columns = [
@@ -70,3 +70,5 @@ export const CareDetails = ({ title, data }) => {
     </>
   );
 };
+
+export default CareDetails;

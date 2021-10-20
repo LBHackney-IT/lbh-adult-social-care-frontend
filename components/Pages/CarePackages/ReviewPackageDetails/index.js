@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { BROKER_PORTAL_ROUTE, getBrokerPackageRoute, getHistoryRoute } from '../../../../routes/RouteConstants';
-import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../BrokerageHeader';
 import { Button, Container, Link, Breadcrumbs } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
@@ -27,7 +27,7 @@ const breadcrumbs = [
   { text: 'Full overview' },
 ];
 
-export const ReviewPackageDetails = ({
+const ReviewPackageDetails = ({
   userDetails,
   packageId,
   packageInfoItems = [],
@@ -130,3 +130,5 @@ export const ReviewPackageDetails = ({
     </div>
   );
 };
+
+export default ReviewPackageDetails;

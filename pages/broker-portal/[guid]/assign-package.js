@@ -1,12 +1,19 @@
 import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import { mapServiceUserBasicInfo, usePackageGetAll, useCarePackageApi, assignToBroker } from 'api';
 import { useDispatch } from 'react-redux';
-import { Announcement, Breadcrumbs, Button, Container, Select, Textarea } from 'components/HackneyDS';
-import FormGroup from 'components/HackneyDS/FormGroup';
-import ServiceUserDetails from 'components/Pages/BrokerPortal/ServiceUserDetails';
-import BrokerageHeader from 'components/Pages/CarePackages/BrokerageHeader/BrokerageHeader';
-import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
+import {
+  Button,
+  Select,
+  Textarea,
+  Container,
+  FormGroup,
+  Breadcrumbs,
+  Announcement,
+  BrokerageHeader,
+  ServiceUserDetails,
+  TitleSubtitleHeader,
+} from 'components';
+import { mapServiceUserBasicInfo, usePackageGetAll, useCarePackageApi, assignToBroker } from 'api';
 import { requiredSchema } from 'constants/schemas';
 import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';

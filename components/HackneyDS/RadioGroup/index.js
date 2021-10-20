@@ -1,7 +1,9 @@
 import React from 'react';
 import FormGroup from '../FormGroup';
 import RadioItem from '../RadioItem';
-import { ErrorMessage, HorizontalSeparator, Label } from '../index';
+import Label from '../lettering/Label';
+import ErrorMessage from '../lettering/ErrorMessage';
+import { HorizontalSeparator } from '../Layout/HorizontalSeparator';
 
 export default function RadioGroup({
   className = '',
