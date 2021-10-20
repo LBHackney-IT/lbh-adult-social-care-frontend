@@ -4,6 +4,7 @@ import { BROKER_PORTAL_ROUTE, getBrokerPackageRoute, getHistoryRoute } from '../
 import BrokerageHeader from '../BrokerageHeader';
 import { Button, Container, Link, Breadcrumbs } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
+import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import PackageInfo from './PackageInfo';
 import BrokerageBorderCost from '../BrokerageBorderCost';
 import { currency } from '../../../../constants/strings';
@@ -51,16 +52,16 @@ const ReviewPackageDetails = ({
       <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
         <Breadcrumbs values={breadcrumbs} />
       </Container>
-      <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        <Container className="brokerage__container-header brokerage__container">
-          <p>{title}</p>
-          <h2>
-            {subTitle}{' '}
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+        <TitleSubtitleHeader
+          title={title}
+          subTitle={subTitle}
+          link={
             <span onClick={goToHistory} className="text-blue font-size-19px package-history-link">
               Package history
             </span>
-          </h2>
-        </Container>
+          }
+        />
         <PackageUserDetails {...userDetails} />
         <Container className="review-package-details__main-container">
           <Container className="review-package-details__links">

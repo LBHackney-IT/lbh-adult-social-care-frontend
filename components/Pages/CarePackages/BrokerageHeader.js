@@ -4,10 +4,9 @@ import { BROKER_PORTAL_ROUTE, LOGOUT_ROUTE } from '../../../routes/RouteConstant
 
 const links = [
   { href: BROKER_PORTAL_ROUTE, text: 'Broker Portal' },
-  { href: '#', text: 'Broker Package' },
-  { href: '#', text: 'Care Charge' },
-  { href: '#', text: 'Approvals' },
-  { href: '#', text: 'Finance' },
+  { href: '#1', text: 'Care Charges' },
+  { href: '#2', text: 'Approvals' },
+  { href: '#3', text: 'Finance' },
   { href: LOGOUT_ROUTE, text: 'Log out' },
 ];
 
