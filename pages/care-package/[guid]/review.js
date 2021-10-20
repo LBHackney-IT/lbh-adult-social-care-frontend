@@ -2,7 +2,7 @@ import React from 'react';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { useCarePackageApi } from 'api';
-import { getLoggedInUser } from 'service/helpers';
+import { getLoggedInUser } from 'service';
 import { BrokerageBorderCost, ReviewPackageDetails } from 'components';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -125,17 +125,17 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'Funded Nursing Care',
       id: 'funded-nursing-care',
-      items: data?.fundedNursingCare ? [data.fundedNursingCare] : null,
+      items: data?.fundedNursingCare ? [data?.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
       details: (
         <>
           <p>
             <span className="font-weight-bold">FNC assessment been carried out: </span>
-            {data.fundedNursingCare?.assessmentFileUrl ? 'Yes' : 'No'}
+            {data?.fundedNursingCare?.assessmentFileUrl ? 'Yes' : 'No'}
           </p>
           <p>
             <span className="font-weight-bold">Collected by: </span>
-            {fundedNursingCareClaimCollector[data.fundedNursingCare?.claimCollector]}
+            {fundedNursingCareClaimCollector[data?.fundedNursingCare?.claimCollector]}
           </p>
           <p className="mb-3">
             <span className="font-weight-bold">FNC assessment: </span>
@@ -145,11 +145,11 @@ const ReviewPackageDetailsPage = () => {
       ),
       totalCostComponent: (
         <>
-          {data?.hackneyReclaims?.fnc !== undefined && data.hackneyReclaims?.fnc !== 0 && (
+          {data?.hackneyReclaims?.fnc !== undefined && data?.hackneyReclaims?.fnc !== 0 && (
             <BrokerageBorderCost totalCost={data?.hackneyReclaims?.fnc.toFixed(2)} totalCostHeader="Total (Gross)" />
           )}
           {data?.supplierReclaims?.fnc !== undefined && !!data?.hackneyReclaims?.fnc && <br />}
-          {data?.supplierReclaims?.fnc !== undefined && data.supplierReclaims.fnc !== 0 && (
+          {data?.supplierReclaims?.fnc !== undefined && data?.supplierReclaims.fnc !== 0 && (
             <BrokerageBorderCost totalCost={data?.supplierReclaims?.fnc.toFixed(2)} totalCostHeader="Total (Net Off)" />
           )}
         </>
@@ -167,7 +167,7 @@ const ReviewPackageDetailsPage = () => {
           {data?.fundedNursingCare?.claimCollector && (
             <p>
               <span className="font-weight-bold">Collected by: </span>
-              {careChargesClaimCollector[data.fundedNursingCare.claimCollector]}
+              {careChargesClaimCollector[data?.fundedNursingCare.claimCollector]}
             </p>
           )}
           <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
@@ -176,7 +176,7 @@ const ReviewPackageDetailsPage = () => {
       ),
       totalCostComponent: (
         <>
-          {data?.hackneyReclaims?.careCharge !== undefined && data.hackneyReclaims?.careCharge !== 0 && (
+          {data?.hackneyReclaims?.careCharge !== undefined && data?.hackneyReclaims?.careCharge !== 0 && (
             <BrokerageBorderCost
               totalCost={data?.hackneyReclaims?.careCharge.toFixed(2)}
               totalCostHeader="Total (Gross)"
@@ -185,7 +185,7 @@ const ReviewPackageDetailsPage = () => {
           {data?.supplierReclaims?.careCharge !== undefined && data?.hackneyReclaims?.careCharge !== undefined && (
             <br />
           )}
-          {data?.supplierReclaims?.careCharge !== undefined && data.supplierReclaims?.careCharge !== 0 && (
+          {data?.supplierReclaims?.careCharge !== undefined && data?.supplierReclaims?.careCharge !== 0 && (
             <BrokerageBorderCost
               totalCost={data?.supplierReclaims?.careCharge.toFixed(2)}
               totalCostHeader="Total (Net Off)"

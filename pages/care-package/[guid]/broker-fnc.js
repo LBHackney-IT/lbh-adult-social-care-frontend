@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 import { getCareChargesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useReclaimApi, createCarePackageReclaimFnc, updateCarePackageReclaimFnc } from 'api';
-import { getLoggedInUser } from 'service/helpers';
 import { FundedNursingCare } from 'components';
+import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(({ req }) => {

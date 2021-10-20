@@ -10,6 +10,7 @@ import {
   Breadcrumbs,
   Announcement,
   BrokerageHeader,
+  UploadGreenButton,
   ServiceUserDetails,
   TitleSubtitleHeader,
 } from 'components';
@@ -36,6 +37,7 @@ const AssignPackage = () => {
   const [packageType, setPackageType] = useState('');
   const [broker, setBroker] = useState('');
   const [notes, setNotes] = useState('');
+  const [file, setFile] = useState(null);
 
   const [errors, setErrors] = useState({
     broker: '',
@@ -159,12 +161,10 @@ const AssignPackage = () => {
                 </FormGroup>
               </Container>
 
-              {/* Feature temporarily postponed */}
-
-              {/* <Container className="brokerage__container"> */}
-              {/*  <h3>Support plan and care package</h3> */}
-              {/*  <UploadGreenButton label="Upload social worker care plan" file={file} setFile={setFile} /> */}
-              {/* </Container> */}
+              <Container className="brokerage__container">
+                <h3>Support plan and care package</h3>
+                <UploadGreenButton label="Upload social worker care plan" file={file} setFile={setFile} />
+              </Container>
 
               <div className="assign-care-plan__notes">
                 <h3>Add notes</h3>

@@ -70,3 +70,12 @@ AddAnotherItemButton.args = {
   link: '',
   addItem: true,
 };
+
+export const LoadingComponentButton = Template.bind({});
+LoadingComponentButton.args = {
+  children: 'Loading',
+  secondary: false,
+  disabled: true,
+  isLoading: true,
+  link: '',
+};

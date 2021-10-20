@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Loading } from 'components';
 import withSession from 'lib/session';
-import { getLoggedInUser } from 'service/helpers';
+import { getLoggedInUser } from 'service';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {

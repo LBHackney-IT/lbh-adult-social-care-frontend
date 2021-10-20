@@ -14,7 +14,7 @@ import {
 import { CorePackageDetails } from 'components';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
-import { getLoggedInUser } from 'service/helpers';
+import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -40,7 +40,8 @@ const packageSettingOptions = [
 
 const settingKeys = ['hasRespiteCare', 'hospitalAvoidance', 'hasDischargePackage', 'isReEnablement', 'isS117Client'];
 
-const getCurrentSelectedSettings = (carePackage = {}) => settingKeys.filter((setting) => carePackage[setting] === true);
+const getCurrentSelectedSettings = (carePackage = {}) =>
+  settingKeys.filter((setting) => carePackage?.[setting] === true);
 
 const CorePackagePage = () => {
   const dispatch = useDispatch();

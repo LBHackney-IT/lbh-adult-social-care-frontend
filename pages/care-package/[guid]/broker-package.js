@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useCarePackageApi } from 'api';
 import { BrokerPackage } from 'components';
-import { getLoggedInUser } from 'service/helpers';
+import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -23,8 +23,8 @@ const BrokerPackagePage = () => {
   const { guid: packageId } = router.query;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const { data: detailsData, isLoading: detailsLoading } = useCarePackageApi.details(packageId);
 

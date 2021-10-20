@@ -10,9 +10,10 @@ import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
-import { compareDescendingDMY, dateStringToDate, uniqueID } from '../../../../service/helpers';
+import { compareDescendingDMY, dateStringToDate, uniqueID } from '../../../../service';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
+import { useDebounce } from 'react-use';
 
 const initialNeed = {
   cost: 0,
@@ -44,7 +45,7 @@ const BrokerPackage = ({
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [weeklyTotalCost, setWeeklyTotalCost] = useState(0);
-  const [oneOfTotalCost, setOneOfTotalCost] = useState(0);
+  const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
   const [isNewSupplier, setIsNewSupplier] = useState(false);
 
   const [packageDates, setPackageDates] = useState({
@@ -54,6 +55,11 @@ const BrokerPackage = ({
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchText, setSearchText] = useState('');
+  useDebounce(
+    () => setSearchQuery(searchText),
+    1000,
+    [searchText]
+  );
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   const onSearchSupplier = () => {
@@ -61,9 +67,9 @@ const BrokerPackage = ({
     setShowSearchResults(true);
   };
 
-  const { data: searchResults } = useCarePackageApi.suppliers({
+  const { data: searchResults, isLoading: suppliersLoading } = useCarePackageApi.suppliers({
     supplierName: searchQuery,
-    shouldFetch: showSearchResults,
+    shouldFetch: searchQuery || showSearchResults,
   });
 
   const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
@@ -289,7 +295,7 @@ const BrokerPackage = ({
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
-        <Loading isLoading={loading} />
+        <Loading isLoading={loading || suppliersLoading} />
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
           <Container>
@@ -315,6 +321,7 @@ const BrokerPackage = ({
                   searchIcon={null}
                   clearIcon={<p className="lbh-primary-button">Clear</p>}
                   clear={clearSearch}
+                  search={onSearchSupplier}
                   value={searchText}
                   className="supplier-search-box"
                   id="supplier-search-box"
@@ -363,7 +370,7 @@ const BrokerPackage = ({
               oneOffNeeds={oneOffNeeds}
               setWeeklyNeeds={setWeeklyNeeds}
               setOneOffNeeds={setOneOffNeeds}
-              oneOffTotalCost={oneOfTotalCost}
+              oneOffTotalCost={oneOffTotalCost}
               weeklyTotalCost={weeklyTotalCost}
               coreCost={coreCost}
               setCoreCost={setCoreCost}
@@ -375,7 +382,11 @@ const BrokerPackage = ({
             <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !coreCost} onClick={clickSave}>
+            <Button
+              isLoading={loading}
+              disabled={(!oneOffTotalCost && !weeklyTotalCost && !coreCost) || loading}
+              onClick={clickSave}
+            >
               Save and continue
             </Button>
           </Container>
