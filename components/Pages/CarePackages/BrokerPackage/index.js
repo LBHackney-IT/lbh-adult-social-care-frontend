@@ -269,7 +269,7 @@ const BrokerPackage = ({
         totalCost += Number(item.cost);
       });
     }
-    setOneOfTotalCost(totalCost);
+    setOneOffTotalCost(totalCost);
   }, [coreCost, oneOffNeeds]);
 
   useEffect(() => {
