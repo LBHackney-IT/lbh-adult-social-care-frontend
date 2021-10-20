@@ -174,8 +174,8 @@ const BrokerPackage = ({
       return;
     }
 
-    if(!supplierWeeklyCost) {
-      setSupplierWeeklyCostError('Required field');
+    if(!coreCost) {
+      setCoreCostError('Required field');
       pushNotification('Core weekly cost is required')
       return;
     }
@@ -257,9 +257,9 @@ const BrokerPackage = ({
     setter(cloneNeeds);
   };
 
-  const changeSupplierWeeklyCost = (value) => {
-    setSupplierWeeklyCost(value);
-    setSupplierWeeklyCostError('');
+  const changeCoreCost = (value) => {
+    setCoreCost(value);
+    setCoreCostError('');
   };
 
   const addNeed = (setter) => {
@@ -389,12 +389,12 @@ const BrokerPackage = ({
               coreCostError={coreCostError}
               oneOffNeeds={oneOffNeeds}
               setWeeklyNeeds={setWeeklyNeeds}
-              supplierWeeklyCostError={supplierWeeklyCostError}
+              coreCostError={coreCostError}
               setOneOffNeeds={setOneOffNeeds}
               oneOffTotalCost={oneOffTotalCost}
               weeklyTotalCost={weeklyTotalCost}
               coreCost={coreCost}
-              setCoreCost={setCoreCost}
+              setCoreCost={changeCoreCost}
               changeNeed={changeNeed}
               removeNeed={removeNeed}
             />
