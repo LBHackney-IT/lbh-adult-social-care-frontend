@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useCarePackageApi } from 'api';
-import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from 'components';
+import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from 'components/HackneyDS';
 import { getCorePackageRoute } from 'routes/RouteConstants';
 import { formatDate, getTagColorFromStatus } from 'service';
 import { CaretDownIcon } from 'components/Icons';
