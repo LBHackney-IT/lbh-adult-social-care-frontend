@@ -40,7 +40,8 @@ const packageSettingOptions = [
 
 const settingKeys = ['hasRespiteCare', 'hospitalAvoidance', 'hasDischargePackage', 'isReEnablement', 'isS117Client'];
 
-const getCurrentSelectedSettings = (carePackage = {}) => settingKeys.filter((setting) => carePackage[setting] === true);
+const getCurrentSelectedSettings = (carePackage = {}) =>
+  settingKeys.filter((setting) => carePackage?.[setting] === true);
 
 const CorePackagePage = () => {
   const dispatch = useDispatch();
