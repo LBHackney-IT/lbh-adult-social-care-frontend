@@ -1,5 +1,8 @@
 module.exports = {
-  extends: ['next', 'prettier'],
+  extends: ['plugin:@next/next/recommended', 'airbnb', 'prettier'],
+  rules: {
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+  },
   settings: {
     'import/resolver': {
       alias: {
