@@ -110,7 +110,7 @@ export const BrokerPortalPage = ({
                   startDate={filters.dateFrom}
                   dateValue={filters.dateFrom}
                   setDate={(value) => {
-                    if (value > filters.dateTo) {
+                    if (filters.dateTo && value > filters.dateTo) {
                       setFilters((prevState) => ({
                         ...prevState,
                         dateTo: value,
