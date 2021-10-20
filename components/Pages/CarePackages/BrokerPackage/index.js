@@ -316,6 +316,7 @@ const BrokerPackage = ({
                   searchIcon={null}
                   clearIcon={<p className="lbh-primary-button">Clear</p>}
                   clear={clearSearch}
+                  search={onSearchSupplier}
                   value={searchText}
                   className="supplier-search-box"
                   id="supplier-search-box"
