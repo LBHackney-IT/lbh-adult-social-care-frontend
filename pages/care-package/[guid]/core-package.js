@@ -48,7 +48,7 @@ const CorePackagePage = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { data: schedulingOptions, isLoading: schedulingLoading } = useCarePackageOptions.packageSchedulingOptions();
+  const { data: schedulingOptions = [], isLoading: schedulingLoading } = useCarePackageOptions.packageSchedulingOptions();
   const { options: packageTypes = [], isLoading: packageGetAllLoading } = usePackageGetAll();
   const { data: primarySupportReasons = [], isLoading: primarySupportReasonLoading } = usePrimarySupportReason();
 
