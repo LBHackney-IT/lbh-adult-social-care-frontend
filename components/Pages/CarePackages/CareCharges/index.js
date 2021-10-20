@@ -164,6 +164,7 @@ const CareCharges = ({
               setCollectedBy(value);
             }}
             inline
+            className='mb-3'
             error={errors.collectedBy}
             value={collectedBy}
             label="Collected by"

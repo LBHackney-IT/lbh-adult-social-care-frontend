@@ -1,5 +1,6 @@
 import React from 'react';
 import Loading from '../../Loading';
+import { Container } from '../index';
 
 export default function Button({
   children,
@@ -11,9 +12,9 @@ export default function Button({
   target,
   className,
   addItem,
+  onClick = () => {},
   LoadingComponent = Loading,
   isLoading,
-  onClick = () => {},
 }) {
   const outerClassName = className ? ` ${className}` : '';
   const secondaryClassList = secondary ? ' govuk-secondary lbh-button--secondary' : '';
@@ -31,6 +32,7 @@ export default function Button({
     <a
       rel={rel}
       target={target}
+      aria-disabled={disabled}
       onClick={(e) => disabled && e.preventDefault()}
       href={link}
       role="button"
@@ -38,7 +40,8 @@ export default function Button({
       className={`${mainClass}${secondaryClassList + disabledClassList}`}
       data-module="govuk-button"
     >
-      {children}
+      {isLoading && <LoadingComponent className='loading-absolute-centered' isLoading={isLoading} />}
+      <Container className={isLoading ? 'hide' : ''}>{children}</Container>
     </a>
   ) : (
     <button
@@ -49,9 +52,9 @@ export default function Button({
       disabled={disabled}
       onClick={onClick}
     >
+      {isLoading && <LoadingComponent className='loading-absolute-centered' isLoading={isLoading} />}
       {addItem && addItemIcon}
-      <LoadingComponent className='button-loading' isLoading={isLoading} />
-      {children}
+      <Container className={isLoading ? 'hide' : ''}>{children}</Container>
     </button>
   );
 }

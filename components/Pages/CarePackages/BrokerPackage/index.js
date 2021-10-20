@@ -43,7 +43,7 @@ const BrokerPackage = ({
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [weeklyTotalCost, setWeeklyTotalCost] = useState(0);
-  const [oneOfTotalCost, setOneOfTotalCost] = useState(0);
+  const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
   const [isNewSupplier, setIsNewSupplier] = useState(false);
 
   const [packageDates, setPackageDates] = useState({
@@ -258,7 +258,7 @@ const BrokerPackage = ({
         totalCost += Number(item.cost);
       });
     }
-    setOneOfTotalCost(totalCost);
+    setOneOffTotalCost(totalCost);
   }, [supplierWeeklyCost, oneOffNeeds]);
 
   useEffect(() => {
@@ -356,7 +356,7 @@ const BrokerPackage = ({
               oneOffNeeds={oneOffNeeds}
               setWeeklyNeeds={setWeeklyNeeds}
               setOneOffNeeds={setOneOffNeeds}
-              oneOffTotalCost={oneOfTotalCost}
+              oneOffTotalCost={oneOffTotalCost}
               weeklyTotalCost={weeklyTotalCost}
               supplierWeeklyCost={supplierWeeklyCost}
               setSupplierWeeklyCost={setSupplierWeeklyCost}
@@ -370,7 +370,7 @@ const BrokerPackage = ({
             </Button>
             <Button
               isLoading={loading}
-              disabled={(!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost) || loading}
+              disabled={(!oneOffTotalCost && !weeklyTotalCost && !supplierWeeklyCost) || loading}
               onClick={clickSave}
             >
               Save and continue
