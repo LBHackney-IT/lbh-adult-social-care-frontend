@@ -13,6 +13,7 @@ import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
 import { dateStringToDate, uniqueID } from '../../../../service/helpers';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
+import { compareDesc } from 'date-fns';
 
 const initialNeed = {
   cost: 0,
@@ -169,6 +170,11 @@ const BrokerPackage = ({
     if(!supplierWeeklyCost) {
       setSupplierWeeklyCostError('Required field');
       pushNotification('Core weekly cost is required')
+      return;
+    }
+
+    if(!isOngoing && (!packageDates.endDate || compareDesc(packageDates.startDate, packageDates.endDate) === -1)) {
+      pushNotification('Core date is wrong');
       return;
     }
 
