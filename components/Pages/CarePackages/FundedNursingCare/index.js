@@ -148,7 +148,7 @@ const FundedNursingCare = ({
     <Container className="brokerage__funded-nursing-care">
       <Loading isLoading={loading} />
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+      <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <TitleSubtitleHeader title="Build a care package" subTitle="Funded Nursing Care" />
         <Container>
           <h3 className="brokerage__item-title">Funded Nursing Care</h3>
@@ -214,7 +214,9 @@ const FundedNursingCare = ({
             <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button disabled={loading} isLoading={loading} onClick={clickSave}>Save and continue</Button>
+            <Button disabled={loading} isLoading={loading} onClick={clickSave}>
+              Save and continue
+            </Button>
           </Container>
         </Container>
       </Container>
