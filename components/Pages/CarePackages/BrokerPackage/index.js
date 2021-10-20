@@ -10,7 +10,7 @@ import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
-import { dateStringToDate, uniqueID } from '../../../../service/helpers';
+import { dateStringToDate, uniqueID } from '../../../../service';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import { useDebounce } from 'react-use';

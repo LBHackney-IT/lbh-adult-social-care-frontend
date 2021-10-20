@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import React, { memo, useEffect } from 'react';
-import { getLoggedInUser } from 'service/helpers';
+import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(({ req }) => {

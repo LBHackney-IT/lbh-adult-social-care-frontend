@@ -1,9 +1,18 @@
 import React, { useMemo } from 'react';
-import withSession from 'lib/session';
 import { useRouter } from 'next/router';
-import { getLoggedInUser } from 'service/helpers';
+import {
+  Loading,
+  Container,
+  Breadcrumbs,
+  HistoryList,
+  BrokerageHeader,
+  HistoryOverview,
+  TitleSubtitleHeader,
+} from 'components';
+import withSession from 'lib/session';
+import { useCarePackageApi } from 'api';
+import { getLoggedInUser } from 'service';
 import { BROKER_PORTAL_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
-import { Breadcrumbs, Container, BrokerageHeader, TitleSubtitleHeader, HistoryList, HistoryOverview } from 'components';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -35,14 +44,18 @@ const History = () => {
     [packageId]
   );
 
+  const { data, isLoading } = useCarePackageApi.history(packageId);
+
   return (
     <div>
       <BrokerageHeader />
 
+      <Loading isLoading={isLoading} />
+
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
         <Breadcrumbs values={breadcrumbs} />
 
-        <TitleSubtitleHeader subTitle="Package history" title="Nursing care" />
+        <TitleSubtitleHeader subTitle="Package history" title={data.packageType} />
 
         <HistoryOverview />
 

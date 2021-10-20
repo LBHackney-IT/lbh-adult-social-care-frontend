@@ -2,8 +2,8 @@ import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
 import { useCarePackageApi } from 'api';
+import { getLoggedInUser } from 'service';
 import { BrokerPortalPage } from 'components';
-import { getLoggedInUser } from 'service/helpers';
 import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
