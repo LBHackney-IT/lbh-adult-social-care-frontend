@@ -1,7 +1,7 @@
 import React from 'react';
-import { getSlot } from '../index';
+import { getSlot } from '../helpers';
 
-export default function Announcement ({ children = [], className }) {
+export default function Announcement({ children = [], className }) {
   const nodeList = Array.isArray(children) ? children : [children];
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from 'components/HackneyDS';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
+import { useCarePackageApi } from 'api';
 import { getCorePackageRoute } from 'routes/RouteConstants';
 import { CaretDownIcon } from 'components/Icons';
 import { formatDate } from 'service/helpers';
@@ -16,7 +16,7 @@ const tagColors = {
   Approved: 'gray',
 };
 
-export const PackageRequest = () => {
+const PackageRequest = () => {
   const router = useRouter();
   const { guid: packageId, packageStatus, dateAssigned } = router.query;
   const [isExpanded, setExpanded] = useState(false);
@@ -53,7 +53,7 @@ export const PackageRequest = () => {
             <p>{formatDate(dateAssigned)}</p>
           </Container>
         </Container>
-        <Button handler={handleClick}>Create Package</Button>
+        <Button onClick={handleClick}>Create Package</Button>
       </Container>
       <HorizontalSeparator height="10px" />
       <Container>
@@ -85,3 +85,5 @@ export const PackageRequest = () => {
     </Container>
   );
 };
+
+export default PackageRequest;

@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { getCareChargesRoute } from 'routes/RouteConstants';
-import useReclaimApi from 'api/SWR/CarePackage/useReclaimApi';
 import { addNotification } from 'reducers/notificationsReducer';
-import { createCarePackageReclaimFnc, updateCarePackageReclaimFnc } from 'api/CarePackages/CarePackageReclaim';
-import FundedNursingCare from 'components/Pages/CarePackages/FundedNursingCare';
+import { useReclaimApi, createCarePackageReclaimFnc, updateCarePackageReclaimFnc } from 'api';
 import { getLoggedInUser } from 'service/helpers';
+import { FundedNursingCare } from 'components';
 import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -43,7 +42,7 @@ const FundedNursingCarePage = () => {
   const createFundedNursingCare = async (packageId, fundedNursingCareCreation) => {
     setLoading(true);
     try {
-      await createCarePackageReclaimFnc(packageId, fundedNursingCareCreation)
+      await createCarePackageReclaimFnc(packageId, fundedNursingCareCreation);
       pushNotification(`Funded Nursing Care created successfully`, 'success');
       router.push(getCareChargesRoute(carePackageId));
     } catch (e) {
@@ -55,7 +54,7 @@ const FundedNursingCarePage = () => {
   const updateFundedNursingCare = async (packageId, fundedNursingCareUpdate) => {
     setLoading(true);
     try {
-      await updateCarePackageReclaimFnc(packageId, fundedNursingCareUpdate)
+      await updateCarePackageReclaimFnc(packageId, fundedNursingCareUpdate);
       pushNotification(`Funded Nursing Care updated successfully`, 'success');
       router.push(getCareChargesRoute(carePackageId));
     } catch (e) {

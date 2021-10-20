@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Button } from './HackneyDS/index';
+import { Button } from './HackneyDS';
 import { CircleCloseIcon } from './Icons';
-import Loading from './Loading'
+import Loading from './Loading';
 
 const Popup = ({ mainContent, loading, firstButton, className = '', secondButton, title, closePopup }) => {
   useEffect(() => {

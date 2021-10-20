@@ -1,13 +1,12 @@
 import { useRouter } from 'next/router';
 import React, { useCallback, useRef, useState } from 'react';
-import BrokerageHeader from '../CarePackages/BrokerageHeader/BrokerageHeader';
-import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select } from '../../HackneyDS';
+import BrokerageHeader from '../CarePackages/BrokerageHeader';
+import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select, FormGroup } from '../../HackneyDS';
+import { BROKER_PORTAL_SEARCH_ROUTE } from '../../../routes/RouteConstants';
 import AlternativePagination from '../../AlternativePagination';
-import FormGroup from '../../HackneyDS/FormGroup';
-import DatePick from '../../DatePick';
 import { BrokerPortalTable } from './BrokerPortalTable';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
-import { BROKER_PORTAL_SEARCH_ROUTE } from '../../../routes/RouteConstants';
+import DatePick from '../../DatePick';
 import Loading from '../../Loading';
 
 const statusOptions = [
@@ -66,13 +65,13 @@ export const BrokerPortalPage = ({
       <BrokerageHeader />
       <Container background="#FAFAFA" padding="0 0 55px">
         <Container maxWidth="1080px" margin="0 auto">
-          <Container padding='10px 60px 0px'>
+          <Container padding="10px 60px 0px">
             <Breadcrumbs values={breadcrumbs} />
           </Container>
 
           <Container className="brokerage-portal__header">
             <h1>Broker Portal</h1>
-            <Button handler={goToBrokerPortalSearch}>Find a service user</Button>
+            <Button onClick={goToBrokerPortalSearch}>Find a service user</Button>
           </Container>
 
           <Container className="brokerage-portal__filters">
@@ -137,7 +136,7 @@ export const BrokerPortalPage = ({
               {shouldShowClear && (
                 <Button
                   className="outline gray clear-filter-button"
-                  handler={() => {
+                  onClick={() => {
                     clearFilter();
                     selectorRef.current?.select?.select?.clearValue();
                   }}
@@ -165,3 +164,5 @@ export const BrokerPortalPage = ({
     </div>
   );
 };
+
+export default BrokerPortalPage;

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React, { memo } from 'react';
 import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 
-const Overview = () => {
+const HistoryOverview = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
@@ -33,4 +33,4 @@ const Overview = () => {
   );
 };
 
-export default memo(Overview);
+export default memo(HistoryOverview);

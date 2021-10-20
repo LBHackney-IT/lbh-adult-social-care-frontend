@@ -1,15 +1,18 @@
 import React from 'react';
+import {
+  Loading,
+  Container,
+  Breadcrumbs,
+  CareDetails,
+  PackageRequest,
+  BrokerageHeader,
+  ServiceUserDetails,
+  TitleSubtitleHeader,
+  HorizontalSeparator,
+} from 'components';
 import { useRouter } from 'next/router';
-import { Breadcrumbs, Container, HorizontalSeparator } from 'components/HackneyDS';
-import ServiceUserDetails from 'components/Pages/BrokerPortal/ServiceUserDetails';
-import BrokerageHeader from 'components/Pages/CarePackages/BrokerageHeader/BrokerageHeader';
-import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
-import { CareDetails } from 'components/Pages/ServiceUser/Packages/CareDetails';
-import { PackageRequest } from 'components/Pages/ServiceUser/Packages/PackageRequest';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
-import { mapServiceUserBasicInfo } from 'api/Mappers/optionsMapper';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
-import Loading from 'components/Loading';
+import { mapServiceUserBasicInfo, useCarePackageApi } from 'api';
 
 const nursingData = [
   {

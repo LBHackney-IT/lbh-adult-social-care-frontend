@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { memo } from 'react';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
+import { useCarePackageApi } from 'api';
 import { formatDate } from 'service/helpers';
 
 const HistoryList = () => {

@@ -28,19 +28,25 @@ const testSecondElement = [
   },
 ];
 
-export const CancelElementModal = ({ isOpened = true, firstElement = testFirstElement, secondElement = testSecondElement }) => {
+const CancelElementModal = ({
+  isOpened = true,
+  firstElement = testFirstElement,
+  secondElement = testSecondElement,
+}) => {
   const [openedModal, setOpenedModal] = useState(true);
 
   const closeModal = () => setOpenedModal(false);
 
   return (
-    <Dialog className='care-charges-modal cancel-element-modal' isOpen={isOpened || openedModal} onClose={closeModal}>
+    <Dialog className="care-charges-modal cancel-element-modal" isOpen={isOpened || openedModal} onClose={closeModal}>
       <CancelElementContent
         closeModal={closeModal}
         firstElement={firstElement}
         secondElement={secondElement}
-        headerText='Cancel element'
+        headerText="Cancel element"
       />
     </Dialog>
-  )
+  );
 };
+
+export default CancelElementModal;
