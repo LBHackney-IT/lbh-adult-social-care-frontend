@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
+import { useCarePackageApi } from 'api';
 import { getLoggedInUser } from 'service/helpers';
 import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { BrokerPortalPage } from 'components/Pages/BrokerPortal';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -56,13 +56,19 @@ const BrokerPortal = () => {
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
   const handleRowClick = useCallback((rowInfo) => {
-    if (rowInfo) {
-      router.push({ pathname: getServiceUserPackagesRoute(rowInfo.serviceUserId), query: rowInfo });
-    }
+    router.push({
+      pathname: getServiceUserPackagesRoute(rowInfo.packageId),
+      query: {
+        // todo: should be removed once endpoint for getting package info will contain this data
+        packageStatus: rowInfo.packageStatus,
+        dateAssigned: rowInfo.dateAssigned,
+      },
+    });
   }, []);
 
   return (
     <BrokerPortalPage
+      loading={brokerViewLoading}
       filters={filters}
       clearFilter={clearFilters}
       setFilters={setFilters}

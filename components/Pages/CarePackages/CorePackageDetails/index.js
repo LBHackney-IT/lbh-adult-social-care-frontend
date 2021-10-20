@@ -4,10 +4,12 @@ import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
 import { Button, Checkbox, Container, ErrorMessage, RadioGroup } from '../../../HackneyDS';
 import CorePackageSelectors from './CorePackageSelectors';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
+import Loading from '../../../Loading';
 
 const CorePackageDetails = ({
   userDetails,
   supportReasonOptions,
+  loading,
   checkboxOptions,
   packageTypeOptions,
   packageScheduleOptions,
@@ -110,6 +112,7 @@ const CorePackageDetails = ({
     <div className="core-package-details brokerage">
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
+        <Loading isLoading={loading} />
         <Container className="brokerage__container-header brokerage__container">
           <p>Build a care package</p>
           <h2>Core package details</h2>
@@ -153,7 +156,7 @@ const CorePackageDetails = ({
           </Container>
         </Container>
         {Object.values(errors).some((error) => !!error) && <ErrorMessage>There is some errors above</ErrorMessage>}
-        <Button className="core-package-details__button" handler={saveAndContinue}>
+        <Button className="core-package-details__button" onClick={saveAndContinue}>
           Save and continue
         </Button>
       </Container>

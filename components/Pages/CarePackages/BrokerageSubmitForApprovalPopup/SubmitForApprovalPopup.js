@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import Popup from '../../../Popup';
-import { Button, Container, Select, Textarea } from '../../../HackneyDS';
+import { submitCarePackage } from '../../../../api';
 import FormGroup from '../../../HackneyDS/FormGroup';
-import { submitCarePackage } from '../../../../api/CarePackages/CarePackage';
+import { Button, Container, Select, Textarea } from '../../../HackneyDS';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { BROKER_PORTAL_ROUTE } from '../../../../routes/RouteConstants';
+import Loading from '../../../Loading';
 
 const approverOptions = [
   { text: 'Furkan Kayar', value: 'aee45700-af9b-4ab5-bb43-535adbdcfb84' },
@@ -19,8 +20,10 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
 
   const [approverId, setApproverId] = useState(approverOptions[0].value);
   const [notes, setNotes] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const submit = async () => {
+    setLoading(true);
     try {
       await submitCarePackage({
         packageId,
@@ -31,10 +34,12 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
     } catch (e) {
       dispatch(addNotification({ text: e || 'Something went wrong' }));
     }
+    setLoading(false);
   };
 
   const popupMainContent = (
     <Container>
+      <Loading isLoading={loading} />
       <FormGroup className="brokerage__approved-by-select" label="To be approved by">
         <Select options={approverOptions} value={approverId} onChangeValue={setApproverId} />
       </FormGroup>
@@ -42,8 +47,8 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
         <Textarea value={notes} handler={setNotes} />
       </FormGroup>
       <Container className="brokerage__actions">
-        <Button handler={submit}>Submit</Button>
-        <Button handler={closePopup} className="link-button red">
+        <Button onClick={submit}>Submit</Button>
+        <Button onClick={closePopup} className="link-button red">
           Cancel
         </Button>
       </Container>
