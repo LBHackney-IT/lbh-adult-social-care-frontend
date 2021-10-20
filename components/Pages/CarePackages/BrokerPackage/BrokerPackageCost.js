@@ -18,6 +18,7 @@ const BrokerPackageCost = ({
   oneOffTotalCost,
   supplierWeeklyCost,
   setSupplierWeeklyCost,
+  supplierWeeklyCostError,
   removeSupplierCard,
 }) => (
   <Container className="supplier-look-up__selected">
@@ -41,6 +42,8 @@ const BrokerPackageCost = ({
       label="Weekly Cost"
       value={supplierWeeklyCost}
       onChangeValue={setSupplierWeeklyCost}
+      error={supplierWeeklyCostError}
+      required
     />
     <BrokerageCost
       name="weekly-additional"

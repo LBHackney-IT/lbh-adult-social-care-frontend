@@ -39,6 +39,7 @@ const BrokerPackage = ({
 
   const [isOngoing, setIsOngoing] = useState(false);
   const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
+  const [supplierWeeklyCostError, setSupplierWeeklyCostError] = useState('');
 
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
@@ -47,7 +48,7 @@ const BrokerPackage = ({
   const [isNewSupplier, setIsNewSupplier] = useState(false);
 
   const [packageDates, setPackageDates] = useState({
-    startDate: new Date(),
+    startDate: null,
     endDate: null,
   });
 
@@ -86,7 +87,7 @@ const BrokerPackage = ({
   const composeDetailsData = () => {
     if (detailsData) {
       setPackageDates({
-        startDate: dateStringToDate(detailsData.startDate),
+        startDate: dateStringToDate(detailsData.startDate) || new Date(),
         endDate: dateStringToDate(detailsData.endDate),
       });
 
@@ -135,6 +136,8 @@ const BrokerPackage = ({
   const checkNeedsErrors = (needs) => {
     let hasErrors = false;
     const checkedNeeds = needs.map((item) => {
+      if (!item.startDate && !item.endDate && !item.cost) return { ...item };
+
       let errorStartDate = '';
       let errorEndDate = '';
       if (!item.startDate || (item.startDate && item.endDate && item.startDate > item.endDate)) {
@@ -162,6 +165,13 @@ const BrokerPackage = ({
       pushNotification('No supplier selected');
       return;
     }
+
+    if(!supplierWeeklyCost) {
+      setSupplierWeeklyCostError('Required field');
+      pushNotification('Core weekly cost is required')
+      return;
+    }
+
     const checkedWeeklyDetails = checkNeedsErrors(weeklyNeeds);
     const checkOneOffDetails = checkNeedsErrors(oneOffNeeds);
 
@@ -174,7 +184,7 @@ const BrokerPackage = ({
     }
 
     const weeklyDetails = weeklyNeeds
-      .filter((item) => item.cost !== 0)
+      .filter((item) => item.startDate || item.endDate || item.cost)
       .map(({ cost, endDate, startDate }) => ({
         // id,
         cost,
@@ -185,7 +195,7 @@ const BrokerPackage = ({
       }));
 
     const oneOffDetails = oneOffNeeds
-      .filter((item) => item.cost !== 0)
+      .filter((item) => item.startDate || item.endDate || item.cost)
       .map(({ cost, endDate, startDate }) => ({
         // id,
         cost,
@@ -229,6 +239,11 @@ const BrokerPackage = ({
     const cloneNeeds = getter.slice();
     cloneNeeds.splice(index, 1, cloneNeed);
     setter(cloneNeeds);
+  };
+
+  const changeSupplierWeeklyCost = (value) => {
+    setSupplierWeeklyCost(value);
+    setSupplierWeeklyCostError('');
   };
 
   const addNeed = (setter) => {
@@ -282,11 +297,11 @@ const BrokerPackage = ({
 
   return (
     <div className="supplier-look-up brokerage">
-      <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
-        <Loading isLoading={loading} />
+      <BrokerageHeader/>
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px 30px">
+        <Loading isLoading={loading}/>
         <Container className="brokerage__container-main">
-          <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
+          <TitleSubtitleHeader title="Build a care package" subTitle="Broker package"/>
           <Container>
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
@@ -322,7 +337,7 @@ const BrokerPackage = ({
 
             {!searchText && !selectedItem && (
               <Container className="is-new-supplier">
-                <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
+                <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier}/>
                 <Container className="is-new-supplier-text" display="flex" flexDirection="column">
                   <p>This is a new supplier</p>
                   <p>
@@ -355,11 +370,12 @@ const BrokerPackage = ({
               weeklyNeeds={weeklyNeeds}
               oneOffNeeds={oneOffNeeds}
               setWeeklyNeeds={setWeeklyNeeds}
+              supplierWeeklyCostError={supplierWeeklyCostError}
               setOneOffNeeds={setOneOffNeeds}
               oneOffTotalCost={oneOfTotalCost}
               weeklyTotalCost={weeklyTotalCost}
               supplierWeeklyCost={supplierWeeklyCost}
-              setSupplierWeeklyCost={setSupplierWeeklyCost}
+              setSupplierWeeklyCost={changeSupplierWeeklyCost}
               changeNeed={changeNeed}
               removeNeed={removeNeed}
             />
@@ -368,7 +384,7 @@ const BrokerPackage = ({
             <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost} onClick={clickSave}>
+            <Button onClick={clickSave}>
               Save and continue
             </Button>
           </Container>
