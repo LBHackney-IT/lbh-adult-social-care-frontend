@@ -13,6 +13,7 @@ import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
 import { dateStringToDate, uniqueID } from '../../../../service/helpers';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
+import { useDebounce } from 'react-use';
 
 const initialNeed = {
   cost: 0,
@@ -23,7 +24,15 @@ const initialNeed = {
   errorEndDate: '',
 };
 
-export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, setCurrentPage, selectedItem, setSelectedItem }) => {
+export const BrokerPackage = ({
+  detailsData,
+  loading,
+  setLoading,
+  currentPage,
+  setCurrentPage,
+  selectedItem,
+  setSelectedItem
+}) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
@@ -45,6 +54,11 @@ export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, s
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchText, setSearchText] = useState('');
+  const debounceSearch = useDebounce(
+    () => setSearchQuery(searchText),
+    1000,
+    [searchText]
+  );
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   const onSearchSupplier = () => {
@@ -54,7 +68,7 @@ export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, s
 
   const { data: searchResults } = useCarePackageApi.suppliers({
     supplierName: searchQuery,
-    shouldFetch: showSearchResults,
+    shouldFetch: searchQuery?.length > 1,
   });
 
   const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
@@ -274,11 +288,11 @@ export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, s
 
   return (
     <div className="supplier-look-up brokerage">
-      <BrokerageHeader />
+      <BrokerageHeader/>
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        <Loading isLoading={loading} />
+        <Loading isLoading={loading}/>
         <Container className="brokerage__container-main">
-          <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
+          <TitleSubtitleHeader title="Build a care package" subTitle="Broker package"/>
           <Container>
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
@@ -314,7 +328,7 @@ export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, s
 
             {!searchText && !selectedItem && (
               <Container className="is-new-supplier">
-                <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
+                <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier}/>
                 <Container className="is-new-supplier-text" display="flex" flexDirection="column">
                   <p>This is a new supplier</p>
                   <p>
