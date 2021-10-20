@@ -63,7 +63,7 @@ const breadcrumbs = [
 
 const Packages = () => {
   const router = useRouter();
-  const { guid: packageId } = router.query;
+  const { packageId } = router.query;
 
   const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
   const { client, dateOfBirth, hackneyId, postcode } = mapServiceUserBasicInfo(packageInfo.serviceUser);
