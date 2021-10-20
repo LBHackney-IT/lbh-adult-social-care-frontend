@@ -283,10 +283,13 @@ const BrokerPackage = ({
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
+
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <Loading isLoading={loading} />
+
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
+
           <Container>
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
@@ -301,11 +304,12 @@ const BrokerPackage = ({
               setIsOngoing={setIsOngoing}
             />
           </Container>
+
           <>
             {!selectedItem && (
               <Container className="supplier-search-container" display="flex">
                 <SearchBox
-                  onChangeValue={(value) => setSearchText(value)}
+                  onChangeValue={setSearchText}
                   label="Supplier"
                   searchIcon={null}
                   clearIcon={<p className="lbh-primary-button">Clear</p>}
@@ -313,7 +317,9 @@ const BrokerPackage = ({
                   value={searchText}
                   className="supplier-search-box"
                   id="supplier-search-box"
+                  required
                 />
+
                 <Button className="supplier-search-button" onClick={onSearchSupplier}>
                   Search
                 </Button>
@@ -323,6 +329,7 @@ const BrokerPackage = ({
             {!searchText && !selectedItem && (
               <Container className="is-new-supplier">
                 <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
+
                 <Container className="is-new-supplier-text" display="flex" flexDirection="column">
                   <p>This is a new supplier</p>
                   <p>
@@ -333,6 +340,7 @@ const BrokerPackage = ({
               </Container>
             )}
           </>
+
           {(searchResults && searchText && !selectedItem) || (showSearchResults && searchResults) ? (
             <BrokerPackageSelector
               currentPage={currentPage}
@@ -364,10 +372,12 @@ const BrokerPackage = ({
               removeNeed={removeNeed}
             />
           )}
+
           <Container className="brokerage__actions">
             <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
+
             <Button
               isLoading={loading}
               disabled={(!oneOffTotalCost && !weeklyTotalCost && !supplierWeeklyCost) || loading}

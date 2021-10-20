@@ -41,6 +41,7 @@ const BrokerPackageCost = ({
       label="Weekly Cost"
       value={supplierWeeklyCost}
       onChangeValue={setSupplierWeeklyCost}
+      required
     />
     <BrokerageCost
       name="weekly-additional"
