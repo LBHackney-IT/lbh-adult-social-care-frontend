@@ -17,8 +17,8 @@ import BrokeragePackageDates from '../BrokeragePackageDates';
 
 const initialNeed = {
   cost: 0,
-  startDate: new Date(),
-  endDate: new Date(),
+  startDate: null,
+  endDate: null,
   isOngoing: false,
   errorStartDate: '',
   errorEndDate: '',
@@ -41,8 +41,8 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
   const [isNewSupplier, setIsNewSupplier] = useState(false);
 
   const [packageDates, setPackageDates] = useState({
-    endDate: new Date(),
     startDate: new Date(),
+    endDate: null,
   });
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -80,8 +80,8 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
   const composeDetailsData = () => {
     if (detailsData) {
       setPackageDates({
-        endDate: dateStringToDate(detailsData.endDate || new Date()),
         startDate: dateStringToDate(detailsData.startDate || new Date()),
+        endDate: dateStringToDate(detailsData.endDate),
       });
 
       if (!detailsData.endDate) {
