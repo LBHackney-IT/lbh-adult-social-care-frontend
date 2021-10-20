@@ -1,20 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from 'components/HackneyDS';
 import { useCarePackageApi } from 'api';
+import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from 'components';
 import { getCorePackageRoute } from 'routes/RouteConstants';
+import { formatDate, getTagColorFromStatus } from 'service';
 import { CaretDownIcon } from 'components/Icons';
 import { useRouter } from 'next/router';
-import { formatDate } from 'service';
-
-const tagColors = {
-  New: 'green',
-  'In Progress': 'yellow',
-  'Waiting For Approval': 'blue',
-  'Not Approved': 'red',
-  Ended: 'red',
-  Cancelled: 'red',
-  Approved: 'gray',
-};
 
 const PackageRequest = () => {
   const router = useRouter();
@@ -31,7 +21,7 @@ const PackageRequest = () => {
   return (
     <Container border="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
       <Container display="flex" alignItems="center">
-        <Tag className="text-capitalize outline" color={tagColors[packageStatus]}>
+        <Tag className="text-capitalize outline" color={getTagColorFromStatus(packageStatus)}>
           {packageStatus}
         </Tag>
         <VerticalSeparator width="10px" />

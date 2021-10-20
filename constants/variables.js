@@ -6,3 +6,13 @@ export const requestMethods = {
   patch: 'PATCH',
   head: 'HEAD',
 };
+
+export const tagColors = {
+  new: 'green',
+  'in progress': 'yellow',
+  'waiting for approval': 'blue',
+  'not approved': 'red',
+  ended: 'red',
+  cancelled: 'red',
+  approved: 'gray',
+};

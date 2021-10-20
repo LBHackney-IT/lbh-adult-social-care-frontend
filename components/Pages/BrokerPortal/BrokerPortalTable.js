@@ -1,16 +1,6 @@
 import React from 'react';
-import { formatDate } from '../../../service';
 import { Container, Table, Tag } from '../../HackneyDS';
-
-const tagColors = {
-  new: 'green',
-  'in progress': 'yellow',
-  'waiting for approval': 'blue',
-  'not approved': 'red',
-  ended: 'red',
-  cancelled: 'red',
-  approved: 'gray',
-};
+import { formatDate, getTagColorFromStatus } from '../../../service';
 
 export const BrokerPortalTable = ({ onRowClick, data }) => {
   const columns = [
@@ -22,7 +12,7 @@ export const BrokerPortalTable = ({ onRowClick, data }) => {
             <p className="brokerage-portal--user-name font-size-19px font-weight-bold text-green">
               {original.serviceUserName}
             </p>
-            <Tag className="text-capitalize outline" color={tagColors[value.toLowerCase()]}>
+            <Tag className="text-capitalize outline" color={getTagColorFromStatus(value)}>
               {value}
             </Tag>
           </Container>
