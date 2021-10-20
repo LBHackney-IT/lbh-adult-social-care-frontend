@@ -2,7 +2,7 @@ import React from 'react';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { useCarePackageApi } from 'api';
-import { getLoggedInUser } from 'service/helpers';
+import { getLoggedInUser } from 'service';
 import { BrokerageBorderCost, ReviewPackageDetails } from 'components';
 
 export const getServerSideProps = withSession(({ req }) => {

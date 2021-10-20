@@ -1,6 +1,3 @@
-export const maxStringLength = 200;
-export const DEFAULT_PAGE_SIZE = 10;
-
 export const requestMethods = {
   put: 'PUT',
   get: 'GET',
@@ -18,15 +15,4 @@ export const tagColors = {
   ended: 'red',
   cancelled: 'red',
   approved: 'gray',
-};
-
-export const initialPagingOptions = {
-  pagingMetaData: {},
-  data: [],
-}
-
-export const invoiceStatusIdByString = {
-  accepted: 5,
-  rejected: 2,
-  hold: 1,
 };

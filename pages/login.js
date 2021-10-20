@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useUser } from 'api';
 import { HackneyFooterInfo, Header } from 'components';
 import { userLogin } from 'reducers/userReducer';
-import { getLoggedInUser } from 'service/helpers';
+import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';

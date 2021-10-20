@@ -4,7 +4,7 @@ import FormGroup from '../../../HackneyDS/FormGroup';
 import UrlFromFile from '../../../UrlFromFile';
 import { isFunction } from '../../../../api/index';
 import { requiredSchema } from '../../../../constants/schemas';
-import { dateStringToDate } from '../../../../service/helpers';
+import { dateStringToDate } from '../../../../service';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';

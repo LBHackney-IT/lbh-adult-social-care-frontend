@@ -3,7 +3,6 @@ import axios from 'axios';
 import { requestMethods } from '../../constants/variables';
 
 export const handleResponse = async (response) => {
-  console.log(`response`, response);
   if (response.status === 200 || response.status === 201 || response.status === 204) return response.data;
   if (response.status === 400) {
     // So, a server-side validation error occurred.
@@ -20,17 +19,12 @@ export const handleError = (error) => {
   if (error.response) {
     // Request made and server responded
     errorMessage = error.response.data.message;
-    console.log(error.response.data);
-    console.log(error.response.status);
-    console.log(error.response.headers);
     throw errorMessage;
   } else if (error.request) {
     // The request was made but no response was received
     errorMessage = error.request.toString();
-    console.log(error.request);
   } else {
     // Something happened in setting up the request that triggered an Error
-    console.log('Error', error.message);
     errorMessage = error.message.toString();
     // eslint-disable-next-line no-console
     // console.error(`API call failed. ${error}`);
