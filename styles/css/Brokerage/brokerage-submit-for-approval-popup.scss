@@ -1,7 +1,8 @@
 .brokerage__submit-for-approval {
   .popup__inner-content {
     width: 480px;
-    height: 480px;
+    min-height: 480px;
+    height: fit-content;
     padding: 32px;
   }
 

@@ -11,6 +11,7 @@ import { currency } from '../../../../constants/strings';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
 import Loading from '../../../Loading';
+import { useCarePackageApi } from '@api';
 
 const links = [
   { text: 'Care Package', href: '#care-package' },
@@ -52,7 +53,7 @@ const ReviewPackageDetails = ({
       <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
         <Breadcrumbs values={breadcrumbs} />
       </Container>
-      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px 30px">
         <TitleSubtitleHeader
           title={title}
           subTitle={subTitle}

@@ -7,6 +7,8 @@ const useCarePackageApi = {
   summary: (carePackageId) =>
     useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/summary` : null),
 
+  approvers: () => useGetData('/users/approver', 'Can not get approvers', []),
+
   brokerView: ({ pageNumber, toDate, fromDate, status, serviceUserName, brokerId }) =>
     useGetData(
       `${CARE_PACKAGES_URL}/broker-view${getQueryParamsFromObject({
