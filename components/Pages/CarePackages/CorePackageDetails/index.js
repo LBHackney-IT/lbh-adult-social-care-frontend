@@ -154,7 +154,12 @@ const CorePackageDetails = ({
           </Container>
         </Container>
         {Object.values(errors).some((error) => !!error) && <ErrorMessage>There is some errors above</ErrorMessage>}
-        <Button className="core-package-details__button" onClick={saveAndContinue}>
+        <Button
+          isLoading={loading}
+          disabled={loading}
+          className="core-package-details__button"
+          onClick={saveAndContinue}
+        >
           Save and continue
         </Button>
       </Container>

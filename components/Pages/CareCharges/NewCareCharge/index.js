@@ -1,9 +1,8 @@
 import React from 'react';
 import { Breadcrumbs, Button, Container, Header, Select, Tag, FormGroup } from '../../../HackneyDS';
-import { getTagColorFromStatusId, getTagDisplayTextFromStatusId } from '../../../../service/getTagFromStatus';
+import { getTagColorFromStatusId, getTagDisplayTextFromStatusId, formatDate } from '../../../../service';
 import { CARE_PACKAGE_ROUTE, LOGOUT_ROUTE } from '../../../../routes/RouteConstants';
 import AlternativePagination from '../../../AlternativePagination';
-import { formatDate } from '../../../../service/helpers';
 import TitleSubtitle from './TitleSubtitle';
 
 const breadcrumbs = [{ text: 'Home', href: CARE_PACKAGE_ROUTE }, { text: 'Care Charges' }];

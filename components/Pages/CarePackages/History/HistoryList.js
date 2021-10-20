@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { memo } from 'react';
 import { useCarePackageApi } from 'api';
-import { formatDate } from 'service/helpers';
+import { formatDate } from 'service';
 
 const HistoryList = () => {
   const router = useRouter();

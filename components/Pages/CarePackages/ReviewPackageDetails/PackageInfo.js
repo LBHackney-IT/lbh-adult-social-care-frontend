@@ -1,6 +1,6 @@
 import React, { useState, memo } from 'react';
+import { formatDate } from '../../../../service';
 import { Container, SingleAccordion } from '../../../HackneyDS';
-import { formatDate } from '../../../../service/helpers';
 import { currency, dateStringFormats } from '../../../../constants/strings';
 
 const PackageInfo = ({ headerTitle, items, containerId, details }) => {
@@ -9,7 +9,7 @@ const PackageInfo = ({ headerTitle, items, containerId, details }) => {
 
   const changeOpenedService = (id) => {
     if (openedServiceUserNeed.includes(id)) {
-      setOpenedServiceUserNeed(openedServiceUserNeed.filter(item => item !== id));
+      setOpenedServiceUserNeed(openedServiceUserNeed.filter((item) => item !== id));
     } else {
       setOpenedServiceUserNeed([...openedServiceUserNeed, id]);
     }
@@ -17,7 +17,7 @@ const PackageInfo = ({ headerTitle, items, containerId, details }) => {
 
   const changeOpenedDetails = (id) => {
     if (openedDetails.includes(id)) {
-      setOpenedDetails(openedDetails.filter(item => item !== id));
+      setOpenedDetails(openedDetails.filter((item) => item !== id));
     } else {
       setOpenedDetails([...openedDetails, id]);
     }
@@ -26,17 +26,7 @@ const PackageInfo = ({ headerTitle, items, containerId, details }) => {
   return (
     <Container className="review-package-details__items-container">
       <h3 id={containerId}>{headerTitle}</h3>
-      {items?.map(({
-        startDate,
-        endDate,
-        cost,
-        title,
-        address,
-        serviceUserNeed,
-        place,
-        id,
-        description,
-      }) => {
+      {items?.map(({ startDate, endDate, cost, title, address, serviceUserNeed, place, id, description }) => {
         const openedServiceUserId = openedServiceUserNeed.includes(id);
         const openedDetailsId = openedDetails.includes(id);
         const minusSign = cost < 0 ? '-' : '';
@@ -48,25 +38,29 @@ const PackageInfo = ({ headerTitle, items, containerId, details }) => {
                 {endDate && ` - `}
                 {endDate && formatDate(endDate, dateStringFormats.dayMonthYearSlash)}
               </p>
-              {cost && <p className="text-lbh-f01">{minusSign}{currency.euro}{cost ? Math.abs(cost).toFixed(2) : 0}</p>}
+              {cost && (
+                <p className="text-lbh-f01">
+                  {minusSign}
+                  {currency.euro}
+                  {cost ? Math.abs(cost).toFixed(2) : 0}
+                </p>
+              )}
             </Container>
             {details}
-            {description &&
-            <SingleAccordion
-              title="Notes"
-              onClick={() => changeOpenedDetails(id)}
-              isOpened={openedDetailsId}
-            >
-              <p>{description}</p>
-            </SingleAccordion>
-            }
+            {description && (
+              <SingleAccordion title="Notes" onClick={() => changeOpenedDetails(id)} isOpened={openedDetailsId}>
+                <p>{description}</p>
+              </SingleAccordion>
+            )}
             {title && <p className="review-package-details__items-title font-weight-bold">{title}</p>}
-            {address &&
-            <Container>
-              <p className="review-package-details__items-place">{place} {id}</p>
-              <p className="review-package-details__items-address">{address}</p>
-            </Container>
-            }
+            {address && (
+              <Container>
+                <p className="review-package-details__items-place">
+                  {place} {id}
+                </p>
+                <p className="review-package-details__items-address">{address}</p>
+              </Container>
+            )}
             {serviceUserNeed && (
               <SingleAccordion
                 title="Core package details"
@@ -74,7 +68,9 @@ const PackageInfo = ({ headerTitle, items, containerId, details }) => {
                 isOpened={openedServiceUserId}
               >
                 <p>{serviceUserNeed.term}</p>
-                {serviceUserNeed?.careType?.map(careType => <p>{careType}</p>)}
+                {serviceUserNeed?.careType?.map((careType) => (
+                  <p>{careType}</p>
+                ))}
               </SingleAccordion>
             )}
           </Container>

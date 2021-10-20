@@ -164,6 +164,7 @@ const CareCharges = ({
               setCollectedBy(value);
             }}
             inline
+            className='mb-3'
             error={errors.collectedBy}
             value={collectedBy}
             label="Collected by"
@@ -199,7 +200,7 @@ const CareCharges = ({
             <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button onClick={clickSave}>Save and review</Button>
+            <Button isLoading={loading} disabled={loading} onClick={clickSave}>Save and review</Button>
           </Container>
         </Container>
       </Container>
