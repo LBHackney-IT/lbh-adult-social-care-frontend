@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Table, Tag } from '../../HackneyDS';
-import { formatDate } from '../../../service/helpers';
-import getTagColorFromStatus from '../../../service/getTagColorFromStatus';
+import { formatDate } from 'service/helpers';
+import getTagColorFromStatus from 'service/getTagColorFromStatus';
 
 export const BrokerPortalTable = ({ onRowClick, data }) => {
   const columns = [
