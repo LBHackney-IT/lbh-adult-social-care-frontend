@@ -15,18 +15,16 @@ const testActiveElements = [
   },
 ];
 
-export const AddElementModal = ({ isOpened = true, activeElements = testActiveElements }) => {
+const AddElementModal = ({ isOpened = true, activeElements = testActiveElements }) => {
   const [openedModal, setOpenedModal] = useState(true);
 
   const closeModal = () => setOpenedModal(false);
 
   return (
-    <Dialog className='care-charges-modal' isOpen={isOpened || openedModal} onClose={closeModal}>
-      <AddElementContent
-        closeModal={closeModal}
-        activeElements={activeElements}
-        headerText='Set up a new element'
-      />
+    <Dialog className="care-charges-modal" isOpen={isOpened || openedModal} onClose={closeModal}>
+      <AddElementContent closeModal={closeModal} activeElements={activeElements} headerText="Set up a new element" />
     </Dialog>
   );
 };
+
+export default AddElementModal;

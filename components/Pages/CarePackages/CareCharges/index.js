@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Button, Container, ErrorMessage, Input, Label, RadioGroup, Select, Textarea } from '../../../HackneyDS';
 import { requiredSchema } from '../../../../constants/schemas';
 import { currency } from '../../../../constants/strings';
-import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import Loading from '../../../Loading';
@@ -138,7 +138,7 @@ const CareCharges = ({
   return (
     <Container className="brokerage__care-charges">
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
         <Loading isLoading={loading} />
         <TitleSubtitleHeader title="Build a care package" subTitle="Care Charges" />
         <Container>

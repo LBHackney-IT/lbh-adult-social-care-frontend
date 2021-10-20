@@ -5,7 +5,7 @@ import { incrementDate } from '../../../../service/helpers';
 import CareChargesModalActions from '../CareChargesModalActions';
 import CareChargesInfoTitle from '../CareChargesInfoTitle';
 import CareChargesModalTitle from '../CareChargesModalTitle';
-import { ErrorMessage } from '../../../HackneyDS/index';
+import { ErrorMessage } from '../../../HackneyDS';
 
 const initialInputs = {
   value: '',
@@ -13,11 +13,7 @@ const initialInputs = {
   endDate: '',
 };
 
-const AddElementContent = ({
-  activeElements,
-  closeModal,
-  headerText,
-}) => {
+const AddElementContent = ({ activeElements, closeModal, headerText }) => {
   const [inputs, setInputs] = useState([]);
   const [inputHasErrors, setInputHasErrors] = useState(false);
   const [inputErrors, setInputErrors] = useState([]);
@@ -28,10 +24,12 @@ const AddElementContent = ({
     newInput[field] = value;
     if (field === 'startDate') {
       const { dateFromWeeks } = newInput;
-      const minEndDate = dateFromWeeks && incrementDate({
-        incrementTime: { weeks: dateFromWeeks },
-        date: value,
-      });
+      const minEndDate =
+        dateFromWeeks &&
+        incrementDate({
+          incrementTime: { weeks: dateFromWeeks },
+          date: value,
+        });
       if (dateFromWeeks) {
         newInput.endDate = minEndDate;
       }
@@ -77,16 +75,18 @@ const AddElementContent = ({
     if (activeElements?.length) {
       setInputs(activeElements.map((activeElement) => ({ ...activeElement, period: 'fixed-period' })));
 
-      setInputErrors(activeElements.map(() => ({
-        ...initialInputs,
-      })));
+      setInputErrors(
+        activeElements.map(() => ({
+          ...initialInputs,
+        }))
+      );
     }
   }, [activeElements]);
 
   return (
     <>
-      <CareChargesModalTitle title={headerText}/>
-      <CareChargesInfoTitle title='NEW ELEMENT'/>
+      <CareChargesModalTitle title={headerText} />
+      <CareChargesInfoTitle title="NEW ELEMENT" />
       <CareChargesInfoEdited
         hasEditStyle={false}
         elements={inputs}

@@ -6,7 +6,7 @@ import { isFunction } from '../../../../api';
 import { requiredSchema } from '../../../../constants/schemas';
 import { dateStringToDate } from '../../../../service/helpers';
 import BrokerageTotalCost from '../BrokerageTotalCost';
-import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import Loading from '../../../Loading';
@@ -148,7 +148,7 @@ const FundedNursingCare = ({
     <Container className="brokerage__funded-nursing-care">
       <Loading isLoading={loading} />
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
         <TitleSubtitleHeader title="Build a care package" subTitle="Funded Nursing Care" />
         <Container>
           <h3 className="brokerage__item-title">Funded Nursing Care</h3>

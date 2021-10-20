@@ -1,7 +1,8 @@
 export const BROKER_PORTAL_ROUTE = '/broker-portal';
+export const BROKER_PORTAL_SEARCH_ROUTE = `${BROKER_PORTAL_ROUTE}/search`;
+export const getAssignPackageRoute = (id) => `${BROKER_PORTAL_ROUTE}/${id}/assign-package`;
 
 export const CARE_PACKAGE_ROUTE = '/care-package';
-export const getAssignPackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/assign-package`;
 export const getCarePackageReviewRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/review`;
 export const getCorePackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/core-package`;
 export const getBrokerPackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-package`;

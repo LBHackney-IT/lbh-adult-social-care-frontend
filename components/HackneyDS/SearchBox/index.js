@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
-// eslint-disable-next-line import/no-cycle
-import { ErrorMessage, Hint, Label } from '../index';
+import Hint from '../lettering/Hint';
+import Label from '../lettering/Label';
+import ErrorMessage from '../lettering/ErrorMessage';
 import { CrossIcon, SearchIcon } from '../icons';
 import { isFunction } from '../../../api';
 
