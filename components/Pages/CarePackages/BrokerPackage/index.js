@@ -13,6 +13,7 @@ import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
 import { dateStringToDate, uniqueID } from '../../../../service/helpers';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
+import { useDebounce } from 'react-use';
 
 const initialNeed = {
   cost: 0,
@@ -53,6 +54,11 @@ const BrokerPackage = ({
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchText, setSearchText] = useState('');
+  useDebounce(
+    () => setSearchQuery(searchText),
+    1000,
+    [searchText]
+  );
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   const onSearchSupplier = () => {
@@ -60,9 +66,9 @@ const BrokerPackage = ({
     setShowSearchResults(true);
   };
 
-  const { data: searchResults } = useCarePackageApi.suppliers({
+  const { data: searchResults, isLoading: suppliersLoading } = useCarePackageApi.suppliers({
     supplierName: searchQuery,
-    shouldFetch: showSearchResults,
+    shouldFetch: searchQuery || showSearchResults,
   });
 
   const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
@@ -283,10 +289,8 @@ const BrokerPackage = ({
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
-
-      <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
-        <Loading isLoading={loading} />
-
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+        <Loading isLoading={loading || suppliersLoading} />
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
 
@@ -314,6 +318,7 @@ const BrokerPackage = ({
                   searchIcon={null}
                   clearIcon={<p className="lbh-primary-button">Clear</p>}
                   clear={clearSearch}
+                  search={onSearchSupplier}
                   value={searchText}
                   className="supplier-search-box"
                   id="supplier-search-box"
