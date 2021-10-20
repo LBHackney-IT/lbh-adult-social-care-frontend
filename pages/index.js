@@ -24,7 +24,7 @@ export default function IndexPage() {
 
   useEffect(() => {
     router.replace(BROKER_PORTAL_ROUTE);
-  }, []);
+  }, [router]);
 
   return (
     <div>

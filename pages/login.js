@@ -47,7 +47,7 @@ const Login = () => {
         dispatch(userLogin({ user: res.data }));
       });
     });
-  }, []);
+  }, [dispatch, mutateUser]);
 
   return (
     <div className="login-page">

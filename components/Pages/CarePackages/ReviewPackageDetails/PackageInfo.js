@@ -69,7 +69,7 @@ const PackageInfo = ({ headerTitle, items, containerId, details }) => {
               >
                 <p>{serviceUserNeed.term}</p>
                 {serviceUserNeed?.careType?.map((careType) => (
-                  <p>{careType}</p>
+                  <p key={careType}>{careType}</p>
                 ))}
               </SingleAccordion>
             )}

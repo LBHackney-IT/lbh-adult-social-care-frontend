@@ -84,7 +84,7 @@ const SearchServiceUser = ({ searchResults, pageNumber, setPageNumber, totalCoun
           <Container>
             <SearchResult count={searchResults.length} />
             {searchResults.map((item) => (
-              <Container className="search-service-user__card">
+              <Container className="search-service-user__card" key={item.id}>
                 <ServiceUserDetails
                   hackneyId={item.hackneyId}
                   dateOfBirth={item.dateOfBirth}

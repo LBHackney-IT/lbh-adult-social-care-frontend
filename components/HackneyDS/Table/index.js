@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react/jsx-key */
+import { useCallback, useEffect, Fragment } from 'react';
 import { useTable, useExpanded, useRowSelect } from 'react-table';
 
 export const Table = ({
@@ -34,11 +35,11 @@ export const Table = ({
     useRowSelect
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (setSelectedRows) setSelectedRows(selectedFlatRows);
-  }, [setSelectedRows, selectedRowIds]);
+  }, [setSelectedRows, selectedRowIds, selectedFlatRows]);
 
-  const renderRowSubComponent = React.useCallback(expandRowCallback, []);
+  const renderRowSubComponent = useCallback(expandRowCallback, [expandRowCallback]);
 
   return (
     <table className="govuk-table lbh-table" {...getTableProps()}>
@@ -55,11 +56,12 @@ export const Table = ({
           ))}
         </thead>
       )}
+
       <tbody className={`govuk-table__body ${bodyClassName}`} {...getTableBodyProps()}>
         {rows.map((row, index) => {
           prepareRow(row);
           return (
-            <React.Fragment key={index}>
+            <Fragment key={index}>
               <tr
                 onClick={onRowClick ? () => onRowClick(row.original) : () => {}}
                 className="govuk-table__row"
@@ -78,10 +80,11 @@ export const Table = ({
                   </td>
                 </tr>
               )}
-            </React.Fragment>
+            </Fragment>
           );
         })}
       </tbody>
+
       {hasFooter && (
         <tfoot className={`govuk-table__head ${footerClassName}`}>
           {footerGroups.map((group) => (

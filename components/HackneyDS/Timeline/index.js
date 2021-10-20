@@ -11,7 +11,7 @@ export default function Timeline({ timelines = [] }) {
         const minorClass = minor ? ' lbh-timeline__event--minor' : '';
         const calcClasses = `${actionNeededClass}${majorClass}${minorClass}${gapBelowClass}`;
         return (
-          <li className={`lbh-timeline__event${calcClasses}`}>
+          <li className={`lbh-timeline__event${calcClasses}`} key={header.text}>
             {header && (
               <h3 className={header.rewriteClass || 'lbh-heading-h3'}>
                 {header.link ? <Link text={header.text} noVisited /> : header.text}

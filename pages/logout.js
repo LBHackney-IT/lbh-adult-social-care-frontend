@@ -40,7 +40,7 @@ const Logout = () => {
 
     if (hackneyToken) logout();
     else router.push('/login');
-  }, []);
+  }, [router]);
 
   return <></>;
 };

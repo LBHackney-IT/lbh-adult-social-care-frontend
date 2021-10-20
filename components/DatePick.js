@@ -5,6 +5,14 @@ import ErrorField from './ErrorField';
 import 'react-datepicker/dist/react-datepicker.css';
 import { dateStringFormats } from '../constants/strings';
 
+const CustomInput = forwardRef(({ value, onClick, placeholder }, ref) => (
+  <button className="datepicker-custom-input" onClick={onClick} ref={ref}>
+    {value || <p className="datepicker-custom-input-placeholder">{placeholder}</p>}
+  </button>
+));
+
+CustomInput.displayName = 'CustomInput';
+
 const DatePick = ({
   selectsRange,
   inline,
@@ -23,12 +31,6 @@ const DatePick = ({
   setDate,
   dateValue,
 }) => {
-  const CustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button className="datepicker-custom-input" onClick={onClick} ref={ref}>
-      {value || <p className="datepicker-custom-input-placeholder">{placeholder}</p>}
-    </button>
-  ));
-
   return (
     <BaseField className={`${className} react-date-picker`} label={label} noInputStyle>
       {dateValue?.toString() === 'Invalid Date' ? (

@@ -1,10 +1,10 @@
-import React from 'react';
+import { forwardRef, useEffect } from 'react';
 
-export const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
+export const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = React.useRef();
   const resolvedRef = ref || defaultRef;
 
-  React.useEffect(() => {
+  useEffect(() => {
     resolvedRef.current.indeterminate = indeterminate;
   }, [resolvedRef, indeterminate]);
 
@@ -14,3 +14,5 @@ export const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest 
     </>
   );
 });
+
+IndeterminateCheckbox.displayName = 'IndeterminateCheckbox';
