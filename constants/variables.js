@@ -1,7 +1,7 @@
-const maxStringLength = 200;
-const DEFAULT_PAGE_SIZE = 10;
+export const maxStringLength = 200;
+export const DEFAULT_PAGE_SIZE = 10;
 
-const requestMethods = {
+export const requestMethods = {
   put: 'PUT',
   get: 'GET',
   post: 'POST',
@@ -10,21 +10,23 @@ const requestMethods = {
   head: 'HEAD',
 };
 
-const initialPagingOptions = {
+export const tagColors = {
+  new: 'green',
+  'in progress': 'yellow',
+  'waiting for approval': 'blue',
+  'not approved': 'red',
+  ended: 'red',
+  cancelled: 'red',
+  approved: 'gray',
+};
+
+export const initialPagingOptions = {
   pagingMetaData: {},
   data: [],
 }
 
-const invoiceStatusIdByString = {
+export const invoiceStatusIdByString = {
   accepted: 5,
   rejected: 2,
   hold: 1,
-};
-
-export {
-  initialPagingOptions,
-  maxStringLength,
-  invoiceStatusIdByString,
-  requestMethods,
-  DEFAULT_PAGE_SIZE,
 };

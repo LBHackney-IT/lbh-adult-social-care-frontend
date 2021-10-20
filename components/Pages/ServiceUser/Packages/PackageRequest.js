@@ -5,16 +5,7 @@ import { getCorePackageRoute } from 'routes/RouteConstants';
 import { CaretDownIcon } from 'components/Icons';
 import { formatDate } from 'service/helpers';
 import { useRouter } from 'next/router';
-
-const tagColors = {
-  New: 'green',
-  'In Progress': 'yellow',
-  'Waiting For Approval': 'blue',
-  'Not Approved': 'red',
-  Ended: 'red',
-  Cancelled: 'red',
-  Approved: 'gray',
-};
+import getTagColorFromStatus from 'service/getTagColorFromStatus';
 
 const PackageRequest = () => {
   const router = useRouter();
@@ -31,7 +22,7 @@ const PackageRequest = () => {
   return (
     <Container border="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
       <Container display="flex" alignItems="center">
-        <Tag className="text-capitalize outline" color={tagColors[packageStatus]}>
+        <Tag className="text-capitalize outline" color={getTagColorFromStatus(packageStatus)}>
           {packageStatus}
         </Tag>
         <VerticalSeparator width="10px" />
