@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
-import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
@@ -23,7 +23,15 @@ const initialNeed = {
   errorEndDate: '',
 };
 
-export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, setCurrentPage, selectedItem, setSelectedItem }) => {
+const BrokerPackage = ({
+  detailsData,
+  loading,
+  setLoading,
+  currentPage,
+  setCurrentPage,
+  selectedItem,
+  setSelectedItem,
+}) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
@@ -280,7 +288,7 @@ export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, s
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
         <Loading isLoading={loading} />
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
@@ -376,3 +384,5 @@ export const BrokerPackage = ({ detailsData, loading, setLoading, currentPage, s
     </div>
   );
 };
+
+export default BrokerPackage;

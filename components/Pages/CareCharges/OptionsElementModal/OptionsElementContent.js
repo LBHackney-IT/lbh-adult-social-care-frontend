@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
-import { RadioGroup } from '../../../HackneyDS/index';
+import { RadioGroup } from '../../../HackneyDS';
 
 const OptionsElementContent = ({ options, closeModal }) => {
   const [optionElement, setOptionElement] = useState('edit-element');
@@ -12,12 +12,8 @@ const OptionsElementContent = ({ options, closeModal }) => {
 
   return (
     <>
-      <CareChargesModalTitle title="Element options"/>
-      <RadioGroup
-        value={optionElement}
-        handle={(itemId) => setOptionElement(itemId)}
-        items={options}
-      />
+      <CareChargesModalTitle title="Element options" />
+      <RadioGroup value={optionElement} handle={(itemId) => setOptionElement(itemId)} items={options} />
       <CareChargesModalActions
         actions={[
           { title: 'Next', handler: nextStep },

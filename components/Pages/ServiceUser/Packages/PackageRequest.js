@@ -16,7 +16,7 @@ const tagColors = {
   Approved: 'gray',
 };
 
-export const PackageRequest = () => {
+const PackageRequest = () => {
   const router = useRouter();
   const { guid: packageId, packageStatus, dateAssigned } = router.query;
   const [isExpanded, setExpanded] = useState(false);
@@ -85,3 +85,5 @@ export const PackageRequest = () => {
     </Container>
   );
 };
+
+export default PackageRequest;
