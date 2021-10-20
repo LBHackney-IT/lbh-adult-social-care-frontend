@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { addDays, addWeeks, differenceInDays, differenceInWeeks, intervalToDuration } from 'date-fns';
 import DatePick from '../../../DatePick';
 import RadioButton from '../../../RadioButton';
-import { formatDate } from '../../../../service/helpers';
+import { formatDate } from '../../../../service';
 import BaseField from '../../../BaseField';
 
 const EditElementDatePickers = ({

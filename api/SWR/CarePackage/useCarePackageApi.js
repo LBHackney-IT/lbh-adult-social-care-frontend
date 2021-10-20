@@ -1,5 +1,5 @@
 import useGetData from '../useGetData';
-import { getQueryParamsFromObject } from '../../Utils/ApiUtils';
+import { getQueryParamsFromObject } from '../../index';
 
 const CARE_PACKAGES_URL = '/care-packages';
 
@@ -29,6 +29,7 @@ const useCarePackageApi = {
 
   singleSupplier: (supplierId) => useGetData(supplierId ? `/suppliers/${supplierId}` : null, '', {}),
   singlePackageInfo: (packageId) => useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}` : null, '', {}),
+  history: (packageId) => useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/history` : null, '', {}),
 };
 
 export default useCarePackageApi;

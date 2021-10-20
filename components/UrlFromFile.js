@@ -1,6 +1,6 @@
 import React from 'react';
+import { getUrlFromFile } from '../service';
 import { Container } from './HackneyDS/Layout/Container';
-import { getUrlFromFile } from '../service/helpers';
 
 const UrlFromFile = ({ file, removeFile }) => {
   if (!file) return <></>;
