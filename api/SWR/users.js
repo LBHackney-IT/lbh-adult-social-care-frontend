@@ -1,9 +1,17 @@
 import useGetData from './useGetData';
 
 export const useBrokers = () => {
-  const { data } = useGetData('/users/broker', '', []);
+  const { data, isLoading } = useGetData('/users/broker', '', []);
 
   const options = data.map((el) => ({ value: el.id, text: el.userName }));
 
-  return { options };
+  return { options, isLoading };
+};
+
+export const useApprovers = () => {
+  const { data, isLoading } = useGetData('/users/approver', '', []);
+
+  const options = data.map((el) => ({ value: el.id, text: el.userName }));
+
+  return { options, isLoading };
 };
