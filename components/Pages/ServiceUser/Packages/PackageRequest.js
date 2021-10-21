@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from 'components/HackneyDS';
 import { useCarePackageApi } from 'api';
+import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from 'components/HackneyDS';
 import { getCorePackageRoute } from 'routes/RouteConstants';
+import { formatDate, getTagColorFromStatus } from 'service';
 import { CaretDownIcon } from 'components/Icons';
-import { formatDate } from 'service/helpers';
 import { useRouter } from 'next/router';
-import getTagColorFromStatus from 'service/getTagColorFromStatus';
 
 const PackageRequest = () => {
   const router = useRouter();

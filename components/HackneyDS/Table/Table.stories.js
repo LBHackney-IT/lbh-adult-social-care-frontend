@@ -2,9 +2,9 @@ import { format } from 'date-fns';
 import React from 'react';
 import faker from 'faker';
 import { MdExpandLess, MdExpandMore } from 'react-icons/md';
-import { Table } from '.';
-import { getNumberWithCommas } from '../../../service/helpers';
+import { getNumberWithCommas } from '../../../service';
 import { IndeterminateCheckbox } from './IndeterminateCheckbox';
+import { Table } from '.';
 
 const createTableData = (records) => {
   let tableData = [];

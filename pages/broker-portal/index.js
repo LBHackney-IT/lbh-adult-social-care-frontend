@@ -2,8 +2,8 @@ import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
 import { useCarePackageApi } from 'api';
+import { getLoggedInUser } from 'service';
 import { BrokerPortalPage } from 'components';
-import { getLoggedInUser } from 'service/helpers';
 import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -35,7 +35,7 @@ const BrokerPortal = () => {
   const [filters, setFilters] = useState(initialFilters);
   const { broker, dateTo, dateFrom, status, serviceUserName } = filters;
 
-  const { data, isValidating: brokerViewLoading } = useCarePackageApi.brokerView({
+  const { data, isLoading: brokerViewLoading } = useCarePackageApi.brokerView({
     fromDate: dateFrom ? dateFrom.toJSON() : null,
     toDate: dateTo ? dateTo.toJSON() : null,
     brokerId: broker?.id,

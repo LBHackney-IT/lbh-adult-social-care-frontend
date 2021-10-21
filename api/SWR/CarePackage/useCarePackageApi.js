@@ -62,6 +62,7 @@ const useCarePackageApi = {
       postcode,
     })}` : null, 'Can not get service user', { residents: [] })
   ),
+  history: (packageId) => useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/history` : null, '', {}),
 };
 
 export default useCarePackageApi;
