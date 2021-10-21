@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useDebounce } from 'react-use';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
+import { compareDesc } from 'date-fns';
 import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader';
@@ -14,7 +15,6 @@ import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
-import { compareDesc } from 'date-fns';
 
 const initialNeed = {
   cost: 0,
