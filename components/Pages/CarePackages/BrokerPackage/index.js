@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import { useDebounce } from 'react-use';
 import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader';
@@ -13,7 +14,6 @@ import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from '../../../../service';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
-import { useDebounce } from 'react-use';
 
 const initialNeed = {
   cost: 0,
@@ -55,11 +55,7 @@ const BrokerPackage = ({
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchText, setSearchText] = useState('');
-  useDebounce(
-    () => setSearchQuery(searchText),
-    1000,
-    [searchText]
-  );
+  useDebounce(() => setSearchQuery(searchText), 1000, [searchText]);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   const onSearchSupplier = () => {
@@ -175,8 +171,8 @@ const BrokerPackage = ({
 
     setWeeklyNeeds(checkedWeeklyDetails.checkedNeeds);
     setOneOffNeeds(checkOneOffDetails.checkedNeeds);
-    if(!coreCost) {
-      setCoreCostError('The core cost field is required')
+    if (!coreCost) {
+      setCoreCostError('The core cost field is required');
     }
 
     if (checkedWeeklyDetails.hasErrors || checkOneOffDetails.hasErrors) {
@@ -211,7 +207,7 @@ const BrokerPackage = ({
     try {
       await updateCarePackageCosts({
         data: {
-          coreCost: coreCost,
+          coreCost,
           startDate: packageDates.startDate,
           endDate: isOngoing ? null : packageDates.endDate,
           supplierId: selectedItem.id,
