@@ -1,29 +1,10 @@
 import React, { memo } from 'react';
-import {
-  BROKER_PORTAL_ROUTE,
-  CARE_PACKAGE_ROUTE,
-  LOGOUT_ROUTE,
-  getServiceUserPackagesRoute,
-  getHistoryRoute,
-  getAssignPackageRoute,
-  NOT_FOUND_ROUTE,
-} from '../../../../routes/RouteConstants';
-import { Button, Container, Header, Input, Breadcrumbs, DatePicker, FormGroup } from '../../../HackneyDS';
+import { BrokerageHeader } from 'components';
+import { getServiceUserPackagesRoute, getAssignPackageRoute } from 'routes/RouteConstants';
+import { Button, Container, Input, Breadcrumbs, DatePicker, FormGroup } from '../../../HackneyDS';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
 import AlternativePagination from '../../../AlternativePagination';
 import SearchResult from '../../../SearchResult';
-
-const links = [
-  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
-  { text: 'Care Charges', href: CARE_PACKAGE_ROUTE },
-  { text: 'Log Out', href: LOGOUT_ROUTE },
-];
-
-const breadcrumbs = [
-  { text: 'Home', href: '/' },
-  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
-  { text: 'Search for a service user' },
-];
 
 const inputs = [
   { label: 'First name', key: 'firstName' },
@@ -32,6 +13,7 @@ const inputs = [
 ];
 
 const SearchServiceUser = ({
+  breadcrumbs,
   isLoading,
   searchResults,
   pageNumber,
@@ -43,9 +25,10 @@ const SearchServiceUser = ({
   pushRoute,
   filters,
   onSearch,
+  className = '',
 }) => (
-  <Container className="search-service-user">
-    <Header links={links} />
+  <Container className={`search-service-user ${className}`}>
+    <BrokerageHeader />
     <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
       <Breadcrumbs values={breadcrumbs} />
       <Container padding="60px 0 0">
@@ -81,7 +64,7 @@ const SearchServiceUser = ({
           <SearchResult count={searchResults.length} />
           {searchResults.map((item) => (
             <Container
-              onClick={() => item.hackneyId && pushRoute(getServiceUserPackagesRoute(item.hackneyId))}
+              onClick={() => item.hackneyId && pushRoute(getServiceUserPackagesRoute(item.id))}
               key={`${item.hackneyId || item.mosaicId}${item.firstName}${item.lastName}`}
               className="search-service-user__card"
             >
@@ -92,28 +75,13 @@ const SearchServiceUser = ({
                 address={item.postCode || item.address?.postcode}
                 title=""
               />
-              <Container className="actions">
-                <p
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    pushRoute(item.hackneyId ? getAssignPackageRoute(item.hackneyId) : NOT_FOUND_ROUTE);
-                  }}
-                  className="link-button green"
-                >
-                  Allocate to broker
-                </p>
-                {item.hackneyId && (
-                  <p
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      pushRoute(getHistoryRoute(item.hackneyId));
-                    }}
-                    className="link-button green"
-                  >
-                    View package history
+              {item.mosaicId && (
+                <Container className="actions">
+                  <p onClick={() => pushRoute(getAssignPackageRoute(item.mosaicId))} className="link-button green">
+                    Allocate to broker
                   </p>
-                )}
-              </Container>
+                </Container>
+              )}
             </Container>
           ))}
           {pageNumber && (

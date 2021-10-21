@@ -27,7 +27,7 @@ export default function Select({
           if (onChangeValue) {
             return onChangeValue(e.target.value);
           }
-          onChange(e);
+          return onChange(e);
         }}
         value={value}
         className={`govuk-select lbh-select${outerClass}${errorClass}`}

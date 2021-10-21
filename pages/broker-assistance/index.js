@@ -4,7 +4,7 @@ import withSession from 'lib/session';
 import { useCarePackageApi } from 'api';
 import { getLoggedInUser } from 'service';
 import { BrokerPortalPage } from 'components';
-import { getServiceUserPackagesRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
+import { getServiceUserPackagesRoute, SERVICE_USER_MASTER_SEARCH_ROUTE } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -23,12 +23,13 @@ const initialFilters = {
   status: '',
   dateFrom: null,
   dateTo: null,
+  brokerId: '',
   serviceUserName: '',
 };
 
-const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Portal' }];
+const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Assistance' }];
 
-const BrokerPortal = () => {
+const BrokerAssistance = () => {
   const router = useRouter();
 
   const [pageNumber, setPageNumber] = useState(1);
@@ -54,10 +55,6 @@ const BrokerPortal = () => {
     },
   } = data;
 
-  const goToBrokerPortalSearch = useCallback(() => {
-    router.push(SERVICE_USER_SEARCH_ROUTE);
-  }, []);
-
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
   const handleRowClick = useCallback((rowInfo) => {
@@ -71,12 +68,16 @@ const BrokerPortal = () => {
     });
   }, []);
 
+  const goToBrokerAssistanceSearch = useCallback(() => {
+    router.push(SERVICE_USER_MASTER_SEARCH_ROUTE);
+  }, []);
+
   return (
     <BrokerPortalPage
-      title='Broker Portal'
+      title='Broker Assistance'
       breadcrumbs={breadcrumbs}
       loading={brokerViewLoading}
-      goToSearch={goToBrokerPortalSearch}
+      goToSearch={goToBrokerAssistanceSearch}
       filters={filters}
       clearFilter={clearFilters}
       setFilters={setFilters}
@@ -89,4 +90,4 @@ const BrokerPortal = () => {
   );
 };
 
-export default BrokerPortal;
+export default BrokerAssistance;
