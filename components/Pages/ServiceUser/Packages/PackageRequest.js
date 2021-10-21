@@ -1,25 +1,18 @@
 import React, { useState } from 'react';
+import { useCarePackageApi } from 'api';
 import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from 'components/HackneyDS';
 import { getCorePackageRoute } from 'routes/RouteConstants';
+import { formatDate, getTagColorFromStatus } from 'service';
 import { CaretDownIcon } from 'components/Icons';
-import { formatDate } from 'service/helpers';
 import { useRouter } from 'next/router';
 
-const tagColors = {
-  New: 'green',
-  'In Progress': 'yellow',
-  'Waiting For Approval': 'blue',
-  'Not Approved': 'red',
-  Ended: 'red',
-  Cancelled: 'red',
-  Approved: 'gray',
-};
-
-export const PackageRequest = () => {
+const PackageRequest = () => {
   const router = useRouter();
-  const { dateAssigned, packageId, packageStatus, packageType } = router.query;
-
+  const { guid: packageId, packageStatus, dateAssigned } = router.query;
   const [isExpanded, setExpanded] = useState(false);
+
+  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { packageType } = packageInfo;
 
   const handleClick = () => {
     router.push(getCorePackageRoute(packageId));
@@ -28,7 +21,7 @@ export const PackageRequest = () => {
   return (
     <Container border="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
       <Container display="flex" alignItems="center">
-        <Tag className="text-capitalize outline" color={tagColors[packageStatus]}>
+        <Tag className="text-capitalize outline" color={getTagColorFromStatus(packageStatus)}>
           {packageStatus}
         </Tag>
         <VerticalSeparator width="10px" />
@@ -50,7 +43,7 @@ export const PackageRequest = () => {
             <p>{formatDate(dateAssigned)}</p>
           </Container>
         </Container>
-        <Button handler={handleClick}>Create Package</Button>
+        <Button onClick={handleClick}>Create Package</Button>
       </Container>
       <HorizontalSeparator height="10px" />
       <Container>
@@ -82,3 +75,5 @@ export const PackageRequest = () => {
     </Container>
   );
 };
+
+export default PackageRequest;

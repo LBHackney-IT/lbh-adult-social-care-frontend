@@ -6,18 +6,21 @@ import {
   getCorePackageRoute,
   getHistoryRoute
 } from '../../../../routes/RouteConstants';
-import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../BrokerageHeader';
 import { Button, Container, Link, Breadcrumbs } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
+import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import PackageInfo from './PackageInfo';
 import BrokerageBorderCost from '../BrokerageBorderCost';
 import { currency } from '../../../../constants/strings';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
+import Loading from '../../../Loading';
 import ReviewPackageDetailsButtons from './ReviewPackageDetailsButtons';
-import { EndElementModal } from '../../CareCharges/EndElementModal';
-import { CancelElementModal } from '../../CareCharges/CancelElementModal';
 import ActionCarePackageModal from '../../BrokerPortal/ActionCarePackageModal';
+import { addNotification } from '../../../../reducers/notificationsReducer';
+import { cancelCarePackage, endCarePackage } from 'api';
+import { useDispatch } from 'react-redux';
 
 const links = [
   { text: 'Care Package', href: '#care-package' },
@@ -34,7 +37,7 @@ const breadcrumbs = [
   { text: 'Full overview' },
 ];
 
-export const ReviewPackageDetails = ({
+const ReviewPackageDetails = ({
   userDetails,
   packageId,
   packageInfoItems = [],
@@ -44,8 +47,11 @@ export const ReviewPackageDetails = ({
   title = 'Nursing Care',
   subTitle = 'Package details',
   goBack,
+  loading: isLoading,
 }) => {
+  const dispatch = useDispatch();
   const [openedPopup, setOpenedPopup] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
@@ -63,13 +69,28 @@ export const ReviewPackageDetails = ({
   const cancel = () => setOpenedPopup('cancel');
   const edit = () => router.push(getCorePackageRoute(packageId));
 
+  const pushNotification = (text, notificationClassName = 'error') => {
+    dispatch(addNotification({ text, notificationClassName }));
+  };
+
+  const makeActionPackage = async (action) => {
+    setLoading(true);
+    try {
+      await action(packageId);
+      router.push('/');
+    } catch (e) {
+      pushNotification('Something went wrong');
+    }
+    setLoading(false);
+  }
+
   const cancelCarePackageActions = [
-    { title: 'End package', onClick: () => alert('end package') },
+    { title: 'End package', onClick: () => makeActionPackage(endCarePackage) },
     { title: 'Cancel', onClick: closePopup, className: 'link-button red' },
   ];
 
   const endCarePackageActions = [
-    { title: 'Cancel package', className: 'color-lbh-e01', onClick: () => alert('end package') },
+    { title: 'Cancel package', className: 'color-lbh-e01', onClick: () => makeActionPackage(cancelCarePackage) },
     { title: 'Back', onClick: closePopup, className: 'link-button black' },
   ];
 
@@ -82,7 +103,8 @@ export const ReviewPackageDetails = ({
 
   return (
     <div className={`review-package-details ${className}`}>
-      {openedPopup === 'submit' && <SubmitForApprovalPopup packageId={packageId} closePopup={closePopup}/>}
+      <Loading isLoading={loading || isLoading} />
+      {openedPopup === 'submit' && <SubmitForApprovalPopup packageId={packageId} closePopup={closePopup} />}
       <ActionCarePackageModal
         className='package-details__action-modal'
         title={`End ${title.toLowerCase()} package`}
@@ -102,21 +124,21 @@ export const ReviewPackageDetails = ({
         actions={cancelCarePackageActions}
       />
       <BrokerageHeader/>
-      <Container maxWidth="1080px" margin="0 auto" padding="8px 60px 0 60px">
+      <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
         <Breadcrumbs values={breadcrumbs}/>
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
         <Container className="brokerage__container-header brokerage__container">
-          <Container>
-            <p>{title}</p>
-            <h2>
-              {subTitle}{' '}
+          <TitleSubtitleHeader
+            title={title}
+            subTitle={subTitle}
+            link={
               <span onClick={goToHistory} className="text-blue font-size-19px package-history-link">
-            Package history
-          </span>
-            </h2>
-          </Container>
-          {showEditActions && <ReviewPackageDetailsButtons end={end} edit={edit} cancel={cancel}/>}
+                Package history
+              </span>
+            }
+          />
+          {showEditActions && <ReviewPackageDetailsButtons end={end} edit={edit} cancel={cancel} />}
         </Container>
         <PackageUserDetails {...userDetails} />
         <Container className="review-package-details__main-container">
@@ -143,7 +165,7 @@ export const ReviewPackageDetails = ({
                 details,
               }) => (
                 <Container key={itemId} className="review-package-details__cost-info-item">
-                  <PackageInfo details={details} containerId={itemId} headerTitle={headerTitle} items={items}/>
+                  <PackageInfo details={details} containerId={itemId} headerTitle={headerTitle} items={items} />
                   {!!costOfPlacement && (
                     <p className="brokerage__cost-of-placement">
                       Cost of placement
@@ -153,7 +175,7 @@ export const ReviewPackageDetails = ({
                       </span>
                     </p>
                   )}
-                  {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader}/>}
+                  {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader} />}
                   {totalCostComponent}
                   {!!totalCost && (
                     <Container className="review-package-details__items-actions" display="flex">
@@ -172,12 +194,12 @@ export const ReviewPackageDetails = ({
               <h3 id="summary" className="font-weight-bold">
                 Summary
               </h3>
-              {summary.map(({ key, value, className, id }) => (
-                <BrokerageTotalCost key={id} value={value} name={key} className={className}/>
+              {summary.map(({ key, value, className: itemClassName, id }) => (
+                <BrokerageTotalCost key={id} value={value} name={key} className={itemClassName} />
               ))}
             </Container>
             {showEditActions ? (
-              <ReviewPackageDetailsButtons end={end} edit={edit} cancel={cancel}/>
+              <ReviewPackageDetailsButtons end={end} edit={edit} cancel={cancel} />
             ) : (
               <Container className="review-package-details__actions" display="flex">
                 <Button handler={goBack}>Back</Button>
@@ -190,3 +212,5 @@ export const ReviewPackageDetails = ({
     </div>
   );
 };
+
+export default ReviewPackageDetails;

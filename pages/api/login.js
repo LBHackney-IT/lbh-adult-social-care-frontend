@@ -1,7 +1,6 @@
 import Cookies from 'cookies';
-import { hackneyGoogleLogin } from 'api/Users/AuthApi';
-import { HASC_TOKEN_ID } from 'api/BaseApi';
 import withSession from 'lib/session';
+import { hackneyGoogleLogin, HASC_TOKEN_ID } from 'api';
 
 export default withSession(async (req, res) => {
   const { hackneyToken } = req.cookies;

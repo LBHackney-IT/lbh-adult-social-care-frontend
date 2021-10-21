@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
-import { BrokerPackage } from 'components/Pages/CarePackages/BrokerPackage';
-import { getLoggedInUser } from 'service/helpers';
+import { useCarePackageApi } from 'api';
+import { BrokerPackage } from 'components';
+import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -23,11 +23,14 @@ const BrokerPackagePage = () => {
   const { guid: packageId } = router.query;
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const { data: detailsData } = useCarePackageApi.details(packageId);
+  const { data: detailsData, isLoading: detailsLoading } = useCarePackageApi.details(packageId);
 
-  const { data: selectedSupplier } = useCarePackageApi.singleSupplier(detailsData.supplierId);
+  const { data: selectedSupplier, isLoading: singleSupplierLoading } = useCarePackageApi.singleSupplier(
+    detailsData.supplierId
+  );
   const { supplierName } = selectedSupplier;
 
   useEffect(() => {
@@ -38,6 +41,8 @@ const BrokerPackagePage = () => {
 
   return (
     <BrokerPackage
+      loading={detailsLoading || singleSupplierLoading || loading}
+      setLoading={setLoading}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
       setSelectedItem={setSelectedItem}

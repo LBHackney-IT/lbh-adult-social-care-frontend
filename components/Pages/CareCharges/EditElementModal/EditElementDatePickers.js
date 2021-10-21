@@ -1,9 +1,9 @@
+import React, { useState } from 'react';
+import { addDays, addWeeks, differenceInDays, differenceInWeeks, intervalToDuration } from 'date-fns';
 import DatePick from '../../../DatePick';
 import RadioButton from '../../../RadioButton';
-import React, { useState } from 'react';
-import { formatDate } from '../../../../service/helpers';
-import { addDays, addWeeks, differenceInDays, differenceInWeeks, intervalToDuration } from 'date-fns';
-import BaseField from '../../../baseComponents/BaseField';
+import { formatDate } from '../../../../service';
+import BaseField from '../../../BaseField';
 
 const EditElementDatePickers = ({
   index,
@@ -24,9 +24,9 @@ const EditElementDatePickers = ({
 
   const editDateAction = (isEdit, id) => {
     if (isEdit) {
-      setEditedElements(prevState => ([...prevState, id]));
+      setEditedElements((prevState) => [...prevState, id]);
     } else {
-      setEditedElements(elements.filter(item => item !== id));
+      setEditedElements(elements.filter((item) => item !== id));
     }
   };
 
@@ -41,83 +41,82 @@ const EditElementDatePickers = ({
   const isEditStartDate = !editedElements.includes(startDateId) && hasEditStyle;
   const isEditEndDate = !editedElements.includes(endDateId) && hasEditStyle;
   return (
-    <div className='care-charges-modal__date-pickers'>
-      {isEditStartDate ?
-        <div className='care-charges-modal__value'>
+    <div className="care-charges-modal__date-pickers">
+      {isEditStartDate ? (
+        <div className="care-charges-modal__value">
           <p>Start date</p>
-          <p className='care-charges-modal__date-info'>
+          <p className="care-charges-modal__date-info">
             {`${formattedStartDate} `}
-            {daysFromPrevious &&
-            <>
-              ({daysFromPrevious} {daysFromPrevious === 1 ? 'day' : 'days'} after previous element)
-            </>
-            }
+            {daysFromPrevious && (
+              <>
+                ({daysFromPrevious} {daysFromPrevious === 1 ? 'day' : 'days'} after previous element)
+              </>
+            )}
             <span
-              className='care-charges-modal__date-action'
+              className="care-charges-modal__date-action"
               onClick={() => editDateAction(isEditStartDate, startDateId)}
-            >EDIT</span>
+            >
+              EDIT
+            </span>
           </p>
         </div>
-        : (
-          <DatePick
-            minDate={minStartDate}
-            error={inputErrors[index].startDate}
-            setDate={(newValue) => onChangeInput('startDate', newValue, index)}
-            dateValue={startDate}
-            label='Start date'
-          />
-        )
-      }
-      {period === 'fixed-period' && isEditEndDate ?
-        <div className='care-charges-modal__value'>
+      ) : (
+        <DatePick
+          minDate={minStartDate}
+          error={inputErrors[index].startDate}
+          setDate={(newValue) => onChangeInput('startDate', newValue, index)}
+          dateValue={startDate}
+          label="Start date"
+        />
+      )}
+      {period === 'fixed-period' && isEditEndDate ? (
+        <div className="care-charges-modal__value">
           <p>End date</p>
-          <p className='care-charges-modal__date-info'>
+          <p className="care-charges-modal__date-info">
             {`${formattedEndDate} `}
-            {weeksFromStart &&
-            <>
-              ({weeksFromStart} {weeksFromStart === 1 ? 'week' : 'weeks'} from start date)
-            </>
-            }
-            <span
-              className='care-charges-modal__date-action'
-              onClick={() => editDateAction(true, endDateId)}
-            >EDIT</span>
+            {weeksFromStart && (
+              <>
+                ({weeksFromStart} {weeksFromStart === 1 ? 'week' : 'weeks'} from start date)
+              </>
+            )}
+            <span className="care-charges-modal__date-action" onClick={() => editDateAction(true, endDateId)}>
+              EDIT
+            </span>
           </p>
         </div>
-        : (
-          <>
-            <RadioButton
-              options={[
-                { value: 'ongoing', text: 'Ongoing' },
-                { value: 'fixed-period', text: 'Fixed Period' },
-              ]}
-              selectedValue={period}
-              onChange={newValue => {
-                onChangeInput('period', newValue, index);
-                editDateAction(true, endDateId);
-              }}
-            />
-            {period === 'fixed-period' &&
-            <div className='edit-element__end-date'>
+      ) : (
+        <>
+          <RadioButton
+            options={[
+              { value: 'ongoing', text: 'Ongoing' },
+              { value: 'fixed-period', text: 'Fixed Period' },
+            ]}
+            selectedValue={period}
+            onChange={(newValue) => {
+              onChangeInput('period', newValue, index);
+              editDateAction(true, endDateId);
+            }}
+          />
+          {period === 'fixed-period' && (
+            <div className="edit-element__end-date">
               <DatePick
                 error={inputErrors[index].endDate}
                 setDate={(newValue) => onChangeInput('endDate', newValue, index)}
                 dateValue={endDate}
-                label='End date'
+                label="End date"
                 minDate={minEndDate}
                 maxDate={maxEndDate}
               />
-              <BaseField label=''>
-                <p className='edit-element__end-date-distance'>
+              <BaseField label="">
+                <p className="edit-element__end-date-distance">
                   ({endDateDistance.months} {endDateDistance.months === 1 ? 'month' : 'months'} {endDateDistance.days}
                   {endDateDistance.days === 1 ? ' day' : ' days'})
                 </p>
               </BaseField>
             </div>
-            }
-          </>
-        )
-      }
+          )}
+        </>
+      )}
     </div>
   );
 };

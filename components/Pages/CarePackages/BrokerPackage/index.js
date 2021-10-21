@@ -1,52 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import useCarePackageApi from '../../../../api/SWR/CarePackage/useCarePackageApi';
+import { useDebounce } from 'react-use';
+import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
+import { compareDesc } from 'date-fns';
+import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
-import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { updateCarePackageCosts } from '../../../../api/CarePackages/CarePackage';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
-import { dateStringToDate, uniqueID } from '../../../../service/helpers';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 
 const initialNeed = {
   cost: 0,
-  startDate: new Date(),
-  endDate: new Date(),
+  startDate: null,
+  endDate: null,
   isOngoing: false,
   errorStartDate: '',
   errorEndDate: '',
 };
 
-export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, selectedItem, setSelectedItem }) => {
+const BrokerPackage = ({
+  detailsData,
+  loading,
+  setLoading,
+  currentPage,
+  setCurrentPage,
+  selectedItem,
+  setSelectedItem,
+}) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
-  const [supplierWeeklyCost, setSupplierWeeklyCost] = useState(0);
+  const [coreCost, setCoreCost] = useState(0);
+  const [coreCostError, setCoreCostError] = useState('');
 
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [weeklyTotalCost, setWeeklyTotalCost] = useState(0);
-  const [oneOfTotalCost, setOneOfTotalCost] = useState(0);
+  const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
   const [isNewSupplier, setIsNewSupplier] = useState(false);
 
   const [packageDates, setPackageDates] = useState({
-    endDate: new Date(),
-    startDate: new Date(),
+    startDate: null,
+    endDate: null,
   });
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchText, setSearchText] = useState('');
+  useDebounce(() => setSearchQuery(searchText), 1000, [searchText]);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   const onSearchSupplier = () => {
@@ -54,9 +64,9 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
     setShowSearchResults(true);
   };
 
-  const { data: searchResults } = useCarePackageApi.suppliers({
+  const { data: searchResults, isLoading: suppliersLoading } = useCarePackageApi.suppliers({
     supplierName: searchQuery,
-    shouldFetch: showSearchResults,
+    shouldFetch: searchQuery || showSearchResults,
   });
 
   const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
@@ -80,17 +90,17 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
   const composeDetailsData = () => {
     if (detailsData) {
       setPackageDates({
-        endDate: dateStringToDate(detailsData.endDate || new Date()),
-        startDate: dateStringToDate(detailsData.startDate || new Date()),
+        startDate: dateStringToDate(detailsData.startDate) || new Date(),
+        endDate: dateStringToDate(detailsData.endDate),
       });
 
       if (!detailsData.endDate) {
         setIsOngoing(true);
       }
 
-      setSupplierWeeklyCost(detailsData.coreCost);
+      setCoreCost(detailsData.coreCost);
 
-      if (detailsData.details) {
+      if (detailsData?.details?.length) {
         const weeklyDetails = detailsData.details
           .filter((item) => item.costPeriod === 2)
           .map((item) => ({
@@ -129,14 +139,17 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
   const checkNeedsErrors = (needs) => {
     let hasErrors = false;
     const checkedNeeds = needs.map((item) => {
+      if (!item.startDate && !item.endDate && !item.cost) return { ...item };
+
+      const { startDate, endDate, isOngoing: isOngoingItem } = item;
       let errorStartDate = '';
       let errorEndDate = '';
-      if (!item.startDate || (item.startDate && item.endDate && item.startDate > item.endDate)) {
+      if (!startDate || (startDate && endDate && !isOngoingItem && compareDescendingDMY(startDate, endDate))) {
         errorStartDate = 'Invalid start date';
-      } else if (item.startDate < packageDates.endDate) {
+      } else if (startDate && compareDescendingDMY(startDate, packageDates.endDate)) {
         errorStartDate = 'Start date should be later then core date';
       }
-      if (item.startDate && item.startDate < packageDates.endDate) {
+      if (endDate && !isOngoingItem && compareDescendingDMY(endDate, packageDates.endDate)) {
         errorEndDate = 'End date should be later then core date';
       }
       if (errorStartDate || errorEndDate) {
@@ -156,11 +169,26 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
       pushNotification('No supplier selected');
       return;
     }
+
+    if(!coreCost) {
+      setCoreCostError('Required field');
+      pushNotification('Core weekly cost is required')
+      return;
+    }
+
+    if(!isOngoing && (!packageDates.endDate || compareDesc(packageDates.startDate, packageDates.endDate) === -1)) {
+      pushNotification('Core date is wrong');
+      return;
+    }
+
     const checkedWeeklyDetails = checkNeedsErrors(weeklyNeeds);
     const checkOneOffDetails = checkNeedsErrors(oneOffNeeds);
 
     setWeeklyNeeds(checkedWeeklyDetails.checkedNeeds);
     setOneOffNeeds(checkOneOffDetails.checkedNeeds);
+    if (!coreCost) {
+      setCoreCostError('The core cost field is required');
+    }
 
     if (checkedWeeklyDetails.hasErrors || checkOneOffDetails.hasErrors) {
       pushNotification('Some validation errors above');
@@ -168,18 +196,18 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
     }
 
     const weeklyDetails = weeklyNeeds
-      .filter((item) => item.cost !== 0)
-      .map(({ cost, endDate, startDate }) => ({
+      .filter((item) => item.startDate || item.endDate || item.cost)
+      .map(({ cost, endDate, startDate, isOngoing: isOngoingItem }) => ({
         // id,
         cost,
         startDate,
-        endDate: isOngoing ? null : endDate,
+        endDate: isOngoingItem ? null : endDate,
         costPeriod: costPeriods.weekly,
         type: brokerageTypeOptions.additionalNeed,
       }));
 
     const oneOffDetails = oneOffNeeds
-      .filter((item) => item.cost !== 0)
+      .filter((item) => item.startDate || item.endDate || item.cost)
       .map(({ cost, endDate, startDate }) => ({
         // id,
         cost,
@@ -194,7 +222,7 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
     try {
       await updateCarePackageCosts({
         data: {
-          coreCost: supplierWeeklyCost,
+          coreCost,
           startDate: packageDates.startDate,
           endDate: isOngoing ? null : packageDates.endDate,
           supplierId: selectedItem.id,
@@ -225,6 +253,11 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
     setter(cloneNeeds);
   };
 
+  const changeCoreCost = (value) => {
+    setCoreCost(value);
+    setCoreCostError('');
+  };
+
   const addNeed = (setter) => {
     setter((prevState) => [...prevState, { ...initialNeed, id: uniqueID() }]);
   };
@@ -243,7 +276,7 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
       });
     }
     setWeeklyTotalCost(totalCost);
-  }, [supplierWeeklyCost, weeklyNeeds]);
+  }, [coreCost, weeklyNeeds]);
 
   useEffect(() => {
     let totalCost = 0;
@@ -252,8 +285,8 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
         totalCost += Number(item.cost);
       });
     }
-    setOneOfTotalCost(totalCost);
-  }, [supplierWeeklyCost, oneOffNeeds]);
+    setOneOffTotalCost(totalCost);
+  }, [coreCost, oneOffNeeds]);
 
   useEffect(() => {
     setIsOngoing(!detailsData?.endDate);
@@ -277,10 +310,11 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="60px">
-        {(loading || detailsData === undefined) && <Loading className="loading-center" />}
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+        <Loading isLoading={loading || suppliersLoading} />
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
+
           <Container>
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
@@ -295,20 +329,24 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
               setIsOngoing={setIsOngoing}
             />
           </Container>
+
           <>
             {!selectedItem && (
               <Container className="supplier-search-container" display="flex">
                 <SearchBox
-                  onChangeValue={(value) => setSearchText(value)}
+                  onChangeValue={setSearchText}
                   label="Supplier"
                   searchIcon={null}
                   clearIcon={<p className="lbh-primary-button">Clear</p>}
                   clear={clearSearch}
+                  search={onSearchSupplier}
                   value={searchText}
                   className="supplier-search-box"
                   id="supplier-search-box"
+                  required
                 />
-                <Button className="supplier-search-button" handler={onSearchSupplier}>
+
+                <Button className="supplier-search-button" onClick={onSearchSupplier}>
                   Search
                 </Button>
               </Container>
@@ -317,6 +355,7 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
             {!searchText && !selectedItem && (
               <Container className="is-new-supplier">
                 <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
+
                 <Container className="is-new-supplier-text" display="flex" flexDirection="column">
                   <p>This is a new supplier</p>
                   <p>
@@ -327,6 +366,7 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
               </Container>
             )}
           </>
+
           {(searchResults && searchText && !selectedItem) || (showSearchResults && searchResults) ? (
             <BrokerPackageSelector
               currentPage={currentPage}
@@ -342,27 +382,35 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
             />
           ) : (
             <BrokerPackageCost
+              setCoreCostError={setCoreCostError}
               removeSupplierCard={removeSupplierCard}
               cardInfo={selectedItem}
               corePackageDates={packageDates}
               addNeed={addNeed}
               weeklyNeeds={weeklyNeeds}
+              coreCostError={coreCostError}
               oneOffNeeds={oneOffNeeds}
               setWeeklyNeeds={setWeeklyNeeds}
               setOneOffNeeds={setOneOffNeeds}
-              oneOffTotalCost={oneOfTotalCost}
+              oneOffTotalCost={oneOffTotalCost}
               weeklyTotalCost={weeklyTotalCost}
-              supplierWeeklyCost={supplierWeeklyCost}
-              setSupplierWeeklyCost={setSupplierWeeklyCost}
+              coreCost={coreCost}
+              setCoreCost={changeCoreCost}
               changeNeed={changeNeed}
               removeNeed={removeNeed}
             />
           )}
+
           <Container className="brokerage__actions">
-            <Button handler={clickBack} className="brokerage__back-button">
+            <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button disabled={!oneOfTotalCost && !weeklyTotalCost && !supplierWeeklyCost} handler={clickSave}>
+
+            <Button
+              isLoading={loading}
+              disabled={(!oneOffTotalCost && !weeklyTotalCost && !coreCost) || loading}
+              onClick={clickSave}
+            >
               Save and continue
             </Button>
           </Container>
@@ -371,3 +419,5 @@ export const BrokerPackage = ({ detailsData, currentPage, setCurrentPage, select
     </div>
   );
 };
+
+export default BrokerPackage;

@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
-import { getLoggedInUser } from 'service/helpers';
+import { useCarePackageApi } from 'api';
+import { getLoggedInUser } from 'service';
+import { BrokerPortalPage } from 'components';
 import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
-import { BrokerPortalPage } from 'components/Pages/BrokerPortal';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -23,7 +23,7 @@ const initialFilters = {
   status: '',
   dateFrom: null,
   dateTo: null,
-  broker: null,
+  brokerId: '',
   serviceUserName: '',
 };
 
@@ -33,14 +33,14 @@ const BrokerPortal = () => {
   const [pageNumber, setPageNumber] = useState(1);
 
   const [filters, setFilters] = useState(initialFilters);
-  const { broker, dateTo, dateFrom, status, serviceUserName } = filters;
+  const { brokerId, dateTo, dateFrom, status, serviceUserName } = filters;
 
-  const { data } = useCarePackageApi.brokerView({
+  const { data, isLoading: brokerViewLoading } = useCarePackageApi.brokerView({
     fromDate: dateFrom ? dateFrom.toJSON() : null,
     toDate: dateTo ? dateTo.toJSON() : null,
-    brokerId: broker?.id,
     serviceUserName,
     pageNumber,
+    brokerId,
     status,
   });
 
@@ -56,11 +56,19 @@ const BrokerPortal = () => {
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
   const handleRowClick = useCallback((rowInfo) => {
-    router.push(getServiceUserPackagesRoute(rowInfo.packageId));
+    router.push({
+      pathname: getServiceUserPackagesRoute(rowInfo.packageId),
+      query: {
+        // todo: should be removed once endpoint for getting package info will contain this data
+        packageStatus: rowInfo.packageStatus,
+        dateAssigned: rowInfo.dateAssigned,
+      },
+    });
   }, []);
 
   return (
     <BrokerPortalPage
+      loading={brokerViewLoading}
       filters={filters}
       clearFilter={clearFilters}
       setFilters={setFilters}

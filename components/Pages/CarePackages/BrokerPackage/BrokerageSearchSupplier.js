@@ -6,7 +6,7 @@ const BrokerageSearchSupplier = ({ searchResults: { totalCount, items, totalPage
   const [supplierSearch, setSupplierSearch] = useState('');
 
   const onSearchSupplier = () => {
-    alert('search supplier');
+    alert('master-search supplier');
   };
 
   const searchResultText = totalCount === 1 ? 'result' : 'results';
@@ -25,7 +25,7 @@ const BrokerageSearchSupplier = ({ searchResults: { totalCount, items, totalPage
           className="supplier-search-box"
           id="supplier-search-box"
         />
-        <Button className="supplier-search-button" handler={() => alert('Search')}>
+        <Button className="supplier-search-button" onClick={() => alert('Search')}>
           Search
         </Button>
       </Container>

@@ -1,7 +1,7 @@
 import React from 'react';
-import BaseField from './baseComponents/BaseField';
+import BaseField from './BaseField';
 import ErrorField from './ErrorField';
-import { isFunction } from '../api/Utils/FuncUtils';
+import { isFunction } from '../api';
 
 const yesNoValues = [
   { text: 'Yes', value: true },
@@ -30,20 +30,18 @@ const RadioButton = ({
     <BaseField tooltipText={tooltipText} label={label} className={innerClass}>
       <div className={`radio-cont${inline ? '' : ' not-inline'}`}>
         {options.map((radioItem, index) => (
-            <React.Fragment key={`${radioItem.value}${label}${radioItem.text}`}>
-              {radioItem.header && radioItem.header}
-              <label
-                className={`radio-item${index !== options.length ? ' is-first' : ''}`}
-                onClick={() => radioChange(radioItem.value)}
-              >
-                <div
-                  className={`radio-select-cont${selectedValue === radioItem.value ? ' is-active' : ''}`}
-                >
-                  <div className="radio-item-selected" />
-                </div>
-                <p className='radio-item__text'>{radioItem.text}</p>
-              </label>
-            </React.Fragment>
+          <React.Fragment key={`${radioItem.value}${label}${radioItem.text}`}>
+            {radioItem.header && radioItem.header}
+            <label
+              className={`radio-item${index !== options.length ? ' is-first' : ''}`}
+              onClick={() => radioChange(radioItem.value)}
+            >
+              <div className={`radio-select-cont${selectedValue === radioItem.value ? ' is-active' : ''}`}>
+                <div className="radio-item-selected" />
+              </div>
+              <p className="radio-item__text">{radioItem.text}</p>
+            </label>
+          </React.Fragment>
         ))}
       </div>
       {error && <ErrorField text={error} />}

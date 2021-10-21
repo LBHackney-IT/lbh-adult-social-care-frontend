@@ -1,10 +1,14 @@
 import React from 'react';
 import { Container } from '../../HackneyDS';
 
-const TitleSubtitleHeader = ({ title, subTitle }) => (
+const TitleSubtitleHeader = ({ title, subTitle, link }) => (
   <Container className="title-subtitle-header">
     <p>{title}</p>
-    <h2>{subTitle}</h2>
+
+    <div>
+      <h2>{subTitle}</h2>
+      {link}
+    </div>
   </Container>
 );
 

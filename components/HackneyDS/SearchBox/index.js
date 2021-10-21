@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
-// eslint-disable-next-line import/no-cycle
-import { ErrorMessage, Hint, Label } from '../index';
+import Hint from '../lettering/Hint';
+import Label from '../lettering/Label';
+import ErrorMessage from '../lettering/ErrorMessage';
 import { CrossIcon, SearchIcon } from '../icons';
-import { isFunction } from '../../../api/Utils/FuncUtils';
+import { isFunction } from '../../../api';
 
 export default function SearchBox({
   label = 'Search',
@@ -17,6 +18,7 @@ export default function SearchBox({
   onChangeValue,
   clear,
   search,
+  required,
   searchIcon = <SearchIcon />,
   clearIcon = <CrossIcon />,
 }) {
@@ -36,7 +38,7 @@ export default function SearchBox({
     if (onChangeValue) {
       return onChangeValue(e.target.value);
     }
-    handler(e);
+    return handler(e);
   };
 
   const onEnterPress = ({ key }) => {
@@ -45,7 +47,11 @@ export default function SearchBox({
 
   return (
     <div className={`govuk-form-group lbh-form-group lbh-search-box${outerClassName}`}>
-      {label && <Label htmlFor={id}>{label}</Label>}
+      {label && (
+        <Label htmlFor={id} className={required ? 'text-required-after' : ''}>
+          {label}
+        </Label>
+      )}
       {hint && <Hint>{hint}</Hint>}
       {error && <ErrorMessage>{error}</ErrorMessage>}
       <div className="lbh-search-box__container">
@@ -61,7 +67,7 @@ export default function SearchBox({
           placeholder={placeholder}
         />
         <div role="presentation" onClick={buttonHandler} className="lbh-search-box__action">
-          <span className="govuk-visually-hidden">{value ? 'Clear search' : 'Search'}</span>
+          <span className="govuk-visually-hidden">{value ? 'Clear master-search' : 'Search'}</span>
           {value && clear ? clearIcon : searchIcon}
         </div>
       </div>
