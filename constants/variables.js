@@ -18,6 +18,6 @@ export const tagColors = {
 };
 
 export const userTagColors = {
-  new: 'gray',
+  new: 'yellow',
   existing: 'gray',
 };
