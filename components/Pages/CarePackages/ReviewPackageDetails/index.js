@@ -11,7 +11,6 @@ import { currency } from '../../../../constants/strings';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
 import Loading from '../../../Loading';
-import { useCarePackageApi } from '@api';
 
 const links = [
   { text: 'Care Package', href: '#care-package' },
