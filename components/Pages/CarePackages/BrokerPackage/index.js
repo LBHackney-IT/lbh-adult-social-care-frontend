@@ -291,9 +291,6 @@ const BrokerPackage = ({
     }
   };
 
-  console.log(weeklyNeeds);
-  console.log(oneOffNeeds);
-
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
