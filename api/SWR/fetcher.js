@@ -1,5 +1,5 @@
-import { BASE_URL } from '../BaseApi';
-import { axiosRequest } from '../Utils/ApiUtils';
+import { BASE_URL } from 'api/BaseApi';
+import { axiosRequest } from 'api/Utils/ApiUtils';
 
 const fetcher = async (url, options) =>
   axiosRequest({

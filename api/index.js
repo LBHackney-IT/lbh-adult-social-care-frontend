@@ -14,10 +14,10 @@ export * from './Utils/CommonOptions';
 // SWR hooks
 export { default as fetcher } from './SWR/fetcher';
 export { default as useGetData } from './SWR/useGetData';
-export { default as useErrorNotification } from './SWR/useErrorNotification';
 
 export { default as useUser } from './SWR/useUser';
 
+export * from './SWR/serviceUser';
 export { default as useCarePackageApi } from './SWR/CarePackage/useCarePackageApi';
 export { default as useCarePackageOptions } from './SWR/CarePackage/useCarePackageOptions';
 export { default as useReclaimApi } from './SWR/CarePackage/useReclaimApi';

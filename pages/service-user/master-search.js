@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import SearchServiceUser from 'components/Pages/BrokerAssistant/SearchServiceUser';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
+import React, { useMemo, useState } from 'react';
+import { useServiceUserMasterSearch } from 'api';
+import { SearchServiceUser } from 'components';
 import { useRouter } from 'next/router';
 
 const initialFilters = {
@@ -17,19 +17,27 @@ const BrokerPortalSearch = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
 
-  const { data: { residents: searchResults }, isLoading } = useCarePackageApi.serviceUserMasterSearch({
-    firstName: filters.firstName,
-    postcode: filters.postcode,
-    lastName: filters.lastName,
-    hackneyId: filters.hackneyId,
-    dateOfBirth: filters?.dateOfBirth?.toJSON?.(),
-  }, showSearchResults);
+  const params = useMemo(
+    () => ({
+      firstName: filters.firstName,
+      postcode: filters.postcode,
+      lastName: filters.lastName,
+      hackneyId: filters.hackneyId,
+      dateOfBirth: filters?.dateOfBirth?.toJSON?.(),
+    }),
+    [filters]
+  );
+
+  const {
+    data: { residents: searchResults },
+    isLoading,
+  } = useServiceUserMasterSearch({ params, shouldFetch: showSearchResults });
 
   const changeFilters = (field, value) => {
     setShowSearchResults(false);
-    setFilters(prevState => ({
+    setFilters((prevState) => ({
       ...prevState,
-      [field]: value
+      [field]: value,
     }));
   };
 

@@ -14,10 +14,10 @@ import {
   ServiceUserDetails,
   TitleSubtitleHeader,
 } from 'components';
-import { mapServiceUserBasicInfo, usePackageGetAll, useCarePackageApi, assignToBroker } from 'api';
 import { requiredSchema } from 'constants/schemas';
-import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
+import { addNotification } from 'reducers/notificationsReducer';
+import { mapServiceUserBasicInfo, usePackageGetAll, assignToBroker, useServiceUser } from 'api';
 
 // todo: replace with data from API once available
 const brokerOptions = [
@@ -47,9 +47,9 @@ const AssignPackage = () => {
   const dispatch = useDispatch();
 
   const router = useRouter();
-  const { guid: packageId } = router.query;
+  const { hackneyId } = router.query;
 
-  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo } = useServiceUser(hackneyId);
   const { options: packageTypeOptions } = usePackageGetAll();
 
   const validateFields = async (fields) => {
