@@ -1,29 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "components": [
-        "components/"
-      ],
-      "constants": [
-        "constants/"
-      ],
-      "routes": [
-        "routes/"
-      ],
-      "api": [
-        "api/"
-      ],
-      "reducers": [
-        "reducers/"
-      ],
-      "lib": [
-        "lib/"
-      ],
-      "service": [
-        "service/"
-      ]
-    }
+    "baseUrl": "."
   },
   "exclude": [
     "node_modules",

@@ -2,6 +2,23 @@
   "name": "lbh-adult-social-care",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint --fix",
+    "format": "prettier --write .",
+    "check-format": "prettier --check .",
+    "test-all": "npm run check-format && npm run lint && npm run build",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "chromatic": "npx chromatic --project-token=97e4e3b73e5d",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "npm run lint",
+    "*.{js,jsx,css}": "prettier --write"
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^1.1.0",
     "axios": "^0.21.1",
@@ -19,6 +36,7 @@
     "next": "^11.1.2",
     "next-absolute-url": "^1.2.2",
     "next-iron-session": "^4.2.0",
+    "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-datepicker": "^4.1.1",
     "react-dom": "^17.0.2",
@@ -37,21 +55,6 @@
     "serverless-http": "^2.7.0",
     "swr": "^0.5.6",
     "yup": "^0.32.9"
-  },
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "lint-fix": "npm run lint --fix",
-    "lint-fix-dry": "eslint --fix-dry-run",
-    "check-format": "prettier --check .",
-    "format": "prettier --write .",
-    "test-all": "npm run check-format && npm run lint && npm run build",
-    "prepare": "husky install",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "chromatic": "npx chromatic --project-token=97e4e3b73e5d"
   },
   "browserslist": {
     "production": [
@@ -95,7 +98,8 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "husky": "^7.0.0",
+    "husky": ">=6",
+    "lint-staged": ">=10",
     "prettier": "2.3.2",
     "sass": "^1.38.0",
     "sass-loader": "10.1.1",
