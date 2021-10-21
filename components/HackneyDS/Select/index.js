@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SelectArrowTriangle } from '../../Icons';
 
 export default function Select({
@@ -16,13 +16,14 @@ export default function Select({
   const outerClass = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-select--error' : '';
   const errorDescribedBy = error ? { 'aria-describedby': ' govuk-select--error' } : {};
-
+  const [isDisabled, setDisabled] = useState(false);
   return (
     <div className="select-container">
       <select
         id={id}
         {...errorDescribedBy}
         onChange={(e) => {
+          if (e.target.value !== emptyElement.value) setDisabled(true);
           if (onChangeValue) {
             return onChangeValue(e.target.value);
           }
@@ -31,7 +32,11 @@ export default function Select({
         value={value}
         className={`govuk-select lbh-select${outerClass}${errorClass}`}
       >
-        {emptyElement && <option value={emptyElement.value}>{emptyElement.text}</option>}
+        {emptyElement && (
+          <option disabled={isDisabled} value={emptyElement.value}>
+            {emptyElement.text}
+          </option>
+        )}
         {options.map((option) => {
           const isDisabledOption = disabledOptions.some((disabledOption) => disabledOption === option.value);
 
