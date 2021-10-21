@@ -11,7 +11,7 @@ import { BROKER_PORTAL_ROUTE } from '../../../../routes/RouteConstants';
 const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { data: approverOptions, isLoading } = useApprovers();
+  const { options: approverOptions, isLoading } = useApprovers();
 
   const [approverId, setApproverId] = useState('');
   const [approverError, setApproverError] = useState('');
