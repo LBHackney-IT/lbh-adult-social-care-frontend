@@ -20,7 +20,6 @@ export const FurtherDetails = ({ settings, control, setValue }) => {
       }
     }
   }, [settings]);
-  console.log(settings);
 
   return (
     <>
