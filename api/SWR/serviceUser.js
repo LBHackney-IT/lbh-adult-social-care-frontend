@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import fetcher from 'api/SWR/fetcher';
+import fetcher from './fetcher';
 import useErrorNotification from './useErrorNotification';
 import useGetData from './useGetData';
 

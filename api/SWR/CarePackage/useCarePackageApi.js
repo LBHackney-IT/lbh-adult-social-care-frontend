@@ -1,4 +1,4 @@
-import { getQueryParamsFromObject } from 'api/Utils/ApiUtils';
+import { getQueryParamsFromObject } from '../../Utils/ApiUtils';
 import useGetData from '../useGetData';
 
 const CARE_PACKAGES_URL = '/care-packages';
