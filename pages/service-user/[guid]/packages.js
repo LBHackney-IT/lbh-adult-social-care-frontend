@@ -76,7 +76,7 @@ const Packages = () => {
     <>
       <BrokerageHeader />
 
-      <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
+      <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
         <Breadcrumbs values={breadcrumbs} />
 
         <TitleSubtitleHeader title="All package details" subTitle="Full overview" />
