@@ -1,5 +1,5 @@
 import useGetData from '../useGetData';
-import { getQueryParamsFromObject } from '../../Utils/ApiUtils';
+import { getQueryParamsFromObject } from '../../index';
 
 const CARE_PACKAGES_URL = '/care-packages';
 
@@ -21,6 +21,20 @@ const useCarePackageApi = {
       {}
     ),
 
+  careChargeList: ({ status, pageNumber, pageSize = 10, orderByDate, orderBy, modifiedBy }) =>
+    useGetData(
+      `/care-charges${getQueryParamsFromObject({
+        modifiedBy,
+        pageNumber,
+        status,
+        pageSize,
+        orderBy,
+        orderByDate
+      })}`,
+      'Can not get care charges',
+      { data: [], pagingMetaData: {}}
+    ),
+
   details: (packageId) =>
     useGetData(packageId !== undefined ? `${CARE_PACKAGES_URL}/${packageId}/details` : null, '', {}),
 
@@ -28,10 +42,8 @@ const useCarePackageApi = {
     useGetData(shouldFetch ? `/suppliers${getQueryParamsFromObject({ supplierName })}` : null),
 
   singleSupplier: (supplierId) => useGetData(supplierId ? `/suppliers/${supplierId}` : null, '', {}),
-  singlePackageInfo: (packageId) => {
-    const response = useGetData(`${CARE_PACKAGES_URL}/${packageId}`, '', {});
-    return { ...response, singlePackageInfoLoading: !!response.data};
-  },
+  singlePackageInfo: (packageId) => useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}` : null, '', {}),
+  history: (packageId) => useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/history` : null, '', {}),
   serviceUser: ({ hackneyId }, shouldFetch) => (
     useGetData(shouldFetch ? `/service-user/${hackneyId}` : null, 'Can not get service user', {})
   ),

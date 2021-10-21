@@ -31,6 +31,22 @@
   -webkit-appearance: none;
   width: auto;
 
+  &--disabled {
+    cursor: initial;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .loading {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+
+    circle {
+      fill: $lbh-light-link;
+    }
+  }
+
   svg.loading.button-loading {
     width: 20px;
     height: 20px;

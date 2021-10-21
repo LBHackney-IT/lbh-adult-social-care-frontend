@@ -1,16 +1,20 @@
 import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import { usePackageGetAll } from 'api/SWR';
-import useCarePackageOptions from 'api/SWR/CarePackage/useCarePackageOptions';
-import usePrimarySupportReason from 'api/SWR/package/usePrimarySupportReason';
+import {
+  optionsMapper,
+  usePackageGetAll,
+  useCarePackageApi,
+  useCarePackageOptions,
+  updateCoreCarePackage,
+  usePrimarySupportReason,
+  mapServiceUserBasicInfo,
+  mapPackageSchedulingOptions,
+} from 'api';
+import { CorePackageDetails } from 'components';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
-import { updateCoreCarePackage } from 'api/CarePackages/CarePackage';
-import optionsMapper, { mapPackageSchedulingOptions, mapServiceUserBasicInfo } from 'api/Mappers/optionsMapper';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
-import CorePackageDetails from 'components/Pages/CarePackages/CorePackageDetails';
-import { getLoggedInUser } from 'service/helpers';
+import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -36,7 +40,8 @@ const packageSettingOptions = [
 
 const settingKeys = ['hasRespiteCare', 'hospitalAvoidance', 'hasDischargePackage', 'isReEnablement', 'isS117Client'];
 
-const getCurrentSelectedSettings = (carePackage = {}) => settingKeys.filter((setting) => carePackage[setting] === true);
+const getCurrentSelectedSettings = (carePackage = {}) =>
+  settingKeys.filter((setting) => carePackage?.[setting] === true);
 
 const CorePackagePage = () => {
   const dispatch = useDispatch();
@@ -92,8 +97,8 @@ const CorePackagePage = () => {
     packageTypeOptions: packageTypes,
     saveCorePackage: updatePackage,
     defaultValues: currentPackageCoreSettings,
-    loading: schedulingLoading || loading || packageGetAllLoading ||
-      primarySupportReasonLoading || singlePackageInfoLoading,
+    loading:
+      schedulingLoading || loading || packageGetAllLoading || primarySupportReasonLoading || singlePackageInfoLoading,
   };
 
   return <CorePackageDetails {...props} />;

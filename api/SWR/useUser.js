@@ -3,7 +3,7 @@ import Router from 'next/router';
 import useSWR from 'swr';
 import { axiosFetcher } from '../Utils/ApiUtils';
 
-export default function useUser({ redirectTo = false, redirectIfFound = false } = {}) {
+const useUser = ({ redirectTo = false, redirectIfFound = false } = {}) => {
   const { data: user, mutate: mutateUser } = useSWR('/api/user', axiosFetcher);
 
   useEffect(() => {
@@ -22,4 +22,6 @@ export default function useUser({ redirectTo = false, redirectIfFound = false } 
   }, [user, redirectIfFound, redirectTo]);
 
   return { user: user?.data ?? user, mutateUser };
-}
+};
+
+export default useUser;

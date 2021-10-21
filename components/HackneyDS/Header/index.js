@@ -1,16 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { BROKER_PORTAL_ROUTE } from '../../../routes/RouteConstants';
-import { getSlot, getMultipleSlot, Container } from '../index';
+import { getSlot } from '../helpers';
+import { Container } from '../Layout/Container';
 
-export default function Header({
-  children = [],
-  links = [],
-  bottomLines = false,
-  fixed,
-  purple,
-  className,
-}) {
+export default function Header({ children = [], links = [], bottomLines = false, fixed, purple, className }) {
   const bottomLinesClass = bottomLines ? ' bottom-lines' : '';
   const fixedClassList = fixed ? ' lbh-header--fixed' : '';
   const shortServiceNodeList = ' lbh-header__service-name--short';
@@ -67,11 +61,9 @@ export default function Header({
             </h1>
 
             <div className="lbh-header__links">
-              {getMultipleSlot(nodeList, 'link')}
-
-              {links?.map(({ href, text }) => (
+              {links.map(({ href, text }) => (
                 <Link key={href} href={href}>
-                  <a slot="link">{text}</a>
+                  {text}
                 </Link>
               ))}
             </div>

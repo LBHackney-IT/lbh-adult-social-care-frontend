@@ -10,7 +10,11 @@ const useGetData = (url, errorMessage, initialData = []) => {
 
   useErrorNotification(response.error, errorMessage);
 
-  return { ...response, data: response.data || initialData, isLoading: !response.error && !response.data && url };
+  return {
+    ...response,
+    data: response.data || initialData,
+    isLoading: response.error === undefined && response.data === undefined && !!url
+  };
 };
 
 export default useGetData;

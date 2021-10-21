@@ -12,7 +12,7 @@ export default function CookieBanner({ 'policy-link': policyLink, handler = () =
           </p>
         </div>
         <div className="lbh-cookie-banner__button-wrapper">
-          <Button className="lbh-cookie-banner__button" secondary handler={handler}>
+          <Button className="lbh-cookie-banner__button" secondary onClick={handler}>
             Accept and close
           </Button>
         </div>

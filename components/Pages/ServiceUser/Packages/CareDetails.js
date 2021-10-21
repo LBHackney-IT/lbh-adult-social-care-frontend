@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Checkbox, Container, Heading, HorizontalSeparator, Table, VerticalSeparator } from 'components/HackneyDS';
 import { CaretDownIcon } from 'components/Icons';
-import { formatDate, getNumberWithCommas } from 'service/helpers';
+import { formatDate, getNumberWithCommas } from 'service';
+import { Checkbox, Container, Heading, HorizontalSeparator, Table, VerticalSeparator } from 'components/HackneyDS';
 
-export const CareDetails = ({ title, data }) => {
+const CareDetails = ({ title, data }) => {
   const [isExpanded, setExpanded] = useState(true);
 
   const columns = [
@@ -70,3 +70,5 @@ export const CareDetails = ({ title, data }) => {
     </>
   );
 };
+
+export default CareDetails;

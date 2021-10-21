@@ -1,16 +1,6 @@
 import React from 'react';
 import { Container, Table, Tag } from '../../HackneyDS';
-import { formatDate } from '../../../service/helpers';
-
-const tagColors = {
-  new: 'green',
-  'in progress': 'yellow',
-  'waiting for approval': 'blue',
-  'not approved': 'red',
-  ended: 'red',
-  cancelled: 'red',
-  approved: 'gray',
-};
+import { formatDate, getTagColorFromStatus } from '../../../service';
 
 export const BrokerPortalTable = ({ onRowClick, data }) => {
   const columns = [
@@ -22,8 +12,8 @@ export const BrokerPortalTable = ({ onRowClick, data }) => {
             <p className="brokerage-portal--user-name font-size-19px font-weight-bold text-green">
               {original.serviceUserName}
             </p>
-            <Tag className="text-capitalize outline" color={tagColors[value?.toLowerCase?.()]}>
-              {original.packageStatus}
+            <Tag className="text-capitalize outline" color={getTagColorFromStatus(value)}>
+              {value}
             </Tag>
           </Container>
           <p className="brokerage-portal--birthdate">{formatDate(original.dateOfBirth)}</p>

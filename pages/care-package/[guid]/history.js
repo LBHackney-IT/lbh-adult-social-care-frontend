@@ -1,13 +1,18 @@
 import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { Breadcrumbs, Container } from 'components/HackneyDS';
-import BrokerageHeader from 'components/Pages/CarePackages/BrokerageHeader/BrokerageHeader';
-import { BROKER_PORTAL_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
-import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
-import HistoryList from 'components/Pages/CarePackages/History/HistoryList';
-import Overview from 'components/Pages/CarePackages/History/Overview';
-import { getLoggedInUser } from 'service/helpers';
+import {
+  Loading,
+  Container,
+  Breadcrumbs,
+  HistoryList,
+  BrokerageHeader,
+  HistoryOverview,
+  TitleSubtitleHeader,
+} from 'components';
 import withSession from 'lib/session';
+import { useCarePackageApi } from 'api';
+import { getLoggedInUser } from 'service';
+import { BROKER_PORTAL_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -39,16 +44,20 @@ const History = () => {
     [packageId]
   );
 
+  const { data, isLoading } = useCarePackageApi.history(packageId);
+
   return (
     <div>
       <BrokerageHeader />
 
+      <Loading isLoading={isLoading} />
+
       <Container maxWidth="1080px" margin="10px auto" padding="0 60px">
         <Breadcrumbs values={breadcrumbs} />
 
-        <TitleSubtitleHeader subTitle="Package history" title="Nursing care" />
+        <TitleSubtitleHeader subTitle="Package history" title={data.packageType} />
 
-        <Overview />
+        <HistoryOverview />
 
         <HistoryList />
       </Container>

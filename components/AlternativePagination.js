@@ -30,7 +30,7 @@ const AlternativePagination = ({
   return (
     <div className={`table-pagination${className ? ` ${className}` : ''}`}>
       {actionButton && (
-        <Button disabled={actionButton.disabled} className={actionButton.className} handler={actionButton.onClick}>
+        <Button disabled={actionButton.disabled} className={actionButton.className} onClick={actionButton.onClick}>
           {actionButton.text}
         </Button>
       )}
@@ -40,8 +40,8 @@ const AlternativePagination = ({
       <div className="table-pagination-actions">
         {totalCount === 0 ? (
           <Button
-            key='page-1'
-            handler={() => onChangePagination(1)}
+            key="page-1"
+            onClick={() => onChangePagination(1)}
             className="table-pagination-button table-pagination-item-active"
           >
             1
@@ -51,8 +51,8 @@ const AlternativePagination = ({
             const currentPageClass = String(item + 1) === String(currentPage) ? ' table-pagination-item-active' : '';
             return (
               <Button
-                key={`page-${item+1}`}
-                handler={() => onChangePagination(item + 1)}
+                key={`page-${item + 1}`}
+                onClick={() => onChangePagination(item + 1)}
                 className={`table-pagination-button${currentPageClass}`}
               >
                 {item + 1}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
-import { BrokerPackage } from 'components/Pages/CarePackages/BrokerPackage';
-import { getLoggedInUser } from 'service/helpers';
+import { useCarePackageApi } from 'api';
+import { BrokerPackage } from 'components';
+import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -28,7 +28,9 @@ const BrokerPackagePage = () => {
 
   const { data: detailsData, isLoading: detailsLoading } = useCarePackageApi.details(packageId);
 
-  const { data: selectedSupplier, isLoading: singleSupplierLoading } = useCarePackageApi.singleSupplier(detailsData.supplierId);
+  const { data: selectedSupplier, isLoading: singleSupplierLoading } = useCarePackageApi.singleSupplier(
+    detailsData.supplierId
+  );
   const { supplierName } = selectedSupplier;
 
   useEffect(() => {

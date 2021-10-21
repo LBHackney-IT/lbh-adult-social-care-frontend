@@ -9,9 +9,15 @@
 }
 
 .new-care-charge__card {
-  margin-bottom: 23px;
+  transition: 0.2s ease;
   padding-bottom: 24px;
+  padding-top: 10px;
   border-bottom: 1px solid $lbh-gray-border;
+
+  &:hover {
+    cursor: pointer;
+    background: $lbh-gray;
+  }
 }
 
 .new-care-charge__card-address {
@@ -44,6 +50,10 @@
 
 .new-care-charge__header {
   margin-bottom: 32px;
+  h2 {
+    font-size: 30px;
+    font-weight: 700;
+  }
 }
 
 .new-care-charge__selectors {
@@ -69,7 +79,7 @@
     display: none;
   }
 
-  .lbh-form-group:not(.lbh-form-group:last-of-type) {
+  .lbh-form-group {
     margin-right: 24px;
   }
 }

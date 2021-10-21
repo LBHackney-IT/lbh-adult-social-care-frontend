@@ -2,17 +2,16 @@ import React, { memo } from 'react';
 import {
   BROKER_PORTAL_ROUTE,
   CARE_PACKAGE_ROUTE,
+  LOGOUT_ROUTE,
   getAssignPackageRoute,
   getServiceUserPackagesRoute,
   getHistoryRoute,
-  LOGOUT_ROUTE
 } from '../../../../routes/RouteConstants';
-import { Button, Container, Header, Input, Breadcrumbs } from '../../../HackneyDS';
-import DatePicker from '../../../HackneyDS/DatePicker';
+import { Button, Container, Header, Input, Breadcrumbs, DatePicker, FormGroup } from '../../../HackneyDS';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
 import AlternativePagination from '../../../AlternativePagination';
-import FormGroup from '../../../HackneyDS/FormGroup';
 import SearchResult from '../../../SearchResult';
+import Loading from '../../../Loading';
 
 const links = [
   { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },

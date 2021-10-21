@@ -15,6 +15,7 @@ export const Input = ({
   onBlur,
   handler,
   onChangeValue,
+  required,
 }) => {
   const outerClassName = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-form-group--error' : '';
@@ -30,7 +31,7 @@ export const Input = ({
   return (
     <div className={`govuk-form-group lbh-form-group${errorClass}${signClass} ${outerClassName}`}>
       {label && (
-        <label className="govuk-label lbh-label" htmlFor={id}>
+        <label className={`govuk-label lbh-label${required ? ' text-required-after' : ''}`} htmlFor={id}>
           {label}
         </label>
       )}

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Button, Container, ErrorMessage, Input, Label, RadioGroup, Select, Textarea } from '../../../HackneyDS';
 import { requiredSchema } from '../../../../constants/schemas';
 import { currency } from '../../../../constants/strings';
-import BrokerageHeader from '../BrokerageHeader/BrokerageHeader';
+import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import Loading from '../../../Loading';
@@ -138,9 +138,9 @@ const CareCharges = ({
   return (
     <Container className="brokerage__care-charges">
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
         <Loading isLoading={loading} />
-        <TitleSubtitleHeader title='Build a care package' subTitle="Care Charges"/>
+        <TitleSubtitleHeader title="Build a care package" subTitle="Care Charges" />
         <Container>
           <h3 className="brokerage__item-title">Care charges</h3>
           <p className="care-charges-hint">Provisional care charge (pre-assessement)</p>
@@ -164,6 +164,7 @@ const CareCharges = ({
               setCollectedBy(value);
             }}
             inline
+            className='mb-3'
             error={errors.collectedBy}
             value={collectedBy}
             label="Collected by"
@@ -196,10 +197,10 @@ const CareCharges = ({
             value={finalCost}
           />
           <Container className="brokerage__actions">
-            <Button handler={clickBack} className="brokerage__back-button">
+            <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button isLoading={loading} disabled={loading} handler={clickSave}>Save and review</Button>
+            <Button isLoading={loading} disabled={loading} onClick={clickSave}>Save and review</Button>
           </Container>
         </Container>
       </Container>

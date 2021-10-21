@@ -2,8 +2,7 @@ import axios from 'axios';
 // eslint-disable-next-line import/named
 import { requestMethods } from '../../constants/variables';
 
-async function handleResponse(response) {
-  console.log(`response`, response)
+export const handleResponse = async (response) => {
   if (response.status === 200 || response.status === 201 || response.status === 204) return response.data;
   if (response.status === 400) {
     // So, a server-side validation error occurred.
@@ -12,33 +11,28 @@ async function handleResponse(response) {
     throw new Error(error);
   }
   throw new Error('Network response was not ok.');
-}
+};
 
 // Maybe call error logging service.
-function handleError(error) {
+export const handleError = (error) => {
   let errorMessage = '';
   if (error.response) {
     // Request made and server responded
     errorMessage = error.response.data.message;
-    console.log(error.response.data);
-    console.log(error.response.status);
-    console.log(error.response.headers);
     throw errorMessage;
   } else if (error.request) {
     // The request was made but no response was received
     errorMessage = error.request.toString();
-    console.log(error.request);
   } else {
     // Something happened in setting up the request that triggered an Error
-    console.log('Error', error.message);
     errorMessage = error.message.toString();
     // eslint-disable-next-line no-console
     // console.error(`API call failed. ${error}`);
   }
   throw errorMessage;
-}
+};
 
-const axiosRequest = (options = {}) => {
+export const axiosRequest = (options = {}) => {
   const headers = options.headers || {};
   delete options.headers;
 
@@ -64,7 +58,7 @@ const axiosRequest = (options = {}) => {
 
   return a string '?payRunId=very-long-id-1234&orderBy=cost'
  */
-const getQueryParamsFromObject = (params = {}, addEmptyString, signs = {}) => {
+export const getQueryParamsFromObject = (params = {}, addEmptyString, signs = {}) => {
   let string = '';
   let count = 0;
   for (const i in params) {
@@ -83,6 +77,4 @@ const getQueryParamsFromObject = (params = {}, addEmptyString, signs = {}) => {
   return string;
 };
 
-const axiosFetcher = (url) => axios.get(url).then(handleResponse).catch(handleError);
-
-export { handleError, handleResponse, axiosRequest, getQueryParamsFromObject, axiosFetcher };
+export const axiosFetcher = (url) => axios.get(url).then(handleResponse).catch(handleError);

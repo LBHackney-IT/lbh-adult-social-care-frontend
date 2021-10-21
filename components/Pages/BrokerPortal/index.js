@@ -1,14 +1,13 @@
 import { useRouter } from 'next/router';
 import React, { useCallback, useRef, useState } from 'react';
-import BrokerageHeader from '../CarePackages/BrokerageHeader/BrokerageHeader';
-import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select } from '../../HackneyDS';
+import BrokerageHeader from '../CarePackages/BrokerageHeader';
+import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select, FormGroup } from '../../HackneyDS';
+import { SERVICE_USER_MASTER_SEARCH_ROUTE } from '../../../routes/RouteConstants';
 import AlternativePagination from '../../AlternativePagination';
-import FormGroup from '../../HackneyDS/FormGroup';
-import DatePick from '../../DatePick';
 import { BrokerPortalTable } from './BrokerPortalTable';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
+import DatePick from '../../DatePick';
 import Loading from '../../Loading';
-import { SERVICE_USER_MASTER_SEARCH_ROUTE } from '../../../routes/RouteConstants';
 
 const statusOptions = [
   { text: 'All', value: '' },
@@ -72,7 +71,7 @@ export const BrokerPortalPage = ({
 
           <Container className="brokerage-portal__header">
             <h1>Broker Portal</h1>
-            <Button handler={goToBrokerPortalSearch}>Find a service user</Button>
+            <Button onClick={goToBrokerPortalSearch}>Find a service user</Button>
           </Container>
 
           <Container className="brokerage-portal__filters">
@@ -111,7 +110,7 @@ export const BrokerPortalPage = ({
                   startDate={filters.dateFrom}
                   dateValue={filters.dateFrom}
                   setDate={(value) => {
-                    if (value > filters.dateTo) {
+                    if (filters.dateTo && value > filters.dateTo) {
                       setFilters((prevState) => ({
                         ...prevState,
                         dateTo: value,
@@ -137,7 +136,7 @@ export const BrokerPortalPage = ({
               {shouldShowClear && (
                 <Button
                   className="outline gray clear-filter-button"
-                  handler={() => {
+                  onClick={() => {
                     clearFilter();
                     selectorRef.current?.select?.select?.clearValue();
                   }}
@@ -165,3 +164,5 @@ export const BrokerPortalPage = ({
     </div>
   );
 };
+
+export default BrokerPortalPage;

@@ -1,16 +1,10 @@
 import React from 'react';
-import { getAgeFromDateString } from '../../../api/Utils/FuncUtils';
-import { formatDate }  from '../../../service/helpers';
 import { Container } from '../../HackneyDS';
+import { formatDate } from '../../../service';
+import { getAgeFromDateString } from '../../../api';
 
 const placeHolderBirthDate = new Date(1990, 10, 10);
-const ServiceUserDetails = ({
-  serviceUserName,
-  hackneyId,
-  dateOfBirth,
-  address,
-  title = 'Service user details'
-}) => (
+const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address, title = 'Service user details' }) => (
   <Container className="user-details brokerage__container">
     {title && <h3>{title}</h3>}
     <Container>

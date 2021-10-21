@@ -1,10 +1,10 @@
-import Head from 'next/head';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
-import Loading from 'components/Loading';
+import Head from 'next/head';
+import { Loading } from 'components';
 import withSession from 'lib/session';
-import { getLoggedInUser } from 'service/helpers';
+import { getLoggedInUser } from 'service';
+import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
