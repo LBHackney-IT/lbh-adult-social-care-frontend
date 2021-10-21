@@ -2,12 +2,12 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useRef, useState } from 'react';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
 import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select, FormGroup } from '../../HackneyDS';
-import { BROKER_PORTAL_SEARCH_ROUTE } from '../../../routes/RouteConstants';
 import AlternativePagination from '../../AlternativePagination';
 import { BrokerPortalTable } from './BrokerPortalTable';
 import CustomAsyncSelector from '../../CustomAsyncSelect';
 import DatePick from '../../DatePick';
 import Loading from '../../Loading';
+import { SERVICE_USER_MASTER_SEARCH_ROUTE } from '../../../routes/RouteConstants';
 
 const statusOptions = [
   { text: 'All', value: '' },
@@ -54,7 +54,7 @@ export const BrokerPortalPage = ({
   }, [changeFilterField, searchText]);
 
   const goToBrokerPortalSearch = useCallback(() => {
-    router.push(BROKER_PORTAL_SEARCH_ROUTE);
+    router.push(SERVICE_USER_MASTER_SEARCH_ROUTE);
   }, []);
 
   const shouldShowClear = Object.values(filters).some((item) => !!item);
