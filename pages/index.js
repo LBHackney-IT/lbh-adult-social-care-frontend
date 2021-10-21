@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { Loading } from 'components';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
+import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -23,7 +23,7 @@ export default function IndexPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(BROKER_PORTAL_ROUTE);
+    router.replace(BROKER_ASSISTANCE_ROUTE);
   }, []);
 
   return (
