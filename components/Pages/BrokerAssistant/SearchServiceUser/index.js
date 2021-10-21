@@ -93,11 +93,11 @@ const SearchServiceUser = ({
             <Container className="actions">
               <p onClick={(e) => {
                 e.stopPropagation();
-                pushRoute(item, getAssignPackageRoute(item.hackneyId || item.mosaicId));
+                pushRoute(getAssignPackageRoute(item.hackneyId || item.mosaicId));
               }} className="link-button green">Allocate to broker</p>
               {item.hackneyId && <p onClick={(e) => {
                 e.stopPropagation();
-                pushRoute(item, getHistoryRoute(item.hackneyId));
+                pushRoute(getHistoryRoute(item.hackneyId));
               }} className="link-button green">View package history</p>}
             </Container>
           </Container>
