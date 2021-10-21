@@ -23,11 +23,11 @@ export default function Select({
         id={id}
         {...errorDescribedBy}
         onChange={(e) => {
-          if (e.target.value !== emptyElement.value) setDisabled(true);
+          if (emptyElement && e.target.value !== emptyElement.value) setDisabled(true);
           if (onChangeValue) {
             return onChangeValue(e.target.value);
           }
-          onChange(e);
+          return onChange(e);
         }}
         value={value}
         className={`govuk-select lbh-select${outerClass}${errorClass}`}

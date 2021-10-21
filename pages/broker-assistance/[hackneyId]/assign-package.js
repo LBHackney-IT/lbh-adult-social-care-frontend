@@ -41,9 +41,9 @@ const AssignPackage = () => {
   const dispatch = useDispatch();
 
   const router = useRouter();
-  const { mosaicId } = router.query;
+  const { hackneyId } = router.query;
 
-  const { data: serviceUser } = useServiceUser(mosaicId);
+  const { data: serviceUser } = useServiceUser(hackneyId);
   const { options: packageTypeOptions } = usePackageGetAll();
   const { options: brokerOptions } = useBrokers();
 
@@ -78,7 +78,7 @@ const AssignPackage = () => {
 
     const formData = new FormData();
 
-    formData.append('HackneyUserId', mosaicId);
+    formData.append('HackneyUserId', hackneyId);
     formData.append('BrokerId', broker);
     formData.append('PackageType', packageType);
     formData.append('Notes', notes);
@@ -123,7 +123,7 @@ const AssignPackage = () => {
               address={serviceUser.postCode}
               serviceUserName={`${serviceUser.firstName ?? ''} ${serviceUser.lastName ?? ''}`}
               dateOfBirth={serviceUser.dateOfBirth}
-              hackneyId={mosaicId}
+              hackneyId={hackneyId}
             />
 
             <Container>
