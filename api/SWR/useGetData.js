@@ -7,13 +7,14 @@ const useGetData = (url, errorMessage, initialData = {}) => {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
   });
+  const { error, data } = response;
 
-  useErrorNotification(response.error, errorMessage);
+  useErrorNotification(error, errorMessage);
 
   return {
     ...response,
-    data: response.data || initialData,
-    isLoading: response.error === undefined && response.data === undefined && !!url
+    data: data || initialData,
+    isLoading: error === undefined && data === undefined && !!url,
   };
 };
 

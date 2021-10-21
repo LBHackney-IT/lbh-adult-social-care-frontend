@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import SearchServiceUser from 'components/Pages/BrokerAssistant/SearchServiceUser';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
+import React, { useMemo, useState } from 'react';
+import { SearchServiceUser } from 'components';
+import { useServiceUserSearch } from 'api';
 import { useRouter } from 'next/router';
 
 const initialFilters = {
@@ -17,20 +17,28 @@ const BrokerPortalSearch = () => {
   const [filters, setFilters] = useState({ ...initialFilters });
   const [showSearchResults, setShowSearchResults] = useState(false);
 
-  const { data: { pagingMetaData, data: searchResults }, isLoading } = useCarePackageApi.serviceUserSearch({
-    pageNumber,
-    firstName: filters.firstName,
-    postcode: filters.postcode,
-    lastName: filters.lastName,
-    hackneyId: filters.hackneyId,
-    dateOfBirth: filters.dateOfBirth?.toJSON?.(),
-  }, showSearchResults);
+  const searchParams = useMemo(
+    () => ({
+      pageNumber,
+      firstName: filters.firstName,
+      postcode: filters.postcode,
+      lastName: filters.lastName,
+      hackneyId: filters.hackneyId,
+      dateOfBirth: filters.dateOfBirth?.toJSON?.(),
+    }),
+    [filters]
+  );
+
+  const {
+    data: { pagingMetaData, data: searchResults },
+    isLoading,
+  } = useServiceUserSearch({ params: searchParams, shouldFetch: showSearchResults });
 
   const changeFilters = (field, value) => {
     setShowSearchResults(false);
-    setFilters(prevState => ({
+    setFilters((prevState) => ({
       ...prevState,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -41,7 +49,7 @@ const BrokerPortalSearch = () => {
 
   const onSearch = () => setShowSearchResults(true);
 
-  const pushRoute = (route) => router.push(route)
+  const pushRoute = (route) => router.push(route);
 
   return (
     <SearchServiceUser

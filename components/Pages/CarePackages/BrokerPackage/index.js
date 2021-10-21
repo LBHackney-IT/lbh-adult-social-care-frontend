@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useDebounce } from 'react-use';
+import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
 import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader';
@@ -11,7 +12,6 @@ import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
-import { compareDescendingDMY, dateStringToDate, uniqueID } from '../../../../service';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import { compareDesc } from 'date-fns';
@@ -100,7 +100,7 @@ const BrokerPackage = ({
 
       setCoreCost(detailsData.coreCost);
 
-      if (detailsData.details) {
+      if (detailsData?.details?.length) {
         const weeklyDetails = detailsData.details
           .filter((item) => item.costPeriod === 2)
           .map((item) => ({
@@ -141,15 +141,15 @@ const BrokerPackage = ({
     const checkedNeeds = needs.map((item) => {
       if (!item.startDate && !item.endDate && !item.cost) return { ...item };
 
-      const { startDate, endDate } = item;
+      const { startDate, endDate, isOngoing: isOngoingItem } = item;
       let errorStartDate = '';
       let errorEndDate = '';
-      if (!startDate || (startDate && endDate && compareDescendingDMY(startDate, endDate))) {
+      if (!startDate || (startDate && endDate && !isOngoingItem && compareDescendingDMY(startDate, endDate))) {
         errorStartDate = 'Invalid start date';
       } else if (startDate && compareDescendingDMY(startDate, packageDates.endDate)) {
         errorStartDate = 'Start date should be later then core date';
       }
-      if (endDate && compareDescendingDMY(endDate, packageDates.endDate)) {
+      if (endDate && !isOngoingItem && compareDescendingDMY(endDate, packageDates.endDate)) {
         errorEndDate = 'End date should be later then core date';
       }
       if (errorStartDate || errorEndDate) {
@@ -197,11 +197,11 @@ const BrokerPackage = ({
 
     const weeklyDetails = weeklyNeeds
       .filter((item) => item.startDate || item.endDate || item.cost)
-      .map(({ cost, endDate, startDate }) => ({
+      .map(({ cost, endDate, startDate, isOngoing: isOngoingItem }) => ({
         // id,
         cost,
         startDate,
-        endDate: isOngoing ? null : endDate,
+        endDate: isOngoingItem ? null : endDate,
         costPeriod: costPeriods.weekly,
         type: brokerageTypeOptions.additionalNeed,
       }));
@@ -309,11 +309,12 @@ const BrokerPackage = ({
 
   return (
     <div className="supplier-look-up brokerage">
-      <BrokerageHeader/>
-      <Container maxWidth="1080px" margin="0 auto" padding="0 60px 30px">
+      <BrokerageHeader />
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
         <Loading isLoading={loading || suppliersLoading} />
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
+
           <Container>
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
@@ -354,6 +355,7 @@ const BrokerPackage = ({
             {!searchText && !selectedItem && (
               <Container className="is-new-supplier">
                 <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
+
                 <Container className="is-new-supplier-text" display="flex" flexDirection="column">
                   <p>This is a new supplier</p>
                   <p>
@@ -389,7 +391,6 @@ const BrokerPackage = ({
               coreCostError={coreCostError}
               oneOffNeeds={oneOffNeeds}
               setWeeklyNeeds={setWeeklyNeeds}
-              coreCostError={coreCostError}
               setOneOffNeeds={setOneOffNeeds}
               oneOffTotalCost={oneOffTotalCost}
               weeklyTotalCost={weeklyTotalCost}
