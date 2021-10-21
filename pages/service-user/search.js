@@ -13,16 +13,17 @@ const initialFilters = {
 
 const BrokerPortalSearch = () => {
   const router = useRouter();
+  const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState({ ...initialFilters });
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
 
-  const { data: { residents: searchResults }, isLoading } = useCarePackageApi.serviceUserMasterSearch({
+  const { data: { pagingMetaData, data: searchResults }, isLoading } = useCarePackageApi.serviceUserSearch({
+    pageNumber,
     firstName: filters.firstName,
     postcode: filters.postcode,
     lastName: filters.lastName,
     hackneyId: filters.hackneyId,
-    dateOfBirth: filters?.dateOfBirth?.toJSON?.(),
+    dateOfBirth: filters.dateOfBirth?.toJSON?.(),
   }, showSearchResults);
 
   const changeFilters = (field, value) => {
@@ -40,21 +41,22 @@ const BrokerPortalSearch = () => {
 
   const onSearch = () => setShowSearchResults(true);
 
-  const pushRoute = ({ hackneyId }, route) => router.push(route);
+  const pushRoute = (route) => router.push(route)
 
   return (
     <SearchServiceUser
       isLoading={isLoading}
-      filters={filters}
-      pushRoute={pushRoute}
-      searchResults={searchResults?.slice((pageNumber - 1) * 10, pageNumber * 10)}
-      clearFilters={clearFilters}
-      changeFilters={changeFilters}
       setPageNumber={setPageNumber}
+      changeFilters={changeFilters}
       pageNumber={pageNumber}
-      totalCount={searchResults.length}
-      totalPages={searchResults.length && Math.ceil(searchResults.length / 10)}
+      totalCount={pagingMetaData?.totalCount}
+      filters={filters}
+      totalPages={pagingMetaData?.totalPages}
+      pushRoute={pushRoute}
+      searchResults={searchResults}
       onSearch={onSearch}
+      clearFilters={clearFilters}
+      setFilters={setFilters}
     />
   );
 };

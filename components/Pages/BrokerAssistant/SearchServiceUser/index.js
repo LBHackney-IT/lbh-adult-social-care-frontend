@@ -11,7 +11,6 @@ import { Button, Container, Header, Input, Breadcrumbs, DatePicker, FormGroup } 
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
 import AlternativePagination from '../../../AlternativePagination';
 import SearchResult from '../../../SearchResult';
-import Loading from '../../../Loading';
 
 const links = [
   { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
@@ -83,7 +82,7 @@ const SearchServiceUser = ({
       <Container>
         <SearchResult count={searchResults.length}/>
         {searchResults.map((item) => (
-          <Container onClick={() => item.hackneyId && pushRoute(item, getServiceUserPackagesRoute((item.hackneyId)))} key={`${item.hackneyId || item.mosaicId}${item.firstName}${item.lastName}`} className="search-service-user__card">
+          <Container onClick={() => item.hackneyId && pushRoute(getServiceUserPackagesRoute((item.hackneyId)))} key={`${item.hackneyId || item.mosaicId}${item.firstName}${item.lastName}`} className="search-service-user__card">
             <ServiceUserDetails
               hackneyId={item.hackneyId || item.mosaicId}
               dateOfBirth={item.dateOfBirth}
