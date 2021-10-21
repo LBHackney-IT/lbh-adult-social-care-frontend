@@ -1,13 +1,11 @@
-import { useRouter } from 'next/router';
 import React, { useCallback, useState } from 'react';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
-import { useBrokers } from '../../../api';
+import { useBrokers } from 'api';
 import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select, FormGroup } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
 import { BrokerPortalTable } from './BrokerPortalTable';
 import DatePick from '../../DatePick';
 import Loading from '../../Loading';
-import { SERVICE_USER_MASTER_SEARCH_ROUTE } from '../../../routes/RouteConstants';
 
 const statusOptions = [
   { text: 'All', value: '' },
@@ -20,10 +18,9 @@ const statusOptions = [
   { text: 'Cancelled', value: '7' },
 ];
 
-const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Portal' }];
-
 export const BrokerPortalPage = ({
   items,
+  title,
   pageNumber,
   setPageNumber,
   paginationData: { pageSize, totalPages, totalCount },
@@ -32,10 +29,10 @@ export const BrokerPortalPage = ({
   clearFilter,
   onRowClick = () => {},
   loading,
+  goToSearch,
+  breadcrumbs,
 }) => {
   const [searchText, setSearchText] = useState('');
-
-  const router = useRouter();
 
   const { options: brokerOptions } = useBrokers();
 
@@ -53,10 +50,6 @@ export const BrokerPortalPage = ({
     changeFilterField('serviceUserName', searchText);
   }, [changeFilterField, searchText]);
 
-  const goToBrokerPortalSearch = useCallback(() => {
-    router.push(SERVICE_USER_MASTER_SEARCH_ROUTE);
-  }, []);
-
   const shouldShowClear = Object.values(filters).some((item) => !!item);
 
   return (
@@ -68,10 +61,9 @@ export const BrokerPortalPage = ({
           <Container padding="10px 60px 0px">
             <Breadcrumbs values={breadcrumbs} />
           </Container>
-
           <Container className="brokerage-portal__header">
-            <h1>Broker Portal</h1>
-            <Button onClick={goToBrokerPortalSearch}>Find a service user</Button>
+            <h1>{title}</h1>
+            <Button onClick={goToSearch}>Find a service user</Button>
           </Container>
 
           <Container className="brokerage-portal__filters">
@@ -89,13 +81,15 @@ export const BrokerPortalPage = ({
                 />
               </FormGroup>
 
-              <FormGroup className="form-group--inline-label" label="Broker">
-                <Select
-                  value={filters.brokerId}
-                  options={brokerOptions}
-                  onChange={({ target: { value } }) => changeFilterField('brokerId', value)}
-                />
-              </FormGroup>
+              {filters.brokerId !== undefined && (
+                <FormGroup className="form-group--inline-label" label="Broker">
+                  <Select
+                    value={filters.brokerId}
+                    options={brokerOptions}
+                    onChange={({ target: { value } }) => changeFilterField('brokerId', value)}
+                  />
+                </FormGroup>
+              )}
             </div>
 
             <div className="brokerage-portal__filters-block">

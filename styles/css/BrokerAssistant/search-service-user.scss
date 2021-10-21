@@ -1,4 +1,13 @@
 .search-service-user {
+  &.broker-assistance__search {
+    .search-service-user__card {
+      &:hover {
+        cursor: pointer;
+        background: $lbh-gray;
+      }
+    }
+  }
+
   .search-service-user__button {
     width: 226px;
     height: 50px;

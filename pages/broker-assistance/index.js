@@ -4,7 +4,11 @@ import withSession from 'lib/session';
 import { useCarePackageApi } from 'api';
 import { getLoggedInUser } from 'service';
 import { BrokerPortalPage } from 'components';
-import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
+import {
+  getServiceUserPackagesRoute,
+  SERVICE_USER_MASTER_SEARCH_ROUTE,
+  SERVICE_USER_SEARCH_ROUTE
+} from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -26,6 +30,8 @@ const initialFilters = {
   brokerId: '',
   serviceUserName: '',
 };
+
+const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Assistance' }];
 
 const BrokerPortal = () => {
   const router = useRouter();
@@ -66,9 +72,16 @@ const BrokerPortal = () => {
     });
   }, []);
 
+  const goToBrokerAssistanceSearch = useCallback(() => {
+    router.push(SERVICE_USER_MASTER_SEARCH_ROUTE);
+  }, []);
+
   return (
     <BrokerPortalPage
+      title='Broker Assistance'
+      breadcrumbs={breadcrumbs}
       loading={brokerViewLoading}
+      goToSearch={goToBrokerAssistanceSearch}
       filters={filters}
       clearFilter={clearFilters}
       setFilters={setFilters}

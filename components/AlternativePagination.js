@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Button } from './HackneyDS';
 
 const AlternativePagination = ({
@@ -21,7 +21,9 @@ const AlternativePagination = ({
   };
 
   useEffect(() => {
-    changePagination(1);
+    if(totalPages && currentPage > totalPages) {
+      changePagination(1);
+    }
   }, [totalPages]);
 
   const fromCalc = from || currentPage * pageSize - (pageSize - 1);
@@ -65,4 +67,4 @@ const AlternativePagination = ({
   );
 };
 
-export default AlternativePagination;
+export default memo(AlternativePagination);

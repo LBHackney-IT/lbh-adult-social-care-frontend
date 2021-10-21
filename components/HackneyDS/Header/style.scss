@@ -1,4 +1,17 @@
 .lbh-header {
+
+  .active-route {
+    a {
+      text-decoration: underline;
+    }
+  }
+
+  .lbh-header__links-container {
+    &:not(&:first-of-type) a {
+      margin-left: 10px;
+    }
+  }
+
   &.bottom-lines {
     &:before {
       bottom: 3px;

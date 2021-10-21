@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useServiceUserMasterSearch } from 'api';
 import { SearchServiceUser } from 'components';
 import { useRouter } from 'next/router';
+import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 
 const initialFilters = {
   postcode: '',
@@ -10,6 +11,12 @@ const initialFilters = {
   hackneyId: '',
   dateOfBirth: null,
 };
+
+const breadcrumbs = [
+  { text: 'Home', href: '/' },
+  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
+  { text: 'Search for a service user' },
+];
 
 const BrokerPortalSearch = () => {
   const router = useRouter();
@@ -52,6 +59,7 @@ const BrokerPortalSearch = () => {
 
   return (
     <SearchServiceUser
+      breadcrumbs={breadcrumbs}
       isLoading={isLoading}
       filters={filters}
       pushRoute={pushRoute}

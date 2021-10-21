@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import { SearchServiceUser } from 'components';
 import { useServiceUserSearch } from 'api';
 import { useRouter } from 'next/router';
+import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
 
 const initialFilters = {
   postcode: '',
@@ -10,6 +11,12 @@ const initialFilters = {
   hackneyId: '',
   dateOfBirth: null,
 };
+
+const breadcrumbs = [
+  { text: 'Home', href: '/' },
+  { text: 'Broker Assistance', href: BROKER_ASSISTANCE_ROUTE },
+  { text: 'Search for a service user' },
+];
 
 const BrokerPortalSearch = () => {
   const router = useRouter();
@@ -26,7 +33,7 @@ const BrokerPortalSearch = () => {
       hackneyId: filters.hackneyId,
       dateOfBirth: filters.dateOfBirth?.toJSON?.(),
     }),
-    [filters]
+    [filters, pageNumber]
   );
 
   const {
@@ -53,6 +60,8 @@ const BrokerPortalSearch = () => {
 
   return (
     <SearchServiceUser
+      breadcrumbs={breadcrumbs}
+      className='broker-assistance__search'
       isLoading={isLoading}
       setPageNumber={setPageNumber}
       changeFilters={changeFilters}
@@ -69,4 +78,4 @@ const BrokerPortalSearch = () => {
   );
 };
 
-export default BrokerPortalSearch;
+export default memo(BrokerPortalSearch);
