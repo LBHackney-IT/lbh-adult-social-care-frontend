@@ -138,15 +138,15 @@ const BrokerPackage = ({
   const checkNeedsErrors = (needs) => {
     let hasErrors = false;
     const checkedNeeds = needs.map((item) => {
-      const { startDate, endDate } = item;
+      const { startDate, endDate, isOngoing: isOngoingItem } = item;
       let errorStartDate = '';
       let errorEndDate = '';
-      if (!startDate || (startDate && endDate && compareDescendingDMY(startDate, endDate))) {
+      if (!startDate || (startDate && endDate && !isOngoingItem && compareDescendingDMY(startDate, endDate))) {
         errorStartDate = 'Invalid start date';
       } else if (startDate && compareDescendingDMY(startDate, packageDates.endDate)) {
         errorStartDate = 'Start date should be later then core date';
       }
-      if (endDate && compareDescendingDMY(endDate, packageDates.endDate)) {
+      if (endDate && !isOngoingItem && compareDescendingDMY(endDate, packageDates.endDate)) {
         errorEndDate = 'End date should be later then core date';
       }
       if (errorStartDate || errorEndDate) {
@@ -182,11 +182,11 @@ const BrokerPackage = ({
 
     const weeklyDetails = weeklyNeeds
       .filter((item) => item.cost !== 0)
-      .map(({ cost, endDate, startDate }) => ({
+      .map(({ cost, endDate, startDate, isOngoing: isOngoingItem }) => ({
         // id,
         cost,
         startDate,
-        endDate: isOngoing ? null : endDate,
+        endDate: isOngoingItem ? null : endDate,
         costPeriod: costPeriods.weekly,
         type: brokerageTypeOptions.additionalNeed,
       }));
