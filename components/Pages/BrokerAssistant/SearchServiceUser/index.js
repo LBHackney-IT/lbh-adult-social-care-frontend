@@ -96,7 +96,7 @@ const SearchServiceUser = ({
                 <p
                   onClick={(e) => {
                     e.stopPropagation();
-                    pushRoute(item.hackneyId ? getAssignPackageRoute(item.hackneyId) : NOT_FOUND_ROUTE);
+                    pushRoute(66779 ? getAssignPackageRoute(66779) : NOT_FOUND_ROUTE);
                   }}
                   className="link-button green"
                 >

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import {
@@ -17,7 +17,7 @@ import {
 import { requiredSchema } from 'constants/schemas';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { mapServiceUserBasicInfo, usePackageGetAll, assignToBroker, useServiceUser } from 'api';
+import { usePackageGetAll, assignToBroker, useServiceUser } from 'api';
 
 // todo: replace with data from API once available
 const brokerOptions = [
@@ -49,7 +49,7 @@ const AssignPackage = () => {
   const router = useRouter();
   const { hackneyId } = router.query;
 
-  const { data: packageInfo } = useServiceUser(hackneyId);
+  const { data: serviceUser } = useServiceUser(hackneyId);
   const { options: packageTypeOptions } = usePackageGetAll();
 
   const validateFields = async (fields) => {
@@ -83,7 +83,7 @@ const AssignPackage = () => {
 
     const formData = new FormData();
 
-    formData.append('HackneyUserId', packageInfo.serviceUser.hackneyId);
+    formData.append('HackneyUserId', hackneyId);
     formData.append('BrokerId', broker);
     formData.append('PackageType', packageType);
     formData.append('Notes', notes);
@@ -100,7 +100,6 @@ const AssignPackage = () => {
     setErrors((prevState) => ({ ...prevState, [field]: value }));
   };
 
-  const userDetails = useMemo(() => mapServiceUserBasicInfo(packageInfo.serviceUser), [packageInfo.serviceUser]);
   const brokerName = brokerOptions.find((el) => el.value === broker)?.text;
 
   return (
@@ -126,10 +125,10 @@ const AssignPackage = () => {
             <TitleSubtitleHeader title="Assign a care plan to brokerage" subTitle="Assign and attach a care plan" />
 
             <ServiceUserDetails
-              address={userDetails.postcode}
-              serviceUserName={userDetails.client}
-              dateOfBirth={userDetails.dateOfBirth}
-              hackneyId={userDetails.hackneyId}
+              address={serviceUser.postCode}
+              serviceUserName={`${serviceUser.firstName ?? ''} ${serviceUser.lastName ?? ''}`}
+              dateOfBirth={serviceUser.dateOfBirth}
+              hackneyId={hackneyId}
             />
 
             <Container>
