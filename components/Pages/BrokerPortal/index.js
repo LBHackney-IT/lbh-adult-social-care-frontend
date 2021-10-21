@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
 import React, { useCallback, useRef, useState } from 'react';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
+import { useBrokers } from '../../../api';
 import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select, FormGroup } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
 import { BrokerPortalTable } from './BrokerPortalTable';
-import CustomAsyncSelector from '../../CustomAsyncSelect';
 import DatePick from '../../DatePick';
 import Loading from '../../Loading';
 import { SERVICE_USER_MASTER_SEARCH_ROUTE } from '../../../routes/RouteConstants';
@@ -36,6 +36,8 @@ export const BrokerPortalPage = ({
   const [searchText, setSearchText] = useState('');
 
   const router = useRouter();
+
+  const { options: brokerOptions } = useBrokers();
 
   const selectorRef = useRef(null);
 
@@ -90,15 +92,10 @@ export const BrokerPortalPage = ({
               </FormGroup>
 
               <FormGroup className="form-group--inline-label" label="Broker">
-                <CustomAsyncSelector
-                  innerRef={selectorRef}
-                  onChange={(option) => changeFilterField('broker', option)}
-                  getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
-                  endpoint={{
-                    endpointName: '/clients/get-all',
-                    filterKey: 'clientName',
-                  }}
+                <Select
                   value={filters.broker}
+                  options={brokerOptions}
+                  onChange={(option) => changeFilterField('broker', option)}
                 />
               </FormGroup>
             </div>
