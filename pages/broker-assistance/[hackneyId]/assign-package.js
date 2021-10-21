@@ -112,7 +112,7 @@ const AssignPackage = () => {
             </Announcement>
 
             <Button className="mt-60" onClick={() => router.replace(BROKER_PORTAL_ROUTE)}>
-              Back to Broker Portal
+              Back to Broker Assistance
             </Button>
           </Container>
         ) : (

@@ -1,5 +1,6 @@
 export const BROKER_PORTAL_ROUTE = '/broker-portal';
-export const getAssignPackageRoute = (id) => `${BROKER_PORTAL_ROUTE}/${id}/assign-package`;
+
+export const getAssignPackageRoute = (id) => `/broker-assistance/${id}/assign-package`;
 
 export const CARE_PACKAGE_ROUTE = '/care-package';
 export const getCarePackageReviewRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/review`;
