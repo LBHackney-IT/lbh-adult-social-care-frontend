@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import {
@@ -14,16 +14,10 @@ import {
   ServiceUserDetails,
   TitleSubtitleHeader,
 } from 'components';
-import { mapServiceUserBasicInfo, usePackageGetAll, useCarePackageApi, assignToBroker } from 'api';
 import { requiredSchema } from 'constants/schemas';
-import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
-
-// todo: replace with data from API once available
-const brokerOptions = [
-  { text: 'Furkan Kayar', value: 'aee45700-af9b-4ab5-bb43-535adbdcfb84' },
-  { text: 'Duncan Okeno', value: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8' },
-];
+import { addNotification } from 'reducers/notificationsReducer';
+import { usePackageGetAll, assignToBroker, useServiceUser, useBrokers } from 'api';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKER_PORTAL_ROUTE },
@@ -47,10 +41,11 @@ const AssignPackage = () => {
   const dispatch = useDispatch();
 
   const router = useRouter();
-  const { guid: packageId } = router.query;
+  const { hackneyId } = router.query;
 
-  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: serviceUser } = useServiceUser(hackneyId);
   const { options: packageTypeOptions } = usePackageGetAll();
+  const { options: brokerOptions } = useBrokers();
 
   const validateFields = async (fields) => {
     const validationResults = await Promise.all(
@@ -83,7 +78,7 @@ const AssignPackage = () => {
 
     const formData = new FormData();
 
-    formData.append('HackneyUserId', packageInfo.serviceUser.hackneyId);
+    formData.append('HackneyUserId', hackneyId);
     formData.append('BrokerId', broker);
     formData.append('PackageType', packageType);
     formData.append('Notes', notes);
@@ -100,8 +95,7 @@ const AssignPackage = () => {
     setErrors((prevState) => ({ ...prevState, [field]: value }));
   };
 
-  const userDetails = useMemo(() => mapServiceUserBasicInfo(packageInfo.serviceUser), [packageInfo.serviceUser]);
-  const brokerName = brokerOptions.find((el) => el.value === broker)?.text;
+  const brokerName = brokerOptions?.find((el) => el.value === broker)?.text;
 
   return (
     <Container className="assign-care-plan">
@@ -126,10 +120,10 @@ const AssignPackage = () => {
             <TitleSubtitleHeader title="Assign a care plan to brokerage" subTitle="Assign and attach a care plan" />
 
             <ServiceUserDetails
-              address={userDetails.postcode}
-              serviceUserName={userDetails.client}
-              dateOfBirth={userDetails.dateOfBirth}
-              hackneyId={userDetails.hackneyId}
+              address={serviceUser.postCode}
+              serviceUserName={`${serviceUser.firstName ?? ''} ${serviceUser.lastName ?? ''}`}
+              dateOfBirth={serviceUser.dateOfBirth}
+              hackneyId={hackneyId}
             />
 
             <Container>

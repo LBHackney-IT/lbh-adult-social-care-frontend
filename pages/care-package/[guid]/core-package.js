@@ -1,21 +1,25 @@
-import React, { useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
-import {
-  optionsMapper,
-  usePackageGetAll,
-  useCarePackageApi,
-  useCarePackageOptions,
-  updateCoreCarePackage,
-  usePrimarySupportReason,
-  mapServiceUserBasicInfo,
-  mapPackageSchedulingOptions,
-} from 'api';
-import { CorePackageDetails } from 'components';
-import { addNotification } from 'reducers/notificationsReducer';
-import { getBrokerPackageRoute } from 'routes/RouteConstants';
-import { getLoggedInUser } from 'service';
+import React, { useEffect } from 'react';
 import withSession from 'lib/session';
+import { useForm, Controller } from 'react-hook-form';
+import { getLoggedInUser } from 'service';
+import {
+  Button,
+  Container,
+  HorizontalSeparator,
+  RadioGroup,
+  BrokerageHeader,
+  ServiceUserDetails,
+  TitleSubtitleHeader,
+  FurtherDetails,
+  PackageType,
+} from 'components';
+import { useRouter } from 'next/router';
+import { addNotification } from 'reducers/notificationsReducer';
+import { useDispatch } from 'react-redux';
+import { getBrokerPackageRoute } from 'routes/RouteConstants';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { mapPackageSchedulingOptions, useCarePackageApi, useCarePackageOptions, updateCoreCarePackage } from 'api';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -30,78 +34,105 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
-const packageSettingOptions = [
-  { id: 'hasRespiteCare', label: 'Respite care' },
-  { id: 'hospitalAvoidance', label: 'Hospital avoidance' },
-  { id: 'hasDischargePackage', label: 'Discharge package' },
-  { id: 'isReEnablement', label: 'Re-enablement package' },
-  { id: 'isS117Client', label: 'S117 client' },
-];
-
-const settingKeys = ['hasRespiteCare', 'hospitalAvoidance', 'hasDischargePackage', 'isReEnablement', 'isS117Client'];
-
-const getCurrentSelectedSettings = (carePackage = {}) =>
-  settingKeys.filter((setting) => carePackage?.[setting] === true);
-
-const CorePackagePage = () => {
-  const dispatch = useDispatch();
-
+const CorePackage = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { guid: packageId } = router.query;
+  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { settings } = packageInfo;
+  const { data: schedulingOptions } = useCarePackageOptions.packageSchedulingOptions();
+  const packageScheduleOptions = mapPackageSchedulingOptions(schedulingOptions || []);
 
-  const { data: schedulingOptions, isLoading: schedulingLoading } = useCarePackageOptions.packageSchedulingOptions();
-  const { options: packageTypes = [], isLoading: packageGetAllLoading } = usePackageGetAll();
-  const { data: primarySupportReasons = [], isLoading: primarySupportReasonLoading } = usePrimarySupportReason();
+  const schema = yup.object().shape({
+    packageType: yup
+      .number()
+      .typeError('Please select a package type')
+      .required()
+      .min(1, 'Please select a package type'),
+    primarySupportReasonId: yup
+      .number()
+      .typeError('Please select a primary support reason')
+      .required()
+      .min(1, 'Please select a primary support reason'),
+    packageScheduling: yup.number().required().min(1, 'Please select a package scheduling option'),
+  });
 
-  const { data: packageInfo, isLoading: singlePackageInfoLoading } = useCarePackageApi.singlePackageInfo(packageId);
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      carePackageId: packageId,
+      packageType: 0,
+      primarySupportReasonId: 0,
+      packageScheduling: 0,
+      hasRespiteCare: false,
+      hospitalAvoidance: false,
+      hasDischargePackage: false,
+      isReEnablement: false,
+      isS117Client: false,
+    },
+  });
+  const onSubmit = (data) => updatePackage(data);
 
-  const [loading, setLoading] = useState(false);
-
-  const currentPackageCoreSettings = useMemo(
-    () => ({
-      supportReason: packageInfo.primarySupportReasonId ?? '',
-      packageType: packageInfo.packageType ?? '',
-      furtherDetails: getCurrentSelectedSettings(packageInfo.settings),
-      packageSchedule: packageInfo.packageScheduling,
-    }),
-    [packageInfo]
-  );
+  useEffect(() => {
+    if (packageInfo) {
+      setValue('packageType', packageInfo.packageType, 10);
+      setValue('primarySupportReasonId', packageInfo.primarySupportReasonId);
+      setValue('packageScheduling', packageInfo.packageScheduling);
+    }
+  }, [packageInfo]);
 
   const updatePackage = async (data = {}) => {
-    setLoading(true);
     try {
       const { id } = await updateCoreCarePackage({ data, packageId });
       router.push(getBrokerPackageRoute(id));
-      pushNotification('Package saved.', 'success');
+      dispatch(addNotification({ text: 'Package saved.', className: 'success' }));
     } catch (error) {
-      pushNotification(error);
+      dispatch(addNotification({ text: error, className: 'error' }));
     }
-    setLoading(false);
   };
 
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
-  };
-
-  const props = {
-    userDetails: mapServiceUserBasicInfo(packageInfo.serviceUser),
-    packageScheduleOptions: mapPackageSchedulingOptions(schedulingOptions || []),
-    supportReasonOptions: optionsMapper(
-      {
-        text: 'primarySupportReasonName',
-        value: 'primarySupportReasonId',
-      },
-      primarySupportReasons
-    ),
-    checkboxOptions: packageSettingOptions,
-    packageTypeOptions: packageTypes,
-    saveCorePackage: updatePackage,
-    defaultValues: currentPackageCoreSettings,
-    loading:
-      schedulingLoading || loading || packageGetAllLoading || primarySupportReasonLoading || singlePackageInfoLoading,
-  };
-
-  return <CorePackageDetails {...props} />;
+  return (
+    <>
+      <BrokerageHeader />
+      <Container maxWidth="1080px" margin="0 auto" padding="60px">
+        <TitleSubtitleHeader subTitle="Core package details" title="Build a care package" />
+        {packageInfo.serviceUser && (
+          <ServiceUserDetails
+            serviceUserName={packageInfo.serviceUser.fullName}
+            hackneyId={packageInfo.serviceUser.hackneyId}
+            dateOfBirth={packageInfo.serviceUser.dateOfBirth}
+            address={packageInfo.serviceUser.postCode}
+          />
+        )}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <PackageType errors={errors} control={control} />
+          <Container className="brokerage__container">
+            <Controller
+              name="packageScheduling"
+              control={control}
+              render={({ field }) => (
+                <RadioGroup
+                  error={errors.packageScheduling?.message}
+                  label="Packaging scheduling"
+                  handle={field.onChange}
+                  items={packageScheduleOptions}
+                  {...field}
+                />
+              )}
+            />
+          </Container>
+          <FurtherDetails settings={settings} control={control} setValue={setValue} />
+          <HorizontalSeparator height="20px" />
+          <Button type="submit">Save and continue</Button>
+        </form>
+      </Container>
+    </>
+  );
 };
 
-export default CorePackagePage;
+export default CorePackage;

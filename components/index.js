@@ -14,8 +14,10 @@ export { default as PackageRequest } from './Pages/ServiceUser/Packages/PackageR
 export { default as CareCharges } from './Pages/CarePackages/CareCharges';
 export { default as FundedNursingCare } from './Pages/CarePackages/FundedNursingCare';
 export { default as BrokerPackage } from './Pages/CarePackages/BrokerPackage';
-export { default as CorePackageDetails } from './Pages/CarePackages/CorePackageDetails';
 export { default as HistoryList } from './Pages/CarePackages/History/HistoryList';
 export { default as HistoryOverview } from './Pages/CarePackages/History/HistoryOverview';
 export { default as BrokerageBorderCost } from './Pages/CarePackages/BrokerageBorderCost';
 export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPackageDetails';
+export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchServiceUser';
+export { FurtherDetails } from './Pages/CarePackages/CorePackageDetails/FurtherDetails';
+export { PackageType } from './Pages/CarePackages/CorePackageDetails/PackageType';

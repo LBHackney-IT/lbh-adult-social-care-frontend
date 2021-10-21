@@ -28,9 +28,13 @@ const links = [
 ];
 
 const userStatusOptions = [
-  { text: 'New', value: '1' },
-  { text: 'Existing', value: '2' },
-  { text: 'S117', value: '3' },
+  { text: 'New', value: 'New' },
+  { text: 'Existing', value: 'Existing' },
+];
+
+const dateOptions = [
+  {text: 'Newest first', value: 'desc' },
+  {text: 'Oldest First', value: 'asc' },
 ];
 
 const NewCareChargePackages = ({
@@ -41,12 +45,10 @@ const NewCareChargePackages = ({
   searchResults: { data, pagingMetaData },
   pageNumber,
   setPageNumber,
-  dateOptions,
   pushRoute,
   modifiedByOptions,
 }) => {
   const changeFilter = (field) => (value) => setFilters((prevState) => ({ ...prevState, [field]: value }));
-  console.log(filters);
 
   return (
     <Container className="new-care-charge">
@@ -87,7 +89,7 @@ const NewCareChargePackages = ({
           </Container>
         </Container>
       </Container>
-      <Container padding="0 60px 32px" className="centered-container">
+      <Container padding="30px 60px 60px 60px" className="centered-container">
         {data?.map(({
           status,
           serviceUser,
@@ -128,6 +130,7 @@ const NewCareChargePackages = ({
           </Container>
         ))}
         <AlternativePagination
+          className='mt-6'
           totalPages={pagingMetaData?.totalPages}
           totalCount={pagingMetaData?.totalCount}
           currentPage={pageNumber}

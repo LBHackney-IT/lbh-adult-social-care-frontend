@@ -1,9 +1,5 @@
 import useGetData from '../useGetData';
 
-const usePrimarySupportReason = () => {
-  const response = useGetData('/primary-support-reasons');
-
-  return { ...response, primarySupportReasonLoading: !!response.data };
-};
+const usePrimarySupportReason = () => useGetData('/primary-support-reasons', 'Can not get support reasons' , []);
 
 export default usePrimarySupportReason;
