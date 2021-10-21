@@ -17,13 +17,7 @@ import {
 import { requiredSchema } from 'constants/schemas';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { usePackageGetAll, assignToBroker, useServiceUser } from 'api';
-
-// todo: replace with data from API once available
-const brokerOptions = [
-  { text: 'Furkan Kayar', value: 'aee45700-af9b-4ab5-bb43-535adbdcfb84' },
-  { text: 'Duncan Okeno', value: '1f825b5f-5c65-41fb-8d9e-9d36d78fd6d8' },
-];
+import { usePackageGetAll, assignToBroker, useServiceUser, useBrokers } from 'api';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKER_PORTAL_ROUTE },
@@ -51,6 +45,7 @@ const AssignPackage = () => {
 
   const { data: serviceUser } = useServiceUser(hackneyId);
   const { options: packageTypeOptions } = usePackageGetAll();
+  const { options: brokerOptions } = useBrokers();
 
   const validateFields = async (fields) => {
     const validationResults = await Promise.all(
@@ -100,7 +95,7 @@ const AssignPackage = () => {
     setErrors((prevState) => ({ ...prevState, [field]: value }));
   };
 
-  const brokerName = brokerOptions.find((el) => el.value === broker)?.text;
+  const brokerName = brokerOptions?.find((el) => el.value === broker)?.text;
 
   return (
     <Container className="assign-care-plan">
