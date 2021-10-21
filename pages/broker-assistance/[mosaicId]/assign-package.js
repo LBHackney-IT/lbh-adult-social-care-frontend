@@ -15,13 +15,13 @@ import {
   TitleSubtitleHeader,
 } from 'components';
 import { requiredSchema } from 'constants/schemas';
-import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
+import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { usePackageGetAll, assignToBroker, useServiceUser, useBrokers } from 'api';
 
 const breadcrumbs = [
-  { text: 'Home', href: BROKER_PORTAL_ROUTE },
-  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
+  { text: 'Home', href: BROKER_ASSISTANCE_ROUTE },
+  { text: 'Broker Assistance', href: BROKER_ASSISTANCE_ROUTE },
   { text: 'Assign and attach a care plan' },
 ];
 
@@ -41,9 +41,9 @@ const AssignPackage = () => {
   const dispatch = useDispatch();
 
   const router = useRouter();
-  const { hackneyId } = router.query;
+  const { mosaicId } = router.query;
 
-  const { data: serviceUser } = useServiceUser(hackneyId);
+  const { data: serviceUser } = useServiceUser(mosaicId);
   const { options: packageTypeOptions } = usePackageGetAll();
   const { options: brokerOptions } = useBrokers();
 
@@ -78,7 +78,7 @@ const AssignPackage = () => {
 
     const formData = new FormData();
 
-    formData.append('HackneyUserId', hackneyId);
+    formData.append('HackneyUserId', mosaicId);
     formData.append('BrokerId', broker);
     formData.append('PackageType', packageType);
     formData.append('Notes', notes);
@@ -111,8 +111,8 @@ const AssignPackage = () => {
               <div slot="content">Care plan assigned to {brokerName}</div>
             </Announcement>
 
-            <Button className="mt-60" onClick={() => router.replace(BROKER_PORTAL_ROUTE)}>
-              Back to Broker Portal
+            <Button className="mt-60" onClick={() => router.replace(BROKER_ASSISTANCE_ROUTE)}>
+              Back to Broker Assistance
             </Button>
           </Container>
         ) : (
@@ -123,7 +123,7 @@ const AssignPackage = () => {
               address={serviceUser.postCode}
               serviceUserName={`${serviceUser.firstName ?? ''} ${serviceUser.lastName ?? ''}`}
               dateOfBirth={serviceUser.dateOfBirth}
-              hackneyId={hackneyId}
+              hackneyId={mosaicId}
             />
 
             <Container>
