@@ -14,8 +14,8 @@ export const Input = ({
   value,
   onBlur,
   handler,
-  required,
   onChangeValue,
+  required,
 }) => {
   const outerClassName = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-form-group--error' : '';
