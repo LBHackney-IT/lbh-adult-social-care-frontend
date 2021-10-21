@@ -19,3 +19,5 @@ export { default as HistoryOverview } from './Pages/CarePackages/History/History
 export { default as BrokerageBorderCost } from './Pages/CarePackages/BrokerageBorderCost';
 export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPackageDetails';
 export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchServiceUser';
+export { FurtherDetails } from './Pages/CarePackages/CorePackageDetails/FurtherDetails';
+export { PackageType } from './Pages/CarePackages/CorePackageDetails/PackageType';

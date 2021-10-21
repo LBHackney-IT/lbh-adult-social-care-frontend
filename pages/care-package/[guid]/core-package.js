@@ -1,19 +1,24 @@
 import React, { useEffect } from 'react';
 import withSession from 'lib/session';
 import { useForm, Controller } from 'react-hook-form';
-import { getLoggedInUser } from 'service/helpers';
-import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
-import { Button, Container, HorizontalSeparator, RadioGroup } from 'components/HackneyDS';
-import ServiceUserDetails from 'components/Pages/BrokerPortal/ServiceUserDetails';
+import { getLoggedInUser } from 'service';
+import {
+  Button,
+  Container,
+  HorizontalSeparator,
+  RadioGroup,
+  BrokerageHeader,
+  ServiceUserDetails,
+  TitleSubtitleHeader,
+  FurtherDetails,
+  PackageType,
+} from 'components';
 import { useRouter } from 'next/router';
-import { FurtherDetails } from 'components/Pages/CarePackages/CorePackageDetails/FurtherDetails';
-import { PackageType } from 'components/Pages/CarePackages/CorePackageDetails/PackageType';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { BrokerageHeader } from 'components';
 import { mapPackageSchedulingOptions, useCarePackageApi, useCarePackageOptions, updateCoreCarePackage } from 'api';
 
 export const getServerSideProps = withSession(({ req }) => {

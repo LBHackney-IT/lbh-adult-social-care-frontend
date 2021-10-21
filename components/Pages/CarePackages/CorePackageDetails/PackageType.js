@@ -1,9 +1,7 @@
 import React from 'react';
-import { Container, HorizontalSeparator, Select } from 'components/HackneyDS';
-import { optionsMapper, usePackageGetAll } from 'api';
-import usePrimarySupportReason from 'api/SWR/package/usePrimarySupportReason';
+import { Container, HorizontalSeparator, Select, FormGroup } from 'components/HackneyDS';
+import { optionsMapper, usePackageGetAll, usePrimarySupportReason } from 'api';
 import { Controller } from 'react-hook-form';
-import FormGroup from 'components/HackneyDS/FormGroup';
 
 export const PackageType = ({ errors, control }) => {
   const { data: primarySupportReasons = [] } = usePrimarySupportReason();
