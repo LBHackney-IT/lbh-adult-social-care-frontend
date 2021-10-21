@@ -23,7 +23,7 @@ const initialFilters = {
   status: '',
   dateFrom: null,
   dateTo: null,
-  brokerId: null,
+  brokerId: '',
   serviceUserName: '',
 };
 

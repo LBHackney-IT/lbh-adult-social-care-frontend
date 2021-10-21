@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
 import { useBrokers } from '../../../api';
 import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select, FormGroup } from '../../HackneyDS';
@@ -38,8 +38,6 @@ export const BrokerPortalPage = ({
   const router = useRouter();
 
   const { options: brokerOptions } = useBrokers();
-
-  const selectorRef = useRef(null);
 
   const changeFilterField = useCallback(
     (field, value) => {
@@ -131,13 +129,7 @@ export const BrokerPortalPage = ({
               </FormGroup>
 
               {shouldShowClear && (
-                <Button
-                  className="outline gray clear-filter-button"
-                  onClick={() => {
-                    clearFilter();
-                    selectorRef.current?.select?.select?.clearValue();
-                  }}
-                >
+                <Button className="outline gray clear-filter-button" onClick={clearFilter}>
                   Clear
                 </Button>
               )}
