@@ -106,7 +106,7 @@ const SearchServiceUser = ({
                   <p
                     onClick={(e) => {
                       e.stopPropagation();
-                      pushRoute(item, getHistoryRoute(item.hackneyId));
+                      pushRoute(getHistoryRoute(item.hackneyId));
                     }}
                     className="link-button green"
                   >
