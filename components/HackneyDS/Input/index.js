@@ -15,12 +15,13 @@ export const Input = ({
   onBlur,
   handler,
   onChangeValue,
+  required,
 }) => {
   const outerClassName = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-form-group--error' : '';
   const signClass = preSign ? ' with-sign' : '';
 
-  const onChange = e => {
+  const onChange = (e) => {
     if (onChangeValue) {
       return onChangeValue(e.target.value);
     }
@@ -30,13 +31,13 @@ export const Input = ({
   return (
     <div className={`govuk-form-group lbh-form-group${errorClass}${signClass} ${outerClassName}`}>
       {label && (
-        <label className="govuk-label lbh-label" htmlFor={id}>
+        <label className={`govuk-label lbh-label ${required ? 'text-required-after' : ''}`} htmlFor={id}>
           {label}
         </label>
       )}
       {hint && <span className="govuk-hint lbh-hint">{hint}</span>}
       {error && <span className="govuk-error-message lbh-error-message">{error}</span>}
-      <div className='input-container' data-presign={preSign}>
+      <div className="input-container" data-presign={preSign}>
         <input
           onBlur={onBlur}
           className={`govuk-input lbh-input ${(error ?? '') && 'govuk-input--error'}`}

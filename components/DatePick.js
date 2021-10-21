@@ -30,6 +30,7 @@ const DatePick = ({
   maxDate,
   setDate,
   dateValue,
+  useDefaultInput,
 }) => {
   return (
     <BaseField className={`${className} react-date-picker`} label={label} noInputStyle>
@@ -49,10 +50,13 @@ const DatePick = ({
           onClickOutside={onClickOutside}
           maxDate={maxDate}
           selectsRange={selectsRange}
-          customInput={<CustomInput />}
+          customInput={!useDefaultInput && <CustomInput />}
           selected={dateValue}
           inline={inline}
           placeholderText={placeholder}
+          showMonthDropdown
+          showYearDropdown
+          dropdownMode="select"
           className="react-date-picker__input"
         />
       )}

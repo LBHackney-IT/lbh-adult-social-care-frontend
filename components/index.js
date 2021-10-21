@@ -19,3 +19,4 @@ export { default as HistoryList } from './Pages/CarePackages/History/HistoryList
 export { default as HistoryOverview } from './Pages/CarePackages/History/HistoryOverview';
 export { default as BrokerageBorderCost } from './Pages/CarePackages/BrokerageBorderCost';
 export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPackageDetails';
+export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchServiceUser';

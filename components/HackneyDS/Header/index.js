@@ -4,7 +4,7 @@ import { BROKER_PORTAL_ROUTE } from '../../../routes/RouteConstants';
 import { getSlot } from '../helpers';
 import { Container } from '../Layout/Container';
 
-export default function Header({ children = [], links = [], bottomLines = true, fixed, purple, className }) {
+export default function Header({ children = [], links = [], bottomLines = false, fixed, purple, className }) {
   const bottomLinesClass = bottomLines ? ' bottom-lines' : '';
   const fixedClassList = fixed ? ' lbh-header--fixed' : '';
   const shortServiceNodeList = ' lbh-header__service-name--short';

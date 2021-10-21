@@ -138,7 +138,7 @@ const CareCharges = ({
   return (
     <Container className="brokerage__care-charges">
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+      <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <Loading isLoading={loading} />
         <TitleSubtitleHeader title="Build a care package" subTitle="Care Charges" />
         <Container>
@@ -164,7 +164,7 @@ const CareCharges = ({
               setCollectedBy(value);
             }}
             inline
-            className='mb-3'
+            className="mb-3"
             error={errors.collectedBy}
             value={collectedBy}
             label="Collected by"
@@ -200,7 +200,9 @@ const CareCharges = ({
             <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button isLoading={loading} disabled={loading} onClick={clickSave}>Save and review</Button>
+            <Button isLoading={loading} disabled={loading} onClick={clickSave}>
+              Save and review
+            </Button>
           </Container>
         </Container>
       </Container>
