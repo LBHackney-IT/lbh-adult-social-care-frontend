@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['airbnb', 'plugin:@next/next/recommended', 'prettier'],
+  extends: ['airbnb', 'airbnb/hooks', 'plugin:@next/next/recommended', 'prettier'],
   parserOptions: {
     ecmaVersion: 12,
     ecmaFeatures: {
