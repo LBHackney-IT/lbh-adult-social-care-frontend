@@ -95,7 +95,7 @@ export const BrokerPortalPage = ({
                 <Select
                   value={filters.broker}
                   options={brokerOptions}
-                  onChange={(option) => changeFilterField('broker', option)}
+                  onChange={({ target: { value } }) => changeFilterField('broker', value)}
                 />
               </FormGroup>
             </div>
