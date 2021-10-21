@@ -71,11 +71,7 @@ const CorePackage = () => {
       isS117Client: false,
     },
   });
-  const onSubmit = (data) => {
-    console.log('data', data);
-    console.log('errors', errors);
-    updatePackage(data);
-  };
+  const onSubmit = (data) => updatePackage(data);
 
   useEffect(() => {
     if (packageInfo) {
