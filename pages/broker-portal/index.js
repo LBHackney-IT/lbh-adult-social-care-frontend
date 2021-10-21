@@ -23,7 +23,7 @@ const initialFilters = {
   status: '',
   dateFrom: null,
   dateTo: null,
-  broker: null,
+  brokerId: null,
   serviceUserName: '',
 };
 
@@ -33,14 +33,14 @@ const BrokerPortal = () => {
   const [pageNumber, setPageNumber] = useState(1);
 
   const [filters, setFilters] = useState(initialFilters);
-  const { broker, dateTo, dateFrom, status, serviceUserName } = filters;
+  const { brokerId, dateTo, dateFrom, status, serviceUserName } = filters;
 
   const { data, isLoading: brokerViewLoading } = useCarePackageApi.brokerView({
     fromDate: dateFrom ? dateFrom.toJSON() : null,
     toDate: dateTo ? dateTo.toJSON() : null,
-    brokerId: broker?.id,
     serviceUserName,
     pageNumber,
+    brokerId,
     status,
   });
 

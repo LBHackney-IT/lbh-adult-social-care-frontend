@@ -93,9 +93,9 @@ export const BrokerPortalPage = ({
 
               <FormGroup className="form-group--inline-label" label="Broker">
                 <Select
-                  value={filters.broker}
+                  value={filters.brokerId}
                   options={brokerOptions}
-                  onChange={({ target: { value } }) => changeFilterField('broker', value)}
+                  onChange={({ target: { value } }) => changeFilterField('brokerId', value)}
                 />
               </FormGroup>
             </div>
