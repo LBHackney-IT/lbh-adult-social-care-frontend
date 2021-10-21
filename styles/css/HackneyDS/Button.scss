@@ -47,6 +47,12 @@
     }
   }
 
+  svg.loading.button-loading {
+    width: 20px;
+    height: 20px;
+    margin: 0 8px 0 0;
+  }
+
   &.warning-button {
     background-color: #81312F;
   }

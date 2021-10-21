@@ -2,7 +2,6 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 16px 16px 0 16px;
   margin-bottom: 32px;
 
   @include media-mobile {
@@ -25,18 +24,21 @@
   color: $lbh-secondary-text-colour;
 }
 
-.table-pagination-button.button.button-base {
+button.table-pagination-button {
+  box-shadow: none;
   background-color: white;
   color: $lbh-gray2;
   margin-right: 8px;
+  width: 40px;
+  height: 40px;
 }
 
-.table-pagination-item-active.button.button-base {
+button.table-pagination-item-active {
   background-color: $lbh-green1;
   color: white;
 }
 
-.table-pagination-button {
+button.table-pagination-button {
   display: flex;
   align-items: center;
   border: 1px solid $lbh-gray-border;

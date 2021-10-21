@@ -6,7 +6,7 @@ const BrokerageSearchSupplier = ({ searchResults: { totalCount, items, totalPage
   const [supplierSearch, setSupplierSearch] = useState('');
 
   const onSearchSupplier = () => {
-    alert('search supplier');
+    alert('master-search supplier');
   };
 
   const searchResultText = totalCount === 1 ? 'result' : 'results';

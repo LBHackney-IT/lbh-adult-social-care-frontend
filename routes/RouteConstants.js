@@ -1,5 +1,4 @@
 export const BROKER_PORTAL_ROUTE = '/broker-portal';
-export const BROKER_PORTAL_SEARCH_ROUTE = `${BROKER_PORTAL_ROUTE}/search`;
 export const getAssignPackageRoute = (id) => `${BROKER_PORTAL_ROUTE}/${id}/assign-package`;
 
 export const CARE_PACKAGE_ROUTE = '/care-package';
@@ -11,6 +10,8 @@ export const getCareChargesRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-c
 export const getHistoryRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/history`;
 
 export const SERVICE_USER_ROUTE = '/service-user';
+export const SERVICE_USER_MASTER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/master-search`;
 export const getServiceUserPackagesRoute = (id) => `${SERVICE_USER_ROUTE}/${id}/packages`;
 
+export const NOT_FOUND_ROUTE = '/404';
 export const LOGOUT_ROUTE = '/logout';

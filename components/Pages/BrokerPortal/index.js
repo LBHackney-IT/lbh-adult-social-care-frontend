@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
+import { useBrokers } from '../../../api';
 import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select, FormGroup } from '../../HackneyDS';
-import { BROKER_PORTAL_SEARCH_ROUTE } from '../../../routes/RouteConstants';
 import AlternativePagination from '../../AlternativePagination';
 import { BrokerPortalTable } from './BrokerPortalTable';
-import CustomAsyncSelector from '../../CustomAsyncSelect';
 import DatePick from '../../DatePick';
 import Loading from '../../Loading';
+import { SERVICE_USER_MASTER_SEARCH_ROUTE } from '../../../routes/RouteConstants';
 
 const statusOptions = [
   { text: 'All', value: '' },
@@ -37,7 +37,7 @@ export const BrokerPortalPage = ({
 
   const router = useRouter();
 
-  const selectorRef = useRef(null);
+  const { options: brokerOptions } = useBrokers();
 
   const changeFilterField = useCallback(
     (field, value) => {
@@ -54,7 +54,7 @@ export const BrokerPortalPage = ({
   }, [changeFilterField, searchText]);
 
   const goToBrokerPortalSearch = useCallback(() => {
-    router.push(BROKER_PORTAL_SEARCH_ROUTE);
+    router.push(SERVICE_USER_MASTER_SEARCH_ROUTE);
   }, []);
 
   const shouldShowClear = Object.values(filters).some((item) => !!item);
@@ -90,15 +90,10 @@ export const BrokerPortalPage = ({
               </FormGroup>
 
               <FormGroup className="form-group--inline-label" label="Broker">
-                <CustomAsyncSelector
-                  innerRef={selectorRef}
-                  onChange={(option) => changeFilterField('broker', option)}
-                  getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
-                  endpoint={{
-                    endpointName: '/clients/get-all',
-                    filterKey: 'clientName',
-                  }}
-                  value={filters.broker}
+                <Select
+                  value={filters.brokerId}
+                  options={brokerOptions}
+                  onChange={({ target: { value } }) => changeFilterField('brokerId', value)}
                 />
               </FormGroup>
             </div>
@@ -134,13 +129,7 @@ export const BrokerPortalPage = ({
               </FormGroup>
 
               {shouldShowClear && (
-                <Button
-                  className="outline gray clear-filter-button"
-                  onClick={() => {
-                    clearFilter();
-                    selectorRef.current?.select?.select?.clearValue();
-                  }}
-                >
+                <Button className="outline gray clear-filter-button" onClick={clearFilter}>
                   Clear
                 </Button>
               )}

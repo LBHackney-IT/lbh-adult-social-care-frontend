@@ -44,13 +44,13 @@ const BrokerPackageCost = ({
       )}
       <Input
         id="supplier-weekly-cost"
-        required
         className="supplier-look-up__weekly-cost"
         error={coreCostError}
         preSign={currency.euro}
         label="Weekly Cost"
         value={coreCost}
         onChangeValue={onChangeCoreCost}
+        required
       />
       <BrokerageCost
         name="weekly-additional"

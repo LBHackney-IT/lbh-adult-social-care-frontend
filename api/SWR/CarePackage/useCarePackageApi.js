@@ -1,13 +1,11 @@
+import { getQueryParamsFromObject } from '../../Utils/ApiUtils';
 import useGetData from '../useGetData';
-import { getQueryParamsFromObject } from '../../index';
 
 const CARE_PACKAGES_URL = '/care-packages';
 
 const useCarePackageApi = {
   summary: (carePackageId) =>
     useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/summary` : null),
-
-  approvers: () => useGetData('/users/approver', 'Can not get approvers', []),
 
   brokerView: ({ pageNumber, toDate, fromDate, status, serviceUserName, brokerId }) =>
     useGetData(
