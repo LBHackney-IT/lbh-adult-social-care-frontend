@@ -49,10 +49,10 @@ const ReviewPackageDetails = ({
       <Loading isLoading={loading} />
       {isOpenedPopup && <SubmitForApprovalPopup packageId={packageId} closePopup={() => setIsOpenedPopup(false)} />}
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
+
+      <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
         <Breadcrumbs values={breadcrumbs} />
-      </Container>
-      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+
         <TitleSubtitleHeader
           title={title}
           subTitle={subTitle}

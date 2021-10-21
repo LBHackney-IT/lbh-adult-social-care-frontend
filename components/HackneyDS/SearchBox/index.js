@@ -18,6 +18,7 @@ export default function SearchBox({
   onChangeValue,
   clear,
   search,
+  required,
   searchIcon = <SearchIcon />,
   clearIcon = <CrossIcon />,
 }) {
@@ -46,7 +47,11 @@ export default function SearchBox({
 
   return (
     <div className={`govuk-form-group lbh-form-group lbh-search-box${outerClassName}`}>
-      {label && <Label htmlFor={id}>{label}</Label>}
+      {label && (
+        <Label htmlFor={id} className={required ? 'text-required-after' : ''}>
+          {label}
+        </Label>
+      )}
       {hint && <Hint>{hint}</Hint>}
       {error && <ErrorMessage>{error}</ErrorMessage>}
       <div className="lbh-search-box__container">
@@ -62,7 +67,7 @@ export default function SearchBox({
           placeholder={placeholder}
         />
         <div role="presentation" onClick={buttonHandler} className="lbh-search-box__action">
-          <span className="govuk-visually-hidden">{value ? 'Clear search' : 'Search'}</span>
+          <span className="govuk-visually-hidden">{value ? 'Clear master-search' : 'Search'}</span>
           {value && clear ? clearIcon : searchIcon}
         </div>
       </div>

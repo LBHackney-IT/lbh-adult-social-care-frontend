@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from './HackneyDS';
 
 const AlternativePagination = ({
@@ -19,6 +19,10 @@ const AlternativePagination = ({
   const onChangePagination = (item) => {
     changePagination(item);
   };
+
+  useEffect(() => {
+    changePagination(1);
+  }, [totalPages]);
 
   const fromCalc = from || currentPage * pageSize - (pageSize - 1);
   const toCalc = to || currentPage * pageSize > totalCount ? totalCount : currentPage * pageSize;
