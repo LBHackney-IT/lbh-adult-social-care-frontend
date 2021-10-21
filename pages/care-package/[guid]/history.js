@@ -52,7 +52,7 @@ const History = () => {
 
       <Loading isLoading={isLoading} />
 
-      <Container maxWidth="1080px" margin="10px auto" padding="0 60px">
+      <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
         <Breadcrumbs values={breadcrumbs} />
 
         <TitleSubtitleHeader subTitle="Package history" title={data.packageType} />
