@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import { useDebounce } from 'react-use';
+import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
 import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader';
@@ -10,10 +12,8 @@ import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
 import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
-import { compareDescendingDMY, dateStringToDate, uniqueID } from '../../../../service';
 import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
-import { useDebounce } from 'react-use';
 
 const initialNeed = {
   cost: 0,
@@ -103,7 +103,7 @@ const BrokerPackage = ({
 
       setCoreCost(detailsData.coreCost);
 
-      if (detailsData.details) {
+      if (detailsData?.details?.length) {
         const weeklyDetails = detailsData.details
           .filter((item) => item.costPeriod === 2)
           .map((item) => ({
@@ -211,7 +211,7 @@ const BrokerPackage = ({
     try {
       await updateCarePackageCosts({
         data: {
-          coreCost: coreCost,
+          coreCost,
           startDate: packageDates.startDate,
           endDate: isOngoing ? null : packageDates.endDate,
           supplierId: selectedItem.id,
@@ -290,6 +290,9 @@ const BrokerPackage = ({
         return 'Package Type not found';
     }
   };
+
+  console.log(weeklyNeeds);
+  console.log(oneOffNeeds);
 
   return (
     <div className="supplier-look-up brokerage">
