@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useServiceUserMasterSearch } from 'api';
 import { SearchServiceUser } from 'components';
 import { useRouter } from 'next/router';
-import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
+import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
 
 const initialFilters = {
   postcode: '',
@@ -14,11 +14,11 @@ const initialFilters = {
 
 const breadcrumbs = [
   { text: 'Home', href: '/' },
-  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
+  { text: 'Broker Assistance', href: BROKER_ASSISTANCE_ROUTE },
   { text: 'Search for a service user' },
 ];
 
-const BrokerPortalSearch = () => {
+const BrokerAssistanceSearch = () => {
   const router = useRouter();
   const [filters, setFilters] = useState({ ...initialFilters });
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -75,4 +75,4 @@ const BrokerPortalSearch = () => {
   );
 };
 
-export default BrokerPortalSearch;
+export default BrokerAssistanceSearch;
