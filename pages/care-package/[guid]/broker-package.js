@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useCarePackageApi, usePackageDetails, useSuppliers } from 'api';
+import { usePackageDetails, useSuppliers } from 'api';
 import { BrokerPackage } from 'components';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';

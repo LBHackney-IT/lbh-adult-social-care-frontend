@@ -1,31 +1,21 @@
 import React from 'react';
 import { formatDate, getTagColorFromStatus } from 'service';
-import { Breadcrumbs, Button, Container, Header, Select, Tag, FormGroup } from '../../../HackneyDS';
 import {
-  getServiceUserPackagesRoute,
-  APPROVALS_ROUTE,
-  BROKER_ASSISTANT_ROUTE,
-  BROKER_PORTAL_ROUTE,
-  CARE_CHARGE_ROUTE,
-  CARE_PACKAGE_ROUTE,
-  FINANCE_ROUTE,
-  LOGOUT_ROUTE
-} from '../../../../routes/RouteConstants';
-import AlternativePagination from '../../../AlternativePagination';
-import TitleSubtitle from './TitleSubtitle';
-import Loading from '../../../Loading';
-import { userTagColors } from '../../../../constants/variables';
+  Breadcrumbs,
+  Button,
+  Container,
+  Select,
+  Tag,
+  FormGroup,
+  BrokerageHeader,
+  Loading,
+  AlternativePagination,
+  TitleSubtitle,
+} from 'components';
+import { getServiceUserPackagesRoute, CARE_PACKAGE_ROUTE, } from 'routes/RouteConstants';
+import { userTagColors } from 'constants/variables';
 
 const breadcrumbs = [{ text: 'Home', href: CARE_PACKAGE_ROUTE }, { text: 'Care Charges' }];
-
-const links = [
-  { text: 'Broker Assistant', href: BROKER_ASSISTANT_ROUTE },
-  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
-  { text: 'Care Charges', href: CARE_CHARGE_ROUTE },
-  { text: 'Approvals', href: FINANCE_ROUTE },
-  { text: 'Finance', href: APPROVALS_ROUTE },
-  { text: 'Logout', href: LOGOUT_ROUTE },
-];
 
 const userStatusOptions = [
   { text: 'New', value: 'New' },
@@ -52,7 +42,7 @@ const NewCareChargePackages = ({
 
   return (
     <Container className="new-care-charge">
-      <Header links={links}/>
+      <BrokerageHeader />
       <Loading isLoading={isLoading}/>
       <Container background="#FAFAFA">
         <Container padding="10px 60px 32px 60px" className="centered-container">

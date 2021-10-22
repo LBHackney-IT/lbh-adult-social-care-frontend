@@ -1,25 +1,15 @@
-import useSWR from 'swr';
-import useErrorNotification from './useErrorNotification';
-import searchFetch from './searchFetch';
 import useGetData from './useGetData';
+import { useFetchParams } from './useFetchParams';
 
 const CARE_PACKAGES_URL = '/care-packages';
 
-export const useBrokerView = ({ params, shouldFetch }) => {
-  const response = useSWR([`${CARE_PACKAGES_URL}/broker-view`, params], searchFetch);
-  const { error, data } = response;
-
-  useErrorNotification(response.error, 'Can not get broker view');
-
-  return {
-    ...response,
-    data: data || {
-      data: [],
-      pagingMetaData: {},
-    },
-    isLoading: !error && !data && shouldFetch,
-  };
-};
+export const useBrokerView = ({ params }) => (
+  useFetchParams({
+    params,
+    url: `${CARE_PACKAGES_URL}/broker-view`,
+    errorText: 'Can not get broker view'
+  })
+);
 
 export const usePackageDetails = (packageId) =>
   useGetData(packageId !== undefined ? `${CARE_PACKAGES_URL}/${packageId}/details` : null, '');

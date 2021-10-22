@@ -5,15 +5,13 @@ import { useDebounce } from 'react-use';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
 import { compareDesc } from 'date-fns';
 import { updateCarePackageCosts, useSuppliers, useSinglePackageInfo } from 'api';
-import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
-import BrokerageHeader from '../BrokerageHeader';
-import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
+import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
+import { addNotification } from 'reducers/notificationsReducer';
+import { Button, Checkbox, Container, SearchBox, Loading, BrokerageHeader } from 'components';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
-import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 
 const initialNeed = {

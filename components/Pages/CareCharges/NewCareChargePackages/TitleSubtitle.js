@@ -1,5 +1,5 @@
-import React from 'react';
-import { Container } from '../../../HackneyDS';
+import React, { memo } from 'react';
+import { Container } from 'components';
 
 const TitleSubtitle = ({ title, subtitle, className = '' }) => (
   <Container className={`title-subtitle ${className}`}>
@@ -8,4 +8,4 @@ const TitleSubtitle = ({ title, subtitle, className = '' }) => (
   </Container>
 );
 
-export default TitleSubtitle;
+export default memo(TitleSubtitle);

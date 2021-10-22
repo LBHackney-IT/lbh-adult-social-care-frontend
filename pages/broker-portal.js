@@ -34,15 +34,14 @@ const BrokerPortal = () => {
   const [pageNumber, setPageNumber] = useState(1);
 
   const [filters, setFilters] = useState(initialFilters);
-  const { brokerId, dateTo, dateFrom, status, serviceUserName } = filters;
+  const { dateFrom, dateTo, status, serviceUserName } = filters;
 
   const params = useMemo(() => ({
     fromDate: dateFrom ? dateFrom.toJSON() : null,
-      toDate: dateTo ? dateTo.toJSON() : null,
-      serviceUserName,
-      pageNumber,
-      brokerId,
-      status,
+    toDate: dateTo ? dateTo.toJSON() : null,
+    serviceUserName,
+    pageNumber,
+    status
   }), [filters, pageNumber])
 
   const { data, isLoading: brokerViewLoading } = useBrokerView({ params });
