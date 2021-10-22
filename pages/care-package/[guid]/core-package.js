@@ -38,7 +38,7 @@ const CorePackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { guid: packageId } = router.query;
-  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo } = useCarePackageApi.singleCorePackageInfo(packageId);
   const { settings } = packageInfo;
   const { data: schedulingOptions } = useCarePackageOptions.packageSchedulingOptions();
   const packageScheduleOptions = mapPackageSchedulingOptions(schedulingOptions || []);

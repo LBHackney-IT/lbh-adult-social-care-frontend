@@ -3,9 +3,15 @@ import useGetData from '../useGetData';
 
 const CARE_PACKAGES_URL = '/care-packages';
 
+const getCarePackageUrl = (endpoint = '') => (packageId) =>
+  useGetData(
+    packageId !== undefined ? `${CARE_PACKAGES_URL}/${packageId}${endpoint}` : null,
+    '',
+    {}
+  );
+
 const useCarePackageApi = {
-  summary: (carePackageId) =>
-    useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/summary` : null),
+  summary: getCarePackageUrl('/summary'),
 
   brokerView: ({ pageNumber, toDate, fromDate, status, serviceUserName, brokerId }) =>
     useGetData(
@@ -21,15 +27,15 @@ const useCarePackageApi = {
       {}
     ),
 
-  details: (packageId) =>
-    useGetData(packageId !== undefined ? `${CARE_PACKAGES_URL}/${packageId}/details` : null, '', {}),
+  details: getCarePackageUrl('/details'),
 
   suppliers: ({ supplierName, shouldFetch }) =>
     useGetData(shouldFetch ? `/suppliers${getQueryParamsFromObject({ supplierName })}` : null),
 
   singleSupplier: (supplierId) => useGetData(supplierId ? `/suppliers/${supplierId}` : null, '', {}),
-  singlePackageInfo: (packageId) => useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}` : null, '', {}),
-  history: (packageId) => useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/history` : null, '', {}),
+  singlePackageInfo: getCarePackageUrl(),
+  singleCorePackageInfo: getCarePackageUrl('/core'),
+  history: getCarePackageUrl('/history'),
 };
 
 export default useCarePackageApi;
