@@ -5,7 +5,10 @@ import {
   getBrokerPackageRoute,
   getCorePackageRoute,
   getHistoryRoute
-} from '../../../../routes/RouteConstants';
+} from 'routes/RouteConstants';
+import { addNotification } from 'reducers/notificationsReducer';
+import { cancelCarePackage, endCarePackage } from 'api';
+import { useDispatch } from 'react-redux';
 import BrokerageHeader from '../BrokerageHeader';
 import { Button, Container, Link, Breadcrumbs } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
@@ -18,9 +21,6 @@ import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitFor
 import Loading from '../../../Loading';
 import ReviewPackageDetailsButtons from './ReviewPackageDetailsButtons';
 import ActionCarePackageModal from '../../BrokerPortal/ActionCarePackageModal';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { cancelCarePackage, endCarePackage } from 'api';
-import { useDispatch } from 'react-redux';
 
 const links = [
   { text: 'Care Package', href: '#care-package' },
