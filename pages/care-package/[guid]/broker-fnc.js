@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { getCareChargesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { useReclaimApi, createCarePackageReclaimFnc, updateCarePackageReclaimFnc } from 'api';
+import { useReclaimApi, createCarePackageReclaimFnc, updateCarePackageReclaimFnc, useCarePackageApi } from 'api';
 import { FundedNursingCare } from 'components';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
@@ -29,10 +29,16 @@ const collectedByOptions = [
 const FundedNursingCarePage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
+  const [shouldFetchDetails, setShouldFetchDetails] = useState(false);
 
   const dispatch = useDispatch();
   const { data: carePackageReclaimFnc, isLoading: fncLoading } = useReclaimApi.fnc(carePackageId);
   const { data: activeFncPrice, isLoading: fncPriceLoading } = useReclaimApi.activeFncPrice(carePackageId);
+  const { data: detailsData, isLoading: detailsLoading } = useCarePackageApi.details(
+    carePackageId,
+    shouldFetchDetails && !fncLoading
+  );
+
   const [loading, setLoading] = useState(false);
 
   const pushNotification = (text, className = 'error') => {
@@ -62,6 +68,12 @@ const FundedNursingCarePage = () => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    if(!fncLoading && !carePackageReclaimFnc) {
+      setShouldFetchDetails(true)
+    }
+  }, [carePackageReclaimFnc, fncLoading]);
 
   return (
     <FundedNursingCare

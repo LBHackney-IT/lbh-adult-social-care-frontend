@@ -21,8 +21,8 @@ const useCarePackageApi = {
       {}
     ),
 
-  details: (packageId) =>
-    useGetData(packageId !== undefined ? `${CARE_PACKAGES_URL}/${packageId}/details` : null, '', {}),
+  details: (packageId, shouldFetch) =>
+    useGetData(shouldFetch || packageId !== undefined ? `${CARE_PACKAGES_URL}/${packageId}/details` : null, '', {}),
 
   suppliers: ({ supplierName, shouldFetch }) =>
     useGetData(shouldFetch ? `/suppliers${getQueryParamsFromObject({ supplierName })}` : null),
