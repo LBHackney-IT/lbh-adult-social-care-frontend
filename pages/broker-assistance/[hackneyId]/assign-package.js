@@ -12,8 +12,8 @@ import {
   BrokerageHeader,
   UploadGreenButton,
   ServiceUserDetails,
-  TitleSubtitleHeader,
 } from 'components';
+import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
 import { requiredSchema } from 'constants/schemas';
 import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';

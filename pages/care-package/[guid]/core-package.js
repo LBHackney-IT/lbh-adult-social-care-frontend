@@ -9,10 +9,10 @@ import {
   RadioGroup,
   BrokerageHeader,
   ServiceUserDetails,
-  TitleSubtitleHeader,
   FurtherDetails,
   PackageType,
 } from 'components';
+import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';

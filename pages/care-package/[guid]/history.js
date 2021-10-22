@@ -7,9 +7,9 @@ import {
   HistoryList,
   BrokerageHeader,
   HistoryOverview,
-  TitleSubtitleHeader,
 } from 'components';
 import withSession from 'lib/session';
+import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
 import { usePackageHistory } from 'api';
 import { getLoggedInUser } from 'service';
 import { BROKER_PORTAL_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
