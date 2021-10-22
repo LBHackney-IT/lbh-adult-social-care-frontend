@@ -7,6 +7,12 @@ export const requestMethods = {
   head: 'HEAD',
 };
 
+export const dateDescending = {
+  asc: 1,
+  equal: 0,
+  desc: -1,
+};
+
 export const tagColors = {
   new: 'green',
   'in progress': 'yellow',

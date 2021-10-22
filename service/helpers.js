@@ -1,5 +1,4 @@
 import { add, compareDesc, format } from 'date-fns';
-import { maxStringLength } from '../constants/variables';
 
 const chr4 = () => Math.random().toString(16).slice(-4);
 

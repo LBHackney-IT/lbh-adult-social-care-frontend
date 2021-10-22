@@ -8,6 +8,7 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
+import { dateDescending } from '../../../../constants/variables';
 
 const FundedNursingCare = ({
   carePackageId,
@@ -45,10 +46,11 @@ const FundedNursingCare = ({
   };
 
   const clickSave = async () => {
+    const { dateFrom, dateTo } = dates;
     const validFields = [
       {
         schema: requiredSchema.date,
-        value: dates.dateFrom,
+        value: dateFrom,
         field: 'dateFrom',
       },
     ];
@@ -56,7 +58,7 @@ const FundedNursingCare = ({
     if (!isOngoing) {
       validFields.push({
         schema: requiredSchema.date,
-        value: dates.dateTo,
+        value: dateTo,
         field: 'dateTo',
       });
     }
@@ -70,11 +72,27 @@ const FundedNursingCare = ({
         localErrors[field] = 'Required field';
       }
     }
+
+    const invalidEndDate = !isOngoing && compareDescendingDMY(dateFrom, dateTo) === dateDescending.desc;
+
+    const coreEndDateValidation = dateTo && !isOngoing && compareDescendingDMY(dateTo, detailsData.endDate) === dateDescending.desc;
+
+    const coreStartEndDateValidation = dateFrom && (
+      compareDescendingDMY(detailsData.startDate, dateFrom) === dateDescending.desc ||
+      (detailsData.endDate && compareDescendingDMY(dateFrom, detailsData.endDate) === dateDescending.desc)
+    );
+
+    if(coreEndDateValidation) {
+      localErrors.dateTo = 'Date to should be in range of core date';
+    }
+
+    if(coreStartEndDateValidation) {
+      localErrors.dateFrom = 'Date from should be in range of core date';
+    }
+
     setErrors((prevState) => ({ ...prevState, ...localErrors }));
 
-    const invalidEndDate = compareDescendingDMY(dates.dateFrom, dates.dateTo) !== 1;
-
-    if (hasErrors || invalidEndDate) return;
+    if (hasErrors || invalidEndDate || coreEndDateValidation || coreStartEndDateValidation) return;
 
     const fundedNursingCareCreation = {
       carePackageId,
@@ -83,8 +101,8 @@ const FundedNursingCare = ({
       supplierId: 1, // To be removed
       status: 1, // Set active status ?
       type: 1, // Set type of reclaim ?
-      startDate: dates.dateFrom,
-      endDate: dates.dateTo,
+      startDate: dateFrom,
+      endDate: dateTo,
       description: notes,
     };
 
@@ -95,8 +113,8 @@ const FundedNursingCare = ({
       supplierId: 1, // To be removed
       status: 1, // Set active status ?
       type: 1, // Set type of reclaim ?
-      startDate: dates.dateFrom,
-      endDate: dates.dateTo,
+      startDate: dateFrom,
+      endDate: dateTo,
       description: notes,
     };
 
