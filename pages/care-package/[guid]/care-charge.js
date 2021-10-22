@@ -3,7 +3,14 @@ import React, { useMemo } from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
 import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
-import { Breadcrumbs, BrokerageHeader, Container, TitleSubtitleHeader, ProvisionalCareCharge } from 'components';
+import {
+  Breadcrumbs,
+  BrokerageHeader,
+  Container,
+  TitleSubtitleHeader,
+  ProvisionalCareCharge,
+  ResidentialSUContribution,
+} from 'components';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -40,7 +47,7 @@ const CareCharge = () => {
   const breadcrumbs = useBreadcrumbs();
 
   return (
-    <div>
+    <div className="financial-assessment">
       <BrokerageHeader />
 
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
@@ -49,6 +56,9 @@ const CareCharge = () => {
         <TitleSubtitleHeader subTitle="Care Charges" title="Add financial assessment" />
 
         <ProvisionalCareCharge />
+
+        <ResidentialSUContribution weeks="1-12" />
+        <ResidentialSUContribution weeks="13+" />
       </Container>
     </div>
   );

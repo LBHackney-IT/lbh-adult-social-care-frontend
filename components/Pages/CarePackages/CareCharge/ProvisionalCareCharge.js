@@ -1,6 +1,7 @@
 import React from 'react';
 import { currency } from 'constants/strings';
 import { Input, Label, RadioGroup, Select, Textarea } from 'components/HackneyDS';
+import ActionButtons from './ActionButtons';
 
 const collectedByOptions = [
   { id: 'hackney', label: 'Hackney council (gross)' },
@@ -12,6 +13,7 @@ const ProvisionalCareCharge = () => (
     <h3>Provisional care charge (pre-assessment)</h3>
 
     <Input
+      id="cost-per-week"
       label="Cost per week"
       hint="Auto calculated on age"
       preSign={currency.euro}
@@ -26,9 +28,10 @@ const ProvisionalCareCharge = () => (
     />
 
     <RadioGroup
+      inline
       label="Collected by"
       items={collectedByOptions}
-      className="provisional-care__radios"
+      className="financial-assessment__radios"
       // handle={(value) => {
       //   changeError('collectedBy');
       //   setCollectedBy(value);
@@ -59,6 +62,8 @@ const ProvisionalCareCharge = () => (
       // value={notes}
       rows={3}
     />
+
+    <ActionButtons />
   </div>
 );
 

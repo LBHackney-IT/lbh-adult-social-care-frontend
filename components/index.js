@@ -22,3 +22,4 @@ export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchServ
 export { FurtherDetails } from './Pages/CarePackages/CorePackageDetails/FurtherDetails';
 export { PackageType } from './Pages/CarePackages/CorePackageDetails/PackageType';
 export { default as ProvisionalCareCharge } from './Pages/CarePackages/CareCharge/ProvisionalCareCharge';
+export { default as ResidentialSUContribution } from './Pages/CarePackages/CareCharge/ResidentialSUContribution';
