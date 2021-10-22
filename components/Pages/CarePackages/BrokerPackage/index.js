@@ -8,10 +8,10 @@ import { updateCarePackageCosts, useSuppliers, useSinglePackageInfo } from 'api'
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { Button, Checkbox, Container, SearchBox, Loading, BrokerageHeader } from 'components';
+import { brokerageTypeOptions, costPeriods } from 'constants/variables';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 
 const initialNeed = {
@@ -38,8 +38,6 @@ const BrokerPackage = ({
   const [isOngoing, setIsOngoing] = useState(false);
   const [coreCost, setCoreCost] = useState(0);
   const [coreCostError, setCoreCostError] = useState('');
-  const [hasDateError, setHasDateError] = useState(false);
-
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [weeklyTotalCost, setWeeklyTotalCost] = useState(0);

@@ -21,3 +21,15 @@ export const userTagColors = {
   new: 'yellow',
   existing: 'gray',
 };
+
+export const costPeriods = {
+  hourly: 1,
+  weekly: 2,
+  oneOff: 3,
+  fixed: 4,
+};
+
+export const brokerageTypeOptions = {
+  coreCost: 1,
+  additionalNeed: 2,
+};
