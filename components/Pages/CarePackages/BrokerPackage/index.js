@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useDebounce } from 'react-use';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
 import { compareDesc } from 'date-fns';
-import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
+import { updateCarePackageCosts, useSuppliers, useSinglePackageInfo } from 'api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
 import BrokerageHeader from '../BrokerageHeader';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
@@ -64,12 +64,12 @@ const BrokerPackage = ({
     setShowSearchResults(true);
   };
 
-  const { data: searchResults, isLoading: suppliersLoading } = useCarePackageApi.suppliers({
-    supplierName: searchQuery,
+  const { data: searchResults, isLoading: suppliersLoading } = useSuppliers({
+    params: { supplierName: searchQuery },
     shouldFetch: searchQuery || showSearchResults,
   });
 
-  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo } = useSinglePackageInfo(packageId);
   const { packageType } = packageInfo;
 
   const clickBack = () => {

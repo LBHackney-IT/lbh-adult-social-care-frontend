@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import SearchServiceUser from 'components/Pages/BrokerAssistant/SearchServiceUser';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
+import SearchServiceUser from 'components';
 import { useRouter } from 'next/router';
+import { useServiceUserSearch } from 'api';
 
 const initialFilters = {
   postcode: '',
@@ -17,14 +17,17 @@ const BrokerPortalSearch = () => {
   const [filters, setFilters] = useState({ ...initialFilters });
   const [showSearchResults, setShowSearchResults] = useState(false);
 
-  const { data: { pagingMetaData, data: searchResults }, isLoading } = useCarePackageApi.serviceUserSearch({
-    pageNumber,
-    firstName: filters.firstName,
-    postcode: filters.postcode,
-    lastName: filters.lastName,
-    hackneyId: filters.hackneyId,
-    dateOfBirth: filters.dateOfBirth?.toJSON?.(),
-  }, showSearchResults);
+  const { data: { pagingMetaData, data: searchResults }, isLoading } = useServiceUserSearch({
+    showSearchResults,
+    params: {
+      pageNumber,
+      firstName: filters.firstName,
+      postcode: filters.postcode,
+      lastName: filters.lastName,
+      hackneyId: filters.hackneyId,
+      dateOfBirth: filters.dateOfBirth?.toJSON?.(),
+    }
+  });
 
   const changeFilters = (field, value) => {
     setShowSearchResults(false);

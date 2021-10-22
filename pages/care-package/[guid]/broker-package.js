@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useCarePackageApi } from 'api';
+import { useCarePackageApi, usePackageDetails, useSuppliers } from 'api';
 import { BrokerPackage } from 'components';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
@@ -26,11 +26,11 @@ const BrokerPackagePage = () => {
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const { data: detailsData, isLoading: detailsLoading } = useCarePackageApi.details(packageId);
+  const { data: detailsData, isLoading: detailsLoading } = usePackageDetails(packageId);
 
-  const { data: selectedSupplier, isLoading: singleSupplierLoading } = useCarePackageApi.singleSupplier(
-    detailsData.supplierId
-  );
+  const { data: selectedSupplier, isLoading: singleSupplierLoading } = useSuppliers({
+    supplierId: detailsData.supplierId
+  });
   const { supplierName } = selectedSupplier;
 
   useEffect(() => {

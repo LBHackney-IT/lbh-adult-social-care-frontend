@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
 import { useRouter } from 'next/router';
+import { useCareCharge } from 'api';
 import NewCareChargePackages from '../../components/Pages/CareCharges/NewCareChargePackages';
 
 const initialFilters = {
@@ -14,11 +14,13 @@ const CareChargePackages = () => {
   const [filters, setFilters] = useState(initialFilters);
   const [pageNumber, setPageNumber] = useState(1);
 
-  const { data: searchResults, isLoading } = useCarePackageApi.careChargeList({
-    pageNumber,
-    orderByDate: filters.orderByDate,
-    status: filters.status,
-    modifiedBy: filters.modifiedBy,
+  const { data: searchResults, isLoading } = useCareCharge({
+    params: {
+      pageNumber,
+      orderByDate: filters.orderByDate,
+      status: filters.status,
+      modifiedBy: filters.modifiedBy,
+    }
   });
 
   const clearFilters = () => setFilters({ ...initialFilters });

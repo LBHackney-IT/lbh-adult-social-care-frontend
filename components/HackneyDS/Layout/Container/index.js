@@ -16,6 +16,7 @@ export const Container = ({
   borderBottom,
   maxWidth,
   margin,
+  cursor,
   className = '',
 }) => (
   <div
@@ -35,6 +36,7 @@ export const Container = ({
       borderBottom,
       maxWidth,
       margin,
+      cursor,
     }}
   >
     {children}

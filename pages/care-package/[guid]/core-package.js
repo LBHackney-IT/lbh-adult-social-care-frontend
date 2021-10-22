@@ -19,7 +19,7 @@ import { useDispatch } from 'react-redux';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { mapPackageSchedulingOptions, useCarePackageApi, useCarePackageOptions, updateCoreCarePackage } from 'api';
+import { updateCoreCarePackage, useSinglePackageInfo, usePackageSchedulingOptions } from 'api';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -38,10 +38,9 @@ const CorePackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { guid: packageId } = router.query;
-  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo } = useSinglePackageInfo(packageId);
   const { settings } = packageInfo;
-  const { data: schedulingOptions } = useCarePackageOptions.packageSchedulingOptions();
-  const packageScheduleOptions = mapPackageSchedulingOptions(schedulingOptions || []);
+  const { data: schedulingOptions = [] } = usePackageSchedulingOptions();
 
   const schema = yup.object().shape({
     packageType: yup
@@ -120,7 +119,7 @@ const CorePackage = () => {
                   error={errors.packageScheduling?.message}
                   label="Packaging scheduling"
                   handle={field.onChange}
-                  items={packageScheduleOptions}
+                  items={schedulingOptions}
                   {...field}
                 />
               )}

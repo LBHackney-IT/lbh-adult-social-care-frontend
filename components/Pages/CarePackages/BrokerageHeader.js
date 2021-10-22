@@ -1,8 +1,14 @@
 import React from 'react';
 import { Header } from '../../HackneyDS';
-import { BROKER_PORTAL_ROUTE, CARE_CHARGE_ROUTE, LOGOUT_ROUTE } from '../../../routes/RouteConstants';
+import {
+  BROKER_ASSISTANCE_ROUTE,
+  BROKER_PORTAL_ROUTE,
+  CARE_CHARGE_ROUTE,
+  LOGOUT_ROUTE,
+} from '../../../routes/RouteConstants';
 
 const links = [
+  { href: BROKER_ASSISTANCE_ROUTE, text: 'Broker Assistance' },
   { href: BROKER_PORTAL_ROUTE, text: 'Broker Portal' },
   { href: CARE_CHARGE_ROUTE, text: 'Care Charges' },
   { href: '#2', text: 'Approvals' },

@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
-import { useCarePackageApi } from 'api';
+import { useBrokerView } from 'api';
 import { getLoggedInUser } from 'service';
 import { BrokerPortalPage } from 'components';
-import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
+import { getServiceUserPackagesRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -23,9 +23,10 @@ const initialFilters = {
   status: '',
   dateFrom: null,
   dateTo: null,
-  brokerId: '',
   serviceUserName: '',
 };
+
+const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Portal' }];
 
 const BrokerPortal = () => {
   const router = useRouter();
@@ -35,14 +36,16 @@ const BrokerPortal = () => {
   const [filters, setFilters] = useState(initialFilters);
   const { brokerId, dateTo, dateFrom, status, serviceUserName } = filters;
 
-  const { data, isLoading: brokerViewLoading } = useCarePackageApi.brokerView({
+  const params = useMemo(() => ({
     fromDate: dateFrom ? dateFrom.toJSON() : null,
-    toDate: dateTo ? dateTo.toJSON() : null,
-    serviceUserName,
-    pageNumber,
-    brokerId,
-    status,
-  });
+      toDate: dateTo ? dateTo.toJSON() : null,
+      serviceUserName,
+      pageNumber,
+      brokerId,
+      status,
+  }), [filters, pageNumber])
+
+  const { data, isLoading: brokerViewLoading } = useBrokerView({ params });
 
   const {
     packages = [],
@@ -53,22 +56,22 @@ const BrokerPortal = () => {
     },
   } = data;
 
+  const goToBrokerPortalSearch = useCallback(() => {
+    router.push(SERVICE_USER_SEARCH_ROUTE);
+  }, []);
+
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
   const handleRowClick = useCallback((rowInfo) => {
-    router.push({
-      pathname: getServiceUserPackagesRoute(rowInfo.packageId),
-      query: {
-        // todo: should be removed once endpoint for getting package info will contain this data
-        packageStatus: rowInfo.packageStatus,
-        dateAssigned: rowInfo.dateAssigned,
-      },
-    });
+    router.push(getServiceUserPackagesRoute(rowInfo.serviceUserId));
   }, []);
 
   return (
     <BrokerPortalPage
+      title='Broker Portal'
+      breadcrumbs={breadcrumbs}
       loading={brokerViewLoading}
+      goToSearch={goToBrokerPortalSearch}
       filters={filters}
       clearFilter={clearFilters}
       setFilters={setFilters}
