@@ -9,9 +9,9 @@ import {
   RadioGroup,
   BrokerageHeader,
   ServiceUserDetails,
-  TitleSubtitleHeader,
   FurtherDetails,
   PackageType,
+  TitleSubtitleHeader,
 } from 'components';
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';

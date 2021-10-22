@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useDebounce } from 'react-use';
@@ -62,9 +62,12 @@ const BrokerPackage = ({
     setShowSearchResults(true);
   };
 
+  const params = useMemo(() => ({ supplierName: searchQuery }), [searchQuery]);
+  const shouldFetch = useMemo(() => searchQuery || showSearchResults, [searchQuery, showSearchResults]);
+
   const { data: searchResults, isLoading: suppliersLoading } = useSuppliers({
-    params: { supplierName: searchQuery },
-    shouldFetch: searchQuery || showSearchResults,
+    params,
+    shouldFetch
   });
 
   const { data: packageInfo } = useSinglePackageInfo(packageId);
@@ -86,7 +89,7 @@ const BrokerPackage = ({
   };
 
   const composeDetailsData = () => {
-    if (detailsData) {
+    if (detailsData?.coreCost !== undefined) {
       setPackageDates({
         startDate: dateStringToDate(detailsData.startDate) || new Date(),
         endDate: dateStringToDate(detailsData.endDate),
@@ -308,7 +311,7 @@ const BrokerPackage = ({
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <Loading isLoading={loading || suppliersLoading} />
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
@@ -406,7 +409,7 @@ const BrokerPackage = ({
 
             <Button
               isLoading={loading}
-              disabled={(!oneOffTotalCost && !weeklyTotalCost && !coreCost) || loading}
+              disabled={loading}
               onClick={clickSave}
             >
               Save and continue
