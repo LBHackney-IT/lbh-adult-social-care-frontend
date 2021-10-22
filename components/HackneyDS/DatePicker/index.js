@@ -16,6 +16,7 @@ export default function DatePicker({
   label,
   formId,
   minDate,
+  maxDate,
   hint,
   date,
   setDate,
@@ -163,6 +164,7 @@ export default function DatePicker({
               startDate={date}
               inline
               minDate={minDate}
+              maxDate={maxDate}
               dateValue={date}
               setDate={changeCalendarInput}
             />

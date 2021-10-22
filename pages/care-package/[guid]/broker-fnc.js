@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { getCareChargesRoute } from 'routes/RouteConstants';
@@ -29,15 +29,11 @@ const collectedByOptions = [
 const FundedNursingCarePage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
-  const [shouldFetchDetails, setShouldFetchDetails] = useState(false);
 
   const dispatch = useDispatch();
   const { data: carePackageReclaimFnc, isLoading: fncLoading } = useReclaimApi.fnc(carePackageId);
   const { data: activeFncPrice, isLoading: fncPriceLoading } = useReclaimApi.activeFncPrice(carePackageId);
-  const { data: detailsData, isLoading: detailsLoading } = useCarePackageApi.details(
-    carePackageId,
-    shouldFetchDetails && !fncLoading
-  );
+  const { data: detailsData, isLoading: detailsLoading } = useCarePackageApi.details(carePackageId);
 
   const [loading, setLoading] = useState(false);
 
@@ -69,21 +65,16 @@ const FundedNursingCarePage = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    if(!fncLoading && !carePackageReclaimFnc) {
-      setShouldFetchDetails(true)
-    }
-  }, [carePackageReclaimFnc, fncLoading]);
-
   return (
     <FundedNursingCare
-      loading={loading || fncLoading || fncPriceLoading}
+      loading={loading || fncLoading || fncPriceLoading || detailsLoading}
       carePackageId={carePackageId}
       collectedByOptions={collectedByOptions}
       activeFncPrice={activeFncPrice}
       carePackageReclaimFnc={carePackageReclaimFnc}
       createFundedNursingCare={createFundedNursingCare}
       updateFundedNursingCare={updateFundedNursingCare}
+      detailsData={detailsData}
       goBack={router.back}
     />
   );

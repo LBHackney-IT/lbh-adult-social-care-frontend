@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Container, FileUpload, Label, RadioGroup, Select, Textarea } from '../../../HackneyDS';
-import FormGroup from '../../../HackneyDS/FormGroup';
+import { Button, FormGroup, Container, FileUpload, Label, Loading, RadioGroup, Select, Textarea } from 'components';
+import { isFunction } from 'api';
+import { requiredSchema } from 'constants/schemas';
+import { compareDescendingDMY, dateStringToDate } from 'service';
 import UrlFromFile from '../../../UrlFromFile';
-import { isFunction } from '../../../../api/index';
-import { requiredSchema } from '../../../../constants/schemas';
-import { dateStringToDate } from '../../../../service';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
-import Loading from '../../../Loading';
 
 const FundedNursingCare = ({
   carePackageId,
@@ -19,6 +17,7 @@ const FundedNursingCare = ({
   createFundedNursingCare = () => {},
   updateFundedNursingCare = () => {},
   goBack = () => {},
+  detailsData,
   loading,
 }) => {
   const [collectedByType] = useState({
@@ -35,7 +34,7 @@ const FundedNursingCare = ({
     dateTo: '',
     notes: '',
   });
-  const [hasFNC, setHasFNC] = useState('yes');
+  const [hasFNC, setHasFNC] = useState('');
   const [collectedBy, setCollectedBy] = useState();
   const [notes, setNotes] = useState('');
   const [file, setFile] = useState(null);
@@ -47,16 +46,6 @@ const FundedNursingCare = ({
 
   const clickSave = async () => {
     const validFields = [
-      {
-        schema: requiredSchema.string,
-        value: hasFNC,
-        field: 'hasFNC',
-      },
-      {
-        schema: requiredSchema.string,
-        value: notes,
-        field: 'notes',
-      },
       {
         schema: requiredSchema.date,
         value: dates.dateFrom,
@@ -83,7 +72,9 @@ const FundedNursingCare = ({
     }
     setErrors((prevState) => ({ ...prevState, ...localErrors }));
 
-    if (hasErrors) return;
+    const invalidEndDate = compareDescendingDMY(dates.dateFrom, dates.dateTo) !== 1;
+
+    if (hasErrors || invalidEndDate) return;
 
     const fundedNursingCareCreation = {
       carePackageId,
@@ -125,24 +116,18 @@ const FundedNursingCare = ({
     setDates((prevState) => ({ ...prevState, [field]: value }));
   };
 
-  const composeCarePackageReclaimFncData = () => {
-    if (carePackageReclaimFnc) {
-      setDates({
-        dateFrom: dateStringToDate(carePackageReclaimFnc.startDate),
-        dateTo: dateStringToDate(carePackageReclaimFnc.endDate),
-      });
-      if (!carePackageReclaimFnc.endDate) {
-        setIsOngoing(true);
-      }
-
-      setNotes(carePackageReclaimFnc.description);
-      setCollectedBy(carePackageReclaimFnc.claimCollector);
-    }
-  };
-
   useEffect(() => {
-    composeCarePackageReclaimFncData();
-  }, [carePackageReclaimFnc]);
+    setDates({
+      dateFrom: dateStringToDate(carePackageReclaimFnc.startDate || detailsData.startDate),
+      dateTo: dateStringToDate(carePackageReclaimFnc.endDate || detailsData.endDate),
+    })
+    if (!carePackageReclaimFnc.endDate && !detailsData.endDate) {
+      setIsOngoing(true);
+    }
+
+    setNotes(carePackageReclaimFnc.description || '');
+    setCollectedBy(carePackageReclaimFnc.claimCollector || '');
+  }, [carePackageReclaimFnc, detailsData]);
 
   return (
     <Container className="brokerage__funded-nursing-care">
@@ -180,6 +165,9 @@ const FundedNursingCare = ({
             dates={dates}
             error={errors.dateFrom || errors.dateTo}
             setDates={changeDate}
+            startMinDate={dateStringToDate(detailsData.startDate)}
+            startMaxDate={dateStringToDate(detailsData.endDate)}
+            endMaxDate={dateStringToDate(detailsData.endDate)}
             label="Funded Nursing Care Schedule..."
             setIsOngoing={(value) => {
               changeError('dateTo');
@@ -188,14 +176,8 @@ const FundedNursingCare = ({
             isOngoing={isOngoing}
           />
           <FormGroup error={errors.notes}>
-            <Label className="text-required-after label-textarea">Funded Nursing Care notes</Label>
-            <Textarea
-              handler={(value) => {
-                changeError('notes');
-                setNotes(value);
-              }}
-              value={notes}
-            />
+            <Label className="label-textarea">Funded Nursing Care notes</Label>
+            <Textarea handler={setNotes} value={notes}/>
           </FormGroup>
           <FormGroup className="upload-fnc-assessment" label="Upload FNC Assessment...">
             <UrlFromFile file={file} removeFile={setFile} />

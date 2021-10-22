@@ -1,7 +1,5 @@
-import FormGroup from '../../HackneyDS/FormGroup';
-import DatePicker from '../../HackneyDS/DatePicker';
-import { Checkbox } from '../../HackneyDS';
 import React from 'react';
+import { Checkbox, DatePicker, FormGroup } from '../../HackneyDS';
 
 const BrokeragePackageDates = ({
   dates,
@@ -9,6 +7,8 @@ const BrokeragePackageDates = ({
   isOngoing,
   setIsOngoing,
   startMinDate,
+  startMaxDate,
+  endMaxDate,
   error,
   fields = {
     dateTo: 'dateTo',
@@ -24,6 +24,7 @@ const BrokeragePackageDates = ({
       <DatePicker
         day={{ label: 'From' }}
         minDate={startMinDate}
+        maxDate={startMaxDate}
         date={dates[fields.dateFrom]}
         setDate={(date) => setDates(fields.dateFrom, date)}
       />
@@ -31,6 +32,7 @@ const BrokeragePackageDates = ({
         disabled={isOngoing}
         day={{ label: 'To' }}
         minDate={dates[fields.dateFrom]}
+        maxDate={endMaxDate}
         date={dates[fields.dateTo]}
         setDate={(date) => setDates(fields.dateTo, date)}
       />
