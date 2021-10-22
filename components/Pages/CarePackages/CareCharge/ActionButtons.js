@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ActionButtons = ({ onEdit, onCancel, onEnd }) => (
-  <div className="financial-assessment__buttons">
+  <div className="care-charge__buttons">
     <button type="button" onClick={onEdit}>
       Edit
     </button>

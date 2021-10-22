@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { currency } from 'constants/strings';
 import { Input, Label, RadioGroup, Select, Textarea } from 'components/HackneyDS';
 import ActionButtons from './ActionButtons';
@@ -31,7 +31,7 @@ const ProvisionalCareCharge = () => (
       inline
       label="Collected by"
       items={collectedByOptions}
-      className="financial-assessment__radios"
+      className="care-charge__radios"
       // handle={(value) => {
       //   changeError('collectedBy');
       //   setCollectedBy(value);
@@ -67,4 +67,4 @@ const ProvisionalCareCharge = () => (
   </div>
 );
 
-export default ProvisionalCareCharge;
+export default memo(ProvisionalCareCharge);

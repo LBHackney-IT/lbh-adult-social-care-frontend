@@ -4,12 +4,14 @@ import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
 import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import {
+  Container,
   Breadcrumbs,
   BrokerageHeader,
-  Container,
   TitleSubtitleHeader,
+  FinancialAssessment,
   ProvisionalCareCharge,
   ResidentialSUContribution,
+  Button,
 } from 'components';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -47,7 +49,7 @@ const CareCharge = () => {
   const breadcrumbs = useBreadcrumbs();
 
   return (
-    <div className="financial-assessment">
+    <div className="care-charge">
       <BrokerageHeader />
 
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
@@ -59,6 +61,13 @@ const CareCharge = () => {
 
         <ResidentialSUContribution weeks="1-12" />
         <ResidentialSUContribution weeks="13+" />
+
+        <FinancialAssessment />
+
+        <Container className="brokerage__actions">
+          <Button className="brokerage__back-button">Back</Button>
+          <Button>Save and continue</Button>
+        </Container>
       </Container>
     </div>
   );

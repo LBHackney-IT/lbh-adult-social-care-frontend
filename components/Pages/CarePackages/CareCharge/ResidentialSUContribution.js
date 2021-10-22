@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { currency } from 'constants/strings';
 import { Checkbox, Input, RadioGroup, DatePicker } from 'components/HackneyDS';
-import ActionButtons from "./ActionButtons";
+import ActionButtons from './ActionButtons';
 
 const claimedByOptions = [
   { id: 'gross', label: 'Gross' },
@@ -34,7 +34,7 @@ const ResidentialSuContribution = ({ weeks }) => {
       <RadioGroup
         inline
         items={claimedByOptions}
-        className="financial-assessment__radios"
+        className="care-charge__radios"
         // handle={(value) => {
         //   changeError('collectedBy');
         //   setCollectedBy(value);
@@ -43,7 +43,7 @@ const ResidentialSuContribution = ({ weeks }) => {
         // value={collectedBy}
       />
 
-      <div className="financial-assessment__dates">
+      <div className="care-charge__dates">
         <div>
           <h5>Start date</h5>
           <DatePicker
@@ -79,4 +79,4 @@ const ResidentialSuContribution = ({ weeks }) => {
   );
 };
 
-export default ResidentialSuContribution;
+export default memo(ResidentialSuContribution);
