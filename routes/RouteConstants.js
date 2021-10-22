@@ -18,6 +18,6 @@ export const getServiceUserPackagesRoute = (id) => `${SERVICE_USER_ROUTE}/${id}/
 export const BROKER_ASSISTANCE_ROUTE = '/broker-assistance';
 export const getAssignPackageRoute = (id) => `${BROKER_ASSISTANCE_ROUTE}/${id}/assign-package`;
 
-export const CARE_CHARGE_ROUTE = '/care-charge';
+export const CARE_CHARGE_ROUTE = '/care-charges';
 
 export const LOGOUT_ROUTE = '/logout';

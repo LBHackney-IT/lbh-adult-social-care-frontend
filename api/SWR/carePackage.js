@@ -1,10 +1,10 @@
 import useGetData from './useGetData';
-import { useFetchParams } from './useFetchParams';
+import { useFetchWithParams } from './useFetchWithParams';
 
 const CARE_PACKAGES_URL = '/care-packages';
 
 export const useBrokerView = ({ params }) => (
-  useFetchParams({
+  useFetchWithParams({
     params,
     url: `${CARE_PACKAGES_URL}/broker-view`,
     errorText: 'Can not get broker view'

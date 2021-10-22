@@ -12,8 +12,9 @@ import {
   AlternativePagination,
   TitleSubtitle,
 } from 'components';
-import { getServiceUserPackagesRoute, CARE_PACKAGE_ROUTE, } from 'routes/RouteConstants';
+import { getServiceUserPackagesRoute, CARE_PACKAGE_ROUTE, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { userTagColors } from 'constants/variables';
+import { useRouter } from 'next/router';
 
 const breadcrumbs = [{ text: 'Home', href: CARE_PACKAGE_ROUTE }, { text: 'Care Charges' }];
 
@@ -38,7 +39,10 @@ const NewCareChargePackages = ({
   pushRoute,
   modifiedByOptions,
 }) => {
+  const router = useRouter();
   const changeFilter = (field) => (value) => setFilters((prevState) => ({ ...prevState, [field]: value }));
+
+  const findServiceUser = () => router.push(SERVICE_USER_SEARCH_ROUTE);
 
   return (
     <Container className="new-care-charge">
@@ -49,7 +53,7 @@ const NewCareChargePackages = ({
           <Breadcrumbs values={breadcrumbs} />
           <Container className="new-care-charge__header" display="flex" justifyContent="space-between">
             <h2>New care Charge package</h2>
-            <Button>Find a service user</Button>
+            <Button onClick={findServiceUser}>Find a service user</Button>
           </Container>
           <Container className="new-care-charge__selectors">
             <FormGroup label="Status">
@@ -108,7 +112,7 @@ const NewCareChargePackages = ({
             <p className="new-care-charge__card-address">{address}</p>
             <Container display="flex" justifyContent="space-between">
               <Container display="flex">
-                <TitleSubtitle title="Mosaic ID" subtitle={`#${hackneyId}`} />
+                <TitleSubtitle title="Hackney ID" subtitle={`#${hackneyId}`} />
                 <TitleSubtitle title="Package" subtitle={packageName} />
                 <TitleSubtitle title="Start date" subtitle={formatDate(startDate)} />
               </Container>

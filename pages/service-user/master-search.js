@@ -68,8 +68,8 @@ const BrokerAssistanceSearch = () => {
       changeFilters={changeFilters}
       setPageNumber={setPageNumber}
       pageNumber={pageNumber}
-      totalCount={searchResults.length}
-      totalPages={searchResults.length && Math.ceil(searchResults.length / 10)}
+      totalCount={searchResults?.length}
+      totalPages={searchResults?.length && Math.ceil(searchResults.length / 10)}
       onSearch={onSearch}
     />
   );

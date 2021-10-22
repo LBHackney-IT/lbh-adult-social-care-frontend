@@ -1,18 +1,20 @@
 import useSWR from 'swr';
-import searchFetch from './searchFetch';
 import useErrorNotification from './useErrorNotification';
+import fetcher from './fetcher';
 
-export const useFetchParams = ({
+const fetchWithParams = (url, params) => fetcher(url, { params });
+
+export const useFetchWithParams = ({
   params,
   url,
   shouldFetch = true,
-  errorText = 'Response fail',
+  errorText = 'Request fail',
   initialData = {
     data: [],
     pagingMetaData: {},
   }
 }) => {
-  const response = useSWR(shouldFetch ? [url, params] : null, searchFetch);
+  const response = useSWR(shouldFetch ? [url, params] : null, fetchWithParams);
   const { error, data } = response;
 
   useErrorNotification(response.error, errorText);

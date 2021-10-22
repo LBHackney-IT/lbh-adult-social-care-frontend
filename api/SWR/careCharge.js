@@ -1,4 +1,4 @@
-import { useFetchParams } from './useFetchParams';
+import { useFetchWithParams } from './useFetchWithParams';
 
 export const useCareCharge = ({ params }) =>
-  useFetchParams({ params, url: '/care-charges' })
+  useFetchWithParams({ params, url: '/care-charges' })

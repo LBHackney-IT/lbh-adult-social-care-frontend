@@ -63,11 +63,10 @@ const BrokerPackage = ({
   };
 
   const params = useMemo(() => ({ supplierName: searchQuery }), [searchQuery]);
-  const shouldFetch = useMemo(() => searchQuery || showSearchResults, [searchQuery, showSearchResults]);
 
   const { data: searchResults, isLoading: suppliersLoading } = useSuppliers({
     params,
-    shouldFetch
+    shouldFetch: searchQuery || showSearchResults,
   });
 
   const { data: packageInfo } = useSinglePackageInfo(packageId);
