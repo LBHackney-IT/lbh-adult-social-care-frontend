@@ -21,3 +21,4 @@ export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPack
 export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchServiceUser';
 export { FurtherDetails } from './Pages/CarePackages/CorePackageDetails/FurtherDetails';
 export { PackageType } from './Pages/CarePackages/CorePackageDetails/PackageType';
+export { default as ProvisionalCareCharge } from './Pages/CarePackages/CareCharge/ProvisionalCareCharge';

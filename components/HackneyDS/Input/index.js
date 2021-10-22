@@ -31,11 +31,11 @@ export const Input = ({
   return (
     <div className={`govuk-form-group lbh-form-group${errorClass}${signClass} ${outerClassName}`}>
       {label && (
-        <label className={`govuk-label lbh-label ${required ? 'text-required-after' : ''}`} htmlFor={id}>
+        <label className={`govuk-label lbh-label input__label ${required ? 'text-required-after' : ''}`} htmlFor={id}>
           {label}
         </label>
       )}
-      {hint && <span className="govuk-hint lbh-hint">{hint}</span>}
+      {hint && <span className="govuk-hint lbh-hint input__hint">{hint}</span>}
       {error && <span className="govuk-error-message lbh-error-message">{error}</span>}
       <div className="input-container" data-presign={preSign}>
         <input
