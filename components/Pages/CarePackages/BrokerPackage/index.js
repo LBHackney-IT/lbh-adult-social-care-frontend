@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useDebounce } from 'react-use';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
 import { compareDesc } from 'date-fns';
-import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
-import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
-import BrokerageHeader from '../BrokerageHeader';
+import { updateCarePackageCosts, useSuppliers, useSinglePackageInfo } from 'api';
+import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
+import { addNotification } from 'reducers/notificationsReducer';
+import { brokerageTypeOptions, costPeriods } from 'constants/variables';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
+import Loading from '../../../Loading';
+import BrokerageHeader from '../BrokerageHeader';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
-import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 
 const initialNeed = {
@@ -21,8 +21,6 @@ const initialNeed = {
   startDate: null,
   endDate: null,
   isOngoing: false,
-  errorStartDate: '',
-  errorEndDate: '',
 };
 
 const BrokerPackage = ({
@@ -42,7 +40,6 @@ const BrokerPackage = ({
   const [isOngoing, setIsOngoing] = useState(false);
   const [coreCost, setCoreCost] = useState(0);
   const [coreCostError, setCoreCostError] = useState('');
-
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [weeklyTotalCost, setWeeklyTotalCost] = useState(0);
@@ -50,7 +47,7 @@ const BrokerPackage = ({
   const [isNewSupplier, setIsNewSupplier] = useState(false);
 
   const [packageDates, setPackageDates] = useState({
-    startDate: null,
+    startDate: new Date(),
     endDate: null,
   });
 
@@ -64,12 +61,14 @@ const BrokerPackage = ({
     setShowSearchResults(true);
   };
 
-  const { data: searchResults, isLoading: suppliersLoading } = useCarePackageApi.suppliers({
-    supplierName: searchQuery,
+  const params = useMemo(() => ({ supplierName: searchQuery }), [searchQuery]);
+
+  const { data: searchResults, isLoading: suppliersLoading } = useSuppliers({
+    params,
     shouldFetch: searchQuery || showSearchResults,
   });
 
-  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo } = useSinglePackageInfo(packageId);
   const { packageType } = packageInfo;
 
   const clickBack = () => {
@@ -88,7 +87,7 @@ const BrokerPackage = ({
   };
 
   const composeDetailsData = () => {
-    if (detailsData) {
+    if (detailsData?.coreCost !== undefined) {
       setPackageDates({
         startDate: dateStringToDate(detailsData.startDate) || new Date(),
         endDate: dateStringToDate(detailsData.endDate),
@@ -108,8 +107,6 @@ const BrokerPackage = ({
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
             isOngoing: !item.endDate,
-            errorStartDate: '',
-            errorEndDate: '',
           }));
 
         const oneOffDetails = detailsData.details
@@ -118,8 +115,6 @@ const BrokerPackage = ({
             ...item,
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
-            errorStartDate: '',
-            errorEndDate: '',
           }));
 
         setWeeklyNeeds(weeklyDetails);
@@ -136,33 +131,24 @@ const BrokerPackage = ({
     dispatch(addNotification({ text, className }));
   };
 
-  const checkNeedsErrors = (needs) => {
-    let hasErrors = false;
-    const checkedNeeds = needs.map((item) => {
-      if (!item.startDate && !item.endDate && !item.cost) return { ...item };
+  const checkNeedError = (item) => {
+    const { startDate, endDate, isOngoing: isOngoingItem } = item;
+    let errorStartDate = '';
+    let errorEndDate = '';
+    if ((!startDate && isOngoingItem) || (!startDate && !isOngoingItem && endDate)) {
+      errorStartDate = 'Invalid start date';
+    } else if (startDate && endDate && !isOngoingItem && compareDescendingDMY(startDate, endDate) === -1) {
+      errorEndDate = 'End date should be later then start date';
+    } else if (startDate && !isOngoing && compareDescendingDMY(packageDates.endDate, startDate) === -1) {
+      errorStartDate = 'Start date should be later then core date';
+    } else if (startDate && isOngoing && compareDescendingDMY(packageDates.startDate, startDate) === -1) {
+      errorEndDate = 'Start date should be later then core date';
+    }
 
-      const { startDate, endDate, isOngoing: isOngoingItem } = item;
-      let errorStartDate = '';
-      let errorEndDate = '';
-      if (!startDate || (startDate && endDate && !isOngoingItem && compareDescendingDMY(startDate, endDate))) {
-        errorStartDate = 'Invalid start date';
-      } else if (startDate && compareDescendingDMY(startDate, packageDates.endDate)) {
-        errorStartDate = 'Start date should be later then core date';
-      }
-      if (endDate && !isOngoingItem && compareDescendingDMY(endDate, packageDates.endDate)) {
-        errorEndDate = 'End date should be later then core date';
-      }
-      if (errorStartDate || errorEndDate) {
-        hasErrors = true;
-      }
-      return {
-        ...item,
-        errorEndDate,
-        errorStartDate,
-      };
-    });
-    return { checkedNeeds, hasErrors };
+    return errorStartDate || errorEndDate;
   };
+
+  const checkDateErrors = (needs) => needs.some(item => checkNeedError(item));
 
   const clickSave = async () => {
     if (!isNewSupplier && !selectedItem?.id) {
@@ -181,16 +167,13 @@ const BrokerPackage = ({
       return;
     }
 
-    const checkedWeeklyDetails = checkNeedsErrors(weeklyNeeds);
-    const checkOneOffDetails = checkNeedsErrors(oneOffNeeds);
-
-    setWeeklyNeeds(checkedWeeklyDetails.checkedNeeds);
-    setOneOffNeeds(checkOneOffDetails.checkedNeeds);
+    const weeklyDateErrors = checkDateErrors(weeklyNeeds);
+    const oneOfNeedDateErrors = checkDateErrors(oneOffNeeds);
     if (!coreCost) {
       setCoreCostError('The core cost field is required');
     }
 
-    if (checkedWeeklyDetails.hasErrors || checkOneOffDetails.hasErrors) {
+    if (weeklyDateErrors || oneOfNeedDateErrors) {
       pushNotification('Some validation errors above');
       return;
     }
@@ -310,7 +293,7 @@ const BrokerPackage = ({
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <Loading isLoading={loading || suppliersLoading} />
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
@@ -387,6 +370,7 @@ const BrokerPackage = ({
               cardInfo={selectedItem}
               corePackageDates={packageDates}
               addNeed={addNeed}
+              checkNeedError={checkNeedError}
               weeklyNeeds={weeklyNeeds}
               coreCostError={coreCostError}
               oneOffNeeds={oneOffNeeds}
@@ -408,7 +392,7 @@ const BrokerPackage = ({
 
             <Button
               isLoading={loading}
-              disabled={(!oneOffTotalCost && !weeklyTotalCost && !coreCost) || loading}
+              disabled={loading}
               onClick={clickSave}
             >
               Save and continue

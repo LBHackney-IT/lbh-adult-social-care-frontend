@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
-import { BrokerageHeader } from 'components';
 import { getServiceUserPackagesRoute, getAssignPackageRoute } from 'routes/RouteConstants';
+import BrokerageHeader from '../../CarePackages/BrokerageHeader';
 import { Button, Container, Input, Breadcrumbs, DatePicker, FormGroup } from '../../../HackneyDS';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
 import AlternativePagination from '../../../AlternativePagination';

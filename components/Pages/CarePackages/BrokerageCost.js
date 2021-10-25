@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Container, Input } from '../../HackneyDS';
+import { Container, Input, FormGroup } from '../../HackneyDS';
 import { SelectArrowTriangle } from '../../Icons';
 import BrokeragePackageDates from './BrokeragePackageDates';
 import { currency } from '../../../constants/strings';
 import BrokerageBorderCost from './BrokerageBorderCost';
-import FormGroup from '../../HackneyDS/FormGroup';
 
 const BrokerageCost = ({
   title,
@@ -13,6 +12,7 @@ const BrokerageCost = ({
   setter,
   name,
   corePackageDates,
+  checkNeedError,
   removeNeed,
   labelInputCost,
   addNeedText,
@@ -34,43 +34,46 @@ const BrokerageCost = ({
       </h2>
       {expanded && (
         <>
-          {getter.map(({ id, errorEndDate, isOngoing, cost, startDate, endDate, errorStartDate }, index) => (
-            <FormGroup error={errorStartDate ? 'Some validations error' : ''} key={id}>
-              <BrokeragePackageDates
-                startMinDate={corePackageDates.endDate}
-                dates={{ startDate, endDate }}
-                fields={{
-                  dateFrom: 'startDate',
-                  dateTo: 'endDate',
-                }}
-                error={errorEndDate || errorStartDate}
-                setDates={(field, date) => changeNeed(getter, setter, field, date, index)}
-                checkboxId={`${name}-checkbox-${index}`}
-                label="Dates"
-                hasOngoing={hasOngoing}
-                isOngoing={isOngoing}
-                setIsOngoing={(value) => changeNeed(getter, setter, 'isOngoing', value, index)}
-              />
-              <Input
-                id={`supplier-cost-${name}-${index}`}
-                preSign={currency.euro}
-                className="brokerage__cost-input"
-                label={labelInputCost}
-                value={cost}
-                onChangeValue={(value) => changeNeed(getter, setter, 'cost', value, index)}
-              />
-              <Container className="brokerage__cost-add-need" display="flex">
-                {index !== 0 && (
-                  <p onClick={() => removeNeed(getter, setter, index)} className="link-button red">
-                    Remove
+          {getter.map((item, index) => {
+            const error = checkNeedError(item);
+            return (
+              <FormGroup error={error ? 'Some validations error' : ''} key={item.id}>
+                <BrokeragePackageDates
+                  startMinDate={corePackageDates.endDate}
+                  dates={{ startDate: item.startDate, endDate: item.endDate }}
+                  fields={{
+                    dateFrom: 'startDate',
+                    dateTo: 'endDate',
+                  }}
+                  error={error}
+                  setDates={(field, date) => changeNeed(getter, setter, field, date, index)}
+                  checkboxId={`${name}-checkbox-${index}`}
+                  label="Dates"
+                  hasOngoing={hasOngoing}
+                  isOngoing={item.isOngoing}
+                  setIsOngoing={(value) => changeNeed(getter, setter, 'isOngoing', value, index)}
+                />
+                <Input
+                  id={`supplier-cost-${name}-${index}`}
+                  preSign={currency.euro}
+                  className="brokerage__cost-input"
+                  label={labelInputCost}
+                  value={item.cost}
+                  onChangeValue={(value) => changeNeed(getter, setter, 'cost', value, index)}
+                />
+                <Container className="brokerage__cost-add-need" display="flex">
+                  {index !== 0 && (
+                    <p onClick={() => removeNeed(getter, setter, index)} className="link-button red">
+                      Remove
+                    </p>
+                  )}
+                  <p onClick={() => addNeed(setter)} className="text-green">
+                    {addNeedText}
                   </p>
-                )}
-                <p onClick={() => addNeed(setter)} className="text-green">
-                  {addNeedText}
-                </p>
-              </Container>
-            </FormGroup>
-          ))}
+                </Container>
+              </FormGroup>
+            )
+          })}
           <BrokerageBorderCost
             totalCostHeader={totalCostName}
             className="brokerage__border-cost"

@@ -46,6 +46,11 @@ export const BrokerPortalPage = ({
     [setFilters]
   );
 
+  const onClearFilters = () => {
+    setSearchText('');
+    clearFilter();
+  }
+
   const onSearch = useCallback(() => {
     changeFilterField('serviceUserName', searchText);
   }, [changeFilterField, searchText]);
@@ -56,7 +61,7 @@ export const BrokerPortalPage = ({
     <div className="broker-portal">
       <Loading isLoading={loading} />
       <BrokerageHeader />
-      <Container background="#FAFAFA" padding="0 0 55px">
+      <Container background="#FAFAFA" padding="0 0 60px">
         <Container maxWidth="1080px" margin="0 auto">
           <Container padding="10px 60px 0px">
             <Breadcrumbs values={breadcrumbs} />
@@ -86,7 +91,7 @@ export const BrokerPortalPage = ({
                   <Select
                     value={filters.brokerId}
                     options={brokerOptions}
-                    onChange={({ target: { value } }) => changeFilterField('brokerId', value)}
+                    onChangeValue={(value) => changeFilterField('brokerId', value)}
                   />
                 </FormGroup>
               )}
@@ -123,7 +128,7 @@ export const BrokerPortalPage = ({
               </FormGroup>
 
               {shouldShowClear && (
-                <Button className="outline gray clear-filter-button" onClick={clearFilter}>
+                <Button className="outline gray clear-filter-button" onClick={onClearFilters}>
                   Clear
                 </Button>
               )}

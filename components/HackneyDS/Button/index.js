@@ -1,6 +1,6 @@
 import React from 'react';
 import Loading from '../../Loading';
-import { Container } from '../index';
+import { Container } from '../Layout/Container';
 
 export default function Button({
   children,

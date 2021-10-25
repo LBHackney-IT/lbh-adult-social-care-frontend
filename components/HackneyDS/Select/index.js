@@ -7,6 +7,7 @@ export default function Select({
   value = { text: '', value: '' },
   className = '',
   disabledOptions = [],
+  disabledEmptyComponent = false,
   options = [],
   emptyElement = { text: 'Select one', value: null },
   id = 'select-id',
@@ -23,7 +24,7 @@ export default function Select({
         id={id}
         {...errorDescribedBy}
         onChange={(e) => {
-          if (emptyElement && e.target.value !== emptyElement.value) setDisabled(true);
+          if (emptyElement && e.target.value !== emptyElement.value && disabledEmptyComponent) setDisabled(true);
           if (onChangeValue) {
             return onChangeValue(e.target.value);
           }
@@ -41,7 +42,7 @@ export default function Select({
           const isDisabledOption = disabledOptions.some((disabledOption) => disabledOption === option.value);
 
           return (
-            <option disabled={isDisabledOption} key={option.text} value={option.value}>
+            <option disabled={isDisabledOption} key={`${option.text}${option.value}`} value={option.value}>
               {option.text}
             </option>
           );
