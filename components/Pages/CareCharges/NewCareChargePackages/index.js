@@ -115,7 +115,7 @@ const NewCareChargePackages = ({
             <Container display="flex" justifyContent="space-between">
               <Container display="flex">
                 <TitleSubtitle title="Hackney ID" subtitle={`#${hackneyId}`} />
-                <TitleSubtitle title="Package" subtitle={packageName} />
+                <TitleSubtitle title="Package" subtitle={packageType} />
                 <TitleSubtitle title="Start date" subtitle={formatDate(startDate)} />
               </Container>
               <Container display="flex">
