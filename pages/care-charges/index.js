@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useCareCharge } from 'api';
+import { useCareCharge, useUsers } from 'api';
 import { NewCareChargePackages } from 'components';
 
 const initialFilters = {
@@ -23,17 +23,20 @@ const CareChargePackages = () => {
 
   const { data: searchResults, isLoading } = useCareCharge({ params });
 
+  const { options: modifiedByOptions, isLoading: usersLoading } = useUsers();
+
   const clearFilters = () => setFilters({ ...initialFilters });
 
   const pushRoute = (route) => router.push(route)
 
   return (
     <NewCareChargePackages
-      isLoading={isLoading}
+      isLoading={isLoading || usersLoading}
       setPageNumber={setPageNumber}
       clearFilters={clearFilters}
       pageNumber={pageNumber}
       filters={filters}
+      modifiedByOptions={modifiedByOptions}
       pushRoute={pushRoute}
       searchResults={searchResults}
       setFilters={setFilters}

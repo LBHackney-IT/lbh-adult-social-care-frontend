@@ -7,8 +7,10 @@ import { compareDesc } from 'date-fns';
 import { updateCarePackageCosts, useSuppliers, useSinglePackageInfo } from 'api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { Button, Checkbox, Container, SearchBox, Loading, BrokerageHeader } from 'components';
 import { brokerageTypeOptions, costPeriods } from 'constants/variables';
+import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
+import Loading from '../../../Loading';
+import BrokerageHeader from '../BrokerageHeader';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
@@ -60,11 +62,10 @@ const BrokerPackage = ({
   };
 
   const params = useMemo(() => ({ supplierName: searchQuery }), [searchQuery]);
-  const shouldFetch = useMemo(() => searchQuery || showSearchResults, [searchQuery, showSearchResults]);
 
   const { data: searchResults, isLoading: suppliersLoading } = useSuppliers({
     params,
-    shouldFetch
+    shouldFetch: searchQuery || showSearchResults,
   });
 
   const { data: packageInfo } = useSinglePackageInfo(packageId);
@@ -84,7 +85,6 @@ const BrokerPackage = ({
     setShowSearchResults(false);
     setSearchText('');
   };
-
 
   const composeDetailsData = () => {
     if (detailsData?.coreCost !== undefined) {

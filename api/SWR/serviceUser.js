@@ -1,36 +1,21 @@
-import useSWR from 'swr';
-import useErrorNotification from './useErrorNotification';
 import useGetData from './useGetData';
-import searchFetch from './searchFetch';
+import { useFetchWithParams } from './useFetchWithParams';
 
 export const useServiceUser = (hackneyId) =>
-  useGetData(hackneyId ? `/service-user/${hackneyId}` : null, 'Can not get service user', {});
+  useGetData(hackneyId ? `/service-user/${hackneyId}` : null, 'Can not get service user');
 
-export const useServiceUserSearch = ({ params, shouldFetch }) => {
-  const response = useSWR(shouldFetch ? ['/service-user/search', params] : null, searchFetch);
-  const { error, data } = response;
+export const useServiceUserSearch = ({ params, shouldFetch }) =>
+  useFetchWithParams({
+    params,
+    shouldFetch,
+    url: '/service-user/search',
+    errorText: 'Can not get service user'
+  })
 
-  useErrorNotification(response.error, 'Can not get service user');
-
-  return {
-    ...response,
-    data: data || {
-      data: [],
-      pagingMetaData: {},
-    },
-    isLoading: !error && !data && shouldFetch,
-  };
-};
-
-export const useServiceUserMasterSearch = ({ params, shouldFetch }) => {
-  const response = useSWR(shouldFetch ? ['/service-user/master-search', params] : null, searchFetch);
-  const { error, data } = response;
-
-  useErrorNotification(error, 'Can not get service user');
-
-  return {
-    ...response,
-    data: data || { residents: [] },
-    isLoading: !error && !data && shouldFetch,
-  };
-};
+export const useServiceUserMasterSearch = ({ params, shouldFetch }) =>
+  useFetchWithParams({
+    params,
+    shouldFetch,
+    url: '/service-user/master-search',
+    errorText: 'Can not get service user'
+  })

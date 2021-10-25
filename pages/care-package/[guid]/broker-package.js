@@ -30,7 +30,7 @@ const BrokerPackagePage = () => {
 
   const params = useMemo(() => ({
     supplierId: detailsData.supplierId
-  }), []);
+  }), [detailsData.supplierId]);
 
   const { data: { data: selectedSupplier }, isLoading: singleSupplierLoading } = useSuppliers({ params });
   const { supplierName } = selectedSupplier;

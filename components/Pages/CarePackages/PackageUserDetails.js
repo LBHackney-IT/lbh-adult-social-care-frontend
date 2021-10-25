@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from 'components';
+import { Container } from '../../HackneyDS';
 import { formatDate } from 'service';
 import { getAgeFromDateString } from 'api';
 
