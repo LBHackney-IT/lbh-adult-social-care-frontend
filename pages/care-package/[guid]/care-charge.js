@@ -32,11 +32,6 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
-const collectedByOptions = [
-  { id: 'hackney', label: 'Hackney council (gross)' },
-  { id: 'supplier', label: 'Supplier (net)' },
-];
-
 const useBreadcrumbs = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
@@ -68,9 +63,22 @@ const CareCharge = () => {
     defaultValues: {
       provisional: {
         costPerWeek: '',
-        collectedBy: collectedByOptions[0].id,
-        reasonCollecting: null,
+        collectedBy: '',
+        reasonCollecting: '',
         notes: '',
+      },
+      residentialLess12: {
+        value: '',
+        claimedBy: '',
+        startDate: null,
+        endDate: null,
+      },
+      residentialMore12: {
+        value: '',
+        claimedBy: '',
+        startDate: null,
+        endDate: null,
+        isOngoing: false,
       },
     },
   });
@@ -83,6 +91,8 @@ const CareCharge = () => {
     [toggleEdit]
   );
 
+  const residentialProps = { control, toggleCancel, toggleEnd };
+
   return (
     <div className="care-charge">
       <BrokerageHeader />
@@ -92,15 +102,10 @@ const CareCharge = () => {
 
         <TitleSubtitleHeader subTitle="Care Charges" title="Add financial assessment" />
 
-        <ProvisionalCareCharge
-          collectedByOptions={collectedByOptions}
-          onCancel={toggleCancel}
-          control={control}
-          onEnd={toggleEnd}
-        />
+        <ProvisionalCareCharge onCancel={toggleCancel} control={control} onEnd={toggleEnd} />
 
-        <ResidentialSUContribution weeks="1-12" onCancel={toggleCancel} onEnd={toggleEnd} />
-        <ResidentialSUContribution weeks="13+" onCancel={toggleCancel} onEnd={toggleEnd} />
+        <ResidentialSUContribution {...residentialProps} />
+        <ResidentialSUContribution {...residentialProps} isMore12 />
 
         <FinancialAssessment />
 

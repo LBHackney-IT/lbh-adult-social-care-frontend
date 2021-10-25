@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { currency } from 'constants/strings';
 import { Checkbox, Input, RadioGroup, DatePicker } from 'components/HackneyDS';
+import { Controller } from 'react-hook-form';
 import ActionButtons from './ActionButtons';
 
 const claimedByOptions = [
@@ -8,68 +9,75 @@ const claimedByOptions = [
   { id: 'net', label: 'Net' },
 ];
 
-const ResidentialSuContribution = ({ weeks, onCancel, onEnd }) => {
+const ResidentialSuContribution = ({ isMore12, control, onCancel, onEnd }) => {
+  const weeks = isMore12 ? '13+' : '1-12';
+  const formKey = isMore12 ? 'residentialMore12' : 'residentialLess12';
   const description = `Without Property ${weeks} weeks`;
-  const hasOngoing = weeks === '13+';
+
+  const options = claimedByOptions.map((el) => ({
+    label: el.label,
+    id: `${formKey}-${el.id}`,
+  }));
 
   return (
     <div className="residential-contribution">
       <h3>Residential SU contribution</h3>
       <p>{description}</p>
 
-      <Input
-        id={`${weeks}-value`}
-        label="Value"
-        preSign={currency.euro}
-        // onChangeValue={setCostPerWeek}
-        // value={costPerWeek}
-        // error={errors.costPerWeek}
-        // onBlur={() => {
-        //   if (costPerWeek < calculatedCost) {
-        //     setCostPerWeek(calculatedCost);
-        //   }
-        // }}
+      <Controller
+        name={`${formKey}.value`}
+        control={control}
+        defaultValue=""
+        render={({ field }) => (
+          <Input
+            id={`${weeks}-value`}
+            label="Value"
+            preSign={currency.euro}
+            handler={field.onChange}
+            value={field.value}
+          />
+        )}
       />
 
-      <RadioGroup
-        inline
-        items={claimedByOptions}
-        className="care-charge__radios"
-        // handle={(value) => {
-        //   changeError('collectedBy');
-        //   setCollectedBy(value);
-        // }}
-        // error={errors.collectedBy}
-        // value={collectedBy}
+      <Controller
+        name={`${formKey}.claimedBy`}
+        control={control}
+        render={({ field }) => (
+          <RadioGroup
+            inline
+            items={options}
+            name={`${formKey}-claimedBy`}
+            className="care-charge__radios"
+            handle={field.onChange}
+            value={field.value}
+          />
+        )}
       />
 
       <div className="care-charge__dates">
         <div>
           <h5>Start date</h5>
-          <DatePicker
-            day={{ label: 'From' }}
-            // minDate={startMinDate}
-            // date={dates[fields.dateFrom]}
-            // setDate={(date) => setDates(fields.dateFrom, date)}
+          <Controller
+            name={`${formKey}.startDate`}
+            control={control}
+            render={({ field }) => <DatePicker day={{ label: 'From' }} date={field.value} setDate={field.onChange} />}
           />
         </div>
 
         <div>
           <h5>End date</h5>
-          <DatePicker
-            day={{ label: 'To' }}
-            // minDate={startMinDate}
-            // date={dates[fields.dateFrom]}
-            // setDate={(date) => setDates(fields.dateFrom, date)}
+          <Controller
+            name={`${formKey}.endDate`}
+            control={control}
+            render={({ field }) => <DatePicker day={{ label: 'To' }} date={field.value} setDate={field.onChange} />}
           />
         </div>
 
-        {hasOngoing && (
-          <Checkbox
-            // value={isOngoing}
-            // id={checkboxId}
-            // onChangeValue={value => setIsOngoing(value)}
-            label="Ongoing"
+        {isMore12 && (
+          <Controller
+            name={`${formKey}.isOngoing`}
+            control={control}
+            render={({ field }) => <Checkbox value={field.value} onChangeValue={field.onChange} label="Ongoing" />}
           />
         )}
       </div>

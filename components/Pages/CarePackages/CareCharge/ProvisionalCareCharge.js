@@ -4,7 +4,12 @@ import { currency } from 'constants/strings';
 import { Input, Label, RadioGroup, Select, Textarea } from 'components/HackneyDS';
 import ActionButtons from './ActionButtons';
 
-const ProvisionalCareCharge = ({ control, collectedByOptions, onCancel, onEnd }) => (
+const collectedByOptions = [
+  { id: 'hackney', label: 'Hackney council (gross)' },
+  { id: 'supplier', label: 'Supplier (net)' },
+];
+
+const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => (
   <div className="provisional-care">
     <h3>Provisional care charge (pre-assessment)</h3>
 
@@ -30,6 +35,7 @@ const ProvisionalCareCharge = ({ control, collectedByOptions, onCancel, onEnd })
       render={({ field }) => (
         <RadioGroup
           inline
+          name="collected-by"
           label="Collected by"
           items={collectedByOptions}
           className="care-charge__radios"
