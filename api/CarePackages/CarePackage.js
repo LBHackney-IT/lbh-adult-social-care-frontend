@@ -1,6 +1,5 @@
-import { axiosRequest } from '../Utils/ApiUtils';
+import { axiosRequest, BASE_URL } from './../../api';
 import { requestMethods } from '../../constants/variables';
-import { BASE_URL } from '../BaseApi';
 
 const CARE_PACKAGE_URL = `${BASE_URL}/v1/care-packages`;
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { currency } from '../../../constants/strings';
+import { currency } from 'constants/strings';
 
 const BrokerageTotalCost = ({ name, className, value }) => {
   if(!name) return <></>;

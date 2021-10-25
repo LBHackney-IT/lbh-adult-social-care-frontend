@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { CaretDownIcon } from 'components/Icons';
 import { formatDate, getNumberWithCommas } from 'service';
-import { Checkbox, Container, Heading, HorizontalSeparator, Table, VerticalSeparator, Link } from 'components';
 import { getCarePackageDetailsRoute } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
+import { CaretDownIcon } from '../../../Icons';
+import { Checkbox, Container, Heading, HorizontalSeparator, Table, VerticalSeparator, Link } from '../../../HackneyDS';
 
 const CareDetails = ({ id, title, data }) => {
   const router = useRouter();
