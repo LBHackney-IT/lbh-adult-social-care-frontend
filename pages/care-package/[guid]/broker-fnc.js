@@ -51,6 +51,8 @@ const FundedNursingCarePage = () => {
     setLoading(false);
   };
 
+  const skipAndContinue = () => router.push(getCareChargesRoute(carePackageId));
+
   const updateFundedNursingCare = async (packageId, fundedNursingCareUpdate) => {
     setLoading(true);
     try {
@@ -73,6 +75,7 @@ const FundedNursingCarePage = () => {
       createFundedNursingCare={createFundedNursingCare}
       updateFundedNursingCare={updateFundedNursingCare}
       goBack={router.back}
+      skipAndContinue={skipAndContinue}
     />
   );
 };

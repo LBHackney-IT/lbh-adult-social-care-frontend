@@ -16,7 +16,17 @@
 
   &.success {
     border-left: 6px solid $lbh-success-border;
-    border-right: 1px solid #84bd00;
+    border-right: 1px solid $lbh-success-border;
+    padding-left: 24px;
+  }
+
+
+  &.actions {
+    background: $lbh-action-background;
+    border-left: 6px solid $lbh-action-border;
+    border-right: 1px solid $lbh-action-border;
+    border-top: 1px solid $lbh-action-border;
+    border-bottom: 1px solid $lbh-action-border;
     padding-left: 24px;
   }
 }
