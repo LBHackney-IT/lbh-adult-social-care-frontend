@@ -1,17 +1,21 @@
+import React, { useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import React, { useMemo } from 'react';
 import withSession from 'lib/session';
+import { useToggle } from 'react-use';
 import { getLoggedInUser } from 'service';
 import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import {
+  Button,
   Container,
   Breadcrumbs,
   BrokerageHeader,
+  EndElementModal,
+  EditElementModal,
+  CancelElementModal,
   TitleSubtitleHeader,
   FinancialAssessment,
   ProvisionalCareCharge,
   ResidentialSUContribution,
-  Button,
 } from 'components';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -45,8 +49,18 @@ const useBreadcrumbs = () => {
   );
 };
 
+const useModal = () => useToggle(false);
+
 const CareCharge = () => {
   const breadcrumbs = useBreadcrumbs();
+
+  const [isOpenEdit, toggleEdit] = useModal();
+  const [isOpenCancel, toggleCancel] = useModal();
+  const [isOpenEnd, toggleEnd] = useModal();
+
+  const onSubmit = useCallback(() => {
+    toggleEdit();
+  }, [toggleEdit]);
 
   return (
     <div className="care-charge">
@@ -57,18 +71,22 @@ const CareCharge = () => {
 
         <TitleSubtitleHeader subTitle="Care Charges" title="Add financial assessment" />
 
-        <ProvisionalCareCharge />
+        <ProvisionalCareCharge onCancel={toggleCancel} onEnd={toggleEnd} />
 
-        <ResidentialSUContribution weeks="1-12" />
-        <ResidentialSUContribution weeks="13+" />
+        <ResidentialSUContribution weeks="1-12" onCancel={toggleCancel} onEnd={toggleEnd} />
+        <ResidentialSUContribution weeks="13+" onCancel={toggleCancel} onEnd={toggleEnd} />
 
         <FinancialAssessment />
 
         <Container className="brokerage__actions">
           <Button className="brokerage__back-button">Back</Button>
-          <Button>Save and continue</Button>
+          <Button onClick={onSubmit}>Save and continue</Button>
         </Container>
       </Container>
+
+      <EditElementModal isOpen={isOpenEdit} onClose={() => toggleEdit(false)} />
+      <CancelElementModal isOpen={isOpenCancel} onClose={() => toggleCancel(false)} />
+      <EndElementModal isOpen={isOpenEnd} onClose={() => toggleEnd(false)} />
     </div>
   );
 };

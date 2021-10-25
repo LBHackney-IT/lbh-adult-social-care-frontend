@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useState } from 'react';
 import EditElementContent from './EditElementContent';
-import { Dialog } from '../../../HackneyDS';
+import { Dialog } from '../../../../HackneyDS';
 
 const testActiveElements = [
   {
@@ -23,28 +23,23 @@ const testActiveElements = [
     claimedBy: 'net',
     startDate: new Date(2021, 5, 2),
     endDate: new Date(2021, 9, 2),
-  }
+  },
 ];
 
-export const EditElementModal = ({ isOpened = true, activeElements = testActiveElements, isEditStep = true }) => {
-  const [openedModal, setOpenedModal] = useState(true);
-  const [editStep, setEditStep] = useState(isEditStep);
-
-  const closeModal = () => setOpenedModal(false);
-
-  useEffect(() => {
-    setEditStep(isEditStep);
-  }, [isEditStep]);
+const EditElementModal = ({ isOpen, onClose, activeElements = testActiveElements }) => {
+  const [editStep, setEditStep] = useState(false);
 
   return (
-    <Dialog className='care-charges-modal' isOpen={isOpened || openedModal} onClose={closeModal}>
+    <Dialog className="care-charges-modal" isOpen={isOpen} onClose={onClose}>
       <EditElementContent
         editStep={editStep}
         setEditStep={setEditStep}
-        closeModal={closeModal}
         activeElements={activeElements}
-        headerText='Edit element'
+        headerText="Edit element"
+        onClose={onClose}
       />
     </Dialog>
   );
 };
+
+export default memo(EditElementModal);

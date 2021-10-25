@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AddElementContent from './AddElementContent';
-import { Dialog } from '../../../HackneyDS';
+import { Dialog } from '../../../../HackneyDS';
 
 const testActiveElements = [
   {

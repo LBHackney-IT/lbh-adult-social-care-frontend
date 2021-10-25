@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { object, string } from 'yup';
-import { addWeeks } from 'date-fns';
-import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
-import CareChargesInfoEdited from '../ModalComponents/CareChargesInfoEdited';
-import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
-import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
-import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
-import { ErrorMessage } from '../../../HackneyDS';
+import { formValidator, incrementDate } from '../../../../../service';
+import CareChargesInfoEdited from '../CareChargesInfoEdited';
+import CareChargesModalActions from '../CareChargesModalActions';
+import CareChargesInfoTitle from '../CareChargesInfoTitle';
+import CareChargesModalTitle from '../CareChargesModalTitle';
+import { ErrorMessage } from '../../../../HackneyDS';
 
 const initialInputs = {
   value: '',
@@ -14,7 +12,7 @@ const initialInputs = {
   endDate: '',
 };
 
-const EditElementContent = ({ activeElements, headerText, editStep, setEditStep }) => {
+const AddElementContent = ({ activeElements, closeModal, headerText }) => {
   const [inputs, setInputs] = useState([]);
   const [inputHasErrors, setInputHasErrors] = useState(false);
   const [inputErrors, setInputErrors] = useState([]);
@@ -25,7 +23,12 @@ const EditElementContent = ({ activeElements, headerText, editStep, setEditStep 
     newInput[field] = value;
     if (field === 'startDate') {
       const { dateFromWeeks } = newInput;
-      const minEndDate = dateFromWeeks && addWeeks(value, dateFromWeeks);
+      const minEndDate =
+        dateFromWeeks &&
+        incrementDate({
+          incrementTime: { weeks: dateFromWeeks },
+          date: value,
+        });
       if (dateFromWeeks) {
         newInput.endDate = minEndDate;
       }
@@ -44,31 +47,19 @@ const EditElementContent = ({ activeElements, headerText, editStep, setEditStep 
     setInputErrors(cloneInputErrors);
   };
 
-  const confirm = () => alert('Confirm');
-
-  const editElement = () => setEditStep(true);
-
   const cancelAction = () => alert('Cancel');
 
-  const next = async () => {
+  const savePackage = () => {
     let hasErrors = false;
     const newInputErrors = inputErrors.slice();
 
-    const schema = object().shape({
-      value: string().required(),
-    });
-
-    let index = 0;
-    for await (const item of inputs) {
-      const valid = await schema.isValid({ value: item.value });
-      if (!valid) {
+    inputs.forEach((input, index) => {
+      const { validFields, hasErrors: hasLocalErrors } = formValidator({ form: input });
+      if (hasLocalErrors) {
         hasErrors = true;
-        newInputErrors.splice(index, 1, {
-          value: 'Required field',
-        });
+        newInputErrors.splice(index, 1, validFields);
       }
-      index += 1;
-    }
+    });
 
     if (hasErrors) {
       setInputHasErrors(true);
@@ -76,7 +67,7 @@ const EditElementContent = ({ activeElements, headerText, editStep, setEditStep 
       return;
     }
 
-    setEditStep(false);
+    alert('Saved success');
   };
 
   useEffect(() => {
@@ -94,19 +85,17 @@ const EditElementContent = ({ activeElements, headerText, editStep, setEditStep 
   return (
     <>
       <CareChargesModalTitle title={headerText} />
-      <CareChargesInfoTitle title={editStep ? 'ACTIVE ELEMENT' : 'PREVIOUS ELEMENT'} />
-      <CareChargesInfoStatic activeElements={activeElements} />
-      <CareChargesInfoTitle title={editStep ? 'EDITED ELEMENT' : 'NEW ELEMENT'} />
-      {editStep ? (
-        <CareChargesInfoEdited elements={inputs} inputErrors={inputErrors} onChangeInput={onChangeInput} />
-      ) : (
-        <CareChargesInfoStatic activeElements={inputs} />
-      )}
+      <CareChargesInfoTitle title="NEW ELEMENT" />
+      <CareChargesInfoEdited
+        hasEditStyle={false}
+        elements={inputs}
+        inputErrors={inputErrors}
+        onChangeInput={onChangeInput}
+      />
       {inputHasErrors && <ErrorMessage>There some errors above</ErrorMessage>}
       <CareChargesModalActions
         actions={[
-          { title: editStep ? 'Next' : 'Confirm', handler: editStep ? next : confirm },
-          !editStep && { title: 'Edit', className: 'without-background', handler: editElement },
+          { title: 'Save and update package', handler: savePackage },
           { title: 'Cancel', handler: cancelAction, className: 'without-background' },
         ]}
       />
@@ -114,4 +103,4 @@ const EditElementContent = ({ activeElements, headerText, editStep, setEditStep 
   );
 };
 
-export default EditElementContent;
+export default AddElementContent;

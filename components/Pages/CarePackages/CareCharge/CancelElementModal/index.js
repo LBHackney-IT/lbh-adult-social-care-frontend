@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { memo } from 'react';
 import CancelElementContent from './CancelElementContent';
-import { Dialog } from '../../../HackneyDS';
+import { Dialog } from '../../../../HackneyDS';
 
 const testFirstElement = [
   {
@@ -15,6 +15,7 @@ const testFirstElement = [
     endDate: new Date(2021, 1, 5),
   },
 ];
+
 const testSecondElement = [
   {
     id: 1,
@@ -29,24 +30,19 @@ const testSecondElement = [
 ];
 
 const CancelElementModal = ({
-  isOpened = true,
+  isOpen,
+  onClose,
   firstElement = testFirstElement,
   secondElement = testSecondElement,
-}) => {
-  const [openedModal, setOpenedModal] = useState(true);
+}) => (
+  <Dialog className="care-charges-modal cancel-element-modal" isOpen={isOpen} onClose={onClose}>
+    <CancelElementContent
+      firstElement={firstElement}
+      secondElement={secondElement}
+      headerText="Cancel element"
+      onClose={onClose}
+    />
+  </Dialog>
+);
 
-  const closeModal = () => setOpenedModal(false);
-
-  return (
-    <Dialog className="care-charges-modal cancel-element-modal" isOpen={isOpened || openedModal} onClose={closeModal}>
-      <CancelElementContent
-        closeModal={closeModal}
-        firstElement={firstElement}
-        secondElement={secondElement}
-        headerText="Cancel element"
-      />
-    </Dialog>
-  );
-};
-
-export default CancelElementModal;
+export default memo(CancelElementModal);

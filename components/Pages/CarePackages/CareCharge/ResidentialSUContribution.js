@@ -8,7 +8,7 @@ const claimedByOptions = [
   { id: 'net', label: 'Net' },
 ];
 
-const ResidentialSuContribution = ({ weeks }) => {
+const ResidentialSuContribution = ({ weeks, onCancel, onEnd }) => {
   const description = `Without Property ${weeks} weeks`;
   const hasOngoing = weeks === '13+';
 
@@ -74,7 +74,7 @@ const ResidentialSuContribution = ({ weeks }) => {
         )}
       </div>
 
-      <ActionButtons />
+      <ActionButtons onCancel={onCancel} onEnd={onEnd} />
     </div>
   );
 };

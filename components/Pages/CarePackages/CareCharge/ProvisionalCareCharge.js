@@ -8,7 +8,7 @@ const collectedByOptions = [
   { id: 'supplier', label: 'Supplier (net)' },
 ];
 
-const ProvisionalCareCharge = () => (
+const ProvisionalCareCharge = ({ onCancel, onEnd }) => (
   <div className="provisional-care">
     <h3>Provisional care charge (pre-assessment)</h3>
 
@@ -63,7 +63,7 @@ const ProvisionalCareCharge = () => (
       rows={3}
     />
 
-    <ActionButtons />
+    <ActionButtons onCancel={onCancel} onEnd={onEnd} />
   </div>
 );
 

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { memo } from 'react';
 import EndElementContent from './EndElementContent';
-import { Dialog } from '../../../HackneyDS';
+import { Dialog } from '../../../../HackneyDS';
 
 const testActiveElements = [
   {
@@ -23,21 +23,13 @@ const testActiveElements = [
     claimedBy: 'net',
     startDate: new Date(2021, 5, 2),
     endDate: new Date(2021, 9, 2),
-  }
+  },
 ];
 
-export const EndElementModal = ({ isOpened = true, activeElements = testActiveElements }) => {
-  const [openedModal, setOpenedModal] = useState(true);
+const EndElementModal = ({ isOpen, onClose, activeElements = testActiveElements }) => (
+  <Dialog className="care-charges-modal end-element-modal" isOpen={isOpen} onClose={onClose}>
+    <EndElementContent onClose={onClose} activeElements={activeElements} headerText="End current element" />
+  </Dialog>
+);
 
-  const closeModal = () => setOpenedModal(false);
-
-  return (
-    <Dialog className='care-charges-modal end-element-modal' isOpen={isOpened || openedModal} onClose={closeModal}>
-      <EndElementContent
-        closeModal={closeModal}
-        activeElements={activeElements}
-        headerText='End current element'
-      />
-    </Dialog>
-  )
-};
+export default memo(EndElementModal);

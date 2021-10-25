@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '../../HackneyDS';
+import { Button } from '../../../HackneyDS';
 
 const CareChargesModalActions = ({ actions = [] }) => (
   <div className="care-charges-modal__actions">

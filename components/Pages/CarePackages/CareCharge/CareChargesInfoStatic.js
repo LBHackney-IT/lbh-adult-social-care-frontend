@@ -1,6 +1,6 @@
 import React from 'react';
-import { formatDate } from '../../../service';
-import { currency } from '../../../constants/strings';
+import { formatDate } from '../../../../service';
+import { currency } from '../../../../constants/strings';
 
 const CareChargesInfoStatic = ({ activeElements = [], children }) => (
   <>

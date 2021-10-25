@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import OptionsElementContent from './OptionsElementContent';
-import { Dialog } from '../../../HackneyDS';
+import { Dialog } from '../../../../HackneyDS';
 
 export const OptionsElementModal = ({ isOpened = true, options = [] }) => {
   const [openedModal, setOpenedModal] = useState(true);
