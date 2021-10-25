@@ -3,7 +3,13 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { getCareChargesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { useReclaimApi, createCarePackageReclaimFnc, updateCarePackageReclaimFnc, useCarePackageApi } from 'api';
+import {
+  createCarePackageReclaimFnc,
+  updateCarePackageReclaimFnc,
+  usePackageFnc,
+  usePackageActiveFncPrice,
+  usePackageDetails
+} from 'api';
 import { FundedNursingCare } from 'components';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
@@ -31,10 +37,9 @@ const FundedNursingCarePage = () => {
   const carePackageId = router.query.guid;
 
   const dispatch = useDispatch();
-  const { data: carePackageReclaimFnc, isLoading: fncLoading } = useReclaimApi.fnc(carePackageId);
-  const { data: activeFncPrice, isLoading: fncPriceLoading } = useReclaimApi.activeFncPrice(carePackageId);
-  const { data: detailsData, isLoading: detailsLoading } = useCarePackageApi.details(carePackageId);
-
+  const { data: carePackageReclaimFnc, isLoading: fncLoading } = usePackageFnc(carePackageId);
+  const { data: activeFncPrice, isLoading: fncPriceLoading } = usePackageActiveFncPrice(carePackageId);
+  const { data: detailsData, isLoading: detailsLoading } = usePackageDetails(carePackageId);
   const [loading, setLoading] = useState(false);
 
   const pushNotification = (text, className = 'error') => {

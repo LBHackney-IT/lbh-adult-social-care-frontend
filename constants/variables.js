@@ -22,3 +22,8 @@ export const tagColors = {
   cancelled: 'red',
   approved: 'gray',
 };
+
+export const userTagColors = {
+  new: 'yellow',
+  existing: 'gray',
+};

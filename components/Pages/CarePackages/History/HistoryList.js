@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import React, { memo } from 'react';
-import { useCarePackageApi } from 'api';
+import { usePackageHistory } from 'api';
 import { formatDate } from 'service';
 
 const HistoryList = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { data } = useCarePackageApi.history(packageId);
+  const { data } = usePackageHistory(packageId);
 
   return (
     <div className="history__list">

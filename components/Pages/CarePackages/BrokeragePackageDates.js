@@ -1,5 +1,7 @@
 import React from 'react';
-import { Checkbox, DatePicker, FormGroup } from '../../HackneyDS';
+import FormGroup from '../../HackneyDS/FormGroup';
+import DatePicker from '../../HackneyDS/DatePicker';
+import { Checkbox } from '../../HackneyDS';
 
 const BrokeragePackageDates = ({
   dates,
