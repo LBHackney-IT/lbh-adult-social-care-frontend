@@ -1,19 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Container, FileUpload, Label, RadioGroup, Select, Textarea } from '../../../HackneyDS';
-import FormGroup from '../../../HackneyDS/FormGroup';
+import { isFunction } from 'api';
+import { requiredSchema } from 'constants/schemas';
+import { dateStringToDate } from 'service';
+import {
+  Button,
+  Loading,
+  FormGroup,
+  Container,
+  FileUpload,
+  Label,
+  RadioGroup,
+  Select,
+  Textarea,
+  Announcement
+} from 'components';
 import UrlFromFile from '../../../UrlFromFile';
-import { isFunction } from '../../../../api/index';
-import { requiredSchema } from '../../../../constants/schemas';
-import { dateStringToDate } from '../../../../service';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
-import Loading from '../../../Loading';
 
 const FundedNursingCare = ({
   carePackageId,
   collectedByOptions,
+  skipAndContinue,
   activeFncPrice,
   carePackageReclaimFnc,
   createFundedNursingCare = () => {},
@@ -35,6 +45,7 @@ const FundedNursingCare = ({
     dateTo: '',
     notes: '',
   });
+  const [hasPreviousFnc, setHasPreviousFnc] = useState(false); //todo for new design
   const [hasFNC, setHasFNC] = useState('yes');
   const [collectedBy, setCollectedBy] = useState();
   const [notes, setNotes] = useState('');
@@ -140,6 +151,9 @@ const FundedNursingCare = ({
     }
   };
 
+  const loadPreviousFnc = () => alert('load previous fnc');
+  const addNewFnc = () => alert('add new fnc');
+
   useEffect(() => {
     composeCarePackageReclaimFncData();
   }, [carePackageReclaimFnc]);
@@ -152,6 +166,18 @@ const FundedNursingCare = ({
         <TitleSubtitleHeader title="Build a care package" subTitle="Funded Nursing Care" />
         <Container>
           <h3 className="brokerage__item-title">Funded Nursing Care</h3>
+          {hasPreviousFnc && (
+            <Announcement className="actions mb-5">
+              <div slot="title">FNC charge has previously been added. </div>
+              <div slot="content">
+                <p className='mb-3'>Would you like to use previous FNC?</p>
+                <Container className='button-group'>
+                  <Button onClick={loadPreviousFnc}>Yes, use previous FNC</Button>
+                  <Button className='background-secondary' onClick={addNewFnc}>No, add new FNC</Button>
+                </Container>
+              </div>
+            </Announcement>
+          )}
           <RadioGroup
             handle={(value) => {
               changeError('hasFNC');
@@ -214,6 +240,7 @@ const FundedNursingCare = ({
             <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
+            <Button onClick={skipAndContinue} className='background-yellow'>Skip and continue</Button>
             <Button disabled={loading} isLoading={loading} onClick={clickSave}>
               Save and continue
             </Button>

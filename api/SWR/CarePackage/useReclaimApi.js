@@ -8,7 +8,11 @@ const useReclaimApi = {
   activeFncPrice: (carePackageId) =>
     useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/reclaims/fnc/active-price` : null),
   calculatedCost: (carePackageId, serviceUserId) =>
-    useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/reclaims/care-charges/${serviceUserId}/default` : null),
+    useGetData(
+      carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/reclaims/care-charges/${serviceUserId}/default` : null,
+      'Can not get calculated cost',
+      0,
+    ),
   careCharge: (carePackageId) =>
     useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/reclaims/care-charges` : null),  
 };
