@@ -4,19 +4,26 @@
   }
 
   .title-subtitle {
-    margin-right: 60px;
+    margin-left: auto;
+  }
+}
+
+.care-charges__cell {
+  cursor: pointer;
+  vertical-align: bottom;
+  margin-left: auto;
+  padding-top: 24px;
+  padding-bottom: 24px;
+
+  &:first-of-type {
+    padding-left: 0;
+    margin-left: 0;
   }
 }
 
 .new-care-charge__card {
-  transition: 0.2s ease;
-  padding-bottom: 24px;
-  padding-top: 10px;
-  border-bottom: 1px solid $lbh-gray-border;
-
-  &:hover {
-    cursor: pointer;
-    background: $lbh-gray;
+  .title-subtitle {
+    margin-right: 60px;
   }
 }
 

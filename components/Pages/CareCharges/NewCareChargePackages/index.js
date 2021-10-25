@@ -1,20 +1,17 @@
 import React from 'react';
-import { formatDate, getTagColorFromStatus } from 'service';
 import { getServiceUserPackagesRoute, CARE_PACKAGE_ROUTE, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
-import { userTagColors } from 'constants/variables';
 import { useRouter } from 'next/router';
 import {
   Breadcrumbs,
   Button,
   Container,
   Select,
-  Tag,
   FormGroup,
 } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 import BrokerageHeader from '../../CarePackages/BrokerageHeader';
-import TitleSubtitle from './TitleSubtitle';
 import AlternativePagination from '../../../AlternativePagination';
+import { CareChargesTable } from './CareChargesTable';
 
 const breadcrumbs = [{ text: 'Home', href: CARE_PACKAGE_ROUTE }, { text: 'Care Charges' }];
 
@@ -84,47 +81,7 @@ const NewCareChargePackages = ({
         </Container>
       </Container>
       <Container padding="30px 60px 60px 60px" className="centered-container">
-        {data?.map(({
-          status,
-          serviceUser,
-          isS117Client,
-          dateOfBirth,
-          address,
-          hackneyId,
-          packageId,
-          packageType,
-          serviceUserId,
-          startDate,
-          lastModified,
-          modifiedBy,
-        }) => (
-          <Container
-            onClick={() => pushRoute(getServiceUserPackagesRoute(serviceUserId))}
-            key={packageId}
-            className="new-care-charge__card"
-          >
-            <Container className="new-care-charge__card-title" display="flex">
-              <p>{serviceUser}</p>
-              <Tag className="outline" color={getTagColorFromStatus(status, userTagColors)}>
-                {status}
-              </Tag>
-              {isS117Client && <Tag className="outline" color="red">S117</Tag>}
-            </Container>
-            <p className="new-care-charge__card-date">{formatDate(dateOfBirth)}</p>
-            <p className="new-care-charge__card-address">{address}</p>
-            <Container display="flex" justifyContent="space-between">
-              <Container display="flex">
-                <TitleSubtitle title="Hackney ID" subtitle={`#${hackneyId}`} />
-                <TitleSubtitle title="Package" subtitle={packageType} />
-                <TitleSubtitle title="Start date" subtitle={formatDate(startDate)} />
-              </Container>
-              <Container display="flex">
-                <TitleSubtitle title="Last modified" subtitle={formatDate(lastModified)} />
-                <TitleSubtitle title="by" subtitle={modifiedBy} />
-              </Container>
-            </Container>
-          </Container>
-        ))}
+        <CareChargesTable data={data} onRowClick={({ serviceUserId }) => pushRoute(getServiceUserPackagesRoute(serviceUserId))} />
         <AlternativePagination
           className='mt-6'
           totalPages={pagingMetaData?.totalPages}
