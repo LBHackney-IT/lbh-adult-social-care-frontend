@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
 import { useToggle } from 'react-use';
@@ -31,6 +32,11 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
+const collectedByOptions = [
+  { id: 'hackney', label: 'Hackney council (gross)' },
+  { id: 'supplier', label: 'Supplier (net)' },
+];
+
 const useBreadcrumbs = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
@@ -58,9 +64,24 @@ const CareCharge = () => {
   const [isOpenCancel, toggleCancel] = useModal();
   const [isOpenEnd, toggleEnd] = useModal();
 
-  const onSubmit = useCallback(() => {
-    toggleEdit();
-  }, [toggleEdit]);
+  const { handleSubmit, control } = useForm({
+    defaultValues: {
+      provisional: {
+        costPerWeek: '',
+        collectedBy: collectedByOptions[0].id,
+        reasonCollecting: null,
+        notes: '',
+      },
+    },
+  });
+
+  const onSubmit = useCallback(
+    (form) => {
+      console.log('%c form =', 'color: lightblue', form);
+      // toggleEdit();
+    },
+    [toggleEdit]
+  );
 
   return (
     <div className="care-charge">
@@ -71,7 +92,12 @@ const CareCharge = () => {
 
         <TitleSubtitleHeader subTitle="Care Charges" title="Add financial assessment" />
 
-        <ProvisionalCareCharge onCancel={toggleCancel} onEnd={toggleEnd} />
+        <ProvisionalCareCharge
+          collectedByOptions={collectedByOptions}
+          onCancel={toggleCancel}
+          control={control}
+          onEnd={toggleEnd}
+        />
 
         <ResidentialSUContribution weeks="1-12" onCancel={toggleCancel} onEnd={toggleEnd} />
         <ResidentialSUContribution weeks="13+" onCancel={toggleCancel} onEnd={toggleEnd} />
@@ -80,7 +106,7 @@ const CareCharge = () => {
 
         <Container className="brokerage__actions">
           <Button className="brokerage__back-button">Back</Button>
-          <Button onClick={onSubmit}>Save and continue</Button>
+          <Button onClick={handleSubmit(onSubmit)}>Save</Button>
         </Container>
       </Container>
 
