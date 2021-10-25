@@ -8,9 +8,9 @@ export const requestMethods = {
 };
 
 export const dateDescending = {
-  asc: 1,
-  equal: 0,
-  desc: -1,
+  asc: 1, // 0, 1
+  equal: 0, // 0, 0
+  desc: -1, // 1, 0
 };
 
 export const tagColors = {

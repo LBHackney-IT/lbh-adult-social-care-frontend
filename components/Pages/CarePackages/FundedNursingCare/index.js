@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { isFunction } from 'api';
-import { requiredSchema } from 'constants/schemas';
 import { compareDescendingDMY, dateStringToDate } from 'service';
 import { dateDescending } from 'constants/variables';
+import { useDispatch } from 'react-redux';
+import { addNotification } from 'reducers/notificationsReducer';
+import * as yup from 'yup';
 import {
   Button,
   FormGroup,
@@ -33,6 +35,7 @@ const FundedNursingCare = ({
   detailsData,
   loading,
 }) => {
+  const dispatch = useDispatch();
   const [collectedByType] = useState({
     hackney: 'gross',
     supplier: 'net',
@@ -48,7 +51,7 @@ const FundedNursingCare = ({
     notes: '',
   });
   const [hasFNC, setHasFNC] = useState('');
-  const [hasPreviousFnc] = useState(false); //todo for new design
+  const [hasPreviousFnc] = useState(false); // todo for new design
   const [collectedBy, setCollectedBy] = useState();
   const [notes, setNotes] = useState('');
   const [file, setFile] = useState(null);
@@ -58,54 +61,66 @@ const FundedNursingCare = ({
     if (isFunction(goBack())) goBack();
   };
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  }
+
   const clickSave = async () => {
     const { dateFrom, dateTo } = dates;
-    const validFields = [
-      {
-        schema: requiredSchema.date,
-        value: dateFrom,
-        field: 'dateFrom',
-      },
-    ];
 
-    if (!isOngoing) {
-      validFields.push({
-        schema: requiredSchema.date,
-        value: dateTo,
-        field: 'dateTo',
-      });
-    }
+    const schema = yup.object().shape({
+      detailsDateTo: null,
+      isOngoing: yup.boolean(),
+      dateFrom: yup
+        .date()
+        .typeError('Please select a date from')
+        .required()
+        .min(new Date(detailsData.startDate), 'Date from less then core date start')
+        .test('dateFrom', 'Date from more then core date end', () => {
+          if(detailsData.endDate) {
+            return compareDescendingDMY(dateFrom, detailsData.endDate) !== dateDescending.desc
+          }
+          return true;
+        }),
+      dateTo: yup
+        .date()
+        .when('isOngoing', {
+          is: false,
+          then: yup
+            .date()
+            .typeError('Please select a date to')
+            .required()
+            .test('dateTo', '(Date to) less then (date from)', () => (
+              compareDescendingDMY(dateFrom, dateTo) !== dateDescending.desc
+            ))
+            .test('dateTo', 'Date to should be less or equal then core end date', (value) => {
+              if(detailsData.endDate) {
+                return compareDescendingDMY(value, detailsData.endDate) !== dateDescending.desc
+              }
+              return true
+            }),
+        })
+    });
 
+    let localErrors = {};
     let hasErrors = false;
-    const localErrors = {};
-    for await (const { schema, value, field } of validFields) {
-      const isValid = await schema.isValid({ value });
-      if (!isValid) {
+
+    try {
+      await schema.validate({ detailsDateTo: detailsData.endDate, isOngoing, dateFrom, dateTo}, { abortEarly: false });
+    } catch (errorValidation) {
+      const newErrors = errorValidation?.inner?.map(error => ([error.path, error.message ]));
+      if(newErrors) {
         hasErrors = true;
-        localErrors[field] = 'Required field';
+        localErrors = Object.fromEntries(newErrors);
+        setErrors(prevState => ({ ...prevState, ...localErrors }));
       }
-    }
-
-    const invalidEndDate = !isOngoing && compareDescendingDMY(dateFrom, dateTo) === dateDescending.desc;
-
-    const coreEndDateValidation = dateTo && !isOngoing && compareDescendingDMY(dateTo, detailsData.endDate) === dateDescending.desc;
-
-    const coreStartEndDateValidation = dateFrom && (
-      compareDescendingDMY(detailsData.startDate, dateFrom) === dateDescending.desc ||
-      (detailsData.endDate && compareDescendingDMY(dateFrom, detailsData.endDate) === dateDescending.desc)
-    );
-
-    if(coreEndDateValidation) {
-      localErrors.dateTo = 'Date to should be in range of core date';
-    }
-
-    if(coreStartEndDateValidation) {
-      localErrors.dateFrom = 'Date from should be in range of core date';
     }
 
     setErrors((prevState) => ({ ...prevState, ...localErrors }));
 
-    if (hasErrors || invalidEndDate || coreEndDateValidation || coreStartEndDateValidation) return;
+    if (hasErrors) {
+      return pushNotification('Some errors above');
+    }
 
     const fundedNursingCareCreation = {
       carePackageId,
@@ -115,7 +130,7 @@ const FundedNursingCare = ({
       status: 1, // Set active status ?
       type: 1, // Set type of reclaim ?
       startDate: dateFrom,
-      endDate: dateTo,
+      endDate: isOngoing ? null : dateTo,
       description: notes,
     };
 
@@ -127,15 +142,14 @@ const FundedNursingCare = ({
       status: 1, // Set active status ?
       type: 1, // Set type of reclaim ?
       startDate: dateFrom,
-      endDate: dateTo,
+      endDate: isOngoing ? null : dateTo,
       description: notes,
     };
 
     if (!carePackageReclaimFnc?.id) {
-      createFundedNursingCare(carePackageId, fundedNursingCareCreation);
-      return;
+      return createFundedNursingCare(carePackageId, fundedNursingCareCreation);
     }
-    updateFundedNursingCare(carePackageId, fundedNursingCareUpdate);
+    return updateFundedNursingCare(carePackageId, fundedNursingCareUpdate);
   };
 
   const changeError = (field, value = '') => {
@@ -154,8 +168,9 @@ const FundedNursingCare = ({
     setDates({
       dateFrom: dateStringToDate(carePackageReclaimFnc.startDate || detailsData.startDate),
       dateTo: dateStringToDate(carePackageReclaimFnc.endDate || detailsData.endDate),
-    })
-    if (!carePackageReclaimFnc.endDate && !detailsData.endDate) {
+    });
+
+    if (carePackageReclaimFnc?.endDate === null) {
       setIsOngoing(true);
     }
 
