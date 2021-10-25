@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import withSession from 'lib/session';
 import { useForm, Controller } from 'react-hook-form';
 import { getLoggedInUser } from 'service';
@@ -40,7 +40,16 @@ const CorePackage = () => {
   const { guid: packageId } = router.query;
   const { data: packageInfo } = useSinglePackageInfo(packageId);
   const { settings } = packageInfo;
-  const { data: schedulingOptions = [] } = usePackageSchedulingOptions();
+  const { data: schedulingOptionsData = [] } = usePackageSchedulingOptions();
+
+  const schedulingOptions = useMemo(() => (
+    schedulingOptionsData.map(({ id, optionName, optionPeriod }) => ({
+      id,
+      label: `${optionName} (${optionPeriod})`
+    }))
+  ), [schedulingOptionsData]);
+
+  console.log(schedulingOptionsData);
 
   const schema = yup.object().shape({
     packageType: yup
@@ -116,6 +125,7 @@ const CorePackage = () => {
               control={control}
               render={({ field }) => (
                 <RadioGroup
+                  name='packageScheduling'
                   error={errors.packageScheduling?.message}
                   label="Packaging scheduling"
                   handle={field.onChange}
