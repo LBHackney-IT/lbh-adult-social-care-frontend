@@ -44,7 +44,7 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
   const popupMainContent = (
     <Container>
       <FormGroup error={approverError} required className="brokerage__approved-by-select" label="To be approved by">
-        <Select error={approverError} options={approverOptions} value={approverId} onChangeValue={changeApprover} />
+        <Select disabledEmptyComponent error={approverError} options={approverOptions} value={approverId} onChangeValue={changeApprover} />
       </FormGroup>
       <FormGroup className="brokerage__add-notes" label="Add notes">
         <Textarea value={notes} handler={setNotes} />
