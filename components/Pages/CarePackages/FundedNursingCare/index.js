@@ -55,7 +55,7 @@ const FundedNursingCare = ({
   const [collectedBy, setCollectedBy] = useState();
   const [notes, setNotes] = useState('');
   const [file, setFile] = useState(null);
-  const [isOngoing, setIsOngoing] = useState(false);
+  const [isOngoing, setIsOngoing] = useState(true);
 
   const clickBack = () => {
     if (isFunction(goBack())) goBack();
@@ -172,8 +172,8 @@ const FundedNursingCare = ({
       dateTo: dateStringToDate(carePackageReclaimFnc.endDate || detailsData.endDate),
     });
 
-    if (carePackageReclaimFnc?.endDate === null) {
-      setIsOngoing(true);
+    if (carePackageReclaimFnc?.endDate || detailsData.endDate) {
+      setIsOngoing(false);
     }
 
     setNotes(carePackageReclaimFnc.description || '');

@@ -9,7 +9,7 @@ export default function Select({
   disabledOptions = [],
   disabledEmptyComponent = false,
   options = [],
-  emptyElement = { text: 'Select one', value: null },
+  emptyElement = { text: 'Select one', value: '' },
   id = 'select-id',
   error,
   IconComponent = <SelectArrowTriangle />,
@@ -17,7 +17,7 @@ export default function Select({
   const outerClass = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-select--error' : '';
   const errorDescribedBy = error ? { 'aria-describedby': ' govuk-select--error' } : {};
-  const [isDisabled, setDisabled] = useState(false);
+  const [isDisabled, setDisabled] = useState(disabledEmptyComponent && emptyElement?.text);
   return (
     <div className="select-container">
       <select
