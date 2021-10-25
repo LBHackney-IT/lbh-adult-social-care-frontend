@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Container, Dialog, Textarea } from '../../HackneyDS';
-import FormGroup from '../../HackneyDS/FormGroup';
+import { Button, Container, Dialog, Textarea, FormGroup } from '../../HackneyDS';
 
 const ActionCarePackageModal = ({ close, title, actions, isOpened, notes, setNotes, className }) => (
   <Dialog isOpen={isOpened} onClose={close} className={className}>

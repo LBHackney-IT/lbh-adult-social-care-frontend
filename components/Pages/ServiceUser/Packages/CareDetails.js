@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { CaretDownIcon } from 'components/Icons';
 import { formatDate, getNumberWithCommas } from 'service';
-import { Checkbox, Container, Heading, HorizontalSeparator, Table, VerticalSeparator } from 'components/HackneyDS';
+import { Checkbox, Container, Heading, HorizontalSeparator, Table, VerticalSeparator, Link } from 'components';
+import { getCarePackageDetailsRoute } from 'routes/RouteConstants';
+import { useRouter } from 'next/router';
 
-const CareDetails = ({ title, data }) => {
+const CareDetails = ({ id, title, data }) => {
+  const router = useRouter();
+  const filteredData = data.filter((d) => d.status === 'Active');
   const [isExpanded, setExpanded] = useState(true);
 
   const columns = [
@@ -13,7 +17,7 @@ const CareDetails = ({ title, data }) => {
     },
     {
       Header: 'Element',
-      accessor: 'element',
+      accessor: 'name',
     },
     {
       Header: 'Start date',
@@ -23,7 +27,7 @@ const CareDetails = ({ title, data }) => {
     {
       Header: 'End date',
       accessor: 'endDate',
-      Cell: ({ value }) => formatDate(value),
+      Cell: ({ value }) => (value ? formatDate(value) : 'Ongoing'),
     },
     {
       Header: 'Weekly cost',
@@ -31,35 +35,47 @@ const CareDetails = ({ title, data }) => {
       className: 'align-right',
       Cell: ({ value }) => (
         <span className="align-right">
-          {value < 0 ? `-£${getNumberWithCommas(Math.abs(value))}` : `£${getNumberWithCommas(value)}`}
+          {value < 0
+            ? `-£${getNumberWithCommas(Math.abs(value).toFixed(2))}`
+            : `£${getNumberWithCommas(Math.abs(value).toFixed(2))}`}
         </span>
       ),
     },
   ];
+
+  const [activeOnly, setFilter] = useState(false);
+
+  const handleClick = () => router.push(getCarePackageDetailsRoute(id));
+
   return (
     <>
       <Container alignItems="baseline" borderBottom="1px solid #BFC1C3">
         <Container display="flex" alignItems="baseline">
           <Heading size="xl">{title}</Heading>
           <VerticalSeparator width="20px" />
-          <Container
-            display="flex"
-            className={`review-package-details__accordion-info${isExpanded ? ' accordion-opened' : ''}`}
-          >
+          <Container display="flex" alignItems="center">
             <p onClick={() => setExpanded(!isExpanded)} className="link-button">
               {isExpanded ? 'Hide' : 'Collapse'}
             </p>
+            <VerticalSeparator width="5px" />
             <CaretDownIcon />
           </Container>
+        </Container>
+        <Container display='flex' justifyContent='flex-end'>
+        <Link onClick={handleClick} noVisited>Package details</Link>
         </Container>
         {isExpanded && (
           <Container>
             <HorizontalSeparator height="20px" />
-            <Checkbox label="Show only active elements" />
+            <Checkbox
+              label="Show only active elements"
+              value={activeOnly}
+              onChangeValue={() => setFilter(!activeOnly)}
+            />
             <HorizontalSeparator height="5px" />
             <Table
               columns={columns}
-              data={data}
+              data={activeOnly ? filteredData : data}
               headerClassName="care-details__table-header"
               cellClassName="care-details__table-cell"
             />
@@ -67,6 +83,7 @@ const CareDetails = ({ title, data }) => {
         )}
         <HorizontalSeparator height="28px" />
       </Container>
+      <HorizontalSeparator height="28px" />
     </>
   );
 };

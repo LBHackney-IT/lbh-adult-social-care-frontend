@@ -58,14 +58,7 @@ const BrokerAssistance = () => {
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
   const handleRowClick = useCallback((rowInfo) => {
-    router.push({
-      pathname: getServiceUserPackagesRoute(rowInfo.packageId),
-      query: {
-        // todo: should be removed once endpoint for getting package info will contain this data
-        packageStatus: rowInfo.packageStatus,
-        dateAssigned: rowInfo.dateAssigned,
-      },
-    });
+    router.push(getServiceUserPackagesRoute(rowInfo.serviceUserId));
   }, []);
 
   const goToBrokerAssistanceSearch = useCallback(() => {

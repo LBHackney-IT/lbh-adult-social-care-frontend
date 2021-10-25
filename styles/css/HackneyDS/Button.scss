@@ -31,6 +31,16 @@
   -webkit-appearance: none;
   width: auto;
 
+  &.background-yellow {
+    background: $lbh-yellow;
+    color: black;
+  }
+
+  &.background-secondary {
+    background: $lbh-secondary-text-colour;
+    color: white;
+  }
+
   &--disabled {
     cursor: initial;
     user-select: none;

@@ -1,28 +1,26 @@
 import React, { useState } from 'react';
-import { useCarePackageApi } from 'api';
 import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from 'components/HackneyDS';
-import { getCorePackageRoute } from 'routes/RouteConstants';
-import { formatDate, getTagColorFromStatus } from 'service';
+import {
+  formatDate,
+  getButtonTextFromPackageStatus,
+  getTagColorFromStatus,
+  getButtonColourFromPackageStatus,
+} from 'service';
 import { CaretDownIcon } from 'components/Icons';
 import { useRouter } from 'next/router';
+import { getCorePackageRoute } from 'routes/RouteConstants';
 
-const PackageRequest = () => {
+const PackageRequest = ({ packageRequest }) => {
   const router = useRouter();
-  const { guid: packageId, packageStatus, dateAssigned } = router.query;
   const [isExpanded, setExpanded] = useState(false);
+  const buttonClass = getButtonColourFromPackageStatus(packageRequest.packageStatus);
 
-  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
-  const { packageType } = packageInfo;
-
-  const handleClick = () => {
-    router.push(getCorePackageRoute(packageId));
-  };
-
+  const handleClick = () => router.push(getCorePackageRoute(packageRequest.packageId));
   return (
-    <Container border="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
+    <Container borderBottom="1px solid #BFC1C3" border="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
       <Container display="flex" alignItems="center">
-        <Tag className="text-capitalize outline" color={getTagColorFromStatus(packageStatus)}>
-          {packageStatus}
+        <Tag className="text-capitalize outline" color={getTagColorFromStatus(packageRequest.packageStatus)}>
+          {packageRequest.packageStatus}
         </Tag>
         <VerticalSeparator width="10px" />
         <Heading size="l">Package request</Heading>
@@ -32,7 +30,7 @@ const PackageRequest = () => {
         <Container className="user-details">
           <Container>
             <p>Package</p>
-            <p>{packageType}</p>
+            <p>{packageRequest.packageType}</p>
           </Container>
           <Container>
             <p>Care Plan</p>
@@ -40,20 +38,20 @@ const PackageRequest = () => {
           </Container>
           <Container>
             <p>Assigned</p>
-            <p>{formatDate(dateAssigned)}</p>
+            <p>{formatDate(packageRequest.dateAssigned)}</p>
           </Container>
         </Container>
-        <Button onClick={handleClick}>Create Package</Button>
+        <Button onClick={handleClick} className={`package-request__${buttonClass}`}>
+          {getButtonTextFromPackageStatus(packageRequest.packageStatus)}
+        </Button>
       </Container>
       <HorizontalSeparator height="10px" />
       <Container>
-        <Container
-          display="flex"
-          className={`review-package-details__accordion-info${isExpanded ? ' accordion-opened' : ''}`}
-        >
+        <Container display="flex" alignItems="center" cursor="pointer">
           <p onClick={() => setExpanded(!isExpanded)} className="link-button">
-            Notes
+            {isExpanded ? 'Hide' : 'Collapse'}
           </p>
+          <VerticalSeparator width="5px" />
           <CaretDownIcon />
         </Container>
         {isExpanded && (
