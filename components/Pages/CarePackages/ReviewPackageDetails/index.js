@@ -73,10 +73,10 @@ const ReviewPackageDetails = ({
     dispatch(addNotification({ text, notificationClassName }));
   };
 
-  const makeActionPackage = async (action) => {
+  const makeActionPackage = async (action, notes) => {
     setLoading(true);
     try {
-      await action(packageId);
+      await action(packageId, notes);
       router.push('/');
     } catch (e) {
       pushNotification('Something went wrong');
@@ -84,13 +84,22 @@ const ReviewPackageDetails = ({
     setLoading(false);
   }
 
-  const cancelCarePackageActions = [
-    { title: 'End package', onClick: () => makeActionPackage(endCarePackage) },
+  const endCarePackageActions = [
+    {
+      loading,
+      title: 'End package',
+      onClick: () => makeActionPackage(endCarePackage, actionNotes.endNotes)
+    },
     { title: 'Cancel', onClick: closePopup, className: 'link-button red' },
   ];
 
-  const endCarePackageActions = [
-    { title: 'Cancel package', className: 'color-lbh-e01', onClick: () => makeActionPackage(cancelCarePackage) },
+  const cancelCarePackageActions = [
+    {
+      loading,
+      title: 'Cancel package',
+      className: 'color-lbh-e01',
+      onClick: () => makeActionPackage(cancelCarePackage, actionNotes.cancelNotes)
+    },
     { title: 'Back', onClick: closePopup, className: 'link-button black' },
   ];
 
@@ -103,7 +112,7 @@ const ReviewPackageDetails = ({
 
   return (
     <div className={`review-package-details ${className}`}>
-      <Loading isLoading={loading || isLoading} />
+      <Loading isLoading={isLoading} />
       {openedPopup === 'submit' && <SubmitForApprovalPopup packageId={packageId} closePopup={closePopup} />}
       <ActionCarePackageModal
         className='package-details__action-modal'
@@ -124,10 +133,10 @@ const ReviewPackageDetails = ({
         actions={cancelCarePackageActions}
       />
       <BrokerageHeader/>
-      <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
-        <Breadcrumbs values={breadcrumbs}/>
+      <Container maxWidth="1080px" margin="10px auto 0" padding="0 60px">
+        <Breadcrumbs values={breadcrumbs} />
       </Container>
-      <Container maxWidth="1080px" margin="0 auto" padding="60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <Container className="brokerage__container-header brokerage__container">
           <TitleSubtitleHeader
             width=''

@@ -8,8 +8,8 @@ const ActionCarePackageModal = ({ close, title, actions, isOpened, notes, setNot
       <Textarea value={notes} handler={setNotes}/>
     </FormGroup>
     <Container className="brokerage__actions">
-      {actions.map(({ title: actionTitle, onClick, className: actionClassName }) => (
-        <Button className={actionClassName} key={actionTitle} onClick={onClick}>
+      {actions.map(({ loading, title: actionTitle, onClick, className: actionClassName }) => (
+        <Button disabled={loading} isLoading={loading} className={actionClassName} key={actionTitle} onClick={onClick}>
           {actionTitle}
         </Button>
       ))}

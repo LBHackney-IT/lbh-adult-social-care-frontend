@@ -14,11 +14,11 @@ export const submitCarePackage = ({ data, packageId }) => sendCarePackageRequest
 
 export const approveCarePackage = ({ data, packageId }) => sendCarePackageRequest(`${packageId}/approve`, data)
 
-export const endCarePackage = ({ data, packageId }) => sendCarePackageRequest(`${packageId}/end`, data)
-
 export const declineCarePackage = ({ data, packageId }) => sendCarePackageRequest(`${packageId}/decline`, data)
 
-export const cancelCarePackage = ({ data, packageId }) => sendCarePackageRequest(`${packageId}/cancel`, data)
+export const endCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/end`, { notes })
+
+export const cancelCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/cancel`, { notes })
 
 export const createCoreCarePackage = ({ data }) => sendCarePackageRequest('', data)
 
