@@ -1,5 +1,5 @@
 import React from 'react';
-import { currency } from '../../../constants/strings';
+import { currency } from 'constants/strings';
 import { Container } from '../../HackneyDS';
 
 const BrokerageBorderCost = ({ totalCostHeader, totalCost }) => {

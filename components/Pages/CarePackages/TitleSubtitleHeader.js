@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Container } from 'components';
+import { Container } from '../../HackneyDS';
 
 const TitleSubtitleHeader = ({ title, subTitle, link }) => (
   <Container className="title-subtitle-header">

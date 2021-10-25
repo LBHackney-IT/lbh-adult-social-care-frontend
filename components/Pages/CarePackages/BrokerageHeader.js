@@ -1,11 +1,11 @@
 import React from 'react';
-import { Header } from '../../HackneyDS';
 import {
   BROKER_ASSISTANCE_ROUTE,
   BROKER_PORTAL_ROUTE,
   CARE_CHARGE_ROUTE,
   LOGOUT_ROUTE,
-} from '../../../routes/RouteConstants';
+} from 'routes/RouteConstants';
+import { Header } from '../../HackneyDS';
 
 const links = [
   { href: BROKER_ASSISTANCE_ROUTE, text: 'Broker Assistance' },

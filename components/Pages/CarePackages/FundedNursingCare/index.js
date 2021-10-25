@@ -4,7 +4,6 @@ import { requiredSchema } from 'constants/schemas';
 import { dateStringToDate } from 'service';
 import {
   Button,
-  Loading,
   FormGroup,
   Container,
   FileUpload,
@@ -13,7 +12,8 @@ import {
   Select,
   Textarea,
   Announcement
-} from 'components';
+} from '../../../HackneyDS';
+import Loading from '../../../Loading';
 import UrlFromFile from '../../../UrlFromFile';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import BrokerageHeader from '../BrokerageHeader';
