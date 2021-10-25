@@ -1,7 +1,7 @@
 import React from 'react';
+import { getTagColorFromStatusId, getTagDisplayTextFromStatusId, formatDate } from 'service';
+import { CARE_PACKAGE_ROUTE, LOGOUT_ROUTE } from 'routes/RouteConstants';
 import { Breadcrumbs, Button, Container, Header, Select, Tag, FormGroup } from '../../../HackneyDS';
-import { getTagColorFromStatusId, getTagDisplayTextFromStatusId, formatDate } from '../../../../service';
-import { CARE_PACKAGE_ROUTE, LOGOUT_ROUTE } from '../../../../routes/RouteConstants';
 import AlternativePagination from '../../../AlternativePagination';
 import TitleSubtitle from './TitleSubtitle';
 
@@ -33,7 +33,7 @@ export const NewCareCharge = ({
           </Container>
           <Container className="new-care-charge__selectors">
             <FormGroup label="Status">
-              <Select options={statusOptions} onChangeValue={changeFilter('status')} value={filters.status} />
+              <Select disabledEmptyComponent options={statusOptions} onChangeValue={changeFilter('status')} value={filters.status} />
             </FormGroup>
             <FormGroup label="Date">
               <Select options={dateOptions} onChangeValue={changeFilter('date')} value={filters.date} />

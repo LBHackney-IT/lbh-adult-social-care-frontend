@@ -132,6 +132,7 @@ const AssignPackage = () => {
 
                 <FormGroup error={errors.broker} required label="Select broker" className="assign-care-plan__select">
                   <Select
+                    disabledEmptyComponent
                     id="select-broker"
                     options={brokerOptions}
                     value={broker}
@@ -145,6 +146,7 @@ const AssignPackage = () => {
                 <FormGroup error={errors.packageType} required label="What package type?">
                   <Select
                     id="select-package"
+                    disabledEmptyComponent
                     options={packageTypeOptions}
                     value={packageType}
                     onChangeValue={(value) => {

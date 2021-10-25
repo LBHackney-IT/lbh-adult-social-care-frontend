@@ -4,11 +4,7 @@ import withSession from 'lib/session';
 import { useCarePackageApi } from 'api';
 import { getLoggedInUser } from 'service';
 import { BrokerPortalPage } from 'components';
-import {
-  getServiceUserPackagesRoute,
-  SERVICE_USER_MASTER_SEARCH_ROUTE,
-  SERVICE_USER_SEARCH_ROUTE
-} from 'routes/RouteConstants';
+import { getServiceUserPackagesRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
