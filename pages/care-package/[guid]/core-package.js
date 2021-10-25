@@ -49,8 +49,6 @@ const CorePackage = () => {
     }))
   ), [schedulingOptionsData]);
 
-  console.log(schedulingOptionsData);
-
   const schema = yup.object().shape({
     packageType: yup
       .number()

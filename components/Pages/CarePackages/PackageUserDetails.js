@@ -1,7 +1,7 @@
 import React from 'react';
-import { Container } from '../../HackneyDS';
 import { formatDate } from 'service';
 import { getAgeFromDateString } from 'api';
+import { Container } from '../../HackneyDS';
 
 const PackageUserDetails = ({ firstName, lastName, hackneyId, dateOfBirth, postCode }) => (
   <Container className="user-details brokerage__container">

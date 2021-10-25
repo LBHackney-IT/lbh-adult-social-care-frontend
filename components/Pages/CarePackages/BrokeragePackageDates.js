@@ -1,7 +1,7 @@
 import React from 'react';
-import FormGroup from '../../HackneyDS/FormGroup';
-import DatePicker from '../../HackneyDS/DatePicker';
-import { Checkbox } from '../../HackneyDS';
+import { compareDescendingDMY } from 'service';
+import { dateDescending } from 'constants/variables';
+import { Checkbox, FormGroup, DatePicker } from '../../HackneyDS';
 
 const BrokeragePackageDates = ({
   dates,
@@ -9,6 +9,8 @@ const BrokeragePackageDates = ({
   isOngoing,
   setIsOngoing,
   startMinDate,
+  startMaxDate,
+  endMaxDate,
   error,
   fields = {
     dateTo: 'dateTo',
@@ -18,12 +20,13 @@ const BrokeragePackageDates = ({
   checkboxId = 'package-dates-id',
   hasOngoing = true,
 }) => {
-  const dateToError = !isOngoing && dates[fields.dateTo] < dates[fields.dateFrom] ? '(Date to) less then (date from)' : '';
+  const dateToError = !isOngoing && compareDescendingDMY(dates[fields.dateTo], dates[fields.dateFrom]) === dateDescending.asc ? '(Date to) less then (date from)' : '';
   return (
     <FormGroup error={error || dateToError} className="brokerage__package-dates" label={label}>
       <DatePicker
         day={{ label: 'From' }}
         minDate={startMinDate}
+        maxDate={startMaxDate}
         date={dates[fields.dateFrom]}
         setDate={(date) => setDates(fields.dateFrom, date)}
       />
@@ -31,6 +34,7 @@ const BrokeragePackageDates = ({
         disabled={isOngoing}
         day={{ label: 'To' }}
         minDate={dates[fields.dateFrom]}
+        maxDate={endMaxDate}
         date={dates[fields.dateTo]}
         setDate={(date) => setDates(fields.dateTo, date)}
       />
