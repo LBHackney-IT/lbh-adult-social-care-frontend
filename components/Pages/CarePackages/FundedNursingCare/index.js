@@ -46,6 +46,7 @@ const FundedNursingCare = ({
   });
   const [errors, setErrors] = useState({
     hasFNC: '',
+    collectedBy: '',
     dateFrom: '',
     dateTo: '',
     notes: '',
@@ -69,6 +70,7 @@ const FundedNursingCare = ({
     const { dateFrom, dateTo } = dates;
 
     const schema = yup.object().shape({
+      collectedBy: yup.number().typeError('Required field').required('Required field'),
       detailsDateTo: null,
       isOngoing: yup.boolean(),
       dateFrom: yup
@@ -108,7 +110,10 @@ const FundedNursingCare = ({
     let hasErrors = false;
 
     try {
-      await schema.validate({ detailsDateTo: detailsData.endDate, isOngoing, dateFrom, dateTo}, { abortEarly: false });
+      await schema.validate(
+        { detailsDateTo: detailsData.endDate, isOngoing, dateFrom, dateTo, collectedBy },
+        { abortEarly: false }
+      );
     } catch (errorValidation) {
       const newErrors = errorValidation?.inner?.map(error => ([error.path, error.message ]));
       if(newErrors) {
@@ -156,6 +161,11 @@ const FundedNursingCare = ({
 
   const changeError = (field, value = '') => {
     setErrors((prevState) => ({ ...prevState, [field]: value }));
+  };
+
+  const onSelectCollectedBy = (value) => {
+    setCollectedBy(value);
+    changeError('collectedBy');
   };
 
   const changeDate = (field, value) => {
@@ -206,6 +216,7 @@ const FundedNursingCare = ({
               setHasFNC(value);
             }}
             inline
+            className='has-fnc-radio-group'
             error={errors.hasFNC}
             value={hasFNC}
             label="Has a FNC assessment been carried out?"
@@ -214,16 +225,19 @@ const FundedNursingCare = ({
               { id: 'no', label: 'No' },
             ]}
           />
-          <Label className="select-collected-by" htmlFor="collected-by">
-            Collected by
-          </Label>
-          <Select
-            id="collected-by"
-            className="funded-nursing-care__select"
-            options={collectedByOptions}
-            value={collectedBy}
-            onChangeValue={setCollectedBy}
-          />
+          <FormGroup className='select-collected-by' required label='Collected by' error={errors.collectedBy}>
+            <Select
+              error={errors.collectedBy}
+              disabledEmptyComponent
+              emptyElement={{ text: 'Please select', value: '' }}
+              id="collected-by"
+              className="funded-nursing-care__select"
+              options={collectedByOptions}
+              value={collectedBy}
+              onChangeValue={onSelectCollectedBy}
+            />
+          </FormGroup>
+
           <BrokeragePackageDates
             dates={dates}
             error={errors.dateFrom || errors.dateTo}
