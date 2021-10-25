@@ -1,8 +1,8 @@
 import React from 'react';
 import BrokerageSupplierCard from 'components/Pages/CarePackages/BrokerageSupplierCard';
 import BrokerageCost from 'components/Pages/CarePackages/BrokerageCost';
+import { currency } from 'constants/strings';
 import { Container, Input } from '../../../HackneyDS';
-import { currency } from '../../../../constants/strings';
 
 const BrokerPackageCost = ({
   cardInfo,

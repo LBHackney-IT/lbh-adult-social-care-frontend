@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useCarePackageApi } from 'api';
+import { usePackageDetails, useSuppliers } from 'api';
 import { BrokerPackage } from 'components';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
@@ -26,16 +26,18 @@ const BrokerPackagePage = () => {
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const { data: detailsData, isLoading: detailsLoading } = useCarePackageApi.details(packageId);
+  const { data: detailsData, isLoading: detailsLoading } = usePackageDetails(packageId);
 
-  const { data: selectedSupplier, isLoading: singleSupplierLoading } = useCarePackageApi.singleSupplier(
-    detailsData.supplierId
-  );
+  const params = useMemo(() => ({
+    supplierId: detailsData.supplierId
+  }), [detailsData.supplierId]);
+
+  const { data: { data: selectedSupplier }, isLoading: singleSupplierLoading } = useSuppliers({ params });
   const { supplierName } = selectedSupplier;
 
   useEffect(() => {
-    if (Object.keys(selectedSupplier).length > 0) {
-      setSelectedItem(selectedSupplier);
+    if (selectedSupplier.length > 0) {
+      setSelectedItem(selectedSupplier[0]);
     }
   }, [selectedSupplier]);
 

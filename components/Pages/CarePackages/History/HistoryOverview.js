@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
 import React, { memo } from 'react';
-import useCarePackageApi from 'api/SWR/CarePackage/useCarePackageApi';
+import { usePackageHistory } from 'api';
 
 const HistoryOverview = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { data } = useCarePackageApi.history(packageId);
+  const { data } = usePackageHistory(packageId);
   const { brokeredBy, assignedOn, approvedBy, approveOn } = data;
 
   const overviewData = [
