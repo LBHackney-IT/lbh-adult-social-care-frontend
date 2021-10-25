@@ -25,10 +25,7 @@ const AddElementContent = ({ activeElements, headerText }) => {
       const { dateFromWeeks } = newInput;
       const minEndDate =
         dateFromWeeks &&
-        incrementDate({
-          incrementTime: { weeks: dateFromWeeks },
-          date: value,
-        });
+        incrementDate({ weeks: dateFromWeeks }, value);
       if (dateFromWeeks) {
         newInput.endDate = minEndDate;
       }

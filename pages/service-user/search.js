@@ -2,7 +2,7 @@ import React, { memo, useMemo, useState } from 'react';
 import { SearchServiceUser } from 'components';
 import { useServiceUserSearch } from 'api';
 import { useRouter } from 'next/router';
-import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
+import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 
 const initialFilters = {
   postcode: '',
@@ -14,7 +14,7 @@ const initialFilters = {
 
 const breadcrumbs = [
   { text: 'Home', href: '/' },
-  { text: 'Broker Assistance', href: BROKER_ASSISTANCE_ROUTE },
+  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
   { text: 'Search for a service user' },
 ];
 
