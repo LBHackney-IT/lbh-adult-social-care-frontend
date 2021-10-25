@@ -92,7 +92,7 @@ const NewCareChargePackages = ({
           address,
           hackneyId,
           packageId,
-          packageName,
+          packageType,
           serviceUserId,
           startDate,
           lastModified,
