@@ -11,8 +11,8 @@ import {
   ServiceUserDetails,
   FurtherDetails,
   PackageType,
+  TitleSubtitleHeader,
 } from 'components';
-import TitleSubtitleHeader from 'components/Pages/CarePackages/TitleSubtitleHeader';
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
