@@ -75,7 +75,9 @@ const FundedNursingCare = ({
         .date()
         .typeError('Please select a date from')
         .required()
-        .min(new Date(detailsData.startDate), 'Date from less then core date start')
+        .test('dateFrom', 'Date from less then core date start', () => (
+          compareDescendingDMY(dateFrom, detailsData.startDate) !== dateDescending.asc
+        ))
         .test('dateFrom', 'Date from more then core date end', () => {
           if(detailsData.endDate) {
             return compareDescendingDMY(dateFrom, detailsData.endDate) !== dateDescending.desc
@@ -83,7 +85,7 @@ const FundedNursingCare = ({
           return true;
         }),
       dateTo: yup
-        .date()
+        .mixed()
         .when('isOngoing', {
           is: false,
           then: yup
