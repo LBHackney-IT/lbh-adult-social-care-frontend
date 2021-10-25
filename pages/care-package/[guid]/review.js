@@ -1,7 +1,7 @@
 import React from 'react';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
-import { useCarePackageApi } from 'api';
+import { usePackageSummary } from 'api';
 import { getLoggedInUser } from 'service';
 import { BrokerageBorderCost, ReviewPackageDetails } from 'components';
 
@@ -39,7 +39,7 @@ const careChargesClaimCollector = {
 const ReviewPackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
-  const { data, isLoading: summaryLoading } = useCarePackageApi.summary(carePackageId);
+  const { data, isLoading: summaryLoading } = usePackageSummary(carePackageId);
 
   const checkSettings = (settings) =>
     settings &&

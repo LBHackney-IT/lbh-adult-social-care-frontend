@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Container } from '../../HackneyDS';
 
-const TitleSubtitleHeader = ({ title, subTitle, link }) => (
-  <Container className="title-subtitle-header">
+const TitleSubtitleHeader = ({ title, subTitle, link, children, width }) => (
+  <Container width={width} className="title-subtitle-header">
     <p>{title}</p>
 
     <div>
       <h2>{subTitle}</h2>
       {link}
+      {children}
     </div>
   </Container>
 );
 
-export default TitleSubtitleHeader;
+export default memo(TitleSubtitleHeader);

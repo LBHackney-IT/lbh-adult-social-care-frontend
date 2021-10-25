@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
-import { useCarePackageApi } from 'api';
+import { useBrokerView } from 'api';
 import { getLoggedInUser } from 'service';
 import { BrokerPortalPage } from 'components';
 import { getServiceUserPackagesRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
@@ -34,16 +34,17 @@ const BrokerPortal = () => {
   const [pageNumber, setPageNumber] = useState(1);
 
   const [filters, setFilters] = useState(initialFilters);
-  const { brokerId, dateTo, dateFrom, status, serviceUserName } = filters;
+  const { dateFrom, dateTo, status, serviceUserName } = filters;
 
-  const { data, isLoading: brokerViewLoading } = useCarePackageApi.brokerView({
+  const params = useMemo(() => ({
     fromDate: dateFrom ? dateFrom.toJSON() : null,
     toDate: dateTo ? dateTo.toJSON() : null,
     serviceUserName,
     pageNumber,
-    brokerId,
-    status,
-  });
+    status
+  }), [filters, pageNumber])
+
+  const { data, isLoading: brokerViewLoading } = useBrokerView({ params });
 
   const {
     packages = [],

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { currency } from 'constants/strings';
 import {
   BROKER_PORTAL_ROUTE,
   getBrokerPackageRoute,
@@ -15,7 +16,6 @@ import PackageUserDetails from '../PackageUserDetails';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import PackageInfo from './PackageInfo';
 import BrokerageBorderCost from '../BrokerageBorderCost';
-import { currency } from '../../../../constants/strings';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
 import Loading from '../../../Loading';
@@ -130,6 +130,7 @@ const ReviewPackageDetails = ({
       <Container maxWidth="1080px" margin="0 auto" padding="60px">
         <Container className="brokerage__container-header brokerage__container">
           <TitleSubtitleHeader
+            width=''
             title={title}
             subTitle={subTitle}
             link={
@@ -137,8 +138,9 @@ const ReviewPackageDetails = ({
                 Package history
               </span>
             }
-          />
-          {showEditActions && <ReviewPackageDetailsButtons end={end} edit={edit} cancel={cancel} />}
+          >
+            {showEditActions && <ReviewPackageDetailsButtons end={end} edit={edit} cancel={cancel} />}
+          </TitleSubtitleHeader>
         </Container>
         <PackageUserDetails {...userDetails} />
         <Container className="review-package-details__main-container">

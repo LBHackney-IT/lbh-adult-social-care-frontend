@@ -4,6 +4,14 @@
     align-items: flex-end;
     justify-content: space-between;
   }
+
+  .title-subtitle-header {
+    width: 100%;
+
+    .review-package-details__buttons {
+      margin-left: auto;
+    }
+  }
 }
 
 .package-details__action-modal {

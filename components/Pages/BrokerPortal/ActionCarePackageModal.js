@@ -9,7 +9,7 @@ const ActionCarePackageModal = ({ close, title, actions, isOpened, notes, setNot
     </FormGroup>
     <Container className="brokerage__actions">
       {actions.map(({ title: actionTitle, onClick, className: actionClassName }) => (
-        <Button className={actionClassName} key={actionTitle} handler={onClick}>
+        <Button className={actionClassName} key={actionTitle} onClick={onClick}>
           {actionTitle}
         </Button>
       ))}
