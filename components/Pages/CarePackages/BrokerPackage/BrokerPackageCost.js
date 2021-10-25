@@ -15,6 +15,7 @@ const BrokerPackageCost = ({
   setWeeklyNeeds,
   setOneOffNeeds,
   weeklyTotalCost,
+  checkNeedError,
   oneOffTotalCost,
   coreCost,
   setCoreCost,
@@ -58,6 +59,7 @@ const BrokerPackageCost = ({
         corePackageDates={corePackageDates}
         getter={weeklyNeeds}
         setter={setWeeklyNeeds}
+        checkNeedError={checkNeedError}
         totalCostName="Weekly cost"
         totalCost={weeklyTotalCost}
         removeNeed={removeNeed}
@@ -69,6 +71,7 @@ const BrokerPackageCost = ({
       <BrokerageCost
         name="one-off"
         changeNeed={changeNeed}
+        checkNeedError={checkNeedError}
         corePackageDates={corePackageDates}
         totalCostName="One off cost"
         getter={oneOffNeeds}

@@ -1,6 +1,6 @@
 import React from 'react';
-import { getAgeFromDateString } from '../../../api/Utils/FuncUtils';
-import { formatDate } from '../../../service/helpers';
+import { getAgeFromDateString } from 'api/Utils/FuncUtils';
+import { formatDate } from 'service/helpers';
 import { Container, Heading, HorizontalSeparator, VerticalSeparator } from '../../HackneyDS';
 
 const placeHolderBirthDate = new Date(1990, 10, 10);

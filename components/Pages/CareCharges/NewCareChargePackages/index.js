@@ -91,14 +91,16 @@ const NewCareChargePackages = ({
           dateOfBirth,
           address,
           hackneyId,
+          packageId,
           packageName,
+          serviceUserId,
           startDate,
           lastModified,
           modifiedBy,
         }) => (
           <Container
-            onClick={() => pushRoute(getServiceUserPackagesRoute(hackneyId))}
-            key={hackneyId}
+            onClick={() => pushRoute(getServiceUserPackagesRoute(serviceUserId))}
+            key={packageId}
             className="new-care-charge__card"
           >
             <Container className="new-care-charge__card-title" display="flex">

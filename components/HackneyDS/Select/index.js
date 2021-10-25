@@ -42,7 +42,7 @@ export default function Select({
           const isDisabledOption = disabledOptions.some((disabledOption) => disabledOption === option.value);
 
           return (
-            <option disabled={isDisabledOption} key={option.text} value={option.value}>
+            <option disabled={isDisabledOption} key={`${option.text}${option.value}`} value={option.value}>
               {option.text}
             </option>
           );
