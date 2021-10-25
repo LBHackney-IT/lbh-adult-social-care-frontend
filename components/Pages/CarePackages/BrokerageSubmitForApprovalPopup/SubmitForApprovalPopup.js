@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
+import { submitCarePackage, useApprovers } from 'api';
+import { addNotification } from 'reducers/notificationsReducer';
+import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 import Popup from '../../../Popup';
-import { submitCarePackage, useApprovers } from '../../../../api/index';
-import FormGroup from '../../../HackneyDS/FormGroup';
-import { Button, Container, Select, Textarea } from '../../../HackneyDS';
-import { addNotification } from '../../../../reducers/notificationsReducer';
-import { BROKER_PORTAL_ROUTE } from '../../../../routes/RouteConstants';
+import { Button, Container, Select, Textarea, FormGroup } from '../../../HackneyDS';
 
 const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
   const router = useRouter();

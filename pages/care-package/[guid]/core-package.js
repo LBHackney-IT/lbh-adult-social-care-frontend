@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import withSession from 'lib/session';
 import { useForm, Controller } from 'react-hook-form';
 import { getLoggedInUser } from 'service';
@@ -9,9 +9,9 @@ import {
   RadioGroup,
   BrokerageHeader,
   ServiceUserDetails,
-  TitleSubtitleHeader,
   FurtherDetails,
   PackageType,
+  TitleSubtitleHeader,
 } from 'components';
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -19,7 +19,7 @@ import { useDispatch } from 'react-redux';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { mapPackageSchedulingOptions, useCarePackageApi, useCarePackageOptions, updateCoreCarePackage } from 'api';
+import { updateCoreCarePackage, useSinglePackageInfo, usePackageSchedulingOptions } from 'api';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -38,10 +38,18 @@ const CorePackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { guid: packageId } = router.query;
-  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo } = useSinglePackageInfo(packageId);
   const { settings } = packageInfo;
-  const { data: schedulingOptions } = useCarePackageOptions.packageSchedulingOptions();
-  const packageScheduleOptions = mapPackageSchedulingOptions(schedulingOptions || []);
+  const { data: schedulingOptionsData = [] } = usePackageSchedulingOptions();
+
+  const schedulingOptions = useMemo(() => (
+    schedulingOptionsData.map(({ id, optionName, optionPeriod }) => ({
+      id,
+      label: `${optionName} (${optionPeriod})`
+    }))
+  ), [schedulingOptionsData]);
+
+  console.log(schedulingOptionsData);
 
   const schema = yup.object().shape({
     packageType: yup
@@ -117,10 +125,11 @@ const CorePackage = () => {
               control={control}
               render={({ field }) => (
                 <RadioGroup
+                  name='packageScheduling'
                   error={errors.packageScheduling?.message}
                   label="Packaging scheduling"
                   handle={field.onChange}
-                  items={packageScheduleOptions}
+                  items={schedulingOptions}
                   {...field}
                 />
               )}

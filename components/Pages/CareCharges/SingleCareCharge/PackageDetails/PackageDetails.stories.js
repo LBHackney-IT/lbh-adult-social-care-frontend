@@ -3,7 +3,7 @@ import faker from 'faker';
 import { PackageDetails } from './PackageDetails';
 
 export default {
-  title: 'Pages/CareCharges/SingleCareCharge/ReviewPackageDetails',
+  title: 'Pages/CareCharges/SingleCareCharge/PackageDetails',
   component: PackageDetails,
   argTypes: {
     PackageDetails: {},

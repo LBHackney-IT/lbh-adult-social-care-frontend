@@ -25,8 +25,8 @@ export const getEnGBFormattedDate = (dateString, nullData = false) => {
 export const stringIsNullOrEmpty = (str) => {
   if (!str || str.length === 0) return true;
   if (!str || /^\s*$/.test(str)) return true;
-  if (!str.trim()) return true;
-  return false;
+  return !str.trim();
+
 };
 
 export const isServer = () => typeof window === 'undefined';

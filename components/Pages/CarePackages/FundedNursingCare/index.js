@@ -4,7 +4,6 @@ import { requiredSchema } from 'constants/schemas';
 import { dateStringToDate } from 'service';
 import {
   Button,
-  Loading,
   FormGroup,
   Container,
   FileUpload,
@@ -13,7 +12,8 @@ import {
   Select,
   Textarea,
   Announcement
-} from 'components';
+} from '../../../HackneyDS';
+import Loading from '../../../Loading';
 import UrlFromFile from '../../../UrlFromFile';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import BrokerageHeader from '../BrokerageHeader';
@@ -45,7 +45,7 @@ const FundedNursingCare = ({
     dateTo: '',
     notes: '',
   });
-  const [hasPreviousFnc, setHasPreviousFnc] = useState(false); //todo for new design
+  const [hasPreviousFnc] = useState(false); //todo for new design
   const [hasFNC, setHasFNC] = useState('yes');
   const [collectedBy, setCollectedBy] = useState();
   const [notes, setNotes] = useState('');

@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useDebounce } from 'react-use';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
 import { compareDesc } from 'date-fns';
-import { useCarePackageApi, updateCarePackageCosts } from '../../../../api';
-import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../../routes/RouteConstants';
-import BrokerageHeader from '../BrokerageHeader';
+import { updateCarePackageCosts, useSuppliers, useSinglePackageInfo } from 'api';
+import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
+import { addNotification } from 'reducers/notificationsReducer';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
+import Loading from '../../../Loading';
+import BrokerageHeader from '../BrokerageHeader';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { addNotification } from '../../../../reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
-import Loading from '../../../Loading';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 
 const initialNeed = {
@@ -64,12 +64,14 @@ const BrokerPackage = ({
     setShowSearchResults(true);
   };
 
-  const { data: searchResults, isLoading: suppliersLoading } = useCarePackageApi.suppliers({
-    supplierName: searchQuery,
+  const params = useMemo(() => ({ supplierName: searchQuery }), [searchQuery]);
+
+  const { data: searchResults, isLoading: suppliersLoading } = useSuppliers({
+    params,
     shouldFetch: searchQuery || showSearchResults,
   });
 
-  const { data: packageInfo } = useCarePackageApi.singlePackageInfo(packageId);
+  const { data: packageInfo } = useSinglePackageInfo(packageId);
   const { packageType } = packageInfo;
 
   const clickBack = () => {
@@ -88,7 +90,7 @@ const BrokerPackage = ({
   };
 
   const composeDetailsData = () => {
-    if (detailsData) {
+    if (detailsData?.coreCost !== undefined) {
       setPackageDates({
         startDate: dateStringToDate(detailsData.startDate) || new Date(),
         endDate: dateStringToDate(detailsData.endDate),
@@ -310,7 +312,7 @@ const BrokerPackage = ({
   return (
     <div className="supplier-look-up brokerage">
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <Loading isLoading={loading || suppliersLoading} />
         <Container className="brokerage__container-main">
           <TitleSubtitleHeader title="Build a care package" subTitle="Broker package" />
@@ -408,7 +410,7 @@ const BrokerPackage = ({
 
             <Button
               isLoading={loading}
-              disabled={(!oneOffTotalCost && !weeklyTotalCost && !coreCost) || loading}
+              disabled={loading}
               onClick={clickSave}
             >
               Save and continue

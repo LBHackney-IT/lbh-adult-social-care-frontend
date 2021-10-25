@@ -24,12 +24,14 @@ export const FurtherDetails = ({ settings, control, setValue }) => {
   return (
     <>
       <FormGroup label="Further details" hint="select all that apply">
-        {checkboxOptions.map((item) => (
+        {checkboxOptions.map(({ id, label}) => (
           <Controller
-            key={item.id}
-            name={item.id}
+            key={id}
+            name={id}
             control={control}
-            render={({ field }) => <Checkbox handler={field.onChange} label={item.label} {...field} />}
+            render={({ field }) => (
+              <Checkbox id={id} handler={field.onChange} label={label} {...field} />
+            )}
           />
         ))}
       </FormGroup>

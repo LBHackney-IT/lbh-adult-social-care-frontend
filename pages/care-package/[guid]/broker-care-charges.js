@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { CareCharges } from 'components';
-import { useReclaimApi, createCarePackageReclaimCareCharge, updateCarePackageReclaimCareCharge } from 'api';
+import {
+  createCarePackageReclaimCareCharge,
+  updateCarePackageReclaimCareCharge,
+  usePackageCareCharge,
+  usePackageCalculatedCost,
+} from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { getLoggedInUser } from 'service';
@@ -29,8 +34,8 @@ const CareChargesPage = () => {
   const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e'; // todo to be removed
 
   const dispatch = useDispatch();
-  const { data: carePackageReclaimCareCharge, isLoading: careChargeLoading } = useReclaimApi.careCharge(carePackageId);
-  const { data: calculatedCost, isLoading: calculatedCostLoading } = useReclaimApi.calculatedCost(
+  const { data: carePackageReclaimCareCharge, isLoading: careChargeLoading } = usePackageCareCharge(carePackageId);
+  const { data: calculatedCost, isLoading: calculatedCostLoading } = usePackageCalculatedCost(
     carePackageId,
     serviceUserId
   );
