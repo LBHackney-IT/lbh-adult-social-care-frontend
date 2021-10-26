@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { memo } from 'react';
 import { usePackageHistory } from 'api';
+import { formatDate } from 'service';
 
 const HistoryOverview = () => {
   const router = useRouter();
@@ -11,9 +12,9 @@ const HistoryOverview = () => {
 
   const overviewData = [
     { value: brokeredBy ?? '-', label: 'Brokered by' },
-    { value: assignedOn ?? '-', label: 'Assigned on' },
+    { value: formatDate(assignedOn) ?? '-', label: 'Assigned on' },
     { value: approvedBy ?? '-', label: 'Approved by' },
-    { value: approveOn ?? '-', label: 'Approved on' },
+    { value: formatDate(approveOn) ?? '-', label: 'Approved on' },
     { value: '-', label: 'Care Plan' },
   ];
 
