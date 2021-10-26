@@ -31,7 +31,7 @@ export const CareChargesTable = ({ onRowClick, data }) => {
     {
       accessor: 'startDate',
       Cell: ({ value }) => (
-        <Container>
+        <Container className='start-date-cell'>
           <TitleSubtitle title="Start date" subtitle={formatDate(value)} />
         </Container>
       ),

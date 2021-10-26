@@ -6,6 +6,12 @@
   .title-subtitle {
     margin-left: auto;
   }
+
+  .start-date-cell {
+    .title-subtitle {
+      margin-left: initial;
+    }
+  }
 }
 
 .care-charges__cell {
@@ -18,11 +24,21 @@
   &:first-of-type {
     padding-left: 0;
     margin-left: 0;
+    width: 350px;
+  }
+
+  &:last-of-type {
+    width: 160px;
+    .title-subtitle {
+      p:first-of-type {
+        text-align: right;
+      }
+    }
   }
 }
 
 .new-care-charge__card {
-  .title-subtitle {
+  .title-subtitle:not(.title-subtitle:last-of-type) {
     margin-right: 60px;
   }
 }
