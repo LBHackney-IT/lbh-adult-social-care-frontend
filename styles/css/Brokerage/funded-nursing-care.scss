@@ -1,8 +1,21 @@
 .brokerage__funded-nursing-care {
+  .has-fnc-radio-group {
+    margin-bottom: 12px;
+  }
   .select-collected-by {
-    font-size: 19px;
-    font-weight: bold;
-    margin-bottom: 8px;
+    .horizontal-separator {
+      display: none;
+    }
+
+    .govuk-fieldset__legend {
+      font-size: 19px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .govuk-error-message {
+      margin-bottom: 8px;
+    }
   }
 
   .brokerage__package-dates {
