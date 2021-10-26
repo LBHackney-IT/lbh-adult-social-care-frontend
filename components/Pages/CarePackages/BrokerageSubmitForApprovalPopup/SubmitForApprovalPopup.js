@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { submitCarePackage, useApprovers } from 'api';
+import { Button, Container, Dialog, Select, Textarea, FormGroup } from '../../../HackneyDS';
 import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
-import Popup from '../../../Popup';
-import { Button, Container, Select, Textarea, FormGroup } from '../../../HackneyDS';
 
 const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
   const router = useRouter();
@@ -41,30 +40,29 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
     setLoading(false);
   };
 
-  const popupMainContent = (
-    <Container>
-      <FormGroup error={approverError} required className="brokerage__approved-by-select" label="To be approved by">
-        <Select disabledEmptyComponent error={approverError} options={approverOptions} value={approverId} onChangeValue={changeApprover} />
-      </FormGroup>
-      <FormGroup className="brokerage__add-notes" label="Add notes">
-        <Textarea value={notes} handler={setNotes} />
-      </FormGroup>
-      <Container className="brokerage__actions">
-        <Button isLoading={loading || isLoading} disabled={loading || isLoading} onClick={submit}>Submit</Button>
-        <Button onClick={closePopup} className="link-button red">
-          Cancel
-        </Button>
-      </Container>
-    </Container>
-  );
-
   return (
-    <Popup
+    <Dialog
       className="brokerage__submit-for-approval"
       closePopup={closePopup}
-      mainContent={popupMainContent}
       title="Submit for approval"
-    />
+    >
+      <Container>
+        <FormGroup error={approverError} className="brokerage__approved-by-select" label="To be approved by">
+          <Select disabledEmptyComponent error={approverError} options={approverOptions} value={approverId} onChangeValue={changeApprover} />
+        </FormGroup>
+        <FormGroup className="brokerage__add-notes" label="Add notes">
+          <Textarea value={notes} handler={setNotes} />
+        </FormGroup>
+        <Container className="brokerage__actions">
+          <Button disabled={loading || isLoading} isLoading={loading || isLoading} handler={submit}>
+            Submit
+          </Button>
+          <Button handler={closePopup} className="link-button red">
+            Cancel
+          </Button>
+        </Container>
+      </Container>
+    </Dialog>
   );
 };
 

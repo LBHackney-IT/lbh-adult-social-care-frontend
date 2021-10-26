@@ -38,7 +38,7 @@ export default function SearchBox({
     if (onChangeValue) {
       return onChangeValue(e.target.value);
     }
-    handler(e);
+    return handler(e);
   };
 
   const onEnterPress = ({ key }) => {

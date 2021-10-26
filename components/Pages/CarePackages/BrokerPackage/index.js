@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useDebounce } from 'react-use';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
-import { compareDesc } from 'date-fns';
 import { updateCarePackageCosts, useSuppliers, useSinglePackageInfo } from 'api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -156,13 +155,13 @@ const BrokerPackage = ({
       return;
     }
 
-    if(!coreCost) {
+    if (!coreCost) {
       setCoreCostError('Required field');
       pushNotification('Core weekly cost is required')
       return;
     }
 
-    if(!isOngoing && (!packageDates.endDate || compareDesc(packageDates.startDate, packageDates.endDate) === -1)) {
+    if (!isOngoing && (!packageDates.endDate || compareDescendingDMY(packageDates.startDate, packageDates.endDate) === -1)) {
       pushNotification('Core date is wrong');
       return;
     }
