@@ -5,6 +5,7 @@ import { getLoggedInUser } from 'service';
 import { getCarePackageApprovalRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { PackageApprovals } from 'components';
 import { useSelector } from 'react-redux';
+import { useApprovals } from 'api';
 import { selectApproversSearch } from '../reducers/approversReducer';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -22,7 +23,7 @@ export const getServerSideProps = withSession(({ req }) => {
 
 const initialFilters = {
   status: '',
-  approver: '',
+  approverId: '',
   dateFrom: null,
   dateTo: null,
   packageType: '',
@@ -34,10 +35,10 @@ const Approvals = () => {
   const router = useRouter();
 
   const [pageNumber, setPageNumber] = useState(1);
-  const [searchBy, setSearchBy] = useState('');
+  const [searchBy, setSearchBy] = useState('default-filters');
 
   const [filters, setFilters] = useState(initialFilters);
-  const { dateFrom, dateTo, status, serviceUserName, packageType, approver } = filters;
+  const { dateFrom, dateTo, status, serviceUserName, packageType, approverId } = filters;
   const { firstName, lastName, hackneyId, dateOfBirth, postcode } = useSelector(selectApproversSearch);
 
   const params = useMemo(() => {
@@ -46,7 +47,7 @@ const Approvals = () => {
         fromDate: dateFrom ? dateFrom.toJSON() : null,
         toDate: dateTo ? dateTo.toJSON() : null,
         serviceUserName,
-        approver,
+        approverId,
         packageType,
         pageNumber,
         status
@@ -65,7 +66,7 @@ const Approvals = () => {
     return {};
   }, [filters, pageNumber, searchBy]);
 
-  // const { data, isLoading: approversLoading } = useApprovers({ params, shouldFetch: searchBy });
+  const { data, isLoading: approvalsLoading } = useApprovals({ params, shouldFetch: searchBy });
 
   const {
     packages = [],
@@ -74,7 +75,7 @@ const Approvals = () => {
       totalPages: 0,
       pageSize: 0,
     },
-  } = {};
+  } = data;
 
   const goToBrokerPortalSearch = useCallback(() => {
     router.push(SERVICE_USER_SEARCH_ROUTE);
@@ -91,7 +92,7 @@ const Approvals = () => {
       setSearchBy={setSearchBy}
       title='Approvals'
       breadcrumbs={breadcrumbs}
-      loading={false}
+      loading={approvalsLoading}
       goToSearch={goToBrokerPortalSearch}
       filters={filters}
       clearFilter={clearFilters}

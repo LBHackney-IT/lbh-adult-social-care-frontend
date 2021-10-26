@@ -49,6 +49,7 @@ export const PackageApprovals = ({
 
   const changeFilterField = useCallback(
     (field, value) => {
+      setSearchBy('default-filter');
       setFilters((prevState) => ({
         ...prevState,
         [field]: value,
@@ -121,7 +122,6 @@ export const PackageApprovals = ({
 
               <FormGroup className="form-group--inline-label brokerage-portal__form-status" label="Status">
                 <Select
-                  emptyElement={null}
                   options={statusOptions}
                   value={filters.status}
                   onChange={({ target: { value } }) => changeFilterField('status', value)}
@@ -130,9 +130,9 @@ export const PackageApprovals = ({
 
               <FormGroup className="form-group--inline-label" label="Approver">
                 <Select
-                  value={filters.approver}
+                  value={filters.approverId}
                   options={approverOptions}
-                  onChangeValue={(value) => changeFilterField('approver', value)}
+                  onChangeValue={(value) => changeFilterField('approverId', value)}
                 />
               </FormGroup>
             </div>
