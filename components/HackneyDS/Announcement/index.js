@@ -1,13 +1,14 @@
 import React from 'react';
-import { getSlot } from '../helpers';
 
-export default function Announcement({ children = [], className }) {
-  const nodeList = Array.isArray(children) ? children : [children];
-
+export default function Announcement({ title, children, className, isWarning }) {
   return (
-    <section className={`lbh-announcement lbh-announcement--site${className ? ` ${className}` : ''}`}>
-      <h3 className="lbh-announcement__title">{getSlot(nodeList, 'title')}</h3>
-      <div className="lbh-announcement__content">{getSlot(nodeList, 'content')}</div>
+    <section
+      className={`lbh-announcement lbh-announcement--site${className && ` ${className}`}${
+        isWarning && ' lbh-announcement--warning'
+      }`}
+    >
+      <h3 className="lbh-announcement__title">{title}</h3>
+      <div className="lbh-announcement__content">{children}</div>
     </section>
   );
 }
