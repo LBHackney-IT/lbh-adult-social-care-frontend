@@ -1,0 +1,24 @@
+.approvals {
+  .govuk-form-group.lbh-search-box {
+    width: 250px;
+    margin-right: 14px;
+  }
+
+  .govuk-form-group {
+    .select-container {
+      width: 200px;
+    }
+  }
+
+  .brokerage-portal__filters-block {
+    .date-from {
+      margin-right: 43px;
+    }
+
+    &:last-of-type .govuk-form-group:last-of-type {
+      .govuk-fieldset__legend {
+        margin-right: 18px;
+      }
+    }
+  }
+}
