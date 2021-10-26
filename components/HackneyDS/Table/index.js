@@ -3,11 +3,12 @@ import { useTable, useExpanded, useRowSelect } from 'react-table';
 
 export const Table = ({
   hasHeader = true,
-  RowHeader,
+  rowsHaveHeader,
   columns,
   data,
   expandRowCallback,
   setSelectedRows,
+  fixedTable,
   hasFooter,
   headerClassName = '',
   bodyClassName = '',
@@ -42,13 +43,13 @@ export const Table = ({
   const renderRowSubComponent = React.useCallback(expandRowCallback, []);
 
   return (
-    <table className="govuk-table lbh-table" {...getTableProps()}>
+    <table className={`govuk-table lbh-table${fixedTable ? ' fixed-table' : ''}`} {...getTableProps()}>
       {hasHeader && (
         <thead className={`govuk-table__head ${headerClassName}`}>
           {headerGroups.map((headerGroup) => (
             <tr className="govuk-table__row" {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th scope="col" {...column.getHeaderProps([{ className: `govuk-table__header ${column.className}` }])}>
+                <th scope="col" {...column.getHeaderProps([{ className: `govuk-table__header ${column.className || ''}` }])}>
                   {column.render('Header')}
                 </th>
               ))}
@@ -69,18 +70,18 @@ export const Table = ({
             <React.Fragment key={index}>
               <tr
                 onClick={onRowClick ? () => onRowClick(row.original) : () => {}}
-                className={`govuk-table__row${RowHeader ? ' with-row-header' : ''}`}
+                className={`govuk-table__row${rowsHaveHeader ? ' with-row-header' : ''}`}
                 {...row.getRowProps()}
               >
-                {RowHeader ? (
-                  <td>
+                {rowsHaveHeader ? (
+                  <td colSpan={row.cells.length}>
                     <table>
                       <tr className='govuk-table__row-header'>
                         <td colSpan={row.cells.length}>
-                          <RowHeader {...row.original} />
+                          {rowsHaveHeader({ ...row.original })}
                         </td>
                       </tr>
-                      {rowElement}
+                      <tr>{rowElement}</tr>
                     </table>
                   </td>
                 ) : rowElement}

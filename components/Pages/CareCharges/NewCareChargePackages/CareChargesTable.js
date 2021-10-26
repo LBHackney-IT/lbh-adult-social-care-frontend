@@ -4,7 +4,7 @@ import { userTagColors } from 'constants/variables';
 import { Container, Table, Tag } from '../../../HackneyDS'
 import TitleSubtitle from './TitleSubtitle';
 
-const RowHeader = ({ serviceUser, status, isS117Client, address, dateOfBirth }) => (
+const rowHaveHeader = ({ serviceUser, status, isS117Client, address, dateOfBirth }) => (
   <Container className='new-care-charge__card'>
     <Container className="new-care-charge__card-title" display="flex">
       <p>{serviceUser}</p>
@@ -48,7 +48,7 @@ export const CareChargesTable = ({ onRowClick, data }) => {
   return (
     <div className="care-charges__table">
       <Table
-        RowHeader={RowHeader}
+        rowsHaveHeader={rowHaveHeader}
         onRowClick={onRowClick}
         hasHeader={false}
         columns={columns}
