@@ -213,8 +213,8 @@ const ReviewPackageDetails = ({
               <ReviewPackageDetailsButtons end={end} edit={edit} cancel={cancel} />
             ) : (
               <Container className="review-package-details__actions" display="flex">
-                <Button handler={goBack}>Back</Button>
-                <Button handler={() => setOpenedPopup('submit')}>Submit for approval</Button>
+                <Button className='secondary-g' onClick={goBack}>Back</Button>
+                <Button onClick={() => setOpenedPopup('submit')}>Submit for approval</Button>
               </Container>
             )}
           </Container>
