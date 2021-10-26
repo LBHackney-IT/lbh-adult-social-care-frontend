@@ -152,22 +152,22 @@ button:not(.lbh-button--disabled):not([disabled]) {
     cursor: initial;
   }
 
-  &.secondary-f {
-    background-color: $button-secondary-f;
+  &.secondary-red {
+    background-color: $button-secondary-red;
     color: white;
 
     &:hover, &:target {
-      background-color: $button-secondary-f-hover;
+      background-color: $button-secondary-red-hover;
       color: white;
     }
 
     &:active {
-      background-color: $button-secondary-f-pressed;
+      background-color: $button-secondary-red-pressed;
     }
   }
 
-  &.secondary-b {
-    background-color: $button-secondary-b;
+  &.secondary-blue {
+    background-color: $button-secondary-blue;
     color: white;
 
     &:hover, &:target {
@@ -176,20 +176,20 @@ button:not(.lbh-button--disabled):not([disabled]) {
     }
 
     &:active {
-      background-color: $button-secondary-b-active;
+      background-color: $button-secondary-blue-active;
     }
   }
 
-  &.secondary-h {
-    background-color: $button-secondary-h;
+  &.secondary-yellow {
+    background-color: $button-secondary-yellow;
     color: $button-secondary-g-text;
 
     &:hover, &:target {
-      background-color: $button-secondary-h-hover;
+      background-color: $button-secondary-yellow-hover;
     }
 
     &:active {
-      background-color: $button-secondary-h-pressed;
+      background-color: $button-secondary-yellow-pressed;
     }
   }
 

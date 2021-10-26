@@ -1,11 +1,11 @@
 export const getButtonColourFromPackageStatus = (packageStatus) => {
   switch (packageStatus) {
     case 'In Progress':
-      return 'secondary-h';
+      return 'secondary-yellow';
     case 'Not Approved':
-      return 'secondary-f';
+      return 'secondary-red';
     case 'Waiting for Approval':
-      return 'secondary-b';
+      return 'secondary-blue';
     case 'Cancelled':
     case 'Ended':
     case 'New':
