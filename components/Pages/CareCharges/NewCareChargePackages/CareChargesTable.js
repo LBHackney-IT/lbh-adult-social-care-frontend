@@ -27,13 +27,21 @@ const columnsRow = [
 ];
 
 export const CareChargesTable = ({ onRowClick, data }) => {
-  const columns = useMemo(() => columnsRow.map(({ accessor, className = '', title, subtitle }) => (
-    {
-      accessor,
-      Cell: ({ value }) =>
-        <TitleSubtitle className={className} title={title} subtitle={subtitle ? subtitle(value) : value} />
-    }
-  )), []);
+  const columns = useMemo(() => columnsRow.map(({
+    accessor,
+    className = '',
+    title,
+    subtitle
+  }) => ({
+    accessor,
+    Cell: ({ value }) => (
+      <TitleSubtitle
+        className={className}
+        title={title}
+        subtitle={subtitle ? subtitle(value) : value}
+      />
+    )
+  })), []);
 
   return (
     <div className="care-charges__table">
