@@ -7,7 +7,6 @@
   background-color: $lbh-green1;
   padding: 12px 16px;
   height: 42px;
-  transition: 0.1s ease;
 
   &:hover {
     transform: scale(1.01);
@@ -20,6 +19,7 @@
   }
 
   &.outline {
+    transition: background-color 0.1s ease;
     background: transparent;
 
     &:hover {
@@ -30,16 +30,31 @@
   &.outline.green {
     color: $lbh-green1;
     border-color: $lbh-green1;
+
+    &:hover {
+      background-color: $lbh-green1;
+      color: white;
+    }
   }
 
   &.outline.red {
-    color: red;
-    border-color: red;
+    color: $lbh-red;
+    border-color: $lbh-red;
+
+    &:hover {
+      background-color: $lbh-red;
+      color: white;
+    }
   }
 
   &.outline.gray {
     color: $lbh-gray-text;
     border-color: $lbh-gray-text;
+
+    &:hover {
+      background-color: $lbh-gray-text;
+      color: white;
+    }
   }
 
   &[disabled]:not(.outline) {
