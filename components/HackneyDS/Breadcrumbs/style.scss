@@ -53,7 +53,7 @@
   a:hover,
   a:link,
   a:visited {
-    color: $lbh-primary-button;
+    color: $lbh-primary;
   }
   &__list-item:before {
     content: '';
@@ -63,7 +63,7 @@
     position: absolute;
   }
   a {
-    color: $lbh-primary-button;
+    color: $lbh-primary;
     cursor: pointer;
   }
   .lbh-breadcrumbs a {

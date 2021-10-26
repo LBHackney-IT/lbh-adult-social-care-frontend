@@ -4,18 +4,24 @@
 
 .lbh-primary-button {
   & {
-    background-color: $lbh-secondary-text-colour;
+    background-color: $lbh-primary;
     color: white;
 
     &:hover, &:target {
-      background-color: $lbh-gray1;
+      background-color: $button-primary-hover;
     }
 
     &:active {
-      background-color: $lbh-black1;
+      background-color: $lbh-primary-active-button;
     }
   }
   font-size: 14px;
+}
+
+.storybook-buttons {
+  button {
+    height: 40px;
+  }
 }
 
 .govuk-button {
@@ -43,15 +49,15 @@
   width: auto;
 
   & {
-    background-color: $lbh-primary-button;
+    background-color: $lbh-primary;
     color: white;
 
     &:hover, &:target {
-      background-color: $lbh-primary-disabled-button;
+      background-color: $button-primary-hover;
     }
 
     &:active {
-      background-color: $lbh-primary-inner-shadow;
+      background-color: $lbh-primary-active-button;
     }
   }
 
@@ -107,9 +113,13 @@ button:not(.lbh-button--disabled):not([disabled]) {
       color: $lbh-green1;
       border-color: $lbh-green1;
 
-      &:hover {
-        background: $lbh-green1;
+      &:hover, &:target {
+        background: $button-primary-hover;
         color: white;
+      }
+
+      &:active {
+        background-color: $lbh-primary-active-button;
       }
     }
 
@@ -117,9 +127,13 @@ button:not(.lbh-button--disabled):not([disabled]) {
       color: $lbh-f01;
       border-color: $lbh-f01;
 
-      &:hover {
-        background: $lbh-f01;
+      &:hover, &:target {
+        background: $button-secondary-red-hover;
         color: white;
+      }
+
+      &:active {
+        background-color: $button-secondary-red-pressed;
       }
     }
 
@@ -127,19 +141,41 @@ button:not(.lbh-button--disabled):not([disabled]) {
       color: $lbh-gray-text;
       border-color: $lbh-gray-text;
 
-      &:hover {
-        background: $lbh-gray-text;
+      &:hover, &:target {
+        background: $lbh-gray1;
         color: white;
+      }
+
+      &:active {
+        background-color: $lbh-black1;
+      }
+    }
+
+    &.yellow {
+      border-color: $button-secondary-yellow;
+      color: $button-secondary-yellow;
+
+      &:hover, &:target {
+        background-color: $button-secondary-yellow-hover;
+        color: white;
+      }
+
+      &:active {
+        background-color: $button-secondary-yellow-pressed;
       }
     }
 
     &.blue {
-      color: $lbh-link;
-      border-color: $lbh-link;
+      color: $button-secondary-blue;
+      border-color: $button-secondary-blue;
 
-      &:hover {
-        background: $lbh-link;
+      &:hover, &:target {
+        background: $button-secondary-blue-active;
         color: white;
+      }
+
+      &:active {
+        background-color: $button-secondary-blue-active;
       }
     }
 
@@ -182,7 +218,7 @@ button:not(.lbh-button--disabled):not([disabled]) {
 
   &.secondary-yellow {
     background-color: $button-secondary-yellow;
-    color: $button-secondary-g-text;
+    color: $button-secondary-gray-text;
 
     &:hover, &:target {
       background-color: $button-secondary-yellow-hover;
@@ -193,7 +229,7 @@ button:not(.lbh-button--disabled):not([disabled]) {
     }
   }
 
-  &.secondary-g {
+  &.secondary-gray {
     background-color: $lbh-secondary-text-colour;
     color: white;
 
@@ -205,8 +241,6 @@ button:not(.lbh-button--disabled):not([disabled]) {
       background-color: $lbh-black1;
     }
   }
-
-
 }
 
 .govuk-button:active,

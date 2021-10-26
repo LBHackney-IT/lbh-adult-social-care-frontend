@@ -1,9 +1,8 @@
 
 $lbh-green1: #00664f;
 $lbh-green2: #025945;
-$lbh-primary-button: #00664F;
-$lbh-primary-disabled-button: #328472;
-$lbh-primary-inner-shadow: #003D2F;
+$lbh-primary: #00664F;
+$lbh-primary-active-button: #003D2F;
 $lbh-text-colour: #0B0C0C;
 $lbh-green-border: #7fb2a7;
 $lbh-light-green: rgba(0, 102, 79, 0.1);
@@ -63,4 +62,6 @@ $button-secondary-yellow-pressed: $lbh-h03;
 $button-secondary-blue: #025EA6;
 $button-secondary-blue-active: #0D538A;
 
-$button-secondary-g-text: #0C0C0C;
+$button-primary-hover: #328472;
+
+$button-secondary-gray-text: #0C0C0C;

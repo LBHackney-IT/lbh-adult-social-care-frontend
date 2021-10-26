@@ -104,9 +104,9 @@
   .care-charges-modal__date-action {
     margin-left: 4px;
     font-weight: bold;
-    color: $lbh-primary-button;
+    color: $lbh-primary;
     text-decoration: underline;
-    text-decoration-color: $lbh-primary-button;
+    text-decoration-color: $lbh-primary;
 
     &:hover {
       cursor: pointer;
@@ -155,7 +155,7 @@
 
   .care-charges-modal__info-title {
     font-size: 14px;
-    color: $lbh-primary-button;
+    color: $lbh-primary;
     font-weight: bold;
     margin-bottom: 16px;
   }
