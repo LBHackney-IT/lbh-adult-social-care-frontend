@@ -1,4 +1,6 @@
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useCallback } from 'react';
+import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 // import { object, string } from 'yup';
 // import { addWeeks } from 'date-fns';
 // import CareChargesInfoEdited from '../../../CareCharges/ModalComponents/CareChargesInfoEdited';
@@ -15,6 +17,14 @@ import CareChargesModalActions from '../ModalComponents/CareChargesModalActions'
 // };
 
 const EditElementContent = ({ activeElements, headerText, onClose }) => {
+  const router = useRouter();
+
+  const goToPackages = useCallback(() => {
+    router.push(getServiceUserPackagesRoute('test'));
+  }, [router]);
+
+  const onConfirm = () => goToPackages();
+
   // const [inputs, setInputs] = useState([]);
   // const [inputHasErrors, setInputHasErrors] = useState(false);
   // const [inputErrors, setInputErrors] = useState([]);
@@ -43,8 +53,6 @@ const EditElementContent = ({ activeElements, headerText, onClose }) => {
   //   cloneInputErrors.splice(index, 1, newInputError);
   //   setInputErrors(cloneInputErrors);
   // };
-
-  const confirm = () => alert('Confirm');
 
   // const next = async () => {
   //   let hasErrors = false;
@@ -109,9 +117,9 @@ const EditElementContent = ({ activeElements, headerText, onClose }) => {
 
       <CareChargesModalActions
         actions={[
-          { title: 'Confirm', handler: confirm },
+          { title: 'Confirm', handler: onConfirm },
           { title: 'Edit', handler: onClose, className: 'without-background' },
-          { title: 'Cancel', handler: onClose, className: 'without-background' },
+          { title: 'Cancel', handler: goToPackages, className: 'without-background' },
         ]}
       />
     </>

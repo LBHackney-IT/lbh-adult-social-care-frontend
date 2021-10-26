@@ -59,7 +59,7 @@ const CareCharge = () => {
   const [isOpenCancel, toggleCancel] = useModal();
   const [isOpenEnd, toggleEnd] = useModal();
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, formState } = useForm({
     defaultValues: {
       provisional: {
         costPerWeek: '',
@@ -83,15 +83,22 @@ const CareCharge = () => {
     },
   });
 
+  const router = useRouter();
+  const goToPackages = useCallback(() => {
+    router.push(getServiceUserPackagesRoute('test'));
+  }, [router]);
+
   const onSubmit = useCallback(
     (form) => {
       console.log('%c form =', 'color: lightblue', form);
-      // toggleEdit();
+
+      if (formState.isDirty) toggleEdit();
+      else goToPackages();
     },
-    [toggleEdit]
+    [formState.isDirty, toggleEdit, goToPackages]
   );
 
-  const residentialProps = { control, toggleCancel, toggleEnd };
+  const residentialProps = { control, onCancel: toggleCancel, onEnd: toggleEnd };
 
   return (
     <div className="care-charge">
