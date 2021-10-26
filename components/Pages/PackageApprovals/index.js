@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import { usePackageGetAll, useApproversOptions } from 'api';
-import { changeApproversSearch, clearApproversSearch, selectApproversSearch } from 'reducers/approversReducer';
-import { useDispatch, useSelector } from 'react-redux';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
 import {
   Breadcrumbs,
@@ -25,6 +23,14 @@ const statusOptions = [
   { text: 'Not Approved', value: '5' },
 ];
 
+const initialServiceUserFilters = {
+  firstName: '',
+  lastName: '',
+  hackneyId: '',
+  dateOfBirth: null,
+  postcode: '',
+};
+
 export const PackageApprovals = ({
   items,
   title,
@@ -36,20 +42,16 @@ export const PackageApprovals = ({
   clearFilter,
   onRowClick = () => {},
   breadcrumbs,
-  setSearchBy,
 }) => {
-  const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const [openedSearch, setOpenedSearch] = useState(false);
-
-  const serviceUserSearch = useSelector(selectApproversSearch);
+  const [serviceUserFilter, setServiceUserFilter] = useState(initialServiceUserFilters)
 
   const { options: packageOptions, isLoading: packageOptionsLoading } = usePackageGetAll();
   const { options: approverOptions, isLoading: approverOptionsLoading } = useApproversOptions();
 
   const changeFilterField = useCallback(
     (field, value) => {
-      setSearchBy('default-filter');
       setFilters((prevState) => ({
         ...prevState,
         [field]: value,
@@ -68,16 +70,23 @@ export const PackageApprovals = ({
   const openSearch = () => setOpenedSearch(true);
 
   const onServiceUserSearch = () => {
-    setSearchBy('serviceUser');
+    setOpenedSearch('');
+    setFilters(prevState => ({
+      ...prevState,
+      ...serviceUserFilter,
+    }));
   };
 
   const changeServiceUserSearch = (field, value) => {
-    dispatch(changeApproversSearch({ [field]: value }));
+    setServiceUserFilter(prevState => ({
+      ...prevState,
+      [field]: value,
+    }))
   };
 
   const clearServiceUserSearch = () => {
-    dispatch(clearApproversSearch())
-  }
+    setServiceUserFilter({ ...initialServiceUserFilters });
+  };
 
   const onSearch = useCallback(() => {
     changeFilterField('serviceUserName', searchText);
@@ -93,7 +102,7 @@ export const PackageApprovals = ({
       <Dialog className='approvals-modal' onClose={closeSearch} isOpen={openedSearch}>
         <ServiceUserSearch
           onSearch={onServiceUserSearch}
-          filters={serviceUserSearch}
+          filters={serviceUserFilter}
           changeFilters={changeServiceUserSearch}
           clearFilters={clearServiceUserSearch}
         />
@@ -106,7 +115,8 @@ export const PackageApprovals = ({
           </Container>
           <Container className="brokerage-portal__header">
             <h1>{title}</h1>
-            <Button onClick={openSearch}>Find a service user</Button>
+            {/* todo ask the manager about this feature*/}
+            {/* <Button onClick={openSearch}>Find a service user</Button>*/}
           </Container>
 
           <Container className="brokerage-portal__filters">

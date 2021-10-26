@@ -4,9 +4,7 @@ import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
 import { getCarePackageApprovalRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { PackageApprovals } from 'components';
-import { useSelector } from 'react-redux';
 import { useApprovals } from 'api';
-import { selectApproversSearch } from '../reducers/approversReducer';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -27,46 +25,49 @@ const initialFilters = {
   dateFrom: null,
   dateTo: null,
   packageType: '',
+  firstName: '',
+  lastName: '',
+  hackneyId: '',
+  dateOfBirth: null,
+  postcode: '',
 };
 
 const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Approvals' }];
 
 const Approvals = () => {
   const router = useRouter();
-
   const [pageNumber, setPageNumber] = useState(1);
-  const [searchBy, setSearchBy] = useState('default-filters');
-
   const [filters, setFilters] = useState(initialFilters);
-  const { dateFrom, dateTo, status, serviceUserName, packageType, approverId } = filters;
-  const { firstName, lastName, hackneyId, dateOfBirth, postcode } = useSelector(selectApproversSearch);
+  const {
+    dateFrom,
+    dateTo,
+    status,
+    serviceUserName,
+    packageType,
+    approverId,
+    dateOfBirth,
+    postcode,
+    lastName,
+    hackneyId,
+    firstName
+  } = filters;
 
-  const params = useMemo(() => {
-    if (searchBy === 'default-filters') {
-      return {
+  const params = useMemo(() => ({
         fromDate: dateFrom ? dateFrom.toJSON() : null,
         toDate: dateTo ? dateTo.toJSON() : null,
         serviceUserName,
         approverId,
         packageType,
         pageNumber,
-        status
-      }
-    }
-    if (searchBy === 'service-user') {
-      return {
-        pageNumber,
+        status,
         firstName,
         lastName,
         hackneyId,
         dateOfBirth: dateOfBirth ? dateOfBirth.toJSON() : null,
         postcode,
-      }
-    }
-    return {};
-  }, [filters, pageNumber, searchBy]);
+      }), [filters, pageNumber]);
 
-  const { data, isLoading: approvalsLoading } = useApprovals({ params, shouldFetch: searchBy });
+  const { data, isLoading: approvalsLoading } = useApprovals({ params });
 
   const {
     packages = [],
@@ -89,7 +90,6 @@ const Approvals = () => {
 
   return (
     <PackageApprovals
-      setSearchBy={setSearchBy}
       title='Approvals'
       breadcrumbs={breadcrumbs}
       loading={approvalsLoading}
