@@ -3,6 +3,7 @@ import { useTable, useExpanded, useRowSelect } from 'react-table';
 
 export const Table = ({
   hasHeader = true,
+  RowHeader,
   columns,
   data,
   expandRowCallback,
@@ -58,18 +59,31 @@ export const Table = ({
       <tbody className={`govuk-table__body ${bodyClassName}`} {...getTableBodyProps()}>
         {rows.map((row, index) => {
           prepareRow(row);
+
+          const rowElement = row.cells.map((cell) => (
+            <td className={`govuk-table__cell ${cellClassName}`} {...cell.getCellProps()}>
+              {cell.render('Cell')}
+            </td>
+          ));
           return (
             <React.Fragment key={index}>
               <tr
                 onClick={onRowClick ? () => onRowClick(row.original) : () => {}}
-                className="govuk-table__row"
+                className={`govuk-table__row${RowHeader ? ' with-row-header' : ''}`}
                 {...row.getRowProps()}
               >
-                {row.cells.map((cell) => (
-                  <td className={`govuk-table__cell ${cellClassName}`} {...cell.getCellProps()}>
-                    {cell.render('Cell')}
+                {RowHeader ? (
+                  <td>
+                    <table>
+                      <tr className='govuk-table__row-header'>
+                        <td colSpan={row.cells.length}>
+                          <RowHeader {...row.original} />
+                        </td>
+                      </tr>
+                      {rowElement}
+                    </table>
                   </td>
-                ))}
+                ) : rowElement}
               </tr>
               {row.isExpanded && renderRowSubComponent && (
                 <tr className="govuk-table__row">

@@ -24,7 +24,26 @@
   &:first-of-type {
     padding-left: 0;
     margin-left: 0;
-    width: 350px;
+  }
+
+  &:nth-of-type(1), &:nth-of-type(2) {
+    .title-subtitle {
+      margin-left: initial;
+    }
+  }
+
+  &:nth-of-type(1) {
+    width: 100px;
+  }
+
+  &:nth-of-type(2) {
+    width: 240px;
+  }
+
+  &:nth-of-type(3) {
+    .title-subtitle {
+      margin-left: initial;
+    }
   }
 
   &:last-of-type {
@@ -37,6 +56,12 @@
   }
 }
 
+.govuk-table__row-header {
+  td {
+    padding-top: 23px;
+  }
+}
+
 .new-care-charge__card {
   .title-subtitle:not(.title-subtitle:last-of-type) {
     margin-right: 60px;
@@ -44,7 +69,6 @@
 }
 
 .new-care-charge__card-address {
-  margin-bottom: 20px;
   font-size: 16px;
   color: $lbh-secondary-text-colour;
 }
