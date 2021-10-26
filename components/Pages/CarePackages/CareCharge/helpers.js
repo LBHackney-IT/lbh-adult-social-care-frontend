@@ -1,5 +1,5 @@
-import { useCallback, useEffect } from "react";
-import { useToggle } from "react-use";
+import { useCallback, useEffect } from 'react';
+import { useToggle } from 'react-use';
 
 export const useIsDisabledByStatus = (status) => {
   const [isDisabled, toggleDisabled] = useToggle(false);
@@ -13,4 +13,6 @@ export const useIsDisabledByStatus = (status) => {
   }, []);
 
   return [isDisabled, makeEnabled];
-}
+};
+
+export const checkIfActionsVisible = (status) => ['active', 'pending'].includes(status);

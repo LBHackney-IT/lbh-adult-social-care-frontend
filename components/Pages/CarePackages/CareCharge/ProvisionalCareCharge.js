@@ -3,7 +3,7 @@ import { Controller } from 'react-hook-form';
 import { currency } from 'constants/strings';
 import { Input, Label, RadioGroup, Select, Textarea } from 'components/HackneyDS';
 import ActionButtons from './ActionButtons';
-import { useIsDisabledByStatus } from './helpers';
+import { checkIfActionsVisible, useIsDisabledByStatus } from './helpers';
 
 const collectedByOptions = [
   { id: 'hackney', label: 'Hackney council (gross)' },
@@ -85,7 +85,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
         )}
       />
 
-      <ActionButtons onEdit={makeEnabled} onCancel={onCancel} onEnd={onEnd} />
+      {checkIfActionsVisible(status) && <ActionButtons onEdit={makeEnabled} onCancel={onCancel} onEnd={onEnd} />}
     </div>
   );
 };

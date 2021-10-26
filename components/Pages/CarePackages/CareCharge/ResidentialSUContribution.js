@@ -4,7 +4,7 @@ import { currency } from 'constants/strings';
 import { Checkbox, Input, RadioGroup, DatePicker } from 'components/HackneyDS';
 import { Controller, useWatch } from 'react-hook-form';
 import ActionButtons from './ActionButtons';
-import { useIsDisabledByStatus } from './helpers';
+import { useIsDisabledByStatus, checkIfActionsVisible } from './helpers';
 
 const claimedByOptions = [
   { id: 'gross', label: 'Gross' },
@@ -142,7 +142,7 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
         )}
       </div>
 
-      <ActionButtons onEdit={makeEnabled} onCancel={onCancel} onEnd={onEnd} />
+      {checkIfActionsVisible(status) && <ActionButtons onEdit={makeEnabled} onCancel={onCancel} onEnd={onEnd} />}
     </div>
   );
 };
