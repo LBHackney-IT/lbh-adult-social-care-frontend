@@ -16,6 +16,7 @@ export const Input = ({
   handler,
   onChangeValue,
   required,
+  disabled,
 }) => {
   const outerClassName = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-form-group--error' : '';
@@ -48,6 +49,7 @@ export const Input = ({
           ref={ref}
           value={value}
           onChange={onChange}
+          disabled={disabled}
         />
       </div>
     </div>

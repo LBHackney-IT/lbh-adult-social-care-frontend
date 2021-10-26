@@ -3,16 +3,21 @@ import { currency } from 'constants/strings';
 import { Checkbox, Input, RadioGroup, DatePicker } from 'components/HackneyDS';
 import { Controller } from 'react-hook-form';
 import ActionButtons from './ActionButtons';
+import { useIsDisabledByStatus } from './helpers';
 
 const claimedByOptions = [
   { id: 'gross', label: 'Gross' },
   { id: 'net', label: 'Net' },
 ];
 
+const status = 'active';
+
 const ResidentialSuContribution = ({ isMore12, control, onCancel, onEnd }) => {
   const weeks = isMore12 ? '13+' : '1-12';
   const formKey = isMore12 ? 'residentialMore12' : 'residentialLess12';
   const description = `Without Property ${weeks} weeks`;
+
+  const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
 
   const options = claimedByOptions.map((el) => ({
     label: el.label,
@@ -30,10 +35,11 @@ const ResidentialSuContribution = ({ isMore12, control, onCancel, onEnd }) => {
         defaultValue=""
         render={({ field }) => (
           <Input
-            id={`${weeks}-value`}
             label="Value"
+            id={`${weeks}-value`}
             preSign={currency.euro}
             handler={field.onChange}
+            disabled={isDisabled}
             value={field.value}
           />
         )}
@@ -49,6 +55,7 @@ const ResidentialSuContribution = ({ isMore12, control, onCancel, onEnd }) => {
             name={`${formKey}-claimedBy`}
             className="care-charge__radios"
             handle={field.onChange}
+            disabled={isDisabled}
             value={field.value}
           />
         )}
@@ -60,7 +67,9 @@ const ResidentialSuContribution = ({ isMore12, control, onCancel, onEnd }) => {
           <Controller
             name={`${formKey}.startDate`}
             control={control}
-            render={({ field }) => <DatePicker day={{ label: 'From' }} date={field.value} setDate={field.onChange} />}
+            render={({ field }) => (
+              <DatePicker day={{ label: 'From' }} date={field.value} setDate={field.onChange} disabled={isDisabled} />
+            )}
           />
         </div>
 
@@ -69,7 +78,9 @@ const ResidentialSuContribution = ({ isMore12, control, onCancel, onEnd }) => {
           <Controller
             name={`${formKey}.endDate`}
             control={control}
-            render={({ field }) => <DatePicker day={{ label: 'To' }} date={field.value} setDate={field.onChange} />}
+            render={({ field }) => (
+              <DatePicker day={{ label: 'To' }} date={field.value} setDate={field.onChange} disabled={isDisabled} />
+            )}
           />
         </div>
 
@@ -77,12 +88,14 @@ const ResidentialSuContribution = ({ isMore12, control, onCancel, onEnd }) => {
           <Controller
             name={`${formKey}.isOngoing`}
             control={control}
-            render={({ field }) => <Checkbox value={field.value} onChangeValue={field.onChange} label="Ongoing" />}
+            render={({ field }) => (
+              <Checkbox value={field.value} onChangeValue={field.onChange} label="Ongoing" disabled={isDisabled} />
+            )}
           />
         )}
       </div>
 
-      <ActionButtons onCancel={onCancel} onEnd={onEnd} />
+      <ActionButtons onEdit={makeEnabled} onCancel={onCancel} onEnd={onEnd} />
     </div>
   );
 };

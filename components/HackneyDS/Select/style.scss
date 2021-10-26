@@ -18,6 +18,10 @@
     text-indent: 1px;
     text-overflow: '';
   }
+  
+  &:disabled {
+    background-color: #dee0e2;
+  }
 
   &:focus {
     outline: #ffc845 solid 3px;

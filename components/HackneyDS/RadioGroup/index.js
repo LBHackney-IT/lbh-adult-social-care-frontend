@@ -16,6 +16,7 @@ export default function RadioGroup({
   name,
   hint,
   small,
+  disabled,
 }) {
   const outerClassName = className ? ` ${className}` : '';
   const inlineClassName = inline ? ' govuk-radios--inline' : '';
@@ -35,6 +36,7 @@ export default function RadioGroup({
               </div>
             );
           }
+
           return (
             <React.Fragment key={item.id}>
               <RadioItem
@@ -47,13 +49,16 @@ export default function RadioGroup({
                 label={item.label}
                 name={name}
                 checked={value === item.id}
-                disabled={item.disabled}
+                disabled={disabled || item.disabled}
               />
+
               {condition && (
                 <div className="govuk-radios__conditional govuk-radios__conditional--hidden">
                   {condition.label && <Label htmlFor={condition.id}>{condition.label}</Label>}
                   {condition.error && <ErrorMessage>{condition.error}</ErrorMessage>}
+
                   <HorizontalSeparator height="10px" />
+
                   <input
                     className={`govuk-input govuk-!-width-one-third${errorClass}`}
                     name={condition.id}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Textarea ({
+export default function Textarea({
   maxCount,
   rows = 5,
   id,
@@ -8,6 +8,7 @@ export default function Textarea ({
   value,
   className = '',
   handler = () => {},
+  disabled,
 }) {
   const getCount = () => maxCount - value.length;
   return (
@@ -19,6 +20,7 @@ export default function Textarea ({
         rows={rows}
         value={value}
         onChange={(e) => handler(e.target.value)}
+        disabled={disabled}
       />
       {!!maxCount && (
         <span

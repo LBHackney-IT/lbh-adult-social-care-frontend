@@ -115,7 +115,7 @@ export default function DatePicker({
   }, [date]);
 
   return (
-    <div className={`govuk-date-input lbh-date-input${disabledClass}${outerClass}`} id={`${formId}-errors`}>
+    <div className={`govuk-date-input lbh-date-input${outerClass}`} id={`${formId}-errors`}>
       {label && <Label className="govuk-date-input__label">{label}</Label>}
       {hint && <Hint className="govuk-date-input__hint">{hint}</Hint>}
       {inputs.map((input) => {
@@ -130,7 +130,7 @@ export default function DatePicker({
               </label>
             )}
             <input
-              className={`${errorClass}govuk-input govuk-date-input__input ${input.className}`}
+              className={`${errorClass} govuk-input govuk-date-input__input ${input.className}`}
               id={input.id}
               disabled={disabled}
               value={`00${input.value}`.slice(-2)}
@@ -152,7 +152,7 @@ export default function DatePicker({
         );
       })}
       {IconComponent && (
-        <div className="date-picker__calendar-container">
+        <div className={`date-picker__calendar-container${disabledClass}`}>
           <IconComponent onClick={clickIcon} className={iconClassName} />
           {isOpenCalendar && (
             <DatePick
