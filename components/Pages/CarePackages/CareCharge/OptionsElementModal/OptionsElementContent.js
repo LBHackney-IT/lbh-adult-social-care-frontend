@@ -3,7 +3,7 @@ import CareChargesModalActions from '../ModalComponents/CareChargesModalActions'
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import { RadioGroup } from '../../../../HackneyDS';
 
-const OptionsElementContent = ({ options, closeModal }) => {
+const OptionsElementContent = ({ options }) => {
   const [optionElement, setOptionElement] = useState('edit-element');
 
   const cancelAction = () => alert('Cancel');

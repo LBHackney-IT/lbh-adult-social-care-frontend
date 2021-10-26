@@ -3,7 +3,13 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { getCareChargesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { createCarePackageReclaimFnc, updateCarePackageReclaimFnc, usePackageFnc, usePackageActiveFncPrice } from 'api';
+import {
+  createCarePackageReclaimFnc,
+  updateCarePackageReclaimFnc,
+  usePackageFnc,
+  usePackageActiveFncPrice,
+  usePackageDetails
+} from 'api';
 import { FundedNursingCare } from 'components';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
@@ -33,6 +39,7 @@ const FundedNursingCarePage = () => {
   const dispatch = useDispatch();
   const { data: carePackageReclaimFnc, isLoading: fncLoading } = usePackageFnc(carePackageId);
   const { data: activeFncPrice, isLoading: fncPriceLoading } = usePackageActiveFncPrice(carePackageId);
+  const { data: detailsData, isLoading: detailsLoading } = usePackageDetails(carePackageId);
   const [loading, setLoading] = useState(false);
 
   const pushNotification = (text, className = 'error') => {
@@ -67,13 +74,14 @@ const FundedNursingCarePage = () => {
 
   return (
     <FundedNursingCare
-      loading={loading || fncLoading || fncPriceLoading}
+      loading={loading || fncLoading || fncPriceLoading || detailsLoading}
       carePackageId={carePackageId}
       collectedByOptions={collectedByOptions}
       activeFncPrice={activeFncPrice}
       carePackageReclaimFnc={carePackageReclaimFnc}
       createFundedNursingCare={createFundedNursingCare}
       updateFundedNursingCare={updateFundedNursingCare}
+      detailsData={detailsData}
       goBack={router.back}
       skipAndContinue={skipAndContinue}
     />

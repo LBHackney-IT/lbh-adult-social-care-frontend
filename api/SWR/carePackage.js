@@ -1,7 +1,10 @@
+import { hasUrl } from '../../service';
 import useGetData from './useGetData';
 import { useFetchWithParams } from './useFetchWithParams';
 
 const CARE_PACKAGES_URL = '/care-packages';
+
+const getCarePackageUrl = (id, string = '') => hasUrl(id, `${CARE_PACKAGES_URL}${id ? `/${id}` : ''}${string}`);
 
 export const useBrokerView = ({ params }) => (
   useFetchWithParams({
@@ -12,7 +15,7 @@ export const useBrokerView = ({ params }) => (
 );
 
 export const usePackageDetails = (packageId) =>
-  useGetData(packageId !== undefined ? `${CARE_PACKAGES_URL}/${packageId}/details` : null, '');
+  useGetData(getCarePackageUrl(packageId, '/details'), '');
 
 export const usePackageSchedulingOptions = () =>
   useGetData(`${CARE_PACKAGES_URL}/package-scheduling-options`, 'Can not get Scheduling options', []);
@@ -20,29 +23,27 @@ export const usePackageSchedulingOptions = () =>
 export const usePackageStatuses = () =>
   useGetData(`${CARE_PACKAGES_URL}/package-status-options`, 'Can not get status options', []);
 
-export const usePackageSummary = (carePackageId) =>
-  useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/summary` : null);
+export const usePackageSummary = (packageId) => useGetData(getCarePackageUrl(packageId, '/summary'));
 
-export const useSinglePackageInfo = (packageId) =>
-  useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}` : null, '');
+export const useSinglePackageInfo = (packageId) => useGetData(getCarePackageUrl(packageId));
+
+export const useSingleCorePackageInfo = (packageId) =>
+  useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/core` : null, '');
 
 export const usePackageHistory = (packageId) =>
-  useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/history` : null, '');
+  useGetData(getCarePackageUrl(packageId, '/history'), '');
 
-export const usePackageFnc = (carePackageId) =>
-  useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/reclaims/fnc` : null);
+export const usePackageFnc = (packageId) => useGetData(getCarePackageUrl(packageId, '/reclaims/fnc'));
 
-export const usePackageActiveFncPrice = (carePackageId) =>
-  useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/reclaims/fnc/active-price` : null);
+export const usePackageActiveFncPrice = (packageId) =>
+  useGetData(getCarePackageUrl(packageId, '/reclaims/fnc/active-price'));
 
-export const usePackageCalculatedCost = (carePackageId, serviceUserId) => {
-  const url = `${CARE_PACKAGES_URL}/${carePackageId}/reclaims/care-charges/${serviceUserId}/default`;
-  return useGetData(
-    carePackageId !== undefined ? url : null,
+export const usePackageCalculatedCost = (packageId, serviceUserId) =>
+  useGetData(
+    getCarePackageUrl(packageId, `/reclaims/care-charges/${serviceUserId}/default`),
     'Can not get calculated cost',
     0,
   );
-};
 
-export const usePackageCareCharge = (carePackageId) =>
-  useGetData(carePackageId !== undefined ? `${CARE_PACKAGES_URL}/${carePackageId}/reclaims/care-charges` : null);
+export const usePackageCareCharge = (packageId) =>
+  useGetData(getCarePackageUrl(packageId, '/reclaims/care-charges'));

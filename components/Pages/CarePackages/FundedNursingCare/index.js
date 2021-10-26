@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { isFunction } from 'api';
-import { requiredSchema } from 'constants/schemas';
-import { dateStringToDate } from 'service';
+import { compareDescendingDMY, dateStringToDate } from 'service';
+import { dateDescending } from 'constants/variables';
+import { useDispatch } from 'react-redux';
+import { addNotification } from 'reducers/notificationsReducer';
+import * as yup from 'yup';
 import {
   Button,
   FormGroup,
@@ -29,8 +32,10 @@ const FundedNursingCare = ({
   createFundedNursingCare = () => {},
   updateFundedNursingCare = () => {},
   goBack = () => {},
+  detailsData,
   loading,
 }) => {
+  const dispatch = useDispatch();
   const [collectedByType] = useState({
     hackney: 'gross',
     supplier: 'net',
@@ -41,60 +46,88 @@ const FundedNursingCare = ({
   });
   const [errors, setErrors] = useState({
     hasFNC: '',
+    collectedBy: '',
     dateFrom: '',
     dateTo: '',
     notes: '',
   });
-  const [hasPreviousFnc] = useState(false); //todo for new design
-  const [hasFNC, setHasFNC] = useState('yes');
+  const [hasFNC, setHasFNC] = useState('');
+  const [hasPreviousFnc] = useState(false); // todo for new design
   const [collectedBy, setCollectedBy] = useState();
   const [notes, setNotes] = useState('');
   const [file, setFile] = useState(null);
-  const [isOngoing, setIsOngoing] = useState(false);
+  const [isOngoing, setIsOngoing] = useState(true);
 
   const clickBack = () => {
     if (isFunction(goBack())) goBack();
   };
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  }
+
   const clickSave = async () => {
-    const validFields = [
-      {
-        schema: requiredSchema.string,
-        value: hasFNC,
-        field: 'hasFNC',
-      },
-      {
-        schema: requiredSchema.string,
-        value: notes,
-        field: 'notes',
-      },
-      {
-        schema: requiredSchema.date,
-        value: dates.dateFrom,
-        field: 'dateFrom',
-      },
-    ];
+    const { dateFrom, dateTo } = dates;
 
-    if (!isOngoing) {
-      validFields.push({
-        schema: requiredSchema.date,
-        value: dates.dateTo,
-        field: 'dateTo',
-      });
-    }
+    const schema = yup.object().shape({
+      collectedBy: yup.number().typeError('Required field').required('Required field'),
+      detailsDateTo: null,
+      isOngoing: yup.boolean(),
+      dateFrom: yup
+        .date()
+        .typeError('Please select a date from')
+        .required()
+        .test('dateFrom', 'Date from less then core date start', () => (
+          compareDescendingDMY(dateFrom, detailsData.startDate) !== dateDescending.asc
+        ))
+        .test('dateFrom', 'Date from more then core date end', () => {
+          if(detailsData.endDate) {
+            return compareDescendingDMY(dateFrom, detailsData.endDate) !== dateDescending.desc
+          }
+          return true;
+        }),
+      dateTo: yup
+        .mixed()
+        .when('isOngoing', {
+          is: false,
+          then: yup
+            .date()
+            .typeError('Please select a date to')
+            .required()
+            .test('dateTo', '(Date to) less then (date from)', () => (
+              compareDescendingDMY(dateFrom, dateTo) !== dateDescending.desc
+            ))
+            .test('dateTo', 'Date to should be less or equal then core end date', (value) => {
+              if(detailsData.endDate) {
+                return compareDescendingDMY(value, detailsData.endDate) !== dateDescending.desc
+              }
+              return true
+            }),
+        })
+    });
 
+    let localErrors = {};
     let hasErrors = false;
-    const localErrors = {};
-    for await (const { schema, value, field } of validFields) {
-      const isValid = await schema.isValid({ value });
-      if (!isValid) {
+
+    try {
+      await schema.validate(
+        { detailsDateTo: detailsData.endDate, isOngoing, dateFrom, dateTo, collectedBy },
+        { abortEarly: false }
+      );
+    } catch (errorValidation) {
+      const newErrors = errorValidation?.inner?.map(error => ([error.path, error.message ]));
+      if(newErrors) {
         hasErrors = true;
-        localErrors[field] = 'Required field';
+        localErrors = Object.fromEntries(newErrors);
+        setErrors(prevState => ({ ...prevState, ...localErrors }));
       }
     }
+
     setErrors((prevState) => ({ ...prevState, ...localErrors }));
 
-    if (hasErrors) return;
+    if (hasErrors) {
+      return pushNotification('Some errors above');
+    }
 
     const fundedNursingCareCreation = {
       carePackageId,
@@ -103,8 +136,8 @@ const FundedNursingCare = ({
       supplierId: 1, // To be removed
       status: 1, // Set active status ?
       type: 1, // Set type of reclaim ?
-      startDate: dates.dateFrom,
-      endDate: dates.dateTo,
+      startDate: dateFrom,
+      endDate: isOngoing ? null : dateTo,
       description: notes,
     };
 
@@ -115,20 +148,24 @@ const FundedNursingCare = ({
       supplierId: 1, // To be removed
       status: 1, // Set active status ?
       type: 1, // Set type of reclaim ?
-      startDate: dates.dateFrom,
-      endDate: dates.dateTo,
+      startDate: dateFrom,
+      endDate: isOngoing ? null : dateTo,
       description: notes,
     };
 
     if (!carePackageReclaimFnc?.id) {
-      createFundedNursingCare(carePackageId, fundedNursingCareCreation);
-      return;
+      return createFundedNursingCare(carePackageId, fundedNursingCareCreation);
     }
-    updateFundedNursingCare(carePackageId, fundedNursingCareUpdate);
+    return updateFundedNursingCare(carePackageId, fundedNursingCareUpdate);
   };
 
   const changeError = (field, value = '') => {
     setErrors((prevState) => ({ ...prevState, [field]: value }));
+  };
+
+  const onSelectCollectedBy = (value) => {
+    setCollectedBy(value);
+    changeError('collectedBy');
   };
 
   const changeDate = (field, value) => {
@@ -136,27 +173,22 @@ const FundedNursingCare = ({
     setDates((prevState) => ({ ...prevState, [field]: value }));
   };
 
-  const composeCarePackageReclaimFncData = () => {
-    if (carePackageReclaimFnc) {
-      setDates({
-        dateFrom: dateStringToDate(carePackageReclaimFnc.startDate),
-        dateTo: dateStringToDate(carePackageReclaimFnc.endDate),
-      });
-      if (!carePackageReclaimFnc.endDate) {
-        setIsOngoing(true);
-      }
-
-      setNotes(carePackageReclaimFnc.description);
-      setCollectedBy(carePackageReclaimFnc.claimCollector);
-    }
-  };
-
   const loadPreviousFnc = () => alert('load previous fnc');
   const addNewFnc = () => alert('add new fnc');
 
   useEffect(() => {
-    composeCarePackageReclaimFncData();
-  }, [carePackageReclaimFnc]);
+    setDates({
+      dateFrom: dateStringToDate(carePackageReclaimFnc.startDate || detailsData.startDate),
+      dateTo: dateStringToDate(carePackageReclaimFnc.endDate || detailsData.endDate),
+    });
+
+    if (carePackageReclaimFnc?.endDate || detailsData.endDate) {
+      setIsOngoing(false);
+    }
+
+    setNotes(carePackageReclaimFnc.description || '');
+    setCollectedBy(carePackageReclaimFnc.claimCollector || '');
+  }, [carePackageReclaimFnc, detailsData]);
 
   return (
     <Container className="brokerage__funded-nursing-care">
@@ -184,6 +216,7 @@ const FundedNursingCare = ({
               setHasFNC(value);
             }}
             inline
+            className='has-fnc-radio-group'
             error={errors.hasFNC}
             value={hasFNC}
             label="Has a FNC assessment been carried out?"
@@ -192,20 +225,26 @@ const FundedNursingCare = ({
               { id: 'no', label: 'No' },
             ]}
           />
-          <Label className="select-collected-by" htmlFor="collected-by">
-            Collected by
-          </Label>
-          <Select
-            id="collected-by"
-            className="funded-nursing-care__select"
-            options={collectedByOptions}
-            value={collectedBy}
-            onChangeValue={setCollectedBy}
-          />
+          <FormGroup className='select-collected-by' required label='Collected by' error={errors.collectedBy}>
+            <Select
+              error={errors.collectedBy}
+              disabledEmptyComponent
+              emptyElement={{ text: 'Please select', value: '' }}
+              id="collected-by"
+              className="funded-nursing-care__select"
+              options={collectedByOptions}
+              value={collectedBy}
+              onChangeValue={onSelectCollectedBy}
+            />
+          </FormGroup>
+
           <BrokeragePackageDates
             dates={dates}
             error={errors.dateFrom || errors.dateTo}
             setDates={changeDate}
+            startMinDate={dateStringToDate(detailsData.startDate)}
+            startMaxDate={dateStringToDate(detailsData.endDate)}
+            endMaxDate={dateStringToDate(detailsData.endDate)}
             label="Funded Nursing Care Schedule..."
             setIsOngoing={(value) => {
               changeError('dateTo');
@@ -214,14 +253,8 @@ const FundedNursingCare = ({
             isOngoing={isOngoing}
           />
           <FormGroup error={errors.notes}>
-            <Label className="text-required-after label-textarea">Funded Nursing Care notes</Label>
-            <Textarea
-              handler={(value) => {
-                changeError('notes');
-                setNotes(value);
-              }}
-              value={notes}
-            />
+            <Label className="label-textarea">Funded Nursing Care notes</Label>
+            <Textarea handler={setNotes} value={notes}/>
           </FormGroup>
           <FormGroup className="upload-fnc-assessment" label="Upload FNC Assessment...">
             <UrlFromFile file={file} removeFile={setFile} />

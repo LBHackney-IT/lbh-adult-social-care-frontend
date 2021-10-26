@@ -19,7 +19,7 @@ import { useDispatch } from 'react-redux';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { updateCoreCarePackage, useSinglePackageInfo, usePackageSchedulingOptions } from 'api';
+import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -38,7 +38,7 @@ const CorePackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { guid: packageId } = router.query;
-  const { data: packageInfo } = useSinglePackageInfo(packageId);
+  const { data: packageInfo } = useSingleCorePackageInfo(packageId);
   const { settings } = packageInfo;
   const { data: schedulingOptionsData = [] } = usePackageSchedulingOptions();
 
@@ -48,8 +48,6 @@ const CorePackage = () => {
       label: `${optionName} (${optionPeriod})`
     }))
   ), [schedulingOptionsData]);
-
-  console.log(schedulingOptionsData);
 
   const schema = yup.object().shape({
     packageType: yup

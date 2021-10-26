@@ -26,7 +26,6 @@ export const stringIsNullOrEmpty = (str) => {
   if (!str || str.length === 0) return true;
   if (!str || /^\s*$/.test(str)) return true;
   return !str.trim();
-
 };
 
 export const isServer = () => typeof window === 'undefined';

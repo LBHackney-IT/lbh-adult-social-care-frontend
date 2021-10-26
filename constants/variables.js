@@ -7,6 +7,12 @@ export const requestMethods = {
   head: 'HEAD',
 };
 
+export const dateDescending = {
+  asc: 1, // 0, 1
+  equal: 0, // 0, 0
+  desc: -1, // 1, 0
+};
+
 export const tagColors = {
   new: 'green',
   'in progress': 'yellow',
@@ -20,4 +26,16 @@ export const tagColors = {
 export const userTagColors = {
   new: 'yellow',
   existing: 'gray',
+};
+
+export const costPeriods = {
+  hourly: 1,
+  weekly: 2,
+  oneOff: 3,
+  fixed: 4,
+};
+
+export const brokerageTypeOptions = {
+  coreCost: 1,
+  additionalNeed: 2,
 };

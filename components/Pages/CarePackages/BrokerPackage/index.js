@@ -3,17 +3,16 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useDebounce } from 'react-use';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
-import { compareDesc } from 'date-fns';
 import { updateCarePackageCosts, useSuppliers, useSinglePackageInfo } from 'api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
+import { brokerageTypeOptions, costPeriods } from 'constants/variables';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 import BrokerageHeader from '../BrokerageHeader';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
-import { brokerageTypeOptions, costPeriods } from '../../../../Constants';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 
 const initialNeed = {
@@ -21,8 +20,6 @@ const initialNeed = {
   startDate: null,
   endDate: null,
   isOngoing: false,
-  errorStartDate: '',
-  errorEndDate: '',
 };
 
 const BrokerPackage = ({
@@ -42,7 +39,6 @@ const BrokerPackage = ({
   const [isOngoing, setIsOngoing] = useState(false);
   const [coreCost, setCoreCost] = useState(0);
   const [coreCostError, setCoreCostError] = useState('');
-
   const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
   const [weeklyTotalCost, setWeeklyTotalCost] = useState(0);
@@ -50,7 +46,7 @@ const BrokerPackage = ({
   const [isNewSupplier, setIsNewSupplier] = useState(false);
 
   const [packageDates, setPackageDates] = useState({
-    startDate: null,
+    startDate: new Date(),
     endDate: null,
   });
 
@@ -110,8 +106,6 @@ const BrokerPackage = ({
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
             isOngoing: !item.endDate,
-            errorStartDate: '',
-            errorEndDate: '',
           }));
 
         const oneOffDetails = detailsData.details
@@ -120,8 +114,6 @@ const BrokerPackage = ({
             ...item,
             startDate: dateStringToDate(item.startDate),
             endDate: dateStringToDate(item.endDate),
-            errorStartDate: '',
-            errorEndDate: '',
           }));
 
         setWeeklyNeeds(weeklyDetails);
@@ -138,33 +130,24 @@ const BrokerPackage = ({
     dispatch(addNotification({ text, className }));
   };
 
-  const checkNeedsErrors = (needs) => {
-    let hasErrors = false;
-    const checkedNeeds = needs.map((item) => {
-      if (!item.startDate && !item.endDate && !item.cost) return { ...item };
+  const checkNeedError = (item) => {
+    const { startDate, endDate, isOngoing: isOngoingItem } = item;
+    let errorStartDate = '';
+    let errorEndDate = '';
+    if ((!startDate && isOngoingItem) || (!startDate && !isOngoingItem && endDate)) {
+      errorStartDate = 'Invalid start date';
+    } else if (startDate && endDate && !isOngoingItem && compareDescendingDMY(startDate, endDate) === -1) {
+      errorEndDate = 'End date should be later then start date';
+    } else if (startDate && !isOngoing && compareDescendingDMY(packageDates.endDate, startDate) === -1) {
+      errorStartDate = 'Start date should be later then core date';
+    } else if (startDate && isOngoing && compareDescendingDMY(packageDates.startDate, startDate) === -1) {
+      errorEndDate = 'Start date should be later then core date';
+    }
 
-      const { startDate, endDate, isOngoing: isOngoingItem } = item;
-      let errorStartDate = '';
-      let errorEndDate = '';
-      if (!startDate || (startDate && endDate && !isOngoingItem && compareDescendingDMY(startDate, endDate))) {
-        errorStartDate = 'Invalid start date';
-      } else if (startDate && compareDescendingDMY(startDate, packageDates.endDate)) {
-        errorStartDate = 'Start date should be later then core date';
-      }
-      if (endDate && !isOngoingItem && compareDescendingDMY(endDate, packageDates.endDate)) {
-        errorEndDate = 'End date should be later then core date';
-      }
-      if (errorStartDate || errorEndDate) {
-        hasErrors = true;
-      }
-      return {
-        ...item,
-        errorEndDate,
-        errorStartDate,
-      };
-    });
-    return { checkedNeeds, hasErrors };
+    return errorStartDate || errorEndDate;
   };
+
+  const checkDateErrors = (needs) => needs.some(item => checkNeedError(item));
 
   const clickSave = async () => {
     if (!isNewSupplier && !selectedItem?.id) {
@@ -172,27 +155,24 @@ const BrokerPackage = ({
       return;
     }
 
-    if(!coreCost) {
+    if (!coreCost) {
       setCoreCostError('Required field');
       pushNotification('Core weekly cost is required')
       return;
     }
 
-    if(!isOngoing && (!packageDates.endDate || compareDesc(packageDates.startDate, packageDates.endDate) === -1)) {
+    if (!isOngoing && (!packageDates.endDate || compareDescendingDMY(packageDates.startDate, packageDates.endDate) === -1)) {
       pushNotification('Core date is wrong');
       return;
     }
 
-    const checkedWeeklyDetails = checkNeedsErrors(weeklyNeeds);
-    const checkOneOffDetails = checkNeedsErrors(oneOffNeeds);
-
-    setWeeklyNeeds(checkedWeeklyDetails.checkedNeeds);
-    setOneOffNeeds(checkOneOffDetails.checkedNeeds);
+    const weeklyDateErrors = checkDateErrors(weeklyNeeds);
+    const oneOfNeedDateErrors = checkDateErrors(oneOffNeeds);
     if (!coreCost) {
       setCoreCostError('The core cost field is required');
     }
 
-    if (checkedWeeklyDetails.hasErrors || checkOneOffDetails.hasErrors) {
+    if (weeklyDateErrors || oneOfNeedDateErrors) {
       pushNotification('Some validation errors above');
       return;
     }
@@ -389,6 +369,7 @@ const BrokerPackage = ({
               cardInfo={selectedItem}
               corePackageDates={packageDates}
               addNeed={addNeed}
+              checkNeedError={checkNeedError}
               weeklyNeeds={weeklyNeeds}
               coreCostError={coreCostError}
               oneOffNeeds={oneOffNeeds}

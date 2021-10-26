@@ -191,6 +191,13 @@
 .review-package-details__buttons {
   display: flex;
   flex-wrap: wrap;
+
+  button {
+    height: 45px;
+    &:not(button:last-of-type) {
+      margin-right: 16px;
+    }
+  }
 }
 
 .package-history-link {

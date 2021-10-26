@@ -1,0 +1,54 @@
+.package-details {
+  .brokerage__container-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .title-subtitle-header {
+    width: 100%;
+
+    .review-package-details__buttons {
+      margin-left: auto;
+    }
+  }
+}
+
+.package-details__action-modal {
+  h2 {
+    font-size: 30px;
+    font-weight: 700;
+    color: black;
+    margin-bottom: 20px;
+  }
+
+  .horizontal-separator {
+    display: none;
+  }
+
+  .brokerage__actions button {
+    width: initial;
+
+    &:first-of-type {
+      padding: 16px;
+    }
+  }
+
+  .lbh-dialog {
+    border: none;
+  }
+
+  .lbh-dialog__close {
+    display: none;
+  }
+
+  .lbh-form-group .govuk-fieldset__legend {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  textarea {
+    border: 1px solid $lbh-gray-border;
+    margin-bottom: 30px;
+  }
+}
