@@ -4,42 +4,19 @@
   }
 
   .title-subtitle {
-    margin-left: auto;
-  }
-
-  .start-date-cell {
-    .title-subtitle {
-      margin-left: initial;
-    }
-  }
-}
-
-.care-charges__cell {
-  cursor: pointer;
-  vertical-align: bottom;
-  margin-left: auto;
-  padding-top: 24px;
-  padding-bottom: 24px;
-
-  &:first-of-type {
-    padding-left: 0;
-    margin-left: 0;
-    width: 350px;
-  }
-
-  &:last-of-type {
-    width: 160px;
-    .title-subtitle {
-      p:first-of-type {
-        text-align: right;
-      }
-    }
+    margin-right: 60px;
   }
 }
 
 .new-care-charge__card {
-  .title-subtitle:not(.title-subtitle:last-of-type) {
-    margin-right: 60px;
+  transition: 0.2s ease;
+  padding-bottom: 24px;
+  padding-top: 10px;
+  border-bottom: 1px solid $lbh-gray-border;
+
+  &:hover {
+    cursor: pointer;
+    background: $lbh-gray;
   }
 }
 
