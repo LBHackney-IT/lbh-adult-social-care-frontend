@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Container, Input } from '../../HackneyDS';
+import { Container, Input, FormGroup } from '../../HackneyDS';
 import { SelectArrowTriangle } from '../../Icons';
 import BrokeragePackageDates from './BrokeragePackageDates';
 import { currency } from '../../../constants/strings';
 import BrokerageBorderCost from './BrokerageBorderCost';
-import FormGroup from '../../HackneyDS/FormGroup';
 
 const BrokerageCost = ({
   title,

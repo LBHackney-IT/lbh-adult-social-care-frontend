@@ -27,6 +27,9 @@ export const usePackageSummary = (packageId) => useGetData(getCarePackageUrl(pac
 
 export const useSinglePackageInfo = (packageId) => useGetData(getCarePackageUrl(packageId));
 
+export const useSingleCorePackageInfo = (packageId) =>
+  useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/core` : null, '');
+
 export const usePackageHistory = (packageId) =>
   useGetData(getCarePackageUrl(packageId, '/history'), '');
 
