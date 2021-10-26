@@ -27,6 +27,8 @@ const columnsRow = [
 ];
 
 export const CareChargesTable = ({ onRowClick, data }) => {
+  if(!data) return null;
+
   const columns = useMemo(() => columnsRow.map(({
     accessor,
     className = '',
