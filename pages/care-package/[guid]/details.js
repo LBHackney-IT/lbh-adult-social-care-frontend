@@ -4,7 +4,12 @@ import { useRouter } from 'next/router';
 import { ReviewPackageDetails, BrokerageBorderCost } from 'components';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
-import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from '../../../routes/RouteConstants';
+import {
+  getBrokerPackageRoute,
+  getCareChargesRoute,
+  getCorePackageRoute,
+  getFundedNursingCareRoute
+} from '../../../routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -110,6 +115,7 @@ const PackageDetailsPage = () => {
     },
     {
       headerTitle: 'Weekly Additional Need',
+      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
       id: 'weekly-additional-need',
       items: data?.additionalWeeklyNeeds,
       totalCostHeader: 'Total (Net Off)',
@@ -118,6 +124,7 @@ const PackageDetailsPage = () => {
     {
       headerTitle: 'One Off Additional Need',
       id: 'on-off-additional-need',
+      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
       items: data?.additionalOneOffNeeds,
       totalCostHeader: 'Total (Net Off)',
       totalCost: data?.additionalOneOffCost,
