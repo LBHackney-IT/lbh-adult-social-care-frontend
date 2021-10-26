@@ -4,37 +4,43 @@ import CareChargesModalTitle from '../CareChargesModalTitle';
 import CareChargesInfoStatic from '../CareChargesInfoStatic';
 import { Checkbox } from '../../../../HackneyDS';
 
-const CancelElementContent = ({ firstElement, secondElement, headerText, onClose }) => {
+const CancelElementContent = ({ data, headerText, onClose }) => {
   const [canceledContribution, setCanceledContribution] = useState(false);
 
-  const cancelElement = () => {
-    let canceledElement = firstElement[0];
-    if (canceledContribution) {
-      canceledElement = secondElement[0];
-    }
-    alert(`Canceled success for (${canceledElement.name} ${canceledElement.property})`);
+  const showCheckbox = Boolean(data.checkboxLabel);
+
+  const onCancel = () => {
+    // let canceledElement = firstElement[0];
+    // if (canceledContribution) {
+    //   canceledElement = secondElement[0];
+    // }
+    // alert(`Canceled success for (${canceledElement.name} ${canceledElement.property})`);
   };
 
   return (
     <>
       <CareChargesModalTitle title={headerText} />
 
-      <div className={canceledContribution ? 'opacity-3' : ''}>
-        <CareChargesInfoStatic activeElements={firstElement} />
+      <div>
+        <CareChargesInfoStatic data={data.topItem} />
       </div>
 
-      <Checkbox
-        small
-        className="care-charges-modal__cancel-checkbox"
-        onChangeValue={setCanceledContribution}
-        value={canceledContribution}
-        id="cancelContribution"
-        label="Cancel 13+ contribution"
-      />
+      {showCheckbox && (
+        <>
+          <Checkbox
+            small
+            className="care-charges-modal__cancel-checkbox"
+            onChangeValue={setCanceledContribution}
+            value={canceledContribution}
+            id="cancelContribution"
+            label={data.checkboxLabel}
+          />
 
-      <div className={canceledContribution ? '' : 'opacity-3'}>
-        <CareChargesInfoStatic activeElements={secondElement} />
-      </div>
+          <div className={canceledContribution ? '' : 'opacity-3'}>
+            <CareChargesInfoStatic data={data.bottomItem} />
+          </div>
+        </>
+      )}
 
       <p className="text-warning has-text-weight-bold">
         Warning: This will cancel the element, all
@@ -44,7 +50,7 @@ const CancelElementContent = ({ firstElement, secondElement, headerText, onClose
 
       <CareChargesModalActions
         actions={[
-          { title: 'Cancel element', handler: cancelElement, className: 'warning-button' },
+          { title: 'Cancel element', handler: onCancel, className: 'warning-button' },
           { title: 'Return', handler: onClose, className: 'without-background' },
         ]}
       />

@@ -39,3 +39,8 @@ export const brokerageTypeOptions = {
   coreCost: 1,
   additionalNeed: 2,
 };
+
+export const collectedByOptions = [
+  { id: 'hackney', label: 'Hackney council (gross)' },
+  { id: 'supplier', label: 'Supplier (net)' },
+];

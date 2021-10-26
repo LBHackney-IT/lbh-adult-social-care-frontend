@@ -12,7 +12,7 @@
   }
 
   .lbh-dialog {
-    background: #F1F1F1;
+    background: #f1f1f1;
     border: none;
     padding: 32px;
 
@@ -64,6 +64,8 @@
 
   .care-charges-modal__values {
     display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
 
     @include media-mobile {
       flex-wrap: wrap;
@@ -143,7 +145,6 @@
   .care-charges-modal__info {
     border: 1px solid $lbh-gray-border-2;
     padding: 24px;
-    box-sizing: border-box;
     margin-bottom: 32px;
 
     .govuk-form-group, .radio-button {
@@ -161,12 +162,11 @@
   }
 
   .care-charges-modal__content {
-    margin-bottom: 16px;
-
     p:first-of-type {
       font-weight: bold;
       color: black;
     }
+
     p:last-of-type {
       font-size: 14px;
       color: $lbh-text-colour;
@@ -233,6 +233,7 @@
   & > p {
     margin-bottom: 20px;
   }
+
   margin-bottom: 16px;
 }
 

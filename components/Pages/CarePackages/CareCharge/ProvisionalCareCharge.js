@@ -2,13 +2,9 @@ import React, { memo } from 'react';
 import { Controller } from 'react-hook-form';
 import { currency } from 'constants/strings';
 import { Input, Label, RadioGroup, Select, Textarea } from 'components/HackneyDS';
+import { collectedByOptions } from 'constants/variables';
 import ActionButtons from './ActionButtons';
 import { checkIfActionsVisible, useIsDisabledByStatus } from './helpers';
-
-const collectedByOptions = [
-  { id: 'hackney', label: 'Hackney council (gross)' },
-  { id: 'supplier', label: 'Supplier (net)' },
-];
 
 const status = 'active';
 
