@@ -211,7 +211,8 @@ const PackageDetailsPage = () => {
     <ReviewPackageDetails
       className='package-details'
       showEditActions
-      subTitle="Review package details"
+      title={data?.packageType}
+      subTitle="Package details"
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}

@@ -23,10 +23,12 @@ const PackageUserDetails = ({ firstName, lastName, hackneyId, dateOfBirth, postC
         {` (${getAgeFromDateString(dateOfBirth)})`}
       </p>
     </Container>
-    <Container>
-      <p>Postcode</p>
-      <p>{postCode}</p>
-    </Container>
+    {postCode && (
+      <Container>
+        <p>Postcode</p>
+        <p>{postCode}</p>
+      </Container>
+    )}
   </Container>
 );
 

@@ -211,6 +211,7 @@ const ReviewPackageDetailsPage = () => {
     <ReviewPackageDetails
       loading={summaryLoading}
       subTitle="Review package details"
+      title={data?.packageType}
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
