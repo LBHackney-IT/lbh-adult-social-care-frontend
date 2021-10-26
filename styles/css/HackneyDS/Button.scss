@@ -68,9 +68,10 @@
   }
 }
 
-button {
+button:not(.lbh-button--disabled):not([disabled]) {
   &.outline {
     background: transparent;
+    transition: background-color 0.2s ease;
     border: 1px solid;
     box-shadow: none;
 
@@ -81,21 +82,41 @@ button {
     &.green {
       color: $lbh-green1;
       border-color: $lbh-green1;
+
+      &:hover {
+        background: $lbh-green1;
+        color: white;
+      }
     }
 
     &.red {
       color: $lbh-f01;
       border-color: $lbh-f01;
+
+      &:hover {
+        background: $lbh-f01;
+        color: white;
+      }
     }
 
     &.gray {
       color: $lbh-gray-text;
       border-color: $lbh-gray-text;
+
+      &:hover {
+        background: $lbh-gray-text;
+        color: white;
+      }
     }
 
     &.blue {
       color: $lbh-link;
-      border-color: $lbh-link
+      border-color: $lbh-link;
+
+      &:hover {
+        background: $lbh-link;
+        color: white;
+      }
     }
 
     &:active, &:hover, &:link, &:visited {
