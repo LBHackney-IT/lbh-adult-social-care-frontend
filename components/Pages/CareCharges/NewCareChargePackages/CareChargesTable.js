@@ -18,21 +18,22 @@ const RowHeader = ({ serviceUser, status, isS117Client, address, dateOfBirth }) 
   </Container>
 )
 
-export const CareChargesTable = ({ onRowClick, data }) => {
-  const columnsRow = [
-    { accessor: 'hackneyId', title: 'Hackney ID', subtitle: (value) => `#${value}`},
-    { accessor: 'packageType', title: 'Package' },
-    { accessor: 'startDate', title: 'Start date', subtitle: (value) => formatDate(value) },
-    { accessor: 'lastModified', title: 'Last modified', subtitle: (value) => formatDate(value) },
-    { accessor: 'modifiedBy', title: 'by' },
-  ];
+const columnsRow = [
+  { accessor: 'hackneyId', title: 'Hackney ID', subtitle: (value) => `#${value}`},
+  { accessor: 'packageType', title: 'Package' },
+  { accessor: 'startDate', title: 'Start date', subtitle: (value) => formatDate(value) },
+  { accessor: 'lastModified', title: 'Last modified', subtitle: (value) => formatDate(value) },
+  { accessor: 'modifiedBy', title: 'by' },
+];
 
-  const columns = useMemo(() => (
-    columnsRow.map(({ accessor, className = '', title, subtitle }) => ({
+export const CareChargesTable = ({ onRowClick, data }) => {
+  const columns = useMemo(() => columnsRow.map(({ accessor, className = '', title, subtitle }) => (
+    {
       accessor,
-      Cell: ({ value }) => <TitleSubtitle className={className} title={title} subtitle={subtitle ? subtitle(value) : value} />
-    }))
-  ), [columnsRow]);
+      Cell: ({ value }) =>
+        <TitleSubtitle className={className} title={title} subtitle={subtitle ? subtitle(value) : value} />
+    }
+  )), []);
 
   return (
     <div className="care-charges__table">
