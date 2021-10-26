@@ -1,6 +1,9 @@
+
 $lbh-green1: #00664f;
 $lbh-green2: #025945;
 $lbh-primary-button: #00664F;
+$lbh-primary-disabled-button: #328472;
+$lbh-primary-inner-shadow: #003D2F;
 $lbh-text-colour: #0B0C0C;
 $lbh-green-border: #7fb2a7;
 $lbh-light-green: rgba(0, 102, 79, 0.1);
@@ -13,6 +16,11 @@ $lbh-blue-highlight: #0085ca;
 $lbh-secondary-text-colour: #525A5B;
 $lbh-e01: #672146;
 $lbh-f01: #81312F;
+$lbh-f02: #BE3A34;
+$lbh-f03: #71211F;
+$lbh-h01: #F8E08E;
+$lbh-h02: #FFDB62;
+$lbh-h03: #E7BE32;
 $lbh-black-light: rgba(0, 0, 0, 0.5);
 $lbh-black1: #0b0c0c;
 $lbh-text: #0b0c0c;
@@ -42,3 +50,13 @@ $lbh-light-link: #057fdf;
 $lbh-red: #be3a34;
 $lbh-link-red: #be3a34;
 $lbh-light-red: rgba(190, 58, 52, 0.05);
+
+$button-secondary-f: $lbh-f01;
+$button-secondary-f-hover: $lbh-f02;
+$button-secondary-f-pressed: $lbh-f03;
+
+$button-secondary-h: $lbh-h01;
+$button-secondary-h-hover: $lbh-h02;
+$button-secondary-h-pressed: $lbh-h03;
+
+$button-secondary-g-text: #0C0C0C;

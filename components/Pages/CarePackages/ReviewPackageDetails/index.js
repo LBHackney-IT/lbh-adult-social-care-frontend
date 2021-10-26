@@ -97,7 +97,7 @@ const ReviewPackageDetails = ({
     {
       loading,
       title: 'Cancel package',
-      className: 'color-lbh-e01',
+      className: 'secondary-f',
       onClick: () => makeActionPackage(cancelCarePackage, actionNotes.cancelNotes)
     },
     { title: 'Back', onClick: closePopup, className: 'link-button black' },
