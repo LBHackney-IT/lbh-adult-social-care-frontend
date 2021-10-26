@@ -4,34 +4,28 @@ import { requestMethods } from '../../constants/variables';
 
 const CARE_PACKAGE_URL = `${BASE_URL}/v1/care-packages`;
 
-export const changeCarePackageDetails = ({ data, packageId }) => {
-  const url = `${CARE_PACKAGE_URL}/${packageId}/details`;
-  return axiosRequest({ url, data, method: requestMethods.put });
-};
+const sendCarePackageRequest = (url, data, method = requestMethods.post) =>
+  axiosRequest({ url: `${CARE_PACKAGE_URL}/${url}`, data, method });
 
-export const submitCarePackage = ({ data, packageId }) => {
-  const url = `${CARE_PACKAGE_URL}/${packageId}/submit`;
-  return axiosRequest({ url, data, method: requestMethods.post });
-};
+export const changeCarePackageDetails = ({ data, packageId }) =>
+  sendCarePackageRequest(`${packageId}/details`, data, requestMethods.put)
 
-export const createCoreCarePackage = ({ data }) => {
-  const url = `${CARE_PACKAGE_URL}`;
-  return axiosRequest({ url, data, method: requestMethods.post });
-};
+export const submitCarePackage = ({ data, packageId }) => sendCarePackageRequest(`${packageId}/submit`, data)
 
-export const updateCoreCarePackage = ({ data, packageId }) => {
-  const url = `${CARE_PACKAGE_URL}/${packageId}`;
-  return axiosRequest({ url, data, method: requestMethods.put });
-};
+export const approveCarePackage = ({ data, packageId }) => sendCarePackageRequest(`${packageId}/approve`, data)
 
-export const updateCarePackageCosts = ({ data, packageId }) => {
-  const url = `${CARE_PACKAGE_URL}/${packageId}/details`;
-  return axiosRequest({ url, data, method: requestMethods.put });
-};
+export const declineCarePackage = ({ data, packageId }) => sendCarePackageRequest(`${packageId}/decline`, data)
 
-export const assignToBroker = ({ data }) =>
-  axiosRequest({
-    url: `${CARE_PACKAGE_URL}/assign`,
-    method: requestMethods.post,
-    data,
-  });
+export const endCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/end`, { notes })
+
+export const cancelCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/cancel`, { notes })
+
+export const createCoreCarePackage = ({ data }) => sendCarePackageRequest('', data)
+
+export const updateCoreCarePackage = ({ data, packageId }) =>
+  sendCarePackageRequest(`${packageId}`, data, requestMethods.put)
+
+export const updateCarePackageCosts = ({ data, packageId }) =>
+  sendCarePackageRequest(`${packageId}/details`, data, requestMethods.put)
+
+export const assignToBroker = ({ data }) => sendCarePackageRequest('/assign', data)

@@ -12,7 +12,7 @@ const initialInputs = {
   endDate: '',
 };
 
-const AddElementContent = ({ activeElements, closeModal, headerText }) => {
+const AddElementContent = ({ activeElements, headerText }) => {
   const [inputs, setInputs] = useState([]);
   const [inputHasErrors, setInputHasErrors] = useState(false);
   const [inputErrors, setInputErrors] = useState([]);

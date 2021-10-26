@@ -18,7 +18,7 @@ export default function Dialog({ children, onClose, isOpen, className = '' }) {
     };
   }, [onClose]);
 
-  if(!windowState) return <></>;
+  if(!windowState) return null;
 
   return (
     isOpen &&

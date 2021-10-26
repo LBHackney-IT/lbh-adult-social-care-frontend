@@ -4,7 +4,7 @@ import CareChargesModalTitle from '../CareChargesModalTitle';
 import CareChargesInfoStatic from '../CareChargesInfoStatic';
 import { Checkbox } from '../../../HackneyDS';
 
-const CancelElementContent = ({ firstElement, secondElement, closeModal, headerText }) => {
+const CancelElementContent = ({ firstElement, secondElement, headerText }) => {
   const [canceledContribution, setCanceledContribution] = useState(false);
 
   const returnAction = () => alert('Return');

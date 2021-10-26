@@ -25,7 +25,7 @@ export const Input = ({
     if (onChangeValue) {
       return onChangeValue(e.target.value);
     }
-    handler(e);
+    return handler(e);
   };
 
   return (

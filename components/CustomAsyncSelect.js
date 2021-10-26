@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import AsyncSelect from 'react-select/async';
-import { BASE_URL } from '../api';
+import { BASE_URL } from 'api';
 import { CaretDownIcon } from './Icons';
 
 const loadOptions = async (searchText, endpoint) => {
