@@ -12,8 +12,8 @@ const approversSearchSlice = createSlice({
   name: 'approversSearch',
   initialState,
   reducers: {
-    clearSearch: () => ({ ...initialState }),
-    changeSearch: (state, action) => {
+    clearApproversSearch: () => ({ ...initialState }),
+    changeApproversSearch: (state, action) => {
       return {
         ...state,
         ...action.payload
@@ -23,13 +23,12 @@ const approversSearchSlice = createSlice({
 });
 
 // Actions
-export const { changeSearch, clearSearch } = approversSearchSlice.actions;
+export const { changeApproversSearch, clearApproversSearch } = approversSearchSlice.actions;
 
 // Selectors
-const selectApproversSearch = (state) => {
-  return state.approversSearch;
-};
+const selectApproversSearch = (state) => state.approversSearch;
+
 export { selectApproversSearch, approversSearchSlice };
 
 // Reducer
-export default approversSearchSlice.reducer;
+  export default approversSearchSlice.reducer;

@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import { useApprovers, usePackageGetAll, useApproversOptions } from 'api';
-import { selectApproversSearch } from 'reducers/approversReducer';
+import { usePackageGetAll, useApproversOptions } from 'api';
+import { changeApproversSearch, clearApproversSearch, selectApproversSearch } from 'reducers/approversReducer';
+import { useDispatch, useSelector } from 'react-redux';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
 import {
   Breadcrumbs,
@@ -10,12 +11,13 @@ import {
   SearchBox,
   Select,
   FormGroup,
-  Dialog
+  Dialog,
 } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
 import DatePick from '../../DatePick';
 import Loading from '../../Loading';
 import { PackageApprovalsTable } from './PackageApprovalsTable';
+import ServiceUserSearch from '../ServiceUser/Search';
 
 const statusOptions = [
   { text: 'Waiting For Approval', value: '3' },
@@ -33,17 +35,17 @@ export const PackageApprovals = ({
   setFilters,
   clearFilter,
   onRowClick = () => {},
-  loading,
   breadcrumbs,
+  setSearchBy,
 }) => {
+  const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const [openedSearch, setOpenedSearch] = useState(false);
 
-  const { firstName, lastName, hackneyId, dateOfBirth, postcode } = selectApproversSearch();
+  const serviceUserSearch = useSelector(selectApproversSearch);
 
-  const { options: packageOptions } = usePackageGetAll();
-  const { options: approverOptions } = useApproversOptions();
-  const { data: approvers } = useApprovers();
+  const { options: packageOptions, isLoading: packageOptionsLoading } = usePackageGetAll();
+  const { options: approverOptions, isLoading: approverOptionsLoading } = useApproversOptions();
 
   const changeFilterField = useCallback(
     (field, value) => {
@@ -60,7 +62,21 @@ export const PackageApprovals = ({
     clearFilter();
   };
 
-  const openSearch = setOpenedSearch(true);
+  const closeSearch = () => setOpenedSearch(false);
+
+  const openSearch = () => setOpenedSearch(true);
+
+  const onServiceUserSearch = () => {
+    setSearchBy('serviceUser');
+  };
+
+  const changeServiceUserSearch = (field, value) => {
+    dispatch(changeApproversSearch({ [field]: value }));
+  };
+
+  const clearServiceUserSearch = () => {
+    dispatch(clearApproversSearch())
+  }
 
   const onSearch = useCallback(() => {
     changeFilterField('serviceUserName', searchText);
@@ -68,19 +84,24 @@ export const PackageApprovals = ({
 
   const shouldShowClear = Object.values(filters).some((item) => item);
 
+  const isLoading = approverOptionsLoading || packageOptionsLoading;
+
   return (
     <div className="broker-portal approvals">
-      <Loading isLoading={loading}/>
-      <Dialog>
-        <Container>
-          <h2>Search for service user</h2>
-        </Container>
+      <Loading isLoading={isLoading} />
+      <Dialog className='approvals-modal' onClose={closeSearch} isOpen={openedSearch}>
+        <ServiceUserSearch
+          onSearch={onServiceUserSearch}
+          filters={serviceUserSearch}
+          changeFilters={changeServiceUserSearch}
+          clearFilters={clearServiceUserSearch}
+        />
       </Dialog>
       <BrokerageHeader/>
       <Container background="#FAFAFA" padding="0 0 60px">
         <Container maxWidth="1080px" margin="0 auto">
           <Container padding="10px 60px 0px">
-            <Breadcrumbs values={breadcrumbs}/>
+            <Breadcrumbs values={breadcrumbs} />
           </Container>
           <Container className="brokerage-portal__header">
             <h1>{title}</h1>

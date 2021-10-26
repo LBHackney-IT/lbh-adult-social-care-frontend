@@ -18,7 +18,7 @@ export { default as HistoryList } from './Pages/CarePackages/History/HistoryList
 export { default as HistoryOverview } from './Pages/CarePackages/History/HistoryOverview';
 export { default as BrokerageBorderCost } from './Pages/CarePackages/BrokerageBorderCost';
 export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPackageDetails';
-export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchServiceUser';
+export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchForServiceUser';
 export { default as NewCareChargePackages } from './Pages/CareCharges/NewCareChargePackages';
 export { default as PackageApprovals } from './Pages/PackageApprovals';
 export { FurtherDetails } from './Pages/CarePackages/CorePackageDetails/FurtherDetails';

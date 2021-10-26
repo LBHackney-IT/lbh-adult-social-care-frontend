@@ -1,7 +1,7 @@
 import { useFetchWithParams } from './useFetchWithParams';
 import useGetData from './useGetData';
 
-export const useApprovers = ({ params, approverId, shouldFetch = true }) => {
+export const useApprovers = ({ params, approverId, shouldFetch }) => {
   const approverIdUrl = approverId ? `/${approverId}` : '';
 
   return useFetchWithParams({

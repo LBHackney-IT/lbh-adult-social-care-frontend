@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
-import { useBrokerView } from 'api';
 import { getLoggedInUser } from 'service';
 import { getCarePackageApprovalRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { PackageApprovals } from 'components';
+import { useSelector } from 'react-redux';
+import { selectApproversSearch } from '../reducers/approversReducer';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -33,21 +34,38 @@ const Approvals = () => {
   const router = useRouter();
 
   const [pageNumber, setPageNumber] = useState(1);
+  const [searchBy, setSearchBy] = useState('');
 
   const [filters, setFilters] = useState(initialFilters);
   const { dateFrom, dateTo, status, serviceUserName, packageType, approver } = filters;
+  const { firstName, lastName, hackneyId, dateOfBirth, postcode } = useSelector(selectApproversSearch);
 
-  const params = useMemo(() => ({
-    fromDate: dateFrom ? dateFrom.toJSON() : null,
-    toDate: dateTo ? dateTo.toJSON() : null,
-    serviceUserName,
-    approver,
-    packageType,
-    pageNumber,
-    status
-  }), [filters, pageNumber])
+  const params = useMemo(() => {
+    if (searchBy === 'default-filters') {
+      return {
+        fromDate: dateFrom ? dateFrom.toJSON() : null,
+        toDate: dateTo ? dateTo.toJSON() : null,
+        serviceUserName,
+        approver,
+        packageType,
+        pageNumber,
+        status
+      }
+    }
+    if (searchBy === 'service-user') {
+      return {
+        pageNumber,
+        firstName,
+        lastName,
+        hackneyId,
+        dateOfBirth: dateOfBirth ? dateOfBirth.toJSON() : null,
+        postcode,
+      }
+    }
+    return {};
+  }, [filters, pageNumber, searchBy]);
 
-  const { data, isLoading: brokerViewLoading } = useBrokerView({ params });
+  // const { data, isLoading: approversLoading } = useApprovers({ params, shouldFetch: searchBy });
 
   const {
     packages = [],
@@ -56,7 +74,7 @@ const Approvals = () => {
       totalPages: 0,
       pageSize: 0,
     },
-  } = data;
+  } = {};
 
   const goToBrokerPortalSearch = useCallback(() => {
     router.push(SERVICE_USER_SEARCH_ROUTE);
@@ -70,9 +88,10 @@ const Approvals = () => {
 
   return (
     <PackageApprovals
+      setSearchBy={setSearchBy}
       title='Approvals'
       breadcrumbs={breadcrumbs}
-      loading={brokerViewLoading}
+      loading={false}
       goToSearch={goToBrokerPortalSearch}
       filters={filters}
       clearFilter={clearFilters}

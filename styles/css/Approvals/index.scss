@@ -22,3 +22,26 @@
     }
   }
 }
+
+.approvals-modal {
+  .lbh-dialog {
+    max-width: 90vw;
+    width: 90vw;
+    border: none;
+    padding: 48px;
+  }
+
+  .lbh-dialog__close {
+    display: none;
+  }
+
+  .clear-button {
+    height: 42px;
+    margin-top: auto;
+    margin-bottom: 48px;
+  }
+
+  .service-user-search__inputs {
+    padding: 0;
+  }
+}
