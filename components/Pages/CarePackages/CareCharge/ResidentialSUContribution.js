@@ -1,7 +1,8 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useMemo } from 'react';
+import { addWeeks } from 'date-fns';
 import { currency } from 'constants/strings';
 import { Checkbox, Input, RadioGroup, DatePicker } from 'components/HackneyDS';
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import ActionButtons from './ActionButtons';
 import { useIsDisabledByStatus } from './helpers';
 
@@ -12,16 +13,43 @@ const claimedByOptions = [
 
 const status = 'active';
 
-const ResidentialSuContribution = ({ isMore12, control, onCancel, onEnd }) => {
+const getEndDate = (date) => addWeeks(new Date(date), 12);
+
+const useDatesValidation = (isMore12, control, setValue, formKey) => {
+  const startDate = useWatch({ control, name: `${formKey}.startDate` });
+  const endDate12weeks = useWatch({ control, name: `residentialLess12.endDate` });
+  const isOngoing = useWatch({ control, name: `residentialMore12.isOngoing` });
+
+  const maxEndDate = useMemo(() => {
+    // for 1-12 weeks
+    if (!isMore12 && startDate) return getEndDate(startDate);
+    // null for 13+ weeks
+    return null;
+  }, [isMore12, startDate]);
+
+  useEffect(() => {
+    // once 1-12 weeks startDate is set - also set endDate
+    if (!isMore12 && startDate) {
+      const endDate = getEndDate(startDate);
+      setValue(`${formKey}.endDate`, endDate);
+    }
+  }, [isMore12, startDate]);
+
+  return { startDate, maxEndDate, endDate12weeks, isOngoing };
+};
+
+const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEnd }) => {
   const weeks = isMore12 ? '13+' : '1-12';
   const formKey = isMore12 ? 'residentialMore12' : 'residentialLess12';
   const description = `Without Property ${weeks} weeks`;
 
   const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
 
-  const options = claimedByOptions.map((el) => ({
-    label: el.label,
-    id: `${formKey}-${el.id}`,
+  const { startDate, maxEndDate, endDate12weeks, isOngoing } = useDatesValidation(isMore12, control, setValue, formKey);
+
+  const options = claimedByOptions.map(({ id, label }) => ({
+    id: `${formKey}-${id}`,
+    label,
   }));
 
   return (
@@ -68,7 +96,13 @@ const ResidentialSuContribution = ({ isMore12, control, onCancel, onEnd }) => {
             name={`${formKey}.startDate`}
             control={control}
             render={({ field }) => (
-              <DatePicker day={{ label: 'From' }} date={field.value} setDate={field.onChange} disabled={isDisabled} />
+              <DatePicker
+                day={{ label: 'From' }}
+                date={field.value}
+                setDate={field.onChange}
+                minDate={endDate12weeks}
+                disabled={isDisabled}
+              />
             )}
           />
         </div>
@@ -79,7 +113,14 @@ const ResidentialSuContribution = ({ isMore12, control, onCancel, onEnd }) => {
             name={`${formKey}.endDate`}
             control={control}
             render={({ field }) => (
-              <DatePicker day={{ label: 'To' }} date={field.value} setDate={field.onChange} disabled={isDisabled} />
+              <DatePicker
+                day={{ label: 'To' }}
+                date={field.value}
+                setDate={field.onChange}
+                disabled={isDisabled || (isMore12 && isOngoing)}
+                minDate={startDate}
+                maxDate={maxEndDate}
+              />
             )}
           />
         </div>
@@ -89,7 +130,13 @@ const ResidentialSuContribution = ({ isMore12, control, onCancel, onEnd }) => {
             name={`${formKey}.isOngoing`}
             control={control}
             render={({ field }) => (
-              <Checkbox value={field.value} onChangeValue={field.onChange} label="Ongoing" disabled={isDisabled} />
+              <Checkbox
+                id="ongoing-checkbox"
+                value={field.value}
+                onChangeValue={field.onChange}
+                label="Ongoing"
+                disabled={isDisabled}
+              />
             )}
           />
         )}

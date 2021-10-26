@@ -59,7 +59,7 @@ const CareCharge = () => {
   const [isOpenCancel, toggleCancel] = useModal();
   const [isOpenEnd, toggleEnd] = useModal();
 
-  const { handleSubmit, control, formState } = useForm({
+  const { handleSubmit, control, formState, setValue } = useForm({
     defaultValues: {
       provisional: {
         costPerWeek: '',
@@ -98,7 +98,7 @@ const CareCharge = () => {
     [formState.isDirty, toggleEdit, goToPackages]
   );
 
-  const residentialProps = { control, onCancel: toggleCancel, onEnd: toggleEnd };
+  const residentialProps = { control, setValue, onCancel: toggleCancel, onEnd: toggleEnd };
 
   return (
     <div className="care-charge">

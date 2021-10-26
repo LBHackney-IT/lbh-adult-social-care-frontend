@@ -18,6 +18,8 @@ const breadcrumbs = [
   { text: 'Search for a service user' },
 ];
 
+export const getServerSideProps = ({ req }) => ({ props: { prevRoute: req.headers.referer } });
+
 const BrokerPortalSearch = () => {
   const router = useRouter();
   const [pageNumber, setPageNumber] = useState(1);
@@ -61,7 +63,7 @@ const BrokerPortalSearch = () => {
   return (
     <SearchServiceUser
       breadcrumbs={breadcrumbs}
-      className='broker-assistance__search'
+      className="broker-assistance__search"
       isLoading={isLoading}
       setPageNumber={setPageNumber}
       changeFilters={changeFilters}
