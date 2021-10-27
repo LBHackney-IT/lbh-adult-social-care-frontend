@@ -6,7 +6,8 @@ import {
   createCarePackageReclaimCareCharge,
   updateCarePackageReclaimCareCharge,
   usePackageCareCharge,
-  usePackageCalculatedCost, useSinglePackageInfo,
+  usePackageCalculatedCost,
+  useSingleCorePackageInfo,
 } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
@@ -41,12 +42,13 @@ const CareChargesPage = () => {
     params,
     packageId: carePackageId
   });
+
   const { data: calculatedCost, isLoading: calculatedCostLoading } = usePackageCalculatedCost(
     carePackageId,
     serviceUserId
   );
 
-  const { data: packageInfo } = useSinglePackageInfo(carePackageId);
+  const { data: packageInfo } = useSingleCorePackageInfo(carePackageId);
 
   const collectingReasonOptions = [
     { text: 'Service user unable to manage finances', value: '1' },
