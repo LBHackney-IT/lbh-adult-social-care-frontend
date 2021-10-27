@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import {
@@ -17,7 +17,7 @@ import {
 import { requiredSchema } from 'constants/schemas';
 import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { usePackageGetAll, assignToBroker, useServiceUser, useBrokers } from 'api';
+import { assignToBroker, useServiceUser, useBrokers, useLookups } from 'api';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKER_ASSISTANCE_ROUTE },
@@ -43,8 +43,10 @@ const AssignPackage = () => {
   const router = useRouter();
   const { hackneyId } = router.query;
 
+  const params = useMemo(() => ({ name: 'packageType' }), []);
+
   const { data: serviceUser } = useServiceUser(hackneyId);
-  const { options: packageTypeOptions } = usePackageGetAll();
+  const { options: packageTypeOptions } = useLookups({ params });
   const { options: brokerOptions } = useBrokers();
 
   const validateFields = async (fields) => {
