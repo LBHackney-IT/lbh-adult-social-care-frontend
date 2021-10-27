@@ -38,7 +38,7 @@ const EndElementContent = ({ data, control, headerText, onClose }) => {
 
       <CareChargesInfoTitle title="Elements to be ended" />
 
-      <CareChargesInfoStatic data={data.topItem}>
+      <CareChargesInfoStatic data={data.data}>
         <div className="end-element__picker">
           <DatePick
             setDate={setEndDate}

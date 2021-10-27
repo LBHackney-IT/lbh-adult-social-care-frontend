@@ -61,6 +61,10 @@ const CareCharge = () => {
   const [isOpenCancel, toggleCancel] = useModal();
   const [isOpenEnd, toggleEnd] = useModal();
 
+  const [editData, setEditData] = useState([]);
+  const [cancelData, setCancelData] = useState({});
+  const [endData, setEndData] = useState({});
+
   const { handleSubmit, control, formState, setValue, getValues } = useForm({
     defaultValues: {
       provisional: {
@@ -90,78 +94,106 @@ const CareCharge = () => {
     router.push(getServiceUserPackagesRoute('test'));
   }, [router]);
 
-  const [cancelData, setCancelData] = useState({});
-  const [endData, setEndData] = useState({});
+  const createProvisionalData = () => {
+    const { collectedBy, costPerWeek, notes, reasonCollecting } = getValues('provisional');
+    const collectedByLabel = collectedByOptions.find((el) => el.id === collectedBy)?.label;
 
-  const onAction = (toggleModal, setData, type) => {
-    if (type === 'provisional') {
-      const { collectedBy, costPerWeek, notes, reasonCollecting } = getValues('provisional');
-      const collectedByLabel = collectedByOptions.find((el) => el.id === collectedBy)?.label;
+    return [
+      { label: 'Provisional care charge (pre-assessement)', value: '' },
+      { label: 'Cost per week', value: costPerWeek ? `${currency.euro}${costPerWeek}` : '' },
+      {
+        label: 'Collected by',
+        value: <span className="text-capitalize">{collectedByLabel}</span>,
+      },
+      { label: 'Collecting reason', value: reasonCollecting },
+      { label: 'Notes', value: notes },
+    ];
+  };
 
-      setData({
-        topItem: [
-          { label: 'Provisional care charge (pre-assessement)', value: '' },
-          { label: 'Cost per week', value: costPerWeek ? `${currency.euro}${costPerWeek}` : '' },
-          {
-            label: 'Collected by',
-            value: <span className="text-capitalize">{collectedByLabel}</span>,
-          },
-          { label: 'Collecting reason', value: reasonCollecting },
-          { label: 'Notes', value: notes },
-        ],
+  const createResidentialData = (formKey) => {
+    const data = getValues(formKey);
+
+    const claimedBy = data.claimedBy.split('-')[1];
+    return [
+      {
+        label: 'Residential SU contribution',
+        value: formKey === 'residentialLess12' ? 'Without Property 1-12 weeks' : 'Without Property 13+ weeks',
+      },
+      { label: 'Value', value: `${currency.euro}${data.value}` },
+      { label: 'Start date', value: formatDate(data.startDate) },
+      { label: 'End date', value: data.isOngoing ? 'Ongoing' : formatDate(data.endDate) },
+      { label: 'Type', value: <span className="text-capitalize">{claimedBy}</span> },
+    ];
+  };
+
+  const onEdit = () => {
+    const editedForms = Object.keys(formState.dirtyFields);
+
+    const data = [];
+
+    if (editedForms.includes('provisional'))
+      data.push({
+        id: 'provisional',
+        data: createProvisionalData(),
       });
 
-      toggleModal();
+    if (editedForms.includes('residentialLess12')) {
+      data.push({
+        id: 'residentialLess12',
+        data: createResidentialData('residentialLess12'),
+      });
+    }
+
+    if (editedForms.includes('residentialMore12')) {
+      data.push({
+        id: 'residentialMore12',
+        data: createResidentialData('residentialMore12'),
+      });
+    }
+
+    setEditData(data);
+
+    toggleEdit();
+  };
+
+  const onCancel = (type) => {
+    if (type === 'provisional') {
+      setCancelData({ topItem: createProvisionalData() });
+      toggleCancel();
       return;
     }
 
-    const residentialLess12 = getValues('residentialLess12');
-    const residentialMore12 = getValues('residentialMore12');
-
-    const createDataArray = (data) => {
-      const claimedBy = data.claimedBy.split('-')[1];
-      return [
-        { label: 'Value', value: `${currency.euro}${data.value}` },
-        { label: 'Start date', value: formatDate(data.startDate) },
-        { label: 'End date', value: data.isOngoing ? 'Ongoing' : formatDate(data.endDate) },
-        { label: 'Type', value: <span className="text-capitalize">{claimedBy}</span> },
-      ];
-    };
-
-    const less12Data = [
-      { label: 'Residential SU contribution', value: 'Without Property 1-12 weeks' },
-      ...createDataArray(residentialLess12),
-    ];
-
-    const more12Data = [
-      { label: 'Residential SU contribution', value: 'Without Property 13+ weeks' },
-      ...createDataArray(residentialMore12),
-    ];
+    const less12Data = createResidentialData('residentialLess12');
+    const more12Data = createResidentialData('residentialMore12');
 
     const isMore12 = type === 'residentialMore12';
 
-    setData({
+    setCancelData({
       topItem: isMore12 ? more12Data : less12Data,
       bottomItem: isMore12 ? less12Data : more12Data,
       checkboxLabel: isMore12 ? 'Cancel 1-12 contribution' : 'Cancel 13+ contribution',
-      formKey: type, // required for End modal
     });
 
-    toggleModal();
+    toggleCancel();
   };
 
-  const onCancel = onAction.bind(null, toggleCancel, setCancelData);
-  const onEnd = onAction.bind(null, toggleEnd, setEndData);
+  const onEnd = (type) => {
+    if (type === 'provisional') {
+      setEndData({ data: createProvisionalData() });
+    } else {
+      setEndData({
+        data: createResidentialData(type),
+        formKey: type,
+      });
+    }
 
-  const onSubmit = useCallback(
-    (form) => {
-      console.log('%c form =', 'color: lightblue', form);
+    toggleEnd();
+  };
 
-      if (formState.isDirty) toggleEdit();
-      else goToPackages();
-    },
-    [formState.isDirty, toggleEdit, goToPackages]
-  );
+  const onSubmit = useCallback(() => {
+    if (formState.isDirty) onEdit();
+    else goToPackages();
+  }, [formState.isDirty, onEdit, goToPackages]);
 
   return (
     <div className="care-charge">
@@ -201,7 +233,7 @@ const CareCharge = () => {
         </Container>
       </Container>
 
-      <EditElementModal isOpen={isOpenEdit} onClose={() => toggleEdit(false)} />
+      <EditElementModal isOpen={isOpenEdit} onClose={() => toggleEdit(false)} data={editData} />
       <CancelElementModal isOpen={isOpenCancel} onClose={() => toggleCancel(false)} data={cancelData} />
       <EndElementModal isOpen={isOpenEnd} onClose={() => toggleEnd(false)} data={endData} control={control} />
     </div>
