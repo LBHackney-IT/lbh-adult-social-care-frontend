@@ -49,7 +49,10 @@ export const Table = ({
           {headerGroups.map((headerGroup) => (
             <tr className="govuk-table__row" {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th scope="col" {...column.getHeaderProps([{ className: `govuk-table__header ${column.className || ''}` }])}>
+                <th
+                  scope="col"
+                  {...column.getHeaderProps([{ className: `govuk-table__header ${column.className || ''}` }])}
+                >
                   {column.render('Header')}
                 </th>
               ))}
@@ -76,15 +79,15 @@ export const Table = ({
                 {rowsHaveHeader ? (
                   <td colSpan={row.cells.length}>
                     <table>
-                      <tr className='govuk-table__row-header'>
-                        <td colSpan={row.cells.length}>
-                          {rowsHaveHeader({ ...row.original })}
-                        </td>
+                      <tr className="govuk-table__row-header">
+                        <td colSpan={row.cells.length}>{rowsHaveHeader({ ...row.original })}</td>
                       </tr>
                       <tr>{rowElement}</tr>
                     </table>
                   </td>
-                ) : rowElement}
+                ) : (
+                  rowElement
+                )}
               </tr>
               {row.isExpanded && renderRowSubComponent && (
                 <tr className="govuk-table__row">
