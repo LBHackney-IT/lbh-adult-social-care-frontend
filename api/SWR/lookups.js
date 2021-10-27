@@ -1,16 +1,17 @@
 import { useMemo } from 'react';
-import { useFetchWithParams } from './useFetchWithParams';
+import useSWR from 'swr';
+import fetcher from './fetcher';
 
 export const useLookups = (name) => {
-  const params = useMemo(() => ({ name }), [name]);
+  const response = useSWR(['/lookups', name], (url, name) => fetcher(url, { params: { name } }));
+  const { error, data } = response;
 
-  const { data, isLoading } = useFetchWithParams({
-    url: '/lookups',
-    params,
-    initialData: [],
-  });
+  const options = useMemo(() => data?.map((type) => ({ value: type.id, text: type.name })), [data]);
 
-  const options = useMemo(() => data.map((type) => ({ value: type.id, text: type.name })), [data]);
-
-  return { data, options, isLoading };
+  return {
+    ...response,
+    data: data ?? [],
+    isLoading: !error && !data,
+    options,
+  };
 };

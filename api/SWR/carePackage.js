@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import useSWR from 'swr';
 import { hasUrl } from '../../service';
+import fetcher from './fetcher';
 import useGetData from './useGetData';
 import { useFetchWithParams } from './useFetchWithParams';
 
@@ -44,11 +45,15 @@ export const usePackageCalculatedCost = (packageId, serviceUserId) =>
   );
 
 export const usePackageCareCharge = (packageId, subType) => {
-  const params = useMemo(() => ({ subType }), [subType]);
+  const response = useSWR(
+    packageId ? [getCarePackageUrl(packageId, '/reclaims/care-charges'), subType] : null,
+    (url, subTypeParam) => fetcher(url, { params: { subType: subTypeParam } })
+  );
+  const { error, data } = response;
 
-  return useFetchWithParams({
-    url: getCarePackageUrl(packageId, '/reclaims/care-charges'),
-    initialData: [],
-    params,
-  });
+  return {
+    ...response,
+    data: data ?? [],
+    isLoading: !error && !data && packageId,
+  };
 };
