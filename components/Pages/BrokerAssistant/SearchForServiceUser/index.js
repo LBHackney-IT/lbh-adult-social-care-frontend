@@ -1,10 +1,11 @@
 import React, { memo } from 'react';
 import { getServiceUserPackagesRoute, getAssignPackageRoute } from 'routes/RouteConstants';
 import BrokerageHeader from '../../CarePackages/BrokerageHeader';
-import { Button, Container, Input, Breadcrumbs, DatePicker, FormGroup } from '../../../HackneyDS';
+import { Container, Breadcrumbs } from '../../../HackneyDS';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
 import AlternativePagination from '../../../AlternativePagination';
 import SearchResult from '../../../SearchResult';
+import ServiceUserSearch from '../../ServiceUser/Search';
 
 const inputs = [
   { label: 'First name', key: 'firstName' },
@@ -31,34 +32,14 @@ const SearchServiceUser = ({
     <BrokerageHeader />
     <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
       <Breadcrumbs values={breadcrumbs} />
-      <Container padding="60px 0 0">
-        <h3 className="search-service-user__title">Search for a service user</h3>
-        <Container className="search-service-user__filters">
-          {inputs.map(({ key, label }) => (
-            <Input key={key} value={filters[key]} onChangeValue={(value) => changeFilters(key, value)} label={label} />
-          ))}
-          <FormGroup>
-            <DatePicker
-              setDate={(value) => changeFilters('dateOfBirth', value)}
-              date={filters.dateOfBirth}
-              label="Date of birth"
-            />
-          </FormGroup>
-          <Input
-            label="Postcode"
-            value={filters.postcode}
-            onChangeValue={(value) => changeFilters('postcode', value)}
-          />
-          {Object.values(filters).some((value) => value) && (
-            <Button onClick={clearFilters} className="outline gray clear-button">
-              Clear
-            </Button>
-          )}
-        </Container>
-      </Container>
-      <Button isLoading={isLoading} disabled={isLoading} className="search-service-user__button" onClick={onSearch}>
-        Search
-      </Button>
+      <ServiceUserSearch
+        onSearch={onSearch}
+        isLoading={isLoading}
+        clearFilters={clearFilters}
+        filters={filters}
+        changeFilters={changeFilters}
+        inputs={inputs}
+      />
       {searchResults && (
         <Container>
           <SearchResult count={searchResults.length} />

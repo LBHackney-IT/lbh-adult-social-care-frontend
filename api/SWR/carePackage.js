@@ -14,6 +14,16 @@ export const useBrokerView = ({ params }) => (
   })
 );
 
+export const useApprovals = ({ params, approverId, shouldFetch }) => {
+  const approverIdUrl = approverId ? `/${approverId}` : '';
+
+  return useFetchWithParams({
+    params,
+    shouldFetch,
+    url: `${CARE_PACKAGES_URL}/approvals${approverIdUrl}`
+  });
+};
+
 export const usePackageCareCharge = ({ params, packageId }) => (
   useFetchWithParams({
     params,
