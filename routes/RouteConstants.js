@@ -7,7 +7,7 @@ export const getBrokerPackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker
 export const getFundedNursingCareRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-fnc`;
 export const getCareChargesRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-care-charges`;
 export const getHistoryRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/history`;
-export const getCarePackageDetailsRoute = (id) =>  `${CARE_PACKAGE_ROUTE}/${id}/details`;
+export const getCarePackageDetailsRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/details`;
 
 export const SERVICE_USER_ROUTE = '/service-user';
 export const SERVICE_USER_MASTER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/master-search`;
@@ -18,6 +18,6 @@ export const getServiceUserPackagesRoute = (serviceUserId) => `${SERVICE_USER_RO
 export const BROKER_ASSISTANCE_ROUTE = '/broker-assistance';
 export const getAssignPackageRoute = (id) => `${BROKER_ASSISTANCE_ROUTE}/${id}/assign-package`;
 
-export const CARE_CHARGE_ROUTE = '/care-charges';
+export const CARE_CHARGES_ROUTE = '/care-charges';
 
 export const LOGOUT_ROUTE = '/logout';

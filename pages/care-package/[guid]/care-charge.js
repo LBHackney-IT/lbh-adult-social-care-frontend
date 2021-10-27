@@ -188,7 +188,10 @@ const CareCharge = () => {
 
   const onCancel = (type) => {
     if (type === provisional) {
-      setCancelData({ topItem: createProvisionalData() });
+      setCancelData({
+        topItem: createProvisionalData(),
+        topId: careChargeData.find((el) => el.subType === careChargeAPIKeys.provisional)?.id,
+      });
       toggleCancel();
       return;
     }
@@ -202,6 +205,12 @@ const CareCharge = () => {
       topItem: isMore12 ? more12Data : less12Data,
       bottomItem: isMore12 ? less12Data : more12Data,
       checkboxLabel: isMore12 ? 'Cancel 1-12 contribution' : 'Cancel 13+ contribution',
+      topId: careChargeData.find(
+        (el) => el.subType === (isMore12 ? careChargeAPIKeys.more12 : careChargeAPIKeys.less12)
+      )?.id,
+      bottomId: careChargeData.find(
+        (el) => el.subType === (isMore12 ? careChargeAPIKeys.less12 : careChargeAPIKeys.more12)
+      )?.id,
     });
 
     toggleCancel();

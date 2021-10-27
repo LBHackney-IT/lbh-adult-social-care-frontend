@@ -1,20 +1,33 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { cancelCareChargeReclaim } from '../../../../../api';
+import { addNotification } from '../../../../../reducers/notificationsReducer';
+import { CARE_CHARGES_ROUTE } from '../../../../../routes/RouteConstants';
 import CareChargesModalActions from '../CareChargesModalActions';
 import CareChargesModalTitle from '../CareChargesModalTitle';
 import CareChargesInfoStatic from '../CareChargesInfoStatic';
 import { Checkbox } from '../../../../HackneyDS';
 
 const CancelElementContent = ({ data, headerText, onClose }) => {
-  const [canceledContribution, setCanceledContribution] = useState(false);
+  const [shouldCancelBottom, setShouldCancelBottom] = useState(false);
 
   const showCheckbox = Boolean(data.checkboxLabel);
 
-  const onCancel = () => {
-    // let canceledElement = firstElement[0];
-    // if (canceledContribution) {
-    //   canceledElement = secondElement[0];
-    // }
-    // alert(`Canceled success for (${canceledElement.name} ${canceledElement.property})`);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { guid: carePackageId } = router.query;
+
+  const onCancel = async () => {
+    await cancelCareChargeReclaim({ carePackageId, reclaimId: data.topId });
+
+    if (shouldCancelBottom) {
+      await cancelCareChargeReclaim({ carePackageId, reclaimId: data.bottomId });
+    }
+
+    dispatch(addNotification({ text: 'Successfully cancelled!', className: 'success' }));
+    onClose();
+    router.push(CARE_CHARGES_ROUTE);
   };
 
   return (
@@ -30,13 +43,13 @@ const CancelElementContent = ({ data, headerText, onClose }) => {
           <Checkbox
             small
             className="care-charges-modal__cancel-checkbox"
-            onChangeValue={setCanceledContribution}
-            value={canceledContribution}
+            onChangeValue={setShouldCancelBottom}
+            value={shouldCancelBottom}
             id="cancelContribution"
             label={data.checkboxLabel}
           />
 
-          <div className={canceledContribution ? '' : 'opacity-3'}>
+          <div className={shouldCancelBottom ? '' : 'opacity-3'}>
             <CareChargesInfoStatic data={data.bottomItem} />
           </div>
         </>
