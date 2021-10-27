@@ -19,7 +19,7 @@ const PackageRequest = ({ packageRequest }) => {
   return (
     <Container borderBottom="1px solid #BFC1C3" border="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
       <Container display="flex" alignItems="center">
-        <Tag className="text-capitalize outline" color={getTagColorFromStatus(packageRequest.packageStatus)}>
+        <Tag className="text-capitalize" outline color={getTagColorFromStatus(packageRequest.packageStatus)}>
           {packageRequest.packageStatus}
         </Tag>
         <VerticalSeparator width="10px" />

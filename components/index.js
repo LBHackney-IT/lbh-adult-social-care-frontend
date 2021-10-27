@@ -22,5 +22,6 @@ export { default as BrokerageBorderCost } from './Pages/CarePackages/BrokerageBo
 export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPackageDetails';
 export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchServiceUser';
 export { default as NewCareChargePackages } from './Pages/CareCharges/NewCareChargePackages';
+export { default as CarePackageBreadcrumbs } from './Pages/CarePackages/CarePackageBreadcrumbs';
 export { FurtherDetails } from './Pages/CarePackages/CorePackageDetails/FurtherDetails';
 export { PackageType } from './Pages/CarePackages/CorePackageDetails/PackageType';
