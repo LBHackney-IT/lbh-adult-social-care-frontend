@@ -1,19 +1,17 @@
 import React, { memo, useEffect, useMemo } from 'react';
 import { addWeeks } from 'date-fns';
 import { currency } from 'constants/strings';
-import { careChargeFormKeys } from 'constants/variables';
+import { careChargeAPIKeys, careChargeFormKeys } from 'constants/variables';
 import { Checkbox, Input, RadioGroup, DatePicker } from 'components/HackneyDS';
 import { Controller, useWatch } from 'react-hook-form';
 import ActionButtons from './ActionButtons';
-import { useIsDisabledByStatus, checkIfActionsVisible } from './helpers';
+import { useIsDisabledByStatus, checkIfActionsVisible, useGetChargeStatus } from './helpers';
 
 const claimedByOptions = [
   { id: 'gross', label: 'Gross' },
   { id: 'net', label: 'Net' },
 ];
 const { less12, more12 } = careChargeFormKeys;
-
-const status = 'active';
 
 const getEndDate = (date) => addWeeks(new Date(date), 12);
 
@@ -44,6 +42,8 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
   const weeks = isMore12 ? '13+' : '1-12';
   const formKey = isMore12 ? more12 : less12;
   const description = `Without Property ${weeks} weeks`;
+
+  const status = useGetChargeStatus(isMore12 ? careChargeAPIKeys.more12 : careChargeAPIKeys.less12);
 
   const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
 

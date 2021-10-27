@@ -1,15 +1,21 @@
 import { Input, Label, RadioGroup, Select, Textarea } from 'components/HackneyDS';
 import { currency } from 'constants/strings';
-import { careChargeFormKeys, collectedByOptions, collectingReasonOptions } from 'constants/variables';
+import {
+  careChargeAPIKeys,
+  careChargeFormKeys,
+  collectedByOptions,
+  collectingReasonOptions,
+} from 'constants/variables';
 import React, { memo } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import ActionButtons from './ActionButtons';
-import { checkIfActionsVisible, useIsDisabledByStatus } from './helpers';
+import { checkIfActionsVisible, useGetChargeStatus, useIsDisabledByStatus } from './helpers';
 
-const status = 'active';
 const { provisional } = careChargeFormKeys;
 
 const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
+  const status = useGetChargeStatus(careChargeAPIKeys.provisional);
+
   const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
 
   const reasonCollecting = useWatch({ control, name: `${provisional}.reasonCollecting` });

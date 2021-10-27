@@ -52,9 +52,9 @@ export const careChargeFormKeys = {
 };
 
 export const careChargeAPIKeys = {
-  [careChargeFormKeys.provisional]: 1,
-  [careChargeFormKeys.less12]: 2,
-  [careChargeFormKeys.more12]: 3,
+  provisional: 1,
+  less12: 2,
+  more12: 3,
 };
 
 export const collectingReasonOptions = [

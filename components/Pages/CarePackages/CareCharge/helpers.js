@@ -1,12 +1,14 @@
 import { useCallback, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { useToggle } from 'react-use';
+import { useLookups, usePackageCareCharge } from 'api';
 
 export const useIsDisabledByStatus = (status) => {
   const [isDisabled, toggleDisabled] = useToggle(false);
 
   useEffect(() => {
-    toggleDisabled(['active', 'pending'].includes(status));
-  }, []);
+    toggleDisabled(['Active', 'Pending'].includes(status));
+  }, [status]);
 
   const makeEnabled = useCallback(() => {
     toggleDisabled(false);
@@ -15,4 +17,16 @@ export const useIsDisabledByStatus = (status) => {
   return [isDisabled, makeEnabled];
 };
 
-export const checkIfActionsVisible = (status) => ['active', 'pending'].includes(status);
+export const checkIfActionsVisible = (status) => ['Active', 'Pending'].includes(status);
+
+export const useGetChargeStatus = (subType) => {
+  const router = useRouter();
+  const { guid: packageId } = router.query;
+
+  const { data: careChargeData } = usePackageCareCharge(packageId);
+  const { data: statusOptions } = useLookups('reclaimStatus');
+
+  const provisionalData = careChargeData.find((el) => el.subType === subType);
+
+  return statusOptions.find((el) => el.id === provisionalData?.status)?.name;
+};

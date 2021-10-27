@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { hasUrl } from '../../service';
 import useGetData from './useGetData';
 import { useFetchWithParams } from './useFetchWithParams';
@@ -6,16 +7,14 @@ const CARE_PACKAGES_URL = '/care-packages';
 
 const getCarePackageUrl = (id, string = '') => hasUrl(id, `${CARE_PACKAGES_URL}${id ? `/${id}` : ''}${string}`);
 
-export const useBrokerView = ({ params }) => (
+export const useBrokerView = ({ params }) =>
   useFetchWithParams({
     params,
     url: `${CARE_PACKAGES_URL}/broker-view`,
-    errorText: 'Can not get broker view'
-  })
-);
+    errorText: 'Can not get broker view',
+  });
 
-export const usePackageDetails = (packageId) =>
-  useGetData(getCarePackageUrl(packageId, '/details'), '');
+export const usePackageDetails = (packageId) => useGetData(getCarePackageUrl(packageId, '/details'), '');
 
 export const usePackageSchedulingOptions = () =>
   useGetData(`${CARE_PACKAGES_URL}/package-scheduling-options`, 'Can not get Scheduling options', []);
@@ -30,8 +29,7 @@ export const useSinglePackageInfo = (packageId) => useGetData(getCarePackageUrl(
 export const useSingleCorePackageInfo = (packageId) =>
   useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/core` : null, '');
 
-export const usePackageHistory = (packageId) =>
-  useGetData(getCarePackageUrl(packageId, '/history'), '');
+export const usePackageHistory = (packageId) => useGetData(getCarePackageUrl(packageId, '/history'), '');
 
 export const usePackageFnc = (packageId) => useGetData(getCarePackageUrl(packageId, '/reclaims/fnc'));
 
@@ -42,8 +40,15 @@ export const usePackageCalculatedCost = (packageId, serviceUserId) =>
   useGetData(
     getCarePackageUrl(packageId, `/reclaims/care-charges/${serviceUserId}/default`),
     'Can not get calculated cost',
-    0,
+    0
   );
 
-export const usePackageCareCharge = (packageId) =>
-  useGetData(getCarePackageUrl(packageId, '/reclaims/care-charges'));
+export const usePackageCareCharge = (packageId, subType) => {
+  const params = useMemo(() => ({ subType }), [subType]);
+
+  return useFetchWithParams({
+    url: getCarePackageUrl(packageId, '/reclaims/care-charges'),
+    initialData: [],
+    params,
+  });
+};
