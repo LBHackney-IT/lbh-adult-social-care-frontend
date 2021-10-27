@@ -156,8 +156,6 @@ const ApprovalPackageDetail = () => {
     },
   ];
 
-  console.log(router);
-
   return (
     <ReviewPackageDetails
       className='approval-package-detail'

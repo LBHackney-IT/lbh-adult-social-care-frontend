@@ -227,10 +227,10 @@ const ReviewPackageDetails = ({
                   )}
                   {goToPackage && (
                     <Container className="review-package-details__items-actions" display="flex">
-                      <p onClick={goToBrokerPackage} className="link-button">
+                      <p onClick={goToPackage} className="link-button">
                         Edit
                       </p>
-                      <p onClick={goToBrokerPackage} className="link-button red">
+                      <p onClick={goToPackage} className="link-button red">
                         Remove
                       </p>
                     </Container>
