@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { currency } from 'constants/strings';
 import {
   BROKER_PORTAL_ROUTE,
-  getBrokerPackageRoute,
   getCorePackageRoute,
   getHistoryRoute
 } from 'routes/RouteConstants';
@@ -60,7 +59,6 @@ const ReviewPackageDetails = ({
     cancelNotes: '',
   });
 
-  const goToBrokerPackage = () => router.push(getBrokerPackageRoute(packageId));
   const goToHistory = () => router.push(getHistoryRoute(packageId));
 
   const closePopup = () => setOpenedPopup('');
@@ -166,6 +164,7 @@ const ReviewPackageDetails = ({
           <Container className="review-package-details__cost-info">
             {packageInfoItems.map(
               ({
+                goToPackage,
                 id: itemId,
                 headerTitle,
                 items,
@@ -188,12 +187,12 @@ const ReviewPackageDetails = ({
                   )}
                   {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader} />}
                   {totalCostComponent}
-                  {!!totalCost && (
+                  {goToPackage && (
                     <Container className="review-package-details__items-actions" display="flex">
-                      <p onClick={goToBrokerPackage} className="link-button">
+                      <p onClick={() => goToPackage(packageId)} className="link-button">
                         Edit
                       </p>
-                      <p onClick={goToBrokerPackage} className="link-button red">
+                      <p onClick={() => goToPackage(packageId)} className="link-button red">
                         Remove
                       </p>
                     </Container>

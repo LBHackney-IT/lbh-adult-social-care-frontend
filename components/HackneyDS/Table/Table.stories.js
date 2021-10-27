@@ -167,3 +167,13 @@ WithRowSelection.args = {
   columns: columns3,
   data,
 };
+
+export const WithHeaderRow = Template.bind({});
+WithHeaderRow.args = {
+  columns: columns3,
+  headerClassName: 'stories-table-header',
+  bodyClassName: 'stories-table-body',
+  rowsHaveHeader: (origin) => <p>This is header for every row. Age is: {origin.age}</p>,
+  fixedTable: true,
+  data,
+};
