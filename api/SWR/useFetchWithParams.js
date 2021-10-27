@@ -5,7 +5,7 @@ import fetcher from './fetcher';
 const fetchWithParams = (url, params) => fetcher(url, { params });
 
 export const useFetchWithParams = ({
-  params,
+  params = {},
   url,
   shouldFetch = true,
   errorText = 'Request fail',
