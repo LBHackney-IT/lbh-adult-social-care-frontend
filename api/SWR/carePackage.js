@@ -1,4 +1,4 @@
-import { hasUrl } from 'service';
+import { hasUrl } from '../../service';
 import useGetData from './useGetData';
 import { useFetchWithParams } from './useFetchWithParams';
 
