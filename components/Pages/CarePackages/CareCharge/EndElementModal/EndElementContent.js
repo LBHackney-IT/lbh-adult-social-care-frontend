@@ -1,67 +1,65 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { addWeeks, intervalToDuration } from 'date-fns';
+import { useWatch } from 'react-hook-form';
 import CareChargesInfoStatic from '../CareChargesInfoStatic';
 import CareChargesModalActions from '../CareChargesModalActions';
 import CareChargesInfoTitle from '../CareChargesInfoTitle';
 import CareChargesModalTitle from '../CareChargesModalTitle';
 import DatePick from '../../../../DatePick';
 
-const EndElementContent = ({ activeElements, headerText, onClose }) => {
+const EndElementContent = ({ data, control, headerText, onClose }) => {
   const [endDate, setEndDate] = useState(null);
 
-  const startDate = activeElements[0]?.startDate;
-  const minDateFromWeeks = activeElements[0]?.dateFromWeeks;
-  const minDateToWeeks = activeElements[0]?.dateToWeeks;
-
-  const minEndDate = minDateFromWeeks && addWeeks(startDate, minDateFromWeeks);
-  const maxEndDate = minDateToWeeks && addWeeks(startDate, minDateToWeeks);
-
-  const endDateDistance = useMemo(
-    () =>
-      intervalToDuration({
-        start: startDate,
-        end: endDate || activeElements[0].endDate,
-      }),
-    [startDate, endDate]
-  );
-
-  const endElement = () => alert('End');
+  const formStateDate = useWatch({ control, name: `${data.formKey}.startDate` });
+  const formEndDate = useWatch({ control, name: `${data.formKey}.endDate` });
+  const isLess12 = data.formKey?.includes('12');
 
   useEffect(() => {
-    if (activeElements?.length) {
-      setEndDate(activeElements[0].endDate);
+    if (formEndDate) setEndDate(formEndDate);
+  }, [formEndDate]);
+
+  const maxDate = useMemo(() => {
+    if (isLess12) return addWeeks(formStateDate, 12);
+    return null;
+  }, [isLess12, formStateDate]);
+
+  const duration = useMemo(() => {
+    if (formStateDate && endDate) {
+      return intervalToDuration({ start: formStateDate, end: endDate });
     }
-  }, [activeElements]);
+    return null;
+  }, [formStateDate, endDate]);
+
+  const onEnd = () => alert('End');
 
   return (
     <>
       <CareChargesModalTitle title={headerText} />
 
       <CareChargesInfoTitle title="Elements to be ended" />
-      <CareChargesInfoStatic activeElements={activeElements.slice(0, 1)}>
-        {endDateDistance && (
-          <div className="edit-element__end-date">
-            <DatePick
-              setDate={setEndDate}
-              dateValue={endDate}
-              label="End date"
-              minDate={minEndDate}
-              maxDate={maxEndDate}
-            />
-            <p className="edit-element__end-date-distance">
-              ({endDateDistance.months} {endDateDistance.months === 1 ? 'month' : 'months'} {endDateDistance.days}
-              {endDateDistance.days === 1 ? ' day' : ' days'})
-            </p>
-          </div>
-        )}
-      </CareChargesInfoStatic>
 
-      <CareChargesInfoTitle title="Elements to be cancelled" />
-      <CareChargesInfoStatic activeElements={activeElements.slice(1)} />
+      <CareChargesInfoStatic data={data.topItem}>
+        <div className="end-element__picker">
+          <DatePick
+            setDate={setEndDate}
+            dateValue={endDate}
+            label="End date"
+            minDate={formStateDate}
+            maxDate={maxDate}
+          />
+
+          {duration && (
+            <p className="edit-element__end-date-distance">
+              ({duration.months} {duration.months === 1 ? 'month' : 'months'} {duration.days}
+              {duration.days === 1 ? ' day' : ' days'})
+            </p>
+          )}
+        </div>
+      </CareChargesInfoStatic>
 
       <CareChargesModalActions
         actions={[
-          { title: 'End element', handler: endElement },
+          { title: 'End element', handler: onEnd },
           { title: 'Cancel', handler: onClose, className: 'without-background' },
         ]}
       />

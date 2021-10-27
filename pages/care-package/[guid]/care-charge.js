@@ -91,16 +91,17 @@ const CareCharge = () => {
   }, [router]);
 
   const [cancelData, setCancelData] = useState({});
+  const [endData, setEndData] = useState({});
 
-  const onCancel = (type) => {
+  const onAction = (toggleModal, setData, type) => {
     if (type === 'provisional') {
       const { collectedBy, costPerWeek, notes, reasonCollecting } = getValues('provisional');
-      const collectedByLabel = collectedByOptions.find((el) => el.id === collectedBy).label;
+      const collectedByLabel = collectedByOptions.find((el) => el.id === collectedBy)?.label;
 
-      setCancelData({
+      setData({
         topItem: [
           { label: 'Provisional care charge (pre-assessement)', value: '' },
-          { label: 'Cost per week', value: `${currency.euro}${costPerWeek}` },
+          { label: 'Cost per week', value: costPerWeek ? `${currency.euro}${costPerWeek}` : '' },
           {
             label: 'Collected by',
             value: <span className="text-capitalize">{collectedByLabel}</span>,
@@ -110,7 +111,7 @@ const CareCharge = () => {
         ],
       });
 
-      toggleCancel();
+      toggleModal();
       return;
     }
 
@@ -139,14 +140,18 @@ const CareCharge = () => {
 
     const isMore12 = type === 'residentialMore12';
 
-    setCancelData({
+    setData({
       topItem: isMore12 ? more12Data : less12Data,
       bottomItem: isMore12 ? less12Data : more12Data,
       checkboxLabel: isMore12 ? 'Cancel 1-12 contribution' : 'Cancel 13+ contribution',
+      formKey: type, // required for End modal
     });
 
-    toggleCancel();
+    toggleModal();
   };
+
+  const onCancel = onAction.bind(null, toggleCancel, setCancelData);
+  const onEnd = onAction.bind(null, toggleEnd, setEndData);
 
   const onSubmit = useCallback(
     (form) => {
@@ -158,8 +163,6 @@ const CareCharge = () => {
     [formState.isDirty, toggleEdit, goToPackages]
   );
 
-  const residentialProps = { control, setValue, onEnd: toggleEnd };
-
   return (
     <div className="care-charge">
       <BrokerageHeader />
@@ -169,10 +172,26 @@ const CareCharge = () => {
 
         <TitleSubtitleHeader subTitle="Care Charges" title="Add financial assessment" />
 
-        <ProvisionalCareCharge onCancel={() => onCancel('provisional')} control={control} onEnd={toggleEnd} />
+        <ProvisionalCareCharge
+          onCancel={() => onCancel('provisional')}
+          onEnd={() => onEnd('provisional')}
+          control={control}
+        />
 
-        <ResidentialSUContribution {...residentialProps} onCancel={() => onCancel('residentialLess12')} />
-        <ResidentialSUContribution {...residentialProps} onCancel={() => onCancel('residentialMore12')} isMore12 />
+        <ResidentialSUContribution
+          onCancel={() => onCancel('residentialLess12')}
+          onEnd={() => onEnd('residentialLess12')}
+          setValue={setValue}
+          control={control}
+        />
+
+        <ResidentialSUContribution
+          onCancel={() => onCancel('residentialMore12')}
+          onEnd={() => onEnd('residentialMore12')}
+          setValue={setValue}
+          control={control}
+          isMore12
+        />
 
         <FinancialAssessment />
 
@@ -184,7 +203,7 @@ const CareCharge = () => {
 
       <EditElementModal isOpen={isOpenEdit} onClose={() => toggleEdit(false)} />
       <CancelElementModal isOpen={isOpenCancel} onClose={() => toggleCancel(false)} data={cancelData} />
-      <EndElementModal isOpen={isOpenEnd} onClose={() => toggleEnd(false)} />
+      <EndElementModal isOpen={isOpenEnd} onClose={() => toggleEnd(false)} data={endData} control={control} />
     </div>
   );
 };

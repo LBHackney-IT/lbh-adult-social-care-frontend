@@ -188,6 +188,23 @@
     }
   }
 
+  .end-element__picker {
+    display: flex;
+    align-items: flex-end;
+    column-gap: 15px;
+    width: 100%;
+
+    label {
+      color: #000;
+      font-weight: 400;
+    }
+
+    & > p {
+      position: relative;
+      bottom: 9px;
+    }
+  }
+
   &.end-element-modal {
     .edit-element__end-date {
       margin-top: 8px;
