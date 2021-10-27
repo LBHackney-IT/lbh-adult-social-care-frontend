@@ -273,7 +273,7 @@ const FundedNursingCare = ({
             <Button onClick={clickBack} className="brokerage__back-button">
               Back
             </Button>
-            <Button onClick={skipAndContinue} className='background-yellow'>Skip and continue</Button>
+            <Button onClick={skipAndContinue} className='secondary-yellow'>Skip and continue</Button>
             <Button disabled={loading} isLoading={loading} onClick={clickSave}>
               Save and continue
             </Button>

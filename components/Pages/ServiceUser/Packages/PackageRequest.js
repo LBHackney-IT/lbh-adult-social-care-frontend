@@ -41,7 +41,7 @@ const PackageRequest = ({ packageRequest }) => {
             <p>{formatDate(packageRequest.dateAssigned)}</p>
           </Container>
         </Container>
-        <Button onClick={handleClick} className={`package-request__${buttonClass}`}>
+        <Button onClick={handleClick} className={buttonClass}>
           {getButtonTextFromPackageStatus(packageRequest.packageStatus)}
         </Button>
       </Container>

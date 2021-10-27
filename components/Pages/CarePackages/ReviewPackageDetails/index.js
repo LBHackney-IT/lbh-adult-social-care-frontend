@@ -109,7 +109,7 @@ const ReviewPackageDetails = ({
     {
       loading,
       title: 'Cancel package',
-      className: 'color-lbh-e01',
+      className: 'secondary-red',
       onClick: () => makeActionPackage(cancelCarePackage, actionNotes.cancelNotes)
     },
     { title: 'Back', onClick: closePopup, className: 'link-button black' },
@@ -227,10 +227,10 @@ const ReviewPackageDetails = ({
                   )}
                   {goToPackage && (
                     <Container className="review-package-details__items-actions" display="flex">
-                      <p onClick={() => goToPackage(packageId)} className="link-button">
+                      <p onClick={goToBrokerPackage} className="link-button">
                         Edit
                       </p>
-                      <p onClick={() => goToPackage(packageId)} className="link-button red">
+                      <p onClick={goToBrokerPackage} className="link-button red">
                         Remove
                       </p>
                     </Container>
