@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { currency } from 'constants/strings';
 import {
   BROKER_PORTAL_ROUTE,
-  getBrokerPackageRoute,
   getCorePackageRoute,
   getHistoryRoute
 } from 'routes/RouteConstants';
@@ -96,7 +95,7 @@ const ReviewPackageDetails = ({
     {
       loading,
       title: 'Cancel package',
-      className: 'color-lbh-e01',
+      className: 'secondary-red',
       onClick: () => makeActionPackage(cancelCarePackage, actionNotes.cancelNotes)
     },
     { title: 'Back', onClick: closePopup, className: 'link-button black' },
@@ -213,7 +212,7 @@ const ReviewPackageDetails = ({
               <ReviewPackageDetailsButtons end={end} edit={edit} cancel={cancel} />
             ) : (
               <Container className="review-package-details__actions" display="flex">
-                <Button onClick={goBack}>Back</Button>
+                <Button className='secondary-gray' onClick={goBack}>Back</Button>
                 <Button onClick={() => setOpenedPopup('submit')}>Submit for approval</Button>
               </Container>
             )}
