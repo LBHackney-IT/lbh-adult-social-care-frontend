@@ -1,4 +1,4 @@
-import { isServer } from 'api';
+import { isServer } from '../api';
 
 export const BROKER_PORTAL_ROUTE = '/broker-portal';
 
