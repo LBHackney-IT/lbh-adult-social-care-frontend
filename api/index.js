@@ -18,7 +18,6 @@ export { default as useGetData } from './SWR/useGetData';
 export { default as useUser } from './SWR/useUser';
 
 export * from './SWR/users';
-export * from './SWR/approvers';
 export * from './SWR/serviceUser';
 export * from './SWR/carePackage';
 export * from './SWR/careCharge';
