@@ -1,12 +1,13 @@
+import { Input, Label, RadioGroup, Select, Textarea } from 'components/HackneyDS';
+import { currency } from 'constants/strings';
+import { careChargeFormKeys, collectedByOptions } from 'constants/variables';
 import React, { memo } from 'react';
 import { Controller } from 'react-hook-form';
-import { currency } from 'constants/strings';
-import { Input, Label, RadioGroup, Select, Textarea } from 'components/HackneyDS';
-import { collectedByOptions } from 'constants/variables';
 import ActionButtons from './ActionButtons';
 import { checkIfActionsVisible, useIsDisabledByStatus } from './helpers';
 
 const status = 'active';
+const { provisional } = careChargeFormKeys;
 
 const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
   const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
@@ -16,7 +17,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
       <h3>Provisional care charge (pre-assessment)</h3>
 
       <Controller
-        name="provisional.costPerWeek"
+        name={`${provisional}.costPerWeek`}
         control={control}
         defaultValue=""
         render={({ field }) => (
@@ -33,7 +34,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
       />
 
       <Controller
-        name="provisional.collectedBy"
+        name={`${provisional}.collectedBy`}
         control={control}
         render={({ field }) => (
           <RadioGroup
@@ -54,7 +55,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
       </Label>
 
       <Controller
-        name="provisional.reasonCollecting"
+        name={`${provisional}.reasonCollecting`}
         control={control}
         render={({ field }) => (
           <Select
@@ -68,7 +69,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
       />
 
       <Controller
-        name="provisional.notes"
+        name={`${provisional}.notes`}
         control={control}
         render={({ field }) => (
           <Textarea

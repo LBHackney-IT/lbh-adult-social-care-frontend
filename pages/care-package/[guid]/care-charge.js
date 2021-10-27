@@ -1,25 +1,27 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
-import withSession from 'lib/session';
-import { useToggle } from 'react-use';
-import { formatDate, getLoggedInUser } from 'service';
-import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import {
-  Button,
-  Container,
   Breadcrumbs,
   BrokerageHeader,
-  EndElementModal,
-  EditElementModal,
+  Button,
   CancelElementModal,
-  TitleSubtitleHeader,
+  Container,
+  EditElementModal,
+  EndElementModal,
   FinancialAssessment,
   ProvisionalCareCharge,
   ResidentialSUContribution,
+  TitleSubtitleHeader,
 } from 'components';
 import { currency } from 'constants/strings';
-import { collectedByOptions } from 'constants/variables';
+import { careChargeFormKeys, collectedByOptions } from 'constants/variables';
+import withSession from 'lib/session';
+import { useRouter } from 'next/router';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useToggle } from 'react-use';
+import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
+import { formatDate, getLoggedInUser } from 'service';
+
+const { provisional, more12, less12 } = careChargeFormKeys;
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -67,19 +69,19 @@ const CareCharge = () => {
 
   const { handleSubmit, control, formState, setValue, getValues } = useForm({
     defaultValues: {
-      provisional: {
+      [provisional]: {
         costPerWeek: '',
         collectedBy: '',
         reasonCollecting: '',
         notes: '',
       },
-      residentialLess12: {
+      [less12]: {
         value: '',
         claimedBy: '',
         startDate: null,
         endDate: null,
       },
-      residentialMore12: {
+      [more12]: {
         value: '',
         claimedBy: '',
         startDate: null,
@@ -95,7 +97,7 @@ const CareCharge = () => {
   }, [router]);
 
   const createProvisionalData = () => {
-    const { collectedBy, costPerWeek, notes, reasonCollecting } = getValues('provisional');
+    const { collectedBy, costPerWeek, notes, reasonCollecting } = getValues(provisional);
     const collectedByLabel = collectedByOptions.find((el) => el.id === collectedBy)?.label;
 
     return [
@@ -117,7 +119,7 @@ const CareCharge = () => {
     return [
       {
         label: 'Residential SU contribution',
-        value: formKey === 'residentialLess12' ? 'Without Property 1-12 weeks' : 'Without Property 13+ weeks',
+        value: formKey === less12 ? 'Without Property 1-12 weeks' : 'Without Property 13+ weeks',
       },
       { label: 'Value', value: `${currency.euro}${data.value}` },
       { label: 'Start date', value: formatDate(data.startDate) },
@@ -131,24 +133,14 @@ const CareCharge = () => {
 
     const data = [];
 
-    if (editedForms.includes('provisional'))
-      data.push({
-        id: 'provisional',
-        data: createProvisionalData(),
-      });
+    if (editedForms.includes(provisional)) data.push({ id: provisional, data: createProvisionalData() });
 
-    if (editedForms.includes('residentialLess12')) {
-      data.push({
-        id: 'residentialLess12',
-        data: createResidentialData('residentialLess12'),
-      });
+    if (editedForms.includes(less12)) {
+      data.push({ id: less12, data: createResidentialData(less12) });
     }
 
-    if (editedForms.includes('residentialMore12')) {
-      data.push({
-        id: 'residentialMore12',
-        data: createResidentialData('residentialMore12'),
-      });
+    if (editedForms.includes(more12)) {
+      data.push({ id: more12, data: createResidentialData(more12) });
     }
 
     setEditData(data);
@@ -157,16 +149,16 @@ const CareCharge = () => {
   };
 
   const onCancel = (type) => {
-    if (type === 'provisional') {
+    if (type === provisional) {
       setCancelData({ topItem: createProvisionalData() });
       toggleCancel();
       return;
     }
 
-    const less12Data = createResidentialData('residentialLess12');
-    const more12Data = createResidentialData('residentialMore12');
+    const less12Data = createResidentialData(less12);
+    const more12Data = createResidentialData(more12);
 
-    const isMore12 = type === 'residentialMore12';
+    const isMore12 = type === more12;
 
     setCancelData({
       topItem: isMore12 ? more12Data : less12Data,
@@ -178,7 +170,7 @@ const CareCharge = () => {
   };
 
   const onEnd = (type) => {
-    if (type === 'provisional') {
+    if (type === provisional) {
       setEndData({ data: createProvisionalData() });
     } else {
       setEndData({
@@ -205,21 +197,21 @@ const CareCharge = () => {
         <TitleSubtitleHeader subTitle="Care Charges" title="Add financial assessment" />
 
         <ProvisionalCareCharge
-          onCancel={() => onCancel('provisional')}
-          onEnd={() => onEnd('provisional')}
+          onCancel={() => onCancel(provisional)}
+          onEnd={() => onEnd(provisional)}
           control={control}
         />
 
         <ResidentialSUContribution
-          onCancel={() => onCancel('residentialLess12')}
-          onEnd={() => onEnd('residentialLess12')}
+          onCancel={() => onCancel(less12)}
+          onEnd={() => onEnd(less12)}
           setValue={setValue}
           control={control}
         />
 
         <ResidentialSUContribution
-          onCancel={() => onCancel('residentialMore12')}
-          onEnd={() => onEnd('residentialMore12')}
+          onCancel={() => onCancel(more12)}
+          onEnd={() => onEnd(more12)}
           setValue={setValue}
           control={control}
           isMore12

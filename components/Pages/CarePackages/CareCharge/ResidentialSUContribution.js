@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useMemo } from 'react';
 import { addWeeks } from 'date-fns';
 import { currency } from 'constants/strings';
+import { careChargeFormKeys } from 'constants/variables';
 import { Checkbox, Input, RadioGroup, DatePicker } from 'components/HackneyDS';
 import { Controller, useWatch } from 'react-hook-form';
 import ActionButtons from './ActionButtons';
@@ -10,6 +11,7 @@ const claimedByOptions = [
   { id: 'gross', label: 'Gross' },
   { id: 'net', label: 'Net' },
 ];
+const { less12, more12 } = careChargeFormKeys;
 
 const status = 'active';
 
@@ -17,8 +19,8 @@ const getEndDate = (date) => addWeeks(new Date(date), 12);
 
 const useDatesValidation = (isMore12, control, setValue, formKey) => {
   const startDate = useWatch({ control, name: `${formKey}.startDate` });
-  const endDate12weeks = useWatch({ control, name: `residentialLess12.endDate` });
-  const isOngoing = useWatch({ control, name: `residentialMore12.isOngoing` });
+  const endDate12weeks = useWatch({ control, name: `${less12}.endDate` });
+  const isOngoing = useWatch({ control, name: `${more12}.isOngoing` });
 
   const maxEndDate = useMemo(() => {
     // for 1-12 weeks
@@ -40,7 +42,7 @@ const useDatesValidation = (isMore12, control, setValue, formKey) => {
 
 const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEnd }) => {
   const weeks = isMore12 ? '13+' : '1-12';
-  const formKey = isMore12 ? 'residentialMore12' : 'residentialLess12';
+  const formKey = isMore12 ? more12 : less12;
   const description = `Without Property ${weeks} weeks`;
 
   const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
