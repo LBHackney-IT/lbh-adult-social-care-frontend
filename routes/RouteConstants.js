@@ -48,13 +48,13 @@ export const getStoragePrevRoute = () => {
   return route ? getPrevRouteInfo(route) : {};
 };
 
-export const getCarePackageMainRoute = () => {
+export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
   const routeInfo = getStoragePrevRoute();
 
   return [
     { text: 'Home', href: '/' },
     { text: routeInfo.name || 'Broker Assistance', href: routeInfo.route || BROKER_ASSISTANCE_ROUTE },
-    { text: 'Full overview' },
+    ...additionalBreadcrumbs
   ];
 };
 export const getPrevRouteInfo = (route) => carePackageRoutes.find(mainRoute => route.includes(mainRoute.route)) || {};
