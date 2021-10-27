@@ -170,7 +170,7 @@ button:not(.lbh-button--disabled):not([disabled]) {
       border-color: $button-secondary-blue;
 
       &:hover, &:target {
-        background: $button-secondary-blue-active;
+        background: $lbh-hover-link;
         color: white;
       }
 
