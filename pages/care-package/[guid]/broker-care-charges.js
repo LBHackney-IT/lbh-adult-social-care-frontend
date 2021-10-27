@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { CareCharges } from 'components';
@@ -6,12 +6,13 @@ import {
   createCarePackageReclaimCareCharge,
   updateCarePackageReclaimCareCharge,
   usePackageCareCharge,
-  usePackageCalculatedCost,
+  usePackageCalculatedCost, useSinglePackageInfo,
 } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
+import { reclaimType } from 'constants/variables';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -28,17 +29,24 @@ export const getServerSideProps = withSession(({ req }) => {
 
 const CareChargesPage = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const carePackageId = router.query.guid;
   const [loading, setLoading] = useState(false);
 
   const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e'; // todo to be removed
 
-  const dispatch = useDispatch();
-  const { data: carePackageReclaimCareCharge, isLoading: careChargeLoading } = usePackageCareCharge(carePackageId);
+  const params = useMemo(() => ({ subType: reclaimType.careCharge }), []);
+
+  const { data: careCharge, isLoading: careChargeLoading } = usePackageCareCharge({
+    params,
+    packageId: carePackageId
+  });
   const { data: calculatedCost, isLoading: calculatedCostLoading } = usePackageCalculatedCost(
     carePackageId,
     serviceUserId
   );
+
+  const { data: packageInfo } = useSinglePackageInfo(carePackageId);
 
   const collectingReasonOptions = [
     { text: 'Service user unable to manage finances', value: '1' },
@@ -83,7 +91,8 @@ const CareChargesPage = () => {
       loading={loading || calculatedCostLoading || careChargeLoading}
       reasonsCollecting={collectingReasonOptions}
       calculatedCost={calculatedCost}
-      carePackageReclaimCareCharge={carePackageReclaimCareCharge}
+      isS117={packageInfo?.settings?.isS117Client}
+      careCharge={careCharge?.length && careCharge}
       createCareCharge={createCareCharge}
       updateCareCharge={updateCareCharge}
     />

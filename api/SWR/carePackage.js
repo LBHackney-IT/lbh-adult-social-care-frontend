@@ -1,4 +1,4 @@
-import { hasUrl } from '../../service';
+import { hasUrl } from 'service';
 import useGetData from './useGetData';
 import { useFetchWithParams } from './useFetchWithParams';
 
@@ -13,6 +13,16 @@ export const useBrokerView = ({ params }) => (
     errorText: 'Can not get broker view'
   })
 );
+
+export const usePackageCareCharge = ({ params, packageId }) => {
+  return (
+    useFetchWithParams({
+      params,
+      url: getCarePackageUrl(packageId, '/reclaims/care-charges'),
+      errorText: 'Can not get reclaims care charges'
+    })
+  );
+}
 
 export const usePackageDetails = (packageId) =>
   useGetData(getCarePackageUrl(packageId, '/details'), '');
@@ -45,5 +55,5 @@ export const usePackageCalculatedCost = (packageId, serviceUserId) =>
     0,
   );
 
-export const usePackageCareCharge = (packageId) =>
+export const usePackageCareChargeList = (packageId) =>
   useGetData(getCarePackageUrl(packageId, '/reclaims/care-charges'));

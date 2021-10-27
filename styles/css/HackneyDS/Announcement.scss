@@ -9,17 +9,40 @@
 }
 
 .lbh-announcement {
-  padding: 2.25rem 0;
+  padding: 2.25rem 0 2.25rem 24px;
   border-top: 1px solid #84bd00;
   border-bottom: 1px solid #84bd00;
   background: rgba(164, 214, 94, 0.2);
 
+  &--site {
+    background: rgba(164, 214, 94, 0.5);
+  }
+  &__title {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: #1c1e21;
+  }
+  &__content {
+    color: #0b0c0c;
+    font-size: 1rem;
+    line-height: 1.625rem;
+    font-weight: 400;
+  }
+
   &.success {
     border-left: 6px solid $lbh-success-border;
     border-right: 1px solid $lbh-success-border;
-    padding-left: 24px;
   }
 
+  &.error {
+    background: $lbh-announcement-red;
+    border-left: 6px solid $lbh-red;
+    border-right: 1px solid $lbh-red;
+    border-bottom: 1px solid $lbh-red;
+    border-top: 1px solid $lbh-red;
+  }
 
   &.actions {
     background: $lbh-action-background;
@@ -27,7 +50,6 @@
     border-right: 1px solid $lbh-action-border;
     border-top: 1px solid $lbh-action-border;
     border-bottom: 1px solid $lbh-action-border;
-    padding-left: 24px;
   }
 }
 

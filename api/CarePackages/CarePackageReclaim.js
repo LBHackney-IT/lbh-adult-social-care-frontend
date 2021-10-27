@@ -60,7 +60,7 @@ export const updateCarePackageReclaimCareCharge = (carePackageId, careChargeUpda
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    data: careChargeUpdateRequest,
+    data: [careChargeUpdateRequest],
   };
   return axios(options).then(handleResponse).catch(handleError);
 };
