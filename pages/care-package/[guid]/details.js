@@ -4,6 +4,12 @@ import { useRouter } from 'next/router';
 import { ReviewPackageDetails, BrokerageBorderCost } from 'components';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
+import {
+  getBrokerPackageRoute,
+  getCareChargesRoute,
+  getCorePackageRoute,
+  getFundedNursingCareRoute
+} from '../../../routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -90,6 +96,7 @@ const PackageDetailsPage = () => {
     {
       headerTitle: data?.packageType,
       id: 'care-package',
+      goToPackage: (packageId) => router.push(getCorePackageRoute(packageId)),
       costOfPlacement: data?.costOfPlacement,
       items: [
         {
@@ -108,6 +115,7 @@ const PackageDetailsPage = () => {
     },
     {
       headerTitle: 'Weekly Additional Need',
+      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
       id: 'weekly-additional-need',
       items: data?.additionalWeeklyNeeds,
       totalCostHeader: 'Total (Net Off)',
@@ -116,6 +124,7 @@ const PackageDetailsPage = () => {
     {
       headerTitle: 'One Off Additional Need',
       id: 'on-off-additional-need',
+      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
       items: data?.additionalOneOffNeeds,
       totalCostHeader: 'Total (Net Off)',
       totalCost: data?.additionalOneOffCost,
@@ -123,6 +132,7 @@ const PackageDetailsPage = () => {
     {
       headerTitle: 'Funded Nursing Care',
       id: 'funded-nursing-care',
+      goToPackage: (packageId) => router.push(getFundedNursingCareRoute(packageId)),
       items: data?.fundedNursingCare ? [data.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
       details: (
@@ -163,6 +173,7 @@ const PackageDetailsPage = () => {
       headerTitle: 'Care Charges',
       id: 'care-charges',
       items: data?.careCharges,
+      goToPackage: (packageId) => router.push(getCareChargesRoute(packageId)),
       details: (
         <>
           <p>
@@ -200,7 +211,8 @@ const PackageDetailsPage = () => {
     <ReviewPackageDetails
       className='package-details'
       showEditActions
-      subTitle="Review package details"
+      title={data?.packageType}
+      subTitle="Package details"
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '../index';
+import { Button, Container, HorizontalSeparator, VerticalSeparator } from '../index';
 
 export default {
   title: 'Hackney Design System/Button',
@@ -11,7 +11,11 @@ export default {
   },
 };
 
-const Template = (args) => <Button {...args} />;
+const Template = (args) => {
+  if(args.coloredButtons) return args.coloredButtons;
+
+  return <Button {...args} />
+};
 
 export const Default = Template.bind({});
 
@@ -78,4 +82,36 @@ LoadingComponentButton.args = {
   disabled: true,
   isLoading: true,
   link: '',
+};
+
+export const ColoredButtons = Template.bind({});
+ColoredButtons.args = {
+  coloredButtons: (
+    <Container className='storybook-buttons' display='flex'>
+      <Container>
+        <Button className='lbh-primary-button'>Primary</Button>
+        <HorizontalSeparator height={10} />
+        <Button className='secondary-red'>Secondary red</Button>
+        <HorizontalSeparator height={10} />
+        <Button className='secondary-yellow'>Secondary yellow</Button>
+        <HorizontalSeparator height={10} />
+        <Button className='secondary-gray'>Secondary gray</Button>
+        <HorizontalSeparator height={10} />
+        <Button className='secondary-blue'>Secondary blue</Button>
+      </Container>
+      <VerticalSeparator width={10} />
+      <Container>
+        <Button className='green outline'>Primary</Button>
+        <HorizontalSeparator height={10} />
+        <Button className='red outline'>Secondary red</Button>
+        <HorizontalSeparator height={10} />
+        <Button className='outline yellow'>Secondary yellow</Button>
+        <HorizontalSeparator height={10} />
+        <Button className='outline gray'>Secondary gray</Button>
+        <HorizontalSeparator height={10} />
+        <Button className='outline blue'>Secondary blue</Button>
+      </Container>
+
+    </Container>
+  )
 };
