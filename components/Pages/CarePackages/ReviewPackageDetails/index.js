@@ -116,10 +116,10 @@ const ReviewPackageDetails = ({
   ];
 
   const modalActions = [
-    { title: `End ${title.toLowerCase()} package`, field: 'end', actions: endCarePackageActions },
+    { title: `End package`, field: 'end', actions: endCarePackageActions },
     { title: 'Approve package', field: 'approve', actions: approveCarePackageActions },
     { title: 'Decline package', field: 'decline', actions: declineCarePackageActions },
-    { title: `Cancel ${title.toLowerCase()} package`, field: 'cancel', actions: cancelCarePackageActions },
+    { title: `Cancel package`, field: 'cancel', actions: cancelCarePackageActions },
   ];
 
   const changeActionNotes = (field, value) => {
