@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { currency } from 'constants/strings';
 import {
   BROKER_PORTAL_ROUTE,
-  getBrokerPackageRoute,
   getCorePackageRoute,
   getHistoryRoute
 } from 'routes/RouteConstants';
@@ -60,7 +59,6 @@ const ReviewPackageDetails = ({
     cancelNotes: '',
   });
 
-  const goToBrokerPackage = () => router.push(getBrokerPackageRoute(packageId));
   const goToHistory = () => router.push(getHistoryRoute(packageId));
 
   const closePopup = () => setOpenedPopup('');
@@ -97,7 +95,7 @@ const ReviewPackageDetails = ({
     {
       loading,
       title: 'Cancel package',
-      className: 'color-lbh-e01',
+      className: 'secondary-red',
       onClick: () => makeActionPackage(cancelCarePackage, actionNotes.cancelNotes)
     },
     { title: 'Back', onClick: closePopup, className: 'link-button black' },
@@ -166,6 +164,7 @@ const ReviewPackageDetails = ({
           <Container className="review-package-details__cost-info">
             {packageInfoItems.map(
               ({
+                goToPackage,
                 id: itemId,
                 headerTitle,
                 items,
@@ -188,12 +187,12 @@ const ReviewPackageDetails = ({
                   )}
                   {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader} />}
                   {totalCostComponent}
-                  {!!totalCost && (
+                  {goToPackage && (
                     <Container className="review-package-details__items-actions" display="flex">
-                      <p onClick={goToBrokerPackage} className="link-button">
+                      <p onClick={() => goToPackage(packageId)} className="link-button">
                         Edit
                       </p>
-                      <p onClick={goToBrokerPackage} className="link-button red">
+                      <p onClick={() => goToPackage(packageId)} className="link-button red">
                         Remove
                       </p>
                     </Container>
@@ -213,8 +212,8 @@ const ReviewPackageDetails = ({
               <ReviewPackageDetailsButtons end={end} edit={edit} cancel={cancel} />
             ) : (
               <Container className="review-package-details__actions" display="flex">
-                <Button handler={goBack}>Back</Button>
-                <Button handler={() => setOpenedPopup('submit')}>Submit for approval</Button>
+                <Button className='secondary-gray' onClick={goBack}>Back</Button>
+                <Button onClick={() => setOpenedPopup('submit')}>Submit for approval</Button>
               </Container>
             )}
           </Container>

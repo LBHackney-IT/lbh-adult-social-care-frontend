@@ -4,6 +4,12 @@ import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
 import { getLoggedInUser } from 'service';
 import { BrokerageBorderCost, ReviewPackageDetails } from 'components';
+import {
+  getBrokerPackageRoute,
+  getCareChargesRoute,
+  getCorePackageRoute,
+  getFundedNursingCareRoute
+} from '../../../routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -92,6 +98,7 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: data?.packageType,
       id: 'care-package',
+      goToPackage: (packageId) => router.push(getCorePackageRoute(packageId)),
       costOfPlacement: data?.costOfPlacement,
       items: [
         {
@@ -111,6 +118,7 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'Weekly Additional Need',
       id: 'weekly-additional-need',
+      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
       items: data?.additionalWeeklyNeeds,
       totalCostHeader: 'Total (Net Off)',
       totalCost: data?.additionalWeeklyCost,
@@ -118,6 +126,7 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'One Off Additional Need',
       id: 'on-off-additional-need',
+      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
       items: data?.additionalOneOffNeeds,
       totalCostHeader: 'Total (Net Off)',
       totalCost: data?.additionalOneOffCost,
@@ -125,6 +134,7 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'Funded Nursing Care',
       id: 'funded-nursing-care',
+      goToPackage: (packageId) => router.push(getFundedNursingCareRoute(packageId)),
       items: data?.fundedNursingCare ? [data?.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
       details: (
@@ -158,6 +168,7 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'Care Charges',
       id: 'care-charges',
+      goToPackage: (packageId) => router.push(getCareChargesRoute(packageId)),
       items: data?.careCharges,
       details: (
         <>
@@ -200,6 +211,7 @@ const ReviewPackageDetailsPage = () => {
     <ReviewPackageDetails
       loading={summaryLoading}
       subTitle="Review package details"
+      title={data?.packageType}
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
