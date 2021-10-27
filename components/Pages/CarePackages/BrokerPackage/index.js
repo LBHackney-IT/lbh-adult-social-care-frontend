@@ -135,14 +135,16 @@ const BrokerPackage = ({
     const { startDate, endDate, isOngoing: isOngoingItem } = item;
     let errorStartDate = '';
     let errorEndDate = '';
-    if ((!startDate && isOngoingItem) || (!startDate && !isOngoingItem && endDate)) {
-      errorStartDate = 'Invalid start date';
-    } else if (startDate && endDate && !isOngoingItem && compareDescendingDMY(startDate, endDate) === -1) {
+    if (!startDate && !isOngoingItem) errorStartDate = 'Invalid start date';
+    if (!isOngoingItem && !endDate) errorEndDate = 'Invalid end date';
+    if (startDate && endDate && !isOngoingItem && compareDescendingDMY(startDate, endDate) === -1) {
       errorEndDate = 'End date should be later then start date';
-    } else if (startDate && !isOngoing && compareDescendingDMY(packageDates.endDate, startDate) === -1) {
+    }
+    if (startDate && !isOngoing && compareDescendingDMY(packageDates.endDate, startDate) === -1) {
       errorStartDate = 'Start date should be later then core date';
-    } else if (startDate && isOngoing && compareDescendingDMY(packageDates.startDate, startDate) === -1) {
-      errorEndDate = 'Start date should be later then core date';
+    }
+    if (startDate && isOngoing && compareDescendingDMY(packageDates.startDate, startDate) === -1) {
+      errorStartDate = 'Start date should be later then core date';
     }
 
     return errorStartDate || errorEndDate;

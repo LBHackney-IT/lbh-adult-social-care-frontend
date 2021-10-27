@@ -4,8 +4,6 @@ export { default as Loading } from './Loading';
 export { default as CustomNotification } from './CustomNotification';
 export { default as HackneyFooterInfo } from './HackneyFooterInfo';
 
-export { default as AlternativePagination } from './AlternativePagination';
-
 // pages
 export { default as BrokerageHeader } from './Pages/CarePackages/BrokerageHeader';
 export { default as TitleSubtitleHeader } from './Pages/CarePackages/TitleSubtitleHeader';
@@ -20,8 +18,9 @@ export { default as HistoryList } from './Pages/CarePackages/History/HistoryList
 export { default as HistoryOverview } from './Pages/CarePackages/History/HistoryOverview';
 export { default as BrokerageBorderCost } from './Pages/CarePackages/BrokerageBorderCost';
 export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPackageDetails';
-export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchServiceUser';
+export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchForServiceUser';
 export { default as NewCareChargePackages } from './Pages/CareCharges/NewCareChargePackages';
+export { default as PackageApprovals } from './Pages/PackageApprovals';
 export { default as CarePackageBreadcrumbs } from './Pages/CarePackages/CarePackageBreadcrumbs';
 export { FurtherDetails } from './Pages/CarePackages/CorePackageDetails/FurtherDetails';
 export { PackageType } from './Pages/CarePackages/CorePackageDetails/PackageType';
