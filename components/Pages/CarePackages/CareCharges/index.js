@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { collectingReasonOptions } from '../../../../constants/variables';
 import { Button, Container, ErrorMessage, Input, Label, RadioGroup, Select, Textarea } from '../../../HackneyDS';
 import { requiredSchema } from '../../../../constants/schemas';
 import { currency } from '../../../../constants/strings';
@@ -9,7 +10,6 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import Loading from '../../../Loading';
 
 const CareCharges = ({
-  reasonsCollecting,
   calculatedCost,
   carePackageReclaimCareCharge,
   createCareCharge = () => {},
@@ -181,7 +181,7 @@ const CareCharges = ({
               {errors.reasonCollecting && <ErrorMessage>{errors.reasonCollecting}</ErrorMessage>}
               <Select
                 id="reason-collecting"
-                options={reasonsCollecting}
+                options={collectingReasonOptions}
                 value={reasonCollecting}
                 onChangeValue={(value) => {
                   setReasonCollecting(value);

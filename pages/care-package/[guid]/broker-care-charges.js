@@ -40,14 +40,6 @@ const CareChargesPage = () => {
     serviceUserId
   );
 
-  const collectingReasonOptions = [
-    { text: 'Service user unable to manage finances', value: '1' },
-    { text: 'Agreement with provider to pay gross', value: '2' },
-    { text: 'Service user or family declining payment', value: '3' },
-    { text: 'Finance managed by CFAT', value: '4' },
-    { text: 'Other', value: '5' },
-  ];
-
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
   };
@@ -81,7 +73,6 @@ const CareChargesPage = () => {
   return (
     <CareCharges
       loading={loading || calculatedCostLoading || careChargeLoading}
-      reasonsCollecting={collectingReasonOptions}
       calculatedCost={calculatedCost}
       carePackageReclaimCareCharge={carePackageReclaimCareCharge}
       createCareCharge={createCareCharge}

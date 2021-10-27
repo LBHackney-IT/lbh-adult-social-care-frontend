@@ -73,7 +73,7 @@ const CareCharge = () => {
         costPerWeek: '',
         collectedBy: '',
         reasonCollecting: '',
-        notes: '',
+        reasonCollectingOther: '',
       },
       [less12]: {
         value: '',
@@ -91,7 +91,6 @@ const CareCharge = () => {
     },
   });
 
-  const router = useRouter();
   const goToPackages = useCallback(() => {
     router.push(getServiceUserPackagesRoute('test'));
   }, [router]);

@@ -1,8 +1,8 @@
 import { Input, Label, RadioGroup, Select, Textarea } from 'components/HackneyDS';
 import { currency } from 'constants/strings';
-import { careChargeFormKeys, collectedByOptions } from 'constants/variables';
+import { careChargeFormKeys, collectedByOptions, collectingReasonOptions } from 'constants/variables';
 import React, { memo } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import ActionButtons from './ActionButtons';
 import { checkIfActionsVisible, useIsDisabledByStatus } from './helpers';
 
@@ -11,6 +11,9 @@ const { provisional } = careChargeFormKeys;
 
 const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
   const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
+
+  const reasonCollecting = useWatch({ control, name: `${provisional}.reasonCollecting` });
+  const isOther = reasonCollecting === '5';
 
   return (
     <div className="provisional-care">
@@ -59,7 +62,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
         control={control}
         render={({ field }) => (
           <Select
-            options={[]}
+            options={collectingReasonOptions}
             value={field.value}
             disabled={isDisabled}
             id="reason-collecting"
@@ -68,19 +71,21 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
         )}
       />
 
-      <Controller
-        name={`${provisional}.notes`}
-        control={control}
-        render={({ field }) => (
-          <Textarea
-            className="provisional-care__textarea"
-            handler={field.onChange}
-            disabled={isDisabled}
-            value={field.value}
-            rows={3}
-          />
-        )}
-      />
+      {isOther && (
+        <Controller
+          name={`${provisional}.reasonCollectingOther`}
+          control={control}
+          render={({ field }) => (
+            <Textarea
+              className="provisional-care__textarea"
+              handler={field.onChange}
+              disabled={isDisabled}
+              value={field.value}
+              rows={3}
+            />
+          )}
+        />
+      )}
 
       {checkIfActionsVisible(status) && <ActionButtons onEdit={makeEnabled} onCancel={onCancel} onEnd={onEnd} />}
     </div>
