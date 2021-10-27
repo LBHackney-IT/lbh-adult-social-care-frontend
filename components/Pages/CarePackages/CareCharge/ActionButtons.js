@@ -1,18 +1,19 @@
 import React from 'react';
+import { Button } from '../../../HackneyDS';
 
 const ActionButtons = ({ onEdit, onCancel, onEnd }) => (
   <div className="care-charge__buttons">
-    <button type="button" onClick={onEdit}>
+    <Button onClick={onEdit} className="outline blue">
       Edit
-    </button>
+    </Button>
 
-    <button type="button" onClick={onCancel}>
+    <Button onClick={onCancel} className="outline red">
       Cancel
-    </button>
+    </Button>
 
-    <button type="button" onClick={onEnd}>
+    <Button onClick={onEnd} className="outline blue">
       End
-    </button>
+    </Button>
   </div>
 );
 
