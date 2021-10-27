@@ -65,9 +65,19 @@ export const updateCarePackageReclaimCareCharge = (carePackageId, careChargeUpda
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-export const cancelCareChargeReclaim = ({ carePackageId, reclaimId }) => axios({
+export const cancelCareChargeReclaim = ({ carePackageId, reclaimId }) =>
+  axios({
     url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/${reclaimId}/cancel`,
     method: 'PUT',
+  })
+    .then(handleResponse)
+    .catch(handleError);
+
+export const endCareChargeReclaim = ({ carePackageId, reclaimId, endDate }) =>
+  axios({
+    url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/${reclaimId}/end`,
+    method: 'PUT',
+    data: { endDate },
   })
     .then(handleResponse)
     .catch(handleError);

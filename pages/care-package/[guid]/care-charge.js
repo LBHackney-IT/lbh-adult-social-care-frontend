@@ -186,11 +186,13 @@ const CareCharge = () => {
     toggleEdit();
   };
 
+  const getReclaimId = (subType) => careChargeData.find((el) => el.subType === subType)?.id;
+
   const onCancel = (type) => {
     if (type === provisional) {
       setCancelData({
         topItem: createProvisionalData(),
-        topId: careChargeData.find((el) => el.subType === careChargeAPIKeys.provisional)?.id,
+        topId: getReclaimId(careChargeAPIKeys.provisional),
       });
       toggleCancel();
       return;
@@ -205,12 +207,8 @@ const CareCharge = () => {
       topItem: isMore12 ? more12Data : less12Data,
       bottomItem: isMore12 ? less12Data : more12Data,
       checkboxLabel: isMore12 ? 'Cancel 1-12 contribution' : 'Cancel 13+ contribution',
-      topId: careChargeData.find(
-        (el) => el.subType === (isMore12 ? careChargeAPIKeys.more12 : careChargeAPIKeys.less12)
-      )?.id,
-      bottomId: careChargeData.find(
-        (el) => el.subType === (isMore12 ? careChargeAPIKeys.less12 : careChargeAPIKeys.more12)
-      )?.id,
+      topId: getReclaimId(isMore12 ? careChargeAPIKeys.more12 : careChargeAPIKeys.less12),
+      bottomId: getReclaimId(isMore12 ? careChargeAPIKeys.less12 : careChargeAPIKeys.more12),
     });
 
     toggleCancel();
@@ -218,9 +216,13 @@ const CareCharge = () => {
 
   const onEnd = (type) => {
     if (type === provisional) {
-      setEndData({ data: createProvisionalData() });
+      setEndData({
+        id: getReclaimId(careChargeAPIKeys.provisional),
+        data: createProvisionalData(),
+      });
     } else {
       setEndData({
+        id: getReclaimId(type === less12 ? careChargeAPIKeys.less12 : careChargeAPIKeys.more12),
         data: createResidentialData(type),
         formKey: type,
       });
