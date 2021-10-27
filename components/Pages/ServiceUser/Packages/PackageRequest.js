@@ -46,30 +46,33 @@ const PackageRequest = ({ packageRequest }) => {
         </Button>
       </Container>
       <HorizontalSeparator height="10px" />
-      {packageRequest.notes.map((note) => (
-        <Container>
-          <Container display="flex" alignItems="center" cursor="pointer">
-            <p onClick={() => setExpanded(!isExpanded)} className="link-button">
-              {isExpanded ? 'Hide' : 'Collapse'}
-            </p>
-            <VerticalSeparator width="5px" />
-            <CaretDownIcon />
-          </Container>
-          {isExpanded && (
-            <>
-              <HorizontalSeparator height="10px" />
-              <Container display="flex" alignItems="center">
-                <Heading size="m">{note.description}</Heading>
-                <VerticalSeparator width="20px" />
-                <Hint>{formatDate(note.dateCreated)}</Hint>
-              </Container>
-              <p>
-                Created by <strong>{note.creatorName}</strong>
-              </p>
-            </>
-          )}
+
+      <Container>
+        <Container display="flex" alignItems="center" cursor="pointer">
+          <p onClick={() => setExpanded(!isExpanded)} className="link-button">
+            {isExpanded ? 'Hide' : 'Collapse'}
+          </p>
+          <VerticalSeparator width="5px" />
+          <CaretDownIcon />
         </Container>
-      ))}
+        {packageRequest.notes.map((note) => (
+          <>
+            {isExpanded && (
+              <>
+                <HorizontalSeparator height="10px" />
+                <Container display="flex" alignItems="center">
+                  <Heading size="m">{note.description}</Heading>
+                  <VerticalSeparator width="20px" />
+                  <Hint>{formatDate(note.dateCreated)}</Hint>
+                </Container>
+                <p>
+                  Created by <strong>{note.creatorName}</strong>
+                </p>
+              </>
+            )}
+          </>
+        ))}
+      </Container>
     </Container>
   );
 };
