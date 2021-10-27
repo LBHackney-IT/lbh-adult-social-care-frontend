@@ -1,25 +1,18 @@
-import { Input, Label, RadioGroup, Select, Textarea } from 'components/HackneyDS';
-import { currency } from 'constants/strings';
-import {
-  careChargeAPIKeys,
-  careChargeFormKeys,
-  collectedByOptions,
-  collectingReasonOptions,
-} from 'constants/variables';
 import React, { memo } from 'react';
-import { Controller, useWatch } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
+import { currency } from 'constants/strings';
+import { Input, Label, RadioGroup, Select, Textarea } from 'components/HackneyDS';
+import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
+import { checkIfActionsVisible, useClaimCollectorOptions, useGetChargeStatus, useIsDisabledByStatus } from './helpers';
 import ActionButtons from './ActionButtons';
-import { checkIfActionsVisible, useGetChargeStatus, useIsDisabledByStatus } from './helpers';
 
 const { provisional } = careChargeFormKeys;
 
 const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
   const status = useGetChargeStatus(careChargeAPIKeys.provisional);
+  const claimCollectorOptions = useClaimCollectorOptions();
 
   const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
-
-  const reasonCollecting = useWatch({ control, name: `${provisional}.reasonCollecting` });
-  const isOther = reasonCollecting === '5';
 
   return (
     <div className="provisional-care">
@@ -50,7 +43,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
             inline
             name="collected-by"
             label="Collected by"
-            items={collectedByOptions}
+            items={claimCollectorOptions}
             className="care-charge__radios"
             handle={field.onChange}
             disabled={isDisabled}
@@ -77,21 +70,19 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
         )}
       />
 
-      {isOther && (
-        <Controller
-          name={`${provisional}.reasonCollectingOther`}
-          control={control}
-          render={({ field }) => (
-            <Textarea
-              className="provisional-care__textarea"
-              handler={field.onChange}
-              disabled={isDisabled}
-              value={field.value}
-              rows={3}
-            />
-          )}
-        />
-      )}
+      <Controller
+        name={`${provisional}.description`}
+        control={control}
+        render={({ field }) => (
+          <Textarea
+            className="provisional-care__textarea"
+            handler={field.onChange}
+            disabled={isDisabled}
+            value={field.value}
+            rows={3}
+          />
+        )}
+      />
 
       {checkIfActionsVisible(status) && <ActionButtons onEdit={makeEnabled} onCancel={onCancel} onEnd={onEnd} />}
     </div>

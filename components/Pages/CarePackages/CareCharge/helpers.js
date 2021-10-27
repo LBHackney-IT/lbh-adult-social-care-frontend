@@ -30,3 +30,12 @@ export const useGetChargeStatus = (subType) => {
 
   return statusOptions.find((el) => el.id === provisionalData?.status)?.name;
 };
+
+export const useClaimCollectorOptions = (formKey) => {
+  const { data: claimCollectors } = useLookups('claimCollector');
+  
+  return claimCollectors.map((el) => ({
+    id: formKey ? `${formKey}-${el.id}` : el.id,
+    label: el.name,
+  }));
+};

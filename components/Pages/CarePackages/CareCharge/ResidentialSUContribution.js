@@ -1,16 +1,12 @@
 import React, { memo, useEffect, useMemo } from 'react';
-import { addWeeks } from 'date-fns';
+import { Controller, useWatch } from 'react-hook-form';
 import { currency } from 'constants/strings';
+import { addWeeks } from 'date-fns';
 import { careChargeAPIKeys, careChargeFormKeys } from 'constants/variables';
 import { Checkbox, Input, RadioGroup, DatePicker } from 'components/HackneyDS';
-import { Controller, useWatch } from 'react-hook-form';
+import { useIsDisabledByStatus, checkIfActionsVisible, useGetChargeStatus, useClaimCollectorOptions } from './helpers';
 import ActionButtons from './ActionButtons';
-import { useIsDisabledByStatus, checkIfActionsVisible, useGetChargeStatus } from './helpers';
 
-const claimedByOptions = [
-  { id: 'gross', label: 'Gross' },
-  { id: 'net', label: 'Net' },
-];
 const { less12, more12 } = careChargeFormKeys;
 
 const getEndDate = (date) => addWeeks(new Date(date), 12);
@@ -44,15 +40,11 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
   const description = `Without Property ${weeks} weeks`;
 
   const status = useGetChargeStatus(isMore12 ? careChargeAPIKeys.more12 : careChargeAPIKeys.less12);
+  const claimCollectorOptions = useClaimCollectorOptions(formKey);
 
   const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
 
   const { startDate, maxEndDate, endDate12weeks, isOngoing } = useDatesValidation(isMore12, control, setValue, formKey);
-
-  const options = claimedByOptions.map(({ id, label }) => ({
-    id: `${formKey}-${id}`,
-    label,
-  }));
 
   return (
     <div className="residential-contribution">
@@ -76,13 +68,13 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
       />
 
       <Controller
-        name={`${formKey}.claimedBy`}
+        name={`${formKey}.collectedBy`}
         control={control}
         render={({ field }) => (
           <RadioGroup
             inline
-            items={options}
-            name={`${formKey}-claimedBy`}
+            items={claimCollectorOptions}
+            name={`${formKey}-collectedBy`}
             className="care-charge__radios"
             handle={field.onChange}
             disabled={isDisabled}

@@ -40,11 +40,6 @@ export const brokerageTypeOptions = {
   additionalNeed: 2,
 };
 
-export const collectedByOptions = [
-  { id: 'hackney', label: 'Hackney council (gross)' },
-  { id: 'supplier', label: 'Supplier (net)' },
-];
-
 export const careChargeFormKeys = {
   provisional: 'provisional',
   less12: 'residentialLess12',
