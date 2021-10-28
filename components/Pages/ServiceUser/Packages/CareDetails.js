@@ -12,7 +12,7 @@ import {
   Hint,
 } from 'components';
 import { formatDate, getNumberWithCommas } from 'service';
-import { getCarePackageDetailsRoute } from 'routes/RouteConstants';
+import { getCarePackageCareChargeRoute, getCarePackageDetailsRoute } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
 import { confirmS117 } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -62,9 +62,14 @@ const CareDetails = ({ packageId, title, data, isS117Client, netTotal }) => {
 
   const [activeOnly, setFilter] = useState(false);
 
-  const handleClick = (e) => {
+  const goToPackageDetails = (e) => {
     e.preventDefault();
     router.push(getCarePackageDetailsRoute(packageId));
+  };
+
+  const goToCareCharge = (e) => {
+    e.preventDefault();
+    router.push(getCarePackageCareChargeRoute(packageId));
   };
 
   const handleS117 = async (e) => {
@@ -124,9 +129,15 @@ const CareDetails = ({ packageId, title, data, isS117Client, netTotal }) => {
                     value={activeOnly}
                     onChangeValue={() => setFilter(!activeOnly)}
                   />
-                  <Link onClick={(e) => handleClick(e)} noVisited>
-                    Package details
-                  </Link>
+                  <Container display="flex" justifyContent="space-between" alignItems="center">
+                    <Link className="mr-5" onClick={goToCareCharge} noVisited>
+                      Add financial assessment
+                    </Link>
+
+                    <Link onClick={goToPackageDetails} noVisited>
+                      Package details
+                    </Link>
+                  </Container>
                 </Container>
                 <HorizontalSeparator height="5px" />
                 <Table

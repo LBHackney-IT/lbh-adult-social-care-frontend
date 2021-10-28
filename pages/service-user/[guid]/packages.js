@@ -41,24 +41,22 @@ const Packages = () => {
             address={serviceUser.postCode}
           />
         )}
-        {packages &&
-          packages.map((p, index) => (
-            <>
-              <PackageRequest packageRequest={p} />
-              {index < packages.length - 1 && <HorizontalSeparator height="20px" />}
-            </>
-          ))}
+        {packages?.map((p, index) => (
+          <>
+            <PackageRequest packageRequest={p} />
+            {index < packages.length - 1 && <HorizontalSeparator height="20px" />}
+          </>
+        ))}
         <HorizontalSeparator height="48px" />
-        {packages &&
-          packages.map((p) => (
-            <CareDetails
-              packageId={p.packageId}
-              title={p.packageType}
-              data={p.packageItems}
-              isS117Client={p.isS117Client}
-              netTotal={p.netTotal}
-            />
-          ))}
+        {packages?.map((p) => (
+          <CareDetails
+            packageId={p.packageId}
+            title={p.packageType}
+            data={p.packageItems}
+            isS117Client={p.isS117Client}
+            netTotal={p.netTotal}
+          />
+        ))}
       </Container>
     </>
   );

@@ -20,7 +20,7 @@ import { useForm } from 'react-hook-form';
 import { useToggle } from 'react-use';
 import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { formatDate, getLoggedInUser } from 'service';
-import { useLookups, usePackageCareCharge } from 'api';
+import { useLookups, usePackageCareCharge, useSinglePackageInfo } from 'api';
 
 const { provisional, more12, less12 } = careChargeFormKeys;
 
@@ -41,13 +41,15 @@ const useBreadcrumbs = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
+  const { data } = useSinglePackageInfo(packageId);
+
   return useMemo(
     () => [
       { text: 'Home', href: '/' },
       { text: 'Care charges', href: '/' },
       {
         text: 'Full Overview',
-        href: getServiceUserPackagesRoute(packageId),
+        href: getServiceUserPackagesRoute(data?.serviceUser?.id),
       },
       { text: 'Financial assessment' },
     ],
