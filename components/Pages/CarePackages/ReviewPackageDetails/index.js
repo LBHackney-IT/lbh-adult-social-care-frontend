@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { currency } from 'constants/strings';
-import {
-  getCorePackageRoute,
-  getHistoryRoute
-} from 'routes/RouteConstants';
+import { getCorePackageRoute, getHistoryRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage } from 'api';
 import { useDispatch } from 'react-redux';
@@ -20,15 +17,6 @@ import Loading from '../../../Loading';
 import ActionCarePackageModal from '../../BrokerPortal/ActionCarePackageModal';
 import CarePackageBreadcrumbs from '../CarePackageBreadcrumbs';
 import PackageDetailsButtons from './PackageDetailsButtons';
-
-const links = [
-  { text: 'Care Package', href: '#care-package' },
-  { text: 'Weekly Additional Need', href: '#weekly-additional-need' },
-  { text: 'One Off Additional Need', href: '#on-off-additional-need' },
-  { text: 'Funded Nursing Care', href: '#funded-nursing-care' },
-  { text: 'Care charges', href: '#care-charges' },
-  { text: 'Summary', href: '#summary' },
-];
 
 const initialNotes = {
   endNotes: '',
@@ -51,6 +39,7 @@ const ReviewPackageDetails = ({
   title = 'Nursing Care',
   subTitle = 'Package details',
   loading: isLoading,
+  links = [],
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -79,13 +68,13 @@ const ReviewPackageDetails = ({
       pushNotification('Something went wrong');
     }
     setLoading(false);
-  }
+  };
 
   const endCarePackageActions = [
     {
       loading,
       title: 'End package',
-      onClick: () => makeActionPackage(endCarePackage, actionNotes.endNotes)
+      onClick: () => makeActionPackage(endCarePackage, actionNotes.endNotes),
     },
     { title: 'Cancel', onClick: closePopup, className: 'link-button red' },
   ];
@@ -94,7 +83,7 @@ const ReviewPackageDetails = ({
     {
       loading,
       title: 'Approve',
-      onClick: () => makeActionPackage(approveCarePackage, actionNotes.approveNotes)
+      onClick: () => makeActionPackage(approveCarePackage, actionNotes.approveNotes),
     },
     { title: 'Cancel', onClick: closePopup, className: 'link-button red' },
   ];
@@ -104,7 +93,7 @@ const ReviewPackageDetails = ({
       loading,
       title: 'Decline',
       className: 'secondary-red',
-      onClick: () => makeActionPackage(declineCarePackage, actionNotes.approveNotes)
+      onClick: () => makeActionPackage(declineCarePackage, actionNotes.approveNotes),
     },
     { title: 'Cancel', onClick: closePopup, className: 'link-button black' },
   ];
@@ -114,7 +103,7 @@ const ReviewPackageDetails = ({
       loading,
       title: 'Cancel package',
       className: 'secondary-red',
-      onClick: () => makeActionPackage(cancelCarePackage, actionNotes.cancelNotes)
+      onClick: () => makeActionPackage(cancelCarePackage, actionNotes.cancelNotes),
     },
     { title: 'Back', onClick: closePopup, className: 'link-button black' },
   ];
@@ -127,7 +116,7 @@ const ReviewPackageDetails = ({
   ];
 
   const changeActionNotes = (field, value) => {
-    setActionNotes(prevState => ({
+    setActionNotes((prevState) => ({
       ...prevState,
       [field]: value,
     }));
@@ -140,7 +129,7 @@ const ReviewPackageDetails = ({
       {modalActions.map(({ title: modalTitle, field, actions }) => (
         <ActionCarePackageModal
           key={field}
-          className='package-details__action-modal'
+          className="package-details__action-modal"
           title={modalTitle}
           close={closePopup}
           notes={actionNotes[`${field}Notes`]}
@@ -149,12 +138,12 @@ const ReviewPackageDetails = ({
           actions={actions}
         />
       ))}
-      <BrokerageHeader/>
+      <BrokerageHeader />
       <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <Container className="brokerage__container-header brokerage__container">
           <TitleSubtitleHeader
-            width=''
+            width=""
             title={title}
             subTitle={subTitle}
             link={
@@ -218,7 +207,7 @@ const ReviewPackageDetails = ({
                           totalCostHeader="Total (Gross)"
                         />
                       )}
-                      {totalCostInfo?.supplier !== undefined && totalCostInfo?.hackney !== undefined && <br/>}
+                      {totalCostInfo?.supplier !== undefined && totalCostInfo?.hackney !== undefined && <br />}
                       {totalCostInfo?.supplier !== undefined && totalCostInfo?.supplier !== 0 && (
                         <BrokerageBorderCost
                           totalCost={totalCostInfo?.supplier.toFixed(2)}
