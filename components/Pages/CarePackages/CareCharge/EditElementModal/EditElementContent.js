@@ -13,7 +13,7 @@ import { currency } from 'constants/strings';
 import { careChargeAPIKeys } from 'constants/variables';
 import { formatDate } from 'service';
 import { addNotification } from 'reducers/notificationsReducer';
-import CareChargesInfoStatic from '../CareChargesInfoStatic';
+import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';

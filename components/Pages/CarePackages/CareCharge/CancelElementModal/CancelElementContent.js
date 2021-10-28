@@ -4,13 +4,14 @@ import { useDispatch } from 'react-redux';
 import { cancelCareChargeReclaim } from '../../../../../api';
 import { addNotification } from '../../../../../reducers/notificationsReducer';
 import { CARE_CHARGES_ROUTE } from '../../../../../routes/RouteConstants';
-import CareChargesModalActions from '../CareChargesModalActions';
-import CareChargesModalTitle from '../CareChargesModalTitle';
-import CareChargesInfoStatic from '../CareChargesInfoStatic';
+import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
+import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
+import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import { Checkbox } from '../../../../HackneyDS';
 
 const CancelElementContent = ({ data, headerText, onClose }) => {
   const [shouldCancelBottom, setShouldCancelBottom] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const showCheckbox = Boolean(data.bottomId);
 
@@ -19,12 +20,15 @@ const CancelElementContent = ({ data, headerText, onClose }) => {
   const { guid: carePackageId } = router.query;
 
   const onCancel = async () => {
+    setIsLoading(true);
+
     await cancelCareChargeReclaim({ carePackageId, reclaimId: data.topId });
 
     if (shouldCancelBottom) {
       await cancelCareChargeReclaim({ carePackageId, reclaimId: data.bottomId });
     }
 
+    setIsLoading(false);
     dispatch(addNotification({ text: 'Successfully cancelled!', className: 'success' }));
     onClose();
     router.push(CARE_CHARGES_ROUTE);
@@ -63,7 +67,7 @@ const CancelElementContent = ({ data, headerText, onClose }) => {
 
       <CareChargesModalActions
         actions={[
-          { title: 'Cancel element', handler: onCancel, className: 'warning-button' },
+          { title: 'Cancel element', handler: onCancel, isLoading, className: 'warning-button' },
           { title: 'Return', handler: onClose, className: 'without-background' },
         ]}
       />

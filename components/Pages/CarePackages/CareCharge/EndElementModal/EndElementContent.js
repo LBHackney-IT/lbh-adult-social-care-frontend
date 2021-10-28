@@ -6,10 +6,10 @@ import { useDispatch } from 'react-redux';
 import { endCareChargeReclaim } from '../../../../../api';
 import { addNotification } from '../../../../../reducers/notificationsReducer';
 import { CARE_CHARGES_ROUTE } from '../../../../../routes/RouteConstants';
-import CareChargesInfoStatic from '../CareChargesInfoStatic';
-import CareChargesModalActions from '../CareChargesModalActions';
-import CareChargesInfoTitle from '../CareChargesInfoTitle';
-import CareChargesModalTitle from '../CareChargesModalTitle';
+import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
+import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
+import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
+import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import DatePick from '../../../../DatePick';
 
 const EndElementContent = ({ data, control, headerText, onClose }) => {
