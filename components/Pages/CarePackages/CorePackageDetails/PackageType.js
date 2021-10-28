@@ -6,9 +6,12 @@ import { Controller } from 'react-hook-form';
 export const PackageType = ({ errors, control }) => {
   const { data: primarySupportReasons = [] } = usePrimarySupportReason();
 
-  const params = useMemo(() => ({
-    name: 'packageType',
-  }), []);
+  const params = useMemo(
+    () => ({
+      name: 'packageType',
+    }),
+    []
+  );
 
   const { options: packageTypes = [] } = useLookups({ params });
   const mappedSupportReasons = optionsMapper(
@@ -24,7 +27,7 @@ export const PackageType = ({ errors, control }) => {
         <Controller
           name="packageType"
           control={control}
-          render={({ field }) => <Select options={packageTypes} {...field} />}
+          render={({ field }) => <Select readonly options={packageTypes} {...field} />}
         />
       </FormGroup>
       <HorizontalSeparator height="20px" />

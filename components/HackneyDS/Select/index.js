@@ -8,6 +8,7 @@ export default function Select({
   className = '',
   disabledOptions = [],
   disabledEmptyComponent = false,
+  readonly = false,
   options = [],
   emptyElement = { text: 'Select one', value: '' },
   id = 'select-id',
@@ -21,6 +22,7 @@ export default function Select({
   return (
     <div className="select-container">
       <select
+        disabled={readonly}
         id={id}
         {...errorDescribedBy}
         onChange={(e) => {
