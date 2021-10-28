@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import fetcher from './fetcher';
 
 export const useLookups = (name) => {
-  const response = useSWR(['/lookups', name], (url, name) => fetcher(url, { params: { name } }));
+  const response = useSWR(['/lookups', name], (url, nameParam) => fetcher(url, { params: { name: nameParam } }));
   const { error, data } = response;
 
   const options = useMemo(() => data?.map((type) => ({ value: type.id, text: type.name })), [data]);

@@ -21,7 +21,7 @@ export const useApprovals = ({ params, approverId, shouldFetch }) => {
   return useFetchWithParams({
     params,
     shouldFetch,
-    url: `${CARE_PACKAGES_URL}/approvals${approverIdUrl}`
+    url: `${CARE_PACKAGES_URL}/approvals${approverIdUrl}`,
   });
 };
 
@@ -67,6 +67,3 @@ export const usePackageCareCharge = (packageId, subType) => {
     isLoading: !error && !data && packageId,
   };
 };
-
-export const usePackageCareChargeList = (packageId) =>
-  useGetData(getCarePackageUrl(packageId, '/reclaims/care-charges'));

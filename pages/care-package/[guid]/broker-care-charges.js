@@ -1,8 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { CareCharges } from 'components';
-import { createCareChargeReclaim, updateCareChargeReclaim, usePackageCareCharge, usePackageCalculatedCost, useSingleCorePackageInfo } from 'api';
+import {
+  createCareChargeReclaim,
+  updateCareChargeReclaim,
+  usePackageCareCharge,
+  usePackageCalculatedCost,
+  useSingleCorePackageInfo,
+} from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { getLoggedInUser } from 'service';
@@ -30,12 +36,10 @@ const CareChargesPage = () => {
 
   const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e'; // todo to be removed
 
-  const params = useMemo(() => ({ subType: reclaimType.careCharge }), []);
-
-  const { data: careCharge, isLoading: careChargeLoading } = usePackageCareCharge({
-    params,
-    packageId: carePackageId
-  });
+  const { data: careCharge, isLoading: careChargeLoading } = usePackageCareCharge(
+    carePackageId,
+    reclaimType.careCharge
+  );
 
   const { data: calculatedCost, isLoading: calculatedCostLoading } = usePackageCalculatedCost(
     carePackageId,

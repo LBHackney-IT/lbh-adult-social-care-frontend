@@ -33,18 +33,18 @@ export const LOGOUT_ROUTE = '/logout';
 const carePackageRoutes = [
   { route: BROKER_ASSISTANCE_ROUTE, name: 'Broker Assistance' },
   { route: BROKER_PORTAL_ROUTE, name: 'Broker Portal' },
-  { route: CARE_CHARGE_ROUTE, name: 'Care Charges' },
+  { route: CARE_CHARGES_ROUTE, name: 'Care Charges' },
   { route: APPROVALS_ROUTE, name: 'Approvals' },
   { route: FINANCE_ROUTE, name: 'Finance' },
 ];
 
 export const saveToStoragePrevRoute = (route) => {
-  if(isServer()) return;
+  if (isServer()) return;
   window.localStorage.setItem('prevRoute', route);
 };
 
 export const getStoragePrevRoute = () => {
-  if(isServer()) return {};
+  if (isServer()) return {};
   const route = window.localStorage.getItem('prevRoute');
   return route ? getPrevRouteInfo(route) : {};
 };
@@ -55,7 +55,7 @@ export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
   return [
     { text: 'Home', href: '/' },
     { text: routeInfo.name || 'Broker Assistance', href: routeInfo.route || BROKER_ASSISTANCE_ROUTE },
-    ...additionalBreadcrumbs
+    ...additionalBreadcrumbs,
   ];
 };
-export const getPrevRouteInfo = (route) => carePackageRoutes.find(mainRoute => route.includes(mainRoute.route)) || {};
+export const getPrevRouteInfo = (route) => carePackageRoutes.find((mainRoute) => route.includes(mainRoute.route)) || {};

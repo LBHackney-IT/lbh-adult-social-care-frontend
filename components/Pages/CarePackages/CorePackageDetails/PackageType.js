@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Container, HorizontalSeparator, Select, FormGroup } from 'components/HackneyDS';
 import { useLookups, optionsMapper, usePrimarySupportReason } from 'api';
 import { Controller } from 'react-hook-form';
@@ -6,11 +6,7 @@ import { Controller } from 'react-hook-form';
 export const PackageType = ({ errors, control }) => {
   const { data: primarySupportReasons = [] } = usePrimarySupportReason();
 
-  const params = useMemo(() => ({
-    name: 'packageType',
-  }), []);
-
-  const { options: packageTypes = [] } = useLookups({ params });
+  const { options: packageTypes = [] } = useLookups('packageType');
   const mappedSupportReasons = optionsMapper(
     {
       text: 'primarySupportReasonName',
