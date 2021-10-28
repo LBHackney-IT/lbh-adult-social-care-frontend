@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { CareCharges } from 'components';
-import {
-  createCarePackageReclaimCareCharge,
-  updateCarePackageReclaimCareCharge,
-  usePackageCareCharge,
-  usePackageCalculatedCost,
-} from 'api';
+import { createCareChargeReclaim, updateCareChargeReclaim, usePackageCareCharge, usePackageCalculatedCost } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { getLoggedInUser } from 'service';
@@ -49,7 +44,7 @@ const CareChargesPage = () => {
   const createCareCharge = async (packageId, careChargeCreation) => {
     setLoading(true);
     try {
-      await createCarePackageReclaimCareCharge(packageId, careChargeCreation);
+      await createCareChargeReclaim(packageId, careChargeCreation);
       pushNotification(`Care charge created successfully`, 'success');
       router.push(packageReviewPageLink);
     } catch (e) {
@@ -61,7 +56,7 @@ const CareChargesPage = () => {
   const updateCareCharge = async (packageId, careChargeUpdate) => {
     setLoading(true);
     try {
-      await updateCarePackageReclaimCareCharge(packageId, careChargeUpdate);
+      await updateCareChargeReclaim(packageId, careChargeUpdate);
       pushNotification(`Care charge updated successfully`, 'success');
       router.push(packageReviewPageLink);
     } catch (e) {

@@ -33,7 +33,7 @@ export const useGetChargeStatus = (subType) => {
 
 export const useClaimCollectorOptions = (formKey) => {
   const { data: claimCollectors } = useLookups('claimCollector');
-  
+
   return claimCollectors.map((el) => ({
     id: formKey ? `${formKey}-${el.id}` : el.id,
     label: el.name,

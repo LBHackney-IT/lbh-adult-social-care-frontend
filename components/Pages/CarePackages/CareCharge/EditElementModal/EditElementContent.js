@@ -19,7 +19,9 @@ const EditElementContent = ({ data, headerText, onClose }) => {
   const { data: claimCollectors } = useLookups('claimCollector');
 
   const previousData = useMemo(() => {
-    const ids = data.map((el) => el.id);
+    const ids = data.map((el) => el.reclaimId).filter((id) => id);
+
+    if (ids.length === 0) return null;
 
     const initialData = ids.reduce((acc, id) => {
       const reclaim = careChargeData.find((charge) => charge.id === id);
@@ -73,10 +75,14 @@ const EditElementContent = ({ data, headerText, onClose }) => {
     <>
       <CareChargesModalTitle title={headerText} />
 
-      <CareChargesInfoTitle title="PREVIOUS ELEMENT" />
-      {previousData.map((el) => (
-        <CareChargesInfoStatic key={el.id} data={el.data} />
-      ))}
+      {previousData && (
+        <>
+          <CareChargesInfoTitle title="PREVIOUS ELEMENT" />
+          {previousData.map((el) => (
+            <CareChargesInfoStatic key={el.id} data={el.data} />
+          ))}
+        </>
+      )}
 
       <CareChargesInfoTitle title="NEW ELEMENT" />
       {data.map((el) => (

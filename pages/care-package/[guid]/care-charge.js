@@ -102,26 +102,26 @@ const CareCharge = () => {
 
   useEffect(() => {
     if (careChargeData.length) {
-      const provisionalData = careChargeData.find((el) => el.subType === careChargeAPIKeys.provisional);
-      const less12Data = careChargeData.find((el) => el.subType === careChargeAPIKeys.less12);
-      const more12Data = careChargeData.find((el) => el.subType === careChargeAPIKeys.more12);
+      const provisionalData = careChargeData.find((el) => el.subType === careChargeAPIKeys.provisional) ?? {};
+      const less12Data = careChargeData.find((el) => el.subType === careChargeAPIKeys.less12) ?? {};
+      const more12Data = careChargeData.find((el) => el.subType === careChargeAPIKeys.more12) ?? {};
 
       reset({
         [provisional]: {
-          costPerWeek: provisionalData.cost,
+          costPerWeek: provisionalData.cost ?? '',
           collectedBy: provisionalData.claimCollector,
           reasonCollecting: provisionalData.claimReason,
-          description: provisionalData.description,
+          description: provisionalData.description ?? '',
         },
         [less12]: {
-          value: less12Data.cost,
-          collectedBy: `${less12}-${less12Data.claimCollector}`,
+          value: less12Data.cost ?? '',
+          collectedBy: less12Data.claimCollector ? `${less12}-${less12Data.claimCollector}` : null,
           startDate: less12Data.startDate,
           endDate: less12Data.endDate,
         },
         [more12]: {
-          value: more12Data.cost,
-          collectedBy: `${more12}-${more12Data.claimCollector}`,
+          value: more12Data.cost ?? '',
+          collectedBy: more12Data.claimCollector ? `${more12}-${more12Data.claimCollector}` : null,
           startDate: more12Data.startDate,
           endDate: more12Data.endDate,
           isOngoing: false,
@@ -155,7 +155,7 @@ const CareCharge = () => {
   const createResidentialData = (formKey) => {
     const data = getValues(formKey);
 
-    const collectedBy = data.collectedBy.split('-')[1];
+    const collectedBy = data.collectedBy?.split('-')[1];
     const collectedByLabel = claimCollectors.find((el) => el.id === Number(collectedBy))?.name;
 
     return [
@@ -177,21 +177,24 @@ const CareCharge = () => {
 
     if (editedForms.includes(provisional))
       data.push({
-        id: getReclaimId(careChargeAPIKeys.provisional),
+        id: careChargeFormKeys.provisional,
         data: createProvisionalData(),
+        reclaimId: getReclaimId(careChargeAPIKeys.provisional),
       });
 
     if (editedForms.includes(less12)) {
       data.push({
-        id: getReclaimId(careChargeAPIKeys.less12),
+        id: careChargeFormKeys.less12,
         data: createResidentialData(less12),
+        reclaimId: getReclaimId(careChargeAPIKeys.less12),
       });
     }
 
     if (editedForms.includes(more12)) {
       data.push({
-        id: getReclaimId(careChargeAPIKeys.more12),
+        id: careChargeFormKeys.more12,
         data: createResidentialData(more12),
+        reclaimId: getReclaimId(careChargeAPIKeys.more12),
       });
     }
 

@@ -97,7 +97,7 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
             render={({ field }) => (
               <DatePicker
                 day={{ label: 'From' }}
-                date={new Date(field.value)}
+                date={field.value ? new Date(field.value) : null}
                 setDate={field.onChange}
                 minDate={minFromDate}
                 disabled={isDisabled}
