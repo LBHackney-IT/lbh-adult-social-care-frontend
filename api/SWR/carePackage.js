@@ -35,8 +35,6 @@ export const usePackageStatuses = () =>
 
 export const usePackageSummary = (packageId) => useGetData(getCarePackageUrl(packageId, '/summary'));
 
-export const useSinglePackageInfo = (packageId) => useGetData(getCarePackageUrl(packageId));
-
 export const useSingleCorePackageInfo = (packageId) =>
   useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/core` : null, '');
 

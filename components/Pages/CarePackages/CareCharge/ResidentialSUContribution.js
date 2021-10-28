@@ -73,13 +73,13 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
       />
 
       <Controller
-        name={`${formKey}.collectedBy`}
+        name={`${formKey}.claimCollector`}
         control={control}
         render={({ field }) => (
           <RadioGroup
             inline
             items={claimCollectorOptions}
-            name={`${formKey}-collectedBy`}
+            name={`${formKey}-claimCollector`}
             className="care-charge__radios"
             handle={field.onChange}
             disabled={isDisabled}

@@ -16,8 +16,8 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
   const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
 
   const { data: claimCollectors } = useLookups('claimCollector');
-  const collectedBy = useWatch({ control, name: `${provisional}.collectedBy` });
-  const isCollectedByHackney = claimCollectors.find((el) => el.id === collectedBy)?.name === 'Hackney';
+  const claimCollector = useWatch({ control, name: `${provisional}.claimCollector` });
+  const isClaimedByHackney = claimCollectors.find((el) => el.id === claimCollector)?.name === 'Hackney';
 
   return (
     <div className="provisional-care">
@@ -41,7 +41,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
       />
 
       <Controller
-        name={`${provisional}.collectedBy`}
+        name={`${provisional}.claimCollector`}
         control={control}
         render={({ field }) => (
           <RadioGroup
@@ -57,21 +57,21 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
         )}
       />
 
-      {isCollectedByHackney && (
+      {isClaimedByHackney && (
         <>
-          <Label className="reason-collecting" htmlFor="reason-collecting">
+          <Label className="reason-collecting" htmlFor="claim-reason">
             Why is Hackney collecting these care charges?
           </Label>
 
           <Controller
-            name={`${provisional}.reasonCollecting`}
+            name={`${provisional}.claimReason`}
             control={control}
             render={({ field }) => (
               <Select
                 options={collectingReasonOptions}
                 value={field.value}
                 disabled={isDisabled}
-                id="reason-collecting"
+                id="claim-reason"
                 onChange={field.onChange}
               />
             )}

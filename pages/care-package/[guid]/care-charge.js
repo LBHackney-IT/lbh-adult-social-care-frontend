@@ -20,7 +20,7 @@ import { useForm } from 'react-hook-form';
 import { useToggle } from 'react-use';
 import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { formatDate, getLoggedInUser } from 'service';
-import { useLookups, usePackageCareCharge, useSinglePackageInfo } from 'api';
+import { useLookups, usePackageCareCharge, useSingleCorePackageInfo } from 'api';
 
 const { provisional, more12, less12 } = careChargeFormKeys;
 
@@ -41,7 +41,7 @@ const useBreadcrumbs = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { data } = useSinglePackageInfo(packageId);
+  const { data } = useSingleCorePackageInfo(packageId);
 
   return useMemo(
     () => [
@@ -80,19 +80,19 @@ const CareCharge = () => {
     defaultValues: {
       [provisional]: {
         cost: '',
-        collectedBy: '',
-        reasonCollecting: '',
+        claimCollector: '',
+        claimReason: '',
         description: '',
       },
       [less12]: {
         cost: '',
-        collectedBy: '',
+        claimCollector: '',
         startDate: null,
         endDate: null,
       },
       [more12]: {
         cost: '',
-        collectedBy: '',
+        claimCollector: '',
         startDate: null,
         endDate: null,
         isOngoing: false,
@@ -109,19 +109,19 @@ const CareCharge = () => {
       reset({
         [provisional]: {
           cost: provisionalData.cost ?? '',
-          collectedBy: provisionalData.claimCollector,
-          reasonCollecting: provisionalData.claimReason,
+          claimCollector: provisionalData.claimCollector,
+          claimReason: provisionalData.claimReason,
           description: provisionalData.description ?? '',
         },
         [less12]: {
           cost: less12Data.cost ?? '',
-          collectedBy: less12Data.claimCollector ? `${less12}-${less12Data.claimCollector}` : null,
+          claimCollector: less12Data.claimCollector ? `${less12}-${less12Data.claimCollector}` : null,
           startDate: less12Data.startDate,
           endDate: less12Data.endDate,
         },
         [more12]: {
           cost: more12Data.cost ?? '',
-          collectedBy: more12Data.claimCollector ? `${more12}-${more12Data.claimCollector}` : null,
+          claimCollector: more12Data.claimCollector ? `${more12}-${more12Data.claimCollector}` : null,
           startDate: more12Data.startDate,
           endDate: more12Data.endDate,
           isOngoing: false,
@@ -137,8 +137,8 @@ const CareCharge = () => {
   const getReclaimId = (subType) => careChargeData.find((el) => el.subType === subType)?.id;
 
   const createProvisionalData = () => {
-    const { collectedBy, cost, description, reasonCollecting } = getValues(provisional);
-    const collectedByLabel = claimCollectors.find((el) => el.id === collectedBy)?.name;
+    const { claimCollector, cost, description, claimReason } = getValues(provisional);
+    const collectedByLabel = claimCollectors.find((el) => el.id === claimCollector)?.name;
 
     return [
       { label: 'Provisional care charge (pre-assessement)', value: '' },
@@ -147,7 +147,7 @@ const CareCharge = () => {
         label: 'Collected by',
         value: <span className="text-capitalize">{collectedByLabel}</span>,
       },
-      { label: 'Collecting reason', value: reasonCollecting },
+      { label: 'Collecting reason', value: claimReason },
       { label: 'Notes', value: description },
     ];
   };
@@ -155,8 +155,8 @@ const CareCharge = () => {
   const createResidentialData = (formKey) => {
     const data = getValues(formKey);
 
-    const collectedBy = data.collectedBy?.split('-')[1];
-    const collectedByLabel = claimCollectors.find((el) => el.id === Number(collectedBy))?.name;
+    const claimCollector = data.claimCollector?.split('-')[1];
+    const claimCollectorName = claimCollectors.find((el) => el.id === Number(claimCollector))?.name;
 
     return [
       {
@@ -166,7 +166,7 @@ const CareCharge = () => {
       { label: 'Value', value: data.cost ? `${currency.euro}${data.cost}` : '' },
       { label: 'Start date', value: formatDate(data.startDate) },
       { label: 'End date', value: data.isOngoing ? 'Ongoing' : formatDate(data.endDate) },
-      { label: 'Type', value: <span className="text-capitalize">{collectedByLabel}</span> },
+      { label: 'Type', value: <span className="text-capitalize">{claimCollectorName}</span> },
     ];
   };
 
