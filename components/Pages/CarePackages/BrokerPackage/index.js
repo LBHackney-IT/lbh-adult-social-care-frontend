@@ -39,8 +39,8 @@ const BrokerPackage = ({
   const [isOngoing, setIsOngoing] = useState(false);
   const [coreCost, setCoreCost] = useState(0);
   const [coreCostError, setCoreCostError] = useState('');
-  const [weeklyNeeds, setWeeklyNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
-  const [oneOffNeeds, setOneOffNeeds] = useState([{ ...initialNeed, id: uniqueID() }]);
+  const [weeklyNeeds, setWeeklyNeeds] = useState([]);
+  const [oneOffNeeds, setOneOffNeeds] = useState([]);
   const [weeklyTotalCost, setWeeklyTotalCost] = useState(0);
   const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
   const [isNewSupplier, setIsNewSupplier] = useState(false);
@@ -143,6 +143,7 @@ const BrokerPackage = ({
 
     let errorStartDate = '';
     let errorEndDate = '';
+    let errorCost = '';
     if (!startDate && !isOngoingItem && endDate) errorStartDate = 'Invalid start date';
     if (startDate && !isOngoingItem && !endDate) errorEndDate = 'Invalid end date';
     if (startDate && endDate && !isOngoingItem && compareDescendingDMY(startDate, endDate) === -1) {
@@ -158,7 +159,11 @@ const BrokerPackage = ({
       errorStartDate = 'Start date is wrong';
     }
 
-    return errorStartDate || errorEndDate;
+    if(!cost && (startDate || endDate)) {
+      errorCost = 'Cost is required';
+    }
+
+    return errorStartDate || errorEndDate || errorCost;
   };
 
   const checkDateErrors = (needs) => needs.some(item => checkNeedError(item));
@@ -347,7 +352,7 @@ const BrokerPackage = ({
                   onChangeValue={setSearchText}
                   label="Supplier"
                   searchIcon={null}
-                  clearIcon={<p className="lbh-primary-button">Clear</p>}
+                  clearIcon={<p className="lbh-primary-color">Clear</p>}
                   clear={clearSearch}
                   search={onSearchSupplier}
                   value={searchText}

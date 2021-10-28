@@ -2,6 +2,7 @@ import React from 'react';
 import BrokerageSupplierCard from 'components/Pages/CarePackages/BrokerageSupplierCard';
 import BrokerageCost from 'components/Pages/CarePackages/BrokerageCost';
 import { currency } from 'constants/strings';
+import BrokerageBorderCost from 'components/Pages/CarePackages/BrokerageBorderCost';
 import { Container, Input } from '../../../HackneyDS';
 
 const BrokerPackageCost = ({
@@ -45,13 +46,17 @@ const BrokerPackageCost = ({
       )}
       <Input
         id="supplier-weekly-cost"
-        className="broker-package__weekly-cost"
         error={coreCostError}
         preSign={currency.euro}
         label="Weekly Cost"
         value={coreCost}
         onChangeValue={onChangeCoreCost}
         required
+      />
+      <BrokerageBorderCost
+        className="broker-package__weekly-cost"
+        totalCost={coreCost}
+        totalCostHeader='Core cost'
       />
       <BrokerageCost
         name="weekly-additional"
