@@ -201,7 +201,7 @@ const FundedNursingCare = ({
         <Container>
           <h3 className="brokerage__item-title">Funded Nursing Care</h3>
           {hasPreviousFnc && (
-            <Announcement isWarning className="mb-5">
+            <Announcement isError className="mb-5">
               <div slot="title">FNC charge has previously been added. </div>
               <div slot="content">
                 <p className='mb-3'>Would you like to use previous FNC?</p>
