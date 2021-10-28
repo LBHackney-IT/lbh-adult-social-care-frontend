@@ -111,7 +111,7 @@ const CareCharge = () => {
           costPerWeek: provisionalData.cost,
           collectedBy: provisionalData.claimCollector,
           reasonCollecting: provisionalData.claimReason,
-          reasonCollectingOther: provisionalData.description,
+          description: provisionalData.description,
         },
         [less12]: {
           value: less12Data.cost,
@@ -137,7 +137,7 @@ const CareCharge = () => {
   const getReclaimId = (subType) => careChargeData.find((el) => el.subType === subType)?.id;
 
   const createProvisionalData = () => {
-    const { collectedBy, costPerWeek, notes, reasonCollecting } = getValues(provisional);
+    const { collectedBy, costPerWeek, description, reasonCollecting } = getValues(provisional);
     const collectedByLabel = claimCollectors.find((el) => el.id === collectedBy)?.name;
 
     return [
@@ -148,7 +148,7 @@ const CareCharge = () => {
         value: <span className="text-capitalize">{collectedByLabel}</span>,
       },
       { label: 'Collecting reason', value: reasonCollecting },
-      { label: 'Notes', value: notes },
+      { label: 'Notes', value: description },
     ];
   };
 
