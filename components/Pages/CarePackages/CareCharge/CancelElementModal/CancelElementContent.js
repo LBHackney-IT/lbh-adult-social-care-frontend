@@ -12,7 +12,7 @@ import { Checkbox } from '../../../../HackneyDS';
 const CancelElementContent = ({ data, headerText, onClose }) => {
   const [shouldCancelBottom, setShouldCancelBottom] = useState(false);
 
-  const showCheckbox = Boolean(data.checkboxLabel);
+  const showCheckbox = Boolean(data.bottomId);
 
   const dispatch = useDispatch();
   const router = useRouter();
