@@ -3,6 +3,7 @@ import React from 'react';
 export const Container = ({
   children,
   padding,
+  color,
   background,
   width = 'auto',
   height,
@@ -14,6 +15,7 @@ export const Container = ({
   justifyContent,
   border,
   borderBottom,
+  borderRadius,
   maxWidth,
   margin,
   cursor,
@@ -24,6 +26,7 @@ export const Container = ({
     className={className}
     style={{
       padding,
+      color,
       background,
       height,
       width,
@@ -34,6 +37,7 @@ export const Container = ({
       justifyContent,
       border,
       borderBottom,
+      borderRadius,
       maxWidth,
       margin,
       cursor,
