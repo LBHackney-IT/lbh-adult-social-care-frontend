@@ -17,6 +17,14 @@
   width: 100px;
 }
 
+.review-package-details {
+  .title-subtitle-header {
+    border-bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
 .review-package-details__cost-info {
   @include media-small-ipod-up {
     width: calc(100% - 250px) !important;

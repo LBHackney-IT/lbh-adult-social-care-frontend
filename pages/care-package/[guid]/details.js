@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { usePackageSummary } from 'api';
 import { useRouter } from 'next/router';
-import { ReviewPackageDetails, BrokerageBorderCost } from 'components';
+import { ReviewPackageDetails } from 'components';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
 import {
+  BROKER_PORTAL_ROUTE,
   getBrokerPackageRoute,
   getCareChargesRoute,
   getCorePackageRoute,
@@ -42,14 +43,25 @@ const careChargesClaimCollector = {
   1: 'Supplier (net)',
 };
 
+const breadcrumbs = [
+  { text: 'Home', href: '/' },
+  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
+  { text: 'Full overview' },
+];
+
 const PackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
   const { data } = usePackageSummary(carePackageId);
+  const [openedPopup, setOpenedPopup] = useState('');
 
   const checkSettings = (settings) => settings && settingsTypes
     .filter((item) => settings[item.field])
     .map(item => settingsTypes.find(setting => setting[item])?.text);
+
+  const end = () => setOpenedPopup('end');
+  const cancel = () => setOpenedPopup('cancel');
+  const edit = () => router.push(getCorePackageRoute(carePackageId));
 
   const summary = [
     { id: 1, key: 'Cost of placement', value: data?.costOfPlacement },
@@ -135,75 +147,25 @@ const PackageDetailsPage = () => {
       goToPackage: (packageId) => router.push(getFundedNursingCareRoute(packageId)),
       items: data?.fundedNursingCare ? [data.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
-      details: (
-        <>
-          <p>
-            <span className="font-weight-bold">FNC assessment been carried out: </span>
-            {data.fundedNursingCare?.assessmentFileUrl ? 'Yes' : 'No'}
-          </p>
-          <p>
-            <span className="font-weight-bold">Collected by: </span>
-            {fundedNursingCareClaimCollector[data.fundedNursingCare?.claimCollector]}
-          </p>
-          <p className="mb-3">
-            <span className="font-weight-bold">FNC assessment: </span>
-            <span className="link-button text-blue">View</span>
-          </p>
-        </>
-      ),
-      totalCostComponent: (
-        <>
-          {data?.hackneyReclaims?.fnc !== undefined && data.hackneyReclaims?.fnc !== 0 && (
-            <BrokerageBorderCost
-              totalCost={data?.hackneyReclaims?.fnc.toFixed(2)}
-              totalCostHeader="Total (Gross)"
-            />
-          )}
-          {data?.supplierReclaims?.fnc !== undefined && !!data?.hackneyReclaims?.fnc && <br/>}
-          {data?.supplierReclaims?.fnc !== undefined && data.supplierReclaims.fnc !== 0 && (
-            <BrokerageBorderCost
-              totalCost={data?.supplierReclaims?.fnc.toFixed(2)}
-              totalCostHeader="Total (Net Off)"
-            />
-          )}
-        </>
-      ),
+      fncDetails: {
+        funcClaimCollector: fundedNursingCareClaimCollector[data?.fundedNursingCare?.claimCollector],
+        assessmentFileUrl: data?.fundedNursingCare?.assessmentFileUrl ? 'Yes' : 'No',
+      },
+      totalCostInfo: {
+        hackney: data?.hackneyReclaims?.fnc,
+        supplier: data?.supplierReclaims?.fnc,
+      }
     },
     {
       headerTitle: 'Care Charges',
       id: 'care-charges',
       items: data?.careCharges,
       goToPackage: (packageId) => router.push(getCareChargesRoute(packageId)),
-      details: (
-        <>
-          <p>
-            <span className="font-weight-bold">Provisional care charge (pre-assessement)</span>
-          </p>
-          {data?.fundedNursingCare?.claimCollector && <p>
-            <span className="font-weight-bold">Collected by: </span>
-            {careChargesClaimCollector[data.fundedNursingCare.claimCollector]}
-          </p>}
-          <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
-          <p className="mb-3">Service user unable to manage finances</p>
-        </>
-      ),
-      totalCostComponent: (
-        <>
-          {data?.hackneyReclaims?.careCharge !== undefined && data.hackneyReclaims?.careCharge !== 0 && (
-            <BrokerageBorderCost
-              totalCost={data?.hackneyReclaims?.careCharge.toFixed(2)}
-              totalCostHeader="Total (Gross)"
-            />
-          )}
-          {data?.supplierReclaims?.careCharge !== undefined && data?.hackneyReclaims?.careCharge !== undefined && <br/>}
-          {data?.supplierReclaims?.careCharge !== undefined && data.supplierReclaims?.careCharge !== 0 && (
-            <BrokerageBorderCost
-              totalCost={data?.supplierReclaims?.careCharge.toFixed(2)}
-              totalCostHeader="Total (Net Off)"
-            />
-          )}
-        </>
-      ),
+      careChargeClaimCollector: careChargesClaimCollector[data?.fundedNursingCare?.claimCollector],
+      totalCostInfo: {
+        hackney: data?.hackneyReclaims?.careCharge,
+        supplier: data?.supplierReclaims?.careCharge,
+      },
     },
   ];
 
@@ -211,7 +173,15 @@ const PackageDetailsPage = () => {
     <ReviewPackageDetails
       className='package-details'
       showEditActions
+      openedPopup={openedPopup}
+      buttons={[
+        { title: 'Edit', onClick: edit, className: 'outline blue' },
+        { title: 'Cancel', onClick: cancel, className: 'outline red' },
+        { title: 'End', onClick: end, className: 'outline blue' },
+      ]}
+      setOpenedPopup={setOpenedPopup}
       title={data?.packageType}
+      breadcrumbs={breadcrumbs}
       subTitle="Package details"
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}

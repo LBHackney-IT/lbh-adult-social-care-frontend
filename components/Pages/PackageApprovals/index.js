@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { usePackageGetAll, useApproversOptions } from 'api';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useApproversOptions, useLookups } from 'api';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
 import {
   Breadcrumbs,
@@ -45,9 +45,11 @@ export const PackageApprovals = ({
 }) => {
   const [searchText, setSearchText] = useState('');
   const [openedSearch, setOpenedSearch] = useState(false);
-  const [serviceUserFilter, setServiceUserFilter] = useState(initialServiceUserFilters)
+  const [serviceUserFilter, setServiceUserFilter] = useState(initialServiceUserFilters);
 
-  const { options: packageOptions, isLoading: packageOptionsLoading } = usePackageGetAll();
+  const params = useMemo(() => ({ name: 'packageType' }), []);
+
+  const { options: packageOptions, isLoading: packageOptionsLoading } = useLookups({ params });
   const { options: approverOptions, isLoading: approverOptionsLoading } = useApproversOptions();
 
   const changeFilterField = useCallback(

@@ -1,9 +1,9 @@
 import React, { useState, memo } from 'react';
-import { formatDate } from '../../../../service';
+import { currency, dateStringFormats } from 'constants/strings';
+import { formatDate } from 'service';
 import { Container, SingleAccordion } from '../../../HackneyDS';
-import { currency, dateStringFormats } from '../../../../constants/strings';
 
-const PackageInfo = ({ headerTitle, items, containerId, details }) => {
+const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeClaimCollector }) => {
   const [openedServiceUserNeed, setOpenedServiceUserNeed] = useState([]);
   const [openedDetails, setOpenedDetails] = useState([]);
 
@@ -46,7 +46,37 @@ const PackageInfo = ({ headerTitle, items, containerId, details }) => {
                 </p>
               )}
             </Container>
-            {details}
+            {fncDetails && (
+              <>
+                <p>
+                  <span className="font-weight-bold">FNC assessment been carried out: </span>
+                  {fncDetails.assessmentFileUrl}
+                </p>
+                <p>
+                  <span className="font-weight-bold">Collected by: </span>
+                  {fncDetails.funcClaimCollector}
+                </p>
+                <p className="mb-3">
+                  <span className="font-weight-bold">FNC assessment: </span>
+                  <span className="link-button text-blue">View</span>
+                </p>
+              </>
+            )}
+            {careChargeClaimCollector && (
+              <>
+                <p>
+                  <span className="font-weight-bold">Provisional care charge (pre-assessement)</span>
+                </p>
+                {careChargeClaimCollector && (
+                  <p>
+                    <span className="font-weight-bold">Collected by: </span>
+                    {careChargeClaimCollector}
+                  </p>
+                )}
+                <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
+                <p className="mb-3">Service user unable to manage finances</p>
+              </>
+            )}
             {description && (
               <SingleAccordion title="Notes" onClick={() => changeOpenedDetails(id)} isOpened={openedDetailsId}>
                 <p>{description}</p>
