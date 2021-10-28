@@ -134,6 +134,8 @@ const CareCharge = () => {
     router.push(getServiceUserPackagesRoute('test'));
   }, [router]);
 
+  const getReclaimId = (subType) => careChargeData.find((el) => el.subType === subType)?.id;
+
   const createProvisionalData = () => {
     const { collectedBy, costPerWeek, notes, reasonCollecting } = getValues(provisional);
     const collectedByLabel = claimCollectors.find((el) => el.id === collectedBy)?.name;
@@ -161,7 +163,7 @@ const CareCharge = () => {
         label: 'Residential SU contribution',
         value: formKey === less12 ? 'Without Property 1-12 weeks' : 'Without Property 13+ weeks',
       },
-      { label: 'Value', value: `${currency.euro}${data.value}` },
+      { label: 'Value', value: data.value ? `${currency.euro}${data.value}` : '' },
       { label: 'Start date', value: formatDate(data.startDate) },
       { label: 'End date', value: data.isOngoing ? 'Ongoing' : formatDate(data.endDate) },
       { label: 'Type', value: <span className="text-capitalize">{collectedByLabel}</span> },
@@ -173,22 +175,30 @@ const CareCharge = () => {
 
     const data = [];
 
-    if (editedForms.includes(provisional)) data.push({ id: provisional, data: createProvisionalData() });
+    if (editedForms.includes(provisional))
+      data.push({
+        id: getReclaimId(careChargeAPIKeys.provisional),
+        data: createProvisionalData(),
+      });
 
     if (editedForms.includes(less12)) {
-      data.push({ id: less12, data: createResidentialData(less12) });
+      data.push({
+        id: getReclaimId(careChargeAPIKeys.less12),
+        data: createResidentialData(less12),
+      });
     }
 
     if (editedForms.includes(more12)) {
-      data.push({ id: more12, data: createResidentialData(more12) });
+      data.push({
+        id: getReclaimId(careChargeAPIKeys.more12),
+        data: createResidentialData(more12),
+      });
     }
 
     setEditData(data);
 
     toggleEdit();
   };
-
-  const getReclaimId = (subType) => careChargeData.find((el) => el.subType === subType)?.id;
 
   const onCancel = (type) => {
     if (type === provisional) {
