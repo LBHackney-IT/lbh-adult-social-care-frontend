@@ -147,7 +147,7 @@ const CareCharges = ({
         <Loading isLoading={loading} />
         <TitleSubtitleHeader title="Build a care package" subTitle="Care Charges" />
         {isS117 && (
-          <Announcement className="error">
+          <Announcement isError>
             <div slot="title">S117</div>
             <div slot="content">
               <p>This client has been categorised as S117. </p>

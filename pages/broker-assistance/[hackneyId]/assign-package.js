@@ -108,7 +108,7 @@ const AssignPackage = () => {
 
         {assignedCarePlan ? (
           <Container margin="60px 0 0" className="brokerage__container-main">
-            <Announcement className="success mb">
+            <Announcement>
               <div slot="title">Success!</div>
               <div slot="content">Care plan assigned to {brokerName}</div>
             </Announcement>
