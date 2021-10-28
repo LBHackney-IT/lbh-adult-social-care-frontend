@@ -53,7 +53,7 @@ const useBreadcrumbs = () => {
       },
       { text: 'Financial assessment' },
     ],
-    [packageId],
+    [packageId]
   );
 };
 
@@ -147,7 +147,7 @@ const CareCharge = () => {
       { label: 'Cost per week', value: cost ? `${currency.euro}${cost}` : '' },
       {
         label: 'Collected by',
-        value: <span className='text-capitalize'>{collectedByLabel}</span>,
+        value: <span className="text-capitalize">{collectedByLabel}</span>,
       },
       { label: 'Collecting reason', value: claimReason },
       { label: 'Notes', value: description },
@@ -168,7 +168,7 @@ const CareCharge = () => {
       { label: 'Value', value: data.cost ? `${currency.euro}${data.cost}` : '' },
       { label: 'Start date', value: formatDate(data.startDate) },
       { label: 'End date', value: data.isOngoing ? 'Ongoing' : formatDate(data.endDate) },
-      { label: 'Type', value: <span className='text-capitalize'>{claimCollectorName}</span> },
+      { label: 'Type', value: <span className="text-capitalize">{claimCollectorName}</span> },
     ];
   };
 
@@ -265,17 +265,17 @@ const CareCharge = () => {
       if (formState.isDirty) onEdit(form);
       else goToPackages();
     },
-    [formState.isDirty, onEdit, goToPackages],
+    [formState.isDirty, onEdit, goToPackages]
   );
 
   return (
-    <div className='care-charge'>
+    <div className="care-charge">
       <BrokerageHeader />
 
-      <Container maxWidth='1080px' margin='10px auto 60px' padding='0 60px'>
+      <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
         <Breadcrumbs values={breadcrumbs} />
 
-        <TitleSubtitleHeader subTitle='Care Charges' title='Add financial assessment' />
+        <TitleSubtitleHeader subTitle="Care Charges" title="Add financial assessment" />
 
         <ProvisionalCareCharge
           onCancel={() => onCancel(provisional)}
@@ -300,8 +300,10 @@ const CareCharge = () => {
 
         <FinancialAssessment />
 
-        <Container className='brokerage__actions'>
-          <Button className='brokerage__back-button'>Back</Button>
+        <Container className="brokerage__actions">
+          <Button className="brokerage__back-button" onClick={router.back}>
+            Back
+          </Button>
           <Button onClick={handleSubmit(onSubmit)}>Save</Button>
         </Container>
       </Container>

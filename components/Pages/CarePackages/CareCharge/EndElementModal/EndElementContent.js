@@ -13,6 +13,7 @@ import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import DatePick from '../../../../DatePick';
 
 const EndElementContent = ({ data, control, headerText, onClose }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [endDate, setEndDate] = useState(null);
 
   const formStateDate = useWatch({ control, name: `${data.formKey}.startDate` });
@@ -41,12 +42,15 @@ const EndElementContent = ({ data, control, headerText, onClose }) => {
 
   const onEnd = async () => {
     try {
+      setIsLoading(true);
       await endCareChargeReclaim({ carePackageId, reclaimId: data.id, endDate });
       dispatch(addNotification({ text: 'Successfully ended!', className: 'success' }));
       router.push(CARE_CHARGES_ROUTE);
       onClose();
     } catch (error) {
       dispatch(addNotification({ text: error }));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,7 +81,7 @@ const EndElementContent = ({ data, control, headerText, onClose }) => {
 
       <CareChargesModalActions
         actions={[
-          { title: 'End element', handler: onEnd },
+          { title: 'End element', handler: onEnd, isLoading },
           { title: 'Cancel', handler: onClose, className: 'without-background' },
         ]}
       />
