@@ -28,7 +28,7 @@ const ServiceUserSearch = ({ filters, inputs = defaultInputs, changeFilters, cle
           onChangeValue={(value) => changeFilters('postcode', value)}
         />
         {Object.values(filters).some((value) => value) && (
-          <Button onClick={clearFilters} className="outline gray clear-button">
+          <Button onClick={clearFilters} outline color='gray' className="clear-button">
             Clear
           </Button>
         )}

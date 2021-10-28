@@ -13,6 +13,21 @@ export const dateDescending = {
   desc: -1, // 1, 0
 };
 
+export const collectedByType = {
+  supplier: 'net',
+  hackney: 'gross',
+};
+
+export const reclaimType = {
+  careCharge: 1,
+  fnc: 2,
+};
+
+export const claimCollector = {
+  hackney: 2,
+  supplier: 1,
+};
+
 export const tagColors = {
   new: 'green',
   'in progress': 'yellow',

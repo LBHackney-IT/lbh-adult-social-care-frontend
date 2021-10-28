@@ -22,6 +22,7 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
+import CarePackageBreadcrumbs from '../CarePackageBreadcrumbs';
 
 const FundedNursingCare = ({
   carePackageId,
@@ -194,12 +195,13 @@ const FundedNursingCare = ({
     <Container className="brokerage__funded-nursing-care">
       <Loading isLoading={loading} />
       <BrokerageHeader />
+      <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <TitleSubtitleHeader title="Build a care package" subTitle="Funded Nursing Care" />
         <Container>
           <h3 className="brokerage__item-title">Funded Nursing Care</h3>
           {hasPreviousFnc && (
-            <Announcement className="actions mb-5">
+            <Announcement isWarning className="mb-5">
               <div slot="title">FNC charge has previously been added. </div>
               <div slot="content">
                 <p className='mb-3'>Would you like to use previous FNC?</p>

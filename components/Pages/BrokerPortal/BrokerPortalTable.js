@@ -12,7 +12,7 @@ export const BrokerPortalTable = ({ onRowClick, data }) => {
             <p className="brokerage-portal--user-name font-size-19px font-weight-bold text-green">
               {original.serviceUserName}
             </p>
-            <Tag className="text-capitalize outline" color={getTagColorFromStatus(value)}>
+            <Tag className="text-capitalize" outline color={getTagColorFromStatus(value)}>
               {value}
             </Tag>
           </Container>

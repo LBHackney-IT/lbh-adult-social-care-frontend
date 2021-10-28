@@ -12,6 +12,7 @@ import {
   FurtherDetails,
   PackageType,
   TitleSubtitleHeader,
+  CarePackageBreadcrumbs,
 } from 'components';
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -105,7 +106,8 @@ const CorePackage = () => {
   return (
     <>
       <BrokerageHeader />
-      <Container maxWidth="1080px" margin="0 auto" padding="60px">
+      <CarePackageBreadcrumbs />
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Core package details" title="Build a care package" />
         {packageInfo.serviceUser && (
           <ServiceUserDetails

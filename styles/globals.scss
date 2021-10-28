@@ -111,4 +111,9 @@ button {
   margin: 0 auto;
 }
 
+.disabled-content {
+  opacity: 0.5;
+  pointer-events: none !important;
+}
+
 @import "~bulma/css/bulma.min.css";

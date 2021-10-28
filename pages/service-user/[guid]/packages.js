@@ -2,26 +2,35 @@ import React from 'react';
 import {
   Loading,
   Container,
-  Breadcrumbs,
   CareDetails,
   PackageRequest,
   BrokerageHeader,
   ServiceUserDetails,
   HorizontalSeparator,
   TitleSubtitleHeader,
+  CarePackageBreadcrumbs,
 } from 'components';
 import { useRouter } from 'next/router';
-import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';
+import withSession from 'lib/session';
+import { getLoggedInUser } from 'service';
 
-const breadcrumbs = [
-  { text: 'Home', href: '/' },
-  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
-  { text: 'Full overview' },
-];
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const Packages = () => {
   const router = useRouter();
+
   const { guid: serviceUserId } = router.query;
   const { data } = useServiceUserApi.getServiceUserCarePackages(serviceUserId);
   const { serviceUser, packages } = data;
@@ -29,8 +38,8 @@ const Packages = () => {
   return (
     <>
       <BrokerageHeader />
+      <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
-        <Breadcrumbs values={breadcrumbs} />
         <TitleSubtitleHeader subTitle="All package details" title="Full overview" />
         <Loading isLoading={data === undefined} />
         {serviceUser && (

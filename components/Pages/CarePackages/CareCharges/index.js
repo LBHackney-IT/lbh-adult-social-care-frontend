@@ -1,32 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Container, ErrorMessage, Input, Label, RadioGroup, Select, Textarea } from '../../../HackneyDS';
-import { requiredSchema } from '../../../../constants/schemas';
-import { currency } from '../../../../constants/strings';
+import { requiredSchema } from 'constants/schemas';
+import { currency } from 'constants/strings';
+import { claimCollector, collectedByType } from 'constants/variables';
+import { getCarePackageReviewRoute } from 'routes/RouteConstants';
+import {
+  Announcement,
+  Button,
+  Container,
+  ErrorMessage,
+  Input,
+  Label,
+  RadioGroup,
+  Select,
+  Textarea
+} from '../../../HackneyDS';
 import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import Loading from '../../../Loading';
+import CarePackageBreadcrumbs from '../CarePackageBreadcrumbs';
 
 const CareCharges = ({
   reasonsCollecting,
+  isS117,
   calculatedCost,
-  carePackageReclaimCareCharge,
+  careCharge,
   createCareCharge = () => {},
   updateCareCharge = () => {},
   loading,
 }) => {
   const router = useRouter();
   const carePackageId = router.query.guid;
-
-  const [collectedByType] = useState({
-    supplier: 'net',
-    hackney: 'gross',
-  });
-  const [claimCollector] = useState({
-    hackney: 2,
-    supplier: 1,
-  });
   const [errors, setErrors] = useState({
     collectedBy: '',
     costPerWeek: '',
@@ -43,7 +48,11 @@ const CareCharges = ({
     router.back();
   };
 
+  const packageReviewPageLink = getCarePackageReviewRoute(carePackageId);
+
   const clickSave = async () => {
+    if(isS117) return router.push(packageReviewPageLink);
+
     const validFields = [
       {
         schema: requiredSchema.number,
@@ -91,7 +100,7 @@ const CareCharges = ({
     };
 
     const careChargeUpdate = {
-      id: carePackageReclaimCareCharge.id,
+      id: careCharge?.id,
       cost: costPerWeek,
       claimCollector: claimCollector[collectedBy],
       supplierId: 1, // fix value to be removed after updating API side
@@ -102,7 +111,7 @@ const CareCharges = ({
       claimReason: reasonCollecting,
     };
 
-    if (!carePackageReclaimCareCharge?.id) {
+    if (!careCharge?.id) {
       createCareCharge(carePackageId, careChargeCreation);
       return;
     }
@@ -119,29 +128,36 @@ const CareCharges = ({
     }
   }, [calculatedCost]);
 
-  const composecarePackageReclaimCareChargeData = () => {
-    if (carePackageReclaimCareCharge) {
-      setNotes(carePackageReclaimCareCharge.description);
-      if (carePackageReclaimCareCharge.claimCollector === 2) {
+  useEffect(() => {
+    if (careCharge) {
+      const { description, claimCollector: claimCollectorInfo, claimReason } = careCharge;
+      setNotes(description);
+      setReasonCollecting(claimReason);
+      if (claimCollectorInfo === 2) {
         setCollectedBy('hackney');
       } else {
         setCollectedBy('supplier');
       }
-      setReasonCollecting(carePackageReclaimCareCharge.claimReason);
     }
-  };
-
-  useEffect(() => {
-    composecarePackageReclaimCareChargeData();
-  }, [carePackageReclaimCareCharge]);
+  }, [careCharge]);
 
   return (
     <Container className="brokerage__care-charges">
       <BrokerageHeader />
+      <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <Loading isLoading={loading} />
         <TitleSubtitleHeader title="Build a care package" subTitle="Care Charges" />
-        <Container>
+        {isS117 && (
+          <Announcement isError>
+            <div slot="title">S117</div>
+            <div slot="content">
+              <p>This client has been categorised as S117. </p>
+              <p>No care charges need to be applied</p>
+            </div>
+          </Announcement>
+        )}
+        <Container className={isS117 ? 'disabled-content' : ''}>
           <h3 className="brokerage__item-title">Care charges</h3>
           <p className="care-charges-hint">Provisional care charge (pre-assessement)</p>
           <Input
@@ -191,19 +207,19 @@ const CareCharges = ({
             </>
           )}
           <Textarea className="care-charges__textarea" handler={setNotes} value={notes} />
-          <BrokerageTotalCost
-            name={`Funding per week ${collectedBy ? `(${collectedByType[collectedBy]})` : ''}`}
-            className="brokerage__border-cost"
-            value={finalCost}
-          />
-          <Container className="brokerage__actions">
-            <Button onClick={clickBack} className="brokerage__back-button">
-              Back
-            </Button>
-            <Button isLoading={loading} disabled={loading} onClick={clickSave}>
-              Save and review
-            </Button>
-          </Container>
+        </Container>
+        <BrokerageTotalCost
+          name={`Funding per week ${collectedBy ? `(${collectedByType[collectedBy]})` : ''}`}
+          className="brokerage__border-cost"
+          value={finalCost}
+        />
+        <Container className="brokerage__actions">
+          <Button onClick={clickBack} className="brokerage__back-button">
+            Back
+          </Button>
+          <Button isLoading={loading} disabled={loading} onClick={clickSave}>
+            {isS117 ? 'Review' : 'Save and review'}
+          </Button>
         </Container>
       </Container>
     </Container>

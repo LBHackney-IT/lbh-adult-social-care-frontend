@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { currency } from 'constants/strings';
-import { getHistoryRoute } from 'routes/RouteConstants';
+import {
+  getCorePackageRoute,
+  getHistoryRoute
+} from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage } from 'api';
 import { useDispatch } from 'react-redux';
 import BrokerageHeader from '../BrokerageHeader';
-import { Container, Link, Breadcrumbs } from '../../../HackneyDS';
+import { Button, Container, Link } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import PackageInfo from './PackageInfo';
@@ -15,6 +18,7 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
 import Loading from '../../../Loading';
 import ActionCarePackageModal from '../../BrokerPortal/ActionCarePackageModal';
+import CarePackageBreadcrumbs from '../CarePackageBreadcrumbs';
 import PackageDetailsButtons from './PackageDetailsButtons';
 
 const links = [
@@ -146,9 +150,7 @@ const ReviewPackageDetails = ({
         />
       ))}
       <BrokerageHeader/>
-      <Container maxWidth="1080px" margin="10px auto 0" padding="0 60px">
-        <Breadcrumbs values={breadcrumbs} />
-      </Container>
+      <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <Container className="brokerage__container-header brokerage__container">
           <TitleSubtitleHeader

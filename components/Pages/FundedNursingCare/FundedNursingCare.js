@@ -62,7 +62,7 @@ export const FundedNursingCare = ({
         )}
       </div>
       <FundedNursingCareTable data={tableData} />
-      <Button onClick={() => alert('Edit FNC')} className="outline green edit-fnc-button">
+      <Button onClick={() => alert('Edit FNC')} outline secondary color='green' className="edit-fnc-button">
         Edit FNC
       </Button>
     </div>

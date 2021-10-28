@@ -7,6 +7,7 @@ export default {
   argTypes: {
     color: { type: '' },
     className: { type: 'string' },
+    outline: { type: 'boolean' },
   },
 };
 
@@ -45,4 +46,12 @@ Gray.args = {
   children: 'Archived',
   className: '',
   color: 'gray',
+};
+
+export const Outline = Template.bind({});
+Outline.args = {
+  children: 'Outline',
+  className: '',
+  color: 'red',
+  outline: true,
 };

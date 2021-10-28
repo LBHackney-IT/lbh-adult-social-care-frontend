@@ -27,6 +27,7 @@
   &:after {
     content: '*';
     color: $lbh-red;
+    font-weight: initial !important;
   }
 }
 

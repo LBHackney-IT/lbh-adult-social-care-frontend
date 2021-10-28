@@ -3,16 +3,15 @@ import { useRouter } from 'next/router';
 import {
   Loading,
   Container,
-  Breadcrumbs,
   HistoryList,
   BrokerageHeader,
   HistoryOverview,
-  TitleSubtitleHeader,
+  TitleSubtitleHeader, CarePackageBreadcrumbs,
 } from 'components';
 import withSession from 'lib/session';
 import { usePackageHistory } from 'api';
 import { getLoggedInUser } from 'service';
-import { BROKER_PORTAL_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
+import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -33,12 +32,7 @@ const History = () => {
 
   const breadcrumbs = useMemo(
     () => [
-      { text: 'Home', href: '/' },
-      { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
-      {
-        text: 'Full Overview',
-        href: getServiceUserPackagesRoute(packageId),
-      },
+      { text: 'Full Overview', href: getServiceUserPackagesRoute(packageId), },
       { text: 'Package History' },
     ],
     [packageId]
@@ -52,8 +46,8 @@ const History = () => {
 
       <Loading isLoading={isLoading} />
 
+      <CarePackageBreadcrumbs additionalBreadcrumbs={breadcrumbs} />
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
-        <Breadcrumbs values={breadcrumbs} />
 
         <TitleSubtitleHeader subTitle="Package history" title={data.packageType} />
 

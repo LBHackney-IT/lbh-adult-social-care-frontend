@@ -5,7 +5,7 @@ import { requestMethods } from '../../constants/variables';
 const CARE_PACKAGE_URL = `${BASE_URL}/v1/care-packages`;
 
 const sendCarePackageRequest = (url = '', data, method = requestMethods.post) =>
-  axiosRequest({ url: `${CARE_PACKAGE_URL}${url}`, data, method });
+  axiosRequest({ url: `${CARE_PACKAGE_URL}/${url}`, data, method });
 
 const sendCarePackageRequestNoData = (url, method = requestMethods.post) =>
   axiosRequest({ url: `${CARE_PACKAGE_URL}/${url}`, method });
