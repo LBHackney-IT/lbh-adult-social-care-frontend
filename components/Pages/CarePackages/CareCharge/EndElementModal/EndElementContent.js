@@ -39,32 +39,35 @@ const EndElementContent = ({ data, control, headerText, onClose }) => {
   const router = useRouter();
   const { guid: carePackageId } = router.query;
 
-  console.log('%c data =', 'color: lightblue', data);
   const onEnd = async () => {
-    await endCareChargeReclaim({ carePackageId, reclaimId: data.id, endDate });
-    dispatch(addNotification({ text: 'Successfully ended!', className: 'success' }));
-    onClose();
-    router.push(CARE_CHARGES_ROUTE);
+    try {
+      await endCareChargeReclaim({ carePackageId, reclaimId: data.id, endDate });
+      dispatch(addNotification({ text: 'Successfully ended!', className: 'success' }));
+      router.push(CARE_CHARGES_ROUTE);
+      onClose();
+    } catch (error) {
+      dispatch(addNotification({ text: error }));
+    }
   };
 
   return (
     <>
       <CareChargesModalTitle title={headerText} />
 
-      <CareChargesInfoTitle title='Elements to be ended' />
+      <CareChargesInfoTitle title="Elements to be ended" />
 
       <CareChargesInfoStatic data={data.data}>
-        <div className='end-element__picker'>
+        <div className="end-element__picker">
           <DatePick
             setDate={setEndDate}
             dateValue={endDate}
-            label='End date'
+            label="End date"
             minDate={formStateDate}
             maxDate={maxDate}
           />
 
           {duration && (
-            <p className='edit-element__end-date-distance'>
+            <p className="edit-element__end-date-distance">
               ({duration.months} {duration.months === 1 ? 'month' : 'months'} {duration.days}
               {duration.days === 1 ? ' day' : ' days'})
             </p>

@@ -73,7 +73,7 @@ const CareCharge = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { data: careChargeData } = usePackageCareCharge(packageId);
+  const { actualReclaims } = usePackageCareCharge(packageId);
   const { data: claimCollectors } = useLookups('claimCollector');
   const { data: packageInfo } = useSingleCorePackageInfo(packageId);
 
@@ -102,10 +102,10 @@ const CareCharge = () => {
   });
 
   useEffect(() => {
-    if (careChargeData.length) {
-      const provisionalData = careChargeData.find((el) => el.subType === careChargeAPIKeys.provisional) ?? {};
-      const less12Data = careChargeData.find((el) => el.subType === careChargeAPIKeys.less12) ?? {};
-      const more12Data = careChargeData.find((el) => el.subType === careChargeAPIKeys.more12) ?? {};
+    if (actualReclaims.length) {
+      const provisionalData = actualReclaims.find((el) => el.subType === careChargeAPIKeys.provisional) ?? {};
+      const less12Data = actualReclaims.find((el) => el.subType === careChargeAPIKeys.less12) ?? {};
+      const more12Data = actualReclaims.find((el) => el.subType === careChargeAPIKeys.more12) ?? {};
 
       reset({
         [provisional]: {
@@ -129,13 +129,13 @@ const CareCharge = () => {
         },
       });
     }
-  }, [careChargeData]);
+  }, [actualReclaims]);
 
   const goToPackages = useCallback(() => {
     router.push(getServiceUserPackagesRoute(packageInfo?.serviceUser?.id));
   }, [router, packageInfo]);
 
-  const getReclaimId = (subType) => careChargeData.find((el) => el.subType === subType)?.id;
+  const getReclaimId = (subType) => actualReclaims.find((el) => el.subType === subType)?.id;
 
   const createProvisionalData = () => {
     const { claimCollector, cost, description, claimReason } = getValues(provisional);

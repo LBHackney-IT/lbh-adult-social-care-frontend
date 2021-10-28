@@ -26,7 +26,7 @@ const EditElementContent = ({ data, headerText, onClose }) => {
   const { guid: packageId } = router.query;
 
   const { data: packageInfo } = useSingleCorePackageInfo(packageId);
-  const { data: careChargeData } = usePackageCareCharge(packageId);
+  const { actualReclaims } = usePackageCareCharge(packageId);
   const { data: claimCollectors } = useLookups('claimCollector');
 
   const previousData = useMemo(() => {
@@ -35,7 +35,7 @@ const EditElementContent = ({ data, headerText, onClose }) => {
     if (ids.length === 0) return null;
 
     const initialData = ids.reduce((acc, id) => {
-      const reclaim = careChargeData.find((charge) => charge.id === id);
+      const reclaim = actualReclaims.find((charge) => charge.id === id);
       acc.push(reclaim);
       return acc;
     }, []);
@@ -74,7 +74,7 @@ const EditElementContent = ({ data, headerText, onClose }) => {
         ],
       };
     });
-  }, [careChargeData, data]);
+  }, [actualReclaims, data]);
 
   const goToPackages = useCallback(() => {
     router.push(getServiceUserPackagesRoute(packageInfo?.serviceUser?.id));

@@ -1,7 +1,7 @@
-import { useCallback, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { useToggle } from 'react-use';
 import { useLookups, usePackageCareCharge } from 'api';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect } from 'react';
+import { useToggle } from 'react-use';
 
 export const useIsDisabledByStatus = (status) => {
   const [isDisabled, toggleDisabled] = useToggle(false);
@@ -23,12 +23,12 @@ export const useGetChargeStatus = (subType) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { data: careChargeData } = usePackageCareCharge(packageId);
+  const { actualReclaims } = usePackageCareCharge(packageId);
   const { data: statusOptions } = useLookups('reclaimStatus');
 
-  const provisionalData = careChargeData.find((el) => el.subType === subType);
+  const reclaimData = actualReclaims.find((el) => el.subType === subType);
 
-  return statusOptions.find((el) => el.id === provisionalData?.status)?.name;
+  return statusOptions.find((el) => el.id === reclaimData?.status)?.name;
 };
 
 export const useClaimCollectorOptions = (formKey) => {

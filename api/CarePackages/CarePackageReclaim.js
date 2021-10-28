@@ -55,7 +55,7 @@ export const updateCareChargeReclaim = (carePackageId, careChargeUpdateRequest) 
     },
     data: [careChargeUpdateRequest],
   };
-  
+
   return axios(options).then(handleResponse).catch(handleError);
 };
 

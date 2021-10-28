@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import useSWR from 'swr';
 import { hasUrl } from '../../service';
 import fetcher from './fetcher';
+import { useLookups } from './lookups';
 import useGetData from './useGetData';
 import { useFetchWithParams } from './useFetchWithParams';
-
+ 
 const CARE_PACKAGES_URL = '/care-packages';
 
 const getCarePackageUrl = (id, string = '') => hasUrl(id, `${CARE_PACKAGES_URL}${id ? `/${id}` : ''}${string}`);
@@ -52,6 +54,19 @@ export const usePackageCalculatedCost = (packageId, serviceUserId) =>
     0
   );
 
+// helper for usePackageCareCharge
+const useGetActualReclaims = (reclaims = []) => {
+  const { data: reclaimStatuses } = useLookups('reclaimStatus');
+
+  const activeStatusId = reclaimStatuses.find((el) => el.name.toLowerCase() === 'active')?.id;
+  const pendingStatusId = reclaimStatuses.find((el) => el.name.toLowerCase() === 'pending')?.id;
+
+  return useMemo(
+    () => reclaims.filter((reclaim) => [activeStatusId, pendingStatusId].includes(reclaim.status)),
+    [reclaims, activeStatusId, pendingStatusId]
+  );
+};
+
 export const usePackageCareCharge = (packageId, subType) => {
   const response = useSWR(
     packageId ? [getCarePackageUrl(packageId, '/reclaims/care-charges'), subType] : null,
@@ -59,9 +74,12 @@ export const usePackageCareCharge = (packageId, subType) => {
   );
   const { error, data } = response;
 
+  const actualReclaims = useGetActualReclaims(data);
+
   return {
     ...response,
     data: data ?? [],
+    actualReclaims,
     isLoading: !error && !data && packageId,
   };
 };
