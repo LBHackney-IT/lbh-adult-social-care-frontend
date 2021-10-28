@@ -94,7 +94,7 @@ const CareChargesPage = () => {
       reasonsCollecting={collectingReasonOptions}
       calculatedCost={calculatedCost}
       isS117={packageInfo?.settings?.isS117Client}
-      careCharge={careCharge?.length && careCharge}
+      careCharge={careCharge?.length && careCharge[0]}
       createCareCharge={createCareCharge}
       updateCareCharge={updateCareCharge}
     />
