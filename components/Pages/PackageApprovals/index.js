@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useApproversOptions, useLookups } from 'api';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
 import {
@@ -47,9 +47,7 @@ export const PackageApprovals = ({
   const [openedSearch, setOpenedSearch] = useState(false);
   const [serviceUserFilter, setServiceUserFilter] = useState(initialServiceUserFilters);
 
-  const params = useMemo(() => ({ name: 'packageType' }), []);
-
-  const { options: packageOptions, isLoading: packageOptionsLoading } = useLookups({ params });
+  const { options: packageOptions, isLoading: packageOptionsLoading } = useLookups('packageType');
   const { options: approverOptions, isLoading: approverOptionsLoading } = useApproversOptions();
 
   const changeFilterField = useCallback(
@@ -73,17 +71,17 @@ export const PackageApprovals = ({
 
   const onServiceUserSearch = () => {
     setOpenedSearch('');
-    setFilters(prevState => ({
+    setFilters((prevState) => ({
       ...prevState,
       ...serviceUserFilter,
     }));
   };
 
   const changeServiceUserSearch = (field, value) => {
-    setServiceUserFilter(prevState => ({
+    setServiceUserFilter((prevState) => ({
       ...prevState,
       [field]: value,
-    }))
+    }));
   };
 
   const clearServiceUserSearch = () => {
@@ -101,7 +99,7 @@ export const PackageApprovals = ({
   return (
     <div className="broker-portal approvals">
       <Loading isLoading={isLoading} />
-      <Dialog className='approvals-modal' onClose={closeSearch} isOpen={openedSearch}>
+      <Dialog className="approvals-modal" onClose={closeSearch} isOpen={openedSearch}>
         <ServiceUserSearch
           onSearch={onServiceUserSearch}
           filters={serviceUserFilter}
@@ -109,7 +107,7 @@ export const PackageApprovals = ({
           clearFilters={clearServiceUserSearch}
         />
       </Dialog>
-      <BrokerageHeader/>
+      <BrokerageHeader />
       <Container background="#FAFAFA" padding="0 0 60px">
         <Container maxWidth="1080px" margin="0 auto">
           <Container padding="10px 60px 0px">
@@ -117,19 +115,14 @@ export const PackageApprovals = ({
           </Container>
           <Container className="brokerage-portal__header">
             <h1>{title}</h1>
-            {/* todo ask the manager about this feature*/}
-            {/* <Button onClick={openSearch}>Find a service user</Button>*/}
+            {/* todo ask the manager about this feature */}
+            {/* <Button onClick={openSearch}>Find a service user</Button> */}
           </Container>
 
           <Container className="brokerage-portal__filters">
             <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label">
-                <SearchBox
-                  label="Search Packages"
-                  value={searchText}
-                  onChangeValue={setSearchText}
-                  search={onSearch}
-                />
+                <SearchBox label="Search Packages" value={searchText} onChangeValue={setSearchText} search={onSearch} />
               </FormGroup>
 
               <FormGroup className="form-group--inline-label brokerage-portal__form-status" label="Status">
