@@ -15,9 +15,9 @@ export const changeCarePackageDetails = ({ data, packageId }) =>
 
 export const submitCarePackage = ({ data, packageId }) => sendCarePackageRequest(`${packageId}/submit`, data);
 
-export const approveCarePackage = ({ data, packageId }) => sendCarePackageRequest(`${packageId}/approve`, data);
+export const approveCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/approve`, { notes });
 
-export const declineCarePackage = ({ data, packageId }) => sendCarePackageRequest(`${packageId}/decline`, data);
+export const declineCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/decline`, { notes });
 
 export const endCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/end`, { notes });
 

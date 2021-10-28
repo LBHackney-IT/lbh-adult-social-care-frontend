@@ -4,13 +4,7 @@ import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
 import { getLoggedInUser } from 'service';
 import { ReviewPackageDetails } from 'components';
-import {
-  BROKER_PORTAL_ROUTE,
-  getBrokerPackageRoute,
-  getCareChargesRoute,
-  getCorePackageRoute,
-  getFundedNursingCareRoute
-} from 'routes/RouteConstants';
+import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -24,12 +18,6 @@ export const getServerSideProps = withSession(({ req }) => {
   }
   return { props: {} };
 });
-
-const breadcrumbs = [
-  { text: 'Home', href: '/' },
-  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
-  { text: 'Full overview' },
-];
 
 const settingsTypes = [
   { field: 'hasRespiteCare', text: 'Respite Care' },
@@ -49,7 +37,13 @@ const careChargesClaimCollector = {
   1: 'Supplier (net)',
 };
 
-const ReviewPackageDetailsPage = () => {
+const breadcrumbs = [
+  { text: 'Home', href: '/' },
+  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
+  { text: 'Full overview' },
+];
+
+const ApprovalPackageDetail = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
   const { data, isLoading: summaryLoading } = usePackageSummary(carePackageId);
@@ -106,7 +100,6 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: data?.packageType,
       id: 'care-package',
-      goToPackage: (packageId) => router.push(getCorePackageRoute(packageId)),
       costOfPlacement: data?.costOfPlacement,
       items: [
         {
@@ -126,7 +119,6 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'Weekly Additional Need',
       id: 'weekly-additional-need',
-      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
       items: data?.additionalWeeklyNeeds,
       totalCostHeader: 'Total (Net Off)',
       totalCost: data?.additionalWeeklyCost,
@@ -134,7 +126,6 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'One Off Additional Need',
       id: 'on-off-additional-need',
-      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
       items: data?.additionalOneOffNeeds,
       totalCostHeader: 'Total (Net Off)',
       totalCost: data?.additionalOneOffCost,
@@ -142,7 +133,6 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'Funded Nursing Care',
       id: 'funded-nursing-care',
-      goToPackage: (packageId) => router.push(getFundedNursingCareRoute(packageId)),
       items: data?.fundedNursingCare ? [data?.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
       fncDetails: {
@@ -157,7 +147,6 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'Care Charges',
       id: 'care-charges',
-      goToPackage: (packageId) => router.push(getCareChargesRoute(packageId)),
       items: data?.careCharges,
       careChargeClaimCollector: careChargesClaimCollector[data?.fundedNursingCare?.claimCollector],
       totalCostInfo: {
@@ -169,23 +158,26 @@ const ReviewPackageDetailsPage = () => {
 
   return (
     <ReviewPackageDetails
+      className='approval-package-detail'
       loading={summaryLoading}
-      subTitle="Review package details"
-      breadcrumbs={breadcrumbs}
+      subTitle="Approval package detail"
       title={data?.packageType}
-      openedPopup={openedPopup}
-      setOpenedPopup={setOpenedPopup}
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
+      breadcrumbs={breadcrumbs}
+      setOpenedPopup={setOpenedPopup}
+      openedPopup={openedPopup}
+      showEditActions
       buttons={[
-        { title: 'Back', className: 'secondary-gray', onClick: router.back, },
-        { title: 'Submit for approval', onClick: () => setOpenedPopup('submit') },
+        { title: 'Decline', onClick: () => setOpenedPopup('decline'), className: 'outline red' },
+        { title: 'Approve', onClick: () => setOpenedPopup('approve') },
       ]}
+      submitButtonText='Approve'
       goBack={router.back}
       summary={summary}
     />
   );
 };
 
-export default ReviewPackageDetailsPage;
+export default ApprovalPackageDetail;
