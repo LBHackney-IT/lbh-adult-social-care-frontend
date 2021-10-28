@@ -17,10 +17,11 @@ import { useRouter } from 'next/router';
 import { confirmS117 } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
+import { isAfter } from 'date-fns';
 import { CaretDownIcon } from '../../../Icons';
 import { CarePackageStatus } from './CarePackageStatus';
 
-const CareDetails = ({ packageId, title, data, isS117Client, netTotal }) => {
+const CareDetails = ({ packageId, title, data, isS117Client, netTotal, packageStatus }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const filteredData = data.filter((d) => d.status === 'Active' || d.status === 'In Progress');
@@ -78,14 +79,32 @@ const CareDetails = ({ packageId, title, data, isS117Client, netTotal }) => {
     }
   };
 
-  const packageStatus =
-    data.filter((d) => d.status === 'Active' || d.status === 'In Progress').length > 0 ? 'Active' : 'End';
+  const getApprovedStatus = (endDate) => {
+    if (endDate !== null && isAfter(new Date(), endDate)) {
+      return 'Future';
+    }
+    return 'Active';
+  };
+
+  const getStatus = (status, packageData) => {
+    switch (status) {
+      case 'Approved':
+        return packageData.filter((d) => d.status === 'Approved').map((d) => getApprovedStatus(d.endDate));
+      case 'Ended':
+        return 'End';
+      case 'Cancelled':
+        return 'Cancelled';
+      default:
+        return 'Approved';
+    }
+  };
+
   return (
     <>
       <Container alignItems="baseline" borderBottom="1px solid #BFC1C3">
         <Container display="flex" alignItems="baseline">
           <Container display="flex" alignItems="center">
-            <CarePackageStatus status={packageStatus} />
+            <CarePackageStatus status={getStatus(packageStatus, data)} />
             <VerticalSeparator width="10px" />
             <Heading size="xl">{title}</Heading>
           </Container>
