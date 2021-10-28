@@ -67,6 +67,7 @@ const BrokerAssistanceSearch = () => {
       clearFilters={clearFilters}
       changeFilters={changeFilters}
       setPageNumber={setPageNumber}
+      className='master-search'
       pageNumber={pageNumber}
       totalCount={searchResults?.length}
       totalPages={searchResults?.length && Math.ceil(searchResults.length / 10)}

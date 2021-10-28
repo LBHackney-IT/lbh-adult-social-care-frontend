@@ -1,3 +1,17 @@
 .service-user-search__inputs {
   padding: 60px 0 0;
 }
+
+.master-search {
+  .search-service-user__card {
+    .horizontal-separator {
+      display: none;
+    }
+
+    .brokerage__container {
+      border-bottom: 0;
+      padding-bottom: 8px;
+      margin-bottom: 0;
+    }
+  }
+}
