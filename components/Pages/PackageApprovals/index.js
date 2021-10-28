@@ -1,24 +1,37 @@
 import React, { useCallback, useState } from 'react';
-import { useBrokers } from 'api';
+import { usePackageGetAll, useApproversOptions } from 'api';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
-import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select, FormGroup } from '../../HackneyDS';
+import {
+  Breadcrumbs,
+  Button,
+  Container,
+  HorizontalSeparator,
+  SearchBox,
+  Select,
+  FormGroup,
+  Dialog,
+} from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
-import { BrokerPortalTable } from './BrokerPortalTable';
 import DatePick from '../../DatePick';
 import Loading from '../../Loading';
+import { PackageApprovalsTable } from './PackageApprovalsTable';
+import ServiceUserSearch from '../ServiceUser/Search';
 
 const statusOptions = [
-  { text: 'All', value: '' },
-  { text: 'New', value: '1' },
-  { text: 'In Progress', value: '2' },
   { text: 'Waiting For Approval', value: '3' },
   { text: 'Approved', value: '4' },
   { text: 'Not Approved', value: '5' },
-  { text: 'Ended', value: '6' },
-  { text: 'Cancelled', value: '7' },
 ];
 
-export const BrokerPortalPage = ({
+const initialServiceUserFilters = {
+  firstName: '',
+  lastName: '',
+  hackneyId: '',
+  dateOfBirth: null,
+  postcode: '',
+};
+
+export const PackageApprovals = ({
   items,
   title,
   pageNumber,
@@ -28,13 +41,14 @@ export const BrokerPortalPage = ({
   setFilters,
   clearFilter,
   onRowClick = () => {},
-  loading,
-  goToSearch,
   breadcrumbs,
 }) => {
   const [searchText, setSearchText] = useState('');
+  const [openedSearch, setOpenedSearch] = useState(false);
+  const [serviceUserFilter, setServiceUserFilter] = useState(initialServiceUserFilters)
 
-  const { options: brokerOptions } = useBrokers();
+  const { options: packageOptions, isLoading: packageOptionsLoading } = usePackageGetAll();
+  const { options: approverOptions, isLoading: approverOptionsLoading } = useApproversOptions();
 
   const changeFilterField = useCallback(
     (field, value) => {
@@ -49,7 +63,30 @@ export const BrokerPortalPage = ({
   const onClearFilters = () => {
     setSearchText('');
     clearFilter();
-  }
+  };
+
+  const closeSearch = () => setOpenedSearch(false);
+
+  const openSearch = () => setOpenedSearch(true);
+
+  const onServiceUserSearch = () => {
+    setOpenedSearch('');
+    setFilters(prevState => ({
+      ...prevState,
+      ...serviceUserFilter,
+    }));
+  };
+
+  const changeServiceUserSearch = (field, value) => {
+    setServiceUserFilter(prevState => ({
+      ...prevState,
+      [field]: value,
+    }))
+  };
+
+  const clearServiceUserSearch = () => {
+    setServiceUserFilter({ ...initialServiceUserFilters });
+  };
 
   const onSearch = useCallback(() => {
     changeFilterField('serviceUserName', searchText);
@@ -57,10 +94,20 @@ export const BrokerPortalPage = ({
 
   const shouldShowClear = Object.values(filters).some((item) => item);
 
+  const isLoading = approverOptionsLoading || packageOptionsLoading;
+
   return (
-    <div className="broker-portal">
-      <Loading isLoading={loading} />
-      <BrokerageHeader />
+    <div className="broker-portal approvals">
+      <Loading isLoading={isLoading} />
+      <Dialog className='approvals-modal' onClose={closeSearch} isOpen={openedSearch}>
+        <ServiceUserSearch
+          onSearch={onServiceUserSearch}
+          filters={serviceUserFilter}
+          changeFilters={changeServiceUserSearch}
+          clearFilters={clearServiceUserSearch}
+        />
+      </Dialog>
+      <BrokerageHeader/>
       <Container background="#FAFAFA" padding="0 0 60px">
         <Container maxWidth="1080px" margin="0 auto">
           <Container padding="10px 60px 0px">
@@ -68,37 +115,40 @@ export const BrokerPortalPage = ({
           </Container>
           <Container className="brokerage-portal__header">
             <h1>{title}</h1>
-            <Button onClick={goToSearch}>Find a service user</Button>
+            {/* todo ask the manager about this feature*/}
+            {/* <Button onClick={openSearch}>Find a service user</Button>*/}
           </Container>
 
           <Container className="brokerage-portal__filters">
             <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label">
-                <SearchBox label="Search Packages" value={searchText} onChangeValue={setSearchText} search={onSearch} />
+                <SearchBox
+                  label="Search Packages"
+                  value={searchText}
+                  onChangeValue={setSearchText}
+                  search={onSearch}
+                />
               </FormGroup>
 
               <FormGroup className="form-group--inline-label brokerage-portal__form-status" label="Status">
                 <Select
-                  emptyElement={null}
                   options={statusOptions}
                   value={filters.status}
                   onChange={({ target: { value } }) => changeFilterField('status', value)}
                 />
               </FormGroup>
 
-              {filters.brokerId !== undefined && (
-                <FormGroup className="form-group--inline-label" label="Broker">
-                  <Select
-                    value={filters.brokerId}
-                    options={brokerOptions}
-                    onChangeValue={(value) => changeFilterField('brokerId', value)}
-                  />
-                </FormGroup>
-              )}
+              <FormGroup className="form-group--inline-label" label="Approver">
+                <Select
+                  value={filters.approverId}
+                  options={approverOptions}
+                  onChangeValue={(value) => changeFilterField('approverId', value)}
+                />
+              </FormGroup>
             </div>
 
             <div className="brokerage-portal__filters-block">
-              <FormGroup className="form-group--inline-label" label="From">
+              <FormGroup className="form-group--inline-label date-from" label="From">
                 <DatePick
                   placeholder="Select date"
                   startDate={filters.dateFrom}
@@ -127,6 +177,14 @@ export const BrokerPortalPage = ({
                 />
               </FormGroup>
 
+              <FormGroup className="form-group--inline-label" label="Package">
+                <Select
+                  value={filters.packageType}
+                  options={packageOptions}
+                  onChangeValue={(value) => changeFilterField('packageType', value)}
+                />
+              </FormGroup>
+
               {shouldShowClear && (
                 <Button className="outline gray clear-filter-button" onClick={onClearFilters}>
                   Clear
@@ -138,7 +196,7 @@ export const BrokerPortalPage = ({
       </Container>
 
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
-        {items && <BrokerPortalTable onRowClick={onRowClick} data={items} />}
+        {items && <PackageApprovalsTable onRowClick={onRowClick} data={items} />}
         <HorizontalSeparator height="20px" />
 
         <AlternativePagination
@@ -153,4 +211,4 @@ export const BrokerPortalPage = ({
   );
 };
 
-export default BrokerPortalPage;
+export default PackageApprovals;
