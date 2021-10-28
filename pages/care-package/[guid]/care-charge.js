@@ -75,6 +75,7 @@ const CareCharge = () => {
 
   const { data: careChargeData } = usePackageCareCharge(packageId);
   const { data: claimCollectors } = useLookups('claimCollector');
+  const { data: packageInfo } = useSingleCorePackageInfo(packageId);
 
   const { handleSubmit, control, formState, setValue, getValues, reset } = useForm({
     defaultValues: {
@@ -131,8 +132,8 @@ const CareCharge = () => {
   }, [careChargeData]);
 
   const goToPackages = useCallback(() => {
-    router.push(getServiceUserPackagesRoute('test'));
-  }, [router]);
+    router.push(getServiceUserPackagesRoute(packageInfo?.serviceUser?.id));
+  }, [router, packageInfo]);
 
   const getReclaimId = (subType) => careChargeData.find((el) => el.subType === subType)?.id;
 
