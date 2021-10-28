@@ -8,7 +8,7 @@ export default function Select({
   className = '',
   disabledOptions = [],
   disabledEmptyComponent = false,
-  readonly = false,
+  isDisabled = false,
   options = [],
   emptyElement = { text: 'Select one', value: '' },
   id = 'select-id',
@@ -18,15 +18,16 @@ export default function Select({
   const outerClass = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-select--error' : '';
   const errorDescribedBy = error ? { 'aria-describedby': ' govuk-select--error' } : {};
-  const [isDisabled, setDisabled] = useState(disabledEmptyComponent && emptyElement?.text);
+  const [isEmptyElementDisabled, setEmptyElementDisabled] = useState(disabledEmptyComponent && emptyElement?.text);
   return (
     <div className="select-container">
       <select
-        disabled={readonly}
+        disabled={isDisabled}
         id={id}
         {...errorDescribedBy}
         onChange={(e) => {
-          if (emptyElement && e.target.value !== emptyElement.value && disabledEmptyComponent) setDisabled(true);
+          if (emptyElement && e.target.value !== emptyElement.value && disabledEmptyComponent)
+            setEmptyElementDisabled(true);
           if (onChangeValue) {
             return onChangeValue(e.target.value);
           }
@@ -36,7 +37,7 @@ export default function Select({
         className={`govuk-select lbh-select${outerClass}${errorClass}`}
       >
         {emptyElement && (
-          <option disabled={isDisabled} value={emptyElement.value}>
+          <option disabled={isEmptyElementDisabled} value={emptyElement.value}>
             {emptyElement.text}
           </option>
         )}
