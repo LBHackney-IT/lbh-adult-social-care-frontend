@@ -31,7 +31,12 @@ const useDatesValidation = (isMore12, control, setValue, formKey) => {
     }
   }, [isMore12, startDate]);
 
-  return { startDate, maxEndDate, endDate12weeks, isOngoing };
+  return {
+    startDate,
+    maxEndDate,
+    minFromDate: formKey === less12 ? null : endDate12weeks,
+    isOngoing,
+  };
 };
 
 const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEnd }) => {
@@ -44,7 +49,7 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
 
   const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
 
-  const { startDate, maxEndDate, endDate12weeks, isOngoing } = useDatesValidation(isMore12, control, setValue, formKey);
+  const { startDate, maxEndDate, minFromDate, isOngoing } = useDatesValidation(isMore12, control, setValue, formKey);
 
   return (
     <div className="residential-contribution">
@@ -92,9 +97,9 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
             render={({ field }) => (
               <DatePicker
                 day={{ label: 'From' }}
-                date={field.value}
+                date={new Date(field.value)}
                 setDate={field.onChange}
-                minDate={endDate12weeks}
+                minDate={minFromDate}
                 disabled={isDisabled}
               />
             )}
