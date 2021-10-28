@@ -57,13 +57,13 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
       <p>{description}</p>
 
       <Controller
-        name={`${formKey}.value`}
+        name={`${formKey}.cost`}
         control={control}
         defaultValue=""
         render={({ field }) => (
           <Input
             label="Value"
-            id={`${weeks}-value`}
+            id={`${weeks}-cost`}
             preSign={currency.euro}
             handler={field.onChange}
             disabled={isDisabled}

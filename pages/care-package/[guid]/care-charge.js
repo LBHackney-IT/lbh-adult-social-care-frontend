@@ -79,19 +79,19 @@ const CareCharge = () => {
   const { handleSubmit, control, formState, setValue, getValues, reset } = useForm({
     defaultValues: {
       [provisional]: {
-        costPerWeek: '',
+        cost: '',
         collectedBy: '',
         reasonCollecting: '',
         description: '',
       },
       [less12]: {
-        value: '',
+        cost: '',
         collectedBy: '',
         startDate: null,
         endDate: null,
       },
       [more12]: {
-        value: '',
+        cost: '',
         collectedBy: '',
         startDate: null,
         endDate: null,
@@ -108,19 +108,19 @@ const CareCharge = () => {
 
       reset({
         [provisional]: {
-          costPerWeek: provisionalData.cost ?? '',
+          cost: provisionalData.cost ?? '',
           collectedBy: provisionalData.claimCollector,
           reasonCollecting: provisionalData.claimReason,
           description: provisionalData.description ?? '',
         },
         [less12]: {
-          value: less12Data.cost ?? '',
+          cost: less12Data.cost ?? '',
           collectedBy: less12Data.claimCollector ? `${less12}-${less12Data.claimCollector}` : null,
           startDate: less12Data.startDate,
           endDate: less12Data.endDate,
         },
         [more12]: {
-          value: more12Data.cost ?? '',
+          cost: more12Data.cost ?? '',
           collectedBy: more12Data.claimCollector ? `${more12}-${more12Data.claimCollector}` : null,
           startDate: more12Data.startDate,
           endDate: more12Data.endDate,
@@ -137,12 +137,12 @@ const CareCharge = () => {
   const getReclaimId = (subType) => careChargeData.find((el) => el.subType === subType)?.id;
 
   const createProvisionalData = () => {
-    const { collectedBy, costPerWeek, description, reasonCollecting } = getValues(provisional);
+    const { collectedBy, cost, description, reasonCollecting } = getValues(provisional);
     const collectedByLabel = claimCollectors.find((el) => el.id === collectedBy)?.name;
 
     return [
       { label: 'Provisional care charge (pre-assessement)', value: '' },
-      { label: 'Cost per week', value: costPerWeek ? `${currency.euro}${costPerWeek}` : '' },
+      { label: 'Cost per week', value: cost ? `${currency.euro}${cost}` : '' },
       {
         label: 'Collected by',
         value: <span className="text-capitalize">{collectedByLabel}</span>,
@@ -163,14 +163,14 @@ const CareCharge = () => {
         label: 'Residential SU contribution',
         value: formKey === less12 ? 'Without Property 1-12 weeks' : 'Without Property 13+ weeks',
       },
-      { label: 'Value', value: data.value ? `${currency.euro}${data.value}` : '' },
+      { label: 'Value', value: data.cost ? `${currency.euro}${data.cost}` : '' },
       { label: 'Start date', value: formatDate(data.startDate) },
       { label: 'End date', value: data.isOngoing ? 'Ongoing' : formatDate(data.endDate) },
       { label: 'Type', value: <span className="text-capitalize">{collectedByLabel}</span> },
     ];
   };
 
-  const onEdit = () => {
+  const onEdit = (form) => {
     const editedForms = Object.keys(formState.dirtyFields);
 
     const data = [];
@@ -178,14 +178,22 @@ const CareCharge = () => {
     if (editedForms.includes(provisional))
       data.push({
         id: careChargeFormKeys.provisional,
-        data: createProvisionalData(),
+        displayData: createProvisionalData(),
+        submitData: {
+          ...form[careChargeFormKeys.provisional],
+          subType: careChargeAPIKeys.provisional,
+        },
         reclaimId: getReclaimId(careChargeAPIKeys.provisional),
       });
 
     if (editedForms.includes(less12)) {
       data.push({
         id: careChargeFormKeys.less12,
-        data: createResidentialData(less12),
+        displayData: createResidentialData(less12),
+        submitData: {
+          ...form[careChargeFormKeys.less12],
+          subType: careChargeAPIKeys.less12,
+        },
         reclaimId: getReclaimId(careChargeAPIKeys.less12),
       });
     }
@@ -193,7 +201,11 @@ const CareCharge = () => {
     if (editedForms.includes(more12)) {
       data.push({
         id: careChargeFormKeys.more12,
-        data: createResidentialData(more12),
+        displayData: createResidentialData(more12),
+        submitData: {
+          ...form[careChargeFormKeys.more12],
+          subType: careChargeAPIKeys.more12,
+        },
         reclaimId: getReclaimId(careChargeAPIKeys.more12),
       });
     }
@@ -246,10 +258,13 @@ const CareCharge = () => {
     toggleEnd();
   };
 
-  const onSubmit = useCallback(() => {
-    if (formState.isDirty) onEdit();
-    else goToPackages();
-  }, [formState.isDirty, onEdit, goToPackages]);
+  const onSubmit = useCallback(
+    (form) => {
+      if (formState.isDirty) onEdit(form);
+      else goToPackages();
+    },
+    [formState.isDirty, onEdit, goToPackages]
+  );
 
   return (
     <div className="care-charge">

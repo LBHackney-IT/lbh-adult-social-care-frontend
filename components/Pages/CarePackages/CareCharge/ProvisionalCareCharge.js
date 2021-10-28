@@ -20,18 +20,18 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
   const isCollectedByHackney = claimCollectors.find((el) => el.id === collectedBy)?.name === 'Hackney';
 
   return (
-    <div className='provisional-care'>
+    <div className="provisional-care">
       <h3>Provisional care charge (pre-assessment)</h3>
 
       <Controller
-        name={`${provisional}.costPerWeek`}
+        name={`${provisional}.cost`}
         control={control}
-        defaultValue=''
+        defaultValue=""
         render={({ field }) => (
           <Input
-            id='cost-per-week'
-            label='Cost per week'
-            hint='Auto calculated on age'
+            id="cost-per-week"
+            label="Cost per week"
+            hint="Auto calculated on age"
             preSign={currency.euro}
             handler={field.onChange}
             value={field.value}
@@ -46,10 +46,10 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
         render={({ field }) => (
           <RadioGroup
             inline
-            name='collected-by'
-            label='Collected by'
+            name="collected-by"
+            label="Collected by"
             items={claimCollectorOptions}
-            className='care-charge__radios'
+            className="care-charge__radios"
             handle={field.onChange}
             disabled={isDisabled}
             value={field.value}
@@ -59,7 +59,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
 
       {isCollectedByHackney && (
         <>
-          <Label className='reason-collecting' htmlFor='reason-collecting'>
+          <Label className="reason-collecting" htmlFor="reason-collecting">
             Why is Hackney collecting these care charges?
           </Label>
 
@@ -71,7 +71,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
                 options={collectingReasonOptions}
                 value={field.value}
                 disabled={isDisabled}
-                id='reason-collecting'
+                id="reason-collecting"
                 onChange={field.onChange}
               />
             )}
@@ -82,7 +82,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd }) => {
             control={control}
             render={({ field }) => (
               <Textarea
-                className='provisional-care__textarea'
+                className="provisional-care__textarea"
                 handler={field.onChange}
                 disabled={isDisabled}
                 value={field.value}

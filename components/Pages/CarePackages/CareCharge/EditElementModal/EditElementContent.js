@@ -36,7 +36,7 @@ const EditElementContent = ({ data, headerText, onClose }) => {
       if (subType === careChargeAPIKeys.provisional) {
         return {
           id: reclaim.id,
-          data: [
+          displayData: [
             { label: 'Provisional care charge (pre-assessement)', value: '' },
             { label: 'Cost per week', value: cost ? `${currency.euro}${cost}` : '' },
             {
@@ -51,7 +51,7 @@ const EditElementContent = ({ data, headerText, onClose }) => {
 
       return {
         id: reclaim.id,
-        data: [
+        displayData: [
           {
             label: 'Residential SU contribution',
             value: subType === careChargeAPIKeys.less12 ? 'Without Property 1-12 weeks' : 'Without Property 13+ weeks',
@@ -69,7 +69,14 @@ const EditElementContent = ({ data, headerText, onClose }) => {
     router.push(getServiceUserPackagesRoute(packageInfo?.serviceUser?.id));
   }, [router, packageInfo]);
 
-  const onConfirm = () => goToPackages();
+  const onConfirm = () => {
+    const editData = data.filter((el) => el.reclaimId).map((el) => ({ ...el.submitData, id: el.reclaimId }));
+    const createData = data.filter((el) => !el.reclaimId).map((el) => el.submitData);
+    console.log('%c editData =', 'color: lightblue', editData);
+    console.log('%c createData =', 'color: lightblue', createData);
+
+    // goToPackages();
+  };
 
   return (
     <>
@@ -79,14 +86,14 @@ const EditElementContent = ({ data, headerText, onClose }) => {
         <>
           <CareChargesInfoTitle title="PREVIOUS ELEMENT" />
           {previousData.map((el) => (
-            <CareChargesInfoStatic key={el.id} data={el.data} />
+            <CareChargesInfoStatic key={el.id} data={el.displayData} />
           ))}
         </>
       )}
 
       <CareChargesInfoTitle title="NEW ELEMENT" />
       {data.map((el) => (
-        <CareChargesInfoStatic key={el.id} data={el.data} />
+        <CareChargesInfoStatic key={el.id} data={el.displayData} />
       ))}
 
       <CareChargesModalActions
