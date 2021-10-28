@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { currency } from 'constants/strings';
 import {
-  BROKER_PORTAL_ROUTE,
   getCorePackageRoute,
   getHistoryRoute
 } from 'routes/RouteConstants';
@@ -10,7 +9,7 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { cancelCarePackage, endCarePackage } from 'api';
 import { useDispatch } from 'react-redux';
 import BrokerageHeader from '../BrokerageHeader';
-import { Button, Container, Link, Breadcrumbs } from '../../../HackneyDS';
+import { Button, Container, Link } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import PackageInfo from './PackageInfo';
@@ -20,6 +19,7 @@ import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitFor
 import Loading from '../../../Loading';
 import ReviewPackageDetailsButtons from './ReviewPackageDetailsButtons';
 import ActionCarePackageModal from '../../BrokerPortal/ActionCarePackageModal';
+import CarePackageBreadcrumbs from '../CarePackageBreadcrumbs';
 
 const links = [
   { text: 'Care Package', href: '#care-package' },
@@ -28,12 +28,6 @@ const links = [
   { text: 'Funded Nursing Care', href: '#funded-nursing-care' },
   { text: 'Care charges', href: '#care-charges' },
   { text: 'Summary', href: '#summary' },
-];
-
-const breadcrumbs = [
-  { text: 'Home', href: '/' },
-  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
-  { text: 'Full overview' },
 ];
 
 const ReviewPackageDetails = ({
@@ -131,9 +125,7 @@ const ReviewPackageDetails = ({
         actions={cancelCarePackageActions}
       />
       <BrokerageHeader/>
-      <Container maxWidth="1080px" margin="10px auto 0" padding="0 60px">
-        <Breadcrumbs values={breadcrumbs} />
-      </Container>
+      <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <Container className="brokerage__container-header brokerage__container">
           <TitleSubtitleHeader

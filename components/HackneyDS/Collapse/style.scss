@@ -1,0 +1,15 @@
+.collapse__button-container {
+  &:hover {
+    cursor: pointer;
+  }
+
+  .collapse__button {
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
+
+    svg {
+      margin-left: 5px;
+    }
+  }
+}

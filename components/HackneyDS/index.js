@@ -5,7 +5,6 @@ import Announcement from './Announcement';
 import BackLink from './BackLink';
 import BackToTop from './BackToTop';
 import Breadcrumbs from './Breadcrumbs';
-import Collapsible from './Collapsible';
 import Textarea from './Textarea';
 import Checkbox from './Checkbox';
 import FormGroup from './FormGroup';
@@ -41,8 +40,10 @@ import { SummaryList } from './SummaryList';
 import { FileUpload } from './FileUpload/FileUpload';
 import { UploadGreenButton } from './UploadGreenButton';
 import { SingleAccordion } from './SingleAccordion';
+import { Collapse } from './Collapse/Collapse';
 
 export {
+  Collapse,
   Tip,
   RadioGroup,
   RadioItem,
@@ -62,7 +63,6 @@ export {
   BackLink,
   BackToTop,
   Breadcrumbs,
-  Collapsible,
   Textarea,
   Checkbox,
   CookieBanner,

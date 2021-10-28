@@ -1,6 +1,14 @@
-.supplier-look-up {
+.broker-package {
   .supplier-search-container {
     margin-bottom: 23px;
+  }
+
+  .collapse__button-container {
+    h2 {
+      font-size: 30px;
+      font-weight: 700;
+    }
+    margin-bottom: 24px;
   }
 
   .is-new-supplier {
@@ -82,25 +90,20 @@
   }
 }
 
-.supplier-look-up__weekly-cost {
-  border-bottom: 1px solid $lbh-light-gray-border;
-  padding-bottom: 60px;
-
-  &.govuk-form-group {
-    margin-bottom: 60px;
-  }
+.broker-package__weekly-cost {
+  margin: 32px 0 60px;
 }
 
 .supplier-search-for {
   text-decoration: underline;
 }
 
-.supplier-look-up__selected-title {
+.broker-package__selected-title {
   font-size: 19px;
   margin-bottom: 16px;
 }
 
-.supplier-look-up__selected {
+.broker-package__selected {
   .brokerage__supplier-card {
     margin-bottom: 32px;
   }
