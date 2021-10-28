@@ -1,14 +1,17 @@
 import React from 'react';
 
-export default function Announcement({ title, children, className, isWarning }) {
+const mainClass = 'lbh-announcement';
+
+export default function Announcement({ title, children, className, isWarning, isError }) {
+
+  const isWarningClass = isWarning ? ` ${mainClass}--warning` : '';
+  const isErrorClass = isError ? ` ${mainClass}--error` : '';
   return (
     <section
-      className={`lbh-announcement lbh-announcement--site${className && ` ${className}`}${
-        isWarning && ' lbh-announcement--warning'
-      }`}
+      className={`${mainClass} ${mainClass}--site${className && ` ${className}`}${isWarningClass}${isErrorClass}`}
     >
-      <h3 className="lbh-announcement__title">{title}</h3>
-      <div className="lbh-announcement__content">{children}</div>
+      <h3 className={`${mainClass}__title`}>{title}</h3>
+      <div className={`${mainClass}__content`}>{children}</div>
     </section>
   );
 }

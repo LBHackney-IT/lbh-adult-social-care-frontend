@@ -95,7 +95,7 @@ const CareDetails = ({ packageId, title, data, isS117Client, netTotal }) => {
           <>
             <HorizontalSeparator height="10px" />
             {s117Client && (
-              <Announcement isWarning>
+              <Announcement isError>
                 <WarningText>This client has been categorised as S117.</WarningText>
                 <Container display="flex">
                   No care charges need to be applied

@@ -38,8 +38,8 @@ const Packages = () => {
   return (
     <>
       <BrokerageHeader />
+      <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
-        <CarePackageBreadcrumbs />
         <TitleSubtitleHeader subTitle="All package details" title="Full overview" />
         <Loading isLoading={data === undefined} />
         {serviceUser && (

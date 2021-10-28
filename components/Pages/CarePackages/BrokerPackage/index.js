@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useDebounce } from 'react-use';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
-import { updateCarePackageCosts, useSuppliers, useSinglePackageInfo } from 'api';
+import { updateCarePackageCosts, useSuppliers, useSingleCorePackageInfo } from 'api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods } from 'constants/variables';
@@ -68,7 +68,7 @@ const BrokerPackage = ({
     shouldFetch: searchQuery || showSearchResults,
   });
 
-  const { data: packageInfo } = useSinglePackageInfo(packageId);
+  const { data: packageInfo } = useSingleCorePackageInfo(packageId);
   const { packageType } = packageInfo;
 
   const clickBack = () => {

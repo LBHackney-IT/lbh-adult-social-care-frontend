@@ -24,6 +24,14 @@ export const useApprovals = ({ params, approverId, shouldFetch }) => {
   });
 };
 
+export const usePackageCareCharge = ({ params, packageId }) => (
+  useFetchWithParams({
+    params,
+    url: getCarePackageUrl(packageId, '/reclaims/care-charges'),
+    errorText: 'Can not get reclaims care charges'
+  })
+);
+
 export const usePackageDetails = (packageId) =>
   useGetData(getCarePackageUrl(packageId, '/details'), '');
 
@@ -34,8 +42,6 @@ export const usePackageStatuses = () =>
   useGetData(`${CARE_PACKAGES_URL}/package-status-options`, 'Can not get status options', []);
 
 export const usePackageSummary = (packageId) => useGetData(getCarePackageUrl(packageId, '/summary'));
-
-export const useSinglePackageInfo = (packageId) => useGetData(getCarePackageUrl(packageId));
 
 export const useSingleCorePackageInfo = (packageId) =>
   useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/core` : null, '');
@@ -55,5 +61,5 @@ export const usePackageCalculatedCost = (packageId, serviceUserId) =>
     0,
   );
 
-export const usePackageCareCharge = (packageId) =>
+export const usePackageCareChargeList = (packageId) =>
   useGetData(getCarePackageUrl(packageId, '/reclaims/care-charges'));
