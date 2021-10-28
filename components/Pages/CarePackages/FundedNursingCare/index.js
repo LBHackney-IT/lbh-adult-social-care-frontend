@@ -22,6 +22,7 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
+import CarePackageBreadcrumbs from '../CarePackageBreadcrumbs';
 
 const FundedNursingCare = ({
   carePackageId,
@@ -194,6 +195,7 @@ const FundedNursingCare = ({
     <Container className="brokerage__funded-nursing-care">
       <Loading isLoading={loading} />
       <BrokerageHeader />
+      <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <TitleSubtitleHeader title="Build a care package" subTitle="Funded Nursing Care" />
         <Container>

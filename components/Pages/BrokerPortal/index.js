@@ -128,7 +128,7 @@ export const BrokerPortalPage = ({
               </FormGroup>
 
               {shouldShowClear && (
-                <Button className="outline gray clear-filter-button" onClick={onClearFilters}>
+                <Button outline secondary color='gray' className=" clear-filter-button" onClick={onClearFilters}>
                   Clear
                 </Button>
               )}

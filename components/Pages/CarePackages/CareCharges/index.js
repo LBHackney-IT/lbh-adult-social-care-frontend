@@ -7,6 +7,7 @@ import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import Loading from '../../../Loading';
+import CarePackageBreadcrumbs from '../CarePackageBreadcrumbs';
 
 const CareCharges = ({
   reasonsCollecting,
@@ -119,7 +120,7 @@ const CareCharges = ({
     }
   }, [calculatedCost]);
 
-  const composecarePackageReclaimCareChargeData = () => {
+  useEffect(() => {
     if (carePackageReclaimCareCharge) {
       setNotes(carePackageReclaimCareCharge.description);
       if (carePackageReclaimCareCharge.claimCollector === 2) {
@@ -129,15 +130,12 @@ const CareCharges = ({
       }
       setReasonCollecting(carePackageReclaimCareCharge.claimReason);
     }
-  };
-
-  useEffect(() => {
-    composecarePackageReclaimCareChargeData();
   }, [carePackageReclaimCareCharge]);
 
   return (
     <Container className="brokerage__care-charges">
       <BrokerageHeader />
+      <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <Loading isLoading={loading} />
         <TitleSubtitleHeader title="Build a care package" subTitle="Care Charges" />

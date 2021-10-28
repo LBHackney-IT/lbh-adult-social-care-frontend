@@ -9,7 +9,7 @@ import {
   getCareChargesRoute,
   getCorePackageRoute,
   getFundedNursingCareRoute
-} from '../../../routes/RouteConstants';
+} from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
