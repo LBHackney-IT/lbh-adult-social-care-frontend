@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import Hint from '../lettering/Hint';
 import Label from '../lettering/Label';
 import ErrorMessage from '../lettering/ErrorMessage';
-import { CrossIcon, SearchIcon } from '../icons';
+import { CrossIcon, SearchIcon } from '../../Icons';
 import { isFunction } from '../../../api';
 
 export default function SearchBox({

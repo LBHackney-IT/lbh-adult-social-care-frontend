@@ -1,5 +1,15 @@
-import React, { useState } from 'react';
-import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator, Hint } from 'components';
+import React from 'react';
+import {
+  Button,
+  Container,
+  Heading,
+  HorizontalSeparator,
+  Link,
+  Tag,
+  VerticalSeparator,
+  Hint,
+  Collapse
+} from 'components';
 import {
   formatDate,
   getButtonTextFromPackageStatus,
@@ -12,7 +22,6 @@ import { getCorePackageRoute } from 'routes/RouteConstants';
 
 const PackageRequest = ({ packageRequest }) => {
   const router = useRouter();
-  const [isExpanded, setExpanded] = useState(false);
   const buttonClass = getButtonColourFromPackageStatus(packageRequest.packageStatus);
   const handleClick = () => router.push(getCorePackageRoute(packageRequest.packageId));
   return (
@@ -45,33 +54,23 @@ const PackageRequest = ({ packageRequest }) => {
         </Button>
       </Container>
       <HorizontalSeparator height="10px" />
-
-      <Container>
-        <Container display="flex" alignItems="center" cursor="pointer">
-          <p onClick={() => setExpanded(!isExpanded)} className="link-button">
-            {isExpanded ? 'Hide' : 'Collapse'}
-          </p>
-          <VerticalSeparator width="5px" />
-          <CaretDownIcon />
-        </Container>
-        {packageRequest.notes.map((note) => (
-          <>
-            {isExpanded && (
-              <>
-                <HorizontalSeparator height="10px" />
-                <Container display="flex" alignItems="center">
-                  <Heading size="m">{note.description}</Heading>
-                  <VerticalSeparator width="20px" />
-                  <Hint>{formatDate(note.dateCreated)}</Hint>
-                </Container>
-                <p>
-                  Created by <strong>{note.creatorName}</strong>
-                </p>
-              </>
-            )}
-          </>
-        ))}
-      </Container>
+      <Collapse IconComponent={CaretDownIcon} collapseText='Hide'>
+        {
+          packageRequest.notes.map((note) => (
+            <>
+              <HorizontalSeparator height="10px" />
+              <Container display="flex" alignItems="center">
+                <Heading size="m">{note.description}</Heading>
+                <VerticalSeparator width="20px" />
+                <Hint>{formatDate(note.dateCreated)}</Hint>
+              </Container>
+              <p>
+                Created by <strong>{note.creatorName}</strong>
+              </p>
+            </>
+          ))
+        }
+      </Collapse>
     </Container>
   );
 };
