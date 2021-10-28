@@ -67,3 +67,6 @@ export const usePackageCareCharge = (packageId, subType) => {
     isLoading: !error && !data && packageId,
   };
 };
+
+export const usePackageCareChargeList = (packageId) =>
+  useGetData(getCarePackageUrl(packageId, '/reclaims/care-charges'));

@@ -8,10 +8,10 @@ const rowHaveHeader = ({ serviceUser, status, isS117Client, address, dateOfBirth
   <Container className='new-care-charge__card'>
     <Container className="new-care-charge__card-title" display="flex">
       <p>{serviceUser}</p>
-      <Tag className="outline" color={getTagColorFromStatus(status, userTagColors)}>
+      <Tag outline color={getTagColorFromStatus(status, userTagColors)}>
         {status}
       </Tag>
-      {isS117Client && <Tag className="outline" color="red">S117</Tag>}
+      {isS117Client && <Tag outline color="red">S117</Tag>}
     </Container>
     <p className="new-care-charge__card-date">{formatDate(dateOfBirth)}</p>
     {!!address?.trim?.() && <p className="new-care-charge__card-address">{address}</p>}

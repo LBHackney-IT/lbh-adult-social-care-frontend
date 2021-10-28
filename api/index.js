@@ -24,5 +24,5 @@ export * from './SWR/carePackage';
 export * from './SWR/careCharge';
 export * from './SWR/suppliers';
 
-export { default as usePackageGetAll } from './SWR/package/usePackageGetAll';
-export { default as usePrimarySupportReason } from './SWR/package/usePrimarySupportReason';
+export { default as useLookups } from './SWR/useLookups';
+export { default as usePrimarySupportReason } from './SWR/usePrimarySupportReason';

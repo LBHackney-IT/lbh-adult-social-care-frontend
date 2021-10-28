@@ -9,8 +9,10 @@ export default function Button({
   disabled,
   link,
   rel,
+  color,
   target,
   className,
+  outline,
   addItem,
   onClick = () => {},
   LoadingComponent = Loading,
@@ -18,11 +20,12 @@ export default function Button({
   type = 'button',
 }) {
   const outerClassName = className ? ` ${className}` : '';
-  const secondaryClassList = secondary ? ' govuk-secondary lbh-button--secondary' : '';
+  const outlineClass = outline ? ' outline' : '';
+  const secondaryClassList = secondary ? color ? ` secondary-${color}` : ' govuk-secondary lbh-button--secondary' : '';
   const disabledClassList = disabled ? ' lbh-button--disabled govuk-button--disabled' : '';
   const mainClass = clearClass ? '' : 'govuk-button lbh-button';
   const addItemClassList = addItem ? ' lbh-button--add' : '';
-  const calculateClassNames = `${outerClassName}${secondaryClassList}${disabledClassList}${addItemClassList}`;
+  const allClasses = `${outlineClass}${secondaryClassList}${outerClassName}${disabledClassList}${addItemClassList}`;
   const addItemIcon = (
     <svg width="12" height="12" viewBox="0 0 12 12">
       <path d="M6.94 0L5 0V12H6.94V0Z" />
@@ -38,7 +41,7 @@ export default function Button({
       href={link}
       role="button"
       draggable="false"
-      className={`${mainClass}${secondaryClassList + disabledClassList}`}
+      className={`${mainClass}${allClasses}`}
       data-module="govuk-button"
     >
       {isLoading && <LoadingComponent className="loading-absolute-centered" isLoading={isLoading} />}
@@ -47,7 +50,7 @@ export default function Button({
   ) : (
     <button
       type={type}
-      className={`${mainClass}${calculateClassNames}`}
+      className={`${mainClass}${allClasses}`}
       data-module="govuk-button"
       aria-disabled={disabled}
       disabled={disabled}

@@ -10,6 +10,7 @@ import {
   Announcement,
   WarningText,
   Hint,
+  Collapse,
 } from 'components';
 import { formatDate, getNumberWithCommas } from 'service';
 import { getCarePackageCareChargeRoute, getCarePackageDetailsRoute } from 'routes/RouteConstants';
@@ -24,7 +25,6 @@ const CareDetails = ({ packageId, title, data, isS117Client, netTotal }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const filteredData = data.filter((d) => d.status === 'Active' || d.status === 'In Progress');
-  const [isExpanded, setExpanded] = useState(true);
   const [s117Client, setS117Client] = useState(isS117Client);
 
   const columns = [
@@ -95,20 +95,12 @@ const CareDetails = ({ packageId, title, data, isS117Client, netTotal }) => {
             <Heading size="xl">{title}</Heading>
           </Container>
           <VerticalSeparator width="20px" />
-          <Container display="flex" alignItems="center">
-            <p onClick={() => setExpanded(!isExpanded)} className="link-button">
-              {isExpanded ? 'Hide' : 'Collapse'}
-            </p>
-            <VerticalSeparator width="5px" />
-            <CaretDownIcon />
-          </Container>
         </Container>
-
-        {isExpanded && (
+        <Collapse IconComponent={CaretDownIcon}>
           <>
             <HorizontalSeparator height="10px" />
             {s117Client && (
-              <Announcement isWarning>
+              <Announcement isError>
                 <WarningText>This client has been categorised as S117.</WarningText>
                 <Container display="flex">
                   No care charges need to be applied
@@ -164,7 +156,7 @@ const CareDetails = ({ packageId, title, data, isS117Client, netTotal }) => {
               </>
             )}
           </>
-        )}
+        </Collapse>
         <HorizontalSeparator height="28px" />
       </Container>
       <HorizontalSeparator height="28px" />

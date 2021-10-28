@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { useServiceUserMasterSearch } from 'api';
 import { SearchServiceUser } from 'components';
 import { useRouter } from 'next/router';
-import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
 
 const initialFilters = {
   postcode: '',
@@ -11,12 +10,6 @@ const initialFilters = {
   hackneyId: '',
   dateOfBirth: null,
 };
-
-const breadcrumbs = [
-  { text: 'Home', href: '/' },
-  { text: 'Broker Assistance', href: BROKER_ASSISTANCE_ROUTE },
-  { text: 'Search for a service user' },
-];
 
 const BrokerAssistanceSearch = () => {
   const router = useRouter();
@@ -59,7 +52,6 @@ const BrokerAssistanceSearch = () => {
 
   return (
     <SearchServiceUser
-      breadcrumbs={breadcrumbs}
       isLoading={isLoading}
       filters={filters}
       pushRoute={pushRoute}
@@ -67,6 +59,7 @@ const BrokerAssistanceSearch = () => {
       clearFilters={clearFilters}
       changeFilters={changeFilters}
       setPageNumber={setPageNumber}
+      className='master-search'
       pageNumber={pageNumber}
       totalCount={searchResults?.length}
       totalPages={searchResults?.length && Math.ceil(searchResults.length / 10)}

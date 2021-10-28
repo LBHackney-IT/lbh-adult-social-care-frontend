@@ -3,13 +3,13 @@ import { Button, Container } from '../../../HackneyDS';
 
 const ReviewPackageDetailsButtons = ({ edit, cancel, end }) => (
   <Container className="review-package-details__buttons">
-    <Button className="outline blue" onClick={edit}>
+    <Button outline secondary color='blue' onClick={edit}>
       Edit
     </Button>
-    <Button className="outline red" onClick={cancel}>
+    <Button outline secondary color='red' onClick={cancel}>
       Cancel
     </Button>
-    <Button className="outline blue" onClick={end}>
+    <Button color='blue' outline secondary onClick={end}>
       End
     </Button>
   </Container>

@@ -75,7 +75,7 @@ const NewCareChargePackages = ({
               />
             </FormGroup>
             {Object.values(filters).some(item => item) && (
-              <Button className="outline gray" onClick={clearFilters}>Clear</Button>
+              <Button outline secondary color='gray' onClick={clearFilters}>Clear</Button>
             )}
           </Container>
         </Container>
