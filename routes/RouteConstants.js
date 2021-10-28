@@ -8,6 +8,7 @@ export const getFundedNursingCareRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/br
 export const getCareChargesRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-care-charges`;
 export const getHistoryRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/history`;
 export const getCarePackageDetailsRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/details`;
+export const getCarePackageApprovalRoute = (packageId) => `${CARE_PACKAGE_ROUTE}/${packageId}/approval`;
 
 export const SERVICE_USER_ROUTE = '/service-user';
 export const SERVICE_USER_MASTER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/master-search`;
@@ -19,5 +20,7 @@ export const BROKER_ASSISTANCE_ROUTE = '/broker-assistance';
 export const getAssignPackageRoute = (id) => `${BROKER_ASSISTANCE_ROUTE}/${id}/assign-package`;
 
 export const CARE_CHARGES_ROUTE = '/care-charges';
+
+export const APPROVALS_ROUTE = '/approvals';
 
 export const LOGOUT_ROUTE = '/logout';

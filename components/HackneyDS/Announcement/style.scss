@@ -1,10 +1,16 @@
 .lbh-announcement {
-  padding: 2.25rem 0;
+  padding: 25px;
   border-top: 1px solid #84bd00;
   border-bottom: 1px solid #84bd00;
+  border-right: 1px solid #84bd00;
+  border-left: 6px solid #84bd00;
   background: rgba(164, 214, 94, 0.2);
   &--site {
     background: rgba(164, 214, 94, 0.5);
+  }
+  &--warning {
+    border-color: #be3a34;
+    background: rgba(224, 60, 49, 0.2);
   }
   &__title {
     margin-top: 0;

@@ -49,7 +49,16 @@ const Packages = () => {
             </>
           ))}
         <HorizontalSeparator height="48px" />
-        {packages && packages.map((p) => <CareDetails id={p.packageId} title={p.packageType} data={p.packageItems} />)}
+        {packages &&
+          packages.map((p) => (
+            <CareDetails
+              packageId={p.packageId}
+              title={p.packageType}
+              data={p.packageItems}
+              isS117Client={p.isS117Client}
+              netTotal={p.netTotal}
+            />
+          ))}
       </Container>
     </>
   );

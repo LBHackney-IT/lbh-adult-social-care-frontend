@@ -1,0 +1,47 @@
+.approvals {
+  .govuk-form-group.lbh-search-box {
+    width: 250px;
+    margin-right: 14px;
+  }
+
+  .govuk-form-group {
+    .select-container {
+      width: 200px;
+    }
+  }
+
+  .brokerage-portal__filters-block {
+    .date-from {
+      margin-right: 43px;
+    }
+
+    &:last-of-type .govuk-form-group:last-of-type {
+      .govuk-fieldset__legend {
+        margin-right: 18px;
+      }
+    }
+  }
+}
+
+.approvals-modal {
+  .lbh-dialog {
+    max-width: 90vw;
+    width: 90vw;
+    border: none;
+    padding: 48px;
+  }
+
+  .lbh-dialog__close {
+    display: none;
+  }
+
+  .clear-button {
+    height: 42px;
+    margin-top: auto;
+    margin-bottom: 48px;
+  }
+
+  .service-user-search__inputs {
+    padding: 0;
+  }
+}

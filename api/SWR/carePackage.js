@@ -15,6 +15,16 @@ export const useBrokerView = ({ params }) =>
     errorText: 'Can not get broker view',
   });
 
+export const useApprovals = ({ params, approverId, shouldFetch }) => {
+  const approverIdUrl = approverId ? `/${approverId}` : '';
+
+  return useFetchWithParams({
+    params,
+    shouldFetch,
+    url: `${CARE_PACKAGES_URL}/approvals${approverIdUrl}`
+  });
+};
+
 export const usePackageDetails = (packageId) => useGetData(getCarePackageUrl(packageId, '/details'), '');
 
 export const usePackageSchedulingOptions = () =>
