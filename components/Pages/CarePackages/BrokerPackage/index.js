@@ -45,7 +45,7 @@ const BrokerPackage = ({
   const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
   const [isNewSupplier, setIsNewSupplier] = useState(false);
 
-  const [packageDates, setPackageDates] = useState({
+  const [coreDates, setCoreDates] = useState({
     startDate: new Date(),
     endDate: null,
   });
@@ -87,7 +87,7 @@ const BrokerPackage = ({
 
   const composeDetailsData = () => {
     if (detailsData?.coreCost !== undefined) {
-      setPackageDates({
+      setCoreDates({
         startDate: dateStringToDate(detailsData.startDate) || new Date(),
         endDate: dateStringToDate(detailsData.endDate),
       });
@@ -116,11 +116,17 @@ const BrokerPackage = ({
             endDate: dateStringToDate(item.endDate),
           }));
 
-        setWeeklyNeeds(weeklyDetails);
-        setOneOffNeeds(oneOffDetails);
+        if(weeklyDetails.length) setWeeklyNeeds(weeklyDetails);
+        if(oneOffDetails.length) setOneOffNeeds(oneOffDetails);
       }
     }
   };
+
+  const errorCoreDate = useMemo(() => {
+    const { startDate: coreStartDate, endDate: coreEndDate } = coreDates;
+
+    return (!coreStartDate && !isOngoing && coreEndDate) ? 'Core start date is wrong' : ''
+  }, [isOngoing, coreDates]);
 
   useEffect(() => {
     composeDetailsData();
@@ -131,19 +137,25 @@ const BrokerPackage = ({
   };
 
   const checkNeedError = (item) => {
-    const { startDate, endDate, isOngoing: isOngoingItem } = item;
+    const { startDate, endDate, isOngoing: isOngoingItem, cost } = item;
+
+    const { startDate: coreStartDate, endDate: coreEndDate } = coreDates;
+
     let errorStartDate = '';
     let errorEndDate = '';
-    if (!startDate && !isOngoingItem) errorStartDate = 'Invalid start date';
-    if (!isOngoingItem && !endDate) errorEndDate = 'Invalid end date';
+    if (!startDate && !isOngoingItem && endDate) errorStartDate = 'Invalid start date';
+    if (startDate && !isOngoingItem && !endDate) errorEndDate = 'Invalid end date';
     if (startDate && endDate && !isOngoingItem && compareDescendingDMY(startDate, endDate) === -1) {
       errorEndDate = 'End date should be later then start date';
     }
-    if (startDate && !isOngoing && compareDescendingDMY(packageDates.endDate, startDate) === -1) {
+    if (startDate && !isOngoing && compareDescendingDMY(coreEndDate, startDate) === -1) {
       errorStartDate = 'Start date should be later then core date';
     }
-    if (startDate && isOngoing && compareDescendingDMY(packageDates.startDate, startDate) === -1) {
+    if (startDate && isOngoing && compareDescendingDMY(coreStartDate, startDate) === -1) {
       errorStartDate = 'Start date should be later then core date';
+    }
+    if(cost && !startDate) {
+      errorStartDate = 'Start date is wrong';
     }
 
     return errorStartDate || errorEndDate;
@@ -152,6 +164,7 @@ const BrokerPackage = ({
   const checkDateErrors = (needs) => needs.some(item => checkNeedError(item));
 
   const clickSave = async () => {
+    const { startDate: coreStartDate, endDate: coreEndDate } = coreDates;
     if (!isNewSupplier && !selectedItem?.id) {
       pushNotification('No supplier selected');
       return;
@@ -163,7 +176,10 @@ const BrokerPackage = ({
       return;
     }
 
-    if (!isOngoing && (!packageDates.endDate || compareDescendingDMY(packageDates.startDate, packageDates.endDate) === -1)) {
+    if (
+      (!coreStartDate && !isOngoing && coreEndDate) ||
+      !isOngoing && (!coreDates.endDate || compareDescendingDMY(coreDates.startDate, coreDates.endDate) === -1)
+    ) {
       pushNotification('Core date is wrong');
       return;
     }
@@ -203,15 +219,20 @@ const BrokerPackage = ({
 
     setLoading(true);
 
+    const postData = {
+      coreCost,
+      startDate: coreDates.startDate,
+      endDate: isOngoing ? null : coreDates.endDate,
+      supplierId: selectedItem.id,
+    };
+    const details = [...weeklyDetails, ...oneOffDetails];
+    if (details.length) {
+      postData.details = details;
+    }
+
     try {
       await updateCarePackageCosts({
-        data: {
-          coreCost,
-          startDate: packageDates.startDate,
-          endDate: isOngoing ? null : packageDates.endDate,
-          supplierId: selectedItem.id,
-          details: [...weeklyDetails, ...oneOffDetails],
-        },
+        data: postData,
         packageId,
       });
       pushNotification('Success', 'success');
@@ -251,6 +272,10 @@ const BrokerPackage = ({
     copyGetter.splice(index, 1);
     setter(copyGetter);
   };
+
+  const changeCoreDate = (field, date) => (
+    setCoreDates((prevState) => ({ ...prevState, [field]: date }))
+  );
 
   useEffect(() => {
     let totalCost = 0;
@@ -292,7 +317,7 @@ const BrokerPackage = ({
   };
 
   return (
-    <div className="supplier-look-up brokerage">
+    <div className="broker-package brokerage">
       <BrokerageHeader />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <Loading isLoading={loading || suppliersLoading} />
@@ -302,13 +327,14 @@ const BrokerPackage = ({
           <Container>
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
+              error={errorCoreDate}
               fields={{
                 dateFrom: 'startDate',
                 dateTo: 'endDate',
               }}
-              dates={packageDates}
+              dates={coreDates}
               label="Package dates"
-              setDates={(field, date) => setPackageDates((prevState) => ({ ...prevState, [field]: date }))}
+              setDates={changeCoreDate}
               isOngoing={isOngoing}
               setIsOngoing={setIsOngoing}
             />
@@ -369,7 +395,7 @@ const BrokerPackage = ({
               setCoreCostError={setCoreCostError}
               removeSupplierCard={removeSupplierCard}
               cardInfo={selectedItem}
-              corePackageDates={packageDates}
+              corePackageDates={coreDates}
               addNeed={addNeed}
               checkNeedError={checkNeedError}
               weeklyNeeds={weeklyNeeds}

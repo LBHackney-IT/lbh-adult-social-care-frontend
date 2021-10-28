@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, memo, useState } from 'react';
 import { lastDayOfMonth } from 'date-fns';
-import { DatePickerCalendarIcon } from '../../Icons';
+import { DatePickerCalendarIcon, RestoreIcon, CrossIcon } from '../../Icons';
 import DatePick from '../../DatePick';
 import Hint from '../lettering/Hint';
 import Label from '../lettering/Label';
@@ -10,7 +10,7 @@ const initialDateState = {
   error: '',
 };
 
-export default function DatePicker({
+const DatePicker = ({
   disabled,
   className = '',
   label,
@@ -26,7 +26,26 @@ export default function DatePicker({
   month = {},
   year = {},
   onClickIcon = () => {},
-}) {
+}) => {
+  const [localDay, setLocalDay] = useState({
+    value: '',
+    error: '',
+  });
+
+  const [previousDate, setPreviousDate] = useState(null);
+
+  const [localMonth, setLocalMonth] = useState({
+    value: '',
+    error: '',
+  });
+
+  const [localYear, setLocalYear] = useState({
+    value: '',
+    error: '',
+  });
+
+  const [isOpenCalendar, setIsOpenCalendar] = useState(false);
+
   const outerClass = className ? ` ${className}` : '';
   const disabledClass = disabled ? ' disabled' : '';
   const actualDate = new Date();
@@ -68,22 +87,6 @@ export default function DatePicker({
     setDate(new Date(getValidYear(value), date?.getMonth() || 0, date?.getDate() || 1));
   };
 
-  const [localDay, setLocalDay] = useState({
-    value: '',
-    error: '',
-  });
-
-  const [localMonth, setLocalMonth] = useState({
-    value: '',
-    error: '',
-  });
-
-  const [localYear, setLocalYear] = useState({
-    value: '',
-    error: '',
-  });
-
-  const [isOpenCalendar, setIsOpenCalendar] = useState(false);
   const inputs = [
     { name: 'day', id: `${formId}-day`, visible: true, ...localDay, ...day, onChangeValue: onChangeDay },
     { name: 'month', id: `${formId}-month`, visible: true, ...localMonth, ...month, onChangeValue: onChangeMonth },
@@ -95,10 +98,21 @@ export default function DatePicker({
     onClickIcon();
   };
 
+  const clearDate = () => {
+    setDate(null);
+    setPreviousDate(date);
+  };
+
+  const restoreDate = () => {
+    setDate(previousDate)
+    setPreviousDate(null);
+  }
+
   const changeCalendarInput = (newDate) => setDate(newDate);
 
   useEffect(() => {
     if (date) {
+      setPreviousDate(null);
       const formatDate = new Date(date);
       setLocalDay((prevState) => ({ ...prevState, value: formatDate.getDate(), error: '' }));
       setLocalMonth((prevState) => ({ ...prevState, value: formatDate.getMonth() + 1, error: '' }));
@@ -115,7 +129,7 @@ export default function DatePicker({
   }, [date]);
 
   return (
-    <div className={`govuk-date-input lbh-date-input${disabledClass}${outerClass}`} id={`${formId}-errors`}>
+    <div className={`govuk-date-input lbh-date-input${disabledClass}${outerClass}`} id={formId && `${formId}-errors`}>
       {label && <Label className="govuk-date-input__label">{label}</Label>}
       {hint && <Hint className="govuk-date-input__hint">{hint}</Hint>}
       {inputs.map((input) => {
@@ -153,7 +167,9 @@ export default function DatePicker({
       })}
       {IconComponent && (
         <div className="date-picker__calendar-container">
-          <IconComponent onClick={clickIcon} className={iconClassName} />
+          <div className='date-picker__additional-action'>
+            <IconComponent onClick={clickIcon} className={iconClassName} />
+          </div>
           {isOpenCalendar && (
             <DatePick
               onClickOutside={() => {
@@ -171,6 +187,14 @@ export default function DatePicker({
           )}
         </div>
       )}
+      {date && <div className='date-picker__additional-action clear-datepicker' onClick={clearDate}><CrossIcon /></div>}
+      {previousDate && (
+        <div onClick={restoreDate} className='date-picker__additional-action restore-date'>
+          <RestoreIcon />
+        </div>
+      )}
     </div>
   );
 }
+
+export default memo(DatePicker)

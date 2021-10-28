@@ -29,10 +29,10 @@ const BrokerPackageCost = ({
   };
 
   return (
-    <Container className="supplier-look-up__selected">
+    <Container className="broker-package__selected">
       {cardInfo && (
         <>
-          <h3 className="supplier-look-up__selected-title">Supplier</h3>
+          <h3 className="broker-package__selected-title">Supplier</h3>
           <BrokerageSupplierCard
             cardInfo={cardInfo}
             actionsComponent={
@@ -45,7 +45,7 @@ const BrokerPackageCost = ({
       )}
       <Input
         id="supplier-weekly-cost"
-        className="supplier-look-up__weekly-cost"
+        className="broker-package__weekly-cost"
         error={coreCostError}
         preSign={currency.euro}
         label="Weekly Cost"
