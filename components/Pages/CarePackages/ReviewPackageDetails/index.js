@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { currency } from 'constants/strings';
-import { getCorePackageRoute, getHistoryRoute } from 'routes/RouteConstants';
+import { getHistoryRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage } from 'api';
+import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage, stringIsNullOrEmpty } from 'api';
 import { useDispatch } from 'react-redux';
 import BrokerageHeader from '../BrokerageHeader';
 import { Container, Link } from '../../../HackneyDS';
@@ -25,6 +25,9 @@ const initialNotes = {
   declineNotes: '',
 };
 
+const isNursingCarePackage = (packageType) =>
+  !stringIsNullOrEmpty(packageType) && packageType.toLowerCase().includes('nursing');
+
 const ReviewPackageDetails = ({
   userDetails,
   packageId,
@@ -35,13 +38,25 @@ const ReviewPackageDetails = ({
   openedPopup,
   buttons,
   setOpenedPopup,
-  title = 'Nursing Care',
+  title,
   subTitle = 'Package details',
   loading: isLoading,
-  links = [],
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+
+  const isHide = () => !isNursingCarePackage(title);
+
+  const links = useMemo(() => (
+    [
+      { text: 'Care Package', href: '#care-package' },
+      { text: 'Weekly Additional Need', href: '#weekly-additional-need' },
+      { text: 'One Off Additional Need', href: '#on-off-additional-need' },
+      { text: 'Funded Nursing Care', href: '#funded-nursing-care', hide: isHide() },
+      { text: 'Care charges', href: '#care-charges' },
+      { text: 'Summary', href: '#summary' },
+    ]
+  ), [title]);
 
   const router = useRouter();
 
@@ -157,14 +172,18 @@ const ReviewPackageDetails = ({
         <PackageUserDetails {...userDetails} />
         <Container className="review-package-details__main-container">
           <Container className="review-package-details__links">
-            {links.map((link) => (
-              <p key={link.text}>
-                —{' '}
-                <Link className="link-button" href={link.href}>
-                  {link.text}
-                </Link>
-              </p>
-            ))}
+            {links.map(({ text, href, hide }) => {
+              if(hide) return null;
+
+              return (
+                <p key={text}>
+                  —{' '}
+                  <Link className="link-button" href={href}>
+                    {text}
+                  </Link>
+                </p>
+              )
+            })}
           </Container>
           <Container className="review-package-details__cost-info">
             {packageInfoItems.map(
@@ -174,67 +193,74 @@ const ReviewPackageDetails = ({
                 headerTitle,
                 items,
                 totalCost,
+                checkHide,
                 totalCostHeader,
                 costOfPlacement,
                 totalCostInfo,
                 careChargeClaimCollector,
                 fncDetails,
-              }) => (
-                <Container key={itemId} className="review-package-details__cost-info-item">
-                  <PackageInfo
-                    fncDetails={fncDetails}
-                    careChargeClaimCollector={careChargeClaimCollector}
-                    containerId={itemId}
-                    headerTitle={headerTitle}
-                    items={items}
-                  />
-                  {!!costOfPlacement && (
-                    <p className="brokerage__cost-of-placement">
-                      Cost of placement
-                      <span className="text-lbh-f01 font-weight-bold">
+              }) => {
+                if(checkHide && isHide()) return null;
+
+                return (
+                  <Container key={itemId} className="review-package-details__cost-info-item">
+                    <PackageInfo
+                      fncDetails={fncDetails}
+                      careChargeClaimCollector={careChargeClaimCollector}
+                      containerId={itemId}
+                      headerTitle={headerTitle}
+                      items={items}
+                    />
+                    {!!costOfPlacement && (
+                      <p className="brokerage__cost-of-placement">
+                        Cost of placement
+                        <span className="text-lbh-f01 font-weight-bold">
                         {currency.euro}
-                        {costOfPlacement.toFixed(2)}
+                          {costOfPlacement.toFixed(2)}
                       </span>
-                    </p>
-                  )}
-                  {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader} />}
-                  {totalCostInfo && (
-                    <>
-                      {totalCostInfo?.hackney !== undefined && totalCostInfo?.hackney !== 0 && (
-                        <BrokerageBorderCost
-                          totalCost={totalCostInfo?.hackney.toFixed(2)}
-                          totalCostHeader="Total (Gross)"
-                        />
-                      )}
-                      {totalCostInfo?.supplier !== undefined && totalCostInfo?.hackney !== undefined && <br />}
-                      {totalCostInfo?.supplier !== undefined && totalCostInfo?.supplier !== 0 && (
-                        <BrokerageBorderCost
-                          totalCost={totalCostInfo?.supplier.toFixed(2)}
-                          totalCostHeader="Total (Net Off)"
-                        />
-                      )}
-                    </>
-                  )}
-                  {goToPackage && (
-                    <Container className="review-package-details__items-actions" display="flex">
-                      <p onClick={goToPackage} className="link-button">
-                        Edit
                       </p>
-                      <p onClick={goToPackage} className="link-button red">
-                        Remove
-                      </p>
-                    </Container>
-                  )}
-                </Container>
-              )
+                    )}
+                    {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader} />}
+                    {totalCostInfo && (
+                      <>
+                        {totalCostInfo?.hackney !== undefined && totalCostInfo?.hackney !== 0 && (
+                          <BrokerageBorderCost
+                            totalCost={totalCostInfo?.hackney.toFixed(2)}
+                            totalCostHeader="Total (Gross)"
+                          />
+                        )}
+                        {totalCostInfo?.supplier !== undefined && totalCostInfo?.hackney !== undefined && <br />}
+                        {totalCostInfo?.supplier !== undefined && totalCostInfo?.supplier !== 0 && (
+                          <BrokerageBorderCost
+                            totalCost={totalCostInfo?.supplier.toFixed(2)}
+                            totalCostHeader="Total (Net Off)"
+                          />
+                        )}
+                      </>
+                    )}
+                    {goToPackage && (
+                      <Container className="review-package-details__items-actions" display="flex">
+                        <p onClick={goToPackage} className="link-button">
+                          Edit
+                        </p>
+                        <p onClick={goToPackage} className="link-button red">
+                          Remove
+                        </p>
+                      </Container>
+                    )}
+                  </Container>
+                )
+              }
             )}
             <Container className="review-package-details__summary">
               <h3 id="summary" className="font-weight-bold">
                 Summary
               </h3>
-              {summary.map(({ key, value, className: itemClassName, id }) => (
-                <BrokerageTotalCost key={id} value={value} name={key} className={itemClassName} />
-              ))}
+              {summary.map(({ key, value, className: itemClassName, id, checkHide }) => {
+                if(checkHide && isHide()) return null;
+
+                return <BrokerageTotalCost key={id} value={value} name={key} className={itemClassName} />;
+              })}
             </Container>
             <PackageDetailsButtons buttons={buttons} />
           </Container>
