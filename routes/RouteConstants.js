@@ -30,6 +30,8 @@ export const FINANCE_ROUTE = '/finance';
 
 export const LOGOUT_ROUTE = '/logout';
 
+export const NOT_FOUND_ROUTE = '/404';
+
 const carePackageRoutes = [
   { route: BROKER_ASSISTANCE_ROUTE, name: 'Broker Assistance' },
   { route: BROKER_PORTAL_ROUTE, name: 'Broker Portal' },

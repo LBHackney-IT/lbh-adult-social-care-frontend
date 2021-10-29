@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { usePackageSummary } from 'api';
 import { useRouter } from 'next/router';
 import { ReviewPackageDetails } from 'components';
-import { getLoggedInUser } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import withSession from 'lib/session';
 import {
   getBrokerPackageRoute,
   getCareChargesRoute,
   getCorePackageRoute,
-  getFundedNursingCareRoute
+  getFundedNursingCareRoute,
 } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -48,9 +48,13 @@ const PackageDetailsPage = () => {
   const { data } = usePackageSummary(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
 
-  const checkSettings = (settings) => settings && settingsTypes
-    .filter((item) => settings[item.field])
-    .map(item => settingsTypes.find(setting => setting[item])?.text);
+  useRedirectIfPackageNotExist();
+
+  const checkSettings = (settings) =>
+    settings &&
+    settingsTypes
+      .filter((item) => settings[item.field])
+      .map((item) => settingsTypes.find((setting) => setting[item])?.text);
 
   const end = () => setOpenedPopup('end');
   const cancel = () => setOpenedPopup('cancel');
@@ -150,7 +154,7 @@ const PackageDetailsPage = () => {
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.fnc,
         supplier: data?.supplierReclaims?.fnc,
-      }
+      },
     },
     {
       headerTitle: 'Care Charges',
@@ -167,7 +171,7 @@ const PackageDetailsPage = () => {
 
   return (
     <ReviewPackageDetails
-      className='package-details'
+      className="package-details"
       showEditActions
       openedPopup={openedPopup}
       buttons={[
