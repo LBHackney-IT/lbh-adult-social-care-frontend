@@ -152,7 +152,7 @@ export const getServerSideProps = withSession(async ({ req, params }) => {
   try {
     await getSingleCorePackageInfo(params.guid);
   } catch (error) {
-    if (error.isError) return { notFound: true };
+    if (error?.response?.data?.isError) return { notFound: true };
   }
 
   return { props: {} };
