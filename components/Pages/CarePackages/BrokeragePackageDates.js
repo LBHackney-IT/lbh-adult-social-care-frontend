@@ -10,6 +10,7 @@ const BrokeragePackageDates = ({
   setIsOngoing,
   startMinDate,
   startMaxDate,
+  hasEndMinDate = true,
   endMaxDate,
   hasClear,
   error,
@@ -36,7 +37,7 @@ const BrokeragePackageDates = ({
         hasClear={hasClear}
         disabled={isOngoing}
         day={{ label: 'To' }}
-        minDate={dates[fields.dateFrom]}
+        minDate={hasEndMinDate && dates[fields.dateFrom]}
         maxDate={endMaxDate}
         date={dates[fields.dateTo]}
         setDate={(date) => setDates(fields.dateTo, date)}

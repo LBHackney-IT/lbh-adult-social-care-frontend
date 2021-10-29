@@ -126,7 +126,15 @@ const BrokerPackage = ({
   const errorCoreDate = useMemo(() => {
     const { startDate: coreStartDate, endDate: coreEndDate } = coreDates;
 
-    return !coreStartDate && !isOngoing && coreEndDate ? 'Core start date is wrong' : '';
+    if(!coreStartDate) {
+      return 'Core start date is wrong';
+    }
+    if(!isOngoing && !coreEndDate) {
+      return 'Core end date is wrong';
+    }
+    if(!isOngoing && coreEndDate && compareDescendingDMY(coreStartDate, coreEndDate) === -1) {
+      return 'Core end date less then core start date';
+    }
   }, [isOngoing, coreDates]);
 
   useEffect(() => {
@@ -170,7 +178,6 @@ const BrokerPackage = ({
   const checkDateErrors = (needs) => needs.some((item) => checkNeedError(item));
 
   const clickSave = async () => {
-    const { startDate: coreStartDate, endDate: coreEndDate } = coreDates;
     if (!isNewSupplier && !selectedItem?.id) {
       pushNotification('No supplier selected');
       return;
@@ -182,11 +189,8 @@ const BrokerPackage = ({
       return;
     }
 
-    if (
-      (!coreStartDate && !isOngoing && coreEndDate) ||
-      (!isOngoing && (!coreDates.endDate || compareDescendingDMY(coreDates.startDate, coreDates.endDate) === -1))
-    ) {
-      pushNotification('Core date is wrong');
+    if(errorCoreDate) {
+      pushNotification(errorCoreDate);
       return;
     }
 
@@ -334,6 +338,7 @@ const BrokerPackage = ({
           <Container>
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
+              hasClear
               error={errorCoreDate}
               fields={{
                 dateFrom: 'startDate',
