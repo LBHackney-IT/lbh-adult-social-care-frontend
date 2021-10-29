@@ -189,19 +189,28 @@
   }
 
   .end-element__picker {
-    display: flex;
-    align-items: flex-end;
-    column-gap: 15px;
     width: 100%;
 
-    label {
-      color: #000;
-      font-weight: 400;
+    .govuk-form-group {
+      width: 100%;
+      max-width: unset;
     }
 
-    & > p {
-      position: relative;
-      bottom: 9px;
+    fieldset > div:last-of-type {
+      display: flex;
+      align-items: flex-end;
+      column-gap: 15px;
+      width: 100%;
+
+      label {
+        color: #000;
+        font-weight: 400;
+      }
+
+      & > p {
+        position: relative;
+        bottom: 9px;
+      }
     }
   }
 

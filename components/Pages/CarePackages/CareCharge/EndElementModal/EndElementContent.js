@@ -3,18 +3,23 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { addWeeks, intervalToDuration, parseISO } from 'date-fns';
 import { useWatch } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import * as yup from 'yup';
 import { endCareChargeReclaim } from '../../../../../api';
 import { addNotification } from '../../../../../reducers/notificationsReducer';
 import { CARE_CHARGES_ROUTE } from '../../../../../routes/RouteConstants';
+import { FormGroup } from '../../../../HackneyDS';
 import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import DatePick from '../../../../DatePick';
 
+const endDateSchema = yup.mixed().required();
+
 const EndElementContent = ({ data, control, headerText, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [endDate, setEndDate] = useState(null);
+  const [isError, setIsError] = useState(null);
 
   const formStateDate = useWatch({ control, name: `${data.formKey}.startDate` });
   const formEndDate = useWatch({ control, name: `${data.formKey}.endDate` });
@@ -43,6 +48,14 @@ const EndElementContent = ({ data, control, headerText, onClose }) => {
   const onEnd = async () => {
     try {
       setIsLoading(true);
+
+      const isValid = await endDateSchema.isValid(endDate);
+
+      if (!isValid) {
+        setIsError(true);
+        return;
+      }
+
       await endCareChargeReclaim({ carePackageId, reclaimId: data.id, endDate });
       dispatch(addNotification({ text: 'Successfully ended!', className: 'success' }));
       router.push(CARE_CHARGES_ROUTE);
@@ -62,20 +75,24 @@ const EndElementContent = ({ data, control, headerText, onClose }) => {
 
       <CareChargesInfoStatic data={data.data}>
         <div className="end-element__picker">
-          <DatePick
-            setDate={setEndDate}
-            dateValue={endDate}
-            label="End date"
-            minDate={formStateDate}
-            maxDate={maxDate}
-          />
+          <FormGroup error={isError ? 'Required field' : null}>
+            <div>
+              <DatePick
+                setDate={setEndDate}
+                dateValue={endDate}
+                label="End date"
+                minDate={formStateDate}
+                maxDate={maxDate}
+              />
 
-          {duration && (
-            <p className="edit-element__end-date-distance">
-              ({duration.months} {duration.months === 1 ? 'month' : 'months'} {duration.days}
-              {duration.days === 1 ? ' day' : ' days'})
-            </p>
-          )}
+              {duration && (
+                <p className="edit-element__end-date-distance">
+                  ({duration.months} {duration.months === 1 ? 'month' : 'months'} {duration.days}
+                  {duration.days === 1 ? ' day' : ' days'})
+                </p>
+              )}
+            </div>
+          </FormGroup>
         </div>
       </CareChargesInfoStatic>
 
