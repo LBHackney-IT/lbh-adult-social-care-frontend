@@ -2,7 +2,7 @@ import React from 'react';
 import { formatDate, getTagColorFromStatusId, getTagDisplayTextFromStatusId } from 'service';
 import { Container, Table, Tag } from '../../HackneyDS';
 
-export const PackageApprovalsTable = ({ onRowClick, data }) => {
+export const PackageApprovalsTable = ({ getPackageTypeById, onRowClick, data }) => {
   const columns = [
     {
       accessor: 'status',
@@ -58,7 +58,7 @@ export const PackageApprovalsTable = ({ onRowClick, data }) => {
       Cell: ({ value }) => (
         <Container className="brokerage-portal__cell-with-title">
           <h3>Package</h3>
-          <p>{value}</p>
+          <p>{getPackageTypeById(value)}</p>
         </Container>
       ),
     },

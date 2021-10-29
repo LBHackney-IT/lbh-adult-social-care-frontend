@@ -86,6 +86,8 @@ export const PackageApprovals = ({
     setServiceUserFilter({ ...initialServiceUserFilters });
   };
 
+  const getPackageTypeById = (packageTypeId) => packageOptions.find(packageType => packageType.value === packageTypeId)?.text;
+
   const onSearch = useCallback(() => {
     changeFilterField('serviceUserName', searchText);
   }, [changeFilterField, searchText]);
@@ -187,7 +189,7 @@ export const PackageApprovals = ({
       </Container>
 
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
-        <PackageApprovalsTable onRowClick={onRowClick} data={items} />
+        <PackageApprovalsTable getPackageTypeById={getPackageTypeById} onRowClick={onRowClick} data={items} />
         <HorizontalSeparator height="20px" />
 
         <AlternativePagination
