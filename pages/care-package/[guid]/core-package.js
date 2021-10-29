@@ -20,20 +20,12 @@ import { useDispatch } from 'react-redux';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
-
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
-});
+import {
+  getSingleCorePackageInfo,
+  updateCoreCarePackage,
+  usePackageSchedulingOptions,
+  useSingleCorePackageInfo,
+} from 'api';
 
 const CorePackage = () => {
   const router = useRouter();
@@ -43,12 +35,14 @@ const CorePackage = () => {
   const { settings } = packageInfo;
   const { data: schedulingOptionsData = [] } = usePackageSchedulingOptions();
 
-  const schedulingOptions = useMemo(() => (
-    schedulingOptionsData.map(({ id, optionName, optionPeriod }) => ({
-      id,
-      label: `${optionName} (${optionPeriod})`
-    }))
-  ), [schedulingOptionsData]);
+  const schedulingOptions = useMemo(
+    () =>
+      schedulingOptionsData.map(({ id, optionName, optionPeriod }) => ({
+        id,
+        label: `${optionName} (${optionPeriod})`,
+      })),
+    [schedulingOptionsData]
+  );
 
   const schema = yup.object().shape({
     packageType: yup
@@ -125,7 +119,7 @@ const CorePackage = () => {
               control={control}
               render={({ field }) => (
                 <RadioGroup
-                  name='packageScheduling'
+                  name="packageScheduling"
                   error={errors.packageScheduling?.message}
                   label="Packaging scheduling"
                   handle={field.onChange}
@@ -143,5 +137,25 @@ const CorePackage = () => {
     </>
   );
 };
+
+export const getServerSideProps = withSession(async ({ req, params }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  try {
+    await getSingleCorePackageInfo(params.guid);
+  } catch (error) {
+    if (error.isError) return { notFound: true };
+  }
+
+  return { props: {} };
+});
 
 export default CorePackage;
