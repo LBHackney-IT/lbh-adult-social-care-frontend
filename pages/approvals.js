@@ -70,7 +70,7 @@ const Approvals = () => {
   const { data, isLoading: approvalsLoading } = useApprovals({ params });
 
   const {
-    packages = [],
+    data: approvals = [],
     pagingMetaData = {
       totalCount: 0,
       totalPages: 0,
@@ -99,7 +99,7 @@ const Approvals = () => {
       setFilters={setFilters}
       pageNumber={pageNumber}
       setPageNumber={setPageNumber}
-      items={packages}
+      items={approvals}
       paginationData={pagingMetaData}
       onRowClick={handleRowClick}
     />
