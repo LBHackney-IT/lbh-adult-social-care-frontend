@@ -54,3 +54,8 @@ export const brokerageTypeOptions = {
   coreCost: 1,
   additionalNeed: 2,
 };
+
+export const packageTypes = {
+  residential: 2,
+  nursing: 4,
+};

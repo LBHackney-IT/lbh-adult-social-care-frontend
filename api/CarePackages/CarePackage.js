@@ -31,7 +31,7 @@ export const updateCoreCarePackage = ({ data, packageId }) =>
 export const updateCarePackageCosts = ({ data, packageId }) =>
   sendCarePackageRequest(`${packageId}/details`, data, requestMethods.put);
 
-export const assignToBroker = ({ data }) => sendCarePackageRequest('/assign', data);
+export const assignToBroker = ({ data }) => sendCarePackageRequest('assign', data);
 
 export const confirmS117 = ({ packageId }) =>
   sendCarePackageRequestNoData(`${packageId}/confirm-s117`, requestMethods.put);
