@@ -3,7 +3,7 @@ import { Controller, useWatch } from 'react-hook-form';
 import { currency } from 'constants/strings';
 import { addWeeks } from 'date-fns';
 import { careChargeAPIKeys, careChargeFormKeys } from 'constants/variables';
-import { Checkbox, Input, RadioGroup, DatePicker } from 'components/HackneyDS';
+import { Checkbox, Input, RadioGroup, DatePicker, FormGroup } from 'components/HackneyDS';
 import { useIsDisabledByStatus, checkIfActionsVisible, useGetChargeStatus, useClaimCollectorOptions } from './helpers';
 import ActionButtons from './ActionButtons';
 
@@ -39,7 +39,7 @@ const useDatesValidation = (isMore12, control, setValue, formKey) => {
   };
 };
 
-const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEnd }) => {
+const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEnd, errors }) => {
   const weeks = isMore12 ? '13+' : '1-12';
   const formKey = isMore12 ? more12 : less12;
   const description = `Without Property ${weeks} weeks`;
@@ -56,54 +56,60 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
       <h3>Residential SU contribution</h3>
       <p>{description}</p>
 
-      <Controller
-        name={`${formKey}.cost`}
-        control={control}
-        defaultValue=""
-        render={({ field }) => (
-          <Input
-            label="Value"
-            id={`${weeks}-cost`}
-            preSign={currency.euro}
-            handler={field.onChange}
-            disabled={isDisabled}
-            value={field.value}
-          />
-        )}
-      />
+      <FormGroup error={errors.cost}>
+        <Controller
+          name={`${formKey}.cost`}
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <Input
+              label="Value"
+              id={`${weeks}-cost`}
+              preSign={currency.euro}
+              handler={field.onChange}
+              disabled={isDisabled}
+              value={field.value}
+            />
+          )}
+        />
+      </FormGroup>
 
-      <Controller
-        name={`${formKey}.claimCollector`}
-        control={control}
-        render={({ field }) => (
-          <RadioGroup
-            inline
-            items={claimCollectorOptions}
-            name={`${formKey}-claimCollector`}
-            className="care-charge__radios"
-            handle={field.onChange}
-            disabled={isDisabled}
-            value={field.value}
-          />
-        )}
-      />
+      <FormGroup error={errors.claimCollector}>
+        <Controller
+          name={`${formKey}.claimCollector`}
+          control={control}
+          render={({ field }) => (
+            <RadioGroup
+              inline
+              items={claimCollectorOptions}
+              name={`${formKey}-claimCollector`}
+              className="care-charge__radios"
+              handle={field.onChange}
+              disabled={isDisabled}
+              value={field.value}
+            />
+          )}
+        />
+      </FormGroup>
 
       <div className="care-charge__dates">
         <div>
           <h5>Start date</h5>
-          <Controller
-            name={`${formKey}.startDate`}
-            control={control}
-            render={({ field }) => (
-              <DatePicker
-                day={{ label: 'From' }}
-                date={field.value ? new Date(field.value) : null}
-                setDate={field.onChange}
-                minDate={minFromDate}
-                disabled={isDisabled}
-              />
-            )}
-          />
+          <FormGroup error={errors.startDate}>
+            <Controller
+              name={`${formKey}.startDate`}
+              control={control}
+              render={({ field }) => (
+                <DatePicker
+                  day={{ label: 'From' }}
+                  date={field.value ? new Date(field.value) : null}
+                  setDate={field.onChange}
+                  minDate={minFromDate}
+                  disabled={isDisabled}
+                />
+              )}
+            />
+          </FormGroup>
         </div>
 
         <div>

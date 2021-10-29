@@ -16,11 +16,14 @@ import { currency } from 'constants/strings';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { useToggle } from 'react-use';
 import { formatDate, getLoggedInUser } from 'service';
 import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
 import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { useLookups, usePackageCareCharge, useSingleCorePackageInfo } from 'api';
+import { addNotification } from 'reducers/notificationsReducer';
+import * as yup from 'yup';
 
 const { provisional, more12, less12 } = careChargeFormKeys;
 
@@ -81,6 +84,10 @@ const defaultValues = {
   },
 };
 
+const costSchema = yup.number().typeError('Only numbers allowed').required('Required field');
+const claimCollectorSchema = yup.string().required('Required field');
+const startDateSchema = yup.mixed().required('Required field');
+
 const CareCharge = () => {
   const breadcrumbs = useBreadcrumbs();
 
@@ -92,6 +99,24 @@ const CareCharge = () => {
   const [cancelData, setCancelData] = useState({});
   const [endData, setEndData] = useState({});
 
+  const [errors, setErrors] = useState({
+    [provisional]: {
+      cost: false,
+      claimCollector: false,
+    },
+    [less12]: {
+      cost: false,
+      claimCollector: false,
+      startDate: false,
+    },
+    [more12]: {
+      cost: false,
+      claimCollector: false,
+      startDate: false,
+    },
+  });
+
+  const dispatch = useDispatch();
   const router = useRouter();
   const { guid: packageId } = router.query;
 
@@ -142,6 +167,47 @@ const CareCharge = () => {
   const goToPackages = useCallback(() => {
     router.push(getServiceUserPackagesRoute(packageInfo?.serviceUser?.id));
   }, [router, packageInfo]);
+
+  const validateFields = async (fields) => {
+    const schemas = {
+      cost: costSchema,
+      claimCollector: claimCollectorSchema,
+      startDate: startDateSchema,
+    };
+
+    const validationResults = await Promise.all(
+      fields.map(async ({ value, field, formKey }) => {
+        let isValid = true;
+        let errorMessage = null;
+
+        try {
+          await schemas[field].validate(value);
+        } catch (error) {
+          isValid = false;
+          errorMessage = error.message;
+        }
+
+        return { isValid, errorMessage, field, formKey };
+      })
+    );
+
+    const hasErrors = validationResults.some((result) => !result.isValid);
+
+    const localErrors = validationResults.reduce((acc, { formKey, field, isValid, errorMessage }) => {
+      if (acc[formKey]) {
+        acc[formKey][field] = isValid ? null : errorMessage;
+      } else {
+        acc[formKey] = {
+          [field]: isValid ? null : errorMessage,
+        };
+      }
+      return acc;
+    }, {});
+
+    setErrors((prevState) => ({ ...prevState, ...localErrors }));
+
+    return hasErrors;
+  };
 
   const getReclaimId = (subType) => actualReclaims.find((el) => el.subType === subType)?.id;
 
@@ -270,7 +336,39 @@ const CareCharge = () => {
   };
 
   const onSubmit = useCallback(
-    (form) => {
+    async (form) => {
+      const fields = [];
+
+      if (formState.dirtyFields[provisional]) {
+        fields.push(
+          { formKey: provisional, field: 'cost', value: Number(form[provisional].cost) },
+          { formKey: provisional, field: 'claimCollector', value: String(form[provisional].claimCollector) }
+        );
+      }
+
+      if (formState.dirtyFields[less12]) {
+        fields.push(
+          { formKey: less12, field: 'cost', value: form[less12].cost },
+          { formKey: less12, field: 'claimCollector', value: form[less12].claimCollector },
+          { formKey: less12, field: 'startDate', value: form[less12].startDate }
+        );
+      }
+
+      if (formState.dirtyFields[more12]) {
+        fields.push(
+          { formKey: more12, field: 'cost', value: form[more12].cost },
+          { formKey: more12, field: 'claimCollector', value: form[more12].claimCollector },
+          { formKey: more12, field: 'startDate', value: form[more12].startDate }
+        );
+      }
+
+      const hasErrors = await validateFields(fields);
+
+      if (hasErrors) {
+        dispatch(addNotification({ text: 'Some validation errors above' }));
+        return;
+      }
+
       if (formState.isDirty) onEdit(form);
       else goToPackages();
     },
@@ -287,12 +385,14 @@ const CareCharge = () => {
         <TitleSubtitleHeader subTitle="Care Charges" title="Add financial assessment" />
 
         <ProvisionalCareCharge
+          errors={errors[provisional]}
           onCancel={() => onCancel(provisional)}
           onEnd={() => onEnd(provisional)}
           control={control}
         />
 
         <ResidentialSUContribution
+          errors={errors[less12]}
           onCancel={() => onCancel(less12)}
           onEnd={() => onEnd(less12)}
           setValue={setValue}
@@ -300,6 +400,7 @@ const CareCharge = () => {
         />
 
         <ResidentialSUContribution
+          errors={errors[more12]}
           onCancel={() => onCancel(more12)}
           onEnd={() => onEnd(more12)}
           setValue={setValue}
