@@ -9,26 +9,26 @@ const Select = (props) => {
     className = '',
     disabledOptions = [],
     disabledEmptyComponent = false,
-    options = [],
+    isDisabled = false,options = [],
     emptyElement = { text: 'Select one', value: '' },
     id = 'select-id',
     error,
     IconComponent = <SelectArrowTriangle />,
     disabled,
   } = props;
-
   const outerClass = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-select--error' : '';
   const errorDescribedBy = error ? { 'aria-describedby': ' govuk-select--error' } : {};
-  const [isDisabled, setDisabled] = useState(disabledEmptyComponent && emptyElement?.text);
-
+  const [isEmptyElementDisabled, setEmptyElementDisabled] = useState(disabledEmptyComponent && emptyElement?.text);
   return (
     <div className="select-container">
       <select
+        disabled={isDisabled}
         id={id}
         {...errorDescribedBy}
         onChange={(e) => {
-          if (emptyElement && e.target.value !== emptyElement.value && disabledEmptyComponent) setDisabled(true);
+          if (emptyElement && e.target.value !== emptyElement.value && disabledEmptyComponent)
+            setEmptyElementDisabled(true);
           if (onChangeValue) return onChangeValue(e.target.value);
           return onChange(e);
         }}
@@ -37,7 +37,7 @@ const Select = (props) => {
         disabled={disabled}
       >
         {emptyElement && (
-          <option disabled={isDisabled} value={emptyElement.value}>
+          <option disabled={isEmptyElementDisabled} value={emptyElement.value}>
             {emptyElement.text}
           </option>
         )}

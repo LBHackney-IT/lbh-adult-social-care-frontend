@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator, Hint } from 'components';
+import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from 'components';
 import {
   formatDate,
   getButtonTextFromPackageStatus,
@@ -60,13 +60,13 @@ const PackageRequest = ({ packageRequest }) => {
               <>
                 <HorizontalSeparator height="10px" />
                 <Container display="flex" alignItems="center">
-                  <Heading size="m">{note.description}</Heading>
+                  <Heading size="m">{note.creatorName}</Heading>
                   <VerticalSeparator width="20px" />
-                  <Hint>{formatDate(note.dateCreated)}</Hint>
+                  {note.description}
+                  <VerticalSeparator width="20px" />
+                  {formatDate(note.dateCreated)}
                 </Container>
-                <p>
-                  Created by <strong>{note.creatorName}</strong>
-                </p>
+                <p>{note.requestMoreInformation ? note.requestMoreInformation : 'No additional information submitted.'}</p>
               </>
             )}
           </>

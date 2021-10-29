@@ -74,3 +74,9 @@ export const collectingReasonOptions = [
   { text: 'Finance managed by CFAT', value: '4' },
   { text: 'Other', value: '5' },
 ];
+
+
+export const packageTypes = {
+  residential: 2,
+  nursing: 4,
+};

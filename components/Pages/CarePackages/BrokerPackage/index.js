@@ -6,7 +6,7 @@ import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
 import { updateCarePackageCosts, useSuppliers, useSingleCorePackageInfo } from 'api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { brokerageTypeOptions, costPeriods } from 'constants/variables';
+import { brokerageTypeOptions, costPeriods, packageTypes } from 'constants/variables';
 import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 import BrokerageHeader from '../BrokerageHeader';
@@ -117,8 +117,8 @@ const BrokerPackage = ({
             endDate: dateStringToDate(item.endDate),
           }));
 
-        if(weeklyDetails.length) setWeeklyNeeds(weeklyDetails);
-        if(oneOffDetails.length) setOneOffNeeds(oneOffDetails);
+        if (weeklyDetails.length) setWeeklyNeeds(weeklyDetails);
+        if (oneOffDetails.length) setOneOffNeeds(oneOffDetails);
       }
     }
   };
@@ -126,7 +126,7 @@ const BrokerPackage = ({
   const errorCoreDate = useMemo(() => {
     const { startDate: coreStartDate, endDate: coreEndDate } = coreDates;
 
-    return (!coreStartDate && !isOngoing && coreEndDate) ? 'Core start date is wrong' : ''
+    return !coreStartDate && !isOngoing && coreEndDate ? 'Core start date is wrong' : '';
   }, [isOngoing, coreDates]);
 
   useEffect(() => {
@@ -156,18 +156,18 @@ const BrokerPackage = ({
     if (startDate && isOngoing && compareDescendingDMY(coreStartDate, startDate) === -1) {
       errorStartDate = 'Start date should be later then core date';
     }
-    if(cost && !startDate) {
+    if (cost && !startDate) {
       errorStartDate = 'Start date is wrong';
     }
 
-    if(!cost && (startDate || endDate)) {
+    if (!cost && (startDate || endDate)) {
       errorCost = 'Cost is required';
     }
 
     return errorStartDate || errorEndDate || errorCost;
   };
 
-  const checkDateErrors = (needs) => needs.some(item => checkNeedError(item));
+  const checkDateErrors = (needs) => needs.some((item) => checkNeedError(item));
 
   const clickSave = async () => {
     const { startDate: coreStartDate, endDate: coreEndDate } = coreDates;
@@ -178,13 +178,13 @@ const BrokerPackage = ({
 
     if (!coreCost) {
       setCoreCostError('Required field');
-      pushNotification('Core weekly cost is required')
+      pushNotification('Core weekly cost is required');
       return;
     }
 
     if (
       (!coreStartDate && !isOngoing && coreEndDate) ||
-      !isOngoing && (!coreDates.endDate || compareDescendingDMY(coreDates.startDate, coreDates.endDate) === -1)
+      (!isOngoing && (!coreDates.endDate || compareDescendingDMY(coreDates.startDate, coreDates.endDate) === -1))
     ) {
       pushNotification('Core date is wrong');
       return;
@@ -243,7 +243,9 @@ const BrokerPackage = ({
       });
       pushNotification('Success', 'success');
 
-      router.push(packageType === 4 ? getFundedNursingCareRoute(packageId) : getCareChargesRoute(packageId));
+      router.push(
+        packageType === packageTypes.nursing ? getFundedNursingCareRoute(packageId) : getCareChargesRoute(packageId)
+      );
     } catch (e) {
       pushNotification(e);
     }
@@ -279,9 +281,7 @@ const BrokerPackage = ({
     setter(copyGetter);
   };
 
-  const changeCoreDate = (field, date) => (
-    setCoreDates((prevState) => ({ ...prevState, [field]: date }))
-  );
+  const changeCoreDate = (field, date) => setCoreDates((prevState) => ({ ...prevState, [field]: date }));
 
   useEffect(() => {
     let totalCost = 0;
@@ -424,11 +424,7 @@ const BrokerPackage = ({
               Back
             </Button>
 
-            <Button
-              isLoading={loading}
-              disabled={loading}
-              onClick={clickSave}
-            >
+            <Button isLoading={loading} disabled={loading} onClick={clickSave}>
               Save and continue
             </Button>
           </Container>
