@@ -18,7 +18,7 @@ import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 
-const EditElementContent = ({ data, headerText, onClose }) => {
+const EditElementContent = ({ data, onClose }) => {
   const [isLoading, toggleLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -133,6 +133,9 @@ const EditElementContent = ({ data, headerText, onClose }) => {
       toggleLoading(false);
     }
   };
+
+  const isAddOnly = data.every((el) => !el.reclaimId);
+  const headerText = isAddOnly ? 'Add element' : 'Edit element';
 
   return (
     <>
