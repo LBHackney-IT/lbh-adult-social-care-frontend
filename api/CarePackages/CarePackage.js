@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { axiosRequest } from '../Utils/ApiUtils';
 import { BASE_URL } from '../BaseApi';
 import { requestMethods } from '../../constants/variables';
@@ -35,3 +36,5 @@ export const assignToBroker = ({ data }) => sendCarePackageRequest('assign', dat
 
 export const confirmS117 = ({ packageId }) =>
   sendCarePackageRequestNoData(`${packageId}/confirm-s117`, requestMethods.put);
+
+export const getSingleCorePackageInfo = (packageId) => axios.get(`${CARE_PACKAGE_URL}/${packageId}/core`);
