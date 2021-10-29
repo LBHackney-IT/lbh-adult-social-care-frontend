@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { cancelCareChargeReclaim } from '../../../../../api';
+import { cancelCareChargeReclaim, useSingleCorePackageInfo } from '../../../../../api';
 import { addNotification } from '../../../../../reducers/notificationsReducer';
-import { CARE_CHARGES_ROUTE } from '../../../../../routes/RouteConstants';
+import { getServiceUserPackagesRoute } from '../../../../../routes/RouteConstants';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
@@ -19,6 +19,8 @@ const CancelElementContent = ({ data, headerText, onClose }) => {
   const router = useRouter();
   const { guid: carePackageId } = router.query;
 
+  const { data: packageInfo } = useSingleCorePackageInfo(carePackageId);
+
   const onCancel = async () => {
     setIsLoading(true);
 
@@ -31,7 +33,7 @@ const CancelElementContent = ({ data, headerText, onClose }) => {
     setIsLoading(false);
     dispatch(addNotification({ text: 'Successfully cancelled!', className: 'success' }));
     onClose();
-    router.push(CARE_CHARGES_ROUTE);
+    router.push(getServiceUserPackagesRoute(packageInfo?.serviceUser?.id));
   };
 
   return (

@@ -4,9 +4,9 @@ import { addWeeks, intervalToDuration, parseISO } from 'date-fns';
 import { useWatch } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
-import { endCareChargeReclaim } from '../../../../../api';
+import { endCareChargeReclaim, useSingleCorePackageInfo } from '../../../../../api';
 import { addNotification } from '../../../../../reducers/notificationsReducer';
-import { CARE_CHARGES_ROUTE } from '../../../../../routes/RouteConstants';
+import { getServiceUserPackagesRoute } from '../../../../../routes/RouteConstants';
 import { FormGroup } from '../../../../HackneyDS';
 import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
@@ -45,6 +45,8 @@ const EndElementContent = ({ data, control, headerText, onClose }) => {
   const router = useRouter();
   const { guid: carePackageId } = router.query;
 
+  const { data: packageInfo } = useSingleCorePackageInfo(carePackageId);
+
   const onEnd = async () => {
     try {
       setIsLoading(true);
@@ -58,7 +60,7 @@ const EndElementContent = ({ data, control, headerText, onClose }) => {
 
       await endCareChargeReclaim({ carePackageId, reclaimId: data.id, endDate });
       dispatch(addNotification({ text: 'Successfully ended!', className: 'success' }));
-      router.push(CARE_CHARGES_ROUTE);
+      router.push(getServiceUserPackagesRoute(packageInfo?.serviceUser?.id));
       onClose();
     } catch (error) {
       dispatch(addNotification({ text: error }));
