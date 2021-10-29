@@ -70,7 +70,7 @@ const Approvals = () => {
   const { data, isLoading: approvalsLoading } = useApprovals({ params });
 
   const {
-    packages = [],
+    data: approvals = [],
     pagingMetaData = {
       totalCount: 0,
       totalPages: 0,
@@ -85,7 +85,7 @@ const Approvals = () => {
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
   const handleRowClick = useCallback((rowInfo) => {
-    router.push(getCarePackageApprovalRoute(rowInfo.packageId));
+    router.push(getCarePackageApprovalRoute(rowInfo.id));
   }, []);
 
   return (
@@ -99,7 +99,7 @@ const Approvals = () => {
       setFilters={setFilters}
       pageNumber={pageNumber}
       setPageNumber={setPageNumber}
-      items={packages}
+      items={approvals}
       paginationData={pagingMetaData}
       onRowClick={handleRowClick}
     />

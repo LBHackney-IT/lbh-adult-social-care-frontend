@@ -69,8 +69,6 @@ export const PackageApprovals = ({
 
   const closeSearch = () => setOpenedSearch(false);
 
-  const openSearch = () => setOpenedSearch(true);
-
   const onServiceUserSearch = () => {
     setOpenedSearch('');
     setFilters(prevState => ({
@@ -117,8 +115,6 @@ export const PackageApprovals = ({
           </Container>
           <Container className="brokerage-portal__header">
             <h1>{title}</h1>
-            {/* todo ask the manager about this feature*/}
-            {/* <Button onClick={openSearch}>Find a service user</Button>*/}
           </Container>
 
           <Container className="brokerage-portal__filters">
@@ -198,7 +194,7 @@ export const PackageApprovals = ({
       </Container>
 
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
-        {items && <PackageApprovalsTable onRowClick={onRowClick} data={items} />}
+        <PackageApprovalsTable onRowClick={onRowClick} data={items} />
         <HorizontalSeparator height="20px" />
 
         <AlternativePagination

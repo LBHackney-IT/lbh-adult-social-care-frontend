@@ -16,6 +16,8 @@ export const Table = ({
   cellClassName = '',
   onRowClick,
 }) => {
+  if(!data?.length) return <p className='lbh-table__no-results'>No results found</p>;
+
   const {
     getTableProps,
     getTableBodyProps,
