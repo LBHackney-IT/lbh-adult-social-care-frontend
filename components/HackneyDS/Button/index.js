@@ -17,7 +17,7 @@ export default function Button({
   onClick = () => {},
   LoadingComponent = Loading,
   isLoading,
-  type='button',
+  type = 'button',
 }) {
   const outerClassName = className ? ` ${className}` : '';
   const outlineClass = outline ? ' outline' : '';
@@ -44,7 +44,7 @@ export default function Button({
       className={`${mainClass}${allClasses}`}
       data-module="govuk-button"
     >
-      {isLoading && <LoadingComponent className='loading-absolute-centered' isLoading={isLoading} />}
+      {isLoading && <LoadingComponent className="loading-absolute-centered" isLoading={isLoading} />}
       <Container className={isLoading ? 'hide' : ''}>{children}</Container>
     </a>
   ) : (
@@ -56,7 +56,7 @@ export default function Button({
       disabled={disabled}
       onClick={onClick}
     >
-      {isLoading && <LoadingComponent className='loading-absolute-centered' isLoading={isLoading} />}
+      {isLoading && <LoadingComponent className="loading-absolute-centered" isLoading={isLoading} />}
       {addItem && addItemIcon}
       <Container className={isLoading ? 'hide' : ''}>{children}</Container>
     </button>

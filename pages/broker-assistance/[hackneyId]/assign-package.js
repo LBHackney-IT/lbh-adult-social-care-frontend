@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import {
@@ -43,10 +43,8 @@ const AssignPackage = () => {
   const router = useRouter();
   const { hackneyId } = router.query;
 
-  const params = useMemo(() => ({ name: 'packageType' }), []);
-
   const { data: serviceUser } = useServiceUser(hackneyId);
-  const { options: packageTypeOptions } = useLookups({ params });
+  const { options: packageTypeOptions } = useLookups('packageType');
   const { options: brokerOptions } = useBrokers();
 
   const validateFields = async (fields) => {

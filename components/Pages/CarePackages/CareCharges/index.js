@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { collectingReasonOptions, claimCollector, collectedByType } from '../../../../constants/variables';
 import { requiredSchema } from 'constants/schemas';
 import { currency } from 'constants/strings';
-import { claimCollector, collectedByType } from 'constants/variables';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 import {
   Announcement,
@@ -22,7 +22,6 @@ import Loading from '../../../Loading';
 import CarePackageBreadcrumbs from '../CarePackageBreadcrumbs';
 
 const CareCharges = ({
-  reasonsCollecting,
   isS117,
   calculatedCost,
   careCharge,
@@ -197,7 +196,7 @@ const CareCharges = ({
               {errors.reasonCollecting && <ErrorMessage>{errors.reasonCollecting}</ErrorMessage>}
               <Select
                 id="reason-collecting"
-                options={reasonsCollecting}
+                options={collectingReasonOptions}
                 value={reasonCollecting}
                 onChangeValue={(value) => {
                   setReasonCollecting(value);

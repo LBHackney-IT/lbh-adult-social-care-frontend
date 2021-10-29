@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 export default function Dialog({ children, onClose, isOpen, className = '' }) {
   const [windowState, setWindowState] = useState();
+
+  useEffect(() => {
+    document.querySelector('html').style.overflow = isOpen ? 'hidden' : 'visible';
+  }, [isOpen]);
 
   useEffect(() => {
     const onClickOutside = (e) => {
@@ -18,7 +22,7 @@ export default function Dialog({ children, onClose, isOpen, className = '' }) {
     };
   }, [onClose]);
 
-  if(!windowState) return null;
+  if (!windowState) return null;
 
   return (
     isOpen &&
