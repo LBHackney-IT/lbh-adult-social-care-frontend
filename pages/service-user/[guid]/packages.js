@@ -77,6 +77,7 @@ const Packages = () => {
                 title={p.packageType}
                 data={p.packageItems}
                 isS117Client={p.isS117Client}
+                isS117ClientConfirmed={p.isS117ClientConfirmed}
                 netTotal={p.netTotal}
                 packageStatus={p.packageStatus}
               />

@@ -1,17 +1,11 @@
 import React from 'react';
-import {
-  APPROVALS_ROUTE,
-  BROKER_ASSISTANCE_ROUTE,
-  BROKER_PORTAL_ROUTE,
-  CARE_CHARGE_ROUTE,
-  LOGOUT_ROUTE,
-} from 'routes/RouteConstants';
+import {APPROVALS_ROUTE, BROKER_ASSISTANCE_ROUTE, BROKER_PORTAL_ROUTE, CARE_CHARGES_ROUTE, LOGOUT_ROUTE } from 'routes/RouteConstants';
 import { Header } from '../../HackneyDS';
 
 const links = [
   { href: BROKER_ASSISTANCE_ROUTE, text: 'Broker Assistance' },
   { href: BROKER_PORTAL_ROUTE, text: 'Broker Portal' },
-  { href: CARE_CHARGE_ROUTE, text: 'Care Charges' },
+  { href: CARE_CHARGES_ROUTE, text: 'Care Charges' },
   { href: APPROVALS_ROUTE, text: 'Approvals' },
   { href: '#3', text: 'Finance' },
   { href: LOGOUT_ROUTE, text: 'Log out' },

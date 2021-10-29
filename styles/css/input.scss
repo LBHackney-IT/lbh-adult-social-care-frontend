@@ -41,6 +41,7 @@ textarea {
 
 .lbh-form-group.with-sign .input-container {
   position: relative;
+
   &::before {
     content: attr(data-presign);
     position: absolute;
@@ -50,7 +51,24 @@ textarea {
     box-sizing: border-box;
     left: 8px;
   }
+
   .govuk-input {
     padding-left: 16px;
   }
+}
+
+.govuk-label.lbh-label.input__label {
+  font-size: 19px;
+  line-height: 37px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+.govuk-hint.lbh-hint.input__hint {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 37px;
+  color: #525a5b;
+  margin-bottom: 4px !important;
 }

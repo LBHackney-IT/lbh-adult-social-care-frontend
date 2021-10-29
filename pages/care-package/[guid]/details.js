@@ -177,6 +177,7 @@ const PackageDetailsPage = () => {
       ]}
       setOpenedPopup={setOpenedPopup}
       title={data?.packageType}
+      packageStatus={data?.packageStatus}
       subTitle="Package details"
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}

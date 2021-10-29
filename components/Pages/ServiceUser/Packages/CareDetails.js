@@ -12,7 +12,7 @@ import {
   Hint,
 } from 'components';
 import { formatDate, getNumberWithCommas } from 'service';
-import { getCarePackageDetailsRoute } from 'routes/RouteConstants';
+import { getCarePackageCareChargeRoute, getCarePackageDetailsRoute } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
 import { confirmS117 } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -21,12 +21,20 @@ import { isAfter } from 'date-fns';
 import { CaretDownIcon } from '../../../Icons';
 import { CarePackageStatus } from './CarePackageStatus';
 
-const CareDetails = ({ packageId, title, data, isS117Client, netTotal, packageStatus }) => {
+const CareDetails = ({
+  packageId,
+  title,
+  data,
+  isS117Client,
+  isS117ClientConfirmed: isS117ClientConfirmedInitial,
+  netTotal,
+  packageStatus,
+}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const filteredData = data.filter((d) => d.status === 'Active' || d.status === 'In Progress');
   const [isExpanded, setExpanded] = useState(true);
-  const [s117Client, setS117Client] = useState(isS117Client);
+  const [isS117ClientConfirmed, setIsS117ClientConfirmed] = useState(isS117ClientConfirmedInitial);
 
   const columns = [
     {
@@ -63,9 +71,14 @@ const CareDetails = ({ packageId, title, data, isS117Client, netTotal, packageSt
 
   const [activeOnly, setFilter] = useState(false);
 
-  const handleClick = (e) => {
+  const goToPackageDetails = (e) => {
     e.preventDefault();
     router.push(getCarePackageDetailsRoute(packageId));
+  };
+
+  const goToCareCharge = (e) => {
+    e.preventDefault();
+    router.push(getCarePackageCareChargeRoute(packageId));
   };
 
   const handleS117 = async (e) => {
@@ -73,7 +86,7 @@ const CareDetails = ({ packageId, title, data, isS117Client, netTotal, packageSt
     try {
       await confirmS117({ packageId });
       dispatch(addNotification('Success', 'success'));
-      setS117Client(false);
+      setIsS117ClientConfirmed(false);
     } catch (error) {
       dispatch(addNotification(error, 'error'));
     }
@@ -121,7 +134,7 @@ const CareDetails = ({ packageId, title, data, isS117Client, netTotal, packageSt
         {isExpanded && (
           <>
             <HorizontalSeparator height="10px" />
-            {s117Client && (
+            {isS117ClientConfirmed && (
               <Announcement isError>
                 <WarningText>This client has been categorised as S117.</WarningText>
                 <Container display="flex">
@@ -143,9 +156,17 @@ const CareDetails = ({ packageId, title, data, isS117Client, netTotal, packageSt
                     value={activeOnly}
                     onChangeValue={() => setFilter(!activeOnly)}
                   />
-                  <Link onClick={(e) => handleClick(e)} noVisited>
-                    Package details
-                  </Link>
+                  <Container display="flex" justifyContent="space-between" alignItems="center">
+                    {!isS117Client && (
+                      <Link className="mr-5" onClick={goToCareCharge} noVisited>
+                        Add financial assessment
+                      </Link>
+                    )}
+
+                    <Link onClick={goToPackageDetails} noVisited>
+                      Package details
+                    </Link>
+                  </Container>
                 </Container>
                 <HorizontalSeparator height="5px" />
                 <Table

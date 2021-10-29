@@ -161,6 +161,7 @@ const ApprovalPackageDetail = () => {
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
+      packageStatus={data?.packageStatus}
       setOpenedPopup={setOpenedPopup}
       openedPopup={openedPopup}
       showEditActions

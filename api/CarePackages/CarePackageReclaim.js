@@ -4,6 +4,7 @@ import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const CARE_PACKAGE_URL = `${BASE_URL}/v1/care-packages`;
 
+// FNC requests
 export const createCarePackageReclaimFnc = (carePackageId, fundedNursingCareCreationRequest) => {
   const options = {
     url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/fnc`,
@@ -30,7 +31,8 @@ export const updateCarePackageReclaimFnc = (carePackageId, fundedNursingCareUpda
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-export const createCarePackageReclaimCareCharge = (carePackageId, careChargeReclaimCreationRequest) => {
+// Reclaim requests
+export const createCareChargeReclaim = (carePackageId, careChargeReclaimCreationRequest) => {
   const options = {
     url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges`,
     method: 'POST',
@@ -43,16 +45,7 @@ export const createCarePackageReclaimCareCharge = (carePackageId, careChargeRecl
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-export const getCarePackageReclaimFnc = (carePackageId) =>
-  axios.get(`${CARE_PACKAGE_URL}/${carePackageId}/reclaims/fnc`).then(handleResponse).catch(handleError);
-
-export const getCarePackageReclaimCareCharges = (carePackageId) =>
-  axios.get(`${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges`).then(handleResponse).catch(handleError);
-
-export const getActiveFundedNursingCarePrice = (carePackageId) =>
-  axios.get(`${CARE_PACKAGE_URL}/${carePackageId}/reclaims/fnc/active-price`).then(handleResponse).catch(handleError);
-
-export const updateCarePackageReclaimCareCharge = (carePackageId, careChargeUpdateRequest) => {
+export const updateCareChargeReclaim = (carePackageId, careChargeUpdateRequest) => {
   const options = {
     url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges`,
     method: 'PUT',
@@ -62,5 +55,25 @@ export const updateCarePackageReclaimCareCharge = (carePackageId, careChargeUpda
     },
     data: [careChargeUpdateRequest],
   };
+
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+export const cancelCareChargeReclaim = ({ carePackageId, reclaimId }) => {
+  const options = {
+    url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/${reclaimId}/cancel`,
+    method: 'PUT',
+  };
+
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+export const endCareChargeReclaim = ({ carePackageId, reclaimId, endDate }) => {
+  const options = {
+    url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/${reclaimId}/end`,
+    method: 'PUT',
+    data: { endDate },
+  };
+
   return axios(options).then(handleResponse).catch(handleError);
 };

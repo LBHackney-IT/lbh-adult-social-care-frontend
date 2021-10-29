@@ -140,7 +140,7 @@ const DatePicker = ({
   }, [date]);
 
   return (
-    <div className={`govuk-date-input lbh-date-input${disabledClass}${outerClass}`} id={formId && `${formId}-errors`}>
+    <div className={`govuk-date-input lbh-date-input${outerClass}`} id={formId && `${formId}-errors`}>
       {label && <Label className="govuk-date-input__label">{label}</Label>}
       {hint && <Hint className="govuk-date-input__hint">{hint}</Hint>}
       {inputs.map((input) => {
@@ -155,7 +155,7 @@ const DatePicker = ({
               </label>
             )}
             <input
-              className={`${errorClass}govuk-input govuk-date-input__input ${input.className}`}
+              className={`${errorClass} govuk-input govuk-date-input__input ${input.className}`}
               id={input.id}
               disabled={disabled}
               value={date === null ? '' : `00${input.value}`.slice(-2)}
@@ -181,7 +181,7 @@ const DatePicker = ({
         );
       })}
       {IconComponent && (
-        <div className="date-picker__calendar-container">
+        <div className={`date-picker__calendar-container${disabledClass}`}>
           <div className='date-picker__additional-action'>
             <IconComponent onClick={clickIcon} className={iconClassName} />
           </div>

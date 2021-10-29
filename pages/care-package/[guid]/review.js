@@ -68,7 +68,7 @@ const ReviewPackageDetailsPage = () => {
       id: 5,
       key: data?.hackneyReclaims?.fnc && 'FNC (net collected at source)',
       value: data?.hackneyReclaims?.fnc,
-      checkHide: true
+      checkHide: true,
     },
     {
       id: 6,
@@ -85,7 +85,7 @@ const ReviewPackageDetailsPage = () => {
       id: 8,
       key: data?.supplierReclaims?.fnc && 'FNC (net collected at source)',
       value: data?.supplierReclaims?.fnc,
-      checkHide: true
+      checkHide: true,
     },
     {
       id: 9,
@@ -116,7 +116,7 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: data?.packageType,
       id: 'care-package',
-      goToPackage: (packageId) => router.push(getCorePackageRoute(packageId)),
+      goToPackage: () => router.push(getCorePackageRoute(carePackageId)),
       costOfPlacement: data?.costOfPlacement,
       items: [
         {
@@ -136,7 +136,7 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'Weekly Additional Need',
       id: 'weekly-additional-need',
-      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
+      goToPackage: () => router.push(getBrokerPackageRoute(carePackageId)),
       items: data?.additionalWeeklyNeeds,
       totalCostHeader: 'Total (Net Off)',
       totalCost: data?.additionalWeeklyCost,
@@ -144,7 +144,7 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'One Off Additional Need',
       id: 'on-off-additional-need',
-      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
+      goToPackage: () => router.push(getBrokerPackageRoute(carePackageId)),
       items: data?.additionalOneOffNeeds,
       totalCostHeader: 'Total (Net Off)',
       totalCost: data?.additionalOneOffCost,
@@ -152,7 +152,7 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'Funded Nursing Care',
       id: 'funded-nursing-care',
-      goToPackage: (packageId) => router.push(getFundedNursingCareRoute(packageId)),
+      goToPackage: () => router.push(getFundedNursingCareRoute(carePackageId)),
       items: data?.fundedNursingCare ? [data?.fundedNursingCare] : null,
       checkHide: true,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
@@ -168,7 +168,7 @@ const ReviewPackageDetailsPage = () => {
     {
       headerTitle: 'Care Charges',
       id: 'care-charges',
-      goToPackage: (packageId) => router.push(getCareChargesRoute(packageId)),
+      goToPackage: () => router.push(getCareChargesRoute(carePackageId)),
       items: data?.careCharges,
       careChargeClaimCollector: careChargesClaimCollector[data?.fundedNursingCare?.claimCollector],
       totalCostInfo: {
@@ -186,6 +186,7 @@ const ReviewPackageDetailsPage = () => {
       openedPopup={openedPopup}
       setOpenedPopup={setOpenedPopup}
       packageId={carePackageId}
+      packageStatus={data?.packageStatus}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
       buttons={[

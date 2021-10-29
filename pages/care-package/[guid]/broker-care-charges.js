@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { CareCharges } from 'components';
 import {
-  createCarePackageReclaimCareCharge,
-  updateCarePackageReclaimCareCharge,
+  createCareChargeReclaim,
+  updateCareChargeReclaim,
   usePackageCareCharge,
   usePackageCalculatedCost,
   useSingleCorePackageInfo,
@@ -36,12 +36,10 @@ const CareChargesPage = () => {
 
   const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e'; // todo to be removed
 
-  const params = useMemo(() => ({ subType: reclaimType.careCharge }), []);
-
-  const { data: careCharge, isLoading: careChargeLoading } = usePackageCareCharge({
-    params,
-    packageId: carePackageId
-  });
+  const { data: careCharge, isLoading: careChargeLoading } = usePackageCareCharge(
+    carePackageId,
+    reclaimType.careCharge
+  );
 
   const { data: calculatedCost, isLoading: calculatedCostLoading } = usePackageCalculatedCost(
     carePackageId,
@@ -49,14 +47,6 @@ const CareChargesPage = () => {
   );
 
   const { data: packageInfo } = useSingleCorePackageInfo(carePackageId);
-
-  const collectingReasonOptions = [
-    { text: 'Service user unable to manage finances', value: '1' },
-    { text: 'Agreement with provider to pay gross', value: '2' },
-    { text: 'Service user or family declining payment', value: '3' },
-    { text: 'Finance managed by CFAT', value: '4' },
-    { text: 'Other', value: '5' },
-  ];
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
@@ -67,7 +57,7 @@ const CareChargesPage = () => {
   const createCareCharge = async (packageId, careChargeCreation) => {
     setLoading(true);
     try {
-      await createCarePackageReclaimCareCharge(packageId, careChargeCreation);
+      await createCareChargeReclaim(packageId, careChargeCreation);
       pushNotification(`Care charge created successfully`, 'success');
       router.push(packageReviewPageLink);
     } catch (e) {
@@ -79,7 +69,7 @@ const CareChargesPage = () => {
   const updateCareCharge = async (packageId, careChargeUpdate) => {
     setLoading(true);
     try {
-      await updateCarePackageReclaimCareCharge(packageId, careChargeUpdate);
+      await updateCareChargeReclaim(packageId, careChargeUpdate);
       pushNotification(`Care charge updated successfully`, 'success');
       router.push(packageReviewPageLink);
     } catch (e) {
@@ -91,7 +81,6 @@ const CareChargesPage = () => {
   return (
     <CareCharges
       loading={loading || calculatedCostLoading || careChargeLoading}
-      reasonsCollecting={collectingReasonOptions}
       calculatedCost={calculatedCost}
       isS117={packageInfo?.settings?.isS117Client}
       careCharge={careCharge?.length && careCharge[0]}
