@@ -9,7 +9,7 @@ export const getBrokerPackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker
 export const getFundedNursingCareRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-fnc`;
 export const getCareChargesRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-care-charges`;
 export const getHistoryRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/history`;
-export const getCarePackageDetailsRoute = (id) =>  `${CARE_PACKAGE_ROUTE}/${id}/details`;
+export const getCarePackageDetailsRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/details`;
 export const getCarePackageApprovalRoute = (packageId) => `${CARE_PACKAGE_ROUTE}/${packageId}/approval`;
 
 export const SERVICE_USER_ROUTE = '/service-user';
@@ -38,12 +38,12 @@ const carePackageRoutes = [
 ];
 
 export const saveToStoragePrevRoute = (route) => {
-  if(isServer()) return;
+  if (isServer()) return;
   window.localStorage.setItem('prevRoute', route);
 };
 
 export const getStoragePrevRoute = () => {
-  if(isServer()) return {};
+  if (isServer()) return {};
   const route = window.localStorage.getItem('prevRoute');
   return route ? getPrevRouteInfo(route) : {};
 };
@@ -54,7 +54,7 @@ export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
   return [
     { text: 'Home', href: '/' },
     { text: routeInfo.name || 'Broker Assistance', href: routeInfo.route || BROKER_ASSISTANCE_ROUTE },
-    ...additionalBreadcrumbs
+    ...additionalBreadcrumbs,
   ];
 };
-export const getPrevRouteInfo = (route) => carePackageRoutes.find(mainRoute => route.includes(mainRoute.route)) || {};
+export const getPrevRouteInfo = (route) => carePackageRoutes.find((mainRoute) => route.includes(mainRoute.route)) || {};
