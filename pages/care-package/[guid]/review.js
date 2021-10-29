@@ -186,6 +186,7 @@ const ReviewPackageDetailsPage = () => {
       openedPopup={openedPopup}
       setOpenedPopup={setOpenedPopup}
       packageId={carePackageId}
+      packageStatus={data?.packageStatus}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
       buttons={[
