@@ -35,7 +35,7 @@ export const PackageApprovalsTable = ({ onRowClick, data }) => {
               </Tag>
             </Container>
             <p className="brokerage-portal--birthdate">{formatDate(dateOfBirth)}</p>
-            {address.length && (
+            {!!address.length && (
               <p className="brokerage-portal--address">
                 {address.join(', ')}
               </p>
