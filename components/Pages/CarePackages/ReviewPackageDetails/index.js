@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { currency } from 'constants/strings';
-import {
-  getCorePackageRoute,
-  getHistoryRoute
-} from 'routes/RouteConstants';
+import { getHistoryRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage } from 'api';
 import { useDispatch } from 'react-redux';
 import BrokerageHeader from '../BrokerageHeader';
-import { Button, Container, Link } from '../../../HackneyDS';
+import { Container, Link } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import PackageInfo from './PackageInfo';
@@ -46,7 +43,6 @@ const ReviewPackageDetails = ({
   summary = [],
   openedPopup,
   buttons,
-  breadcrumbs,
   setOpenedPopup,
   title = 'Nursing Care',
   subTitle = 'Package details',

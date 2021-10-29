@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
 import { getLoggedInUser } from 'service';
 import { ReviewPackageDetails } from 'components';
-import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -36,12 +35,6 @@ const careChargesClaimCollector = {
   2: 'Hackney Council (gross)',
   1: 'Supplier (net)',
 };
-
-const breadcrumbs = [
-  { text: 'Home', href: '/' },
-  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
-  { text: 'Full overview' },
-];
 
 const ApprovalPackageDetail = () => {
   const router = useRouter();
@@ -165,13 +158,21 @@ const ApprovalPackageDetail = () => {
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
-      breadcrumbs={breadcrumbs}
       setOpenedPopup={setOpenedPopup}
       openedPopup={openedPopup}
       showEditActions
       buttons={[
-        { title: 'Decline', onClick: () => setOpenedPopup('decline'), className: 'outline red' },
-        { title: 'Approve', onClick: () => setOpenedPopup('approve') },
+        {
+          title: 'Decline',
+          onClick: () => setOpenedPopup('decline'),
+          secondary: true,
+          color: 'red',
+          outline: true
+        },
+        {
+          title: 'Approve',
+          onClick: () => setOpenedPopup('approve')
+        },
       ]}
       submitButtonText='Approve'
       goBack={router.back}

@@ -1,9 +1,20 @@
 .brokerage__submit-for-approval {
-  .popup__inner-content {
+  .lbh-dialog {
     width: 480px;
-    min-height: 480px;
     height: fit-content;
     padding: 32px;
+    border: none;
+  }
+
+  h2 {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    color: $lbh-text-colour;
+  }
+
+  .lbh-dialog__close {
+    display: none;
   }
 
   .brokerage__approved-by-select {
