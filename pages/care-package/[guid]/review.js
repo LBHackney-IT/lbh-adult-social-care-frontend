@@ -5,7 +5,6 @@ import { usePackageSummary } from 'api';
 import { getLoggedInUser } from 'service';
 import { ReviewPackageDetails } from 'components';
 import {
-  BROKER_PORTAL_ROUTE,
   getBrokerPackageRoute,
   getCareChargesRoute,
   getCorePackageRoute,
@@ -24,12 +23,6 @@ export const getServerSideProps = withSession(({ req }) => {
   }
   return { props: {} };
 });
-
-const breadcrumbs = [
-  { text: 'Home', href: '/' },
-  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
-  { text: 'Full overview' },
-];
 
 const settingsTypes = [
   { field: 'hasRespiteCare', text: 'Respite Care' },
@@ -171,7 +164,6 @@ const ReviewPackageDetailsPage = () => {
     <ReviewPackageDetails
       loading={summaryLoading}
       subTitle="Review package details"
-      breadcrumbs={breadcrumbs}
       title={data?.packageType}
       openedPopup={openedPopup}
       setOpenedPopup={setOpenedPopup}
