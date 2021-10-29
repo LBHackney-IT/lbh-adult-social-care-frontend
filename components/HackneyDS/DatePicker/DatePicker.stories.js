@@ -62,3 +62,26 @@ LabelHintError.args = {
   month: { label: 'Month' },
   year: { error: 'Error year', label: 'Year' }
 };
+
+export const WithClearButton = Template.bind({});
+WithClearButton.args = {
+  formId: 'label-hint-error',
+  hint: 'Date picker hint',
+  label: 'Date picker label',
+  day: { label: 'Day' },
+  month: { label: 'Month' },
+  year: { error: 'Error year', label: 'Year' },
+  hasClear: true,
+};
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  formId: 'label-hint-error',
+  hint: 'Date picker hint',
+  label: 'Date picker label',
+  day: { label: 'Day' },
+  month: { label: 'Month' },
+  year: { error: 'Error year', label: 'Year' },
+  disabled: true,
+  hasClear: true,
+};

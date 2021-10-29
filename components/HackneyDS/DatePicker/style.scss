@@ -102,6 +102,13 @@
   }
 }
 
+.date-picker__additional-action {
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
 .date-picker__calendar-container {
   display: inline-block;
   position: relative;

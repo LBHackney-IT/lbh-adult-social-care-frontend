@@ -202,9 +202,13 @@ const DatePicker = ({
           )}
         </div>
       )}
-      {hasClear && date && <div className='date-picker__additional-action clear-datepicker' onClick={clearDate}><CrossIcon /></div>}
+      {hasClear && date && (
+        <div className={`date-picker__additional-action clear-datepicker${disabledClass}`} onClick={clearDate}>
+          <CrossIcon />
+        </div>
+      )}
       {previousDate && (
-        <div onClick={restoreDate} className='date-picker__additional-action restore-date'>
+        <div onClick={restoreDate} className={`date-picker__additional-action restore-date${disabledClass}`}>
           <RestoreIcon />
         </div>
       )}

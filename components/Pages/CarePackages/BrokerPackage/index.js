@@ -34,11 +34,10 @@ const BrokerPackage = ({
 }) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
-
   const dispatch = useDispatch();
 
   const [showCoreError, setShowCoreError] = useState(false);
-
+  const [hiddenNeedErrors, setHiddenNeedErrors] = useState([]);
   const [isOngoing, setIsOngoing] = useState(false);
   const [coreCost, setCoreCost] = useState(0);
   const [coreCostError, setCoreCostError] = useState('');
@@ -88,67 +87,28 @@ const BrokerPackage = ({
     setSearchText('');
   };
 
-  const composeDetailsData = () => {
-    if (detailsData?.coreCost !== undefined) {
-      setCoreDates({
-        startDate: dateStringToDate(detailsData.startDate) || new Date(),
-        endDate: dateStringToDate(detailsData.endDate),
-      });
-
-      if (!detailsData.endDate) {
-        setIsOngoing(true);
-      }
-
-      setCoreCost(detailsData.coreCost);
-
-      if (detailsData?.details?.length) {
-        const weeklyDetails = detailsData.details
-          .filter((item) => item.costPeriod === 2)
-          .map((item) => ({
-            ...item,
-            startDate: dateStringToDate(item.startDate),
-            endDate: dateStringToDate(item.endDate),
-            isOngoing: !item.endDate,
-          }));
-
-        const oneOffDetails = detailsData.details
-          .filter((item) => item.costPeriod === 3)
-          .map((item) => ({
-            ...item,
-            startDate: dateStringToDate(item.startDate),
-            endDate: dateStringToDate(item.endDate),
-          }));
-
-        if (weeklyDetails.length) setWeeklyNeeds(weeklyDetails);
-        if (oneOffDetails.length) setOneOffNeeds(oneOffDetails);
-      }
-    }
-  };
-
   const errorCoreDate = useMemo(() => {
     const { startDate: coreStartDate, endDate: coreEndDate } = coreDates;
 
-    if(!coreStartDate) {
+    if (!coreStartDate) {
       return 'Core start date is wrong';
     }
-    if(!isOngoing && !coreEndDate) {
+    if (!isOngoing && !coreEndDate) {
       return 'Core end date is wrong';
     }
-    if(!isOngoing && coreEndDate && compareDescendingDMY(coreStartDate, coreEndDate) === -1) {
+    if (!isOngoing && coreEndDate && compareDescendingDMY(coreStartDate, coreEndDate) === -1) {
       return 'Core end date less then core start date';
     }
   }, [isOngoing, coreDates]);
-
-  useEffect(() => {
-    composeDetailsData();
-  }, [detailsData]);
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
   };
 
   const checkNeedError = (item) => {
-    const { startDate, endDate, isOngoing: isOngoingItem, cost } = item;
+    const { startDate, endDate, isOngoing: isOngoingItem, cost, id } = item;
+
+    if (hiddenNeedErrors.includes(id)) return false;
 
     let errorStartDate = '';
     let errorEndDate = '';
@@ -164,6 +124,10 @@ const BrokerPackage = ({
 
     if (!cost && (startDate || endDate)) {
       errorCost = 'Cost is required';
+    }
+
+    if (!startDate) {
+      errorStartDate = 'Start date is required';
     }
 
     return errorStartDate || errorEndDate || errorCost;
@@ -185,23 +149,24 @@ const BrokerPackage = ({
       hasError = true;
     }
 
-    if(errorCoreDate) {
+    if (errorCoreDate) {
       pushNotification(errorCoreDate);
       hasError = true;
     }
 
     const weeklyDateErrors = checkDateErrors(weeklyNeeds);
     const oneOfNeedDateErrors = checkDateErrors(oneOffNeeds);
+    setHiddenNeedErrors([]);
     if (!coreCost) {
       setCoreCostError('The core cost field is required');
     }
 
-    if (weeklyDateErrors || oneOfNeedDateErrors) {
+    if (!hasError && (weeklyDateErrors || oneOfNeedDateErrors)) {
       pushNotification('Some validation errors above');
       hasError = true;
     }
 
-    if(hasError) return;
+    if (hasError) return;
 
     const weeklyDetails = weeklyNeeds
       .filter((item) => item.startDate || item.endDate || item.cost)
@@ -274,7 +239,9 @@ const BrokerPackage = ({
   };
 
   const addNeed = (setter) => {
-    setter((prevState) => [...prevState, { ...initialNeed, id: uniqueID() }]);
+    const newId = uniqueID();
+    setHiddenNeedErrors(prevState => ([ ...prevState, newId ]));
+    setter((prevState) => [...prevState, { ...initialNeed, id: newId }]);
   };
 
   const removeNeed = (getter, setter, index) => {
@@ -284,11 +251,60 @@ const BrokerPackage = ({
   };
 
   const changeCoreDate = (field, date) => {
-    if(field === 'endDate') {
+    if (field === 'endDate') {
       onShowCoreError(true);
     }
     setCoreDates((prevState) => ({ ...prevState, [field]: date }));
   }
+
+  useEffect(() => {
+    if (detailsData?.coreCost !== undefined) {
+      setCoreDates({
+        startDate: dateStringToDate(detailsData.startDate) || new Date(),
+        endDate: dateStringToDate(detailsData.endDate),
+      });
+
+      if (!detailsData.endDate) {
+        setIsOngoing(true);
+      }
+
+      setCoreCost(detailsData.coreCost);
+
+      if (detailsData?.details?.length) {
+        const weeklyDetails = detailsData.details
+          .filter((item) => item.costPeriod === 2)
+          .map((item) => ({
+            ...initialNeed,
+            ...item,
+            startDate: dateStringToDate(item.startDate),
+            endDate: dateStringToDate(item.endDate),
+            isOngoing: !item.endDate,
+          }));
+
+        const oneOffDetails = detailsData.details
+          .filter((item) => item.costPeriod === 3)
+          .map((item) => ({
+            ...initialNeed,
+            ...item,
+            startDate: dateStringToDate(item.startDate),
+            endDate: dateStringToDate(item.endDate),
+          }));
+
+        let newHiddenNeedErrors = [];
+        if (weeklyDetails.length) {
+          setWeeklyNeeds(weeklyDetails);
+          newHiddenNeedErrors = weeklyDetails.map(item => item.id)
+        }
+        if (oneOffDetails.length) {
+          setOneOffNeeds(oneOffDetails);
+          newHiddenNeedErrors = [...newHiddenNeedErrors, oneOffDetails];
+        }
+        if (hiddenNeedErrors.length) {
+          setHiddenNeedErrors(newHiddenNeedErrors);
+        }
+      }
+    }
+  }, [detailsData]);
 
   useEffect(() => {
     let totalCost = 0;
@@ -298,7 +314,7 @@ const BrokerPackage = ({
       });
     }
     setWeeklyTotalCost(totalCost);
-  }, [coreCost, weeklyNeeds]);
+  }, [weeklyNeeds]);
 
   useEffect(() => {
     let totalCost = 0;
@@ -308,10 +324,10 @@ const BrokerPackage = ({
       });
     }
     setOneOffTotalCost(totalCost);
-  }, [coreCost, oneOffNeeds]);
+  }, [oneOffNeeds]);
 
   useEffect(() => {
-    if(detailsData.startDate && !detailsData?.endDate) {
+    if (!detailsData.startDate && !detailsData?.endDate) {
       setIsOngoing(false);
     }
   }, [detailsData?.endDate, detailsData?.startDate]);
@@ -437,7 +453,7 @@ const BrokerPackage = ({
           )}
 
           <Container className="brokerage__actions">
-            <Button onClick={clickBack} className="brokerage__back-button">
+            <Button onClick={clickBack} secondary color='gray'>
               Back
             </Button>
 
