@@ -10,7 +10,6 @@ const BrokerageCost = ({
   getter,
   setter,
   name,
-  corePackageDates,
   checkNeedError,
   removeNeed,
   labelInputCost,
@@ -44,7 +43,7 @@ const BrokerageCost = ({
                 <FormGroup error={error ? 'Some validations error' : ''} key={item.id}>
                   <BrokeragePackageDates
                     hasClear
-                    startMinDate={corePackageDates.endDate || corePackageDates.startDate}
+                    hasEndMinDate={false}
                     dates={{ startDate: item.startDate, endDate: item.endDate }}
                     fields={{
                       dateFrom: 'startDate',

@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
 import { getLoggedInUser } from 'service';
 import { ReviewPackageDetails } from 'components';
-import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -37,12 +36,6 @@ const careChargesClaimCollector = {
   1: 'Supplier (net)',
 };
 
-const breadcrumbs = [
-  { text: 'Home', href: '/' },
-  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
-  { text: 'Full overview' },
-];
-
 const ApprovalPackageDetail = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
@@ -57,13 +50,14 @@ const ApprovalPackageDetail = () => {
 
   const summary = [
     { id: 1, key: 'Cost of placement', value: data?.costOfPlacement },
-    { id: 2, key: 'FNC payment', value: data?.fncPayment },
+    { id: 2, key: 'FNC payment', value: data?.fncPayment, checkHide: true, },
     { id: 3, key: 'Additional weekly cost', value: data?.additionalWeeklyCost },
     { id: 4, key: 'Sub total cost of package', value: data?.subTotalCost, className: 'brokerage__summary-cost' },
     {
       id: 5,
       key: data?.hackneyReclaims?.fnc && 'FNC (net collected at source)',
       value: data?.hackneyReclaims?.fnc,
+      checkHide: true,
     },
     {
       id: 6,
@@ -80,6 +74,7 @@ const ApprovalPackageDetail = () => {
       id: 8,
       key: data?.supplierReclaims?.fnc && 'FNC (net collected at source)',
       value: data?.supplierReclaims?.fnc,
+      checkHide: true,
     },
     {
       id: 9,
@@ -133,6 +128,7 @@ const ApprovalPackageDetail = () => {
     {
       headerTitle: 'Funded Nursing Care',
       id: 'funded-nursing-care',
+      checkHide: true,
       items: data?.fundedNursingCare ? [data?.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
       fncDetails: {
@@ -165,13 +161,21 @@ const ApprovalPackageDetail = () => {
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
-      breadcrumbs={breadcrumbs}
       setOpenedPopup={setOpenedPopup}
       openedPopup={openedPopup}
       showEditActions
       buttons={[
-        { title: 'Decline', onClick: () => setOpenedPopup('decline'), className: 'outline red' },
-        { title: 'Approve', onClick: () => setOpenedPopup('approve') },
+        {
+          title: 'Decline',
+          onClick: () => setOpenedPopup('decline'),
+          secondary: true,
+          color: 'red',
+          outline: true
+        },
+        {
+          title: 'Approve',
+          onClick: () => setOpenedPopup('approve')
+        },
       ]}
       submitButtonText='Approve'
       goBack={router.back}
