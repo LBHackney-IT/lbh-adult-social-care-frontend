@@ -339,6 +339,7 @@ const BrokerPackage = ({
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
               hasClear
+              hasEndMinDate={false}
               error={errorCoreDate}
               fields={{
                 dateFrom: 'startDate',

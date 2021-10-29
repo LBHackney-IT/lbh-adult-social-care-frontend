@@ -46,15 +46,12 @@ export const PackageApprovalsTable = ({ onRowClick, data }) => {
     },
     {
       accessor: 'hackneyId',
-      Cell: ({ row: { original }}) => {
-        const { hackneyId } = original.serviceUser;
-        return (
-          <Container className="brokerage-portal__cell-with-title">
-            <h3>Hackney ID</h3>
-            <p>#{hackneyId}</p>
-          </Container>
-        )
-      },
+      Cell: ({ row: { original: { serviceUser: { hackneyId }} }}) => (
+        <Container className="brokerage-portal__cell-with-title">
+          <h3>Hackney ID</h3>
+          <p>#{hackneyId}</p>
+        </Container>
+      ),
     },
     {
       accessor: 'packageType',
@@ -67,10 +64,10 @@ export const PackageApprovalsTable = ({ onRowClick, data }) => {
     },
     {
       accessor: 'approver',
-      Cell: ({ value }) => (
+      Cell: ({ row: { original: { approver }}}) => (
         <Container className="brokerage-portal__cell-with-title">
           <h3>Approver</h3>
-          <p>{value || '—'}</p>
+          <p>{approver?.userName || '—'}</p>
         </Container>
       ),
     },
