@@ -48,7 +48,8 @@ const BrokerPackageCost = ({
         id="supplier-weekly-cost"
         error={coreCostError}
         preSign={currency.euro}
-        label="Weekly Cost"
+        className='broker-package__core-cost'
+        label="Weekly сost"
         value={coreCost}
         onChangeValue={onChangeCoreCost}
         required
@@ -56,7 +57,7 @@ const BrokerPackageCost = ({
       <BrokerageBorderCost
         className="broker-package__weekly-cost"
         totalCost={coreCost}
-        totalCostHeader='Core cost'
+        totalCostHeader='Core weekly cost'
       />
       <BrokerageCost
         name="weekly-additional"
@@ -65,7 +66,7 @@ const BrokerPackageCost = ({
         getter={weeklyNeeds}
         setter={setWeeklyNeeds}
         checkNeedError={checkNeedError}
-        totalCostName="Weekly cost"
+        totalCostName="Additional need weekly cost"
         totalCost={weeklyTotalCost}
         removeNeed={removeNeed}
         addNeedText="Add additional weekly need"
