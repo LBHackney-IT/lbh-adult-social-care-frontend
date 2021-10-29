@@ -1,26 +1,24 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import withSession from 'lib/session';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { getLoggedInUser } from 'service';
 import {
-  Button,
   Container,
-  HorizontalSeparator,
-  RadioGroup,
   BrokerageHeader,
-  ServiceUserDetails,
-  FurtherDetails,
-  PackageType,
   TitleSubtitleHeader,
   CarePackageBreadcrumbs,
+  DatePicker,
+  FormGroup,
+  Button,
+  VerticalSeparator,
+  Checkbox,
 } from 'components';
 import { useRouter } from 'next/router';
-import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
-import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
+import { usePackageDetails, useSingleCorePackageInfo } from 'api';
+import DatePick from 'components/DatePick';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -39,17 +37,10 @@ const CorePackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { guid: packageId } = router.query;
-  const { data: packageInfo } = useSingleCorePackageInfo(packageId);
-  const { packageType } = packageInfo;
+  const { data: detailsData, isLoading: detailsLoading } = usePackageDetails(packageId);
+  console.log(detailsData);
 
-
-  const schema = yup.object().shape({
-    packageType: yup
-      .number()
-      .typeError('Please select a package type')
-      .required()
-      .min(1, 'Please select a package type'),
-  });
+  const schema = yup.object().shape({});
 
   const {
     handleSubmit,
@@ -63,12 +54,11 @@ const CorePackage = () => {
   const onSubmit = (data) => console.log(data);
 
   useEffect(() => {
-    if (packageInfo) {
-      setValue('packageType', packageInfo.packageType, 10);
-      setValue('primarySupportReasonId', packageInfo.primarySupportReasonId);
-      setValue('packageScheduling', packageInfo.packageScheduling);
+    if (detailsData) {
+      setValue('startDate', new Date(detailsData.startDate));
+      setValue('endDate', new Date(detailsData.endDate));
     }
-  }, [packageInfo]);
+  }, [detailsData]);
 
   return (
     <>
@@ -76,7 +66,30 @@ const CorePackage = () => {
       <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Broker package" title="Build a care package" />
-        <form onSubmit={handleSubmit(onSubmit)}></form>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Container className="brokerage__container">{}</Container>
+          <FormGroup label="Package dates">
+            <Container display="flex">
+              <Controller
+                name="startDate"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker day={{ label: 'From' }} date={field.value} setDate={field.onChange} {...field} hasClear />
+                )}
+              />
+              <VerticalSeparator width="20px" />
+              <Controller
+                name="endDate"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker day={{ label: 'To' }} date={field.value} setDate={field.onChange} {...field} hasClear />
+                )}
+              />
+              {/* <Checkbox value={}/> */}
+            </Container>
+          </FormGroup>
+          <Button type="submit">Save and continue</Button>
+        </form>
       </Container>
     </>
   );
