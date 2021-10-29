@@ -130,9 +130,11 @@ const CareDetails = ({ packageId, title, data, isS117Client, netTotal }) => {
                     onChangeValue={() => setFilter(!activeOnly)}
                   />
                   <Container display="flex" justifyContent="space-between" alignItems="center">
-                    <Link className="mr-5" onClick={goToCareCharge} noVisited>
-                      Add financial assessment
-                    </Link>
+                    {!isS117Client && (
+                      <Link className="mr-5" onClick={goToCareCharge} noVisited>
+                        Add financial assessment
+                      </Link>
+                    )}
 
                     <Link onClick={goToPackageDetails} noVisited>
                       Package details
