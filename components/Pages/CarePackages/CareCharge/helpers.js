@@ -26,7 +26,7 @@ export const useGetChargeStatus = (subType) => {
   const { actualReclaims } = usePackageCareCharge(packageId);
   const { data: statusOptions } = useLookups('reclaimStatus');
 
-  const reclaimData = actualReclaims.find((el) => el.subType === subType);
+  const reclaimData = actualReclaims?.find((el) => el.subType === subType);
 
   return statusOptions.find((el) => el.id === reclaimData?.status)?.name;
 };

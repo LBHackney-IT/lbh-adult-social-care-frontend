@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Breadcrumbs,
   BrokerageHeader,
@@ -12,14 +13,13 @@ import {
   TitleSubtitleHeader,
 } from 'components';
 import { currency } from 'constants/strings';
-import { careChargeAPIKeys, careChargeFormKeys } from 'constants/variables';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useToggle } from 'react-use';
-import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { formatDate, getLoggedInUser } from 'service';
+import { careChargeAPIKeys, careChargeFormKeys } from 'constants/variables';
+import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { useLookups, usePackageCareCharge, useSingleCorePackageInfo } from 'api';
 
 const { provisional, more12, less12 } = careChargeFormKeys;
@@ -59,6 +59,28 @@ const useBreadcrumbs = () => {
 
 const useModal = () => useToggle(false);
 
+const defaultValues = {
+  [provisional]: {
+    cost: '',
+    claimCollector: '',
+    claimReason: '',
+    description: '',
+  },
+  [less12]: {
+    cost: '',
+    claimCollector: '',
+    startDate: null,
+    endDate: null,
+  },
+  [more12]: {
+    cost: '',
+    claimCollector: '',
+    startDate: null,
+    endDate: null,
+    isOngoing: false,
+  },
+};
+
 const CareCharge = () => {
   const breadcrumbs = useBreadcrumbs();
 
@@ -76,33 +98,16 @@ const CareCharge = () => {
   const { actualReclaims } = usePackageCareCharge(packageId);
   const { data: claimCollectors } = useLookups('claimCollector');
   const { data: packageInfo } = useSingleCorePackageInfo(packageId);
-  console.log('%c actualReclaims =', 'color: lightblue', actualReclaims);
-
-  const { handleSubmit, control, formState, setValue, getValues, reset } = useForm({
-    defaultValues: {
-      [provisional]: {
-        cost: '',
-        claimCollector: '',
-        claimReason: '',
-        description: '',
-      },
-      [less12]: {
-        cost: '',
-        claimCollector: '',
-        startDate: null,
-        endDate: null,
-      },
-      [more12]: {
-        cost: '',
-        claimCollector: '',
-        startDate: null,
-        endDate: null,
-        isOngoing: false,
-      },
-    },
-  });
 
   useEffect(() => {
+    if (packageInfo.settings?.isS117Client) router.replace(CARE_CHARGES_ROUTE);
+  }, [packageInfo]);
+
+  const { handleSubmit, control, formState, setValue, getValues, reset } = useForm({ defaultValues });
+
+  useEffect(() => {
+    if (!actualReclaims) return;
+
     if (actualReclaims.length) {
       const provisionalData = actualReclaims.find((el) => el.subType === careChargeAPIKeys.provisional) ?? {};
       const less12Data = actualReclaims.find((el) => el.subType === careChargeAPIKeys.less12) ?? {};
@@ -129,6 +134,8 @@ const CareCharge = () => {
           isOngoing: false,
         },
       });
+    } else {
+      reset(defaultValues);
     }
   }, [actualReclaims]);
 

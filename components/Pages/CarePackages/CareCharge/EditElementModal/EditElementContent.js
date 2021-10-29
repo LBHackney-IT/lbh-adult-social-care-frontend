@@ -35,7 +35,7 @@ const EditElementContent = ({ data, onClose }) => {
     if (ids.length === 0) return null;
 
     const initialData = ids.reduce((acc, id) => {
-      const reclaim = actualReclaims.find((charge) => charge.id === id);
+      const reclaim = actualReclaims?.find((charge) => charge.id === id);
       acc.push(reclaim);
       return acc;
     }, []);
