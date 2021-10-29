@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useToggle } from 'react-use';
 import { formatDate, getLoggedInUser } from 'service';
-import { careChargeAPIKeys, careChargeFormKeys } from 'constants/variables';
+import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
 import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { useLookups, usePackageCareCharge, useSingleCorePackageInfo } from 'api';
 
@@ -149,6 +149,8 @@ const CareCharge = () => {
     const { claimCollector, cost, description, claimReason } = getValues(provisional);
     const collectedByLabel = claimCollectors.find((el) => el.id === claimCollector)?.name;
 
+    const collectingReasonLabel = collectingReasonOptions.find((el) => el.value === claimReason)?.text;
+
     return [
       { label: 'Provisional care charge (pre-assessement)', value: '' },
       { label: 'Cost per week', value: cost ? `${currency.euro}${cost}` : '' },
@@ -156,7 +158,7 @@ const CareCharge = () => {
         label: 'Collected by',
         value: <span className="text-capitalize">{collectedByLabel}</span>,
       },
-      { label: 'Collecting reason', value: claimReason },
+      { label: 'Collecting reason', value: collectingReasonLabel },
       { label: 'Notes', value: description },
     ];
   };
