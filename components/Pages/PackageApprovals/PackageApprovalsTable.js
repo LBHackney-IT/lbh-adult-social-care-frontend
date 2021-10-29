@@ -6,8 +6,8 @@ export const PackageApprovalsTable = ({ onRowClick, data }) => {
   const columns = [
     {
       accessor: 'status',
-      Cell: ({ value, row: { original } }) => {
-        const {
+      Cell: ({ value, row: { original: {
+        serviceUser: {
           fullName,
           dateOfBirth,
           addressLine1,
@@ -15,7 +15,7 @@ export const PackageApprovalsTable = ({ onRowClick, data }) => {
           addressLine3,
           postCode,
           town
-        } = original.serviceUser;
+        }}}}) => {
         const address = [];
 
         [addressLine1 || addressLine2 || addressLine3, town, postCode].forEach(addressString => {
