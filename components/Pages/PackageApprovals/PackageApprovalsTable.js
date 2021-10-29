@@ -1,11 +1,11 @@
 import React from 'react';
-import { formatDate, getTagColorFromStatus } from 'service';
+import { formatDate, getTagColorFromStatusId, getTagDisplayTextFromStatusId } from 'service';
 import { Container, Table, Tag } from '../../HackneyDS';
 
 export const PackageApprovalsTable = ({ onRowClick, data }) => {
   const columns = [
     {
-      accessor: 'packageStatus',
+      accessor: 'status',
       Cell: ({ value, row: { original } }) => {
         const {
           fullName,
@@ -16,25 +16,30 @@ export const PackageApprovalsTable = ({ onRowClick, data }) => {
           postCode,
           town
         } = original.serviceUser;
-        const withComma = (word) => word ? `${word}, ` : '';
+        const address = [];
+
+        [addressLine1 || addressLine2 || addressLine3, town, postCode].forEach(addressString => {
+          if(addressString) {
+            address.push(addressString)
+          }
+        });
+
         return (
           <Container>
             <Container className="status-info" display="flex">
               <p className="brokerage-portal--user-name font-size-19px font-weight-bold text-green">
                 {fullName}
               </p>
-              <Tag className="text-capitalize outline" color={getTagColorFromStatus(value)}>
-                {value}
+              <Tag className="text-capitalize outline" color={getTagColorFromStatusId(value)}>
+                {getTagDisplayTextFromStatusId(value)}
               </Tag>
             </Container>
             <p className="brokerage-portal--birthdate">{formatDate(dateOfBirth)}</p>
-            <p className="brokerage-portal--address">
-              {withComma(addressLine1)}
-              {withComma(addressLine2)}
-              {withComma(addressLine3)}
-              {withComma(town)}
-              {postCode || ''}
-            </p>
+            {address.length && (
+              <p className="brokerage-portal--address">
+                {address.join(', ')}
+              </p>
+            )}
           </Container>
         )
       },
