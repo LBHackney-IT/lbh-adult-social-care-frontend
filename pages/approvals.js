@@ -85,7 +85,7 @@ const Approvals = () => {
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
   const handleRowClick = useCallback((rowInfo) => {
-    router.push(getCarePackageApprovalRoute(rowInfo.packageId));
+    router.push(getCarePackageApprovalRoute(rowInfo.id));
   }, []);
 
   return (
