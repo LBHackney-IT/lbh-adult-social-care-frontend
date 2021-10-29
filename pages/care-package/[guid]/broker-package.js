@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { usePackageDetails, useSuppliers } from 'api';
 import { BrokerPackage } from 'components';
@@ -34,12 +34,6 @@ const BrokerPackagePage = () => {
 
   const { data: { data: selectedSupplier }, isLoading: singleSupplierLoading } = useSuppliers({ params });
   const { supplierName } = selectedSupplier;
-
-  useEffect(() => {
-    if (selectedSupplier.length > 0) {
-      setSelectedItem(selectedSupplier[0]);
-    }
-  }, [selectedSupplier]);
 
   return (
     <BrokerPackage

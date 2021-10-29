@@ -1,5 +1,5 @@
 import React, { useEffect, memo, useState } from 'react';
-import { lastDayOfMonth } from 'date-fns';
+import { lastDayOfMonth, subDays } from 'date-fns';
 import { DatePickerCalendarIcon, RestoreIcon, CrossIcon } from '../../Icons';
 import DatePick from '../../DatePick';
 import Hint from '../lettering/Hint';
@@ -57,15 +57,22 @@ const DatePicker = ({
   const getValidMonth = (monthValue) => {
     // if value more then 11 return 0 (date.getMonth() start from 0) 11 December and max number of month
     // get value 02 format to 2 and 2-1=1 February
-    const validMonth = replaceFirstZero(monthValue) - 1 > 11 ? 0 : replaceFirstZero(monthValue) - 1;
+    let formattedNewMonthValue = 1;
+    if(monthValue && monthValue?.toString?.()?.[1] !== '0') {
+      formattedNewMonthValue = monthValue[1];
+    }
+    const validMonth = replaceFirstZero(monthValue) - 1 > 11 ? `0${formattedNewMonthValue - 1}` : replaceFirstZero(monthValue) - 1;
     return Number(validMonth) < 0 ? 0 : Number(validMonth);
   };
 
   const getValidDay = (dayValue) => {
     const formatDay = dayValue && replaceFirstZero(dayValue);
     const lastDayInMonth = date && lastDayOfMonth(date).getDate();
-    const validDay = formatDay && lastDayInMonth && lastDayInMonth < formatDay ? 1 : formatDay;
-    return Number(validDay) || 1;
+    const checkLessTen = (value) => value < 10 ? '0' :  value?.toString()?.[0];
+    let editDay = `${(day.value && checkLessTen(day.value)) || localDay.value && checkLessTen(localDay.value) || '0'}${dayValue?.[1] || '1'}`;
+    if(editDay === '00') editDay = '01';
+    const validDay = formatDay && lastDayInMonth && lastDayInMonth < formatDay ? editDay : formatDay;
+    return Number(validDay) || editDay;
   };
 
   const getValidYear = (dayValue) => (dayValue ? `20${dayValue}` : 0);
@@ -75,13 +82,16 @@ const DatePicker = ({
   };
 
   const onChangeMonth = (value) => {
-    setDate(
-      new Date(
-        date?.getFullYear() || actualDate.getFullYear(),
-        getValidMonth(value),
-        date?.getDate() || actualDate.getDate()
-      )
+    const validatedMonth = getValidMonth(value);
+    let validatedDate = new Date(
+      date?.getFullYear() || actualDate.getFullYear(),
+      validatedMonth,
+      date?.getDate() || actualDate.getDate()
     );
+    if(validatedMonth < validatedDate.getMonth()) {
+      validatedDate = subDays(validatedDate, 1);
+    }
+    setDate(validatedDate);
   };
 
   const onChangeYear = (value) => {
@@ -148,13 +158,17 @@ const DatePicker = ({
               className={`${errorClass}govuk-input govuk-date-input__input ${input.className}`}
               id={input.id}
               disabled={disabled}
-              value={`00${input.value}`.slice(-2)}
+              value={date === null ? '' : `00${input.value}`.slice(-2)}
               onChange={(e) => {
+                const { value } = e.target;
                 if (input.onChange) {
                   return input.onChange(e);
                 }
                 if (input.onChangeValue) {
-                  const slicedValue = e.target.value.slice(1, 3);
+                  let slicedValue = value.slice(1, 3);
+                  if(date === null) {
+                    slicedValue = `0${value}`;
+                  }
                   input.onChangeValue(slicedValue);
                 }
               }}
