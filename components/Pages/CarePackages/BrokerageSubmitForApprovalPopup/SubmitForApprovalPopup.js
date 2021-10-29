@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import { submitCarePackage, useApprovers } from 'api';
+import { submitCarePackage, useApproversOptions } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 import { Button, Container, Dialog, Select, Textarea, FormGroup } from '../../../HackneyDS';
@@ -9,7 +9,7 @@ import { Button, Container, Dialog, Select, Textarea, FormGroup } from '../../..
 const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { options: approverOptions, isLoading } = useApprovers();
+  const { options: approverOptions, isLoading } = useApproversOptions();
 
   const [approverId, setApproverId] = useState('');
   const [approverError, setApproverError] = useState('');
@@ -43,10 +43,11 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
   return (
     <Dialog
       className="brokerage__submit-for-approval"
-      closePopup={closePopup}
-      title="Submit for approval"
+      onClose={closePopup}
+      isOpen
     >
       <Container>
+        <h2>Submit for approval</h2>
         <FormGroup error={approverError} className="brokerage__approved-by-select" label="To be approved by">
           <Select disabledEmptyComponent error={approverError} options={approverOptions} value={approverId} onChangeValue={changeApprover} />
         </FormGroup>
@@ -54,10 +55,10 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
           <Textarea value={notes} handler={setNotes} />
         </FormGroup>
         <Container className="brokerage__actions">
-          <Button disabled={loading || isLoading} isLoading={loading || isLoading} handler={submit}>
+          <Button disabled={loading || isLoading} isLoading={loading || isLoading} onClick={submit}>
             Submit
           </Button>
-          <Button handler={closePopup} className="link-button red">
+          <Button onClick={closePopup} className="link-button red">
             Cancel
           </Button>
         </Container>

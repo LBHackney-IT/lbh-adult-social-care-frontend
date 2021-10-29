@@ -3,11 +3,13 @@ import { Button, Container } from '../../../HackneyDS';
 
 const PackageDetailsButtons = ({ buttons }) => (
   <Container className="review-package-details__buttons">
-    {buttons.map(({ className = '', onClick, title }) => (
-      <Button key={title} className={className} onClick={onClick}>
-        {title}
-      </Button>
-    ))}
+    {buttons.map(({ className = '', onClick, secondary, title, outline, color }) => {
+      return (
+        <Button secondary={secondary} key={title} color={color} outline={outline} className={className} onClick={onClick}>
+          {title}
+        </Button>
+      )
+    })}
   </Container>
 );
 

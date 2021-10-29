@@ -5,7 +5,6 @@ import { ReviewPackageDetails } from 'components';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
 import {
-  BROKER_PORTAL_ROUTE,
   getBrokerPackageRoute,
   getCareChargesRoute,
   getCorePackageRoute,
@@ -43,12 +42,6 @@ const careChargesClaimCollector = {
   1: 'Supplier (net)',
 };
 
-const breadcrumbs = [
-  { text: 'Home', href: '/' },
-  { text: 'Broker Portal', href: BROKER_PORTAL_ROUTE },
-  { text: 'Full overview' },
-];
-
 const PackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
@@ -65,13 +58,14 @@ const PackageDetailsPage = () => {
 
   const summary = [
     { id: 1, key: 'Cost of placement', value: data?.costOfPlacement },
-    { id: 2, key: 'FNC payment', value: data?.fncPayment },
+    { id: 2, key: 'FNC payment', value: data?.fncPayment, checkHide: true },
     { id: 3, key: 'Additional weekly cost', value: data?.additionalWeeklyCost },
     { id: 4, key: 'Sub total cost of package', value: data?.subTotalCost, className: 'brokerage__summary-cost' },
     {
       id: 5,
       key: data?.hackneyReclaims?.fnc && 'FNC (net collected at source)',
-      value: data?.hackneyReclaims?.fnc
+      value: data?.hackneyReclaims?.fnc,
+      checkHide: true,
     },
     {
       id: 6,
@@ -87,7 +81,8 @@ const PackageDetailsPage = () => {
     {
       id: 8,
       key: data?.supplierReclaims?.fnc && 'FNC (net collected at source)',
-      value: data?.supplierReclaims?.fnc
+      value: data?.supplierReclaims?.fnc,
+      checkHide: true,
     },
     {
       id: 9,
@@ -144,6 +139,7 @@ const PackageDetailsPage = () => {
     {
       headerTitle: 'Funded Nursing Care',
       id: 'funded-nursing-care',
+      checkHide: true,
       goToPackage: (packageId) => router.push(getFundedNursingCareRoute(packageId)),
       items: data?.fundedNursingCare ? [data.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
@@ -175,13 +171,12 @@ const PackageDetailsPage = () => {
       showEditActions
       openedPopup={openedPopup}
       buttons={[
-        { title: 'Edit', onClick: edit, className: 'outline blue' },
-        { title: 'Cancel', onClick: cancel, className: 'outline red' },
-        { title: 'End', onClick: end, className: 'outline blue' },
+        { title: 'Edit', onClick: edit, secondary: true, outline: true, color: 'blue' },
+        { title: 'Cancel', onClick: cancel, secondary: true, outline: true, color: 'red' },
+        { title: 'End', onClick: end, secondary: true, outline: true, color: 'blue' },
       ]}
       setOpenedPopup={setOpenedPopup}
       title={data?.packageType}
-      breadcrumbs={breadcrumbs}
       subTitle="Package details"
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
