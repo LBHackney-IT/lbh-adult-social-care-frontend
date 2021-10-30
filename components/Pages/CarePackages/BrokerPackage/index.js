@@ -46,7 +46,7 @@ const BrokerPackage = ({
   const [weeklyTotalCost, setWeeklyTotalCost] = useState(0);
   const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
   const [isNewSupplier, setIsNewSupplier] = useState(false);
-  const [newSupplier, setNewSupplier] = useState({
+  const [newSupplier] = useState({
     firstName: '',
     secondName: '',
     id: '',
@@ -141,6 +141,7 @@ const BrokerPackage = ({
   const checkDateErrors = (needs) => needs.some((item) => checkNeedError(item, true));
 
   const getNewSupplierId = async () => {
+    return false; // todo ask about full logic of new supplier
     if (isNewSupplier) {
       const newSupplierData = await createSupplier({
         supplierName: newSupplier.name,
@@ -151,7 +152,7 @@ const BrokerPackage = ({
     }
   };
 
-  const onSaveValidation = () => {
+  const onFailedValidation = () => {
     onShowCoreError();
     let hasError = false;
     if (!selectedItem?.id) {
@@ -186,7 +187,7 @@ const BrokerPackage = ({
   };
 
   const clickSave = async () => {
-    if (onSaveValidation()) return;
+    if (onFailedValidation()) return;
 
     const weeklyDetails = weeklyNeeds
       .filter((item) => item.startDate || item.endDate || item.cost)
