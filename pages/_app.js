@@ -20,10 +20,11 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
-    if(router?.pathname && getPrevRouteInfo(router.pathname)?.route) {
-      saveToStoragePrevRoute(router.pathname);
+    if(router?.route) {
+      const [ mainRoute ] = router.route.split('/');
+      if(getPrevRouteInfo(mainRoute)?.route) saveToStoragePrevRoute(mainRoute);
     }
-  }, [router.pathname])
+  }, [router.route])
 
   return (
     <Provider store={store}>

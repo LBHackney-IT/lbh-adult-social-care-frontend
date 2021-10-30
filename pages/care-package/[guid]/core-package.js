@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import withSession from 'lib/session';
 import { useForm, Controller } from 'react-hook-form';
 import { getLoggedInUser } from 'service';
@@ -30,10 +30,11 @@ import {
 const CorePackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const { guid: packageId } = router.query;
-  const { data: packageInfo } = useSingleCorePackageInfo(packageId);
+  const { data: packageInfo, isLoading: corePackageLoading } = useSingleCorePackageInfo(packageId);
   const { settings } = packageInfo;
-  const { data: schedulingOptionsData = [] } = usePackageSchedulingOptions();
+  const { data: schedulingOptionsData = [], isLoading: schedulingOptionsLoading } = usePackageSchedulingOptions();
 
   const schedulingOptions = useMemo(
     () =>
@@ -88,6 +89,7 @@ const CorePackage = () => {
   }, [packageInfo]);
 
   const updatePackage = async (data = {}) => {
+    setLoading(true);
     try {
       const { id } = await updateCoreCarePackage({ data, packageId });
       router.push(getBrokerPackageRoute(id));
@@ -95,12 +97,15 @@ const CorePackage = () => {
     } catch (error) {
       dispatch(addNotification({ text: error, className: 'error' }));
     }
+    setLoading(false);
   };
+
+  const isLoading = schedulingOptionsLoading || corePackageLoading || loading;
 
   return (
     <>
       <BrokerageHeader />
-      <CarePackageBreadcrumbs />
+      <CarePackageBreadcrumbs additionalBreadcrumbs={[{ text: 'Core package details' }]} />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Core package details" title="Build a care package" />
         {packageInfo.serviceUser && (
@@ -131,7 +136,7 @@ const CorePackage = () => {
           </Container>
           <FurtherDetails settings={settings} control={control} setValue={setValue} />
           <HorizontalSeparator height="20px" />
-          <Button type="submit">Save and continue</Button>
+          <Button isLoading={isLoading} disabled={isLoading} type="submit">Save and continue</Button>
         </form>
       </Container>
     </>

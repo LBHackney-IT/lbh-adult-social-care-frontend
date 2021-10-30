@@ -36,6 +36,16 @@ const carePackageRoutes = [
   { route: CARE_CHARGES_ROUTE, name: 'Care Charges' },
   { route: APPROVALS_ROUTE, name: 'Approvals' },
   { route: FINANCE_ROUTE, name: 'Finance' },
+  { route: 'approval', name: 'Approval package detail' },
+  { route: 'core-package', name: 'Core package' },
+  { route: 'broker-care-charges', name: 'Care charges' },
+  { route: 'packages', name: 'Full overview' },
+  { route: 'master-search', name: 'Service user master search' },
+  { route: 'search', name: 'Service user search' },
+  { route: 'broker-package', name: 'Broker package' },
+  { route: 'broker-fnc', name: 'Funded nursing care' },
+  { route: 'review', name: 'Review package details' },
+  { route: 'details', name: 'Package detail' },
 ];
 
 export const saveToStoragePrevRoute = (route) => {
@@ -49,13 +59,14 @@ export const getStoragePrevRoute = () => {
   return route ? getPrevRouteInfo(route) : {};
 };
 
-export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
-  const routeInfo = getStoragePrevRoute();
+export const getCarePackageMainRoute = (currentRoute) => {
+  const mainRouteInfo = getStoragePrevRoute();
+  const currentRouteInfo = currentRoute ? { text: getPrevRouteInfo(currentRoute).name } : {};
 
   return [
     { text: 'Home', href: '/' },
-    { text: routeInfo.name || 'Broker Assistance', href: routeInfo.route || BROKER_ASSISTANCE_ROUTE },
-    ...additionalBreadcrumbs,
+    { text: mainRouteInfo.name || 'Broker Assistance', href: mainRouteInfo.route || BROKER_ASSISTANCE_ROUTE },
+    currentRouteInfo,
   ];
 };
-export const getPrevRouteInfo = (route) => carePackageRoutes.find((mainRoute) => route.includes(mainRoute.route)) || {};
+export const getPrevRouteInfo = (route) => carePackageRoutes.find((splitRoute) => route === splitRoute.route) || {};
