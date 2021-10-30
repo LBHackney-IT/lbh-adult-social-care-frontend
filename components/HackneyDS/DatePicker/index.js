@@ -1,6 +1,6 @@
-import React, { useEffect, memo, useState } from 'react';
-import { lastDayOfMonth, subDays } from 'date-fns';
-import { DatePickerCalendarIcon, RestoreIcon, CrossIcon } from '../../Icons';
+import React, { memo, useEffect, useState } from 'react';
+import { lastDayOfMonth, setDate as dateFncSetDate } from 'date-fns';
+import { CrossIcon, DatePickerCalendarIcon, RestoreIcon } from '../../Icons';
 import DatePick from '../../DatePick';
 import Hint from '../lettering/Hint';
 import Label from '../lettering/Label';
@@ -58,8 +58,8 @@ const DatePicker = ({
     // if value more then 11 return 0 (date.getMonth() start from 0) 11 December and max number of month
     // get value 02 format to 2 and 2-1=1 February
     let formattedNewMonthValue = 1;
-    if(monthValue && monthValue?.toString?.()?.[1] !== '0') {
-      formattedNewMonthValue = monthValue[1];
+    if (monthValue && monthValue?.toString?.()?.[1] !== '0') {
+      [formattedNewMonthValue] = monthValue;
     }
     const validMonth = replaceFirstZero(monthValue) - 1 > 11 ? `0${formattedNewMonthValue - 1}` : replaceFirstZero(monthValue) - 1;
     return Number(validMonth) < 0 ? 0 : Number(validMonth);
@@ -68,11 +68,13 @@ const DatePicker = ({
   const getValidDay = (dayValue) => {
     const formatDay = dayValue && replaceFirstZero(dayValue);
     const lastDayInMonth = date && lastDayOfMonth(date).getDate();
-    const checkLessTen = (value) => value < 10 ? '0' :  value?.toString()?.[0];
-    let editDay = `${(day.value && checkLessTen(day.value)) || localDay.value && checkLessTen(localDay.value) || '0'}${dayValue?.[1] || '1'}`;
-    if(editDay === '00') editDay = '01';
-    const validDay = formatDay && lastDayInMonth && lastDayInMonth < formatDay ? editDay : formatDay;
-    return Number(validDay) || editDay;
+
+    if (lastDayInMonth < formatDay) {
+      if (formatDay[1] === '0') return '01';
+      return `0${dayValue[1]}`;
+    }
+    if (formatDay === '0' || formatDay === '') return '01';
+    return formatDay;
   };
 
   const getValidYear = (dayValue) => (dayValue ? `20${dayValue}` : 0);
@@ -88,8 +90,13 @@ const DatePicker = ({
       validatedMonth,
       date?.getDate() || actualDate.getDate()
     );
-    if(validatedMonth < validatedDate.getMonth()) {
-      validatedDate = subDays(validatedDate, 1);
+    if (validatedMonth < validatedDate.getMonth()) {
+      validatedDate = new Date(
+        date?.getFullYear() || actualDate.getFullYear(),
+        validatedMonth,
+      );
+      const lastDayInMonth = lastDayOfMonth(validatedDate).getDate();
+      validatedDate = dateFncSetDate(validatedDate, lastDayInMonth);
     }
     setDate(validatedDate);
   };
@@ -115,9 +122,9 @@ const DatePicker = ({
   };
 
   const restoreDate = () => {
-    setDate(previousDate)
+    setDate(previousDate);
     setPreviousDate(null);
-  }
+  };
 
   const changeCalendarInput = (newDate) => setDate(newDate);
 
@@ -166,7 +173,7 @@ const DatePicker = ({
                 }
                 if (input.onChangeValue) {
                   let slicedValue = value.slice(1, 3);
-                  if(date === null) {
+                  if (date === null) {
                     slicedValue = `0${value}`;
                   }
                   input.onChangeValue(slicedValue);
@@ -182,7 +189,7 @@ const DatePicker = ({
       })}
       {IconComponent && (
         <div className={`date-picker__calendar-container${disabledClass}`}>
-          <div className='date-picker__additional-action'>
+          <div className="date-picker__additional-action">
             <IconComponent onClick={clickIcon} className={iconClassName} />
           </div>
           {isOpenCalendar && (
@@ -214,6 +221,6 @@ const DatePicker = ({
       )}
     </div>
   );
-}
+};
 
-export default memo(DatePicker)
+export default memo(DatePicker);

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useDebounce } from 'react-use';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
-import { updateCarePackageCosts, useSuppliers, useSingleCorePackageInfo } from 'api';
+import { createSupplier, updateCarePackageCosts, useSingleCorePackageInfo, useSuppliers } from 'api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods, packageTypes } from 'constants/variables';
@@ -46,6 +46,11 @@ const BrokerPackage = ({
   const [weeklyTotalCost, setWeeklyTotalCost] = useState(0);
   const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
   const [isNewSupplier, setIsNewSupplier] = useState(false);
+  const [newSupplier, setNewSupplier] = useState({
+    firstName: '',
+    secondName: '',
+    id: '',
+  });
 
   const [coreDates, setCoreDates] = useState({
     startDate: new Date(),
@@ -105,10 +110,10 @@ const BrokerPackage = ({
     dispatch(addNotification({ text, className }));
   };
 
-  const checkNeedError = (item) => {
+  const checkNeedError = (item, checkEvery) => {
     const { startDate, endDate, isOngoing: isOngoingItem, cost, id } = item;
 
-    if (hiddenNeedErrors.includes(id)) return false;
+    if (!checkEvery && hiddenNeedErrors.includes(id)) return false;
 
     let errorStartDate = '';
     let errorEndDate = '';
@@ -133,12 +138,23 @@ const BrokerPackage = ({
     return errorStartDate || errorEndDate || errorCost;
   };
 
-  const checkDateErrors = (needs) => needs.some((item) => checkNeedError(item));
+  const checkDateErrors = (needs) => needs.some((item) => checkNeedError(item, true));
 
-  const clickSave = async () => {
+  const getNewSupplierId = async () => {
+    if (isNewSupplier) {
+      const newSupplierData = await createSupplier({
+        supplierName: newSupplier.name,
+        packageTypeId: packageType,
+      });
+
+      return newSupplierData.id;
+    }
+  };
+
+  const onSaveValidation = () => {
     onShowCoreError();
     let hasError = false;
-    if (!isNewSupplier && !selectedItem?.id) {
+    if (!selectedItem?.id) {
       pushNotification('No supplier selected');
       hasError = true;
     }
@@ -161,12 +177,16 @@ const BrokerPackage = ({
       setCoreCostError('The core cost field is required');
     }
 
-    if (!hasError && (weeklyDateErrors || oneOfNeedDateErrors)) {
+    if (weeklyDateErrors || oneOfNeedDateErrors) {
       pushNotification('Some validation errors above');
       hasError = true;
     }
 
-    if (hasError) return;
+    if (hasError) return true;
+  };
+
+  const clickSave = async () => {
+    if (onSaveValidation()) return;
 
     const weeklyDetails = weeklyNeeds
       .filter((item) => item.startDate || item.endDate || item.cost)
@@ -196,7 +216,7 @@ const BrokerPackage = ({
       coreCost,
       startDate: coreDates.startDate,
       endDate: isOngoing ? null : coreDates.endDate,
-      supplierId: selectedItem.id,
+      supplierId: await getNewSupplierId() || selectedItem?.id,
     };
     const details = [...weeklyDetails, ...oneOffDetails];
     if (details.length) {
@@ -208,10 +228,12 @@ const BrokerPackage = ({
         data: postData,
         packageId,
       });
+
       pushNotification('Success', 'success');
 
-      router.push(
-        packageType === packageTypes.nursing ? getFundedNursingCareRoute(packageId) : getCareChargesRoute(packageId)
+      router.push(packageType === packageTypes.nursing ?
+        getFundedNursingCareRoute(packageId) :
+        getCareChargesRoute(packageId)
       );
     } catch (e) {
       pushNotification(e);
@@ -240,7 +262,7 @@ const BrokerPackage = ({
 
   const addNeed = (setter) => {
     const newId = uniqueID();
-    setHiddenNeedErrors(prevState => ([ ...prevState, newId ]));
+    setHiddenNeedErrors(prevState => ([...prevState, newId]));
     setter((prevState) => [...prevState, { ...initialNeed, id: newId }]);
   };
 
@@ -255,7 +277,7 @@ const BrokerPackage = ({
       onShowCoreError(true);
     }
     setCoreDates((prevState) => ({ ...prevState, [field]: date }));
-  }
+  };
 
   useEffect(() => {
     if (detailsData?.coreCost !== undefined) {
@@ -293,7 +315,7 @@ const BrokerPackage = ({
         let newHiddenNeedErrors = [];
         if (weeklyDetails.length) {
           setWeeklyNeeds(weeklyDetails);
-          newHiddenNeedErrors = weeklyDetails.map(item => item.id)
+          newHiddenNeedErrors = weeklyDetails.map(item => item.id);
         }
         if (oneOffDetails.length) {
           setOneOffNeeds(oneOffDetails);
@@ -453,7 +475,7 @@ const BrokerPackage = ({
           )}
 
           <Container className="brokerage__actions">
-            <Button onClick={clickBack} secondary color='gray'>
+            <Button onClick={clickBack} secondary color="gray">
               Back
             </Button>
 
