@@ -1,12 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// EXAMPLE OF PAYLOAD
-// {
-//   time: 4000,
-//   className: 'error',
-//   text: 'Something went wrong',
-// }
-
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState: {
@@ -17,9 +10,10 @@ const notificationsSlice = createSlice({
   },
   reducers: {
     showNotification: (state, { payload }) => {
+      const cloneShowed = state.showedNotifications.filter((showed) => showed.text !== payload.text);
       return {
         ...state,
-        showedNotifications: [...state.showedNotifications, payload],
+        showedNotifications: [...cloneShowed, payload],
         notifications: state.notifications.slice(1, state.notifications.length),
       };
     },
@@ -35,7 +29,7 @@ const notificationsSlice = createSlice({
         ...state,
         notifications: [...state.notifications, {
           // time: 'debugger',
-          time: 4000,
+          time: 3000,
           className: 'error',
           text: 'Something went wrong',
           ...payload,
