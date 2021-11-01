@@ -57,12 +57,15 @@ const DatePicker = ({
   const getValidMonth = (monthValue) => {
     // if value more then 11 return 0 (date.getMonth() start from 0) 11 December and max number of month
     // get value 02 format to 2 and 2-1=1 February
-    let formattedNewMonthValue = 1;
-    if (monthValue && monthValue?.toString?.()?.[1] !== '0') {
-      [formattedNewMonthValue] = monthValue;
+    if (monthValue && Number(monthValue) !== 0) {
+      const monthNumber = monthValue - 1;
+      if (monthNumber > 11) {
+        if (monthValue[1] === '0') return 0;
+        return monthValue[1] - 1;
+      }
+      return monthNumber;
     }
-    const validMonth = replaceFirstZero(monthValue) - 1 > 11 ? `0${formattedNewMonthValue - 1}` : replaceFirstZero(monthValue) - 1;
-    return Number(validMonth) < 0 ? 0 : Number(validMonth);
+    return 0;
   };
 
   const getValidDay = (dayValue) => {
