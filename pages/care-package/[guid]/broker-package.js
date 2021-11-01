@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { usePackageDetails, useSingleSupplier } from 'api';
 import { BrokerPackage } from 'components';
-import { getLoggedInUser } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -21,6 +21,8 @@ export const getServerSideProps = withSession(({ req }) => {
 const BrokerPackagePage = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
+
+  useRedirectIfPackageNotExist();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
