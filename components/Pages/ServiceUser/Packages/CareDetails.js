@@ -138,7 +138,14 @@ const CareDetails = ({
                   <Container display="flex" justifyContent="space-between" alignItems="center">
                     {!isS117Client && (
                       <Link className="mr-5" onClick={goToCareCharge} noVisited>
-                        Add financial assessment
+                        {data.some(({ type, status, name }) => (
+                          type === "Package Reclaim - Care Charge" && status === 'Active' && (
+                            name === "Without Property 13+ Weeks" || name === "Without Property 1-12 Weeks")
+                          )
+                        ) ?
+                          'Edit financial assessment' :
+                          'Add financial assessment'
+                        }
                       </Link>
                     )}
 

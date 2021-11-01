@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatDate, getTagColorFromStatusId, getTagDisplayTextFromStatusId } from 'service';
+import { formatDate, getPackageStatusTextFromStatusId, getPackageColorFromStatusId } from 'service';
 import { Container, Table, Tag } from '../../HackneyDS';
 
 export const PackageApprovalsTable = ({ getPackageTypeById, onRowClick, data }) => {
@@ -34,8 +34,8 @@ export const PackageApprovalsTable = ({ getPackageTypeById, onRowClick, data }) 
               <p className="brokerage-portal--user-name font-size-19px font-weight-bold text-green">
                 {fullName}
               </p>
-              <Tag className="text-capitalize outline" color={getTagColorFromStatusId(value)}>
-                {getTagDisplayTextFromStatusId(value)}
+              <Tag className="text-capitalize outline" color={getPackageColorFromStatusId(value)}>
+                {getPackageStatusTextFromStatusId(value)}
               </Tag>
             </Container>
             <p className="brokerage-portal--birthdate">{formatDate(dateOfBirth)}</p>
