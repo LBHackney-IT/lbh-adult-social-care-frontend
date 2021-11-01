@@ -11,7 +11,7 @@ import {
 } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
-import { getLoggedInUser } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import withSession from 'lib/session';
 import { reclaimType } from 'constants/variables';
 
@@ -33,6 +33,8 @@ const CareChargesPage = () => {
   const dispatch = useDispatch();
   const carePackageId = router.query.guid;
   const [loading, setLoading] = useState(false);
+
+  useRedirectIfPackageNotExist();
 
   const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e'; // todo to be removed
 

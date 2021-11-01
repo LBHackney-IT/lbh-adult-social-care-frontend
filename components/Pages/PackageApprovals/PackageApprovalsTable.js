@@ -1,28 +1,32 @@
 import React from 'react';
-import { formatDate, getTagColorFromStatusId, getTagDisplayTextFromStatusId } from 'service';
+import { formatDate, getPackageStatusTextFromStatusId, getPackageColorFromStatusId } from 'service';
 import { Container, Table, Tag } from '../../HackneyDS';
 
-export const PackageApprovalsTable = ({ onRowClick, data }) => {
+export const PackageApprovalsTable = ({ getPackageTypeById, onRowClick, data }) => {
   const columns = [
     {
       accessor: 'status',
-      Cell: ({ value, row: { original: {
-        serviceUser: {
-          fullName,
-          dateOfBirth,
-          addressLine1,
-          addressLine2,
-          addressLine3,
-          postCode,
-          town
-        }}}}) => {
+      Cell: ({
+        value, row: {
+          original: {
+            serviceUser: {
+              fullName,
+              dateOfBirth,
+              addressLine1,
+              addressLine2,
+              addressLine3,
+              postCode,
+              town
+            }
+          }
+        }
+      }) => {
         const address = [];
 
-        [addressLine1 || addressLine2 || addressLine3, town, postCode].forEach(addressString => {
-          if(addressString) {
-            address.push(addressString)
-          }
-        });
+        const addressLine = addressLine1 || addressLine2 || addressLine3;
+        if (addressLine) address.push(addressLine);
+        if (town) address.push(town);
+        if (postCode) address.push(postCode);
 
         return (
           <Container>
@@ -30,8 +34,8 @@ export const PackageApprovalsTable = ({ onRowClick, data }) => {
               <p className="brokerage-portal--user-name font-size-19px font-weight-bold text-green">
                 {fullName}
               </p>
-              <Tag className="text-capitalize outline" color={getTagColorFromStatusId(value)}>
-                {getTagDisplayTextFromStatusId(value)}
+              <Tag className="text-capitalize outline" color={getPackageColorFromStatusId(value)}>
+                {getPackageStatusTextFromStatusId(value)}
               </Tag>
             </Container>
             <p className="brokerage-portal--birthdate">{formatDate(dateOfBirth)}</p>
@@ -41,12 +45,12 @@ export const PackageApprovalsTable = ({ onRowClick, data }) => {
               </p>
             )}
           </Container>
-        )
+        );
       },
     },
     {
       accessor: 'hackneyId',
-      Cell: ({ row: { original: { serviceUser: { hackneyId }} }}) => (
+      Cell: ({ row: { original: { serviceUser: { hackneyId } } } }) => (
         <Container className="brokerage-portal__cell-with-title">
           <h3>Hackney ID</h3>
           <p>#{hackneyId}</p>
@@ -58,16 +62,16 @@ export const PackageApprovalsTable = ({ onRowClick, data }) => {
       Cell: ({ value }) => (
         <Container className="brokerage-portal__cell-with-title">
           <h3>Package</h3>
-          <p>{value}</p>
+          <p>{getPackageTypeById(value)}</p>
         </Container>
       ),
     },
     {
       accessor: 'approver',
-      Cell: ({ row: { original: { approver }}}) => (
+      Cell: ({ value }) => (
         <Container className="brokerage-portal__cell-with-title">
           <h3>Approver</h3>
-          <p>{approver?.userName || '—'}</p>
+          <p>{value?.userName || '—'}</p>
         </Container>
       ),
     },
