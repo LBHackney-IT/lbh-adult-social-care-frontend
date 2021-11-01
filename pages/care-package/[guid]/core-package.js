@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
-import withSession from 'lib/session';
 import { useForm, Controller } from 'react-hook-form';
-import { getLoggedInUser } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
   Container,
@@ -20,12 +19,21 @@ import { useDispatch } from 'react-redux';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  getSingleCorePackageInfo,
-  updateCoreCarePackage,
-  usePackageSchedulingOptions,
-  useSingleCorePackageInfo,
-} from 'api';
+import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
+import withSession from '../../../lib/session';
+
+export const getServerSideProps = withSession(async ({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const CorePackage = () => {
   const router = useRouter();
@@ -34,6 +42,8 @@ const CorePackage = () => {
   const { data: packageInfo } = useSingleCorePackageInfo(packageId);
   const { settings } = packageInfo;
   const { data: schedulingOptionsData = [] } = usePackageSchedulingOptions();
+
+  useRedirectIfPackageNotExist();
 
   const schedulingOptions = useMemo(
     () =>
@@ -137,25 +147,5 @@ const CorePackage = () => {
     </>
   );
 };
-
-export const getServerSideProps = withSession(async ({ req, params }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-
-  try {
-    await getSingleCorePackageInfo(params.guid);
-  } catch (error) {
-    if (error?.response?.data?.isError) return { notFound: true };
-  }
-
-  return { props: {} };
-});
 
 export default CorePackage;

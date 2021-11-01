@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { cancelCareChargeReclaim, useSingleCorePackageInfo } from '../../../../../api';
 import { addNotification } from '../../../../../reducers/notificationsReducer';
-import { getServiceUserPackagesRoute } from '../../../../../routes/RouteConstants';
+import { getServiceUserCareChargesRoute } from '../../../../../routes/RouteConstants';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
@@ -33,7 +33,7 @@ const CancelElementContent = ({ data, headerText, onClose }) => {
     setIsLoading(false);
     dispatch(addNotification({ text: 'Successfully cancelled!', className: 'success' }));
     onClose();
-    router.push(getServiceUserPackagesRoute(packageInfo?.serviceUser?.id));
+    router.push(getServiceUserCareChargesRoute(packageInfo?.serviceUser?.id));
   };
 
   return (

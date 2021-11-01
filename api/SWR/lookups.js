@@ -12,6 +12,6 @@ export const useLookups = (name) => {
     ...response,
     data: data ?? [],
     isLoading: !error && !data,
-    options,
+    options: options || [],
   };
 };

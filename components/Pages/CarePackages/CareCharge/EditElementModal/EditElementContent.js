@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
+import { getServiceUserCareChargesRoute } from 'routes/RouteConstants';
 import {
   useLookups,
   usePackageCareCharge,
@@ -77,7 +77,7 @@ const EditElementContent = ({ data, onClose }) => {
   }, [actualReclaims, data]);
 
   const goToPackages = useCallback(() => {
-    router.push(getServiceUserPackagesRoute(packageInfo?.serviceUser?.id));
+    router.push(getServiceUserCareChargesRoute(packageInfo?.serviceUser?.id));
   }, [router, packageInfo]);
 
   const onConfirm = async () => {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
-import { getLoggedInUser } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { ReviewPackageDetails } from 'components';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -42,6 +42,8 @@ const ApprovalPackageDetail = () => {
   const { data, isLoading: summaryLoading } = usePackageSummary(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
 
+  useRedirectIfPackageNotExist();
+
   const checkSettings = (settings) =>
     settings &&
     settingsTypes
@@ -50,7 +52,7 @@ const ApprovalPackageDetail = () => {
 
   const summary = [
     { id: 1, key: 'Cost of placement', value: data?.costOfPlacement },
-    { id: 2, key: 'FNC payment', value: data?.fncPayment, checkHide: true, },
+    { id: 2, key: 'FNC payment', value: data?.fncPayment, checkHide: true },
     { id: 3, key: 'Additional weekly cost', value: data?.additionalWeeklyCost },
     { id: 4, key: 'Sub total cost of package', value: data?.subTotalCost, className: 'brokerage__summary-cost' },
     {
@@ -138,7 +140,7 @@ const ApprovalPackageDetail = () => {
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.fnc,
         supplier: data?.supplierReclaims?.fnc,
-      }
+      },
     },
     {
       headerTitle: 'Care Charges',
@@ -154,7 +156,7 @@ const ApprovalPackageDetail = () => {
 
   return (
     <ReviewPackageDetails
-      className='approval-package-detail'
+      className="approval-package-detail"
       loading={summaryLoading}
       subTitle="Approval package detail"
       title={data?.packageType}
@@ -171,14 +173,14 @@ const ApprovalPackageDetail = () => {
           onClick: () => setOpenedPopup('decline'),
           secondary: true,
           color: 'red',
-          outline: true
+          outline: true,
         },
         {
           title: 'Approve',
-          onClick: () => setOpenedPopup('approve')
+          onClick: () => setOpenedPopup('approve'),
         },
       ]}
-      submitButtonText='Approve'
+      submitButtonText="Approve"
       goBack={router.back}
       summary={summary}
     />

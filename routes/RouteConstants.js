@@ -1,4 +1,4 @@
-import { isServer } from '../api';
+import { isServer } from '../api/Utils/FuncUtils';
 
 export const BROKER_PORTAL_ROUTE = '/broker-portal';
 
@@ -18,6 +18,7 @@ export const SERVICE_USER_MASTER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/master-se
 export const SERVICE_USER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/search`;
 export const getPackageDetailRoute = (id) => `${SERVICE_USER_ROUTE}/${id}/package-details`;
 export const getServiceUserPackagesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/packages`;
+export const getServiceUserCareChargesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/care-charges`;
 
 export const BROKER_ASSISTANCE_ROUTE = '/broker-assistance';
 export const getAssignPackageRoute = (id) => `${BROKER_ASSISTANCE_ROUTE}/${id}/assign-package`;
@@ -29,6 +30,8 @@ export const APPROVALS_ROUTE = '/approvals';
 export const FINANCE_ROUTE = '/finance';
 
 export const LOGOUT_ROUTE = '/logout';
+
+export const NOT_FOUND_ROUTE = '/404';
 
 const carePackageRoutes = [
   { route: BROKER_ASSISTANCE_ROUTE, name: 'Broker Assistance' },
