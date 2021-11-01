@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { usePackageDetails, useSuppliers } from 'api';
+import { usePackageDetails, useSingleSupplier } from 'api';
 import { BrokerPackage } from 'components';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
@@ -28,12 +28,16 @@ const BrokerPackagePage = () => {
 
   const { data: detailsData, isLoading: detailsLoading } = usePackageDetails(packageId);
 
-  const params = useMemo(() => ({
-    supplierId: detailsData.supplierId
-  }), [detailsData.supplierId]);
+  const {
+    data: selectedSupplier,
+    isLoading: singleSupplierLoading
+  } = useSingleSupplier(detailsData.supplierId);
 
-  const { data: { data: selectedSupplier }, isLoading: singleSupplierLoading } = useSuppliers({ params });
-  const { supplierName } = selectedSupplier;
+  useEffect(() => {
+    if (selectedSupplier?.id) {
+      setSelectedItem(selectedSupplier);
+    }
+  }, [selectedSupplier]);
 
   return (
     <BrokerPackage
@@ -43,7 +47,6 @@ const BrokerPackagePage = () => {
       setCurrentPage={setCurrentPage}
       setSelectedItem={setSelectedItem}
       selectedItem={selectedItem}
-      supplierName={supplierName || ''}
       detailsData={detailsData}
     />
   );

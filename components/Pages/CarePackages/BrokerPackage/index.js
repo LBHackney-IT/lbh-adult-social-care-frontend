@@ -159,10 +159,16 @@ const BrokerPackage = ({
     setHiddenNeedErrors([]);
     if (!coreCost) {
       setCoreCostError('The core cost field is required');
+      hasError = true;
     }
 
-    if (weeklyDateErrors || oneOfNeedDateErrors) {
-      pushNotification('Some validation errors above');
+    if (weeklyDateErrors) {
+      pushNotification('Weekly additional needs error');
+      hasError = true;
+    }
+
+    if (oneOfNeedDateErrors) {
+      pushNotification('One of additional need error');
       hasError = true;
     }
 
