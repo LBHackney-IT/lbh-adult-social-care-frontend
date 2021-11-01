@@ -1,11 +1,41 @@
 import React from 'react';
-import { Container } from 'components';
+import { isAfter } from 'date-fns';
+import { getTagColorFromStatus } from '../../../../service';
+import { Tag } from '../../../HackneyDS';
 
-export const CarePackageStatus = ({ status }) => {
-const color = status === 'Active' ? '#00664F' : '#525A5B';
+export const CarePackageStatus = ({ status, packageData }) => {
+  const getApprovedStatus = (endDate) => {
+    if (endDate !== null && isAfter(new Date(), endDate)) {
+      return 'Future';
+    }
+    return 'Active';
+  };
+
+  const getStatus = () => {
+    switch (status) {
+      case 'Approved':
+        return packageData.filter((d) => d.status === 'Approved').map((d) => getApprovedStatus(d.endDate));
+      case 'Ended':
+        return 'End';
+      case 'Cancelled':
+        return 'Cancelled';
+      case 'New':
+        return 'New';
+      case 'In Progress':
+        return 'In Progress';
+      case 'Pending':
+        return 'Pending';
+      default:
+        return 'Waiting for Approval';
+    }
+  };
+
+  const activeStatus = getStatus(status, packageData);
+  const color = activeStatus === 'Active' ? '#00664F' : getTagColorFromStatus(status);
+
   return (
-    <Container color={color} border={`1px solid ${color}`} borderBottom={`1px solid ${color}`} padding="10px" borderRadius="5px">
-      {status}
-    </Container>
+    <Tag color={color} outline noBackground>
+      {activeStatus}
+    </Tag>
   );
 };
