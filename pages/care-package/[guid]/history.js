@@ -6,11 +6,12 @@ import {
   HistoryList,
   BrokerageHeader,
   HistoryOverview,
-  TitleSubtitleHeader, CarePackageBreadcrumbs,
+  TitleSubtitleHeader,
+  CarePackageBreadcrumbs,
 } from 'components';
 import withSession from 'lib/session';
 import { usePackageHistory } from 'api';
-import { getLoggedInUser } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -30,11 +31,10 @@ const History = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
+  useRedirectIfPackageNotExist();
+
   const breadcrumbs = useMemo(
-    () => [
-      { text: 'Full Overview', href: getServiceUserPackagesRoute(packageId), },
-      { text: 'Package History' },
-    ],
+    () => [{ text: 'Full Overview', href: getServiceUserPackagesRoute(packageId) }, { text: 'Package History' }],
     [packageId]
   );
 
@@ -48,7 +48,6 @@ const History = () => {
 
       <CarePackageBreadcrumbs additionalBreadcrumbs={breadcrumbs} />
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
-
         <TitleSubtitleHeader subTitle="Package history" title={data.packageType} />
 
         <HistoryOverview />

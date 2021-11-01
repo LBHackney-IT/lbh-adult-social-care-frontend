@@ -1,5 +1,5 @@
 import React from 'react';
-import { getServiceUserPackagesRoute, CARE_PACKAGE_ROUTE, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
+import { getServiceUserCareChargesRoute, CARE_PACKAGE_ROUTE, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
 import { Breadcrumbs, Button, Container, Select, FormGroup } from '../../../HackneyDS';
 import Loading from '../../../Loading';
@@ -71,7 +71,7 @@ const NewCareChargePackages = ({
       <Container padding="30px 60px 60px 60px" className="centered-container">
         <CareChargesTable
           data={data}
-          onRowClick={({ serviceUserId }) => pushRoute(getServiceUserPackagesRoute(serviceUserId))}
+          onRowClick={({ serviceUserId }) => pushRoute(getServiceUserCareChargesRoute(serviceUserId))}
         />
         <AlternativePagination
           className="mt-6"

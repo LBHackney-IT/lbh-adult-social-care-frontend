@@ -35,6 +35,7 @@ export const tagColors = {
   'not approved': 'red',
   ended: 'red',
   cancelled: 'red',
+  pending: 'blue',
   approved: 'gray',
 };
 

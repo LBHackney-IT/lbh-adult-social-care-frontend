@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
-import { getLoggedInUser } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { ReviewPackageDetails } from 'components';
 import {
   getBrokerPackageRoute,
@@ -47,6 +47,8 @@ const ReviewPackageDetailsPage = () => {
   const carePackageId = router.query.guid;
   const { data, isLoading: summaryLoading } = usePackageSummary(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
+
+  useRedirectIfPackageNotExist();
 
   const checkSettings = (settings) =>
     settings &&

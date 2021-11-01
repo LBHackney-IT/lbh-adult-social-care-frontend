@@ -265,7 +265,7 @@ const ReviewPackageDetails = ({
                 return <BrokerageTotalCost key={id} value={value} name={key} className={itemClassName} />;
               })}
             </Container>
-            {isActivePackage && <PackageDetailsButtons buttons={buttons} />}
+            <PackageDetailsButtons buttons={buttons} />
           </Container>
         </Container>
       </Container>
