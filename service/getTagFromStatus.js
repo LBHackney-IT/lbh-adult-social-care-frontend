@@ -9,12 +9,33 @@ const invoiceStatuses = [
   { statusId: 8, statusName: 'Rejected', displayName: 'Reject', background: 'red' },
 ];
 
+const packageStatuses = [
+  { statusId: 1, statusName: 'New', displayName: 'New', background: 'green' },
+  { statusId: 2, statusName: 'InProgress', displayName: 'InProgress', background: 'yellow' },
+  { statusId: 3, statusName: 'Waiting for approval', displayName: 'Waiting for approval', background: 'blue' },
+  { statusId: 4, statusName: 'Approved', displayName: 'Approved', background: 'green' },
+  { statusId: 5, statusName: 'Not Approved', displayName: 'Not Approved', background: 'red' },
+  { statusId: 6, statusName: 'Ended', displayName: 'Ended', background: 'red' },
+  { statusId: 7, statusName: 'Cancelled', displayName: 'Cancelled', background: 'gray' },
+  { statusId: 8, statusName: 'Rejected', displayName: 'Rejected', background: 'red' },
+];
+
 export const getTagDisplayTextFromStatusId = (statusId) => {
   const invoiceInformation = invoiceStatuses.find((status) => status.statusId === statusId);
   return invoiceInformation?.statusName || 'Unknown';
 };
 
+export const getPackageStatusTextFromStatusId = (statusId) => {
+  const packageInfo = packageStatuses.find((status) => status.statusId === statusId);
+  return packageInfo?.statusName || 'Unknown';
+}
+
 export const getTagColorFromStatusId = (statusId) => {
   const invoiceInformation = invoiceStatuses.find((status) => status.statusId === statusId);
   return invoiceInformation?.background || 'gray';
+};
+
+export const getPackageColorFromStatusId = (statusId) => {
+  const packageInfo = packageStatuses.find((status) => status.statusId === statusId);
+  return packageInfo?.background || 'gray';
 };

@@ -17,7 +17,6 @@ import { useRouter } from 'next/router';
 import { confirmS117 } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
-import { isAfter } from 'date-fns';
 import { CaretDownIcon } from '../../../Icons';
 import { CarePackageStatus } from './CarePackageStatus';
 
@@ -92,32 +91,12 @@ const CareDetails = ({
     }
   };
 
-  const getApprovedStatus = (endDate) => {
-    if (endDate !== null && isAfter(new Date(), endDate)) {
-      return 'Future';
-    }
-    return 'Active';
-  };
-
-  const getStatus = (status, packageData) => {
-    switch (status) {
-      case 'Approved':
-        return packageData.filter((d) => d.status === 'Approved').map((d) => getApprovedStatus(d.endDate));
-      case 'Ended':
-        return 'End';
-      case 'Cancelled':
-        return 'Cancelled';
-      default:
-        return 'Approved';
-    }
-  };
-
   return (
     <>
       <Container alignItems="baseline" borderBottom="1px solid #BFC1C3">
         <Container display="flex" alignItems="baseline">
           <Container display="flex" alignItems="center">
-            <CarePackageStatus status={getStatus(packageStatus, data)} />
+            <CarePackageStatus status={packageStatus} packageData={data} />
             <VerticalSeparator width="10px" />
             <Heading size="xl">{title}</Heading>
           </Container>
@@ -159,7 +138,14 @@ const CareDetails = ({
                   <Container display="flex" justifyContent="space-between" alignItems="center">
                     {!isS117Client && (
                       <Link className="mr-5" onClick={goToCareCharge} noVisited>
-                        Add financial assessment
+                        {data.some(({ type, status, name }) => (
+                          type === "Package Reclaim - Care Charge" && status === 'Active' && (
+                            name === "Without Property 13+ Weeks" || name === "Without Property 1-12 Weeks")
+                          )
+                        ) ?
+                          'Edit financial assessment' :
+                          'Add financial assessment'
+                        }
                       </Link>
                     )}
 
