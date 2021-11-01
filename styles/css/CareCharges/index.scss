@@ -1,5 +1,7 @@
 @import "cancel-element-modal";
 @import "options-element-modal";
+@import "new-care-charge";
+
 .care-charges-modal {
   * {
     box-sizing: border-box;
@@ -10,7 +12,7 @@
   }
 
   .lbh-dialog {
-    background: #F1F1F1;
+    background: #f1f1f1;
     border: none;
     padding: 32px;
 
@@ -62,6 +64,8 @@
 
   .care-charges-modal__values {
     display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
 
     @include media-mobile {
       flex-wrap: wrap;
@@ -102,9 +106,9 @@
   .care-charges-modal__date-action {
     margin-left: 4px;
     font-weight: bold;
-    color: $lbh-primary-button;
+    color: $lbh-primary;
     text-decoration: underline;
-    text-decoration-color: $lbh-primary-button;
+    text-decoration-color: $lbh-primary;
 
     &:hover {
       cursor: pointer;
@@ -141,7 +145,6 @@
   .care-charges-modal__info {
     border: 1px solid $lbh-gray-border-2;
     padding: 24px;
-    box-sizing: border-box;
     margin-bottom: 32px;
 
     .govuk-form-group, .radio-button {
@@ -153,18 +156,17 @@
 
   .care-charges-modal__info-title {
     font-size: 14px;
-    color: $lbh-primary-button;
+    color: $lbh-primary;
     font-weight: bold;
     margin-bottom: 16px;
   }
 
   .care-charges-modal__content {
-    margin-bottom: 16px;
-
     p:first-of-type {
       font-weight: bold;
       color: black;
     }
+
     p:last-of-type {
       font-size: 14px;
       color: $lbh-text-colour;
@@ -183,6 +185,32 @@
       margin-top: 24px;
       margin-left: 24px;
       color: $lbh-secondary-text-colour;
+    }
+  }
+
+  .end-element__picker {
+    width: 100%;
+
+    .govuk-form-group {
+      width: 100%;
+      max-width: unset;
+    }
+
+    fieldset > div:last-of-type {
+      display: flex;
+      align-items: flex-end;
+      column-gap: 15px;
+      width: 100%;
+
+      label {
+        color: #000;
+        font-weight: 400;
+      }
+
+      & > p {
+        position: relative;
+        bottom: 9px;
+      }
     }
   }
 
@@ -231,6 +259,7 @@
   & > p {
     margin-bottom: 20px;
   }
+
   margin-bottom: 16px;
 }
 

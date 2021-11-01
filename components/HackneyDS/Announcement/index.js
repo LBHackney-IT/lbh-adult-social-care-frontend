@@ -1,13 +1,13 @@
 import React from 'react';
-import { getSlot } from '../index';
 
-export default function Announcement({ children = [] }) {
-  const nodeList = Array.isArray(children) ? children : [children];
+const mainClass = 'lbh-announcement';
 
+export default function Announcement({ title, children, className, isError }) {
+  const isErrorClass = isError ? ` ${mainClass}--error` : '';
   return (
-    <section className="lbh-announcement lbh-announcement--site">
-      <h3 className="lbh-announcement__title">{getSlot(nodeList, 'title')}</h3>
-      <div className="lbh-announcement__content">{getSlot(nodeList, 'content')}</div>
+    <section className={`${mainClass} ${mainClass}--site${className && ` ${className}`}${isErrorClass}`}>
+      <h3 className={`${mainClass}__title`}>{title}</h3>
+      <div className={`${mainClass}__content`}>{children}</div>
     </section>
   );
 }

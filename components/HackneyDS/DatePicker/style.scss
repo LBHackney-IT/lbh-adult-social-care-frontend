@@ -12,12 +12,6 @@
   align-items: center;
   flex-wrap: wrap;
 
-  &.disabled {
-    opacity: 0.3;
-    user-select: none;
-    pointer-events: none;
-  }
-
   & > .govuk-label {
     width: 100%;
   }
@@ -39,15 +33,18 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 .govuk-date-input__item {
   display: inline-block;
   margin-right: 20px;
   margin-bottom: 0;
 }
+
 .lbh-form-group .govuk-label.govuk-date-input__label {
   color: #0b0c0c;
   line-height: 1.625rem;
 }
+
 .lbh-form-group .govuk-label.govuk-date-input__label {
   margin-bottom: 0.375rem;
   display: block;
@@ -77,10 +74,51 @@
   }
 }
 
+.date-picker__additional-action {
+  width: 26px;
+  height: 26px;
+  margin-left: 10px;
+  border-radius: 4px;
+  padding: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.clear-datepicker {
+    svg path {
+      fill: $lbh-red;
+    }
+  }
+
+  &.restore-date {
+    svg {
+      fill: $lbh-primary;
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: $lbh-gray;
+  }
+}
+
 .date-picker__calendar-container {
   display: inline-block;
   position: relative;
   z-index: 2;
+
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .date-picker__additional-action {
+    margin-left: 0;
+
+    svg path {
+      fill: $lbh-blue-highlight
+    }
+  }
 
   & > svg:hover {
     cursor: pointer;

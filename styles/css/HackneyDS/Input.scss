@@ -1,13 +1,18 @@
 .govuk-input {
   border: 2px solid #0b0c0c;
   -webkit-appearance: none;
+
+  &:disabled {
+    background-color: #dee0e2;
+  }
+
+  &:focus {
+    outline: #ffc845 solid 3px;
+    outline-offset: 0;
+    box-shadow: inset 0 0 0 2px;
+  }
 }
 
-.govuk-input:focus {
-  outline: #ffc845 solid 3px;
-  outline-offset: 0;
-  box-shadow: inset 0 0 0 2px;
-}
 .govuk-input--error {
   border: 2px solid #d4351c;
 }

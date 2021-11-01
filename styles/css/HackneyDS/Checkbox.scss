@@ -1,0 +1,7 @@
+.govuk-checkboxes__input:disabled + .govuk-checkboxes__label {
+  opacity: 1 !important;
+
+  &:before {
+    background-color: #dee0e2;
+  }
+}

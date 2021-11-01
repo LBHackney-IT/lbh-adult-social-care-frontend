@@ -5,9 +5,10 @@ import Announcement from './Announcement';
 import BackLink from './BackLink';
 import BackToTop from './BackToTop';
 import Breadcrumbs from './Breadcrumbs';
-import Collapsible from './Collapsible';
 import Textarea from './Textarea';
 import Checkbox from './Checkbox';
+import FormGroup from './FormGroup';
+import DatePicker from './DatePicker';
 import CookieBanner from './CookieBanner';
 import { Tabs } from './Tabs';
 import { Tab } from './Tabs/Tab';
@@ -24,7 +25,7 @@ import { Table } from './Table';
 import { Pagination } from './Pagination';
 import SearchBox from './SearchBox';
 import RadioItem from './RadioItem';
-import { Tip } from './Tip';
+import Tip from './Tip';
 import { HorizontalSeparator } from './Layout/HorizontalSeparator';
 import { VerticalSeparator } from './Layout/VerticalSeparator';
 import { Container } from './Layout/Container';
@@ -37,18 +38,12 @@ import RadioGroup from './RadioGroup';
 import { SimplePagination } from './SimplePagination';
 import { SummaryList } from './SummaryList';
 import { FileUpload } from './FileUpload/FileUpload';
-import { EditElementModal } from '../CareCharges/EditElementModal';
-import { FundedNursingCare } from '../CarePackages/FundedNursingCare/FundedNursingCare';
-import { AddElementModal } from '../CareCharges/AddElementModal';
-import { CancelElementModal } from '../CareCharges/CancelElementModal';
-import { EndElementModal } from '../CareCharges/EndElementModal';
-import { OptionsElementModal } from '../CareCharges/OptionsElementModal';
-
-export const getSlot = (nodeList = [], name) => nodeList.find((el) => el.props.slot === name);
-
-export const getMultipleSlot = (nodeList = [], name) => nodeList.filter((el) => el.props.slot === name);
+import { UploadGreenButton } from './UploadGreenButton';
+import { SingleAccordion } from './SingleAccordion';
+import { Collapse } from './Collapse/Collapse';
 
 export {
+  Collapse,
   Tip,
   RadioGroup,
   RadioItem,
@@ -58,6 +53,7 @@ export {
   Timeline,
   ErrorMessage,
   Label,
+  DatePicker,
   Hint,
   Input,
   Button,
@@ -67,13 +63,13 @@ export {
   BackLink,
   BackToTop,
   Breadcrumbs,
-  Collapsible,
   Textarea,
   Checkbox,
   CookieBanner,
   Tabs,
   Tab,
   Tag,
+  FormGroup,
   Select,
   Dialog,
   WarningText,
@@ -88,10 +84,6 @@ export {
   SummaryList,
   FileUpload,
   Container,
-  EditElementModal,
-  AddElementModal,
-  OptionsElementModal,
-  FundedNursingCare,
-  CancelElementModal,
-  EndElementModal,
+  SingleAccordion,
+  UploadGreenButton,
 };

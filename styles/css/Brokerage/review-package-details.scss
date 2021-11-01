@@ -5,6 +5,7 @@
   height: 500px;
 
   margin-right: 30px;
+
   p:not(p:last-of-type) {
     margin-bottom: 24px;
   }
@@ -14,6 +15,14 @@
   }
 
   width: 100px;
+}
+
+.review-package-details {
+  .title-subtitle-header {
+    border-bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
 }
 
 .review-package-details__cost-info {
@@ -26,7 +35,7 @@
   margin-bottom: 24px;
 }
 
-.review-package-details__accordion-info {
+.single-accordion-info {
   display: flex;
   align-items: center;
   width: fit-content;
@@ -38,6 +47,7 @@
 
   svg {
     transition: 0.2s ease;
+
     &:hover {
       cursor: pointer;
     }
@@ -86,6 +96,7 @@
   margin-bottom: 24px;
   display: flex;
   justify-content: space-between;
+  color: $lbh-text-colour;
 
   font-size: 24px;
 }
@@ -119,6 +130,7 @@
   margin-bottom: 60px;
   padding: 24px;
   background: $lbh-light-gray2;
+
   & > h3 {
     font-size: 30px;
     color: black;
@@ -142,6 +154,7 @@
         padding-bottom: 16px;
         border-bottom: 1px solid $lbh-gray-border-2;
       }
+
       &:last-of-type {
         margin-bottom: 0;
       }
@@ -154,6 +167,7 @@
     display: flex;
     flex-direction: column-reverse;
   }
+
   button {
     @include media-small-ipod-up {
       width: 226px;
@@ -181,4 +195,20 @@
   @include media-small-ipod-up {
     display: flex;
   }
+}
+
+.review-package-details__buttons {
+  display: flex;
+  flex-wrap: wrap;
+
+  button {
+    height: 45px;
+    &:not(button:last-of-type) {
+      margin-right: 16px;
+    }
+  }
+}
+
+.package-history-link {
+  cursor: pointer;
 }

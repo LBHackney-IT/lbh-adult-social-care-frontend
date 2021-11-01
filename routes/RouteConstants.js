@@ -1,87 +1,63 @@
-const LOGIN_ROUTE = '/login';
-const LOGOUT_ROUTE = '/logout';
-const BROKERAGE_HUB_ROUTE = '/brokerage-hub';
-const LOGIN_CALL_BACK_ROUTE = '/login-callback';
-const CARE_PACKAGE_ROUTE = '/care-package';
-const ACTIVE_PACKAGES_ROUTE = '/active-packages';
-const SOCIAL_WORKER_ROUTE = '/social-worker';
-const APPROVER_HUB_ROUTE = '/approver-hub';
-const PROPOSED_PACKAGES_ROUTE = '/proposed-packages';
-const HOME_CARE_ROUTE = `${CARE_PACKAGE_ROUTE}/home-care`;
-const BROKERAGE_ROUTE = `${CARE_PACKAGE_ROUTE}/brokerage`;
-const BROKER_PACKAGE_ROUTE = `${BROKERAGE_ROUTE}/broker-package`;
-const CORE_PACKAGE_DETAILS_ROUTE = `${BROKERAGE_ROUTE}/core-package-details`;
-const HOME_CARE_APPROVE_PACKAGE_ROUTE = `${HOME_CARE_ROUTE}/approve-package`;
-const HOME_CARE_APPROVE_BROKERED_ROUTE = `${HOME_CARE_ROUTE}/approve-brokered`;
-const NURSING_CARE_ROUTE = `${CARE_PACKAGE_ROUTE}/nursing-care`;
-const NURSING_CARE_APPROVE_PACKAGE_ROUTE = `${NURSING_CARE_ROUTE}/approve-package`;
-const NURSING_CARE_APPROVE_BROKERED_ROUTE = `${NURSING_CARE_ROUTE}/approve-brokered`;
-const NURSING_CARE_BROKERING_ROUTE = `${NURSING_CARE_ROUTE}/brokering`;
-const RESIDENTIAL_CARE_ROUTE = `${CARE_PACKAGE_ROUTE}/residential-care`;
-const RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE = `${RESIDENTIAL_CARE_ROUTE}/approve-package`;
-const RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE = `${RESIDENTIAL_CARE_ROUTE}/approve-brokered`;
-const RESIDENTIAL_CARE_BROKERING_ROUTE = `${RESIDENTIAL_CARE_ROUTE}/brokering`;
-const DAY_CARE_ROUTE = `${CARE_PACKAGE_ROUTE}/day-care`;
-const DAY_CARE_APPROVE_PACKAGE_ROUTER = `${DAY_CARE_ROUTE}/approve-package/:dayCarePackageId`;
-const DAY_CARE_BROKERING_PACKAGE_ROUTER = `${DAY_CARE_ROUTE}/brokering/:dayCarePackageId`;
-const DAY_CARE_APPROVE_BROKERED_ROUTER = `${DAY_CARE_ROUTE}/approve-brokered/:dayCarePackageId`;
-const CLIENT_HISTORY_ROUTER = '/client-history';
+import { isServer } from '../api';
 
-const PAYMENTS_ROUTE = '/payments';
-const PAYMENTS_PAY_RUNS_ROUTE = `${PAYMENTS_ROUTE}/pay-runs`;
-const PAYMENTS_BILLS_ROUTE = `${PAYMENTS_ROUTE}/bills`;
-const PAYMENTS_ADD_BILL_ROUTE = `${PAYMENTS_ROUTE}/bills/add-bill`;
-const PAYMENTS_BILL_ROUTE = `${PAYMENTS_ROUTE}/bills/bill/:id`;
-const PAYMENTS_CARE_CHARGES_ROUTE = `${PAYMENTS_ROUTE}/care-charges`;
-const PAYMENTS_RECLAIMS_ROUTE = `${PAYMENTS_ROUTE}/supplier-returns`;
-const PAYMENTS_RECLAIM_ROUTE = `${PAYMENTS_ROUTE}/supplier-returns/:id`;
-const PAYMENTS_SUPPLIER_RETURNS_ROUTE = `${PAYMENTS_ROUTE}/supplier-returns`;
-const PAYMENTS_WEEK_OF_SUPPLIER_ROUTE = `${PAYMENTS_ROUTE}/supplier-returns/week-of-supplier/:id`;
-const PAYMENTS_REPORTING_ROUTE = `${PAYMENTS_ROUTE}/reporting`;
+export const BROKER_PORTAL_ROUTE = '/broker-portal';
 
-const SUPPLIER_DASHBOARD_ROUTE = '/supplier-dashboard/supplier-returns';
-const SUPPLIER_RETURNS_DASHBOARD_ROUTE = `${SUPPLIER_DASHBOARD_ROUTE}/supplier-returns/:id`;
+export const CARE_PACKAGE_ROUTE = '/care-package';
+export const getCarePackageReviewRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/review`;
+export const getCorePackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/core-package`;
+export const getBrokerPackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-package`;
+export const getFundedNursingCareRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-fnc`;
+export const getCareChargesRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/broker-care-charges`;
+export const getHistoryRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/history`;
+export const getCarePackageDetailsRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/details`;
+export const getCarePackageApprovalRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/approval`;
+export const getCarePackageCareChargeRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/care-charge`;
 
-export {
-  LOGIN_ROUTE,
-  LOGOUT_ROUTE,
-  LOGIN_CALL_BACK_ROUTE,
-  HOME_CARE_ROUTE,
-  HOME_CARE_APPROVE_PACKAGE_ROUTE,
-  HOME_CARE_APPROVE_BROKERED_ROUTE,
-  DAY_CARE_ROUTE,
-  DAY_CARE_BROKERING_PACKAGE_ROUTER,
-  DAY_CARE_APPROVE_PACKAGE_ROUTER,
-  DAY_CARE_APPROVE_BROKERED_ROUTER,
-  NURSING_CARE_ROUTE,
-  NURSING_CARE_APPROVE_PACKAGE_ROUTE,
-  NURSING_CARE_APPROVE_BROKERED_ROUTE,
-  NURSING_CARE_BROKERING_ROUTE,
-  RESIDENTIAL_CARE_ROUTE,
-  RESIDENTIAL_CARE_APPROVE_PACKAGE_ROUTE,
-  RESIDENTIAL_CARE_APPROVE_BROKERED_ROUTE,
-  RESIDENTIAL_CARE_BROKERING_ROUTE,
-  CLIENT_HISTORY_ROUTER,
-  CARE_PACKAGE_ROUTE,
-  PROPOSED_PACKAGES_ROUTE,
-  PAYMENTS_ROUTE,
-  PAYMENTS_BILLS_ROUTE,
-  PAYMENTS_CARE_CHARGES_ROUTE,
-  PAYMENTS_PAY_RUNS_ROUTE,
-  PAYMENTS_RECLAIMS_ROUTE,
-  PAYMENTS_REPORTING_ROUTE,
-  PAYMENTS_SUPPLIER_RETURNS_ROUTE,
-  PAYMENTS_BILL_ROUTE,
-  SUPPLIER_DASHBOARD_ROUTE,
-  SUPPLIER_RETURNS_DASHBOARD_ROUTE,
-  PAYMENTS_RECLAIM_ROUTE,
-  PAYMENTS_WEEK_OF_SUPPLIER_ROUTE,
-  PAYMENTS_ADD_BILL_ROUTE,
-  ACTIVE_PACKAGES_ROUTE,
-  SOCIAL_WORKER_ROUTE,
-  APPROVER_HUB_ROUTE,
-  BROKERAGE_HUB_ROUTE,
-  BROKER_PACKAGE_ROUTE,
-  BROKERAGE_ROUTE,
-  CORE_PACKAGE_DETAILS_ROUTE,
+export const SERVICE_USER_ROUTE = '/service-user';
+export const SERVICE_USER_MASTER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/master-search`;
+export const SERVICE_USER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/search`;
+export const getPackageDetailRoute = (id) => `${SERVICE_USER_ROUTE}/${id}/package-details`;
+export const getServiceUserPackagesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/packages`;
+
+export const BROKER_ASSISTANCE_ROUTE = '/broker-assistance';
+export const getAssignPackageRoute = (id) => `${BROKER_ASSISTANCE_ROUTE}/${id}/assign-package`;
+
+export const CARE_CHARGES_ROUTE = '/care-charges';
+
+export const APPROVALS_ROUTE = '/approvals';
+
+export const FINANCE_ROUTE = '/finance';
+
+export const LOGOUT_ROUTE = '/logout';
+
+export const NOT_FOUND_ROUTE = '/404';
+
+const carePackageRoutes = [
+  { route: BROKER_ASSISTANCE_ROUTE, name: 'Broker Assistance' },
+  { route: BROKER_PORTAL_ROUTE, name: 'Broker Portal' },
+  { route: CARE_CHARGES_ROUTE, name: 'Care Charges' },
+  { route: APPROVALS_ROUTE, name: 'Approvals' },
+  { route: FINANCE_ROUTE, name: 'Finance' },
+];
+
+export const saveToStoragePrevRoute = (route) => {
+  if (isServer()) return;
+  window.localStorage.setItem('prevRoute', route);
 };
+
+export const getStoragePrevRoute = () => {
+  if (isServer()) return {};
+  const route = window.localStorage.getItem('prevRoute');
+  return route ? getPrevRouteInfo(route) : {};
+};
+
+export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
+  const routeInfo = getStoragePrevRoute();
+
+  return [
+    { text: 'Home', href: '/' },
+    { text: routeInfo.name || 'Broker Assistance', href: routeInfo.route || BROKER_ASSISTANCE_ROUTE },
+    ...additionalBreadcrumbs,
+  ];
+};
+export const getPrevRouteInfo = (route) => carePackageRoutes.find((mainRoute) => route.includes(mainRoute.route)) || {};

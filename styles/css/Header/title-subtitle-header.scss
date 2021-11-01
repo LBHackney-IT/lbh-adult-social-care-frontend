@@ -1,0 +1,25 @@
+.title-subtitle-header {
+  padding-bottom: 48px;
+  margin-bottom: 48px;
+  margin-top: 60px;
+  border-bottom: 1px solid #bfc1c3;
+
+  p {
+    font-size: 27px;
+    color: $lbh-gray1;
+  }
+
+  h2 {
+    font-size: 48px;
+    color: black;
+  }
+
+  div {
+    display: flex;
+    align-items: baseline;
+
+    h2 {
+      margin-right: 23px;
+    }
+  }
+}

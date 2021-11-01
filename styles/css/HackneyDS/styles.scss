@@ -6,6 +6,7 @@
 @import './Tabs.scss';
 @import './Pagination.scss';
 @import './Table.scss';
+@import './Checkbox.scss';
 
 .lbh-list--bullet .lbh-list--bullet {
   list-style-type: circle;
@@ -42,13 +43,10 @@
   padding-left: 1.125rem;
   list-style-type: disc;
 }
+
 .lbh-list--number {
   padding-left: 1.125rem;
   list-style-type: decimal;
-}
-
-.govuk-form-group {
-  margin-bottom: 20px;
 }
 
 .govuk-form-group:after {
@@ -57,17 +55,9 @@
   clear: both;
 }
 
-.govuk-form-group .govuk-form-group:last-of-type {
-  margin-bottom: 0;
-}
-
 .govuk-form-group--error {
   padding-left: 15px;
   border-left: 5px solid #d4351c;
-}
-
-.lbh-form-group {
-  margin-bottom: 0;
 }
 
 .lbh-form-group .govuk-error-message {
@@ -157,8 +147,8 @@
 }
 
 .lbh-form-group--date-input
-  .govuk-fieldset__legend:not(.govuk-fieldset__legend--m):not(.govuk-fieldset__legend--l):not(.govuk-fieldset__legend--xl)
-  + .govuk-hint,
+.govuk-fieldset__legend:not(.govuk-fieldset__legend--m):not(.govuk-fieldset__legend--l):not(.govuk-fieldset__legend--xl)
++ .govuk-hint,
 .lbh-form-group--date-input .govuk-hint {
   margin-top: 0.375rem;
   margin-bottom: 0;
@@ -188,7 +178,7 @@
 }
 
 .govuk-fieldset__legend:not(.govuk-fieldset__legend--m):not(.govuk-fieldset__legend--l):not(.govuk-fieldset__legend--xl)
-  + .govuk-hint,
++ .govuk-hint,
 .govuk-label:not(.govuk-label--m):not(.govuk-label--l):not(.govuk-label--xl) + .govuk-hint {
   margin-bottom: 10px;
 }
@@ -201,7 +191,6 @@
   font-size: 1rem;
   line-height: 1.25;
   display: block;
-  margin-bottom: 15px;
   color: #505a5f;
 }
 
@@ -225,12 +214,13 @@
 }
 
 .lbh-form-group--date-input
-  .govuk-fieldset__legend:not(.govuk-fieldset__legend--m):not(.govuk-fieldset__legend--l):not(.govuk-fieldset__legend--xl)
-  + .govuk-hint,
+.govuk-fieldset__legend:not(.govuk-fieldset__legend--m):not(.govuk-fieldset__legend--l):not(.govuk-fieldset__legend--xl)
++ .govuk-hint,
 .lbh-form-group--date-input .govuk-hint {
   margin-top: 0.375rem;
   margin-bottom: 0;
 }
+
 .lbh-error-message {
   margin-top: 0;
   margin-bottom: 0;
@@ -275,10 +265,6 @@
   .lbh-list {
     font-size: 1.1875rem;
     line-height: 1.4375rem;
-  }
-
-  .govuk-form-group {
-    margin-bottom: 30px;
   }
 
   .lbh-form-group .govuk-fieldset__legend {

@@ -1,22 +1,24 @@
 import React from 'react';
 import Link from 'next/link';
-import { BROKERAGE_HUB_ROUTE } from '../../../routes/RouteConstants';
-import { getSlot, getMultipleSlot, Container } from '../index';
+import { BROKER_ASSISTANCE_ROUTE } from '../../../routes/RouteConstants';
+import { getSlot } from '../helpers';
+import { Container } from '../Layout/Container';
 
-export default function Header({ children = [], links = [], bottomLines = true, fixed, purple }) {
+export default function Header({ children = [], links = [], bottomLines = false, fixed, purple, className }) {
   const bottomLinesClass = bottomLines ? ' bottom-lines' : '';
   const fixedClassList = fixed ? ' lbh-header--fixed' : '';
   const shortServiceNodeList = ' lbh-header__service-name--short';
   const purpleSchemeNodeList = purple ? ' lbh-header--purple' : '';
   const nodeList = Array.isArray(children) ? children : [children];
+  const outerClassName = className ? ` ${className}` : '';
 
   return (
-    <header className={`lbh-header${bottomLinesClass}${fixedClassList + purpleSchemeNodeList}`}>
+    <header className={`lbh-header${bottomLinesClass}${fixedClassList + purpleSchemeNodeList}${outerClassName}`}>
       <div className="lbh-header__main">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <div className="lbh-header__wrapper">
             <h1 className="lbh-header__title">
-              <Link href={BROKERAGE_HUB_ROUTE}>
+              <Link href={BROKER_ASSISTANCE_ROUTE}>
                 <a className="lbh-header__title-link">
                   <svg
                     className="lbh-header__logo"
@@ -59,11 +61,9 @@ export default function Header({ children = [], links = [], bottomLines = true, 
             </h1>
 
             <div className="lbh-header__links">
-              {getMultipleSlot(nodeList, 'link')}
-
-              {links?.map(({ href, text }) => (
+              {links.map(({ href, text }) => (
                 <Link key={href} href={href}>
-                  <a slot="link">{text}</a>
+                  {text}
                 </Link>
               ))}
             </div>

@@ -1,18 +1,15 @@
-.govuk-button {
-  width: 100%;
-  box-sizing: border-box;
-}
-
 .lbh-button--add:hover svg path {
   fill: #fff;
 }
 
-.lbh-primary-button {
-  color: $lbh-primary-button;
-  font-size: 14px;
+.storybook-buttons {
+  button {
+    height: 40px;
+  }
 }
 
 .govuk-button {
+  box-sizing: border-box;
   font-family: Open Sans;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -26,8 +23,6 @@
   padding: 8px 10px 7px;
   border: 2px solid transparent;
   border-radius: 0;
-  color: #fff;
-  background-color: #00703c;
   box-shadow: 0 2px 0 #002d18;
   text-align: center;
   vertical-align: top;
@@ -35,38 +30,184 @@
   -webkit-appearance: none;
   width: auto;
 
+  background-color: $lbh-primary;
+  color: white;
+
+  &:hover, &:target {
+    background-color: $button-primary-hover;
+  }
+
+  &:active {
+    background-color: $lbh-primary-active-button;
+  }
+
+  &.lbh-button.outline {
+    color: $lbh-green1;
+    border-color: $lbh-green1;
+
+    &[disabled], &.lbh-button--disabled {
+      color: white;
+    }
+
+    &:hover, &:target {
+      background: $button-primary-hover;
+      color: white;
+    }
+
+    &:active {
+      background-color: $lbh-primary-active-button;
+    }
+  }
+
+  &--disabled {
+    cursor: initial;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .loading {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+
+    circle {
+      fill: $lbh-light-link;
+    }
+  }
+
+  svg.loading.button-loading {
+    width: 20px;
+    height: 20px;
+    margin: 0 8px 0 0;
+  }
+
   &.warning-button {
     background-color: #81312F;
   }
 }
 
-button {
-  &.outline {
-    background: transparent;
+button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):not([disabled]) {
+  &[disabled] {
+    cursor: initial;
+  }
+
+  &.secondary-red {
+    background-color: $button-secondary-red;
+    color: white;
+
+    &:hover, &:target {
+      background-color: $button-secondary-red-hover;
+      color: white;
+    }
+
+    &:active {
+      background-color: $button-secondary-red-pressed;
+    }
+
+    &.outline {
+      color: $lbh-f01;
+      border-color: $lbh-f01;
+
+      &:hover, &:target {
+        background: $button-secondary-red-hover;
+        color: white;
+      }
+
+      &:active {
+        background-color: $button-secondary-red-pressed;
+      }
+    }
+  }
+
+  &.secondary-blue {
+    background-color: $button-secondary-blue;
+    color: white;
+
+    &:hover, &:target {
+      background-color: $lbh-hover-link;
+      color: white;
+    }
+
+    &:active {
+      background-color: $button-secondary-blue-active;
+    }
+
+    &.outline {
+      color: $button-secondary-blue;
+      border-color: $button-secondary-blue;
+
+      &:hover, &:target {
+        background: $lbh-hover-link;
+        color: white;
+      }
+
+      &:active {
+        background-color: $button-secondary-blue-active;
+      }
+    }
+  }
+
+  &.secondary-yellow {
+    background-color: $button-secondary-yellow;
+    color: $button-secondary-gray-text;
+
+    &:hover, &:target {
+      background-color: $button-secondary-yellow-hover;
+    }
+
+    &:active {
+      background-color: $button-secondary-yellow-pressed;
+    }
+
+    &.outline {
+      border-color: $button-secondary-yellow;
+      color: $button-secondary-yellow;
+
+      &:hover, &:target {
+        background-color: $button-secondary-yellow-hover;
+        color: white;
+      }
+
+      &:active {
+        background-color: $button-secondary-yellow-pressed;
+      }
+    }
+  }
+
+  &.secondary-gray {
+    background-color: $lbh-secondary-text-colour;
+    color: white;
+
+    &:hover, &:target {
+      background-color: $lbh-gray1;
+    }
+
+    &:active {
+      background-color: $lbh-black1;
+    }
+
+    &.outline {
+      color: $lbh-gray-text;
+      border-color: $lbh-gray-text;
+
+      &:hover, &:target {
+        background: $lbh-gray1;
+        color: white;
+      }
+
+      &:active {
+        background-color: $lbh-black1;
+      }
+    }
+  }
+  &.outline, .lbh-button {
+    background-color: transparent;
+    transition: background-color 0.2s ease;
     border: 1px solid;
     box-shadow: none;
 
     &:hover {
       transform: scale(1.03);
-    }
-
-    &.green {
-      color: $lbh-green1;
-      border-color: $lbh-green1;
-    }
-
-    &.red {
-      color: red;
-      border-color: red;
-    }
-
-    &.gray {
-      color: $lbh-gray-text;
-      border-color: $lbh-gray-text;
-    }
-
-    &:active, &:hover, &:link, &:visited {
-      color: white;
     }
   }
 }
@@ -82,22 +223,8 @@ button {
   padding: 0;
   border: 0;
 }
-.govuk-button:hover {
-  background-color: #005a30;
-}
 .govuk-button:active {
   top: 2px;
-}
-.govuk-button:focus {
-  border-color: #ffc845;
-  outline: transparent solid 3px;
-  box-shadow: inset 0 0 0 1px #ffc845;
-}
-.govuk-button:focus:not(:active):not(:hover) {
-  border-color: #ffc845;
-  color: #0b0c0c;
-  background-color: #ffc845;
-  box-shadow: 0 2px 0 #0b0c0c;
 }
 .govuk-button:before {
   content: '';
@@ -120,10 +247,6 @@ button {
 }
 .govuk-button--disabled:hover,
 .govuk-button[disabled='disabled']:hover,
-.govuk-button[disabled]:hover {
-  background-color: #00703c;
-  cursor: default;
-}
 .govuk-button--disabled:focus,
 .govuk-button[disabled='disabled']:focus,
 .govuk-button[disabled]:focus {
@@ -203,17 +326,7 @@ button {
   background: #00664f;
   font-weight: 400;
 }
-.lbh-button:not(.lbh-button--warning):not(.lbh-button--disabled):not([disabled]):hover {
-  background: #00513f;
-}
-.lbh-button--disabled,
-.lbh-button--disabled:hover,
-.lbh-button:disabled,
-.lbh-button:hover[disabled] {
-  opacity: 1;
-  background: #7fb2a7;
-  box-shadow: 0 2px 0 #328472;
-}
+
 .lbh-button--start {
   padding: 0.9375rem 1.5rem 0.8125rem;
   font-size: 1.6875rem;

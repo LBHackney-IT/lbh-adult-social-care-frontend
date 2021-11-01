@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tip } from './index';
+import Tip from './index';
 
 export default {
   title: 'Hackney Design System/Tip',
@@ -11,7 +11,11 @@ export default {
   },
 };
 
-const Template = (args) => <div style={{width: '50%', display: 'flex'}}><Tip light {...args} /></div>;
+const Template = (args) => (
+  <div style={{ width: '50%', display: 'flex' }}>
+    <Tip light {...args} />
+  </div>
+);
 
 export const Default = Template.bind({});
 Default.args = {
@@ -30,7 +34,7 @@ Interactive.args = {
   children: <p>Hello Tip</p>,
   interactive: true,
   content: (
-    <div className='text-align-left'>
+    <div className="text-align-left">
       <h3 className="lbh-heading-h4">
         <a href="#" className="lbh-link lbh-link--no-visited-state">
           Jane Smith

@@ -3,10 +3,12 @@ import { useTable, useExpanded, useRowSelect } from 'react-table';
 
 export const Table = ({
   hasHeader = true,
+  rowsHaveHeader,
   columns,
   data,
   expandRowCallback,
   setSelectedRows,
+  fixedTable,
   hasFooter,
   headerClassName = '',
   bodyClassName = '',
@@ -14,6 +16,8 @@ export const Table = ({
   cellClassName = '',
   onRowClick,
 }) => {
+  if(!data?.length) return <p className='lbh-table__no-results'>No results found</p>;
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -41,13 +45,16 @@ export const Table = ({
   const renderRowSubComponent = React.useCallback(expandRowCallback, []);
 
   return (
-    <table className="govuk-table lbh-table" {...getTableProps()}>
+    <table className={`govuk-table lbh-table${fixedTable ? ' fixed-table' : ''}`} {...getTableProps()}>
       {hasHeader && (
         <thead className={`govuk-table__head ${headerClassName}`}>
           {headerGroups.map((headerGroup) => (
             <tr className="govuk-table__row" {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th scope="col" {...column.getHeaderProps([{ className: `govuk-table__header ${column.className}` }])}>
+                <th
+                  scope="col"
+                  {...column.getHeaderProps([{ className: `govuk-table__header ${column.className || ''}` }])}
+                >
                   {column.render('Header')}
                 </th>
               ))}
@@ -58,18 +65,31 @@ export const Table = ({
       <tbody className={`govuk-table__body ${bodyClassName}`} {...getTableBodyProps()}>
         {rows.map((row, index) => {
           prepareRow(row);
+
+          const rowElement = row.cells.map((cell) => (
+            <td className={`govuk-table__cell ${cellClassName}`} {...cell.getCellProps()}>
+              {cell.render('Cell')}
+            </td>
+          ));
           return (
             <React.Fragment key={index}>
               <tr
                 onClick={onRowClick ? () => onRowClick(row.original) : () => {}}
-                className="govuk-table__row"
+                className={`govuk-table__row${rowsHaveHeader ? ' with-row-header' : ''}`}
                 {...row.getRowProps()}
               >
-                {row.cells.map((cell) => (
-                  <td className={`govuk-table__cell ${cellClassName}`} {...cell.getCellProps()}>
-                    {cell.render('Cell')}
+                {rowsHaveHeader ? (
+                  <td colSpan={row.cells.length}>
+                    <table>
+                      <tr className="govuk-table__row-header">
+                        <td colSpan={row.cells.length}>{rowsHaveHeader({ ...row.original })}</td>
+                      </tr>
+                      <tr>{rowElement}</tr>
+                    </table>
                   </td>
-                ))}
+                ) : (
+                  rowElement
+                )}
               </tr>
               {row.isExpanded && renderRowSubComponent && (
                 <tr className="govuk-table__row">

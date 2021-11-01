@@ -1,32 +1,203 @@
 import React from 'react';
 
-const Loading = ({ className = ''}) => (
-    <svg className={`loading ${className}`} viewBox="0 0 213.333 213.333">
-      <path style={{fill: '#2D50A7'}} d="M203.636,101.818h-38.788c-5.355,0-9.697,4.342-9.697,9.697s4.342,9.697,9.697,9.697h38.788  c5.355,0,9.697-4.342,9.697-9.697S208.992,101.818,203.636,101.818z"/>
-      <path style={{fill: '#73A1FB'}} d="M48.485,101.818H9.697c-5.355,0-9.697,4.342-9.697,9.697s4.342,9.697,9.697,9.697h38.788  c5.355,0,9.697-4.342,9.697-9.697S53.84,101.818,48.485,101.818z"/>
-      <path style={{fill: '#355EC9'}} d="M168.378,36.09l-27.428,27.428c-3.787,3.786-3.787,9.926,0,13.713  c1.893,1.894,4.375,2.841,6.856,2.841c2.482,0,4.964-0.946,6.857-2.841l27.428-27.428c3.787-3.786,3.787-9.926,0-13.713  C178.305,32.303,172.165,32.303,168.378,36.09z"/>
-      <g>
-        <path style={{fill: '#C4D9FD'}} d="M106.667,169.697c-5.355,0-9.697,4.342-9.697,9.697v19.394c0,5.355,4.342,9.697,9.697,9.697   c5.355,0,9.697-4.342,9.697-9.697v-19.394C116.364,174.039,112.022,169.697,106.667,169.697z"/>
-        <path style={{fill: '#C4D9FD'}} d="M58.669,145.799l-27.427,27.428c-3.787,3.787-3.787,9.926,0,13.713   c1.893,1.893,4.375,2.84,6.857,2.84c2.482,0,4.964-0.947,6.856-2.84l27.427-27.428c3.787-3.787,3.787-9.926,0-13.713   C68.596,142.012,62.456,142.012,58.669,145.799z"/>
+const Loading = ({ className = 'loading-center', isLoading }) => {
+  if (!isLoading) return null;
+
+  return (
+    <svg
+      className={`loading ${className}`}
+      style={{ margin: 'auto', display: 'block', shapeRendering: 'auto' }}
+      width="200px"
+      height="200px"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="xMidYMid"
+    >
+      <g transform="translate(80,50)">
+        <g transform="rotate(0)">
+          <circle cx="0" cy="0" r="6" fill="#00664f" fillOpacity="1">
+            <animateTransform
+              attributeName="transform"
+              type="scale"
+              begin="-0.875s"
+              values="1.5 1.5;1 1"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="fill-opacity"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+              values="1;0"
+              begin="-0.875s"
+            />
+          </circle>
+        </g>
       </g>
-      <path style={{fill: '#3D6DEB'}} d="M106.667,4.848c-5.355,0-9.697,4.342-9.697,9.697v38.788c0,5.355,4.342,9.697,9.697,9.697  c5.355,0,9.697-4.342,9.697-9.697V14.545C116.364,9.19,112.022,4.848,106.667,4.848z"/>
-      <path style={{fill: '#5286FA'}} d="M44.956,36.09c-3.786-3.787-9.926-3.787-13.713,0c-3.787,3.787-3.787,9.926,0,13.713l27.427,27.428  c1.893,1.894,4.375,2.841,6.857,2.841c2.481,0,4.964-0.947,6.856-2.841c3.787-3.786,3.787-9.926,0-13.713L44.956,36.09z"/>
-      <g />
-      <g />
-      <g />
-      <g />
-      <g />
-      <g />
-      <g />
-      <g />
-      <g />
-      <g />
-      <g />
-      <g />
-      <g />
-      <g />
-      <g />
+      <g transform="translate(71.21320343559643,71.21320343559643)">
+        <g transform="rotate(45)">
+          <circle cx="0" cy="0" r="6" fill="#00664f" fillOpacity="0.875">
+            <animateTransform
+              attributeName="transform"
+              type="scale"
+              begin="-0.75s"
+              values="1.5 1.5;1 1"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="fill-opacity"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+              values="1;0"
+              begin="-0.75s"
+            />
+          </circle>
+        </g>
+      </g>
+      <g transform="translate(50,80)">
+        <g transform="rotate(90)">
+          <circle cx="0" cy="0" r="6" fill="#00664f" fillOpacity="0.75">
+            <animateTransform
+              attributeName="transform"
+              type="scale"
+              begin="-0.625s"
+              values="1.5 1.5;1 1"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="fill-opacity"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+              values="1;0"
+              begin="-0.625s"
+            />
+          </circle>
+        </g>
+      </g>
+      <g transform="translate(28.786796564403577,71.21320343559643)">
+        <g transform="rotate(135)">
+          <circle cx="0" cy="0" r="6" fill="#00664f" fillOpacity="0.625">
+            <animateTransform
+              attributeName="transform"
+              type="scale"
+              begin="-0.5s"
+              values="1.5 1.5;1 1"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="fill-opacity"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+              values="1;0"
+              begin="-0.5s"
+            />
+          </circle>
+        </g>
+      </g>
+      <g transform="translate(20,50.00000000000001)">
+        <g transform="rotate(180)">
+          <circle cx="0" cy="0" r="6" fill="#00664f" fillOpacity="0.5">
+            <animateTransform
+              attributeName="transform"
+              type="scale"
+              begin="-0.375s"
+              values="1.5 1.5;1 1"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="fill-opacity"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+              values="1;0"
+              begin="-0.375s"
+            />
+          </circle>
+        </g>
+      </g>
+      <g transform="translate(28.78679656440357,28.786796564403577)">
+        <g transform="rotate(225)">
+          <circle cx="0" cy="0" r="6" fill="#00664f" fillOpacity="0.375">
+            <animateTransform
+              attributeName="transform"
+              type="scale"
+              begin="-0.25s"
+              values="1.5 1.5;1 1"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="fill-opacity"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+              values="1;0"
+              begin="-0.25s"
+            />
+          </circle>
+        </g>
+      </g>
+      <g transform="translate(49.99999999999999,20)">
+        <g transform="rotate(270)">
+          <circle cx="0" cy="0" r="6" fill="#00664f" fillOpacity="0.25">
+            <animateTransform
+              attributeName="transform"
+              type="scale"
+              begin="-0.125s"
+              values="1.5 1.5;1 1"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="fill-opacity"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+              values="1;0"
+              begin="-0.125s"
+            />
+          </circle>
+        </g>
+      </g>
+      <g transform="translate(71.21320343559643,28.78679656440357)">
+        <g transform="rotate(315)">
+          <circle cx="0" cy="0" r="6" fill="#00664f" fillOpacity="0.125">
+            <animateTransform
+              attributeName="transform"
+              type="scale"
+              begin="0s"
+              values="1.5 1.5;1 1"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="fill-opacity"
+              keyTimes="0;1"
+              dur="1s"
+              repeatCount="indefinite"
+              values="1;0"
+              begin="0s"
+            />
+          </circle>
+        </g>
+      </g>
     </svg>
-)
+  );
+};
 
 export default Loading;

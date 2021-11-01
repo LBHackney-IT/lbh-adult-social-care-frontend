@@ -1,0 +1,65 @@
+.history__overview {
+  border-bottom: 1px solid #bfc1c3;
+  padding-bottom: 48px;
+
+  h3 {
+    color: #0b0c0c;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 37px;
+    margin-bottom: 16px;
+  }
+}
+
+.history__overview-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px 48px;
+
+  & > div {
+    font-size: 19px;
+    line-height: 30px;
+
+    h2 {
+      color: black;
+      font-weight: 600;
+    }
+
+    p {
+      color: #6f777b;
+    }
+  }
+}
+
+.history__list {
+  display: flex;
+  flex-direction: column;
+  margin: 48px 0;
+  row-gap: 34px;
+
+  & > div {
+    font-size: 19px;
+    line-height: 15px;
+
+    p {
+      color: #0b0c0c;
+      margin-bottom: 16px;
+    }
+
+    span {
+      color: #525a5b;
+    }
+
+    & > span {
+      display: inline-block;
+      font-size: 16px;
+      line-height: 22px;
+      margin-top: 16px;
+    }
+
+    .history__list-dot {
+      display: inline-block;
+      margin: 0 16px;
+    }
+  }
+}

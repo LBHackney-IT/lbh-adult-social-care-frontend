@@ -1,0 +1,33 @@
+.assign-care-plan {
+  .assign-care-plan__select {
+    margin-bottom: 16px;
+  }
+
+  .assign-care-plan__notes {
+    margin-bottom: 48px;
+
+    h3 {
+      color: #0b0c0c;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 37px;
+      margin-bottom: 24px;
+    }
+  }
+
+
+  .select-container {
+
+    @include media-small-ipod-up {
+      width: 434px;
+    }
+
+    @include media-small-ipod-down {
+      width: 100%;
+    }
+  }
+
+  .govuk-fieldset .govuk-fieldset__legend {
+    font-size: 19px;
+  }
+}

@@ -312,12 +312,7 @@ button.lbh-link {
   margin-top: 15px;
   margin-bottom: 15px;
 }
-.govuk-form-group .govuk-form-group:last-of-type,
-.lbh-form-group,
-.lbh-list--bullet > li,
-.lbh-list--number > li {
-  margin-bottom: 0;
-}
+
 .govuk-section-break--visible,
 .js-enabled .govuk-accordion {
   border-bottom: 1px solid #b1b4b6;
@@ -3319,7 +3314,6 @@ html {
 }
 .govuk-warning-text {
   position: relative;
-  margin-bottom: 20px;
   padding: 10px 0;
 }
 .govuk-warning-text__icon {

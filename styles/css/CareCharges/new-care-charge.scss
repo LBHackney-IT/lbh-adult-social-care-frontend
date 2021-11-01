@@ -1,0 +1,133 @@
+.new-care-charge {
+  .govuk-breadcrumbs {
+    margin-bottom: 40px;
+  }
+
+  .title-subtitle {
+    margin-left: auto;
+  }
+
+  .start-date-cell {
+    .title-subtitle {
+      margin-left: initial;
+    }
+  }
+}
+
+.care-charges__cell {
+  cursor: pointer;
+  vertical-align: bottom;
+  margin-left: auto;
+  padding-top: 24px;
+  padding-bottom: 24px;
+
+  &:first-of-type {
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  &:nth-of-type(1), &:nth-of-type(2) {
+    .title-subtitle {
+      margin-left: initial;
+    }
+  }
+
+  &:nth-of-type(1) {
+    width: 100px;
+  }
+
+  &:nth-of-type(2) {
+    width: 240px;
+  }
+
+  &:nth-of-type(3) {
+    .title-subtitle {
+      margin-left: initial;
+    }
+  }
+
+  &:last-of-type {
+    width: 160px;
+    .title-subtitle {
+      p:first-of-type {
+        text-align: right;
+      }
+    }
+  }
+}
+
+.govuk-table__row-header {
+  td {
+    padding-top: 23px;
+  }
+}
+
+.new-care-charge__card {
+  .title-subtitle:not(.title-subtitle:last-of-type) {
+    margin-right: 60px;
+  }
+}
+
+.new-care-charge__card-address {
+  font-size: 16px;
+  color: $lbh-secondary-text-colour;
+}
+
+.new-care-charge__card-date {
+  font-size: 16px;
+  color: $lbh-secondary-text-colour;
+}
+
+.new-care-charge__card-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+
+  p {
+    margin-right: 14px;
+    font-size: 19px;
+    color: $lbh-primary;
+    font-weight: 700;
+  }
+
+  .lbh-tag {
+    margin-right: 8px;
+  }
+}
+
+.new-care-charge__header {
+  margin-bottom: 32px;
+  h2 {
+    font-size: 30px;
+    font-weight: 700;
+  }
+}
+
+.new-care-charge__selectors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  .govuk-fieldset {
+    display: flex;
+    align-items: center;
+  }
+
+  .govuk-fieldset__legend {
+    margin-right: 8px;
+    font-size: 16px;
+  }
+
+  .select-container {
+    width: 200px;
+  }
+
+  .horizontal-separator {
+    display: none;
+  }
+
+  .lbh-form-group {
+    margin-right: 24px;
+  }
+}
+

@@ -18,6 +18,10 @@ html {
   }
 }
 
+.lbh-primary-color {
+  color: $lbh-primary;
+}
+
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
   html {
@@ -144,6 +148,10 @@ html {
 
 .hackney-text-secondary {
   color: #525a5b;
+}
+
+.lbg-secondary-text-colour {
+  color: $lbh-secondary-text-colour;
 }
 
 // Background sections

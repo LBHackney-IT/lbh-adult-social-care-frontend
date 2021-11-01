@@ -1,0 +1,24 @@
+.care-details {
+  &__table-header {
+    background: #dee0e2;
+  }
+  &__table-cell {
+    background: #f8f8f8;
+    border: none;
+  }
+}
+
+.package-request {
+  &__yellow {
+    background: #f8e08e;
+    color: #0c0c0c;
+  }
+  &__red {
+    background: #81312f;
+    color: #fff;
+  }
+  &__blue {
+    background: #035da6;
+    color: #fff;
+  }
+}

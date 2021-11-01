@@ -2,14 +2,16 @@
 @import "user-details";
 @import "core-package-details";
 @import "review-package-details";
-@import "supplier-look-up";
+@import "broker-package";
 @import "brokerage-action-card";
 @import "brokerage-cost";
 @import "funded-nursing-care";
 @import "brokerage-submit-for-approval-popup";
 @import "care-charges";
-@import "brokerage-hub";
+@import "broker-portal";
 @import "brokerage-weekly-cost";
+@import "approval-package-detail";
+@import "package-details";
 
 .brokerage__container-main {
   @include media-desktop {
@@ -25,12 +27,13 @@
 .brokerage__container {
   padding-bottom: 48px;
   margin-bottom: 48px;
-  border-bottom: 1px solid #BFC1C3;
+  border-bottom: 1px solid #bfc1c3;
 
   & > h3 {
     font-size: 30px;
     font-weight: bold;
     margin-bottom: 16px;
+    color: #0b0c0c;
   }
 }
 

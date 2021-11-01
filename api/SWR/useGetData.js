@@ -2,16 +2,20 @@ import useSWR from 'swr';
 import useErrorNotification from './useErrorNotification';
 
 // use for simple requests without any params
-const useGetData = (url, errorMessage, initialData = []) => {
+const useGetData = (url, errorMessage, initialData = {}) => {
   const response = useSWR(url, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
-    initialData,
   });
+  const { error, data } = response;
 
-  useErrorNotification(response.error, errorMessage);
+  useErrorNotification(error, errorMessage);
 
-  return response;
+  return {
+    ...response,
+    data: data || initialData,
+    isLoading: error === undefined && data === undefined && !!url,
+  };
 };
 
 export default useGetData;

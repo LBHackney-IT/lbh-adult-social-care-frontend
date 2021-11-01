@@ -1,16 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { DatePickerCalendarIcon } from '../../Icons';
-import DatePick from '../../DatePick';
-import { Hint, Label } from '../index';
+import React, { useEffect, memo, useState } from 'react';
 import { lastDayOfMonth } from 'date-fns';
+import { DatePickerCalendarIcon, RestoreIcon, CrossIcon } from '../../Icons';
+import DatePick from '../../DatePick';
+import Hint from '../lettering/Hint';
+import Label from '../lettering/Label';
 
-export default function DatePicker ({
+const initialDateState = {
+  value: '',
+  error: '',
+};
+
+const DatePicker = ({
   disabled,
   className = '',
   label,
   formId,
   minDate,
+  maxDate,
   hint,
+  hasClear,
   date,
   setDate,
   IconComponent = DatePickerCalendarIcon,
@@ -19,66 +27,13 @@ export default function DatePicker ({
   month = {},
   year = {},
   onClickIcon = () => {},
-}) {
-
-  const outerClass = className ? ` ${className}` : '';
-  const disabledClass = disabled ? ' disabled' : '';
-  const actualDate = new Date();
-
-  //get value 01 return 1, get value 10 return 10
-  const replaceFirstZero = (string) => string && (string[0] === '0' ? string.replace('0', '') : string);
-
-  const getValidMonth = (monthValue) => {
-    // if value more then 11 return 0 (date.getMonth() start from 0) 11 December and max number of month
-    // get value 02 format to 2 and 2-1=1 February
-    const validMonth = replaceFirstZero(monthValue) - 1 > 11 ? 0 : replaceFirstZero(monthValue) - 1;
-    return Number(validMonth) < 0 ? 0 : Number(validMonth);
-  };
-
-  const getValidDay = (dayValue) => {
-    const formatDay = dayValue && replaceFirstZero(dayValue);
-    const lastDayInMonth = date && lastDayOfMonth(date).getDate();
-    const validDay = formatDay && lastDayInMonth && (lastDayInMonth < formatDay) ? 1 : formatDay;
-    return Number(validDay) || 1;
-  };
-
-  const getValidYear = (dayValue) => (
-    dayValue ? `20${dayValue}` : 0
-  );
-
-  const onChangeDay = value => {
-    setDate(new Date(
-      date?.getFullYear() || 0,
-      date?.getMonth() || 0,
-      getValidDay(value)
-    ));
-  };
-
-  const onChangeMonth = (value) => {
-    setDate(new Date(
-      date?.getFullYear() || actualDate.getFullYear(),
-      getValidMonth(value),
-      date?.getDate() || actualDate.getDate(),
-    ));
-  };
-
-  const onChangeYear = (value) => {
-    setDate(new Date(
-      getValidYear(value),
-      date?.getMonth() || 0,
-      date?.getDate() || 1,
-    ));
-  };
-
-  const [initialDateState] = useState({
-    value: '',
-    error: '',
-  });
-
+}) => {
   const [localDay, setLocalDay] = useState({
     value: '',
     error: '',
   });
+
+  const [previousDate, setPreviousDate] = useState(null);
 
   const [localMonth, setLocalMonth] = useState({
     value: '',
@@ -91,6 +46,48 @@ export default function DatePicker ({
   });
 
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
+
+  const outerClass = className ? ` ${className}` : '';
+  const disabledClass = disabled ? ' disabled' : '';
+  const actualDate = new Date();
+
+  // get value 01 return 1, get value 10 return 10
+  const replaceFirstZero = (string) => string && (string[0] === '0' ? string.replace('0', '') : string);
+
+  const getValidMonth = (monthValue) => {
+    // if value more then 11 return 0 (date.getMonth() start from 0) 11 December and max number of month
+    // get value 02 format to 2 and 2-1=1 February
+    const validMonth = replaceFirstZero(monthValue) - 1 > 11 ? 0 : replaceFirstZero(monthValue) - 1;
+    return Number(validMonth) < 0 ? 0 : Number(validMonth);
+  };
+
+  const getValidDay = (dayValue) => {
+    const formatDay = dayValue && replaceFirstZero(dayValue);
+    const lastDayInMonth = date && lastDayOfMonth(date).getDate();
+    const validDay = formatDay && lastDayInMonth && lastDayInMonth < formatDay ? 1 : formatDay;
+    return Number(validDay) || 1;
+  };
+
+  const getValidYear = (dayValue) => (dayValue ? `20${dayValue}` : 0);
+
+  const onChangeDay = (value) => {
+    setDate(new Date(date?.getFullYear() || 0, date?.getMonth() || 0, getValidDay(value)));
+  };
+
+  const onChangeMonth = (value) => {
+    setDate(
+      new Date(
+        date?.getFullYear() || actualDate.getFullYear(),
+        getValidMonth(value),
+        date?.getDate() || actualDate.getDate()
+      )
+    );
+  };
+
+  const onChangeYear = (value) => {
+    setDate(new Date(getValidYear(value), date?.getMonth() || 0, date?.getDate() || 1));
+  };
+
   const inputs = [
     { name: 'day', id: `${formId}-day`, visible: true, ...localDay, ...day, onChangeValue: onChangeDay },
     { name: 'month', id: `${formId}-month`, visible: true, ...localMonth, ...month, onChangeValue: onChangeMonth },
@@ -102,14 +99,29 @@ export default function DatePicker ({
     onClickIcon();
   };
 
+  const clearDate = () => {
+    setDate(null);
+    setPreviousDate(date);
+  };
+
+  const restoreDate = () => {
+    setDate(previousDate)
+    setPreviousDate(null);
+  }
+
   const changeCalendarInput = (newDate) => setDate(newDate);
 
   useEffect(() => {
     if (date) {
+      setPreviousDate(null);
       const formatDate = new Date(date);
-      setLocalDay(prevState => ({ ...prevState, value: formatDate.getDate(), error: '' }));
-      setLocalMonth(prevState => ({ ...prevState, value: formatDate.getMonth() + 1, error: '' }));
-      setLocalYear(prevState => ({ ...prevState, value: formatDate.getFullYear().toString().slice(2, 4), error: '' }));
+      setLocalDay((prevState) => ({ ...prevState, value: formatDate.getDate(), error: '' }));
+      setLocalMonth((prevState) => ({ ...prevState, value: formatDate.getMonth() + 1, error: '' }));
+      setLocalYear((prevState) => ({
+        ...prevState,
+        value: formatDate.getFullYear().toString().slice(2, 4),
+        error: '',
+      }));
     } else {
       setLocalDay({ ...initialDateState });
       setLocalMonth({ ...initialDateState });
@@ -118,7 +130,7 @@ export default function DatePicker ({
   }, [date]);
 
   return (
-    <div className={`govuk-date-input lbh-date-input${disabledClass}${outerClass}`} id={`${formId}-errors`}>
+    <div className={`govuk-date-input lbh-date-input${outerClass}`} id={formId && `${formId}-errors`}>
       {label && <Label className="govuk-date-input__label">{label}</Label>}
       {hint && <Hint className="govuk-date-input__hint">{hint}</Hint>}
       {inputs.map((input) => {
@@ -127,15 +139,17 @@ export default function DatePicker ({
 
         return (
           <div key={input.id} className="govuk-date-input__item">
-            {input.label && <label className="govuk-label govuk-date-input__label" htmlFor={input.id}>
-              {input.label}
-            </label>}
+            {input.label && (
+              <label className="govuk-label govuk-date-input__label" htmlFor={input.id}>
+                {input.label}
+              </label>
+            )}
             <input
-              className={`${errorClass}govuk-input govuk-date-input__input ${input.className}`}
+              className={`${errorClass} govuk-input govuk-date-input__input ${input.className}`}
               id={input.id}
               disabled={disabled}
               value={`00${input.value}`.slice(-2)}
-              onChange={e => {
+              onChange={(e) => {
                 if (input.onChange) {
                   return input.onChange(e);
                 }
@@ -152,24 +166,36 @@ export default function DatePicker ({
           </div>
         );
       })}
-      {IconComponent &&
-      <div className="date-picker__calendar-container">
-        <IconComponent onClick={clickIcon} className={iconClassName}/>
-        {isOpenCalendar &&
-        <DatePick
-          onClickOutside={() => {
-            if (isOpenCalendar) {
-              setIsOpenCalendar(false);
-            }
-          }}
-          startDate={date}
-          inline
-          minDate={minDate}
-          dateValue={date}
-          setDate={changeCalendarInput}
-        />}
-      </div>
-      }
+      {IconComponent && (
+        <div className={`date-picker__calendar-container${disabledClass}`}>
+          <div className='date-picker__additional-action'>
+            <IconComponent onClick={clickIcon} className={iconClassName} />
+          </div>
+          {isOpenCalendar && (
+            <DatePick
+              onClickOutside={() => {
+                if (isOpenCalendar) {
+                  setIsOpenCalendar(false);
+                }
+              }}
+              startDate={date}
+              inline
+              minDate={minDate}
+              maxDate={maxDate}
+              dateValue={date}
+              setDate={changeCalendarInput}
+            />
+          )}
+        </div>
+      )}
+      {hasClear && date && <div className='date-picker__additional-action clear-datepicker' onClick={clearDate}><CrossIcon /></div>}
+      {previousDate && (
+        <div onClick={restoreDate} className='date-picker__additional-action restore-date'>
+          <RestoreIcon />
+        </div>
+      )}
     </div>
   );
 }
+
+export default memo(DatePicker)

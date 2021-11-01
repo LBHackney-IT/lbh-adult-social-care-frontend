@@ -1,4 +1,6 @@
 import React from 'react';
+import Loading from '../../Loading';
+import { Container } from '../Layout/Container';
 
 export default function Button({
   children,
@@ -6,16 +8,24 @@ export default function Button({
   clearClass,
   disabled,
   link,
+  rel,
+  color,
+  target,
   className,
+  outline,
   addItem,
-  handler = () => {},
+  onClick = () => {},
+  LoadingComponent = Loading,
+  isLoading,
+  type = 'button',
 }) {
   const outerClassName = className ? ` ${className}` : '';
-  const secondaryClassList = secondary ? ' govuk-secondary lbh-button--secondary' : '';
+  const outlineClass = outline ? ' outline' : '';
+  const secondaryClassList = secondary ? color ? ` secondary-${color}` : ' govuk-secondary lbh-button--secondary' : '';
   const disabledClassList = disabled ? ' lbh-button--disabled govuk-button--disabled' : '';
   const mainClass = clearClass ? '' : 'govuk-button lbh-button';
   const addItemClassList = addItem ? ' lbh-button--add' : '';
-  const calculateClassNames = `${outerClassName}${secondaryClassList}${disabledClassList}${addItemClassList}`;
+  const allClasses = `${outlineClass}${secondaryClassList}${outerClassName}${disabledClassList}${addItemClassList}`;
   const addItemIcon = (
     <svg width="12" height="12" viewBox="0 0 12 12">
       <path d="M6.94 0L5 0V12H6.94V0Z" />
@@ -24,26 +34,31 @@ export default function Button({
   );
   return link ? (
     <a
+      rel={rel}
+      target={target}
+      aria-disabled={disabled}
       onClick={(e) => disabled && e.preventDefault()}
       href={link}
       role="button"
       draggable="false"
-      className={`${mainClass}${secondaryClassList + disabledClassList}`}
+      className={`${mainClass}${allClasses}`}
       data-module="govuk-button"
     >
-      {children}
+      {isLoading && <LoadingComponent className="loading-absolute-centered" isLoading={isLoading} />}
+      <Container className={isLoading ? 'hide' : ''}>{children}</Container>
     </a>
   ) : (
     <button
-      type="button"
-      className={`${mainClass}${calculateClassNames}`}
+      type={type}
+      className={`${mainClass}${allClasses}`}
       data-module="govuk-button"
       aria-disabled={disabled}
       disabled={disabled}
-      onClick={handler}
+      onClick={onClick}
     >
+      {isLoading && <LoadingComponent className="loading-absolute-centered" isLoading={isLoading} />}
       {addItem && addItemIcon}
-      {children}
+      <Container className={isLoading ? 'hide' : ''}>{children}</Container>
     </button>
   );
 }

@@ -20,7 +20,7 @@
 // inputRules example
 // { firstName: ['empty', 'null', 'newRule'] }
 
-const formValidator = ({
+export const formValidator = ({
   form = {},
   ignoreInputs = [],
   customRules = [],
@@ -29,8 +29,8 @@ const formValidator = ({
 }) => {
   const validFields = {};
   let hasErrors = false;
-  for(const name in form) {
-    if(!ignoreInputs.includes(name)) {
+  for (const name in form) {
+    if (!ignoreInputs.includes(name)) {
       validFields[name] = '';
       if (generalRules?.includes('empty') || inputRules[name]?.includes('empty')) {
         if (form[name] === undefined || form[name] === '') {
@@ -58,18 +58,3 @@ const formValidator = ({
   }
   return { validFields, hasErrors };
 };
-
-const checkEmptyFields = (filters) => {
-  for(const field in filters) {
-    if(filters[field]) {
-      return false;
-    }
-  }
-  return true;
-};
-
-export {
-  checkEmptyFields,
-};
-
-export default formValidator;
