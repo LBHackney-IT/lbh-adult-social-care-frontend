@@ -123,7 +123,7 @@ const BrokerPackage = ({
     }
 
     if (!cost && (startDate || endDate)) {
-      errorCost = 'Cost is required';
+      errorCost = 'Cost is mandatory';
     }
 
     if (!startDate) {
@@ -157,10 +157,6 @@ const BrokerPackage = ({
     const weeklyDateErrors = checkDateErrors(weeklyNeeds);
     const oneOfNeedDateErrors = checkDateErrors(oneOffNeeds);
     setHiddenNeedErrors([]);
-    if (!coreCost) {
-      setCoreCostError('The core cost field is required');
-      hasError = true;
-    }
 
     if (weeklyDateErrors) {
       pushNotification('Weekly additional needs error');
