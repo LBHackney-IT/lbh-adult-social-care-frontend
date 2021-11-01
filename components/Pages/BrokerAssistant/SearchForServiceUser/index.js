@@ -30,7 +30,7 @@ const SearchServiceUser = ({
 }) => (
   <Container className={`search-service-user ${className}`}>
     <BrokerageHeader />
-    <CarePackageBreadcrumbs additionalBreadcrumbs={[{ text: 'Search for a service user' }]} />
+    <CarePackageBreadcrumbs />
     <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
       <ServiceUserSearch
         onSearch={onSearch}

@@ -115,7 +115,7 @@ const CorePackage = () => {
   return (
     <>
       <BrokerageHeader />
-      <CarePackageBreadcrumbs additionalBreadcrumbs={[{ text: 'Core package details' }]} />
+      <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Core package details" title="Build a care package" />
         {packageInfo.serviceUser && (

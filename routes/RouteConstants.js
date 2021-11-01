@@ -34,11 +34,11 @@ export const LOGOUT_ROUTE = '/logout';
 export const NOT_FOUND_ROUTE = '/404';
 
 const carePackageRoutes = [
-  { route: BROKER_ASSISTANCE_ROUTE, name: 'Broker Assistance' },
-  { route: BROKER_PORTAL_ROUTE, name: 'Broker Portal' },
-  { route: CARE_CHARGES_ROUTE, name: 'Care Charges' },
-  { route: APPROVALS_ROUTE, name: 'Approvals' },
-  { route: FINANCE_ROUTE, name: 'Finance' },
+  { route: 'broker-assistance', name: 'Broker Assistance' },
+  { route: 'broker-portal', name: 'Broker Portal' },
+  { route: 'care-charges', name: 'Care Charges' },
+  { route: 'approvals', name: 'Approvals' },
+  { route: 'finance', name: 'Finance' },
   { route: 'approval', name: 'Approval package detail' },
   { route: 'core-package', name: 'Core package' },
   { route: 'broker-care-charges', name: 'Care charges' },

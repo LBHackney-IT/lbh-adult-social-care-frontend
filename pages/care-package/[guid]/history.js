@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import {
   Loading,
@@ -12,7 +12,6 @@ import {
 import withSession from 'lib/session';
 import { usePackageHistory } from 'api';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
-import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -33,11 +32,6 @@ const History = () => {
 
   useRedirectIfPackageNotExist();
 
-  const breadcrumbs = useMemo(
-    () => [{ text: 'Full Overview', href: getServiceUserPackagesRoute(packageId) }, { text: 'Package History' }],
-    [packageId]
-  );
-
   const { data, isLoading } = usePackageHistory(packageId);
 
   return (
@@ -46,7 +40,7 @@ const History = () => {
 
       <Loading isLoading={isLoading} />
 
-      <CarePackageBreadcrumbs additionalBreadcrumbs={breadcrumbs} />
+      <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
         <TitleSubtitleHeader subTitle="Package history" title={data.packageType} />
 
