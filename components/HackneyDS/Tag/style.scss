@@ -84,6 +84,10 @@
 
   &.outline {
     border-radius: 4px;
+
+    &.no-background {
+      background: none;
+    }
   }
 
   &--green {
@@ -104,6 +108,10 @@
       color: $lbh-secondary-text-colour;
       background: $lbh-light-yellow;
       border: 1px solid $lbh-yellow;
+
+      &.no-background {
+        color: $lbh-yellow;
+      }
     }
   }
   &--red {
@@ -114,6 +122,10 @@
       color: $lbh-red;
       background: $lbh-light-red;
       border: 1px solid $lbh-red;
+
+      &.no-background {
+        color: $lbh-red;
+      }
     }
   }
   &--gray {
