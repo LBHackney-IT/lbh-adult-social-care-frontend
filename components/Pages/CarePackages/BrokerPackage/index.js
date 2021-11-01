@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useDebounce } from 'react-use';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
-import { createSupplier, updateCarePackageCosts, useSingleCorePackageInfo, useSuppliers } from 'api';
+import { updateCarePackageCosts, useSingleCorePackageInfo, useSuppliers } from 'api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods, packageTypes } from 'constants/variables';
@@ -46,11 +46,6 @@ const BrokerPackage = ({
   const [weeklyTotalCost, setWeeklyTotalCost] = useState(0);
   const [oneOffTotalCost, setOneOffTotalCost] = useState(0);
   const [isNewSupplier, setIsNewSupplier] = useState(false);
-  const [newSupplier] = useState({
-    firstName: '',
-    secondName: '',
-    id: '',
-  });
 
   const [coreDates, setCoreDates] = useState({
     startDate: new Date(),
@@ -140,18 +135,6 @@ const BrokerPackage = ({
 
   const checkDateErrors = (needs) => needs.some((item) => checkNeedError(item, true));
 
-  const getNewSupplierId = async () => {
-    return false; // todo ask about full logic of new supplier
-    if (isNewSupplier) {
-      const newSupplierData = await createSupplier({
-        supplierName: newSupplier.name,
-        packageTypeId: packageType,
-      });
-
-      return newSupplierData.id;
-    }
-  };
-
   const onFailedValidation = () => {
     onShowCoreError();
     let hasError = false;
@@ -217,7 +200,7 @@ const BrokerPackage = ({
       coreCost,
       startDate: coreDates.startDate,
       endDate: isOngoing ? null : coreDates.endDate,
-      supplierId: await getNewSupplierId() || selectedItem?.id,
+      supplierId: selectedItem?.id,
     };
     const details = [...weeklyDetails, ...oneOffDetails];
     if (details.length) {
