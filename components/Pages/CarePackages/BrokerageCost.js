@@ -42,7 +42,7 @@ const BrokerageCost = ({
               return (
                 <FormGroup error={error ? 'Some validations error' : ''} key={item.id}>
                   <BrokeragePackageDates
-                    hasClear
+                    hasClearButton
                     dates={{ startDate: item.startDate, endDate: item.endDate }}
                     fields={{
                       dateFrom: 'startDate',

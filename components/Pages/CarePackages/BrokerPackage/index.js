@@ -373,7 +373,7 @@ const BrokerPackage = ({
           <Container>
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
-              hasClear
+              hasClearButton
               showError={showCoreError}
               error={showCoreError && errorCoreDate}
               fields={{

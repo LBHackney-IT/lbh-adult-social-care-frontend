@@ -18,7 +18,7 @@ const DatePicker = ({
   minDate,
   maxDate,
   hint,
-  hasClear,
+  hasClearButton,
   date,
   setDate,
   IconComponent = DatePickerCalendarIcon,
@@ -212,7 +212,7 @@ const DatePicker = ({
           )}
         </div>
       )}
-      {hasClear && date && (
+      {hasClearButton && date && (
         <div className={`date-picker__additional-action clear-datepicker${disabledClass}`} onClick={clearDate}>
           <CrossIcon />
         </div>

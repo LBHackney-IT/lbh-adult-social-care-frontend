@@ -13,7 +13,7 @@ const BrokeragePackageDates = ({
   showError = true,
   hasEndMinDate = true,
   endMaxDate,
-  hasClear,
+  hasClearButton,
   error,
   fields = {
     dateTo: 'dateTo',
@@ -27,7 +27,7 @@ const BrokeragePackageDates = ({
   return (
     <FormGroup error={error || dateToError} className="brokerage__package-dates" label={label}>
       <DatePicker
-        hasClear={hasClear}
+        hasClearButton={hasClearButton}
         day={{ label: 'From' }}
         minDate={startMinDate}
         maxDate={startMaxDate}
@@ -35,7 +35,7 @@ const BrokeragePackageDates = ({
         setDate={(date) => setDates(fields.dateFrom, date)}
       />
       <DatePicker
-        hasClear={hasClear}
+        hasClearButton={hasClearButton}
         disabled={isOngoing}
         day={{ label: 'To' }}
         minDate={hasEndMinDate && dates[fields.dateFrom]}
