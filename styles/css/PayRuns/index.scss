@@ -1,0 +1,31 @@
+@import 'table';
+@import 'header';
+@import 'held-payments';
+@import 'popup-hold-payment';
+@import 'level-insight';
+@import 'create-pay-run';
+@import 'footer';
+@import 'tabs';
+
+.pay-runs {
+  display: flex;
+  min-height: calc(100vh - 79px);
+  flex-direction: column;
+
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pay-run {
+  .pay-run__searches {
+    .custom-async-selector {
+      margin-bottom: 10px;
+    }
+  }
+
+  .pay-run__dropdowns {
+    .control {
+      margin-bottom: 10px;
+    }
+  }
+}

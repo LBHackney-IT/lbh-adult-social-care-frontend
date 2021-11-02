@@ -1,0 +1,45 @@
+.social-worker__table {
+  .table__row-column {
+    &-1 {
+      width: 132px;
+    }
+    &-2 {
+      width: 138px;
+    }
+    &-3 {
+      width: 56px;
+    }
+    &-4 {
+      width: 146px;
+    }
+    &-5 {
+      width: 74px;
+    }
+    &-6 {
+      width: 170px;
+    }
+  }
+
+  .sort {
+    &:nth-child(3) {
+      justify-content: center;
+    }
+  }
+
+  .table__row-item {
+    font-size: 14px;
+
+    &:nth-child(3) {
+      font-size: 14px;
+    }
+    &:nth-child(4) {
+      text-align: center;
+    }
+    &:nth-child(5) {
+      text-align: center;
+    }
+    &:nth-child(6) {
+      font-size: 12px;
+    }
+  }
+}

@@ -1,0 +1,125 @@
+.bills__tab-class {
+  .table__row-item {
+    font-size: 16px;
+
+    &:nth-child(2) {
+      width: 56px;
+    }
+    &:nth-child(3) {
+      width: 125px;
+    }
+    &:nth-child(4) {
+      width: 134px;
+    }
+    &:nth-child(5) {
+      width: 78px;
+    }
+    &:nth-child(6) {
+      width: 78px;
+    }
+    &:nth-child(7) {
+      width: 83px;
+    }
+    &:nth-child(8) {
+      width: 83px;
+    }
+
+    &:nth-child(9) {
+      width: 83px;
+    }
+  }
+
+  .table__row-item-status {
+    font-size: 12px;
+  }
+
+  .sort-table {
+    .sort {
+      &:nth-child(2) {
+        width: 56px;
+      }
+      &:nth-child(3) {
+        width: 130px;
+      }
+      &:nth-child(4) {
+        width: 134px;
+      }
+      &:nth-child(5) {
+        width: 78px;
+      }
+      &:nth-child(6) {
+        width: 81px;
+      }
+      &:nth-child(7) {
+        width: 83px;
+      }
+      &:nth-child(8) {
+        width: 83px;
+      }
+
+      &:nth-child(9) {
+        width: 83px;
+      }
+    }
+  }
+}
+
+.bill-pay-runs__tab-class {
+  .sort {
+    &:nth-child(2) {
+      width: 68px;
+    }
+    &:nth-child(3) {
+      width: 85px;
+    }
+    &:nth-child(4) {
+      width: 105px;
+    }
+    &:nth-child(5) {
+      width: 105px;
+    }
+    &:nth-child(6) {
+      width: 86px;
+    }
+  }
+
+  .table__row-item {
+    &:nth-child(2) {
+      width: 68px;
+    }
+    &:nth-child(3) {
+      width: 85px;
+    }
+    &:nth-child(4) {
+      width: 105px;
+    }
+    &:nth-child(5) {
+      width: 105px;
+    }
+    &:nth-child(6) {
+      width: 86px;
+    }
+  }
+}
+
+.add-bill {
+  .table__row-item {
+    width: 120px;
+  }
+  .sort {
+    width: 120px;
+  }
+
+  .sort-table {
+    margin-bottom: 0;
+  }
+
+  .table__row {
+    padding-top: 16px;
+  }
+
+  .table {
+    padding: 0;
+    margin-top: 30px;
+  }
+}

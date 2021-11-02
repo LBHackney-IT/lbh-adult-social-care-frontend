@@ -1,0 +1,46 @@
+.create-pay-run {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  .checkbox {
+    margin-bottom: 10px;
+  }
+}
+
+.create-pay-run__regular-cycles {
+  flex-basis: 50%;
+
+  @include media-small-ipod-down {
+    flex-basis: 100%;
+  }
+}
+
+.create-pay-run__title {
+  font-size: 19px;
+  font-weight: bold;
+  color: $lbh-black1;
+  margin-bottom: 10px;
+}
+
+.create-pay-run {
+  margin-bottom: 20px;
+}
+
+.create-pay-run__regular-cycles {
+  margin-bottom: 24px;
+}
+
+.create-pay-run__hoc-releases {
+  margin-top: 24px;
+}
+
+.create-pay-run__text {
+  margin-bottom: 10px;
+}
+
+.create-pay-run__days-since {
+  span {
+    color: $lbh-green1;
+  }
+}

@@ -1,0 +1,28 @@
+.popup__download-ceder {
+  .popup__inner-content {
+    height: initial;
+    width: 40%;
+
+    @include media-small-ipod-down {
+      width: 100%;
+    }
+  }
+
+  .popup__header {
+    margin-bottom: 17px;
+  }
+
+  .popup_main {
+    margin-bottom: 24px;
+  }
+
+  .popup__action-buttons {
+    display: flex;
+    justify-content: center;
+
+    button.button-base {
+      background-color: $lbh-green1;
+      color: white;
+    }
+  }
+}

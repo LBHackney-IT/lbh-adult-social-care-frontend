@@ -1,0 +1,72 @@
+.brokerage-hub-page {
+  .sort__actions {
+    svg {
+      width: 10px;
+      path {
+        stroke: black;
+      }
+    }
+  }
+  .inputs-container {
+    .custom-input__search {
+      min-width: 275px;
+    }
+    .dropdown .button {
+      min-width: 170px;
+      height: 42px;
+    }
+
+    .inputs-container__title {
+      margin-bottom: 65px;
+    }
+  }
+
+  .table {
+    .table__row-column {
+      &-1 {
+        width: 150px;
+      }
+      &-2 {
+        width: 90px;
+      }
+      &-3 {
+        width: 100px;
+        justify-content: center;
+        text-align: center;
+      }
+      &-4 {
+        width: 172px;
+        justify-content: center;
+      }
+      &-5 {
+        width: 200px;
+      }
+    }
+
+    .sort {
+      &:nth-child(6) {
+        width: 84px;
+      }
+      &:nth-child(7) {
+        width: 84px;
+      }
+      &:nth-child(8) {
+        width: 96px;
+      }
+    }
+
+    .table__row-item {
+      font-size: 14px;
+      &:nth-child(6) {
+        width: 84px;
+      }
+      &:nth-child(7) {
+        width: 84px;
+      }
+      &:nth-child(8) {
+        width: 96px;
+        text-align: center;
+      }
+    }
+  }
+}

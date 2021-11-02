@@ -1,191 +1,431 @@
-.govuk-table__header,
-.govuk-table__footer {
-  font-weight: 600;
+.table {
+  padding: 16px;
+  overflow-x: auto;
+
+  @include media-tablet-down {
+    padding: 16px 0;
+  }
+
+  .table__row-item:not(.table__row-item:last-of-type) {
+    margin-right: 40px;
+  }
+
+  .sort-table {
+    .sort:not(.sort:last-of-type) {
+      margin-right: 40px;
+    }
+  }
+
+  &-wrapper {
+    width: 100%;
+    & > div {
+      height: fit-content;
+    }
+  }
+
+  .table__row-column-items {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    height: 56px;
+    padding: 0 10px;
+    &:hover {
+      cursor: pointer;
+    }
+
+    @include media-tablet-down {
+      padding: 0 4px;
+      height: initial;
+    }
+  }
+
+  &__row-wrapper {
+    padding: 0 10px;
+
+    @include media-tablet-down {
+      padding: 0;
+    }
+  }
 }
 
-.govuk-table {
-  font-family: Open Sans;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 1rem;
-  line-height: 1.25;
-  color: #0b0c0c;
-}
-
-.lbh-table__no-results {
-  text-align: center;
-}
-
-.govuk-table {
-  font-weight: 400;
+.table__row-item {
   width: 100%;
-  border-spacing: 0;
-  border-collapse: collapse;
-}
 
-.govuk-table__row.with-row-header {
-  &:hover {
-    cursor: pointer;
+  &:not(.table__row-item-status) > p {
+    font-size: 16px;
+
+    @include media-tablet-down {
+      font-size: 14px;
+    }
   }
 }
 
-.govuk-table__caption--l,
-.govuk-table__caption--m,
-.govuk-table__caption--xl {
-  margin-bottom: 15px;
-  font-family: Open Sans;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.table__row-item-justify-center {
+  justify-content: center !important;
 }
 
-.govuk-table__header,
-.govuk-table__footer {
-  font-weight: 700;
+.table__title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: $lbh-black1;
+  margin-bottom: 20px;
 }
-.govuk-table__cell,
-.govuk-table__header,
-.govuk-table__footer {
-  padding: 10px 20px;
-  border-bottom: 1px solid #b1b4b6;
-  text-align: left;
-  vertical-align: top;
-}
-.govuk-table__cell--numeric {
-  font-family: Open Sans;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-feature-settings: 'tnum' 1;
-  font-feature-settings: 'tnum' 1;
-  font-weight: 400;
-}
-@supports (font-variant-numeric: tabular-nums) {
-  .govuk-character-count__message,
-  .govuk-table__cell--numeric {
-    -webkit-font-feature-settings: normal;
-    font-feature-settings: normal;
-    font-variant-numeric: tabular-nums;
+
+.table__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid $lbh-gray3;
+  width: 100%;
+  min-width: fit-content;
+  transition: background-color 0.2s ease;
+
+  &-item {
+    width: 100%;
+  }
+
+  &.rejected {
+    background-color: $lbh-light-red;
+  }
+
+  &:not(.collapsed):hover {
+    background-color: #f1f1f1;
+  }
+
+  &.collapsed {
+    padding-bottom: 0;
   }
 }
-.govuk-table__cell--numeric,
-.govuk-table__header--numeric,
-.govuk-table__footer--numeric{
-  text-align: right;
-}
-.govuk-table__caption {
-  font-weight: 700;
-  display: table-caption;
-  text-align: left;
-}
-.govuk-table__caption--xl {
-  font-size: 2rem;
-  line-height: 1.09375;
-}
-.govuk-table__caption--l,
-.govuk-table__caption--xl {
-  font-weight: 700;
-}
-.govuk-table__caption--l {
-  font-size: 1.5rem;
-  line-height: 1.0416666667;
-}
-.govuk-table__caption--m {
-  font-weight: 700;
-  font-size: 1.125rem;
-  line-height: 1.1111111111;
-}
-.govuk-table__caption--s {
-  font-weight: 700;
-  line-height: 1.25;
-}
-.govuk-table__caption--s,
-.lbh-table {
-  font-family: Open Sans;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 1rem;
-}
-.lbh-table {
-  color: #0b0c0c;
-  font-weight: 400;
-  line-height: 1.625rem;
-  margin-bottom: 0;
-}
-.govuk-table__caption--xl {
-  font-size: 3rem;
-  line-height: 1.0416666667;
+
+.sort-table {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
+  min-width: fit-content;
+  margin-bottom: 35px;
+
+  @include media-desktop-down {
+    margin-bottom: 10px;
+  }
+
+  @include media-tablet-down {
+    padding: 0 4px;
+  }
 }
 
-.fixed-table {
-  table-layout: fixed;
+.sort-checkbox {
+  width: 32px;
+
+  label.checkbox .checkbox-check {
+    width: 20px;
+    height: 20px;
+  }
 }
 
-$storybook-fixed-table: (1: 20px, 2: 100px, 3: 100px, 4: 100px, 5: 100px, 6: 100px, 7: 100px);
+.sort__sort-name {
+  color: black;
+  margin-right: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
 
-.stories-table-body {
-  @each $index, $size in $storybook-fixed-table {
-    td {
-      &:nth-of-type(#{$index}) {
-        width: $size;
+.sort {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .sort__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    svg:first-of-type {
+      transform: rotate(180deg);
+      margin-bottom: 3px;
+    }
+
+    svg {
+      width: 12px;
+      &:hover {
+        cursor: pointer;
       }
     }
   }
 }
 
-.stories-table-header {
-  @each $index, $size in $storybook-fixed-table {
-    th {
-      &:nth-of-type(#{$index}) {
-        width: $size;
+.table__row-collapsed-main-item__status {
+  padding: 5px;
+  border-radius: 4px;
+
+  &.disputed {
+    background-color: $lbh-red;
+    color: white;
+  }
+
+  &.not-submitted {
+    background-color: $lbh-light-orange;
+    border: 1px solid $lbh-orange;
+  }
+}
+
+.table__row-item-status {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 14px;
+  color: $lbh-black1;
+
+  p {
+    border-radius: 4px;
+    padding: 5px;
+  }
+
+  &.awaiting-approval,
+  &.waiting-approval,
+  &.held,
+  &.outstanding,
+  &.submitted,
+  &.pending-supplier,
+  &.submitted-for-approval,
+  &.querying,
+  &.for-contents-approval,
+  &.in-review,
+  &.n\/a {
+    p {
+      background: $lbh-orange;
+    }
+  }
+
+  &.paid,
+  &.paid-with-holds,
+  &.released,
+  &.complete,
+  &.assigned,
+  &.accepted,
+  &.closed,
+  &.pricing-agreed,
+  &.brokering,
+  &.approved {
+    p {
+      background: $lbh-green1;
+      color: white;
+    }
+  }
+
+  &.draft,
+  &.not-started,
+  &.assign {
+    p {
+      background: $lbh-gray;
+    }
+  }
+
+  &.dropdown-container {
+    .button {
+      width: 124px;
+      span {
+        font-size: 14px;
+        color: $lbh-black1;
       }
+    }
+
+    .dropdown-menu {
+      left: initial;
+      right: 0;
+    }
+  }
+
+  &.in-dispute.dropdown-container {
+    .button {
+      background-color: $lbh-blue-highlight;
+    }
+    span {
+      color: white;
+    }
+    .icon path {
+      stroke: white;
+    }
+  }
+
+  &.held.dropdown-container {
+    .button {
+      background-color: $lbh-dark-orange;
+    }
+
+    .icon path {
+      stroke: $lbh-black1;
+    }
+  }
+
+  &.accepted.dropdown-container {
+    .button {
+      background-color: $lbh-green1;
+    }
+    span {
+      color: white;
+    }
+    .icon path {
+      stroke: white;
+    }
+  }
+
+  &.overdue,
+  &.disputes-active,
+  &.in-dispute,
+  &.declined,
+  &.action-needed,
+  &.info-needed {
+    p {
+      background-color: $lbh-red;
+      color: white;
+    }
+  }
+
+  &.rejected.dropdown-container {
+    .button {
+      background-color: $lbh-red;
+    }
+    span {
+      color: white;
+    }
+
+    .icon path {
+      stroke: white;
     }
   }
 }
 
-.govuk-table__caption--l {
-  font-size: 2.25rem;
-  line-height: 1.1111111111;
-}
-.govuk-table__caption--m {
-  font-size: 1.5rem;
-  line-height: 1.25;
-}
-.govuk-table__caption--s {
-  font-size: 1.1875rem;
-  line-height: 1.3157894737;
+.table__row-collapsed {
+  flex-basis: 100%;
 }
 
-.govuk-table__footer{
-  border:none;
+.table__row-collapsed-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-left: 40px;
+
+  p {
+    font-weight: bold;
+    color: $lbh-black1;
+    font-size: 20px;
+  }
 }
 
-@media print {
-  .govuk-table,
-  .govuk-table__cell--numeric {
-    font-family: sans-serif;
+.table__row-collapsed-header-left {
+  display: flex;
+
+  p:first-of-type {
+    margin-right: 120px;
   }
-  .govuk-table__caption--xl {
-    font-family: sans-serif;
-    font-size: 32pt;
-    line-height: 1.15;
+}
+
+.table__row-collapsed-main-item {
+  display: flex;
+  align-items: center;
+}
+
+.table__row-collapsed-container {
+  background: $lbh-light-gray;
+  padding: 17px 10px;
+
+  &:last-of-type {
+    padding-bottom: 30px;
   }
-  .govuk-table {
-    font-size: 14pt;
-    line-height: 1.15;
-    color: #000;
+}
+
+.table__row-collapsed-main {
+  background: white;
+  padding: 15px 40px;
+  border: 1px solid $lbh-gray;
+}
+
+.table__row-collapsed-main-header, .table__row-collapsed-main-footer {
+  display: flex;
+  margin-bottom: 10px;
+
+  p:first-of-type {
+    width: 209px;
   }
-  .govuk-table__caption--l {
-    font-family: sans-serif;
-    font-size: 24pt;
-    line-height: 1.05;
+
+  p:nth-of-type(2) {
+    width: 70px;
   }
-  .govuk-table__caption--m {
-    font-family: sans-serif;
-    font-size: 18pt;
-    line-height: 1.15;
+
+  p:nth-of-type(3) {
+    width: 70px;
   }
-  .govuk-table__caption--s {
-    font-family: sans-serif;
-    font-size: 14pt;
-    line-height: 1.15;
+
+  p:nth-of-type(4) {
+    width: 170px;
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: bold;
+    color: $lbh-black1;
+  }
+}
+
+.table__row-collapsed-main-footer {
+  p {
+    font-size: 16px;
+  }
+}
+
+.table__row-collapsed-main-item {
+  padding-bottom: 10px;
+
+  &:not(&:last-of-type) {
+    border-bottom: 1px solid $lbh-gray;
+    margin-bottom: 10px;
+  }
+
+  p:first-of-type {
+    width: 209px;
+  }
+
+  p:nth-of-type(2) {
+    width: 70px;
+  }
+
+  p:nth-of-type(3) {
+    width: 70px;
+  }
+
+  p:nth-of-type(4) {
+    width: 170px;
+  }
+}
+
+.table__row-item-checkbox {
+  label.checkbox .checkbox-check {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.table__row-collapsed-main-item__status {
+  padding: 5px;
+  border-radius: 4px;
+
+  &.disputed {
+    background-color: $lbh-red;
+    color: white;
+  }
+
+  &.submitted {
+    background-color: $lbh-green1;
+    color: white;
+  }
+
+  &.not-submitted,
+  &.accepted,
+  &.resubmitted {
+    background-color: $lbh-light-orange;
+    border: 1px solid $lbh-orange;
   }
 }

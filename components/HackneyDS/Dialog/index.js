@@ -12,8 +12,6 @@ export default function Dialog({
 }) {
   const [windowState, setWindowState] = useState();
 
-  console.log(noBorder);
-
   useEffect(() => {
     document.querySelector('html').style.overflow = isOpen ? 'hidden' : 'visible';
   }, [isOpen]);

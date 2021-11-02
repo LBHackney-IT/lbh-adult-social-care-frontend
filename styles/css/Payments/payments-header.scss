@@ -1,0 +1,56 @@
+.default-logo-header {
+  background: $lbh-black1;
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  .hackney-adult-logo {
+    margin-right: 10px;
+
+    @include media-mobile {
+      width: 100%;
+    }
+  }
+
+  @include media-medium-ipod-up {
+    overflow: auto;
+  }
+
+  @include media-small-ipod-down {
+    flex-direction: column;
+    .default-logo-header-navigation {
+      justify-content: initial;
+      width: 100%;
+    }
+  }
+}
+
+.default-logo-header-navigation {
+  display: flex;
+  overflow: auto;
+  padding: 10px 0;
+}
+
+.default-logo-header-item {
+  font-size: 16px;
+  line-height: 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+  min-width: fit-content;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:not(&:last-of-type) {
+    margin-right: 22px;
+  }
+}
+
+.default-logo-header-active-item {
+  text-decoration: underline;
+
+  opacity: 0.75;
+}
