@@ -16,7 +16,7 @@ const Template = (args) => {
   return (
     <>
       <Button onClick={() => setOpen(true)}>Emit Dialog</Button>
-      <Dialog isOpen={isOpen} onClose={() => setOpen(false)}>
+      <Dialog noBorder={args.noBorder} isOpen={isOpen} onClose={() => setOpen(false)}>
         <DialogLayout
           {...args}
           action={{

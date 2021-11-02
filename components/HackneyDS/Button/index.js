@@ -12,7 +12,9 @@ export default function Button({
   color,
   target,
   className,
+  disableShadow,
   outline,
+  borderRadius = 4,
   addItem,
   onClick = () => {},
   LoadingComponent = Loading,
@@ -21,11 +23,12 @@ export default function Button({
 }) {
   const outerClassName = className ? ` ${className}` : '';
   const outlineClass = outline ? ' outline' : '';
+  const disableShadowClass = disableShadow ? ' disable-shadow' : '';
   const secondaryClassList = secondary ? color ? ` secondary-${color}` : ' govuk-secondary lbh-button--secondary' : '';
   const disabledClassList = disabled ? ' lbh-button--disabled govuk-button--disabled' : '';
   const mainClass = clearClass ? '' : 'govuk-button lbh-button';
   const addItemClassList = addItem ? ' lbh-button--add' : '';
-  const allClasses = `${outlineClass}${secondaryClassList}${outerClassName}${disabledClassList}${addItemClassList}`;
+  const allClasses = `${outlineClass}${secondaryClassList}${outerClassName}${disabledClassList}${addItemClassList}${disableShadowClass}`;
   const addItemIcon = (
     <svg width="12" height="12" viewBox="0 0 12 12">
       <path d="M6.94 0L5 0V12H6.94V0Z" />
@@ -40,6 +43,7 @@ export default function Button({
       onClick={(e) => disabled && e.preventDefault()}
       href={link}
       role="button"
+      style={{ borderRadius }}
       draggable="false"
       className={`${mainClass}${allClasses}`}
       data-module="govuk-button"
@@ -50,6 +54,7 @@ export default function Button({
   ) : (
     <button
       type={type}
+      style={{ borderRadius }}
       className={`${mainClass}${allClasses}`}
       data-module="govuk-button"
       aria-disabled={disabled}
