@@ -150,7 +150,7 @@ const DatePicker = ({
   }, [date]);
 
   return (
-    <div className={`govuk-date-input lbh-date-input${outerClass}`} id={formId && `${formId}-errors`}>
+    <div className={`govuk-date-input lbh-date-input${outerClass}${disabledClass}`} id={formId && `${formId}-errors`}>
       {label && <Label className="govuk-date-input__label">{label}</Label>}
       {hint && <Hint className="govuk-date-input__hint">{hint}</Hint>}
       {inputs.map((input) => {
@@ -191,7 +191,7 @@ const DatePicker = ({
         );
       })}
       {IconComponent && (
-        <div className={`date-picker__calendar-container${disabledClass}`}>
+        <div className='date-picker__calendar-container'>
           <div className="date-picker__additional-action">
             <IconComponent onClick={clickIcon} className={iconClassName} />
           </div>
@@ -213,12 +213,12 @@ const DatePicker = ({
         </div>
       )}
       {hasClearButton && date && (
-        <div className={`date-picker__additional-action clear-datepicker${disabledClass}`} onClick={clearDate}>
+        <div className="date-picker__additional-action clear-datepicker" onClick={clearDate}>
           <CrossIcon />
         </div>
       )}
       {previousDate && (
-        <div onClick={restoreDate} className={`date-picker__additional-action restore-date${disabledClass}`}>
+        <div onClick={restoreDate} className="date-picker__additional-action restore-date">
           <RestoreIcon />
         </div>
       )}

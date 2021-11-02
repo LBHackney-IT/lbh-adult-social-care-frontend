@@ -71,7 +71,7 @@ WithClearButton.args = {
   day: { label: 'Day' },
   month: { label: 'Month' },
   year: { error: 'Error year', label: 'Year' },
-  hasClear: true,
+  hasClearButton: true,
 };
 
 export const Disabled = Template.bind({});
@@ -83,5 +83,5 @@ Disabled.args = {
   month: { label: 'Month' },
   year: { error: 'Error year', label: 'Year' },
   disabled: true,
-  hasClear: true,
+  hasClearButton: true,
 };

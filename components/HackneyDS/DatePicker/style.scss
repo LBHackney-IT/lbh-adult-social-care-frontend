@@ -12,6 +12,11 @@
   align-items: center;
   flex-wrap: wrap;
 
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
   & > .govuk-label {
     width: 100%;
   }
@@ -84,28 +89,29 @@
   align-items: center;
   justify-content: center;
 
+
+  &:hover {
+    cursor: pointer;
+  }
+
   &.clear-datepicker {
+    &:hover {
+      background-color: $lbh-gray;
+    }
+
     svg path {
       fill: $lbh-red;
     }
   }
 
   &.restore-date {
+    &:hover {
+      background-color: $lbh-gray;
+    }
+
     svg {
       fill: $lbh-primary;
     }
-  }
-
-  &:hover {
-    cursor: pointer;
-    background-color: $lbh-gray;
-  }
-}
-
-.date-picker__additional-action {
-  &.disabled {
-    opacity: 0.5;
-    pointer-events: none;
   }
 }
 
@@ -113,11 +119,6 @@
   display: inline-block;
   position: relative;
   z-index: 2;
-
-  &.disabled {
-    pointer-events: none;
-    opacity: 0.5;
-  }
 
   .date-picker__additional-action {
     margin-left: 0;
