@@ -47,6 +47,7 @@ const CreatePayrunModal = () => {
         new Date(lastCycleDate.getFullYear(), lastCycleDate.getMonth(), lastCycleDate.getDate())
       );
     }
+    return null;
   }, [payRunToDate]);
 
   const closeModal = () => setIsOpened(false);
@@ -135,7 +136,7 @@ const CreatePayrunModal = () => {
           </Container>
           <Container className="create-pay-run__actions" display="flex">
             <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
-            <Button type="submit" disableShadow borderRadius={0}>Create Draft Pay Run</Button>
+            <Button type="submit" className='disable-shadow' borderRadius={0}>Create Draft Pay Run</Button>
           </Container>
         </form>
       </Dialog>
