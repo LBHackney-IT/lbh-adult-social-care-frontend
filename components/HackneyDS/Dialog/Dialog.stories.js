@@ -43,3 +43,13 @@ Default.args = {
   submitLabel: 'Yes, delete',
   declineLabel: 'No, cancel',
 };
+
+export const WithoutBorder = Template.bind({});
+
+WithoutBorder.args = {
+  title: 'Are you sure?',
+  body: 'The record will be permanently deleted.',
+  submitLabel: 'Yes, delete',
+  declineLabel: 'No, cancel',
+  noBorder: true,
+};
