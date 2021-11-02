@@ -21,6 +21,12 @@ const hocAndReleasesOptions = [
 
 const lastCycleDate = new Date();
 
+const defaultValues = {
+  regularCycles: null,
+  hocAndReleases: null,
+  payRunToDate: null,
+};
+
 const schema = yup.object().shape({
   regularCycles: yup
     .number()
@@ -50,21 +56,21 @@ const CreatePayrunModal = () => {
     return null;
   }, [payRunToDate]);
 
-  const closeModal = () => setIsOpened(false);
+  const closeModal = () => {
+    reset();
+    setIsOpened(false);
+  };
 
   const onCreateDraftPayRun = (data) => alert(`Create draft Pay Run: ${Object.values(data)}`);
 
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      regularCycles: null,
-      hocAndReleases: null,
-      payRunToDate: null,
-    },
+    defaultValues,
   });
 
   return (
