@@ -357,6 +357,7 @@ const BrokerPackage = ({
             {!selectedItem && (
               <Container className="supplier-search-container" display="flex">
                 <SearchBox
+                  placeholder='Search by supplier name'
                   onChangeValue={setSearchText}
                   label="Supplier"
                   searchIcon={null}

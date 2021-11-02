@@ -74,7 +74,7 @@ export const BrokerPortalPage = ({
           <Container className="brokerage-portal__filters">
             <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label">
-                <SearchBox label="Search Packages" value={searchText} onChangeValue={setSearchText} search={onSearch} />
+                <SearchBox placeholder='Search service user' label="Search Packages" value={searchText} onChangeValue={setSearchText} search={onSearch} />
               </FormGroup>
 
               <FormGroup className="form-group--inline-label brokerage-portal__form-status" label="Status">
