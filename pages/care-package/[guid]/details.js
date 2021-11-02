@@ -107,7 +107,7 @@ const PackageDetailsPage = () => {
     {
       headerTitle: data?.packageType,
       id: 'care-package',
-      goToPackage: (packageId) => router.push(getCorePackageRoute(packageId)),
+      goToPackage: () => router.push(getCorePackageRoute(carePackageId)),
       costOfPlacement: data?.costOfPlacement,
       items: [
         {
@@ -126,7 +126,7 @@ const PackageDetailsPage = () => {
     },
     {
       headerTitle: 'Weekly Additional Need',
-      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
+      goToPackage: () => router.push(getBrokerPackageRoute(carePackageId)),
       id: 'weekly-additional-need',
       items: data?.additionalWeeklyNeeds,
       totalCostHeader: 'Total (Net Off)',
@@ -135,7 +135,7 @@ const PackageDetailsPage = () => {
     {
       headerTitle: 'One Off Additional Need',
       id: 'on-off-additional-need',
-      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
+      goToPackage: () => router.push(getBrokerPackageRoute(carePackageId)),
       items: data?.additionalOneOffNeeds,
       totalCostHeader: 'Total (Net Off)',
       totalCost: data?.additionalOneOffCost,
@@ -144,7 +144,7 @@ const PackageDetailsPage = () => {
       headerTitle: 'Funded Nursing Care',
       id: 'funded-nursing-care',
       checkHide: true,
-      goToPackage: (packageId) => router.push(getFundedNursingCareRoute(packageId)),
+      goToPackage: () => router.push(getFundedNursingCareRoute(carePackageId)),
       items: data?.fundedNursingCare ? [data.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
       fncDetails: {
@@ -160,7 +160,7 @@ const PackageDetailsPage = () => {
       headerTitle: 'Care Charges',
       id: 'care-charges',
       items: data?.careCharges,
-      goToPackage: (packageId) => router.push(getCareChargesRoute(packageId)),
+      goToPackage: () => router.push(getCareChargesRoute(carePackageId)),
       careChargeClaimCollector: careChargesClaimCollector[data?.fundedNursingCare?.claimCollector],
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.careCharge,
