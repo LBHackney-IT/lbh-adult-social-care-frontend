@@ -31,7 +31,6 @@ const isNursingCarePackage = (packageType) =>
 const ReviewPackageDetails = ({
   userDetails,
   packageId,
-  packageStatus,
   packageInfoItems = [],
   showEditActions,
   className = '',
@@ -137,8 +136,6 @@ const ReviewPackageDetails = ({
     }));
   };
 
-  const isActivePackage = packageStatus < 6;
-
   return (
     <div className={`review-package-details ${className}`}>
       <Loading isLoading={isLoading} />
@@ -169,7 +166,7 @@ const ReviewPackageDetails = ({
               </span>
             }
           >
-            {isActivePackage && showEditActions && <PackageDetailsButtons buttons={buttons} />}
+            {showEditActions && <PackageDetailsButtons buttons={buttons} />}
           </TitleSubtitleHeader>
         </Container>
         <PackageUserDetails {...userDetails} />
@@ -241,7 +238,7 @@ const ReviewPackageDetails = ({
                         )}
                       </>
                     )}
-                    {isActivePackage && goToPackage && (
+                    {goToPackage && (
                       <Container className="review-package-details__items-actions" display="flex">
                         <p onClick={goToPackage} className="link-button">
                           Edit
