@@ -10,7 +10,7 @@ export default function Breadcrumbs({ values }) {
             const isLastItem = index + 1 === values.length;
             return (
               <li className="govuk-breadcrumbs__list-item" key={text}>
-                {href ? (
+                {!isLastItem && href ? (
                   <Link href={href}>
                     {text}
                   </Link>

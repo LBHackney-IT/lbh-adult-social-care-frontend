@@ -11,7 +11,7 @@ import {
   FurtherDetails,
   PackageType,
   TitleSubtitleHeader,
-  CarePackageBreadcrumbs,
+  DynamicBreadcrumbs,
 } from 'components';
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -20,7 +20,7 @@ import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
-import withSession from '../../../lib/session';
+import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -115,7 +115,7 @@ const CorePackage = () => {
   return (
     <>
       <BrokerageHeader />
-      <CarePackageBreadcrumbs />
+      <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Core package details" title="Build a care package" />
         {packageInfo.serviceUser && (

@@ -7,7 +7,7 @@ import {
   BrokerageHeader,
   HistoryOverview,
   TitleSubtitleHeader,
-  CarePackageBreadcrumbs,
+  DynamicBreadcrumbs,
 } from 'components';
 import withSession from 'lib/session';
 import { usePackageHistory } from 'api';
@@ -40,7 +40,7 @@ const History = () => {
 
       <Loading isLoading={isLoading} />
 
-      <CarePackageBreadcrumbs />
+      <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
         <TitleSubtitleHeader subTitle="Package history" title={data.packageType} />
 

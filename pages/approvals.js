@@ -32,8 +32,6 @@ const initialFilters = {
   postcode: '',
 };
 
-const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Approvals' }];
-
 const Approvals = () => {
   const router = useRouter();
   const [pageNumber, setPageNumber] = useState(1);
@@ -91,7 +89,6 @@ const Approvals = () => {
   return (
     <PackageApprovals
       title='Approvals'
-      breadcrumbs={breadcrumbs}
       loading={approvalsLoading}
       goToSearch={goToBrokerPortalSearch}
       filters={filters}

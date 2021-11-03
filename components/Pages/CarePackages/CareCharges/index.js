@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { collectingReasonOptions, claimCollector, collectedByType } from '../../../../constants/variables';
+import { collectingReasonOptions, claimCollector, collectedByType } from 'constants/variables';
 import { requiredSchema } from 'constants/schemas';
 import { currency } from 'constants/strings';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
@@ -19,7 +19,7 @@ import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import Loading from '../../../Loading';
-import CarePackageBreadcrumbs from '../CarePackageBreadcrumbs';
+import DynamicBreadcrumbs from '../../../DynamicBreadcrumbs';
 
 const CareCharges = ({
   isS117,
@@ -143,7 +143,7 @@ const CareCharges = ({
   return (
     <Container className="brokerage__care-charges">
       <BrokerageHeader />
-      <CarePackageBreadcrumbs />
+      <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <Loading isLoading={loading} />
         <TitleSubtitleHeader title="Build a care package" subTitle="Care Charges" />

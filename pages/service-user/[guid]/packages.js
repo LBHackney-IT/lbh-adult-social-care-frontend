@@ -8,7 +8,7 @@ import {
   ServiceUserDetails,
   HorizontalSeparator,
   TitleSubtitleHeader,
-  CarePackageBreadcrumbs,
+  DynamicBreadcrumbs,
 } from 'components';
 import { useRouter } from 'next/router';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';
@@ -38,7 +38,7 @@ const Packages = () => {
   return (
     <>
       <BrokerageHeader />
-      <CarePackageBreadcrumbs />
+      <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
         <TitleSubtitleHeader subTitle="All package details" title="Full overview" />
         <Loading isLoading={data === undefined} />

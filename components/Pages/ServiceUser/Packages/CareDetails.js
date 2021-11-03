@@ -10,7 +10,7 @@ import {
   Announcement,
   WarningText,
   Hint,
-} from 'components';
+} from '../../../HackneyDS';
 import { formatDate, getNumberWithCommas } from 'service';
 import { getCarePackageCareChargeRoute, getCarePackageDetailsRoute } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';

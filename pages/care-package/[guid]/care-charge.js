@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Breadcrumbs,
   BrokerageHeader,
   Button,
   CancelElementModal,
   Container,
+  DynamicBreadcrumbs,
   EditElementModal,
   EndElementModal,
   FinancialAssessment,
@@ -40,26 +40,6 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
-const useBreadcrumbs = () => {
-  const router = useRouter();
-  const { guid: packageId } = router.query;
-
-  const { data } = useSingleCorePackageInfo(packageId);
-
-  return useMemo(
-    () => [
-      { text: 'Home', href: '/' },
-      { text: 'Care charges', href: '/' },
-      {
-        text: 'Full Overview',
-        href: getServiceUserPackagesRoute(data?.serviceUser?.id),
-      },
-      { text: 'Financial assessment' },
-    ],
-    [packageId]
-  );
-};
-
 const useModal = () => useToggle(false);
 
 const defaultValues = {
@@ -89,8 +69,6 @@ const claimCollectorSchema = yup.string().required('Required field');
 const startDateSchema = yup.mixed().required('Required field');
 
 const CareCharge = () => {
-  const breadcrumbs = useBreadcrumbs();
-
   const [isOpenEdit, toggleEdit] = useModal();
   const [isOpenCancel, toggleCancel] = useModal();
   const [isOpenEnd, toggleEnd] = useModal();
@@ -378,9 +356,9 @@ const CareCharge = () => {
   return (
     <div className="care-charge">
       <BrokerageHeader />
+      <DynamicBreadcrumbs additionalInfo={packageInfo?.serviceUser?.id} />
 
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
-        <Breadcrumbs values={breadcrumbs} />
 
         <TitleSubtitleHeader subTitle="Care Charges" title="Add financial assessment" />
 

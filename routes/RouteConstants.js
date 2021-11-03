@@ -18,7 +18,7 @@ export const SERVICE_USER_MASTER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/master-se
 export const SERVICE_USER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/search`;
 export const getPackageDetailRoute = (id) => `${SERVICE_USER_ROUTE}/${id}/package-details`;
 export const getServiceUserPackagesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/packages`;
-export const getServiceUserCareChargesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/care-charges`;
+export const getServiceUserCareChargesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/care-charges-overview`;
 
 export const BROKER_ASSISTANCE_ROUTE = '/broker-assistance';
 export const getAssignPackageRoute = (id) => `${BROKER_ASSISTANCE_ROUTE}/${id}/assign-package`;
@@ -33,24 +33,6 @@ export const LOGOUT_ROUTE = '/logout';
 
 export const NOT_FOUND_ROUTE = '/404';
 
-const carePackageRoutes = [
-  { route: 'broker-assistance', name: 'Broker Assistance' },
-  { route: 'broker-portal', name: 'Broker Portal' },
-  { route: 'care-charges', name: 'Care Charges' },
-  { route: 'approvals', name: 'Approvals' },
-  { route: 'finance', name: 'Finance' },
-  { route: 'approval', name: 'Approval package detail' },
-  { route: 'core-package', name: 'Core package' },
-  { route: 'broker-care-charges', name: 'Care charges' },
-  { route: 'packages', name: 'Full overview' },
-  { route: 'master-search', name: 'Service user master search' },
-  { route: 'search', name: 'Service user search' },
-  { route: 'broker-package', name: 'Broker package' },
-  { route: 'broker-fnc', name: 'Funded nursing care' },
-  { route: 'review', name: 'Review package details' },
-  { route: 'details', name: 'Package detail' },
-];
-
 export const saveToStoragePrevRoute = (route) => {
   if (isServer()) return;
   window.localStorage.setItem('prevRoute', route);
@@ -62,14 +44,46 @@ export const getStoragePrevRoute = () => {
   return route ? getPrevRouteInfo(route) : {};
 };
 
-export const getCarePackageMainRoute = (currentRoute) => {
+const getBreadcrumbRoutes = (additionalInfo) => [
+  { route: 'broker-assistance', text: 'Broker Assistance' },
+  { route: 'broker-portal', text: 'Broker Portal' },
+  { route: 'care-charges', text: 'Care Charges' },
+  { route: 'care-charges-overview', text: 'Care charges package overview' },
+  {
+    route: 'care-charge',
+    text: 'Financial assessment',
+    preRoutes: [
+      {
+        href: getServiceUserPackagesRoute(additionalInfo),
+        text: 'Full overview'
+      }],
+  },
+  { route: 'approvals', text: 'Approvals' },
+  { route: 'finance', text: 'Finance' },
+  { route: 'approval', text: 'Approval package detail' },
+  { route: 'core-package', text: 'Core package' },
+  { route: 'broker-care-charges', text: 'Care charges' },
+  { route: 'packages', text: 'Full overview' },
+  { route: 'master-search', text: 'Service user master search' },
+  { route: 'search', text: 'Service user search' },
+  { route: 'broker-package', text: 'Broker package' },
+  { route: 'broker-fnc', text: 'Funded nursing care' },
+  { route: 'review', text: 'Review package details' },
+  { route: 'details', text: 'Package detail' },
+  { route: 'assign-package', text: 'Assign and attach a care plan' },
+];
+
+export const getMainRoute = (currentRoute, additionalInfo) => {
   const mainRouteInfo = getStoragePrevRoute();
-  const currentRouteInfo = currentRoute ? { text: getPrevRouteInfo(currentRoute).name } : {};
+  const { text, preRoutes } = getPrevRouteInfo(currentRoute, additionalInfo);
+  const currentRouteInfo = currentRoute ? { text, preRoutes } : {};
+  const currentPreRoutes = currentRouteInfo.preRoutes || [];
 
   return [
     { text: 'Home', href: '/' },
-    { text: mainRouteInfo.name || 'Broker Assistance', href: mainRouteInfo.route || BROKER_ASSISTANCE_ROUTE },
+    { text: mainRouteInfo.text || 'Broker Assistance', href: mainRouteInfo.route || BROKER_ASSISTANCE_ROUTE },
+    ...currentPreRoutes,
     currentRouteInfo,
-  ];
+  ].filter(item => item.text);
 };
-export const getPrevRouteInfo = (route) => carePackageRoutes.find((splitRoute) => route === splitRoute.route) || {};
+export const getPrevRouteInfo = (route, additionalInfo) => getBreadcrumbRoutes(additionalInfo).find((splitRoute) => route === splitRoute.route) || {};

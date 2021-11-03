@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { useBrokers } from 'api';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
-import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select, FormGroup } from '../../HackneyDS';
+import { Button, Container, HorizontalSeparator, SearchBox, Select, FormGroup } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
 import { BrokerPortalTable } from './BrokerPortalTable';
 import DatePick from '../../DatePick';
 import Loading from '../../Loading';
+import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
 
 const statusOptions = [
   { text: 'All', value: '' },
@@ -30,7 +31,6 @@ export const BrokerPortalPage = ({
   onRowClick = () => {},
   loading,
   goToSearch,
-  breadcrumbs,
 }) => {
   const [searchText, setSearchText] = useState('');
 
@@ -61,11 +61,9 @@ export const BrokerPortalPage = ({
     <div className="broker-portal">
       <Loading isLoading={loading} />
       <BrokerageHeader />
+      <DynamicBreadcrumbs />
       <Container background="#FAFAFA" padding="0 0 60px">
         <Container maxWidth="1080px" margin="0 auto">
-          <Container padding="10px 60px 0px">
-            <Breadcrumbs values={breadcrumbs} />
-          </Container>
           <Container className="brokerage-portal__header">
             <h1>{title}</h1>
             <Button onClick={goToSearch}>Find a service user</Button>

@@ -7,23 +7,17 @@ import {
   Textarea,
   Container,
   FormGroup,
-  Breadcrumbs,
   Announcement,
   BrokerageHeader,
   UploadGreenButton,
   ServiceUserDetails,
   TitleSubtitleHeader,
+  DynamicBreadcrumbs,
 } from 'components';
 import { requiredSchema } from 'constants/schemas';
 import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { assignToBroker, useServiceUser, useBrokers, useLookups } from 'api';
-
-const breadcrumbs = [
-  { text: 'Home', href: BROKER_ASSISTANCE_ROUTE },
-  { text: 'Broker Assistance', href: BROKER_ASSISTANCE_ROUTE },
-  { text: 'Assign and attach a care plan' },
-];
 
 const AssignPackage = () => {
   const [assignedCarePlan, setAssignedCarePlan] = useState(false);
@@ -100,9 +94,9 @@ const AssignPackage = () => {
   return (
     <Container className="assign-care-plan">
       <BrokerageHeader />
+      <DynamicBreadcrumbs />
 
       <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
-        <Breadcrumbs values={breadcrumbs} />
 
         {assignedCarePlan ? (
           <Container margin="60px 0 0" className="brokerage__container-main">

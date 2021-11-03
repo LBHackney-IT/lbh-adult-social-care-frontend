@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import { useApproversOptions, useLookups } from 'api';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
 import {
-  Breadcrumbs,
   Button,
   Container,
   HorizontalSeparator,
@@ -16,6 +15,7 @@ import DatePick from '../../DatePick';
 import Loading from '../../Loading';
 import { PackageApprovalsTable } from './PackageApprovalsTable';
 import ServiceUserSearch from '../ServiceUser/Search';
+import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
 
 const statusOptions = [
   { text: 'Waiting For Approval', value: '3' },
@@ -41,7 +41,6 @@ export const PackageApprovals = ({
   setFilters,
   clearFilter,
   onRowClick = () => {},
-  breadcrumbs,
 }) => {
   const [searchText, setSearchText] = useState('');
   const [openedSearch, setOpenedSearch] = useState(false);
@@ -108,11 +107,9 @@ export const PackageApprovals = ({
         />
       </Dialog>
       <BrokerageHeader />
+      <DynamicBreadcrumbs />
       <Container background="#FAFAFA" padding="0 0 60px">
         <Container maxWidth="1080px" margin="0 auto">
-          <Container padding="10px 60px 0px">
-            <Breadcrumbs values={breadcrumbs} />
-          </Container>
           <Container className="brokerage-portal__header">
             <h1>{title}</h1>
           </Container>

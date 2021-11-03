@@ -14,7 +14,7 @@ import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
 import BrokeragePackageDates from '../BrokeragePackageDates';
-import CarePackageBreadcrumbs from '../CarePackageBreadcrumbs';
+import DynamicBreadcrumbs from '../../../DynamicBreadcrumbs';
 
 const initialNeed = {
   cost: 0,
@@ -329,7 +329,7 @@ const BrokerPackage = ({
   return (
     <div className="broker-package brokerage">
       <BrokerageHeader />
-      <CarePackageBreadcrumbs />
+      <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <Loading isLoading={loading || suppliersLoading} />
         <Container className="brokerage__container-main">

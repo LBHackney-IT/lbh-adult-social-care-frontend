@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from 'components';
 import {
   formatDate,
   getButtonTextFromPackageStatus,
@@ -9,6 +8,7 @@ import {
 import { CaretDownIcon } from 'components/Icons';
 import { useRouter } from 'next/router';
 import { getCorePackageRoute } from 'routes/RouteConstants';
+import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from '../../../HackneyDS';
 
 const PackageRequest = ({ packageRequest }) => {
   const router = useRouter();

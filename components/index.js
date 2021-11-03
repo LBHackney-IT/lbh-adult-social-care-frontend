@@ -14,12 +14,11 @@ export { default as PackageRequest } from './Pages/ServiceUser/Packages/PackageR
 export { default as CareCharges } from './Pages/CarePackages/CareCharges';
 export { default as FundedNursingCare } from './Pages/CarePackages/FundedNursingCare';
 export { default as BrokerPackage } from './Pages/CarePackages/BrokerPackage';
-export { default as BrokerageBorderCost } from './Pages/CarePackages/BrokerageBorderCost';
 export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPackageDetails';
 export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchForServiceUser';
 export { default as NewCareChargePackages } from './Pages/CareCharges/NewCareChargePackages';
 export { default as PackageApprovals } from './Pages/PackageApprovals';
-export { default as CarePackageBreadcrumbs } from './Pages/CarePackages/CarePackageBreadcrumbs';
+export { default as DynamicBreadcrumbs } from './DynamicBreadcrumbs';
 export { FurtherDetails } from './Pages/CarePackages/CorePackageDetails/FurtherDetails';
 export { PackageType } from './Pages/CarePackages/CorePackageDetails/PackageType';
 
