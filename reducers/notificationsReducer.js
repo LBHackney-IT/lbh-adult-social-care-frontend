@@ -1,59 +1,68 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// EXAMPLE OF PAYLOAD
-// {
-//   time: 4000,
-//   className: 'error',
-//   text: 'Something went wrong',
-// }
-
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState: {
     notificationsLimit: 2,
     notifications: [],
-    showedNotifications: [],
+    visibleNotifications: [],
     logoutNotification: '',
   },
   reducers: {
     showNotification: (state, { payload }) => {
+      const cloneVisible = state.visibleNotifications.filter((visible) => visible.text !== payload.text);
       return {
         ...state,
-        showedNotifications: [...state.showedNotifications, payload],
+        visibleNotifications: [...cloneVisible, payload],
         notifications: state.notifications.slice(1, state.notifications.length),
       };
     },
+    changeNotificationsLimit: (state, { payload }) => ({
+      ...state,
+      notificationsLimit: payload,
+    }),
     removeNotification: (state, { payload }) => {
-      const cloneShowed = state.showedNotifications.filter((showed) => showed.text !== payload.text);
+      const cloneVisible = state.visibleNotifications.filter((visible) => visible.text !== payload.text);
       return {
         ...state,
-        showedNotifications: cloneShowed,
+        visibleNotifications: cloneVisible,
       };
     },
-    addNotification: (state, { payload }) => {
+    activateTimers: (state) => {
+      const cloneVisible = state.visibleNotifications.map((visible) => ({ ...visible, activeTimer: true }));
       return {
         ...state,
-        notifications: [...state.notifications, {
-          // time: 'debugger',
-          time: 4000,
-          className: 'error',
-          text: 'Something went wrong',
-          ...payload,
-        }],
-        logoutNotification: payload?.text === 'logout' ? 'logout' : '',
-      };
+        visibleNotifications: cloneVisible,
+      }
     },
+    addNotification: (state, { payload }) => ({
+      ...state,
+      notifications: [...state.notifications, {
+        // time: 'debugger',
+        time: 3000,
+        className: 'error',
+        text: 'Something went wrong',
+        ...payload,
+      }],
+      logoutNotification: payload?.text === 'logout' ? 'logout' : '',
+    }),
     removeNotifications: (state) => ({
       ...state,
       notifications: [],
-      showedNotifications: [],
+      visibleNotifications: [],
     }),
   },
 });
 
 // Actions
-export const { removeNotification, removeNotifications, showNotification, addNotification } =
-  notificationsSlice.actions;
+export const {
+  removeNotification,
+  removeNotifications,
+  showNotification,
+  activateTimers,
+  addNotification,
+  changeNotificationsLimit,
+} = notificationsSlice.actions;
 
 // Selectors
 const selectNotifications = (state) => state.notifications;
