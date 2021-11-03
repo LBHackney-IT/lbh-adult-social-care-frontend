@@ -392,6 +392,10 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
   background: #be3a34;
 }
 
+.large-button{
+  min-width:200px;
+}
+
 @media (min-width: 48.0625em) {
   .govuk-button__start-icon {
     margin-left: 10px;

@@ -12,7 +12,7 @@ export const PayrunList = ({ data }) => {
         <>
           <Container background="#FAFAFA" padding="32px 16px" key={d.payRunId}>
             <Container display="flex" justifyContent="space-between" alignItems="flex-end">
-              <Container>
+              <Container minWidth='320px'>
                 <Container display="flex" alignItems="center">
                   <Heading size="s">Payrun ID: </Heading>
                   <VerticalSeparator width="10px" />
@@ -29,10 +29,10 @@ export const PayrunList = ({ data }) => {
                   {d.payRunTypeName}
                 </Container>
               </Container>
-              <Container display="flex" flexDirection="column" justifyContent="flex-end">
+              <Container display="flex" flexDirection="column" justifyContent="flex-end" minWidth='80px'>
                 <Heading size="s">Paid</Heading>£{getNumberWithCommas(d.totalAmountPaid)}
               </Container>
-              <Container display="flex" flexDirection="column" justifyContent="flex-end">
+              <Container display="flex" flexDirection="column" justifyContent="flex-end" minWidth='80px'>
                 <Heading size="s">Held</Heading>£{getNumberWithCommas(d.totalAmountHeld)}
               </Container>
               <Container
