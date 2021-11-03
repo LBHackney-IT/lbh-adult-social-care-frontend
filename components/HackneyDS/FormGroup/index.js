@@ -1,5 +1,5 @@
-import { Container, VerticalSeparator } from 'components';
 import React from 'react';
+import { Container, VerticalSeparator } from '../index';
 import { HorizontalSeparator } from '../Layout/HorizontalSeparator';
 
 export default function FormGroup({
