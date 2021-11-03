@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { useDebounce } from 'react-use';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
 import { updateCarePackageCosts, useSuppliers, useSingleCorePackageInfo } from 'api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
@@ -53,7 +52,6 @@ const BrokerPackage = ({
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchText, setSearchText] = useState('');
-  useDebounce(() => setSearchQuery(searchText), 1000, [searchText]);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   const onSearchSupplier = () => {
