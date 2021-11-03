@@ -40,6 +40,7 @@ export const PackageApprovals = ({
   filters,
   setFilters,
   clearFilter,
+  loading,
   onRowClick = () => {},
   breadcrumbs,
 }) => {
@@ -94,7 +95,7 @@ export const PackageApprovals = ({
 
   const shouldShowClear = Object.values(filters).some((item) => item);
 
-  const isLoading = approverOptionsLoading || packageOptionsLoading;
+  const isLoading = loading || approverOptionsLoading || packageOptionsLoading;
 
   return (
     <div className="broker-portal approvals">
