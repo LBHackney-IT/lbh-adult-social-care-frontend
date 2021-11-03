@@ -27,7 +27,7 @@ export const CARE_CHARGES_ROUTE = '/care-charges';
 
 export const APPROVALS_ROUTE = '/approvals';
 
-export const FINANCE_ROUTE = '/finance';
+export const FINANCE_ROUTE = '/payruns';
 
 export const LOGOUT_ROUTE = '/logout';
 

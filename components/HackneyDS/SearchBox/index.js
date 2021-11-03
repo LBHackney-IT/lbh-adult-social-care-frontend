@@ -6,7 +6,7 @@ import { CrossIcon, SearchIcon } from '../../Icons';
 import { isFunction } from '../../../api';
 
 export default function SearchBox({
-  label = 'Search',
+  label = '',
   id = 'search',
   name = 'search',
   hint,

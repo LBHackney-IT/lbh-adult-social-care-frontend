@@ -1,17 +1,29 @@
+import { Container, VerticalSeparator } from 'components';
 import React from 'react';
 import { HorizontalSeparator } from '../Layout/HorizontalSeparator';
 
-export default function FormGroup({ children = [], label, required, hint, error, className = '' }) {
+export default function FormGroup({
+  children = [],
+  label,
+  required,
+  hint,
+  error,
+  className = '',
+  smallLabel = false,
+  inlineLabel = false,
+}) {
   const outerClassName = className ? ` ${className}` : '';
   const nodeList = Array.isArray(children) ? children : [children];
   const errorClassList = error ? ' govuk-form-group--error' : '';
-
+  const labelSize = smallLabel ? ' small-label' : '';
   return (
     <div className={`govuk-form-group lbh-form-group${errorClassList}${outerClassName}`}>
       <fieldset className="govuk-fieldset lbh-fieldset">
-        {label && (
+        {label && !inlineLabel && (
           <>
-            <label className={`govuk-fieldset__legend${required ? ' text-required-after' : ''}`}>{label}</label>
+            <label className={`govuk-fieldset__legend${required ? ' text-required-after' : ''} ${labelSize}`}>
+              {label}
+            </label>
             <HorizontalSeparator />
           </>
         )}
@@ -27,8 +39,18 @@ export default function FormGroup({ children = [], label, required, hint, error,
             {error}
           </span>
         )}
-        {(hint || error || label) && <HorizontalSeparator height="20px" />}
-        {nodeList}
+        {(hint || error || (label && !smallLabel)) && <HorizontalSeparator height="20px" />}
+        {inlineLabel && label ? (
+          <Container display="flex" alignItems="center">
+            <label className={`govuk-fieldset__legend${required ? ' text-required-after' : ''} ${labelSize}`}>
+              {label}
+            </label>
+            <VerticalSeparator width="8px" />
+            {nodeList}
+          </Container>
+        ) : (
+          nodeList
+        )}
       </fieldset>
     </div>
   );
