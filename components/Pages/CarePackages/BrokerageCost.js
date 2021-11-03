@@ -29,7 +29,7 @@ const BrokerageCost = ({
       className="brokerage__weekly-cost"
     >
       {!getter?.length ? (
-          <Container className="brokerage__cost-add-need" display="flex">
+          <Container width='fit-content' className="brokerage__cost-add-need" display="flex">
             <p onClick={() => addNeed(setter)} className="text-green">
               {addNeedText}
             </p>
@@ -64,7 +64,7 @@ const BrokerageCost = ({
                     value={item.cost}
                     onChangeValue={(value) => changeNeed(getter, setter, 'cost', value, index)}
                   />
-                  <Container width='' className="brokerage__cost-add-need" display="flex">
+                  <Container width='fit-content' className="brokerage__cost-add-need" display="flex">
                     <p onClick={() => removeNeed(getter, setter, index)} className="link-button red">
                       Remove
                     </p>
