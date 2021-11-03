@@ -16,7 +16,6 @@ const statusOptions = [
 
 export const BrokerPortalFilters = ({ filters, setFilters, clearFilter }) => {
   const [searchText, setSearchText] = useState('');
-
   const { options: brokerOptions } = useBrokers();
 
   const changeFilterField = useCallback(
@@ -28,6 +27,7 @@ export const BrokerPortalFilters = ({ filters, setFilters, clearFilter }) => {
     },
     [setFilters]
   );
+
   const onClearFilters = () => {
     setSearchText('');
     clearFilter();

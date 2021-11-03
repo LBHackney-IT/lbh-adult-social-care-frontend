@@ -54,13 +54,13 @@ const Payruns = () => {
           <HorizontalSeparator height="30px" />
           <Container display="flex" justifyContent="space-between">
             <Heading size="xl">Pay Runs</Heading>
-            <Button>New pay run</Button>
+            <Button largeButton>New pay run</Button>
           </Container>
           <HorizontalSeparator height="16px" />
           <PayrunFilters />
         </Container>
       </Container>
-      <HorizontalSeparator height="20px" />
+      <HorizontalSeparator height="30px" />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
         <Tabs tabs={tabs}>
           <Tab>

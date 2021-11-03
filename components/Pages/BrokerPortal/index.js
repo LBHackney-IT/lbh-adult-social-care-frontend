@@ -30,7 +30,7 @@ export const BrokerPortalPage = ({
         <HorizontalSeparator height="30px" />
         <Container display="flex" justifyContent="space-between">
           <Heading size="xl">{title}</Heading>
-          <Button onClick={goToSearch}>Find a service user</Button>
+          <Button onClick={goToSearch} largeButton>Find a service user</Button>
         </Container>
         <HorizontalSeparator height="16px" />
         <BrokerPortalFilters title={title} filters={filters} setFilters={setFilters} clearFilter={clearFilter} />
@@ -40,7 +40,6 @@ export const BrokerPortalPage = ({
     <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
       {items && <BrokerPortalTable onRowClick={onRowClick} data={items} />}
       <HorizontalSeparator height="20px" />
-
       <AlternativePagination
         pageSize={pageSize}
         totalPages={totalPages}
