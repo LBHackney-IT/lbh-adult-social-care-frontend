@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeNotification, selectNotifications, showNotification } from '../reducers/notificationsReducer';
+import { removeNotification, selectNotifications, showNotification, activateTimers } from '../reducers/notificationsReducer';
 
 const CustomNotification = ({ className = '' }) => {
-  const { notifications, showedNotifications, notificationsLimit } = useSelector(selectNotifications);
+  const { notifications, visibleNotifications, notificationsLimit } = useSelector(selectNotifications);
   const [timers, setTimers] = useState([]);
   const dispatch = useDispatch();
 
@@ -15,48 +15,53 @@ const CustomNotification = ({ className = '' }) => {
   };
 
   useEffect(() => {
-    if (!showedNotifications.length) return;
+    if (!visibleNotifications.length) return;
 
-    const newTimers = showedNotifications.map(showedNotification => (
+    const newTimers = visibleNotifications.filter(item => !item.activeTimer).map(visibleNotification => (
       setTimeout(() => {
-        dispatch(removeNotification(showedNotification));
-      }, showedNotification.time)
+        dispatch(removeNotification(visibleNotification));
+      }, visibleNotification.time)
     ));
 
-    setTimers(newTimers);
-  }, [showedNotifications]);
+    setTimers(prevState => ({ ...prevState, ...newTimers }));
+  }, [visibleNotifications]);
 
   useEffect(() => {
-    if (notifications.length && !showedNotifications.length) {
+    if(timers.length) {
+      dispatch(activateTimers());
+    }
+  }, [timers])
+
+  useEffect(() => {
+    if (notifications.length && !visibleNotifications.length) {
       dispatch(showNotification(notifications[0]));
     }
 
-    if (notifications.length && showedNotifications.length === notificationsLimit - 1) {
+    if (notifications.length && visibleNotifications.length < notificationsLimit) {
       dispatch(showNotification(notifications[0]));
     }
-  }, [notifications, showedNotifications, dispatch]);
+  }, [notifications, visibleNotifications, dispatch]);
 
-  if (showedNotifications?.length) {
-    return (
-      <div className="notifications">
-        {showedNotifications.map(item => {
-          const allClasses = `notification ${item ? item.className || '' : ''} ${className}`;
+  if(!visibleNotifications?.length) return <></>;
 
-          return (
-            <div key={item?.text?.toString() || 'error'} className={allClasses}>
-              <div>
-                <p>{item?.text?.toString() || 'Something went wrong'}</p>
-                <span className="notification-close" onClick={() => closeNotification(item)}>
-                  +
-                </span>
-              </div>
+  return (
+    <div className="notifications">
+      {visibleNotifications.map(item => {
+        const allClasses = `notification ${item ? item.className || '' : ''} ${className}`;
+
+        return (
+          <div key={item?.text?.toString() || 'error'} className={allClasses}>
+            <div>
+              <p>{item?.text?.toString() || 'Something went wrong'}</p>
+              <span className="notification-close" onClick={() => closeNotification(item)}>
+                +
+              </span>
             </div>
-          );
-        })}
-      </div>
-    );
-  }
-  return <></>;
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 export default CustomNotification;
