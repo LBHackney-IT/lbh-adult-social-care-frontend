@@ -3,7 +3,7 @@ import { currency, dateStringFormats } from 'constants/strings';
 import { formatDate } from 'service';
 import { Container, SingleAccordion } from '../../../HackneyDS';
 
-const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeClaimCollector }) => {
+const PackageInfo = ({ fncDetails, headerTitle, goToPackage, items, containerId, careChargeClaimCollector }) => {
   const [openedServiceUserNeed, setOpenedServiceUserNeed] = useState([]);
   const [openedDetails, setOpenedDetails] = useState([]);
 
@@ -25,7 +25,19 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
 
   return (
     <Container className="review-package-details__items-container">
-      <h3 id={containerId}>{headerTitle}</h3>
+      <Container className='review-package-details__title' display='flex' alignItems='center'>
+        <h3 id={containerId}>{headerTitle || 'Care Package'}</h3>
+        {goToPackage && (
+          <Container className="review-package-details__items-actions" display="flex">
+            <p onClick={goToPackage} className="link-button">
+              Edit
+            </p>
+            <p onClick={goToPackage} className="link-button red">
+              Remove
+            </p>
+          </Container>
+        )}
+      </Container>
       {items?.map(({ startDate, endDate, cost, title, address, serviceUserNeed, place, id, description }) => {
         const openedServiceUserId = openedServiceUserNeed.includes(id);
         const openedDetailsId = openedDetails.includes(id);
