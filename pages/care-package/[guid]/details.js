@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { usePackageSummary } from 'api';
 import { useRouter } from 'next/router';
 import { ReviewPackageDetails } from 'components';
-import { getLoggedInUser, getPackageStatusBy, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import withSession from 'lib/session';
 import {
   getBrokerPackageRoute,
@@ -174,16 +174,14 @@ const PackageDetailsPage = () => {
       className="package-details"
       showEditActions
       openedPopup={openedPopup}
-      buttons={![
-        getPackageStatusBy({ statusName: 'Cancelled' }),
-        getPackageStatusBy({ statusName: 'Ended' })
-      ].includes(data?.status) && [
+      buttons={[
         { title: 'Edit', onClick: edit, secondary: true, outline: true, color: 'blue' },
         { title: 'Cancel', onClick: cancel, secondary: true, outline: true, color: 'red' },
         { title: 'End', onClick: end, secondary: true, outline: true, color: 'blue' },
       ]}
       setOpenedPopup={setOpenedPopup}
       title={data?.packageType}
+      packageStatus={data?.packageStatus}
       subTitle="Package details"
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
