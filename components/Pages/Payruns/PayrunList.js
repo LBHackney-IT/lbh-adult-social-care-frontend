@@ -3,14 +3,20 @@ import { Container, Heading, HorizontalSeparator, VerticalSeparator } from 'comp
 import { getNumberWithCommas } from 'service';
 import { format } from 'date-fns';
 import { getPayrunStatusBackground } from 'service/getPayrunStatusBackground';
+import { useRouter } from 'next/router';
+import { getSinglePayrunRoute } from 'routes/RouteConstants';
+
 
 export const PayrunList = ({ data }) => {
-  const x = 1;
+  const router = useRouter();
+  const gotToPayrun = (payRunId) => {
+    router.push(getSinglePayrunRoute(payRunId));
+  }
   return (
     <Container>
       {data.map((d, index) => (
         <>
-          <Container background="#FAFAFA" padding="32px 16px" key={d.payRunId}>
+          <Container background="#FAFAFA" padding="32px 16px" key={d.payRunId} cursor='pointer' onClick={() => gotToPayrun(d.payRunId)}>
             <Container display="flex" justifyContent="space-between" alignItems="flex-end">
               <Container minWidth='320px'>
                 <Container display="flex" alignItems="center">
