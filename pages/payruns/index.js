@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { Breadcrumbs, BrokerageHeader, Button, Container, Heading, HorizontalSeparator, Tab, Tabs } from 'components';
+import {
+  Breadcrumbs,
+  BrokerageHeader,
+  Button,
+  Container,
+  Heading,
+  HorizontalSeparator,
+  Loading,
+  Tab,
+  Tabs,
+} from 'components';
 import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
-import faker from 'faker';
+import { usePayrunView } from 'api/SWR/payRuns';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -20,30 +30,43 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
+const initialFilters = {
+  payRunId: '',
+  dateFrom: null,
+  dateTo: null,
+  payRunTypeId: '',
+  payRunStatusId: '',
+};
+
 const Payruns = () => {
   const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Finance' }];
   const tabs = ['Pay Runs', 'Held Payments'];
+  const [pageNumber, setPageNumber] = useState(1);
+  const [filters, setFilters] = useState(initialFilters);
+  const clearFilters = useCallback(() => setFilters(initialFilters), []);
+  const { payRunId, dateTo, dateFrom, payRunTypeId, payRunStatusId } = filters;
+  const params = useMemo(
+    () => ({
+      dateTo,
+      dateFrom,
+      payRunId,
+      pageNumber,
+      payRunTypeId,
+      payRunStatusId,
+    }),
+    [filters, pageNumber]
+  );
+  const { data, isLoading } = usePayrunView({ params });
 
-  const randomIntFromInterval = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+  const {
+    data: payrunData,
+    pagingMetaData = {
+      totalCount: 0,
+      totalPages: 0,
+      pageSize: 0,
+    },
+  } = data;
 
-  const generateData = (total) => {
-    const mockData = [];
-    const statuses = ['Paid', 'Paid with holds', 'Awaiting Approval'];
-    for (let index = 0; index < total; index++) {
-      const datum = {
-        payRunId: faker.datatype.uuid().substring(12),
-        payRunTypeId: 0,
-        payRunTypeName: 'Residential Recurring',
-        payRunStatusId: 0,
-        payRunStatusName: statuses[randomIntFromInterval(0, 2)],
-        totalAmountPaid: faker.datatype.number(100000),
-        totalAmountHeld: faker.datatype.number(10000),
-        dateCreated: faker.date.past(1),
-      };
-      mockData.push(datum);
-    }
-    return mockData;
-  };
   return (
     <Container>
       <BrokerageHeader />
@@ -57,35 +80,37 @@ const Payruns = () => {
             <Button largeButton>New pay run</Button>
           </Container>
           <HorizontalSeparator height="16px" />
-          <PayrunFilters />
+          <PayrunFilters filters={filters} setFilters={setFilters} clearFilter={clearFilters} />
         </Container>
       </Container>
       <HorizontalSeparator height="30px" />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
         <Tabs tabs={tabs}>
           <Tab>
-            <PayrunList data={generateData(10)} />
+            <Loading isLoading={isLoading} />
+            <PayrunList data={payrunData} />
             <HorizontalSeparator height="30px" />
-            {1 && (
+            {pageNumber && (
               <AlternativePagination
-                totalPages={3}
-                totalCount={30}
-                pageSize={10}
-                currentPage={1}
-                changePagination={() => {}}
+                totalPages={pagingMetaData.totalPages}
+                totalCount={pagingMetaData.totalCount}
+                pageSize={pagingMetaData.pageSize}
+                currentPage={pageNumber}
+                changePagination={setPageNumber}
               />
             )}
           </Tab>
           <Tab>
-            <PayrunList data={generateData(6)} />
+            <Loading isLoading={isLoading} />
+            <PayrunList data={payrunData} />
             <HorizontalSeparator height="30px" />
-            {1 && (
+            {pageNumber && (
               <AlternativePagination
-                totalPages={1}
-                totalCount={7}
-                pageSize={10}
-                currentPage={1}
-                changePagination={() => {}}
+                totalPages={pagingMetaData.totalPages}
+                totalCount={pagingMetaData.totalCount}
+                pageSize={pagingMetaData.pageSize}
+                currentPage={pageNumber}
+                changePagination={setPageNumber}
               />
             )}
           </Tab>

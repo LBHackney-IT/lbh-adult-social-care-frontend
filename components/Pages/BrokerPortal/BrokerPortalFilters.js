@@ -85,7 +85,7 @@ export const BrokerPortalFilters = ({ filters, setFilters, clearFilter }) => {
                 changeFilterField('dateFrom', value);
               }
             }}
-          />{' '}
+          />
         </FormGroup>
         <VerticalSeparator width="20px" />
         <FormGroup label="To" inlineLabel smallLabel>
