@@ -53,8 +53,8 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
           <Select
             emptyElement={null}
             options={statusOptions}
-            value={filters.payRunStatusId}
-            onChange={({ target: { value } }) => changeFilterField('payRunStatusId', value)}
+            value={filters.payRunStatus}
+            onChange={({ target: { value } }) => changeFilterField('payRunStatus', value)}
           />
         </FormGroup>
         <VerticalSeparator width="20px" />
@@ -62,8 +62,8 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
           <Select
             emptyElement={null}
             options={typeOptions}
-            value={filters.payRunTypeId}
-            onChange={({ target: { value } }) => changeFilterField('payRunTypeId', value)}
+            value={filters.payRunType}
+            onChange={({ target: { value } }) => changeFilterField('payRunType', value)}
           />
         </FormGroup>
       </Container>

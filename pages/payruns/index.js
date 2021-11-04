@@ -34,8 +34,8 @@ const initialFilters = {
   payRunId: '',
   dateFrom: null,
   dateTo: null,
-  payRunTypeId: '',
-  payRunStatusId: '',
+  payRunType: '',
+  payRunStatus: '',
 };
 
 const Payruns = () => {
@@ -44,15 +44,15 @@ const Payruns = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState(initialFilters);
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
-  const { payRunId, dateTo, dateFrom, payRunTypeId, payRunStatusId } = filters;
+  const { payRunId, dateTo, dateFrom, payRunType, payRunStatus } = filters;
   const params = useMemo(
     () => ({
       dateTo,
       dateFrom,
       payRunId,
       pageNumber,
-      payRunTypeId,
-      payRunStatusId,
+      payRunType,
+      payRunStatus,
     }),
     [filters, pageNumber]
   );
