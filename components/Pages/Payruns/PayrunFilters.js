@@ -1,18 +1,26 @@
 import React, { useCallback, useState } from 'react';
-import { Container, FormGroup, HorizontalSeparator, SearchBox, Select, VerticalSeparator } from 'components';
+import { Button, Container, FormGroup, HorizontalSeparator, SearchBox, Select, VerticalSeparator } from 'components';
 import DatePick from 'components/DatePick';
 
-const initialFilters = {
-  status: '',
-  dateFrom: null,
-  dateTo: null,
-  brokerId: '',
-  serviceUserName: '',
-};
+const statusOptions = [
+  { text: 'All', value: '' },
+  { text: 'Draft', value: '1' },
+  { text: 'In progress', value: '2' },
+  { text: 'Waiting for Approval', value: '3' },
+  { text: 'Approved', value: '4' },
+  { text: 'Paid', value: '5' },
+  { text: 'Hold', value: '6' },
+  { text: 'Rejected', value: '7' },
+];
 
-export const PayrunFilters = () => {
+const typeOptions = [
+  { text: 'All', value: '' },
+  { text: 'Residential Recurring', value: '1' },
+  { text: 'Direct Payments', value: '2' },
+];
+
+export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
   const [searchText, setSearchText] = useState('');
-  const [filters, setFilters] = useState(initialFilters);
   const changeFilterField = useCallback(
     (field, value) => {
       setFilters((prevState) => ({
@@ -23,9 +31,16 @@ export const PayrunFilters = () => {
     [setFilters]
   );
 
+  const onClearFilters = () => {
+    setSearchText('');
+    clearFilter();
+  };
+
   const onSearch = useCallback(() => {
-    changeFilterField('serviceUserName', searchText);
+    changeFilterField('payRunId', searchText);
   }, [changeFilterField, searchText]);
+
+  const shouldShowClear = Object.values(filters).some((item) => item);
 
   return (
     <Container>
@@ -35,22 +50,61 @@ export const PayrunFilters = () => {
         </FormGroup>
         <VerticalSeparator width="20px" />
         <FormGroup label="Status" inlineLabel smallLabel>
-          <Select />
+          <Select
+            emptyElement={null}
+            options={statusOptions}
+            value={filters.payRunStatusId}
+            onChange={({ target: { value } }) => changeFilterField('payRunStatusId', value)}
+          />
         </FormGroup>
         <VerticalSeparator width="20px" />
         <FormGroup label="Type" inlineLabel smallLabel>
-          <Select />
+          <Select
+            emptyElement={null}
+            options={typeOptions}
+            value={filters.payRunTypeId}
+            onChange={({ target: { value } }) => changeFilterField('payRunTypeId', value)}
+          />
         </FormGroup>
       </Container>
       <HorizontalSeparator height="25px" />
       <Container display="flex" alignItems="flex-end">
         <FormGroup label="From" inlineLabel smallLabel>
-          <DatePick placeholder="Select date" startDate={new Date()} dateValue={new Date()} />
+          <DatePick
+            placeholder="Select date"
+            startDate={filters.dateFrom}
+            dateValue={filters.dateFrom}
+            setDate={(value) => {
+              if (filters.dateTo && value > filters.dateTo) {
+                setFilters((prevState) => ({
+                  ...prevState,
+                  dateTo: value,
+                  dateFrom: value,
+                }));
+              } else {
+                changeFilterField('dateFrom', value);
+              }
+            }}
+          />
         </FormGroup>
         <VerticalSeparator width="20px" />
         <FormGroup label="To" inlineLabel smallLabel>
-          <DatePick placeholder="Select date" startDate={new Date()} dateValue={new Date()} />
+          <DatePick
+            placeholder="Select date"
+            startDate={filters.dateTo}
+            dateValue={filters.dateTo}
+            minDate={filters.dateFrom}
+            setDate={(value) => changeFilterField('dateTo', value)}
+          />
         </FormGroup>
+        {shouldShowClear && (
+          <>
+            <VerticalSeparator width="20px" />
+            <Button outline secondary color="gray" className=" clear-filter-button" onClick={onClearFilters}>
+              Clear
+            </Button>
+          </>
+        )}
       </Container>
     </Container>
   );
