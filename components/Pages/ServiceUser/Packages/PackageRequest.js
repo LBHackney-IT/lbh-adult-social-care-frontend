@@ -13,7 +13,7 @@ import { getCorePackageRoute } from 'routes/RouteConstants';
 const PackageRequest = ({ packageRequest }) => {
   const router = useRouter();
   const [isExpanded, setExpanded] = useState(false);
-  const buttonClass = getButtonColourFromPackageStatus(packageRequest.packageStatus);
+  const buttonClass = `${getButtonColourFromPackageStatus(packageRequest.packageStatus)} package-request-button`;
   const handleClick = () => router.push(getCorePackageRoute(packageRequest.packageId));
   return (
     <Container borderBottom="1px solid #BFC1C3" border="1px solid #BFC1C3" background="#F8F8F8" padding="30px">

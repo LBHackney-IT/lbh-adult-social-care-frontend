@@ -14,6 +14,7 @@ export default function Button({
   className,
   outline,
   addItem,
+  largeButton,
   onClick = () => {},
   LoadingComponent = Loading,
   isLoading,
@@ -21,11 +22,16 @@ export default function Button({
 }) {
   const outerClassName = className ? ` ${className}` : '';
   const outlineClass = outline ? ' outline' : '';
-  const secondaryClassList = secondary ? color ? ` secondary-${color}` : ' govuk-secondary lbh-button--secondary' : '';
+  const secondaryClassList = secondary
+    ? color
+      ? ` secondary-${color}`
+      : ' govuk-secondary lbh-button--secondary'
+    : '';
   const disabledClassList = disabled ? ' lbh-button--disabled govuk-button--disabled' : '';
   const mainClass = clearClass ? '' : 'govuk-button lbh-button';
   const addItemClassList = addItem ? ' lbh-button--add' : '';
-  const allClasses = `${outlineClass}${secondaryClassList}${outerClassName}${disabledClassList}${addItemClassList}`;
+  const largeButtonClass = largeButton ? ' large-button' : '';
+  const allClasses = `${outlineClass}${secondaryClassList}${outerClassName}${disabledClassList}${addItemClassList}${largeButtonClass}`;
   const addItemIcon = (
     <svg width="12" height="12" viewBox="0 0 12 12">
       <path d="M6.94 0L5 0V12H6.94V0Z" />

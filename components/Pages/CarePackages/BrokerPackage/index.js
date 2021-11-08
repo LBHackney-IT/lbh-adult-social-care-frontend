@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { useDebounce } from 'react-use';
 import { compareDescendingDMY, dateStringToDate, uniqueID } from 'service';
-import { updateCarePackageCosts, useSuppliers, useSingleCorePackageInfo } from 'api';
+import { updateCarePackageCosts, useSingleCorePackageInfo, useSuppliers } from 'api';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods, packageTypes } from 'constants/variables';
@@ -34,9 +33,10 @@ const BrokerPackage = ({
 }) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
-
   const dispatch = useDispatch();
 
+  const [showCoreError, setShowCoreError] = useState(false);
+  const [hiddenNeedErrors, setHiddenNeedErrors] = useState([]);
   const [isOngoing, setIsOngoing] = useState(false);
   const [coreCost, setCoreCost] = useState(0);
   const [coreCostError, setCoreCostError] = useState('');
@@ -53,7 +53,6 @@ const BrokerPackage = ({
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchText, setSearchText] = useState('');
-  useDebounce(() => setSearchQuery(searchText), 1000, [searchText]);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   const onSearchSupplier = () => {
@@ -86,69 +85,28 @@ const BrokerPackage = ({
     setSearchText('');
   };
 
-  const composeDetailsData = () => {
-    if (detailsData?.coreCost !== undefined) {
-      setCoreDates({
-        startDate: dateStringToDate(detailsData.startDate) || new Date(),
-        endDate: dateStringToDate(detailsData.endDate),
-      });
-
-      if (!detailsData.endDate) {
-        setIsOngoing(true);
-      }
-
-      setCoreCost(detailsData.coreCost);
-
-      if (detailsData?.details?.length) {
-        const weeklyDetails = detailsData.details
-          .filter((item) => item.costPeriod === 2)
-          .map((item) => ({
-            ...item,
-            startDate: dateStringToDate(item.startDate),
-            endDate: dateStringToDate(item.endDate),
-            isOngoing: !item.endDate,
-          }));
-
-        const oneOffDetails = detailsData.details
-          .filter((item) => item.costPeriod === 3)
-          .map((item) => ({
-            ...item,
-            startDate: dateStringToDate(item.startDate),
-            endDate: dateStringToDate(item.endDate),
-          }));
-
-        if (weeklyDetails.length) setWeeklyNeeds(weeklyDetails);
-        if (oneOffDetails.length) setOneOffNeeds(oneOffDetails);
-      }
-    }
-  };
-
   const errorCoreDate = useMemo(() => {
     const { startDate: coreStartDate, endDate: coreEndDate } = coreDates;
 
-    if(!coreStartDate) {
+    if (!coreStartDate) {
       return 'Core start date is wrong';
     }
-    if(!isOngoing && !coreEndDate) {
+    if (!isOngoing && !coreEndDate) {
       return 'Core end date is wrong';
     }
-    if(!isOngoing && coreEndDate && compareDescendingDMY(coreStartDate, coreEndDate) === -1) {
+    if (!isOngoing && coreEndDate && compareDescendingDMY(coreStartDate, coreEndDate) === -1) {
       return 'Core end date less then core start date';
     }
   }, [isOngoing, coreDates]);
-
-  useEffect(() => {
-    composeDetailsData();
-  }, [detailsData]);
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
   };
 
-  const checkNeedError = (item) => {
-    const { startDate, endDate, isOngoing: isOngoingItem, cost } = item;
+  const checkNeedError = (item, checkEvery) => {
+    const { startDate, endDate, isOngoing: isOngoingItem, cost, id } = item;
 
-    const { startDate: coreStartDate, endDate: coreEndDate } = coreDates;
+    if (!checkEvery && hiddenNeedErrors.includes(id)) return false;
 
     let errorStartDate = '';
     let errorEndDate = '';
@@ -158,52 +116,61 @@ const BrokerPackage = ({
     if (startDate && endDate && !isOngoingItem && compareDescendingDMY(startDate, endDate) === -1) {
       errorEndDate = 'End date should be later then start date';
     }
-    if (startDate && !isOngoing && compareDescendingDMY(coreEndDate, startDate) === -1) {
-      errorStartDate = 'Start date should be later then core date';
-    }
-    if (startDate && isOngoing && compareDescendingDMY(coreStartDate, startDate) === -1) {
-      errorStartDate = 'Start date should be later then core date';
-    }
     if (cost && !startDate) {
       errorStartDate = 'Start date is wrong';
     }
 
     if (!cost && (startDate || endDate)) {
-      errorCost = 'Cost is required';
+      errorCost = 'Cost is mandatory';
+    }
+
+    if (!startDate) {
+      errorStartDate = 'Start date is required';
     }
 
     return errorStartDate || errorEndDate || errorCost;
   };
 
-  const checkDateErrors = (needs) => needs.some((item) => checkNeedError(item));
+  const checkDateErrors = (needs) => needs.some((item) => checkNeedError(item, true));
 
-  const clickSave = async () => {
-    if (!isNewSupplier && !selectedItem?.id) {
+  const onFailedValidation = () => {
+    onShowCoreError();
+    let hasError = false;
+    if (!selectedItem?.id) {
       pushNotification('No supplier selected');
-      return;
+      hasError = true;
     }
 
     if (!coreCost) {
       setCoreCostError('Required field');
       pushNotification('Core weekly cost is required');
-      return;
+      hasError = true;
     }
 
-    if(errorCoreDate) {
+    if (errorCoreDate) {
       pushNotification(errorCoreDate);
-      return;
+      hasError = true;
     }
 
     const weeklyDateErrors = checkDateErrors(weeklyNeeds);
     const oneOfNeedDateErrors = checkDateErrors(oneOffNeeds);
-    if (!coreCost) {
-      setCoreCostError('The core cost field is required');
+    setHiddenNeedErrors([]);
+
+    if (weeklyDateErrors) {
+      pushNotification('Weekly additional needs error');
+      hasError = true;
     }
 
-    if (weeklyDateErrors || oneOfNeedDateErrors) {
-      pushNotification('Some validation errors above');
-      return;
+    if (oneOfNeedDateErrors) {
+      pushNotification('One of additional need error');
+      hasError = true;
     }
+
+    if (hasError) return true;
+  };
+
+  const clickSave = async () => {
+    if (onFailedValidation()) return;
 
     const weeklyDetails = weeklyNeeds
       .filter((item) => item.startDate || item.endDate || item.cost)
@@ -233,7 +200,7 @@ const BrokerPackage = ({
       coreCost,
       startDate: coreDates.startDate,
       endDate: isOngoing ? null : coreDates.endDate,
-      supplierId: selectedItem.id,
+      supplierId: selectedItem?.id,
     };
     const details = [...weeklyDetails, ...oneOffDetails];
     if (details.length) {
@@ -245,10 +212,12 @@ const BrokerPackage = ({
         data: postData,
         packageId,
       });
+
       pushNotification('Success', 'success');
 
-      router.push(
-        packageType === packageTypes.nursing ? getFundedNursingCareRoute(packageId) : getCareChargesRoute(packageId)
+      router.push(packageType === packageTypes.nursing ?
+        getFundedNursingCareRoute(packageId) :
+        getCareChargesRoute(packageId)
       );
     } catch (e) {
       pushNotification(e);
@@ -276,7 +245,9 @@ const BrokerPackage = ({
   };
 
   const addNeed = (setter) => {
-    setter((prevState) => [...prevState, { ...initialNeed, id: uniqueID() }]);
+    const newId = uniqueID();
+    setHiddenNeedErrors(prevState => ([...prevState, newId]));
+    setter((prevState) => [...prevState, { ...initialNeed, id: newId }]);
   };
 
   const removeNeed = (getter, setter, index) => {
@@ -285,7 +256,61 @@ const BrokerPackage = ({
     setter(copyGetter);
   };
 
-  const changeCoreDate = (field, date) => setCoreDates((prevState) => ({ ...prevState, [field]: date }));
+  const changeCoreDate = (field, date) => {
+    if (field === 'endDate') {
+      onShowCoreError(true);
+    }
+    setCoreDates((prevState) => ({ ...prevState, [field]: date }));
+  };
+
+  useEffect(() => {
+    if (detailsData?.coreCost !== undefined) {
+      setCoreDates({
+        startDate: dateStringToDate(detailsData.startDate) || new Date(),
+        endDate: dateStringToDate(detailsData.endDate),
+      });
+
+      if (!detailsData.endDate) {
+        setIsOngoing(true);
+      }
+
+      setCoreCost(detailsData.coreCost);
+
+      if (detailsData?.details?.length) {
+        const weeklyDetails = detailsData.details
+          .filter((item) => item.costPeriod === 2)
+          .map((item) => ({
+            ...initialNeed,
+            ...item,
+            startDate: dateStringToDate(item.startDate),
+            endDate: dateStringToDate(item.endDate),
+            isOngoing: !item.endDate,
+          }));
+
+        const oneOffDetails = detailsData.details
+          .filter((item) => item.costPeriod === 3)
+          .map((item) => ({
+            ...initialNeed,
+            ...item,
+            startDate: dateStringToDate(item.startDate),
+            endDate: dateStringToDate(item.endDate),
+          }));
+
+        let newHiddenNeedErrors = [];
+        if (weeklyDetails.length) {
+          setWeeklyNeeds(weeklyDetails);
+          newHiddenNeedErrors = weeklyDetails.map(item => item.id);
+        }
+        if (oneOffDetails.length) {
+          setOneOffNeeds(oneOffDetails);
+          newHiddenNeedErrors = [...newHiddenNeedErrors, oneOffDetails];
+        }
+        if (hiddenNeedErrors.length) {
+          setHiddenNeedErrors(newHiddenNeedErrors);
+        }
+      }
+    }
+  }, [detailsData]);
 
   useEffect(() => {
     let totalCost = 0;
@@ -295,7 +320,7 @@ const BrokerPackage = ({
       });
     }
     setWeeklyTotalCost(totalCost);
-  }, [coreCost, weeklyNeeds]);
+  }, [weeklyNeeds]);
 
   useEffect(() => {
     let totalCost = 0;
@@ -305,11 +330,13 @@ const BrokerPackage = ({
       });
     }
     setOneOffTotalCost(totalCost);
-  }, [coreCost, oneOffNeeds]);
+  }, [oneOffNeeds]);
 
   useEffect(() => {
-    setIsOngoing(!detailsData?.endDate);
-  }, [detailsData?.endDate]);
+    if (!detailsData.startDate && !detailsData?.endDate) {
+      setIsOngoing(false);
+    }
+  }, [detailsData?.endDate, detailsData?.startDate]);
 
   const getPackageType = (packageTypeValue) => {
     switch (packageTypeValue) {
@@ -326,6 +353,12 @@ const BrokerPackage = ({
     }
   };
 
+  const onShowCoreError = () => {
+    if (!showCoreError) {
+      setShowCoreError(true);
+    }
+  };
+
   return (
     <div className="broker-package brokerage">
       <BrokerageHeader />
@@ -338,9 +371,9 @@ const BrokerPackage = ({
           <Container>
             <h3 className="brokerage__item-title">{getPackageType(packageType)}</h3>
             <BrokeragePackageDates
-              hasClear
-              hasEndMinDate={false}
-              error={errorCoreDate}
+              hasClearButton
+              showError={showCoreError}
+              error={showCoreError && errorCoreDate}
               fields={{
                 dateFrom: 'startDate',
                 dateTo: 'endDate',
@@ -427,7 +460,7 @@ const BrokerPackage = ({
           )}
 
           <Container className="brokerage__actions">
-            <Button onClick={clickBack} className="brokerage__back-button">
+            <Button onClick={clickBack} secondary color="gray">
               Back
             </Button>
 
