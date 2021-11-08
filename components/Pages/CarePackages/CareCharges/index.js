@@ -95,7 +95,7 @@ const CareCharges = ({
       type: 2, // fix value to be removed after updating API side
       subType: 1, // fix value to be removed after updating API side
       description: notes,
-      claimReason: reasonCollecting,
+      claimReason: collectedBy === 'hackney' ? reasonCollecting : null,
     };
 
     const careChargeUpdate = {
@@ -107,7 +107,7 @@ const CareCharges = ({
       type: 2, // fix value to be removed after updating API side
       subType: 1, // fix value to be removed after updating API side
       description: notes,
-      claimReason: reasonCollecting,
+      claimReason: collectedBy === 'hackney' ? reasonCollecting : null,
     };
 
     if (!careCharge?.id) {
