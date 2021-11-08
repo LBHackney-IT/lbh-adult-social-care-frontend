@@ -84,10 +84,10 @@ const CareDetails = ({
     e.preventDefault();
     try {
       await confirmS117({ packageId });
-      dispatch(addNotification('Success', 'success'));
-      setIsS117ClientConfirmed(false);
+      dispatch(addNotification({ text: 'Success', className: 'success'}));
+      setIsS117ClientConfirmed(true);
     } catch (error) {
-      dispatch(addNotification(error, 'error'));
+      dispatch(addNotification({ text: error }));
     }
   };
 
