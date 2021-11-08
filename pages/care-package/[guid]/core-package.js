@@ -1,17 +1,18 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import {
-  Button,
-  Container,
-  HorizontalSeparator,
-  RadioGroup,
   BrokerageHeader,
-  ServiceUserDetails,
-  FurtherDetails,
-  PackageType,
-  TitleSubtitleHeader,
+  Button,
   CarePackageBreadcrumbs,
+  Container,
+  FurtherDetails,
+  HorizontalSeparator,
+  Loading,
+  PackageType,
+  RadioGroup,
+  ServiceUserDetails,
+  TitleSubtitleHeader,
 } from 'components';
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -39,9 +40,10 @@ const CorePackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { guid: packageId } = router.query;
-  const { data: packageInfo } = useSingleCorePackageInfo(packageId);
+  const [loading, setLoading] = useState(false);
+  const { data: packageInfo, singleCoreLoading } = useSingleCorePackageInfo(packageId);
   const { settings } = packageInfo;
-  const { data: schedulingOptionsData = [] } = usePackageSchedulingOptions();
+  const { data: schedulingOptionsData = [], schedulingOptionsLoading } = usePackageSchedulingOptions();
 
   useRedirectIfPackageNotExist();
 
@@ -98,6 +100,7 @@ const CorePackage = () => {
   }, [packageInfo]);
 
   const updatePackage = async (data = {}) => {
+    setLoading(true);
     try {
       const { id } = await updateCoreCarePackage({ data, packageId });
       router.push(getBrokerPackageRoute(id));
@@ -105,12 +108,16 @@ const CorePackage = () => {
     } catch (error) {
       dispatch(addNotification({ text: error, className: 'error' }));
     }
+    setLoading(false);
   };
+
+  const isLoading = loading || singleCoreLoading || schedulingOptionsLoading;
 
   return (
     <>
       <BrokerageHeader />
       <CarePackageBreadcrumbs />
+      <Loading isLoading={isLoading} />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Core package details" title="Build a care package" />
         {packageInfo.serviceUser && (
@@ -141,7 +148,7 @@ const CorePackage = () => {
           </Container>
           <FurtherDetails settings={settings} control={control} setValue={setValue} />
           <HorizontalSeparator height="20px" />
-          <Button type="submit">Save and continue</Button>
+          <Button isLoading={isLoading} disabled={isLoading} type="submit">Save and continue</Button>
         </form>
       </Container>
     </>

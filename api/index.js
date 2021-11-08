@@ -9,7 +9,6 @@ export * from './Users/AuthApi';
 
 export * from './Utils/ApiUtils';
 export * from './Utils/FuncUtils';
-export * from './Utils/CommonOptions';
 
 // SWR hooks
 export { default as fetcher } from './SWR/fetcher';
