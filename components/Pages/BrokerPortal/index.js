@@ -1,22 +1,10 @@
-import React, { useCallback, useState } from 'react';
-import { useBrokers } from 'api';
+import React from 'react';
 import BrokerageHeader from '../CarePackages/BrokerageHeader';
-import { Breadcrumbs, Button, Container, HorizontalSeparator, SearchBox, Select, FormGroup } from '../../HackneyDS';
+import { Breadcrumbs, Container, HorizontalSeparator, Heading, Button } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
 import { BrokerPortalTable } from './BrokerPortalTable';
-import DatePick from '../../DatePick';
 import Loading from '../../Loading';
-
-const statusOptions = [
-  { text: 'All', value: '' },
-  { text: 'New', value: '1' },
-  { text: 'In Progress', value: '2' },
-  { text: 'Waiting For Approval', value: '3' },
-  { text: 'Approved', value: '4' },
-  { text: 'Not Approved', value: '5' },
-  { text: 'Ended', value: '6' },
-  { text: 'Cancelled', value: '7' },
-];
+import { BrokerPortalFilters } from './BrokerPortalFilters';
 
 export const BrokerPortalPage = ({
   items,
@@ -31,126 +19,36 @@ export const BrokerPortalPage = ({
   loading,
   goToSearch,
   breadcrumbs,
-}) => {
-  const [searchText, setSearchText] = useState('');
-
-  const { options: brokerOptions } = useBrokers();
-
-  const changeFilterField = useCallback(
-    (field, value) => {
-      setFilters((prevState) => ({
-        ...prevState,
-        [field]: value,
-      }));
-    },
-    [setFilters]
-  );
-
-  const onClearFilters = () => {
-    setSearchText('');
-    clearFilter();
-  }
-
-  const onSearch = useCallback(() => {
-    changeFilterField('serviceUserName', searchText);
-  }, [changeFilterField, searchText]);
-
-  const shouldShowClear = Object.values(filters).some((item) => item);
-
-  return (
-    <div className="broker-portal">
-      <Loading isLoading={loading} />
-      <BrokerageHeader />
-      <Container background="#FAFAFA" padding="0 0 60px">
-        <Container maxWidth="1080px" margin="0 auto">
-          <Container padding="10px 60px 0px">
-            <Breadcrumbs values={breadcrumbs} />
-          </Container>
-          <Container className="brokerage-portal__header">
-            <h1>{title}</h1>
-            <Button onClick={goToSearch}>Find a service user</Button>
-          </Container>
-
-          <Container className="brokerage-portal__filters">
-            <div className="brokerage-portal__filters-block">
-              <FormGroup className="form-group--inline-label">
-                <SearchBox label="Search Packages" value={searchText} onChangeValue={setSearchText} search={onSearch} />
-              </FormGroup>
-
-              <FormGroup className="form-group--inline-label brokerage-portal__form-status" label="Status">
-                <Select
-                  emptyElement={null}
-                  options={statusOptions}
-                  value={filters.status}
-                  onChange={({ target: { value } }) => changeFilterField('status', value)}
-                />
-              </FormGroup>
-
-              {filters.brokerId !== undefined && (
-                <FormGroup className="form-group--inline-label" label="Broker">
-                  <Select
-                    value={filters.brokerId}
-                    options={brokerOptions}
-                    onChangeValue={(value) => changeFilterField('brokerId', value)}
-                  />
-                </FormGroup>
-              )}
-            </div>
-
-            <div className="brokerage-portal__filters-block">
-              <FormGroup className="form-group--inline-label" label="From">
-                <DatePick
-                  placeholder="Select date"
-                  startDate={filters.dateFrom}
-                  dateValue={filters.dateFrom}
-                  setDate={(value) => {
-                    if (filters.dateTo && value > filters.dateTo) {
-                      setFilters((prevState) => ({
-                        ...prevState,
-                        dateTo: value,
-                        dateFrom: value,
-                      }));
-                    } else {
-                      changeFilterField('dateFrom', value);
-                    }
-                  }}
-                />
-              </FormGroup>
-
-              <FormGroup className="form-group--inline-label" label="To">
-                <DatePick
-                  placeholder="Select date"
-                  startDate={filters.dateTo}
-                  dateValue={filters.dateTo}
-                  minDate={filters.dateFrom}
-                  setDate={(value) => changeFilterField('dateTo', value)}
-                />
-              </FormGroup>
-
-              {shouldShowClear && (
-                <Button outline secondary color='gray' className=" clear-filter-button" onClick={onClearFilters}>
-                  Clear
-                </Button>
-              )}
-            </div>
-          </Container>
+}) => (
+  <div className="broker-portal">
+    <Loading isLoading={loading} />
+    <BrokerageHeader />
+    <Container background="#FAFAFA" padding="0 0 60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+        <HorizontalSeparator height="10px" />
+        <Breadcrumbs values={breadcrumbs} />
+        <HorizontalSeparator height="30px" />
+        <Container display="flex" justifyContent="space-between">
+          <Heading size="xl">{title}</Heading>
+          <Button onClick={goToSearch} largeButton>Find a service user</Button>
         </Container>
+        <HorizontalSeparator height="16px" />
+        <BrokerPortalFilters title={title} filters={filters} setFilters={setFilters} clearFilter={clearFilter} />
       </Container>
+    </Container>
 
-      <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
-        {items && <BrokerPortalTable onRowClick={onRowClick} data={items} />}
-        <HorizontalSeparator height="20px" />
-
-        <AlternativePagination
-          pageSize={pageSize}
-          totalPages={totalPages}
-          currentPage={pageNumber}
-          totalCount={totalCount}
-          changePagination={setPageNumber}
-        />
-      </Container>
-    </div>
-  );
-};
+    <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
+      {items && <BrokerPortalTable onRowClick={onRowClick} data={items} />}
+      <HorizontalSeparator height="20px" />
+      <AlternativePagination
+        pageSize={pageSize}
+        totalPages={totalPages}
+        currentPage={pageNumber}
+        totalCount={totalCount}
+        changePagination={setPageNumber}
+      />
+    </Container>
+  </div>
+);
 
 export default BrokerPortalPage;

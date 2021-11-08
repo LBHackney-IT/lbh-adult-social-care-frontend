@@ -411,7 +411,7 @@ const CareCharge = () => {
         <FinancialAssessment />
 
         <Container className="brokerage__actions">
-          <Button className="brokerage__back-button" onClick={router.back}>
+          <Button secondary color='gray' onClick={router.back}>
             Back
           </Button>
           <Button onClick={handleSubmit(onSubmit)}>Save</Button>
