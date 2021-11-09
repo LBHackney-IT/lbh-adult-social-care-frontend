@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import {
+  Announcement,
   Checkbox,
   Container,
   Heading,
+  Hint,
   HorizontalSeparator,
+  Link,
   Table,
   VerticalSeparator,
-  Link,
-  Announcement,
   WarningText,
-  Hint,
 } from 'components';
 import { formatDate, getNumberWithCommas } from 'service';
 import { getCarePackageCareChargeRoute, getCarePackageDetailsRoute } from 'routes/RouteConstants';
@@ -136,19 +136,16 @@ const CareDetails = ({
                     onChangeValue={() => setFilter(!activeOnly)}
                   />
                   <Container display="flex" justifyContent="space-between" alignItems="center">
-                    {!isS117Client && (
+                    {!isS117Client && !['End', 'Cancelled'].includes(packageStatus) && (
                       <Link className="mr-5" onClick={goToCareCharge} noVisited>
-                        {data.some(({ type, status, name }) => (
-                          type === "Package Reclaim - Care Charge" && status === 'Active' && (
-                            name === "Without Property 13+ Weeks" || name === "Without Property 1-12 Weeks")
-                          )
-                        ) ?
-                          'Edit financial assessment' :
-                          'Add financial assessment'
+                        {
+                          data.some(({ type, status, name }) => (
+                            type === 'Package Reclaim - Care Charge' && status === 'Active' && (
+                              name === 'Without Property 13+ Weeks' || name === 'Without Property 1-12 Weeks')
+                          )) ? 'Edit financial assessment' : 'Add financial assessment'
                         }
                       </Link>
                     )}
-
                     <Link onClick={goToPackageDetails} noVisited>
                       Package details
                     </Link>
