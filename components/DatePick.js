@@ -25,7 +25,14 @@ const DatePick = ({
   useDefaultInput,
 }) => {
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button className="datepicker-custom-input" onClick={onClick} ref={ref}>
+    <button
+      className="datepicker-custom-input"
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(e)
+      }}
+      ref={ref}
+    >
       {value || <p className="datepicker-custom-input-placeholder">{placeholder}</p>}
     </button>
   ));

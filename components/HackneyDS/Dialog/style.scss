@@ -4,10 +4,15 @@
   width: 90%;
   max-width: 500px;
   margin: 7vh auto;
+
+  &.no-border {
+    border: none;
+  }
+
   &__close {
     position: absolute;
-    right: 7px;
-    top: 7px;
+    right: 24px;
+    top: 24px;
     border: none;
     background: none;
     padding: 0;

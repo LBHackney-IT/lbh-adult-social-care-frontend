@@ -1,0 +1,65 @@
+.create-pay-run__modal {
+  padding: 30px;
+
+  .lbh-dialog {
+    width: 655px;
+    max-width: 655px;
+  }
+
+  .create-pay-run__radios {
+    & > p {
+      color: black;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .govuk-radios__label {
+      font-size: 14px;
+    }
+  }
+
+  h3 {
+    font-size: 27px;
+    font-weight: 700;
+    color: $lbh-text;
+
+    margin-bottom: 32px;
+  }
+
+  .lbh-dialog__close {
+    top: 30px;
+    right: 30px;
+  }
+}
+
+.create-pay-run__radios {
+  margin-bottom: 20px;
+
+  &:first-of-type {
+    margin-bottom: 24px;
+  }
+
+  h4 {
+    font-size: 19px;
+    font-weight: 700;
+    color: black;
+    margin-bottom: 10px;
+  }
+}
+
+.create-pay-run__actions {
+  button {
+    height: 40px;
+
+    &:first-of-type {
+      margin-right: 7px;
+    }
+  }
+}
+
+.create-pay-run__date-to {
+  p {
+    margin-top: 12px;
+    font-size: 16px;
+  }
+}
