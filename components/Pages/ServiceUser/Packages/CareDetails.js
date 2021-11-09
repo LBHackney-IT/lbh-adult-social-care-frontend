@@ -20,6 +20,19 @@ import { useDispatch } from 'react-redux';
 import { CaretDownIcon } from '../../../Icons';
 import { CarePackageStatus } from './CarePackageStatus';
 
+const statusColors = {
+  New: 'light-red',
+  'In Progress': 'blue',
+  'Waiting for Approval': 'purple',
+  Approved: 'blue',
+  Future: 'blue',
+  Active: 'green',
+  'Not Approved': 'dark-red',
+  End: 'gray',
+  Ended: 'gray',
+  Cancelled: 'gray',
+};
+
 const CareDetails = ({
   packageId,
   title,
@@ -39,6 +52,7 @@ const CareDetails = ({
     {
       Header: 'Status',
       accessor: 'status',
+      Cell: ({ value }) => <p className={`lbh-color-${statusColors[value]}`}>{value}</p>
     },
     {
       Header: 'Element',

@@ -1,19 +1,7 @@
 import React from 'react';
 import { isAfter } from 'date-fns';
+import { getTagColorFromStatus } from '../../../../service';
 import { Tag } from '../../../HackneyDS';
-
-const statusColors = {
-  New: 'light-red',
-  'In Progress': 'blue',
-  'Waiting for Approval': 'purple',
-  Approved: 'blue',
-  Future: 'blue',
-  Active: 'green',
-  'Not Approved': 'dark-red',
-  End: 'gray',
-  Ended: 'gray',
-  Canceled: 'gray',
-};
 
 export const CarePackageStatus = ({ status, packageData }) => {
   const getApprovedStatus = (endDate) => {
@@ -45,7 +33,7 @@ export const CarePackageStatus = ({ status, packageData }) => {
   };
 
   const activeStatus = getStatus(status, packageData);
-  const color = statusColors[status];
+  const color = activeStatus === 'Active' ? '#00664F' : getTagColorFromStatus(status);
 
   return (
     <Tag color={color} outline noBackground>
