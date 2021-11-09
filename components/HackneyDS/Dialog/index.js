@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-export default function Dialog({ children, onClose, isOpen, className = '' }) {
+export default function Dialog ({ children, onClose, isOpen, className = '' }) {
   const [windowState, setWindowState] = useState();
 
   useEffect(() => {
@@ -11,7 +11,7 @@ export default function Dialog({ children, onClose, isOpen, className = '' }) {
   useEffect(() => {
     return () => {
       document.querySelector('html').style.overflow = '';
-    }
+    };
   }, []);
 
   useEffect(() => {
