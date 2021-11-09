@@ -10,9 +10,10 @@ const BrokeragePackageDates = ({
   setIsOngoing,
   startMinDate,
   startMaxDate,
+  showError = true,
   hasEndMinDate = true,
   endMaxDate,
-  hasClear,
+  hasClearButton,
   error,
   fields = {
     dateTo: 'dateTo',
@@ -22,11 +23,11 @@ const BrokeragePackageDates = ({
   checkboxId = 'package-dates-id',
   hasOngoing = true,
 }) => {
-  const dateToError = !isOngoing && compareDescendingDMY(dates[fields.dateTo], dates[fields.dateFrom]) === dateDescending.asc ? '(Date to) less then (date from)' : '';
+  const dateToError = showError && !isOngoing && compareDescendingDMY(dates[fields.dateTo], dates[fields.dateFrom]) === dateDescending.asc ? '(Date to) less then (date from)' : '';
   return (
     <FormGroup error={error || dateToError} className="brokerage__package-dates" label={label}>
       <DatePicker
-        hasClear={hasClear}
+        hasClearButton={hasClearButton}
         day={{ label: 'From' }}
         minDate={startMinDate}
         maxDate={startMaxDate}
@@ -34,7 +35,7 @@ const BrokeragePackageDates = ({
         setDate={(date) => setDates(fields.dateFrom, date)}
       />
       <DatePicker
-        hasClear={hasClear}
+        hasClearButton={hasClearButton}
         disabled={isOngoing}
         day={{ label: 'To' }}
         minDate={hasEndMinDate && dates[fields.dateFrom]}

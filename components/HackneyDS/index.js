@@ -12,6 +12,7 @@ import DatePicker from './DatePicker';
 import CookieBanner from './CookieBanner';
 import { Tabs } from './Tabs';
 import { Tab } from './Tabs/Tab';
+import Notifications from './Notifications';
 import Tag from './Tag';
 import Select from './Select';
 import Dialog from './Dialog';
@@ -86,4 +87,5 @@ export {
   Container,
   SingleAccordion,
   UploadGreenButton,
+  Notifications,
 };
