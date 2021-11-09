@@ -91,6 +91,8 @@ const CareDetails = ({
     }
   };
 
+  const isEndOrCancelled = ['End', 'Cancelled'].includes(packageStatus);
+
   return (
     <>
       <Container alignItems="baseline" borderBottom="1px solid #BFC1C3">
@@ -136,13 +138,14 @@ const CareDetails = ({
                     onChangeValue={() => setFilter(!activeOnly)}
                   />
                   <Container display="flex" justifyContent="space-between" alignItems="center">
-                    {!isS117Client && !['End', 'Cancelled'].includes(packageStatus) && (
+                    {!isS117Client && !isEndOrCancelled && (
                       <Link className="mr-5" onClick={goToCareCharge} noVisited>
                         {
-                          data.some(({ type, status, name }) => (
-                            type === 'Package Reclaim - Care Charge' && status === 'Active' && (
-                              name === 'Without Property 13+ Weeks' || name === 'Without Property 1-12 Weeks')
-                          )) ? 'Edit financial assessment' : 'Add financial assessment'
+                          data.some(({ type, status, name }) => {
+                            const canEditFinancialAssessment = type === 'Package Reclaim - Care Charge' && status === 'Active' && (
+                              name === 'Without Property 13+ Weeks' || name === 'Without Property 1-12 Weeks');
+                            return canEditFinancialAssessment ? 'Edit financial assessment' : 'Add financial assessment';
+                          })
                         }
                       </Link>
                     )}
