@@ -125,7 +125,9 @@ const CareCharge = () => {
   const { data: packageInfo } = useSingleCorePackageInfo(packageId);
 
   useEffect(() => {
-    if (packageInfo.settings?.isS117Client) router.replace(CARE_CHARGES_ROUTE);
+    if (packageInfo.settings?.isS117Client && packageInfo.settings?.isS117ClientConfirmed === false) {
+      router.replace(CARE_CHARGES_ROUTE);
+    }
   }, [packageInfo]);
 
   const { handleSubmit, control, formState, setValue, getValues, reset } = useForm({ defaultValues });

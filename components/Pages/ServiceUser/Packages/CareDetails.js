@@ -86,6 +86,7 @@ const CareDetails = ({
       await confirmS117({ packageId });
       dispatch(addNotification({ text: 'Success', className: 'success'}));
       setIsS117ClientConfirmed(true);
+      router.push(getCarePackageCareChargeRoute(packageId));
     } catch (error) {
       dispatch(addNotification({ text: error }));
     }
