@@ -272,7 +272,7 @@ const FundedNursingCare = ({
             value={activeFncPrice}
           />
           <Container className="brokerage__actions">
-            <Button onClick={clickBack} className="brokerage__back-button">
+            <Button onClick={clickBack} secondary color='gray'>
               Back
             </Button>
             <Button onClick={skipAndContinue} className='secondary-yellow'>Skip and continue</Button>

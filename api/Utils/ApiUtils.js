@@ -49,32 +49,4 @@ export const axiosRequest = (options = {}) => {
   return axios(localOptions).then(handleResponse).catch(handleError);
 };
 
-/*
-  EXAMPLE
-  {
-    payRunId: 'very-long-id-1234',
-    orderBy: 'cost',
-  }
-
-  return a string '?payRunId=very-long-id-1234&orderBy=cost'
- */
-export const getQueryParamsFromObject = (params = {}, addEmptyString, signs = {}) => {
-  let string = '';
-  let count = 0;
-  for (const i in params) {
-    if (params[i] || (addEmptyString && params[i] === '')) {
-      const paramString = `${i}=${params[i]}`;
-      if (count === 0) {
-        const sign = signs?.firstSign || '?';
-        string = `${sign}${string}${paramString}`;
-      } else {
-        const sign = signs?.generalSign || '&';
-        string = `${string}${sign}${paramString}`;
-      }
-      count += 1;
-    }
-  }
-  return string;
-};
-
 export const axiosFetcher = (url) => axios.get(url).then(handleResponse).catch(handleError);

@@ -16,13 +16,12 @@
 
 .care-charges__cell {
   cursor: pointer;
-  vertical-align: bottom;
+  vertical-align: top;
   margin-left: auto;
   padding-top: 24px;
   padding-bottom: 24px;
 
   &:first-of-type {
-    padding-left: 0;
     margin-left: 0;
   }
 
@@ -33,7 +32,7 @@
   }
 
   &:nth-of-type(1) {
-    width: 100px;
+    width: 116px;
   }
 
   &:nth-of-type(2) {
@@ -48,17 +47,16 @@
 
   &:last-of-type {
     width: 160px;
+
     .title-subtitle {
-      p:first-of-type {
-        text-align: right;
-      }
+      margin-left: initial;
     }
   }
 }
 
 .govuk-table__row-header {
   td {
-    padding-top: 23px;
+    padding: 23px 20px 0 20px;
   }
 }
 
@@ -98,7 +96,7 @@
 .new-care-charge__header {
   margin-bottom: 32px;
   h2 {
-    font-size: 30px;
+    font-size: 36px;
     font-weight: 700;
   }
 }

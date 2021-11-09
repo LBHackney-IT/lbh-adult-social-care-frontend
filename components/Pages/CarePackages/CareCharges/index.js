@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { collectingReasonOptions, claimCollector, collectedByType } from '../../../../constants/variables';
+import { collectingReasonOptions, claimCollector, collectedByType } from 'constants/variables';
 import { requiredSchema } from 'constants/schemas';
 import { currency } from 'constants/strings';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
@@ -213,7 +213,7 @@ const CareCharges = ({
           value={finalCost}
         />
         <Container className="brokerage__actions">
-          <Button onClick={clickBack} className="brokerage__back-button">
+          <Button onClick={clickBack} secondary color='gray'>
             Back
           </Button>
           <Button isLoading={loading} disabled={loading} onClick={clickSave}>
