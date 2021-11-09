@@ -3,18 +3,22 @@ import { differenceInDays } from 'date-fns';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { createDraftPayRun } from 'api/PayRun';
+import { addNotification } from 'reducers/notificationsReducer';
 import DatePick from '../../../DatePick';
-import { Button, Container, Dialog, FormGroup, RadioGroup } from '../../../HackneyDS';
+import { Button, Container, Dialog, FormGroup, HorizontalSeparator, RadioGroup } from '../../../HackneyDS';
+import { Loading } from '../../../index';
 
 const regularCyclesOptions = [
+  { divider: <><h4>Ad Hoc and Releases</h4><p>NB - pay cycles will always include released holds.</p></> },
   {
     label: <p>Residential Recurring <span className="lbh-primary-color">(3 releases)</span></p>,
     id: 3
   },
   { label: 'Direct Payments', id: 4 },
-];
-
-const hocAndReleasesOptions = [
+  { divider: <HorizontalSeparator height={26} /> },
+  { divider: <><h4>Ad Hoc and Releases</h4><p>NB - pay cycles will always include released holds.</p></> },
   { label: 'Residential released holds', id: 1 },
   { label: 'Direct payments released holds', id: 2 },
 ];
@@ -22,46 +26,54 @@ const hocAndReleasesOptions = [
 const lastCycleDate = new Date();
 
 const defaultValues = {
-  regularCycles: null,
-  hocAndReleases: null,
-  payRunToDate: null,
+  type: null,
+  paidUpToDate: null,
 };
 
 const schema = yup.object().shape({
-  regularCycles: yup
+  type: yup
     .number()
     .typeError('Please select a package type')
     .required()
     .min(1, 'Please select a package type'),
-  hocAndReleases: yup
-    .number()
-    .typeError('Please select a primary support reason')
-    .required()
-    .min(1, 'Please select a primary support reason'),
-  payRunToDate: yup.date().typeError('Please select correct date').required('Pay run date to is required'),
+  paidUpToDate: yup
+    .date()
+    .typeError('Please select correct date')
+    .required('Pay run date to is required'),
 });
 
-const CreatePayrunModal = () => {
+const CreateDraftPayRun = () => {
+  const dispatch = useDispatch();
   const [isOpened, setIsOpened] = useState(false);
-  const [payRunToDate, setPayRunToDate] = useState(null);
+  const [paidUpToDate, setPaidUpToDate] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [minDate] = useState(new Date());
 
   const daysLastCycle = useMemo(() => {
-    if (payRunToDate) {
+    if (paidUpToDate) {
       return differenceInDays(
-        new Date(payRunToDate.getFullYear(), payRunToDate.getMonth(), payRunToDate.getDate()),
+        new Date(paidUpToDate.getFullYear(), paidUpToDate.getMonth(), paidUpToDate.getDate()),
         new Date(lastCycleDate.getFullYear(), lastCycleDate.getMonth(), lastCycleDate.getDate())
       );
     }
     return null;
-  }, [payRunToDate]);
+  }, [paidUpToDate]);
 
   const closeModal = () => {
     reset();
     setIsOpened(false);
   };
 
-  const onCreateDraftPayRun = (data) => alert(`Create draft Pay Run: ${Object.values(data)}`);
+  const onCreateDraftPayRun = async (data) => {
+    setIsLoading(true);
+    try {
+      await createDraftPayRun(data);
+      setIsOpened(false);
+    } catch (e) {
+      dispatch(addNotification({ text: e }));
+    }
+    setIsLoading(false);
+  };
 
   const {
     handleSubmit,
@@ -77,20 +89,19 @@ const CreatePayrunModal = () => {
     <>
       <Button onClick={() => setIsOpened(true)}>New Pay Run</Button>
       <Dialog noBorder isOpen={isOpened} onClose={closeModal} className="create-pay-run__modal">
+        <Loading isLoading={isLoading} />
         <h3>Create pay run</h3>
         <form onSubmit={handleSubmit(onCreateDraftPayRun)}>
           <Container display="flex" justifyContent="space-between">
             <Container className="create-pay-run__radios">
-              <h4>Regular Cycles:</h4>
-              <p>NB - pay cycles will always include released holds.</p>
               <Controller
                 control={control}
-                name="regularCycles"
+                name="type"
                 render={({ field }) => (
                   <RadioGroup
                     small
-                    name="regular-cycles"
-                    error={errors.regularCycles?.message}
+                    name="type"
+                    error={errors.type?.message}
                     handle={field.onChange}
                     items={regularCyclesOptions}
                     {...field}
@@ -100,14 +111,14 @@ const CreatePayrunModal = () => {
             </Container>
             <Container className="create-pay-run__date-to">
               <Controller
-                name='payRunToDate'
+                name='paidUpToDate'
                 control={control}
                 render={({ field }) => (
-                  <FormGroup error={errors.payRunToDate?.message}>
+                  <FormGroup error={errors.paidUpToDate?.message}>
                     <DatePick
                       startDate={field.value}
                       setDate={(value) => {
-                        setPayRunToDate(value)
+                        setPaidUpToDate(value)
                         field.onChange(value);
                       }}
                       minDate={minDate}
@@ -122,24 +133,6 @@ const CreatePayrunModal = () => {
               />
             </Container>
           </Container>
-          <Container className="create-pay-run__radios">
-            <h4>Ad Hoc and Releases</h4>
-            <p>NB - pay cycles will always include released holds.</p>
-            <Controller
-              control={control}
-              name="hocAndReleases"
-              render={({ field }) => (
-                <RadioGroup
-                  small
-                  name="ad-hoc"
-                  error={errors.hocAndReleases?.message}
-                  handle={field.onChange}
-                  items={hocAndReleasesOptions}
-                  {...field}
-                />
-              )}
-            />
-          </Container>
           <Container className="create-pay-run__actions" display="flex">
             <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
             <Button type="submit" className='disable-shadow' borderRadius={0}>Create Draft Pay Run</Button>
@@ -150,4 +143,4 @@ const CreatePayrunModal = () => {
   );
 };
 
-export default CreatePayrunModal;
+export default CreateDraftPayRun;
