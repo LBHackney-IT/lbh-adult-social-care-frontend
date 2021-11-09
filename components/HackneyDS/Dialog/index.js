@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { CircleCloseIcon } from '../../Icons';
 
-export default function Dialog ({ children, onClose, isOpen, className = '' }) {
+export default function Dialog({
+  children,
+  noBorder,
+  onClose,
+  isOpen,
+  className = '',
+  closeIcon = <CircleCloseIcon />,
+}) {
   const [windowState, setWindowState] = useState();
 
   useEffect(() => {
@@ -30,24 +38,17 @@ export default function Dialog ({ children, onClose, isOpen, className = '' }) {
 
   if (!windowState) return null;
 
+  const noBorderClass = noBorder ? ' no-border' : '';
+
   return (
     isOpen &&
     createPortal(
       <div className={`lbh-dialog-container ${className}`} data-reach-dialog-overlay>
-        <div aria-modal="true" role="dialog" className="lbh-dialog" data-reach-dialog-content>
+        <div aria-modal="true" role="dialog" className={`lbh-dialog${noBorderClass}`} data-reach-dialog-content>
           {children}
           <button className="lbh-dialog__close" type="button" onClick={onClose}>
             <span className="govuk-visually-hidden">Close</span>
-            <svg width="18" height="18" viewBox="0 0 13 13" fill="none">
-              <path
-                d="M-0.0501709 1.36379L1.36404 -0.050415L12.6778 11.2633L11.2635 12.6775L-0.0501709 1.36379Z"
-                fill="#0B0C0C"
-              />
-              <path
-                d="M11.2635 -0.050293L12.6778 1.36392L1.36404 12.6776L-0.0501709 11.2634L11.2635 -0.050293Z"
-                fill="#0B0C0C"
-              />
-            </svg>
+            {closeIcon}
           </button>
         </div>
       </div>,

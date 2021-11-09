@@ -29,6 +29,11 @@
   padding-left: 20px;
   clear: both;
 }
+.govuk-radios--small {
+  .govuk-label {
+    padding: 8px 0 5px;
+  }
+}
 .lbh-radios .govuk-radios__conditional {
   border-color: #bfc1c3;
 }
