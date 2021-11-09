@@ -127,7 +127,7 @@ const CareDetails = ({
         {isExpanded && (
           <>
             <HorizontalSeparator height="10px" />
-            {isS117ClientConfirmed && (
+            {isS117Client && !isS117ClientConfirmed && (
               <Announcement isError>
                 <WarningText>This client has been categorised as S117.</WarningText>
                 <Container display="flex">

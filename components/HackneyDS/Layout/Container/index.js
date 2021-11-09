@@ -17,6 +17,7 @@ export const Container = ({
   borderBottom,
   borderRadius,
   maxWidth,
+  minWidth,
   margin,
   cursor,
   className = '',
@@ -39,6 +40,7 @@ export const Container = ({
       borderBottom,
       borderRadius,
       maxWidth,
+      minWidth,
       margin,
       cursor,
     }}
