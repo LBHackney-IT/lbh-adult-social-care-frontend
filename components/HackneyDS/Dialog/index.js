@@ -5,8 +5,14 @@ export default function Dialog({ children, onClose, isOpen, className = '' }) {
   const [windowState, setWindowState] = useState();
 
   useEffect(() => {
-    document.querySelector('html').style.overflow = isOpen ? 'hidden' : 'visible';
+    document.querySelector('html').style.overflow = isOpen ? 'hidden' : '';
   }, [isOpen]);
+
+  useEffect(() => {
+    return () => {
+      document.querySelector('html').style.overflow = '';
+    }
+  }, []);
 
   useEffect(() => {
     const onClickOutside = (e) => {

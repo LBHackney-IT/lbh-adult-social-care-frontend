@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import {
+  Announcement,
   Checkbox,
   Container,
   Heading,
+  Hint,
   HorizontalSeparator,
+  Link,
   Table,
   VerticalSeparator,
-  Link,
-  Announcement,
   WarningText,
-  Hint,
 } from 'components';
 import { formatDate, getNumberWithCommas } from 'service';
 import { getCarePackageCareChargeRoute, getCarePackageDetailsRoute } from 'routes/RouteConstants';
@@ -84,7 +84,7 @@ const CareDetails = ({
     e.preventDefault();
     try {
       await confirmS117({ packageId });
-      dispatch(addNotification({ text: 'Success', className: 'success'}));
+      dispatch(addNotification({ text: 'Success', className: 'success' }));
       setIsS117ClientConfirmed(true);
       router.push(getCarePackageCareChargeRoute(packageId));
     } catch (error) {
@@ -140,8 +140,8 @@ const CareDetails = ({
                     {!isS117Client && (
                       <Link className="mr-5" onClick={goToCareCharge} noVisited>
                         {data.some(({ type, status, name }) => (
-                          type === "Package Reclaim - Care Charge" && status === 'Active' && (
-                            name === "Without Property 13+ Weeks" || name === "Without Property 1-12 Weeks")
+                            type === 'Package Reclaim - Care Charge' && status === 'Active' && (
+                              name === 'Without Property 13+ Weeks' || name === 'Without Property 1-12 Weeks')
                           )
                         ) ?
                           'Edit financial assessment' :
