@@ -42,9 +42,8 @@ const schema = yup.object().shape({
     .required('Pay run date to is required'),
 });
 
-const CreateDraftPayRun = () => {
+const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
   const dispatch = useDispatch();
-  const [isOpened, setIsOpened] = useState(false);
   const [paidUpToDate, setPaidUpToDate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [minDate] = useState(new Date());
@@ -87,7 +86,6 @@ const CreateDraftPayRun = () => {
 
   return (
     <>
-      <Button onClick={() => setIsOpened(true)}>New Pay Run</Button>
       <Dialog noBorder isOpen={isOpened} onClose={closeModal} className="create-pay-run__modal">
         <Loading isLoading={isLoading} />
         <h3>Create pay run</h3>

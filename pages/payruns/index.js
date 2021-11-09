@@ -16,6 +16,7 @@ import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { usePayrunView } from 'api/SWR/payRuns';
+import CreateDraftPayRun from '../../components/Pages/Finance/CreateDraftPayRun';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -42,6 +43,7 @@ const Payruns = () => {
   const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Finance' }];
   const tabs = ['Pay Runs', 'Held Payments'];
   const [pageNumber, setPageNumber] = useState(1);
+  const [isOpenedModal, setIsOpenedModal] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
   const { payRunId, dateTo, dateFrom, payRunType, payRunStatus } = filters;
@@ -70,6 +72,7 @@ const Payruns = () => {
   return (
     <Container>
       <BrokerageHeader />
+      <CreateDraftPayRun isOpened={isOpenedModal} setIsOpened={setIsOpenedModal} />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <HorizontalSeparator height="10px" />
@@ -77,7 +80,7 @@ const Payruns = () => {
           <HorizontalSeparator height="30px" />
           <Container display="flex" justifyContent="space-between">
             <Heading size="xl">Pay Runs</Heading>
-            <Button largeButton>New pay run</Button>
+            <Button onClick={() => setIsOpenedModal(true)} largeButton>New pay run</Button>
           </Container>
           <HorizontalSeparator height="16px" />
           <PayrunFilters filters={filters} setFilters={setFilters} clearFilter={clearFilters} />
