@@ -31,7 +31,7 @@ const History = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  useRedirectIfPackageNotExist();
+  const coreLoading = useRedirectIfPackageNotExist();
 
   const breadcrumbs = useMemo(
     () => [{ text: 'Full Overview', href: getServiceUserPackagesRoute(packageId) }, { text: 'Package History' }],
@@ -44,7 +44,7 @@ const History = () => {
     <div>
       <BrokerageHeader />
 
-      <Loading isLoading={isLoading} />
+      <Loading isLoading={coreLoading || isLoading} />
 
       <CarePackageBreadcrumbs additionalBreadcrumbs={breadcrumbs} />
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">

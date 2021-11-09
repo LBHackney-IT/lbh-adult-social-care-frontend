@@ -12,13 +12,13 @@ export const Tabs = ({ callback, initialTab = 0, children, title, tabs }) => {
       <ul className="govuk-tabs__list">
         {tabs.map((tab, index) => (
           <li
-            key={index}
+            key={tab}
             role="presentation"
             className={`govuk-tabs__list-item govuk-tabs__list-item${index === activeTab ? '--selected' : ''}`}
             onClick={() => handleClick(index)}
           >
             <a tabIndex="0" role="tab" className="govuk-tabs__tab">
-              {tabs[index]}
+              {tab}
             </a>
           </li>
         ))}

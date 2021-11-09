@@ -42,7 +42,7 @@ const ApprovalPackageDetail = () => {
   const { data, isLoading: summaryLoading } = usePackageSummary(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
 
-  useRedirectIfPackageNotExist();
+  const coreLoading = useRedirectIfPackageNotExist();
 
   const checkSettings = (settings) =>
     settings &&
@@ -157,7 +157,7 @@ const ApprovalPackageDetail = () => {
   return (
     <ReviewPackageDetails
       className="approval-package-detail"
-      loading={summaryLoading}
+      isLoading={summaryLoading || coreLoading}
       subTitle="Approval package detail"
       title={data?.packageType}
       packageId={carePackageId}

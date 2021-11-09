@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { hasUrl } from '../../service';
+import { hasUrl } from '../../service/helpers';
 import fetcher from './fetcher';
 import { useLookups } from './lookups';
 import useGetData from './useGetData';

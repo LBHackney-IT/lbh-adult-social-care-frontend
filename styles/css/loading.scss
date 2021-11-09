@@ -30,6 +30,12 @@
   &-absolute-centered {
     position: absolute;
   }
+
+  &-blue {
+    circle {
+      fill: $lbh-light-link;
+    }
+  }
 }
 
 .table-loading {
