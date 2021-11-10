@@ -9,6 +9,7 @@ import { getSinglePayrunRoute } from 'routes/RouteConstants';
 const statussName = {
   'Waiting for Approval': 'Awaiting Approval',
   'Ready for review': 'Ready for Review',
+  'Paid with hold': 'Paid with Hold',
 };
 
 export const PayrunList = ({ data }) => {

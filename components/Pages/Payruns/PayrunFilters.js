@@ -10,7 +10,8 @@ const statusOptions = [
   { text: 'Awaiting Approval', value: '4' },
   { text: 'Approved', value: '5' },
   { text: 'Paid', value: '6' },
-  { text: 'Rejected', value: '7' },
+  { text: 'Paid with Hold', value: '7' },
+  { text: 'Archived', value: '8' },
 ];
 
 const typeOptions = [
