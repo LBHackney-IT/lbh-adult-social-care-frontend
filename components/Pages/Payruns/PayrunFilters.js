@@ -6,10 +6,10 @@ const statusOptions = [
   { text: 'All', value: '' },
   { text: 'Draft', value: '1' },
   { text: 'In progress', value: '2' },
-  { text: 'Waiting for Approval', value: '3' },
-  { text: 'Approved', value: '4' },
-  { text: 'Paid', value: '5' },
-  { text: 'Hold', value: '6' },
+  { text: 'Ready for Review', value: '3' },
+  { text: 'Awaiting Approval', value: '4' },
+  { text: 'Approved', value: '5' },
+  { text: 'Paid', value: '6' },
   { text: 'Rejected', value: '7' },
 ];
 
