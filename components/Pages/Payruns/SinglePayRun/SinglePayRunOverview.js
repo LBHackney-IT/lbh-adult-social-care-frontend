@@ -8,6 +8,14 @@ import {
   VerticalSeparator,
 } from 'components';
 
+const statusOptions = [
+  { text: 'Draft', value: 1 },
+  { text: 'Held', value: 2 },
+  { text: 'Released', value: 3 },
+  { text: 'Rejected', value: 4 },
+  { text: 'Accepted', value: 5 },
+];
+
 export const SinglePayRunOverview = ({ payRun }) => (
     <>
       <Container display="flex" alignItems="baseline">
@@ -34,7 +42,7 @@ export const SinglePayRunOverview = ({ payRun }) => (
         <Container>
           <Heading size="s">Total Cost:</Heading>£{getNumberWithCommas(payRun.grossTotal)}
         </Container>
-        <Select></Select>
+        <Select options={statusOptions} onChangeValue={() => {}} value={payRun.invoiceStatus} />
       </Container>
     </>
   );
