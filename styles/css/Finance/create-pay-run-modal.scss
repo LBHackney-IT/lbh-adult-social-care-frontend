@@ -1,6 +1,24 @@
 .create-pay-run__modal {
   padding: 30px;
 
+  .react-date-picker {
+    max-width: initial;
+  }
+
+  .datepicker-custom-input {
+    padding-right: 38px;
+  }
+
+  .create-pay-run__type-selector {
+    label {
+      font-size: 19px;
+    }
+
+    .horizontal-separator {
+      display: none;
+    }
+  }
+
   .lbh-dialog {
     width: 655px;
     max-width: 655px;
@@ -68,8 +86,26 @@
 }
 
 .create-pay-run__date-to {
+  display: flex;
+
+  .datepicker-custom-input {
+    min-width: 140px;
+  }
+
+  .lbh-form-group {
+    height: fit-content;
+
+    &:nth-of-type(2) {
+      margin-left: 20px;
+    }
+  }
+
   p {
     margin-top: 12px;
     font-size: 16px;
+  }
+
+  label {
+    font-size: 19px;
   }
 }

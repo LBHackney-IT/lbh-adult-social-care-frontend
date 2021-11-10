@@ -9,7 +9,7 @@ const Select = (props) => {
     className = '',
     disabledOptions = [],
     disabledEmptyComponent = false,
-    isDisabled = false,options = [],
+    options = [],
     emptyElement = { text: 'Select one', value: '' },
     id = 'select-id',
     error,
@@ -23,7 +23,6 @@ const Select = (props) => {
   return (
     <div className="select-container">
       <select
-        disabled={isDisabled}
         id={id}
         {...errorDescribedBy}
         onChange={(e) => {
