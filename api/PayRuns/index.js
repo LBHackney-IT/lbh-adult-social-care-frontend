@@ -4,7 +4,6 @@ import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const PAY_RUN_URL = `${BASE_URL}/v1/payruns`;
 
-// FNC requests
 export const updatePayRunStatus = (payRunId, invoiceId, newStatus) => {
   const options = {
     url: `${PAY_RUN_URL}/${payRunId}/invoices/${invoiceId}/status/${newStatus}`,
