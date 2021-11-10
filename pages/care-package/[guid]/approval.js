@@ -167,7 +167,7 @@ const ApprovalPackageDetail = () => {
       setOpenedPopup={setOpenedPopup}
       openedPopup={openedPopup}
       showEditActions
-      buttons={[
+      buttons={data.status && data.status !== 4 && [
         {
           title: 'Decline',
           onClick: () => setOpenedPopup('decline'),
