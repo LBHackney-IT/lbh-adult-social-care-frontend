@@ -7,9 +7,10 @@ import { useRouter } from 'next/router';
 import { getSinglePayrunRoute } from 'routes/RouteConstants';
 
 const statussName = {
-  'Waiting for Approval': 'Awaiting Approval',
-  'Ready for review': 'Ready for Review',
-  'Paid with hold': 'Paid with Hold',
+  'Waiting for Approval': 'Waiting For Approval',
+  'Ready for review': 'Waiting For Review',
+  'Paid with hold': 'Paid With Hold',
+  'In progress': 'In Progress',
 };
 
 export const PayrunList = ({ data }) => {
