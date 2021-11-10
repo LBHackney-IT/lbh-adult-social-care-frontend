@@ -18,6 +18,7 @@ import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
 import { SinglePayRunOverview } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunOverview';
 import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunBreakdown';
 import { getSinglePayrun, useSinglePayrunView } from 'api/SWR/payRuns';
+import AlternativePagination from 'components/AlternativePagination';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -51,6 +52,14 @@ const SinglePayRun = () => {
     { text: 'Finance', href: FINANCE_ROUTE },
     { text: `Pay Run ${payRun?.payRunNumber}` },
   ];
+
+  const {
+    pagingMetaData = {
+      totalCount: 1,
+      totalPages: 1,
+      pageSize: 1,
+    },
+  } = payRunItems;
 
   return (
     <Container>
@@ -106,6 +115,14 @@ const SinglePayRun = () => {
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
             </>
           ))}
+        <HorizontalSeparator height="32px" />
+        <AlternativePagination
+          totalPages={pagingMetaData.totalPages}
+          totalCount={pagingMetaData.totalCount}
+          pageSize={pagingMetaData.pageSize}
+          currentPage={1}
+          changePagination={() => {}}
+        />
       </Container>
     </Container>
   );
