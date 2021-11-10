@@ -48,6 +48,7 @@ const PackageDetailsPage = () => {
   const { data } = usePackageSummary(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
   const editableStatus = data?.status < 6;
+  const isApprovedStatus = data?.status === 4;
 
   useRedirectIfPackageNotExist();
 
@@ -110,7 +111,7 @@ const PackageDetailsPage = () => {
     {
       headerTitle: data?.packageType,
       id: 'care-package',
-      goToPackage: editableStatus && pushRoute(getCorePackageRoute(carePackageId)),
+      goToPackage: editableStatus && !isApprovedStatus && pushRoute(getCorePackageRoute(carePackageId)),
       costOfPlacement: data?.costOfPlacement,
       items: [
         {
@@ -129,7 +130,7 @@ const PackageDetailsPage = () => {
     },
     {
       headerTitle: 'Weekly Additional Need',
-      goToPackage: editableStatus && pushRoute(getBrokerPackageRoute(carePackageId)),
+      goToPackage: editableStatus && !isApprovedStatus && pushRoute(getBrokerPackageRoute(carePackageId)),
       id: 'weekly-additional-need',
       items: data?.additionalWeeklyNeeds,
       totalCostHeader: 'Total (Net Off)',
@@ -138,7 +139,7 @@ const PackageDetailsPage = () => {
     {
       headerTitle: 'One Off Additional Need',
       id: 'on-off-additional-need',
-      goToPackage: editableStatus && pushRoute(getBrokerPackageRoute(carePackageId)),
+      goToPackage: editableStatus && !isApprovedStatus && pushRoute(getBrokerPackageRoute(carePackageId)),
       items: data?.additionalOneOffNeeds,
       totalCostHeader: 'Total (Net Off)',
       totalCost: data?.additionalOneOffCost,
@@ -147,7 +148,7 @@ const PackageDetailsPage = () => {
       headerTitle: 'Funded Nursing Care',
       id: 'funded-nursing-care',
       checkHide: true,
-      goToPackage: editableStatus && pushRoute(getFundedNursingCareRoute(carePackageId)),
+      goToPackage: editableStatus && !isApprovedStatus && pushRoute(getFundedNursingCareRoute(carePackageId)),
       items: data?.fundedNursingCare ? [data.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
       fncDetails: {
@@ -163,7 +164,7 @@ const PackageDetailsPage = () => {
       headerTitle: 'Care Charges',
       id: 'care-charges',
       items: data?.careCharges,
-      goToPackage: editableStatus && pushRoute(getCareChargesRoute(carePackageId)),
+      goToPackage: editableStatus && !isApprovedStatus && pushRoute(getCareChargesRoute(carePackageId)),
       careChargeClaimCollector: careChargesClaimCollector[data?.fundedNursingCare?.claimCollector],
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.careCharge,
