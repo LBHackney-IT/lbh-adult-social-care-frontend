@@ -36,7 +36,6 @@ export const getServerSideProps = withSession(({ req }) => {
 const SinglePayRun = () => {
   const router = useRouter();
   const { guid: payRunId } = router.query;
-
   const { data: payRun, isLoading } = getSinglePayrun({ payRunId });
   const { payRunItems: payRunData } = payRun;
   const [payRunItems, setPayRunItems] = useState([]);
@@ -55,11 +54,11 @@ const SinglePayRun = () => {
 
   const {
     pagingMetaData = {
-      totalCount: 1,
-      totalPages: 1,
-      pageSize: 1,
+      totalCount: 0,
+      totalPages: 0,
+      pageSize: 0,
     },
-  } = payRunItems;
+  } = payRunData;
 
   return (
     <Container>
