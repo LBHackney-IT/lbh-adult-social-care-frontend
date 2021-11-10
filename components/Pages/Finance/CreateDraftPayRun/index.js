@@ -71,7 +71,9 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
       await createDraftPayRun(data);
       setIsOpened(false);
     } catch (e) {
-      dispatch(addNotification({ text: e }));
+      const isExistingPayRun = e.includes('already exists!');
+      const errorText = isExistingPayRun ? `${e} First it has to be (approved or deleted or archived)` : e;
+      dispatch(addNotification({ text: errorText, className: isExistingPayRun ? 'warning' : 'error', time: isExistingPayRun ? 15000 : 3000 }));
     }
     setIsLoading(false);
   };
