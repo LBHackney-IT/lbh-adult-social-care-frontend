@@ -6,6 +6,10 @@ import { getPayrunStatusBackgroundColor, getPayrunStatusColor } from 'service/ge
 import { useRouter } from 'next/router';
 import { getSinglePayrunRoute } from 'routes/RouteConstants';
 
+const statussName = {
+  'Waiting for Approval': 'Awaiting Approval',
+  'Ready for review': 'Ready for Review',
+};
 
 export const PayrunList = ({ data }) => {
   const router = useRouter();
@@ -51,7 +55,7 @@ export const PayrunList = ({ data }) => {
                 justifyContent="center"
                 borderRadius="5px"
               >
-                {d.payRunStatusName === 'Waiting for Approval' ? 'Awaiting Approval' : d.payRunStatusName}
+                {statussName[d.payRunStatusName] || d.payRunStatusName}
               </Container>
             </Container>
           </Container>
