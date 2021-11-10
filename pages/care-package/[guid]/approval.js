@@ -4,6 +4,12 @@ import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { ReviewPackageDetails } from 'components';
+import {
+  getBrokerPackageRoute,
+  getCareChargesRoute,
+  getCorePackageRoute,
+  getFundedNursingCareRoute
+} from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -97,6 +103,7 @@ const ApprovalPackageDetail = () => {
     {
       headerTitle: data?.packageType,
       id: 'care-package',
+      goToPackage: () => router.push(getCorePackageRoute(carePackageId)),
       costOfPlacement: data?.costOfPlacement,
       items: [
         {
@@ -114,6 +121,7 @@ const ApprovalPackageDetail = () => {
       ],
     },
     {
+      goToPackage: () => router.push(getBrokerPackageRoute(carePackageId)),
       headerTitle: 'Weekly Additional Need',
       id: 'weekly-additional-need',
       items: data?.additionalWeeklyNeeds,
@@ -121,6 +129,7 @@ const ApprovalPackageDetail = () => {
       totalCost: data?.additionalWeeklyCost,
     },
     {
+      goToPackage: () => router.push(getBrokerPackageRoute(carePackageId)),
       headerTitle: 'One Off Additional Need',
       id: 'on-off-additional-need',
       items: data?.additionalOneOffNeeds,
@@ -128,6 +137,7 @@ const ApprovalPackageDetail = () => {
       totalCost: data?.additionalOneOffCost,
     },
     {
+      goToPackage: () => router.push(getFundedNursingCareRoute(carePackageId)),
       headerTitle: 'Funded Nursing Care',
       id: 'funded-nursing-care',
       checkHide: true,
@@ -143,6 +153,7 @@ const ApprovalPackageDetail = () => {
       },
     },
     {
+      goToPackage: () => router.push(getCareChargesRoute(carePackageId)),
       headerTitle: 'Care Charges',
       id: 'care-charges',
       items: data?.careCharges,
@@ -158,7 +169,7 @@ const ApprovalPackageDetail = () => {
     <ReviewPackageDetails
       className="approval-package-detail"
       isLoading={summaryLoading || coreLoading}
-      subTitle="Approval package detail"
+      subTitle="Package details"
       title={data?.packageType}
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
@@ -178,6 +189,7 @@ const ApprovalPackageDetail = () => {
         {
           title: 'Approve',
           onClick: () => setOpenedPopup('approve'),
+          className: 'disable-shadow'
         },
       ]}
       submitButtonText="Approve"

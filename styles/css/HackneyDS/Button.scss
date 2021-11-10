@@ -30,6 +30,10 @@
   -webkit-appearance: none;
   width: auto;
 
+  &.disable-shadow {
+    box-shadow: none;
+  }
+
   background-color: $lbh-primary;
   color: white;
 

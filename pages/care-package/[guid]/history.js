@@ -10,7 +10,7 @@ import {
   CarePackageBreadcrumbs,
 } from 'components';
 import withSession from 'lib/session';
-import { usePackageHistory } from 'api';
+import { usePackageHistory, useSingleCorePackageInfo } from 'api';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 
@@ -31,14 +31,16 @@ const History = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
+  const { data: corePackage } = useSingleCorePackageInfo(packageId);
+
   const coreLoading = useRedirectIfPackageNotExist();
 
-  const breadcrumbs = useMemo(
-    () => [{ text: 'Full Overview', href: getServiceUserPackagesRoute(packageId) }, { text: 'Package History' }],
-    [packageId]
-  );
-
   const { data, isLoading } = usePackageHistory(packageId);
+
+  const breadcrumbs = useMemo(
+    () => [{ text: 'Full Overview', href: getServiceUserPackagesRoute(corePackage?.serviceUser?.id) }, { text: 'Package History' }],
+    [corePackage?.serviceUser?.id]
+  );
 
   return (
     <div>
