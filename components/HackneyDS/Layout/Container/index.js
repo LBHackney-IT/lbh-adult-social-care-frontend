@@ -20,6 +20,7 @@ export const Container = ({
   minWidth,
   margin,
   cursor,
+  gridTemplateColumns,
   className = '',
 }) => (
   <div
@@ -42,6 +43,7 @@ export const Container = ({
       maxWidth,
       minWidth,
       margin,
+      gridTemplateColumns,
       cursor,
     }}
   >
