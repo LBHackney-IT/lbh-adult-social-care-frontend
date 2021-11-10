@@ -1,9 +1,15 @@
-import React, { useState, memo } from 'react';
+import React, { memo, useState } from 'react';
 import { currency, dateStringFormats } from 'constants/strings';
 import { formatDate } from 'service';
-import { Container, SingleAccordion } from '../../../HackneyDS';
+import { Container, InsetText, HorizontalSeparator, SingleAccordion } from '../../../HackneyDS';
 
-const PackageInfo = ({ fncDetails, headerTitle, goToPackage, items, containerId, careChargeClaimCollector }) => {
+const noContentText = {
+  'Care Charges': 'care charges',
+  'One Off Additional Need': 'one of additional needs',
+  'Weekly Additional Need': 'weekly additional needs',
+};
+
+const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeClaimCollector }) => {
   const [openedServiceUserNeed, setOpenedServiceUserNeed] = useState([]);
   const [openedDetails, setOpenedDetails] = useState([]);
 
@@ -25,15 +31,8 @@ const PackageInfo = ({ fncDetails, headerTitle, goToPackage, items, containerId,
 
   return (
     <Container className="review-package-details__items-container">
-      <Container className='review-package-details__title' display='flex' alignItems='center'>
+      <Container className="review-package-details__title" display="flex" alignItems="center">
         <h3 id={containerId}>{headerTitle || 'Care Package'}</h3>
-        {goToPackage && (
-          <Container className="review-package-details__items-actions" display="flex">
-            <p onClick={goToPackage} className="link-button">
-              Edit or Remove
-            </p>
-          </Container>
-        )}
       </Container>
       {items?.map(({ startDate, endDate, cost, title, address, serviceUserNeed, place, id, description }) => {
         const openedServiceUserId = openedServiceUserNeed.includes(id);
@@ -115,6 +114,12 @@ const PackageInfo = ({ fncDetails, headerTitle, goToPackage, items, containerId,
           </Container>
         );
       })}
+      {!items?.length && (
+        <>
+          <InsetText>No {noContentText[headerTitle]}</InsetText>
+          <HorizontalSeparator height={20} />
+        </>
+      )}
     </Container>
   );
 };

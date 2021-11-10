@@ -238,6 +238,13 @@ const ReviewPackageDetails = ({
                         )}
                       </Container>
                     )}
+                    {goToPackage && (
+                      <Container className="review-package-details__items-actions" display="flex">
+                        <p onClick={goToPackage} className="link-button">
+                          Edit or Remove
+                        </p>
+                      </Container>
+                    )}
                   </Container>
                 )
               }
