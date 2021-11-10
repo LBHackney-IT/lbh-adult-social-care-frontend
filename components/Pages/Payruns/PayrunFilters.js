@@ -5,12 +5,13 @@ import DatePick from 'components/DatePick';
 const statusOptions = [
   { text: 'All', value: '' },
   { text: 'Draft', value: '1' },
-  { text: 'In progress', value: '2' },
-  { text: 'Waiting for Approval', value: '3' },
-  { text: 'Approved', value: '4' },
-  { text: 'Paid', value: '5' },
-  { text: 'Hold', value: '6' },
-  { text: 'Rejected', value: '7' },
+  { text: 'In Progress', value: '2' },
+  { text: 'Waiting For Review', value: '3' },
+  { text: 'Waiting For Approval', value: '4' },
+  { text: 'Approved', value: '5' },
+  { text: 'Paid', value: '6' },
+  { text: 'Paid With Hold', value: '7' },
+  { text: 'Archived', value: '8' },
 ];
 
 const typeOptions = [
