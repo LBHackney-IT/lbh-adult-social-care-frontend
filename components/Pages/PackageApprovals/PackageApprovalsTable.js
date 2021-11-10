@@ -71,7 +71,7 @@ export const PackageApprovalsTable = ({ getPackageTypeById, onRowClick, data }) 
       Cell: ({ value }) => (
         <Container className="brokerage-portal__cell-with-title">
           <h3>Approver</h3>
-          <p>{value?.userName || '—'}</p>
+          <p>{value?.name || '—'}</p>
         </Container>
       ),
     },
