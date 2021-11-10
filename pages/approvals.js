@@ -59,7 +59,7 @@ const Approvals = () => {
         approverId,
         packageType,
         pageNumber,
-        status,
+        packageStatus: status,
         firstName,
         lastName,
         hackneyId,
