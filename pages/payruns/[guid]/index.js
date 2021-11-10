@@ -1,24 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import {
-  Breadcrumbs,
-  BrokerageHeader,
-  Collapse,
-  Container,
-  Heading,
-  HorizontalSeparator,
-  Link,
-  Loading,
-  VerticalSeparator,
-} from 'components';
+import { Breadcrumbs, BrokerageHeader, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
-import { SinglePayRunOverview } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunOverview';
-import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunBreakdown';
-import { getSinglePayrun, useSinglePayrunView } from 'api/SWR/payRuns';
+import { getSinglePayrun } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
+import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -33,16 +22,40 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
+const initialFilters = {
+  payRunId: '',
+  dateFrom: null,
+  dateTo: null,
+  payRunType: '',
+  payRunStatus: '',
+};
+
 const SinglePayRun = () => {
   const router = useRouter();
   const { guid: payRunId } = router.query;
   const { data: payRun, isLoading } = getSinglePayrun({ payRunId });
   const { payRunItems: payRunData } = payRun;
   const [payRunItems, setPayRunItems] = useState([]);
-
+  const [pagingMetaData, setPagingMetaData] = useState({});
+  const [pageNumber, setPageNumber] = useState(1);
+  const [filters, setFilters] = useState(initialFilters);
+  const clearFilters = useCallback(() => setFilters(initialFilters), []);
+  const { invoiceId, dateTo, dateFrom, payRunType, payRunStatus } = filters;
+  const params = useMemo(
+    () => ({
+      dateTo,
+      dateFrom,
+      payRunId,
+      pageNumber,
+      payRunType,
+      payRunStatus,
+    }),
+    [filters, pageNumber]
+  );
   useEffect(() => {
     if (payRunData) {
       setPayRunItems(payRunData.data);
+      setPagingMetaData(payRunData.pagingMetaData);
     }
   }, [payRunData]);
 
@@ -51,14 +64,6 @@ const SinglePayRun = () => {
     { text: 'Finance', href: FINANCE_ROUTE },
     { text: `Pay Run ${payRun?.payRunNumber}` },
   ];
-
-  const {
-    pagingMetaData = {
-      totalCount: 0,
-      totalPages: 0,
-      pageSize: 0,
-    },
-  } = payRunData;
 
   return (
     <Container>
@@ -78,39 +83,7 @@ const SinglePayRun = () => {
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
-              <Container background="#FAFAFA" padding="24px 16px">
-                <SinglePayRunOverview payRun={item} />
-                <HorizontalSeparator height="15px" />
-                <Collapse>
-                  <HorizontalSeparator height="40px" />
-                  <Container margin="0 0 0 16px">
-                    <Container display="grid" gridTemplateColumns="2fr 1fr 1fr 1fr">
-                      <Heading size="m">{item.packageType}</Heading>
-                      <Heading size="s">Weekly Cost</Heading>
-                      <Heading size="s">Quantity (Days)</Heading>
-                      <Heading size="s">Total</Heading>
-                    </Container>
-                    <HorizontalSeparator height="10px" />
-                    <Container display="flex" alignItems="baseline">
-                      <Heading size="s">Package ID</Heading>
-                      <VerticalSeparator width="10px" />
-                      {item.carePackageId}
-                    </Container>
-                    <SinglePayRunBreakdown payRun={item} />
-                    <HorizontalSeparator height="16px" />
-                    <Container borderBottom="1px solid #DEE0E2" />
-                    <HorizontalSeparator height="10px" />
-                    <Container display="grid" gridTemplateColumns="4fr 1fr">
-                      <Container display="flex">
-                        <Link noVisited>View package summary</Link>
-                        <VerticalSeparator width="32px" />
-                        Assigned broker: {item.assignedBrokerName}
-                      </Container>
-                      <Link noVisited>Past payments</Link>
-                    </Container>
-                  </Container>
-                </Collapse>
-              </Container>
+              <PayRunItem item={item} index={index} />
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
             </>
           ))}
@@ -119,8 +92,8 @@ const SinglePayRun = () => {
           totalPages={pagingMetaData.totalPages}
           totalCount={pagingMetaData.totalCount}
           pageSize={pagingMetaData.pageSize}
-          currentPage={1}
-          changePagination={() => {}}
+          currentPage={pageNumber}
+          changePagination={setPageNumber}
         />
       </Container>
     </Container>
