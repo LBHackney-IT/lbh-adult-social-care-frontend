@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { Breadcrumbs, BrokerageHeader, Collapse, Container, Heading, HorizontalSeparator, Loading } from 'components';
+import {
+  Breadcrumbs,
+  BrokerageHeader,
+  Collapse,
+  Container,
+  Heading,
+  HorizontalSeparator,
+  Link,
+  Loading,
+  VerticalSeparator,
+} from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
@@ -55,9 +65,8 @@ const SinglePayRun = () => {
           <PayrunFilters filters={{}} setFilters={{}} clearFilter={{}} />
         </Container>
       </Container>
-      <HorizontalSeparator height="30px" />
-      <Loading isLoading={isLoading} />
-      <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+      <Container maxWidth="1080px" margin="0 auto" padding="30px 60px">
+        <Loading isLoading={isLoading} />
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
@@ -66,7 +75,32 @@ const SinglePayRun = () => {
                 <HorizontalSeparator height="15px" />
                 <Collapse>
                   <HorizontalSeparator height="40px" />
-                  <SinglePayRunBreakdown payRun={item} />
+                  <Container margin="0 0 0 16px">
+                    <Container display="grid" gridTemplateColumns="2fr 1fr 1fr 1fr">
+                      <Heading size="m">{item.packageType}</Heading>
+                      <Heading size="s">Weekly Cost</Heading>
+                      <Heading size="s">Quantity (Days)</Heading>
+                      <Heading size="s">Total</Heading>
+                    </Container>
+                    <HorizontalSeparator height="10px" />
+                    <Container display="flex" alignItems="baseline">
+                      <Heading size="s">Package ID</Heading>
+                      <VerticalSeparator width="10px" />
+                      {item.carePackageId}
+                    </Container>
+                    <SinglePayRunBreakdown payRun={item} />
+                    <HorizontalSeparator height="16px" />
+                    <Container borderBottom="1px solid #DEE0E2" />
+                    <HorizontalSeparator height="10px" />
+                    <Container display="grid" gridTemplateColumns="4fr 1fr">
+                      <Container display="flex">
+                        <Link noVisited>View package summary</Link>
+                        <VerticalSeparator width="32px" />
+                        Assigned broker: {item.assignedBrokerName}
+                      </Container>
+                      <Link noVisited>Past payments</Link>
+                    </Container>
+                  </Container>
                 </Collapse>
               </Container>
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
