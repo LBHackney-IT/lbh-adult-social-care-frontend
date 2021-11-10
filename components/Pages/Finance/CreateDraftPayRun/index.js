@@ -14,13 +14,14 @@ const regularCyclesOptions = [
   { divider: <><h4>Ad Hoc and Releases</h4><p>NB - pay cycles will always include released holds.</p></> },
   {
     label: <p>Residential Recurring <span className="lbh-primary-color">(3 releases)</span></p>,
-    id: 3
+    id: 1
   },
-  { label: 'Direct Payments', id: 4 },
+  { label: 'Direct Payments', id: 2 },
+  { label: 'Home care', id: 3 },
   { divider: <HorizontalSeparator height={26} /> },
   { divider: <><h4>Ad Hoc and Releases</h4><p>NB - pay cycles will always include released holds.</p></> },
-  { label: 'Residential released holds', id: 1 },
-  { label: 'Direct payments released holds', id: 2 },
+  { label: 'Residential released holds', id: 4 },
+  { label: 'Direct payments released holds', id: 5 },
 ];
 
 const lastCycleDate = new Date();
@@ -46,13 +47,13 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
   const dispatch = useDispatch();
   const [paidUpToDate, setPaidUpToDate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [minDate] = useState(new Date());
+  const [maxDate] = useState(new Date());
 
   const daysLastCycle = useMemo(() => {
     if (paidUpToDate) {
       return differenceInDays(
+        new Date(lastCycleDate.getFullYear(), lastCycleDate.getMonth(), lastCycleDate.getDate()),
         new Date(paidUpToDate.getFullYear(), paidUpToDate.getMonth(), paidUpToDate.getDate()),
-        new Date(lastCycleDate.getFullYear(), lastCycleDate.getMonth(), lastCycleDate.getDate())
       );
     }
     return null;
@@ -109,17 +110,17 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
             </Container>
             <Container className="create-pay-run__date-to">
               <Controller
-                name='paidUpToDate'
+                name="paidUpToDate"
                 control={control}
                 render={({ field }) => (
                   <FormGroup error={errors.paidUpToDate?.message}>
                     <DatePick
                       startDate={field.value}
                       setDate={(value) => {
-                        setPaidUpToDate(value)
+                        setPaidUpToDate(value);
                         field.onChange(value);
                       }}
-                      minDate={minDate}
+                      maxDate={maxDate}
                       dateValue={field.value}
                       label="Pay run to:"
                     />
@@ -133,7 +134,15 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
           </Container>
           <Container className="create-pay-run__actions" display="flex">
             <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
-            <Button type="submit" className='disable-shadow' borderRadius={0}>Create Draft Pay Run</Button>
+            <Button
+              isLoading={isLoading}
+              disabled={isLoading}
+              type="submit"
+              className="disable-shadow"
+              borderRadius={0}
+            >
+              Create Draft Pay Run
+            </Button>
           </Container>
         </form>
       </Dialog>
