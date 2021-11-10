@@ -61,6 +61,7 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
 
   const closeModal = () => {
     reset();
+    setPaidUpToDate(null);
     setIsOpened(false);
   };
 
@@ -125,7 +126,7 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
                       label="Pay run to:"
                     />
                     <p>
-                      <span className="lbh-primary-color">{daysLastCycle ?? 'XX'}</span> days since last cycle
+                      <span className="font-weight-bold lbh-primary-color">{daysLastCycle ?? 'XX'}</span> days since last cycle
                     </p>
                   </FormGroup>
                 )}
