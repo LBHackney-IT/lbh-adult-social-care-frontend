@@ -1,12 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getNumberWithCommas } from 'service';
-import {
-  Container,
-  Heading,
-  HorizontalSeparator,
-  Select,
-  VerticalSeparator,
-} from 'components';
+import { Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
+import { updatePayRunStatus } from 'api/PayRuns';
+import { useDispatch } from 'react-redux';
+import { addNotification } from 'reducers/notificationsReducer';
 
 const statusOptions = [
   { text: 'Draft', value: 1 },
@@ -16,7 +13,28 @@ const statusOptions = [
   { text: 'Accepted', value: 5 },
 ];
 
-export const SinglePayRunOverview = ({ payRun }) => (
+
+
+export const SinglePayRunOverview = ({ payRun }) => {
+  const [statusValue, setStatusValue] = useState(payRun.invoiceStatus);
+  const dispatch = useDispatch();
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
+  const handleChange = async (field) => {
+    try {
+      await updatePayRunStatus(payRun.id, payRun.invoiceId, field);
+      pushNotification(`Funded Nursing Care created successfully`, 'success');
+      setStatusValue(field);
+    } catch (e) {
+      pushNotification(e);
+    }
+    setStatusValue(field);
+  }
+
+  return (
     <>
       <Container display="flex" alignItems="baseline">
         <Heading size="m">{payRun.serviceUserName}</Heading>
@@ -42,7 +60,8 @@ export const SinglePayRunOverview = ({ payRun }) => (
         <Container>
           <Heading size="s">Total Cost:</Heading>£{getNumberWithCommas(payRun.grossTotal)}
         </Container>
-        <Select options={statusOptions} onChangeValue={() => {}} value={payRun.invoiceStatus} />
+        <Select options={statusOptions} onChangeValue={handleChange} value={statusValue} />
       </Container>
     </>
   );
+};

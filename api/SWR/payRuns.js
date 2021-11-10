@@ -17,4 +17,4 @@ export const useSinglePayrunView = ({ payRunId }) =>
   });
 
 export const getSinglePayrun = ({payRunId}) =>
-  useGetData(payRunId !== undefined ? `${PAY_RUNS_URL}/fea74c08-495c-4592-98c0-68a49ae58a61` : null);
+  useGetData(payRunId !== undefined ? `${PAY_RUNS_URL}/${payRunId}` : null);
