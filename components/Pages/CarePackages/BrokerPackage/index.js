@@ -82,6 +82,7 @@ const BrokerPackage = ({
 
   const clearSearch = () => {
     setShowSearchResults(false);
+    setSearchQuery('');
     setSearchText('');
   };
 
@@ -407,7 +408,7 @@ const BrokerPackage = ({
                   Search
                 </Button>
                 <VerticalSeparator width={10} />
-                {!searchText.length && !!searchResults.data.length && (
+                {showSearchResults && !searchText && !!searchResults.data.length && (
                   <Button onClick={clearSearch} className="supplier-clear-button" outline secondary color='gray'>
                     Clear
                   </Button>
