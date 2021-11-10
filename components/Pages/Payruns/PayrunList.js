@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Heading, HorizontalSeparator, VerticalSeparator } from 'components';
 import { getNumberWithCommas } from 'service';
 import { format } from 'date-fns';
-import { getPayrunStatusBackground } from 'service/getPayrunStatusBackground';
+import { getPayrunStatusBackgroundColor, getPayrunStatusColor } from 'service/getPayrunStatusColor';
 import { useRouter } from 'next/router';
 import { getSinglePayrunRoute } from 'routes/RouteConstants';
 
@@ -42,15 +42,16 @@ export const PayrunList = ({ data }) => {
                 <Heading size="s">Held</Heading>£{getNumberWithCommas(d.totalAmountHeld)}
               </Container>
               <Container
-                width="170px"
+                width="200px"
                 padding="10px 0"
-                background={getPayrunStatusBackground(d.payRunStatusName)}
+                background={getPayrunStatusBackgroundColor(d.payRunStatusName)}
+                color={getPayrunStatusColor(d.payRunStatusName)}
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
                 borderRadius="5px"
               >
-                {d.payRunStatusName}
+                {d.payRunStatusName === 'Waiting for Approval' ? 'Awaiting Approval' : d.payRunStatusName}
               </Container>
             </Container>
           </Container>
