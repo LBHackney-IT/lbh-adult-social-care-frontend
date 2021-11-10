@@ -442,6 +442,7 @@ const BrokerPackage = ({
               setSelectedItem={(value) => {
                 setSelectedItem(value);
                 setShowSearchResults(false);
+                setSearchQuery('');
               }}
             />
           ) : (
