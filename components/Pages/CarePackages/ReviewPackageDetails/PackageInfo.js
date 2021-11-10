@@ -30,10 +30,7 @@ const PackageInfo = ({ fncDetails, headerTitle, goToPackage, items, containerId,
         {goToPackage && (
           <Container className="review-package-details__items-actions" display="flex">
             <p onClick={goToPackage} className="link-button">
-              Edit
-            </p>
-            <p onClick={goToPackage} className="link-button red">
-              Remove
+              Edit or Remove
             </p>
           </Container>
         )}
