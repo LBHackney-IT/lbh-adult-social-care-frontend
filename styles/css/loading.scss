@@ -1,10 +1,12 @@
 .loading {
   width: 32px;
   height: 32px;
+  z-index: 10;
   -webkit-animation: rotation 1s infinite linear;
   margin: auto;
   display: block;
   shape-rendering: auto;
+
   @keyframes rotation {
     from {
       -webkit-transform: rotate(0deg);
@@ -29,6 +31,12 @@
 
   &-absolute-centered {
     position: absolute;
+  }
+
+  &-blue {
+    circle {
+      fill: $lbh-light-link;
+    }
   }
 }
 

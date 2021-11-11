@@ -6,7 +6,7 @@ import { updateCarePackageCosts, useSingleCorePackageInfo, useSuppliers } from '
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods, packageTypes } from 'constants/variables';
-import { Button, Checkbox, Container, SearchBox } from '../../../HackneyDS';
+import { Button, Checkbox, Container, SearchBox, VerticalSeparator, InsetText } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 import BrokerageHeader from '../BrokerageHeader';
 import BrokerPackageCost from './BrokerPackageCost';
@@ -82,6 +82,7 @@ const BrokerPackage = ({
 
   const clearSearch = () => {
     setShowSearchResults(false);
+    setSearchQuery('');
     setSearchText('');
   };
 
@@ -390,7 +391,7 @@ const BrokerPackage = ({
             {!selectedItem && (
               <Container className="supplier-search-container" display="flex">
                 <SearchBox
-                  placeholder='Search by supplier name'
+                  placeholder="Search by supplier name"
                   onChangeValue={setSearchText}
                   label="Supplier"
                   searchIcon={null}
@@ -406,10 +407,18 @@ const BrokerPackage = ({
                 <Button className="supplier-search-button" onClick={onSearchSupplier}>
                   Search
                 </Button>
+                <VerticalSeparator width={10} />
+                {showSearchResults && !searchText && !!searchResults.data.length && (
+                  <Button onClick={clearSearch} className="supplier-clear-button" outline secondary color='gray'>
+                    Clear
+                  </Button>
+                )}
               </Container>
             )}
 
-            {!searchText && !selectedItem && (
+            {!searchResults.data.length && !suppliersLoading && showSearchResults && !selectedItem && <InsetText>No suppliers found</InsetText>}
+
+            {!searchResults.data.length && !selectedItem && (
               <Container className="is-new-supplier">
                 <Checkbox onChangeValue={setIsNewSupplier} value={isNewSupplier} />
 
@@ -424,17 +433,18 @@ const BrokerPackage = ({
             )}
           </>
 
-          {(searchResults && searchText && !selectedItem) || (showSearchResults && searchResults) ? (
+          {(searchResults.data.length && searchText && !selectedItem) || (showSearchResults && searchResults.data.length) ? (
             <BrokerPackageSelector
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
-              pageSize={searchResults?.pagingMetaData?.pageSize}
-              totalCount={searchResults?.pagingMetaData?.totalCount}
-              totalPages={searchResults?.pagingMetaData?.totalPages}
-              items={searchResults?.data}
+              pageSize={searchResults.pagingMetaData.pageSize}
+              totalCount={searchResults.pagingMetaData.totalCount}
+              totalPages={searchResults.pagingMetaData.totalPages}
+              items={searchResults.data}
               setSelectedItem={(value) => {
                 setSelectedItem(value);
                 setShowSearchResults(false);
+                setSearchQuery('');
               }}
             />
           ) : (

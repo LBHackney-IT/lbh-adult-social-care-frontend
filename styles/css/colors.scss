@@ -1,0 +1,20 @@
+.lbh-color {
+  &-green {
+    color: $lbh-primary;
+  }
+  &-light-red {
+    color: $lbh-light-red;
+  }
+  &-gray {
+    color: $lbh-gray1;
+  }
+  &-purple {
+    color: $lbh-purple;
+  }
+  &-blue {
+    color: $lbh-blue-highlight;
+  }
+  &-dark-red {
+    color: $lbh-dark-red;
+  }
+}

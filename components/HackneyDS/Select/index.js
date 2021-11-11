@@ -13,6 +13,7 @@ const Select = (props) => {
     emptyElement = { text: 'Select one', value: '' },
     id = 'select-id',
     error,
+    style = {},
     IconComponent = <SelectArrowTriangle />,
     disabled,
   } = props;
@@ -23,6 +24,7 @@ const Select = (props) => {
   return (
     <div className="select-container">
       <select
+        style={style}
         id={id}
         {...errorDescribedBy}
         onChange={(e) => {

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { getNumberWithCommas } from 'service';
 import { Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
 import { updatePayRunStatus } from 'api/PayRuns';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
+import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/serviceSelect';
 
 const statusOptions = [
   { text: 'Draft', value: 1 },
@@ -12,8 +13,6 @@ const statusOptions = [
   { text: 'Rejected', value: 4 },
   { text: 'Accepted', value: 5 },
 ];
-
-
 
 export const SinglePayRunOverview = ({ payRun }) => {
   const [statusValue, setStatusValue] = useState(payRun.invoiceStatus);
@@ -26,14 +25,15 @@ export const SinglePayRunOverview = ({ payRun }) => {
   const handleChange = async (field) => {
     try {
       await updatePayRunStatus(payRun.id, payRun.invoiceId, field);
-      pushNotification(`Funded Nursing Care created successfully`, 'success');
+      pushNotification(`Invoice status changed`, 'success');
       setStatusValue(field);
     } catch (e) {
-      pushNotification(e);
+      pushNotification(e, 'error');
     }
-    setStatusValue(field);
-  }
+  };
 
+  const background = useCallback(getStatusSelectBackground(statusValue), [statusValue]);
+  const color = useCallback(getStatusSelectTextColor(statusValue), [statusValue]);
   return (
     <>
       <Container display="flex" alignItems="baseline">
@@ -60,7 +60,12 @@ export const SinglePayRunOverview = ({ payRun }) => {
         <Container>
           <Heading size="s">Total Cost:</Heading>£{getNumberWithCommas(payRun.grossTotal)}
         </Container>
-        <Select options={statusOptions} onChangeValue={handleChange} value={statusValue} />
+        <Select
+          style={{ background, color, border: 'none' }}
+          options={statusOptions}
+          onChangeValue={handleChange}
+          value={statusValue}
+        />
       </Container>
     </>
   );

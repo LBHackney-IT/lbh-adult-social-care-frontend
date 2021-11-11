@@ -1,4 +1,4 @@
-import { useGetData } from 'api';
+import { useGetData } from './useGetData';
 import { useFetchWithParams } from './useFetchWithParams';
 
 const PAY_RUNS_URL = '/payruns';
@@ -11,10 +11,11 @@ export const usePayrunView = ({ params }) =>
     errorText: 'Can not get payrun list',
   });
 
-export const useSinglePayrunView = ({ payRunId }) =>
+export const useInvoiceListView = ({ payRunId, params }) =>
   useFetchWithParams({
+    params,
     url: getPayRunUrl(payRunId),
-    errorText: 'Can not get payrun information',
+    errorText: 'Can not get invoice list',
   });
 
 export const getSinglePayrun = ({payRunId}) =>
