@@ -13,8 +13,8 @@ const statusOptions = [
 
 const typeOptions = [
   { text: 'All', value: '' },
-  { text: 'Residential Recurring', value: '1' },
-  { text: 'Direct Payments', value: '2' },
+  { text: 'Residential Care Package', value: '2' },
+  { text: 'Nursing Care Package', value: '4' },
 ];
 
 export const InvoiceFilters = ({ filters, setFilters, clearFilter }) => {
