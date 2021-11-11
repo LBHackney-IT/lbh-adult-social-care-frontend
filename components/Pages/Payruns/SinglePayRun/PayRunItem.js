@@ -14,7 +14,7 @@ export const PayRunItem = ({ item }) => (
           <Heading size="m">{item.packageType}</Heading>
           <Heading size="s">Weekly Cost</Heading>
           <Heading size="s">Quantity (Days)</Heading>
-          <Heading size="s">Total</Heading>
+          <Container textAlign='right'><Heading size="s">Total</Heading></Container>
         </Container>
         <HorizontalSeparator height="10px" />
         <Container display="flex" alignItems="baseline">

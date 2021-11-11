@@ -24,7 +24,7 @@ export const SinglePayRunBreakdown = ({ payRun }) => {
                 </Container>
                 <Container>£{invoice.cost}</Container>
                 <Container>{`${invoice.quantity} (${invoice.period})`}</Container>
-                <Container>£{getNumberWithCommas(invoice.totalCost)}</Container>
+                <Container textAlign='right'>£{getNumberWithCommas(invoice.totalCost)}</Container>
               </Container>
               <HorizontalSeparator height="16px" />
               <Container borderBottom="1px solid #DEE0E2" />
