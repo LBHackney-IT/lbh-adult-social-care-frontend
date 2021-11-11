@@ -1,32 +1,21 @@
 import React, { useMemo, useState } from 'react';
-import { differenceInDays } from 'date-fns';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { createDraftPayRun } from 'api/PayRun';
 import { addNotification } from 'reducers/notificationsReducer';
+import { useLatestPayRunToDate, useReleasedInvoiceNumber } from 'api';
 import { Button, Container, Dialog, HorizontalSeparator } from '../../../HackneyDS';
 import { Loading } from '../../../index';
 import CreatePayRunInfo from './CreatePayRunInfo';
-import { incrementDate } from '../../../../service';
-
-const regularCyclesOptions = [
-  { divider: <h4>Regular Cycles:</h4> },
-  {
-    label: <p>Residential Recurring <span className="lbh-primary-color">(3 releases)</span></p>,
-    id: 1
-  },
-  { label: 'Direct Payments', id: 2 },
-];
+import { differenceInDays } from 'date-fns';
 
 const adHocAndReleasesOptions = [
   { divider: <h4>Ad Hoc and Releases</h4> },
   { label: 'Residential released holds', id: 3 },
   { label: 'Direct payments released holds', id: 4 },
 ];
-
-const lastCycleDate = new Date();
 
 const defaultValues = {
   paidUpToDate: null,
@@ -36,9 +25,8 @@ const defaultValues = {
   endDate: null,
 };
 
-const maxDate = new Date();
-
 const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
+  if (!isOpened) return null;
   const dispatch = useDispatch();
   const [paidUpToDate, setPaidUpToDate] = useState(null);
   const [date, setDate] = useState({
@@ -49,6 +37,22 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
   const [isLoading, setIsLoading] = useState(false);
   const isRegularCycles = payRunType === 'regularCycles';
   const isAdHocAndReleases = payRunType === 'adHocAndReleases';
+
+  const { data: latestPayRunToDate } = useLatestPayRunToDate();
+  const { data: releasedInvoiceNumber } = useReleasedInvoiceNumber();
+
+  const regularCyclesOptions = useMemo(() => ([
+    { divider: <h4>Regular Cycles:</h4> },
+    {
+      label: <p>Residential Recurring
+        <span className="lbh-primary-color">
+          {' '}({releasedInvoiceNumber || 0} {releasedInvoiceNumber === 1 ? 'release' : 'releases'})
+        </span>
+      </p>,
+      id: 1
+    },
+    { label: 'Direct Payments', id: 2 },
+  ]), [releasedInvoiceNumber]);
 
   const schema = yup.object().shape({
     regularCycles: yup
@@ -90,14 +94,14 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
   });
 
   const daysLastCycle = useMemo(() => {
-    if (paidUpToDate) {
+    if (paidUpToDate && latestPayRunToDate) {
       return differenceInDays(
-        new Date(lastCycleDate.getFullYear(), lastCycleDate.getMonth(), lastCycleDate.getDate()),
+        new Date(latestPayRunToDate.getFullYear(), latestPayRunToDate.getMonth(), latestPayRunToDate.getDate()),
         new Date(paidUpToDate.getFullYear(), paidUpToDate.getMonth(), paidUpToDate.getDate()),
       );
     }
     return null;
-  }, [paidUpToDate]);
+  }, [paidUpToDate, latestPayRunToDate]);
 
   const closeModal = () => {
     resetAll();
@@ -131,7 +135,6 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
     setIsLoading(false);
   };
 
-
   const {
     handleSubmit,
     control,
@@ -153,15 +156,14 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
           <HorizontalSeparator height={20} />
           <CreatePayRunInfo
             payRunType={payRunType}
-            maxDate={maxDate}
-            disableDatePicker={isAdHocAndReleases || !payRunType}
+            minDate={latestPayRunToDate}
+            disableDatePicker={isAdHocAndReleases || !payRunType || !latestPayRunToDate}
             startDateLabel="Pay run to:"
             setPayRunType={() => {
               if (isAdHocAndReleases || !payRunType) resetAll();
               setPayRunType('regularCycles');
             }}
             fieldStart="paidUpToDate"
-            minDate={incrementDate({ weeks: -4 })}
             startDate={paidUpToDate}
             onChangeDate={(field, value) => setPaidUpToDate(value)}
             options={regularCyclesOptions}
@@ -188,7 +190,6 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
               if (isRegularCycles || !payRunType) resetAll();
               setPayRunType('adHocAndReleases');
             }}
-            maxDate={maxDate}
             options={adHocAndReleasesOptions}
             control={control}
             setPaidUpToDate={setPaidUpToDate}
