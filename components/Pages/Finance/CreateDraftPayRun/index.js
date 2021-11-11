@@ -18,13 +18,12 @@ const regularCyclesOptions = [
     id: 1
   },
   { label: 'Direct Payments', id: 2 },
-  { label: 'Home care', id: 3 },
 ];
 
 const adHocAndReleasesOptions = [
   { divider: <h4>Ad Hoc and Releases</h4> },
-  { label: 'Residential released holds', id: 4 },
-  { label: 'Direct payments released holds', id: 5 },
+  { label: 'Residential released holds', id: 3 },
+  { label: 'Direct payments released holds', id: 4 },
 ];
 
 const lastCycleDate = new Date();
