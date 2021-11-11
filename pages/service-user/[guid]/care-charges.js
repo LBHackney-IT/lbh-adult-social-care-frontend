@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  BrokerageHeader,
   CareDetails,
   CarePackageBreadcrumbs,
   Container,
@@ -36,7 +35,6 @@ const Packages = () => {
 
   return (
     <>
-      <BrokerageHeader />
       <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
         <TitleSubtitleHeader subTitle="All package details" title="Full overview" />

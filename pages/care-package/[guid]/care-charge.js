@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Breadcrumbs,
-  BrokerageHeader,
   Button,
   CancelElementModal,
   Container,
@@ -377,7 +376,6 @@ const CareCharge = () => {
 
   return (
     <div className="care-charge">
-      <BrokerageHeader />
 
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
         <Breadcrumbs values={breadcrumbs} />

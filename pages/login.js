@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useUser } from 'api';
-import { HackneyFooterInfo, Header } from 'components';
+import { HackneyFooterInfo } from 'components';
 import { userLogin } from 'reducers/userReducer';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
+import { changeHeader, resetHeader } from '../reducers/headerReducer';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
@@ -49,9 +50,16 @@ const Login = () => {
     });
   }, []);
 
+  useEffect(() => {
+    dispatch(changeHeader({ links: []}));
+
+    return () => {
+      dispatch(resetHeader());
+    }
+  }, [])
+
   return (
     <div className="login-page">
-      <Header />
       {!user?.isLoggedIn && (
         <div className="login-page__form-container">
           <div className="login-page__form">

@@ -3,7 +3,6 @@ import { getServiceUserCareChargesRoute, CARE_PACKAGE_ROUTE, SERVICE_USER_SEARCH
 import { useRouter } from 'next/router';
 import { Breadcrumbs, Button, Container, Select, FormGroup } from '../../../HackneyDS';
 import Loading from '../../../Loading';
-import BrokerageHeader from '../../CarePackages/BrokerageHeader';
 import AlternativePagination from '../../../AlternativePagination';
 import { CareChargesTable } from './CareChargesTable';
 
@@ -37,7 +36,6 @@ const NewCareChargePackages = ({
 
   return (
     <Container className="new-care-charge">
-      <BrokerageHeader />
       <Loading isLoading={isLoading} />
       <Container background="#FAFAFA">
         <Container padding="10px 60px 32px 60px" className="centered-container">

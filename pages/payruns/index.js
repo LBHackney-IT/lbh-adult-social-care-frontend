@@ -3,7 +3,6 @@ import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
 import {
   Breadcrumbs,
-  BrokerageHeader,
   Button,
   Container,
   Heading,
@@ -71,7 +70,6 @@ const Payruns = () => {
 
   return (
     <Container>
-      <BrokerageHeader />
       <CreateDraftPayRun isOpened={isOpenedModal} setIsOpened={setIsOpenedModal} />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
