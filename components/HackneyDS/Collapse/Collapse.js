@@ -9,9 +9,11 @@ export const Collapse = ({
   title,
   className = '',
   expanded,
+  triggerOnlyButton,
   isNegativeRotationAnimation,
   IconComponent = SelectArrowTriangle,
   setExpanded,
+  style = {},
 }) => {
   const [localExpanded, setLocalExpanded] = useState(false);
 
@@ -20,18 +22,21 @@ export const Collapse = ({
   const mainSetExpanded = setExpanded !== undefined ? setExpanded : setLocalExpanded;
 
   const iconAnimationClass = ` ${isNegativeRotationAnimation ? 'icon-animation-rotation-negative' : 'icon-animation-rotation'}`;
+  const triggerOnlyButtonClass = triggerOnlyButton ? ' trigger-only-button' : '';
+
+  const changeCollapse = () => mainSetExpanded(prevState => !prevState);
 
   return (
-    <Container className={className}>
+    <Container className={className} {...style}>
       <Container
-        width='fit-content'
-        display='flex'
-        alignItems='center'
-        className='collapse__button-container'
-        onClick={() => mainSetExpanded(prevState => !prevState)}
+        width="fit-content"
+        display="flex"
+        alignItems="center"
+        className={`collapse__button-container${triggerOnlyButtonClass}`}
+        onClick={() => !triggerOnlyButton && changeCollapse()}
       >
         {title}
-        <span className="text-blue collapse__button">
+        <span onClick={() => triggerOnlyButton && changeCollapse()} className="text-blue collapse__button">
           {mainExpanded ? collapseText : expandText}
           <IconComponent className={`icon-transition${mainExpanded ? iconAnimationClass : ''}`} />
         </span>
