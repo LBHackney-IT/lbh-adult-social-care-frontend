@@ -3,9 +3,9 @@ import { Collapse, Container, Heading, HorizontalSeparator, Link, VerticalSepara
 import { SinglePayRunOverview } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunOverview';
 import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunBreakdown';
 
-export const PayRunItem = ({ item }) => (
+export const PayRunItem = ({ item, setHoldInfo, update }) => (
   <Container background="#FAFAFA" padding="24px 16px">
-    <SinglePayRunOverview payRun={item} />
+    <SinglePayRunOverview update={update} setHoldInfo={setHoldInfo} payRun={item} />
     <HorizontalSeparator height="15px" />
     <Collapse>
       <HorizontalSeparator height="40px" />

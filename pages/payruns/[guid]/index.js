@@ -8,6 +8,7 @@ import { useInvoiceListView } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
+import HoldPayment from '../../../components/Pages/Finance/HoldPayment';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -35,6 +36,7 @@ const SinglePayRun = () => {
   const { guid: payRunId } = router.query;
   const [payRunItems, setPayRunItems] = useState([]);
   const [pagingMetaData, setPagingMetaData] = useState({});
+  const [holdInfo, setHoldInfo] = useState({});
   const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState(initialFilters);
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
@@ -50,8 +52,9 @@ const SinglePayRun = () => {
     [filters, pageNumber]
   );
 
-  const { data: payRun, isLoading } = useInvoiceListView({ payRunId, params });
+  const { data: payRun, isLoading, mutate: update } = useInvoiceListView({ payRunId, params });
   const { payRunItems: payRunData } = payRun;
+
   useEffect(() => {
     if (payRunData) {
       setPayRunItems(payRunData.data);
@@ -68,6 +71,7 @@ const SinglePayRun = () => {
   return (
     <Container>
       <BrokerageHeader />
+      <HoldPayment holdInfo={holdInfo} isOpen={holdInfo.payRun} update={update} setIsOpened={() => setHoldInfo({})} />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <HorizontalSeparator height="10px" />
@@ -81,12 +85,12 @@ const SinglePayRun = () => {
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px">
         <Loading isLoading={isLoading} />
         {payRunItems &&
-          payRunItems.map((item, index) => (
-            <>
-              <PayRunItem item={item} index={index} />
-              {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
-            </>
-          ))}
+        payRunItems.map((item, index) => (
+          <>
+            <PayRunItem update={update} setHoldInfo={setHoldInfo} item={item} index={index} />
+            {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
+          </>
+        ))}
         <HorizontalSeparator height="32px" />
         <AlternativePagination
           totalPages={pagingMetaData.totalPages}

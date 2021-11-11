@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { getNumberWithCommas } from 'service';
 import { Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
-import { updatePayRunStatus } from 'api/PayRuns';
-import { useDispatch } from 'react-redux';
-import { addNotification } from 'reducers/notificationsReducer';
 import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/serviceSelect';
+import { useDispatch } from 'react-redux';
+import { updatePayRunStatus } from 'api/PayRuns';
+import { addNotification } from 'reducers/notificationsReducer';
 
 const statusOptions = [
   { text: 'Draft', value: 1 },
@@ -14,8 +14,7 @@ const statusOptions = [
   { text: 'Accepted', value: 5 },
 ];
 
-export const SinglePayRunOverview = ({ payRun }) => {
-  const [statusValue, setStatusValue] = useState(payRun.invoiceStatus);
+export const SinglePayRunOverview = ({ payRun, setHoldInfo, update }) => {
   const dispatch = useDispatch();
 
   const pushNotification = (text, className = 'error') => {
@@ -23,17 +22,27 @@ export const SinglePayRunOverview = ({ payRun }) => {
   };
 
   const handleChange = async (field) => {
-    try {
-      await updatePayRunStatus(payRun.id, payRun.invoiceId, field);
-      pushNotification(`Invoice status changed`, 'success');
-      setStatusValue(field);
-    } catch (e) {
-      pushNotification(e, 'error');
+    console.log(field);
+    if (field === '2') {
+      setHoldInfo({
+        payRun,
+        field,
+      });
+    } else {
+      try {
+        await updatePayRunStatus(payRun.id, payRun.invoiceId, field);
+        pushNotification(`Invoice status changed`, 'success');
+        update();
+      } catch (e) {
+        pushNotification(e, 'error');
+      }
     }
+
   };
 
-  const background = useCallback(getStatusSelectBackground(statusValue), [statusValue]);
-  const color = useCallback(getStatusSelectTextColor(statusValue), [statusValue]);
+  const background = useCallback(getStatusSelectBackground(payRun.invoiceStatus), [payRun.invoiceStatus]);
+  const color = useCallback(getStatusSelectTextColor(payRun.invoiceStatus), [payRun.invoiceStatus]);
+
   return (
     <>
       <Container display="flex" alignItems="baseline">
@@ -64,7 +73,7 @@ export const SinglePayRunOverview = ({ payRun }) => {
           style={{ background, color, border: 'none' }}
           options={statusOptions}
           onChangeValue={handleChange}
-          value={statusValue}
+          value={payRun.invoiceStatus}
         />
       </Container>
     </>

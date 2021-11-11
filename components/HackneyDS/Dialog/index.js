@@ -30,12 +30,13 @@ export default function Dialog({
     };
   }, [onClose]);
 
+  if (!isOpen) return null;
+
   if (!windowState) return null;
 
   const noBorderClass = noBorder ? ' no-border' : '';
 
   return (
-    isOpen &&
     createPortal(
       <div className={`lbh-dialog-container ${className}`} data-reach-dialog-overlay>
         <div aria-modal="true" role="dialog" className={`lbh-dialog${noBorderClass}`} data-reach-dialog-content>

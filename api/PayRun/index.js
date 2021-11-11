@@ -8,7 +8,7 @@ const sendPayRunsRequest = (url = '', data, method = requestMethods.post) =>
   axiosRequest({ url: `${PAYRUNS_URL}${url ? `/${url}` : ''}`, data, method });
 
 const sendInvoiceRequest = ({ payRunId, invoiceId, params }) =>
-  sendPayRunsRequest(`/${payRunId}/invoices/${invoiceId}/hold`, params);
+  sendPayRunsRequest(`${payRunId}/invoices/${invoiceId}/hold`, params);
 
 export const createDraftPayRun = ({ type, paidUpToDate }) => sendPayRunsRequest('', { type, paidUpToDate });
 

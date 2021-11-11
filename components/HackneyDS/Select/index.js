@@ -9,8 +9,8 @@ const Select = (props) => {
     className = '',
     disabledOptions = [],
     disabledEmptyComponent = false,
-    isDisabled = false,
     options = [],
+    fields = { text: 'text', value: 'value' },
     emptyElement = { text: 'Select one', value: '' },
     id = 'select-id',
     error,
@@ -26,7 +26,6 @@ const Select = (props) => {
     <div className="select-container">
       <select
         style={style}
-        disabled={isDisabled}
         id={id}
         {...errorDescribedBy}
         onChange={(e) => {
@@ -46,11 +45,11 @@ const Select = (props) => {
         )}
 
         {options.map((option) => {
-          const isDisabledOption = disabledOptions.some((disabledOption) => disabledOption === option.value);
+          const isDisabledOption = disabledOptions.some((disabledOption) => disabledOption === option[fields.value]);
 
           return (
-            <option disabled={isDisabledOption} key={`${option.text}${option.value}`} value={option.value}>
-              {option.text}
+            <option disabled={isDisabledOption} key={`${option[fields.text]}${option[fields.value]}`} value={option[fields.value]}>
+              {option[fields.text]}
             </option>
           );
         })}
