@@ -6,7 +6,7 @@ import { updateCarePackageCosts, useSingleCorePackageInfo, useSuppliers } from '
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods, packageTypes } from 'constants/variables';
-import { Button, Checkbox, Container, SearchBox, VerticalSeparator } from '../../../HackneyDS';
+import { Button, Checkbox, Container, SearchBox, VerticalSeparator, InsetText } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 import BrokerageHeader from '../BrokerageHeader';
 import BrokerPackageCost from './BrokerPackageCost';
@@ -415,6 +415,8 @@ const BrokerPackage = ({
                 )}
               </Container>
             )}
+
+            {!searchResults.data.length && !suppliersLoading && showSearchResults && !selectedItem && <InsetText>No suppliers found</InsetText>}
 
             {!searchResults.data.length && !selectedItem && (
               <Container className="is-new-supplier">
