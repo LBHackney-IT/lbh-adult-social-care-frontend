@@ -45,12 +45,12 @@ const careChargesClaimCollector = {
 const PackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
-  const { data } = usePackageSummary(carePackageId);
+  const { data, packageSummaryLoading } = usePackageSummary(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
   const editableStatus = data?.status < 6;
   const isApprovedStatus = data?.status === 4;
 
-  useRedirectIfPackageNotExist();
+  const coreLoading = useRedirectIfPackageNotExist();
 
   const checkSettings = (settings) =>
     settings &&
@@ -177,6 +177,7 @@ const PackageDetailsPage = () => {
     <ReviewPackageDetails
       className="package-details"
       showEditActions
+      isLoading={coreLoading || packageSummaryLoading}
       openedPopup={openedPopup}
       buttons={editableStatus && [
         { title: 'Edit', onClick: edit, secondary: true, outline: true, color: 'blue' },

@@ -17,6 +17,7 @@ import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
+import Loading from '../../../../Loading';
 
 const EditElementContent = ({ data, onClose }) => {
   const [isLoading, toggleLoading] = useState(false);
@@ -140,6 +141,8 @@ const EditElementContent = ({ data, onClose }) => {
   return (
     <>
       <CareChargesModalTitle title={headerText} />
+
+      <Loading isLoading={isLoading} />
 
       {previousData && (
         <>

@@ -39,9 +39,10 @@ const initialFilters = {
   payRunStatus: '',
 };
 
+const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Finance' }];
+const tabs = ['Pay Runs', 'Held Payments'];
+
 const Payruns = () => {
-  const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Finance' }];
-  const tabs = ['Pay Runs', 'Held Payments'];
   const [pageNumber, setPageNumber] = useState(1);
   const [isOpenedModal, setIsOpenedModal] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
@@ -72,6 +73,7 @@ const Payruns = () => {
   return (
     <Container>
       <BrokerageHeader />
+      <Loading isLoading={isLoading} />
       <CreateDraftPayRun isOpened={isOpenedModal} setIsOpened={setIsOpenedModal} />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
@@ -90,7 +92,6 @@ const Payruns = () => {
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
         <Tabs tabs={tabs}>
           <Tab>
-            <Loading isLoading={isLoading} />
             <PayrunList data={payrunData} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (
@@ -104,7 +105,6 @@ const Payruns = () => {
             )}
           </Tab>
           <Tab>
-            <Loading isLoading={isLoading} />
             <PayrunList data={payrunData} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (

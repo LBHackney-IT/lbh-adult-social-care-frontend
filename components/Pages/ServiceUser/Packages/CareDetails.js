@@ -19,9 +19,11 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
 import { CaretDownIcon } from '../../../Icons';
 import { CarePackageStatus } from './CarePackageStatus';
+import Loading from '../../../Loading';
 
 const CareDetails = ({
   packageId,
+  isLoading,
   title,
   data,
   isS117Client,
@@ -32,6 +34,7 @@ const CareDetails = ({
   const dispatch = useDispatch();
   const router = useRouter();
   const filteredData = data.filter((d) => d.status === 'Active' || d.status === 'In Progress');
+  const [loading, setLoading] = useState(false);
   const [isExpanded, setExpanded] = useState(true);
   const [isS117ClientConfirmed, setIsS117ClientConfirmed] = useState(isS117ClientConfirmedInitial);
 
@@ -82,6 +85,7 @@ const CareDetails = ({
 
   const handleS117 = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await confirmS117({ packageId });
       dispatch(addNotification('Success', 'success'));
@@ -89,10 +93,12 @@ const CareDetails = ({
     } catch (error) {
       dispatch(addNotification(error, 'error'));
     }
+    setLoading(false);
   };
 
   return (
     <>
+      <Loading isLoading={isLoading || loading} />
       <Container alignItems="baseline" borderBottom="1px solid #BFC1C3">
         <Container display="flex" alignItems="baseline">
           <Container display="flex" alignItems="center">
