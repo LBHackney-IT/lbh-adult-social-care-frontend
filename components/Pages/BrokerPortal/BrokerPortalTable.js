@@ -25,7 +25,7 @@ export const BrokerPortalTable = ({ onRowClick, data }) => {
       accessor: 'hackneyId',
       Cell: ({ value }) => (
         <Container className="brokerage-portal__cell-with-title">
-          <h3>MosaicID</h3>
+          <h3>HackneyID</h3>
           <p>#{value}</p>
         </Container>
       ),

@@ -21,6 +21,12 @@ const hocAndReleasesOptions = [
 
 const lastCycleDate = new Date();
 
+const defaultValues = {
+  regularCycles: null,
+  hocAndReleases: null,
+  payRunToDate: null,
+};
+
 const schema = yup.object().shape({
   regularCycles: yup
     .number()
@@ -47,23 +53,24 @@ const CreatePayrunModal = () => {
         new Date(lastCycleDate.getFullYear(), lastCycleDate.getMonth(), lastCycleDate.getDate())
       );
     }
+    return null;
   }, [payRunToDate]);
 
-  const closeModal = () => setIsOpened(false);
+  const closeModal = () => {
+    reset();
+    setIsOpened(false);
+  };
 
   const onCreateDraftPayRun = (data) => alert(`Create draft Pay Run: ${Object.values(data)}`);
 
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      regularCycles: null,
-      hocAndReleases: null,
-      payRunToDate: null,
-    },
+    defaultValues,
   });
 
   return (
@@ -135,7 +142,7 @@ const CreatePayrunModal = () => {
           </Container>
           <Container className="create-pay-run__actions" display="flex">
             <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
-            <Button type="submit" disableShadow borderRadius={0}>Create Draft Pay Run</Button>
+            <Button type="submit" className='disable-shadow' borderRadius={0}>Create Draft Pay Run</Button>
           </Container>
         </form>
       </Dialog>

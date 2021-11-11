@@ -47,6 +47,8 @@ const PackageDetailsPage = () => {
   const carePackageId = router.query.guid;
   const { data } = usePackageSummary(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
+  const editableStatus = data?.status < 6;
+  const isApprovedStatus = data?.status === 4;
 
   useRedirectIfPackageNotExist();
 
@@ -59,6 +61,8 @@ const PackageDetailsPage = () => {
   const end = () => setOpenedPopup('end');
   const cancel = () => setOpenedPopup('cancel');
   const edit = () => router.push(getCorePackageRoute(carePackageId));
+
+  const pushRoute = (route) => () => router.push(route);
 
   const summary = [
     { id: 1, key: 'Cost of placement', value: data?.costOfPlacement },
@@ -107,7 +111,7 @@ const PackageDetailsPage = () => {
     {
       headerTitle: data?.packageType,
       id: 'care-package',
-      goToPackage: (packageId) => router.push(getCorePackageRoute(packageId)),
+      goToPackage: editableStatus && !isApprovedStatus && pushRoute(getCorePackageRoute(carePackageId)),
       costOfPlacement: data?.costOfPlacement,
       items: [
         {
@@ -126,7 +130,7 @@ const PackageDetailsPage = () => {
     },
     {
       headerTitle: 'Weekly Additional Need',
-      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
+      goToPackage: editableStatus && !isApprovedStatus && pushRoute(getBrokerPackageRoute(carePackageId)),
       id: 'weekly-additional-need',
       items: data?.additionalWeeklyNeeds,
       totalCostHeader: 'Total (Net Off)',
@@ -135,7 +139,7 @@ const PackageDetailsPage = () => {
     {
       headerTitle: 'One Off Additional Need',
       id: 'on-off-additional-need',
-      goToPackage: (packageId) => router.push(getBrokerPackageRoute(packageId)),
+      goToPackage: editableStatus && !isApprovedStatus && pushRoute(getBrokerPackageRoute(carePackageId)),
       items: data?.additionalOneOffNeeds,
       totalCostHeader: 'Total (Net Off)',
       totalCost: data?.additionalOneOffCost,
@@ -144,7 +148,7 @@ const PackageDetailsPage = () => {
       headerTitle: 'Funded Nursing Care',
       id: 'funded-nursing-care',
       checkHide: true,
-      goToPackage: (packageId) => router.push(getFundedNursingCareRoute(packageId)),
+      goToPackage: editableStatus && !isApprovedStatus && pushRoute(getFundedNursingCareRoute(carePackageId)),
       items: data?.fundedNursingCare ? [data.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
       fncDetails: {
@@ -160,7 +164,7 @@ const PackageDetailsPage = () => {
       headerTitle: 'Care Charges',
       id: 'care-charges',
       items: data?.careCharges,
-      goToPackage: (packageId) => router.push(getCareChargesRoute(packageId)),
+      goToPackage: editableStatus && !isApprovedStatus && pushRoute(getCareChargesRoute(carePackageId)),
       careChargeClaimCollector: careChargesClaimCollector[data?.fundedNursingCare?.claimCollector],
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.careCharge,
@@ -174,14 +178,13 @@ const PackageDetailsPage = () => {
       className="package-details"
       showEditActions
       openedPopup={openedPopup}
-      buttons={[
+      buttons={editableStatus && [
         { title: 'Edit', onClick: edit, secondary: true, outline: true, color: 'blue' },
         { title: 'Cancel', onClick: cancel, secondary: true, outline: true, color: 'red' },
         { title: 'End', onClick: end, secondary: true, outline: true, color: 'blue' },
       ]}
       setOpenedPopup={setOpenedPopup}
       title={data?.packageType}
-      packageStatus={data?.packageStatus}
       subTitle="Package details"
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}

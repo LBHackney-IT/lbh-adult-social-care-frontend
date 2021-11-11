@@ -6,8 +6,18 @@
     max-width: 655px;
   }
 
+  .govuk-radios--small {
+    display: flex;
+    flex-direction: column;
+
+    .govuk-radios__divider {
+      width: initial;
+      text-align: left;
+    }
+  }
+
   .create-pay-run__radios {
-    & > p {
+    .govuk-radios__divider > p {
       color: black;
       margin-bottom: 10px;
       font-size: 16px;
