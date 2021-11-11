@@ -4,10 +4,10 @@ import { getLoggedInUser } from 'service';
 import { Breadcrumbs, BrokerageHeader, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
-import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
-import { getSinglePayrun } from 'api/SWR/payRuns';
+import { useInvoiceListView } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
+import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -23,35 +23,35 @@ export const getServerSideProps = withSession(({ req }) => {
 });
 
 const initialFilters = {
-  payRunId: '',
-  dateFrom: null,
-  dateTo: null,
-  payRunType: '',
-  payRunStatus: '',
+  packageType: '',
+  invoiceStatus: '',
+  searchTerm: '',
+  fromDate: null,
+  toDate: null,
 };
 
 const SinglePayRun = () => {
   const router = useRouter();
   const { guid: payRunId } = router.query;
-  const { data: payRun, isLoading } = getSinglePayrun({ payRunId });
-  const { payRunItems: payRunData } = payRun;
   const [payRunItems, setPayRunItems] = useState([]);
   const [pagingMetaData, setPagingMetaData] = useState({});
   const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState(initialFilters);
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
-  const { invoiceId, dateTo, dateFrom, payRunType, payRunStatus } = filters;
+  const { packageType, invoiceStatus, searchTerm, fromDate, toDate } = filters;
   const params = useMemo(
     () => ({
-      dateTo,
-      dateFrom,
-      payRunId,
-      pageNumber,
-      payRunType,
-      payRunStatus,
+      packageType,
+      invoiceStatus,
+      searchTerm,
+      fromDate,
+      toDate,
     }),
     [filters, pageNumber]
   );
+
+  const { data: payRun, isLoading } = useInvoiceListView({ payRunId, params });
+  const { payRunItems: payRunData } = payRun;
   useEffect(() => {
     if (payRunData) {
       setPayRunItems(payRunData.data);
@@ -75,7 +75,7 @@ const SinglePayRun = () => {
           <HorizontalSeparator height="30px" />
           <Heading size="xl">Pay Run {payRun?.payRunNumber}</Heading>
           <HorizontalSeparator height="16px" />
-          <PayrunFilters filters={{}} setFilters={{}} clearFilter={{}} />
+          <InvoiceFilters filters={filters} setFilters={setFilters} clearFilter={clearFilters} />
         </Container>
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px">
