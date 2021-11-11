@@ -15,7 +15,7 @@ export const SinglePayRunBreakdown = ({ payRun }) => {
               <HorizontalSeparator height="16px" />
               {invoice.name}
               <HorizontalSeparator height="8px" />
-              <Container display="grid" gridTemplateColumns="2fr 1fr 1fr 1fr" >
+              <Container display="grid" gridTemplateColumns="2fr 1fr 1fr 1fr">
                 <Container>
                   {`${format(new Date(invoice.fromDate), 'dd/MM/yyy')} - ${format(
                     new Date(invoice.toDate),
@@ -24,7 +24,7 @@ export const SinglePayRunBreakdown = ({ payRun }) => {
                 </Container>
                 <Container>£{invoice.cost}</Container>
                 <Container>{`${invoice.quantity} (${invoice.period})`}</Container>
-                <Container textAlign='right'>£{getNumberWithCommas(invoice.totalCost)}</Container>
+                <Container textAlign="right">£{getNumberWithCommas(invoice.totalCost)}</Container>
               </Container>
               <HorizontalSeparator height="16px" />
               <Container borderBottom="1px solid #DEE0E2" />
@@ -34,7 +34,9 @@ export const SinglePayRunBreakdown = ({ payRun }) => {
       <HorizontalSeparator height="16px" />
       <Container display="grid" gridTemplateColumns="4fr 1fr">
         <Heading size="m">Total to pay</Heading>
-        <Heading size="m">£{getNumberWithCommas(payRun.netTotal)}</Heading>
+        <Container textAlign="right">
+          <Heading size="m">£{getNumberWithCommas(payRun.netTotal)}</Heading>
+        </Container>
       </Container>
       <HorizontalSeparator height="16px" />
       <Container borderBottom="1px solid #DEE0E2" />
@@ -65,7 +67,7 @@ export const SinglePayRunBreakdown = ({ payRun }) => {
                   </Container>
                   <Container>£{invoice.cost}</Container>
                   <Container>{`${invoice.quantity} (${invoice.period})`}</Container>
-                  <Container>£{getNumberWithCommas(invoice.totalCost)}</Container>
+                  <Container textAlign="right">£{getNumberWithCommas(invoice.totalCost)}</Container>
                 </Container>
                 <HorizontalSeparator height="16px" />
                 <Container borderBottom="1px solid #DEE0E2" />
@@ -75,7 +77,9 @@ export const SinglePayRunBreakdown = ({ payRun }) => {
         <HorizontalSeparator height="16px" />
         <Container display="grid" gridTemplateColumns="4fr 1fr">
           <Heading size="m">Sub reclaimed by Hackney</Heading>
-          <Heading size="m">£{getNumberWithCommas(payRun.netTotal)}</Heading>
+          <Container textAlign="right">
+            <Heading size="m">£{getNumberWithCommas(payRun.netTotal)}</Heading>
+          </Container>
         </Container>
       </Collapse>
     </>
