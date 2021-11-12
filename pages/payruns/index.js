@@ -92,7 +92,7 @@ const Payruns = () => {
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
         <Tabs tabs={tabs}>
           <Tab>
-            <PayrunList data={payrunData} />
+            <PayrunList searchTerm={payRunId} data={payrunData} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
