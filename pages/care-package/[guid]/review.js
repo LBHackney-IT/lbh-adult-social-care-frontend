@@ -48,7 +48,7 @@ const ReviewPackageDetailsPage = () => {
   const { data, isLoading: summaryLoading } = usePackageSummary(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
 
-  useRedirectIfPackageNotExist();
+  const coreLoading = useRedirectIfPackageNotExist();
 
   const checkSettings = (settings) =>
     settings &&
@@ -182,7 +182,7 @@ const ReviewPackageDetailsPage = () => {
 
   return (
     <ReviewPackageDetails
-      loading={summaryLoading}
+      isLoading={summaryLoading || coreLoading}
       subTitle="Review package details"
       title={data?.packageType}
       openedPopup={openedPopup}

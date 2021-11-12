@@ -21,7 +21,7 @@ import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
-import withSession from '../../../lib/session';
+import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -45,7 +45,7 @@ const CorePackage = () => {
   const { settings } = packageInfo;
   const { data: schedulingOptionsData = [], schedulingOptionsLoading } = usePackageSchedulingOptions();
 
-  useRedirectIfPackageNotExist();
+  const coreLoading = useRedirectIfPackageNotExist();
 
   const schedulingOptions = useMemo(
     () =>
@@ -111,7 +111,7 @@ const CorePackage = () => {
     setLoading(false);
   };
 
-  const isLoading = loading || singleCoreLoading || schedulingOptionsLoading;
+  const isLoading = loading || singleCoreLoading || schedulingOptionsLoading || coreLoading;
 
   return (
     <>

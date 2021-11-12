@@ -34,7 +34,7 @@ const CareChargesPage = () => {
   const carePackageId = router.query.guid;
   const [loading, setLoading] = useState(false);
 
-  useRedirectIfPackageNotExist();
+  const coreLoading = useRedirectIfPackageNotExist();
 
   const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e'; // todo to be removed
 
@@ -82,7 +82,7 @@ const CareChargesPage = () => {
 
   return (
     <CareCharges
-      loading={loading || calculatedCostLoading || careChargeLoading}
+      loading={loading || calculatedCostLoading || careChargeLoading || coreLoading}
       calculatedCost={calculatedCost}
       isS117={packageInfo?.settings?.isS117Client}
       careCharge={careCharge?.length && careCharge[0]}

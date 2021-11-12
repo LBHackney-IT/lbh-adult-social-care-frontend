@@ -21,6 +21,7 @@ export const Container = ({
   margin,
   cursor,
   gridTemplateColumns,
+  textAlign,
   className = '',
 }) => (
   <div
@@ -44,6 +45,7 @@ export const Container = ({
       minWidth,
       margin,
       gridTemplateColumns,
+      textAlign,
       cursor,
     }}
   >

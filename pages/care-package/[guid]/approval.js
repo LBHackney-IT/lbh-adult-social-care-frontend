@@ -48,7 +48,7 @@ const ApprovalPackageDetail = () => {
   const { data, isLoading: summaryLoading } = usePackageSummary(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
 
-  useRedirectIfPackageNotExist();
+  const coreLoading = useRedirectIfPackageNotExist();
 
   const checkSettings = (settings) =>
     settings &&
@@ -168,7 +168,7 @@ const ApprovalPackageDetail = () => {
   return (
     <ReviewPackageDetails
       className="approval-package-detail"
-      loading={summaryLoading}
+      isLoading={summaryLoading || coreLoading}
       subTitle="Package details"
       title={data?.packageType}
       packageId={carePackageId}
@@ -178,7 +178,7 @@ const ApprovalPackageDetail = () => {
       setOpenedPopup={setOpenedPopup}
       openedPopup={openedPopup}
       showEditActions
-      buttons={[
+      buttons={data.status && data.status !== 4 && [
         {
           title: 'Decline',
           onClick: () => setOpenedPopup('decline'),

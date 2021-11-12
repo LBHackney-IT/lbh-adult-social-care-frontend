@@ -20,9 +20,24 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
 import { CaretDownIcon } from '../../../Icons';
 import { CarePackageStatus } from './CarePackageStatus';
+import Loading from '../../../Loading';
+
+const statusColors = {
+  New: 'light-red',
+  'In Progress': 'blue',
+  'Waiting for Approval': 'purple',
+  Approved: 'blue',
+  Future: 'blue',
+  Active: 'green',
+  'Not Approved': 'dark-red',
+  End: 'gray',
+  Ended: 'gray',
+  Cancelled: 'gray',
+};
 
 const CareDetails = ({
   packageId,
+  isLoading,
   title,
   data,
   isS117Client,
@@ -33,12 +48,14 @@ const CareDetails = ({
   const dispatch = useDispatch();
   const router = useRouter();
   const filteredData = data.filter((d) => d.status === 'Active' || d.status === 'In Progress');
+  const [loading, setLoading] = useState(false);
   const [isS117ClientConfirmed, setIsS117ClientConfirmed] = useState(isS117ClientConfirmedInitial);
 
   const columns = [
     {
       Header: 'Status',
       accessor: 'status',
+      Cell: ({ value }) => <p className={`lbh-color-${statusColors[value]}`}>{value}</p>
     },
     {
       Header: 'Element',
@@ -82,6 +99,7 @@ const CareDetails = ({
 
   const handleS117 = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await confirmS117({ packageId });
       dispatch(addNotification('Success', 'success'));
@@ -89,98 +107,102 @@ const CareDetails = ({
     } catch (error) {
       dispatch(addNotification(error, 'error'));
     }
+    setLoading(false);
   };
 
   return (
-    <Collapse
-      triggerOnlyButton
-      style={{
-        width: '100%',
-        borderBottom: '1px solid #BFC1C3',
-        padding: '0 0 24px',
-      }}
-      className="care-details__package-collapse"
-      IconComponent={CaretDownIcon}
-      title={(
-        <Container alignItems="baseline">
-          <Container display="flex" alignItems="baseline">
-            <Container display="flex" alignItems="center">
-              <CarePackageStatus status={packageStatus} packageData={data} />
-              <VerticalSeparator width="10px" />
-              <Heading size="xl">{title}</Heading>
+    <>
+      <Loading isLoading={isLoading || loading} />
+      <Collapse
+        triggerOnlyButton
+        style={{
+          width: '100%',
+          borderBottom: '1px solid #BFC1C3',
+          padding: '0 0 24px',
+        }}
+        className="care-details__package-collapse"
+        IconComponent={CaretDownIcon}
+        title={(
+          <Container alignItems="baseline">
+            <Container display="flex" alignItems="baseline">
+              <Container display="flex" alignItems="center">
+                <CarePackageStatus status={packageStatus} packageData={data} />
+                <VerticalSeparator width="10px" />
+                <Heading size="xl">{title}</Heading>
+              </Container>
+              <VerticalSeparator width="20px" />
             </Container>
-            <VerticalSeparator width="20px" />
           </Container>
-        </Container>
-      )}
-    >
-      <HorizontalSeparator height="10px" />
-      {isS117Client && !isS117ClientConfirmed && (
-        <Announcement isError>
-          <WarningText>This client has been categorised as S117.</WarningText>
-          <Container display="flex">
-            No care charges need to be applied
-            <VerticalSeparator width="24px" />
-            <Link onClick={(e) => handleS117(e)} noVisited>
-              Confirm
-            </Link>
-          </Container>
-        </Announcement>
-      )}
-
-      {data.length > 0 ? (
-        <Container>
-          <HorizontalSeparator height="40px" />
-          <Container display="flex" justifyContent="space-between" alignItems="center">
-            <Checkbox
-              label="Show only Active/In Progress elements"
-              value={activeOnly}
-              onChangeValue={() => setFilter(!activeOnly)}
-            />
-            <Container display="flex" justifyContent="space-between" alignItems="center">
-              {!isS117Client && (
-                <Link className="mr-5" onClick={goToCareCharge} noVisited>
-                  {data.some(({ type, status, name }) => (
-                      type === 'Package Reclaim - Care Charge' && status === 'Active' && (
-                        name === 'Without Property 13+ Weeks' || name === 'Without Property 1-12 Weeks')
-                    )
-                  ) ?
-                    'Edit financial assessment' :
-                    'Add financial assessment'
-                  }
-                </Link>
-              )}
-
-              <Link onClick={goToPackageDetails} noVisited>
-                Package details
+        )}
+      >
+        <HorizontalSeparator height="10px" />
+        {isS117Client && !isS117ClientConfirmed && (
+          <Announcement isError>
+            <WarningText>This client has been categorised as S117.</WarningText>
+            <Container display="flex">
+              No care charges need to be applied
+              <VerticalSeparator width="24px" />
+              <Link onClick={(e) => handleS117(e)} noVisited>
+                Confirm
               </Link>
             </Container>
+          </Announcement>
+        )}
+
+        {data.length > 0 ? (
+          <Container>
+            <HorizontalSeparator height="40px" />
+            <Container display="flex" justifyContent="space-between" alignItems="center">
+              <Checkbox
+                label="Show only Active/In Progress elements"
+                value={activeOnly}
+                onChangeValue={() => setFilter(!activeOnly)}
+              />
+              <Container display="flex" justifyContent="space-between" alignItems="center">
+                {!isS117Client && (
+                  <Link className="mr-5" onClick={goToCareCharge} noVisited>
+                    {data.some(({ type, status, name }) => (
+                        type === 'Package Reclaim - Care Charge' && status === 'Active' && (
+                          name === 'Without Property 13+ Weeks' || name === 'Without Property 1-12 Weeks')
+                      )
+                    ) ?
+                      'Edit financial assessment' :
+                      'Add financial assessment'
+                    }
+                  </Link>
+                )}
+
+                <Link onClick={goToPackageDetails} noVisited>
+                  Package details
+                </Link>
+              </Container>
+            </Container>
+            <HorizontalSeparator height="5px" />
+            <Table
+              columns={columns}
+              data={activeOnly ? filteredData : data}
+              headerClassName="care-details__table-header"
+              cellClassName="care-details__table-cell"
+            />
+            <Container background="#f8f8f8" padding="20px" display="flex" justifyContent="flex-end">
+              Provider paid <VerticalSeparator width="10px" />
+              <strong style={{ color: '#00664F' }}>NET OFF</strong>
+              <VerticalSeparator width="30px" />
+              <strong>
+                {netTotal < 0
+                  ? `-£${getNumberWithCommas(Math.abs(netTotal).toFixed(2))}`
+                  : `£${getNumberWithCommas(Math.abs(netTotal).toFixed(2))}`}
+              </strong>
+            </Container>
           </Container>
-          <HorizontalSeparator height="5px" />
-          <Table
-            columns={columns}
-            data={activeOnly ? filteredData : data}
-            headerClassName="care-details__table-header"
-            cellClassName="care-details__table-cell"
-          />
-          <Container background="#f8f8f8" padding="20px" display="flex" justifyContent="flex-end">
-            Provider paid <VerticalSeparator width="10px" />
-            <strong style={{ color: '#00664F' }}>NET OFF</strong>
-            <VerticalSeparator width="30px" />
-            <strong>
-              {netTotal < 0
-                ? `-£${getNumberWithCommas(Math.abs(netTotal).toFixed(2))}`
-                : `£${getNumberWithCommas(Math.abs(netTotal).toFixed(2))}`}
-            </strong>
-          </Container>
-        </Container>
-      ) : (
-        <>
-          <HorizontalSeparator height="20px" />
-          <Hint>No package details</Hint>
-        </>
-      )}
-    </Collapse>
+        ) : (
+          <>
+            <HorizontalSeparator height="20px" />
+            <Hint>No package details</Hint>
+          </>
+        )}
+      </Collapse>
+    </>
   );
 };
 
