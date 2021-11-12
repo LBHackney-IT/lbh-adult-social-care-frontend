@@ -22,7 +22,6 @@ export const SinglePayRunOverview = ({ payRun, setHoldInfo, update }) => {
   };
 
   const handleChange = async (field) => {
-    console.log(field);
     if (field === '2') {
       setHoldInfo({
         payRun,

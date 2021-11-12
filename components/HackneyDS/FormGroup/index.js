@@ -1,6 +1,7 @@
 import React from 'react';
-import { Container, VerticalSeparator } from '../index';
 import { HorizontalSeparator } from '../Layout/HorizontalSeparator';
+import { VerticalSeparator } from '../Layout/VerticalSeparator';
+import { Container } from '../Layout/Container';
 
 export default function FormGroup({
   children = [],

@@ -4,10 +4,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
+import { holdInvoice } from 'api/PayRun';
+import { useDepartments } from 'api';
 import { Button, Container, Dialog, FormGroup, Select, Textarea } from '../../../HackneyDS';
-import { Loading } from '../../../index';
-import { holdInvoice } from '../../../../api/PayRun';
-import { useDepartments } from '../../../../api';
+import Loading from '../../../Loading';
 
 const defaultValues = {
   actionRequiredFromId: null,
@@ -46,6 +46,7 @@ const HoldPayment = ({ holdInfo, isOpen, setIsOpened, update }) => {
       });
       pushNotification(`Invoice status changed`, 'success');
       update();
+      setIsOpened(false);
     } catch (e) {
       pushNotification(e, 'error');
     }

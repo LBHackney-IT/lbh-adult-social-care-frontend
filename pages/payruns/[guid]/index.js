@@ -8,7 +8,7 @@ import { useInvoiceListView } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
-import HoldPayment from '../../../components/Pages/Finance/HoldPayment';
+import HoldPayment from 'components/Pages/Finance/HoldPayment';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
