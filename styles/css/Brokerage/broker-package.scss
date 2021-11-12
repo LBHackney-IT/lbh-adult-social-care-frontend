@@ -1,6 +1,10 @@
 .broker-package {
   .supplier-search-container {
     margin-bottom: 23px;
+
+    .lbh-search-box__action {
+      background: none;
+    }
   }
 
   .collapse__button-container {
@@ -51,6 +55,11 @@
     height: 38px;
     width: 100px;
     margin-bottom: 2px;
+  }
+
+  .supplier-clear-button {
+    height: 40px;
+    margin-top: auto;
   }
 
   .govuk-form-group.brokerage__package-dates {

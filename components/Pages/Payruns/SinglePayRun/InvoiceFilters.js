@@ -5,22 +5,19 @@ import DatePick from 'components/DatePick';
 const statusOptions = [
   { text: 'All', value: '' },
   { text: 'Draft', value: '1' },
-  { text: 'In Progress', value: '2' },
-  { text: 'Waiting For Review', value: '3' },
-  { text: 'Waiting For Approval', value: '4' },
-  { text: 'Approved', value: '5' },
-  { text: 'Paid', value: '6' },
-  { text: 'Paid With Hold', value: '7' },
-  { text: 'Archived', value: '8' },
+  { text: 'Held', value: '2' },
+  { text: 'Released', value: '3' },
+  { text: 'Rejected', value: '4' },
+  { text: 'Accepted', value: '5' },
 ];
 
 const typeOptions = [
   { text: 'All', value: '' },
-  { text: 'Residential Recurring', value: '1' },
-  { text: 'Direct Payments', value: '2' },
+  { text: 'Residential Care Package', value: '2' },
+  { text: 'Nursing Care Package', value: '4' },
 ];
 
-export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
+export const InvoiceFilters = ({ filters, setFilters, clearFilter }) => {
   const [searchText, setSearchText] = useState('');
   const changeFilterField = useCallback(
     (field, value) => {
@@ -38,7 +35,7 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
   };
 
   const onSearch = useCallback(() => {
-    changeFilterField('payRunId', searchText);
+    changeFilterField('searchTerm', searchText);
   }, [changeFilterField, searchText]);
 
   const shouldShowClear = Object.values(filters).some((item) => item);
@@ -54,17 +51,17 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
           <Select
             emptyElement={null}
             options={statusOptions}
-            value={filters.payRunStatus}
-            onChange={({ target: { value } }) => changeFilterField('payRunStatus', value)}
+            value={filters.invoiceStatus}
+            onChange={({ target: { value } }) => changeFilterField('invoiceStatus', value)}
           />
         </FormGroup>
         <VerticalSeparator width="20px" />
-        <FormGroup label="Type" inlineLabel smallLabel>
+        <FormGroup label="Package" inlineLabel smallLabel>
           <Select
             emptyElement={null}
             options={typeOptions}
-            value={filters.payRunType}
-            onChange={({ target: { value } }) => changeFilterField('payRunType', value)}
+            value={filters.packageType}
+            onChange={({ target: { value } }) => changeFilterField('packageType', value)}
           />
         </FormGroup>
       </Container>
@@ -73,17 +70,17 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
         <FormGroup label="From" inlineLabel smallLabel>
           <DatePick
             placeholder="Select date"
-            startDate={filters.dateFrom}
-            dateValue={filters.dateFrom}
+            startDate={filters.fromDate}
+            dateValue={filters.fromDate}
             setDate={(value) => {
-              if (filters.dateTo && value > filters.dateTo) {
+              if (filters.toDate && value > filters.toDate) {
                 setFilters((prevState) => ({
                   ...prevState,
-                  dateTo: value,
-                  dateFrom: value,
+                  toDate: value,
+                  fromDate: value,
                 }));
               } else {
-                changeFilterField('dateFrom', value);
+                changeFilterField('fromDate', value);
               }
             }}
           />
@@ -92,10 +89,10 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
         <FormGroup label="To" inlineLabel smallLabel>
           <DatePick
             placeholder="Select date"
-            startDate={filters.dateTo}
-            dateValue={filters.dateTo}
-            minDate={filters.dateFrom}
-            setDate={(value) => changeFilterField('dateTo', value)}
+            startDate={filters.toDate}
+            dateValue={filters.toDate}
+            minDate={filters.fromDate}
+            setDate={(value) => changeFilterField('toDate', value)}
           />
         </FormGroup>
         {shouldShowClear && (

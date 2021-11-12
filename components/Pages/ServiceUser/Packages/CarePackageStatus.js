@@ -23,6 +23,8 @@ export const CarePackageStatus = ({ status, packageData }) => {
         return 'New';
       case 'In Progress':
         return 'In Progress';
+      case 'Not Approved':
+        return 'Not Approved';
       case 'Pending':
         return 'Pending';
       default:

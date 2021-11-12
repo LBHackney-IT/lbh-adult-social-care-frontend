@@ -1,7 +1,13 @@
-import React, { useState, memo } from 'react';
+import React, { memo, useState } from 'react';
 import { currency, dateStringFormats } from 'constants/strings';
 import { formatDate } from 'service';
-import { Container, SingleAccordion } from '../../../HackneyDS';
+import { Container, InsetText, HorizontalSeparator, SingleAccordion } from '../../../HackneyDS';
+
+const noContentText = {
+  'Care Charges': 'care charges',
+  'One Off Additional Need': 'one of additional needs',
+  'Weekly Additional Need': 'weekly additional needs',
+};
 
 const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeClaimCollector }) => {
   const [openedServiceUserNeed, setOpenedServiceUserNeed] = useState([]);
@@ -25,7 +31,9 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
 
   return (
     <Container className="review-package-details__items-container">
-      <h3 id={containerId}>{headerTitle}</h3>
+      <Container className="review-package-details__title" display="flex" alignItems="center">
+        <h3 id={containerId}>{headerTitle || 'Care Package'}</h3>
+      </Container>
       {items?.map(({ startDate, endDate, cost, title, address, serviceUserNeed, place, id, description }) => {
         const openedServiceUserId = openedServiceUserNeed.includes(id);
         const openedDetailsId = openedDetails.includes(id);
@@ -106,6 +114,12 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
           </Container>
         );
       })}
+      {!items?.length && (
+        <>
+          <InsetText>No {noContentText[headerTitle]}</InsetText>
+          <HorizontalSeparator height={20} />
+        </>
+      )}
     </Container>
   );
 };

@@ -19,9 +19,24 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
 import { CaretDownIcon } from '../../../Icons';
 import { CarePackageStatus } from './CarePackageStatus';
+import Loading from '../../../Loading';
+
+const statusColors = {
+  New: 'light-red',
+  'In Progress': 'blue',
+  'Waiting for Approval': 'purple',
+  Approved: 'blue',
+  Future: 'blue',
+  Active: 'green',
+  'Not Approved': 'dark-red',
+  End: 'gray',
+  Ended: 'gray',
+  Cancelled: 'gray',
+};
 
 const CareDetails = ({
   packageId,
+  isLoading,
   title,
   data,
   isS117Client,
@@ -32,6 +47,7 @@ const CareDetails = ({
   const dispatch = useDispatch();
   const router = useRouter();
   const filteredData = data.filter((d) => d.status === 'Active' || d.status === 'In Progress');
+  const [loading, setLoading] = useState(false);
   const [isExpanded, setExpanded] = useState(true);
   const [isS117ClientConfirmed, setIsS117ClientConfirmed] = useState(isS117ClientConfirmedInitial);
 
@@ -39,6 +55,7 @@ const CareDetails = ({
     {
       Header: 'Status',
       accessor: 'status',
+      Cell: ({ value }) => <p className={`lbh-color-${statusColors[value]}`}>{value}</p>
     },
     {
       Header: 'Element',
@@ -82,6 +99,7 @@ const CareDetails = ({
 
   const handleS117 = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await confirmS117({ packageId });
       dispatch(addNotification({ text: 'Success', className: 'success' }));
@@ -90,10 +108,12 @@ const CareDetails = ({
     } catch (error) {
       dispatch(addNotification({ text: error }));
     }
+    setLoading(false);
   };
 
   return (
     <>
+      <Loading isLoading={isLoading || loading} />
       <Container alignItems="baseline" borderBottom="1px solid #BFC1C3">
         <Container display="flex" alignItems="baseline">
           <Container display="flex" alignItems="center">

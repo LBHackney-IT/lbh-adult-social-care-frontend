@@ -34,9 +34,11 @@ export const tagColors = {
   'waiting for approval': 'blue',
   'not approved': 'red',
   ended: 'red',
+  end: 'red',
   cancelled: 'red',
   pending: 'blue',
   approved: 'gray',
+  active: 'green',
 };
 
 export const userTagColors = {

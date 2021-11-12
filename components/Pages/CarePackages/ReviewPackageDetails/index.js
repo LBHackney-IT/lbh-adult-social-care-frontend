@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { currency } from 'constants/strings';
-import { getHistoryRoute } from 'routes/RouteConstants';
+import { APPROVALS_ROUTE, getHistoryRoute, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage, stringIsNullOrEmpty } from 'api';
 import { useDispatch } from 'react-redux';
@@ -31,7 +31,6 @@ const isNursingCarePackage = (packageType) =>
 const ReviewPackageDetails = ({
   userDetails,
   packageId,
-  packageStatus,
   packageInfoItems = [],
   showEditActions,
   className = '',
@@ -41,7 +40,7 @@ const ReviewPackageDetails = ({
   setOpenedPopup,
   title,
   subTitle = 'Package details',
-  loading: isLoading,
+  isLoading,
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -74,11 +73,11 @@ const ReviewPackageDetails = ({
     dispatch(addNotification({ text, notificationClassName }));
   };
 
-  const makeActionPackage = async (action, notes) => {
+  const makeActionPackage = async (action, notes, route = '/') => {
     setLoading(true);
     try {
       await action(packageId, notes);
-      router.push('/');
+      router.push(route);
     } catch (e) {
       pushNotification('Something went wrong');
     }
@@ -89,7 +88,7 @@ const ReviewPackageDetails = ({
     {
       loading,
       title: 'End package',
-      onClick: () => makeActionPackage(endCarePackage, actionNotes.endNotes),
+      onClick: () => makeActionPackage(endCarePackage, actionNotes.endNotes, getServiceUserPackagesRoute(userDetails.id)),
     },
     { title: 'Cancel', onClick: closePopup, className: 'link-button red' },
   ];
@@ -98,7 +97,7 @@ const ReviewPackageDetails = ({
     {
       loading,
       title: 'Approve',
-      onClick: () => makeActionPackage(approveCarePackage, actionNotes.approveNotes),
+      onClick: () => makeActionPackage(approveCarePackage, actionNotes.approveNotes, APPROVALS_ROUTE),
     },
     { title: 'Cancel', onClick: closePopup, className: 'link-button red' },
   ];
@@ -108,7 +107,7 @@ const ReviewPackageDetails = ({
       loading,
       title: 'Decline',
       className: 'secondary-red',
-      onClick: () => makeActionPackage(declineCarePackage, actionNotes.approveNotes),
+      onClick: () => makeActionPackage(declineCarePackage, actionNotes.approveNotes, APPROVALS_ROUTE),
     },
     { title: 'Cancel', onClick: closePopup, className: 'link-button black' },
   ];
@@ -118,7 +117,7 @@ const ReviewPackageDetails = ({
       loading,
       title: 'Cancel package',
       className: 'secondary-red',
-      onClick: () => makeActionPackage(cancelCarePackage, actionNotes.cancelNotes),
+      onClick: () => makeActionPackage(cancelCarePackage, actionNotes.cancelNotes, getServiceUserPackagesRoute(userDetails.id)),
     },
     { title: 'Back', onClick: closePopup, className: 'link-button black' },
   ];
@@ -137,11 +136,9 @@ const ReviewPackageDetails = ({
     }));
   };
 
-  const isActivePackage = packageStatus < 6;
-
   return (
     <div className={`review-package-details ${className}`}>
-      <Loading isLoading={isLoading} />
+      <Loading isLoading={isLoading || loading} />
       {openedPopup === 'submit' && <SubmitForApprovalPopup packageId={packageId} closePopup={closePopup} />}
       {modalActions.map(({ title: modalTitle, field, actions }) => (
         <ActionCarePackageModal
@@ -169,7 +166,7 @@ const ReviewPackageDetails = ({
               </span>
             }
           >
-            {isActivePackage && showEditActions && <PackageDetailsButtons buttons={buttons} />}
+            {showEditActions && <PackageDetailsButtons buttons={buttons} />}
           </TitleSubtitleHeader>
         </Container>
         <PackageUserDetails {...userDetails} />
@@ -208,6 +205,7 @@ const ReviewPackageDetails = ({
                 return (
                   <Container key={itemId} className="review-package-details__cost-info-item">
                     <PackageInfo
+                      goToPackage={goToPackage}
                       fncDetails={fncDetails}
                       careChargeClaimCollector={careChargeClaimCollector}
                       containerId={itemId}
@@ -225,29 +223,25 @@ const ReviewPackageDetails = ({
                     )}
                     {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader} />}
                     {totalCostInfo && (
-                      <>
+                      <Container className={totalCostInfo?.supplier !== undefined && totalCostInfo?.hackney !== undefined ? 'single-border-cost' : ''}>
                         {totalCostInfo?.hackney !== undefined && totalCostInfo?.hackney !== 0 && (
                           <BrokerageBorderCost
                             totalCost={totalCostInfo?.hackney.toFixed(2)}
                             totalCostHeader="Total (Gross)"
                           />
                         )}
-                        {totalCostInfo?.supplier !== undefined && totalCostInfo?.hackney !== undefined && <br />}
                         {totalCostInfo?.supplier !== undefined && totalCostInfo?.supplier !== 0 && (
                           <BrokerageBorderCost
                             totalCost={totalCostInfo?.supplier.toFixed(2)}
                             totalCostHeader="Total (Net Off)"
                           />
                         )}
-                      </>
+                      </Container>
                     )}
-                    {isActivePackage && goToPackage && (
+                    {goToPackage && (
                       <Container className="review-package-details__items-actions" display="flex">
                         <p onClick={goToPackage} className="link-button">
-                          Edit
-                        </p>
-                        <p onClick={goToPackage} className="link-button red">
-                          Remove
+                          Edit or Remove
                         </p>
                       </Container>
                     )}
