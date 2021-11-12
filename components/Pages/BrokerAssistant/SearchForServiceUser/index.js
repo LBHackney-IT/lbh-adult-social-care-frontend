@@ -7,6 +7,7 @@ import AlternativePagination from '../../../AlternativePagination';
 import SearchResult from '../../../SearchResult';
 import ServiceUserSearch from '../../ServiceUser/Search';
 import CarePackageBreadcrumbs from '../../CarePackages/CarePackageBreadcrumbs';
+import Loading from '../../../Loading';
 
 const inputs = [
   { label: 'First name', key: 'firstName' },
@@ -30,6 +31,7 @@ const SearchServiceUser = ({
 }) => (
   <Container className={`search-service-user ${className}`}>
     <BrokerageHeader />
+    <Loading isLoading={isLoading} />
     <CarePackageBreadcrumbs additionalBreadcrumbs={[{ text: 'Search for a service user' }]} />
     <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
       <ServiceUserSearch

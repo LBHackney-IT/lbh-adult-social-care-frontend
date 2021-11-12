@@ -13,6 +13,7 @@ import {
   UploadGreenButton,
   ServiceUserDetails,
   TitleSubtitleHeader,
+  Loading,
 } from 'components';
 import { requiredSchema } from 'constants/schemas';
 import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
@@ -27,7 +28,7 @@ const breadcrumbs = [
 
 const AssignPackage = () => {
   const [assignedCarePlan, setAssignedCarePlan] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [packageType, setPackageType] = useState('');
   const [broker, setBroker] = useState('');
   const [notes, setNotes] = useState('');
@@ -43,9 +44,9 @@ const AssignPackage = () => {
   const router = useRouter();
   const { hackneyId } = router.query;
 
-  const { data: serviceUser } = useServiceUser(hackneyId);
-  const { options: packageTypeOptions } = useLookups('packageType');
-  const { options: brokerOptions } = useBrokers();
+  const { data: serviceUser, isLoading: serviceUserLoading } = useServiceUser(hackneyId);
+  const { options: packageTypeOptions, isLoading: lookupsLoading } = useLookups('packageType');
+  const { options: brokerOptions, isLoading: brokersLoading } = useBrokers();
 
   const validateFields = async (fields) => {
     const validationResults = await Promise.all(
@@ -68,6 +69,7 @@ const AssignPackage = () => {
   };
 
   const onSubmit = async () => {
+    setLoading(true);
     const fields = [
       { value: broker, field: 'broker' },
       { value: packageType, field: 'packageType' },
@@ -89,6 +91,7 @@ const AssignPackage = () => {
     } catch (error) {
       dispatch(addNotification({ text: error, className: 'error' }));
     }
+    setLoading(false);
   };
 
   const changeError = (field, value = '') => {
@@ -97,10 +100,12 @@ const AssignPackage = () => {
 
   const brokerName = brokerOptions?.find((el) => el.value === broker)?.text;
 
+  const isLoading = serviceUserLoading || lookupsLoading || brokersLoading || loading;
+
   return (
     <Container className="assign-care-plan">
       <BrokerageHeader />
-
+      <Loading isLoading={isLoading} />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
         <Breadcrumbs values={breadcrumbs} />
 

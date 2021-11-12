@@ -1,13 +1,14 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { cancelCareChargeReclaim, useSingleCorePackageInfo } from '../../../../../api';
-import { addNotification } from '../../../../../reducers/notificationsReducer';
-import { getServiceUserCareChargesRoute } from '../../../../../routes/RouteConstants';
+import { cancelCareChargeReclaim, useSingleCorePackageInfo } from 'api';
+import { addNotification } from 'reducers/notificationsReducer';
+import { getServiceUserCareChargesRoute } from 'routes/RouteConstants';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import { Checkbox } from '../../../../HackneyDS';
+import Loading from '../../../../Loading';
 
 const CancelElementContent = ({ data, headerText, onClose }) => {
   const [shouldCancelBottom, setShouldCancelBottom] = useState(false);
@@ -39,6 +40,8 @@ const CancelElementContent = ({ data, headerText, onClose }) => {
   return (
     <>
       <CareChargesModalTitle title={headerText} />
+
+      <Loading isLoading={isLoading} />
 
       <div>
         <CareChargesInfoStatic data={data.topItem} />

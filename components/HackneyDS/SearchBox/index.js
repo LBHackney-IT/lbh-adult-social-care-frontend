@@ -67,7 +67,7 @@ export default function SearchBox({
           placeholder={placeholder}
         />
         <div role="presentation" onClick={buttonHandler} className="lbh-search-box__action">
-          <span className="govuk-visually-hidden">{value ? 'Clear master-search' : 'Search'}</span>
+          {searchIcon && <span className="govuk-visually-hidden">{value ? 'Clear master-search' : 'Search'}</span>}
           {value && clear ? clearIcon : searchIcon}
         </div>
       </div>

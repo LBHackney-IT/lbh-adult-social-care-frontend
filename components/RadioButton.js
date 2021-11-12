@@ -3,11 +3,6 @@ import BaseField from './BaseField';
 import ErrorField from './ErrorField';
 import { isFunction } from '../api';
 
-const yesNoValues = [
-  { text: 'Yes', value: true },
-  { text: 'No', value: false },
-];
-
 const RadioButton = ({
   label,
   options,
@@ -49,5 +44,4 @@ const RadioButton = ({
   );
 };
 
-export { yesNoValues };
 export default RadioButton;
