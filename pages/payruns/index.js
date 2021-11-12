@@ -62,7 +62,6 @@ const Payruns = () => {
 
   return (
     <Container>
-      <Loading isLoading={isLoading} />
       <CreateDraftPayRun isOpened={isOpenedModal} setIsOpened={setIsOpenedModal} />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
@@ -83,6 +82,7 @@ const Payruns = () => {
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
         <Tabs tabs={tabs}>
           <Tab>
+            <Loading className="loading" isLoading={isLoading} />
             <PayrunList searchTerm={payRunId} data={payrunData} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (
@@ -96,6 +96,7 @@ const Payruns = () => {
             )}
           </Tab>
           <Tab>
+            <Loading className="loading" isLoading={isLoading} />
             <PayrunList searchTerm={payRunId} data={payrunData} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (
