@@ -1,5 +1,5 @@
-import { useGetData } from './useGetData';
 import { useFetchWithParams } from './useFetchWithParams';
+import useGetData from './useGetData';
 
 const PAY_RUNS_URL = '/payruns';
 const getPayRunUrl = (payRunId) => `${PAY_RUNS_URL}/${payRunId}`;
@@ -22,8 +22,12 @@ export const getSinglePayrun = ({payRunId}) =>
   useGetData(payRunId !== undefined ? getPayRunUrl(payRunId) : null);
 
 
-export const useLatestPayRunToDate = () =>
-  useGetData(`${PAY_RUNS_URL}/latestPayRunToDate`, 'Can not get latest pay run to date', null);
+export const useLatestPayRunToDate = ({ payRunTypeId }) =>
+  useGetData(
+    !payRunTypeId ? null : `${PAY_RUNS_URL}/${payRunTypeId}/previous-pay-run-end-date`,
+    'Can not get latest pay run to date',
+    null
+  );
 
 export const useReleasedInvoiceNumber = () =>
-  useGetData(`${PAY_RUNS_URL}/releasedInvoiceNumber`, 'Can not get latest pay run to date', null);
+  useGetData(`${PAY_RUNS_URL}/released-invoice-count`, 'Can not get latest pay run to date', null);

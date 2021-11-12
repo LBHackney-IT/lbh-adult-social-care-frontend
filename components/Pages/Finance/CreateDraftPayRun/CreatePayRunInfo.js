@@ -1,7 +1,6 @@
 import { Controller } from 'react-hook-form';
 import React from 'react';
-import { Container, FormGroup, RadioGroup } from '../../../HackneyDS';
-import DatePick from '../../../DatePick';
+import { Container, DatePicker, FormGroup, RadioGroup } from '../../../HackneyDS';
 
 const CreatePayRunInfo = ({
   errors,
@@ -14,12 +13,11 @@ const CreatePayRunInfo = ({
   options,
   maxDate,
   minDate,
-  disableDatePicker,
-  setPayRunType,
+  onChangeRadio,
+  startDateLabel = 'Pay run to',
   dateText,
-  startDateLabel = 'Start Date',
 }) => (
-  <Container display="flex" justifyContent="space-between">
+  <Container>
     <Container className="create-pay-run__radios">
       <Controller
         control={control}
@@ -30,8 +28,8 @@ const CreatePayRunInfo = ({
             name={name}
             error={errors[name]?.message}
             handle={(value) => {
-              setPayRunType();
               field.onChange(value);
+              onChangeRadio?.(value);
             }}
             items={options}
             {...field}
@@ -39,14 +37,15 @@ const CreatePayRunInfo = ({
         )}
       />
     </Container>
+    <h4>Payrun scheduling</h4>
     <Container className="create-pay-run__date-to">
       <Controller
         name={fieldStart}
         control={control}
         render={({ field }) => (
-          <FormGroup disabled={disableDatePicker} error={errors[fieldStart]?.message}>
-            <DatePick
-              startDate={field.value}
+          <FormGroup error={errors[fieldStart]?.message}>
+            <DatePicker
+              date={field.value}
               setDate={(value) => {
                 onChangeDate('startDate', value);
                 field.onChange(value);
@@ -54,7 +53,7 @@ const CreatePayRunInfo = ({
               maxDate={maxDate}
               minDate={minDate}
               dateValue={field.value}
-              label={startDateLabel}
+              day={{ label: startDateLabel }}
             />
             {dateText}
           </FormGroup>
@@ -65,18 +64,18 @@ const CreatePayRunInfo = ({
           name="endDate"
           control={control}
           render={({ field }) => (
-            <FormGroup disabled={disableDatePicker} error={errors.endDate?.message}>
-              <DatePick
-                startDate={field.value}
+            <FormGroup error={errors.endDate?.message}>
+              <DatePicker
+                date={field.value}
                 setDate={(value) => {
                   onChangeDate('endDate', value);
                   field.onChange(value);
                 }}
+                day={{ label: 'To' }}
                 checkMinDate
                 maxDate={maxDate}
                 minDate={startDate}
                 dateValue={field.value}
-                label="End Date"
               />
             </FormGroup>
           )}

@@ -1,6 +1,38 @@
 .create-pay-run__modal {
   padding: 30px;
 
+  .lbh-tabs {
+    margin-bottom: 0;
+
+    .govuk-tabs__panel {
+      border: none;
+    }
+  }
+
+  h4 {
+    font-size: 19px;
+    font-weight: 700;
+    color: black;
+    margin-bottom: 10px;
+  }
+
+  .date-picker__calendar-container .react-date-picker {
+    right: 100px;
+    bottom: -80px;
+    top: initial;
+    left: initial;
+  }
+
+  .lbh-form-group .govuk-label.govuk-date-input__label {
+    font-size: 19px;
+    font-weight: 400;
+    color: black;
+  }
+
+  .govuk-date-input__item {
+    margin-right: 8px;
+  }
+
   .react-date-picker {
     max-width: initial;
   }
@@ -66,13 +98,6 @@
   &:first-of-type {
     margin-bottom: 24px;
   }
-
-  h4 {
-    font-size: 19px;
-    font-weight: 700;
-    color: black;
-    margin-bottom: 10px;
-  }
 }
 
 .create-pay-run__actions {
@@ -98,6 +123,10 @@
 
     &:nth-of-type(2) {
       margin-left: 20px;
+
+      .react-date-picker {
+        right: 200px;
+      }
     }
   }
 

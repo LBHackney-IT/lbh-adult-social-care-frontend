@@ -1,121 +1,20 @@
-import React, { useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createDraftPayRun } from 'api/PayRun';
 import { addNotification } from 'reducers/notificationsReducer';
-import { useLatestPayRunToDate, useReleasedInvoiceNumber } from 'api';
-import { Button, Container, Dialog, HorizontalSeparator } from '../../../HackneyDS';
+import { Dialog, Tab, Tabs } from '../../../HackneyDS';
 import { Loading } from '../../../index';
-import CreatePayRunInfo from './CreatePayRunInfo';
-import { differenceInDays } from 'date-fns';
+import RegularCycles from './RegularCycles';
+import AdHocAndReleases from './AdHocAndReleases';
 
-const adHocAndReleasesOptions = [
-  { divider: <h4>Ad Hoc and Releases</h4> },
-  { label: 'Residential released holds', id: 3 },
-  { label: 'Direct payments released holds', id: 4 },
-];
-
-const defaultValues = {
-  paidUpToDate: null,
-  regularCycles: null,
-  adHocAndReleases: null,
-  startDate: null,
-  endDate: null,
-};
+const tabs = ['Regular cycles', 'Ad Hoc and Releases'];
 
 const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
-  if (!isOpened) return null;
   const dispatch = useDispatch();
-  const [paidUpToDate, setPaidUpToDate] = useState(null);
-  const [date, setDate] = useState({
-    startDate: null,
-    endDate: null,
-  });
-  const [payRunType, setPayRunType] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const isRegularCycles = payRunType === 'regularCycles';
-  const isAdHocAndReleases = payRunType === 'adHocAndReleases';
-
-  const { data: latestPayRunToDate } = useLatestPayRunToDate();
-  const { data: releasedInvoiceNumber } = useReleasedInvoiceNumber();
-
-  const regularCyclesOptions = useMemo(() => ([
-    { divider: <h4>Regular Cycles:</h4> },
-    {
-      label: <p>Residential Recurring
-        <span className="lbh-primary-color">
-          {' '}({releasedInvoiceNumber || 0} {releasedInvoiceNumber === 1 ? 'release' : 'releases'})
-        </span>
-      </p>,
-      id: 1
-    },
-    { label: 'Direct Payments', id: 2 },
-  ]), [releasedInvoiceNumber]);
-
-  const schema = yup.object().shape({
-    regularCycles: yup
-      .mixed()
-      .test('regularCycles', 'Required field', (value) => {
-        if (isAdHocAndReleases) return true;
-
-        return value;
-      }),
-    adHocAndReleases: yup
-      .mixed()
-      .test('adHocAndReleases', 'Required field', (value) => {
-        if (isRegularCycles) return true;
-
-        return value;
-      }),
-    paidUpToDate: yup
-      .mixed()
-      .test('paidUpToDate', 'Paid up date is required', (value) => {
-        if (isAdHocAndReleases || !payRunType) return true;
-
-        return value;
-      }),
-    startDate: yup
-      .mixed()
-      .test('startDate', 'Start date is required', (value) => {
-        if (isRegularCycles || !payRunType) return true;
-
-        return value;
-      }),
-    endDate: yup
-      .mixed()
-      .test('endDate', 'End date is required', (value) => {
-
-        if (isRegularCycles || !payRunType) return true;
-
-        return value;
-      }),
-  });
-
-  const daysLastCycle = useMemo(() => {
-    if (paidUpToDate && latestPayRunToDate) {
-      return differenceInDays(
-        new Date(latestPayRunToDate.getFullYear(), latestPayRunToDate.getMonth(), latestPayRunToDate.getDate()),
-        new Date(paidUpToDate.getFullYear(), paidUpToDate.getMonth(), paidUpToDate.getDate()),
-      );
-    }
-    return null;
-  }, [paidUpToDate, latestPayRunToDate]);
 
   const closeModal = () => {
-    resetAll();
     setIsOpened(false);
-  };
-
-  const resetAll = () => {
-    reset();
-    setPaidUpToDate(null);
-    setPayRunType('');
-    setDate({
-      startDate: null,
-      endDate: null,
-    });
   };
 
   const onCreateDraftPayRun = async (data) => {
@@ -135,79 +34,15 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
     setIsLoading(false);
   };
 
-  const {
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues,
-  });
-
-  const onChangeDate = (field, value) => setDate(prevState => ({ ...prevState, [field]: value }));
-
   return (
     <>
       <Dialog noBorder isOpen={isOpened} onClose={closeModal} className="create-pay-run__modal">
         <Loading isLoading={isLoading} />
         <h3>Create pay run</h3>
-        <form onSubmit={handleSubmit(onCreateDraftPayRun)}>
-          <HorizontalSeparator height={20} />
-          <CreatePayRunInfo
-            payRunType={payRunType}
-            minDate={latestPayRunToDate}
-            disableDatePicker={isAdHocAndReleases || !payRunType || !latestPayRunToDate}
-            startDateLabel="Pay run to:"
-            setPayRunType={() => {
-              if (isAdHocAndReleases || !payRunType) resetAll();
-              setPayRunType('regularCycles');
-            }}
-            fieldStart="paidUpToDate"
-            startDate={paidUpToDate}
-            onChangeDate={(field, value) => setPaidUpToDate(value)}
-            options={regularCyclesOptions}
-            control={control}
-            dateText={
-              <p>
-                <span className="font-weight-bold lbh-primary-color">
-                  {daysLastCycle ?? 'XX'}
-                </span> days since last cycle
-              </p>
-            }
-            setPaidUpToDate={setPaidUpToDate}
-            errors={errors}
-          />
-
-          <CreatePayRunInfo
-            name="adHocAndReleases"
-            payRunType={payRunType}
-            disableDatePicker={isRegularCycles || !payRunType}
-            onChangeDate={onChangeDate}
-            startDate={date.startDate}
-            endDate={date.endDate}
-            setPayRunType={() => {
-              if (isRegularCycles || !payRunType) resetAll();
-              setPayRunType('adHocAndReleases');
-            }}
-            options={adHocAndReleasesOptions}
-            control={control}
-            setPaidUpToDate={setPaidUpToDate}
-            errors={errors}
-          />
-          <Container className="create-pay-run__actions" display="flex">
-            <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
-            <Button
-              isLoading={isLoading}
-              disabled={isLoading}
-              type="submit"
-              className="disable-shadow"
-              borderRadius={0}
-            >
-              Create Draft Pay Run
-            </Button>
-          </Container>
-        </form>
+        <Tabs tabs={tabs}>
+          <Tab><RegularCycles closeModal={closeModal} isLoading={isLoading} onCreateDraftPayRun={onCreateDraftPayRun} /></Tab>
+          <Tab><AdHocAndReleases closeModal={closeModal} isLoading={isLoading} onCreateDraftPayRun={onCreateDraftPayRun} /></Tab>
+        </Tabs>
       </Dialog>
     </>
   );
