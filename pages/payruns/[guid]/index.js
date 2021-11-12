@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { Breadcrumbs, BrokerageHeader, Container, Heading, HorizontalSeparator, Loading } from 'components';
+import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { useInvoiceListView } from 'api/SWR/payRuns';
@@ -67,7 +67,6 @@ const SinglePayRun = () => {
 
   return (
     <Container>
-      <BrokerageHeader />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <HorizontalSeparator height="10px" />

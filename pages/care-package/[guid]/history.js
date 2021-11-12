@@ -4,7 +4,6 @@ import {
   Loading,
   Container,
   HistoryList,
-  BrokerageHeader,
   HistoryOverview,
   TitleSubtitleHeader,
   CarePackageBreadcrumbs,
@@ -44,8 +43,6 @@ const History = () => {
 
   return (
     <div>
-      <BrokerageHeader />
-
       <Loading isLoading={coreLoading || isLoading} />
 
       <CarePackageBreadcrumbs additionalBreadcrumbs={breadcrumbs} />
