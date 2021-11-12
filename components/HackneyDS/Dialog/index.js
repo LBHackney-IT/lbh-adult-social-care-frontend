@@ -30,9 +30,7 @@ export default function Dialog({
     };
   }, [onClose]);
 
-  if (!isOpen) return null;
-
-  if (!windowState) return null;
+  if (!isOpen || !windowState) return null;
 
   const noBorderClass = noBorder ? ' no-border' : '';
 
