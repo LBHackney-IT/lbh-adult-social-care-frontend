@@ -22,7 +22,7 @@ const BrokerPackagePage = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  useRedirectIfPackageNotExist();
+  const coreLoading = useRedirectIfPackageNotExist();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ const BrokerPackagePage = () => {
 
   return (
     <BrokerPackage
-      loading={detailsLoading || singleSupplierLoading || loading}
+      loading={detailsLoading || singleSupplierLoading || loading || coreLoading}
       setLoading={setLoading}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}

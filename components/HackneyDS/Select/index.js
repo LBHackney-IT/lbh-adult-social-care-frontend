@@ -9,10 +9,12 @@ const Select = (props) => {
     className = '',
     disabledOptions = [],
     disabledEmptyComponent = false,
-    isDisabled = false,options = [],
+    isDisabled = false,
+    options = [],
     emptyElement = { text: 'Select one', value: '' },
     id = 'select-id',
     error,
+    style = {},
     IconComponent = <SelectArrowTriangle />,
     disabled,
   } = props;
@@ -23,6 +25,7 @@ const Select = (props) => {
   return (
     <div className="select-container">
       <select
+        style={style}
         disabled={isDisabled}
         id={id}
         {...errorDescribedBy}

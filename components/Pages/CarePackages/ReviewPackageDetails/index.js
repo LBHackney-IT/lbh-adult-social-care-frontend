@@ -39,7 +39,7 @@ const ReviewPackageDetails = ({
   setOpenedPopup,
   title,
   subTitle = 'Package details',
-  loading: isLoading,
+  isLoading,
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -137,7 +137,7 @@ const ReviewPackageDetails = ({
 
   return (
     <div className={`review-package-details ${className}`}>
-      <Loading isLoading={isLoading} />
+      <Loading isLoading={isLoading || loading} />
       {openedPopup === 'submit' && <SubmitForApprovalPopup packageId={packageId} closePopup={closePopup} />}
       {modalActions.map(({ title: modalTitle, field, actions }) => (
         <ActionCarePackageModal

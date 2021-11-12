@@ -32,7 +32,7 @@ const History = () => {
 
   const { data: corePackage } = useSingleCorePackageInfo(packageId);
 
-  useRedirectIfPackageNotExist();
+  const coreLoading = useRedirectIfPackageNotExist();
 
   const { data, isLoading } = usePackageHistory(packageId);
 
@@ -43,7 +43,7 @@ const History = () => {
 
   return (
     <div>
-      <Loading isLoading={isLoading} />
+      <Loading isLoading={coreLoading || isLoading} />
 
       <CarePackageBreadcrumbs additionalBreadcrumbs={breadcrumbs} />
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
