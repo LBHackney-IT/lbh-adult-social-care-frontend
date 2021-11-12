@@ -5,7 +5,7 @@ import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/Sin
 import { useRouter } from 'next/router';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 
-export const PayRunItem = ({ item }) => {
+export const PayRunItem = ({ searchTerm, item }) => {
   const router = useRouter();
   const handleClick = (e) => {
     e.preventDefault();
@@ -13,7 +13,7 @@ export const PayRunItem = ({ item }) => {
   }
   return (
     <Container background="#FAFAFA" padding="24px 16px">
-      <SinglePayRunOverview payRun={item} />
+      <SinglePayRunOverview searchTerm={searchTerm} payRun={item} />
       <HorizontalSeparator height="15px" />
       <Collapse>
         <HorizontalSeparator height="40px" />
