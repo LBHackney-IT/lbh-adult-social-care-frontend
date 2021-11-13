@@ -1,23 +1,14 @@
 import React from 'react';
 import {
-  Button,
-  Collapse,
-  Container,
-  Heading,
-  HorizontalSeparator,
-  Link,
-  Tag,
-  VerticalSeparator
-} from 'components';
-import {
   formatDate,
-  getButtonColourFromPackageStatus,
   getButtonTextFromPackageStatus,
   getTagColorFromStatus,
+  getButtonColourFromPackageStatus,
 } from 'service';
+import { CaretDownIcon } from 'components/Icons';
 import { useRouter } from 'next/router';
 import { getCorePackageRoute } from 'routes/RouteConstants';
-import { CaretDownIcon } from '../../../Icons';
+import { Button, Container, Heading, HorizontalSeparator, Link, Tag, VerticalSeparator } from '../../../HackneyDS';
 
 const PackageRequest = ({ packageRequest }) => {
   const router = useRouter();

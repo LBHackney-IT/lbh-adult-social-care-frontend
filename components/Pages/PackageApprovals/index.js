@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import { useApproversOptions, useLookups } from 'api';
-import BrokerageHeader from '../CarePackages/BrokerageHeader';
 import {
   Breadcrumbs,
   Button,
@@ -108,7 +107,6 @@ export const PackageApprovals = ({
           clearFilters={clearServiceUserSearch}
         />
       </Dialog>
-      <BrokerageHeader />
       <Container background="#FAFAFA" padding="0 0 60px">
         <Container maxWidth="1080px" margin="0 auto">
           <Container padding="10px 60px 0px">
