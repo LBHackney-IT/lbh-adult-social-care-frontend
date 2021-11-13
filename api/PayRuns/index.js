@@ -7,7 +7,7 @@ const PAY_RUN_URL = `${BASE_URL}/v1/payruns`;
 export const updatePayRunStatus = (payRunId, invoiceId, newStatus) => {
   const options = {
     url: `${PAY_RUN_URL}/${payRunId}/invoices/${invoiceId}/status/${newStatus}`,
-    method: 'POST',
+    method: 'PUT',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

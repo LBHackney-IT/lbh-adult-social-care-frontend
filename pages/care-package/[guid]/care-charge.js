@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Breadcrumbs,
-  BrokerageHeader,
   Button,
   CancelElementModal,
   Container,
@@ -379,7 +378,6 @@ const CareCharge = () => {
 
   return (
     <div className="care-charge">
-      <BrokerageHeader />
 
       <Loading isLoading={coreLoading || packageInfoLoading || lookupsLoading || careChargeLoading} />
 
