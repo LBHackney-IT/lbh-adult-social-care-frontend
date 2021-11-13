@@ -7,10 +7,9 @@ import {
   ServiceUserDetails,
   TitleSubtitleHeader,
 } from 'components';
-import { useRouter } from 'next/router';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';
 import withSession from 'lib/session';
-import { getLoggedInUser } from 'service';
+import { getLoggedInUser, useRedirectIfGUIDNotFound } from 'service';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -26,10 +25,8 @@ export const getServerSideProps = withSession(({ req }) => {
 });
 
 const Packages = () => {
-  const router = useRouter();
+  const { data, isLoading } = useRedirectIfGUIDNotFound(useServiceUserApi.getServiceUserCarePackages);
 
-  const { guid: serviceUserId } = router.query;
-  const { data, isLoading } = useServiceUserApi.getServiceUserCarePackages(serviceUserId);
   const { serviceUser, packages } = data;
 
   return (
@@ -47,19 +44,19 @@ const Packages = () => {
         )}
         <HorizontalSeparator height="48px" />
         {packages &&
-          packages
-            .map((p) => (
-              <CareDetails
-                isLoading={isLoading}
-                packageId={p.packageId}
-                title={p.packageType}
-                data={p.packageItems}
-                isS117Client={p.isS117Client}
-                isS117ClientConfirmed={p.isS117ClientConfirmed}
-                netTotal={p.netTotal}
-                packageStatus={p.packageStatus}
-              />
-            ))
+        packages
+          .map((p) => (
+            <CareDetails
+              isLoading={isLoading}
+              packageId={p.packageId}
+              title={p.packageType}
+              data={p.packageItems}
+              isS117Client={p.isS117Client}
+              isS117ClientConfirmed={p.isS117ClientConfirmed}
+              netTotal={p.netTotal}
+              packageStatus={p.packageStatus}
+            />
+          ))
         }
       </Container>
     </>
