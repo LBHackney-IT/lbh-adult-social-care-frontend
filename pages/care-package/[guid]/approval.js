@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
-import { usePackageSummary } from 'api';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
+import { usePackageSummary, useSingleCorePackageInfo } from 'api';
+import { getLoggedInUser, useRedirectIfGUIDNotFound } from 'service';
 import { ReviewPackageDetails } from 'components';
 import {
   getBrokerPackageRoute,
@@ -48,7 +48,7 @@ const ApprovalPackageDetail = () => {
   const { data, isLoading: summaryLoading } = usePackageSummary(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
 
-  const coreLoading = useRedirectIfPackageNotExist();
+  const { isLoading: coreLoading } = useRedirectIfGUIDNotFound(useSingleCorePackageInfo);
 
   const checkSettings = (settings) =>
     settings &&

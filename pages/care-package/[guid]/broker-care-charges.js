@@ -11,7 +11,7 @@ import {
 } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, useRedirectIfGUIDNotFound } from 'service';
 import withSession from 'lib/session';
 import { reclaimType } from 'constants/variables';
 
@@ -34,8 +34,6 @@ const CareChargesPage = () => {
   const carePackageId = router.query.guid;
   const [loading, setLoading] = useState(false);
 
-  const coreLoading = useRedirectIfPackageNotExist();
-
   const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e'; // todo to be removed
 
   const { data: careCharge, isLoading: careChargeLoading } = usePackageCareCharge(
@@ -48,7 +46,7 @@ const CareChargesPage = () => {
     serviceUserId
   );
 
-  const { data: packageInfo } = useSingleCorePackageInfo(carePackageId);
+  const { data: packageInfo, isLoading: coreLoading } = useRedirectIfGUIDNotFound(useSingleCorePackageInfo(carePackageId));
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));

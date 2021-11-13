@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { usePackageSummary } from 'api';
+import { usePackageSummary, useSingleCorePackageInfo } from 'api';
 import { useRouter } from 'next/router';
 import { ReviewPackageDetails } from 'components';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, useRedirectIfGUIDNotFound } from 'service';
 import withSession from 'lib/session';
 import {
   getBrokerPackageRoute,
@@ -50,7 +50,7 @@ const PackageDetailsPage = () => {
   const editableStatus = data?.status < 6;
   const isApprovedStatus = data?.status === 4;
 
-  const coreLoading = useRedirectIfPackageNotExist();
+  const { isLoading: coreLoading } = useRedirectIfGUIDNotFound(useSingleCorePackageInfo);
 
   const checkSettings = (settings) =>
     settings &&

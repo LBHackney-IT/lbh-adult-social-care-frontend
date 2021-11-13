@@ -8,10 +8,10 @@ import {
   updateCarePackageReclaimFnc,
   usePackageFnc,
   usePackageActiveFncPrice,
-  usePackageDetails,
+  usePackageDetails, useSingleCorePackageInfo,
 } from 'api';
 import { FundedNursingCare } from 'components';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, useRedirectIfGUIDNotFound } from 'service';
 import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -36,7 +36,7 @@ const FundedNursingCarePage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
 
-  const coreLoading = useRedirectIfPackageNotExist();
+  const coreLoading = useRedirectIfGUIDNotFound(useSingleCorePackageInfo);
 
   const dispatch = useDispatch();
   const { data: carePackageReclaimFnc, isLoading: fncLoading } = usePackageFnc(carePackageId);

@@ -10,7 +10,7 @@ import {
 } from 'components';
 import withSession from 'lib/session';
 import { usePackageHistory, useSingleCorePackageInfo } from 'api';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, useRedirectIfGUIDNotFound } from 'service';
 import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -30,9 +30,7 @@ const History = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { data: corePackage } = useSingleCorePackageInfo(packageId);
-
-  const coreLoading = useRedirectIfPackageNotExist();
+  const { data: corePackage, isLoading: coreLoading } = useRedirectIfGUIDNotFound(useSingleCorePackageInfo);
 
   const { data, isLoading } = usePackageHistory(packageId);
 

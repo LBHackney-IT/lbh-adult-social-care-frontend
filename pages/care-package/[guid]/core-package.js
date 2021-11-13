@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, useRedirectIfGUIDNotFound } from 'service';
 import {
   Button,
   CarePackageBreadcrumbs,
@@ -40,11 +40,9 @@ const CorePackage = () => {
   const dispatch = useDispatch();
   const { guid: packageId } = router.query;
   const [loading, setLoading] = useState(false);
-  const { data: packageInfo, singleCoreLoading } = useSingleCorePackageInfo(packageId);
+  const { data: packageInfo, singleCoreLoading } = useRedirectIfGUIDNotFound(useSingleCorePackageInfo);
   const { settings } = packageInfo;
   const { data: schedulingOptionsData = [], schedulingOptionsLoading } = usePackageSchedulingOptions();
-
-  const coreLoading = useRedirectIfPackageNotExist();
 
   const schedulingOptions = useMemo(
     () =>
@@ -110,7 +108,7 @@ const CorePackage = () => {
     setLoading(false);
   };
 
-  const isLoading = loading || singleCoreLoading || schedulingOptionsLoading || coreLoading;
+  const isLoading = loading || singleCoreLoading || schedulingOptionsLoading;
 
   return (
     <>

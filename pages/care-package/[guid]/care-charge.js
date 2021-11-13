@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useToggle } from 'react-use';
-import { formatDate, getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
+import { formatDate, getLoggedInUser, useRedirectIfGUIDNotFound } from 'service';
 import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
 import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { useLookups, usePackageCareCharge, useSingleCorePackageInfo } from 'api';
@@ -40,25 +40,18 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
-const useBreadcrumbs = () => {
-  const router = useRouter();
-  const { guid: packageId } = router.query;
-
-  const { data } = useSingleCorePackageInfo(packageId);
-
-  return useMemo(
-    () => [
-      { text: 'Home', href: '/' },
-      { text: 'Care charges', href: '/' },
-      {
-        text: 'Full Overview',
-        href: getServiceUserPackagesRoute(data?.serviceUser?.id),
-      },
-      { text: 'Financial assessment' },
-    ],
-    [packageId]
-  );
-};
+const useBreadcrumbs = (serviceUserId) => useMemo(
+  () => [
+    { text: 'Home', href: '/' },
+    { text: 'Care charges', href: '/' },
+    {
+      text: 'Full Overview',
+      href: getServiceUserPackagesRoute(serviceUserId),
+    },
+    { text: 'Financial assessment' },
+  ],
+  [serviceUserId]
+);
 
 const useModal = () => useToggle(false);
 
@@ -89,8 +82,8 @@ const claimCollectorSchema = yup.string().required('Required field');
 const startDateSchema = yup.mixed().required('Required field');
 
 const CareCharge = () => {
-  const coreLoading = useRedirectIfPackageNotExist();
-  const breadcrumbs = useBreadcrumbs();
+  const { data, isLoading: coreLoading } = useRedirectIfGUIDNotFound(useSingleCorePackageInfo);
+  const breadcrumbs = useBreadcrumbs(data?.serviceUser?.id);
 
   const [isOpenEdit, toggleEdit] = useModal();
   const [isOpenCancel, toggleCancel] = useModal();
@@ -231,9 +224,9 @@ const CareCharge = () => {
   };
 
   const createResidentialData = (formKey) => {
-    const data = getValues(formKey);
+    const residentialData = getValues(formKey);
 
-    const claimCollector = data.claimCollector?.split('-')[1];
+    const claimCollector = residentialData.claimCollector?.split('-')[1];
     const claimCollectorName = claimCollectors.find((el) => el.id === Number(claimCollector))?.name;
 
     return [
@@ -241,9 +234,9 @@ const CareCharge = () => {
         label: 'Residential SU contribution',
         value: formKey === less12 ? 'Without Property 1-12 weeks' : 'Without Property 13+ weeks',
       },
-      { label: 'Value', value: data.cost ? `${currency.euro}${data.cost}` : '' },
-      { label: 'Start date', value: formatDate(data.startDate) },
-      { label: 'End date', value: data.isOngoing ? 'Ongoing' : formatDate(data.endDate) },
+      { label: 'Value', value: residentialData.cost ? `${currency.euro}${residentialData.cost}` : '' },
+      { label: 'Start date', value: formatDate(residentialData.startDate) },
+      { label: 'End date', value: residentialData.isOngoing ? 'Ongoing' : formatDate(residentialData.endDate) },
       { label: 'Type', value: <span className="text-capitalize">{claimCollectorName}</span> },
     ];
   };
@@ -251,10 +244,10 @@ const CareCharge = () => {
   const onEdit = (form) => {
     const editedForms = Object.keys(formState.dirtyFields);
 
-    const data = [];
+    const newEditData = [];
 
     if (editedForms.includes(provisional))
-      data.push({
+      newEditData.push({
         id: careChargeFormKeys.provisional,
         displayData: createProvisionalData(),
         submitData: {
@@ -265,7 +258,7 @@ const CareCharge = () => {
       });
 
     if (editedForms.includes(less12)) {
-      data.push({
+      newEditData.push({
         id: careChargeFormKeys.less12,
         displayData: createResidentialData(less12),
         submitData: {
@@ -277,7 +270,7 @@ const CareCharge = () => {
     }
 
     if (editedForms.includes(more12)) {
-      data.push({
+      newEditData.push({
         id: careChargeFormKeys.more12,
         displayData: createResidentialData(more12),
         submitData: {
@@ -288,7 +281,7 @@ const CareCharge = () => {
       });
     }
 
-    setEditData(data);
+    setEditData(newEditData);
 
     toggleEdit();
   };
@@ -413,7 +406,7 @@ const CareCharge = () => {
         <FinancialAssessment />
 
         <Container className="brokerage__actions">
-          <Button secondary color='gray' onClick={router.back}>
+          <Button secondary color="gray" onClick={router.back}>
             Back
           </Button>
           <Button onClick={handleSubmit(onSubmit)}>Save</Button>
