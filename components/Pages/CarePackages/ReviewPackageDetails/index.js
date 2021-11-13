@@ -5,7 +5,6 @@ import { APPROVALS_ROUTE, getHistoryRoute, getServiceUserPackagesRoute } from 'r
 import { addNotification } from 'reducers/notificationsReducer';
 import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage, stringIsNullOrEmpty } from 'api';
 import { useDispatch } from 'react-redux';
-import BrokerageHeader from '../BrokerageHeader';
 import { Container, Link } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
@@ -152,7 +151,6 @@ const ReviewPackageDetails = ({
           actions={actions}
         />
       ))}
-      <BrokerageHeader />
       <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <Container className="brokerage__container-header brokerage__container">

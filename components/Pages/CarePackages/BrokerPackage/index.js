@@ -8,7 +8,6 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { brokerageTypeOptions, costPeriods, packageTypes } from 'constants/variables';
 import { Button, Checkbox, Container, SearchBox, VerticalSeparator, InsetText } from '../../../HackneyDS';
 import Loading from '../../../Loading';
-import BrokerageHeader from '../BrokerageHeader';
 import BrokerPackageCost from './BrokerPackageCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerPackageSelector from './BrokerPackageSelector';
@@ -362,7 +361,6 @@ const BrokerPackage = ({
 
   return (
     <div className="broker-package brokerage">
-      <BrokerageHeader />
       <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <Loading isLoading={loading || suppliersLoading} />
