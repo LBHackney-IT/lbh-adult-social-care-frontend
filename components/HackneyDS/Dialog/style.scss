@@ -67,6 +67,7 @@
   z-index: var(--ifm-z-index-overlay);
   background: rgba(0, 0, 0, 0.33);
   position: fixed;
+  display: flex;
   top: 0;
   right: 0;
   bottom: 0;
@@ -75,7 +76,7 @@
 }
 [data-reach-dialog-content] {
   width: 50vw;
-  margin: 10vh auto;
+  margin: auto;
   background: #fff;
   padding: 2rem;
   outline: 0;
