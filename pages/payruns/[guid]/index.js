@@ -35,8 +35,8 @@ const SinglePayRun = () => {
   const router = useRouter();
   const { guid: payRunId } = router.query;
   const [payRunItems, setPayRunItems] = useState([]);
+  const [invoiceId, setInvoiceId] = useState('');
   const [pagingMetaData, setPagingMetaData] = useState({});
-  const [holdInfo, setHoldInfo] = useState({});
   const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState(initialFilters);
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
@@ -71,7 +71,13 @@ const SinglePayRun = () => {
   return (
     <Container>
       <BrokerageHeader />
-      <HoldPayment holdInfo={holdInfo} isOpen={holdInfo.payRun} update={update} setIsOpened={() => setHoldInfo({})} />
+      <HoldPayment
+        invoiceId={invoiceId}
+        payRunId={payRunId}
+        isOpen={invoiceId}
+        update={update}
+        setIsOpened={() => setInvoiceId('')}
+      />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <HorizontalSeparator height="10px" />
@@ -87,7 +93,7 @@ const SinglePayRun = () => {
         {payRunItems &&
         payRunItems.map((item, index) => (
           <>
-            <PayRunItem update={update} setHoldInfo={setHoldInfo} item={item} index={index} />
+            <PayRunItem update={update} setInvoiceId={setInvoiceId} item={item} index={index} />
             {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
           </>
         ))}

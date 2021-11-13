@@ -21,7 +21,7 @@ const schema = yup.object().shape({
     .min(1, 'Please select an action required by'),
 });
 
-const HoldPayment = ({ holdInfo, isOpen, setIsOpened, update }) => {
+const HoldPayment = ({ invoiceId, payRunId, isOpen, setIsOpened, update }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const { data: holdPaymentOptions } = useDepartments();
@@ -38,12 +38,7 @@ const HoldPayment = ({ holdInfo, isOpen, setIsOpened, update }) => {
   const onHoldRequest = async ({ reasonForHolding, actionRequiredFromId }) => {
     setIsLoading(true);
     try {
-      await holdInvoice({
-        reasonForHolding,
-        payRunId: holdInfo.payRun.id,
-        actionRequiredFromId: Number(actionRequiredFromId),
-        invoiceId: holdInfo.payRun.invoiceId,
-      });
+      await holdInvoice({ reasonForHolding, payRunId, actionRequiredFromId, invoiceId });
       pushNotification(`Invoice status changed`, 'success');
       update();
       setIsOpened(false);

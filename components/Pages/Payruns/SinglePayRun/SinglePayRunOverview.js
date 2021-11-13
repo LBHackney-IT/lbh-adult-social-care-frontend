@@ -14,7 +14,7 @@ const statusOptions = [
   { text: 'Accepted', value: 5 },
 ];
 
-export const SinglePayRunOverview = ({ payRun, setHoldInfo, update }) => {
+export const SinglePayRunOverview = ({ payRun, setInvoiceId, update }) => {
   const dispatch = useDispatch();
 
   const pushNotification = (text, className = 'error') => {
@@ -23,10 +23,7 @@ export const SinglePayRunOverview = ({ payRun, setHoldInfo, update }) => {
 
   const handleChange = async (field) => {
     if (field === '2') {
-      setHoldInfo({
-        payRun,
-        field,
-      });
+      setInvoiceId(payRun.invoiceId);
     } else {
       try {
         await updatePayRunStatus(payRun.id, payRun.invoiceId, field);
