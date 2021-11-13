@@ -114,7 +114,7 @@ const CareDetails = ({
     <>
       <Loading isLoading={isLoading || loading} />
       <Collapse
-        triggerOnlyButton
+        isButtonClickOnly
         style={{
           width: '100%',
           borderBottom: '1px solid #BFC1C3',
