@@ -7,7 +7,7 @@ const CreatePayRunInfo = ({
   control,
   fieldStart = 'startDate',
   startDate,
-  endDate,
+  paidUpToDate,
   onChangeDate,
   name = 'regularCycles',
   options,
@@ -59,16 +59,16 @@ const CreatePayRunInfo = ({
           </FormGroup>
         )}
       />
-      {endDate !== undefined && (
+      {paidUpToDate !== undefined && (
         <Controller
-          name="endDate"
+          name="paidUpToDate"
           control={control}
           render={({ field }) => (
-            <FormGroup error={errors.endDate?.message}>
+            <FormGroup error={errors.paidUpToDate?.message}>
               <DatePicker
                 date={field.value}
                 setDate={(value) => {
-                  onChangeDate('endDate', value);
+                  onChangeDate('paidUpToDate', value);
                   field.onChange(value);
                 }}
                 day={{ label: 'To' }}

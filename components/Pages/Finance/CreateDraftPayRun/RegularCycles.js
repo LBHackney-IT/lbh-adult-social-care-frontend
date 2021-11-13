@@ -27,14 +27,16 @@ const RegularCycles = ({ isLoading, onCreateDraftPayRun, closeModal }) => {
   const [paidUpToDate, setPaidUpToDate] = useState(null);
   const [payRunTypeId, setPayRunTypeId] = useState('');
 
-  const { data: latestPayRunToDate } = useLatestPayRunToDate({ payRunTypeId });
+  const { data: latestPayRunToDateString } = useLatestPayRunToDate({ payRunTypeId });
   const { data: releasedInvoiceNumber } = useReleasedInvoiceNumber();
+
+  const latestPayRunToDate = latestPayRunToDateString ? new Date(latestPayRunToDateString) : null;
 
   const daysLastCycle = useMemo(() => {
     if (paidUpToDate && latestPayRunToDate) {
       return differenceInDays(
-        new Date(latestPayRunToDate.getFullYear(), latestPayRunToDate.getMonth(), latestPayRunToDate.getDate()),
         new Date(paidUpToDate.getFullYear(), paidUpToDate.getMonth(), paidUpToDate.getDate()),
+        new Date(latestPayRunToDate.getFullYear(), latestPayRunToDate.getMonth(), latestPayRunToDate.getDate()),
       );
     }
     return null;

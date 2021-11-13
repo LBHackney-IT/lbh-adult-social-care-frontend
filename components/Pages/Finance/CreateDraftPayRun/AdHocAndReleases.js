@@ -14,7 +14,7 @@ const adHocAndReleasesOptions = [
 const defaultValues = {
   adHocAndReleases: null,
   startDate: null,
-  endDate: null,
+  paidUpToDate: null,
 };
 
 const schema = yup.object().shape({
@@ -25,13 +25,8 @@ const schema = yup.object().shape({
   startDate: yup
     .date()
     .typeError('Required field')
-    .required('Required field')
-    .test('startDate', 'Start date less then end date', (value, props) => {
-      console.log(props);
-      // if (compareDescendingDMY(value, props.endDate))
-      return false;
-    }),
-  endDate: yup
+    .required('Required field'),
+  paidUpToDate: yup
     .date()
     .typeError('Required field')
     .required('Required field'),
@@ -40,7 +35,7 @@ const schema = yup.object().shape({
 const AdHocAndReleases = ({ onCreateDraftPayRun, isLoading, closeModal }) => {
   const [date, setDate] = useState({
     startDate: null,
-    endDate: null,
+    paidUpToDate: null,
   });
 
   const onChangeDate = (field, value) => setDate(prevState => ({ ...prevState, [field]: value }));
@@ -61,7 +56,7 @@ const AdHocAndReleases = ({ onCreateDraftPayRun, isLoading, closeModal }) => {
         onChangeDate={onChangeDate}
         startDate={date.startDate}
         startDateLabel="From"
-        endDate={date.endDate}
+        paidUpToDate={date.paidUpToDate}
         options={adHocAndReleasesOptions}
         control={control}
         errors={errors}
