@@ -1,5 +1,4 @@
 import React from 'react';
-import BrokerageHeader from '../CarePackages/BrokerageHeader';
 import { Breadcrumbs, Container, HorizontalSeparator, Heading, Button } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
 import { BrokerPortalTable } from './BrokerPortalTable';
@@ -22,7 +21,6 @@ export const BrokerPortalPage = ({
 }) => (
   <div className="broker-portal">
     <Loading isLoading={loading} />
-    <BrokerageHeader />
     <Container background="#FAFAFA" padding="0 0 60px">
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
         <HorizontalSeparator height="10px" />

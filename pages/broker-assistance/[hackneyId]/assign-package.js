@@ -9,7 +9,6 @@ import {
   FormGroup,
   Breadcrumbs,
   Announcement,
-  BrokerageHeader,
   UploadGreenButton,
   ServiceUserDetails,
   TitleSubtitleHeader,
@@ -104,8 +103,9 @@ const AssignPackage = () => {
 
   return (
     <Container className="assign-care-plan">
-      <BrokerageHeader />
+
       <Loading isLoading={isLoading} />
+
       <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
         <Breadcrumbs values={breadcrumbs} />
 

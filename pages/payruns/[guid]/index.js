@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { Breadcrumbs, BrokerageHeader, Container, Heading, HorizontalSeparator, Loading } from 'components';
+import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { useInvoiceListView } from 'api/SWR/payRuns';
@@ -70,7 +70,6 @@ const SinglePayRun = () => {
 
   return (
     <Container>
-      <BrokerageHeader />
       <HoldPayment
         invoiceId={invoiceId}
         payRunId={payRunId}
@@ -91,12 +90,12 @@ const SinglePayRun = () => {
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px">
         <Loading isLoading={isLoading} />
         {payRunItems &&
-        payRunItems.map((item, index) => (
-          <>
-            <PayRunItem update={update} setInvoiceId={setInvoiceId} item={item} index={index} />
-            {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
-          </>
-        ))}
+          payRunItems.map((item, index) => (
+            <>
+              <PayRunItem update={update} setInvoiceId={setInvoiceId} item={item} index={index} />
+              {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
+            </>
+          ))}
         <HorizontalSeparator height="32px" />
         <AlternativePagination
           totalPages={pagingMetaData.totalPages}

@@ -15,7 +15,6 @@ import {
   Select,
   Textarea
 } from '../../../HackneyDS';
-import BrokerageHeader from '../BrokerageHeader';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import Loading from '../../../Loading';
@@ -144,7 +143,6 @@ const CareCharges = ({
 
   return (
     <Container className="brokerage__care-charges">
-      <BrokerageHeader />
       <CarePackageBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <Loading isLoading={loading} />
