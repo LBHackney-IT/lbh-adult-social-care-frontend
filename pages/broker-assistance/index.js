@@ -74,6 +74,7 @@ const BrokerAssistance = () => {
       loading={brokerViewLoading}
       goToSearch={goToBrokerAssistanceSearch}
       filters={filters}
+      searchTerm={serviceUserName}
       clearFilter={clearFilters}
       setFilters={setFilters}
       pageNumber={pageNumber}

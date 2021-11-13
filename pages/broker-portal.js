@@ -69,6 +69,7 @@ const BrokerPortal = () => {
     <BrokerPortalPage
       title='Broker Portal'
       breadcrumbs={breadcrumbs}
+      searchTerm={serviceUserName}
       loading={brokerViewLoading}
       goToSearch={goToBrokerPortalSearch}
       filters={filters}
