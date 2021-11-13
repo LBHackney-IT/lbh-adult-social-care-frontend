@@ -8,13 +8,13 @@ const HistoryOverview = () => {
   const { guid: packageId } = router.query;
 
   const { data } = usePackageHistory(packageId);
-  const { brokeredBy, assignedOn, approvedBy, approveOn } = data;
+  const { brokeredBy, assignedOn, approvedBy, approvedOn } = data;
 
   const overviewData = [
     { value: brokeredBy ?? '-', label: 'Brokered by' },
     { value: formatDate(assignedOn) ?? '-', label: 'Assigned on' },
     { value: approvedBy ?? '-', label: 'Approved by' },
-    { value: formatDate(approveOn) ?? '-', label: 'Approved on' },
+    { value: formatDate(approvedOn) ?? '-', label: 'Approved on' },
     { value: '-', label: 'Care Plan' },
   ];
 
