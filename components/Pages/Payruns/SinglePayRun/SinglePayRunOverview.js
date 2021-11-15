@@ -5,6 +5,7 @@ import { updatePayRunStatus } from 'api/PayRuns';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/serviceSelect';
+import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
 
 const statusOptions = [
   { text: 'Draft', value: 1 },
@@ -14,7 +15,7 @@ const statusOptions = [
   { text: 'Accepted', value: 5 },
 ];
 
-export const SinglePayRunOverview = ({ payRun }) => {
+export const SinglePayRunOverview = ({ searchTerm, payRun }) => {
   const [statusValue, setStatusValue] = useState(payRun.invoiceStatus);
   const dispatch = useDispatch();
 
@@ -37,7 +38,9 @@ export const SinglePayRunOverview = ({ payRun }) => {
   return (
     <>
       <Container display="flex" alignItems="baseline">
-        <Heading size="m">{payRun.serviceUserName}</Heading>
+        <Heading size="m">
+          {React.useMemo(() => getHighlightedSearchQuery(payRun.serviceUserName, searchTerm), [payRun.serviceUserName, searchTerm])}
+        </Heading>
         <VerticalSeparator width="24px" />
         <Heading size="s">Invoice ID:</Heading>
         <VerticalSeparator width="5px" />

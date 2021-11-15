@@ -323,23 +323,3 @@
     line-height: 1.3157894737;
   }
 }
-
-@media print {
-  .govuk-label {
-    font-family: sans-serif;
-    font-size: 14pt;
-    line-height: 1.15;
-  }
-
-  .govuk-hint {
-    font-family: sans-serif;
-    font-size: 14pt;
-    line-height: 1.15;
-  }
-
-  .govuk-error-message {
-    font-family: sans-serif;
-    font-size: 14pt;
-    line-height: 1.15;
-  }
-}

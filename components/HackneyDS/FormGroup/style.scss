@@ -7,6 +7,13 @@
 .lbh-form-group.govuk-form-group--error {
   border-color: #be3a34;
 }
+.govuk-form-group {
+  &.disabled {
+    opacity: 0.5;
+    user-select: none;
+    pointer-events: none;
+  }
+}
 .govuk-visually-hidden {
     position: absolute !important;
     width: 1px!important;

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import BaseField from './BaseField';
 import ErrorField from './ErrorField';
@@ -20,6 +20,7 @@ const DatePick = ({
   label,
   minDate,
   maxDate,
+  checkMinDate,
   setDate,
   dateValue,
   useDefaultInput,
@@ -36,6 +37,14 @@ const DatePick = ({
       {value || <p className="datepicker-custom-input-placeholder">{placeholder}</p>}
     </button>
   ));
+
+  useEffect(() => {
+    if(checkMinDate && dateValue && minDate) {
+      if(dateValue < minDate) {
+        setDate(minDate);
+      }
+    }
+  }, [checkMinDate, minDate, dateValue]);
 
   return (
     <BaseField className={`${className} react-date-picker`} label={label} noInputStyle>
