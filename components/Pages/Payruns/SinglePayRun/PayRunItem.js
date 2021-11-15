@@ -25,7 +25,13 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
   return (
     <>
       <Container background="#FAFAFA" padding="24px 16px">
-        <SinglePayRunOverview update={update} searchTerm={searchTerm} setInvoiceId={setInvoiceId} payRun={item} />
+        <SinglePayRunOverview
+          payRunId={payRunId}
+          update={update}
+          searchTerm={searchTerm}
+          setInvoiceId={setInvoiceId}
+          payRun={item}
+        />
         <HorizontalSeparator height="15px" />
         <Collapse>
           <HorizontalSeparator height="40px" />
