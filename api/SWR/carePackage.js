@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { CARE_PACKAGE_ROUTE } from 'routes/RouteConstants';
 import { hasUrl } from '../../service/helpers';
 import fetcher from './fetcher';
 import { useLookups } from './lookups';
@@ -42,7 +41,7 @@ export const useSingleCorePackageInfo = (packageId) =>
   useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/core` : null, '');
 
 export const usePaymentHistoryView = ({ packageId }) =>
-  useGetData(`${CARE_PACKAGE_ROUTE}/${packageId}/payment-history`, 'Cannot get payment history');
+  useGetData(`${CARE_PACKAGES_URL}/${packageId}/payment-history`, 'Cannot get payment history');
 
 export const usePackageHistory = (packageId) => useGetData(getCarePackageUrl(packageId, '/history'), '');
 
