@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { holdInvoice } from 'api/PayRun';
 import { useDepartments } from 'api';
-import { Button, Container, Dialog, FormGroup, Select, Textarea } from '../../../HackneyDS';
+import { Button, Container, Dialog, FormGroup, HorizontalSeparator, Select, Textarea } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 
 const defaultValues = {
@@ -17,14 +17,14 @@ const defaultValues = {
 const schema = yup.object().shape({
   actionRequiredFromId: yup
     .number()
-    .typeError('Please select an action required by')
-    .required('Please select an action required by')
-    .min(1, 'Please select an action required by'),
+    .typeError('Please select an option')
+    .required('Please select an option')
+    .min(1, 'Please select an option'),
   reasonForHolding: yup
     .string()
-    .typeError('Please enter reason')
-    .required('Please enter reason')
-    .test('reasonForHolding', 'Please enter correct reason', (value) => value?.trim?.())
+    .typeError('Please enter a reason')
+    .required('Please enter a reason')
+    .test('reasonForHolding', 'Please enter a reason', (value) => value?.trim?.())
 });
 
 const HoldPayment = ({ invoiceId, payRunId, isOpen, setIsOpened, update }) => {
@@ -87,12 +87,14 @@ const HoldPayment = ({ invoiceId, payRunId, isOpen, setIsOpened, update }) => {
               </FormGroup>
             )}
           />
+          <HorizontalSeparator height={32} />
           <Controller
             control={control}
             name="reasonForHolding"
             render={({ field }) => (
               <FormGroup error={errors.reasonForHolding?.message} required label="Enter reason for hold And suggested remedial action">
                 <Textarea
+                  trimValue
                   value={field.value}
                   handler={field.onChange}
                   rows={5}
@@ -100,6 +102,7 @@ const HoldPayment = ({ invoiceId, payRunId, isOpen, setIsOpened, update }) => {
               </FormGroup>
             )}
           />
+          <HorizontalSeparator height={32} />
           <Container className="create-pay-run__actions" display="flex">
             <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
             <Button
