@@ -1,8 +1,8 @@
 .approvals {
   .govuk-table__cell {
     vertical-align: top;
-    &:first-of-type {
-      min-width: 320px;
+    .lbh-tag {
+      white-space: nowrap;
     }
   }
 

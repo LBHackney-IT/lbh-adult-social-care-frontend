@@ -30,7 +30,7 @@ export const PackageApprovalsTable = ({ getPackageTypeById, onRowClick, data }) 
 
         return (
           <Container>
-            <Container className="status-info" display="flex">
+            <Container className="status-info" display="flex" alignItems='flex-start'>
               <p className="brokerage-portal--user-name font-size-19px font-weight-bold text-green">
                 {fullName}
               </p>
