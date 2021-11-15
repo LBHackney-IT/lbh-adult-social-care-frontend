@@ -8,7 +8,6 @@ import { useInvoiceListView } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
-import HoldPayment from 'components/Pages/Finance/HoldPayment';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -35,7 +34,6 @@ const SinglePayRun = () => {
   const router = useRouter();
   const { guid: payRunId } = router.query;
   const [payRunItems, setPayRunItems] = useState([]);
-  const [invoiceId, setInvoiceId] = useState('');
   const [pagingMetaData, setPagingMetaData] = useState({});
   const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState(initialFilters);
@@ -70,13 +68,6 @@ const SinglePayRun = () => {
 
   return (
     <Container>
-      <HoldPayment
-        invoiceId={invoiceId}
-        payRunId={payRunId}
-        isOpen={invoiceId}
-        update={update}
-        setIsOpened={() => setInvoiceId('')}
-      />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <HorizontalSeparator height="10px" />
@@ -92,7 +83,7 @@ const SinglePayRun = () => {
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
-              <PayRunItem searchTerm={searchTerm} update={update} setInvoiceId={setInvoiceId} item={item} index={index} />
+              <PayRunItem payRunId={payRunId} searchTerm={searchTerm} update={update} item={item} index={index} />
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
             </>
           ))}
