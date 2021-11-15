@@ -93,6 +93,7 @@ const SinglePayRun = () => {
         <HorizontalSeparator height="32px" />
         {insightData && (
           <HighLevelInsight
+            payRunId={payRunId}
             holdCount={insightData?.holdsCount}
             holdValue={insightData?.totalHeldAmount}
             difference={insightData?.totalDifferenceFromLastCycle}

@@ -1,8 +1,12 @@
 import React from 'react';
 import { Button, Container, Heading, Hint, HorizontalSeparator } from 'components';
 import { getNumberWithCommas } from 'service';
+import { approvePayRun } from 'api/PayRun';
+import { useDispatch } from 'react-redux';
+import { addNotification } from 'reducers/notificationsReducer';
 
 export const HighLevelInsight = ({
+  payRunId,
   total = 0,
   difference = 0,
   suppliers = 0,
@@ -10,9 +14,19 @@ export const HighLevelInsight = ({
   holdCount = 0,
   holdValue = 0,
 }) => {
-  const handleApprove = () => {
-    console.log('approve clicked');
+  const dispatch = useDispatch();
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
   };
+  const handleApprove = async () => {
+    try {
+      await approvePayRun({ payRunId });
+      pushNotification(`Invoice status changed`, 'success');
+    } catch (e) {
+      pushNotification(e, 'error');
+    }
+  };
+
   const handleReject = () => {
     console.log('reject clicked');
   };
