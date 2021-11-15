@@ -27,7 +27,7 @@ const schema = yup.object().shape({
     .test('reasonForHolding', 'Please enter a reason', (value) => value?.trim?.())
 });
 
-const HoldPayment = ({ invoiceId, payRunId, isOpen, setIsOpened, update }) => {
+const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const { data: holdPaymentOptions } = useDepartments();
@@ -121,4 +121,4 @@ const HoldPayment = ({ invoiceId, payRunId, isOpen, setIsOpened, update }) => {
   );
 };
 
-export default HoldPayment;
+export default HoldPaymentDialog;

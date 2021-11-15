@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
-import { Collapse, Container, Heading, HorizontalSeparator, Link, VerticalSeparator } from 'components';
+import {
+  Collapse,
+  Container,
+  Heading,
+  HoldPaymentDialog,
+  HorizontalSeparator,
+  Link,
+  VerticalSeparator,
+} from 'components';
 import { SinglePayRunOverview } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunOverview';
 import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunBreakdown';
 import { useRouter } from 'next/router';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
-import HoldPayment from '../../Finance/HoldPayment';
 
 export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
   const [invoiceId, setInvoiceId] = useState('');
@@ -13,24 +20,12 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
   const handleClick = (e) => {
     e.preventDefault();
     router.push(getCarePackageReviewRoute(item.carePackageId));
-  }
+  };
 
   return (
     <>
-      <HoldPayment
-        invoiceId={invoiceId}
-        payRunId={payRunId}
-        isOpen={invoiceId}
-        update={update}
-        setIsOpened={() => setInvoiceId('')}
-      />
       <Container background="#FAFAFA" padding="24px 16px">
-        <SinglePayRunOverview
-          update={update}
-          searchTerm={searchTerm}
-          setInvoiceId={setInvoiceId}
-          payRun={item}
-        />
+        <SinglePayRunOverview update={update} searchTerm={searchTerm} setInvoiceId={setInvoiceId} payRun={item} />
         <HorizontalSeparator height="15px" />
         <Collapse>
           <HorizontalSeparator height="40px" />
@@ -55,7 +50,7 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
             <HorizontalSeparator height="10px" />
             <Container display="grid" gridTemplateColumns="4fr 1fr">
               <Container display="flex">
-                <Link onClick={e => handleClick(e)} noVisited>
+                <Link onClick={(e) => handleClick(e)} noVisited>
                   View package summary
                 </Link>
                 <VerticalSeparator width="32px" />
@@ -66,6 +61,13 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
           </Container>
         </Collapse>
       </Container>
+      <HoldPaymentDialog
+        invoiceId={invoiceId}
+        payRunId={payRunId}
+        isOpen={invoiceId}
+        update={update}
+        setIsOpened={() => setInvoiceId('')}
+      />
     </>
   );
 };
