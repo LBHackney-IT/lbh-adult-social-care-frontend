@@ -8,9 +8,9 @@ import { useRouter } from 'next/router';
 export const PaymentHistoryTable = ({ data }) => {
   const router = useRouter();
 
-  const handleClick = (e, invoidId, payRunId) => {
+  const handleClick = (e, invoiceId, payRunId) => {
     e.preventDefault();
-    router.push(getInvoiceRoute(payRunId, invoidId));
+    router.push(getInvoiceRoute(payRunId, invoiceId));
   };
 
   const columns = [

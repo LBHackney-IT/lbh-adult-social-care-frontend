@@ -22,24 +22,23 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
+const breadcrumbs = [
+  { text: 'Home', href: '/' },
+  { text: 'Finance', href: FINANCE_ROUTE },
+];
+
 const PaymentHistory = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
   const { data, isLoading } = usePaymentHistoryView({ packageId });
-
   const [packagePayment, setPackagePayment] = useState();
   const [paymentHistory, setPaymentHistory] = useState([]);
-
   useEffect(() => {
     if (data) {
       setPackagePayment(data.packagePayment);
       setPaymentHistory(data?.payments?.data);
     }
   }, [data]);
-  const breadcrumbs = [
-    { text: 'Home', href: '/' },
-    { text: 'Finance', href: FINANCE_ROUTE },
-  ];
 
   return (
     <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px 60px">
@@ -47,48 +46,52 @@ const PaymentHistory = () => {
       <Breadcrumbs values={breadcrumbs} />
       <HorizontalSeparator height="30px" />
       <Loading isLoading={isLoading} />
-      <Container background="#FAFAFA" padding="24px 16px">
-        {data && (
-          <>
-            <Heading size="m">{data.serviceUserName}</Heading>
-            <HorizontalSeparator height="15px" />
-            <Container display="grid" gridTemplateColumns="1fr 1fr">
-              <Container display="flex" alignItems="center">
-                <Heading size="s">Supplier: </Heading>
-                <VerticalSeparator width="5px" />
-                {data.supplierId}
-              </Container>
-              <Heading size="s">Package Type</Heading>
-              <p>{data.supplierName}</p>
-              <p>{data.packageTypeName}</p>
-            </Container>
-          </>
-        )}
-      </Container>
-      <HorizontalSeparator height="30px" />
-      <Container background="#FAFAFA" padding="30px 16px">
-        {packagePayment && (
-          <>
-            <Heading size="l">Past Payments</Heading>
-            <HorizontalSeparator height="10px" />
-            <Container display="flex" alignItems="center">
-              Total paid up to {format(new Date(packagePayment.dateTo), 'dd/MM/yyy')}:
-              <VerticalSeparator width="10px" />
-              <Heading size="m">£{getNumberWithCommas(packagePayment.totalPaid)}</Heading>
-            </Container>
-          </>
-        )}
-        <HorizontalSeparator height="20px" />
-        {paymentHistory && <PaymentHistoryTable data={paymentHistory} />}
-        <HorizontalSeparator height="30px" />
-        <AlternativePagination
-          totalPages={3}
-          totalCount={30}
-          pageSize={10}
-          currentPage={1}
-          changePagination={() => {}}
-        />
-      </Container>
+      {!isLoading && (
+        <>
+          <Container background="#FAFAFA" padding="24px 16px">
+            {data && (
+              <>
+                <Heading size="m">{data.serviceUserName}</Heading>
+                <HorizontalSeparator height="15px" />
+                <Container display="grid" gridTemplateColumns="1fr 1fr">
+                  <Container display="flex" alignItems="center">
+                    <Heading size="s">Supplier: </Heading>
+                    <VerticalSeparator width="5px" />
+                    {data.supplierId}
+                  </Container>
+                  <Heading size="s">Package Type</Heading>
+                  <p>{data.supplierName}</p>
+                  <p>{data.packageTypeName}</p>
+                </Container>
+              </>
+            )}
+          </Container>
+          <HorizontalSeparator height="30px" />
+          <Container background="#FAFAFA" padding="30px 16px">
+            {packagePayment && (
+              <>
+                <Heading size="l">Past Payments</Heading>
+                <HorizontalSeparator height="10px" />
+                <Container display="flex" alignItems="center">
+                  Total paid up to {format(new Date(packagePayment.dateTo), 'dd/MM/yyy')}:
+                  <VerticalSeparator width="10px" />
+                  <Heading size="m">£{getNumberWithCommas(packagePayment.totalPaid)}</Heading>
+                </Container>
+              </>
+            )}
+            <HorizontalSeparator height="20px" />
+            {paymentHistory && <PaymentHistoryTable data={paymentHistory} />}
+            <HorizontalSeparator height="30px" />
+            <AlternativePagination
+              totalPages={3}
+              totalCount={30}
+              pageSize={10}
+              currentPage={1}
+              changePagination={() => {}}
+            />
+          </Container>
+        </>
+      )}
     </Container>
   );
 };
