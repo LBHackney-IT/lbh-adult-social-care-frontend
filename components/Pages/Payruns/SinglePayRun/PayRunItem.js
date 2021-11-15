@@ -60,11 +60,10 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
                 <VerticalSeparator width="32px" />
                 Assigned broker: {item.assignedBrokerName}
               </Container>
-              <Link noVisited>Past payments</Link>
-            </Container>
             <Link onClick={(e) => handlePastPaymentsClick(e)} noVisited>
               Past payments
             </Link>
+            </Container>
           </Container>
         </Collapse>
       </Container>
