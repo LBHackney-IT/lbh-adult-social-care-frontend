@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container } from '../Layout/Container';
 import { SelectArrowTriangle } from '../../Icons';
+import { VerticalSeparator } from '../Layout/VerticalSeparator';
 
 export const Collapse = ({
   children,
@@ -36,6 +37,7 @@ export const Collapse = ({
         onClick={() => !isButtonClickOnly && changeCollapse()}
       >
         {title}
+        {title && <VerticalSeparator width={20} />}
         <span onClick={() => isButtonClickOnly && changeCollapse()} className="text-blue collapse__button">
           {mainExpanded ? collapseText : expandText}
           <IconComponent className={`icon-transition${mainExpanded ? iconAnimationClass : ''}`} />

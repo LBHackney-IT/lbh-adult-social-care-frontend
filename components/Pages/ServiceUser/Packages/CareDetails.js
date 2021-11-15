@@ -16,6 +16,7 @@ import {
   Announcement,
   WarningText,
   Hint,
+  Collapse,
 } from '../../../HackneyDS';
 import { CaretDownIcon } from '../../../Icons';
 import { CarePackageStatus } from './CarePackageStatus';
