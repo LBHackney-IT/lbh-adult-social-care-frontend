@@ -4,6 +4,7 @@ import { CrossIcon, DatePickerCalendarIcon, RestoreIcon } from '../../Icons';
 import DatePick from '../../DatePick';
 import Hint from '../lettering/Hint';
 import Label from '../lettering/Label';
+import { Container } from '../Layout/Container';
 
 const initialDateState = {
   value: '',
@@ -19,6 +20,7 @@ const DatePicker = ({
   maxDate,
   hint,
   hasClearButton,
+  checkMinDate,
   date,
   setDate,
   IconComponent = DatePickerCalendarIcon,
@@ -129,7 +131,10 @@ const DatePicker = ({
     setPreviousDate(null);
   };
 
-  const changeCalendarInput = (newDate) => setDate(newDate);
+  const changeCalendarInput = (newDate) => {
+    setDate(newDate);
+    setIsOpenCalendar(false);
+  };
 
   useEffect(() => {
     if (date) {
@@ -149,79 +154,89 @@ const DatePicker = ({
     }
   }, [date]);
 
+  useEffect(() => {
+    if (checkMinDate && date && minDate) {
+      if (date < minDate) {
+        setDate(minDate);
+      }
+    }
+  }, [date, checkMinDate, minDate]);
+
   return (
     <div className={`govuk-date-input lbh-date-input${outerClass}${disabledClass}`} id={formId && `${formId}-errors`}>
       {label && <Label className="govuk-date-input__label">{label}</Label>}
       {hint && <Hint className="govuk-date-input__hint">{hint}</Hint>}
-      {inputs.map((input) => {
-        if (!input.visible) return null;
-        const errorClass = input.error ? 'govuk-input--error ' : '';
+      <Container display="flex" alignItems="center">
+        {inputs.map((input) => {
+          if (!input.visible) return null;
+          const errorClass = input.error ? 'govuk-input--error ' : '';
 
-        return (
-          <div key={input.id} className="govuk-date-input__item">
-            {input.label && (
-              <label className="govuk-label govuk-date-input__label" htmlFor={input.id}>
-                {input.label}
-              </label>
-            )}
-            <input
-              className={`${errorClass} govuk-input govuk-date-input__input ${input.className}`}
-              id={input.id}
-              disabled={disabled}
-              value={date === null ? '' : `00${input.value}`.slice(-2)}
-              onChange={(e) => {
-                const { value } = e.target;
-                if (input.onChange) {
-                  return input.onChange(e);
-                }
-                if (input.onChangeValue) {
-                  let slicedValue = value.slice(1, 3);
-                  if (date === null) {
-                    slicedValue = `0${value}`;
+          return (
+            <div key={input.id} className="govuk-date-input__item">
+              {input.label && (
+                <label className="govuk-label govuk-date-input__label" htmlFor={input.id}>
+                  {input.label}
+                </label>
+              )}
+              <input
+                className={`${errorClass} govuk-input govuk-date-input__input ${input.className}`}
+                id={input.id}
+                disabled={disabled}
+                value={date === null ? '' : `00${input.value}`.slice(-2)}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  if (input.onChange) {
+                    return input.onChange(e);
                   }
-                  input.onChangeValue(slicedValue);
-                }
-              }}
-              min={1}
-              step={1}
-              name={input.name}
-              type="number"
-            />
+                  if (input.onChangeValue) {
+                    let slicedValue = value.slice(1, 3);
+                    if (date === null) {
+                      slicedValue = `0${value}`;
+                    }
+                    input.onChangeValue(slicedValue);
+                  }
+                }}
+                min={1}
+                step={1}
+                name={input.name}
+                type="number"
+              />
+            </div>
+          );
+        })}
+        {IconComponent && (
+          <div className="date-picker__calendar-container">
+            <div className="date-picker__additional-action">
+              <IconComponent onClick={clickIcon} className={iconClassName} />
+            </div>
+            {isOpenCalendar && (
+              <DatePick
+                onClickOutside={() => {
+                  if (isOpenCalendar) {
+                    setIsOpenCalendar(false);
+                  }
+                }}
+                startDate={date}
+                inline
+                minDate={minDate}
+                maxDate={maxDate}
+                dateValue={date}
+                setDate={changeCalendarInput}
+              />
+            )}
           </div>
-        );
-      })}
-      {IconComponent && (
-        <div className='date-picker__calendar-container'>
-          <div className="date-picker__additional-action">
-            <IconComponent onClick={clickIcon} className={iconClassName} />
+        )}
+        {hasClearButton && date && (
+          <div className="date-picker__additional-action clear-datepicker" onClick={clearDate}>
+            <CrossIcon />
           </div>
-          {isOpenCalendar && (
-            <DatePick
-              onClickOutside={() => {
-                if (isOpenCalendar) {
-                  setIsOpenCalendar(false);
-                }
-              }}
-              startDate={date}
-              inline
-              minDate={minDate}
-              maxDate={maxDate}
-              dateValue={date}
-              setDate={changeCalendarInput}
-            />
-          )}
-        </div>
-      )}
-      {hasClearButton && date && (
-        <div className="date-picker__additional-action clear-datepicker" onClick={clearDate}>
-          <CrossIcon />
-        </div>
-      )}
-      {previousDate && (
-        <div onClick={restoreDate} className="date-picker__additional-action restore-date">
-          <RestoreIcon />
-        </div>
-      )}
+        )}
+        {previousDate && (
+          <div onClick={restoreDate} className="date-picker__additional-action restore-date">
+            <RestoreIcon />
+          </div>
+        )}
+      </Container>
     </div>
   );
 };
