@@ -5,6 +5,7 @@ import fetcher from './fetcher';
 import { useLookups } from './lookups';
 import useGetData from './useGetData';
 import { useFetchWithParams } from './useFetchWithParams';
+import { CARE_PACKAGE_ROUTE } from 'routes/RouteConstants';
 
 const CARE_PACKAGES_URL = '/care-packages';
 
@@ -39,6 +40,9 @@ export const usePackageSummary = (packageId) => useGetData(getCarePackageUrl(pac
 
 export const useSingleCorePackageInfo = (packageId) =>
   useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/core` : null, '');
+
+export const usePaymentHistoryView = ({ packageId }) =>
+  useGetData(`${CARE_PACKAGE_ROUTE}/${packageId}/payment-history`, 'Cannot get payment history');
 
 export const usePackageHistory = (packageId) => useGetData(getCarePackageUrl(packageId, '/history'), '');
 

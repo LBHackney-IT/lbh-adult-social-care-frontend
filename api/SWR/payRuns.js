@@ -18,9 +18,6 @@ export const useInvoiceListView = ({ payRunId, params }) =>
     errorText: 'Cannot get invoice list',
   });
 
-export const usePaymentHistoryView = ({ carePackageId }) =>
-  useGetData(`${PAY_RUNS_URL}/care-packages/${carePackageId}/payment-history`, 'Cannot get payment history');
-
 export const getSinglePayrun = ({ payRunId }) => useGetData(payRunId !== undefined ? getPayRunUrl(payRunId) : null);
 
 export const useLatestPayRunToDate = ({ payRunTypeId }) =>

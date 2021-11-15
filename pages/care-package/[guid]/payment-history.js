@@ -24,8 +24,8 @@ export const getServerSideProps = withSession(({ req }) => {
 
 const PaymentHistory = () => {
   const router = useRouter();
-  const { carePackageId } = router.query;
-  const { data, isLoading } = usePaymentHistoryView({ carePackageId });
+  const { guid: packageId } = router.query;
+  const { data, isLoading } = usePaymentHistoryView({ packageId });
 
   const [packagePayment, setPackagePayment] = useState();
   const [paymentHistory, setPaymentHistory] = useState([]);

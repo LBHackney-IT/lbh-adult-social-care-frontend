@@ -12,6 +12,7 @@ export const getHistoryRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/history`;
 export const getCarePackageDetailsRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/details`;
 export const getCarePackageApprovalRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/approval`;
 export const getCarePackageCareChargeRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/care-charge`;
+export const getPaymentHistoryRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/payment-history`;
 
 export const SERVICE_USER_ROUTE = '/service-user';
 export const SERVICE_USER_MASTER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/master-search`;
@@ -24,8 +25,7 @@ export const BROKER_ASSISTANCE_ROUTE = '/broker-assistance';
 export const getAssignPackageRoute = (id) => `${BROKER_ASSISTANCE_ROUTE}/${id}/assign-package`;
 
 export const getSinglePayrunRoute = (payrunId) => `${FINANCE_ROUTE}/${payrunId}`;
-export const getPayrunHistoryRoute = (carePackageId) =>
-  `${FINANCE_ROUTE}/care-package/${carePackageId}/payment-history`;
+
 export const getInvoiceRoute = (payRunId, invoiceId) => `${FINANCE_ROUTE}/${payRunId}/invoice/${invoiceId}`;
 
 export const CARE_CHARGES_ROUTE = '/care-charges';
