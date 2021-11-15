@@ -11,7 +11,7 @@ import {
 import { SinglePayRunOverview } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunOverview';
 import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunBreakdown';
 import { useRouter } from 'next/router';
-import { getCarePackageReviewRoute } from 'routes/RouteConstants';
+import { getCarePackageReviewRoute, getPayrunHistoryRoute } from 'routes/RouteConstants';
 
 export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
   const [invoiceId, setInvoiceId] = useState('');
@@ -21,7 +21,11 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
     e.preventDefault();
     router.push(getCarePackageReviewRoute(item.carePackageId));
   };
-
+  const handlePastPaymentsClick = (e) => {
+    e.preventDefault();
+    router.push(getPayrunHistoryRoute(item.carePackageId));
+  };
+  console.log(item);
   return (
     <>
       <Container background="#FAFAFA" padding="24px 16px">
@@ -58,6 +62,9 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
               </Container>
               <Link noVisited>Past payments</Link>
             </Container>
+            <Link onClick={(e) => handlePastPaymentsClick(e)} noVisited>
+              Past payments
+            </Link>
           </Container>
         </Collapse>
       </Container>
