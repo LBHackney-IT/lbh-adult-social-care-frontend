@@ -2,7 +2,14 @@ import React from 'react';
 import { Button, Container, Heading, Hint, HorizontalSeparator } from 'components';
 import { getNumberWithCommas } from 'service';
 
-export const HighLevelInsight = ({ total, difference, suppliers, serviceUsers, holdCount, holdValue }) => {
+export const HighLevelInsight = ({
+  total = 0,
+  difference = 0,
+  suppliers = 0,
+  serviceUsers = 0,
+  holdCount = 0,
+  holdValue = 0,
+}) => {
   const handleApprove = () => {
     console.log('approve clicked');
   };

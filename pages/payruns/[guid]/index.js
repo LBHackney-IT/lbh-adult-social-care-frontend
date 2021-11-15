@@ -4,7 +4,7 @@ import { getLoggedInUser } from 'service';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
-import { useInvoiceListView } from 'api/SWR/payRuns';
+import { useInvoiceListView, getPayrunInsight } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
@@ -54,6 +54,8 @@ const SinglePayRun = () => {
   const { data: payRun, isLoading, mutate: update } = useInvoiceListView({ payRunId, params });
   const { payRunItems: payRunData } = payRun;
 
+  const { data: insightData, isLoading: insightsIsLoading } = getPayrunInsight({ payRunId });
+
   useEffect(() => {
     if (payRunData) {
       setPayRunItems(payRunData.data);
@@ -89,14 +91,16 @@ const SinglePayRun = () => {
             </>
           ))}
         <HorizontalSeparator height="32px" />
-        <HighLevelInsight
-          holdCount={48}
-          holdValue={32233}
-          difference={847}
-          serviceUsers={11}
-          suppliers={12}
-          total={1000}
-        />
+        {insightData && (
+          <HighLevelInsight
+            holdCount={insightData?.holdsCount}
+            holdValue={insightData?.totalHeldAmount}
+            difference={insightData?.totalDifferenceFromLastCycle}
+            serviceUsers={insightData?.serviceUserCount}
+            suppliers={insightData?.supplierCount}
+            total={insightData?.totalInvoiceAmount}
+          />
+        )}
         <HorizontalSeparator height="32px" />
         <AlternativePagination
           totalPages={pagingMetaData.totalPages}
