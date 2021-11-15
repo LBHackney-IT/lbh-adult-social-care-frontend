@@ -2,8 +2,9 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { Breadcrumbs, Container, Heading, Hint, HorizontalSeparator } from 'components';
+import { Breadcrumbs, Container, Heading, Hint, HorizontalSeparator, Table, VerticalSeparator } from 'components';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
+import { format } from 'date-fns';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -47,8 +48,13 @@ const PaymentHistory = () => {
       <Container background="#FAFAFA" padding="30px 16px">
         <Heading size="l">Past Payments</Heading>
         <HorizontalSeparator height="15px" />
-        <Hint>Total paid up to</Hint>
+        <Container display='flex' alignItems='center' >
+        Total paid up to {format(new Date(), 'dd/MM/yyy')}
+        <VerticalSeparator width='10px'/>
+        <Heading size='m'>£10000</Heading>
+        </Container>
       </Container>
+      {/* <Table data={}/> */}
     </Container>
   );
 };
