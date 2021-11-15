@@ -66,7 +66,7 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
                 </p>
                 <p className="mb-3">
                   <span className="font-weight-bold">FNC assessment: </span>
-                  <span className="link-button text-blue">View</span>
+                  <span className="link-button lbh-color-blue">View</span>
                 </p>
               </>
             )}

@@ -132,7 +132,6 @@ const CareDetails = ({
                 <VerticalSeparator width="10px" />
                 <Heading size="xl">{title}</Heading>
               </Container>
-              <VerticalSeparator width="20px" />
             </Container>
           </Container>
         )}

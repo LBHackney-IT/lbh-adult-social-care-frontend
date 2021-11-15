@@ -38,7 +38,7 @@ export const Collapse = ({
       >
         {title}
         {title && <VerticalSeparator width={20} />}
-        <span onClick={() => isButtonClickOnly && changeCollapse()} className="text-blue collapse__button">
+        <span onClick={() => isButtonClickOnly && changeCollapse()} className="lbh-color-blue collapse__button">
           {mainExpanded ? collapseText : expandText}
           <IconComponent className={`icon-transition${mainExpanded ? iconAnimationClass : ''}`} />
         </span>
