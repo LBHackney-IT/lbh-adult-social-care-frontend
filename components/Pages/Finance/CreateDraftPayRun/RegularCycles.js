@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { differenceInDays } from 'date-fns';
@@ -23,12 +23,12 @@ const schema = yup.object().shape({
     .required('Required field'),
 });
 
-const RegularCycles = ({ isLoading, onCreateDraftPayRun, closeModal }) => {
+const RegularCycles = ({ isLoading, setIsLoading, onCreateDraftPayRun, closeModal }) => {
   const [paidUpToDate, setPaidUpToDate] = useState(null);
   const [payRunTypeId, setPayRunTypeId] = useState('');
 
-  const { data: latestPayRunToDateString } = useLatestPayRunToDate({ payRunTypeId });
-  const { data: releasedInvoiceNumber } = useReleasedInvoiceNumber();
+  const { data: latestPayRunToDateString, isLoading: payRunToDateLoading } = useLatestPayRunToDate({ payRunTypeId });
+  const { data: releasedInvoiceNumber, isLoading: invoiceNumberLoading } = useReleasedInvoiceNumber();
 
   const latestPayRunToDate = latestPayRunToDateString ? new Date(latestPayRunToDateString) : null;
 
@@ -63,6 +63,14 @@ const RegularCycles = ({ isLoading, onCreateDraftPayRun, closeModal }) => {
     resolver: yupResolver(schema),
     defaultValues,
   });
+
+  useEffect(() => {
+    if (payRunToDateLoading || invoiceNumberLoading) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [payRunToDateLoading, invoiceNumberLoading]);
 
   return (
     <form onSubmit={handleSubmit(onCreateDraftPayRun)}>

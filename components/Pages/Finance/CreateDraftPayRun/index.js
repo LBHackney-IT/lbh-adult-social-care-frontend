@@ -36,12 +36,25 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
 
   return (
     <>
+      <Loading isLoading={isLoading} />
       <Dialog noBorder isOpen={isOpened} onClose={closeModal} className="create-pay-run__modal">
-        <Loading isLoading={isLoading} />
         <h3>Create pay run</h3>
         <Tabs tabs={tabs}>
-          <Tab><RegularCycles closeModal={closeModal} isLoading={isLoading} onCreateDraftPayRun={onCreateDraftPayRun} /></Tab>
-          <Tab><AdHocAndReleases closeModal={closeModal} isLoading={isLoading} onCreateDraftPayRun={onCreateDraftPayRun} /></Tab>
+          <Tab>
+            <RegularCycles
+              closeModal={closeModal}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+              onCreateDraftPayRun={onCreateDraftPayRun}
+            />
+          </Tab>
+          <Tab>
+            <AdHocAndReleases
+              closeModal={closeModal}
+              isLoading={isLoading}
+              onCreateDraftPayRun={onCreateDraftPayRun}
+            />
+          </Tab>
         </Tabs>
       </Dialog>
     </>
