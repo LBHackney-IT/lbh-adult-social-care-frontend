@@ -40,6 +40,9 @@ export const usePackageSummary = (packageId) => useGetData(getCarePackageUrl(pac
 export const useSingleCorePackageInfo = (packageId) =>
   useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/core` : null, '');
 
+export const usePaymentHistoryView = ({ packageId }) =>
+  useGetData(`${CARE_PACKAGES_URL}/${packageId}/payment-history`, 'Cannot get payment history');
+
 export const usePackageHistory = (packageId) => useGetData(getCarePackageUrl(packageId, '/history'), '');
 
 export const usePackageFnc = (packageId) => useGetData(getCarePackageUrl(packageId, '/reclaims/fnc'));
