@@ -50,8 +50,9 @@ const SinglePayRun = () => {
     [filters, pageNumber]
   );
 
-  const { data: payRun, isLoading } = useInvoiceListView({ payRunId, params });
+  const { data: payRun, isLoading, mutate: update } = useInvoiceListView({ payRunId, params });
   const { payRunItems: payRunData } = payRun;
+
   useEffect(() => {
     if (payRunData) {
       setPayRunItems(payRunData.data);
@@ -82,7 +83,7 @@ const SinglePayRun = () => {
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
-              <PayRunItem searchTerm={searchTerm} item={item} index={index} />
+              <PayRunItem payRunId={payRunId} searchTerm={searchTerm} update={update} item={item} index={index} />
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
             </>
           ))}

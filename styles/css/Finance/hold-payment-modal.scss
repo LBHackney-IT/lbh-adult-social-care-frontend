@@ -1,0 +1,33 @@
+.hold-payment-modal {
+  .lbh-dialog {
+    max-width: 655px;
+    min-width: 655px;
+
+    & > h3 {
+      font-size: 27px;
+      font-weight: 700;
+      color: $lbh-text;
+      margin-bottom: 16px;
+    }
+  }
+
+  select {
+    min-width: 250px;
+  }
+
+  .lbh-form-group {
+    .horizontal-separator {
+      display: none;
+    }
+
+    .govuk-error-message {
+      margin-bottom: 20px;
+    }
+
+    label {
+      margin-bottom: 6px;
+      font-size: 16px;
+      font-weight: 400;
+    }
+  }
+}

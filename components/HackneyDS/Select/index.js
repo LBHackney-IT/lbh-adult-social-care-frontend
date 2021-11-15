@@ -10,6 +10,7 @@ const Select = (props) => {
     disabledOptions = [],
     disabledEmptyComponent = false,
     options = [],
+    fields = { text: 'text', value: 'value' },
     emptyElement = { text: 'Select one', value: '' },
     id = 'select-id',
     error,
@@ -44,11 +45,11 @@ const Select = (props) => {
         )}
 
         {options.map((option) => {
-          const isDisabledOption = disabledOptions.some((disabledOption) => disabledOption === option.value);
+          const isDisabledOption = disabledOptions.some((disabledOption) => disabledOption === option[fields.value]);
 
           return (
-            <option disabled={isDisabledOption} key={`${option.text}${option.value}`} value={option.value}>
-              {option.text}
+            <option disabled={isDisabledOption} key={`${option[fields.text]}${option[fields.value]}`} value={option[fields.value]}>
+              {option[fields.text]}
             </option>
           );
         })}

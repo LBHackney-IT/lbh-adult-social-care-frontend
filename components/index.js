@@ -20,6 +20,7 @@ export { default as NewCareChargePackages } from './Pages/CareCharges/NewCareCha
 export { default as PackageApprovals } from './Pages/PackageApprovals';
 export { default as CarePackageBreadcrumbs } from './Pages/CarePackages/CarePackageBreadcrumbs';
 export { default as MainHeader } from './MainHeader';
+export { default as HoldPaymentDialog } from './Pages/Finance/HoldPaymentDialog';
 export { FurtherDetails } from './Pages/CarePackages/CorePackageDetails/FurtherDetails';
 export { PackageType } from './Pages/CarePackages/CorePackageDetails/PackageType';
 
