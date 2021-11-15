@@ -18,7 +18,7 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
-const PayrunsHistory = () => {
+const PaymentHistory = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
   const breadcrumbs = [
@@ -53,4 +53,4 @@ const PayrunsHistory = () => {
   );
 };
 
-export default PayrunsHistory;
+export default PaymentHistory;
