@@ -20,6 +20,7 @@ export * from './SWR/users';
 export * from './SWR/lookups';
 export * from './SWR/serviceUser';
 export * from './SWR/carePackage';
+export * from './SWR/payRuns'
 export * from './SWR/careCharge';
 export * from './SWR/departments';
 export * from './SWR/suppliers';

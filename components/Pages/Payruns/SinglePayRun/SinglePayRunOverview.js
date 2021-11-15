@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
 import { getNumberWithCommas } from 'service';
 import { Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
-import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/serviceSelect';
 import { useDispatch } from 'react-redux';
 import { updatePayRunStatus } from 'api/PayRuns';
 import { addNotification } from 'reducers/notificationsReducer';
+import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/serviceSelect';
+import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
 
 const statusOptions = [
   { text: 'Draft', value: 1 },
@@ -14,7 +15,7 @@ const statusOptions = [
   { text: 'Accepted', value: 5 },
 ];
 
-export const SinglePayRunOverview = ({ payRun, setInvoiceId, update }) => {
+export const SinglePayRunOverview = ({ searchTerm, payRun, setInvoiceId, update }) => {
   const dispatch = useDispatch();
 
   const pushNotification = (text, className = 'error') => {
@@ -33,7 +34,6 @@ export const SinglePayRunOverview = ({ payRun, setInvoiceId, update }) => {
         pushNotification(e, 'error');
       }
     }
-
   };
 
   const background = useCallback(getStatusSelectBackground(payRun.invoiceStatus), [payRun.invoiceStatus]);
@@ -42,7 +42,9 @@ export const SinglePayRunOverview = ({ payRun, setInvoiceId, update }) => {
   return (
     <>
       <Container display="flex" alignItems="baseline">
-        <Heading size="m">{payRun.serviceUserName}</Heading>
+        <Heading size="m">
+          {React.useMemo(() => getHighlightedSearchQuery(payRun.serviceUserName, searchTerm), [payRun.serviceUserName, searchTerm])}
+        </Heading>
         <VerticalSeparator width="24px" />
         <Heading size="s">Invoice ID:</Heading>
         <VerticalSeparator width="5px" />

@@ -33,6 +33,7 @@ const initialServiceUserFilters = {
 export const PackageApprovals = ({
   items,
   title,
+  searchTerm,
   pageNumber,
   setPageNumber,
   paginationData: { pageSize, totalPages, totalCount },
@@ -86,7 +87,8 @@ export const PackageApprovals = ({
     setServiceUserFilter({ ...initialServiceUserFilters });
   };
 
-  const getPackageTypeById = (packageTypeId) => packageOptions.find(packageType => packageType.value === packageTypeId)?.text;
+  const getPackageTypeById = (packageTypeId) =>
+    packageOptions.find((packageType) => packageType.value === packageTypeId)?.text;
 
   const onSearch = useCallback(() => {
     changeFilterField('serviceUserName', searchText);
@@ -115,13 +117,17 @@ export const PackageApprovals = ({
           <Container className="brokerage-portal__header">
             <h1>{title}</h1>
           </Container>
-
           <Container className="brokerage-portal__filters">
             <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label">
-                <SearchBox placeholder='Search service user' label="Search Packages" value={searchText} onChangeValue={setSearchText} search={onSearch} />
+                <SearchBox
+                  placeholder="Search service user"
+                  label="Search Packages"
+                  value={searchText}
+                  onChangeValue={setSearchText}
+                  search={onSearch}
+                />
               </FormGroup>
-
               <FormGroup className="form-group--inline-label brokerage-portal__form-status" label="Status">
                 <Select
                   options={statusOptions}
@@ -129,7 +135,6 @@ export const PackageApprovals = ({
                   onChange={({ target: { value } }) => changeFilterField('status', value)}
                 />
               </FormGroup>
-
               <FormGroup className="form-group--inline-label" label="Approver">
                 <Select
                   value={filters.approverId}
@@ -138,7 +143,6 @@ export const PackageApprovals = ({
                 />
               </FormGroup>
             </div>
-
             <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label date-from" label="From">
                 <DatePick
@@ -158,7 +162,6 @@ export const PackageApprovals = ({
                   }}
                 />
               </FormGroup>
-
               <FormGroup className="form-group--inline-label" label="To">
                 <DatePick
                   placeholder="Select date"
@@ -188,7 +191,7 @@ export const PackageApprovals = ({
       </Container>
 
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
-        <PackageApprovalsTable getPackageTypeById={getPackageTypeById} onRowClick={onRowClick} data={items} />
+        <PackageApprovalsTable searchTerm={searchTerm} getPackageTypeById={getPackageTypeById} onRowClick={onRowClick} data={items} />
         <HorizontalSeparator height="20px" />
 
         <AlternativePagination

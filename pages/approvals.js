@@ -93,6 +93,7 @@ const Approvals = () => {
       title='Approvals'
       breadcrumbs={breadcrumbs}
       loading={approvalsLoading}
+      searchTerm={serviceUserName}
       goToSearch={goToBrokerPortalSearch}
       filters={filters}
       clearFilter={clearFilters}

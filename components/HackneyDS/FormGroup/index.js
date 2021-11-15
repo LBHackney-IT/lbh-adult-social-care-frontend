@@ -7,6 +7,7 @@ export default function FormGroup({
   children = [],
   label,
   required,
+  disabled,
   hint,
   error,
   className = '',
@@ -16,9 +17,10 @@ export default function FormGroup({
   const outerClassName = className ? ` ${className}` : '';
   const nodeList = Array.isArray(children) ? children : [children];
   const errorClassList = error ? ' govuk-form-group--error' : '';
+  const disabledClass = disabled ? ' disabled' : '';
   const labelSize = smallLabel ? ' small-label' : '';
   return (
-    <div className={`govuk-form-group lbh-form-group${errorClassList}${outerClassName}`}>
+    <div className={`govuk-form-group lbh-form-group${errorClassList}${outerClassName}${disabledClass}`}>
       <fieldset className="govuk-fieldset lbh-fieldset">
         {label && !inlineLabel && (
           <>

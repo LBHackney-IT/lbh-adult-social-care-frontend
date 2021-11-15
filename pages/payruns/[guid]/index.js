@@ -92,7 +92,7 @@ const SinglePayRun = () => {
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
-              <PayRunItem update={update} setInvoiceId={setInvoiceId} item={item} index={index} />
+              <PayRunItem searchTerm={searchTerm} update={update} setInvoiceId={setInvoiceId} item={item} index={index} />
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
             </>
           ))}
