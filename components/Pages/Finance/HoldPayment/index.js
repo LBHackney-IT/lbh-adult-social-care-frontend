@@ -11,6 +11,7 @@ import Loading from '../../../Loading';
 
 const defaultValues = {
   actionRequiredFromId: null,
+  reasonForHolding: null,
 };
 
 const schema = yup.object().shape({
@@ -19,6 +20,11 @@ const schema = yup.object().shape({
     .typeError('Please select an action required by')
     .required('Please select an action required by')
     .min(1, 'Please select an action required by'),
+  reasonForHolding: yup
+    .string()
+    .typeError('Please enter reason')
+    .required('Please enter reason')
+    .test('reasonForHolding', 'Please enter correct reason', (value) => value?.trim?.())
 });
 
 const HoldPayment = ({ invoiceId, payRunId, isOpen, setIsOpened, update }) => {
@@ -85,7 +91,7 @@ const HoldPayment = ({ invoiceId, payRunId, isOpen, setIsOpened, update }) => {
             control={control}
             name="reasonForHolding"
             render={({ field }) => (
-              <FormGroup label="Enter reason for hold And suggested remedial action">
+              <FormGroup error={errors.reasonForHolding?.message} required label="Enter reason for hold And suggested remedial action">
                 <Textarea
                   value={field.value}
                   handler={field.onChange}
