@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
 import { getLoggedInUser, getNumberWithCommas } from 'service';
-import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading, Table, VerticalSeparator } from 'components';
+import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading, VerticalSeparator } from 'components';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { format } from 'date-fns';
 import { usePaymentHistoryView } from 'api';
 import AlternativePagination from 'components/AlternativePagination';
+import { PaymentHistoryTable } from 'components/Pages/Payruns/PaymentHistory/PaymentHistoryTable';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -40,27 +41,6 @@ const PaymentHistory = () => {
     { text: 'Finance', href: FINANCE_ROUTE },
   ];
 
-  const columns = [
-    {
-      Header: 'Period',
-      accessor: 'periodTo',
-      Cell: ({
-        value,
-        row: {
-          original: { periodFrom },
-        },
-      }) => <> {`${format(new Date(periodFrom), 'dd/MM/yyy')} - ${format(new Date(value), 'dd/MM/yyy')}`}</>,
-    },
-    {
-      Header: 'Invoice ID',
-      accessor: 'invoiceId',
-    },
-    {
-      Header: 'Paid',
-      accessor: 'amountPaid',
-      Cell: ({ value }) => `£${getNumberWithCommas(value)}`,
-    },
-  ];
   return (
     <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px 60px">
       <HorizontalSeparator height="10px" />
@@ -92,14 +72,14 @@ const PaymentHistory = () => {
             <Heading size="l">Past Payments</Heading>
             <HorizontalSeparator height="10px" />
             <Container display="flex" alignItems="center">
-              Total paid up to {format(new Date(packagePayment.dateTo), 'dd/MM/yyy')}
+              Total paid up to {format(new Date(packagePayment.dateTo), 'dd/MM/yyy')}:
               <VerticalSeparator width="10px" />
               <Heading size="m">£{getNumberWithCommas(packagePayment.totalPaid)}</Heading>
             </Container>
           </>
         )}
         <HorizontalSeparator height="20px" />
-        {paymentHistory && <Table columns={columns} data={paymentHistory} />}
+        {paymentHistory && <PaymentHistoryTable data={paymentHistory} />}
         <HorizontalSeparator height="30px" />
         <AlternativePagination
           totalPages={3}

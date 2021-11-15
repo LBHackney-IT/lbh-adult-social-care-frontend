@@ -24,7 +24,9 @@ export const BROKER_ASSISTANCE_ROUTE = '/broker-assistance';
 export const getAssignPackageRoute = (id) => `${BROKER_ASSISTANCE_ROUTE}/${id}/assign-package`;
 
 export const getSinglePayrunRoute = (payrunId) => `${FINANCE_ROUTE}/${payrunId}`;
-export const getPayrunHistoryRoute = (carePackageId) => `${FINANCE_ROUTE}/care-package/${carePackageId}/payment-history`;
+export const getPayrunHistoryRoute = (carePackageId) =>
+  `${FINANCE_ROUTE}/care-package/${carePackageId}/payment-history`;
+export const getInvoiceRoute = (payRunId, invoiceId) => `${FINANCE_ROUTE}/${payRunId}/invoice/${invoiceId}`;
 
 export const CARE_CHARGES_ROUTE = '/care-charges';
 
