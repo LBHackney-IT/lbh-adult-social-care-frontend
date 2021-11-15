@@ -24,7 +24,7 @@ export const SinglePayRunOverview = ({ searchTerm, payRun, setInvoiceId, update 
 
   const handleChange = async (field) => {
     if (field === '2') {
-      setInvoiceId(payRun.invoiceId);
+      setInvoiceId(payRun.id);
     } else {
       try {
         await updatePayRunStatus(payRun.id, payRun.invoiceId, field);
