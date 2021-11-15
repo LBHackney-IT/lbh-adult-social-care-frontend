@@ -1,0 +1,18 @@
+.invoice-detail__main-container {
+  .link-button.green {
+    font-size: 19px;
+    font-weight: 400;
+  }
+
+  & > h3 {
+    font-size: 30px;
+    font-weight: 400;
+    color: black;
+  }
+
+  & > p {
+    font-size: 24px;
+    font-weight: 400;
+    color: $lbh-secondary-text-colour;
+  }
+}

@@ -50,24 +50,28 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
             <HorizontalSeparator height="10px" />
             <Container display="grid" gridTemplateColumns="4fr 1fr">
               <Container display="flex">
-                <Link onClick={(e) => handleClick(e)} noVisited>
-                  View package summary
-                </Link>
-                <VerticalSeparator width="32px" />
+                {payRunId && (
+                  <Link onClick={(e) => handleClick(e)} noVisited>
+                    View package summary
+                  </Link>
+                )}
+                {payRunId && <VerticalSeparator width="32px" />}
                 Assigned broker: {item.assignedBrokerName}
               </Container>
-              <Link noVisited>Past payments</Link>
+              {payRunId && <Link noVisited>Past payments</Link>}
             </Container>
           </Container>
         </Collapse>
       </Container>
-      <HoldPaymentDialog
-        invoiceId={invoiceId}
-        payRunId={payRunId}
-        isOpen={invoiceId}
-        update={update}
-        setIsOpened={() => setInvoiceId('')}
-      />
+      {payRunId && (
+        <HoldPaymentDialog
+          invoiceId={invoiceId}
+          payRunId={payRunId}
+          isOpen={invoiceId}
+          update={update}
+          setIsOpened={() => setInvoiceId('')}
+        />
+      )}
     </>
   );
 };

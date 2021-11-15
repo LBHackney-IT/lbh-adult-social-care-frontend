@@ -23,6 +23,8 @@ export const SinglePayRunOverview = ({ searchTerm, payRun, setInvoiceId, update 
   };
 
   const handleChange = async (field) => {
+    if (!update) return;
+
     if (field === '2') {
       setInvoiceId(payRun.invoiceId);
     } else {
