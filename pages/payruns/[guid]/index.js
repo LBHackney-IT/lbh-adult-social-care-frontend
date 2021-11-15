@@ -8,6 +8,7 @@ import { useInvoiceListView } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
+import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -87,6 +88,15 @@ const SinglePayRun = () => {
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
             </>
           ))}
+        <HorizontalSeparator height="32px" />
+        <HighLevelInsight
+          holdCount={48}
+          holdValue={32233}
+          difference={847}
+          serviceUsers={11}
+          suppliers={12}
+          total={1000}
+        />
         <HorizontalSeparator height="32px" />
         <AlternativePagination
           totalPages={pagingMetaData.totalPages}
