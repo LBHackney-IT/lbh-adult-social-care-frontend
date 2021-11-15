@@ -18,9 +18,11 @@ export const HighLevelInsight = ({
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
   };
+  const params = { notes: 'test' };
+
   const handleApprove = async () => {
     try {
-      await approvePayRun({ payRunId });
+      await approvePayRun({ payRunId, params });
       pushNotification(`Invoice status changed`, 'success');
     } catch (e) {
       pushNotification(e, 'error');
