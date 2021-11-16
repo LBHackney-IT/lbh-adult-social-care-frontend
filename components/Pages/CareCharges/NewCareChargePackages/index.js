@@ -1,7 +1,7 @@
 import React from 'react';
 import { getServiceUserCareChargesRoute, CARE_PACKAGE_ROUTE, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
-import { Breadcrumbs, Button, Container, Select, FormGroup } from '../../../HackneyDS';
+import { Breadcrumbs, Button, Container, Select, FormGroup, HorizontalSeparator } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 import AlternativePagination from '../../../AlternativePagination';
 import { CareChargesTable } from './CareChargesTable';
@@ -40,9 +40,10 @@ const NewCareChargePackages = ({
       <Container background="#FAFAFA">
         <Container padding="10px 60px 32px 60px" className="centered-container">
           <Breadcrumbs values={breadcrumbs} />
+          <HorizontalSeparator height={30} />
           <Container className="new-care-charge__header" display="flex" justifyContent="space-between">
             <h2>New care charge packages</h2>
-            <Button onClick={findServiceUser}>Find a service user</Button>
+            <Button largeButton onClick={findServiceUser}>Find a service user</Button>
           </Container>
           <Container className="new-care-charge__selectors">
             <FormGroup label="Status">

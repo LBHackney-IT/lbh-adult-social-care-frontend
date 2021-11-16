@@ -1,8 +1,4 @@
 .new-care-charge {
-  .govuk-breadcrumbs {
-    margin-bottom: 40px;
-  }
-
   .title-subtitle {
     margin-left: auto;
   }
@@ -98,11 +94,12 @@
   align-items: center;
 
   button {
-    height: 50px;
+    font-size: 19px;
   }
 
   h2 {
-    font-size: 48px;
+    color: $lbh-text;
+    font-size: 32px;
     font-weight: 700;
   }
 }
