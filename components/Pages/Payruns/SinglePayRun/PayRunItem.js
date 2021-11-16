@@ -11,7 +11,7 @@ import {
 import { SinglePayRunOverview } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunOverview';
 import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunBreakdown';
 import { useRouter } from 'next/router';
-import { getCarePackageReviewRoute } from 'routes/RouteConstants';
+import { getCarePackageReviewRoute, getPaymentHistoryRoute } from 'routes/RouteConstants';
 
 export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }) => {
   if (!item) return null;
@@ -24,10 +24,21 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }
     router.push(getCarePackageReviewRoute(item.carePackageId));
   };
 
+  const handlePastPaymentsClick = (e) => {
+    e.preventDefault();
+    router.push(getPaymentHistoryRoute(item.carePackageId));
+  };
+
   return (
     <>
       <Container background="#FAFAFA" padding="24px 16px">
-        <SinglePayRunOverview update={update} searchTerm={searchTerm} setInvoiceId={setInvoiceId} payRun={item} />
+        <SinglePayRunOverview
+          payRunId={payRunId}
+          update={update}
+          searchTerm={searchTerm}
+          setInvoiceId={setInvoiceId}
+          payRun={item}
+        />
         <HorizontalSeparator height="15px" />
         <Collapse>
           <HorizontalSeparator height="40px" />
@@ -60,7 +71,11 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }
                 {payRunId && <VerticalSeparator width="32px" />}
                 Assigned broker: {item.assignedBrokerName.toString()}
               </Container>
-              {payRunId && <Link noVisited>Past payments</Link>}
+              {payRunId && (
+                <Link onClick={(e) => handlePastPaymentsClick(e)} noVisited>
+                  Past payments
+                </Link>
+              )}
             </Container>
           </Container>
         </Collapse>
