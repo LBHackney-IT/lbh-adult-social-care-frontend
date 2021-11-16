@@ -1,18 +1,23 @@
 .invoice-detail__main-container {
+  .lbh-tag {
+    min-width: 120px;
+    text-align: center;
+  }
+
   .link-button.green {
     font-size: 19px;
     font-weight: 400;
   }
+}
 
-  & > h3 {
-    font-size: 30px;
-    font-weight: 400;
-    color: black;
-  }
+.invoice-detail--title {
+  font-size: 24px;
+  font-weight: 400;
+  color: $lbh-secondary-text-colour;
+}
 
-  & > p {
-    font-size: 24px;
-    font-weight: 400;
-    color: $lbh-secondary-text-colour;
-  }
+.invoice-detail--sub-title {
+  font-size: 30px;
+  font-weight: 400;
+  color: black;
 }

@@ -1,8 +1,9 @@
 import { useFetchWithParams } from './useFetchWithParams';
 import useGetData from './useGetData';
+import { getUrlOrNull } from '../Utils/FuncUtils';
 
 const PAY_RUNS_URL = '/payruns';
-const getPayRunUrl = (payRunId) => `${PAY_RUNS_URL}/${payRunId}`;
+const getPayRunUrl = (payRunId, additionalString = '') => getUrlOrNull(`${PAY_RUNS_URL}/${payRunId}${additionalString}`);
 
 export const usePayrunView = ({ params }) =>
   useFetchWithParams({
@@ -18,13 +19,15 @@ export const useInvoiceListView = ({ payRunId, params }) =>
     errorText: 'Can not get invoice list',
   });
 
-export const getSinglePayrun = ({payRunId}) =>
-  useGetData(payRunId !== undefined ? getPayRunUrl(payRunId) : null);
+export const usePayRunInvoice = (payRunId, invoiceId) =>
+  useGetData(getPayRunUrl(payRunId, `/invoices/${invoiceId}`))
 
+export const getSinglePayrun = ({payRunId}) =>
+  useGetData(getPayRunUrl(payRunId));
 
 export const useLatestPayRunToDate = ({ payRunTypeId }) =>
   useGetData(
-    !payRunTypeId ? null : `${PAY_RUNS_URL}/${payRunTypeId}/previous-pay-run-end-date`,
+    getPayRunUrl(payRunTypeId, '/previous-pay-run-end-date'),
     'Can not get latest pay run to date',
     null
   );

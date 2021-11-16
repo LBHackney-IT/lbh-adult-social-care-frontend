@@ -3,7 +3,7 @@ import { getNumberWithCommas } from 'service';
 import { Collapse, Container, Heading, HorizontalSeparator, VerticalSeparator } from 'components';
 import { format } from 'date-fns';
 
-export const SinglePayRunBreakdown = ({ payRun }) => {
+export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }) => {
   const { invoiceItems } = payRun;
 
   return (
@@ -11,7 +11,7 @@ export const SinglePayRunBreakdown = ({ payRun }) => {
       {invoiceItems.map(
         (invoice) =>
           !invoice.isReclaim && (
-            <>
+            <React.Fragment key={invoice.id}>
               <HorizontalSeparator height="16px" />
               {invoice.name}
               <HorizontalSeparator height="8px" />
@@ -28,12 +28,12 @@ export const SinglePayRunBreakdown = ({ payRun }) => {
               </Container>
               <HorizontalSeparator height="16px" />
               <Container borderBottom="1px solid #DEE0E2" />
-            </>
+            </React.Fragment>
           )
       )}
       <HorizontalSeparator height="16px" />
       <Container display="grid" gridTemplateColumns="4fr 1fr">
-        <Heading size="m">Total to pay</Heading>
+        <Heading size="m">{totalPayTitle}</Heading>
         <Container textAlign="right">
           <Heading size="m">£{getNumberWithCommas(payRun.netTotal)}</Heading>
         </Container>
@@ -54,7 +54,7 @@ export const SinglePayRunBreakdown = ({ payRun }) => {
         {invoiceItems.map(
           (invoice) =>
             invoice.isReclaim && (
-              <>
+              <React.Fragment key={invoice.id}>
                 <HorizontalSeparator height="16px" />
                 {invoice.name}
                 <HorizontalSeparator height="8px" />
@@ -71,7 +71,7 @@ export const SinglePayRunBreakdown = ({ payRun }) => {
                 </Container>
                 <HorizontalSeparator height="16px" />
                 <Container borderBottom="1px solid #DEE0E2" />
-              </>
+              </React.Fragment>
             )
         )}
         <HorizontalSeparator height="16px" />

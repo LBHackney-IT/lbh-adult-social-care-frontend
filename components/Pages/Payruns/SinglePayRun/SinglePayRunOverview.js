@@ -72,6 +72,8 @@ export const SinglePayRunOverview = ({ searchTerm, payRun, setInvoiceId, update 
         <Select
           style={{ background, color, border: 'none' }}
           options={statusOptions}
+          disabled={!update}
+          IconComponent={!update ? null : undefined}
           onChangeValue={handleChange}
           value={payRun.invoiceStatus}
         />

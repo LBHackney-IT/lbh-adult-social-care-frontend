@@ -263,3 +263,24 @@
     }
   }
 }
+
+.default-container {
+  max-width: 1080px;
+  padding: 30px 60px;
+  margin: 0 auto;
+}
+
+.link-button {
+  text-decoration: underline;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.green {
+    color: $lbh-primary;
+  }
+  &.blue {
+    color: $lbh-link;
+  }
+}

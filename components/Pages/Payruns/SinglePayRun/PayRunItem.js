@@ -13,7 +13,9 @@ import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/Sin
 import { useRouter } from 'next/router';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 
-export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
+export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }) => {
+  if (!item) return null;
+
   const [invoiceId, setInvoiceId] = useState('');
 
   const router = useRouter();
@@ -44,7 +46,7 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
               <VerticalSeparator width="10px" />
               {item.carePackageId}
             </Container>
-            <SinglePayRunBreakdown payRun={item} />
+            <SinglePayRunBreakdown totalPayTitle={totalPayTitle} payRun={item} />
             <HorizontalSeparator height="16px" />
             <Container borderBottom="1px solid #DEE0E2" />
             <HorizontalSeparator height="10px" />
@@ -56,7 +58,7 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
                   </Link>
                 )}
                 {payRunId && <VerticalSeparator width="32px" />}
-                Assigned broker: {item.assignedBrokerName}
+                Assigned broker: {item.assignedBrokerName.toString()}
               </Container>
               {payRunId && <Link noVisited>Past payments</Link>}
             </Container>
