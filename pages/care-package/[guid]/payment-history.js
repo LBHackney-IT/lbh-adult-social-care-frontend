@@ -60,7 +60,7 @@ const PaymentHistory = () => {
           <Container background="#FAFAFA" padding="24px 16px">
             {data && (
               <>
-                <Heading size="m">{data.serviceUserName}</Heading>
+                <Heading size="m" color="#00664F">{data.serviceUserName}</Heading>
                 <HorizontalSeparator height="15px" />
                 <Container display="grid" gridTemplateColumns="1fr 1fr">
                   <Container display="flex" alignItems="center">
@@ -84,7 +84,7 @@ const PaymentHistory = () => {
                 <Container display="flex" alignItems="center">
                   Total paid up to {format(new Date(packagePayment.dateTo), 'dd/MM/yyy')}:
                   <VerticalSeparator width="10px" />
-                  <Heading size="m">£{getNumberWithCommas(packagePayment.totalPaid)}</Heading>
+                  <Heading size="m" color="#00664F">£{getNumberWithCommas(packagePayment.totalPaid)}</Heading>
                 </Container>
               </>
             )}
