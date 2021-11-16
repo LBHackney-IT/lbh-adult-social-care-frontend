@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   Button,
@@ -40,11 +40,13 @@ const AssignPackage2 = () => {
 
   const {
     handleSubmit,
+    setValue,
     control,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
+      hackneyId,
       brokerId: 0,
       packageType: 0,
       notes: '',
@@ -62,6 +64,14 @@ const AssignPackage2 = () => {
     }
     setIsSubmitting(false);
   };
+
+  useEffect(() => {
+    if (hackneyId) {
+      setValue('hackneyId', hackneyId);
+    }
+  }, [hackneyId]);
+
+  console.log('assign');
   return (
     <>
       <CarePackageBreadcrumbs />
