@@ -50,7 +50,7 @@ export const HighLevelInsight = ({
   };
 
   const makePayRunAction = async () => {
-    if (isApproveModal && notes.trim() === '') {
+    if (notes.trim() === '') {
       return setNotesError('Please write a note');
     }
 
@@ -87,7 +87,7 @@ export const HighLevelInsight = ({
       <Dialog className="high-level-insight--dialog" isOpen={openedModal} noBorder closeIcon="" onClose={closeModal}>
         <h3>{openedModal} Pay Run</h3>
         <HorizontalSeparator height={32} />
-        <FormGroup horizontalSeparator={8} error={notesError} required={isApproveModal} label="Add Notes">
+        <FormGroup horizontalSeparator={8} error={notesError} required label="Add Notes">
           <Textarea value={notes} handler={onChangeNotes} rows={5} />
         </FormGroup>
         <HorizontalSeparator height={32} />
@@ -95,7 +95,15 @@ export const HighLevelInsight = ({
           <Button onClick={makePayRunAction} secondary={isDeclineModal}
                   color={isDeclineModal && 'red'}>{openedModal} Pay Run</Button>
           <VerticalSeparator width={24} />
-          <p onClick={closeModal} className="link-button black">Cancel</p>
+          <Button
+            onClick={closeModal}
+            outline
+            color='gray'
+            secondary
+            className="no-border link-button"
+          >
+            Cancel
+          </Button>
         </Container>
       </Dialog>
       <Container background="#FAFAFA" padding="24px 16px">
@@ -134,9 +142,9 @@ export const HighLevelInsight = ({
           <Container display="flex" flexDirection="column" alignSelf="center">
             <Button onClick={openModal('Approve')}>Approve</Button>
             <HorizontalSeparator height="10px" />
-            <p className="link-button red" onClick={openModal('Decline')} outline>
+            <Button className='no-border link-button' color='red' secondary onClick={openModal('Decline')} outline>
               Reject
-            </p>
+            </Button>
           </Container>
         </Container>
       </Container>
