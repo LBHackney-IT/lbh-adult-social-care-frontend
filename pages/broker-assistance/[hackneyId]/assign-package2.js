@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   Button,
@@ -15,20 +15,22 @@ import {
 import { useRouter } from 'next/router';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useBrokers, useLookups, useServiceUser } from 'api';
+import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
+import { useDispatch } from 'react-redux';
+import { addNotification } from 'reducers/notificationsReducer';
 
 const AssignPackage2 = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { hackneyId } = router.query;
   const { data: serviceUser, isLoading: serviceUserLoading } = useServiceUser(hackneyId);
   const { options: packageTypeOptions, isLoading: lookupsLoading } = useLookups('packageType');
   const { options: brokerOptions, isLoading: brokersLoading } = useBrokers();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  //   const brokerName = brokerOptions?.find((el) => el.value === broker)?.text;
   const isLoading = serviceUserLoading || lookupsLoading || brokersLoading;
-
   const schema = yup.object().shape({
-    assignBroker: yup.number().typeError('Please choose a broker').required().min(1, 'Please choose a broker'),
+    brokerId: yup.string().typeError('Please choose a Broker').required().min(2, 'Please choose a Broker'),
     packageType: yup
       .number()
       .typeError('Please select a package type')
@@ -39,17 +41,27 @@ const AssignPackage2 = () => {
   const {
     handleSubmit,
     control,
-    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      assignBroker: 0,
+      brokerId: 0,
       packageType: 0,
       notes: '',
     },
   });
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => submitData(data);
+
+  const submitData = async (data = {}) => {
+    setIsSubmitting(true);
+    try {
+      await assignToBroker({ data });
+      dispatch(addNotification({ text: 'Care plan assigned', className: 'success' }));
+    } catch (error) {
+      dispatch(addNotification({ text: error, className: 'error' }));
+    }
+    setIsSubmitting(false);
+  };
   return (
     <>
       <CarePackageBreadcrumbs />
@@ -66,9 +78,9 @@ const AssignPackage2 = () => {
         )}
         <form onSubmit={handleSubmit(onSubmit)}>
           <Container className="brokerage__container">
-            <FormGroup label="Assign a Broker" error={errors.assignBroker?.message}>
+            <FormGroup label="Assign a Broker" error={errors.brokerId?.message}>
               <Controller
-                name="assignBroker"
+                name="brokerId"
                 control={control}
                 render={({ field }) => <Select options={brokerOptions} {...field} />}
               />
@@ -84,10 +96,14 @@ const AssignPackage2 = () => {
           </Container>
           <Container>
             <FormGroup label="Add notes" error={errors.notes?.message}>
-              <Controller name="notes" control={control} render={({ field }) => <Textarea {...field} />} />
+              <Controller
+                name="notes"
+                control={control}
+                render={({ field }) => <Textarea handler={field.onChange} value={field.value} />}
+              />
             </FormGroup>
             <HorizontalSeparator height="20px" />
-            <Button isLoading={isLoading} disabled={isLoading} type="submit">
+            <Button isLoading={isSubmitting} disabled={isLoading} type="submit">
               Save and continue
             </Button>
           </Container>
