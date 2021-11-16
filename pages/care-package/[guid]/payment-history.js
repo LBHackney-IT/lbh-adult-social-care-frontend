@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
 import { getLoggedInUser, getNumberWithCommas } from 'service';
@@ -30,13 +30,22 @@ const breadcrumbs = [
 const PaymentHistory = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
-  const { data, isLoading } = usePaymentHistoryView({ packageId });
+  const [pageNumber, setPageNumber] = useState(1);
+  const params = useMemo(
+    () => ({
+      pageNumber,
+    }),
+    [pageNumber]
+  );
+  const { data, isLoading } = usePaymentHistoryView({ params, packageId });
   const [packagePayment, setPackagePayment] = useState();
+  const [pagingMetaData, setPagingMetaData] = useState();
   const [paymentHistory, setPaymentHistory] = useState([]);
   useEffect(() => {
     if (data) {
       setPackagePayment(data.packagePayment);
       setPaymentHistory(data?.payments?.data);
+      setPagingMetaData(data?.payments?.pagingMetaData);
     }
   }, [data]);
 
@@ -51,7 +60,7 @@ const PaymentHistory = () => {
           <Container background="#FAFAFA" padding="24px 16px">
             {data && (
               <>
-                <Heading size="m">{data.serviceUserName}</Heading>
+                <Heading size="m" color="#00664F">{data.serviceUserName}</Heading>
                 <HorizontalSeparator height="15px" />
                 <Container display="grid" gridTemplateColumns="1fr 1fr">
                   <Container display="flex" alignItems="center">
@@ -75,20 +84,22 @@ const PaymentHistory = () => {
                 <Container display="flex" alignItems="center">
                   Total paid up to {format(new Date(packagePayment.dateTo), 'dd/MM/yyy')}:
                   <VerticalSeparator width="10px" />
-                  <Heading size="m">£{getNumberWithCommas(packagePayment.totalPaid)}</Heading>
+                  <Heading size="m" color="#00664F">£{getNumberWithCommas(packagePayment.totalPaid)}</Heading>
                 </Container>
               </>
             )}
             <HorizontalSeparator height="20px" />
             {paymentHistory && <PaymentHistoryTable data={paymentHistory} />}
             <HorizontalSeparator height="30px" />
-            <AlternativePagination
-              totalPages={3}
-              totalCount={30}
-              pageSize={10}
-              currentPage={1}
-              changePagination={() => {}}
-            />
+            {pagingMetaData && (
+              <AlternativePagination
+                totalPages={pagingMetaData?.totalPages}
+                totalCount={pagingMetaData?.totalCount}
+                pageSize={pagingMetaData?.pageSize}
+                currentPage={pageNumber}
+                changePagination={setPageNumber}
+              />
+            )}
           </Container>
         </>
       )}
