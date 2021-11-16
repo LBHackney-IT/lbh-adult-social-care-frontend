@@ -31,7 +31,7 @@ export const HighLevelInsight = ({
 
   const handleApprove = async () => {
     try {
-      await approvePayRun({ payRunId, notes });
+      await approvePayRun(payRunId, notes);
       pushNotification(`Invoice status changed`, 'success');
       update();
     } catch (e) {
@@ -66,7 +66,7 @@ export const HighLevelInsight = ({
 
   const handleReject = async () => {
     try {
-      await rejectPayRun({ payRunId, notes });
+      await rejectPayRun(payRunId, notes);
       pushNotification(`Invoice status changed`, 'success');
       update();
     } catch (e) {
@@ -98,7 +98,7 @@ export const HighLevelInsight = ({
           <Button
             onClick={closeModal}
             outline
-            color='gray'
+            color="gray"
             secondary
             className="no-border link-button"
           >
@@ -142,7 +142,7 @@ export const HighLevelInsight = ({
           <Container display="flex" flexDirection="column" alignSelf="center">
             <Button onClick={openModal('Approve')}>Approve</Button>
             <HorizontalSeparator height="10px" />
-            <Button className='no-border link-button' color='red' secondary onClick={openModal('Decline')} outline>
+            <Button className="no-border link-button" color="red" secondary onClick={openModal('Decline')} outline>
               Reject
             </Button>
           </Container>
