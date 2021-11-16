@@ -4,6 +4,7 @@ import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
 import { Container, Table, Tag } from '../../HackneyDS';
 
 export const PackageApprovalsTable = ({ searchTerm, getPackageTypeById, onRowClick, data }) => {
+  const handleName = (name) => getHighlightedSearchQuery(name, searchTerm);
   const columns = [
     {
       accessor: 'status',
@@ -26,9 +27,7 @@ export const PackageApprovalsTable = ({ searchTerm, getPackageTypeById, onRowCli
           <Container>
             <Container className="status-info" display="flex">
               <p className="brokerage-portal--user-name font-size-19px font-weight-bold text-green">
-                {searchTerm
-                  ? React.useMemo(() => getHighlightedSearchQuery(fullName, searchTerm), [fullName, searchTerm])
-                  : fullName}
+                {searchTerm ? handleName(fullName) : fullName}
               </p>
               <Tag className="text-capitalize outline" color={getPackageColorFromStatusId(value)}>
                 {getPackageStatusTextFromStatusId(value)}
