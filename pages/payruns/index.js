@@ -7,6 +7,7 @@ import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { usePayrunView } from 'api/SWR/payRuns';
 import CreateDraftPayRun from '../../components/Pages/Finance/CreateDraftPayRun';
+import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });

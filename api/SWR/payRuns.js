@@ -19,6 +19,7 @@ export const useInvoiceListView = ({ payRunId, params }) =>
   });
 
 export const getSinglePayrun = ({ payRunId }) => useGetData(payRunId !== undefined ? getPayRunUrl(payRunId) : null);
+export const getPayrunInsight = ({ payRunId }) => useGetData(`${PAY_RUNS_URL}/${payRunId}/insights`);
 
 export const useLatestPayRunToDate = ({ payRunTypeId }) =>
   useGetData(
