@@ -19,9 +19,6 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
-const dateFrom = new Date();
-const dateTo = new Date(dateFrom.getTime() + 999999999);
-
 const InvoiceDetailPage = () => {
   const router = useRouter();
   const { guid: payRunId, id: invoiceId } = router.query;
@@ -34,7 +31,7 @@ const InvoiceDetailPage = () => {
       <Container className="default-container invoice-detail__main-container">
         <Heading fontWeight={400} size='xl'>Pay run period</Heading>
         <HorizontalSeparator height={9} />
-        <HintDate dateFrom={dateFrom} dateTo={dateTo} />
+        <HintDate dateFrom={invoice.startDate} dateTo={invoice.endDate} />
         <HorizontalSeparator height={24} />
         <PayRunItem totalPayTitle="Total paid" item={invoice?.invoice} />
         <HorizontalSeparator height="32px" />
