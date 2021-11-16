@@ -10,6 +10,7 @@ export default function FormGroup({
   disabled,
   hint,
   error,
+  horizontalSeparator = 20,
   className = '',
   smallLabel = false,
   inlineLabel = false,
@@ -42,7 +43,7 @@ export default function FormGroup({
             {error}
           </span>
         )}
-        {(hint || error || (label && !smallLabel)) && <HorizontalSeparator height="20px" />}
+        {(hint || error || (label && !smallLabel)) && <HorizontalSeparator height={horizontalSeparator} />}
         {inlineLabel && label ? (
           <Container display="flex" alignItems="center">
             <label className={`govuk-fieldset__legend${required ? ' text-required-after' : ''} ${labelSize}`}>

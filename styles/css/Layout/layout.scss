@@ -263,3 +263,20 @@
     }
   }
 }
+
+.link-button {
+  text-decoration: underline;
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.black {
+    color: black;
+  }
+
+  &.red {
+    color: $lbh-dark-red;
+  }
+}
