@@ -9,7 +9,7 @@ import AdHocAndReleases from './AdHocAndReleases';
 
 const tabs = ['Regular cycles', 'Ad Hoc and Releases'];
 
-const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
+const CreateDraftPayRun = ({ isOpened, setIsOpened, update }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,6 +21,7 @@ const CreateDraftPayRun = ({ isOpened, setIsOpened }) => {
     setIsLoading(true);
     try {
       await createDraftPayRun(data);
+      update();
       closeModal();
     } catch (e) {
       const isExistingPayRun = e.includes('already exists!');

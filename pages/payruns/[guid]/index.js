@@ -4,10 +4,11 @@ import { getLoggedInUser } from 'service';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
-import { useInvoiceListView } from 'api/SWR/payRuns';
+import { useInvoiceListView, getPayrunInsight } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
+import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -53,6 +54,8 @@ const SinglePayRun = () => {
   const { data: payRun, isLoading, mutate: update } = useInvoiceListView({ payRunId, params });
   const { payRunItems: payRunData } = payRun;
 
+  const { data: insightData, isLoading: insightsIsLoading } = getPayrunInsight({ payRunId });
+
   useEffect(() => {
     if (payRunData) {
       setPayRunItems(payRunData.data);
@@ -87,6 +90,18 @@ const SinglePayRun = () => {
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
             </>
           ))}
+        <HorizontalSeparator height="32px" />
+        {insightData && (
+          <HighLevelInsight
+            payRunId={payRunId}
+            holdCount={insightData?.holdsCount}
+            holdValue={insightData?.totalHeldAmount}
+            difference={insightData?.totalDifferenceFromLastCycle}
+            serviceUsers={insightData?.serviceUserCount}
+            suppliers={insightData?.supplierCount}
+            total={insightData?.totalInvoiceAmount}
+          />
+        )}
         <HorizontalSeparator height="32px" />
         <AlternativePagination
           totalPages={pagingMetaData.totalPages}

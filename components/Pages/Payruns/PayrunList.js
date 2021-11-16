@@ -19,6 +19,7 @@ export const PayrunList = ({ searchTerm, data }) => {
   const gotToPayrun = (payRunId) => {
     router.push(getSinglePayrunRoute(payRunId));
   };
+  const handleId = (id) => getHighlightedSearchQuery(id, searchTerm);
   return (
     <Container>
       {data.map((d, index) => (
@@ -35,7 +36,7 @@ export const PayrunList = ({ searchTerm, data }) => {
                 <Container display="flex" alignItems="center">
                   <Heading size="s">Payrun ID: </Heading>
                   <VerticalSeparator width="10px" />
-                  {React.useMemo(() => getHighlightedSearchQuery(d.payRunId, searchTerm), [d.payRunId, searchTerm])}
+                  {handleId(d.payRunId)}
                 </Container>
                 <Container display="flex" alignItems="center">
                   <Heading size="s">Date: </Heading>

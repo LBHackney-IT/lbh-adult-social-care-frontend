@@ -7,6 +7,7 @@ import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { usePayrunView } from 'api/SWR/payRuns';
 import CreateDraftPayRun from '../../components/Pages/Finance/CreateDraftPayRun';
+import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -49,7 +50,7 @@ const Payruns = () => {
     }),
     [filters, pageNumber]
   );
-  const { data, isLoading } = usePayrunView({ params });
+  const { data, isLoading, mutate: update } = usePayrunView({ params });
 
   const {
     data: payrunData,
@@ -62,7 +63,7 @@ const Payruns = () => {
 
   return (
     <Container>
-      <CreateDraftPayRun isOpened={isOpenedModal} setIsOpened={setIsOpenedModal} />
+      <CreateDraftPayRun isOpened={isOpenedModal} setIsOpened={setIsOpenedModal} update={update} />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <HorizontalSeparator height="10px" />

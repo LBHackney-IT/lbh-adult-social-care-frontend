@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Table } from 'components';
+import { Container, Link, Table } from 'components';
 import { getNumberWithCommas } from 'service';
 import format from 'date-fns/format';
 import { getInvoiceRoute } from 'routes/RouteConstants';
@@ -39,9 +39,9 @@ export const PaymentHistoryTable = ({ data }) => {
       ),
     },
     {
-      Header: 'Paid',
+      Header: () => <Container textAlign="right">Paid</Container>,
       accessor: 'amountPaid',
-      Cell: ({ value }) => `£${getNumberWithCommas(value)}`,
+      Cell: ({ value }) => <Container textAlign="right">£{getNumberWithCommas(value)}</Container>,
     },
   ];
   return <Table columns={columns} data={data} />;
