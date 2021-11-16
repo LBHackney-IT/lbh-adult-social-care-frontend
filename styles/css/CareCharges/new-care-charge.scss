@@ -95,8 +95,14 @@
 
 .new-care-charge__header {
   margin-bottom: 32px;
+  align-items: center;
+
+  button {
+    height: 50px;
+  }
+
   h2 {
-    font-size: 36px;
+    font-size: 48px;
     font-weight: 700;
   }
 }
