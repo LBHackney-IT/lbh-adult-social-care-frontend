@@ -53,7 +53,7 @@ const AssignPackage = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      hackneyId,
+      hackneyUserId:hackneyId,
       brokerId: 0,
       packageType: 0,
       notes: '',
@@ -74,7 +74,7 @@ const AssignPackage = () => {
 
   useEffect(() => {
     if (hackneyId) {
-      setValue('hackneyId', parseInt(hackneyId, 10));
+      setValue('hackneyUserId', parseInt(hackneyId, 10));
     }
   }, [hackneyId]);
 
