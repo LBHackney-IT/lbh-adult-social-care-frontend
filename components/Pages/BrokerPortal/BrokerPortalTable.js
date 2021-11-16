@@ -4,6 +4,7 @@ import { Container, Table, Tag } from '../../HackneyDS';
 import { formatDate, getTagColorFromStatus } from '../../../service';
 
 export const BrokerPortalTable = ({ searchTerm, onRowClick, data }) => {
+  const handleServiceUserName = (name) => getHighlightedSearchQuery(name, searchTerm);
   const columns = [
     {
       accessor: 'packageStatus',
@@ -11,12 +12,7 @@ export const BrokerPortalTable = ({ searchTerm, onRowClick, data }) => {
         <Container>
           <Container className="status-info" display="flex">
             <p className="brokerage-portal--user-name font-size-19px font-weight-bold text-green">
-              {searchTerm
-                ? React.useMemo(
-                    () => getHighlightedSearchQuery(original.serviceUserName, searchTerm),
-                    [original.serviceUserName, searchTerm]
-                  )
-                : original.serviceUserName}
+              {searchTerm ? handleServiceUserName(original.serviceUserName) : original.serviceUserName}
             </p>
             <Tag className="text-capitalize" outline color={getTagColorFromStatus(value)}>
               {value}

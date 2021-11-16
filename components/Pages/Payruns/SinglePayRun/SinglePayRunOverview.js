@@ -39,12 +39,11 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
   const background = useCallback(getStatusSelectBackground(payRun.invoiceStatus), [payRun.invoiceStatus]);
   const color = useCallback(getStatusSelectTextColor(payRun.invoiceStatus), [payRun.invoiceStatus]);
 
+  const handleServiceUserName = () => getHighlightedSearchQuery(payRun.serviceUserName, searchTerm);
   return (
     <>
       <Container display="flex" alignItems="baseline">
-        <Heading size="m">
-          {React.useMemo(() => getHighlightedSearchQuery(payRun.serviceUserName, searchTerm), [payRun.serviceUserName, searchTerm])}
-        </Heading>
+        <Heading size="m">{handleServiceUserName()}</Heading>
         <VerticalSeparator width="24px" />
         <Heading size="s">Invoice ID:</Heading>
         <VerticalSeparator width="5px" />
