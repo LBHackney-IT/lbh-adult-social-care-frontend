@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, Heading, Hint, HorizontalSeparator } from 'components';
+import { Button, Container, Heading, Hint, HorizontalSeparator, VerticalSeparator } from 'components';
 import { getNumberWithCommas } from 'service';
 import { approvePayRun } from 'api/PayRun';
 import { useDispatch } from 'react-redux';
@@ -36,7 +36,7 @@ export const HighLevelInsight = ({
   const increaseOrDecrease = difference > 0 ? 'increase' : 'decrease';
   return (
     <Container background="#FAFAFA" padding="24px 16px">
-      <Container display="grid" gridTemplateColumns="2fr 1fr 1fr 1.5fr 1fr" alignItems="flex-end">
+      <Container display="flex" justifyContent="space-between">
         <Container display="flex" flexDirection="column">
           <Hint>High Level Insight</Hint>
           <HorizontalSeparator height="5px" />
@@ -46,25 +46,29 @@ export const HighLevelInsight = ({
           <HorizontalSeparator height="5px" />
           {`£${getNumberWithCommas(Math.abs(difference))} ${increaseOrDecrease} from last cycle`}
         </Container>
-        <Container display="flex" flexDirection="column">
+        <Container border="1px solid rgba(82, 90, 91, 0.25)" />
+
+        <Container display="flex" flexDirection="column" textAlign="center" alignSelf="center">
           <Heading size="xl" color="#00664F">
             {suppliers}
           </Heading>
           Suppliers
         </Container>
-        <Container display="flex" flexDirection="column">
+        <Container border="1px solid rgba(82, 90, 91, 0.25)" />
+        <Container display="flex" flexDirection="column" textAlign="center" alignSelf="center">
           <Heading size="xl" color="#00664F">
             {serviceUsers}
           </Heading>
           Service Users
         </Container>
-        <Container display="flex" flexDirection="column">
+        <Container border="1px solid rgba(82, 90, 91, 0.25)" />
+        <Container display="flex" flexDirection="column" textAlign="center" alignSelf="center">
           <Heading size="xl" color="#00664F">
             {holdCount}
           </Heading>
           Holds worth £{getNumberWithCommas(holdValue)}
         </Container>
-        <Container display="flex" flexDirection="column">
+        <Container display="flex" flexDirection="column" alignSelf="center">
           <Button onClick={handleApprove}>Approve</Button>
           <HorizontalSeparator height="10px" />
           <Button onClick={handleReject} outline>
