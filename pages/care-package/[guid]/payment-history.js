@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
 import { getLoggedInUser, getNumberWithCommas } from 'service';
@@ -30,13 +30,22 @@ const breadcrumbs = [
 const PaymentHistory = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
-  const { data, isLoading } = usePaymentHistoryView({ packageId });
+  const [pageNumber, setPageNumber] = useState(1);
+  const params = useMemo(
+    () => ({
+      pageNumber,
+    }),
+    [pageNumber]
+  );
+  const { data, isLoading } = usePaymentHistoryView({ params, packageId });
   const [packagePayment, setPackagePayment] = useState();
+  const [pagingMetaData, setPagingMetaData] = useState();
   const [paymentHistory, setPaymentHistory] = useState([]);
   useEffect(() => {
     if (data) {
       setPackagePayment(data.packagePayment);
       setPaymentHistory(data?.payments?.data);
+      setPagingMetaData(data?.payments?.pagingMetaData);
     }
   }, [data]);
 
@@ -82,13 +91,15 @@ const PaymentHistory = () => {
             <HorizontalSeparator height="20px" />
             {paymentHistory && <PaymentHistoryTable data={paymentHistory} />}
             <HorizontalSeparator height="30px" />
-            <AlternativePagination
-              totalPages={3}
-              totalCount={30}
-              pageSize={10}
-              currentPage={1}
-              changePagination={() => {}}
-            />
+            {pagingMetaData && (
+              <AlternativePagination
+                totalPages={pagingMetaData?.totalPages}
+                totalCount={pagingMetaData?.totalCount}
+                pageSize={pagingMetaData?.pageSize}
+                currentPage={pageNumber}
+                changePagination={setPageNumber}
+              />
+            )}
           </Container>
         </>
       )}
