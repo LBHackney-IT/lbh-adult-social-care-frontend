@@ -42,6 +42,7 @@ import { FileUpload } from './FileUpload/FileUpload';
 import { UploadGreenButton } from './UploadGreenButton';
 import { SingleAccordion } from './SingleAccordion';
 import { Collapse } from './Collapse/Collapse';
+import { HintDate } from './HintDate';
 
 export {
   Collapse,
@@ -88,4 +89,5 @@ export {
   SingleAccordion,
   UploadGreenButton,
   Notifications,
+  HintDate,
 };

@@ -1,8 +1,8 @@
 import React from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { DynamicBreadcrumbs, Container, HorizontalSeparator, Loading } from 'components';
-import { getEnGBFormattedDate, usePayRunInvoice } from 'api';
+import { DynamicBreadcrumbs, Container, HorizontalSeparator, Loading, HintDate, Heading } from 'components';
+import { usePayRunInvoice } from 'api';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { useRouter } from 'next/router';
 
@@ -32,9 +32,9 @@ const InvoiceDetailPage = () => {
       <DynamicBreadcrumbs />
       <Loading isLoading={isLoading} />
       <Container className="default-container invoice-detail__main-container">
-        <h3 className="invoice-detail--title">Pay run period</h3>
-        <p
-          className="invoice-detail--sub-title">{getEnGBFormattedDate(dateFrom)}{dateTo ? ` - ${getEnGBFormattedDate(dateTo)}` : ''}</p>
+        <Heading fontWeight={400} size='xl'>Pay run period</Heading>
+        <HorizontalSeparator height={9} />
+        <HintDate dateFrom={dateFrom} dateTo={dateTo} />
         <HorizontalSeparator height={24} />
         <PayRunItem totalPayTitle="Total paid" item={invoice?.invoice} />
         <HorizontalSeparator height="32px" />
