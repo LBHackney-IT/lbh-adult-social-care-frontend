@@ -1,7 +1,7 @@
 import React from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { CarePackageBreadcrumbs, Container, HorizontalSeparator, Loading } from 'components';
+import { DynamicBreadcrumbs, Container, HorizontalSeparator, Loading } from 'components';
 import { getEnGBFormattedDate, usePayRunInvoice } from 'api';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { useRouter } from 'next/router';
@@ -27,15 +27,11 @@ const InvoiceDetailPage = () => {
   const { guid: payRunId, id: invoiceId } = router.query;
   const { data: invoice, isLoading } = usePayRunInvoice(payRunId, invoiceId);
 
-  const goBack = () => router.back();
-
   return (
     <Container className="invoice-detail">
-      <CarePackageBreadcrumbs />
+      <DynamicBreadcrumbs />
       <Loading isLoading={isLoading} />
       <Container className="default-container invoice-detail__main-container">
-        <p onClick={goBack} className="link-button green">Back</p>
-        <HorizontalSeparator height={50} />
         <h3 className="invoice-detail--title">Pay run period</h3>
         <p
           className="invoice-detail--sub-title">{getEnGBFormattedDate(dateFrom)}{dateTo ? ` - ${getEnGBFormattedDate(dateTo)}` : ''}</p>

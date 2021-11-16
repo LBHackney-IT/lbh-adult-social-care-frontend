@@ -78,7 +78,7 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
         <Container display="grid" gridTemplateColumns="4fr 1fr">
           <Heading size="m">Sub reclaimed by Hackney</Heading>
           <Container textAlign="right">
-            <Heading size="m">£{getNumberWithCommas(payRun.netTotal)}</Heading>
+            <Heading size="m">£{getNumberWithCommas(payRun.hackneyReclaimsTotal)}</Heading>
           </Container>
         </Container>
       </Collapse>

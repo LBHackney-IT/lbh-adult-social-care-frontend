@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { getCarePackageMainRoute } from 'routes/RouteConstants';
-import { Breadcrumbs, Container } from '../../HackneyDS';
+import { Breadcrumbs, Container } from '../HackneyDS';
 
-const CarePackageBreadcrumbs = ({ additionalBreadcrumbs = [{ text: 'Full overview' }]}) => {
+const DynamicBreadcrumbs = ({ additionalBreadcrumbs = [{ text: 'Full overview' }]}) => {
   const breadcrumbs = useMemo(() => getCarePackageMainRoute(additionalBreadcrumbs), []);
 
   return (
@@ -12,4 +12,4 @@ const CarePackageBreadcrumbs = ({ additionalBreadcrumbs = [{ text: 'Full overvie
   )
 };
 
-export default CarePackageBreadcrumbs;
+export default DynamicBreadcrumbs;

@@ -18,7 +18,7 @@ import {
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import Loading from '../../../Loading';
-import CarePackageBreadcrumbs from '../CarePackageBreadcrumbs';
+import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
 
 const CareCharges = ({
   isS117,
@@ -143,7 +143,7 @@ const CareCharges = ({
 
   return (
     <Container className="brokerage__care-charges">
-      <CarePackageBreadcrumbs />
+      <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <Loading isLoading={loading} />
         <TitleSubtitleHeader title="Build a care package" subTitle="Care Charges" />

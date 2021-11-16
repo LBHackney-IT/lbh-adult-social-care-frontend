@@ -5,7 +5,7 @@ import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
 import AlternativePagination from '../../../AlternativePagination';
 import SearchResult from '../../../SearchResult';
 import ServiceUserSearch from '../../ServiceUser/Search';
-import CarePackageBreadcrumbs from '../../CarePackages/CarePackageBreadcrumbs';
+import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
 import Loading from '../../../Loading';
 
 const inputs = [
@@ -30,7 +30,7 @@ const SearchServiceUser = ({
 }) => (
   <Container className={`search-service-user ${className}`}>
     <Loading isLoading={isLoading} />
-    <CarePackageBreadcrumbs additionalBreadcrumbs={[{ text: 'Search for a service user' }]} />
+    <DynamicBreadcrumbs additionalBreadcrumbs={[{ text: 'Search for a service user' }]} />
     <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
       <ServiceUserSearch
         onSearch={onSearch}

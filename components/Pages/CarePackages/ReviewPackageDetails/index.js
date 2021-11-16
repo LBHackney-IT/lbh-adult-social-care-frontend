@@ -14,7 +14,7 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
 import Loading from '../../../Loading';
 import ActionCarePackageModal from '../../BrokerPortal/ActionCarePackageModal';
-import CarePackageBreadcrumbs from '../CarePackageBreadcrumbs';
+import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
 import PackageDetailsButtons from './PackageDetailsButtons';
 
 const initialNotes = {
@@ -151,7 +151,7 @@ const ReviewPackageDetails = ({
           actions={actions}
         />
       ))}
-      <CarePackageBreadcrumbs />
+      <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <Container className="brokerage__container-header brokerage__container">
           <TitleSubtitleHeader
