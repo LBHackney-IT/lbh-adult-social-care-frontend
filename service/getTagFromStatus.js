@@ -21,7 +21,7 @@ export const packageStatuses = [
 ];
 
 export const getPackageStatusBy = ({ statusName, statusId }) =>
-  packageStatuses.find((status) => status[statusName ? 'statusName' : 'statusId'] === statusName || statusId);
+  packageStatuses.find((status) => status[statusName ? 'statusName' : 'statusId'] === (statusName || statusId));
 
 export const getTagDisplayTextFromStatusId = (statusId) => {
   const invoiceInformation = invoiceStatuses.find((status) => status.statusId === statusId);

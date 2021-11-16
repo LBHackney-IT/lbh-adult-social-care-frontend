@@ -132,7 +132,7 @@ export const PackageApprovals = ({
                 <Select
                   options={statusOptions}
                   value={filters.status}
-                  onChange={({ target: { value } }) => changeFilterField('status', value)}
+                  onChangeValue={(value) => changeFilterField('status', value)}
                 />
               </FormGroup>
               <FormGroup className="form-group--inline-label" label="Approver">
