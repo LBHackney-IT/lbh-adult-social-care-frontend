@@ -19,6 +19,7 @@ import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
+import { getFormData } from 'service/getFormData';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKER_ASSISTANCE_ROUTE },
@@ -53,7 +54,7 @@ const AssignPackage = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      hackneyUserId:hackneyId,
+      hackneyUserId: hackneyId,
       brokerId: 0,
       packageType: 0,
       notes: '',
@@ -63,8 +64,9 @@ const AssignPackage = () => {
 
   const submitData = async (data = {}) => {
     setIsSubmitting(true);
+    const formData = getFormData(data);
     try {
-      await assignToBroker({ data });
+      await assignToBroker({ data: formData });
       dispatch(addNotification({ text: 'Care plan assigned', className: 'success' }));
     } catch (error) {
       dispatch(addNotification({ text: error, className: 'error' }));
