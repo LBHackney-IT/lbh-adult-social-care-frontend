@@ -51,7 +51,7 @@ export const HighLevelInsight = ({
 
   const makePayRunAction = async () => {
     if (notes.trim() === '') {
-      return setNotesError('Please write a note');
+      return setNotesError(`Please put a reason for ${openedModal.toLowerCase()}`);
     }
 
     setLoading(true);
@@ -92,8 +92,13 @@ export const HighLevelInsight = ({
         </FormGroup>
         <HorizontalSeparator height={32} />
         <Container display="flex" alignItems="center">
-          <Button onClick={makePayRunAction} secondary={isDeclineModal}
-                  color={isDeclineModal && 'red'}>{openedModal} Pay Run</Button>
+          <Button
+            onClick={makePayRunAction}
+            secondary={isDeclineModal}
+            color={isDeclineModal && 'red'}
+          >
+            {openedModal} Pay Run
+          </Button>
           <VerticalSeparator width={24} />
           <Button
             onClick={closeModal}
