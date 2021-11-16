@@ -20,6 +20,7 @@ import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
 import { getFormData } from 'service/getFormData';
+import { route } from 'next/dist/next-server/server/router';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKER_ASSISTANCE_ROUTE },
@@ -68,6 +69,7 @@ const AssignPackage = () => {
     try {
       await assignToBroker({ data: formData });
       dispatch(addNotification({ text: 'Care plan assigned', className: 'success' }));
+      router.push(BROKER_ASSISTANCE_ROUTE);
     } catch (error) {
       dispatch(addNotification({ text: error, className: 'error' }));
     }
