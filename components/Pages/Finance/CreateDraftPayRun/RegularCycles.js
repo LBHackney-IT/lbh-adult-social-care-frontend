@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { differenceInDays } from 'date-fns';
 import * as yup from 'yup';
 import CreatePayRunInfo from './CreatePayRunInfo';
