@@ -31,7 +31,7 @@ export const Collapse = ({
         onClick={() => mainSetExpanded(prevState => !prevState)}
       >
         {title}
-        <span className="text-blue collapse__button">
+        <span className="collapse__button">
           {mainExpanded ? collapseText : expandText}
           <IconComponent className={`icon-transition${mainExpanded ? iconAnimationClass : ''}`} />
         </span>
