@@ -20,7 +20,7 @@ export const PackageType = ({ errors, control }) => {
         <Controller
           name="packageType"
           control={control}
-          render={({ field }) => <Select disabled options={packageTypes} {...field} />}
+          render={({ field }) => <Select options={packageTypes} {...field} />}
         />
       </FormGroup>
       <HorizontalSeparator height="20px" />
