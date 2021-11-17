@@ -45,7 +45,7 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
   return (
     <>
       <Container display="flex" alignItems="baseline">
-        <Heading size="m">{handleServiceUserName()}</Heading>
+        <Heading size="m" color="#00664F">{handleServiceUserName()}</Heading>
         <VerticalSeparator width="24px" />
         <Heading size="s">Invoice ID:</Heading>
         <VerticalSeparator width="5px" />
