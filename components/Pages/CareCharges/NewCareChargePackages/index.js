@@ -35,13 +35,13 @@ const NewCareChargePackages = ({
   const findServiceUser = () => router.push(SERVICE_USER_SEARCH_ROUTE);
 
   return (
-    <Container className="new-care-charge">
+    <Container>
       <Loading isLoading={isLoading} />
       <Container background="#FAFAFA" padding="0 0 60px 0">
-        <Container padding="0 60px" className="centered-container">
+        <Container padding="0 60px" margin="0 auto" maxWidth="1080px">
           <HorizontalSeparator height="10px" />
           <Breadcrumbs values={breadcrumbs} />
-          <HorizontalSeparator height={30} />
+          <HorizontalSeparator height="30px" />
           <Container display="flex" justifyContent="space-between">
             <Heading size="xl">New care charge packages</Heading>
             <Button largeButton onClick={findServiceUser}>
@@ -76,8 +76,8 @@ const NewCareChargePackages = ({
           data={data}
           onRowClick={({ serviceUserId }) => pushRoute(getServiceUserCareChargesRoute(serviceUserId))}
         />
+        <HorizontalSeparator height="20px" />
         <AlternativePagination
-          className="mt-6"
           totalPages={pagingMetaData?.totalPages}
           totalCount={pagingMetaData?.totalCount}
           currentPage={pageNumber}
