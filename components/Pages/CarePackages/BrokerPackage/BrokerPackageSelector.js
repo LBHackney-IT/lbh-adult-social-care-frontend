@@ -48,7 +48,7 @@ const SupplierLookUpSelector = ({
                   <CollapseGreenDownIcon />
                 </Container>
               ) : (
-                <p onClick={() => setSelectedItem(item)} className="link-button hackney-btn-green">
+                <p onClick={() => setSelectedItem(item)} className="link-button green">
                   Select
                 </p>
               )}
