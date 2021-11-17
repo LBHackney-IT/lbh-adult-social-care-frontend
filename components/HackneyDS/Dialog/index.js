@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CircleCloseIcon } from '../../Icons';
 import { useScrollLock } from '../../../service';
@@ -14,6 +14,20 @@ export default function Dialog ({
   const [windowState, setWindowState] = useState();
 
   useScrollLock(isOpen);
+
+  useEffect(() => {
+    const onClickOutside = (e) => {
+      if (e.target.classList.contains('lbh-dialog-container')) {
+        onClose();
+      }
+    };
+    setWindowState(window);
+    window.addEventListener('click', onClickOutside);
+
+    return () => {
+      window.removeEventListener('click', onClickOutside);
+    };
+  }, [onClose]);
 
   if (!windowState) return null;
 
