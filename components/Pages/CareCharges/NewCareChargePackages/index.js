@@ -37,14 +37,18 @@ const NewCareChargePackages = ({
   return (
     <Container className="new-care-charge">
       <Loading isLoading={isLoading} />
-      <Container background="#FAFAFA">
-        <Container padding="10px 60px 32px 60px" className="centered-container">
+      <Container background="#FAFAFA" padding="0 0 60px 0">
+        <Container padding="0 60px" className="centered-container">
+          <HorizontalSeparator height="10px" />
           <Breadcrumbs values={breadcrumbs} />
           <HorizontalSeparator height={30} />
-          <Container className="new-care-charge__header" display="flex" justifyContent="space-between">
-            <Heading size='xl'>New care charge packages</Heading>
-            <Button largeButton onClick={findServiceUser}>Find a service user</Button>
+          <Container display="flex" justifyContent="space-between">
+            <Heading size="xl">New care charge packages</Heading>
+            <Button largeButton onClick={findServiceUser}>
+              Find a service user
+            </Button>
           </Container>
+          <HorizontalSeparator height="46px" />
           <Container className="new-care-charge__selectors">
             <FormGroup label="Status">
               <Select options={userStatusOptions} onChangeValue={changeFilter('status')} value={filters.status} />
