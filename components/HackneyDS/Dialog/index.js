@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CircleCloseIcon } from '../../Icons';
+import { useScrollLock } from '../../../service';
 
-export default function Dialog({
+export default function Dialog ({
   children,
   noBorder,
   onClose,
@@ -12,29 +13,7 @@ export default function Dialog({
 }) {
   const [windowState, setWindowState] = useState();
 
-  useEffect(() => {
-    document.querySelector('html').style.overflow = isOpen ? 'hidden' : '';
-  }, [isOpen]);
-
-  useEffect(() => {
-    return () => {
-      document.querySelector('html').style.overflow = '';
-    };
-  }, []);
-
-  useEffect(() => {
-    const onClickOutside = (e) => {
-      if (e.target.classList.contains('lbh-dialog-container')) {
-        onClose();
-      }
-    };
-    setWindowState(window);
-    window.addEventListener('click', onClickOutside);
-
-    return () => {
-      window.removeEventListener('click', onClickOutside);
-    };
-  }, [onClose]);
+  useScrollLock(isOpen);
 
   if (!windowState) return null;
 
