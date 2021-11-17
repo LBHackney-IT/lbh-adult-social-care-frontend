@@ -20,10 +20,11 @@ const Select = (props) => {
   } = props;
   const outerClass = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-select--error' : '';
+  const noIconClass = !IconComponent ? ' no-icon' : '';
   const errorDescribedBy = error ? { 'aria-describedby': ' govuk-select--error' } : {};
   const [isEmptyElementDisabled, setEmptyElementDisabled] = useState(disabledEmptyComponent && emptyElement?.text);
   return (
-    <div className="select-container">
+    <div className={`select-container${noIconClass}`}>
       <select
         style={style}
         id={id}

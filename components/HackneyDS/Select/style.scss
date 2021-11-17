@@ -18,7 +18,7 @@
     text-indent: 1px;
     text-overflow: '';
   }
-  
+
   &:disabled {
     background-color: #dee0e2;
   }
@@ -73,5 +73,20 @@
     display: flex;
     align-items: center;
     pointer-events: none;
+  }
+}
+
+.no-icon {
+  select {
+    padding-right: 5px;
+    text-align: center;
+
+    &[disabled] {
+      opacity: 1;
+    }
+  }
+
+  .select-icon {
+    display: none;
   }
 }
