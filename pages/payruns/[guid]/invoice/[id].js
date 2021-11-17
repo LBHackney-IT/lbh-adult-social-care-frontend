@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { DynamicBreadcrumbs, Container, HorizontalSeparator, Loading, HintDate, Heading } from 'components';
-import { usePayRunInvoice } from 'api';
+import { DynamicBreadcrumbs, Container, HorizontalSeparator, Loading, Heading, Hint } from 'components';
+import { getEnGBFormattedDate, usePayRunInvoice } from 'api';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { useRouter } from 'next/router';
 
@@ -31,9 +31,11 @@ const InvoiceDetailPage = () => {
       <DynamicBreadcrumbs additionalBreadcrumbs={breadcrumbs} />
       <Loading isLoading={isLoading} />
       <Container className="default-container invoice-detail__main-container">
-        <Heading fontWeight={400} size='xl'>Pay run period</Heading>
+        <Heading size='xl'>Pay run period</Heading>
         <HorizontalSeparator height={9} />
-        <HintDate dateFrom={invoice.startDate} dateTo={invoice.endDate} />
+        <Hint className='hint-date'>
+          {getEnGBFormattedDate(invoice.startDate)}{invoice.endDate ? ` - ${getEnGBFormattedDate(invoice.endDate)}` : ''}
+        </Hint>
         <HorizontalSeparator height={24} />
         <PayRunItem totalPayTitle="Total paid" item={invoice?.invoice} />
         <HorizontalSeparator height="32px" />
