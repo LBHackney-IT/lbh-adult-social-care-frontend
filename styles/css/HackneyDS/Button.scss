@@ -210,6 +210,10 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
     border: 1px solid;
     box-shadow: none;
 
+    &.no-border {
+      border: none;
+    }
+
     &:hover {
       transform: scale(1.03);
     }
