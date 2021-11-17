@@ -25,7 +25,7 @@ const schema = yup.object().shape({
 
 const RegularCycles = ({ isLoading, setIsLoading, onCreateDraftPayRun, closeModal }) => {
   const [paidUpToDate, setPaidUpToDate] = useState(null);
-  const [payRunTypeId, setPayRunTypeId] = useState('');
+  const [payRunTypeId, setPayRunTypeId] = useState();
 
   const { data: latestPayRunToDateString, isLoading: payRunToDateLoading } = useLatestPayRunToDate({ payRunTypeId });
   const { data: releasedInvoiceNumber, isLoading: invoiceNumberLoading } = useReleasedInvoiceNumber();
