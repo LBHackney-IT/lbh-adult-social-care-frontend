@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as yup from 'yup';
 import CreatePayRunInfo from './CreatePayRunInfo';
 import { Button, Container } from '../../../HackneyDS';
@@ -18,18 +18,9 @@ const defaultValues = {
 };
 
 const schema = yup.object().shape({
-  adHocAndReleases: yup
-    .number()
-    .typeError('Required field')
-    .required('Required field'),
-  startDate: yup
-    .date()
-    .typeError('Required field')
-    .required('Required field'),
-  paidUpToDate: yup
-    .date()
-    .typeError('Required field')
-    .required('Required field'),
+  adHocAndReleases: yup.number().typeError('Required field').required('Required field'),
+  startDate: yup.date().typeError('Required field').required('Required field'),
+  paidUpToDate: yup.date().typeError('Required field').required('Required field'),
 });
 
 const AdHocAndReleases = ({ onCreateDraftPayRun, isLoading, closeModal }) => {
@@ -38,7 +29,7 @@ const AdHocAndReleases = ({ onCreateDraftPayRun, isLoading, closeModal }) => {
     paidUpToDate: null,
   });
 
-  const onChangeDate = (field, value) => setDate(prevState => ({ ...prevState, [field]: value }));
+  const onChangeDate = (field, value) => setDate((prevState) => ({ ...prevState, [field]: value }));
 
   const {
     handleSubmit,
@@ -62,14 +53,10 @@ const AdHocAndReleases = ({ onCreateDraftPayRun, isLoading, closeModal }) => {
         errors={errors}
       />
       <Container className="create-pay-run__actions" display="flex">
-        <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
-        <Button
-          isLoading={isLoading}
-          disabled={isLoading}
-          type="submit"
-          className="disable-shadow"
-          borderRadius={0}
-        >
+        <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>
+          Cancel
+        </Button>
+        <Button isLoading={isLoading} disabled={isLoading} type="submit" className="disable-shadow" borderRadius={0}>
           Create Draft Pay Run
         </Button>
       </Container>

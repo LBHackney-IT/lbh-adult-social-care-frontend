@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -24,7 +24,7 @@ const schema = yup.object().shape({
     .string()
     .typeError('Please enter a reason')
     .required('Please enter a reason')
-    .test('reasonForHolding', 'Please enter a reason', (value) => value?.trim?.())
+    .test('reasonForHolding', 'Please enter a reason', (value) => value?.trim?.()),
 });
 
 const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update }) => {
@@ -92,19 +92,20 @@ const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update })
             control={control}
             name="reasonForHolding"
             render={({ field }) => (
-              <FormGroup error={errors.reasonForHolding?.message} required label="Enter reason for hold And suggested remedial action">
-                <Textarea
-                  trimValue
-                  value={field.value}
-                  handler={field.onChange}
-                  rows={5}
-                />
+              <FormGroup
+                error={errors.reasonForHolding?.message}
+                required
+                label="Enter reason for hold And suggested remedial action"
+              >
+                <Textarea trimValue value={field.value} handler={field.onChange} rows={5} />
               </FormGroup>
             )}
           />
           <HorizontalSeparator height={32} />
           <Container className="create-pay-run__actions" display="flex">
-            <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
+            <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>
+              Cancel
+            </Button>
             <Button
               isLoading={isLoading}
               disabled={isLoading}

@@ -74,6 +74,7 @@ const CareCharges = ({
 
     let hasErrors = false;
     const localErrors = {};
+    // eslint-disable-next-line no-restricted-syntax
     for await (const { schema, value, field } of validFields) {
       const isValid = await schema.isValid({ value });
       if (!isValid) {

@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { SWRConfig } from 'swr';
-import '/styles/globals.scss';
 import { Provider } from 'react-redux';
-
 import { fetcher } from 'api';
 import { CustomNotification, MainHeader } from 'components';
 import { useRouter } from 'next/router';
 import { useStore } from '../store';
 import { getPrevRouteInfo, saveToStoragePrevRoute } from '../routes/RouteConstants';
+import '../styles/globals.scss';
 
 const swrOptions = {
   errorRetryCount: 3,
@@ -20,10 +19,10 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
-    if(router?.pathname && getPrevRouteInfo(router.pathname)?.route) {
+    if (router?.pathname && getPrevRouteInfo(router.pathname)?.route) {
       saveToStoragePrevRoute(router.pathname);
     }
-  }, [router.pathname])
+  }, [router.pathname]);
 
   return (
     <Provider store={store}>

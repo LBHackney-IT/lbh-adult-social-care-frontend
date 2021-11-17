@@ -12,7 +12,7 @@ export const FileUpload = ({
   const changeInput = (e) => {
     if (getFile) {
       return getFile(e.target.files[0]);
-    } else if (getFiles) {
+    } if (getFiles) {
       return getFiles(e.target.files);
     }
     onChange(e);

@@ -1,6 +1,6 @@
 import { Controller, useForm } from 'react-hook-form';
 import React, { useMemo, useState } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -19,7 +19,7 @@ import Loading from '../../../Loading';
 
 const errorText = {
   Approve: 'approval',
-  Decline: 'decline'
+  Decline: 'decline',
 };
 
 const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) => {
@@ -28,13 +28,16 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) 
   const isDeclineModal = openedModal === 'Decline';
   const isApproveModal = openedModal === 'Approve';
 
-  const schema = useMemo(() => (
-    yup.object().shape({
-      notes: yup
-        .string()
-        .required(`Please put a reason for ${errorText[openedModal]}`)
-        .test('notes', `Please put a reason for ${errorText[openedModal]}`, (value) => value.trim?.())
-    })), [openedModal]);
+  const schema = useMemo(
+    () =>
+      yup.object().shape({
+        notes: yup
+          .string()
+          .required(`Please put a reason for ${errorText[openedModal]}`)
+          .test('notes', `Please put a reason for ${errorText[openedModal]}`, (value) => value.trim?.()),
+      }),
+    [openedModal]
+  );
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
@@ -91,7 +94,7 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) 
     <>
       <Loading isLoading={loading} />
       <Dialog className="high-level-insight--dialog" isOpen={openedModal} noBorder closeIcon="" onClose={closeModal}>
-        <Heading size='xl'>{openedModal} Pay Run</Heading>
+        <Heading size="xl">{openedModal} Pay Run</Heading>
         <HorizontalSeparator height={32} />
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
@@ -99,32 +102,17 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) 
             name="notes"
             render={({ field }) => (
               <FormGroup horizontalSeparator={8} error={errors.notes?.message} required label="Add Notes">
-                <Textarea
-                  value={field.value}
-                  handler={field.onChange}
-                  rows={5}
-                  {...field}
-                />
+                <Textarea value={field.value} handler={field.onChange} rows={5} {...field} />
               </FormGroup>
             )}
           />
           <HorizontalSeparator height={32} />
           <Container display="flex" alignItems="center">
-            <Button
-              type="submit"
-              secondary={isDeclineModal}
-              color={isDeclineModal && 'red'}
-            >
+            <Button type="submit" secondary={isDeclineModal} color={isDeclineModal && 'red'}>
               {openedModal} Pay Run
             </Button>
             <VerticalSeparator width={24} />
-            <Button
-              onClick={closeModal}
-              outline
-              color="gray"
-              secondary
-              className="no-border link-button"
-            >
+            <Button onClick={closeModal} outline color="gray" secondary className="no-border link-button">
               Cancel
             </Button>
           </Container>

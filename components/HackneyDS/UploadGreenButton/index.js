@@ -1,7 +1,7 @@
+import React from 'react';
 import UrlFromFile from '../../UrlFromFile';
 import FormGroup from '../FormGroup';
 import { FileUpload } from '../FileUpload/FileUpload';
-import React from 'react';
 
 export const UploadGreenButton = ({ file, setFile, label, className }) => (
   <FormGroup className={`upload-green-button${className ? ` ${className}` : ''}`} label={label}>

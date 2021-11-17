@@ -6,8 +6,7 @@ const PackageDetailsButtons = ({ buttons }) => {
 
   return (
     <Container className="review-package-details__buttons">
-      {buttons.map(({ className = '', onClick, secondary, title, outline, color }) => {
-        return (
+      {buttons.map(({ className = '', onClick, secondary, title, outline, color }) => (
           <Button
             secondary={secondary}
             key={title}
@@ -18,8 +17,7 @@ const PackageDetailsButtons = ({ buttons }) => {
           >
             {title}
           </Button>
-        );
-      })}
+        ))}
     </Container>
   );
 };

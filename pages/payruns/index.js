@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
 import { Breadcrumbs, Button, Container, Heading, HorizontalSeparator, Loading, Tab, Tabs } from 'components';
@@ -7,7 +7,6 @@ import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { usePayrunView } from 'api/SWR/payRuns';
 import CreateDraftPayRun from '../../components/Pages/Finance/CreateDraftPayRun';
-import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });

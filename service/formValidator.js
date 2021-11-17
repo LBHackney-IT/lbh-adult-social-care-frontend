@@ -1,3 +1,5 @@
+/* eslint-disable no-loop-func */
+/* eslint-disable no-restricted-syntax */
 // form example
 // { firstName: 'Test', secondName: 'Second Test' }
 

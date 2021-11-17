@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { differenceInDays } from 'date-fns';
 import * as yup from 'yup';
 import CreatePayRunInfo from './CreatePayRunInfo';
@@ -13,14 +13,8 @@ const defaultValues = {
 };
 
 const schema = yup.object().shape({
-  regularCycles: yup
-    .number()
-    .typeError('Required field')
-    .required('Required field'),
-  paidUpToDate: yup
-    .date()
-    .typeError('Required field')
-    .required('Required field'),
+  regularCycles: yup.number().typeError('Required field').required('Required field'),
+  paidUpToDate: yup.date().typeError('Required field').required('Required field'),
 });
 
 const RegularCycles = ({ isLoading, setIsLoading, onCreateDraftPayRun, closeModal }) => {
@@ -36,24 +30,31 @@ const RegularCycles = ({ isLoading, setIsLoading, onCreateDraftPayRun, closeModa
     if (paidUpToDate && latestPayRunToDate) {
       return differenceInDays(
         new Date(paidUpToDate.getFullYear(), paidUpToDate.getMonth(), paidUpToDate.getDate()),
-        new Date(latestPayRunToDate.getFullYear(), latestPayRunToDate.getMonth(), latestPayRunToDate.getDate()),
+        new Date(latestPayRunToDate.getFullYear(), latestPayRunToDate.getMonth(), latestPayRunToDate.getDate())
       );
     }
     return null;
   }, [paidUpToDate, latestPayRunToDate]);
 
-  const regularCyclesOptions = useMemo(() => ([
-    { divider: <h4>Regular Cycles:</h4> },
-    {
-      label: <p>Residential Recurring
-        <span className="lbh-primary-color">
-          {' '}({releasedInvoiceNumber || 0} {releasedInvoiceNumber === 1 ? 'release' : 'releases'})
-        </span>
-      </p>,
-      id: 1
-    },
-    { label: 'Direct Payments', id: 2 },
-  ]), [releasedInvoiceNumber]);
+  const regularCyclesOptions = useMemo(
+    () => [
+      { divider: <h4>Regular Cycles:</h4> },
+      {
+        label: (
+          <p>
+            Residential Recurring
+            <span className="lbh-primary-color">
+              {' '}
+              ({releasedInvoiceNumber || 0} {releasedInvoiceNumber === 1 ? 'release' : 'releases'})
+            </span>
+          </p>
+        ),
+        id: 1,
+      },
+      { label: 'Direct Payments', id: 2 },
+    ],
+    [releasedInvoiceNumber]
+  );
 
   const {
     handleSubmit,
@@ -87,14 +88,10 @@ const RegularCycles = ({ isLoading, setIsLoading, onCreateDraftPayRun, closeModa
         errors={errors}
       />
       <Container className="create-pay-run__actions" display="flex">
-        <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
-        <Button
-          isLoading={isLoading}
-          disabled={isLoading}
-          type="submit"
-          className="disable-shadow"
-          borderRadius={0}
-        >
+        <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>
+          Cancel
+        </Button>
+        <Button isLoading={isLoading} disabled={isLoading} type="submit" className="disable-shadow" borderRadius={0}>
           Create Draft Pay Run
         </Button>
       </Container>

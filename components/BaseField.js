@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { TooltipIcon } from './Icons';
 import Tip from './HackneyDS/Tip';
@@ -11,7 +12,7 @@ const BaseField = ({ onClick = () => {}, tooltipText = '', className = '', label
   }
 
   return (
-    <div onClick={onClick} className={`${innerClassName} ${className}`}>
+    <div role="presentation" onKeyDown={onClick} onClick={onClick} className={`${innerClassName} ${className}`}>
       {hasLabel ? (
         <label className="text-bold">
           <label>{label}</label>

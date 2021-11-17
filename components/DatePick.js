@@ -27,10 +27,11 @@ const DatePick = ({
 }) => {
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
     <button
+      type="button"
       className="datepicker-custom-input"
       onClick={(e) => {
         e.preventDefault();
-        onClick(e)
+        onClick(e);
       }}
       ref={ref}
     >
@@ -39,8 +40,8 @@ const DatePick = ({
   ));
 
   useEffect(() => {
-    if(checkMinDate && dateValue && minDate) {
-      if(dateValue < minDate) {
+    if (checkMinDate && dateValue && minDate) {
+      if (dateValue < minDate) {
         setDate(minDate);
       }
     }

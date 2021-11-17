@@ -42,8 +42,6 @@ export const SingleCareCharge = () => {
     },
   ];
 
-  const footerSum = data.reduce((a, b) => a + b.cost, 0);
-
   const clientDetails = {
     name: faker.name.findName(),
     birthday: faker.date.past(90),

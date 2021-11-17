@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Checkbox ({
+export default function Checkbox({
   label,
   onChangeValue,
   small,
@@ -24,11 +24,12 @@ export default function Checkbox ({
         value={value}
         disabled={disabled}
         checked={value}
-        onChange={e => {
+        onChange={(e) => {
           if (onChangeValue) {
             return onChangeValue(e.target.checked);
           }
           handler(e);
+          return null;
         }}
       />
       <label className="govuk-label govuk-checkboxes__label" htmlFor={id}>

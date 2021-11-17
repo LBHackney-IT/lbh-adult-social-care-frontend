@@ -15,6 +15,10 @@ module.exports = {
   plugins: ['react'],
   rules: {
     // allow jsx syntax in js files
+    'consistent-return': 'off',
+    'react/button-has-type':'off',
+    'react/no-array-index-key': 'off',
+    'react/destructuring-assignment': 'off',
     'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx'] }],
     // allow prop spreading
     // 'react/jsx-props-no-spreading': ['error', { custom: 'ignore' }],
@@ -23,12 +27,18 @@ module.exports = {
     'jsx-a11y/anchor-is-valid': 'off',
     // note you must disable the base rule as it can report incorrect errors
     'no-use-before-define': 'off',
+    'no-nested-ternary': 'off',
     'import/prefer-default-export': 'off',
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'no-param-reassign': ['error', { props: false }],
     'arrow-body-style': ['error', 'as-needed'],
     // 'no-param-reassign': [2, { props: false }],
     'no-console': 'off',
+    'jsx-a11y/no-static-element-interactions': 'off',
+    'jsx-a11y/label-has-associated-control':'off',
+    'jsx-a11y/no-noninteractive-element-interactions': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
+    'jsx-a11y/no-noninteractive-element-to-interactive-role': 'off',
   },
   settings: {
     'import/resolver': {
