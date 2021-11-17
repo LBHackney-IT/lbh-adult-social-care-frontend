@@ -1,5 +1,5 @@
 import { Controller, useForm } from 'react-hook-form';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
@@ -12,15 +12,18 @@ import {
   FormGroup,
   HorizontalSeparator,
   Textarea,
-  VerticalSeparator
+  VerticalSeparator,
+  Heading,
 } from '../../../HackneyDS';
+import Loading from '../../../Loading';
 
 const errorText = {
   Approve: 'approval',
   Decline: 'decline'
 };
 
-const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, setLoading, payRunId }) => {
+const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) => {
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const isDeclineModal = openedModal === 'Decline';
   const isApproveModal = openedModal === 'Approve';
@@ -85,46 +88,49 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, setLoading, 
   const onSubmit = (data) => makePayRunAction(data);
 
   return (
-    <Dialog className="high-level-insight--dialog" isOpen={openedModal} noBorder closeIcon="" onClose={closeModal}>
-      <h3>{openedModal} Pay Run</h3>
-      <HorizontalSeparator height={32} />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          control={control}
-          name="notes"
-          render={({ field }) => (
-            <FormGroup horizontalSeparator={8} error={errors.notes?.message} required label="Add Notes">
-              <Textarea
-                value={field.value}
-                handler={field.onChange}
-                rows={5}
-                {...field}
-              />
-            </FormGroup>
-          )}
-        />
+    <>
+      <Loading isLoading={loading} />
+      <Dialog className="high-level-insight--dialog" isOpen={openedModal} noBorder closeIcon="" onClose={closeModal}>
+        <Heading size='xl'>{openedModal} Pay Run</Heading>
         <HorizontalSeparator height={32} />
-        <Container display="flex" alignItems="center">
-          <Button
-            type="submit"
-            secondary={isDeclineModal}
-            color={isDeclineModal && 'red'}
-          >
-            {openedModal} Pay Run
-          </Button>
-          <VerticalSeparator width={24} />
-          <Button
-            onClick={closeModal}
-            outline
-            color="gray"
-            secondary
-            className="no-border link-button"
-          >
-            Cancel
-          </Button>
-        </Container>
-      </form>
-    </Dialog>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Controller
+            control={control}
+            name="notes"
+            render={({ field }) => (
+              <FormGroup horizontalSeparator={8} error={errors.notes?.message} required label="Add Notes">
+                <Textarea
+                  value={field.value}
+                  handler={field.onChange}
+                  rows={5}
+                  {...field}
+                />
+              </FormGroup>
+            )}
+          />
+          <HorizontalSeparator height={32} />
+          <Container display="flex" alignItems="center">
+            <Button
+              type="submit"
+              secondary={isDeclineModal}
+              color={isDeclineModal && 'red'}
+            >
+              {openedModal} Pay Run
+            </Button>
+            <VerticalSeparator width={24} />
+            <Button
+              onClick={closeModal}
+              outline
+              color="gray"
+              secondary
+              className="no-border link-button"
+            >
+              Cancel
+            </Button>
+          </Container>
+        </form>
+      </Dialog>
+    </>
   );
 };
 

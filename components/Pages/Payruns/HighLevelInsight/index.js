@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Container, Heading, Hint, HorizontalSeparator } from 'components';
 import { getNumberWithCommas } from 'service';
-import Loading from '../../../Loading';
 import ApproveDeclineModal from '../ApproveDeclineModal';
 
 export const HighLevelInsight = ({
@@ -14,24 +13,19 @@ export const HighLevelInsight = ({
   holdValue = 0,
   update,
 }) => {
-  const [loading, setLoading] = useState(false);
   const [openedModal, setOpenedModal] = useState('');
 
-  const openModal = (name) => () => {
-    setOpenedModal(name);
-  };
+  const openModal = (name) => () => setOpenedModal(name);
 
   const increaseOrDecrease = difference > 0 ? 'increase' : 'decrease';
 
   return (
     <>
-      <Loading isLoading={loading} />
       <ApproveDeclineModal
         setOpenedModal={setOpenedModal}
         openedModal={openedModal}
         payRunId={payRunId}
         update={update}
-        setLoading={setLoading}
       />
       <Container background="#FAFAFA" padding="24px 16px">
         <Container display="flex" justifyContent="space-between">
