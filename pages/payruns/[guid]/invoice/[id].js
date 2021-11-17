@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
 import { DynamicBreadcrumbs, Container, HorizontalSeparator, Loading, HintDate, Heading } from 'components';
@@ -24,9 +24,11 @@ const InvoiceDetailPage = () => {
   const { guid: payRunId, id: invoiceId } = router.query;
   const { data: invoice, isLoading } = usePayRunInvoice(payRunId, invoiceId);
 
+  const breadcrumbs = useMemo(() => [{ text: `Pay Run ${payRunId}`}], [payRunId]);
+
   return (
     <Container className="invoice-detail">
-      <DynamicBreadcrumbs />
+      <DynamicBreadcrumbs additionalBreadcrumbs={breadcrumbs} />
       <Loading isLoading={isLoading} />
       <Container className="default-container invoice-detail__main-container">
         <Heading fontWeight={400} size='xl'>Pay run period</Heading>

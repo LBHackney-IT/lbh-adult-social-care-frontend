@@ -3,7 +3,8 @@ import useGetData from './useGetData';
 import { getUrlOrNull } from '../Utils/FuncUtils';
 
 const PAY_RUNS_URL = '/payruns';
-const getPayRunUrl = (payRunId, additionalString = '') => getUrlOrNull(`${PAY_RUNS_URL}/${payRunId}${additionalString}`);
+const getPayRunUrl = (payRunId, additionalString = '') =>
+  getUrlOrNull(`${PAY_RUNS_URL}${payRunId ? `/${payRunId}` : ''}${additionalString}`);
 
 export const usePayrunView = ({ params }) =>
   useFetchWithParams({
