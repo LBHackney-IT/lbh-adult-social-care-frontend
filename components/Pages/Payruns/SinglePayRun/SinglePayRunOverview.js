@@ -23,6 +23,8 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
   };
 
   const handleChange = async (field) => {
+    if (!update) return;
+
     if (field === '2') {
       setInvoiceId(payRun.id);
     } else {
@@ -43,7 +45,7 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
   return (
     <>
       <Container display="flex" alignItems="baseline">
-        <Heading size="m">{handleServiceUserName()}</Heading>
+        <Heading size="m" color="#00664F">{handleServiceUserName()}</Heading>
         <VerticalSeparator width="24px" />
         <Heading size="s">Invoice ID:</Heading>
         <VerticalSeparator width="5px" />
@@ -69,6 +71,8 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
         <Select
           style={{ background, color, border: 'none' }}
           options={statusOptions}
+          disabled={!update}
+          IconComponent={!update ? null : undefined}
           onChangeValue={handleChange}
           value={payRun.invoiceStatus}
         />

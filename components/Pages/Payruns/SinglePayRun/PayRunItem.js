@@ -13,7 +13,9 @@ import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/Sin
 import { useRouter } from 'next/router';
 import { getCarePackageReviewRoute, getPaymentHistoryRoute } from 'routes/RouteConstants';
 
-export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
+export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }) => {
+  if (!item) return null;
+
   const [invoiceId, setInvoiceId] = useState('');
 
   const router = useRouter();
@@ -21,10 +23,12 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
     e.preventDefault();
     router.push(getCarePackageReviewRoute(item.carePackageId));
   };
+
   const handlePastPaymentsClick = (e) => {
     e.preventDefault();
     router.push(getPaymentHistoryRoute(item.carePackageId));
   };
+
   return (
     <>
       <Container background="#FAFAFA" padding="24px 16px">
@@ -53,32 +57,38 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update }) => {
               <VerticalSeparator width="10px" />
               {item.carePackageId}
             </Container>
-            <SinglePayRunBreakdown payRun={item} />
+            <SinglePayRunBreakdown totalPayTitle={totalPayTitle} payRun={item} />
             <HorizontalSeparator height="16px" />
             <Container borderBottom="1px solid #DEE0E2" />
             <HorizontalSeparator height="10px" />
             <Container display="grid" gridTemplateColumns="4fr 1fr">
               <Container display="flex">
-                <Link onClick={(e) => handleClick(e)} noVisited>
-                  View package summary
-                </Link>
-                <VerticalSeparator width="32px" />
-                Assigned broker: {item.assignedBrokerName}
+                {payRunId && (
+                  <Link onClick={(e) => handleClick(e)} noVisited>
+                    View package summary
+                  </Link>
+                )}
+                {payRunId && <VerticalSeparator width="32px" />}
+                Assigned broker: {item.assignedBrokerName.toString()}
               </Container>
-            <Link onClick={(e) => handlePastPaymentsClick(e)} noVisited>
-              Past payments
-            </Link>
+              {payRunId && (
+                <Link onClick={(e) => handlePastPaymentsClick(e)} noVisited>
+                  Past payments
+                </Link>
+              )}
             </Container>
           </Container>
         </Collapse>
       </Container>
-      <HoldPaymentDialog
-        invoiceId={invoiceId}
-        payRunId={payRunId}
-        isOpen={invoiceId}
-        update={update}
-        setIsOpened={() => setInvoiceId('')}
-      />
+      {payRunId && (
+        <HoldPaymentDialog
+          invoiceId={invoiceId}
+          payRunId={payRunId}
+          isOpen={invoiceId}
+          update={update}
+          setIsOpened={() => setInvoiceId('')}
+        />
+      )}
     </>
   );
 };

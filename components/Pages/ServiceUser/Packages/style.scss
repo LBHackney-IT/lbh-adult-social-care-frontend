@@ -8,6 +8,12 @@
   }
 }
 
+.care-details__package-collapse {
+  &:not(&:last-of-type) {
+    margin-bottom: 24px;
+  }
+}
+
 .package-request {
   &__yellow {
     background: #f8e08e;

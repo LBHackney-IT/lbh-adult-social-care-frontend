@@ -18,7 +18,7 @@ export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPack
 export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchForServiceUser';
 export { default as NewCareChargePackages } from './Pages/CareCharges/NewCareChargePackages';
 export { default as PackageApprovals } from './Pages/PackageApprovals';
-export { default as CarePackageBreadcrumbs } from './Pages/CarePackages/CarePackageBreadcrumbs';
+export { default as DynamicBreadcrumbs } from './Pages/DynamicBreadcrumbs';
 export { default as MainHeader } from './MainHeader';
 export { default as HoldPaymentDialog } from './Pages/Finance/HoldPaymentDialog';
 export { FurtherDetails } from './Pages/CarePackages/CorePackageDetails/FurtherDetails';

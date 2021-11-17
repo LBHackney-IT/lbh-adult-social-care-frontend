@@ -1,4 +1,7 @@
 .new-care-charge {
+  .govuk-breadcrumbs {
+    margin-bottom: 40px;
+  }
   .title-subtitle {
     margin-left: auto;
   }
@@ -17,16 +20,6 @@
   padding-top: 24px;
   padding-bottom: 24px;
 
-  &:first-of-type {
-    margin-left: 0;
-  }
-
-  &:nth-of-type(1), &:nth-of-type(2) {
-    .title-subtitle {
-      margin-left: initial;
-    }
-  }
-
   &:nth-of-type(1) {
     width: 116px;
   }
@@ -35,18 +28,8 @@
     width: 240px;
   }
 
-  &:nth-of-type(3) {
-    .title-subtitle {
-      margin-left: initial;
-    }
-  }
-
   &:last-of-type {
-    width: 160px;
-
-    .title-subtitle {
-      margin-left: initial;
-    }
+    width: 30vw;
   }
 }
 

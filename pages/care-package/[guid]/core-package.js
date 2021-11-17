@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
-  CarePackageBreadcrumbs,
+  DynamicBreadcrumbs,
   Container,
   FurtherDetails,
   HorizontalSeparator,
@@ -114,7 +114,7 @@ const CorePackage = () => {
 
   return (
     <>
-      <CarePackageBreadcrumbs />
+      <DynamicBreadcrumbs />
       <Loading isLoading={isLoading} />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Core package details" title="Build a care package" />

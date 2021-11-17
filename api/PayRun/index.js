@@ -15,5 +15,11 @@ const sendInvoiceRequest = ({ payRunId, invoiceId, params }) =>
 export const holdInvoice = ({ reasonForHolding, invoiceId, actionRequiredFromId, payRunId }) =>
   sendInvoiceRequest({ invoiceId, payRunId, params: { reasonForHolding, actionRequiredFromId } });
 
-export const approvePayRun = ({ payRunId, method = requestMethods.post, params }) =>
-  axiosRequest({ url: `${PAYRUNS_URL}/${payRunId}/approve`, method, data:params });
+export const approvePayRun = (payRunId, notes) =>
+  axiosRequest({ url: `${PAYRUNS_URL}/${payRunId}/approve`, method: requestMethods.post, data: { notes } });
+
+export const rejectPayRun = (payRunId, notes) =>
+  axiosRequest({ url: `${PAYRUNS_URL}/${payRunId}/reject`, method: requestMethods.put, data: { notes } });
+
+export const deletePayRun = (payRunId, notes) =>
+  axiosRequest({ url: `${PAYRUNS_URL}/${payRunId}/delete`, method: requestMethods.put, data: { notes } });

@@ -1,23 +1,26 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import {
+  Breadcrumbs,
   Button,
-  Select,
-  Textarea,
   Container,
   FormGroup,
-  Breadcrumbs,
-  Announcement,
-  UploadGreenButton,
-  ServiceUserDetails,
-  TitleSubtitleHeader,
+  HorizontalSeparator,
   Loading,
+  Select,
+  ServiceUserDetails,
+  Textarea,
+  TitleSubtitleHeader,
 } from 'components';
-import { requiredSchema } from 'constants/schemas';
-import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
+import { useRouter } from 'next/router';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
+import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { assignToBroker, useServiceUser, useBrokers, useLookups } from 'api';
+import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
+import { getFormData } from 'service/getFormData';
+import { route } from 'next/dist/next-server/server/router';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKER_ASSISTANCE_ROUTE },
@@ -26,160 +29,108 @@ const breadcrumbs = [
 ];
 
 const AssignPackage = () => {
-  const [assignedCarePlan, setAssignedCarePlan] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [packageType, setPackageType] = useState('');
-  const [broker, setBroker] = useState('');
-  const [notes, setNotes] = useState('');
-  const [file, setFile] = useState(null);
-
-  const [errors, setErrors] = useState({
-    broker: '',
-    packageType: '',
-  });
-
-  const dispatch = useDispatch();
-
   const router = useRouter();
+  const dispatch = useDispatch();
   const { hackneyId } = router.query;
-
   const { data: serviceUser, isLoading: serviceUserLoading } = useServiceUser(hackneyId);
   const { options: packageTypeOptions, isLoading: lookupsLoading } = useLookups('packageType');
   const { options: brokerOptions, isLoading: brokersLoading } = useBrokers();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const validateFields = async (fields) => {
-    const validationResults = await Promise.all(
-      fields.map(async ({ field, value }) => ({
-        isValid: await requiredSchema.string.isValid({ value }),
-        field,
-      }))
-    );
+  const isLoading = serviceUserLoading || lookupsLoading || brokersLoading;
+  const schema = yup.object().shape({
+    brokerId: yup.string().typeError('Please choose a Broker').required().min(2, 'Please choose a Broker'),
+    packageType: yup
+      .number()
+      .typeError('Please select a package type')
+      .required()
+      .min(1, 'Please select a package type'),
+  });
 
-    const hasErrors = validationResults.some((result) => !result.isValid);
+  const {
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      hackneyUserId: hackneyId,
+      brokerId: 0,
+      packageType: 0,
+      notes: '',
+    },
+  });
+  const onSubmit = (data) => submitData(data);
 
-    const localErrors = validationResults.reduce((acc, { field, isValid }) => {
-      if (!isValid) acc[field] = 'Required field';
-      return acc;
-    }, {});
-
-    setErrors((prevState) => ({ ...prevState, ...localErrors }));
-
-    return hasErrors;
-  };
-
-  const onSubmit = async () => {
-    setLoading(true);
-    const fields = [
-      { value: broker, field: 'broker' },
-      { value: packageType, field: 'packageType' },
-    ];
-
-    const hasErrors = await validateFields(fields);
-    if (hasErrors) return;
-
-    const formData = new FormData();
-
-    formData.append('HackneyUserId', hackneyId);
-    formData.append('BrokerId', broker);
-    formData.append('PackageType', packageType);
-    formData.append('Notes', notes);
-
+  const submitData = async (data = {}) => {
+    setIsSubmitting(true);
+    const formData = getFormData(data);
     try {
       await assignToBroker({ data: formData });
-      setAssignedCarePlan(true);
+      dispatch(addNotification({ text: 'Care plan assigned', className: 'success' }));
+      router.push(BROKER_ASSISTANCE_ROUTE);
     } catch (error) {
       dispatch(addNotification({ text: error, className: 'error' }));
     }
-    setLoading(false);
+    setIsSubmitting(false);
   };
 
-  const changeError = (field, value = '') => {
-    setErrors((prevState) => ({ ...prevState, [field]: value }));
-  };
-
-  const brokerName = brokerOptions?.find((el) => el.value === broker)?.text;
-
-  const isLoading = serviceUserLoading || lookupsLoading || brokersLoading || loading;
+  useEffect(() => {
+    if (hackneyId) {
+      setValue('hackneyUserId', parseInt(hackneyId, 10));
+    }
+  }, [hackneyId]);
 
   return (
-    <Container className="assign-care-plan">
-
-      <Loading isLoading={isLoading} />
-
-      <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
+    <>
+      <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
+        <HorizontalSeparator height="10px" />
         <Breadcrumbs values={breadcrumbs} />
-
-        {assignedCarePlan ? (
-          <Container margin="60px 0 0" className="brokerage__container-main">
-            <Announcement>
-              <div slot="title">Success!</div>
-              <div slot="content">Care plan assigned to {brokerName}</div>
-            </Announcement>
-
-            <Button className="mt-60" onClick={() => router.replace(BROKER_ASSISTANCE_ROUTE)}>
-              Back to Broker Assistance
+        <Loading isLoading={isLoading} />
+        <TitleSubtitleHeader subTitle="Assign and attach a care plan" title="Assign a care plan to brokerage" />
+        {serviceUser && (
+          <ServiceUserDetails
+            serviceUserName={serviceUser.fullName}
+            hackneyId={serviceUser.hackneyId}
+            dateOfBirth={serviceUser.dateOfBirth}
+            address={serviceUser.postCode}
+          />
+        )}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Container className="brokerage__container">
+            <FormGroup label="Assign a Broker" error={errors.brokerId?.message}>
+              <Controller
+                name="brokerId"
+                control={control}
+                render={({ field }) => <Select options={brokerOptions} {...field} />}
+              />
+            </FormGroup>
+            <HorizontalSeparator height="20px" />
+            <FormGroup label="Select a package type" error={errors.packageType?.message}>
+              <Controller
+                name="packageType"
+                control={control}
+                render={({ field }) => <Select options={packageTypeOptions} {...field} />}
+              />
+            </FormGroup>
+          </Container>
+          <Container>
+            <FormGroup label="Add notes" error={errors.notes?.message}>
+              <Controller
+                name="notes"
+                control={control}
+                render={({ field }) => <Textarea handler={field.onChange} value={field.value} />}
+              />
+            </FormGroup>
+            <HorizontalSeparator height="20px" />
+            <Button isLoading={isSubmitting} disabled={isLoading} type="submit">
+              Save and continue
             </Button>
           </Container>
-        ) : (
-          <Container className="brokerage__container-main">
-            <TitleSubtitleHeader title="Assign a care plan to brokerage" subTitle="Assign and attach a care plan" />
-
-            <ServiceUserDetails
-              address={serviceUser.postCode}
-              serviceUserName={`${serviceUser.firstName ?? ''} ${serviceUser.lastName ?? ''}`}
-              dateOfBirth={serviceUser.dateOfBirth}
-              hackneyId={hackneyId}
-            />
-
-            <Container>
-              <Container className="brokerage__container">
-                <h3>Assign broker</h3>
-
-                <FormGroup error={errors.broker} required label="Select broker" className="assign-care-plan__select">
-                  <Select
-                    disabledEmptyComponent
-                    id="select-broker"
-                    options={brokerOptions}
-                    value={broker}
-                    onChangeValue={(value) => {
-                      changeError('broker');
-                      setBroker(value);
-                    }}
-                  />
-                </FormGroup>
-
-                <FormGroup error={errors.packageType} required label="What package type?">
-                  <Select
-                    id="select-package"
-                    disabledEmptyComponent
-                    options={packageTypeOptions}
-                    value={packageType}
-                    onChangeValue={(value) => {
-                      changeError('packageType');
-                      setPackageType(value);
-                    }}
-                  />
-                </FormGroup>
-              </Container>
-
-              <Container className="brokerage__container">
-                <h3>Support plan and care package</h3>
-                <UploadGreenButton label="Upload social worker care plan" file={file} setFile={setFile} />
-              </Container>
-
-              <div className="assign-care-plan__notes">
-                <h3>Add notes</h3>
-                <Textarea handler={setNotes} value={notes} rows={3} />
-              </div>
-
-              <Container className="brokerage__actions">
-                <Button onClick={onSubmit}>Assign care plan</Button>
-              </Container>
-            </Container>
-          </Container>
-        )}
+        </form>
       </Container>
-    </Container>
+    </>
   );
 };
 
