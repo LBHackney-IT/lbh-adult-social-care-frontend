@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CircleCloseIcon } from '../../Icons';
+import { useScrollLock } from '../../../service';
 
-export default function Dialog({
+export default function Dialog ({
   children,
   noBorder = true,
   onClose,
@@ -12,9 +13,7 @@ export default function Dialog({
 }) {
   const [windowState, setWindowState] = useState();
 
-  useEffect(() => {
-    document.querySelector('html').style.overflow = isOpen ? 'hidden' : 'visible';
-  }, [isOpen]);
+  useScrollLock(isOpen);
 
   useEffect(() => {
     const onClickOutside = (e) => {

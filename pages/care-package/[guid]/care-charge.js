@@ -119,15 +119,20 @@ const CareCharge = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const { guid: packageId } = router.query;
+  const { guid: routerPackageId } = router.query;
+
+  const [packageId, setPackageId] = useState(null);
 
   const { actualReclaims, isLoading: careChargeLoading } = usePackageCareCharge(packageId);
   const { data: claimCollectors, isLoading: lookupsLoading } = useLookups('claimCollector');
   const { data: packageInfo, isLoading: packageInfoLoading } = useSingleCorePackageInfo(packageId);
 
   useEffect(() => {
-    if (packageInfo.settings?.isS117Client) router.replace(CARE_CHARGES_ROUTE);
-  }, [packageInfo]);
+    setPackageId(routerPackageId);
+    if (packageId && packageInfo.settings?.isS117Client && packageInfo.settings?.isS117ClientConfirmed === false) {
+      router.replace(CARE_CHARGES_ROUTE);
+    }
+  }, [packageInfo, routerPackageId]);
 
   const { handleSubmit, control, formState, setValue, getValues, reset } = useForm({ defaultValues });
 
@@ -413,7 +418,7 @@ const CareCharge = () => {
         <FinancialAssessment />
 
         <Container className="brokerage__actions">
-          <Button secondary color='gray' onClick={router.back}>
+          <Button secondary color="gray" onClick={router.back}>
             Back
           </Button>
           <Button onClick={handleSubmit(onSubmit)}>Save</Button>

@@ -102,10 +102,11 @@ const CareDetails = ({
     setLoading(true);
     try {
       await confirmS117({ packageId });
-      dispatch(addNotification('Success', 'success'));
-      setIsS117ClientConfirmed(false);
+      dispatch(addNotification({ text: 'Success', className: 'success' }));
+      setIsS117ClientConfirmed(true);
+      router.push(getCarePackageCareChargeRoute(packageId));
     } catch (error) {
-      dispatch(addNotification(error, 'error'));
+      dispatch(addNotification({ text: error }));
     }
     setLoading(false);
   };
