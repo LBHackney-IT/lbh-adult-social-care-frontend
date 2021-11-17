@@ -4,7 +4,7 @@ import { CircleCloseIcon } from '../../Icons';
 
 export default function Dialog({
   children,
-  noBorder,
+  noBorder = true,
   onClose,
   isOpen,
   className = '',

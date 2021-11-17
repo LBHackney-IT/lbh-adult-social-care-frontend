@@ -68,7 +68,6 @@
   z-index: var(--ifm-z-index-overlay);
   background: rgba(0, 0, 0, 0.33);
   position: fixed;
-  display: flex;
   top: 0;
   right: 0;
   bottom: 0;
@@ -79,6 +78,6 @@
   width: 50vw;
   margin: auto;
   background: #fff;
-  padding: 2rem;
+  padding: 32px;
   outline: 0;
 }

@@ -82,7 +82,7 @@ const SinglePayRun = () => {
         </Container>
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px">
-        <Loading isLoading={isLoading} />
+        <Loading isLoading={isLoading || insightsIsLoading} />
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
@@ -93,6 +93,7 @@ const SinglePayRun = () => {
         <HorizontalSeparator height="32px" />
         {insightData && (
           <HighLevelInsight
+            update={update}
             payRunId={payRunId}
             holdCount={insightData?.holdsCount}
             holdValue={insightData?.totalHeldAmount}
