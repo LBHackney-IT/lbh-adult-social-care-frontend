@@ -14,13 +14,12 @@ import {
 } from 'components';
 import { useRouter } from 'next/router';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
 import { getFormData } from 'service/getFormData';
-import { route } from 'next/dist/next-server/server/router';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKER_ASSISTANCE_ROUTE },
