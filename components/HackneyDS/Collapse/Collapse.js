@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container } from '../Layout/Container';
 import { SelectArrowTriangle } from '../../Icons';
+import { VerticalSeparator } from '../Layout/VerticalSeparator';
 
 export const Collapse = ({
   children,
@@ -9,9 +10,11 @@ export const Collapse = ({
   title,
   className = '',
   expanded,
+  isButtonClickOnly,
   isNegativeRotationAnimation,
   IconComponent = SelectArrowTriangle,
   setExpanded,
+  style = {},
 }) => {
   const [localExpanded, setLocalExpanded] = useState(false);
 
@@ -20,18 +23,22 @@ export const Collapse = ({
   const mainSetExpanded = setExpanded !== undefined ? setExpanded : setLocalExpanded;
 
   const iconAnimationClass = ` ${isNegativeRotationAnimation ? 'icon-animation-rotation-negative' : 'icon-animation-rotation'}`;
+  const isButtonClickOnlyClass = isButtonClickOnly ? ' trigger-only-button' : '';
+
+  const changeCollapse = () => mainSetExpanded(prevState => !prevState);
 
   return (
-    <Container className={className}>
+    <Container className={className} {...style}>
       <Container
-        width='fit-content'
-        display='flex'
-        alignItems='center'
-        className='collapse__button-container'
-        onClick={() => mainSetExpanded(prevState => !prevState)}
+        width="fit-content"
+        display="flex"
+        alignItems="flex-end"
+        className={`collapse__button-container${isButtonClickOnlyClass}`}
+        onClick={() => !isButtonClickOnly && changeCollapse()}
       >
         {title}
-        <span className="text-blue collapse__button">
+        {title && <VerticalSeparator width={20} />}
+        <span onClick={() => isButtonClickOnly && changeCollapse()} className="lbh-color-blue collapse__button">
           {mainExpanded ? collapseText : expandText}
           <IconComponent className={`icon-transition${mainExpanded ? iconAnimationClass : ''}`} />
         </span>

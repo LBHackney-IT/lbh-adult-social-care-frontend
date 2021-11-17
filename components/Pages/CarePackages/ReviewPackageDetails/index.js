@@ -159,7 +159,7 @@ const ReviewPackageDetails = ({
             title={title}
             subTitle={subTitle}
             link={
-              <span onClick={goToHistory} className="text-blue font-size-19px package-history-link">
+              <span onClick={goToHistory} className="lbh-color-blue font-size-19px package-history-link">
                 Package history
               </span>
             }

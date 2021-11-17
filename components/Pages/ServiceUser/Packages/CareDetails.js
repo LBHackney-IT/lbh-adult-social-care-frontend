@@ -16,6 +16,7 @@ import {
   Announcement,
   WarningText,
   Hint,
+  Collapse,
 } from '../../../HackneyDS';
 import { CaretDownIcon } from '../../../Icons';
 import { CarePackageStatus } from './CarePackageStatus';
@@ -48,7 +49,6 @@ const CareDetails = ({
   const router = useRouter();
   const filteredData = data.filter((d) => d.status === 'Active' || d.status === 'In Progress');
   const [loading, setLoading] = useState(false);
-  const [isExpanded, setExpanded] = useState(true);
   const [isS117ClientConfirmed, setIsS117ClientConfirmed] = useState(isS117ClientConfirmedInitial);
 
   const columns = [
@@ -115,96 +115,95 @@ const CareDetails = ({
   return (
     <>
       <Loading isLoading={isLoading || loading} />
-      <Container alignItems="baseline" borderBottom="1px solid #BFC1C3">
-        <Container display="flex" alignItems="baseline">
-          <Container display="flex" alignItems="center">
-            <CarePackageStatus status={packageStatus} packageData={data} />
-            <VerticalSeparator width="10px" />
-            <Heading size="xl">{title}</Heading>
-          </Container>
-          <VerticalSeparator width="20px" />
-          <Container display="flex" alignItems="center">
-            <p onClick={() => setExpanded(!isExpanded)} className="link-button">
-              {isExpanded ? 'Hide' : 'Collapse'}
-            </p>
-            <VerticalSeparator width="5px" />
-            <CaretDownIcon />
-          </Container>
-        </Container>
-
-        {isExpanded && (
-          <>
-            <HorizontalSeparator height="10px" />
-            {isS117Client && !isS117ClientConfirmed && (
-              <Announcement isError>
-                <WarningText>This client has been categorised as S117.</WarningText>
-                <Container display="flex">
-                  No care charges need to be applied
-                  <VerticalSeparator width="24px" />
-                  <Link onClick={(e) => handleS117(e)} noVisited>
-                    Confirm
-                  </Link>
-                </Container>
-              </Announcement>
-            )}
-
-            {data.length > 0 ? (
-              <Container>
-                <HorizontalSeparator height="40px" />
-                <Container display="flex" justifyContent="space-between" alignItems="center">
-                  <Checkbox
-                    label="Show only Active/In Progress elements"
-                    value={activeOnly}
-                    onChangeValue={() => setFilter(!activeOnly)}
-                  />
-                  <Container display="flex" justifyContent="space-between" alignItems="center">
-                    {!isS117Client && !isEndOrCancelled && (
-                      <Link className="mr-5" onClick={goToCareCharge} noVisited>
-                        {
-                          data.some(({ type, status, name }) => (
-                            type === 'Package Reclaim - Care Charge' &&
-                            status === 'Active' && (
-                              name === 'Without Property 13+ Weeks' ||
-                              name === 'Without Property 1-12 Weeks'
-                            )
-                          )) ? 'Edit financial assessment' : 'Add financial assessment'
-                        }
-                      </Link>
-                    )}
-                    <Link onClick={goToPackageDetails} noVisited>
-                      Package details
-                    </Link>
-                  </Container>
-                </Container>
-                <HorizontalSeparator height="5px" />
-                <Table
-                  columns={columns}
-                  data={activeOnly ? filteredData : data}
-                  headerClassName="care-details__table-header"
-                  cellClassName="care-details__table-cell"
-                />
-                <Container background="#f8f8f8" padding="20px" display="flex" justifyContent="flex-end">
-                  Provider paid <VerticalSeparator width="10px" />
-                  <strong style={{ color: '#00664F' }}>NET OFF</strong>
-                  <VerticalSeparator width="30px" />
-                  <strong>
-                    {netTotal < 0
-                      ? `-£${getNumberWithCommas(Math.abs(netTotal).toFixed(2))}`
-                      : `£${getNumberWithCommas(Math.abs(netTotal).toFixed(2))}`}
-                  </strong>
-                </Container>
+      <Collapse
+        isButtonClickOnly
+        style={{
+          width: '100%',
+          borderBottom: '1px solid #BFC1C3',
+          padding: '0 0 24px',
+        }}
+        className="care-details__package-collapse"
+        IconComponent={CaretDownIcon}
+        title={(
+          <Container alignItems="baseline">
+            <Container display="flex" alignItems="baseline">
+              <Container display="flex" alignItems="center">
+                <CarePackageStatus status={packageStatus} packageData={data} />
+                <VerticalSeparator width="10px" />
+                <Heading size="xl">{title}</Heading>
               </Container>
-            ) : (
-              <>
-                <HorizontalSeparator height="20px" />
-                <Hint>No package details</Hint>
-              </>
-            )}
+            </Container>
+          </Container>
+        )}
+      >
+        <HorizontalSeparator height="10px" />
+        {isS117Client && !isS117ClientConfirmed && (
+          <Announcement isError>
+            <WarningText>This client has been categorised as S117.</WarningText>
+            <Container display="flex">
+              No care charges need to be applied
+              <VerticalSeparator width="24px" />
+              <Link onClick={(e) => handleS117(e)} noVisited>
+                Confirm
+              </Link>
+            </Container>
+          </Announcement>
+        )}
+
+        {data.length > 0 ? (
+          <Container>
+            <HorizontalSeparator height="40px" />
+            <Container display="flex" justifyContent="space-between" alignItems="center">
+              <Checkbox
+                label="Show only Active/In Progress elements"
+                value={activeOnly}
+                onChangeValue={() => setFilter(!activeOnly)}
+              />
+              <Container display="flex" justifyContent="space-between" alignItems="center">
+                {!isS117Client && !isEndOrCancelled && (
+                  <Link className="mr-5" onClick={goToCareCharge} noVisited>
+                    {
+                      data.some(({ type, status, name }) => (
+                        type === 'Package Reclaim - Care Charge' &&
+                        status === 'Active' && (
+                          name === 'Without Property 13+ Weeks' ||
+                          name === 'Without Property 1-12 Weeks'
+                        )
+                      )) ? 'Edit financial assessment' : 'Add financial assessment'
+                    }
+                  </Link>
+                )}
+
+                <Link onClick={goToPackageDetails} noVisited>
+                  Package details
+                </Link>
+              </Container>
+            </Container>
+            <HorizontalSeparator height="5px" />
+            <Table
+              columns={columns}
+              data={activeOnly ? filteredData : data}
+              headerClassName="care-details__table-header"
+              cellClassName="care-details__table-cell"
+            />
+            <Container background="#f8f8f8" padding="20px" display="flex" justifyContent="flex-end">
+              Provider paid <VerticalSeparator width="10px" />
+              <strong style={{ color: '#00664F' }}>NET OFF</strong>
+              <VerticalSeparator width="30px" />
+              <strong>
+                {netTotal < 0
+                  ? `-£${getNumberWithCommas(Math.abs(netTotal).toFixed(2))}`
+                  : `£${getNumberWithCommas(Math.abs(netTotal).toFixed(2))}`}
+              </strong>
+            </Container>
+          </Container>
+        ) : (
+          <>
+            <HorizontalSeparator height="20px" />
+            <Hint>No package details</Hint>
           </>
         )}
-        <HorizontalSeparator height="28px" />
-      </Container>
-      <HorizontalSeparator height="28px" />
+      </Collapse>
     </>
   );
 };
