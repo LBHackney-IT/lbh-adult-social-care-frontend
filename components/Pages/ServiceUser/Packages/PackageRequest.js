@@ -24,7 +24,7 @@ const PackageRequest = ({ packageRequest }) => {
   const buttonClass = `${getButtonColourFromPackageStatus(packageRequest.packageStatus)} package-request-button`;
   const handleClick = () => router.push(getCorePackageRoute(packageRequest.packageId));
   return (
-    <Container borderBottom="1px solid #BFC1C3" border="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
+    <Container borderBottom="1px solid #BFC1C3" borderRight="1px solid #BFC1C3" borderTop="1px solid #BFC1C3"  borderLeft="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
       <Container display="flex" alignItems="center">
         <Tag className="text-capitalize" outline color={getTagColorFromStatus(packageRequest.packageStatus)}>
           {packageRequest.packageStatus}
