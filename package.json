@@ -51,9 +51,7 @@
     "prepare": "husky install",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "chromatic": "npx chromatic --project-token=97e4e3b73e5d",
-    "resolve-url-loader": "^4.0.0",
-    "faker": "^5.5.3"
+    "chromatic": "npx chromatic --project-token=97e4e3b73e5d"
   },
   "browserslist": {
     "production": [
@@ -101,6 +99,8 @@
     "sass-loader": "10.1.1",
     "sb": "^6.3.7",
     "style-loader": "2.0.0",
-    "webpack": "^5.51.1"
+    "webpack": "^5.51.1",
+    "resolve-url-loader": "^4.0.0",
+    "faker": "^5.5.3"
   }
 }
