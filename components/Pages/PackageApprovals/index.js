@@ -10,7 +10,7 @@ import {
   FormGroup,
   Dialog,
 } from '../../HackneyDS';
-import AlternativePagination from '../../AlternativePagination';
+import AlternativePagination from '../../HackneyDS/AlternativePagination';
 import DatePick from '../../DatePick';
 import Loading from '../../Loading';
 import { PackageApprovalsTable } from './PackageApprovalsTable';

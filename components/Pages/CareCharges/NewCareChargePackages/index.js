@@ -1,9 +1,17 @@
 import React from 'react';
 import { getServiceUserCareChargesRoute, CARE_PACKAGE_ROUTE, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
-import { Breadcrumbs, Button, Container, Select, FormGroup, HorizontalSeparator, Heading } from '../../../HackneyDS';
+import {
+  AlternativePagination,
+  Breadcrumbs,
+  Button,
+  Container,
+  Select,
+  FormGroup,
+  HorizontalSeparator,
+  Heading
+} from '../../../HackneyDS';
 import Loading from '../../../Loading';
-import AlternativePagination from '../../../AlternativePagination';
 import { CareChargesTable } from './CareChargesTable';
 
 const breadcrumbs = [{ text: 'Home', href: CARE_PACKAGE_ROUTE }, { text: 'Care Charges' }];

@@ -5,7 +5,7 @@ import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'c
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { useInvoiceListView, getPayrunInsight } from 'api/SWR/payRuns';
-import AlternativePagination from 'components/AlternativePagination';
+import { AlternativePagination } from 'components/HackneyDS';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
 import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';

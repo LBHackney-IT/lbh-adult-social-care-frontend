@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Container } from '../../../HackneyDS';
+import { Container, AlternativePagination } from '../../../HackneyDS';
 import { CollapseGreenDownIcon } from '../../../Icons';
-import AlternativePagination from '../../../AlternativePagination';
 import BrokerageSupplierCard from '../BrokerageSupplierCard';
 
 const SupplierLookUpSelector = ({

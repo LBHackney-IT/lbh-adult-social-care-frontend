@@ -1,8 +1,7 @@
 import React, { memo } from 'react';
 import { getServiceUserPackagesRoute, getAssignPackageRoute } from 'routes/RouteConstants';
-import { Container } from '../../../HackneyDS';
+import { Container, AlternativePagination } from '../../../HackneyDS';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
-import AlternativePagination from '../../../AlternativePagination';
 import SearchResult from '../../../SearchResult';
 import ServiceUserSearch from '../../ServiceUser/Search';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';

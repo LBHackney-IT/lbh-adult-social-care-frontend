@@ -6,7 +6,7 @@ import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading, Vertical
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { format } from 'date-fns';
 import { usePaymentHistoryView } from 'api';
-import AlternativePagination from 'components/AlternativePagination';
+import { AlternativePagination } from 'components/HackneyDS';
 import { PaymentHistoryTable } from 'components/Pages/Payruns/PaymentHistory/PaymentHistoryTable';
 
 export const getServerSideProps = withSession(({ req }) => {

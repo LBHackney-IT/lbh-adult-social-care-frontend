@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
-import { Button, Input } from './HackneyDS';
-import { ArrowLeftIcon } from './Icons';
+import Button from '../Button';
+import { Input } from '../Input';
+import { ArrowLeftIcon } from '../../Icons';
 
 const AlternativePagination = ({
   className,
@@ -18,7 +19,7 @@ const AlternativePagination = ({
     return <></>;
   }
 
-  const [search, setSearch] = useState(currentPage > 1 && currentPage < totalPages ? currentPage : null);
+  const [search, setSearch] = useState(null);
   const [placeholder, setPlaceholder] = useState('');
 
   const onChangePagination = (item) => {
@@ -54,6 +55,10 @@ const AlternativePagination = ({
     }
   }, [search]);
 
+  useEffect(() => {
+    setSearch(currentPage > 1 && currentPage < totalPages ? currentPage : null);
+  }, [currentPage]);
+
   const fromCalc = from || currentPage * pageSize - (pageSize - 1);
   const toCalc = to || currentPage * pageSize > totalCount ? totalCount : currentPage * pageSize;
 
@@ -85,7 +90,7 @@ const AlternativePagination = ({
                 onBlur={onBlurSearch}
                 pressEnter={() => onChangePagination(search)}
                 placeholder={placeholder}
-                className={`pagination-search${placeholder ? ' filled' : ''}`}
+                className={`pagination-search${placeholder === currentPage ? ' filled' : ''}`}
                 onChangeValue={onChangeSearchPageNumber}
                 type="number"
                 value={search}

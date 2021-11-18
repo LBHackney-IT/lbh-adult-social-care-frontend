@@ -1,6 +1,12 @@
 import React from 'react';
-import { Breadcrumbs, Container, HorizontalSeparator, Heading, Button } from '../../HackneyDS';
-import AlternativePagination from '../../AlternativePagination';
+import {
+  AlternativePagination,
+  Breadcrumbs,
+  Container,
+  HorizontalSeparator,
+  Heading,
+  Button
+} from '../../HackneyDS';
 import { BrokerPortalTable } from './BrokerPortalTable';
 import Loading from '../../Loading';
 import { BrokerPortalFilters } from './BrokerPortalFilters';

@@ -3,11 +3,10 @@ import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
 import { Breadcrumbs, Button, Container, Heading, HorizontalSeparator, Loading, Tab, Tabs } from 'components';
 import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
-import AlternativePagination from 'components/AlternativePagination';
+import { AlternativePagination } from 'components/HackneyDS';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { usePayrunView } from 'api/SWR/payRuns';
 import CreateDraftPayRun from '../../components/Pages/Finance/CreateDraftPayRun';
-import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
