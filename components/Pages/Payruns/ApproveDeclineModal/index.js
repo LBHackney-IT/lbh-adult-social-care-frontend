@@ -1,6 +1,6 @@
 import { Controller, useForm } from 'react-hook-form';
 import React, { useMemo, useState } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';

@@ -115,7 +115,11 @@ jobs:
             yarn build
       - run:
           name: deploy
-          command: yarn install --production --ignore-scripts --prefer-offline && sudo npm i -g serverless && sls deploy --stage staging
+          command: |
+            yarn install --production --ignore-scripts --prefer-offline
+            rm -rf node_modules/webpack node_modules/sass
+            yarn autoclean --force
+            sudo npm i -g serverless && sls deploy --stage staging
 
   build-deploy-production:
     executor: aws-cli/default
@@ -131,7 +135,11 @@ jobs:
             yarn build
       - run:
           name: deploy
-          command: yarn install --production --ignore-scripts --prefer-offline && sudo npm i -g serverless && sls deploy --stage production
+          command: |
+            yarn install --production --ignore-scripts --prefer-offline
+            rm -rf node_modules/'@babel' node_modules/webpack node_modules/sass
+            yarn autoclean --force
+            sudo npm i -g serverless && sls deploy --stage production
 
   generate-draft-github-release:
     executor: aws-cli/default
