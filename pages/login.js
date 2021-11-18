@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useUser } from 'api';
-import { HackneyFooterInfo, Header, Loading } from 'components';
+import { HackneyFooterInfo, Loading } from 'components';
 import { userLogin } from 'reducers/userReducer';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
@@ -70,7 +70,7 @@ const Login = () => {
             <p>Please sign in with your Hackney email account.</p>
             <p>Please contact your manager if you have issues signing in.</p>
             <a
-              className="button button-base is-relative"
+              className="lbh-button govuk-button is-relative"
               href={`${hackneyAuthLink}${origin}/login`}
               rel="noopener noreferrer"
               target="_self"

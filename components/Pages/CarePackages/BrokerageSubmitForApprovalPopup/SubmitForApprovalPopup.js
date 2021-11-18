@@ -58,7 +58,7 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
           <Button disabled={loading || isLoading} isLoading={loading || isLoading} onClick={submit}>
             Submit
           </Button>
-          <Button onClick={closePopup} className="link-button red">
+          <Button onClick={closePopup} outline secondary color='red' className="link-button no-border">
             Cancel
           </Button>
         </Container>

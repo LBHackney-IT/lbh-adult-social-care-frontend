@@ -10,7 +10,7 @@ const UrlFromFile = ({ file, removeFile }) => {
       <a className="link-button blue" href={getUrlFromFile(file)}>
         {file.name}
       </a>
-      <p className="link-button text-black remove-button" onClick={() => removeFile(null)}>
+      <p className="link-button black remove-button" onClick={() => removeFile(null)}>
         Remove
       </p>
     </Container>

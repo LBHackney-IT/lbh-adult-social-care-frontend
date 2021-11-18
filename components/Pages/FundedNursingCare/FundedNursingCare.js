@@ -48,10 +48,10 @@ export const FundedNursingCare = ({
             <h3>Upload FNC assessment</h3>
             {fileName ? (
               <Container display="flex">
-                <Link className="file-link link-button lbh-color-blue" href={urlFile || fileLink}>
+                <Link className="file-link link-button" href={urlFile || fileLink}>
                   {fileName}
                 </Link>
-                <p className="link-button text-black" onClick={() => setUploadFNCAssessment(null)}>
+                <p className="link-button black" onClick={() => setUploadFNCAssessment(null)}>
                   Remove
                 </p>
               </Container>
