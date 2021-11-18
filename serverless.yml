@@ -25,7 +25,7 @@ functions:
         - pages/**
         - public/**
         - build/**
-        - node_modules/**
+        # - node_modules/**
 
     events:
       - http: ANY /
