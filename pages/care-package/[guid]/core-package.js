@@ -21,6 +21,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
 import withSession from 'lib/session';
+import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -73,7 +74,8 @@ const CorePackage = () => {
     handleSubmit,
     control,
     setValue,
-    formState: { errors },
+    getValues,
+    formState: { errors, isDirty },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -95,10 +97,26 @@ const CorePackage = () => {
       setValue('packageType', packageInfo.packageType, 10);
       setValue('primarySupportReasonId', packageInfo.primarySupportReasonId);
       setValue('packageScheduling', packageInfo.packageScheduling);
+      setPackageStatus(packageInfo.status);
     }
   }, [packageInfo]);
 
+  const [packageStatus, setPackageStatus] = useState();
+
   const updatePackage = async (data = {}) => {
+    if (isDirty) {
+      if (packageStatus && parseInt(packageStatus, 10) === 3) {
+        setDialogOpen(true);
+      } else {
+        handleFormSubmission(data);
+      }
+    } else {
+      router.push(getBrokerPackageRoute(packageId));
+    }
+  };
+
+  const handleFormSubmission = async () => {
+    const data = getValues();
     setLoading(true);
     try {
       const { id } = await updateCoreCarePackage({ data, packageId });
@@ -112,8 +130,14 @@ const CorePackage = () => {
 
   const isLoading = loading || singleCoreLoading || schedulingOptionsLoading || coreLoading;
 
+  const [isDialogOpen, setDialogOpen] = useState(false);
   return (
     <>
+      <ResetApprovedPackageDialog
+        isOpen={isDialogOpen}
+        onClose={() => setDialogOpen(false)}
+        handleConfirmation={handleFormSubmission}
+      />
       <DynamicBreadcrumbs />
       <Loading isLoading={isLoading} />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
@@ -146,7 +170,9 @@ const CorePackage = () => {
           </Container>
           <FurtherDetails settings={settings} control={control} setValue={setValue} />
           <HorizontalSeparator height="20px" />
-          <Button isLoading={isLoading} disabled={isLoading} type="submit">Save and continue</Button>
+          <Button isLoading={isLoading} disabled={isLoading} type="submit">
+            Save and continue
+          </Button>
         </form>
       </Container>
     </>
