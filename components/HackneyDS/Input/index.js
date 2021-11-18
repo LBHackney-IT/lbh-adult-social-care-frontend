@@ -2,6 +2,7 @@ import React from 'react';
 
 export const Input = ({
   label,
+  onFocus,
   id = 'lbh-input',
   name,
   type = 'text',
@@ -16,6 +17,7 @@ export const Input = ({
   handler,
   onChangeValue,
   required,
+  pressEnter,
   disabled,
 }) => {
   const outerClassName = className ? ` ${className}` : '';
@@ -27,6 +29,10 @@ export const Input = ({
       return onChangeValue(e.target.value);
     }
     return handler(e);
+  };
+
+  const onEnterPress = ({ key }) => {
+    if (pressEnter && key === 'Enter' && pressEnter) pressEnter?.();
   };
 
   return (
@@ -43,6 +49,8 @@ export const Input = ({
           onBlur={onBlur}
           className={`govuk-input lbh-input ${(error ?? '') && 'govuk-input--error'}`}
           id={id}
+          onKeyPress={onEnterPress}
+          onFocus={onFocus}
           placeholder={placeholder}
           name={name}
           type={type}

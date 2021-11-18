@@ -1,5 +1,6 @@
-import React, { memo, useEffect } from 'react';
-import { Button } from './HackneyDS';
+import React, { memo, useEffect, useState } from 'react';
+import { Button, Input } from './HackneyDS';
+import { ArrowLeftIcon } from './Icons';
 
 const AlternativePagination = ({
   className,
@@ -11,23 +12,54 @@ const AlternativePagination = ({
   to = 0,
   currentPage = 1,
   totalCount = 0,
+  siblingCount = 5,
 }) => {
   if (totalCount === 0) {
     return <></>;
   }
 
+  const [search, setSearch] = useState(currentPage > 1 && currentPage < totalPages ? currentPage : null);
+  const [placeholder, setPlaceholder] = useState('');
+
   const onChangePagination = (item) => {
     changePagination(item);
   };
 
+  const onChangeSearchPageNumber = (value) => {
+    if (!value) return setSearch(null);
+
+    let newValue = value;
+
+    if (value < 2) newValue = 1;
+    if (value > totalPages - 1) newValue = totalPages;
+
+    setSearch(newValue);
+  };
+
+  const onBlurSearch = () => {
+    if (!search) setSearch(placeholder);
+
+    onChangePagination(search || placeholder);
+  };
+
   useEffect(() => {
-    if(totalPages && currentPage > totalPages) {
+    if (totalPages && currentPage > totalPages) {
       changePagination(1);
     }
   }, [totalPages]);
 
+  useEffect(() => {
+    if (search) {
+      setPlaceholder(search);
+    }
+  }, [search]);
+
   const fromCalc = from || currentPage * pageSize - (pageSize - 1);
   const toCalc = to || currentPage * pageSize > totalCount ? totalCount : currentPage * pageSize;
+
+  const numbersArray = [...Array(totalPages).keys()];
+  const hasSibling = totalPages > siblingCount;
+  const pagesArray = hasSibling ? [0, 'search', totalPages - 1] : numbersArray;
 
   return (
     <div className={`table-pagination${className ? ` ${className}` : ''}`}>
@@ -40,27 +72,42 @@ const AlternativePagination = ({
       <p className="table-pagination-info">Showing {`${fromCalc}-${toCalc} of ${totalCount} items`}</p>
 
       <div className="table-pagination-actions">
-        {totalCount === 0 ? (
-          <Button
-            key="page-1"
-            onClick={() => onChangePagination(1)}
-            className="table-pagination-button table-pagination-item-active"
-          >
-            1
+        {hasSibling && currentPage - 1 !== pagesArray[0] && (
+          <Button onClick={() => onChangePagination(currentPage - 1)} className="table-pagination-button">
+            <ArrowLeftIcon />
           </Button>
-        ) : (
-          [...Array(Math.round(totalPages)).keys()].map((item) => {
-            const currentPageClass = String(item + 1) === String(currentPage) ? ' table-pagination-item-active' : '';
+        )}
+        {pagesArray.map((item) => {
+          if (item === 'search') {
             return (
-              <Button
-                key={`page-${item + 1}`}
-                onClick={() => onChangePagination(item + 1)}
-                className={`table-pagination-button${currentPageClass}`}
-              >
-                {item + 1}
-              </Button>
+              <Input
+                onFocus={() => setSearch('')}
+                onBlur={onBlurSearch}
+                pressEnter={() => onChangePagination(search)}
+                placeholder={placeholder}
+                className={`pagination-search${placeholder ? ' filled' : ''}`}
+                onChangeValue={onChangeSearchPageNumber}
+                type="number"
+                value={search}
+              />
             );
-          })
+          }
+
+          const currentPageClass = String(item + 1) === String(currentPage) ? ' table-pagination-item-active' : '';
+          return (
+            <Button
+              key={`page-${item + 1}`}
+              onClick={() => onChangePagination(item + 1)}
+              className={`table-pagination-button${currentPageClass}`}
+            >
+              {item + 1}
+            </Button>
+          );
+        })}
+        {hasSibling && currentPage !== totalPages && (
+          <Button onClick={() => onChangePagination(++currentPage)} className="table-pagination-button arrow">
+            <ArrowLeftIcon className="icon-animation-rotation" />
+          </Button>
         )}
       </div>
     </div>
