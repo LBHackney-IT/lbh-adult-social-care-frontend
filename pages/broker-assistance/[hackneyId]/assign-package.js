@@ -130,7 +130,7 @@ const AssignPackage = () => {
               control={control}
               render={({ field }) => (
                 <FormGroup error={errors.file?.message}>
-                  <UploadGreenButton accept=".pdf" file={field.value} setFile={field.onChange} />
+                  <UploadGreenButton extensions={['pdf', 'doc', 'docx']} file={field.value} setFile={field.onChange} />
                 </FormGroup>
               )}
               name="file"

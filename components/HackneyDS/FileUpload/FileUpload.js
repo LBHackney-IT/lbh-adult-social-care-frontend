@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const FileUpload = ({
-  accept = '',
+  extensions,
   className = '',
   onChange = () => {},
   getFile,
@@ -18,6 +18,8 @@ export const FileUpload = ({
     }
     onChange(e);
   };
+
+  const accept = extensions ? extensions.map(extension => `.${extension}`).join(', ') : '';
 
   return (
     <div className={`govuk-form-group lbh-form-group ${className}`}>
