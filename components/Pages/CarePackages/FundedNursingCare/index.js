@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { isFunction } from 'api';
 import { compareDescendingDMY, dateStringToDate } from 'service';
-import { dateDescending } from 'constants/variables';
+import { dateDescending, TEXT_FILE_EXTENSIONS } from 'constants/variables';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import * as yup from 'yup';
@@ -25,6 +25,7 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
+import { getFormData } from '../../../../service/getFormData';
 
 const FundedNursingCare = ({
   carePackageId,
@@ -51,10 +52,10 @@ const FundedNursingCare = ({
     dateFrom: '',
     dateTo: '',
   });
+  const [hasFNC, setHasFNC] = useState();
   const [hasPreviousFnc] = useState(false); // todo for new design
-  const [collectedBy, setCollectedBy] = useState();
-  const [notes, setNotes] = useState('');
   const [isOngoing, setIsOngoing] = useState(true);
+  const [collectedBy, setCollectedBy] = useState();
 
   const clickBack = () => {
     if (isFunction(goBack())) goBack();
@@ -64,7 +65,7 @@ const FundedNursingCare = ({
     dispatch(addNotification({ text, className }));
   };
 
-  const clickSave = async () => {
+  const clickSave = async (data) => {
     const { dateFrom, dateTo } = dates;
 
     const dateSchema = yup.object().shape({
@@ -108,7 +109,7 @@ const FundedNursingCare = ({
 
     try {
       await dateSchema.validate(
-        { detailsDateTo: detailsData.endDate, isOngoing, dateFrom, dateTo, collectedBy },
+        { detailsDateTo: detailsData.endDate, isOngoing, dateFrom, dateTo },
         { abortEarly: false }
       );
     } catch (errorValidation) {
@@ -126,34 +127,27 @@ const FundedNursingCare = ({
       return pushNotification('Some errors above');
     }
 
-    const fundedNursingCareCreation = {
-      carePackageId,
+    const newData = {
+      ...data,
       cost: activeFncPrice,
-      claimCollector: collectedBy,
       supplierId: 1, // To be removed
       status: 1, // Set active status ?
       type: 1, // Set type of reclaim ?
       startDate: dateFrom,
       endDate: isOngoing ? null : dateTo,
-      description: notes,
-    };
-
-    const fundedNursingCareUpdate = {
-      id: carePackageReclaimFnc.id,
-      cost: activeFncPrice,
-      claimCollector: collectedBy,
-      supplierId: 1, // To be removed
-      status: 1, // Set active status ?
-      type: 1, // Set type of reclaim ?
-      startDate: dateFrom,
-      endDate: isOngoing ? null : dateTo,
-      description: notes,
     };
 
     if (!carePackageReclaimFnc?.id) {
-      return createFundedNursingCare(carePackageId, fundedNursingCareCreation);
+      newData.carePackageId = carePackageId;
+    } else {
+      newData.id = carePackageReclaimFnc.id
     }
-    return updateFundedNursingCare(carePackageId, fundedNursingCareUpdate);
+    const formData = getFormData(newData);
+
+    if (!carePackageReclaimFnc?.id) {
+      return createFundedNursingCare(carePackageId, formData);
+    }
+    return updateFundedNursingCare(carePackageId, formData);
   };
 
   const changeError = (field, value = '') => {
@@ -178,30 +172,31 @@ const FundedNursingCare = ({
       setIsOngoing(false);
     }
 
-    setNotes(carePackageReclaimFnc.description || '');
-    setCollectedBy(carePackageReclaimFnc.claimCollector || '');
+    const { description = '', claimCollector = '' } = carePackageReclaimFnc;
+
+    reset({ description, claimCollector });
+    setCollectedBy(claimCollector);
   }, [carePackageReclaimFnc, detailsData]);
 
   const schema = useMemo(() => (
     yup.object().shape({
-      collectedBy: yup.number().typeError('Required field').required('Required field'),
-      detailsDateTo: null,
-      isOngoing: yup.boolean(),
+      claimCollector: yup
+        .number()
+        .typeError('Required field')
+        .required('Required field')
     })
   ), [detailsData]);
 
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      dateTo: null,
-      dateFrom: null,
-      isOngoing: false,
-      detailsDateTo: null,
-      collectedBy: ''
+      claimCollector: '',
+      description: '',
     },
   });
   const onSubmit = (data) => clickSave(data);
@@ -226,43 +221,43 @@ const FundedNursingCare = ({
               </div>
             </Announcement>
           )}
-          <Controller
-            name="hasFNC"
-            control={control}
-            render={({ field }) => (
-              <RadioGroup
-                handle={field.onChange}
-                inline
-                className="has-fnc-radio-group"
-                error={errors.hasFNC?.message}
-                value={field.value}
-                label="Has a FNC assessment been carried out?"
-                items={[
-                  { id: 'yes', label: 'Yes' },
-                  { id: 'no', label: 'No' },
-                ]}
-              />
-            )}
+          <RadioGroup
+            handle={(value) => {
+              changeError('hasFNC');
+              setHasFNC(value);
+            }}
+            inline
+            className='has-fnc-radio-group'
+            error={errors.hasFNC}
+            value={hasFNC}
+            label="Has a FNC assessment been carried out?"
+            items={[
+              { id: 'yes', label: 'Yes' },
+              { id: 'no', label: 'No' },
+            ]}
           />
           <Controller
-            name="collectedBy"
+            name="claimCollector"
             control={control}
             render={({ field }) => (
               <FormGroup
                 className="select-collected-by"
                 required
                 label="Collected by"
-                error={errors.collectedBy?.message}
+                error={errors.claimCollector?.message}
               >
                 <Select
-                  error={errors.collectedBy?.message}
+                  error={errors.claimCollector?.message}
                   disabledEmptyComponent
                   emptyElement={{ text: 'Please select', value: '' }}
                   id="collected-by"
                   className="funded-nursing-care__select"
                   options={collectedByOptions}
                   value={field.value}
-                  onChangeValue={field.onChange}
+                  onChangeValue={(value) => {
+                    field.onChange(value);
+                    setCollectedBy(value);
+                  }}
                 />
               </FormGroup>
             )}
@@ -283,16 +278,17 @@ const FundedNursingCare = ({
             isOngoing={isOngoing}
           />
           <Controller
-            name="notes"
+            name="description"
             control={control}
             render={({ field }) => (
-              <FormGroup error={errors.notes?.message}>
+              <FormGroup error={errors.description?.message}>
                 <Label className="label-textarea">Funded Nursing Care notes</Label>
-                <Textarea handler={field.onChange} value={field.notes} />
+                <Textarea handler={field.onChange} value={field.value} />
               </FormGroup>
             )}
           />
-          <Container className="brokerage__container">
+          <HorizontalSeparator height={32} />
+          <Container>
             <Heading size="m">Upload FNC Assessment...</Heading>
             <HorizontalSeparator height={24} />
             <Controller
@@ -300,11 +296,12 @@ const FundedNursingCare = ({
               control={control}
               render={({ field }) => (
                 <FormGroup error={errors.file?.message}>
-                  <UploadGreenButton file={field.value} setFile={field.onChange} />
+                  <UploadGreenButton extensions={TEXT_FILE_EXTENSIONS} file={field.value} setFile={field.onChange} />
                 </FormGroup>
               )}
             />
           </Container>
+          <HorizontalSeparator height={50} />
           <BrokerageTotalCost
             name={`Funded per week ${collectedByType[collectedBy] ? `(${collectedByType[collectedBy]})` : ''}`}
             className="brokerage__border-cost"
