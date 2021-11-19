@@ -1,6 +1,7 @@
 import React from 'react';
 
 export const FileUpload = ({
+  accept = '',
   className = '',
   onChange = () => {},
   getFile,
@@ -24,6 +25,7 @@ export const FileUpload = ({
         {label}
       </label>}
       <input
+        accept={accept}
         onChange={changeInput}
         className="govuk-file-upload lbh-file-upload"
         id={id}

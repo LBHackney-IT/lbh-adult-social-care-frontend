@@ -50,7 +50,7 @@ const AssignPackage = () => {
   const { options: brokerOptions, isLoading: brokersLoading } = useBrokers();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isLoading = serviceUserLoading || lookupsLoading || brokersLoading;
+  const isLoading = serviceUserLoading || lookupsLoading || brokersLoading || isSubmitting;
 
   const {
     handleSubmit,
@@ -130,7 +130,7 @@ const AssignPackage = () => {
               control={control}
               render={({ field }) => (
                 <FormGroup error={errors.file?.message}>
-                  <UploadGreenButton file={field.value} setFile={field.onChange} />
+                  <UploadGreenButton accept=".pdf" file={field.value} setFile={field.onChange} />
                 </FormGroup>
               )}
               name="file"
