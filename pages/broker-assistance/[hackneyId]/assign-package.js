@@ -29,25 +29,28 @@ const breadcrumbs = [
   { text: 'Assign and attach a care plan' },
 ];
 
+const schema = yup.object().shape({
+  brokerId: yup.string().typeError('Please choose a Broker').required().min(2, 'Please choose a Broker'),
+  packageType: yup
+    .number()
+    .typeError('Please select a package type')
+    .required()
+    .min(1, 'Please select a package type'),
+  file: yup
+    .mixed()
+    .test('file', '', (value) => value?.size)
+});
+
 const AssignPackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { hackneyId } = router.query;
-  const [file, setFile] = useState(null);
   const { data: serviceUser, isLoading: serviceUserLoading } = useServiceUser(hackneyId);
   const { options: packageTypeOptions, isLoading: lookupsLoading } = useLookups('packageType');
   const { options: brokerOptions, isLoading: brokersLoading } = useBrokers();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isLoading = serviceUserLoading || lookupsLoading || brokersLoading;
-  const schema = yup.object().shape({
-    brokerId: yup.string().typeError('Please choose a Broker').required().min(2, 'Please choose a Broker'),
-    packageType: yup
-      .number()
-      .typeError('Please select a package type')
-      .required()
-      .min(1, 'Please select a package type'),
-  });
 
   const {
     handleSubmit,
@@ -60,6 +63,7 @@ const AssignPackage = () => {
       hackneyUserId: hackneyId,
       brokerId: 0,
       packageType: 0,
+      file: null,
       notes: '',
     },
   });
@@ -122,7 +126,15 @@ const AssignPackage = () => {
             <HorizontalSeparator height={24} />
             <Heading size="m">Upload social worker care plan</Heading>
             <HorizontalSeparator height={24} />
-            <UploadGreenButton file={file} setFile={setFile} />
+            <Controller
+              control={control}
+              render={({ field }) => (
+                <FormGroup error={errors.file?.message}>
+                  <UploadGreenButton file={field.value} setFile={field.onChange} />
+                </FormGroup>
+              )}
+              name="file"
+            />
           </Container>
           <Container>
             <FormGroup label="Add notes" error={errors.notes?.message}>

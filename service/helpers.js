@@ -36,7 +36,7 @@ export const getUrlFromFile = (file) => {
   if (!file) return '';
   if (file?.url) return file.url;
 
-  return window.URL.revokeObjectURL(file);
+  return window.URL.createObjectURL(file);
 };
 
 export const getLoggedInUser = ({ req }) => {
