@@ -7,7 +7,7 @@ import { HorizontalSeparator } from '../Layout/HorizontalSeparator';
 import RadioGroup from '../RadioGroup';
 
 export default {
-  title: 'Hackney Design System/Notifications',
+  title: 'Hackney Design System/Info Text/Notifications',
   component: Notifications,
   argTypes: {
     control: null,

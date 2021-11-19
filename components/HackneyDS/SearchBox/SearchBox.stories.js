@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { SearchBox } from '../index';
 
 export default {
-  title: 'Hackney Design System/SearchBox',
+  title: 'Hackney Design System/Form/SearchBox',
   component: SearchBox,
   argTypes: {},
 };

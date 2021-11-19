@@ -12,7 +12,7 @@ import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
-import DatePick from '../../../../DatePick';
+import DatePickerCalendar from '../../../../HackneyDS/DatePickerCalendar/DatePickerCalendar';
 import Loading from '../../../../Loading';
 
 const endDateSchema = yup.mixed().required();
@@ -82,7 +82,7 @@ const EndElementContent = ({ data, control, headerText, onClose }) => {
         <div className="end-element__picker">
           <FormGroup error={isError ? 'Required field' : null}>
             <div>
-              <DatePick
+              <DatePickerCalendar
                 setDate={setEndDate}
                 dateValue={endDate}
                 label="End date"

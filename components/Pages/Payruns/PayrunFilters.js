@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Button, Container, FormGroup, HorizontalSeparator, SearchBox, Select, VerticalSeparator } from 'components';
-import DatePick from 'components/DatePick';
+import DatePickerCalendar from 'components/HackneyDS/DatePickerCalendar/DatePickerCalendar';
 
 const statusOptions = [
   { text: 'All', value: '' },
@@ -71,7 +71,7 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
       <HorizontalSeparator height="25px" />
       <Container display="flex" alignItems="flex-end">
         <FormGroup label="From" inlineLabel smallLabel>
-          <DatePick
+          <DatePickerCalendar
             placeholder="Select date"
             startDate={filters.dateFrom}
             dateValue={filters.dateFrom}
@@ -90,7 +90,7 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
         </FormGroup>
         <VerticalSeparator width="20px" />
         <FormGroup label="To" inlineLabel smallLabel>
-          <DatePick
+          <DatePickerCalendar
             placeholder="Select date"
             startDate={filters.dateTo}
             dateValue={filters.dateTo}

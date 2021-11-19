@@ -3,7 +3,7 @@ import FormGroup from '.';
 import { Input } from '../Input';
 
 export default {
-  title: 'Hackney Design System/FormGroup',
+  title: 'Hackney Design System/Form/FormGroup',
   component: FormGroup,
 };
 

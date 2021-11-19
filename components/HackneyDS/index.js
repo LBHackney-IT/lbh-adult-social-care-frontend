@@ -42,6 +42,7 @@ import { FileUpload } from './FileUpload/FileUpload';
 import { UploadGreenButton } from './UploadGreenButton';
 import { SingleAccordion } from './SingleAccordion';
 import { Collapse } from './Collapse/Collapse';
+import DatePickerCalendar from './DatePickerCalendar/DatePickerCalendar';
 
 export {
   Collapse,
@@ -55,6 +56,7 @@ export {
   ErrorMessage,
   Label,
   DatePicker,
+  DatePickerCalendar,
   Hint,
   Input,
   Button,

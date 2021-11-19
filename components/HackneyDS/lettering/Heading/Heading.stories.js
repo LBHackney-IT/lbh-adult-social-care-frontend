@@ -2,7 +2,7 @@ import React from 'react';
 import { Heading } from './index';
 
 export default {
-  title: 'Hackney Design System/Heading',
+  title: 'Hackney Design System/Lettering/Heading',
   component: Heading,
   argTypes: {
     children: { type: 'string' },

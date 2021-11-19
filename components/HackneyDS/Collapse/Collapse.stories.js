@@ -3,7 +3,7 @@ import { Collapse } from './Collapse';
 import { ArrowTopIcon, CaretDownIcon } from '../../Icons';
 
 export default {
-  title: 'Hackney Design System/Collapse',
+  title: 'Hackney Design System/Accordion/Collapse',
   component: Collapse,
 };
 

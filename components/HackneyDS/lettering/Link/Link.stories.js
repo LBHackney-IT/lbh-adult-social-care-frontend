@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from '../../index';
 
 export default {
-  title: 'Hackney Design System/Link',
+  title: 'Hackney Design System/Lettering/Link',
   component: Link,
   argTypes: {
     children: { type: 'string' },

@@ -2,7 +2,7 @@ import React from 'react';
 import BackToTop from '.';
 
 export default {
-  title: 'Hackney Design System/BackToTop',
+  title: 'Hackney Design System/Navigation/BackToTop',
   component: BackToTop,
 };
 

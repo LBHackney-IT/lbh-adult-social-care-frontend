@@ -2,7 +2,7 @@ import React from 'react';
 import BackLink from '.';
 
 export default {
-  title: 'Hackney Design System/BackLink',
+  title: 'Hackney Design System/Navigation/BackLink',
   component: BackLink,
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import Label from '.';
 
 export default {
-  title: 'Hackney Design System/Label',
+  title: 'Hackney Design System/Lettering/Label',
   component: Label,
   argTypes: {
     children: { type: 'string' },

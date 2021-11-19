@@ -2,7 +2,7 @@ import React from 'react';
 import { Stat } from './index';
 
 export default {
-  title: 'Hackney Design System/Stat',
+  title: 'Hackney Design System/Info Text/Stat',
   component: Stat,
   argTypes: {},
 };

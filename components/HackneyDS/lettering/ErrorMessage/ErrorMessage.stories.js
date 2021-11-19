@@ -2,7 +2,7 @@ import React from 'react';
 import { ErrorMessage } from '../../index';
 
 export default {
-  title: 'Hackney Design System/ErrorMessage',
+  title: 'Hackney Design System/Lettering/ErrorMessage',
   component: ErrorMessage,
   argTypes: {
     children: { type: 'string' },

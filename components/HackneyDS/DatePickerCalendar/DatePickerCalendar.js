@@ -1,16 +1,18 @@
 import React, { forwardRef, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
-import BaseField from './BaseField';
-import ErrorField from './ErrorField';
+import BaseField from '../../BaseField';
+import ErrorField from '../../ErrorField';
 import 'react-datepicker/dist/react-datepicker.css';
-import { dateStringFormats } from '../constants/strings';
-import { CrossIcon } from './Icons';
-import { Container } from './HackneyDS/Layout/Container';
+import { dateStringFormats } from '../../../constants/strings';
+import { CrossIcon } from '../../Icons';
+import { Container } from '../Layout/Container';
 
-const DatePick = ({
+const clearButtonClass = ' react-date-picker__custom-input';
+
+const DatePickerCalendar = ({
   selectsRange,
   inline,
-  placeholder,
+  placeholder = 'Enter Date',
   startDate = new Date(),
   endDate = '',
   error,
@@ -25,7 +27,6 @@ const DatePick = ({
   checkMinDate,
   setDate,
   dateValue,
-  useDefaultInput,
 }) => {
 
   const clearDate = () => setDate(null);
@@ -42,7 +43,7 @@ const DatePick = ({
       >
         {value || <p className="datepicker-custom-input-placeholder">{placeholder}</p>}
       </button>
-      {!useDefaultInput && dateValue && (
+      {dateValue && (
         <div className="date-picker__additional-action clear-datepicker" onClick={clearDate}>
           <CrossIcon />
         </div>
@@ -58,9 +59,11 @@ const DatePick = ({
     }
   }, [checkMinDate, minDate, dateValue]);
 
+  const disabledClass = disabled ? ' disabled' : '';
+
   return (
     <BaseField
-      className={`${className} react-date-picker${!useDefaultInput ? ' react-date-picker__custom-input' : ''}`}
+      className={`${className} react-date-picker${disabledClass}${clearButtonClass}`}
       label={label}
       noInputStyle
     >
@@ -80,7 +83,7 @@ const DatePick = ({
           onClickOutside={onClickOutside}
           maxDate={maxDate}
           selectsRange={selectsRange}
-          customInput={!useDefaultInput && <CustomInput />}
+          customInput={<CustomInput />}
           selected={dateValue}
           inline={inline}
           placeholderText={placeholder}
@@ -95,4 +98,4 @@ const DatePick = ({
   );
 };
 
-export default DatePick;
+export default DatePickerCalendar;

@@ -2,7 +2,7 @@ import React from 'react';
 import Textarea from '.';
 
 export default {
-  title: 'Hackney Design System/Textarea',
+  title: 'Hackney Design System/Form/Textarea',
   component: Textarea,
   argTypes: {
     'max-count': { type: 'number' },

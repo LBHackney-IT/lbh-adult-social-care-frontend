@@ -2,7 +2,7 @@ import React from 'react';
 import { Panel } from './index';
 
 export default {
-  title: 'Hackney Design System/Panel',
+  title: 'Hackney Design System/Info Text/Panel',
   component: Panel,
   argTypes: {
     children: { type: 'string' },

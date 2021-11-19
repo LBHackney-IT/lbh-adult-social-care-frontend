@@ -1,3 +1,10 @@
+.react-date-picker {
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
 .react-datepicker-wrapper {
   display: flex !important;
   align-items: center;
@@ -13,7 +20,7 @@
     right: 11px;
     width: 24px;
     height: 24px;
-    background: url('../../public/images/icons/icon_hakcney_calendar.svg');
+    background: url('../../../public/images/icons/icon_hakcney_calendar.svg');
     cursor: text;
   }
 }
@@ -34,7 +41,7 @@
       right: 11px;
       width: 24px;
       height: 24px;
-      background: url('../../public/images/icons/icon_hakcney_calendar.svg');
+      background: url('../../../public/images/icons/icon_hakcney_calendar.svg');
       cursor: text;
     }
   }
@@ -71,6 +78,7 @@
 
 .datepicker-ongoing {
   opacity: 0.5;
+
   .react-datepicker-wrapper {
     &::before {
       position: absolute;

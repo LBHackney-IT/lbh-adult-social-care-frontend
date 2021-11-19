@@ -2,7 +2,7 @@ import React from 'react';
 import { Conversation } from '../index';
 
 export default {
-  title: 'Hackney Design System/Conversation',
+  title: 'Hackney Design System/Info Text/Conversation',
   component: Conversation,
   argTypes: {
     conversation: { type: 'array' },

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Container, HorizontalSeparator, VerticalSeparator } from '../index';
 
 export default {
-  title: 'Hackney Design System/Button',
+  title: 'Hackney Design System/Form/Button',
   component: Button,
   argTypes: {
     onClick: {

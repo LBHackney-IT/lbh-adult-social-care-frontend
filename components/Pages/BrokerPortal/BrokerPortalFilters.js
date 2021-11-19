@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useBrokers } from 'api';
 import { Button, Container, SearchBox, Select, FormGroup, VerticalSeparator, HorizontalSeparator } from '../../HackneyDS';
-import DatePick from '../../DatePick';
+import DatePickerCalendar from '../../HackneyDS/DatePickerCalendar/DatePickerCalendar';
 
 const statusOptions = [
   { text: 'All', value: '' },
@@ -70,7 +70,7 @@ export const BrokerPortalFilters = ({ filters, setFilters, clearFilter }) => {
       <HorizontalSeparator height="25px" />
       <Container display="flex" alignItems="flex-end">
         <FormGroup label="From" inlineLabel smallLabel>
-          <DatePick
+          <DatePickerCalendar
             placeholder="Select date"
             startDate={filters.dateFrom}
             dateValue={filters.dateFrom}
@@ -89,7 +89,7 @@ export const BrokerPortalFilters = ({ filters, setFilters, clearFilter }) => {
         </FormGroup>
         <VerticalSeparator width="20px" />
         <FormGroup label="To" inlineLabel smallLabel>
-          <DatePick
+          <DatePickerCalendar
             placeholder="Select date"
             startDate={filters.dateTo}
             dateValue={filters.dateTo}

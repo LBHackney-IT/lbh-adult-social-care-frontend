@@ -2,7 +2,7 @@ import React from 'react';
 import RadioItem from './index';
 
 export default {
-  title: 'Hackney Design System/RadioItem',
+  title: 'Hackney Design System/Form/RadioItem',
   component: RadioItem,
   argTypes: {},
 };

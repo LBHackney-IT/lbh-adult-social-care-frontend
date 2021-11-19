@@ -2,7 +2,7 @@ import React from 'react';
 import CookieBanner from '.';
 
 export default {
-  title: 'Hackney Design System/CookieBanner',
+  title: 'Hackney Design System/Info Text/CookieBanner',
   component: CookieBanner,
   argTypes: {
     'policy-link': { type: 'string' },

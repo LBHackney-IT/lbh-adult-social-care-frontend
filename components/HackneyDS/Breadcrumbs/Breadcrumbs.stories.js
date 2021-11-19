@@ -2,7 +2,7 @@ import React from 'react';
 import Breadcrumbs from '.';
 
 export default {
-  title: 'Hackney Design System/Breadcrumbs',
+  title: 'Hackney Design System/Navigation/Breadcrumbs',
   component: Breadcrumbs,
 };
 

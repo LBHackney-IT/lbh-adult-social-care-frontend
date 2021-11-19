@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { lastDayOfMonth, setDate as dateFncSetDate } from 'date-fns';
 import { CrossIcon, DatePickerCalendarIcon, RestoreIcon } from '../../Icons';
-import DatePick from '../../DatePick';
+import DatePickerCalendar from '../DatePickerCalendar/DatePickerCalendar';
 import Hint from '../lettering/Hint';
 import Label from '../lettering/Label';
 import { Container } from '../Layout/Container';
@@ -210,7 +210,7 @@ const DatePicker = ({
               <IconComponent onClick={clickIcon} className={iconClassName} />
             </div>
             {isOpenCalendar && (
-              <DatePick
+              <DatePickerCalendar
                 onClickOutside={() => {
                   if (isOpenCalendar) {
                     setIsOpenCalendar(false);

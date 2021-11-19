@@ -2,7 +2,7 @@ import React from 'react';
 import { FileUpload } from '../index';
 
 export default {
-  title: 'Hackney Design System/FileUpload',
+  title: 'Hackney Design System/Form/FileUpload',
   component: FileUpload,
   argTypes: {},
 };

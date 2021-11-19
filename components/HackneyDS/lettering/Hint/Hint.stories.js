@@ -2,7 +2,7 @@ import React from 'react';
 import { Hint } from '../../index';
 
 export default {
-  title: 'Hackney Design System/Hint',
+  title: 'Hackney Design System/Lettering/Hint',
   component: Hint,
   argTypes: {
     children: { type: 'string' },

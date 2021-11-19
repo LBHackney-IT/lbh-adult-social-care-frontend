@@ -11,7 +11,7 @@ import {
   Dialog,
 } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
-import DatePick from '../../DatePick';
+import DatePickerCalendar from '../../HackneyDS/DatePickerCalendar/DatePickerCalendar';
 import Loading from '../../Loading';
 import { PackageApprovalsTable } from './PackageApprovalsTable';
 import ServiceUserSearch from '../ServiceUser/Search';
@@ -145,7 +145,7 @@ export const PackageApprovals = ({
             </div>
             <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label date-from" label="From">
-                <DatePick
+                <DatePickerCalendar
                   placeholder="Select date"
                   startDate={filters.dateFrom}
                   dateValue={filters.dateFrom}
@@ -163,7 +163,7 @@ export const PackageApprovals = ({
                 />
               </FormGroup>
               <FormGroup className="form-group--inline-label" label="To">
-                <DatePick
+                <DatePickerCalendar
                   placeholder="Select date"
                   startDate={filters.dateTo}
                   dateValue={filters.dateTo}

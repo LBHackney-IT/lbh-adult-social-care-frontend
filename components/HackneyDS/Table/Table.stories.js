@@ -54,7 +54,7 @@ const columns = [
 const data = createTableData(100);
 
 export default {
-  title: 'Hackney Design System/ Table',
+  title: 'Hackney Design System/Table/Table',
   component: Table,
   argTypes: {
     columns: {

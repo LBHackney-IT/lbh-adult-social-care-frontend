@@ -2,7 +2,7 @@ import React from 'react';
 import { SimplePagination } from '.';
 
 export default {
-  title: 'Hackney Design System/SimplePagination',
+  title: 'Hackney Design System/Pagination/SimplePagination',
   component: SimplePagination,
   argTypes: {
     totalCount: { type: 'number' },
