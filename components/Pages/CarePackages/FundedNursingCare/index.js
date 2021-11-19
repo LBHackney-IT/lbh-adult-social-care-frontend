@@ -78,8 +78,8 @@ const FundedNursingCare = ({
           compareDescendingDMY(dateFrom, detailsData.startDate) !== dateDescending.asc
         ))
         .test('dateFrom', 'Date from more then core date end', () => {
-          if(detailsData.endDate) {
-            return compareDescendingDMY(dateFrom, detailsData.endDate) !== dateDescending.desc
+          if (detailsData.endDate) {
+            return compareDescendingDMY(dateFrom, detailsData.endDate) !== dateDescending.desc;
           }
           return true;
         }),
@@ -95,10 +95,10 @@ const FundedNursingCare = ({
               compareDescendingDMY(dateFrom, dateTo) !== dateDescending.desc
             ))
             .test('dateTo', 'Date to should be less or equal then core end date', (value) => {
-              if(detailsData.endDate) {
-                return compareDescendingDMY(value, detailsData.endDate) !== dateDescending.desc
+              if (detailsData.endDate) {
+                return compareDescendingDMY(value, detailsData.endDate) !== dateDescending.desc;
               }
-              return true
+              return true;
             }),
         })
     });
@@ -112,8 +112,8 @@ const FundedNursingCare = ({
         { abortEarly: false }
       );
     } catch (errorValidation) {
-      const newErrors = errorValidation?.inner?.map(error => ([error.path, error.message ]));
-      if(newErrors) {
+      const newErrors = errorValidation?.inner?.map(error => ([error.path, error.message]));
+      if (newErrors) {
         hasErrors = true;
         localErrors = Object.fromEntries(newErrors);
         setDateErrors(prevState => ({ ...prevState, ...localErrors }));
@@ -248,8 +248,12 @@ const FundedNursingCare = ({
             name="collectedBy"
             control={control}
             render={({ field }) => (
-              <FormGroup className="select-collected-by" required label="Collected by"
-                         error={errors.collectedBy?.message}>
+              <FormGroup
+                className="select-collected-by"
+                required
+                label="Collected by"
+                error={errors.collectedBy?.message}
+              >
                 <Select
                   error={errors.collectedBy?.message}
                   disabledEmptyComponent
@@ -292,13 +296,13 @@ const FundedNursingCare = ({
             <Heading size="m">Upload FNC Assessment...</Heading>
             <HorizontalSeparator height={24} />
             <Controller
+              name="file"
               control={control}
               render={({ field }) => (
                 <FormGroup error={errors.file?.message}>
                   <UploadGreenButton file={field.value} setFile={field.onChange} />
                 </FormGroup>
               )}
-              name="file"
             />
           </Container>
           <BrokerageTotalCost
@@ -311,7 +315,7 @@ const FundedNursingCare = ({
               Back
             </Button>
             <Button onClick={skipAndContinue} className="secondary-yellow">Skip and continue</Button>
-            <Button disabled={isLoading} isLoading={isLoading} onClick={clickSave}>
+            <Button type="submit" disabled={isLoading} isLoading={isLoading}>
               Save and continue
             </Button>
           </Container>
