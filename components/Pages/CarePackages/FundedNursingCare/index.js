@@ -36,7 +36,7 @@ const FundedNursingCare = ({
   updateFundedNursingCare = () => {},
   goBack = () => {},
   detailsData,
-  loading,
+  isLoading,
 }) => {
   const dispatch = useDispatch();
   const [collectedByType] = useState({
@@ -208,7 +208,7 @@ const FundedNursingCare = ({
 
   return (
     <Container className="brokerage__funded-nursing-care">
-      <Loading isLoading={loading} />
+      <Loading isLoading={isLoading} />
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <TitleSubtitleHeader title="Build a care package" subTitle="Funded Nursing Care" />
@@ -311,7 +311,7 @@ const FundedNursingCare = ({
               Back
             </Button>
             <Button onClick={skipAndContinue} className="secondary-yellow">Skip and continue</Button>
-            <Button disabled={loading} isLoading={loading} onClick={clickSave}>
+            <Button disabled={isLoading} isLoading={isLoading} onClick={clickSave}>
               Save and continue
             </Button>
           </Container>

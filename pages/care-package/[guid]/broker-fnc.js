@@ -76,7 +76,7 @@ const FundedNursingCarePage = () => {
 
   return (
     <FundedNursingCare
-      loading={loading || fncLoading || fncPriceLoading || detailsLoading || coreLoading}
+      isLoading={loading || fncLoading || fncPriceLoading || detailsLoading || coreLoading}
       carePackageId={carePackageId}
       collectedByOptions={collectedByOptions}
       activeFncPrice={activeFncPrice}
