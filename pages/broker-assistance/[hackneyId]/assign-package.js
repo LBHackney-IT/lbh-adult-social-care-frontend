@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   Breadcrumbs,
   Button,
   Container,
   FormGroup,
+  Heading,
   HorizontalSeparator,
   Loading,
   Select,
   ServiceUserDetails,
   Textarea,
   TitleSubtitleHeader,
+  UploadGreenButton,
 } from 'components';
 import { useRouter } from 'next/router';
 import * as yup from 'yup';
@@ -31,6 +33,7 @@ const AssignPackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { hackneyId } = router.query;
+  const [file, setFile] = useState(null);
   const { data: serviceUser, isLoading: serviceUserLoading } = useServiceUser(hackneyId);
   const { options: packageTypeOptions, isLoading: lookupsLoading } = useLookups('packageType');
   const { options: brokerOptions, isLoading: brokersLoading } = useBrokers();
@@ -113,6 +116,13 @@ const AssignPackage = () => {
                 render={({ field }) => <Select options={packageTypeOptions} {...field} />}
               />
             </FormGroup>
+          </Container>
+          <Container className="brokerage__container">
+            <Heading size="xl">Support plan and care package</Heading>
+            <HorizontalSeparator height={24} />
+            <Heading size="m">Upload social worker care plan</Heading>
+            <HorizontalSeparator height={24} />
+            <UploadGreenButton file={file} setFile={setFile} />
           </Container>
           <Container>
             <FormGroup label="Add notes" error={errors.notes?.message}>
