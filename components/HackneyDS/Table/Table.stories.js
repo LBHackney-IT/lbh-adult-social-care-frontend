@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import React from 'react';
 import faker from 'faker';
-import { MdExpandLess, MdExpandMore } from 'react-icons/md';
 import { getNumberWithCommas } from '../../../service';
 import { IndeterminateCheckbox } from './IndeterminateCheckbox';
 import { Table } from '.';
@@ -112,11 +111,7 @@ const columns2 = [
   {
     Header: () => null,
     id: 'expander',
-    Cell: ({ row }) => (
-      <span {...row.getToggleRowExpandedProps()}>
-        {row.isExpanded ? <MdExpandLess size="24px" /> : <MdExpandMore size="24px" />}
-      </span>
-    ),
+    Cell: ({ row }) => <span {...row.getToggleRowExpandedProps()}>{row.isExpanded ? 'collapse' : 'expand'}</span>,
   },
 ];
 
