@@ -8,9 +8,9 @@ export const requestMethods = {
 };
 
 export const dateDescending = {
-  asc: 1, // 0, 1
-  equal: 0, // 0, 0
-  desc: -1, // 1, 0
+  asc: 1, // dateLeft < dateRight
+  equal: 0, // dateLeft = dateRight
+  desc: -1, // dateLeft > dateRight
 };
 
 export const collectedByType = {

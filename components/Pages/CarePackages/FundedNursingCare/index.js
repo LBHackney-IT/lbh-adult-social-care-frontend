@@ -1,23 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { isFunction } from 'api';
 import { compareDescendingDMY, dateStringToDate } from 'service';
 import { dateDescending } from 'constants/variables';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import * as yup from 'yup';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import {
+  Announcement,
   Button,
-  FormGroup,
   Container,
-  FileUpload,
+  FormGroup,
+  Heading,
+  HorizontalSeparator,
   Label,
   RadioGroup,
   Select,
   Textarea,
-  Announcement
+  UploadGreenButton
 } from '../../../HackneyDS';
 import Loading from '../../../Loading';
-import UrlFromFile from '../../../UrlFromFile';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
@@ -44,18 +47,13 @@ const FundedNursingCare = ({
     dateFrom: new Date(),
     dateTo: new Date(),
   });
-  const [errors, setErrors] = useState({
-    hasFNC: '',
-    collectedBy: '',
+  const [dateErrors, setDateErrors] = useState({
     dateFrom: '',
     dateTo: '',
-    notes: '',
   });
-  const [hasFNC, setHasFNC] = useState('');
   const [hasPreviousFnc] = useState(false); // todo for new design
   const [collectedBy, setCollectedBy] = useState();
   const [notes, setNotes] = useState('');
-  const [file, setFile] = useState(null);
   const [isOngoing, setIsOngoing] = useState(true);
 
   const clickBack = () => {
@@ -64,13 +62,12 @@ const FundedNursingCare = ({
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
-  }
+  };
 
   const clickSave = async () => {
     const { dateFrom, dateTo } = dates;
 
-    const schema = yup.object().shape({
-      collectedBy: yup.number().typeError('Required field').required('Required field'),
+    const dateSchema = yup.object().shape({
       detailsDateTo: null,
       isOngoing: yup.boolean(),
       dateFrom: yup
@@ -110,7 +107,7 @@ const FundedNursingCare = ({
     let hasErrors = false;
 
     try {
-      await schema.validate(
+      await dateSchema.validate(
         { detailsDateTo: detailsData.endDate, isOngoing, dateFrom, dateTo, collectedBy },
         { abortEarly: false }
       );
@@ -119,11 +116,11 @@ const FundedNursingCare = ({
       if(newErrors) {
         hasErrors = true;
         localErrors = Object.fromEntries(newErrors);
-        setErrors(prevState => ({ ...prevState, ...localErrors }));
+        setDateErrors(prevState => ({ ...prevState, ...localErrors }));
       }
     }
 
-    setErrors((prevState) => ({ ...prevState, ...localErrors }));
+    setDateErrors((prevState) => ({ ...prevState, ...localErrors }));
 
     if (hasErrors) {
       return pushNotification('Some errors above');
@@ -160,12 +157,7 @@ const FundedNursingCare = ({
   };
 
   const changeError = (field, value = '') => {
-    setErrors((prevState) => ({ ...prevState, [field]: value }));
-  };
-
-  const onSelectCollectedBy = (value) => {
-    setCollectedBy(value);
-    changeError('collectedBy');
+    setDateErrors((prevState) => ({ ...prevState, [field]: value }));
   };
 
   const changeDate = (field, value) => {
@@ -190,57 +182,91 @@ const FundedNursingCare = ({
     setCollectedBy(carePackageReclaimFnc.claimCollector || '');
   }, [carePackageReclaimFnc, detailsData]);
 
+  const schema = useMemo(() => (
+    yup.object().shape({
+      collectedBy: yup.number().typeError('Required field').required('Required field'),
+      detailsDateTo: null,
+      isOngoing: yup.boolean(),
+    })
+  ), [detailsData]);
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      dateTo: null,
+      dateFrom: null,
+      isOngoing: false,
+      detailsDateTo: null,
+      collectedBy: ''
+    },
+  });
+  const onSubmit = (data) => clickSave(data);
+
   return (
     <Container className="brokerage__funded-nursing-care">
       <Loading isLoading={loading} />
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <TitleSubtitleHeader title="Build a care package" subTitle="Funded Nursing Care" />
-        <Container>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <h3 className="brokerage__item-title">Funded Nursing Care</h3>
           {hasPreviousFnc && (
             <Announcement isError className="mb-5">
-              <div slot="title">FNC charge has previously been added. </div>
+              <div slot="title">FNC charge has previously been added.</div>
               <div slot="content">
-                <p className='mb-3'>Would you like to use previous FNC?</p>
-                <Container className='button-group'>
+                <p className="mb-3">Would you like to use previous FNC?</p>
+                <Container className="button-group">
                   <Button onClick={loadPreviousFnc}>Yes, use previous FNC</Button>
-                  <Button className='background-secondary' onClick={addNewFnc}>No, add new FNC</Button>
+                  <Button className="background-secondary" onClick={addNewFnc}>No, add new FNC</Button>
                 </Container>
               </div>
             </Announcement>
           )}
-          <RadioGroup
-            handle={(value) => {
-              changeError('hasFNC');
-              setHasFNC(value);
-            }}
-            inline
-            className='has-fnc-radio-group'
-            error={errors.hasFNC}
-            value={hasFNC}
-            label="Has a FNC assessment been carried out?"
-            items={[
-              { id: 'yes', label: 'Yes' },
-              { id: 'no', label: 'No' },
-            ]}
+          <Controller
+            name="hasFNC"
+            control={control}
+            render={({ field }) => (
+              <RadioGroup
+                handle={field.onChange}
+                inline
+                className="has-fnc-radio-group"
+                error={errors.hasFNC?.message}
+                value={field.value}
+                label="Has a FNC assessment been carried out?"
+                items={[
+                  { id: 'yes', label: 'Yes' },
+                  { id: 'no', label: 'No' },
+                ]}
+              />
+            )}
           />
-          <FormGroup className='select-collected-by' required label='Collected by' error={errors.collectedBy}>
-            <Select
-              error={errors.collectedBy}
-              disabledEmptyComponent
-              emptyElement={{ text: 'Please select', value: '' }}
-              id="collected-by"
-              className="funded-nursing-care__select"
-              options={collectedByOptions}
-              value={collectedBy}
-              onChangeValue={onSelectCollectedBy}
-            />
-          </FormGroup>
+          <Controller
+            name="collectedBy"
+            control={control}
+            render={({ field }) => (
+              <FormGroup className="select-collected-by" required label="Collected by"
+                         error={errors.collectedBy?.message}>
+                <Select
+                  error={errors.collectedBy?.message}
+                  disabledEmptyComponent
+                  emptyElement={{ text: 'Please select', value: '' }}
+                  id="collected-by"
+                  className="funded-nursing-care__select"
+                  options={collectedByOptions}
+                  value={field.value}
+                  onChangeValue={field.onChange}
+                />
+              </FormGroup>
+            )}
+          />
 
           <BrokeragePackageDates
             dates={dates}
-            error={errors.dateFrom || errors.dateTo}
+            error={dateErrors.dateFrom || dateErrors.dateTo}
             setDates={changeDate}
             startMinDate={dateStringToDate(detailsData.startDate)}
             startMaxDate={dateStringToDate(detailsData.endDate)}
@@ -252,33 +278,44 @@ const FundedNursingCare = ({
             }}
             isOngoing={isOngoing}
           />
-          <FormGroup error={errors.notes}>
-            <Label className="label-textarea">Funded Nursing Care notes</Label>
-            <Textarea handler={setNotes} value={notes}/>
-          </FormGroup>
-          <FormGroup className="upload-fnc-assessment" label="Upload FNC Assessment...">
-            <UrlFromFile file={file} removeFile={setFile} />
-            {!file && (
-              <FormGroup className="file-upload-form">
-                <FileUpload getFile={setFile} label={<div>Upload file</div>} />
+          <Controller
+            name="notes"
+            control={control}
+            render={({ field }) => (
+              <FormGroup error={errors.notes?.message}>
+                <Label className="label-textarea">Funded Nursing Care notes</Label>
+                <Textarea handler={field.onChange} value={field.notes} />
               </FormGroup>
             )}
-          </FormGroup>
+          />
+          <Container className="brokerage__container">
+            <Heading size="m">Upload FNC Assessment...</Heading>
+            <HorizontalSeparator height={24} />
+            <Controller
+              control={control}
+              render={({ field }) => (
+                <FormGroup error={errors.file?.message}>
+                  <UploadGreenButton file={field.value} setFile={field.onChange} />
+                </FormGroup>
+              )}
+              name="file"
+            />
+          </Container>
           <BrokerageTotalCost
             name={`Funded per week ${collectedByType[collectedBy] ? `(${collectedByType[collectedBy]})` : ''}`}
             className="brokerage__border-cost"
             value={activeFncPrice}
           />
           <Container className="brokerage__actions">
-            <Button onClick={clickBack} secondary color='gray'>
+            <Button onClick={clickBack} secondary color="gray">
               Back
             </Button>
-            <Button onClick={skipAndContinue} className='secondary-yellow'>Skip and continue</Button>
+            <Button onClick={skipAndContinue} className="secondary-yellow">Skip and continue</Button>
             <Button disabled={loading} isLoading={loading} onClick={clickSave}>
               Save and continue
             </Button>
           </Container>
-        </Container>
+        </form>
       </Container>
     </Container>
   );
