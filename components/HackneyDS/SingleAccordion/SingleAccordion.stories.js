@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SingleAccordion } from '.';
 
 export default {
-  title: 'Hackney Design System/Accordion/SingleAccordion',
+  title: 'Hackney Design System/SingleAccordion',
   component: SingleAccordion,
   argTypes: {
     controls: false,

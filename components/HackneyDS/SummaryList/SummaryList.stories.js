@@ -2,7 +2,7 @@ import React from 'react';
 import { SummaryList } from '.';
 
 export default {
-  title: 'Hackney Design System/Table/SummaryList',
+  title: 'Hackney Design System/SummaryList',
   component: SummaryList,
   argTypes: {
     noBorder: {

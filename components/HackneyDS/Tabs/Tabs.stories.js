@@ -3,7 +3,7 @@ import { Tab } from './Tab';
 import { Tabs } from ".";
 
 export default {
-  title: 'Hackney Design System/Navigation/Tabs',
+  title: 'Hackney Design System/Tabs',
   component: Tabs,
   argTypes: {
     onClick: {

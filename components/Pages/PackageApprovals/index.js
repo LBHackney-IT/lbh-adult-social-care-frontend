@@ -9,9 +9,9 @@ import {
   Select,
   FormGroup,
   Dialog,
+  DatePickerCalendar,
 } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
-import DatePickerCalendar from '../../HackneyDS/DatePickerCalendar/DatePickerCalendar';
 import Loading from '../../Loading';
 import { PackageApprovalsTable } from './PackageApprovalsTable';
 import ServiceUserSearch from '../ServiceUser/Search';

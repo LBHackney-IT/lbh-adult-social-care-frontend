@@ -2,7 +2,7 @@ import React from 'react';
 import { Input } from '../index';
 
 export default {
-  title: 'Hackney Design System/Form/Input',
+  title: 'Hackney Design System/Input',
   component: Input,
   argTypes: {},
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import Accordion from '.';
 
 export default {
-  title: 'Hackney Design System/Accordion/Accordion',
+  title: 'Hackney Design System/Accordion',
   component: Accordion,
   argTypes: {
   },

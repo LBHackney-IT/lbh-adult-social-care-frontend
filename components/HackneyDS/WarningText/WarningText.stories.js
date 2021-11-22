@@ -2,7 +2,7 @@ import React from 'react';
 import WarningText from '.';
 
 export default {
-  title: 'Hackney Design System/Info Text/WarningText',
+  title: 'Hackney Design System/WarningText',
   component: WarningText,
   argTypes: {
     children: { type: 'object' },

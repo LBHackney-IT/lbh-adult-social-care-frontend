@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Checkbox from '.';
 
 export default {
-  title: 'Hackney Design System/Form/Checkbox',
+  title: 'Hackney Design System/Checkbox',
   component: Checkbox,
   argTypes: {
     checked: { type: 'boolean' },

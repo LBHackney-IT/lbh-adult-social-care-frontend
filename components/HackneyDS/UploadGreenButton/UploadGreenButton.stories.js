@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { UploadGreenButton } from './index';
 
 export default {
-  title: 'Hackney Design System/Form/Upload Green Button',
+  title: 'Hackney Design System/Upload Green Button',
   component: UploadGreenButton,
   argTypes: {
     controls: false,

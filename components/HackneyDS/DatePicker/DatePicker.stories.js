@@ -3,7 +3,7 @@ import DatePicker from './index';
 import FormGroup from '../FormGroup';
 
 export default {
-  title: 'Hackney Design System/Form/DatePicker',
+  title: 'Hackney Design System/DatePicker',
   component: DatePicker,
   argTypes: {
     disabled: { type: 'boolean' },

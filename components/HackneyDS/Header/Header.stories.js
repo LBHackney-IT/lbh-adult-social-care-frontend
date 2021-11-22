@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '.';
 
 export default {
-  title: 'Hackney Design System/Navigation/Header',
+  title: 'Hackney Design System/Header',
   component: Header,
 };
 

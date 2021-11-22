@@ -2,7 +2,7 @@ import React from 'react';
 import { Select } from '../index';
 
 export default {
-  title: 'Hackney Design System/Form/Select',
+  title: 'Hackney Design System/Select',
   component: Select,
   argTypes: {
     value: {

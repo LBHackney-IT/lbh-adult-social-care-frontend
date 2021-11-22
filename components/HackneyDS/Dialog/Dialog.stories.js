@@ -4,7 +4,7 @@ import { Button } from '../index';
 import DialogLayout from './DialogLayout';
 
 export default {
-  title: 'Hackney Design System/Modal/Dialog',
+  title: 'Hackney Design System/Dialog',
   component: Dialog,
   argTypes: {
     text: 'string',

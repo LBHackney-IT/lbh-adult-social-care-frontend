@@ -2,7 +2,7 @@ import React from 'react';
 import { Pagination } from '.';
 
 export default {
-  title: 'Hackney Design System/Pagination/Pagination',
+  title: 'Hackney Design System/Pagination',
   component: Pagination,
   argTypes: {
     onPageChange: {

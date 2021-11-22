@@ -2,7 +2,7 @@ import React from 'react';
 import { Select, Timeline } from '../index';
 
 export default {
-  title: 'Hackney Design System/Info Text/Timeline',
+  title: 'Hackney Design System/Timeline',
   component: Timeline,
   argTypes: {
     timelines: { type: 'array' },

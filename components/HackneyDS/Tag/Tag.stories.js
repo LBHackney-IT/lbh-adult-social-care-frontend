@@ -2,7 +2,7 @@ import React from 'react';
 import { Tag } from '../index';
 
 export default {
-  title: 'Hackney Design System/Info Text/Tag',
+  title: 'Hackney Design System/Tag',
   component: Tag,
   argTypes: {
     color: { type: '' },

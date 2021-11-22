@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import RadioGroup from './index';
 
 export default {
-  title: 'Hackney Design System/Form/RadioGroup',
+  title: 'Hackney Design System/RadioGroup',
   component: RadioGroup,
   argTypes: {},
 };

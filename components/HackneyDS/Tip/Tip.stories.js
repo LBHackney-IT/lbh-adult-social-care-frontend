@@ -2,7 +2,7 @@ import React from 'react';
 import Tip from './index';
 
 export default {
-  title: 'Hackney Design System/Info Text/Tip',
+  title: 'Hackney Design System/Tip',
   component: Tip,
   argTypes: {
     interactive: { control: false },

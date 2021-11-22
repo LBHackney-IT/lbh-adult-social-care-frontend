@@ -2,7 +2,7 @@ import React from 'react';
 import Announcement from '.';
 
 export default {
-  title: 'Hackney Design System/Info Text/Announcement',
+  title: 'Hackney Design System/Announcement',
   component: Announcement,
   argTypes: {
     title: { type: 'string' },

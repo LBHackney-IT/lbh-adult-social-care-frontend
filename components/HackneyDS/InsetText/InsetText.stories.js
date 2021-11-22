@@ -2,7 +2,7 @@ import React from 'react';
 import InsetText from '.';
 
 export default {
-  title: 'Hackney Design System/Info Text/InsetText',
+  title: 'Hackney Design System/InsetText',
   component: InsetText,
 };
 
