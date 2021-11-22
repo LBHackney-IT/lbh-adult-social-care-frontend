@@ -130,9 +130,6 @@ const FundedNursingCare = ({
     const newData = {
       ...data,
       cost: activeFncPrice,
-      supplierId: 1, // To be removed
-      status: 1, // Set active status ?
-      type: 1, // Set type of reclaim ?
       startDate: dateFrom,
       endDate: isOngoing ? null : dateTo,
     };
@@ -292,10 +289,10 @@ const FundedNursingCare = ({
             <Heading size="m">Upload FNC Assessment...</Heading>
             <HorizontalSeparator height={24} />
             <Controller
-              name="file"
+              name="assessmentFileUrl"
               control={control}
               render={({ field }) => (
-                <FormGroup error={errors.file?.message}>
+                <FormGroup error={errors.assessmentFileUrl?.message}>
                   <UploadGreenButton extensions={TEXT_FILE_EXTENSIONS} file={field.value} setFile={field.onChange} />
                 </FormGroup>
               )}
