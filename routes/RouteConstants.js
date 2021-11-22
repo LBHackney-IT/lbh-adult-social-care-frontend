@@ -67,3 +67,6 @@ export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
   ];
 };
 export const getPrevRouteInfo = (route) => carePackageRoutes.find((mainRoute) => route.includes(mainRoute.route)) || {};
+
+
+export const SERVICE_ROUTES = ['logout', 'login'].map(item => `/${item}`);
