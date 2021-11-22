@@ -13,13 +13,14 @@ import { currency } from 'constants/strings';
 import { careChargeAPIKeys } from 'constants/variables';
 import { formatDate } from 'service';
 import { addNotification } from 'reducers/notificationsReducer';
+import { getFormData } from 'service/getFormData';
 import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import Loading from '../../../../Loading';
 
-const EditElementContent = ({ data, onClose }) => {
+const EditElementContent = ({ data, additionalData, onClose }) => {
   const [isLoading, toggleLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -99,26 +100,30 @@ const EditElementContent = ({ data, onClose }) => {
 
     if (createData.length > 0) {
       createData.forEach((reclaim) => {
-        requests.push(
-          createCareChargeReclaim(packageId, {
-            ...reclaim,
-            carePackageId: packageId,
-            claimCollector: getClaimCollectorId(reclaim.claimCollector),
-            endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
-          })
-        );
+        let mainData = {
+          ...reclaim,
+          carePackageId: packageId,
+          claimCollector: getClaimCollectorId(reclaim.claimCollector),
+          endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
+        };
+
+        if (additionalData) mainData = getFormData({ ...mainData, ...additionalData });
+
+        requests.push(createCareChargeReclaim(packageId, mainData));
       });
     }
 
     if (editData.length > 0) {
       editData.forEach((reclaim) => {
-        requests.push(
-          updateCareChargeReclaim(packageId, {
-            ...reclaim,
-            claimCollector: getClaimCollectorId(reclaim.claimCollector),
-            endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
-          })
-        );
+        let mainData = {
+          ...reclaim,
+          claimCollector: getClaimCollectorId(reclaim.claimCollector),
+          endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
+        };
+
+        if (additionalData) mainData = getFormData({ ...mainData, ...additionalData });
+
+        requests.push(updateCareChargeReclaim(packageId, mainData));
       });
     }
 

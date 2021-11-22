@@ -97,6 +97,7 @@ const CareCharge = () => {
   const [isOpenEnd, toggleEnd] = useModal();
 
   const [editData, setEditData] = useState([]);
+  const [file, setFile] = useState();
   const [cancelData, setCancelData] = useState({});
   const [endData, setEndData] = useState({});
 
@@ -294,6 +295,7 @@ const CareCharge = () => {
     }
 
     setEditData(data);
+    setFile(form.assessmentFileUrl);
 
     toggleEdit();
   };
@@ -415,17 +417,17 @@ const CareCharge = () => {
           isMore12
         />
 
-        <FinancialAssessment />
+        <FinancialAssessment control={control} />
 
         <Container className="brokerage__actions">
           <Button secondary color="gray" onClick={router.back}>
             Back
           </Button>
-          <Button onClick={handleSubmit(onSubmit)}>Save</Button>
+          <Button onClick={handleSubmit(onSubmit)}>Save and continue</Button>
         </Container>
       </Container>
 
-      <EditElementModal isOpen={isOpenEdit} onClose={() => toggleEdit(false)} data={editData} />
+      <EditElementModal additionalData={file} isOpen={isOpenEdit} onClose={() => toggleEdit(false)} data={editData} />
       <CancelElementModal isOpen={isOpenCancel} onClose={() => toggleCancel(false)} data={cancelData} />
       <EndElementModal isOpen={isOpenEnd} onClose={() => toggleEnd(false)} data={endData} control={control} />
     </div>
