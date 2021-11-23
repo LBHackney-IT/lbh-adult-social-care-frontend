@@ -34,6 +34,7 @@ export const formatDate = (date, formatString = 'dd.MM.yy') => date && format(ne
 
 export const getUrlFromFile = (file) => {
   if (!file) return '';
+  if (file?.fileId) return `/document/${file.fileId}`;
   if (file?.url) return file.url;
 
   return window.URL.createObjectURL(file);

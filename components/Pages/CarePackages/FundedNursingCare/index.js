@@ -27,6 +27,11 @@ import BrokeragePackageDates from '../BrokeragePackageDates';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
 import { getFormData } from '../../../../service/getFormData';
 
+const collectedByType = {
+  hackney: 'gross',
+  supplier: 'net',
+};
+
 const FundedNursingCare = ({
   carePackageId,
   collectedByOptions,
@@ -40,10 +45,6 @@ const FundedNursingCare = ({
   isLoading,
 }) => {
   const dispatch = useDispatch();
-  const [collectedByType] = useState({
-    hackney: 'gross',
-    supplier: 'net',
-  });
   const [dates, setDates] = useState({
     dateFrom: new Date(),
     dateTo: new Date(),
@@ -55,7 +56,6 @@ const FundedNursingCare = ({
   const [hasFNC, setHasFNC] = useState();
   const [hasPreviousFnc] = useState(false); // todo for new design
   const [isOngoing, setIsOngoing] = useState(true);
-  const [collectedBy, setCollectedBy] = useState();
 
   const clickBack = () => {
     if (isFunction(goBack())) goBack();
@@ -137,7 +137,7 @@ const FundedNursingCare = ({
     if (!carePackageReclaimFnc?.id) {
       newData.carePackageId = carePackageId;
     } else {
-      newData.id = carePackageReclaimFnc.id
+      newData.id = carePackageReclaimFnc.id;
     }
     const formData = getFormData(newData);
 
@@ -169,10 +169,18 @@ const FundedNursingCare = ({
       setIsOngoing(false);
     }
 
+    let assessmentFileUrl = null;
+
+    if (carePackageReclaimFnc.assessmentFileUrl) {
+      assessmentFileUrl = {
+        name: carePackageReclaimFnc?.assessmentFileUrl?.fileName,
+        fileId: carePackageReclaimFnc?.assessmentFileUrl?.fileId
+      };
+    }
+
     const { description = '', claimCollector = '' } = carePackageReclaimFnc;
 
-    reset({ description, claimCollector });
-    setCollectedBy(claimCollector);
+    reset({ description, claimCollector, assessmentFileUrl });
   }, [carePackageReclaimFnc, detailsData]);
 
   const schema = useMemo(() => (
@@ -188,6 +196,7 @@ const FundedNursingCare = ({
     handleSubmit,
     control,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -197,6 +206,8 @@ const FundedNursingCare = ({
     },
   });
   const onSubmit = (data) => clickSave(data);
+
+  const claimCollector = watch('claimCollector');
 
   return (
     <Container className="brokerage__funded-nursing-care">
@@ -224,7 +235,7 @@ const FundedNursingCare = ({
               setHasFNC(value);
             }}
             inline
-            className='has-fnc-radio-group'
+            className="has-fnc-radio-group"
             error={errors.hasFNC}
             value={hasFNC}
             label="Has a FNC assessment been carried out?"
@@ -251,10 +262,7 @@ const FundedNursingCare = ({
                   className="funded-nursing-care__select"
                   options={collectedByOptions}
                   value={field.value}
-                  onChangeValue={(value) => {
-                    field.onChange(value);
-                    setCollectedBy(value);
-                  }}
+                  onChangeValue={field.onChange}
                 />
               </FormGroup>
             )}
@@ -300,7 +308,7 @@ const FundedNursingCare = ({
           </Container>
           <HorizontalSeparator height={50} />
           <BrokerageTotalCost
-            name={`Funded per week ${collectedByType[collectedBy] ? `(${collectedByType[collectedBy]})` : ''}`}
+            name={`Funded per week ${collectedByType[claimCollector] ? `(${collectedByType[claimCollector]})` : ''}`}
             className="brokerage__border-cost"
             value={activeFncPrice}
           />
