@@ -98,14 +98,15 @@ const EditElementContent = ({ data, additionalData, onClose }) => {
 
     toggleLoading(true);
 
+    const getReclaimProps = (reclaim) => ({
+      ...reclaim,
+      claimCollector: getClaimCollectorId(reclaim.claimCollector),
+      endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
+    });
+
     if (createData.length > 0) {
       createData.forEach((reclaim) => {
-        let mainData = {
-          ...reclaim,
-          carePackageId: packageId,
-          claimCollector: getClaimCollectorId(reclaim.claimCollector),
-          endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
-        };
+        let mainData = { ...getReclaimProps(reclaim), carePackageId: packageId };
 
         if (additionalData) mainData = getFormData({ ...mainData, ...additionalData });
 
@@ -115,11 +116,7 @@ const EditElementContent = ({ data, additionalData, onClose }) => {
 
     if (editData.length > 0) {
       editData.forEach((reclaim) => {
-        let mainData = {
-          ...reclaim,
-          claimCollector: getClaimCollectorId(reclaim.claimCollector),
-          endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
-        };
+        let mainData = getReclaimProps(reclaim);
 
         if (additionalData) mainData = getFormData({ ...mainData, ...additionalData });
 
