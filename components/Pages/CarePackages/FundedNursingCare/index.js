@@ -171,10 +171,10 @@ const FundedNursingCare = ({
 
     let assessmentFileUrl = null;
 
-    if (carePackageReclaimFnc.assessmentFileUrl) {
+    if (carePackageReclaimFnc.socialWorkerCarePlanFileId) {
       assessmentFileUrl = {
-        name: carePackageReclaimFnc?.assessmentFileUrl?.fileName,
-        fileId: carePackageReclaimFnc?.assessmentFileUrl?.fileId
+        name: carePackageReclaimFnc.socialWorkerCarePlanFileId,
+        fileId: carePackageReclaimFnc.socialWorkerCarePlanFileName
       };
     }
 
