@@ -7,7 +7,7 @@ import { userLogin } from 'reducers/userReducer';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
 import { changeHeader, resetHeader } from '../reducers/headerReducer';
-import { getPreviousPath } from '../routes/RouteConstants';
+import { getPreviousPath, setPreviousPath } from '../routes/RouteConstants';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
@@ -55,12 +55,12 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(changeHeader({ links: []}));
+    dispatch(changeHeader({ links: [] }));
 
     return () => {
       dispatch(resetHeader());
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <div className="login-page">
@@ -73,6 +73,7 @@ const Login = () => {
             <a
               className="button button-base is-relative"
               href={`${hackneyAuthLink}${origin}/login`}
+              onClick={() => setPreviousPath('')}
               rel="noopener noreferrer"
               target="_self"
             >

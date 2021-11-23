@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { APP_SERVICE_ROUTES } from '../routes/RouteConstants';
 
 let baseUrl = '';
 
@@ -36,7 +37,7 @@ axios.interceptors.response.use(null, async (error) => {
   if (error?.response?.status === 401) {
     Cookies.remove('hascToken');
     await axios.get('/api/logout');
-    window.location.pathname = '/login';
+    window.location.pathname = APP_SERVICE_ROUTES.login;
   }
   return Promise.reject(error);
 });

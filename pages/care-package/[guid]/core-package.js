@@ -16,7 +16,7 @@ import {
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
-import { getBrokerPackageRoute } from 'routes/RouteConstants';
+import { DEFAULT_REDIRECT_ROUTE_INFO, getBrokerPackageRoute } from 'routes/RouteConstants';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
@@ -25,14 +25,8 @@ import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetAppro
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
+
   return { props: {} };
 });
 

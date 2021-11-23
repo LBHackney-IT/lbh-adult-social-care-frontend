@@ -34,9 +34,18 @@ export const APPROVALS_ROUTE = '/approvals';
 
 export const FINANCE_ROUTE = '/payruns';
 
-export const LOGOUT_ROUTE = '/logout';
+export const APP_SERVICE_ROUTES = {
+  logout: '/logout',
+  notFoundPage: '/404',
+  login: '/login',
+};
 
-export const NOT_FOUND_ROUTE = '/404';
+export const DEFAULT_REDIRECT_ROUTE_INFO = {
+  redirect: {
+    destination: APP_SERVICE_ROUTES.login,
+    permanent: false,
+  },
+};
 
 const carePackageRoutes = [
   { route: BROKER_ASSISTANCE_ROUTE, name: 'Broker Assistance' },
@@ -56,14 +65,15 @@ export const getStoragePrevRoute = () => {
 export const setStorageValue = (key, value) => {
   if (isServer()) return;
   window.localStorage.setItem(key, value);
-}
+};
 
 export const getStorageValue = (key) => {
   if (isServer()) return;
+  // eslint-disable-next-line consistent-return
   return window.localStorage.getItem(key);
-}
+};
 
-export const setPreviousPath = (path) => setStorageValue('previousPath', path);
+export const setPreviousPath = (previousPath) => setStorageValue('previousPath', previousPath);
 export const getPreviousPath = () => getStorageValue('previousPath');
 
 export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
@@ -77,5 +87,4 @@ export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
 };
 export const getPrevRouteInfo = (route) => carePackageRoutes.find((mainRoute) => route.includes(mainRoute.route)) || {};
 
-
-export const SERVICE_ROUTES = ['logout', 'login', '404'].map(item => `/${item}`);
+export const APP_SERVICE_ROUTES_MAP = Object.values(APP_SERVICE_ROUTES);

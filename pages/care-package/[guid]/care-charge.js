@@ -20,7 +20,7 @@ import { useDispatch } from 'react-redux';
 import { useToggle } from 'react-use';
 import { formatDate, getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
-import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
+import { CARE_CHARGES_ROUTE, DEFAULT_REDIRECT_ROUTE_INFO, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { useLookups, usePackageCareCharge, useSingleCorePackageInfo } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import * as yup from 'yup';
@@ -29,14 +29,8 @@ const { provisional, more12, less12 } = careChargeFormKeys;
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
+
   return { props: {} };
 });
 

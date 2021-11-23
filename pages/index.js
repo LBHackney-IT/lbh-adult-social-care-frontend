@@ -4,18 +4,12 @@ import Head from 'next/head';
 import { Loading } from 'components';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { BROKER_ASSISTANCE_ROUTE, getPreviousPath } from 'routes/RouteConstants';
+import { BROKER_ASSISTANCE_ROUTE, DEFAULT_REDIRECT_ROUTE_INFO, getPreviousPath } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
+
   return { props: {} };
 });
 

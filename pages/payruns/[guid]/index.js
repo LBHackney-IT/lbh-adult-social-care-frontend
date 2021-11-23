@@ -3,7 +3,7 @@ import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
-import { FINANCE_ROUTE } from 'routes/RouteConstants';
+import { DEFAULT_REDIRECT_ROUTE_INFO, FINANCE_ROUTE } from 'routes/RouteConstants';
 import { useInvoiceListView, getPayrunInsight } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
@@ -12,14 +12,8 @@ import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
+
   return { props: {} };
 });
 

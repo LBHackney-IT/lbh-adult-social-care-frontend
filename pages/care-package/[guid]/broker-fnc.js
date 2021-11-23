@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { getCareChargesRoute } from 'routes/RouteConstants';
+import { DEFAULT_REDIRECT_ROUTE_INFO, getCareChargesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import {
   createCarePackageReclaimFnc,
@@ -16,14 +16,8 @@ import withSession from 'lib/session';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
+
   return { props: {} };
 });
 

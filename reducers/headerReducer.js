@@ -6,7 +6,7 @@ import {
   BROKER_PORTAL_ROUTE,
   CARE_CHARGES_ROUTE,
   FINANCE_ROUTE,
-  LOGOUT_ROUTE
+  APP_SERVICE_ROUTES
 } from 'routes/RouteConstants';
 
 const initialLinks = [
@@ -15,7 +15,7 @@ const initialLinks = [
   { href: CARE_CHARGES_ROUTE, text: 'Care Charges' },
   { href: APPROVALS_ROUTE, text: 'Approvals' },
   { href: FINANCE_ROUTE, text: 'Finance' },
-  { href: LOGOUT_ROUTE, text: 'Log out' },
+  { href: APP_SERVICE_ROUTES.logout, text: 'Log out' },
 ];
 
 const initialState = {

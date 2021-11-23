@@ -6,19 +6,13 @@ import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { usePayrunView } from 'api/SWR/payRuns';
-import CreateDraftPayRun from '../../components/Pages/Finance/CreateDraftPayRun';
-import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
+import CreateDraftPayRun from 'components/Pages/Finance/CreateDraftPayRun';
+import { DEFAULT_REDIRECT_ROUTE_INFO } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
+
   return { props: {} };
 });
 

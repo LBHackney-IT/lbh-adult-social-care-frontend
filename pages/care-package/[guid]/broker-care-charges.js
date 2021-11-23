@@ -10,21 +10,14 @@ import {
   useSingleCorePackageInfo,
 } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
-import { getCarePackageReviewRoute } from 'routes/RouteConstants';
+import { DEFAULT_REDIRECT_ROUTE_INFO, getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import withSession from 'lib/session';
 import { reclaimType } from 'constants/variables';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
   return { props: {} };
 });
 

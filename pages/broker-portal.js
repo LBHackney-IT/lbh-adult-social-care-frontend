@@ -4,18 +4,16 @@ import withSession from 'lib/session';
 import { useBrokerView } from 'api';
 import { getLoggedInUser } from 'service';
 import { BrokerPortalPage } from 'components';
-import { getServiceUserPackagesRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
+import {
+  DEFAULT_REDIRECT_ROUTE_INFO,
+  getServiceUserPackagesRoute,
+  SERVICE_USER_SEARCH_ROUTE
+} from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
+
   return { props: {} };
 });
 

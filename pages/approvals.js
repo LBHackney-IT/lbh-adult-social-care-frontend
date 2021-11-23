@@ -2,20 +2,18 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { getCarePackageApprovalRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
+import {
+  DEFAULT_REDIRECT_ROUTE_INFO,
+  getCarePackageApprovalRoute,
+  SERVICE_USER_SEARCH_ROUTE
+} from 'routes/RouteConstants';
 import { PackageApprovals } from 'components';
 import { useApprovals } from 'api';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
+
   return { props: {} };
 });
 

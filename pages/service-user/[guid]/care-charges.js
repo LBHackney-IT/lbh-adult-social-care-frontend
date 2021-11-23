@@ -11,13 +11,14 @@ import { useRouter } from 'next/router';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
+import { APP_SERVICE_ROUTES } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
   if (!user) {
     return {
       redirect: {
-        destination: '/login',
+        destination: APP_SERVICE_ROUTES.login,
         permanent: false,
       },
     };
