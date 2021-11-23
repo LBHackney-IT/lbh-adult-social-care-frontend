@@ -30,7 +30,7 @@ const BrokerageCost = ({
     >
       {!getter?.length ? (
           <Container width='fit-content' className="brokerage__cost-add-need" display="flex">
-            <p onClick={() => addNeed(setter)} className="text-green">
+            <p onClick={() => addNeed(setter)} className="hackney-text-green">
               {addNeedText}
             </p>
           </Container>
@@ -68,7 +68,7 @@ const BrokerageCost = ({
                     <p onClick={() => removeNeed(getter, setter, index)} className="link-button red">
                       Remove
                     </p>
-                    <p onClick={() => addNeed(setter)} className="text-green">
+                    <p onClick={() => addNeed(setter)} className="hackney-text-green">
                       {addNeedText}
                     </p>
                   </Container>
