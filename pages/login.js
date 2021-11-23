@@ -7,6 +7,7 @@ import { userLogin } from 'reducers/userReducer';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
 import { changeHeader, resetHeader } from '../reducers/headerReducer';
+import { getPreviousPath } from '../routes/RouteConstants';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
@@ -15,7 +16,7 @@ export const getServerSideProps = withSession(({ req }) => {
   if (user) {
     return {
       redirect: {
-        destination: '/',
+        destination: getPreviousPath() || '/',
         permanent: false,
       },
     };
@@ -26,7 +27,7 @@ export const getServerSideProps = withSession(({ req }) => {
 const Login = () => {
   const dispatch = useDispatch();
   const { user, mutateUser } = useUser({
-    redirectTo: '/',
+    redirectTo: getPreviousPath() || '/',
     redirectIfFound: true,
   });
 

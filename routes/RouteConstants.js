@@ -46,16 +46,25 @@ const carePackageRoutes = [
   { route: FINANCE_ROUTE, name: 'Finance' },
 ];
 
-export const saveToStoragePrevRoute = (route) => {
-  if (isServer()) return;
-  window.localStorage.setItem('prevRoute', route);
-};
+export const saveToStoragePrevRoute = (route) => setStorageValue('prevRoute', route);
 
 export const getStoragePrevRoute = () => {
-  if (isServer()) return {};
-  const route = window.localStorage.getItem('prevRoute');
+  const route = getStorageValue('prevRoute');
   return route ? getPrevRouteInfo(route) : {};
 };
+
+export const setStorageValue = (key, value) => {
+  if (isServer()) return;
+  window.localStorage.setItem(key, value);
+}
+
+export const getStorageValue = (key) => {
+  if (isServer()) return;
+  return window.localStorage.getItem(key);
+}
+
+export const setPreviousPath = (path) => setStorageValue('previousPath', path);
+export const getPreviousPath = () => getStorageValue('previousPath');
 
 export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
   const routeInfo = getStoragePrevRoute();
@@ -69,4 +78,4 @@ export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
 export const getPrevRouteInfo = (route) => carePackageRoutes.find((mainRoute) => route.includes(mainRoute.route)) || {};
 
 
-export const SERVICE_ROUTES = ['logout', 'login'].map(item => `/${item}`);
+export const SERVICE_ROUTES = ['logout', 'login', '404'].map(item => `/${item}`);
