@@ -165,6 +165,7 @@ const CareCharge = () => {
           endDate: more12Data.endDate,
           isOngoing: false,
         },
+        assessmentFileUrl: actualReclaims?.assessmentFileUrl || null,
       });
     } else {
       reset(defaultValues);
