@@ -56,7 +56,7 @@ export const usePackageActiveFncPrice = (packageId) =>
 
 export const usePackageCalculatedCost = (packageId, serviceUserId) =>
   useGetData(
-    getCarePackageUrl(packageId, `/reclaims/care-charges/${serviceUserId}/default`),
+    hasUrl(serviceUserId, getCarePackageUrl(packageId, `/reclaims/care-charges/${serviceUserId}/default`)),
     'Can not get calculated cost',
     0
   );

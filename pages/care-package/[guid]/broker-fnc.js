@@ -36,7 +36,7 @@ const FundedNursingCarePage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
 
-  const coreLoading = useRedirectIfPackageNotExist();
+  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
 
   const dispatch = useDispatch();
   const { data: carePackageReclaimFnc, isLoading: fncLoading } = usePackageFnc(carePackageId);

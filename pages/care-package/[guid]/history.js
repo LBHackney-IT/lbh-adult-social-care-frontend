@@ -32,7 +32,7 @@ const History = () => {
 
   const { data: corePackage } = useSingleCorePackageInfo(packageId);
 
-  const coreLoading = useRedirectIfPackageNotExist();
+  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
 
   const { data, isLoading } = usePackageHistory(packageId);
 

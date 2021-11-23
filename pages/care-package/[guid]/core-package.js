@@ -45,7 +45,7 @@ const CorePackage = () => {
   const { settings } = packageInfo;
   const { data: schedulingOptionsData = [], schedulingOptionsLoading } = usePackageSchedulingOptions();
 
-  const coreLoading = useRedirectIfPackageNotExist();
+  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
 
   const schedulingOptions = useMemo(
     () =>

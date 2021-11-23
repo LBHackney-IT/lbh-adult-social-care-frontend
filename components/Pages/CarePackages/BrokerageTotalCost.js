@@ -8,7 +8,7 @@ const BrokerageTotalCost = ({ name, className, value }) => {
   return (
     <p className={className || ''}>
       {`${name}`}
-      <span className="text-lbh-f01">{minusSign}{currency.euro}{value ? Math.abs(value).toFixed(2) : 0}</span>
+      <span className="lbh-color-dark-red font-weight-bold">{minusSign}{currency.euro}{value ? Math.abs(value).toFixed(2) : 0}</span>
     </p>
   );
 }

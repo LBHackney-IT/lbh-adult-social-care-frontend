@@ -5,15 +5,15 @@ import { CareCharges } from 'components';
 import {
   createCareChargeReclaim,
   updateCareChargeReclaim,
-  usePackageCareCharge,
   usePackageCalculatedCost,
+  usePackageCareCharge,
   useSingleCorePackageInfo,
 } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import withSession from 'lib/session';
-import { reclaimType } from 'constants/variables';
+import { claimTypes } from 'constants/variables';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -34,18 +34,16 @@ const CareChargesPage = () => {
   const carePackageId = router.query.guid;
   const [loading, setLoading] = useState(false);
 
-  const coreLoading = useRedirectIfPackageNotExist();
-
-  const serviceUserId = '2f043f6f-09ed-42f0-ab30-c0409c05cb7e'; // todo to be removed
+  const { coreLoading, data: coreData } = useRedirectIfPackageNotExist();
 
   const { data: careCharge, isLoading: careChargeLoading } = usePackageCareCharge(
     carePackageId,
-    reclaimType.careCharge
+    claimTypes.careCharge
   );
 
   const { data: calculatedCost, isLoading: calculatedCostLoading } = usePackageCalculatedCost(
     carePackageId,
-    serviceUserId
+    coreData?.serviceUser?.id
   );
 
   const { data: packageInfo } = useSingleCorePackageInfo(carePackageId);
@@ -84,6 +82,7 @@ const CareChargesPage = () => {
     <CareCharges
       loading={loading || calculatedCostLoading || careChargeLoading || coreLoading}
       calculatedCost={calculatedCost}
+      subType={coreData?.packageScheduling}
       isS117={packageInfo?.settings?.isS117Client}
       careCharge={careCharge?.length && careCharge[0]}
       createCareCharge={createCareCharge}
