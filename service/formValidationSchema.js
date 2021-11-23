@@ -15,11 +15,14 @@ const carePackageBrokerPackageSchema = yup.object().shape({
     .string()
     .typeError('Please select a start date for the package')
     .required('Please select a start date'),
-  supplierId: yup.number().typeError('Please search for and select a supplier').required(),
+  supplierId: yup
+    .number()
+    .typeError('Please search for and select a supplier')
+    .required('Please search for and select a supplier'),
   coreCost: yup
     .number()
     .typeError('Please enter a weekly cost for the package')
-    .required()
+    .required('Please enter a weekly cost for the package')
     .min(1, 'Please enter a weekly cost for the package'),
 });
 

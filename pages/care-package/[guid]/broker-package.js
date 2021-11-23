@@ -13,23 +13,20 @@ import {
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
-import {
-  getBrokerPackageRoute,
-  getCareChargesRoute,
-  getCorePackageRoute,
-  getFundedNursingCareRoute,
-} from 'routes/RouteConstants';
+import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { updateCarePackageCosts, updateCoreCarePackage, usePackageDetails, useSingleCorePackageInfo } from 'api';
+import { updateCarePackageCosts, usePackageDetails, useSingleCorePackageInfo } from 'api';
 import withSession from 'lib/session';
 import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
 import { formValidationSchema } from 'service/formValidationSchema';
-import { BrokerPackageDateSelection } from 'components/Pages/CarePackages/BrokerPackage/BrokerPackageDateSelection';
-import { SupplierSelection } from 'components/Pages/CarePackages/BrokerPackage/SupplierSelection';
-import { CoreWeeklyCost } from 'components/Pages/CarePackages/BrokerPackage/CoreWeeklyCost';
-import { WeeklyAdditionalNeeds } from 'components/Pages/CarePackages/BrokerPackage/WeeklyAdditionalNeeds';
 import omit from 'lodash.omit';
 import { packageTypes } from 'constants/variables';
+import {
+  BrokerPackageDateSelection,
+  WeeklyAdditionalNeeds,
+  CoreWeeklyCost,
+  SupplierSelection,
+} from 'components/Pages/CarePackages/BrokerPackage/index';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
