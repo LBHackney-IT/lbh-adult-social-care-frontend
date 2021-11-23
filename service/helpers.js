@@ -16,6 +16,9 @@ export const compareDescendingDMY = (startDate, endDate) => {
 
 export const hasUrl = (id, string) => id !== undefined ? string : null;
 
+export const openDocument = (documentId) =>
+  window && window.open(`$${window.location.origin}/document/${documentId}`, '_blank');
+
 export const incrementDate = (incrementTime, date = new Date()) => {
   const { years = 0, months = 0, days = 0, weeks = 0, hours = 0, minutes = 0, seconds = 0 } = incrementTime;
 

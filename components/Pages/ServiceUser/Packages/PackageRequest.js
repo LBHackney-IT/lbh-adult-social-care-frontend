@@ -41,7 +41,7 @@ const PackageRequest = ({ packageRequest }) => {
           </Container>
           <Container>
             <p>Care Plan</p>
-            <Link>View</Link>
+            <Link href={`/document/${packageRequest?.carePlan?.fileId}`}>View</Link>
           </Container>
           <Container>
             <p>Assigned</p>
