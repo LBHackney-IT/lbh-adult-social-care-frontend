@@ -45,10 +45,7 @@ const CareCharges = ({
         .required('Please choose collected by option'),
       dates: yup
         .mixed()
-        .test('dates', 'Please set care charges schedule', (dates) => {
-          console.log(dates);
-          return dates.startDate;
-        })
+        .test('dates', 'Please set care charges schedule', (dates) => dates.startDate)
         .test('dates', 'Please set end date', (value) => !(value.startDate && !isOngoing && !value.endDate))
         .test(
           'dates',
