@@ -55,7 +55,7 @@ const FundedNursingCarePage = () => {
       pushNotification(`Funded Nursing Care created successfully`, 'success');
       router.push(getCareChargesRoute(carePackageId));
     } catch (e) {
-      pushNotification(e);
+      pushNotification(e || 'Cannot create Funded Nursing Care');
     }
     setLoading(false);
   };
@@ -69,7 +69,7 @@ const FundedNursingCarePage = () => {
       pushNotification(`Funded Nursing Care updated successfully`, 'success');
       router.push(getCareChargesRoute(carePackageId));
     } catch (e) {
-      pushNotification(e);
+      pushNotification(e || 'Cannot save Funded Nursing Care');
     }
     setLoading(false);
   };

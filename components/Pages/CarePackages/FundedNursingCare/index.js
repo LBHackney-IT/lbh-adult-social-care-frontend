@@ -7,6 +7,7 @@ import { addNotification } from 'reducers/notificationsReducer';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+import { getFormData } from 'service/getFormData';
 import {
   Announcement,
   Button,
@@ -18,14 +19,14 @@ import {
   RadioGroup,
   Select,
   Textarea,
-  UploadGreenButton
+  UploadGreenButton,
+  VerticalSeparator
 } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
-import { getFormData } from '../../../../service/getFormData';
 
 const collectedByType = {
   hackney: 'gross',
@@ -139,12 +140,12 @@ const FundedNursingCare = ({
     } else {
       newData.id = carePackageReclaimFnc.id;
     }
-    const formData = getFormData(newData);
 
-    if (!carePackageReclaimFnc?.id) {
-      return createFundedNursingCare(carePackageId, formData);
-    }
-    return updateFundedNursingCare(carePackageId, formData);
+    const requestData = hasFNC && newData.assessmentFileUrl ? getFormData(newData) : newData;
+
+    const request = carePackageReclaimFnc?.id ? updateFundedNursingCare : createFundedNursingCare;
+
+    await request(carePackageId, requestData);
   };
 
   const changeError = (field, value = '') => {
@@ -218,25 +219,25 @@ const FundedNursingCare = ({
         <form onSubmit={handleSubmit(onSubmit)}>
           <h3 className="brokerage__item-title">Funded Nursing Care</h3>
           {hasPreviousFnc && (
-            <Announcement isError className="mb-5">
-              <div slot="title">FNC charge has previously been added.</div>
-              <div slot="content">
-                <p className="mb-3">Would you like to use previous FNC?</p>
-                <Container className="button-group">
-                  <Button onClick={loadPreviousFnc}>Yes, use previous FNC</Button>
-                  <Button className="background-secondary" onClick={addNewFnc}>No, add new FNC</Button>
-                </Container>
-              </div>
-            </Announcement>
+            <>
+              <Announcement isError>
+                <div slot="title">FNC charge has previously been added.</div>
+                <div slot="content">
+                  <p className="mb-3">Would you like to use previous FNC?</p>
+                  <Container display='flex'>
+                    <Button onClick={loadPreviousFnc}>Yes, use previous FNC</Button>
+                    <VerticalSeparator width={8} />
+                    <Button secondary onClick={addNewFnc}>No, add new FNC</Button>
+                  </Container>
+                </div>
+              </Announcement>
+              <HorizontalSeparator height={32} />
+            </>
           )}
           <RadioGroup
-            handle={(value) => {
-              changeError('hasFNC');
-              setHasFNC(value);
-            }}
+            handle={setHasFNC}
             inline
             className="has-fnc-radio-group"
-            error={errors.hasFNC}
             value={hasFNC}
             label="Has a FNC assessment been carried out?"
             items={[
@@ -292,20 +293,24 @@ const FundedNursingCare = ({
               </FormGroup>
             )}
           />
-          <HorizontalSeparator height={32} />
-          <Container>
-            <Heading size="m">Upload FNC Assessment...</Heading>
-            <HorizontalSeparator height={24} />
-            <Controller
-              name="assessmentFileUrl"
-              control={control}
-              render={({ field }) => (
-                <FormGroup error={errors.assessmentFileUrl?.message}>
-                  <UploadGreenButton extensions={TEXT_FILE_EXTENSIONS} file={field.value} setFile={field.onChange} />
-                </FormGroup>
-              )}
-            />
-          </Container>
+          {hasFNC === 'yes' && (
+            <>
+              <HorizontalSeparator height={32} />
+              <Container>
+                <Heading size="m">Upload FNC Assessment...</Heading>
+                <HorizontalSeparator height={24} />
+                <Controller
+                  name="assessmentFileUrl"
+                  control={control}
+                  render={({ field }) => (
+                    <FormGroup error={errors.assessmentFileUrl?.message}>
+                      <UploadGreenButton extensions={TEXT_FILE_EXTENSIONS} file={field.value} setFile={field.onChange} />
+                    </FormGroup>
+                  )}
+                />
+              </Container>
+            </>
+          )}
           <HorizontalSeparator height={50} />
           <BrokerageTotalCost
             name={`Funded per week ${collectedByType[claimCollector] ? `(${collectedByType[claimCollector]})` : ''}`}
