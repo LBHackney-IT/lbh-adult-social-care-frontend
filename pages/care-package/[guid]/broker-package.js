@@ -55,7 +55,7 @@ const CorePackage = () => {
   const { data: detailsData, isLoading } = usePackageDetails(packageId);
 
   useRedirectIfPackageNotExist();
-  
+
   const {
     handleSubmit,
     control,
@@ -74,7 +74,11 @@ const CorePackage = () => {
       details: [],
     },
   });
-  const onSubmit = () => updatePackage();
+
+  const isOngoing = watch('isOngoing');
+  const supplierId = watch('supplierId');
+  const coreCost = watch('coreCost');
+  const weeklyNeeds = watch('details')?.filter((d) => d.costPeriod === 2);
 
   useEffect(() => {
     if (detailsData) {
@@ -82,14 +86,13 @@ const CorePackage = () => {
       setValue('supplierId', detailsData.supplierId);
       setValue('coreCost', detailsData.coreCost);
       setValue('details', detailsData.details);
+      if (!detailsData.endDate && detailsData.startDate) setValue('isOngoing', true);
       if (detailsData.endDate) {
         setValue('endDate', detailsData.endDate);
         setValue('isOngoing', false);
-      } else {
-        setValue('isOngoing', true);
       }
     }
-  }, [detailsData]);
+  }, [isLoading]);
 
   useEffect(() => {
     if (packageInfo) {
@@ -115,7 +118,7 @@ const CorePackage = () => {
   const handleFormSubmission = async () => {
     const data = getValues();
     const { details } = data;
-    const newDetails = details.map((detail) => (detail.isNew ? omit(detail, ['id', 'isNew']) : detail));
+    const newDetails = details?.map((detail) => (detail.isNew ? omit(detail, ['id', 'isNew']) : detail)) ?? [];
     const newData = {
       ...data,
       details: newDetails,
@@ -138,11 +141,7 @@ const CorePackage = () => {
     setIsRequestBeingSent(false);
   };
 
-  const isOngoing = watch('isOngoing');
-  const supplierId = watch('supplierId');
-  const coreCost = watch('coreCost');
-  const weeklyNeeds = watch('details')?.filter((d) => d.costPeriod === 2);
-
+  const onSubmit = () => updatePackage();
   const clickBack = () => router.push(getCorePackageRoute(packageId));
   return (
     <>
