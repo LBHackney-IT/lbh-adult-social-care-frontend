@@ -30,7 +30,7 @@ const DatePick = ({
       className="datepicker-custom-input"
       onClick={(e) => {
         e.preventDefault();
-        onClick(e)
+        onClick(e);
       }}
       ref={ref}
     >
@@ -39,15 +39,15 @@ const DatePick = ({
   ));
 
   useEffect(() => {
-    if(checkMinDate && dateValue && minDate) {
-      if(dateValue < minDate) {
+    if (checkMinDate && dateValue && minDate) {
+      if (dateValue < minDate) {
         setDate(minDate);
       }
     }
   }, [checkMinDate, minDate, dateValue]);
 
   return (
-    <BaseField className={`${className} react-date-picker`} label={label} noInputStyle>
+    <BaseField className={`react-date-picker`} label={label} noInputStyle>
       {dateValue?.toString() === 'Invalid Date' ? (
         <p>Invalid Date</p>
       ) : (
@@ -71,6 +71,7 @@ const DatePick = ({
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
+          calendarClassName={className}
           className="react-date-picker__input"
         />
       )}
