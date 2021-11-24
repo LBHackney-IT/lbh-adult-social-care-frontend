@@ -32,15 +32,14 @@ const newOneOffAdditionalNeedSchema = yup.object().shape({
   cost: yup.number().typeError('Please enter a cost').required('Please enter a cost').min(1, 'Please enter a cost'),
 });
 
+const newWeeklyAdditionalNeedSchema = yup.object().shape({
+  startDate: yup.string().typeError('Please select a start date').required('Please select a start date'),
+  cost: yup.number().typeError('Please enter a cost').required('Please enter a cost').min(1, 'Please enter a cost'),
+});
+
 export const formValidationSchema = {
   carePackageCorePackageSchema,
   carePackageBrokerPackageSchema,
   newOneOffAdditionalNeedSchema,
+  newWeeklyAdditionalNeedSchema,
 };
-
-// isOngoing: false,
-// endDate: null,
-// startDate: null,
-// supplierId: null,
-// coreCost: null,
-// details: [],

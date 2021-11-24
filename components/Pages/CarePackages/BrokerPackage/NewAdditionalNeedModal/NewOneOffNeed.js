@@ -17,7 +17,7 @@ export const NewOneOffNeed = ({ createNeed }) => {
       endDate: null,
       cost: null,
       type: 2,
-      costPeriod: 3,
+      costPeriod: 2,
       id: uuidv4(),
       isNew: true,
     },
