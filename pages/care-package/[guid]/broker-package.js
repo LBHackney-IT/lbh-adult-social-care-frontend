@@ -144,7 +144,6 @@ const CorePackage = () => {
   };
 
   const updateDetails = (newDetail) => {
-    console.log('updateDetails', newDetail);
     setValue(
       'details',
       [
@@ -161,8 +160,6 @@ const CorePackage = () => {
 
   const onSubmit = () => updatePackage();
   const clickBack = () => router.push(getCorePackageRoute(packageId));
-
-  console.log(weeklyNeeds);
   return (
     <>
       <ResetApprovedPackageDialog
