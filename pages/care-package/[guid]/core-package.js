@@ -17,11 +17,11 @@ import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
 import withSession from 'lib/session';
 import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
+import { formValidationSchema } from 'service/formValidationSchema';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -39,8 +39,12 @@ export const getServerSideProps = withSession(async ({ req }) => {
 const CorePackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
+  const [packageStatus, setPackageStatus] = useState();
+
   const { guid: packageId } = router.query;
-  const [loading, setLoading] = useState(false);
   const { data: packageInfo, singleCoreLoading } = useSingleCorePackageInfo(packageId);
   const { settings } = packageInfo;
   const { data: schedulingOptionsData = [], schedulingOptionsLoading } = usePackageSchedulingOptions();
@@ -56,20 +60,6 @@ const CorePackage = () => {
     [schedulingOptionsData]
   );
 
-  const schema = yup.object().shape({
-    packageType: yup
-      .number()
-      .typeError('Please select a package type')
-      .required()
-      .min(1, 'Please select a package type'),
-    primarySupportReasonId: yup
-      .number()
-      .typeError('Please select a primary support reason')
-      .required()
-      .min(1, 'Please select a primary support reason'),
-    packageScheduling: yup.number().required().min(1, 'Please select a package scheduling option'),
-  });
-
   const {
     handleSubmit,
     control,
@@ -77,7 +67,7 @@ const CorePackage = () => {
     getValues,
     formState: { errors, isDirty },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(formValidationSchema.carePackageCorePackageSchema),
     defaultValues: {
       carePackageId: packageId,
       packageType: 0,
@@ -101,8 +91,6 @@ const CorePackage = () => {
     }
   }, [packageInfo]);
 
-  const [packageStatus, setPackageStatus] = useState();
-
   const updatePackage = async (data = {}) => {
     if (isDirty) {
       if (packageStatus && parseInt(packageStatus, 10) === 3) {
@@ -117,7 +105,7 @@ const CorePackage = () => {
 
   const handleFormSubmission = async () => {
     const data = getValues();
-    setLoading(true);
+    setIsRequestBeingSent(true);
     try {
       const { id } = await updateCoreCarePackage({ data, packageId });
       router.push(getBrokerPackageRoute(id));
@@ -125,12 +113,11 @@ const CorePackage = () => {
     } catch (error) {
       dispatch(addNotification({ text: error, className: 'error' }));
     }
-    setLoading(false);
+    setIsRequestBeingSent(false);
   };
 
-  const isLoading = loading || singleCoreLoading || schedulingOptionsLoading || coreLoading;
+  const isLoading = singleCoreLoading || schedulingOptionsLoading || coreLoading;
 
-  const [isDialogOpen, setDialogOpen] = useState(false);
   return (
     <>
       <ResetApprovedPackageDialog
@@ -141,7 +128,7 @@ const CorePackage = () => {
       <DynamicBreadcrumbs />
       <Loading isLoading={isLoading} />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
-        <TitleSubtitleHeader subTitle="Core package details" title="Build a care package" />
+        <TitleSubtitleHeader subTitle="Core Details" title="Build a care package" />
         {packageInfo.serviceUser && (
           <ServiceUserDetails
             serviceUserName={packageInfo.serviceUser.fullName}
@@ -170,7 +157,7 @@ const CorePackage = () => {
           </Container>
           <FurtherDetails settings={settings} control={control} setValue={setValue} />
           <HorizontalSeparator height="20px" />
-          <Button isLoading={isLoading} disabled={isLoading} type="submit">
+          <Button isLoading={isRequestBeingSent} disabled={isLoading} type="submit">
             Save and continue
           </Button>
         </form>

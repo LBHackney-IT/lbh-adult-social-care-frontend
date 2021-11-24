@@ -41,6 +41,7 @@ textarea {
 
 .lbh-form-group.with-sign .input-container {
   position: relative;
+  font-size: 1.1875rem;
 
   &::before {
     content: attr(data-presign);
