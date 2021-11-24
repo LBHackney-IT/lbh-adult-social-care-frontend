@@ -8,6 +8,18 @@ export const WeeklyAdditionalNeeds = ({ setValue, weeklyNeeds }) => {
   const [isAddingNew, setIsAddingNew] = useState(false);
   const total =
     weeklyNeeds?.map((need) => need.cost).reduce((partialSum, a) => parseFloat(partialSum) + parseFloat(a), 0) || 0;
+
+  const ongoingTotal =
+    weeklyNeeds
+      ?.filter((need) => !need.endDate)
+      ?.map((need) => need.cost)
+      .reduce((partialSum, a) => parseFloat(partialSum) + parseFloat(a), 0) || 0;
+  const oneOffTotal =
+    weeklyNeeds
+      ?.filter((need) => need.endDate)
+      ?.map((need) => need.cost)
+      .reduce((partialSum, a) => parseFloat(partialSum) + parseFloat(a), 0) || 0;
+
   const handleClick = (e) => {
     e.preventDefault();
     setIsAddingNew(true);
@@ -65,20 +77,20 @@ export const WeeklyAdditionalNeeds = ({ setValue, weeklyNeeds }) => {
               alignItems="center"
               justifyContent="space-between"
               borderBottom="1px solid #bfc1c3"
-              padding="5px 0"
+              padding="10px 0"
             >
               <Hint>Ongoing</Hint>
-              <Heading size="m">£{getNumberWithCommas(total)}</Heading>
+              <Hint size="m">£{getNumberWithCommas(ongoingTotal)}</Hint>
             </Container>
             <Container
               display="flex"
               alignItems="center"
               justifyContent="space-between"
               borderBottom="1px solid #bfc1c3"
-              padding="5px 0"
+              padding="10px 0"
             >
-              <Hint>Temporary</Hint>
-              <Heading size="m">£{getNumberWithCommas(total)}</Heading>
+              <Hint>One-off</Hint>
+              <Hint size="m">£{getNumberWithCommas(oneOffTotal)}</Hint>
             </Container>
             <Container display="flex" alignItems="center" justifyContent="space-between" padding="10px 0">
               <Heading size="m">Total</Heading>
