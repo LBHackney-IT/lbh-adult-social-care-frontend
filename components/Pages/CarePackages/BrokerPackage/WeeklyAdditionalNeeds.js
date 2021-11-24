@@ -6,22 +6,23 @@ import { NewWeeklyNeed } from './NewWeeklyNeed';
 
 export const WeeklyAdditionalNeeds = ({ setValue, weeklyNeeds }) => {
   const [isAddingNew, setIsAddingNew] = useState(false);
-  const total = weeklyNeeds?.map((need) => need.cost).reduce((partialSum, a) => parseFloat(partialSum) + parseFloat(a), 0) || 0;
+  const total =
+    weeklyNeeds?.map((need) => need.cost).reduce((partialSum, a) => parseFloat(partialSum) + parseFloat(a), 0) || 0;
   const handleClick = (e) => {
     e.preventDefault();
     setIsAddingNew(true);
   };
-  
+
   const updateDetails = (newDetail) => {
     setValue('details', [...weeklyNeeds, newDetail], { shouldDirty: true });
     setIsAddingNew(false);
   };
-  
+
   const removeNeed = (id) => {
     const newNeeds = weeklyNeeds.filter((need) => need.id !== id);
     setValue('details', newNeeds, { shouldDirty: true });
   };
-  
+
   return (
     <Container>
       <FormGroup label="Additional needs">
@@ -55,12 +56,34 @@ export const WeeklyAdditionalNeeds = ({ setValue, weeklyNeeds }) => {
           <Container
             borderTop="1px solid #bfc1c3"
             borderBottom="1px solid #bfc1c3"
-            padding="24px 0"
             display="flex"
-            justifyContent="space-between"
+            flexDirection="column"
+            justifyContent="stretch"
           >
-            <Hint>Additional needs</Hint>
-            <Heading size="m">£{getNumberWithCommas(total)}</Heading>
+            <Container
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              borderBottom="1px solid #bfc1c3"
+              padding="5px 0"
+            >
+              <Hint>Ongoing</Hint>
+              <Heading size="m">£{getNumberWithCommas(total)}</Heading>
+            </Container>
+            <Container
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              borderBottom="1px solid #bfc1c3"
+              padding="5px 0"
+            >
+              <Hint>Temporary</Hint>
+              <Heading size="m">£{getNumberWithCommas(total)}</Heading>
+            </Container>
+            <Container display="flex" alignItems="center" justifyContent="space-between" padding="10px 0">
+              <Heading size="m">Total</Heading>
+              <Heading size="m">£{getNumberWithCommas(total)}</Heading>
+            </Container>
           </Container>
         </Container>
       </FormGroup>
