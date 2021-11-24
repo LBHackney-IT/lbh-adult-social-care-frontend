@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { isFunction } from 'api';
+import { isFunction, useDocument } from 'api';
 import { compareDescendingDMY, dateStringToDate } from 'service';
 import { dateDescending, TEXT_FILE_EXTENSIONS } from 'constants/variables';
 import { useDispatch } from 'react-redux';
@@ -57,6 +57,36 @@ const FundedNursingCare = ({
   const [hasFNC, setHasFNC] = useState();
   const [hasPreviousFnc] = useState(false); // todo for new design
   const [isOngoing, setIsOngoing] = useState(true);
+
+  const schema = useMemo(() => (
+    yup.object().shape({
+      claimCollector: yup
+        .number()
+        .typeError('Required field')
+        .required('Required field')
+    })
+  ), [detailsData]);
+
+  const {
+    handleSubmit,
+    control,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      claimCollector: '',
+      description: '',
+    },
+  });
+  const onSubmit = (data) => clickSave(data);
+
+  const claimCollector = watch('claimCollector');
+
+  const assessmentFile = watch('assessmentFile');
+
+  const { data: href } = useDocument(assessmentFile?.fileId);
 
   const clickBack = () => {
     if (isFunction(goBack())) goBack();
@@ -131,21 +161,20 @@ const FundedNursingCare = ({
     const newData = {
       ...data,
       cost: activeFncPrice,
-      startDate: dateFrom,
-      endDate: isOngoing ? null : dateTo,
+      startDate: dateFrom.toJSON(),
     };
 
-    if (!carePackageReclaimFnc?.id) {
-      newData.carePackageId = carePackageId;
-    } else {
-      newData.id = carePackageReclaimFnc.id;
-    }
+    if (!isOngoing) newData.endDate = dateTo.toJSON();
 
-    const requestData = hasFNC && newData.assessmentFileUrl ? getFormData(newData) : newData;
+    if (carePackageReclaimFnc?.id) {
+      newData.id = carePackageReclaimFnc.id;
+    } else {
+      newData.carePackageId = carePackageId;
+    }
 
     const request = carePackageReclaimFnc?.id ? updateFundedNursingCare : createFundedNursingCare;
 
-    await request(carePackageId, requestData);
+    await request(carePackageId, getFormData(newData));
   };
 
   const changeError = (field, value = '') => {
@@ -170,45 +199,20 @@ const FundedNursingCare = ({
       setIsOngoing(false);
     }
 
-    let assessmentFileUrl = null;
+    let prepareAssessmentFile = null;
 
-    if (carePackageReclaimFnc.socialWorkerCarePlanFileId) {
-      assessmentFileUrl = {
-        name: carePackageReclaimFnc.socialWorkerCarePlanFileId,
-        fileId: carePackageReclaimFnc.socialWorkerCarePlanFileName
+    if (carePackageReclaimFnc.assessmentFileId) {
+      prepareAssessmentFile = {
+        name: carePackageReclaimFnc.assessmentFileName,
+        fileId: carePackageReclaimFnc.assessmentFileId
       };
+      setHasFNC('yes');
     }
 
     const { description = '', claimCollector = '' } = carePackageReclaimFnc;
 
-    reset({ description, claimCollector, assessmentFileUrl });
+    reset({ description, claimCollector, assessmentFile: prepareAssessmentFile });
   }, [carePackageReclaimFnc, detailsData]);
-
-  const schema = useMemo(() => (
-    yup.object().shape({
-      claimCollector: yup
-        .number()
-        .typeError('Required field')
-        .required('Required field')
-    })
-  ), [detailsData]);
-
-  const {
-    handleSubmit,
-    control,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      claimCollector: '',
-      description: '',
-    },
-  });
-  const onSubmit = (data) => clickSave(data);
-
-  const claimCollector = watch('claimCollector');
 
   return (
     <Container className="brokerage__funded-nursing-care">
@@ -300,11 +304,16 @@ const FundedNursingCare = ({
                 <Heading size="m">Upload FNC Assessment...</Heading>
                 <HorizontalSeparator height={24} />
                 <Controller
-                  name="assessmentFileUrl"
+                  name="assessmentFile"
                   control={control}
                   render={({ field }) => (
-                    <FormGroup error={errors.assessmentFileUrl?.message}>
-                      <UploadGreenButton extensions={TEXT_FILE_EXTENSIONS} file={field.value} setFile={field.onChange} />
+                    <FormGroup error={errors.assessmentFile?.message}>
+                      <UploadGreenButton
+                        extensions={TEXT_FILE_EXTENSIONS}
+                        file={field.value}
+                        href={href}
+                        setFile={field.onChange}
+                      />
                     </FormGroup>
                   )}
                 />

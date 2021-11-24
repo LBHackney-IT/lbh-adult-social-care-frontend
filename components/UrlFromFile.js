@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getUrlFromFile } from '../service';
 import { Container } from './HackneyDS/Layout/Container';
 import { VerticalSeparator } from './HackneyDS/Layout/VerticalSeparator';
 
-const UrlFromFile = ({ file, removeFile }) => {
+const UrlFromFile = ({ file, href, removeFile }) => {
   if (!file) return <></>;
 
   const [isEdit, setIsEdit] = useState(false);
+  const [link, setLink] = useState('');
+
+  const getFile = async () => {
+    let mainFile = file;
+    if (file && href) {
+      mainFile = { href, name: file.name };
+    }
+    const result = await getUrlFromFile(mainFile);
+    setLink(result);
+  };
+
+  useEffect(() => {
+    if (file) getFile();
+  }, [file, href]);
 
   return (
     <Container className="url-from-file" display="flex">
       <p>{file.name}</p>
       <VerticalSeparator width={8} />
-      <a target="_blank" className="link-button blue" href={getUrlFromFile(file)}>
+      <a target="_blank" href={link} className="link-button blue" rel="noreferrer">
         View
       </a>
       <VerticalSeparator width={8} />

@@ -1,4 +1,5 @@
 import { add, compareDesc, format } from 'date-fns';
+import { isServer } from '../api/Utils/FuncUtils';
 
 const chr4 = () => Math.random().toString(16).slice(-4);
 
@@ -9,8 +10,8 @@ export const dateStringToDate = (dateString) => (dateString ? new Date(dateStrin
 export const compareDescendingDMY = (startDate, endDate) => {
   const resetStartDate = new Date(startDate);
   const resetEndDate = new Date(endDate);
-  resetStartDate.setHours(0,0,0,0);
-  resetEndDate.setHours(0,0,0,0);
+  resetStartDate.setHours(0, 0, 0, 0);
+  resetEndDate.setHours(0, 0, 0, 0);
   return compareDesc(resetStartDate, resetEndDate);
 };
 
@@ -32,13 +33,28 @@ export const incrementDate = (incrementTime, date = new Date()) => {
 
 export const formatDate = (date, formatString = 'dd.MM.yy') => date && format(new Date(date), formatString);
 
-export const getUrlFromFile = (file) => {
+export const getUrlFromFile = async (file) => {
+  if (isServer()) return;
+
+  let mainFile = file;
+  if (file?.href) {
+    mainFile = await urlToFile(file.href, file.name);
+  }
+
   if (!file) return '';
   if (file?.fileId) return `/document/${file.fileId}`;
   if (file?.url) return file.url;
 
-  return window.URL.createObjectURL(file);
+  return window.URL.createObjectURL(mainFile);
 };
+
+export const urlToFile = (url, filename) => {
+  return (fetch(url)
+    .then((res) => res.arrayBuffer())
+    .then((buf) =>
+      new File([buf], filename, {type: (url.match(/^data:([^;]+);/)||'')[1] }))
+  );
+}
 
 export const getLoggedInUser = ({ req }) => {
   const user = req.session.get('user');
