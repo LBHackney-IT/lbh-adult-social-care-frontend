@@ -23,7 +23,7 @@ import omit from 'lodash.omit';
 import { packageTypes } from 'constants/variables';
 import {
   BrokerPackageDateSelection,
-  WeeklyAdditionalNeeds,
+  AdditionalNeeds,
   CoreWeeklyCost,
   SupplierSelection,
 } from 'components/Pages/CarePackages/BrokerPackage/index';
@@ -161,7 +161,7 @@ const CorePackage = () => {
               <SupplierSelection setValue={setValue} supplierId={supplierId} errors={errors} />
               <CoreWeeklyCost control={control} coreCost={coreCost ?? 0} errors={errors} />
               <HorizontalSeparator height="48px" />
-              <WeeklyAdditionalNeeds control={control} weeklyNeeds={weeklyNeeds} setValue={setValue} />
+              <AdditionalNeeds control={control} weeklyNeeds={weeklyNeeds} setValue={setValue} />
               <HorizontalSeparator height="48px" />
               <Container display="flex">
                 <Button onClick={clickBack} secondary color="gray">

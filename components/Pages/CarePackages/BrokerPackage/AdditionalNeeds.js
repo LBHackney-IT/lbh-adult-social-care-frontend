@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { Container, FormGroup, Heading, Hint, HorizontalSeparator, InsetText, Link } from 'components';
 import { getNumberWithCommas } from 'service';
 import { WeeklyNeed } from './WeeklyNeed';
-import { NewWeeklyNeed } from './NewAdditionalNeedModal/NewWeeklyNeed';
 import NewAdditionalNeedModal from './NewAdditionalNeedModal/NewAdditionalNeedModal';
 
-export const WeeklyAdditionalNeeds = ({ setValue, weeklyNeeds }) => {
+export const AdditionalNeeds = ({ setValue, weeklyNeeds }) => {
   const [isAddingNew, setIsAddingNew] = useState(false);
   const total =
     weeklyNeeds?.map((need) => need.cost).reduce((partialSum, a) => parseFloat(partialSum) + parseFloat(a), 0) || 0;
@@ -38,7 +37,11 @@ export const WeeklyAdditionalNeeds = ({ setValue, weeklyNeeds }) => {
 
   return (
     <Container>
-      <NewAdditionalNeedModal isOpen={isAddingNew} onClose={() => setIsAddingNew(false)} handleConfirmation={updateDetails} />
+      <NewAdditionalNeedModal
+        isOpen={isAddingNew}
+        onClose={() => setIsAddingNew(false)}
+        handleConfirmation={updateDetails}
+      />
       <FormGroup label="Additional needs">
         <Container display="flex" justifyContent="stretch" flexDirection="column">
           {!weeklyNeeds ||

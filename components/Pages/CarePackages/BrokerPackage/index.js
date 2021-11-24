@@ -4,7 +4,7 @@ import { SupplierInfo } from './SupplierInfo';
 import { SupplierList } from './SupplierList';
 import { SupplierListItem } from './SupplierListItem';
 import { SupplierSelection } from './SupplierSelection';
-import { WeeklyAdditionalNeeds } from './AdditionalNeeds';
+import { AdditionalNeeds } from './AdditionalNeeds';
 import { WeeklyNeed } from './WeeklyNeed';
 
 export {
@@ -14,6 +14,6 @@ export {
   SupplierList,
   SupplierListItem,
   SupplierSelection,
-  WeeklyAdditionalNeeds,
+  AdditionalNeeds,
   WeeklyNeed,
 };

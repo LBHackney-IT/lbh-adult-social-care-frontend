@@ -1,7 +1,7 @@
 import { Button, Container, Dialog, Heading, HorizontalSeparator, Tab, Tabs, VerticalSeparator } from 'components';
 import React, { memo } from 'react';
 import { NewWeeklyNeed } from './NewWeeklyNeed';
-import { OneOffNeed } from './NewOneOffNeed';
+import { NewOneOffNeed } from './NewOneOffNeed';
 
 const NewAdditionalNeedModal = ({ isOpen, onClose, handleConfirmation }) => {
   const handleClick = (newNeed) => {
@@ -19,11 +19,11 @@ const NewAdditionalNeedModal = ({ isOpen, onClose, handleConfirmation }) => {
             <NewWeeklyNeed />
           </Tab>
           <Tab>
-            <OneOffNeed />
+            <NewOneOffNeed />
           </Tab>
         </Tabs>
         <Container display="flex" justifyContent="flex-end">
-          <Button onClick={() => {}}>Add need</Button>
+          <Button onClick={handleClick}>Add need</Button>
         </Container>
       </Container>
     </Dialog>
