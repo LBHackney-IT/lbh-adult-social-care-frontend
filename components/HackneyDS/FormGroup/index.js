@@ -38,7 +38,7 @@ export default function FormGroup({
           </>
         )}
         {error && (
-          <span className="govuk-error-message">
+          <span className={`govuk-error-message ${labelSize}`}>
             <span className="govuk-visually-hidden">Error:</span>
             {error}
           </span>

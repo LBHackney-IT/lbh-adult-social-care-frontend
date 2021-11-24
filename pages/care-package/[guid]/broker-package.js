@@ -27,6 +27,7 @@ import {
   CoreWeeklyCost,
   SupplierSelection,
 } from 'components/Pages/CarePackages/BrokerPackage/index';
+import NewAdditionalNeedModal from 'components/Pages/CarePackages/BrokerPackage/NewAdditionalNeedModal/NewAdditionalNeedModal';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -49,6 +50,7 @@ const CorePackage = () => {
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
   const [packageStatus, setPackageStatus] = useState();
   const [packageType, setPackageType] = useState();
+  const [isAddingNew, setIsAddingNew] = useState(false);
 
   const { guid: packageId } = router.query;
   const { data: packageInfo } = useSingleCorePackageInfo(packageId);
@@ -78,7 +80,7 @@ const CorePackage = () => {
   const isOngoing = watch('isOngoing');
   const supplierId = watch('supplierId');
   const coreCost = watch('coreCost');
-  const weeklyNeeds = watch('details')?.filter((d) => d.costPeriod === 2);
+  const weeklyNeeds = watch('details');
 
   useEffect(() => {
     if (detailsData) {
@@ -141,14 +143,37 @@ const CorePackage = () => {
     setIsRequestBeingSent(false);
   };
 
+  const updateDetails = (newDetail) => {
+    console.log('updateDetails', newDetail);
+    setValue(
+      'details',
+      [
+        ...weeklyNeeds,
+        {
+          ...newDetail,
+          startDate: new Date(newDetail.startDate).toISOString(),
+          endDate: newDetail.endDate && !newDetail.isOngoing ? new Date(newDetail.endDate).toISOString() : null,
+        },
+      ],
+      { shouldDirty: true }
+    );
+  };
+
   const onSubmit = () => updatePackage();
   const clickBack = () => router.push(getCorePackageRoute(packageId));
+
+  console.log(weeklyNeeds);
   return (
     <>
       <ResetApprovedPackageDialog
         isOpen={isDialogOpen}
         onClose={() => setDialogOpen(false)}
         handleConfirmation={handleFormSubmission}
+      />
+      <NewAdditionalNeedModal
+        isOpen={isAddingNew}
+        onClose={() => setIsAddingNew(false)}
+        handleConfirmation={updateDetails}
       />
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
@@ -161,7 +186,13 @@ const CorePackage = () => {
               <SupplierSelection setValue={setValue} supplierId={supplierId} errors={errors} />
               <CoreWeeklyCost control={control} coreCost={coreCost ?? 0} errors={errors} />
               <HorizontalSeparator height="48px" />
-              <AdditionalNeeds control={control} weeklyNeeds={weeklyNeeds} setValue={setValue} />
+              <AdditionalNeeds
+                control={control}
+                weeklyNeeds={weeklyNeeds}
+                setValue={setValue}
+                isAddingNew={isAddingNew}
+                setIsAddingNew={setIsAddingNew}
+              />
               <HorizontalSeparator height="48px" />
               <Container display="flex">
                 <Button onClick={clickBack} secondary color="gray">

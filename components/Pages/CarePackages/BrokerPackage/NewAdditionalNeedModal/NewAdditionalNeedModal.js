@@ -1,10 +1,10 @@
-import { Button, Container, Dialog, Heading, HorizontalSeparator, Tab, Tabs, VerticalSeparator } from 'components';
+import { Container, Dialog, Heading, HorizontalSeparator, Tab, Tabs } from 'components';
 import React, { memo } from 'react';
 import { NewWeeklyNeed } from './NewWeeklyNeed';
 import { NewOneOffNeed } from './NewOneOffNeed';
 
 const NewAdditionalNeedModal = ({ isOpen, onClose, handleConfirmation }) => {
-  const handleClick = (newNeed) => {
+  const handleSubmit = (newNeed) => {
     handleConfirmation(newNeed);
     onClose();
   };
@@ -16,15 +16,12 @@ const NewAdditionalNeedModal = ({ isOpen, onClose, handleConfirmation }) => {
         <HorizontalSeparator height="30px" />
         <Tabs tabs={tabs}>
           <Tab>
-            <NewWeeklyNeed />
+            <NewWeeklyNeed createNeed={handleSubmit} />
           </Tab>
           <Tab>
-            <NewOneOffNeed />
+            <NewOneOffNeed createNeed={handleSubmit} />
           </Tab>
         </Tabs>
-        <Container display="flex" justifyContent="flex-end">
-          <Button onClick={handleClick}>Add need</Button>
-        </Container>
       </Container>
     </Dialog>
   );

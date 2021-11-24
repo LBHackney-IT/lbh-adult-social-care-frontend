@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container, FormGroup, Heading, Hint, HorizontalSeparator, InsetText, Link } from 'components';
 import { getNumberWithCommas } from 'service';
 import { WeeklyNeed } from './WeeklyNeed';
-import NewAdditionalNeedModal from './NewAdditionalNeedModal/NewAdditionalNeedModal';
 
-export const AdditionalNeeds = ({ setValue, weeklyNeeds }) => {
-  const [isAddingNew, setIsAddingNew] = useState(false);
+export const AdditionalNeeds = ({ setValue, weeklyNeeds, setIsAddingNew }) => {
   const total =
     weeklyNeeds?.map((need) => need.cost).reduce((partialSum, a) => parseFloat(partialSum) + parseFloat(a), 0) || 0;
 
@@ -25,11 +23,6 @@ export const AdditionalNeeds = ({ setValue, weeklyNeeds }) => {
     setIsAddingNew(true);
   };
 
-  const updateDetails = (newDetail) => {
-    setValue('details', [...weeklyNeeds, newDetail], { shouldDirty: true });
-    setIsAddingNew(false);
-  };
-
   const removeNeed = (id) => {
     const newNeeds = weeklyNeeds.filter((need) => need.id !== id);
     setValue('details', newNeeds, { shouldDirty: true });
@@ -37,11 +30,6 @@ export const AdditionalNeeds = ({ setValue, weeklyNeeds }) => {
 
   return (
     <Container>
-      <NewAdditionalNeedModal
-        isOpen={isAddingNew}
-        onClose={() => setIsAddingNew(false)}
-        handleConfirmation={updateDetails}
-      />
       <FormGroup label="Additional needs">
         <Container display="flex" justifyContent="stretch" flexDirection="column">
           {!weeklyNeeds ||
@@ -79,7 +67,7 @@ export const AdditionalNeeds = ({ setValue, weeklyNeeds }) => {
               borderBottom="1px solid #bfc1c3"
               padding="10px 0"
             >
-              <Hint>Ongoing</Hint>
+              <Hint>Weekly</Hint>
               <Hint size="m">£{getNumberWithCommas(ongoingTotal)}</Hint>
             </Container>
             <Container
