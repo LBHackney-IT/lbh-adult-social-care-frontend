@@ -27,7 +27,7 @@ const initialFilters = {
   serviceUserName: '',
 };
 
-const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Assistance' }];
+const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Referral' }];
 
 const BrokerAssistance = () => {
   const router = useRouter();
@@ -69,7 +69,7 @@ const BrokerAssistance = () => {
 
   return (
     <BrokerPortalPage
-      title='Broker Assistance'
+      title='Broker Referral'
       breadcrumbs={breadcrumbs}
       loading={brokerViewLoading}
       goToSearch={goToBrokerAssistanceSearch}
