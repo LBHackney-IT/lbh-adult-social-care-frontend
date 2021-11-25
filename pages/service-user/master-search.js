@@ -11,7 +11,7 @@ const initialFilters = {
   dateOfBirth: null,
 };
 
-const BrokerAssistanceSearch = () => {
+const BrokerReferralSearch = () => {
   const router = useRouter();
   const [filters, setFilters] = useState({ ...initialFilters });
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -68,4 +68,4 @@ const BrokerAssistanceSearch = () => {
   );
 };
 
-export default BrokerAssistanceSearch;
+export default BrokerReferralSearch;

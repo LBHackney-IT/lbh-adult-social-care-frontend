@@ -14,7 +14,7 @@ export { default as CareCharges } from './Pages/CarePackages/CareCharges';
 export { default as FundedNursingCare } from './Pages/CarePackages/FundedNursingCare';
 export { default as BrokerageBorderCost } from './Pages/CarePackages/BrokerageBorderCost';
 export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPackageDetails';
-export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchForServiceUser';
+export { default as SearchServiceUser } from './Pages/BrokerReferral/SearchForServiceUser';
 export { default as NewCareChargePackages } from './Pages/CareCharges/NewCareChargePackages';
 export { default as PackageApprovals } from './Pages/PackageApprovals';
 export { default as DynamicBreadcrumbs } from './Pages/DynamicBreadcrumbs';
