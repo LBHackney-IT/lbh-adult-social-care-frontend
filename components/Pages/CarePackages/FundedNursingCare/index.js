@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { isFunction, useDocument } from 'api';
-import { compareDescendingDMY, dateStringToDate } from 'service';
-import { dateDescending, TEXT_FILE_EXTENSIONS } from 'constants/variables';
+import { compareDescendingDMY, dateStringToDate, formatDocumentInfo } from 'service';
+import { dateDescending } from 'constants/variables';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import * as yup from 'yup';
@@ -13,13 +13,11 @@ import {
   Button,
   Container,
   FormGroup,
-  Heading,
   HorizontalSeparator,
   Label,
   RadioGroup,
   Select,
   Textarea,
-  UploadGreenButton,
   VerticalSeparator
 } from '../../../HackneyDS';
 import Loading from '../../../Loading';
@@ -27,6 +25,7 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
+import FinancialAssessment from '../CareCharge/FinancialAssessment';
 
 const collectedByType = {
   hackney: 'gross',
@@ -78,15 +77,14 @@ const FundedNursingCare = ({
     defaultValues: {
       claimCollector: '',
       description: '',
+      assessmentFileInfo: undefined,
     },
   });
   const onSubmit = (data) => clickSave(data);
 
-  const claimCollector = watch('claimCollector');
+  const [claimCollector, assessmentFileInfo] = watch(['claimCollector', 'assessmentFileInfo']);
 
-  const assessmentFile = watch('assessmentFile');
-
-  const { data: href } = useDocument(assessmentFile?.fileId);
+  const { data: href, isLoading: documentLoading } = useDocument(assessmentFileInfo?.fileId);
 
   const clickBack = () => {
     if (isFunction(goBack())) goBack();
@@ -164,6 +162,17 @@ const FundedNursingCare = ({
       startDate: dateFrom.toJSON(),
     };
 
+    delete newData.assessmentFileInfo;
+
+    if (assessmentFileInfo?.file) {
+      const { file, fileName, fileId } = assessmentFileInfo;
+      if (file.name === fileName) {
+        newData.assessmentFileId = fileId;
+      } else {
+        newData.assessmentFile = file;
+      }
+    }
+
     if (!isOngoing) newData.endDate = dateTo.toJSON();
 
     if (carePackageReclaimFnc?.id) {
@@ -190,33 +199,36 @@ const FundedNursingCare = ({
   const addNewFnc = () => alert('add new fnc');
 
   useEffect(() => {
-    setDates({
-      dateFrom: dateStringToDate(carePackageReclaimFnc.startDate || detailsData.startDate),
-      dateTo: dateStringToDate(carePackageReclaimFnc.endDate || detailsData.endDate),
-    });
+    (async () => {
+      setDates({
+        dateFrom: dateStringToDate(carePackageReclaimFnc.startDate || detailsData.startDate),
+        dateTo: dateStringToDate(carePackageReclaimFnc.endDate || detailsData.endDate),
+      });
 
-    if (carePackageReclaimFnc?.endDate || detailsData.endDate) {
-      setIsOngoing(false);
-    }
+      if (carePackageReclaimFnc?.endDate || detailsData.endDate) {
+        setIsOngoing(false);
+      }
 
-    let prepareAssessmentFile = null;
+      let fileData;
 
-    if (carePackageReclaimFnc.assessmentFileId) {
-      prepareAssessmentFile = {
-        name: carePackageReclaimFnc.assessmentFileName,
-        fileId: carePackageReclaimFnc.assessmentFileId
-      };
-      setHasFNC('yes');
-    }
+      if (carePackageReclaimFnc.assessmentFileName) {
+        fileData = await formatDocumentInfo({
+          href,
+          fileName: carePackageReclaimFnc.assessmentFileName,
+          fileId: carePackageReclaimFnc.assessmentFileId
+        });
+        setHasFNC('yes');
+      }
 
-    const { description = '', claimCollector = '' } = carePackageReclaimFnc;
+      const { description = '', claimCollector: responseClaimCollector = '' } = carePackageReclaimFnc;
 
-    reset({ description, claimCollector, assessmentFile: prepareAssessmentFile });
-  }, [carePackageReclaimFnc, detailsData]);
+      reset({ description, claimCollector: responseClaimCollector, assessmentFileInfo: fileData });
+    })();
+  }, [carePackageReclaimFnc, detailsData, href]);
 
   return (
     <Container className="brokerage__funded-nursing-care">
-      <Loading isLoading={isLoading} />
+      <Loading isLoading={isLoading || documentLoading} />
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <TitleSubtitleHeader title="Build a care package" subTitle="Funded Nursing Care" />
@@ -228,7 +240,7 @@ const FundedNursingCare = ({
                 <div slot="title">FNC charge has previously been added.</div>
                 <div slot="content">
                   <p className="mb-3">Would you like to use previous FNC?</p>
-                  <Container display='flex'>
+                  <Container display="flex">
                     <Button onClick={loadPreviousFnc}>Yes, use previous FNC</Button>
                     <VerticalSeparator width={8} />
                     <Button secondary onClick={addNewFnc}>No, add new FNC</Button>
@@ -300,24 +312,7 @@ const FundedNursingCare = ({
           {hasFNC === 'yes' && (
             <>
               <HorizontalSeparator height={32} />
-              <Container>
-                <Heading size="m">Upload FNC Assessment...</Heading>
-                <HorizontalSeparator height={24} />
-                <Controller
-                  name="assessmentFile"
-                  control={control}
-                  render={({ field }) => (
-                    <FormGroup error={errors.assessmentFile?.message}>
-                      <UploadGreenButton
-                        extensions={TEXT_FILE_EXTENSIONS}
-                        file={field.value}
-                        href={href}
-                        setFile={field.onChange}
-                      />
-                    </FormGroup>
-                  )}
-                />
-              </Container>
+              <FinancialAssessment control={control} />
             </>
           )}
           <HorizontalSeparator height={50} />
@@ -331,7 +326,7 @@ const FundedNursingCare = ({
               Back
             </Button>
             <Button onClick={skipAndContinue} className="secondary-yellow">Skip and continue</Button>
-            <Button type="submit" disabled={isLoading} isLoading={isLoading}>
+            <Button type="submit" disabled={isLoading || documentLoading} isLoading={isLoading || documentLoading}>
               Save and continue
             </Button>
           </Container>

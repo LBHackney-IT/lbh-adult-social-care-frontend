@@ -3,23 +3,24 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { getServiceUserCareChargesRoute } from 'routes/RouteConstants';
 import {
+  createCareChargeReclaim,
+  updateCareChargeReclaim,
   useLookups,
   usePackageCareCharge,
-  updateCareChargeReclaim,
-  createCareChargeReclaim,
   useSingleCorePackageInfo,
 } from 'api';
 import { currency } from 'constants/strings';
 import { careChargeAPIKeys } from 'constants/variables';
 import { formatDate } from 'service';
 import { addNotification } from 'reducers/notificationsReducer';
+import { getFormData } from 'service/getFormData';
 import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import Loading from '../../../../Loading';
 
-const EditElementContent = ({ data, onClose }) => {
+const EditElementContent = ({ data, onClose, assessmentFileInfo }) => {
   const [isLoading, toggleLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -97,28 +98,29 @@ const EditElementContent = ({ data, onClose }) => {
 
     toggleLoading(true);
 
+    const { file } = assessmentFileInfo || {};
+    const fileData = file?.name ? { assessmentFile: file } : {};
+
+    const getReclaimProps = (reclaim) => ({
+      ...reclaim,
+      claimCollector: getClaimCollectorId(reclaim.claimCollector),
+      endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
+      ...fileData
+    });
+
     if (createData.length > 0) {
       createData.forEach((reclaim) => {
-        requests.push(
-          createCareChargeReclaim(packageId, {
-            ...reclaim,
-            carePackageId: packageId,
-            claimCollector: getClaimCollectorId(reclaim.claimCollector),
-            endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
-          })
-        );
+        const mainData = { ...getReclaimProps(reclaim), carePackageId: packageId };
+
+        requests.push(createCareChargeReclaim(packageId, getFormData(mainData)));
       });
     }
 
     if (editData.length > 0) {
       editData.forEach((reclaim) => {
-        requests.push(
-          updateCareChargeReclaim(packageId, {
-            ...reclaim,
-            claimCollector: getClaimCollectorId(reclaim.claimCollector),
-            endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
-          })
-        );
+        const mainData = getReclaimProps(reclaim);
+
+        requests.push(updateCareChargeReclaim(packageId, getFormData(mainData)));
       });
     }
 

@@ -34,27 +34,28 @@ export const incrementDate = (incrementTime, date = new Date()) => {
 export const formatDate = (date, formatString = 'dd.MM.yy') => date && format(new Date(date), formatString);
 
 export const getUrlFromFile = async (file) => {
-  if (isServer()) return;
-
-  let mainFile = file;
-  if (file?.href) {
-    mainFile = await urlToFile(file.href, file.name);
-  }
-
-  if (!file) return '';
-  if (file?.fileId) return `/document/${file.fileId}`;
+  if (isServer() || !file) return;
   if (file?.url) return file.url;
 
-  return window.URL.createObjectURL(mainFile);
+  return window.URL.createObjectURL(file);
 };
 
-export const urlToFile = (url, filename) => {
-  return (fetch(url)
+export const urlToFile = (url, filename) => (
+  fetch(url)
     .then((res) => res.arrayBuffer())
     .then((buf) =>
-      new File([buf], filename, {type: (url.match(/^data:([^;]+);/)||'')[1] }))
-  );
-}
+      new File([buf], filename, { type: (url.match(/^data:([^;]+);/) || '')[1] }))
+);
+
+export const formatDocumentInfo = async ({ fileName, fileId, href }) => {
+  if (fileName) {
+    if (href) {
+      const fileFromUrl = await urlToFile(href, fileName);
+      return { file: fileFromUrl, fileId, fileName };
+    }
+    return { fileId, fileName };
+  }
+};
 
 export const getLoggedInUser = ({ req }) => {
   const user = req.session.get('user');
