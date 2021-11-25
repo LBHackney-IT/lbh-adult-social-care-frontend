@@ -2,17 +2,18 @@ import React from 'react';
 
 export const FileUpload = ({
   extensions,
+  fileInfo,
   className = '',
   onChange = () => {},
-  getFile,
-  getFiles,
+  setFile,
+  setFiles,
   id = 'file-upload',
   label = 'Choose File'
 }) => {
 
   const changeInput = (e) => {
-    if (getFile) return getFile(e.target.files[0]);
-    if (getFiles) return getFiles(e.target.files);
+    if (setFile) return setFile({ file: e.target.files[0], fileId: fileInfo?.fileId, fileName: fileInfo?.fileName });
+    if (setFiles) return setFiles(e.target.files);
     return onChange(e);
   };
 

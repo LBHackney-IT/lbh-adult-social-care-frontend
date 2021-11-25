@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from '../BaseApi';
+import { BASE_URL, MULTIPART_FORM_DATA } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const CARE_PACKAGE_URL = `${BASE_URL}/v1/care-packages`;
@@ -38,7 +38,7 @@ export const createCareChargeReclaim = (carePackageId, careChargeReclaimCreation
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
+      'Content-Type': MULTIPART_FORM_DATA,
     },
     data: careChargeReclaimCreationRequest,
   };
@@ -51,7 +51,7 @@ export const updateCareChargeReclaim = (carePackageId, careChargeUpdateRequest) 
     method: 'PUT',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
+      'Content-Type': MULTIPART_FORM_DATA,
     },
     data: [careChargeUpdateRequest],
   };

@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { getServiceUserCareChargesRoute } from 'routes/RouteConstants';
 import {
+  createCareChargeReclaim,
+  updateCareChargeReclaim,
   useLookups,
   usePackageCareCharge,
-  updateCareChargeReclaim,
-  createCareChargeReclaim,
   useSingleCorePackageInfo,
 } from 'api';
 import { currency } from 'constants/strings';
@@ -20,7 +20,7 @@ import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import Loading from '../../../../Loading';
 
-const EditElementContent = ({ data, additionalData, onClose }) => {
+const EditElementContent = ({ data, onClose, assessmentFileInfo }) => {
   const [isLoading, toggleLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -98,29 +98,29 @@ const EditElementContent = ({ data, additionalData, onClose }) => {
 
     toggleLoading(true);
 
+    const { file } = assessmentFileInfo || {};
+    const fileData = file?.name ? { assessmentFile: file } : {};
+
     const getReclaimProps = (reclaim) => ({
       ...reclaim,
       claimCollector: getClaimCollectorId(reclaim.claimCollector),
       endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
+      ...fileData
     });
 
     if (createData.length > 0) {
       createData.forEach((reclaim) => {
-        let mainData = { ...getReclaimProps(reclaim), carePackageId: packageId };
+        const mainData = { ...getReclaimProps(reclaim), carePackageId: packageId };
 
-        if (additionalData) mainData = getFormData({ ...mainData, ...additionalData });
-
-        requests.push(createCareChargeReclaim(packageId, mainData));
+        requests.push(createCareChargeReclaim(packageId, getFormData(mainData)));
       });
     }
 
     if (editData.length > 0) {
       editData.forEach((reclaim) => {
-        let mainData = getReclaimProps(reclaim);
+        const mainData = getReclaimProps(reclaim);
 
-        if (additionalData) mainData = getFormData({ ...mainData, ...additionalData });
-
-        requests.push(updateCareChargeReclaim(packageId, mainData));
+        requests.push(updateCareChargeReclaim(packageId, getFormData(mainData)));
       });
     }
 

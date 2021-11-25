@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getUrlFromFile } from '../service';
 import { Container } from './HackneyDS/Layout/Container';
 import { VerticalSeparator } from './HackneyDS/Layout/VerticalSeparator';
@@ -7,12 +7,22 @@ const UrlFromFile = ({ file, removeFile }) => {
   if (!file) return <></>;
 
   const [isEdit, setIsEdit] = useState(false);
+  const [link, setLink] = useState('');
+
+  const getFile = async () => {
+    const result = await getUrlFromFile(file);
+    setLink(result);
+  };
+
+  useEffect(() => {
+    if (file) getFile();
+  }, [file]);
 
   return (
     <Container className="url-from-file" display="flex">
       <p>{file.name}</p>
       <VerticalSeparator width={8} />
-      <a target="_blank" className="link-button blue" href={getUrlFromFile(file)}>
+      <a target="_blank" href={link} className="link-button blue" rel="noreferrer">
         View
       </a>
       <VerticalSeparator width={8} />
@@ -27,7 +37,7 @@ const UrlFromFile = ({ file, removeFile }) => {
               Remove
             </p>
           </>
-        ) : <p onClick={() => setIsEdit(true)} className='link-button green'>Edit</p>
+        ) : <p onClick={() => setIsEdit(true)} className="link-button green">Edit</p>
       }
 
     </Container>
