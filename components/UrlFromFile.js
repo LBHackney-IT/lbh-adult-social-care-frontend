@@ -39,11 +39,7 @@ const UrlFromFile = ({ file, removeFile, linkText = 'View', showOnlyLink }) => {
               Cancel
             </p>
             <VerticalSeparator width={8} />
-            <p className="link-button red" onClick={() => removeFile({
-              updated: true,
-              file: undefined,
-              fileId: undefined,
-            })}>
+            <p className="link-button red" onClick={() => removeFile()}>
               Remove
             </p>
           </>

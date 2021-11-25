@@ -55,6 +55,7 @@ export const formatDocumentInfo = async ({ fileName, fileId, href }) => {
     }
     return { fileId, file: null, updated: false };
   }
+  return {};
 };
 
 export const getLoggedInUser = ({ req }) => {

@@ -63,7 +63,7 @@ const useBreadcrumbs = () => {
 const useModal = () => useToggle(false);
 
 const defaultValues = {
-  assessmentFileInfo: {},
+  assessmentFileInfo: undefined,
   [provisional]: {
     cost: '',
     claimCollector: '',
@@ -277,7 +277,7 @@ const CareCharge = () => {
     const includesFile = editedForms.includes('assessmentFileInfo');
     const data = [];
 
-    if (editedForms.includes(provisional) || includesFile)
+    if (editedForms.includes(provisional) || (includesFile && form[careChargeFormKeys.provisional].cost))
       data.push({
         id: careChargeFormKeys.provisional,
         displayData: createProvisionalData(),
@@ -288,7 +288,7 @@ const CareCharge = () => {
         reclaimId: getReclaimId(careChargeAPIKeys.provisional),
       });
 
-    if (editedForms.includes(less12) || includesFile) {
+    if (editedForms.includes(less12) || (includesFile && form[careChargeFormKeys.less12].cost)) {
       data.push({
         id: careChargeFormKeys.less12,
         displayData: createResidentialData(less12),
@@ -300,7 +300,7 @@ const CareCharge = () => {
       });
     }
 
-    if (editedForms.includes(more12) || includesFile) {
+    if (editedForms.includes(more12) || (includesFile && form[careChargeFormKeys.more12].cost)) {
       data.push({
         id: careChargeFormKeys.more12,
         displayData: createResidentialData(more12),
