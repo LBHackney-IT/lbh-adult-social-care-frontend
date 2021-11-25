@@ -41,8 +41,11 @@ export default function SearchBox({
     return handler(e);
   };
 
-  const onEnterPress = ({ key }) => {
-    if (key === 'Enter' && search) search?.();
+  const onEnterPress = (e) => {
+    if (e.key === 'Enter' && search) {
+      e.preventDefault();
+      search?.();
+    }
   };
 
   return (
@@ -61,7 +64,7 @@ export default function SearchBox({
           value={value || ''}
           name={name}
           onChange={onChange}
-          onKeyPress={onEnterPress}
+          onKeyPress={(e) => onEnterPress(e)}
           ref={dataProvider}
           type="search"
           placeholder={placeholder}
