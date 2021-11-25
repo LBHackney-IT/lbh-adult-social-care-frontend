@@ -131,13 +131,13 @@ const EditElementContent = ({ data, onClose, assessmentFileInfo }) => {
       }
 
       if (editData.length > 0) {
-        // editData.forEach((reclaim) => {
-        //   const mainData = getReclaimProps(reclaim);
-        //
-        //   editFormData.append('reclaims', JSON.stringify(mainData));
-        // });
-        const formattedEditData = editData.map(reclaim => getReclaimProps(reclaim));
-        editFormData.append('reclaims', JSON.stringify(formattedEditData))
+        editData.forEach((reclaim) => {
+          const mainData = getReclaimProps(reclaim);
+
+          editFormData.append('reclaims[]', mainData);
+        });
+        // const formattedEditData = editData.map(reclaim => getReclaimProps(reclaim));
+        // editFormData.append('reclaims', JSON.stringify(formattedEditData))
         addFileToFormData(editFormData);
         await updateCareChargeReclaim(packageId, editFormData);
       }
