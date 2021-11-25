@@ -8,7 +8,7 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
 
   return (
     <>
-      {invoiceItems.map(
+      {invoiceItems && invoiceItems?.map(
         (invoice) =>
           !invoice.isReclaim && (
             <React.Fragment key={invoice.id}>
@@ -51,7 +51,7 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
       >
         <HorizontalSeparator height="16px" />
         <Container borderBottom="1px solid #DEE0E2" />
-        {invoiceItems.map(
+        {invoiceItems?.map(
           (invoice) =>
             invoice.isReclaim && (
               <React.Fragment key={invoice.id}>

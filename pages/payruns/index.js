@@ -5,9 +5,9 @@ import { Breadcrumbs, Button, Container, Heading, HorizontalSeparator, Loading, 
 import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
-import { usePayrunView } from 'api/SWR/payRuns';
+import { usePayrunView, useHeldPaymentsView } from 'api/SWR/payRuns';
 import CreateDraftPayRun from '../../components/Pages/Finance/CreateDraftPayRun';
-import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
+import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -51,6 +51,7 @@ const Payruns = () => {
     [filters, pageNumber]
   );
   const { data, isLoading, mutate: update } = usePayrunView({ params });
+  const { data: hData, isLoading: isHeldLoading, mutate: updateHeldPayments } = useHeldPaymentsView({ params });
 
   const {
     data: payrunData,
@@ -60,6 +61,15 @@ const Payruns = () => {
       pageSize: 0,
     },
   } = data;
+
+  const {
+    data: heldData,
+    heldPagingMetaData = {
+      totalCount: 0,
+      totalPages: 0,
+      pageSize: 0,
+    },
+  } = hData;
 
   return (
     <Container>
@@ -97,18 +107,7 @@ const Payruns = () => {
             )}
           </Tab>
           <Tab>
-            <Loading className="loading" isLoading={isLoading} />
-            <PayrunList searchTerm={payRunId} data={payrunData} />
-            <HorizontalSeparator height="30px" />
-            {pageNumber && (
-              <AlternativePagination
-                totalPages={pagingMetaData.totalPages}
-                totalCount={pagingMetaData.totalCount}
-                pageSize={pagingMetaData.pageSize}
-                currentPage={pageNumber}
-                changePagination={setPageNumber}
-              />
-            )}
+            <HeldPaymentsList data={heldData} />
           </Tab>
         </Tabs>
       </Container>
