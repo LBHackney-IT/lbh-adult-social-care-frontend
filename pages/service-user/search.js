@@ -53,7 +53,7 @@ const BrokerPortalSearch = () => {
 
   return (
     <SearchServiceUser
-      className="broker-assistance__search"
+      className="broker-referral__search"
       isLoading={isLoading}
       setPageNumber={setPageNumber}
       changeFilters={changeFilters}
