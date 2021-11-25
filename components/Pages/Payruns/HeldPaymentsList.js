@@ -34,7 +34,7 @@ export const HeldPaymentsList = ({ searchTerm, data }) => {
               isButtonClickOnly
             >
               <HorizontalSeparator height="40px" />
-              <PayRunItem item={payRun.payRunInvoice} key={payRun.payRunId} searchTerm="a" padding="0" payRunId={payRun.payRunId} />
+              <PayRunItem item={payRun.payRunInvoice} key={payRun.payRunId} searchTerm="a" padding="0" payRunId={payRun.payRunId} update />
             </Collapse>
           </Container>
           {index < data.length - 1 && <HorizontalSeparator height="16px" />}
