@@ -3,10 +3,10 @@ import { Container, FormGroup, Heading, HorizontalSeparator, UploadGreenButton }
 import { Controller } from 'react-hook-form';
 import { TEXT_FILE_EXTENSIONS } from 'constants/variables';
 
-const FinancialAssessment = ({ control }) => (
+const UploadFile = ({ control, title }) => (
     <div className="financial-assessment">
       <Container>
-        <Heading size="m">Upload FNC Assessment...</Heading>
+        <Heading size="m">{title}</Heading>
         <HorizontalSeparator height={24} />
         <Controller
           name="assessmentFileInfo"
@@ -21,4 +21,4 @@ const FinancialAssessment = ({ control }) => (
     </div>
   )
 
-export default memo(FinancialAssessment);
+export default memo(UploadFile);

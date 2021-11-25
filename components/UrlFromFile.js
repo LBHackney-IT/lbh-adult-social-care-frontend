@@ -33,7 +33,12 @@ const UrlFromFile = ({ file, removeFile }) => {
               Cancel
             </p>
             <VerticalSeparator width={8} />
-            <p className="link-button red" onClick={() => removeFile(null)}>
+            <p className="link-button red" onClick={() => removeFile({
+              updated: true,
+              file: null,
+              fileName: null,
+              fileId: null,
+            })}>
               Remove
             </p>
           </>

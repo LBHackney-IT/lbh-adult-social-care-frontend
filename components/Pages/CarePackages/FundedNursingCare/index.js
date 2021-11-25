@@ -25,7 +25,7 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
-import FinancialAssessment from '../CareCharge/FinancialAssessment';
+import UploadFile from '../CareCharge/UploadFile';
 
 const collectedByType = {
   hackney: 'gross',
@@ -77,14 +77,17 @@ const FundedNursingCare = ({
     defaultValues: {
       claimCollector: '',
       description: '',
-      assessmentFileInfo: undefined,
+      assessmentFileInfo: {
+        fileId: null,
+        file: null,
+      },
     },
   });
   const onSubmit = (data) => clickSave(data);
 
   const [claimCollector, assessmentFileInfo] = watch(['claimCollector', 'assessmentFileInfo']);
 
-  const { data: href, isLoading: documentLoading } = useDocument(assessmentFileInfo?.fileId);
+  const { data: href, isLoading: documentLoading } = useDocument(assessmentFileInfo.fileId);
 
   const clickBack = () => {
     if (isFunction(goBack())) goBack();
@@ -164,12 +167,12 @@ const FundedNursingCare = ({
 
     delete newData.assessmentFileInfo;
 
-    if (assessmentFileInfo?.file) {
-      const { file, fileName, fileId } = assessmentFileInfo;
-      if (file.name === fileName) {
-        newData.assessmentFileId = fileId;
-      } else {
+    const { file, updated, fileId } = assessmentFileInfo;
+    if (file) {
+      if (updated) {
         newData.assessmentFile = file;
+      } else {
+        newData.assessmentFileId = fileId;
       }
     }
 
@@ -212,7 +215,7 @@ const FundedNursingCare = ({
       let fileData;
 
       if (carePackageReclaimFnc.assessmentFileName) {
-        fileData = await formatDocumentInfo({
+        fileData = !assessmentFileInfo.updated && await formatDocumentInfo({
           href,
           fileName: carePackageReclaimFnc.assessmentFileName,
           fileId: carePackageReclaimFnc.assessmentFileId
@@ -312,7 +315,7 @@ const FundedNursingCare = ({
           {hasFNC === 'yes' && (
             <>
               <HorizontalSeparator height={32} />
-              <FinancialAssessment control={control} />
+              <UploadFile title='Upload FNC Assessment...' control={control} />
             </>
           )}
           <HorizontalSeparator height={50} />

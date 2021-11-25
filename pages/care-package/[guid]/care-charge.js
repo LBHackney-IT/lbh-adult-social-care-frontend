@@ -6,7 +6,7 @@ import {
   Container,
   EditElementModal,
   EndElementModal,
-  FinancialAssessment,
+  UploadFile,
   Loading,
   ProvisionalCareCharge,
   ResidentialSUContribution,
@@ -157,7 +157,7 @@ const CareCharge = () => {
       const someOfFileName = provisionalData.assessmentFileName || less12Data.assessmentFileName || more12Data.assessmentFileName;
       const someOfFileId = provisionalData.assessmentFileId || less12Data.assessmentFileId || more12Data.assessmentFileId;
 
-      const fileData = await formatDocumentInfo({
+      const fileData = !assessmentFileInfo?.updated && await formatDocumentInfo({
         fileId: someOfFileId,
         href,
         fileName: someOfFileName
@@ -364,14 +364,20 @@ const CareCharge = () => {
     async (form) => {
       const fields = [];
 
-      if (formState.dirtyFields[provisional]) {
+      if (
+        formState.dirtyFields[provisional] ||
+        (assessmentFileInfo?.file && form[provisional]?.cost && form[provisional]?.claimCollector)
+      ) {
         fields.push(
           { formKey: provisional, field: 'cost', value: Number(form[provisional].cost) },
           { formKey: provisional, field: 'claimCollector', value: String(form[provisional].claimCollector) }
         );
       }
 
-      if (formState.dirtyFields[less12]) {
+      if (
+        formState.dirtyFields[less12] ||
+        (assessmentFileInfo?.file && form[less12]?.cost && form[less12]?.claimCollector && form[less12].startDate)
+      ) {
         fields.push(
           { formKey: less12, field: 'cost', value: form[less12].cost },
           { formKey: less12, field: 'claimCollector', value: form[less12].claimCollector },
@@ -379,7 +385,10 @@ const CareCharge = () => {
         );
       }
 
-      if (formState.dirtyFields[more12]) {
+      if (
+        formState.dirtyFields[more12] ||
+        (assessmentFileInfo?.file && form[more12]?.cost && form[more12]?.claimCollector && form[more12].startDate)
+      ) {
         fields.push(
           { formKey: more12, field: 'cost', value: form[more12].cost },
           { formKey: more12, field: 'claimCollector', value: form[more12].claimCollector },
@@ -434,7 +443,7 @@ const CareCharge = () => {
           isMore12
         />
 
-        <FinancialAssessment control={control} />
+        <UploadFile title='Upload FNC Assessment...' control={control} />
 
         <Container className="brokerage__actions">
           <Button secondary color="gray" onClick={router.back}>

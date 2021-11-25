@@ -51,9 +51,9 @@ export const formatDocumentInfo = async ({ fileName, fileId, href }) => {
   if (fileName) {
     if (href) {
       const fileFromUrl = await urlToFile(href, fileName);
-      return { file: fileFromUrl, fileId, fileName };
+      return { file: fileFromUrl, fileId, updated: true };
     }
-    return { fileId, fileName };
+    return { fileId, file: null, updated: false };
   }
 };
 

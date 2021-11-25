@@ -98,13 +98,21 @@ const EditElementContent = ({ data, onClose, assessmentFileInfo }) => {
 
     toggleLoading(true);
 
-    const { file } = assessmentFileInfo || {};
-    const fileData = file?.name ? { assessmentFile: file } : {};
+    const { file, fileId } = assessmentFileInfo || {};
+    let fileData = {};
+    if (file?.name) {
+      if (file.updated) {
+        fileData = { assessmentFile: file };
+      } else {
+        fileData = { assessmentFileId: fileId };
+      }
+    }
 
     const getReclaimProps = (reclaim) => ({
       ...reclaim,
+      startDate: reclaim.startDate?.toJSON?.(),
       claimCollector: getClaimCollectorId(reclaim.claimCollector),
-      endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
+      endDate: reclaim.isOngoing ? undefined : reclaim.endDate?.toJSON?.(),
       ...fileData
     });
 

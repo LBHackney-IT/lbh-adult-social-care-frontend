@@ -31,7 +31,7 @@ export { default as HistoryOverview } from './Pages/CarePackages/History/History
 // Care Charge
 export { default as ProvisionalCareCharge } from './Pages/CarePackages/CareCharge/ProvisionalCareCharge';
 export { default as ResidentialSUContribution } from './Pages/CarePackages/CareCharge/ResidentialSUContribution';
-export { default as FinancialAssessment } from './Pages/CarePackages/CareCharge/FinancialAssessment';
+export { default as UploadFile } from './Pages/CarePackages/CareCharge/UploadFile';
 export { default as EditElementModal } from './Pages/CarePackages/CareCharge/EditElementModal';
 export { default as CancelElementModal } from './Pages/CarePackages/CareCharge/CancelElementModal';
 export { default as EndElementModal } from './Pages/CarePackages/CareCharge/EndElementModal';
