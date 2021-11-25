@@ -3,8 +3,8 @@ import { getUrlFromFile } from '../service';
 import { Container } from './HackneyDS/Layout/Container';
 import { VerticalSeparator } from './HackneyDS/Layout/VerticalSeparator';
 
-const UrlFromFile = ({ file, removeFile }) => {
-  if (!file) return <></>;
+const UrlFromFile = ({ file, removeFile, linkText = 'View', showOnlyLink }) => {
+  if (!file && !showOnlyLink) return <></>;
 
   const [isEdit, setIsEdit] = useState(false);
   const [link, setLink] = useState('');
@@ -18,13 +18,19 @@ const UrlFromFile = ({ file, removeFile }) => {
     if (file) getFile();
   }, [file]);
 
+  const linkFileComponent = (
+    <a target="_blank" href={link} className="link-button blue" rel="noreferrer">
+      {linkText}
+    </a>
+  );
+
+  if (showOnlyLink) return file ? linkFileComponent : <p>N/A</p>;
+
   return (
     <Container className="url-from-file" display="flex">
       <p>{file.name}</p>
       <VerticalSeparator width={8} />
-      <a target="_blank" href={link} className="link-button blue" rel="noreferrer">
-        View
-      </a>
+      {linkFileComponent}
       <VerticalSeparator width={8} />
       {
         isEdit ? (
@@ -35,9 +41,8 @@ const UrlFromFile = ({ file, removeFile }) => {
             <VerticalSeparator width={8} />
             <p className="link-button red" onClick={() => removeFile({
               updated: true,
-              file: null,
-              fileName: null,
-              fileId: null,
+              file: undefined,
+              fileId: undefined,
             })}>
               Remove
             </p>

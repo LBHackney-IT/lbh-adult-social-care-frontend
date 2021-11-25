@@ -63,7 +63,7 @@ const useBreadcrumbs = () => {
 const useModal = () => useToggle(false);
 
 const defaultValues = {
-  assessmentFileInfo: undefined,
+  assessmentFileInfo: {},
   [provisional]: {
     cost: '',
     claimCollector: '',
@@ -409,10 +409,12 @@ const CareCharge = () => {
     [formState.isDirty, onEdit, goToPackages]
   );
 
+  const isLoading = documentLoading || coreLoading || packageInfoLoading || lookupsLoading || careChargeLoading;
+
   return (
     <div className="care-charge">
 
-      <Loading isLoading={documentLoading || coreLoading || packageInfoLoading || lookupsLoading || careChargeLoading} />
+      <Loading isLoading={isLoading} />
 
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
         <Breadcrumbs values={breadcrumbs} />
@@ -449,7 +451,7 @@ const CareCharge = () => {
           <Button secondary color="gray" onClick={router.back}>
             Back
           </Button>
-          <Button onClick={handleSubmit(onSubmit)}>Save and continue</Button>
+          <Button disabled={isLoading} isLoading={isLoading} onClick={handleSubmit(onSubmit)}>Save and continue</Button>
         </Container>
       </Container>
 

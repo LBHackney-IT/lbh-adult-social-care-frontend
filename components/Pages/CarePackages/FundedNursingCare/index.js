@@ -77,10 +77,7 @@ const FundedNursingCare = ({
     defaultValues: {
       claimCollector: '',
       description: '',
-      assessmentFileInfo: {
-        fileId: null,
-        file: null,
-      },
+      assessmentFileInfo: {},
     },
   });
   const onSubmit = (data) => clickSave(data);

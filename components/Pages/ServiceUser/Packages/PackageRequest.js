@@ -1,28 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   formatDate,
+  formatDocumentInfo,
+  getButtonColourFromPackageStatus,
   getButtonTextFromPackageStatus,
   getTagColorFromStatus,
-  getButtonColourFromPackageStatus,
 } from 'service';
 import { CaretDownIcon } from 'components/Icons';
 import { useRouter } from 'next/router';
 import { getCorePackageRoute } from 'routes/RouteConstants';
-import {
-  Button,
-  Container,
-  Collapse,
-  Heading,
-  HorizontalSeparator,
-  Link,
-  Tag,
-  VerticalSeparator
-} from '../../../HackneyDS';
+import { useDocument } from 'api';
+import { Button, Collapse, Container, Heading, HorizontalSeparator, Tag, VerticalSeparator } from '../../../HackneyDS';
+import UrlFromFile from '../../../UrlFromFile';
 
 const PackageRequest = ({ packageRequest }) => {
   const router = useRouter();
   const buttonClass = `${getButtonColourFromPackageStatus(packageRequest.packageStatus)} package-request-button`;
   const handleClick = () => router.push(getCorePackageRoute(packageRequest.packageId));
+
+  const [file, setFile] = useState();
+
+  const { data: href } = useDocument(packageRequest.assessmentFileId);
+
+  useEffect(() => {
+    if (href) {
+      (async () => {
+        const { assessmentFileId, assessmentFileName } = packageRequest;
+        const formatFile = await formatDocumentInfo({
+          href,
+          fileName: assessmentFileName,
+          fileId: assessmentFileId
+        });
+        setFile(formatFile);
+      })();
+    }
+  }, [href]);
+
   return (
     <Container borderBottom="1px solid #BFC1C3" border="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
       <Container display="flex" alignItems="center">
@@ -41,7 +54,7 @@ const PackageRequest = ({ packageRequest }) => {
           </Container>
           <Container>
             <p>Care Plan</p>
-            <Link>View</Link>
+            <UrlFromFile showOnlyLink file={file} />
           </Container>
           <Container>
             <p>Assigned</p>
