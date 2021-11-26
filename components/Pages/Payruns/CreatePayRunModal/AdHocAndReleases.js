@@ -1,5 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { Button, Container, DatePicker, FormGroup, HorizontalSeparator, RadioGroup } from 'components';
+import {
+  Button,
+  Container,
+  DatePicker,
+  FormGroup,
+  HorizontalSeparator,
+  RadioGroup,
+  VerticalSeparator,
+} from 'components';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { formValidationSchema } from 'service/formValidationSchema';
@@ -9,7 +17,7 @@ const cycleOptions = [
   { id: 4, label: 'Direct payments released holds' },
 ];
 
-export const AdHocAndReleases = ({ createPayrun, isLoading }) => {
+export const AdHocAndReleases = ({ createPayrun, isLoading, onClose }) => {
   const {
     handleSubmit,
     control,
@@ -77,7 +85,11 @@ export const AdHocAndReleases = ({ createPayrun, isLoading }) => {
           />
         </FormGroup>
         <HorizontalSeparator height="20px" />
-        <Container display="flex" justifyContent="flex-end">
+        <Container display="flex" justifyContent="flex-start">
+          <Button type="button" onClick={onClose} outline secondary color="gray">
+            Cancel
+          </Button>
+          <VerticalSeparator width="10px" />
           <Button type="submit" isLoading={isLoading}>
             Create
           </Button>

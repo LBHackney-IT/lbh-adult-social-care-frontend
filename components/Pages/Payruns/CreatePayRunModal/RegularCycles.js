@@ -41,7 +41,6 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
             control={control}
             render={({ field }) => (
               <RadioGroup
-                // name="type"
                 error={errors.type?.message}
                 small
                 handle={field.onChange}
@@ -69,7 +68,7 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
         </FormGroup>
         <HorizontalSeparator height="20px" />
         <Container display="flex" justifyContent="flex-start">
-          <Button type="button" onClick={onClose}>
+          <Button type="button" onClick={onClose} outline secondary color='gray'>
             Cancel
           </Button>
           <VerticalSeparator width="10px" />

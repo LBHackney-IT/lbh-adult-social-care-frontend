@@ -42,21 +42,19 @@ const CreatePayRunModal = ({ isOpen, onClose, update }) => {
     setIsLoading(false);
   };
 
-  const tabs = ['Regular Cycles', 'Ad-Hoc and Releases'];
+  const tabs = ['Regular Cycles', 'Ad-Hoc/Releases'];
   return (
     <Dialog isOpen={isOpen} onClose={onClose}>
-      <Container display="flex" flexDirection="column">
-        <Heading size="l">New Additional Need</Heading>
-        <HorizontalSeparator height="30px" />
-        <Tabs tabs={tabs}>
-          <Tab>
-            <RegularCycles createPayrun={handleSubmit} isLoading={isLoading} />
-          </Tab>
-          <Tab>
-            <AdHocAndReleases createPayrun={handleSubmit} isLoading={isLoading} />
-          </Tab>
-        </Tabs>
-      </Container>
+      <Heading size="l">New Additional Need</Heading>
+      <HorizontalSeparator height="30px" />
+      <Tabs tabs={tabs}>
+        <Tab>
+          <RegularCycles createPayrun={handleSubmit} isLoading={isLoading} onClose={onClose} />
+        </Tab>
+        <Tab>
+          <AdHocAndReleases createPayrun={handleSubmit} isLoading={isLoading} onClose={onClose} />
+        </Tab>
+      </Tabs>
     </Dialog>
   );
 };
