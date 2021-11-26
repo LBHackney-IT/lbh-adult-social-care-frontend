@@ -47,17 +47,19 @@ const PackageRequest = ({ packageRequest }) => {
       </Container>
       <HorizontalSeparator height="20px" />
       <Container display="flex" justifyContent="space-between">
-        <Container className="user-details">
+        <Container display="flex">
           <Container>
-            <p>Package</p>
+            <Heading size="m">Package</Heading>
             <p>{packageRequest.packageType}</p>
           </Container>
+          <VerticalSeparator width="20px" />
           <Container>
-            <p>Care Plan</p>
+            <Heading size="m">Care Plan</Heading>
             <UrlFromFile showOnlyLink file={file?.file} />
           </Container>
+          <VerticalSeparator width="20px" />
           <Container>
-            <p>Assigned</p>
+            <Heading size="m">Assigned</Heading>
             <p>{formatDate(packageRequest.dateAssigned)}</p>
           </Container>
         </Container>
