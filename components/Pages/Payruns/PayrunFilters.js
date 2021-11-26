@@ -20,7 +20,7 @@ const typeOptions = [
   { text: 'Direct Payments', value: '2' },
 ];
 
-export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
+export const PayrunFilters = ({ filters, setFilters, clearFilter, tabView }) => {
   const [searchText, setSearchText] = useState('');
   const changeFilterField = useCallback(
     (field, value) => {
@@ -52,6 +52,7 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
         <VerticalSeparator width="20px" />
         <FormGroup label="Status" inlineLabel smallLabel>
           <Select
+            disabled={(tabView && tabView === 'Awaiting Approval') || tabView === 'Approved'}
             emptyElement={null}
             options={statusOptions}
             value={filters.payRunStatus}
