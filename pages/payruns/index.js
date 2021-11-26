@@ -7,7 +7,7 @@ import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { usePayrunView, useHeldPaymentsView } from 'api/SWR/payRuns';
 import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
-import CreateDraftPayRun from '../../components/Pages/Finance/CreateDraftPayRun';
+import CreatePayRunModal from 'components/Pages/Payruns/CreatePayRunModal/CreatePayRunModal';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -78,7 +78,7 @@ const Payruns = () => {
 
   return (
     <Container>
-      <CreateDraftPayRun isOpened={isOpenedModal} setIsOpened={setIsOpenedModal} update={update} />
+      <CreatePayRunModal isOpen={isOpenedModal} onClose={() => setIsOpenedModal(false)} update={update} />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <HorizontalSeparator height="10px" />
