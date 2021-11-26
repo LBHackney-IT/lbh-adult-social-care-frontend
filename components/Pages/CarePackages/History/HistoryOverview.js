@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useDocument, usePackageHistory } from 'api';
-import { formatDate } from 'service';
+import { formatDate, formatDocumentInfo } from 'service';
 import UrlFromFile from '../../../UrlFromFile';
 
 const HistoryOverview = () => {
@@ -24,9 +24,16 @@ const HistoryOverview = () => {
 
   useEffect(() => {
     if (href) {
-      setFile(href);
+      (async () => {
+        const formatFile = await formatDocumentInfo({
+          href,
+          fileName: socialWorkerCarePlanFileName,
+          fileId: socialWorkerCarePlanFileId
+        });
+        setFile(formatFile);
+      })();
     }
-  }, [])
+  }, [href]);
 
   const overviewData = useMemo(() => [
     { value: brokeredBy ?? '-', label: 'Brokered by' },

@@ -20,16 +20,16 @@ const PackageRequest = ({ packageRequest }) => {
 
   const [file, setFile] = useState();
 
-  const { data: href } = useDocument(packageRequest.assessmentFileId);
+  const { data: href } = useDocument(packageRequest.socialWorkerCarePlanFileName && packageRequest.socialWorkerCarePlanFileId);
 
   useEffect(() => {
     if (href) {
       (async () => {
-        const { assessmentFileId, assessmentFileName } = packageRequest;
+        const { socialWorkerCarePlanFileId, socialWorkerCarePlanFileName } = packageRequest;
         const formatFile = await formatDocumentInfo({
           href,
-          fileName: assessmentFileName,
-          fileId: assessmentFileId
+          fileName: socialWorkerCarePlanFileName,
+          fileId: socialWorkerCarePlanFileId
         });
         setFile(formatFile);
       })();
@@ -54,7 +54,7 @@ const PackageRequest = ({ packageRequest }) => {
           </Container>
           <Container>
             <p>Care Plan</p>
-            <UrlFromFile showOnlyLink file={file} />
+            <UrlFromFile showOnlyLink file={file?.file} />
           </Container>
           <Container>
             <p>Assigned</p>

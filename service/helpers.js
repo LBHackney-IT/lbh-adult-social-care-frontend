@@ -34,6 +34,7 @@ export const incrementDate = (incrementTime, date = new Date()) => {
 export const formatDate = (date, formatString = 'dd.MM.yy') => date && format(new Date(date), formatString);
 
 export const getUrlFromFile = async (file) => {
+  console.log(file);
   if (isServer() || !file) return;
   if (file?.url) return file.url;
 
