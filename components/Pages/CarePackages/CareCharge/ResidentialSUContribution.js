@@ -16,7 +16,7 @@ const useDatesValidation = (isMore12, control, setValue, formKey) => {
   const endDate12weeks = useWatch({ control, name: `${less12}.endDate` });
   const isOngoing = useWatch({ control, name: `${more12}.isOngoing` });
 
-  const less12MaxEndDate = useMemo(() => getEndDate(startDate), [isMore12, startDate]);
+  const less12MaxEndDate = useMemo(() => getEndDate(startDate), [startDate]);
 
   useEffect(() => {
     // once 1-12 weeks startDate is set - also set endDate

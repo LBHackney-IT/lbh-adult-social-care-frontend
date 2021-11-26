@@ -186,14 +186,14 @@ const CareCharge = () => {
         [less12]: {
           cost: less12Data.cost ?? '',
           claimCollector: less12Data.claimCollector ? `${less12}-${less12Data.claimCollector}` : null,
-          startDate: less12Data.startDate,
-          endDate: less12Data.endDate,
+          startDate: less12Data.startDate ? new Date(less12Data.startDate) : null,
+          endDate: less12Data.endDate ? new Date(less12Data.endDate) : null,
         },
         [more12]: {
           cost: more12Data.cost ?? '',
           claimCollector: more12Data.claimCollector ? `${more12}-${more12Data.claimCollector}` : null,
-          startDate: more12Data.startDate,
-          endDate: more12Data.endDate,
+          startDate: more12Data.startDate ? new Date(more12Data.startDate) : null,
+          endDate: more12Data.endDate ? new Date(more12Data.endDate) : null,
           isOngoing: false,
         },
         fileInfo: fileData
