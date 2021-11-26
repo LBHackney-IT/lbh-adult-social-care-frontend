@@ -48,6 +48,12 @@ const ResidentialSuContribution = ({
   const formKey = isMore12 ? more12 : less12;
   const description = `Without Property ${weeks} weeks`;
 
+  const getAdditional13Weeks = (date) => date ? addWeeks(new Date(date), 13) : null;
+
+  const isMore12MinStartDate = useMemo(() => (
+    isMore12 ? getAdditional13Weeks(coreStartDate) : null
+  ), [isMore12, coreStartDate]);
+
   const status = useGetChargeStatus(isMore12 ? careChargeAPIKeys.more12 : careChargeAPIKeys.less12);
   const claimCollectorOptions = useClaimCollectorOptions(formKey);
 
@@ -115,7 +121,7 @@ const ResidentialSuContribution = ({
                   day={{ label: 'From' }}
                   date={field.value ? new Date(field.value) : null}
                   setDate={field.onChange}
-                  minDate={coreStartDate || minFromDate}
+                  minDate={isMore12MinStartDate || coreStartDate || minFromDate}
                   maxDate={coreEndDate}
                   disabled={isDisabled}
                 />
@@ -131,6 +137,7 @@ const ResidentialSuContribution = ({
             control={control}
             render={({ field }) => (
               <DatePicker
+                checkMinDate
                 day={{ label: 'To' }}
                 date={field.value}
                 setDate={field.onChange}

@@ -6,11 +6,11 @@ import {
   Container,
   EditElementModal,
   EndElementModal,
-  UploadFile,
   Loading,
   ProvisionalCareCharge,
   ResidentialSUContribution,
   TitleSubtitleHeader,
+  UploadFile,
 } from 'components';
 import { currency } from 'constants/strings';
 import withSession from 'lib/session';
@@ -136,10 +136,9 @@ const CareCharge = () => {
 
   const fileInfo = watch('fileInfo');
 
-  const { startDate: less12StartDateString, endDate: less12EndDateString } = watch(less12) || {};
+  const { endDate: less12EndDateString } = watch(less12) || {};
 
   const less12EndDate = less12EndDateString ? addDays(new Date(less12EndDateString), 1) : null;
-  const less12StartDate = less12StartDateString ? new Date(less12StartDateString) : null;
 
   const { data: href, isLoading: documentLoading } = useDocument(fileInfo?.fileId);
 
@@ -456,7 +455,7 @@ const CareCharge = () => {
         <ResidentialSUContribution
           errors={errors[more12]}
           onCancel={() => onCancel(more12)}
-          coreStartDate={less12EndDate || less12StartDate || coreStartDate}
+          coreStartDate={less12EndDate}
           coreEndDate={coreEndDate}
           onEnd={() => onEnd(more12)}
           setValue={setValue}
@@ -464,7 +463,7 @@ const CareCharge = () => {
           isMore12
         />
 
-        <UploadFile title='Upload FNC Assessment...' control={control} />
+        <UploadFile title="Upload FNC Assessment..." control={control} />
 
         <Container className="brokerage__actions">
           <Button secondary color="gray" onClick={router.back}>
