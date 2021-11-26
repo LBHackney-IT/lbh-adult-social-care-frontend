@@ -15,7 +15,7 @@ export const compareDescendingDMY = (startDate, endDate) => {
   return compareDesc(resetStartDate, resetEndDate);
 };
 
-export const hasUrl = (id, string) => id !== undefined ? string : null;
+export const hasUrl = (id, string) => (id !== undefined ? string : null);
 
 export const incrementDate = (incrementTime, date = new Date()) => {
   const { years = 0, months = 0, days = 0, weeks = 0, hours = 0, minutes = 0, seconds = 0 } = incrementTime;
@@ -64,4 +64,4 @@ export const getLoggedInUser = ({ req }) => {
   return user;
 };
 
-export const getNumberWithCommas = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export const getNumberWithCommas = (x) => x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
