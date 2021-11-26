@@ -169,11 +169,11 @@ const FundedNursingCare = ({
 
       let fileData;
 
-      if (carePackageReclaimFnc.assessmentFileName) {
+      if (carePackageReclaimFnc.socialWorkerCarePlanFileName) {
         fileData = !fileInfo?.updated && await formatDocumentInfo({
           href,
-          fileName: carePackageReclaimFnc.assessmentFileName,
-          fileId: carePackageReclaimFnc.assessmentFileId
+          fileName: carePackageReclaimFnc.socialWorkerCarePlanFileName,
+          fileId: carePackageReclaimFnc.socialWorkerCarePlanFileId
         });
         setHasFNC('yes');
       }
