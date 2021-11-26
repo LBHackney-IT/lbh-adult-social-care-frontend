@@ -130,7 +130,8 @@
 
   .react-date-picker {
     position: absolute;
-    top: 32px;
-    left: 0;
+    z-index: 3;
+    top: -50px;
+    right: -100px;
   }
 }
