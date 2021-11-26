@@ -12,7 +12,6 @@ export const FileUpload = ({
 }) => {
 
   const changeInput = (e) => {
-    console.log(fileInfo);
     if (setFile) return setFile({
       ...fileInfo,
       file: e.target.files[0],

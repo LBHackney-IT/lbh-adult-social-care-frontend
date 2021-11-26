@@ -18,6 +18,7 @@ import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import Loading from '../../../../Loading';
+import { getFormData } from '../../../../../service/getFormData';
 
 const EditElementContent = ({ data, onClose, assessmentFileInfo }) => {
   const [isLoading, toggleLoading] = useState(false);
@@ -117,27 +118,22 @@ const EditElementContent = ({ data, onClose, assessmentFileInfo }) => {
 
     try {
       if (createData.length > 0) {
-        createData.forEach((reclaim) => { // todo first way to make formData with array
+        createData.forEach((reclaim, index) => { // todo first way to make formData with array
           const mainData = { ...getReclaimProps(reclaim), carePackageId: packageId };
 
-          createFormData.append('reclaims[]', mainData);
+          getFormData(mainData, createFormData, `reclaims[${index}]`);
         });
 
-        // todo second way to make formData with array
-        // const formattedCreateData = createData.map(reclaim => getReclaimProps(reclaim));
-        // createFormData.append('reclaims', JSON.stringify(formattedCreateData))
         addFileToFormData(createFormData)
         await createCareChargeReclaim(packageId, createFormData);
       }
 
       if (editData.length > 0) {
-        editData.forEach((reclaim) => {
+        editData.forEach((reclaim, index) => {
           const mainData = getReclaimProps(reclaim);
 
-          editFormData.append('reclaims[]', mainData);
+          getFormData(mainData, editFormData, `reclaims[${index}]`);
         });
-        // const formattedEditData = editData.map(reclaim => getReclaimProps(reclaim));
-        // editFormData.append('reclaims', JSON.stringify(formattedEditData))
         addFileToFormData(editFormData);
         await updateCareChargeReclaim(packageId, editFormData);
       }
