@@ -16,12 +16,7 @@ const useDatesValidation = (isMore12, control, setValue, formKey) => {
   const endDate12weeks = useWatch({ control, name: `${less12}.endDate` });
   const isOngoing = useWatch({ control, name: `${more12}.isOngoing` });
 
-  const maxEndDate = useMemo(() => {
-    // for 1-12 weeks
-    if (!isMore12 && startDate) return getEndDate(startDate);
-    // null for 13+ weeks
-    return null;
-  }, [isMore12, startDate]);
+  const less12MaxEndDate = useMemo(() => getEndDate(startDate), [isMore12, startDate]);
 
   useEffect(() => {
     // once 1-12 weeks startDate is set - also set endDate
@@ -33,13 +28,22 @@ const useDatesValidation = (isMore12, control, setValue, formKey) => {
 
   return {
     startDate,
-    maxEndDate,
+    less12MaxEndDate,
     minFromDate: formKey === less12 ? null : endDate12weeks,
     isOngoing,
   };
 };
 
-const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEnd, errors }) => {
+const ResidentialSuContribution = ({
+  isMore12,
+  control,
+  setValue,
+  onCancel,
+  onEnd,
+  errors,
+  coreStartDate,
+  coreEndDate,
+}) => {
   const weeks = isMore12 ? '13+' : '1-12';
   const formKey = isMore12 ? more12 : less12;
   const description = `Without Property ${weeks} weeks`;
@@ -49,7 +53,14 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
 
   const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
 
-  const { startDate, maxEndDate, minFromDate, isOngoing } = useDatesValidation(isMore12, control, setValue, formKey);
+  const { startDate, less12MaxEndDate, minFromDate, isOngoing } = useDatesValidation(
+    isMore12,
+    control,
+    setValue,
+    formKey,
+    coreStartDate,
+    coreEndDate
+  );
 
   return (
     <div className="residential-contribution">
@@ -104,7 +115,8 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
                   day={{ label: 'From' }}
                   date={field.value ? new Date(field.value) : null}
                   setDate={field.onChange}
-                  minDate={minFromDate}
+                  minDate={coreStartDate || minFromDate}
+                  maxDate={coreEndDate}
                   disabled={isDisabled}
                 />
               )}
@@ -124,7 +136,7 @@ const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEn
                 setDate={field.onChange}
                 disabled={isDisabled || (isMore12 && isOngoing)}
                 minDate={startDate}
-                maxDate={maxEndDate}
+                maxDate={isMore12 ? coreEndDate : less12MaxEndDate}
               />
             )}
           />

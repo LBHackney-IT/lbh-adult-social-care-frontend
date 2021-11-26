@@ -21,9 +21,10 @@ import { useToggle } from 'react-use';
 import { formatDate, formatDocumentInfo, getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
 import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
-import { useDocument, useLookups, usePackageCareCharge, useSingleCorePackageInfo } from 'api';
+import { useDocument, useLookups, usePackageCareCharge, usePackageDetails, useSingleCorePackageInfo } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import * as yup from 'yup';
+import { addDays } from 'date-fns';
 
 const { provisional, more12, less12 } = careChargeFormKeys;
 
@@ -122,11 +123,23 @@ const CareCharge = () => {
   const router = useRouter();
   const { guid: routerPackageId } = router.query;
 
+  const { data: detailsData, isLoading: detailsLoading } = usePackageDetails(routerPackageId);
+
+  const { startDate, endDate } = detailsData || {};
+
+  const coreStartDate = startDate ? new Date(startDate) : null;
+  const coreEndDate = endDate ? new Date(endDate) : null;
+
   const [packageId, setPackageId] = useState(null);
 
   const { handleSubmit, control, formState, setValue, getValues, reset, watch } = useForm({ defaultValues });
 
   const fileInfo = watch('fileInfo');
+
+  const { startDate: less12StartDateString, endDate: less12EndDateString } = watch(less12) || {};
+
+  const less12EndDate = less12EndDateString ? addDays(new Date(less12EndDateString), 1) : null;
+  const less12StartDate = less12StartDateString ? new Date(less12StartDateString) : null;
 
   const { data: href, isLoading: documentLoading } = useDocument(fileInfo?.fileId);
 
@@ -409,7 +422,7 @@ const CareCharge = () => {
     [formState.isDirty, onEdit, goToPackages]
   );
 
-  const isLoading = documentLoading || coreLoading || packageInfoLoading || lookupsLoading || careChargeLoading;
+  const isLoading = documentLoading || coreLoading || packageInfoLoading || lookupsLoading || careChargeLoading || detailsLoading;
 
   return (
     <div className="care-charge">
@@ -425,6 +438,8 @@ const CareCharge = () => {
           errors={errors[provisional]}
           onCancel={() => onCancel(provisional)}
           onEnd={() => onEnd(provisional)}
+          coreStartDate={coreStartDate}
+          coreEndDate={coreEndDate}
           control={control}
         />
 
@@ -433,12 +448,16 @@ const CareCharge = () => {
           onCancel={() => onCancel(less12)}
           onEnd={() => onEnd(less12)}
           setValue={setValue}
+          coreStartDate={coreStartDate}
+          coreEndDate={coreEndDate}
           control={control}
         />
 
         <ResidentialSUContribution
           errors={errors[more12]}
           onCancel={() => onCancel(more12)}
+          coreStartDate={less12EndDate || less12StartDate || coreStartDate}
+          coreEndDate={coreEndDate}
           onEnd={() => onEnd(more12)}
           setValue={setValue}
           control={control}

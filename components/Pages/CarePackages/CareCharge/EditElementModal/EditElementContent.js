@@ -11,14 +11,13 @@ import {
 } from 'api';
 import { currency } from 'constants/strings';
 import { careChargeAPIKeys } from 'constants/variables';
-import { formatDate } from 'service';
+import { formatDate, getFormData } from 'service';
 import { addNotification } from 'reducers/notificationsReducer';
 import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import Loading from '../../../../Loading';
-import { getFormData } from '../../../../../service/getFormData';
 
 const EditElementContent = ({ data, onClose, fileInfo }) => {
   const [isLoading, toggleLoading] = useState(false);
@@ -96,7 +95,6 @@ const EditElementContent = ({ data, onClose, fileInfo }) => {
 
     toggleLoading(true);
 
-    const createFormData = new FormData();
     const editFormData = new FormData();
 
     const { file, fileId, updated } = fileInfo || {};
@@ -118,14 +116,13 @@ const EditElementContent = ({ data, onClose, fileInfo }) => {
 
     try {
       if (createData.length > 0) {
-        createData.forEach((reclaim, index) => {
+        for await (const reclaim of createData) {
           const mainData = { ...getReclaimProps(reclaim), carePackageId: packageId };
 
-          getFormData(mainData, createFormData, `reclaims[${index}]`);
-        });
-
-        addFileToFormData(createFormData)
-        await createCareChargeReclaim(packageId, createFormData);
+          const createFormData = getFormData(mainData);
+          addFileToFormData(createFormData);
+          await createCareChargeReclaim(packageId, createFormData);
+        }
       }
 
       if (editData.length > 0) {
