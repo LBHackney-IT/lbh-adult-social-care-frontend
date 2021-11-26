@@ -12,6 +12,7 @@ const BrokeragePackageDates = ({
   startMaxDate,
   showError = true,
   hasEndMinDate = true,
+  checkMinDate,
   endMaxDate,
   hasClearButton,
   error,
@@ -42,6 +43,7 @@ const BrokeragePackageDates = ({
         maxDate={endMaxDate}
         date={dates[fields.dateTo]}
         setDate={(date) => setDates(fields.dateTo, date)}
+        checkMinDate={checkMinDate}
       />
       {hasOngoing &&
       <Checkbox

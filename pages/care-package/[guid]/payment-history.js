@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import { usePaymentHistoryView } from 'api';
 import AlternativePagination from 'components/AlternativePagination';
 import { PaymentHistoryTable } from 'components/Pages/Payruns/PaymentHistory/PaymentHistoryTable';
+import { COLORS } from 'constants/strings';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -57,7 +58,7 @@ const PaymentHistory = () => {
       <Loading isLoading={isLoading} />
       {!isLoading && (
         <>
-          <Container background="#FAFAFA" padding="24px 16px">
+          <Container background={COLORS.white} padding="24px 16px">
             {data && (
               <>
                 <Heading size="m" color="#00664F">{data.serviceUserName}</Heading>
@@ -76,7 +77,7 @@ const PaymentHistory = () => {
             )}
           </Container>
           <HorizontalSeparator height="30px" />
-          <Container background="#FAFAFA" padding="30px 16px">
+          <Container background={COLORS.white} padding="30px 16px">
             {packagePayment && (
               <>
                 <Heading size="l">Past Payments</Heading>

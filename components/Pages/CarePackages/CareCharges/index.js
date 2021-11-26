@@ -5,7 +5,7 @@ import { currency } from 'constants/strings';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import * as yup from 'yup';
+import { dateStringToDate, getBrokerCareChargeSchema, getFormData } from 'service';
 import {
   Announcement,
   Button,
@@ -23,6 +23,7 @@ import BrokerageTotalCost from '../BrokerageTotalCost';
 import Loading from '../../../Loading';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
 import BrokeragePackageDates from '../BrokeragePackageDates';
+import { usePackageDetails } from '../../../../api';
 
 const CareCharges = ({
   isS117,
@@ -37,39 +38,12 @@ const CareCharges = ({
   const carePackageId = router.query.guid;
   const [isOngoing, setIsOngoing] = useState(false);
 
-  const schema = useMemo(() => (
-    yup.object().shape({
-      collectedBy: yup
-        .string()
-        .typeError('Please choose collected by option')
-        .required('Please choose collected by option'),
-      dates: yup
-        .mixed()
-        .test('dates', 'Please set care charges schedule', (dates) => dates.startDate)
-        .test('dates', 'Please set end date', (value) => !(value.startDate && !isOngoing && !value.endDate))
-        .test(
-          'dates',
-          'Start date should me more then end date',
-          ({ startDate, endDate }) => !(
-            startDate &&
-            !isOngoing &&
-            endDate &&
-            startDate > endDate
-          )),
-      reasonCollecting: yup
-        .mixed()
-        .test('reasonCollected', 'Reason collected is required', (value, { parent }) => {
-          if (parent.collectedBy === 'hackney') return value;
+  const { data: details, isLoading: detailsLoading } = usePackageDetails(carePackageId);
 
-          return true;
-        }),
-      cost: yup
-        .number()
-        .typeError('Please select a package type')
-        .required()
-        .min(1, 'Please select a package type'),
-    })
-  ), [isOngoing]);
+  const coreStartDate = dateStringToDate(details.startDate);
+  const coreEndDate = dateStringToDate(details.endDate);
+
+  const schema = useMemo(() => getBrokerCareChargeSchema(isOngoing), [isOngoing]);
 
   const {
     handleSubmit,
@@ -122,9 +96,16 @@ const CareCharges = ({
     };
 
     if (!careCharge?.id) {
-      createCareCharge(carePackageId, { ...newData, carePackageId });
+      const formattedData = getFormData({ ...newData, carePackageId });
+      createCareCharge(carePackageId, formattedData);
     } else {
-      updateCareCharge(carePackageId, { ...newData, id: careCharge?.id });
+      const updatedData = new FormData();
+      const { assessmentFileId, assessmentFileName } = careCharge;
+
+      if (assessmentFileName) updatedData.append('assessmentFileId', assessmentFileId);
+
+      getFormData({ ...newData, id: careCharge?.id }, updatedData, 'reclaims[0]');
+      updateCareCharge(carePackageId,);
     }
   };
 
@@ -161,10 +142,12 @@ const CareCharges = ({
 
   const onSubmit = (data) => clickSave(data);
 
+  const isLoading = detailsLoading || loading;
+
   return (
     <Container className="brokerage__care-charges">
       <DynamicBreadcrumbs />
-      <Loading isLoading={loading} />
+      <Loading isLoading={isLoading} />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <TitleSubtitleHeader title="Build a care package" subTitle="Care Charges" />
         {isS117 && (
@@ -224,6 +207,10 @@ const CareCharges = ({
               control={control}
               render={({ field: formField }) => (
                 <BrokeragePackageDates
+                  checkMinDate
+                  startMaxDate={coreEndDate}
+                  endMaxDate={coreEndDate}
+                  startMinDate={coreStartDate}
                   fields={{
                     dateFrom: 'startDate',
                     dateTo: 'endDate',
@@ -277,7 +264,7 @@ const CareCharges = ({
           />
           <Container className="brokerage__actions">
             <Button onClick={clickBack} secondary color="gray">Back</Button>
-            <Button type="submit" isLoading={loading} disabled={loading}>
+            <Button type="submit" isLoading={isLoading} disabled={isLoading}>
               {isS117 ? 'Review' : 'Save and review'}
             </Button>
           </Container>

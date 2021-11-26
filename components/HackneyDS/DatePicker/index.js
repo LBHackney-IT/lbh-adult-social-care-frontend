@@ -18,6 +18,7 @@ const DatePicker = ({
   formId,
   minDate,
   maxDate,
+  floatingCalendar,
   hint,
   hasClearButton,
   checkMinDate,
@@ -96,10 +97,7 @@ const DatePicker = ({
       date?.getDate() || actualDate.getDate()
     );
     if (validatedMonth < validatedDate.getMonth()) {
-      validatedDate = new Date(
-        date?.getFullYear() || actualDate.getFullYear(),
-        validatedMonth,
-      );
+      validatedDate = new Date(date?.getFullYear() || actualDate.getFullYear(), validatedMonth);
       const lastDayInMonth = lastDayOfMonth(validatedDate).getDate();
       validatedDate = dateFncSetDate(validatedDate, lastDayInMonth);
     }
@@ -211,6 +209,7 @@ const DatePicker = ({
             </div>
             {isOpenCalendar && (
               <DatePick
+                className={`${floatingCalendar ? 'fixed-datepicker' : ''}`}
                 onClickOutside={() => {
                   if (isOpenCalendar) {
                     setIsOpenCalendar(false);

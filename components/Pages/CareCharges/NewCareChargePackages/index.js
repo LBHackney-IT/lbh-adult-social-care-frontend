@@ -1,7 +1,8 @@
 import React from 'react';
-import { getServiceUserCareChargesRoute, CARE_PACKAGE_ROUTE, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
+import { CARE_PACKAGE_ROUTE, getServiceUserCareChargesRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
-import { Breadcrumbs, Button, Container, Select, FormGroup, HorizontalSeparator, Heading } from '../../../HackneyDS';
+import { COLORS } from 'constants/strings';
+import { Breadcrumbs, Button, Container, FormGroup, Heading, HorizontalSeparator, Select } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 import AlternativePagination from '../../../AlternativePagination';
 import { CareChargesTable } from './CareChargesTable';
@@ -37,7 +38,7 @@ const NewCareChargePackages = ({
   return (
     <Container>
       <Loading isLoading={isLoading} />
-      <Container background="#FAFAFA" padding="0 0 60px 0">
+      <Container background={COLORS.white} padding="0 0 60px 0">
         <Container padding="0 60px" margin="0 auto" maxWidth="1080px">
           <HorizontalSeparator height="10px" />
           <Breadcrumbs values={breadcrumbs} />

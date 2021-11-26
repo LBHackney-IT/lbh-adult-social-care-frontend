@@ -12,8 +12,9 @@ import { SinglePayRunOverview } from 'components/Pages/Payruns/SinglePayRun/Sing
 import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunBreakdown';
 import { useRouter } from 'next/router';
 import { getCarePackageReviewRoute, getPaymentHistoryRoute } from 'routes/RouteConstants';
+import { COLORS } from 'constants/strings';
 
-export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }) => {
+export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle, padding = '24px 16px' }) => {
   if (!item) return null;
 
   const [invoiceId, setInvoiceId] = useState('');
@@ -31,7 +32,7 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }
 
   return (
     <>
-      <Container background="#FAFAFA" padding="24px 16px">
+      <Container background={COLORS.white} padding={padding}>
         <SinglePayRunOverview
           payRunId={payRunId}
           update={update}
@@ -41,8 +42,15 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }
         />
         <HorizontalSeparator height="15px" />
         <Collapse>
-          <HorizontalSeparator height="40px" />
-          <Container margin="0 0 0 16px">
+          <HorizontalSeparator height="16px" />
+          <Container
+            // margin="0 0 0 16px"
+            padding="16px"
+            borderTop="1px solid #DEE0E2"
+            borderBottom="1px solid #DEE0E2"
+            borderLeft="1px solid #DEE0E2"
+            borderRight="1px solid #DEE0E2"
+          >
             <Container display="grid" gridTemplateColumns="2fr 1fr 1fr 1fr">
               <Heading size="m">{item.packageType}</Heading>
               <Heading size="s">Weekly Cost</Heading>
@@ -61,22 +69,22 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }
             <HorizontalSeparator height="16px" />
             <Container borderBottom="1px solid #DEE0E2" />
             <HorizontalSeparator height="10px" />
-            <Container display="grid" gridTemplateColumns="4fr 1fr">
-              <Container display="flex">
-                {payRunId && (
+            {payRunId && (
+              <Container display="grid" gridTemplateColumns="4fr 1fr">
+                <Container display="flex">
                   <Link onClick={(e) => handleClick(e)} noVisited>
                     View package summary
                   </Link>
-                )}
-                {payRunId && <VerticalSeparator width="32px" />}
-                Assigned broker: {item.assignedBrokerName.toString()}
+                  <VerticalSeparator width="32px" />
+                  Assigned broker: {item?.assignedBrokerName?.toString()}
+                </Container>
+                <Container display="flex" justifyContent="flex-end">
+                  <Link onClick={(e) => handlePastPaymentsClick(e)} noVisited>
+                    Past payments
+                  </Link>
+                </Container>
               </Container>
-              {payRunId && (
-                <Link onClick={(e) => handlePastPaymentsClick(e)} noVisited>
-                  Past payments
-                </Link>
-              )}
-            </Container>
+            )}
           </Container>
         </Collapse>
       </Container>

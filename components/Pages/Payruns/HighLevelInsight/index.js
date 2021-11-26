@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Container, Heading, Hint, HorizontalSeparator } from 'components';
 import { getNumberWithCommas } from 'service';
+import { COLORS } from 'constants/strings';
 import ApproveDeclineModal from '../ApproveDeclineModal';
 
 export const HighLevelInsight = ({
@@ -27,7 +28,7 @@ export const HighLevelInsight = ({
         payRunId={payRunId}
         update={update}
       />
-      <Container background="#FAFAFA" padding="24px 16px">
+      <Container background={COLORS.white} padding="24px 16px">
         <Container display="flex" justifyContent="space-between">
           <Container display="flex" flexDirection="column">
             <Hint>High Level Insight</Hint>

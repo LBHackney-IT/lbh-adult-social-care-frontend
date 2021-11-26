@@ -1,27 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { isFunction } from 'api';
-import { compareDescendingDMY, dateStringToDate } from 'service';
-import { dateDescending } from 'constants/variables';
+import React, { useEffect, useMemo, useState } from 'react';
+import { isFunction, useDocument } from 'api';
+import { dateStringToDate, formatDocumentInfo } from 'service';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import * as yup from 'yup';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+import { getFormData } from 'service/getFormData';
+import { fncClaimCollectorSchema, getFNCDateValidationSchema } from 'service/formValidationSchema';
 import {
+  Announcement,
   Button,
-  FormGroup,
   Container,
-  FileUpload,
+  FormGroup,
+  HorizontalSeparator,
   Label,
   RadioGroup,
   Select,
   Textarea,
-  Announcement
+  VerticalSeparator
 } from '../../../HackneyDS';
 import Loading from '../../../Loading';
-import UrlFromFile from '../../../UrlFromFile';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
 import BrokeragePackageDates from '../BrokeragePackageDates';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
+import UploadFile from '../CareCharge/UploadFile';
+
+const collectedByType = {
+  hackney: 'gross',
+  supplier: 'net',
+};
 
 const FundedNursingCare = ({
   carePackageId,
@@ -33,30 +41,42 @@ const FundedNursingCare = ({
   updateFundedNursingCare = () => {},
   goBack = () => {},
   detailsData,
-  loading,
+  isLoading,
 }) => {
   const dispatch = useDispatch();
-  const [collectedByType] = useState({
-    hackney: 'gross',
-    supplier: 'net',
-  });
   const [dates, setDates] = useState({
     dateFrom: new Date(),
     dateTo: new Date(),
   });
-  const [errors, setErrors] = useState({
-    hasFNC: '',
-    collectedBy: '',
+  const [dateErrors, setDateErrors] = useState({
     dateFrom: '',
     dateTo: '',
-    notes: '',
   });
-  const [hasFNC, setHasFNC] = useState('');
+  const [hasFNC, setHasFNC] = useState();
   const [hasPreviousFnc] = useState(false); // todo for new design
-  const [collectedBy, setCollectedBy] = useState();
-  const [notes, setNotes] = useState('');
-  const [file, setFile] = useState(null);
   const [isOngoing, setIsOngoing] = useState(true);
+
+  const schema = useMemo(() => fncClaimCollectorSchema, [detailsData]);
+
+  const {
+    handleSubmit,
+    control,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      claimCollector: '',
+      description: '',
+      fileInfo: undefined,
+    },
+  });
+  const onSubmit = (data) => clickSave(data);
+
+  const [claimCollector, fileInfo] = watch(['claimCollector', 'fileInfo']);
+
+  const { data: href, isLoading: documentLoading } = useDocument(fileInfo?.fileId);
 
   const clickBack = () => {
     if (isFunction(goBack())) goBack();
@@ -64,108 +84,65 @@ const FundedNursingCare = ({
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
-  }
+  };
 
-  const clickSave = async () => {
+  const clickSave = async (data) => {
     const { dateFrom, dateTo } = dates;
 
-    const schema = yup.object().shape({
-      collectedBy: yup.number().typeError('Required field').required('Required field'),
-      detailsDateTo: null,
-      isOngoing: yup.boolean(),
-      dateFrom: yup
-        .date()
-        .typeError('Please select a date from')
-        .required()
-        .test('dateFrom', 'Date from less then core date start', () => (
-          compareDescendingDMY(dateFrom, detailsData.startDate) !== dateDescending.asc
-        ))
-        .test('dateFrom', 'Date from more then core date end', () => {
-          if(detailsData.endDate) {
-            return compareDescendingDMY(dateFrom, detailsData.endDate) !== dateDescending.desc
-          }
-          return true;
-        }),
-      dateTo: yup
-        .mixed()
-        .when('isOngoing', {
-          is: false,
-          then: yup
-            .date()
-            .typeError('Please select a date to')
-            .required()
-            .test('dateTo', '(Date to) less then (date from)', () => (
-              compareDescendingDMY(dateFrom, dateTo) !== dateDescending.desc
-            ))
-            .test('dateTo', 'Date to should be less or equal then core end date', (value) => {
-              if(detailsData.endDate) {
-                return compareDescendingDMY(value, detailsData.endDate) !== dateDescending.desc
-              }
-              return true
-            }),
-        })
-    });
+    const dateSchema = getFNCDateValidationSchema(detailsData);
 
     let localErrors = {};
     let hasErrors = false;
 
     try {
-      await schema.validate(
-        { detailsDateTo: detailsData.endDate, isOngoing, dateFrom, dateTo, collectedBy },
+      await dateSchema.validate(
+        { detailsDateTo: detailsData.endDate, isOngoing, dateFrom, dateTo },
         { abortEarly: false }
       );
     } catch (errorValidation) {
-      const newErrors = errorValidation?.inner?.map(error => ([error.path, error.message ]));
-      if(newErrors) {
+      const newErrors = errorValidation?.inner?.map(error => ([error.path, error.message]));
+      if (newErrors) {
         hasErrors = true;
         localErrors = Object.fromEntries(newErrors);
-        setErrors(prevState => ({ ...prevState, ...localErrors }));
+        setDateErrors(prevState => ({ ...prevState, ...localErrors }));
       }
     }
 
-    setErrors((prevState) => ({ ...prevState, ...localErrors }));
+    setDateErrors((prevState) => ({ ...prevState, ...localErrors }));
 
     if (hasErrors) {
       return pushNotification('Some errors above');
     }
 
-    const fundedNursingCareCreation = {
-      carePackageId,
+    const newData = {
+      ...data,
       cost: activeFncPrice,
-      claimCollector: collectedBy,
-      supplierId: 1, // To be removed
-      status: 1, // Set active status ?
-      type: 1, // Set type of reclaim ?
-      startDate: dateFrom,
-      endDate: isOngoing ? null : dateTo,
-      description: notes,
     };
 
-    const fundedNursingCareUpdate = {
-      id: carePackageReclaimFnc.id,
-      cost: activeFncPrice,
-      claimCollector: collectedBy,
-      supplierId: 1, // To be removed
-      status: 1, // Set active status ?
-      type: 1, // Set type of reclaim ?
-      startDate: dateFrom,
-      endDate: isOngoing ? null : dateTo,
-      description: notes,
-    };
+    delete newData.fileInfo;
 
-    if (!carePackageReclaimFnc?.id) {
-      return createFundedNursingCare(carePackageId, fundedNursingCareCreation);
+    const { file, updated, fileId } = fileInfo || {};
+    if (file) {
+      if (updated) {
+        newData.assessmentFile = file;
+      } else {
+        newData.assessmentFileId = fileId;
+      }
     }
-    return updateFundedNursingCare(carePackageId, fundedNursingCareUpdate);
+
+    if (carePackageReclaimFnc?.id) {
+      newData.id = carePackageReclaimFnc.id;
+    } else {
+      newData.carePackageId = carePackageId;
+    }
+
+    const request = carePackageReclaimFnc?.id ? updateFundedNursingCare : createFundedNursingCare;
+
+    await request(carePackageId, getFormData(newData));
   };
 
   const changeError = (field, value = '') => {
-    setErrors((prevState) => ({ ...prevState, [field]: value }));
-  };
-
-  const onSelectCollectedBy = (value) => {
-    setCollectedBy(value);
-    changeError('collectedBy');
+    setDateErrors((prevState) => ({ ...prevState, [field]: value }));
   };
 
   const changeDate = (field, value) => {
@@ -177,47 +154,61 @@ const FundedNursingCare = ({
   const addNewFnc = () => alert('add new fnc');
 
   useEffect(() => {
-    setDates({
-      dateFrom: dateStringToDate(carePackageReclaimFnc.startDate || detailsData.startDate),
-      dateTo: dateStringToDate(carePackageReclaimFnc.endDate || detailsData.endDate),
-    });
+    (async () => {
+      setDates({
+        dateFrom: dateStringToDate(carePackageReclaimFnc.startDate || detailsData.startDate),
+        dateTo: dateStringToDate(carePackageReclaimFnc.endDate || detailsData.endDate),
+      });
 
-    if (carePackageReclaimFnc?.endDate || detailsData.endDate) {
-      setIsOngoing(false);
-    }
+      if (carePackageReclaimFnc?.endDate || detailsData.endDate) {
+        setIsOngoing(false);
+      }
 
-    setNotes(carePackageReclaimFnc.description || '');
-    setCollectedBy(carePackageReclaimFnc.claimCollector || '');
-  }, [carePackageReclaimFnc, detailsData]);
+      let fileData;
+
+      if (carePackageReclaimFnc.assessmentFileName) {
+        fileData = !fileInfo?.updated && await formatDocumentInfo({
+          href,
+          fileName: carePackageReclaimFnc.assessmentFileName,
+          fileId: carePackageReclaimFnc.assessmentFileId
+        });
+        setHasFNC('yes');
+      }
+
+      const { description = '', claimCollector: responseClaimCollector = '' } = carePackageReclaimFnc;
+
+      reset({ description, claimCollector: responseClaimCollector, fileInfo: fileData });
+    })();
+  }, [carePackageReclaimFnc, detailsData, href]);
 
   return (
     <Container className="brokerage__funded-nursing-care">
-      <Loading isLoading={loading} />
+      <Loading isLoading={isLoading || documentLoading} />
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="0 60px">
         <TitleSubtitleHeader title="Build a care package" subTitle="Funded Nursing Care" />
-        <Container>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <h3 className="brokerage__item-title">Funded Nursing Care</h3>
           {hasPreviousFnc && (
-            <Announcement isError className="mb-5">
-              <div slot="title">FNC charge has previously been added. </div>
-              <div slot="content">
-                <p className='mb-3'>Would you like to use previous FNC?</p>
-                <Container className='button-group'>
-                  <Button onClick={loadPreviousFnc}>Yes, use previous FNC</Button>
-                  <Button className='background-secondary' onClick={addNewFnc}>No, add new FNC</Button>
-                </Container>
-              </div>
-            </Announcement>
+            <>
+              <Announcement isError>
+                <div slot="title">FNC charge has previously been added.</div>
+                <div slot="content">
+                  <p className="mb-3">Would you like to use previous FNC?</p>
+                  <Container display="flex">
+                    <Button onClick={loadPreviousFnc}>Yes, use previous FNC</Button>
+                    <VerticalSeparator width={8} />
+                    <Button secondary onClick={addNewFnc}>No, add new FNC</Button>
+                  </Container>
+                </div>
+              </Announcement>
+              <HorizontalSeparator height={32} />
+            </>
           )}
           <RadioGroup
-            handle={(value) => {
-              changeError('hasFNC');
-              setHasFNC(value);
-            }}
+            handle={setHasFNC}
             inline
-            className='has-fnc-radio-group'
-            error={errors.hasFNC}
+            className="has-fnc-radio-group"
             value={hasFNC}
             label="Has a FNC assessment been carried out?"
             items={[
@@ -225,22 +216,33 @@ const FundedNursingCare = ({
               { id: 'no', label: 'No' },
             ]}
           />
-          <FormGroup className='select-collected-by' required label='Collected by' error={errors.collectedBy}>
-            <Select
-              error={errors.collectedBy}
-              disabledEmptyComponent
-              emptyElement={{ text: 'Please select', value: '' }}
-              id="collected-by"
-              className="funded-nursing-care__select"
-              options={collectedByOptions}
-              value={collectedBy}
-              onChangeValue={onSelectCollectedBy}
-            />
-          </FormGroup>
+          <Controller
+            name="claimCollector"
+            control={control}
+            render={({ field }) => (
+              <FormGroup
+                className="select-collected-by"
+                required
+                label="Collected by"
+                error={errors.claimCollector?.message}
+              >
+                <Select
+                  error={errors.claimCollector?.message}
+                  disabledEmptyComponent
+                  emptyElement={{ text: 'Please select', value: '' }}
+                  id="collected-by"
+                  className="funded-nursing-care__select"
+                  options={collectedByOptions}
+                  value={field.value}
+                  onChangeValue={field.onChange}
+                />
+              </FormGroup>
+            )}
+          />
 
           <BrokeragePackageDates
             dates={dates}
-            error={errors.dateFrom || errors.dateTo}
+            error={dateErrors.dateFrom || dateErrors.dateTo}
             setDates={changeDate}
             startMinDate={dateStringToDate(detailsData.startDate)}
             startMaxDate={dateStringToDate(detailsData.endDate)}
@@ -252,33 +254,38 @@ const FundedNursingCare = ({
             }}
             isOngoing={isOngoing}
           />
-          <FormGroup error={errors.notes}>
-            <Label className="label-textarea">Funded Nursing Care notes</Label>
-            <Textarea handler={setNotes} value={notes}/>
-          </FormGroup>
-          <FormGroup className="upload-fnc-assessment" label="Upload FNC Assessment...">
-            <UrlFromFile file={file} removeFile={setFile} />
-            {!file && (
-              <FormGroup className="file-upload-form">
-                <FileUpload getFile={setFile} label={<div>Upload file</div>} />
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <FormGroup error={errors.description?.message}>
+                <Label className="label-textarea">Funded Nursing Care notes</Label>
+                <Textarea handler={field.onChange} value={field.value} />
               </FormGroup>
             )}
-          </FormGroup>
+          />
+          {hasFNC === 'yes' && (
+            <>
+              <HorizontalSeparator height={32} />
+              <UploadFile title="Upload FNC Assessment..." control={control} />
+            </>
+          )}
+          <HorizontalSeparator height={50} />
           <BrokerageTotalCost
-            name={`Funded per week ${collectedByType[collectedBy] ? `(${collectedByType[collectedBy]})` : ''}`}
+            name={`Funded per week ${collectedByType[claimCollector] ? `(${collectedByType[claimCollector]})` : ''}`}
             className="brokerage__border-cost"
             value={activeFncPrice}
           />
           <Container className="brokerage__actions">
-            <Button onClick={clickBack} secondary color='gray'>
+            <Button onClick={clickBack} secondary color="gray">
               Back
             </Button>
-            <Button onClick={skipAndContinue} className='secondary-yellow'>Skip and continue</Button>
-            <Button disabled={loading} isLoading={loading} onClick={clickSave}>
+            <Button onClick={skipAndContinue} className="secondary-yellow">Skip and continue</Button>
+            <Button type="submit" disabled={isLoading || documentLoading} isLoading={isLoading || documentLoading}>
               Save and continue
             </Button>
           </Container>
-        </Container>
+        </form>
       </Container>
     </Container>
   );

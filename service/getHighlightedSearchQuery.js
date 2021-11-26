@@ -1,10 +1,10 @@
 import React from 'react';
 
 export const getHighlightedSearchQuery = (text, highlightText = '') => {
-  const results = text.split(new RegExp(`(${highlightText})`, 'gi'));
+  const results = text?.split(new RegExp(`(${highlightText})`, 'gi'));
   return (
     <>
-      {results.map((result, i) => (
+      {results?.map((result, i) => (
         <span
           key={`${result}${i}`}
           style={

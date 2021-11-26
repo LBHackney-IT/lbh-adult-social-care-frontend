@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
-import { getLoggedInUser } from 'service';
+import { dateToJson, getLoggedInUser } from 'service';
 import { getCarePackageApprovalRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { PackageApprovals } from 'components';
 import { useApprovals } from 'api';
@@ -53,8 +53,8 @@ const Approvals = () => {
   } = filters;
 
   const params = useMemo(() => ({
-        fromDate: dateFrom ? dateFrom.toJSON() : null,
-        toDate: dateTo ? dateTo.toJSON() : null,
+        fromDate: dateToJson(dateFrom),
+        toDate: dateToJson(dateTo),
         serviceUserName,
         approverId,
         packageType,
@@ -63,7 +63,7 @@ const Approvals = () => {
         firstName,
         lastName,
         hackneyId,
-        dateOfBirth: dateOfBirth ? dateOfBirth.toJSON() : null,
+        dateOfBirth: dateToJson(dateOfBirth),
         postcode,
       }), [filters, pageNumber]);
 

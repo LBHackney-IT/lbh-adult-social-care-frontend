@@ -20,6 +20,7 @@ const ServiceUserSearch = ({ filters, inputs = defaultInputs, changeFilters, cle
             setDate={(value) => changeFilters('dateOfBirth', value)}
             date={filters.dateOfBirth}
             label="Date of birth"
+            floatingCalendar
           />
         </FormGroup>
         <Input

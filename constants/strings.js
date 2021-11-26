@@ -1,13 +1,15 @@
-const currency = {
+export const currency = {
   euro: '£',
   dollar: '$',
 };
 
-const dateStringFormats = {
+export const dateStringFormats = {
   dayMonthYearSlash: 'dd/MM/yyyy',
   dayMonthYearDot: 'dd.MM.yyyy',
   monthDayYearSlash: 'MM/dd/yyyy',
   monthDayYearDot: 'MM.dd.yyyy',
 };
 
-export { currency, dateStringFormats };
+export const COLORS = {
+  white: '#FAFAFA',
+};

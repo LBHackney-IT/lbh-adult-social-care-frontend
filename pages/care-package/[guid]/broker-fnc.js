@@ -55,7 +55,7 @@ const FundedNursingCarePage = () => {
       pushNotification(`Funded Nursing Care created successfully`, 'success');
       router.push(getCareChargesRoute(carePackageId));
     } catch (e) {
-      pushNotification(e);
+      pushNotification(e || 'Cannot create Funded Nursing Care');
     }
     setLoading(false);
   };
@@ -69,14 +69,14 @@ const FundedNursingCarePage = () => {
       pushNotification(`Funded Nursing Care updated successfully`, 'success');
       router.push(getCareChargesRoute(carePackageId));
     } catch (e) {
-      pushNotification(e);
+      pushNotification(e || 'Cannot save Funded Nursing Care');
     }
     setLoading(false);
   };
 
   return (
     <FundedNursingCare
-      loading={loading || fncLoading || fncPriceLoading || detailsLoading || coreLoading}
+      isLoading={loading || fncLoading || fncPriceLoading || detailsLoading || coreLoading}
       carePackageId={carePackageId}
       collectedByOptions={collectedByOptions}
       activeFncPrice={activeFncPrice}

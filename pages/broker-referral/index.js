@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
 import { useBrokerView } from 'api';
-import { getLoggedInUser } from 'service';
+import { dateToJson, getLoggedInUser } from 'service';
 import { BrokerPortalPage } from 'components';
 import { getServiceUserPackagesRoute, SERVICE_USER_MASTER_SEARCH_ROUTE } from 'routes/RouteConstants';
 
@@ -27,9 +27,9 @@ const initialFilters = {
   serviceUserName: '',
 };
 
-const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Assistance' }];
+const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Referral' }];
 
-const BrokerAssistance = () => {
+const BrokerReferral = () => {
   const router = useRouter();
 
   const [pageNumber, setPageNumber] = useState(1);
@@ -38,8 +38,8 @@ const BrokerAssistance = () => {
   const { brokerId, dateTo, dateFrom, status, serviceUserName } = filters;
 
   const params = useMemo(() => ({
-    fromDate: dateFrom ? dateFrom.toJSON() : null,
-    toDate: dateTo ? dateTo.toJSON() : null,
+    fromDate: dateToJson(dateFrom),
+    toDate: dateToJson(dateTo),
     serviceUserName,
     pageNumber,
     status,
@@ -63,16 +63,16 @@ const BrokerAssistance = () => {
     router.push(getServiceUserPackagesRoute(rowInfo.serviceUserId));
   }, []);
 
-  const goToBrokerAssistanceSearch = useCallback(() => {
+  const goToBrokerReferralSearch = useCallback(() => {
     router.push(SERVICE_USER_MASTER_SEARCH_ROUTE);
   }, []);
 
   return (
     <BrokerPortalPage
-      title='Broker Assistance'
+      title='Broker Referral'
       breadcrumbs={breadcrumbs}
       loading={brokerViewLoading}
-      goToSearch={goToBrokerAssistanceSearch}
+      goToSearch={goToBrokerReferralSearch}
       filters={filters}
       searchTerm={serviceUserName}
       clearFilter={clearFilters}
@@ -86,4 +86,4 @@ const BrokerAssistance = () => {
   );
 };
 
-export default BrokerAssistance;
+export default BrokerReferral;

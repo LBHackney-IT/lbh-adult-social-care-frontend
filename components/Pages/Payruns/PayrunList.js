@@ -6,8 +6,9 @@ import { getPayrunStatusBackgroundColor, getPayrunStatusColor } from 'service/ge
 import { useRouter } from 'next/router';
 import { getSinglePayrunRoute } from 'routes/RouteConstants';
 import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
+import { COLORS } from 'constants/strings';
 
-const statussName = {
+const statusesName = {
   'Waiting for Approval': 'Waiting For Approval',
   'Ready for review': 'Waiting For Review',
   'Paid with hold': 'Paid With Hold',
@@ -25,7 +26,7 @@ export const PayrunList = ({ searchTerm, data }) => {
       {data.map((d, index) => (
         <>
           <Container
-            background="#FAFAFA"
+            background={COLORS.white}
             padding="32px 16px"
             key={d.payRunId}
             cursor="pointer"
@@ -39,7 +40,7 @@ export const PayrunList = ({ searchTerm, data }) => {
                   {handleId(d.payRunId)}
                 </Container>
                 <Container display="flex" alignItems="center">
-                  <Heading size="s">Date: </Heading>
+                  <Heading size="s">Created: </Heading>
                   <VerticalSeparator width="10px" />
                   {format(new Date(d.dateCreated), 'dd/MM/yy')}
                 </Container>
@@ -65,7 +66,7 @@ export const PayrunList = ({ searchTerm, data }) => {
                 justifyContent="center"
                 borderRadius="5px"
               >
-                {statussName[d.payRunStatusName] || d.payRunStatusName}
+                {statusesName[d.payRunStatusName] || d.payRunStatusName}
               </Container>
             </Container>
           </Container>

@@ -30,6 +30,7 @@ const CreatePayRunDates = ({
             minDate={minDate}
             dateValue={field.value}
             day={{ label: startDateLabel }}
+            floatingCalendar
           />
           {dateText}
         </FormGroup>
@@ -52,6 +53,7 @@ const CreatePayRunDates = ({
               maxDate={maxDate}
               minDate={startDate}
               dateValue={field.value}
+              floatingCalendar
             />
           </FormGroup>
         )}

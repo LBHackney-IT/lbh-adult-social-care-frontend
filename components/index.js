@@ -12,10 +12,9 @@ export { default as CareDetails } from './Pages/ServiceUser/Packages/CareDetails
 export { default as PackageRequest } from './Pages/ServiceUser/Packages/PackageRequest';
 export { default as CareCharges } from './Pages/CarePackages/CareCharges';
 export { default as FundedNursingCare } from './Pages/CarePackages/FundedNursingCare';
-export { default as BrokerPackage } from './Pages/CarePackages/BrokerPackage';
 export { default as BrokerageBorderCost } from './Pages/CarePackages/BrokerageBorderCost';
 export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPackageDetails';
-export { default as SearchServiceUser } from './Pages/BrokerAssistant/SearchForServiceUser';
+export { default as SearchServiceUser } from './Pages/BrokerReferral/SearchForServiceUser';
 export { default as NewCareChargePackages } from './Pages/CareCharges/NewCareChargePackages';
 export { default as PackageApprovals } from './Pages/PackageApprovals';
 export { default as DynamicBreadcrumbs } from './Pages/DynamicBreadcrumbs';
@@ -31,7 +30,7 @@ export { default as HistoryOverview } from './Pages/CarePackages/History/History
 // Care Charge
 export { default as ProvisionalCareCharge } from './Pages/CarePackages/CareCharge/ProvisionalCareCharge';
 export { default as ResidentialSUContribution } from './Pages/CarePackages/CareCharge/ResidentialSUContribution';
-export { default as FinancialAssessment } from './Pages/CarePackages/CareCharge/FinancialAssessment';
+export { default as UploadFile } from './Pages/CarePackages/CareCharge/UploadFile';
 export { default as EditElementModal } from './Pages/CarePackages/CareCharge/EditElementModal';
 export { default as CancelElementModal } from './Pages/CarePackages/CareCharge/CancelElementModal';
 export { default as EndElementModal } from './Pages/CarePackages/CareCharge/EndElementModal';

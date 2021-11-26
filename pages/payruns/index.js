@@ -5,9 +5,10 @@ import { Breadcrumbs, Button, Container, Heading, HorizontalSeparator, Loading, 
 import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
-import { usePayrunView } from 'api/SWR/payRuns';
-import CreateDraftPayRun from '../../components/Pages/Finance/CreateDraftPayRun';
-import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
+import { useHeldPaymentsView, usePayrunView } from 'api/SWR/payRuns';
+import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
+import CreateDraftPayRun from 'components/Pages/Finance/CreateDraftPayRun';
+import { COLORS } from 'constants/strings';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -35,6 +36,7 @@ const tabs = ['Pay Runs', 'Held Payments'];
 
 const Payruns = () => {
   const [pageNumber, setPageNumber] = useState(1);
+  const [heldPageNumber, setHeldPageNumber] = useState(1);
   const [isOpenedModal, setIsOpenedModal] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
@@ -45,12 +47,14 @@ const Payruns = () => {
       dateFrom,
       payRunId,
       pageNumber,
+      heldPageNumber,
       payRunType,
       payRunStatus,
     }),
-    [filters, pageNumber]
+    [filters, pageNumber, heldPageNumber]
   );
   const { data, isLoading, mutate: update } = usePayrunView({ params });
+  const { data: hData, isLoading: isHeldLoading } = useHeldPaymentsView({ params });
 
   const {
     data: payrunData,
@@ -61,10 +65,19 @@ const Payruns = () => {
     },
   } = data;
 
+  const {
+    data: heldData,
+    pagingMetaData: heldPagingMetaData = {
+      totalCount: 0,
+      totalPages: 0,
+      pageSize: 0,
+    },
+  } = hData;
+
   return (
     <Container>
       <CreateDraftPayRun isOpened={isOpenedModal} setIsOpened={setIsOpenedModal} update={update} />
-      <Container background="#FAFAFA" padding="0 0 60px 0">
+      <Container background={COLORS.white} padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <HorizontalSeparator height="10px" />
           <Breadcrumbs values={breadcrumbs} />
@@ -97,16 +110,16 @@ const Payruns = () => {
             )}
           </Tab>
           <Tab>
-            <Loading className="loading" isLoading={isLoading} />
-            <PayrunList searchTerm={payRunId} data={payrunData} />
+            <Loading className="loading" isLoading={isHeldLoading} />
+            <HeldPaymentsList data={heldData} searchTerm={payRunId} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
-                totalPages={pagingMetaData.totalPages}
-                totalCount={pagingMetaData.totalCount}
-                pageSize={pagingMetaData.pageSize}
-                currentPage={pageNumber}
-                changePagination={setPageNumber}
+                totalPages={heldPagingMetaData.totalPages}
+                totalCount={heldPagingMetaData.totalCount}
+                pageSize={heldPagingMetaData.pageSize}
+                currentPage={heldPageNumber}
+                changePagination={setHeldPageNumber}
               />
             )}
           </Tab>

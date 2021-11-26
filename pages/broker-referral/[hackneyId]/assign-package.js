@@ -1,29 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   Breadcrumbs,
   Button,
   Container,
   FormGroup,
+  Heading,
   HorizontalSeparator,
   Loading,
   Select,
   ServiceUserDetails,
   Textarea,
   TitleSubtitleHeader,
+  UploadFile,
 } from 'components';
 import { useRouter } from 'next/router';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
+import { BROKER_REFERRAL_ROUTE } from 'routes/RouteConstants';
 import { getFormData } from 'service/getFormData';
+import { assignPackageSchema } from '../../../service/formValidationSchema';
 
 const breadcrumbs = [
-  { text: 'Home', href: BROKER_ASSISTANCE_ROUTE },
-  { text: 'Broker Assistance', href: BROKER_ASSISTANCE_ROUTE },
+  { text: 'Home', href: BROKER_REFERRAL_ROUTE },
+  { text: 'Broker Referral', href: BROKER_REFERRAL_ROUTE },
   { text: 'Assign and attach a care plan' },
 ];
 
@@ -36,15 +38,7 @@ const AssignPackage = () => {
   const { options: brokerOptions, isLoading: brokersLoading } = useBrokers();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isLoading = serviceUserLoading || lookupsLoading || brokersLoading;
-  const schema = yup.object().shape({
-    brokerId: yup.string().typeError('Please choose a Broker').required().min(2, 'Please choose a Broker'),
-    packageType: yup
-      .number()
-      .typeError('Please select a package type')
-      .required()
-      .min(1, 'Please select a package type'),
-  });
+  const isLoading = serviceUserLoading || lookupsLoading || brokersLoading || isSubmitting;
 
   const {
     handleSubmit,
@@ -52,23 +46,26 @@ const AssignPackage = () => {
     control,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(assignPackageSchema),
     defaultValues: {
       hackneyUserId: hackneyId,
       brokerId: 0,
       packageType: 0,
+      fileInfo: undefined,
       notes: '',
     },
   });
   const onSubmit = (data) => submitData(data);
 
   const submitData = async (data = {}) => {
+    const carePlanFile = data.fileInfo?.file;
     setIsSubmitting(true);
-    const formData = getFormData(data);
+    delete data.fileInfo;
+    const formData = getFormData({ ...data, carePlanFile });
     try {
       await assignToBroker({ data: formData });
       dispatch(addNotification({ text: 'Care plan assigned', className: 'success' }));
-      router.push(BROKER_ASSISTANCE_ROUTE);
+      router.push(BROKER_REFERRAL_ROUTE);
     } catch (error) {
       dispatch(addNotification({ text: error, className: 'error' }));
     }
@@ -114,6 +111,11 @@ const AssignPackage = () => {
               />
             </FormGroup>
           </Container>
+          <Container className="brokerage__container">
+            <Heading size="xl">Support plan and care package</Heading>
+            <HorizontalSeparator height={24} />
+            <UploadFile control={control} title="Upload social worker care plan" />
+          </Container>
           <Container>
             <FormGroup label="Add notes" error={errors.notes?.message}>
               <Controller
@@ -123,8 +125,8 @@ const AssignPackage = () => {
               />
             </FormGroup>
             <HorizontalSeparator height="20px" />
-            <Button isLoading={isSubmitting} disabled={isLoading} type="submit">
-              Save and continue
+            <Button isLoading={isLoading} disabled={isLoading} type="submit">
+              Assign care plan
             </Button>
           </Container>
         </form>

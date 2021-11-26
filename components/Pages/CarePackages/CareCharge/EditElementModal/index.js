@@ -2,9 +2,9 @@ import React, { memo } from 'react';
 import { Dialog } from '../../../../HackneyDS';
 import EditElementContent from './EditElementContent';
 
-const EditElementModal = ({ isOpen, onClose, data }) => (
+const EditElementModal = ({ isOpen, onClose, fileInfo, data }) => (
   <Dialog className="care-charges-modal" isOpen={isOpen} onClose={onClose}>
-    <EditElementContent data={data} onClose={onClose} />
+    <EditElementContent fileInfo={fileInfo} data={data} onClose={onClose} />
   </Dialog>
 );
 

@@ -4,11 +4,12 @@ import { getLoggedInUser } from 'service';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
-import { useInvoiceListView, getPayrunInsight } from 'api/SWR/payRuns';
+import { getPayrunInsight, useInvoiceListView } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
 import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
+import { COLORS } from 'constants/strings';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -71,7 +72,7 @@ const SinglePayRun = () => {
 
   return (
     <Container>
-      <Container background="#FAFAFA" padding="0 0 60px 0">
+      <Container background={COLORS.white} padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <HorizontalSeparator height="10px" />
           <Breadcrumbs values={breadcrumbs} />
@@ -84,12 +85,12 @@ const SinglePayRun = () => {
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px">
         <Loading isLoading={isLoading || insightsIsLoading} />
         {payRunItems &&
-          payRunItems.map((item, index) => (
-            <>
-              <PayRunItem payRunId={payRunId} searchTerm={searchTerm} update={update} item={item} index={index} />
-              {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
-            </>
-          ))}
+        payRunItems.map((item, index) => (
+          <>
+            <PayRunItem payRunId={payRunId} searchTerm={searchTerm} update={update} item={item} index={index} />
+            {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
+          </>
+        ))}
         <HorizontalSeparator height="32px" />
         {insightData && (
           <HighLevelInsight

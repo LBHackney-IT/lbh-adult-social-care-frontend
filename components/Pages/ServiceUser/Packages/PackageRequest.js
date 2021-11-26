@@ -1,30 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   formatDate,
+  formatDocumentInfo,
+  getButtonColourFromPackageStatus,
   getButtonTextFromPackageStatus,
   getTagColorFromStatus,
-  getButtonColourFromPackageStatus,
 } from 'service';
 import { CaretDownIcon } from 'components/Icons';
 import { useRouter } from 'next/router';
 import { getCorePackageRoute } from 'routes/RouteConstants';
-import {
-  Button,
-  Container,
-  Collapse,
-  Heading,
-  HorizontalSeparator,
-  Link,
-  Tag,
-  VerticalSeparator
-} from '../../../HackneyDS';
+import { useDocument } from 'api';
+import { Button, Collapse, Container, Heading, HorizontalSeparator, Tag, VerticalSeparator } from '../../../HackneyDS';
+import UrlFromFile from '../../../UrlFromFile';
 
 const PackageRequest = ({ packageRequest }) => {
   const router = useRouter();
   const buttonClass = `${getButtonColourFromPackageStatus(packageRequest.packageStatus)} package-request-button`;
   const handleClick = () => router.push(getCorePackageRoute(packageRequest.packageId));
+
+  const [file, setFile] = useState();
+
+  const { data: href } = useDocument(packageRequest.socialWorkerCarePlanFileName && packageRequest.socialWorkerCarePlanFileId);
+
+  useEffect(() => {
+    if (href) {
+      (async () => {
+        const { socialWorkerCarePlanFileId, socialWorkerCarePlanFileName } = packageRequest;
+        const formatFile = await formatDocumentInfo({
+          href,
+          fileName: socialWorkerCarePlanFileName,
+          fileId: socialWorkerCarePlanFileId
+        });
+        setFile(formatFile);
+      })();
+    }
+  }, [href]);
+
   return (
-    <Container borderBottom="1px solid #BFC1C3" border="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
+    <Container borderBottom="1px solid #BFC1C3" borderRight="1px solid #BFC1C3" borderTop="1px solid #BFC1C3"  borderLeft="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
       <Container display="flex" alignItems="center">
         <Tag className="text-capitalize" outline color={getTagColorFromStatus(packageRequest.packageStatus)}>
           {packageRequest.packageStatus}
@@ -34,17 +47,19 @@ const PackageRequest = ({ packageRequest }) => {
       </Container>
       <HorizontalSeparator height="20px" />
       <Container display="flex" justifyContent="space-between">
-        <Container className="user-details">
+        <Container display="flex">
           <Container>
-            <p>Package</p>
+            <Heading size="m">Package</Heading>
             <p>{packageRequest.packageType}</p>
           </Container>
+          <VerticalSeparator width="20px" />
           <Container>
-            <p>Care Plan</p>
-            <Link>View</Link>
+            <Heading size="m">Care Plan</Heading>
+            <UrlFromFile showOnlyLink file={file?.file} />
           </Container>
+          <VerticalSeparator width="20px" />
           <Container>
-            <p>Assigned</p>
+            <Heading size="m">Assigned</Heading>
             <p>{formatDate(packageRequest.dateAssigned)}</p>
           </Container>
         </Container>
