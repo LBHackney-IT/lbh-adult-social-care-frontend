@@ -45,7 +45,9 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
   return (
     <>
       <Container display="flex" alignItems="baseline">
-        <Heading size="m" color="#00664F">{handleServiceUserName()}</Heading>
+        <Heading size="m" color="#00664F">
+          {handleServiceUserName()}
+        </Heading>
         <VerticalSeparator width="24px" />
         <Heading size="s">Invoice ID:</Heading>
         <VerticalSeparator width="5px" />
@@ -66,7 +68,10 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
           {payRun.packageType}
         </Container>
         <Container>
-          <Heading size="s">Total Cost:</Heading>£{getNumberWithCommas(payRun.grossTotal)}
+          <Heading size="s">Total Cost:</Heading>
+          {payRun.netTotal >= 0
+            ? `£${getNumberWithCommas(payRun.netTotal)}`
+            : `-£${getNumberWithCommas(Math.abs(payRun.netTotal))}`}
         </Container>
         <Select
           style={{ background, color, border: 'none' }}

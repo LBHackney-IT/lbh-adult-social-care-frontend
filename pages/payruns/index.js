@@ -5,9 +5,9 @@ import { Breadcrumbs, Button, Container, Heading, HorizontalSeparator, Loading, 
 import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
-import { useHeldPaymentsView, usePayrunView } from 'api/SWR/payRuns';
+import { usePayrunView, useHeldPaymentsView } from 'api/SWR/payRuns';
 import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
-import CreateDraftPayRun from 'components/Pages/Finance/CreateDraftPayRun';
+import CreatePayRunModal from 'components/Pages/Payruns/CreatePayRunModal/CreatePayRunModal';
 import { COLORS } from 'constants/strings';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -32,11 +32,12 @@ const initialFilters = {
 };
 
 const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Finance' }];
-const tabs = ['Pay Runs', 'Held Payments'];
+const tabs = ['Pay Runs', 'Held Payments', 'Awaiting Approval', 'Approved'];
 
 const Payruns = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [heldPageNumber, setHeldPageNumber] = useState(1);
+  const [tabView, setTabView] = useState(tabs[0]);
   const [isOpenedModal, setIsOpenedModal] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
@@ -49,9 +50,11 @@ const Payruns = () => {
       pageNumber,
       heldPageNumber,
       payRunType,
-      payRunStatus,
+      payRunStatus:
+        // eslint-disable-next-line no-nested-ternary
+        tabView === 'Awaiting Approval' ? 'WaitingForApproval' : tabView === 'Approved' ? 'Approved' : payRunStatus,
     }),
-    [filters, pageNumber, heldPageNumber]
+    [filters, pageNumber, heldPageNumber, tabView]
   );
   const { data, isLoading, mutate: update } = usePayrunView({ params });
   const { data: hData, isLoading: isHeldLoading } = useHeldPaymentsView({ params });
@@ -76,7 +79,7 @@ const Payruns = () => {
 
   return (
     <Container>
-      <CreateDraftPayRun isOpened={isOpenedModal} setIsOpened={setIsOpenedModal} update={update} />
+      <CreatePayRunModal isOpen={isOpenedModal} onClose={() => setIsOpenedModal(false)} update={update} />
       <Container background={COLORS.white} padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <HorizontalSeparator height="10px" />
@@ -89,12 +92,12 @@ const Payruns = () => {
             </Button>
           </Container>
           <HorizontalSeparator height="16px" />
-          <PayrunFilters filters={filters} setFilters={setFilters} clearFilter={clearFilters} />
+          <PayrunFilters filters={filters} setFilters={setFilters} clearFilter={clearFilters} tabView={tabView} />
         </Container>
       </Container>
       <HorizontalSeparator height="30px" />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
-        <Tabs tabs={tabs}>
+        <Tabs tabs={tabs} callback={(index) => setTabView(tabs[index])}>
           <Tab>
             <Loading className="loading" isLoading={isLoading} />
             <PayrunList searchTerm={payRunId} data={payrunData} />
@@ -120,6 +123,34 @@ const Payruns = () => {
                 pageSize={heldPagingMetaData.pageSize}
                 currentPage={heldPageNumber}
                 changePagination={setHeldPageNumber}
+              />
+            )}
+          </Tab>
+          <Tab>
+            <Loading className="loading" isLoading={isLoading} />
+            <PayrunList searchTerm={payRunId} data={payrunData} />
+            <HorizontalSeparator height="30px" />
+            {pageNumber && (
+              <AlternativePagination
+                totalPages={pagingMetaData.totalPages}
+                totalCount={pagingMetaData.totalCount}
+                pageSize={pagingMetaData.pageSize}
+                currentPage={pageNumber}
+                changePagination={setPageNumber}
+              />
+            )}
+          </Tab>
+          <Tab>
+            <Loading className="loading" isLoading={isLoading} />
+            <PayrunList searchTerm={payRunId} data={payrunData} />
+            <HorizontalSeparator height="30px" />
+            {pageNumber && (
+              <AlternativePagination
+                totalPages={pagingMetaData.totalPages}
+                totalCount={pagingMetaData.totalCount}
+                pageSize={pagingMetaData.pageSize}
+                currentPage={pageNumber}
+                changePagination={setPageNumber}
               />
             )}
           </Tab>
