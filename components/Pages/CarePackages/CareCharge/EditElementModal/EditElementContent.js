@@ -20,7 +20,7 @@ import CareChargesModalActions from '../ModalComponents/CareChargesModalActions'
 import Loading from '../../../../Loading';
 import { getFormData } from '../../../../../service/getFormData';
 
-const EditElementContent = ({ data, onClose, assessmentFileInfo }) => {
+const EditElementContent = ({ data, onClose, fileInfo }) => {
   const [isLoading, toggleLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -99,7 +99,7 @@ const EditElementContent = ({ data, onClose, assessmentFileInfo }) => {
     const createFormData = new FormData();
     const editFormData = new FormData();
 
-    const { file, fileId, updated } = assessmentFileInfo || {};
+    const { file, fileId, updated } = fileInfo || {};
 
     const addFileToFormData = (formData) => {
       if (file?.name) {
@@ -118,7 +118,7 @@ const EditElementContent = ({ data, onClose, assessmentFileInfo }) => {
 
     try {
       if (createData.length > 0) {
-        createData.forEach((reclaim, index) => { // todo first way to make formData with array
+        createData.forEach((reclaim, index) => {
           const mainData = { ...getReclaimProps(reclaim), carePackageId: packageId };
 
           getFormData(mainData, createFormData, `reclaims[${index}]`);

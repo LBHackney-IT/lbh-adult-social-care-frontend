@@ -63,7 +63,7 @@ const useBreadcrumbs = () => {
 const useModal = () => useToggle(false);
 
 const defaultValues = {
-  assessmentFileInfo: undefined,
+  fileInfo: undefined,
   [provisional]: {
     cost: '',
     claimCollector: '',
@@ -126,9 +126,9 @@ const CareCharge = () => {
 
   const { handleSubmit, control, formState, setValue, getValues, reset, watch } = useForm({ defaultValues });
 
-  const assessmentFileInfo = watch('assessmentFileInfo');
+  const fileInfo = watch('fileInfo');
 
-  const { data: href, isLoading: documentLoading } = useDocument(assessmentFileInfo?.fileId);
+  const { data: href, isLoading: documentLoading } = useDocument(fileInfo?.fileId);
 
   const { actualReclaims, isLoading: careChargeLoading } = usePackageCareCharge(packageId);
   const { data: claimCollectors, isLoading: lookupsLoading } = useLookups('claimCollector');
@@ -157,7 +157,7 @@ const CareCharge = () => {
       const someOfFileName = provisionalData.assessmentFileName || less12Data.assessmentFileName || more12Data.assessmentFileName;
       const someOfFileId = provisionalData.assessmentFileId || less12Data.assessmentFileId || more12Data.assessmentFileId;
 
-      const fileData = !assessmentFileInfo?.updated && await formatDocumentInfo({
+      const fileData = !fileInfo?.updated && await formatDocumentInfo({
         fileId: someOfFileId,
         href,
         fileName: someOfFileName
@@ -183,7 +183,7 @@ const CareCharge = () => {
           endDate: more12Data.endDate,
           isOngoing: false,
         },
-        assessmentFileInfo: fileData
+        fileInfo: fileData
       });
     })();
   }, [actualReclaims, href]);
@@ -274,7 +274,7 @@ const CareCharge = () => {
   const onEdit = (form) => {
     const editedForms = Object.keys(formState.dirtyFields);
 
-    const includesFile = editedForms.includes('assessmentFileInfo');
+    const includesFile = editedForms.includes('fileInfo');
     const data = [];
 
     if (editedForms.includes(provisional) || (includesFile && form[careChargeFormKeys.provisional].cost))
@@ -366,7 +366,7 @@ const CareCharge = () => {
 
       if (
         formState.dirtyFields[provisional] ||
-        (assessmentFileInfo?.file && form[provisional]?.cost && form[provisional]?.claimCollector)
+        (fileInfo?.file && form[provisional]?.cost && form[provisional]?.claimCollector)
       ) {
         fields.push(
           { formKey: provisional, field: 'cost', value: Number(form[provisional].cost) },
@@ -376,7 +376,7 @@ const CareCharge = () => {
 
       if (
         formState.dirtyFields[less12] ||
-        (assessmentFileInfo?.file && form[less12]?.cost && form[less12]?.claimCollector && form[less12].startDate)
+        (fileInfo?.file && form[less12]?.cost && form[less12]?.claimCollector && form[less12].startDate)
       ) {
         fields.push(
           { formKey: less12, field: 'cost', value: form[less12].cost },
@@ -387,7 +387,7 @@ const CareCharge = () => {
 
       if (
         formState.dirtyFields[more12] ||
-        (assessmentFileInfo?.file && form[more12]?.cost && form[more12]?.claimCollector && form[more12].startDate)
+        (fileInfo?.file && form[more12]?.cost && form[more12]?.claimCollector && form[more12].startDate)
       ) {
         fields.push(
           { formKey: more12, field: 'cost', value: form[more12].cost },
@@ -456,7 +456,7 @@ const CareCharge = () => {
       </Container>
 
       <EditElementModal
-        assessmentFileInfo={assessmentFileInfo}
+        fileInfo={fileInfo}
         isOpen={isOpenEdit}
         onClose={() => toggleEdit(false)}
         data={editData}

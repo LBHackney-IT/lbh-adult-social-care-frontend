@@ -9,7 +9,7 @@ const UploadFile = ({ control, title }) => (
         <Heading size="m">{title}</Heading>
         <HorizontalSeparator height={24} />
         <Controller
-          name="assessmentFileInfo"
+          name="fileInfo"
           control={control}
           render={({ field }) => (
             <FormGroup>

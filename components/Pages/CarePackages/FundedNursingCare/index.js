@@ -77,14 +77,14 @@ const FundedNursingCare = ({
     defaultValues: {
       claimCollector: '',
       description: '',
-      assessmentFileInfo: undefined,
+      fileInfo: undefined,
     },
   });
   const onSubmit = (data) => clickSave(data);
 
-  const [claimCollector, assessmentFileInfo] = watch(['claimCollector', 'assessmentFileInfo']);
+  const [claimCollector, fileInfo] = watch(['claimCollector', 'fileInfo']);
 
-  const { data: href, isLoading: documentLoading } = useDocument(assessmentFileInfo?.fileId);
+  const { data: href, isLoading: documentLoading } = useDocument(fileInfo?.fileId);
 
   const clickBack = () => {
     if (isFunction(goBack())) goBack();
@@ -162,9 +162,9 @@ const FundedNursingCare = ({
       startDate: dateFrom.toJSON(),
     };
 
-    delete newData.assessmentFileInfo;
+    delete newData.fileInfo;
 
-    const { file, updated, fileId } = assessmentFileInfo || {};
+    const { file, updated, fileId } = fileInfo || {};
     if (file) {
       if (updated) {
         newData.assessmentFile = file;
@@ -212,7 +212,7 @@ const FundedNursingCare = ({
       let fileData;
 
       if (carePackageReclaimFnc.assessmentFileName) {
-        fileData = !assessmentFileInfo?.updated && await formatDocumentInfo({
+        fileData = !fileInfo?.updated && await formatDocumentInfo({
           href,
           fileName: carePackageReclaimFnc.assessmentFileName,
           fileId: carePackageReclaimFnc.assessmentFileId
@@ -222,7 +222,7 @@ const FundedNursingCare = ({
 
       const { description = '', claimCollector: responseClaimCollector = '' } = carePackageReclaimFnc;
 
-      reset({ description, claimCollector: responseClaimCollector, assessmentFileInfo: fileData });
+      reset({ description, claimCollector: responseClaimCollector, fileInfo: fileData });
     })();
   }, [carePackageReclaimFnc, detailsData, href]);
 
