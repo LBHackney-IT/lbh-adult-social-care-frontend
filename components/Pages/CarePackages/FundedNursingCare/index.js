@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { isFunction, useDocument } from 'api';
-import { compareDescendingDMY, dateStringToDate, formatDocumentInfo } from 'service';
-import { dateDescending } from 'constants/variables';
+import { dateStringToDate, formatDocumentInfo } from 'service';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { getFormData } from 'service/getFormData';
+import { fncClaimCollectorSchema, getFNCDateValidationSchema } from 'service/formValidationSchema';
 import {
   Announcement,
   Button,
@@ -57,14 +56,7 @@ const FundedNursingCare = ({
   const [hasPreviousFnc] = useState(false); // todo for new design
   const [isOngoing, setIsOngoing] = useState(true);
 
-  const schema = useMemo(() => (
-    yup.object().shape({
-      claimCollector: yup
-        .number()
-        .typeError('Required field')
-        .required('Required field')
-    })
-  ), [detailsData]);
+  const schema = useMemo(() => fncClaimCollectorSchema, [detailsData]);
 
   const {
     handleSubmit,
@@ -97,41 +89,7 @@ const FundedNursingCare = ({
   const clickSave = async (data) => {
     const { dateFrom, dateTo } = dates;
 
-    const dateSchema = yup.object().shape({
-      detailsDateTo: null,
-      isOngoing: yup.boolean(),
-      dateFrom: yup
-        .date()
-        .typeError('Please select a date from')
-        .required()
-        .test('dateFrom', 'Date from less then core date start', () => (
-          compareDescendingDMY(dateFrom, detailsData.startDate) !== dateDescending.asc
-        ))
-        .test('dateFrom', 'Date from more then core date end', () => {
-          if (detailsData.endDate) {
-            return compareDescendingDMY(dateFrom, detailsData.endDate) !== dateDescending.desc;
-          }
-          return true;
-        }),
-      dateTo: yup
-        .mixed()
-        .when('isOngoing', {
-          is: false,
-          then: yup
-            .date()
-            .typeError('Please select a date to')
-            .required()
-            .test('dateTo', '(Date to) less then (date from)', () => (
-              compareDescendingDMY(dateFrom, dateTo) !== dateDescending.desc
-            ))
-            .test('dateTo', 'Date to should be less or equal then core end date', (value) => {
-              if (detailsData.endDate) {
-                return compareDescendingDMY(value, detailsData.endDate) !== dateDescending.desc;
-              }
-              return true;
-            }),
-        })
-    });
+    const dateSchema = getFNCDateValidationSchema(detailsData);
 
     let localErrors = {};
     let hasErrors = false;
@@ -312,7 +270,7 @@ const FundedNursingCare = ({
           {hasFNC === 'yes' && (
             <>
               <HorizontalSeparator height={32} />
-              <UploadFile title='Upload FNC Assessment...' control={control} />
+              <UploadFile title="Upload FNC Assessment..." control={control} />
             </>
           )}
           <HorizontalSeparator height={50} />

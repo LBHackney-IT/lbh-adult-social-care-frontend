@@ -15,36 +15,19 @@ import {
   UploadFile,
 } from 'components';
 import { useRouter } from 'next/router';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_REFERRAL_ROUTE } from 'routes/RouteConstants';
 import { getFormData } from 'service/getFormData';
-import { TEXT_FILE_EXTENSIONS } from 'constants/variables';
+import { assignPackageSchema } from '../../../service/formValidationSchema';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKER_REFERRAL_ROUTE },
   { text: 'Broker Referral', href: BROKER_REFERRAL_ROUTE },
   { text: 'Assign and attach a care plan' },
 ];
-
-const schema = yup.object().shape({
-  brokerId: yup.string().typeError('Please choose a Broker').required().min(2, 'Please choose a Broker'),
-  packageType: yup
-    .number()
-    .typeError('Please select a package type')
-    .required()
-    .min(1, 'Please select a package type'),
-  file: yup
-    .mixed()
-    .test('fileInfo', '', (value) => {
-      if (!value?.size || (value?.size && TEXT_FILE_EXTENSIONS.some(fileType => value.type.includes(fileType)))) {
-        return true;
-      }
-    })
-});
 
 const AssignPackage = () => {
   const router = useRouter();
@@ -63,7 +46,7 @@ const AssignPackage = () => {
     control,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(assignPackageSchema),
     defaultValues: {
       hackneyUserId: hackneyId,
       brokerId: 0,
