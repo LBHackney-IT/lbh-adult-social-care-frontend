@@ -45,9 +45,9 @@ export const AdHocAndReleases = ({ createPayrun, isLoading }) => {
           />
         </FormGroup>
         <HorizontalSeparator height="10px" />
-        <FormGroup label="Paid up to" error={errors.paidUpToDate?.message} smallLabel>
+        <FormGroup label="Paid From" error={errors.paidUpToDate?.message} smallLabel>
           <Controller
-            name="paidUpToDate"
+            name="paidFromDate"
             control={control}
             render={({ field }) => (
               <DatePicker
@@ -59,8 +59,11 @@ export const AdHocAndReleases = ({ createPayrun, isLoading }) => {
               />
             )}
           />
+        </FormGroup>
+        <HorizontalSeparator height="10px" />
+        <FormGroup label="Paid To" error={errors.paidUpToDate?.message} smallLabel>
           <Controller
-            name="paidFromDate"
+            name="paidUpToDate"
             control={control}
             render={({ field }) => (
               <DatePicker

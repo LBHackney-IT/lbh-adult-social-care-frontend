@@ -26,6 +26,12 @@ const CreatePayRunModal = ({ isOpen, onClose, update }) => {
       await createDraftPayRun({ data });
       update();
       onClose();
+      dispatch(
+        addNotification({
+          text: 'payrun successfully created',
+          className: 'success',
+        })
+      );
     } catch (e) {
       dispatch(
         addNotification({
