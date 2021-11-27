@@ -95,7 +95,17 @@ export const assignPackageSchema = yup.object().shape({
       if (!value?.size || (value?.size && TEXT_FILE_EXTENSIONS.some(fileType => value.type.includes(fileType)))) {
         return true;
       }
-    })
+    });
+
+const newPayRunRegularCyclesSchema = yup.object().shape({
+  paidUpToDate: yup.string().typeError('Please select a date').required('Please select a date'),
+  type: yup.number().typeError('Please enter a cost').required('Please enter a cost').min(1, 'Please enter a cost'),
+});
+
+const adHochAndReleasesSchema = yup.object().shape({
+  paidFromDate: yup.string().typeError('Please select a date').required('Please select a date'),
+  paidUpToDate: yup.string().typeError('Please select a date').required('Please select a date'),
+  type: yup.number().typeError('Please enter a cost').required('Please enter a cost').min(1, 'Please enter a cost'),
 });
 
 export const formValidationSchema = {
@@ -103,4 +113,6 @@ export const formValidationSchema = {
   carePackageBrokerPackageSchema,
   newOneOffAdditionalNeedSchema,
   newWeeklyAdditionalNeedSchema,
+  newPayRunRegularCyclesSchema,
+  adHochAndReleasesSchema,
 };
