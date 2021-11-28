@@ -12,6 +12,7 @@ import {
   Hint,
   FormGroup,
   Input,
+  RadioGroup,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -75,6 +76,7 @@ const CareCharge = () => {
     resolver: yupResolver(formValidationSchema.carePackageFNCSchema),
     defaultValues: {
       cost: null,
+      claimCollector: 2,
     },
   });
 
@@ -140,7 +142,7 @@ const CareCharge = () => {
             <Container className="brokerage__container">
               <Hint>Provisional care charge (pre-assessement)</Hint>
               <HorizontalSeparator height="30px" />
-              <FormGroup label="Cost per week" hint='Auto calculated on age'>
+              <FormGroup label="Cost per week" hint="Auto calculated on age">
                 <Controller
                   name="cost"
                   control={control}
@@ -157,6 +159,23 @@ const CareCharge = () => {
                 />
               </FormGroup>
             </Container>
+            <Controller
+              name="claimCollector"
+              control={control}
+              render={({ field }) => (
+                <RadioGroup
+                  handle={field.onChange}
+                  inline
+                  // error={errors.collectedBy}
+                  label="Collected by"
+                  items={[
+                    { id: 1, label: 'Hackney council (gross)' },
+                    { id: 2, label: 'Supplier (net)' },
+                  ]}
+                  {...field}
+                />
+              )}
+            />
 
             <HorizontalSeparator height="48px" />
             <Container display="flex">
