@@ -20,6 +20,8 @@ import { NursingSchedule } from 'components/Pages/CarePackages/FundedNusringCare
 import { getCareChargesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getFormData } from 'service/getFormData';
+import { formValidationSchema } from 'service/formValidationSchema';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -59,7 +61,7 @@ const BrokerFNC = () => {
     setValue,
     formState: { errors, isDirty },
   } = useForm({
-    // resolver: yupResolver(formValidationSchema.carePackageCorePackageSchema),
+    resolver: yupResolver(formValidationSchema.carePackageFNCSchema),
     defaultValues: {
       carePackageId,
       id: null,
@@ -137,7 +139,7 @@ const BrokerFNC = () => {
         {!fncLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
             <Container className="brokerage__container">
-              <FormGroup label="Claims are collected by" error={errors.packageType?.message}>
+              <FormGroup label="Claims are collected by" error={errors.claimCollector?.message}>
                 <Controller
                   name="claimCollector"
                   control={control}
@@ -147,7 +149,7 @@ const BrokerFNC = () => {
             </Container>
             <NursingSchedule errors={errors} control={control} isOngoing={isOngoing} />
             <Container className="brokerage__container">
-              <FormGroup label="Funded Nursing Care notes" error={errors.packageType?.message}>
+              <FormGroup label="Funded Nursing Care notes" error={errors.description?.message}>
                 <Controller
                   name="description"
                   control={control}
