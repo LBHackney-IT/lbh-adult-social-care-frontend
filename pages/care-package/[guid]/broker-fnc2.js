@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { getLoggedInUser, getNumberWithCommas } from 'service';
+import { useForm } from 'react-hook-form';
+import { getLoggedInUser } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
   Container,
   Loading,
   TitleSubtitleHeader,
-  Select,
-  FormGroup,
-  Textarea,
   VerticalSeparator,
-  Hint,
   HorizontalSeparator,
-  Heading,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { updateCarePackageReclaimFnc, usePackageActiveFncPrice, usePackageFnc } from 'api';
 import withSession from 'lib/session';
-import { NursingSchedule } from 'components/Pages/CarePackages/FundedNusringCare2/NursingSchedule';
 import { getBrokerPackageRoute, getCareChargesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+import {
+  NursingSchedule,
+  ClaimsCollector,
+  FundingPerWeek,
+  NursingCareNotes,
+} from 'components/Pages/CarePackages/FundedNusringCare2';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -48,11 +48,6 @@ const BrokerFNC = () => {
   const { guid: carePackageId } = router.query;
   const { data: fncData, isLoading: fncLoading } = usePackageFnc(carePackageId);
   const { data: activeFncPrice } = usePackageActiveFncPrice(carePackageId);
-
-  const collectedOptions = [
-    { text: 'Supplier', value: '1' },
-    { text: 'Hackney', value: '2' },
-  ];
 
   const {
     handleSubmit,
@@ -143,44 +138,11 @@ const BrokerFNC = () => {
         <Loading isLoading={fncLoading} />
         {!fncLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
-            <Container className="brokerage__container">
-              <FormGroup label="Claims are collected by" error={errors.claimCollector?.message}>
-                <Controller
-                  name="claimCollector"
-                  control={control}
-                  render={({ field }) => <Select options={collectedOptions} {...field} />}
-                />
-              </FormGroup>
-            </Container>
+            <ClaimsCollector errors={errors} control={control} />
             <NursingSchedule errors={errors} control={control} isOngoing={isOngoing} />
-            <Container>
-              <FormGroup label="Funded Nursing Care notes" error={errors.description?.message}>
-                <Controller
-                  name="description"
-                  control={control}
-                  render={({ field }) => <Textarea value={field.value} handler={field.onChange} {...field} />}
-                />
-              </FormGroup>
-            </Container>
+            <NursingCareNotes errors={errors} control={control} />
             <HorizontalSeparator height="48px" />
-            <Container
-              borderTop="1px solid #bfc1c3"
-              borderBottom="1px solid #bfc1c3"
-              display="flex"
-              flexDirection="column"
-              justifyContent="stretch"
-            >
-              <Container
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-                borderBottom="1px solid #bfc1c3"
-                padding="30px 0"
-              >
-                <Heading size="l">Funding per week</Heading>
-                <Heading size="l">£{getNumberWithCommas(cost)}</Heading>
-              </Container>
-            </Container>
+            <FundingPerWeek total={cost} />
             <HorizontalSeparator height="48px" />
             <Container display="flex">
               <Button onClick={clickBack} secondary color="gray">
