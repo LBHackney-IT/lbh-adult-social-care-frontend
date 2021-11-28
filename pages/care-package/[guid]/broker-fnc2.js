@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { getLoggedInUser } from 'service';
+import { getLoggedInUser, getNumberWithCommas } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
   Container,
-  HorizontalSeparator,
   Loading,
   TitleSubtitleHeader,
   Select,
   FormGroup,
   Textarea,
+  VerticalSeparator,
+  Hint,
+  HorizontalSeparator,
+  Heading,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { updateCarePackageReclaimFnc, usePackageActiveFncPrice, usePackageDetails, usePackageFnc } from 'api';
+import { updateCarePackageReclaimFnc, usePackageActiveFncPrice, usePackageFnc } from 'api';
 import withSession from 'lib/session';
 import { NursingSchedule } from 'components/Pages/CarePackages/FundedNusringCare2/NursingSchedule';
-import { getCareChargesRoute } from 'routes/RouteConstants';
+import { getBrokerPackageRoute, getCareChargesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
@@ -40,8 +43,6 @@ const BrokerFNC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const [isDialogOpen, setDialogOpen] = useState(false);
-  const [packageStatus, setPackageStatus] = useState();
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
 
   const { guid: carePackageId } = router.query;
@@ -76,6 +77,7 @@ const BrokerFNC = () => {
     },
   });
 
+  const cost = watch('cost');
   const isOngoing = watch('isOngoing');
 
   useEffect(() => {
@@ -99,6 +101,9 @@ const BrokerFNC = () => {
       }
     }
   }, [fncLoading]);
+
+  const clickBack = () => router.push(getBrokerPackageRoute(carePackageId));
+  const skip = () => router.push(getCareChargesRoute(carePackageId));
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
@@ -148,7 +153,7 @@ const BrokerFNC = () => {
               </FormGroup>
             </Container>
             <NursingSchedule errors={errors} control={control} isOngoing={isOngoing} />
-            <Container className="brokerage__container">
+            <Container>
               <FormGroup label="Funded Nursing Care notes" error={errors.description?.message}>
                 <Controller
                   name="description"
@@ -157,9 +162,39 @@ const BrokerFNC = () => {
                 />
               </FormGroup>
             </Container>
-            <Button isLoading={isRequestBeingSent} type="submit">
-              Save and continue
-            </Button>
+            <HorizontalSeparator height="48px" />
+            <Container
+              borderTop="1px solid #bfc1c3"
+              borderBottom="1px solid #bfc1c3"
+              display="flex"
+              flexDirection="column"
+              justifyContent="stretch"
+            >
+              <Container
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                borderBottom="1px solid #bfc1c3"
+                padding="30px 0"
+              >
+                <Heading size="l">Funding per week</Heading>
+                <Heading size="l">£{getNumberWithCommas(cost)}</Heading>
+              </Container>
+            </Container>
+            <HorizontalSeparator height="48px" />
+            <Container display="flex">
+              <Button onClick={clickBack} secondary color="gray">
+                Back
+              </Button>
+              <VerticalSeparator width="10px" />
+              <Button onClick={skip} className="secondary-yellow">
+                Skip and continue
+              </Button>
+              <VerticalSeparator width="10px" />
+              <Button isLoading={isRequestBeingSent} type="submit">
+                Save and continue
+              </Button>
+            </Container>
           </form>
         )}
       </Container>
