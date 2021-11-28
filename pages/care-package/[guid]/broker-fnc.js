@@ -25,6 +25,7 @@ import {
   FundingPerWeek,
   NursingCareNotes,
 } from 'components/Pages/CarePackages/FundedNusringCare';
+import omit from 'lodash.omit';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -115,11 +116,20 @@ const BrokerFNC = () => {
   const handleFormSubmission = async () => {
     setIsRequestBeingSent(true);
     const data = getValues();
-    const formData = getFormData({
-      ...data,
-      startDate: new Date(data.startDate).toISOString(),
-      endDate: data.endDate && !data.isOngoing ? new Date(data.endDate).toISOString() : null,
-    });
+    const omittedData = data.endDate && !data.isOngoing ? data : omit(data, ['endDate']);
+    console.log(omittedData);
+    const formData =
+      !omittedData.endDate || omittedData.isOngoing
+        ? getFormData({
+            ...omittedData,
+            startDate: new Date(omittedData.startDate).toISOString(),
+          })
+        : getFormData({
+            ...omittedData,
+            startDate: new Date(omittedData.startDate).toISOString(),
+            endDate: new Date(omittedData.endDate).toISOString(),
+          });
+
     try {
       await updateCarePackageReclaimFnc(carePackageId, formData);
       pushNotification(`Funded Nursing Care updated successfully`, 'success');
