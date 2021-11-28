@@ -156,7 +156,6 @@ const CorePackage = () => {
     }
   };
 
-  const onSubmit = () => updatePackage();
   const clickBack = () => router.push(getCorePackageRoute(packageId));
   return (
     <>
@@ -173,7 +172,7 @@ const CorePackage = () => {
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Broker Package" title="Build a care package" />
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(updatePackage)}>
           <Loading className="loading" isLoading={isLoading} />
           {!isLoading && (
             <>
