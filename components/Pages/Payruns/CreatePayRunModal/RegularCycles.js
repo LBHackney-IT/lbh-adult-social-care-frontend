@@ -1,3 +1,4 @@
+import React, { useMemo } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import {
   Button,
@@ -8,19 +9,17 @@ import {
   RadioGroup,
   VerticalSeparator,
 } from 'components';
-import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { formValidationSchema } from 'service/formValidationSchema';
-
-const cycleOptions = [
-  { id: 1, label: 'Residential Recurring' },
-  { id: 2, label: 'Direct Payments' },
-];
+import { differenceInDays } from 'date-fns';
+import { useLatestPayRunToDate, useReleasedInvoiceNumber } from 'api';
+import { Hint } from '../../../HackneyDS';
 
 export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
   const {
     handleSubmit,
     control,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(formValidationSchema.newPayRunRegularCyclesSchema),
@@ -29,6 +28,35 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
       paidUpToDate: null,
     },
   });
+
+  const [paidUpToDate, type] = watch(['paidUpToDate', 'type']);
+
+  const { data: invoiceNumber, isLoading: invoiceNumberLoading } = useReleasedInvoiceNumber();
+  const { data: lastCycleDate, isLoading: lastCycleDateLoading } = useLatestPayRunToDate(type);
+  const fullLoading = lastCycleDateLoading || invoiceNumberLoading || isLoading;
+
+  const daysLastCycle = useMemo(() => {
+    if (paidUpToDate) {
+      const formattedCycleDate = new Date(lastCycleDate);
+      return differenceInDays(
+        new Date(paidUpToDate.getFullYear(), paidUpToDate.getMonth(), paidUpToDate.getDate()),
+        new Date(formattedCycleDate.getFullYear(), formattedCycleDate.getMonth(), formattedCycleDate.getDate()),
+      );
+    }
+    return 0;
+  }, [paidUpToDate, lastCycleDate]);
+
+  const cycleOptions = useMemo(() => [
+    {
+      id: 1,
+      label:
+        <p>
+          Residential Recurring
+          {invoiceNumber ? <span className="lbh-color-green font-size-14px"> ({invoiceNumber} releases)</span> : ''}
+        </p>
+    },
+    { id: 2, label: 'Direct Payments' },
+  ], [invoiceNumber]);
 
   const onSubmit = (data) => createPayrun(data);
 
@@ -60,19 +88,27 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
                 date={field.value ? new Date(field.value) : null}
                 setDate={field.onChange}
                 {...field}
+                minDate={lastCycleDate && new Date(lastCycleDate)}
                 floatingCalendar
                 hasClearButton
               />
             )}
           />
         </FormGroup>
-        <HorizontalSeparator height="20px" />
+        {daysLastCycle !== null && (
+          <>
+            <HorizontalSeparator height={10} />
+            <Hint className="font-size-14px">{daysLastCycle}{daysLastCycle === 1 ? ' day' : ' days'} since last
+              cycle</Hint>
+          </>
+        )}
+        <HorizontalSeparator height="24px" />
         <Container display="flex" justifyContent="flex-start">
-          <Button type="button" onClick={onClose} outline secondary color='gray'>
+          <Button type="button" onClick={onClose} outline secondary color="red">
             Cancel
           </Button>
           <VerticalSeparator width="10px" />
-          <Button type="submit" isLoading={isLoading}>
+          <Button type="submit" isLoading={fullLoading}>
             Create
           </Button>
         </Container>

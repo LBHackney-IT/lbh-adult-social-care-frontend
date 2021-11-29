@@ -7,7 +7,7 @@ import { SupplierListItem } from './SupplierListItem';
 export const SupplierList = ({ searchTerm, newSearch, setNewSearch, setValue }) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [resultsFor, setResultsFor] = useState(searchTerm);
-  const params = useMemo(() => ({ supplierName: resultsFor }), [resultsFor]);
+  const params = useMemo(() => ({ supplierName: resultsFor, pageNumber }), [resultsFor, pageNumber]);
   const { data: searchResults, isLoading: suppliersLoading } = useSuppliers({
     params,
     shouldFetch: resultsFor,
