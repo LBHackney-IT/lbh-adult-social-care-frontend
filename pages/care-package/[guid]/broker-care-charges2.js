@@ -97,7 +97,7 @@ const CareCharge = () => {
 
   useEffect(() => {
     if (calculatedCost) setValue('cost', calculatedCost);
-  }, [calculatedCostLoading]);
+  }, [calculatedCost]);
 
   useEffect(() => {
     if (careChargeData && careChargeData.length) {
@@ -127,7 +127,7 @@ const CareCharge = () => {
     if (isDirty) {
       handleFormSubmission(data);
     } else {
-      // router.push(getCareChargesRoute(carePackageId));
+      router.push(getCarePackageReviewRoute(carePackageId));
     }
   };
 
