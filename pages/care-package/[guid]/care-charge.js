@@ -88,7 +88,7 @@ const claimCollectorSchema = yup.string().required('Required field');
 const startDateSchema = yup.mixed().required('Required field');
 
 const CareCharge = () => {
-  const coreLoading = useRedirectIfPackageNotExist();
+  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
   const breadcrumbs = useBreadcrumbs();
 
   const [isOpenEdit, toggleEdit] = useModal();

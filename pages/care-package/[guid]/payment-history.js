@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
-import { getLoggedInUser, getNumberWithCommas } from 'service';
+import { getLoggedInUser, getNumberWithCommas, useRedirectIfPackageNotExist } from 'service';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading, VerticalSeparator } from 'components';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { format } from 'date-fns';
@@ -37,10 +37,15 @@ const PaymentHistory = () => {
     }),
     [pageNumber]
   );
-  const { data, isLoading } = usePaymentHistoryView({ params, packageId });
+
+  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
+  const { data, isLoading: HistoryViewLoading } = usePaymentHistoryView({ params, packageId });
   const [packagePayment, setPackagePayment] = useState();
   const [pagingMetaData, setPagingMetaData] = useState();
   const [paymentHistory, setPaymentHistory] = useState([]);
+
+  const isLoading = coreLoading || HistoryViewLoading;
+
   useEffect(() => {
     if (data) {
       setPackagePayment(data.packagePayment);
