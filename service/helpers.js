@@ -65,3 +65,11 @@ export const getLoggedInUser = ({ req }) => {
 };
 
 export const getNumberWithCommas = (x) => x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+export const removeEmpty = (obj) => {
+  Object.keys(obj).forEach(k =>
+    (obj[k] && typeof obj[k] === 'object') && removeEmpty(obj[k]) ||
+    (!obj[k] && obj[k] !== undefined) && delete obj[k]
+  );
+  return obj;
+};

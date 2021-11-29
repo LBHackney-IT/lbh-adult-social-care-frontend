@@ -12,19 +12,26 @@ import {
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { createCarePackageReclaimFnc, updateCarePackageReclaimFnc, usePackageActiveFncPrice, usePackageFnc } from 'api';
+import {
+  createCareChargeReclaim,
+  updateCareChargeReclaim,
+  usePackageCalculatedCost,
+  usePackageCareCharge,
+  useSingleCorePackageInfo,
+} from 'api';
 import withSession from 'lib/session';
-import { getBrokerPackageRoute, getCareChargesRoute } from 'routes/RouteConstants';
+import { getBrokerPackageRoute, getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+import { reclaimType } from 'constants/variables';
 import {
-  NursingSchedule,
+  CareChargeCost,
+  CareChargeSchedule,
   ClaimsCollector,
   FundingPerWeek,
-  NursingCareNotes,
-} from 'components/Pages/CarePackages/FundedNusringCare';
+} from 'components/Pages/CarePackages/BrokerCareCharge';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -39,15 +46,22 @@ export const getServerSideProps = withSession(async ({ req }) => {
   return { props: {} };
 });
 
-const BrokerFNC = () => {
+const CareCharge = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
 
   const { guid: carePackageId } = router.query;
-  const { data: fncData, isLoading: fncLoading } = usePackageFnc(carePackageId);
-  const { data: activeFncPrice } = usePackageActiveFncPrice(carePackageId);
+
+  const { data: careChargeData, isLoading: careChargeLoading } = usePackageCareCharge(
+    carePackageId,
+    reclaimType.careCharge
+  );
+
+  const { data: packageInfo } = useSingleCorePackageInfo(carePackageId);
+  const { serviceUser } = packageInfo;
+  const { data: calculatedCost } = usePackageCalculatedCost(carePackageId, serviceUser?.id);
 
   const {
     handleSubmit,
@@ -57,48 +71,44 @@ const BrokerFNC = () => {
     setValue,
     formState: { errors, isDirty },
   } = useForm({
-    resolver: yupResolver(formValidationSchema.carePackageFNCSchema),
+    resolver: yupResolver(formValidationSchema.carePackageBrokerCareChargesSchema),
     defaultValues: {
       carePackageId,
-      id: null,
       cost: null,
-      claimCollector: 0,
+      subType: 1,
+      claimCollector: 2,
+      claimReason: null,
       startDate: null,
       endDate: null,
-      description: null,
-      assessmentFileName: null,
-      assessmentFileId: null,
       isOngoing: false,
+      description: null,
+      id: null,
     },
   });
 
-  const cost = watch('cost');
-  const isOngoing = watch('isOngoing');
+  useEffect(() => {
+    if (calculatedCost) setValue('cost', calculatedCost);
+  }, [calculatedCost]);
 
   useEffect(() => {
-    if (activeFncPrice) {
-      setValue('cost', activeFncPrice);
-    }
-  }, [activeFncPrice]);
-
-  useEffect(() => {
-    if (fncData) {
-      setValue('startDate', fncData.startDate);
-      setValue('claimCollector', fncData.claimCollector);
-      if (fncData.id) setValue('id', fncData.id);
-      if (fncData.description) setValue('description', fncData.description);
-      if (fncData.assessmentFileName) setValue('assessmentFileName', fncData.assessmentFileName);
-      if (fncData.assessmentFileId) setValue('assessmentFileId', fncData.assessmentFileId);
-      if (!fncData.endDate && fncData.startDate) setValue('isOngoing', true);
-      if (fncData.endDate) {
-        setValue('endDate', fncData.endDate);
+    if (careChargeData && careChargeData.length) {
+      const data = careChargeData[0];
+      setValue('id', data.id);
+      setValue('startDate', data.startDate);
+      setValue('claimCollector', data.claimCollector);
+      if (data.claimReason) setValue('claimReason', data.claimReason);
+      if (data.description) setValue('description', data.description);
+      if (data.assessmentFileName) setValue('assessmentFileName', data.assessmentFileName);
+      if (data.assessmentFileId) setValue('assessmentFileId', data.assessmentFileId);
+      if (!data.endDate && data.startDate) setValue('isOngoing', true);
+      if (data.endDate) {
+        setValue('endDate', data.endDate);
         setValue('isOngoing', false);
       }
     }
-  }, [fncLoading]);
+  }, [careChargeLoading]);
 
   const clickBack = () => router.push(getBrokerPackageRoute(carePackageId));
-  const skip = () => router.push(getCareChargesRoute(carePackageId));
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
@@ -108,7 +118,7 @@ const BrokerFNC = () => {
     if (isDirty) {
       handleFormSubmission(data);
     } else {
-      router.push(getCareChargesRoute(carePackageId));
+      router.push(getCarePackageReviewRoute(carePackageId));
     }
   };
 
@@ -129,46 +139,58 @@ const BrokerFNC = () => {
           });
 
     try {
-      if (omittedData.id) {
-        await updateCarePackageReclaimFnc(carePackageId, formData);
+      if (data.id) {
+        await updateCareChargeReclaim(carePackageId, formData);
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
       } else {
-        await createCarePackageReclaimFnc(carePackageId, formData);
+        await createCareChargeReclaim(carePackageId, formData);
         pushNotification(`Funded Nursing Care created successfully`, 'success');
       }
-      router.push(getCareChargesRoute(carePackageId));
+      router.push(getCarePackageReviewRoute(carePackageId));
     } catch (e) {
       pushNotification(e);
     }
+
     setIsRequestBeingSent(false);
   };
 
+  const collectedBy = watch('claimCollector');
+  const isOngoing = watch('isOngoing');
+  const cost = watch('cost');
+
+  const { data: coreInfo } = useSingleCorePackageInfo(carePackageId);
+
+  const isS117Client = coreInfo?.settings?.isS117Client;
+  const skipPage = () => router.push(getCarePackageReviewRoute(carePackageId));
   return (
     <>
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
-        <TitleSubtitleHeader subTitle="Funded Nursing Care" title="Build a care package" />
-        <Loading isLoading={fncLoading} />
-        {!fncLoading && (
+        <TitleSubtitleHeader subTitle="Care Charges" title="Build a care package" />
+        <Loading isLoading={careChargeLoading} />
+        {!careChargeLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
-            <ClaimsCollector errors={errors} control={control} />
-            <NursingSchedule errors={errors} control={control} isOngoing={isOngoing} />
-            <NursingCareNotes errors={errors} control={control} />
+            <CareChargeCost control={control} errors={errors} isS117Client={isS117Client} />
+            <CareChargeSchedule control={control} errors={errors} isOngoing={isOngoing} isS117Client={isS117Client} />
+            <ClaimsCollector control={control} errors={errors} collectedBy={collectedBy} isS117Client={isS117Client} />
             <HorizontalSeparator height="48px" />
-            <FundingPerWeek total={cost} />
+            <FundingPerWeek total={cost} isS117Client={isS117Client} />
             <HorizontalSeparator height="48px" />
             <Container display="flex">
               <Button onClick={clickBack} secondary color="gray">
                 Back
               </Button>
               <VerticalSeparator width="10px" />
-              <Button onClick={skip} className="secondary-yellow">
-                Skip and continue
-              </Button>
               <VerticalSeparator width="10px" />
-              <Button isLoading={isRequestBeingSent} type="submit">
-                Save and continue
-              </Button>
+              {isS117Client ? (
+                <Button type="button" onClick={skipPage}>
+                  Continue
+                </Button>
+              ) : (
+                <Button isLoading={isRequestBeingSent} type="submit">
+                  Save and continue
+                </Button>
+              )}
             </Container>
           </form>
         )}
@@ -177,4 +199,4 @@ const BrokerFNC = () => {
   );
 };
 
-export default BrokerFNC;
+export default CareCharge;

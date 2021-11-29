@@ -55,11 +55,7 @@ export const usePackageActiveFncPrice = (packageId) =>
   useGetData(getCarePackageUrl(packageId, '/reclaims/fnc/active-price'));
 
 export const usePackageCalculatedCost = (packageId, serviceUserId) =>
-  useGetData(
-    getCarePackageUrl(packageId, `/reclaims/care-charges/${serviceUserId}/default`),
-    'Can not get calculated cost',
-    0
-  );
+  useGetData(getCarePackageUrl(packageId, `/reclaims/care-charges/${serviceUserId}/default`));
 
 // helper for usePackageCareCharge
 const useGetActualReclaims = (reclaims) => {

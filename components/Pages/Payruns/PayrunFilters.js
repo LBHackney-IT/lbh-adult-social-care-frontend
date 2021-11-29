@@ -38,6 +38,7 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter, tabView }) => 
   };
 
   const onSearch = useCallback(() => {
+    changeFilterField('searchTerm', searchText);
     changeFilterField('payRunId', searchText);
   }, [changeFilterField, searchText]);
 

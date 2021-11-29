@@ -24,6 +24,7 @@ export const getServerSideProps = withSession(({ req }) => {
 
 const initialFilters = {
   payRunId: '',
+  searchTerm: '',
   dateFrom: null,
   dateTo: null,
   payRunType: '',
@@ -40,12 +41,13 @@ const Payruns = () => {
   const [isOpenedModal, setIsOpenedModal] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
-  const { payRunId, dateTo, dateFrom, payRunType, payRunStatus } = filters;
+  const { payRunId, searchTerm, dateTo, dateFrom, payRunType, payRunStatus } = filters;
   const params = useMemo(
     () => ({
       dateTo,
       dateFrom,
       payRunId,
+      searchTerm,
       pageNumber,
       heldPageNumber,
       payRunType,
@@ -56,7 +58,7 @@ const Payruns = () => {
     [filters, pageNumber, heldPageNumber, tabView]
   );
   const { data, isLoading, mutate: update } = usePayrunView({ params });
-  const { data: hData, isLoading: isHeldLoading } = useHeldPaymentsView({ params });
+  const { data: hData, isLoading: isHeldLoading, mutate: updateHeldData } = useHeldPaymentsView({ params });
 
   const {
     data: payrunData,
@@ -113,7 +115,7 @@ const Payruns = () => {
           </Tab>
           <Tab>
             <Loading className="loading" isLoading={isHeldLoading} />
-            <HeldPaymentsList data={heldData} searchTerm={payRunId} />
+            <HeldPaymentsList data={heldData} searchTerm={payRunId} update={updateHeldData} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination

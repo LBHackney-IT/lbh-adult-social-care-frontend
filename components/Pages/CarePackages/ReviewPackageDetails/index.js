@@ -46,16 +46,17 @@ const ReviewPackageDetails = ({
 
   const isHide = () => !isNursingCarePackage(title);
 
-  const links = useMemo(() => (
-    [
+  const links = useMemo(
+    () => [
       { text: 'Care Package', href: '#care-package' },
       { text: 'Weekly Additional Need', href: '#weekly-additional-need' },
       { text: 'One Off Additional Need', href: '#on-off-additional-need' },
       { text: 'Funded Nursing Care', href: '#funded-nursing-care', hide: isHide() },
       { text: 'Care charges', href: '#care-charges' },
       { text: 'Summary', href: '#summary' },
-    ]
-  ), [title]);
+    ],
+    [title]
+  );
 
   const router = useRouter();
 
@@ -87,7 +88,8 @@ const ReviewPackageDetails = ({
     {
       loading,
       title: 'End package',
-      onClick: () => makeActionPackage(endCarePackage, actionNotes.endNotes, getServiceUserPackagesRoute(userDetails.id)),
+      onClick: () =>
+        makeActionPackage(endCarePackage, actionNotes.endNotes, getServiceUserPackagesRoute(userDetails.id)),
     },
     { title: 'Cancel', onClick: closePopup, className: 'link-button red' },
   ];
@@ -116,7 +118,8 @@ const ReviewPackageDetails = ({
       loading,
       title: 'Cancel package',
       className: 'secondary-red',
-      onClick: () => makeActionPackage(cancelCarePackage, actionNotes.cancelNotes, getServiceUserPackagesRoute(userDetails.id)),
+      onClick: () =>
+        makeActionPackage(cancelCarePackage, actionNotes.cancelNotes, getServiceUserPackagesRoute(userDetails.id)),
     },
     { title: 'Back', onClick: closePopup, className: 'link-button black' },
   ];
@@ -160,7 +163,7 @@ const ReviewPackageDetails = ({
             subTitle={subTitle}
             link={
               <span onClick={goToHistory} className="lbh-color-blue font-size-19px package-history-link">
-                Package history
+                Package History
               </span>
             }
           >
@@ -171,7 +174,7 @@ const ReviewPackageDetails = ({
         <Container className="review-package-details__main-container">
           <Container className="review-package-details__links">
             {links.map(({ text, href, hide }) => {
-              if(hide) return null;
+              if (hide) return null;
 
               return (
                 <p key={text}>
@@ -180,7 +183,7 @@ const ReviewPackageDetails = ({
                     {text}
                   </Link>
                 </p>
-              )
+              );
             })}
           </Container>
           <Container className="review-package-details__cost-info">
@@ -198,7 +201,7 @@ const ReviewPackageDetails = ({
                 careChargeClaimCollector,
                 fncDetails,
               }) => {
-                if(checkHide && isHide()) return null;
+                if (checkHide && isHide()) return null;
 
                 return (
                   <Container key={itemId} className="review-package-details__cost-info-item">
@@ -214,14 +217,20 @@ const ReviewPackageDetails = ({
                       <p className="brokerage__cost-of-placement">
                         Cost of placement
                         <span className="text-lbh-f01 font-weight-bold">
-                        {currency.euro}
+                          {currency.euro}
                           {costOfPlacement.toFixed(2)}
-                      </span>
+                        </span>
                       </p>
                     )}
                     {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader} />}
                     {totalCostInfo && (
-                      <Container className={totalCostInfo?.supplier !== undefined && totalCostInfo?.hackney !== undefined ? 'single-border-cost' : ''}>
+                      <Container
+                        className={
+                          totalCostInfo?.supplier !== undefined && totalCostInfo?.hackney !== undefined
+                            ? 'single-border-cost'
+                            : ''
+                        }
+                      >
                         {totalCostInfo?.hackney !== undefined && totalCostInfo?.hackney !== 0 && (
                           <BrokerageBorderCost
                             totalCost={totalCostInfo?.hackney.toFixed(2)}
@@ -244,7 +253,7 @@ const ReviewPackageDetails = ({
                       </Container>
                     )}
                   </Container>
-                )
+                );
               }
             )}
             <Container className="review-package-details__summary">
@@ -252,7 +261,7 @@ const ReviewPackageDetails = ({
                 Summary
               </h3>
               {summary.map(({ key, value, className: itemClassName, id, checkHide }) => {
-                if(checkHide && isHide()) return null;
+                if (checkHide && isHide()) return null;
 
                 return <BrokerageTotalCost key={id} value={value} name={key} className={itemClassName} />;
               })}
