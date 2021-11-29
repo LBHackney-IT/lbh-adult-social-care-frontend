@@ -20,8 +20,8 @@ import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_REFERRAL_ROUTE } from 'routes/RouteConstants';
-import { getFormData } from 'service/getFormData';
-import { assignPackageSchema } from '../../../service/formValidationSchema';
+import { getFormDataWithFile } from 'service/getFormData';
+import { assignPackageSchema } from 'service/formValidationSchema';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKER_REFERRAL_ROUTE },
@@ -38,8 +38,6 @@ const AssignPackage = () => {
   const { options: brokerOptions, isLoading: brokersLoading } = useBrokers();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isLoading = serviceUserLoading || lookupsLoading || brokersLoading || isSubmitting;
-
   const {
     handleSubmit,
     setValue,
@@ -51,17 +49,21 @@ const AssignPackage = () => {
       hackneyUserId: hackneyId,
       brokerId: 0,
       packageType: 0,
-      fileInfo: undefined,
+      assessmentFileName: null,
+      assessmentFile: null,
+      assessmentFileId: null,
       notes: '',
     },
   });
   const onSubmit = (data) => submitData(data);
 
   const submitData = async (data = {}) => {
-    const carePlanFile = data.fileInfo?.file;
     setIsSubmitting(true);
-    delete data.fileInfo;
-    const formData = getFormData({ ...data, carePlanFile });
+    const formData = getFormDataWithFile(data, {
+      fileId: 'carePlanFileId',
+      fileName: 'carePlanFileName',
+      file: 'carePlanFile',
+    });
     try {
       await assignToBroker({ data: formData });
       dispatch(addNotification({ text: 'Care plan assigned', className: 'success' }));
@@ -77,6 +79,8 @@ const AssignPackage = () => {
       setValue('hackneyUserId', parseInt(hackneyId, 10));
     }
   }, [hackneyId]);
+
+  const isLoading = serviceUserLoading || lookupsLoading || brokersLoading || isSubmitting;
 
   return (
     <>
@@ -114,7 +118,7 @@ const AssignPackage = () => {
           <Container className="brokerage__container">
             <Heading size="xl">Support plan and care package</Heading>
             <HorizontalSeparator height={24} />
-            <UploadFile control={control} title="Upload social worker care plan" />
+            <UploadFile name='carePlanFile' control={control} title="Upload social worker care plan" />
           </Container>
           <Container>
             <FormGroup label="Add notes" error={errors.notes?.message}>

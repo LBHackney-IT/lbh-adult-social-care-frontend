@@ -56,22 +56,6 @@ export const formatDocumentInfo = async ({ fileName, href }) => {
   return null;
 };
 
-export const formatDataWithFile = ({
-  data,
-  fileField = {
-    file: 'assessmentFile',
-    fileId: 'assessmentFileId',
-    fileName: 'assessmentFileName',
-  },
-}) => {
-  if (data[fileField.file]?.name === data[fileField.fileName]) {
-    delete data[fileField.file];
-  } else {
-    delete data[fileField.fileName];
-    delete data[fileField.fileId];
-  }
-};
-
 export const getLoggedInUser = ({ req }) => {
   const user = req.session.get('user');
   if (user === undefined) return null;

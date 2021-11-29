@@ -21,7 +21,7 @@ import { useToggle } from 'react-use';
 import { formatDate, getLoggedInUser, useGetFile, useRedirectIfPackageNotExist } from 'service';
 import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
 import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
-import { useLookups, usePackageCareCharge, usePackageDetails, useSingleCorePackageInfo } from 'api';
+import { useLookups, usePackageCareCharge, usePackageDetails } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import * as yup from 'yup';
 import { addDays } from 'date-fns';
@@ -41,11 +41,9 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
-const useBreadcrumbs = () => {
+const useBreadcrumbs = (serviceUserId) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
-
-  const { data } = useSingleCorePackageInfo(packageId);
 
   return useMemo(
     () => [
@@ -53,7 +51,7 @@ const useBreadcrumbs = () => {
       { text: 'Care charges', href: '/' },
       {
         text: 'Full Overview',
-        href: getServiceUserPackagesRoute(data?.serviceUser?.id),
+        href: getServiceUserPackagesRoute(serviceUserId),
       },
       { text: 'Financial assessment' },
     ],
@@ -64,7 +62,9 @@ const useBreadcrumbs = () => {
 const useModal = () => useToggle(false);
 
 const defaultValues = {
-  fileInfo: undefined,
+  assessmentFileId: null,
+  assessmentFileName: null,
+  assessmentFile: null,
   [provisional]: {
     cost: '',
     claimCollector: '',
@@ -91,8 +91,8 @@ const claimCollectorSchema = yup.string().required('Required field');
 const startDateSchema = yup.mixed().required('Required field');
 
 const CareCharge = () => {
-  const coreLoading = useRedirectIfPackageNotExist();
-  const breadcrumbs = useBreadcrumbs();
+  const { data: packageInfo, isLoading: packageInfoLoading } = useRedirectIfPackageNotExist();
+  const breadcrumbs = useBreadcrumbs(packageInfo?.serviceUser?.id);
 
   const [isOpenEdit, toggleEdit] = useModal();
   const [isOpenCancel, toggleCancel] = useModal();
@@ -150,7 +150,6 @@ const CareCharge = () => {
 
   const { actualReclaims, isLoading: careChargeLoading } = usePackageCareCharge(packageId);
   const { data: claimCollectors, isLoading: lookupsLoading } = useLookups('claimCollector');
-  const { data: packageInfo, isLoading: packageInfoLoading } = useSingleCorePackageInfo(packageId);
 
   useEffect(() => {
     setPackageId(routerPackageId);
@@ -424,7 +423,7 @@ const CareCharge = () => {
     [formState.isDirty, onEdit, goToPackages]
   );
 
-  const isLoading = documentLoading || coreLoading || packageInfoLoading || lookupsLoading || careChargeLoading || detailsLoading;
+  const isLoading = documentLoading || packageInfoLoading || lookupsLoading || careChargeLoading || detailsLoading;
 
   return (
     <div className="care-charge">

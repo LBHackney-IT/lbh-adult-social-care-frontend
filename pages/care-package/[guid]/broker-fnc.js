@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { dateToIsoString, formatDataWithFile, getLoggedInUser, useGetFile } from 'service';
+import {
+  dateToIsoString,
+  getFormDataWithFile,
+  getLoggedInUser,
+  useGetFile,
+  useRedirectIfPackageNotExist
+} from 'service';
 import {
   Button,
   Container,
@@ -13,11 +19,16 @@ import {
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { createCarePackageReclaimFnc, updateCarePackageReclaimFnc, usePackageActiveFncPrice, usePackageFnc } from 'api';
+import {
+  createCarePackageReclaimFnc,
+  updateCarePackageReclaimFnc,
+  usePackageActiveFncPrice,
+  usePackageDetails,
+  usePackageFnc
+} from 'api';
 import withSession from 'lib/session';
 import { getBrokerPackageRoute, getCareChargesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import {
@@ -43,10 +54,12 @@ export const getServerSideProps = withSession(async ({ req }) => {
 const BrokerFNC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { guid: carePackageId } = router.query;
 
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
+  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
+  const { data: details, isLoading: detailsLoading } = usePackageDetails(carePackageId);
 
-  const { guid: carePackageId } = router.query;
   const { data: fncData, isLoading: fncLoading } = usePackageFnc(carePackageId);
   const { data: activeFncPrice } = usePackageActiveFncPrice(carePackageId);
 
@@ -74,7 +87,7 @@ const BrokerFNC = () => {
     },
   });
 
-  const [cost, isOngoing] = watch(['cost', 'isOngoing']);
+  const [cost, isOngoing, startDate] = watch(['cost', 'isOngoing', 'startDate']);
 
   const { isLoading: fileLoading } = useGetFile({
     fileId: fncData.assessmentFileId,
@@ -82,7 +95,7 @@ const BrokerFNC = () => {
     setter: (file) => setValue('assessmentFile', file)
   });
 
-  const isLoading = fncLoading || fileLoading || isRequestBeingSent;
+  const isLoading = fncLoading || fileLoading || isRequestBeingSent || coreLoading || detailsLoading;
 
   useEffect(() => {
     if (activeFncPrice) {
@@ -125,12 +138,10 @@ const BrokerFNC = () => {
     setIsRequestBeingSent(true);
     const omittedData = getValues();
 
-    formatDataWithFile({ data: omittedData });
-
-    if (!isOngoing) omittedData.endDate = dateToIsoString(omittedData.endDate);
+    omittedData.endDate = !isOngoing ? dateToIsoString(omittedData.endDate) : null;
     omittedData.startDate = dateToIsoString(omittedData.startDate);
 
-    const formData = getFormData(omittedData);
+    const formData = getFormDataWithFile(omittedData);
 
     try {
       if (omittedData.id) {
@@ -156,7 +167,13 @@ const BrokerFNC = () => {
         {!fncLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
             <ClaimsCollector errors={errors} control={control} />
-            <NursingSchedule errors={errors} control={control} isOngoing={isOngoing} />
+            <NursingSchedule
+              startDate={startDate}
+              minStartDate={details.startDate}
+              errors={errors}
+              control={control}
+              isOngoing={isOngoing}
+            />
             <NursingCareNotes errors={errors} control={control} />
             <HorizontalSeparator height={32} />
             <UploadFile title="Upload FNC Assessment..." control={control} />

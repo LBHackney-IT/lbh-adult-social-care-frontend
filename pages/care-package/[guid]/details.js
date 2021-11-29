@@ -50,7 +50,7 @@ const PackageDetailsPage = () => {
   const editableStatus = data?.status < 6;
   const isApprovedStatus = data?.status === 4;
 
-  const coreLoading = useRedirectIfPackageNotExist();
+  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
 
   const checkSettings = (settings) =>
     settings &&

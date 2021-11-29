@@ -15,7 +15,7 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { updateCarePackageCosts, usePackageDetails, useSingleCorePackageInfo } from 'api';
+import { updateCarePackageCosts, usePackageDetails } from 'api';
 import withSession from 'lib/session';
 import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
 import { formValidationSchema } from 'service/formValidationSchema';
@@ -53,10 +53,11 @@ const CorePackage = () => {
   const [isAddingNew, setIsAddingNew] = useState(false);
 
   const { guid: packageId } = router.query;
-  const { data: packageInfo } = useSingleCorePackageInfo(packageId);
-  const { data: detailsData, isLoading } = usePackageDetails(packageId);
+  const { data: detailsData, isLoading: packageDetailsLoading } = usePackageDetails(packageId);
 
-  useRedirectIfPackageNotExist();
+  const { isLoading: coreLoading, data: packageInfo } = useRedirectIfPackageNotExist();
+
+  const isLoading = coreLoading || packageDetailsLoading;
 
   const {
     handleSubmit,

@@ -51,7 +51,7 @@ const PackageRequest = ({ packageRequest }) => {
           <VerticalSeparator width="20px" />
           <Container>
             <Heading size="m">Care Plan</Heading>
-            <UrlFromFile showOnlyLink file={file?.file} />
+            <UrlFromFile showOnlyLink file={file} />
           </Container>
           <VerticalSeparator width="20px" />
           <Container>
