@@ -56,7 +56,7 @@ const Payruns = () => {
     [filters, pageNumber, heldPageNumber, tabView]
   );
   const { data, isLoading, mutate: update } = usePayrunView({ params });
-  const { data: hData, isLoading: isHeldLoading } = useHeldPaymentsView({ params });
+  const { data: hData, isLoading: isHeldLoading, mutate: updateHeldData } = useHeldPaymentsView({ params });
 
   const {
     data: payrunData,
@@ -113,7 +113,7 @@ const Payruns = () => {
           </Tab>
           <Tab>
             <Loading className="loading" isLoading={isHeldLoading} />
-            <HeldPaymentsList data={heldData} searchTerm={payRunId} />
+            <HeldPaymentsList data={heldData} searchTerm={payRunId} update={updateHeldData} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
