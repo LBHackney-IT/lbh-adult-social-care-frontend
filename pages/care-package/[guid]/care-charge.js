@@ -6,6 +6,7 @@ import {
   Container,
   EditElementModal,
   EndElementModal,
+  FinancialAssessment,
   Loading,
   ProvisionalCareCharge,
   ResidentialSUContribution,
@@ -414,13 +415,7 @@ const CareCharge = () => {
           isMore12
         />
 
-        {/*todo new changes in upload-file branch*/}
-        <div className="financial-assessment">
-          <h3>Financial Assessment</h3>
-          <Button className="mt-5" secondary>
-            Upload file
-          </Button>
-        </div>
+        <FinancialAssessment />
 
         <Container className="brokerage__actions">
           <Button secondary color="gray" onClick={router.back}>
