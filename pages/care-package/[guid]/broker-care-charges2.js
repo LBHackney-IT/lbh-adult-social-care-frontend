@@ -97,7 +97,7 @@ const CareCharge = () => {
 
   useEffect(() => {
     if (calculatedCost) setValue('cost', calculatedCost);
-  }, [calculatedCost]);
+  }, [calculatedCostLoading]);
 
   useEffect(() => {
     if (careChargeData && careChargeData.length) {
@@ -150,7 +150,6 @@ const CareCharge = () => {
             endDate: new Date(omittedData.endDate).toISOString(),
           });
 
-    console.log(omittedData);
     if (data.id) {
       try {
         await updateCareChargeReclaim(carePackageId, formData);
