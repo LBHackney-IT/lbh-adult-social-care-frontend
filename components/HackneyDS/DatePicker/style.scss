@@ -133,6 +133,25 @@
   .react-date-picker {
     position: absolute;
     z-index: 3;
-    top: -50px;
+    top: -140px;
+    left: -120px;
+
+    &.left {
+      left: -260px;
+    }
+
+    &.right {
+      left: initial;
+      right: 0;
+    }
+
+    &.bottom {
+      top: initial;
+      bottom: 0;
+    }
+
+    &.top {
+      top: -277px;
+    }
   }
 }

@@ -29,6 +29,12 @@ Default.args = {
   formId: 'date-picker',
 };
 
+export const FixedCalendarPositions = Template.bind({});
+FixedCalendarPositions.args = {
+  formId: 'date-picker',
+  calendarPositions: ['bottom', 'right'],
+};
+
 export const ErrorDay = Template.bind({});
 ErrorDay.args = {
   formId: 'error-day',

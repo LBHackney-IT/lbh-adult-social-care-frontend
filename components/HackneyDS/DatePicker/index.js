@@ -18,6 +18,7 @@ const DatePicker = ({
   formId,
   minDate,
   maxDate,
+  calendarPositions,
   floatingCalendar,
   hint,
   hasClearButton,
@@ -215,6 +216,7 @@ const DatePicker = ({
                     setIsOpenCalendar(false);
                   }
                 }}
+                calendarPositions={calendarPositions}
                 startDate={date}
                 inline
                 minDate={minDate}

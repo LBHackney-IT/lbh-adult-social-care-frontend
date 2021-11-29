@@ -22,6 +22,7 @@ const DatePick = ({
   maxDate,
   checkMinDate,
   setDate,
+  calendarPositions = [],
   dateValue,
   useDefaultInput,
 }) => {
@@ -46,8 +47,10 @@ const DatePick = ({
     }
   }, [checkMinDate, minDate, dateValue]);
 
+  const calendarPositionClassName = calendarPositions.join(' ');
+
   return (
-    <BaseField className={`react-date-picker`} label={label} noInputStyle>
+    <BaseField className={`react-date-picker ${calendarPositionClassName}`} label={label} noInputStyle>
       {dateValue?.toString() === 'Invalid Date' ? (
         <p>Invalid Date</p>
       ) : (
