@@ -1,8 +1,9 @@
-import { createDraftPayRun } from 'api/PayRun';
-import { Container, Dialog, Heading, HorizontalSeparator, Tab, Tabs } from 'components';
 import React, { memo, useState } from 'react';
+import { createDraftPayRun } from 'api/PayRun';
+import { Dialog, Heading, HorizontalSeparator, Tab, Tabs } from 'components';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
+import { dateToISOString } from 'service';
 import { AdHocAndReleases } from './AdHocAndReleases';
 import { RegularCycles } from './RegularCycles';
 
@@ -10,34 +11,21 @@ const CreatePayRunModal = ({ isOpen, onClose, update }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (newPayRun) => {
-    const foramttedPayRun = {
+  const handleSubmit = async (newPayRun) => {
+    const data = {
       ...newPayRun,
-      paidUpToDate: new Date(newPayRun.paidUpToDate).toISOString(),
-      paidFromDate:
-        newPayRun.paidFromDate && !newPayRun.isOngoing ? new Date(newPayRun.paidFromDate).toISOString() : null,
+      paidUpToDate: dateToISOString(newPayRun.paidUpToDate),
+      paidFromDate: newPayRun.paidFromDate && !newPayRun.isOngoing ? dateToISOString(newPayRun.paidFromDate) : null,
     };
-    createPayRun(foramttedPayRun);
-  };
 
-  const createPayRun = async (data) => {
     setIsLoading(true);
     try {
       await createDraftPayRun({ data });
       update();
       onClose();
-      dispatch(
-        addNotification({
-          text: 'payrun successfully created',
-          className: 'success',
-        })
-      );
+      dispatch(addNotification({ text: 'Payrun successfully created', className: 'success' }));
     } catch (e) {
-      dispatch(
-        addNotification({
-          text: e,
-        })
-      );
+      dispatch(addNotification({ text: e }));
     }
     setIsLoading(false);
   };
