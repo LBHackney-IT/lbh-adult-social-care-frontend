@@ -24,6 +24,7 @@ import {
   ClaimsCollector,
   FundingPerWeek,
   NursingCareNotes,
+  NursingHasFNC,
 } from 'components/Pages/CarePackages/FundedNusringCare';
 
 export const getServerSideProps = withSession(async ({ req }) => {
@@ -68,6 +69,7 @@ const BrokerFNC = () => {
       description: null,
       assessmentFileName: null,
       assessmentFileId: null,
+      hasAssessmentBeenCarried: null,
       isOngoing: false,
     },
   });
@@ -151,6 +153,7 @@ const BrokerFNC = () => {
         <Loading isLoading={fncLoading} />
         {!fncLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
+            <NursingHasFNC control={control} />
             <ClaimsCollector errors={errors} control={control} />
             <NursingSchedule errors={errors} control={control} isOngoing={isOngoing} />
             <NursingCareNotes errors={errors} control={control} />
