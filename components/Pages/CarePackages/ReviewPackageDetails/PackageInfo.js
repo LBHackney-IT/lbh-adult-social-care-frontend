@@ -5,7 +5,7 @@ import { Container, InsetText, HorizontalSeparator, SingleAccordion } from '../.
 
 const noContentText = {
   'Care Charges': 'care charges',
-  'One Off Additional Need': 'one of additional needs',
+  'One Off Additional Need': 'one off additional needs',
   'Weekly Additional Need': 'weekly additional needs',
 };
 
