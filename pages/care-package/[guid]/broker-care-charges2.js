@@ -9,8 +9,6 @@ import {
   TitleSubtitleHeader,
   VerticalSeparator,
   HorizontalSeparator,
-  Announcement,
-  WarningText,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -28,10 +26,12 @@ import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { reclaimType } from 'constants/variables';
-import { CareChargeSchedule } from 'components/Pages/CarePackages/BrokerCareCharge/CareChargeSchedule';
-import { FundingPerWeek } from 'components/Pages/CarePackages/BrokerCareCharge/FundingPerWeek';
-import { CareChargeCost } from 'components/Pages/CarePackages/BrokerCareCharge/CareChargeCost';
-import { ClaimsCollector } from 'components/Pages/CarePackages/BrokerCareCharge/ClaimsCollector';
+import {
+  CareChargeCost,
+  CareChargeSchedule,
+  ClaimsCollector,
+  FundingPerWeek,
+} from 'components/Pages/CarePackages/BrokerCareCharge';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -170,11 +170,6 @@ const CareCharge = () => {
         <Loading isLoading={careChargeLoading} />
         {!careChargeLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
-            {/* {packageInfo?.settings?.isS117Client && (
-              <>
-              </>
-            )} */}
-
             <CareChargeCost control={control} errors={errors} isS117Client={isS117Client} />
             <CareChargeSchedule control={control} errors={errors} isOngoing={isOngoing} isS117Client={isS117Client} />
             <ClaimsCollector control={control} errors={errors} collectedBy={collectedBy} isS117Client={isS117Client} />
