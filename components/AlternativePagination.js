@@ -11,6 +11,7 @@ const AlternativePagination = ({
   to = 0,
   currentPage = 1,
   totalCount = 0,
+  siblingCount = 2,
 }) => {
   if (totalCount === 0) {
     return <></>;
@@ -21,7 +22,7 @@ const AlternativePagination = ({
   };
 
   useEffect(() => {
-    if(totalPages && currentPage > totalPages) {
+    if (totalPages && currentPage > totalPages) {
       changePagination(1);
     }
   }, [totalPages]);
@@ -49,17 +50,19 @@ const AlternativePagination = ({
             1
           </Button>
         ) : (
-          [...Array(Math.round(totalPages)).keys()].map((item) => {
+          [...Array(Math.round(totalPages)).keys()].map((item, index) => {
             const currentPageClass = String(item + 1) === String(currentPage) ? ' table-pagination-item-active' : '';
-            return (
-              <Button
-                key={`page-${item + 1}`}
-                onClick={() => onChangePagination(item + 1)}
-                className={`table-pagination-button${currentPageClass}`}
-              >
-                {item + 1}
-              </Button>
-            );
+            if (index + 1 >= currentPage - siblingCount && index + 1 <= currentPage + siblingCount)
+              return (
+                <Button
+                  key={`page-${item + 1}`}
+                  onClick={() => onChangePagination(item + 1)}
+                  className={`table-pagination-button${currentPageClass}`}
+                >
+                  {item + 1}
+                </Button>
+              );
+            return null;
           })
         )}
       </div>
