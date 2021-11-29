@@ -47,6 +47,7 @@ const SinglePayRun = () => {
       searchTerm,
       fromDate,
       toDate,
+      pageNumber,
     }),
     [filters, pageNumber]
   );
