@@ -38,6 +38,16 @@ const carePackageFNCSchema = yup.object().shape({
     .min(1, 'Please select a claims collector'),
 });
 
+const carePackageBrokerCareChargesSchema = yup.object().shape({
+  startDate: yup.string().typeError('Please select a start date').required('Please select a start date'),
+  claimCollector: yup
+    .number()
+    .typeError('Please select a claims collector')
+    .required('Please select a claims collector')
+    .min(1, 'Please select a claims collector'),
+  cost: yup.number().typeError('Please enter a cost').required('Please enter a cost').min(1, 'Please enter a cost'),
+});
+
 const newOneOffAdditionalNeedSchema = yup.object().shape({
   startDate: yup.string().typeError('Please select a start date').required('Please select a start date'),
   endDate: yup.string().typeError('Please select an end date').required('Please select an end date'),
@@ -64,6 +74,7 @@ export const formValidationSchema = {
   carePackageCorePackageSchema,
   carePackageBrokerPackageSchema,
   carePackageFNCSchema,
+  carePackageBrokerCareChargesSchema,
   newOneOffAdditionalNeedSchema,
   newWeeklyAdditionalNeedSchema,
   newPayRunRegularCyclesSchema,
