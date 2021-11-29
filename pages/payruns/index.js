@@ -24,6 +24,7 @@ export const getServerSideProps = withSession(({ req }) => {
 
 const initialFilters = {
   payRunId: '',
+  searchTerm: '',
   dateFrom: null,
   dateTo: null,
   payRunType: '',
@@ -40,12 +41,13 @@ const Payruns = () => {
   const [isOpenedModal, setIsOpenedModal] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
-  const { payRunId, dateTo, dateFrom, payRunType, payRunStatus } = filters;
+  const { payRunId, searchTerm, dateTo, dateFrom, payRunType, payRunStatus } = filters;
   const params = useMemo(
     () => ({
       dateTo,
       dateFrom,
       payRunId,
+      searchTerm,
       pageNumber,
       heldPageNumber,
       payRunType,
