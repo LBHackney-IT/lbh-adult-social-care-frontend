@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL, MULTIPART_FORM_DATA } from '../BaseApi';
+import { BASE_URL } from '../BaseApi';
 import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const CARE_PACKAGE_URL = `${BASE_URL}/v1/care-packages`;
@@ -11,7 +11,7 @@ export const createCarePackageReclaimFnc = (carePackageId, fundedNursingCareCrea
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': MULTIPART_FORM_DATA,
+      'Content-Type': 'application/json',
     },
     data: fundedNursingCareCreationRequest,
   };
@@ -24,7 +24,7 @@ export const updateCarePackageReclaimFnc = (carePackageId, fundedNursingCareUpda
     method: 'PUT',
     headers: {
       Accept: 'application/json',
-      'Content-Type': MULTIPART_FORM_DATA,
+      'Content-Type': 'application/json',
     },
     data: fundedNursingCareUpdateRequest,
   };
@@ -38,7 +38,7 @@ export const createCareChargeReclaim = (carePackageId, careChargeReclaimCreation
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': MULTIPART_FORM_DATA,
+      'Content-Type': 'application/json',
     },
     data: careChargeReclaimCreationRequest,
   };
@@ -51,7 +51,7 @@ export const updateCareChargeReclaim = (carePackageId, careChargeUpdateRequest) 
     method: 'PUT',
     headers: {
       Accept: 'application/json',
-      'Content-Type': MULTIPART_FORM_DATA,
+      'Content-Type': 'application/json',
     },
     data: careChargeUpdateRequest,
   };

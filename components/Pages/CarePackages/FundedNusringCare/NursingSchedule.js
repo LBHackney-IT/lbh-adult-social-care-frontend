@@ -2,7 +2,7 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import { Checkbox, Container, DatePicker, FormGroup, VerticalSeparator } from 'components';
 
-export const NursingSchedule = ({ control, minStartDate, isOngoing, errors, startDate }) => (
+export const NursingSchedule = ({ control, isOngoing, errors }) => (
   <Container className="brokerage__container">
     <FormGroup label="Funded Nursing Care Schedule..." error={errors.startDate?.message}>
       <Container display="flex">
@@ -11,7 +11,6 @@ export const NursingSchedule = ({ control, minStartDate, isOngoing, errors, star
           control={control}
           render={({ field }) => (
             <DatePicker
-              minDate={minStartDate && new Date(minStartDate)}
               day={{ label: 'From' }}
               date={field.value ? new Date(field.value) : null}
               setDate={field.onChange}
@@ -27,8 +26,6 @@ export const NursingSchedule = ({ control, minStartDate, isOngoing, errors, star
           render={({ field }) => (
             <DatePicker
               disabled={isOngoing}
-              minDate={startDate}
-              checkMinDate
               day={{ label: 'To' }}
               date={field.value ? new Date(field.value) : null}
               setDate={field.onChange}
@@ -42,7 +39,7 @@ export const NursingSchedule = ({ control, minStartDate, isOngoing, errors, star
           name="isOngoing"
           control={control}
           render={({ field }) => (
-            <Checkbox id='ongoing' label="Ongoing" value={field.value} onChangeValue={field.onChange} {...field} />
+            <Checkbox label="Ongoing" value={field.value} onChangeValue={field.onChange} {...field} />
           )}
         />
       </Container>

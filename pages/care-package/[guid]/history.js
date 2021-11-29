@@ -22,7 +22,7 @@ export const getServerSideProps = withSession(({ req }) => {
 const History = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
-  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
+  const coreLoading = useRedirectIfPackageNotExist();
 
   const { data, isLoading } = usePackageHistory(packageId);
   const breadcrumbs = useMemo(

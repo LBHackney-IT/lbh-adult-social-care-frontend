@@ -6,11 +6,11 @@ import {
   Container,
   EditElementModal,
   EndElementModal,
+  FinancialAssessment,
   Loading,
   ProvisionalCareCharge,
   ResidentialSUContribution,
   TitleSubtitleHeader,
-  UploadFile,
 } from 'components';
 import { currency } from 'constants/strings';
 import withSession from 'lib/session';
@@ -18,13 +18,12 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useToggle } from 'react-use';
-import { formatDate, getLoggedInUser, useGetFile, useRedirectIfPackageNotExist } from 'service';
+import { formatDate, getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
 import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
-import { useLookups, usePackageCareCharge, usePackageDetails } from 'api';
+import { useLookups, usePackageCareCharge, useSingleCorePackageInfo } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import * as yup from 'yup';
-import { addDays } from 'date-fns';
 
 const { provisional, more12, less12 } = careChargeFormKeys;
 
@@ -41,9 +40,11 @@ export const getServerSideProps = withSession(({ req }) => {
   return { props: {} };
 });
 
-const useBreadcrumbs = (serviceUserId) => {
+const useBreadcrumbs = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
+
+  const { data } = useSingleCorePackageInfo(packageId);
 
   return useMemo(
     () => [
@@ -51,7 +52,7 @@ const useBreadcrumbs = (serviceUserId) => {
       { text: 'Care charges', href: '/' },
       {
         text: 'Full Overview',
-        href: getServiceUserPackagesRoute(serviceUserId),
+        href: getServiceUserPackagesRoute(data?.serviceUser?.id),
       },
       { text: 'Financial assessment' },
     ],
@@ -62,9 +63,6 @@ const useBreadcrumbs = (serviceUserId) => {
 const useModal = () => useToggle(false);
 
 const defaultValues = {
-  assessmentFileId: null,
-  assessmentFileName: null,
-  assessmentFile: null,
   [provisional]: {
     cost: '',
     claimCollector: '',
@@ -91,8 +89,8 @@ const claimCollectorSchema = yup.string().required('Required field');
 const startDateSchema = yup.mixed().required('Required field');
 
 const CareCharge = () => {
-  const { data: packageInfo, isLoading: packageInfoLoading } = useRedirectIfPackageNotExist();
-  const breadcrumbs = useBreadcrumbs(packageInfo?.serviceUser?.id);
+  const coreLoading = useRedirectIfPackageNotExist();
+  const breadcrumbs = useBreadcrumbs();
 
   const [isOpenEdit, toggleEdit] = useModal();
   const [isOpenCancel, toggleCancel] = useModal();
@@ -123,33 +121,11 @@ const CareCharge = () => {
   const router = useRouter();
   const { guid: routerPackageId } = router.query;
 
-  const { data: detailsData, isLoading: detailsLoading } = usePackageDetails(routerPackageId);
-
-  const { startDate, endDate } = detailsData || {};
-
-  const coreStartDate = startDate ? new Date(startDate) : null;
-  const coreEndDate = endDate ? new Date(endDate) : null;
-
   const [packageId, setPackageId] = useState(null);
-
-  const { handleSubmit, control, formState, setValue, getValues, reset, watch } = useForm({ defaultValues });
-
-  const [assessmentFileId, assessmentFileName, assessmentFile] = watch(['assessmentFileId', 'assessmentFileName', 'assessmentFile']);
-
-  const checkNewFile = () => assessmentFile?.name !== assessmentFileName;
-
-  const { endDate: less12EndDateString } = watch(less12) || {};
-
-  const less12EndDate = less12EndDateString ? addDays(new Date(less12EndDateString), 1) : null;
-
-  const { isLoading: documentLoading } = useGetFile({
-    fileId: assessmentFileId,
-    fileName: assessmentFileName,
-    setter: (newFile) => setValue('assessmentFile', newFile),
-  });
 
   const { actualReclaims, isLoading: careChargeLoading } = usePackageCareCharge(packageId);
   const { data: claimCollectors, isLoading: lookupsLoading } = useLookups('claimCollector');
+  const { data: packageInfo, isLoading: packageInfoLoading } = useSingleCorePackageInfo(packageId);
 
   useEffect(() => {
     setPackageId(routerPackageId);
@@ -158,45 +134,40 @@ const CareCharge = () => {
     }
   }, [packageInfo, routerPackageId]);
 
+  const { handleSubmit, control, formState, setValue, getValues, reset } = useForm({ defaultValues });
+
   useEffect(() => {
     if (!actualReclaims) return;
 
-    if (!actualReclaims.length) {
+    if (actualReclaims.length) {
+      const provisionalData = actualReclaims.find((el) => el.subType === careChargeAPIKeys.provisional) ?? {};
+      const less12Data = actualReclaims.find((el) => el.subType === careChargeAPIKeys.less12) ?? {};
+      const more12Data = actualReclaims.find((el) => el.subType === careChargeAPIKeys.more12) ?? {};
+
+      reset({
+        [provisional]: {
+          cost: provisionalData.cost ?? '',
+          claimCollector: provisionalData.claimCollector,
+          claimReason: provisionalData.claimReason,
+          description: provisionalData.description ?? '',
+        },
+        [less12]: {
+          cost: less12Data.cost ?? '',
+          claimCollector: less12Data.claimCollector ? `${less12}-${less12Data.claimCollector}` : null,
+          startDate: less12Data.startDate,
+          endDate: less12Data.endDate,
+        },
+        [more12]: {
+          cost: more12Data.cost ?? '',
+          claimCollector: more12Data.claimCollector ? `${more12}-${more12Data.claimCollector}` : null,
+          startDate: more12Data.startDate,
+          endDate: more12Data.endDate,
+          isOngoing: false,
+        },
+      });
+    } else {
       reset(defaultValues);
-      return;
     }
-
-    const provisionalData = actualReclaims.find((el) => el.subType === careChargeAPIKeys.provisional) ?? {};
-    const less12Data = actualReclaims.find((el) => el.subType === careChargeAPIKeys.less12) ?? {};
-    const more12Data = actualReclaims.find((el) => el.subType === careChargeAPIKeys.more12) ?? {};
-
-    const someOfFileName = provisionalData.assessmentFileName || less12Data.assessmentFileName || more12Data.assessmentFileName;
-    const someOfFileId = provisionalData.assessmentFileId || less12Data.assessmentFileId || more12Data.assessmentFileId;
-
-    reset({
-      [provisional]: {
-        cost: provisionalData.cost ?? '',
-        claimCollector: provisionalData.claimCollector,
-        claimReason: provisionalData.claimReason,
-        description: provisionalData.description ?? '',
-      },
-      [less12]: {
-        cost: less12Data.cost ?? '',
-        claimCollector: less12Data.claimCollector ? `${less12}-${less12Data.claimCollector}` : null,
-        startDate: less12Data.startDate ? new Date(less12Data.startDate) : null,
-        endDate: less12Data.endDate ? new Date(less12Data.endDate) : null,
-      },
-      [more12]: {
-        cost: more12Data.cost ?? '',
-        claimCollector: more12Data.claimCollector ? `${more12}-${more12Data.claimCollector}` : null,
-        startDate: more12Data.startDate ? new Date(more12Data.startDate) : null,
-        endDate: more12Data.endDate ? new Date(more12Data.endDate) : null,
-        isOngoing: false,
-      },
-      assessmentFile: null,
-      assessmentFileId: someOfFileId,
-      assessmentFileName: someOfFileName,
-    });
   }, [actualReclaims]);
 
   const goToPackages = useCallback(() => {
@@ -285,11 +256,9 @@ const CareCharge = () => {
   const onEdit = (form) => {
     const editedForms = Object.keys(formState.dirtyFields);
 
-    const includesFile = checkNewFile();
-
     const data = [];
 
-    if (editedForms.includes(provisional) || (includesFile && form[careChargeFormKeys.provisional].cost))
+    if (editedForms.includes(provisional))
       data.push({
         id: careChargeFormKeys.provisional,
         displayData: createProvisionalData(),
@@ -300,7 +269,7 @@ const CareCharge = () => {
         reclaimId: getReclaimId(careChargeAPIKeys.provisional),
       });
 
-    if (editedForms.includes(less12) || (includesFile && form[careChargeFormKeys.less12].cost)) {
+    if (editedForms.includes(less12)) {
       data.push({
         id: careChargeFormKeys.less12,
         displayData: createResidentialData(less12),
@@ -312,7 +281,7 @@ const CareCharge = () => {
       });
     }
 
-    if (editedForms.includes(more12) || (includesFile && form[careChargeFormKeys.more12].cost)) {
+    if (editedForms.includes(more12)) {
       data.push({
         id: careChargeFormKeys.more12,
         displayData: createResidentialData(more12),
@@ -376,22 +345,14 @@ const CareCharge = () => {
     async (form) => {
       const fields = [];
 
-      const isNewFile = checkNewFile();
-
-      if (
-        formState.dirtyFields[provisional] ||
-        (isNewFile && form[provisional]?.cost && form[provisional]?.claimCollector)
-      ) {
+      if (formState.dirtyFields[provisional]) {
         fields.push(
           { formKey: provisional, field: 'cost', value: Number(form[provisional].cost) },
           { formKey: provisional, field: 'claimCollector', value: String(form[provisional].claimCollector) }
         );
       }
 
-      if (
-        formState.dirtyFields[less12] ||
-        (isNewFile && form[less12]?.cost && form[less12]?.claimCollector && form[less12].startDate)
-      ) {
+      if (formState.dirtyFields[less12]) {
         fields.push(
           { formKey: less12, field: 'cost', value: form[less12].cost },
           { formKey: less12, field: 'claimCollector', value: form[less12].claimCollector },
@@ -399,10 +360,7 @@ const CareCharge = () => {
         );
       }
 
-      if (
-        formState.dirtyFields[more12] ||
-        (isNewFile && form[more12]?.cost && form[more12]?.claimCollector && form[more12].startDate)
-      ) {
+      if (formState.dirtyFields[more12]) {
         fields.push(
           { formKey: more12, field: 'cost', value: form[more12].cost },
           { formKey: more12, field: 'claimCollector', value: form[more12].claimCollector },
@@ -423,12 +381,10 @@ const CareCharge = () => {
     [formState.isDirty, onEdit, goToPackages]
   );
 
-  const isLoading = documentLoading || packageInfoLoading || lookupsLoading || careChargeLoading || detailsLoading;
-
   return (
     <div className="care-charge">
 
-      <Loading isLoading={isLoading} />
+      <Loading isLoading={coreLoading || packageInfoLoading || lookupsLoading || careChargeLoading} />
 
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
         <Breadcrumbs values={breadcrumbs} />
@@ -439,8 +395,6 @@ const CareCharge = () => {
           errors={errors[provisional]}
           onCancel={() => onCancel(provisional)}
           onEnd={() => onEnd(provisional)}
-          coreStartDate={coreStartDate}
-          coreEndDate={coreEndDate}
           control={control}
         />
 
@@ -449,42 +403,29 @@ const CareCharge = () => {
           onCancel={() => onCancel(less12)}
           onEnd={() => onEnd(less12)}
           setValue={setValue}
-          coreStartDate={coreStartDate}
-          coreEndDate={coreEndDate}
           control={control}
         />
 
         <ResidentialSUContribution
           errors={errors[more12]}
           onCancel={() => onCancel(more12)}
-          coreStartDate={less12EndDate}
-          coreEndDate={coreEndDate}
           onEnd={() => onEnd(more12)}
           setValue={setValue}
           control={control}
           isMore12
         />
 
-        <UploadFile title="Upload FNC Assessment..." control={control} />
+        <FinancialAssessment />
 
         <Container className="brokerage__actions">
           <Button secondary color="gray" onClick={router.back}>
             Back
           </Button>
-          <Button disabled={isLoading} isLoading={isLoading} onClick={handleSubmit(onSubmit)}>Save and continue</Button>
+          <Button onClick={handleSubmit(onSubmit)}>Save</Button>
         </Container>
       </Container>
 
-      <EditElementModal
-        fileInfo={{
-          assessmentFile,
-          assessmentFileId,
-          assessmentFileName,
-        }}
-        isOpen={isOpenEdit}
-        onClose={() => toggleEdit(false)}
-        data={editData}
-      />
+      <EditElementModal isOpen={isOpenEdit} onClose={() => toggleEdit(false)} data={editData} />
       <CancelElementModal isOpen={isOpenCancel} onClose={() => toggleCancel(false)} data={cancelData} />
       <EndElementModal isOpen={isOpenEnd} onClose={() => toggleEnd(false)} data={endData} control={control} />
     </div>

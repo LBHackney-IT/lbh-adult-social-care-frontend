@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { getLoggedInUser } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -45,10 +45,11 @@ const CorePackage = () => {
   const [packageStatus, setPackageStatus] = useState();
 
   const { guid: packageId } = router.query;
-  const { isLoading: singleCoreLoading, data: packageInfo } = useSingleCorePackageInfo(packageId);
+  const { data: packageInfo, singleCoreLoading } = useSingleCorePackageInfo(packageId);
   const { settings } = packageInfo;
   const { data: schedulingOptionsData = [], schedulingOptionsLoading } = usePackageSchedulingOptions();
 
+  const coreLoading = useRedirectIfPackageNotExist();
 
   const schedulingOptions = useMemo(
     () =>
@@ -115,7 +116,7 @@ const CorePackage = () => {
     setIsRequestBeingSent(false);
   };
 
-  const isLoading = singleCoreLoading || schedulingOptionsLoading;
+  const isLoading = singleCoreLoading || schedulingOptionsLoading || coreLoading;
 
   return (
     <>
