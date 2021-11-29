@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser, removeEmpty } from 'service';
+import { dateToIsoString, formatDataWithFile, getLoggedInUser, useGetFile } from 'service';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
+  DynamicBreadcrumbs,
+  HorizontalSeparator,
   Loading,
   TitleSubtitleHeader,
+  UploadFile,
   VerticalSeparator,
-  HorizontalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -20,10 +21,10 @@ import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import {
-  NursingSchedule,
   ClaimsCollector,
   FundingPerWeek,
   NursingCareNotes,
+  NursingSchedule,
 } from 'components/Pages/CarePackages/FundedNusringCare';
 
 export const getServerSideProps = withSession(async ({ req }) => {
@@ -68,12 +69,20 @@ const BrokerFNC = () => {
       description: null,
       assessmentFileName: null,
       assessmentFileId: null,
+      assessmentFile: null,
       isOngoing: false,
     },
   });
 
-  const cost = watch('cost');
-  const isOngoing = watch('isOngoing');
+  const [cost, isOngoing] = watch(['cost', 'isOngoing']);
+
+  const { isLoading: fileLoading } = useGetFile({
+    fileId: fncData.assessmentFileId,
+    fileName: fncData.assessmentFileName,
+    setter: (file) => setValue('assessmentFile', file)
+  });
+
+  const isLoading = fncLoading || fileLoading || isRequestBeingSent;
 
   useEffect(() => {
     if (activeFncPrice) {
@@ -82,18 +91,18 @@ const BrokerFNC = () => {
   }, [activeFncPrice]);
 
   useEffect(() => {
-    if (fncData) {
-      setValue('startDate', fncData.startDate);
-      setValue('claimCollector', fncData.claimCollector);
-      if (fncData.id) setValue('id', fncData.id);
-      if (fncData.description) setValue('description', fncData.description);
-      if (fncData.assessmentFileName) setValue('assessmentFileName', fncData.assessmentFileName);
-      if (fncData.assessmentFileId) setValue('assessmentFileId', fncData.assessmentFileId);
-      if (!fncData.endDate && fncData.startDate) setValue('isOngoing', true);
-      if (fncData.endDate) {
-        setValue('endDate', fncData.endDate);
-        setValue('isOngoing', false);
-      }
+    if (!fncData.startDate) return;
+
+    setValue('startDate', fncData.startDate);
+    setValue('claimCollector', fncData.claimCollector);
+    if (fncData.id) setValue('id', fncData.id);
+    if (fncData.description) setValue('description', fncData.description);
+    if (fncData.assessmentFileName) setValue('assessmentFileName', fncData.assessmentFileName);
+    if (fncData.assessmentFileId) setValue('assessmentFileId', fncData.assessmentFileId);
+    if (!fncData.endDate && fncData.startDate) setValue('isOngoing', true);
+    if (fncData.endDate) {
+      setValue('endDate', fncData.endDate);
+      setValue('isOngoing', false);
     }
   }, [fncLoading]);
 
@@ -114,19 +123,14 @@ const BrokerFNC = () => {
 
   const handleFormSubmission = async () => {
     setIsRequestBeingSent(true);
-    const data = getValues();
-    const omittedData = removeEmpty(data);
-    const formData =
-      !omittedData.endDate || omittedData.isOngoing
-        ? getFormData({
-            ...omittedData,
-            startDate: new Date(omittedData.startDate).toISOString(),
-          })
-        : getFormData({
-            ...omittedData,
-            startDate: new Date(omittedData.startDate).toISOString(),
-            endDate: new Date(omittedData.endDate).toISOString(),
-          });
+    const omittedData = getValues();
+
+    formatDataWithFile({ data: omittedData });
+
+    if (!isOngoing) omittedData.endDate = dateToIsoString(omittedData.endDate);
+    omittedData.startDate = dateToIsoString(omittedData.startDate);
+
+    const formData = getFormData(omittedData);
 
     try {
       if (omittedData.id) {
@@ -148,12 +152,14 @@ const BrokerFNC = () => {
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Funded Nursing Care" title="Build a care package" />
-        <Loading isLoading={fncLoading} />
+        <Loading isLoading={isLoading} />
         {!fncLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
             <ClaimsCollector errors={errors} control={control} />
             <NursingSchedule errors={errors} control={control} isOngoing={isOngoing} />
             <NursingCareNotes errors={errors} control={control} />
+            <HorizontalSeparator height={32} />
+            <UploadFile title="Upload FNC Assessment..." control={control} />
             <HorizontalSeparator height="48px" />
             <FundingPerWeek total={cost} />
             <HorizontalSeparator height="48px" />
@@ -166,7 +172,7 @@ const BrokerFNC = () => {
                 Skip and continue
               </Button>
               <VerticalSeparator width="10px" />
-              <Button isLoading={isRequestBeingSent} type="submit">
+              <Button isLoading={isLoading} type="submit">
                 Save and continue
               </Button>
             </Container>

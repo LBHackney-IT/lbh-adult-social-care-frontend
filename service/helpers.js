@@ -33,6 +33,8 @@ export const incrementDate = (incrementTime, date = new Date()) => {
 
 export const formatDate = (date, formatString = 'dd.MM.yy') => date && format(new Date(date), formatString);
 
+export const dateToIsoString = (date) => date && new Date(date).toISOString();
+
 export const getUrlFromFile = async (file) => {
   if (isServer() || !file) return;
   if (file?.url) return file.url;
@@ -47,15 +49,27 @@ export const urlToFile = (url, filename) => (
       new File([buf], filename, { type: (url.match(/^data:([^;]+);/) || '')[1] }))
 );
 
-export const formatDocumentInfo = async ({ fileName, fileId, href }) => {
-  if (fileName) {
-    if (href) {
-      const fileFromUrl = await urlToFile(href, fileName);
-      return { file: fileFromUrl, fileId, updated: true };
-    }
-    return { fileId, file: null, updated: false };
+export const formatDocumentInfo = async ({ fileName, href }) => {
+  if (!fileName) return;
+  if (href) return await urlToFile(href, fileName);
+
+  return null;
+};
+
+export const formatDataWithFile = ({
+  data,
+  fileField = {
+    file: 'assessmentFile',
+    fileId: 'assessmentFileId',
+    fileName: 'assessmentFileName',
+  },
+}) => {
+  if (data[fileField.file]?.name === data[fileField.fileName]) {
+    delete data[fileField.file];
+  } else {
+    delete data[fileField.fileName];
+    delete data[fileField.fileId];
   }
-  return {};
 };
 
 export const getLoggedInUser = ({ req }) => {

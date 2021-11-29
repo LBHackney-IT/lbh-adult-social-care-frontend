@@ -3,13 +3,13 @@ import { Container, FormGroup, Heading, HorizontalSeparator, UploadGreenButton }
 import { Controller } from 'react-hook-form';
 import { TEXT_FILE_EXTENSIONS } from 'constants/variables';
 
-const UploadFile = ({ control, title }) => (
+const UploadFile = ({ control, title, name = 'assessmentFile' }) => (
     <div className="financial-assessment">
       <Container>
         <Heading size="m">{title}</Heading>
         <HorizontalSeparator height={24} />
         <Controller
-          name="fileInfo"
+          name={name}
           control={control}
           render={({ field }) => (
             <FormGroup>

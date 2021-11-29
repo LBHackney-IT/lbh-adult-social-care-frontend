@@ -5,10 +5,10 @@ import { FileUpload } from '../FileUpload/FileUpload';
 
 export const UploadGreenButton = ({ fileInfo, setFile, label, className, extensions }) => (
   <FormGroup className={`upload-green-button${className ? ` ${className}` : ''}`} label={label}>
-    <UrlFromFile file={fileInfo?.file} removeFile={() => setFile({ ...fileInfo, file: undefined, updated: true })}/>
-    {!fileInfo?.file && (
+    <UrlFromFile file={fileInfo} removeFile={() => setFile(null)}/>
+    {!fileInfo && (
       <FormGroup className="file-upload-form">
-        <FileUpload extensions={extensions} fileInfo={fileInfo} setFile={setFile} label={<div>Upload file</div>}/>
+        <FileUpload extensions={extensions} setFile={setFile} label={<div>Upload file</div>}/>
       </FormGroup>
     )}
   </FormGroup>

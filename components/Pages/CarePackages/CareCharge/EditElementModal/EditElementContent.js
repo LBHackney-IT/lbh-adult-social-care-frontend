@@ -97,12 +97,13 @@ const EditElementContent = ({ data, onClose, fileInfo }) => {
 
     const editFormData = new FormData();
 
-    const { file, fileId, updated } = fileInfo || {};
+    const { assessmentFile, assessmentFileId, assessmentFileName } = fileInfo;
 
     const addFileToFormData = (formData) => {
-      if (file?.name) {
+      if (assessmentFile?.name) {
+        const updated = assessmentFileName !== assessmentFile.name;
         const field = updated ? 'assessmentFile' : 'assessmentFileId';
-        const newData = updated ? file : fileId
+        const newData = updated ? assessmentFile : assessmentFileId;
         formData.append(field, newData);
       }
     };

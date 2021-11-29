@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   formatDate,
-  formatDocumentInfo,
   getButtonColourFromPackageStatus,
   getButtonTextFromPackageStatus,
   getTagColorFromStatus,
+  useGetFile,
 } from 'service';
 import { CaretDownIcon } from 'components/Icons';
 import { useRouter } from 'next/router';
 import { getCorePackageRoute } from 'routes/RouteConstants';
-import { useDocument } from 'api';
 import { Button, Collapse, Container, Heading, HorizontalSeparator, Tag, VerticalSeparator } from '../../../HackneyDS';
 import UrlFromFile from '../../../UrlFromFile';
 
@@ -20,24 +19,21 @@ const PackageRequest = ({ packageRequest }) => {
 
   const [file, setFile] = useState();
 
-  const { data: href } = useDocument(packageRequest.socialWorkerCarePlanFileName && packageRequest.socialWorkerCarePlanFileId);
-
-  useEffect(() => {
-    if (href) {
-      (async () => {
-        const { socialWorkerCarePlanFileId, socialWorkerCarePlanFileName } = packageRequest;
-        const formatFile = await formatDocumentInfo({
-          href,
-          fileName: socialWorkerCarePlanFileName,
-          fileId: socialWorkerCarePlanFileId
-        });
-        setFile(formatFile);
-      })();
-    }
-  }, [href]);
+  useGetFile({
+    fileId: packageRequest.socialWorkerCarePlanFileId,
+    fileName: packageRequest.socialWorkerCarePlanFileName,
+    setter: (newFile) => setFile(newFile),
+  });
 
   return (
-    <Container borderBottom="1px solid #BFC1C3" borderRight="1px solid #BFC1C3" borderTop="1px solid #BFC1C3"  borderLeft="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
+    <Container
+      borderBottom="1px solid #BFC1C3"
+      borderRight="1px solid #BFC1C3"
+      borderTop="1px solid #BFC1C3"
+      borderLeft="1px solid #BFC1C3"
+      background="#F8F8F8"
+      padding="30px"
+    >
       <Container display="flex" alignItems="center">
         <Tag className="text-capitalize" outline color={getTagColorFromStatus(packageRequest.packageStatus)}>
           {packageRequest.packageStatus}

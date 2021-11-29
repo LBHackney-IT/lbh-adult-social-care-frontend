@@ -2,7 +2,6 @@ import React from 'react';
 
 export const FileUpload = ({
   extensions,
-  fileInfo,
   className = '',
   onChange = () => {},
   setFile,
@@ -12,12 +11,9 @@ export const FileUpload = ({
 }) => {
 
   const changeInput = (e) => {
-    if (setFile) return setFile({
-      ...fileInfo,
-      file: e.target.files[0],
-      updated: true,
-    });
+    if (setFile) return setFile(e.target.files[0]);
     if (setFiles) return setFiles(e.target.files);
+
     return onChange(e);
   };
 
@@ -25,9 +21,11 @@ export const FileUpload = ({
 
   return (
     <div className={`govuk-form-group lbh-form-group ${className}`}>
-      {label && <label className="file-upload" htmlFor={id}>
-        {label}
-      </label>}
+      {label && (
+        <label className="file-upload" htmlFor={id}>
+          {label}
+        </label>
+      )}
       <input
         accept={accept}
         onChange={changeInput}
