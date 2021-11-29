@@ -32,6 +32,8 @@ export const incrementDate = (incrementTime, date = new Date()) => {
 
 export const formatDate = (date, formatString = 'dd.MM.yy') => date && format(new Date(date), formatString);
 
+export const dateToISOString = (date) => date && new Date(date).toISOString();
+
 export const getUrlFromFile = (file) => {
   if (!file) return '';
   if (file?.url) return file.url;

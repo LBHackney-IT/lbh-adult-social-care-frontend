@@ -86,7 +86,7 @@ export const AdHocAndReleases = ({ createPayrun, isLoading, onClose }) => {
         </FormGroup>
         <HorizontalSeparator height="20px" />
         <Container display="flex" justifyContent="flex-start">
-          <Button type="button" onClick={onClose} outline secondary color="gray">
+          <Button type="button" onClick={onClose} outline secondary color="red">
             Cancel
           </Button>
           <VerticalSeparator width="10px" />

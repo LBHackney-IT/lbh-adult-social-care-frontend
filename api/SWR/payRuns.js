@@ -33,7 +33,7 @@ export const getSinglePayrun = ({ payRunId }) => useGetData(getPayRunUrl(payRunI
 
 export const getPayrunInsight = ({ payRunId }) => useGetData(`${PAY_RUNS_URL}/${payRunId}/insights`);
 
-export const useLatestPayRunToDate = ({ payRunTypeId }) =>
+export const useLatestPayRunToDate = (payRunTypeId) =>
   useGetData(getPayRunUrl(payRunTypeId, '/previous-pay-run-end-date'), 'Cannot get latest pay run to date', null);
 
 export const useReleasedInvoiceNumber = () =>
