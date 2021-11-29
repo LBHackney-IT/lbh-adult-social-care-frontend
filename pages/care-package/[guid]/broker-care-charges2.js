@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { getLoggedInUser } from 'service';
+import { getLoggedInUser, removeEmpty } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -20,6 +20,8 @@ import {
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import {
+  createCareChargeReclaim,
+  updateCareChargeReclaim,
   updateCarePackageReclaimFnc,
   usePackageActiveFncPrice,
   usePackageCalculatedCost,
@@ -28,7 +30,7 @@ import {
   useSingleCorePackageInfo,
 } from 'api';
 import withSession from 'lib/session';
-import { getBrokerPackageRoute, getCareChargesRoute } from 'routes/RouteConstants';
+import { getBrokerPackageRoute, getCareChargesRoute, getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
@@ -80,13 +82,16 @@ const CareCharge = () => {
   } = useForm({
     resolver: yupResolver(formValidationSchema.carePackageFNCSchema),
     defaultValues: {
+      carePackageId,
       cost: null,
+      subType: 1,
       claimCollector: 2,
       claimReason: null,
       startDate: null,
       endDate: null,
       isOngoing: false,
       description: null,
+      id: null,
     },
   });
 
@@ -97,6 +102,7 @@ const CareCharge = () => {
   useEffect(() => {
     if (careChargeData && careChargeData.length) {
       const data = careChargeData[0];
+      setValue('id', data.id);
       setValue('startDate', data.startDate);
       setValue('claimCollector', data.claimCollector);
       if (data.claimReason) setValue('claimReason', data.claimReason);
@@ -121,25 +127,48 @@ const CareCharge = () => {
     if (isDirty) {
       handleFormSubmission(data);
     } else {
-      router.push(getCareChargesRoute(carePackageId));
+      // router.push(getCareChargesRoute(carePackageId));
     }
   };
 
   const handleFormSubmission = async () => {
     setIsRequestBeingSent(true);
     const data = getValues();
-    const formData = getFormData({
-      ...data,
-      startDate: new Date(data.startDate).toISOString(),
-      endDate: data.endDate && !data.isOngoing ? new Date(data.endDate).toISOString() : null,
-    });
-    try {
-      await updateCarePackageReclaimFnc(carePackageId, formData);
-      pushNotification(`Funded Nursing Care updated successfully`, 'success');
-      router.push(getCareChargesRoute(carePackageId));
-    } catch (e) {
-      pushNotification(e);
+
+    // const omittedData = data.endDate && !data.isOngoing ? data : omit(data, ['endDate']);
+    const omittedData = removeEmpty(data);
+
+    const formData =
+      !omittedData.endDate || omittedData.isOngoing
+        ? getFormData({
+            ...omittedData,
+            startDate: new Date(omittedData.startDate).toISOString(),
+          })
+        : getFormData({
+            ...omittedData,
+            startDate: new Date(omittedData.startDate).toISOString(),
+            endDate: new Date(omittedData.endDate).toISOString(),
+          });
+
+    console.log(omittedData);
+    if (data.id) {
+      try {
+        await updateCareChargeReclaim(carePackageId, formData);
+        pushNotification(`Funded Nursing Care updated successfully`, 'success');
+        router.push(getCarePackageReviewRoute(carePackageId));
+      } catch (e) {
+        pushNotification(e);
+      }
+    } else {
+      try {
+        await createCareChargeReclaim(carePackageId, formData);
+        pushNotification(`Funded Nursing Care updated successfully`, 'success');
+        router.push(getCarePackageReviewRoute(carePackageId));
+      } catch (e) {
+        pushNotification(e);
+      }
     }
+
     setIsRequestBeingSent(false);
   };
 

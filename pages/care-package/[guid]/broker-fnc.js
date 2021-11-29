@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser } from 'service';
+import { getLoggedInUser, removeEmpty } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -12,7 +12,7 @@ import {
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { updateCarePackageReclaimFnc, usePackageActiveFncPrice, usePackageFnc } from 'api';
+import { createCarePackageReclaimFnc, updateCarePackageReclaimFnc, usePackageActiveFncPrice, usePackageFnc } from 'api';
 import withSession from 'lib/session';
 import { getBrokerPackageRoute, getCareChargesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -25,7 +25,6 @@ import {
   FundingPerWeek,
   NursingCareNotes,
 } from 'components/Pages/CarePackages/FundedNusringCare';
-import omit from 'lodash.omit';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -116,8 +115,7 @@ const BrokerFNC = () => {
   const handleFormSubmission = async () => {
     setIsRequestBeingSent(true);
     const data = getValues();
-    const omittedData = data.endDate && !data.isOngoing ? data : omit(data, ['endDate']);
-    console.log(omittedData);
+    const omittedData = removeEmpty(data);
     const formData =
       !omittedData.endDate || omittedData.isOngoing
         ? getFormData({
@@ -130,12 +128,22 @@ const BrokerFNC = () => {
             endDate: new Date(omittedData.endDate).toISOString(),
           });
 
-    try {
-      await updateCarePackageReclaimFnc(carePackageId, formData);
-      pushNotification(`Funded Nursing Care updated successfully`, 'success');
-      router.push(getCareChargesRoute(carePackageId));
-    } catch (e) {
-      pushNotification(e);
+    if (omittedData.id) {
+      try {
+        await updateCarePackageReclaimFnc(carePackageId, formData);
+        pushNotification(`Funded Nursing Care updated successfully`, 'success');
+        router.push(getCareChargesRoute(carePackageId));
+      } catch (e) {
+        pushNotification(e);
+      }
+    } else {
+      try {
+        await createCarePackageReclaimFnc(carePackageId, formData);
+        pushNotification(`Funded Nursing Care created successfully`, 'success');
+        router.push(getCareChargesRoute(carePackageId));
+      } catch (e) {
+        pushNotification(e);
+      }
     }
     setIsRequestBeingSent(false);
   };
