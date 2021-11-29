@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import {
   createCareChargeReclaim,
-  updateCareChargeReclaim,
+  updateCareChargeBrokerage,
   usePackageCalculatedCost,
   usePackageCareCharge,
   useSingleCorePackageInfo,
@@ -140,7 +140,7 @@ const CareCharge = () => {
 
     try {
       if (data.id) {
-        await updateCareChargeReclaim(carePackageId, formData);
+        await updateCareChargeBrokerage(carePackageId, formData);
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
       } else {
         await createCareChargeReclaim(carePackageId, formData);

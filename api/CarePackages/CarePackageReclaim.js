@@ -59,6 +59,20 @@ export const updateCareChargeReclaim = (carePackageId, careChargeUpdateRequest) 
   return axios(options).then(handleResponse).catch(handleError);
 };
 
+export const updateCareChargeBrokerage = (carePackageId, careChargeUpdateRequest) => {
+  const options = {
+    url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/fnc`,
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    data: careChargeUpdateRequest,
+  };
+
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
 export const cancelCareChargeReclaim = ({ carePackageId, reclaimId }) => {
   const options = {
     url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/${reclaimId}/cancel`,
