@@ -136,24 +136,19 @@ const CareCharge = () => {
             endDate: new Date(omittedData.endDate).toISOString(),
           });
 
-    if (data.id) {
-      try {
+    try {
+      if (data.id) {
         await updateCareChargeReclaim(carePackageId, formData);
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
-        router.push(getCarePackageReviewRoute(carePackageId));
-      } catch (e) {
-        pushNotification(e);
-      }
-    } else {
-      try {
+      } else {
         await createCareChargeReclaim(carePackageId, formData);
-        pushNotification(`Funded Nursing Care updated successfully`, 'success');
-        router.push(getCarePackageReviewRoute(carePackageId));
-      } catch (e) {
-        pushNotification(e);
+        pushNotification(`Funded Nursing Care created successfully`, 'success');
       }
+      router.push(getCarePackageReviewRoute(carePackageId));
+    } catch (e) {
+      pushNotification(e);
     }
-
+    
     setIsRequestBeingSent(false);
   };
 
