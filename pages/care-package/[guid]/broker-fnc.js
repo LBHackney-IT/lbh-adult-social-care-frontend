@@ -128,22 +128,17 @@ const BrokerFNC = () => {
             endDate: new Date(omittedData.endDate).toISOString(),
           });
 
-    if (omittedData.id) {
-      try {
+    try {
+      if (omittedData.id) {
         await updateCarePackageReclaimFnc(carePackageId, formData);
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
-        router.push(getCareChargesRoute(carePackageId));
-      } catch (e) {
-        pushNotification(e);
-      }
-    } else {
-      try {
+      } else {
         await createCarePackageReclaimFnc(carePackageId, formData);
         pushNotification(`Funded Nursing Care created successfully`, 'success');
-        router.push(getCareChargesRoute(carePackageId));
-      } catch (e) {
-        pushNotification(e);
       }
+      router.push(getCareChargesRoute(carePackageId));
+    } catch (e) {
+      pushNotification(e);
     }
     setIsRequestBeingSent(false);
   };
