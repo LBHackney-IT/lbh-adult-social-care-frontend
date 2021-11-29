@@ -38,7 +38,7 @@ export const createCareChargeReclaim = (carePackageId, careChargeReclaimCreation
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': MULTIPART_FORM_DATA,
+      'Content-Type': 'application/json',
     },
     data: careChargeReclaimCreationRequest,
   };
@@ -51,7 +51,7 @@ export const updateCareChargeReclaim = (carePackageId, careChargeUpdateRequest) 
     method: 'PUT',
     headers: {
       Accept: 'application/json',
-      'Content-Type': MULTIPART_FORM_DATA,
+      'Content-Type': 'application/json',
     },
     data: careChargeUpdateRequest,
   };

@@ -8,16 +8,16 @@ export const useRedirectIfPackageNotExist = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { error, isLoading, data } = useSingleCorePackageInfo(packageId);
+  const { error, isLoading } = useSingleCorePackageInfo(packageId);
 
   useEffect(() => {
     if (error) router.replace(NOT_FOUND_ROUTE);
   }, [error]);
 
-  return { isLoading, data };
+  return isLoading;
 };
 
-export function useScrollLock (isLocked) {
+export function useScrollLock(isLocked) {
   useEffect(() => {
     document.querySelector('html').style.overflow = isLocked ? 'hidden' : 'visible';
     return () => {

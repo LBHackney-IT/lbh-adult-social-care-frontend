@@ -5,7 +5,6 @@ import {
   getFormDataWithFile,
   getLoggedInUser,
   useGetFile,
-  useRedirectIfPackageNotExist
 } from 'service';
 import {
   Button,
@@ -57,7 +56,6 @@ const BrokerFNC = () => {
   const { guid: carePackageId } = router.query;
 
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
-  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
   const { data: details, isLoading: detailsLoading } = usePackageDetails(carePackageId);
 
   const { data: fncData, isLoading: fncLoading } = usePackageFnc(carePackageId);
@@ -95,7 +93,7 @@ const BrokerFNC = () => {
     setter: (file) => setValue('assessmentFile', file)
   });
 
-  const isLoading = fncLoading || fileLoading || isRequestBeingSent || coreLoading || detailsLoading;
+  const isLoading = fncLoading || fileLoading || isRequestBeingSent || detailsLoading;
 
   useEffect(() => {
     if (activeFncPrice) {

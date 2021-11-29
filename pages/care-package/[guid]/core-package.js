@@ -45,10 +45,9 @@ const CorePackage = () => {
   const [packageStatus, setPackageStatus] = useState();
 
   const { guid: packageId } = router.query;
-  const { isLoading: singleCoreLoading, data: packageInfo } = useSingleCorePackageInfo(packageId);
+  const { data: packageInfo, isLoading: singleCoreLoading } = useSingleCorePackageInfo(packageId);
   const { settings } = packageInfo;
   const { data: schedulingOptionsData = [], schedulingOptionsLoading } = usePackageSchedulingOptions();
-
 
   const schedulingOptions = useMemo(
     () =>
