@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   Breadcrumbs,
   Button,
   Container,
   FormGroup,
-  Heading,
   HorizontalSeparator,
   Loading,
   Select,
   ServiceUserDetails,
   Textarea,
   TitleSubtitleHeader,
-  UploadFile,
 } from 'components';
 import { useRouter } from 'next/router';
+import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_REFERRAL_ROUTE } from 'routes/RouteConstants';
-import { getFormDataWithFile } from 'service/getFormData';
-import { assignPackageSchema } from 'service/formValidationSchema';
+import { getFormData } from 'service/getFormData';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKER_REFERRAL_ROUTE },
@@ -38,20 +36,27 @@ const AssignPackage = () => {
   const { options: brokerOptions, isLoading: brokersLoading } = useBrokers();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const isLoading = serviceUserLoading || lookupsLoading || brokersLoading;
+  const schema = yup.object().shape({
+    brokerId: yup.string().typeError('Please choose a Broker').required().min(2, 'Please choose a Broker'),
+    packageType: yup
+      .number()
+      .typeError('Please select a package type')
+      .required()
+      .min(1, 'Please select a package type'),
+  });
+
   const {
     handleSubmit,
     setValue,
     control,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(assignPackageSchema),
+    resolver: yupResolver(schema),
     defaultValues: {
       hackneyUserId: hackneyId,
       brokerId: 0,
       packageType: 0,
-      assessmentFileName: null,
-      assessmentFile: null,
-      assessmentFileId: null,
       notes: '',
     },
   });
@@ -59,11 +64,7 @@ const AssignPackage = () => {
 
   const submitData = async (data = {}) => {
     setIsSubmitting(true);
-    const formData = getFormDataWithFile(data, {
-      fileId: 'carePlanFileId',
-      fileName: 'carePlanFileName',
-      file: 'carePlanFile',
-    });
+    const formData = getFormData(data);
     try {
       await assignToBroker({ data: formData });
       dispatch(addNotification({ text: 'Care plan assigned', className: 'success' }));
@@ -79,8 +80,6 @@ const AssignPackage = () => {
       setValue('hackneyUserId', parseInt(hackneyId, 10));
     }
   }, [hackneyId]);
-
-  const isLoading = serviceUserLoading || lookupsLoading || brokersLoading || isSubmitting;
 
   return (
     <>
@@ -115,11 +114,6 @@ const AssignPackage = () => {
               />
             </FormGroup>
           </Container>
-          <Container className="brokerage__container">
-            <Heading size="xl">Support plan and care package</Heading>
-            <HorizontalSeparator height={24} />
-            <UploadFile name='carePlanFile' control={control} title="Upload social worker care plan" />
-          </Container>
           <Container>
             <FormGroup label="Add notes" error={errors.notes?.message}>
               <Controller
@@ -129,8 +123,8 @@ const AssignPackage = () => {
               />
             </FormGroup>
             <HorizontalSeparator height="20px" />
-            <Button isLoading={isLoading} disabled={isLoading} type="submit">
-              Assign care plan
+            <Button isLoading={isSubmitting} disabled={isLoading} type="submit">
+              Save and continue
             </Button>
           </Container>
         </form>

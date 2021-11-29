@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useMemo } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { currency } from 'constants/strings';
-import { addDays, addWeeks } from 'date-fns';
+import { addWeeks } from 'date-fns';
 import { careChargeAPIKeys, careChargeFormKeys } from 'constants/variables';
 import { Checkbox, Input, RadioGroup, DatePicker, FormGroup } from 'components/HackneyDS';
 import { useIsDisabledByStatus, checkIfActionsVisible, useGetChargeStatus, useClaimCollectorOptions } from './helpers';
