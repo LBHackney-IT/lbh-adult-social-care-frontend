@@ -2,7 +2,7 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import { Container, HorizontalSeparator, FormGroup, RadioGroup, Select, Textarea } from 'components';
 
-export const ClaimsCollector = ({ control, errors, collectedBy }) => {
+export const ClaimsCollector = ({ control, errors, collectedBy, isS117Client }) => {
   const collectingReasonOptions = [
     { text: 'Service user unable to manage finances', value: '1' },
     { text: 'Agreement with provider to pay gross', value: '2' },
@@ -12,25 +12,27 @@ export const ClaimsCollector = ({ control, errors, collectedBy }) => {
   ];
   return (
     <Container>
-      <Controller
-        name="claimCollector"
-        control={control}
-        render={({ field }) => (
-          <RadioGroup
-            handle={field.onChange}
-            inline
-            error={errors.claimCollector?.message}
-            label="Collected by"
-            items={[
-              { id: 1, label: 'Hackney council (gross)' },
-              { id: 2, label: 'Supplier (net)' },
-            ]}
-            {...field}
-          />
-        )}
-      />
+      <FormGroup disabled={isS117Client}>
+        <Controller
+          name="claimCollector"
+          control={control}
+          render={({ field }) => (
+            <RadioGroup
+              handle={field.onChange}
+              inline
+              error={errors.claimCollector?.message}
+              label="Collected by"
+              items={[
+                { id: 1, label: 'Hackney council (gross)' },
+                { id: 2, label: 'Supplier (net)' },
+              ]}
+              {...field}
+            />
+          )}
+        />
+      </FormGroup>
       <HorizontalSeparator height="20px" />
-      <FormGroup label="Why is Hackney collecting these care charges?" disabled={collectedBy !== 1}>
+      <FormGroup label="Why is Hackney collecting these care charges?" disabled={collectedBy !== 1 || isS117Client}>
         <Controller
           name="claimReason"
           control={control}

@@ -2,9 +2,9 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import { Checkbox, Container, DatePicker, FormGroup, VerticalSeparator } from 'components';
 
-export const CareChargeSchedule = ({ control, isOngoing, errors }) => (
+export const CareChargeSchedule = ({ control, isOngoing, errors, isS117Client }) => (
   <Container className="brokerage__container">
-    <FormGroup label="Care Charge Schedule..." error={errors.startDate?.message}>
+    <FormGroup label="Care Charge Schedule..." error={errors.startDate?.message} disabled={isS117Client}>
       <Container display="flex">
         <Controller
           name="startDate"

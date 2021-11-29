@@ -1,8 +1,9 @@
 import React from 'react';
 import { getNumberWithCommas } from 'service';
-import { Container, Heading } from 'components';
+import { Container, FormGroup, Heading } from 'components';
 
-export const FundingPerWeek = ({ total }) => (
+export const FundingPerWeek = ({ total, isS117Client }) => (
+  <FormGroup disabled={isS117Client}>
     <Container
       borderTop="1px solid #bfc1c3"
       borderBottom="1px solid #bfc1c3"
@@ -21,4 +22,5 @@ export const FundingPerWeek = ({ total }) => (
         <Heading size="l">£{getNumberWithCommas(total)}</Heading>
       </Container>
     </Container>
-  );
+  </FormGroup>
+);

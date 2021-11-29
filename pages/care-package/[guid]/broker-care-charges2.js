@@ -9,6 +9,8 @@ import {
   TitleSubtitleHeader,
   VerticalSeparator,
   HorizontalSeparator,
+  Announcement,
+  WarningText,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -148,13 +150,18 @@ const CareCharge = () => {
     } catch (e) {
       pushNotification(e);
     }
-    
+
     setIsRequestBeingSent(false);
   };
 
   const collectedBy = watch('claimCollector');
   const isOngoing = watch('isOngoing');
   const cost = watch('cost');
+
+  const { data: coreInfo } = useSingleCorePackageInfo(carePackageId);
+
+  const isS117Client = coreInfo?.settings?.isS117Client;
+  const skipPage = () => router.push(getCarePackageReviewRoute(carePackageId));
   return (
     <>
       <DynamicBreadcrumbs />
@@ -163,11 +170,16 @@ const CareCharge = () => {
         <Loading isLoading={careChargeLoading} />
         {!careChargeLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
-            <CareChargeCost control={control} errors={errors} />
-            <CareChargeSchedule control={control} errors={errors} isOngoing={isOngoing} />
-            <ClaimsCollector control={control} errors={errors} collectedBy={collectedBy} />
+            {/* {packageInfo?.settings?.isS117Client && (
+              <>
+              </>
+            )} */}
+
+            <CareChargeCost control={control} errors={errors} isS117Client={isS117Client} />
+            <CareChargeSchedule control={control} errors={errors} isOngoing={isOngoing} isS117Client={isS117Client} />
+            <ClaimsCollector control={control} errors={errors} collectedBy={collectedBy} isS117Client={isS117Client} />
             <HorizontalSeparator height="48px" />
-            <FundingPerWeek total={cost} />
+            <FundingPerWeek total={cost} isS117Client={isS117Client} />
             <HorizontalSeparator height="48px" />
             <Container display="flex">
               <Button onClick={clickBack} secondary color="gray">
@@ -175,9 +187,15 @@ const CareCharge = () => {
               </Button>
               <VerticalSeparator width="10px" />
               <VerticalSeparator width="10px" />
-              <Button isLoading={isRequestBeingSent} type="submit">
-                Save and continue
-              </Button>
+              {isS117Client ? (
+                <Button type="button" onClick={skipPage}>
+                  Continue
+                </Button>
+              ) : (
+                <Button isLoading={isRequestBeingSent} type="submit">
+                  Save and continue
+                </Button>
+              )}
             </Container>
           </form>
         )}
