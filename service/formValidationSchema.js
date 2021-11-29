@@ -39,14 +39,11 @@ const carePackageFNCSchema = yup.object().shape({
 });
 
 const carePackageBrokerCareChargesSchema = yup.object().shape({
-  startDate: yup
-    .string()
-    .typeError('Please select a start date for the package')
-    .required('Please select a start date'),
+  startDate: yup.string().typeError('Please select a start date').required('Please select a start date'),
   claimCollector: yup
     .number()
     .typeError('Please select a claims collector')
-    .required('Required field')
+    .required('Please select a claims collector')
     .min(1, 'Please select a claims collector'),
   cost: yup.number().typeError('Please enter a cost').required('Please enter a cost').min(1, 'Please enter a cost'),
 });
