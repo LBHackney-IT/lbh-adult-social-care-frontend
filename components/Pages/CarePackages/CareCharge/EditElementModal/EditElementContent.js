@@ -3,15 +3,15 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { getServiceUserCareChargesRoute } from 'routes/RouteConstants';
 import {
-  createCareChargeReclaim,
-  updateCareChargeReclaim,
   useLookups,
   usePackageCareCharge,
+  updateCareChargeReclaim,
+  createCareChargeReclaim,
   useSingleCorePackageInfo,
 } from 'api';
 import { currency } from 'constants/strings';
 import { careChargeAPIKeys } from 'constants/variables';
-import { formatDate, getFormData } from 'service';
+import { formatDate } from 'service';
 import { addNotification } from 'reducers/notificationsReducer';
 import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
@@ -19,7 +19,7 @@ import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import Loading from '../../../../Loading';
 
-const EditElementContent = ({ data, onClose, fileInfo }) => {
+const EditElementContent = ({ data, onClose }) => {
   const [isLoading, toggleLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -93,49 +93,37 @@ const EditElementContent = ({ data, onClose, fileInfo }) => {
       return claimCollector;
     };
 
+    const requests = [];
+
     toggleLoading(true);
 
-    const editFormData = new FormData();
+    if (createData.length > 0) {
+      createData.forEach((reclaim) => {
+        requests.push(
+          createCareChargeReclaim(packageId, {
+            ...reclaim,
+            carePackageId: packageId,
+            claimCollector: getClaimCollectorId(reclaim.claimCollector),
+            endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
+          })
+        );
+      });
+    }
 
-    const { assessmentFile, assessmentFileId, assessmentFileName } = fileInfo;
-
-    const addFileToFormData = (formData) => {
-      if (assessmentFile?.name) {
-        const updated = assessmentFileName !== assessmentFile.name;
-        const field = updated ? 'assessmentFile' : 'assessmentFileId';
-        const newData = updated ? assessmentFile : assessmentFileId;
-        formData.append(field, newData);
-      }
-    };
-
-    const getReclaimProps = (reclaim) => ({
-      ...reclaim,
-      startDate: reclaim.startDate && new Date(reclaim.startDate).toJSON(),
-      claimCollector: getClaimCollectorId(reclaim.claimCollector),
-      endDate: reclaim.isOngoing ? undefined : reclaim.endDate?.toJSON?.(),
-    });
+    if (editData.length > 0) {
+      editData.forEach((reclaim) => {
+        requests.push(
+          updateCareChargeReclaim(packageId, {
+            ...reclaim,
+            claimCollector: getClaimCollectorId(reclaim.claimCollector),
+            endDate: reclaim.isOngoing ? undefined : reclaim.endDate,
+          })
+        );
+      });
+    }
 
     try {
-      if (createData.length > 0) {
-        for await (const reclaim of createData) {
-          const mainData = { ...getReclaimProps(reclaim), carePackageId: packageId };
-
-          const createFormData = getFormData(mainData);
-          addFileToFormData(createFormData);
-          await createCareChargeReclaim(packageId, createFormData);
-        }
-      }
-
-      if (editData.length > 0) {
-        editData.forEach((reclaim, index) => {
-          const mainData = getReclaimProps(reclaim);
-
-          getFormData(mainData, editFormData, `reclaims[${index}]`);
-        });
-        addFileToFormData(editFormData);
-        await updateCareChargeReclaim(packageId, editFormData);
-      }
-
+      await Promise.all(requests);
       dispatch(addNotification({ text: 'Success!', className: 'success' }));
       onClose();
       goToPackages();

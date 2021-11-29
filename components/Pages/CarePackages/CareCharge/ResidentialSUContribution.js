@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useMemo } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { currency } from 'constants/strings';
-import { addDays, addWeeks } from 'date-fns';
+import { addWeeks } from 'date-fns';
 import { careChargeAPIKeys, careChargeFormKeys } from 'constants/variables';
 import { Checkbox, Input, RadioGroup, DatePicker, FormGroup } from 'components/HackneyDS';
 import { useIsDisabledByStatus, checkIfActionsVisible, useGetChargeStatus, useClaimCollectorOptions } from './helpers';
@@ -16,7 +16,12 @@ const useDatesValidation = (isMore12, control, setValue, formKey) => {
   const endDate12weeks = useWatch({ control, name: `${less12}.endDate` });
   const isOngoing = useWatch({ control, name: `${more12}.isOngoing` });
 
-  const less12MaxEndDate = useMemo(() => getEndDate(startDate), [startDate]);
+  const maxEndDate = useMemo(() => {
+    // for 1-12 weeks
+    if (!isMore12 && startDate) return getEndDate(startDate);
+    // null for 13+ weeks
+    return null;
+  }, [isMore12, startDate]);
 
   useEffect(() => {
     // once 1-12 weeks startDate is set - also set endDate
@@ -28,41 +33,23 @@ const useDatesValidation = (isMore12, control, setValue, formKey) => {
 
   return {
     startDate,
-    less12MaxEndDate,
+    maxEndDate,
     minFromDate: formKey === less12 ? null : endDate12weeks,
     isOngoing,
   };
 };
 
-const ResidentialSuContribution = ({
-  isMore12,
-  control,
-  setValue,
-  onCancel,
-  onEnd,
-  errors,
-  coreStartDate,
-  coreEndDate,
-}) => {
+const ResidentialSuContribution = ({ isMore12, control, setValue, onCancel, onEnd, errors }) => {
   const weeks = isMore12 ? '13+' : '1-12';
   const formKey = isMore12 ? more12 : less12;
   const description = `Without Property ${weeks} weeks`;
-
-  const isMore12MinStartDate = useMemo(() => isMore12 ? coreStartDate : null, [isMore12, coreStartDate]);
 
   const status = useGetChargeStatus(isMore12 ? careChargeAPIKeys.more12 : careChargeAPIKeys.less12);
   const claimCollectorOptions = useClaimCollectorOptions(formKey);
 
   const [isDisabled, makeEnabled] = useIsDisabledByStatus(status);
 
-  const { startDate, less12MaxEndDate, minFromDate, isOngoing } = useDatesValidation(
-    isMore12,
-    control,
-    setValue,
-    formKey,
-    coreStartDate,
-    coreEndDate
-  );
+  const { startDate, maxEndDate, minFromDate, isOngoing } = useDatesValidation(isMore12, control, setValue, formKey);
 
   return (
     <div className="residential-contribution">
@@ -117,8 +104,7 @@ const ResidentialSuContribution = ({
                   day={{ label: 'From' }}
                   date={field.value ? new Date(field.value) : null}
                   setDate={field.onChange}
-                  minDate={isMore12MinStartDate || coreStartDate || minFromDate}
-                  maxDate={coreEndDate}
+                  minDate={minFromDate}
                   disabled={isDisabled}
                 />
               )}
@@ -133,13 +119,12 @@ const ResidentialSuContribution = ({
             control={control}
             render={({ field }) => (
               <DatePicker
-                checkMinDate
                 day={{ label: 'To' }}
                 date={field.value}
                 setDate={field.onChange}
                 disabled={isDisabled || (isMore12 && isOngoing)}
                 minDate={startDate}
-                maxDate={isMore12 ? coreEndDate : less12MaxEndDate}
+                maxDate={maxEndDate}
               />
             )}
           />

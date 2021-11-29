@@ -14,9 +14,7 @@ export const CarePackageStatus = ({ status, packageData }) => {
   const getStatus = () => {
     switch (status) {
       case 'Approved':
-        return packageData
-          .filter((d) => d.status === 'Approved')
-          .map((d) => getApprovedStatus(d.endDate))[0];
+        return packageData.filter((d) => d.status === 'Approved').map((d) => getApprovedStatus(d.endDate));
       case 'Ended':
         return 'End';
       case 'Cancelled':
@@ -35,7 +33,7 @@ export const CarePackageStatus = ({ status, packageData }) => {
   };
 
   const activeStatus = getStatus(status, packageData);
-  const color = activeStatus === 'Active' ? 'green' : getTagColorFromStatus(status);
+  const color = activeStatus === 'Active' ? '#00664F' : getTagColorFromStatus(status);
 
   return (
     <Tag color={color} outline noBackground>

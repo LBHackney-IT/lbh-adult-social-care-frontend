@@ -1,39 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   formatDate,
-  getButtonColourFromPackageStatus,
   getButtonTextFromPackageStatus,
   getTagColorFromStatus,
-  useGetFile,
+  getButtonColourFromPackageStatus,
 } from 'service';
 import { CaretDownIcon } from 'components/Icons';
 import { useRouter } from 'next/router';
 import { getCorePackageRoute } from 'routes/RouteConstants';
-import { Button, Collapse, Container, Heading, HorizontalSeparator, Tag, VerticalSeparator } from '../../../HackneyDS';
-import UrlFromFile from '../../../UrlFromFile';
+import {
+  Button,
+  Container,
+  Collapse,
+  Heading,
+  HorizontalSeparator,
+  Link,
+  Tag,
+  VerticalSeparator
+} from '../../../HackneyDS';
 
 const PackageRequest = ({ packageRequest }) => {
   const router = useRouter();
   const buttonClass = `${getButtonColourFromPackageStatus(packageRequest.packageStatus)} package-request-button`;
   const handleClick = () => router.push(getCorePackageRoute(packageRequest.packageId));
-
-  const [file, setFile] = useState();
-
-  useGetFile({
-    fileId: packageRequest.socialWorkerCarePlanFileId,
-    fileName: packageRequest.socialWorkerCarePlanFileName,
-    setter: (newFile) => setFile(newFile),
-  });
-
   return (
-    <Container
-      borderBottom="1px solid #BFC1C3"
-      borderRight="1px solid #BFC1C3"
-      borderTop="1px solid #BFC1C3"
-      borderLeft="1px solid #BFC1C3"
-      background="#F8F8F8"
-      padding="30px"
-    >
+    <Container borderBottom="1px solid #BFC1C3" borderRight="1px solid #BFC1C3" borderTop="1px solid #BFC1C3"  borderLeft="1px solid #BFC1C3" background="#F8F8F8" padding="30px">
       <Container display="flex" alignItems="center">
         <Tag className="text-capitalize" outline color={getTagColorFromStatus(packageRequest.packageStatus)}>
           {packageRequest.packageStatus}
@@ -43,19 +34,17 @@ const PackageRequest = ({ packageRequest }) => {
       </Container>
       <HorizontalSeparator height="20px" />
       <Container display="flex" justifyContent="space-between">
-        <Container display="flex">
+        <Container className="user-details">
           <Container>
-            <Heading size="m">Package</Heading>
+            <p>Package</p>
             <p>{packageRequest.packageType}</p>
           </Container>
-          <VerticalSeparator width="20px" />
           <Container>
-            <Heading size="m">Care Plan</Heading>
-            <UrlFromFile showOnlyLink file={file} />
+            <p>Care Plan</p>
+            <Link>View</Link>
           </Container>
-          <VerticalSeparator width="20px" />
           <Container>
-            <Heading size="m">Assigned</Heading>
+            <p>Assigned</p>
             <p>{formatDate(packageRequest.dateAssigned)}</p>
           </Container>
         </Container>
