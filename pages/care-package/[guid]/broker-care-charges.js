@@ -140,7 +140,7 @@ const CareCharge = () => {
 
     try {
       if (data.id) {
-        await updateCareChargeBrokerage(carePackageId, formData);
+        await updateCareChargeBrokerage(carePackageId, data.id, data);
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
       } else {
         await createCareChargeReclaim(carePackageId, formData);
