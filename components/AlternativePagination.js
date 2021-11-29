@@ -40,7 +40,11 @@ const AlternativePagination = ({
 
       <p className="table-pagination-info">Showing {`${fromCalc}-${toCalc} of ${totalCount} items`}</p>
       <div className="table-pagination-actions">
-        {1 + siblingCount < currentPage && <Button onClick={() => onChangePagination(1)}>{1}</Button>}
+        {1 + siblingCount < currentPage && (
+          <Button onClick={() => onChangePagination(1)} className="govuk-button lbh-button table-pagination-button">
+            {1}
+          </Button>
+        )}
         {totalCount === 0 ? (
           <Button key="page-1" onClick={() => onChangePagination(1)}>
             1
@@ -62,7 +66,12 @@ const AlternativePagination = ({
           })
         )}
         {Math.round(totalPages) > currentPage + siblingCount && (
-          <Button onClick={() => onChangePagination(totalPages)}>{Math.round(totalPages)}</Button>
+          <Button
+            onClick={() => onChangePagination(totalPages)}
+            className="govuk-button lbh-button table-pagination-button"
+          >
+            {Math.round(totalPages)}
+          </Button>
         )}
       </div>
     </div>
