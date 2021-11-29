@@ -47,9 +47,9 @@ const CorePackage = () => {
   const { guid: packageId } = router.query;
   const { data: packageInfo, singleCoreLoading } = useSingleCorePackageInfo(packageId);
   const { settings } = packageInfo;
-  const { data: schedulingOptionsData = [], schedulingOptionsLoading } = usePackageSchedulingOptions();
+  const { data: schedulingOptionsData = [] } = usePackageSchedulingOptions();
 
-  const coreLoading = useRedirectIfPackageNotExist();
+  useRedirectIfPackageNotExist();
 
   const schedulingOptions = useMemo(
     () =>
@@ -116,8 +116,6 @@ const CorePackage = () => {
     setIsRequestBeingSent(false);
   };
 
-  const isLoading = singleCoreLoading || schedulingOptionsLoading || coreLoading;
-
   return (
     <>
       <ResetApprovedPackageDialog
@@ -126,41 +124,45 @@ const CorePackage = () => {
         handleConfirmation={handleFormSubmission}
       />
       <DynamicBreadcrumbs />
-      <Loading isLoading={isLoading} />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Core Details" title="Build a care package" />
-        {packageInfo.serviceUser && (
-          <ServiceUserDetails
-            serviceUserName={packageInfo.serviceUser.fullName}
-            hackneyId={packageInfo.serviceUser.hackneyId}
-            dateOfBirth={packageInfo.serviceUser.dateOfBirth}
-            address={packageInfo.serviceUser.postCode}
-          />
-        )}
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <PackageType errors={errors} control={control} />
-          <Container className="brokerage__container">
-            <Controller
-              name="packageScheduling"
-              control={control}
-              render={({ field }) => (
-                <RadioGroup
+        <Loading isLoading={singleCoreLoading} className="loading" />
+        {!singleCoreLoading && (
+          <>
+            {packageInfo.serviceUser && (
+              <ServiceUserDetails
+                serviceUserName={packageInfo.serviceUser.fullName}
+                hackneyId={packageInfo.serviceUser.hackneyId}
+                dateOfBirth={packageInfo.serviceUser.dateOfBirth}
+                address={packageInfo.serviceUser.postCode}
+              />
+            )}
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <PackageType errors={errors} control={control} />
+              <Container className="brokerage__container">
+                <Controller
                   name="packageScheduling"
-                  error={errors.packageScheduling?.message}
-                  label="Packaging scheduling"
-                  handle={field.onChange}
-                  items={schedulingOptions}
-                  {...field}
+                  control={control}
+                  render={({ field }) => (
+                    <RadioGroup
+                      name="packageScheduling"
+                      error={errors.packageScheduling?.message}
+                      label="Packaging scheduling"
+                      handle={field.onChange}
+                      items={schedulingOptions}
+                      {...field}
+                    />
+                  )}
                 />
-              )}
-            />
-          </Container>
-          <FurtherDetails settings={settings} control={control} setValue={setValue} />
-          <HorizontalSeparator height="20px" />
-          <Button isLoading={isRequestBeingSent} disabled={isLoading} type="submit">
-            Save and continue
-          </Button>
-        </form>
+              </Container>
+              <FurtherDetails settings={settings} control={control} setValue={setValue} />
+              <HorizontalSeparator height="20px" />
+              <Button isLoading={isRequestBeingSent} disabled={isRequestBeingSent} type="submit">
+                Save and continue
+              </Button>
+            </form>
+          </>
+        )}
       </Container>
     </>
   );
