@@ -91,7 +91,14 @@ const SinglePayRun = () => {
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
-              <PayRunItem payRunId={payRunId} searchTerm={searchTerm} update={updateData} item={item} index={index} />
+              <PayRunItem
+                payRunId={payRunId}
+                searchTerm={searchTerm}
+                updateData={updateData}
+                item={item}
+                index={index}
+                update={[1, 2, 3, 4].includes(payRun?.payRunStatus)}
+              />
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
             </>
           ))}

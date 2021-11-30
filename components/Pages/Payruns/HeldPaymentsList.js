@@ -4,7 +4,7 @@ import { CaretDownIcon } from 'components/Icons';
 import { HeldPaymentHeader } from './HeldPaymentHeader';
 import { PayRunItem } from './SinglePayRun/PayRunItem';
 
-export const HeldPaymentsList = ({ data, searchTerm, update}) => (
+export const HeldPaymentsList = ({ data, searchTerm, update }) => (
   <Container>
     {data.map((payRun, index) => (
       <>
@@ -24,7 +24,7 @@ export const HeldPaymentsList = ({ data, searchTerm, update}) => (
               padding="0"
               payRunId={payRun.payRunId}
               isHeld
-              update={update}
+              updateData={update}
             />
           </Collapse>
         </Container>
