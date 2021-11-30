@@ -136,7 +136,7 @@ const BrokerFNC = () => {
     try {
       if (omittedData.id) {
         if (hasAssessmentBeenCarried !== null) {
-          formData.append('hasAssessmentBeenCarried', hasAssessmentBeenCarried);
+          formData.append('hasAssessmentBeenCarried', hasAssessmentBeenCarried !== 'no');
         }
         await updateCarePackageReclaimFnc(carePackageId, formData);
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
