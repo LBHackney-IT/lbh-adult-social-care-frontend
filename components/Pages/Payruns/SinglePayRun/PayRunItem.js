@@ -44,7 +44,6 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update,updateData, tota
         <Collapse>
           <HorizontalSeparator height="16px" />
           <Container
-            // margin="0 0 0 16px"
             padding="16px"
             borderTop="1px solid #DEE0E2"
             borderBottom="1px solid #DEE0E2"
@@ -54,7 +53,7 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update,updateData, tota
             <Container display="grid" gridTemplateColumns="2fr 1fr 1.5fr 1fr">
               <Heading size="m">{item.packageType}</Heading>
               <Heading size="s">Weekly Cost</Heading>
-              <Heading size="s">Quantity (Days)</Heading>
+              <Heading size="s">Quantity (days)</Heading>
               <Container textAlign="right">
                 <Heading size="s">Total</Heading>
               </Container>
