@@ -4,7 +4,7 @@ import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const PAY_RUN_URL = `${BASE_URL}/v1/payruns`;
 
-export const updatePayRunStatus = (payRunId, invoiceId, newStatus) => {
+export const updateInvoiceStatus = (payRunId, invoiceId, newStatus, notes) => {
   const options = {
     url: `${PAY_RUN_URL}/${payRunId}/invoices/${invoiceId}/status/${newStatus}`,
     method: 'PUT',
@@ -12,6 +12,7 @@ export const updatePayRunStatus = (payRunId, invoiceId, newStatus) => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
+    params: notes
   };
   return axios(options).then(handleResponse).catch(handleError);
 };

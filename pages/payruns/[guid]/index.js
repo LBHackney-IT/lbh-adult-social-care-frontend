@@ -34,6 +34,7 @@ const initialFilters = {
 const SinglePayRun = () => {
   const router = useRouter();
   const { guid: payRunId } = router.query;
+  const [loading, setLoading] = useState(false);
   const [payRunItems, setPayRunItems] = useState([]);
   const [pagingMetaData, setPagingMetaData] = useState({});
   const [pageNumber, setPageNumber] = useState(1);
@@ -52,7 +53,7 @@ const SinglePayRun = () => {
     [filters, pageNumber]
   );
 
-  const { data: payRun, isLoading, mutate: update } = useInvoiceListView({ payRunId, params });
+  const { data: payRun, isLoading: invoiceLoading, mutate: update } = useInvoiceListView({ payRunId, params });
   const { payRunItems: payRunData } = payRun;
 
   const { data: insightData, isLoading: insightsIsLoading, mutate: updateInsight } = getPayrunInsight({ payRunId });
@@ -74,6 +75,9 @@ const SinglePayRun = () => {
     update();
     updateInsight();
   }
+
+  const isLoading = invoiceLoading || insightsIsLoading || loading;
+
   return (
     <Container>
       <Container background="#FAFAFA" padding="0 0 60px 0">
@@ -91,7 +95,14 @@ const SinglePayRun = () => {
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
-              <PayRunItem payRunId={payRunId} searchTerm={searchTerm} update={updateData} item={item} index={index} />
+              <PayRunItem
+                payRunId={payRunId}
+                searchTerm={searchTerm}
+                update={updateData}
+                item={item}
+                index={index}
+                setLoading={setLoading}
+              />
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
             </>
           ))}

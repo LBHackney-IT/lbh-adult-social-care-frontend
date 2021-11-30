@@ -6,7 +6,16 @@ import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { holdInvoice } from 'api/PayRun';
 import { useDepartments } from 'api';
-import { Button, Container, Dialog, FormGroup, HorizontalSeparator, Select, Textarea } from '../../../HackneyDS';
+import {
+  Button,
+  Container,
+  Dialog,
+  FormGroup,
+  HorizontalSeparator,
+  Select,
+  Textarea,
+  VerticalSeparator
+} from '../../../HackneyDS';
 import Loading from '../../../Loading';
 
 const defaultValues = {
@@ -103,8 +112,9 @@ const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update })
             )}
           />
           <HorizontalSeparator height={32} />
-          <Container className="create-pay-run__actions" display="flex">
+          <Container display="flex">
             <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
+            <VerticalSeparator width={8} />
             <Button
               isLoading={isLoading}
               disabled={isLoading}

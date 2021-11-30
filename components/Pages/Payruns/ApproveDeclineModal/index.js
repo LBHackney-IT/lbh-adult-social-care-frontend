@@ -22,7 +22,7 @@ const errorText = {
   Decline: 'decline'
 };
 
-const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) => {
+const ApproveDeclineModal = ({ openedModal, title = 'Pay Run', setOpenedModal, request, update, payRunId }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const isDeclineModal = openedModal === 'Decline';
@@ -43,7 +43,7 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) 
   const handleApprove = async (notes) => {
     try {
       await approvePayRun(payRunId, notes);
-      pushNotification(`Invoice status changed`, 'success');
+      pushNotification(`Pay run status changed`, 'success');
       update();
     } catch (e) {
       pushNotification(e);
@@ -68,9 +68,13 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) 
 
   const handleReject = async (notes) => {
     try {
-      await rejectPayRun(payRunId, notes);
-      pushNotification(`Invoice status changed`, 'success');
-      update();
+      if (request) {
+        await request(notes);
+      } else {
+        await rejectPayRun(payRunId, notes);
+        pushNotification(`Pay run status changed`, 'success');
+        update();
+      }
     } catch (e) {
       pushNotification(e);
     }
@@ -91,7 +95,7 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) 
     <>
       <Loading isLoading={loading} />
       <Dialog className="high-level-insight--dialog" isOpen={openedModal} noBorder closeIcon="" onClose={closeModal}>
-        <Heading size='xl'>{openedModal} Pay Run</Heading>
+        <Heading size='xl'>{openedModal} {title}</Heading>
         <HorizontalSeparator height={32} />
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
@@ -115,7 +119,7 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) 
               secondary={isDeclineModal}
               color={isDeclineModal && 'red'}
             >
-              {openedModal} Pay Run
+              {openedModal} {title}
             </Button>
             <VerticalSeparator width={24} />
             <Button

@@ -12,11 +12,49 @@ import { SinglePayRunOverview } from 'components/Pages/Payruns/SinglePayRun/Sing
 import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunBreakdown';
 import { useRouter } from 'next/router';
 import { getCarePackageReviewRoute, getPaymentHistoryRoute } from 'routes/RouteConstants';
+import { useDispatch } from 'react-redux';
+import { addNotification } from 'reducers/notificationsReducer';
+import { updateInvoiceStatus } from 'api/PayRuns';
+import ApproveDeclineModal from '../ApproveDeclineModal';
 
-export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle, padding = '24px 16px', isHeld }) => {
+export const PayRunItem = ({
+  searchTerm,
+  payRunId,
+  item,
+  update,
+  totalPayTitle,
+  padding = '24px 16px',
+  isHeld,
+  setLoading,
+}) => {
   if (!item) return null;
 
+  const dispatch = useDispatch();
   const [invoiceId, setInvoiceId] = useState('');
+
+  const [openedModal, setOpenedModal] = useState('');
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
+  const rejectInvoiceStatus = async (notes) => {
+    setLoading(true);
+    try {
+      await updateInvoiceStatus(payRunId, invoiceId, 4, notes);
+      pushNotification('Success', 'success');
+      await update();
+      setInvoiceId('');
+    } catch (e) {
+      pushNotification(e);
+    }
+    setLoading(false);
+  };
+
+  const closeModal = () => {
+    setInvoiceId('');
+    setOpenedModal('');
+  };
 
   const router = useRouter();
   const handleClick = (e) => {
@@ -35,6 +73,7 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle, 
         <SinglePayRunOverview
           payRunId={payRunId}
           update={update}
+          openModal={(field) => setOpenedModal(field === '4' ? 'Decline' : 'Hold')}
           searchTerm={searchTerm}
           setInvoiceId={setInvoiceId}
           payRun={item}
@@ -92,11 +131,19 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle, 
         <HoldPaymentDialog
           invoiceId={invoiceId}
           payRunId={payRunId}
-          isOpen={invoiceId}
+          isOpen={openedModal === 'Hold'}
           update={update}
-          setIsOpened={() => setInvoiceId('')}
+          setIsOpened={closeModal}
         />
       )}
+      <ApproveDeclineModal
+        setOpenedModal={closeModal}
+        openedModal={openedModal !== 'Hold' && openedModal}
+        payRunId={payRunId}
+        title="Invoice"
+        request={rejectInvoiceStatus}
+        update={update}
+      />
     </>
   );
 };
