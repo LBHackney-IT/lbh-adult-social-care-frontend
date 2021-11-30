@@ -5,7 +5,7 @@ import { FormGroup, RadioGroup } from '../../../HackneyDS';
 export const NursingHasFNC = ({ control, errors }) => (
   <FormGroup required label="Has a FNC assessment been carried out?">
     <Controller
-      render={(({ field }) => (
+      render={({ field }) => (
         <RadioGroup
           inline
           value={field.value}
@@ -13,11 +13,11 @@ export const NursingHasFNC = ({ control, errors }) => (
           handle={field.onChange}
           name="hasAssessmentBeenCarried"
           items={[
-            { label: 'Yes', id: 'yes' },
-            { label: 'No', id: 'no' }
+            { label: 'Yes', id: true },
+            { label: 'No', id: false },
           ]}
         />
-      ))}
+      )}
       name="hasAssessmentBeenCarried"
       control={control}
     />

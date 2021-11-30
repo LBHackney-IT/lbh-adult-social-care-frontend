@@ -69,7 +69,7 @@ const BrokerFNC = () => {
       description: null,
       assessmentFileName: null,
       assessmentFileId: null,
-      hasAssessmentBeenCarried: null,
+      hasAssessmentBeenCarried: false,
       isOngoing: false,
     },
   });
@@ -88,6 +88,7 @@ const BrokerFNC = () => {
       setValue('startDate', fncData.startDate);
       setValue('claimCollector', fncData.claimCollector);
       if (fncData.id) setValue('id', fncData.id);
+      if (fncData.hasAssessmentBeenCarried) setValue('hasAssessmentBeenCarried', true);
       if (fncData.description) setValue('description', fncData.description);
       if (fncData.assessmentFileName) setValue('assessmentFileName', fncData.assessmentFileName);
       if (fncData.assessmentFileId) setValue('assessmentFileId', fncData.assessmentFileId);
@@ -117,26 +118,23 @@ const BrokerFNC = () => {
   const handleFormSubmission = async () => {
     setIsRequestBeingSent(true);
     const data = getValues();
-    const { hasAssessmentBeenCarried } = data;
 
     const omittedData = removeEmpty(data);
     const formData =
       !omittedData.endDate || omittedData.isOngoing
         ? getFormData({
-          ...omittedData,
-          startDate: new Date(omittedData.startDate).toISOString(),
-        })
+            ...omittedData,
+            startDate: new Date(omittedData.startDate).toISOString(),
+            hasAssessmentBeenCarried: Boolean(omittedData.hasAssessmentBeenCarried).toString(),
+          })
         : getFormData({
-          ...omittedData,
-          startDate: new Date(omittedData.startDate).toISOString(),
-          endDate: new Date(omittedData.endDate).toISOString(),
-        });
-
+            ...omittedData,
+            startDate: new Date(omittedData.startDate).toISOString(),
+            endDate: new Date(omittedData.endDate).toISOString(),
+            hasAssessmentBeenCarried: Boolean(omittedData.hasAssessmentBeenCarried).toString(),
+          });
     try {
       if (omittedData.id) {
-        if (hasAssessmentBeenCarried !== null) {
-          formData.append('hasAssessmentBeenCarried', hasAssessmentBeenCarried !== 'no');
-        }
         await updateCarePackageReclaimFnc(carePackageId, formData);
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
       } else {
@@ -158,12 +156,8 @@ const BrokerFNC = () => {
         <Loading isLoading={fncLoading} />
         {!fncLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
-            {fncData.id && (
-              <>
-                <NursingHasFNC errors={errors} control={control} />
-                <HorizontalSeparator height={20} />
-              </>
-            )}
+            <NursingHasFNC errors={errors} control={control} />
+            <HorizontalSeparator height={20} />
             <ClaimsCollector errors={errors} control={control} />
             <NursingSchedule errors={errors} control={control} isOngoing={isOngoing} />
             <NursingCareNotes errors={errors} control={control} />
