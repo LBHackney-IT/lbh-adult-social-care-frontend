@@ -19,7 +19,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useToggle } from 'react-use';
 import { formatDate, getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
-import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
+import { careChargeAPIKeys, careChargeFormKeys, COLLECTING_REASON_OPTIONS } from 'constants/variables';
 import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { useLookups, usePackageCareCharge, useSingleCorePackageInfo } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -221,7 +221,7 @@ const CareCharge = () => {
     const { claimCollector, cost, description, claimReason } = getValues(provisional);
     const collectedByLabel = claimCollectors.find((el) => el.id === claimCollector)?.name;
 
-    const collectingReasonLabel = collectingReasonOptions.find((el) => el.value === claimReason)?.text;
+    const collectingReasonLabel = COLLECTING_REASON_OPTIONS.find((el) => el.value === claimReason)?.text;
 
     return [
       { label: 'Provisional care charge (pre-assessement)', value: '' },

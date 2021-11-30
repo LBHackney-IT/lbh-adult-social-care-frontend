@@ -1,6 +1,7 @@
 import React, { memo, useState } from 'react';
 import { currency, dateStringFormats } from 'constants/strings';
 import { formatDate } from 'service';
+import { COLLECTING_REASON_OPTIONS } from 'constants/variables';
 import { Container, InsetText, HorizontalSeparator, SingleAccordion } from '../../../HackneyDS';
 
 const noContentText = {
@@ -9,7 +10,7 @@ const noContentText = {
   'Weekly Additional Need': 'weekly additional needs',
 };
 
-const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeClaimCollector }) => {
+const PackageInfo = ({ lookups, fncDetails, headerTitle, items, containerId, careChargeClaimCollector }) => {
   const [openedServiceUserNeed, setOpenedServiceUserNeed] = useState([]);
   const [openedDetails, setOpenedDetails] = useState([]);
 
@@ -34,8 +35,11 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
       <Container className="review-package-details__title" display="flex" alignItems="center">
         <h3 id={containerId}>{headerTitle || 'Care Package'}</h3>
       </Container>
-      {items?.map(({ startDate, endDate, cost, title, address, serviceUserNeed, place, id, description }) => {
+      {items?.map(({ startDate, endDate, claimReason, subType, cost, title, address, serviceUserNeed, place, id, description }) => {
         const openedServiceUserId = openedServiceUserNeed.includes(id);
+        const collectingReasonLabel = claimReason && COLLECTING_REASON_OPTIONS.find((el) => (
+          el.value === claimReason
+        ))?.text;
         const openedDetailsId = openedDetails.includes(id);
         const minusSign = cost < 0 ? '-' : '';
         return (
@@ -60,10 +64,12 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
                   <span className="font-weight-bold">FNC assessment been carried out: </span>
                   {fncDetails.assessmentFileUrl}
                 </p>
+                <HorizontalSeparator height={8} />
                 <p>
                   <span className="font-weight-bold">Collected by: </span>
-                  {fncDetails.funcClaimCollector}
+                  {fncDetails.fncClaimCollector}
                 </p>
+                <HorizontalSeparator height={8} />
                 <p className="mb-3">
                   <span className="font-weight-bold">FNC assessment: </span>
                   <span className="link-button lbh-color-blue">View</span>
@@ -73,16 +79,20 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
             {careChargeClaimCollector && (
               <>
                 <p>
-                  <span className="font-weight-bold">Provisional care charge (pre-assessement)</span>
+                  <span className="font-weight-bold">{
+                    lookups.find(lookup => lookup.id === subType)?.name
+                  } care charge (pre-assessement)</span>
                 </p>
+                <HorizontalSeparator height={8} />
                 {careChargeClaimCollector && (
                   <p>
                     <span className="font-weight-bold">Collected by: </span>
                     {careChargeClaimCollector}
                   </p>
                 )}
+                <HorizontalSeparator height={8} />
                 <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
-                <p className="mb-3">Service user unable to manage finances</p>
+                <p className="mb-3">{collectingReasonLabel || 'Service user unable to manage finances'}</p>
               </>
             )}
             {description && (

@@ -3,7 +3,14 @@ import { useRouter } from 'next/router';
 import { currency } from 'constants/strings';
 import { APPROVALS_ROUTE, getHistoryRoute, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage, stringIsNullOrEmpty } from 'api';
+import {
+  approveCarePackage,
+  cancelCarePackage,
+  declineCarePackage,
+  endCarePackage,
+  stringIsNullOrEmpty,
+  useLookups
+} from 'api';
 import { useDispatch } from 'react-redux';
 import { Container, Link } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
@@ -43,6 +50,7 @@ const ReviewPackageDetails = ({
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const { data: lookups } = useLookups('reclaimSubType');
 
   const isHide = () => !isNursingCarePackage(title);
 
@@ -206,6 +214,7 @@ const ReviewPackageDetails = ({
                 return (
                   <Container key={itemId} className="review-package-details__cost-info-item">
                     <PackageInfo
+                      lookups={lookups}
                       goToPackage={goToPackage}
                       fncDetails={fncDetails}
                       careChargeClaimCollector={careChargeClaimCollector}

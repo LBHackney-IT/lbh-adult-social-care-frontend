@@ -70,7 +70,7 @@ export const careChargeAPIKeys = {
   more12: 3,
 };
 
-export const collectingReasonOptions = [
+export const COLLECTING_REASON_OPTIONS = [
   { text: 'Service user unable to manage finances', value: '1' },
   { text: 'Agreement with provider to pay gross', value: '2' },
   { text: 'Service user or family declining payment', value: '3' },

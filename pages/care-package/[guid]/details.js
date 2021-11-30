@@ -152,8 +152,8 @@ const PackageDetailsPage = () => {
       items: data?.fundedNursingCare ? [data.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
       fncDetails: {
-        funcClaimCollector: fundedNursingCareClaimCollector[data?.fundedNursingCare?.claimCollector],
-        assessmentFileUrl: data?.fundedNursingCare?.assessmentFileUrl ? 'Yes' : 'No',
+        fncClaimCollector: fundedNursingCareClaimCollector[data?.fundedNursingCare?.claimCollector],
+        assessmentFileUrl: data?.fundedNursingCare?.assessmentFileName ? 'Yes' : 'No',
       },
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.fnc,
