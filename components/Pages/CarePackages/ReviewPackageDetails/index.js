@@ -225,19 +225,15 @@ const ReviewPackageDetails = ({
                     {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader} />}
                     {totalCostInfo && (
                       <Container
-                        className={
-                          totalCostInfo?.supplier !== undefined && totalCostInfo?.hackney !== undefined
-                            ? 'single-border-cost'
-                            : ''
-                        }
+                        className={totalCostInfo?.supplier && totalCostInfo?.hackney ? 'single-border-cost' : ''}
                       >
-                        {totalCostInfo?.hackney !== undefined && totalCostInfo?.hackney !== 0 && (
+                        {!!totalCostInfo?.hackney && (
                           <BrokerageBorderCost
                             totalCost={totalCostInfo?.hackney.toFixed(2)}
                             totalCostHeader="Total (Gross)"
                           />
                         )}
-                        {totalCostInfo?.supplier !== undefined && totalCostInfo?.supplier !== 0 && (
+                        {!!totalCostInfo?.supplier && (
                           <BrokerageBorderCost
                             totalCost={totalCostInfo?.supplier.toFixed(2)}
                             totalCostHeader="Total (Net Off)"
