@@ -80,7 +80,7 @@ export const AdHocAndReleases = ({ createPayrun, isLoading, onClose }) => {
                 setDate={field.onChange}
                 {...field}
                 floatingCalendar
-                calendarStylePosition={{ top: -70, left: 32 }}
+                calendarStylePosition={{ top: -132, left: 32 }}
                 hasClearButton
               />
             )}
