@@ -118,7 +118,6 @@ const BrokerFNC = () => {
     setIsRequestBeingSent(true);
     const data = getValues();
     const { hasAssessmentBeenCarried } = data;
-    delete data.hasAssessmentBeenCarried;
 
     const omittedData = removeEmpty(data);
     const formData =
@@ -159,7 +158,12 @@ const BrokerFNC = () => {
         <Loading isLoading={fncLoading} />
         {!fncLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
-            {fncData.id && <NursingHasFNC errors={errors} control={control} />}
+            {fncData.id && (
+              <>
+                <NursingHasFNC errors={errors} control={control} />
+                <HorizontalSeparator height={20} />
+              </>
+            )}
             <ClaimsCollector errors={errors} control={control} />
             <NursingSchedule errors={errors} control={control} isOngoing={isOngoing} />
             <NursingCareNotes errors={errors} control={control} />
