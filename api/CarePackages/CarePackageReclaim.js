@@ -53,7 +53,21 @@ export const updateCareChargeReclaim = (carePackageId, careChargeUpdateRequest) 
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    data: [careChargeUpdateRequest],
+    data: careChargeUpdateRequest,
+  };
+
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+export const updateCareChargeBrokerage = (carePackageId, careChargeId, careChargeUpdateRequest) => {
+  const options = {
+    url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/${careChargeId}`,
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    data: careChargeUpdateRequest,
   };
 
   return axios(options).then(handleResponse).catch(handleError);

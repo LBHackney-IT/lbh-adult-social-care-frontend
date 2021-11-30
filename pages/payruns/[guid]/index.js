@@ -54,7 +54,7 @@ const SinglePayRun = () => {
   const { data: payRun, isLoading, mutate: update } = useInvoiceListView({ payRunId, params });
   const { payRunItems: payRunData } = payRun;
 
-  const { data: insightData, isLoading: insightsIsLoading } = getPayrunInsight({ payRunId });
+  const { data: insightData, isLoading: insightsIsLoading, mutate: updateInsight } = getPayrunInsight({ payRunId });
 
   useEffect(() => {
     if (payRunData) {
@@ -69,6 +69,10 @@ const SinglePayRun = () => {
     { text: `Pay Run ${payRun?.payRunNumber}` },
   ];
 
+  const updateData = () => {
+    update();
+    updateInsight();
+  }
   return (
     <Container>
       <Container background="#FAFAFA" padding="0 0 60px 0">
@@ -86,7 +90,7 @@ const SinglePayRun = () => {
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
-              <PayRunItem payRunId={payRunId} searchTerm={searchTerm} update={update} item={item} index={index} />
+              <PayRunItem payRunId={payRunId} searchTerm={searchTerm} update={updateData} item={item} index={index} />
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
             </>
           ))}

@@ -16,13 +16,11 @@ export const useRedirectIfPackageNotExist = () => {
   return isLoading;
 };
 
-export const useScrollLock = (isLocked) => {
+export function useScrollLock(isLocked) {
   useEffect(() => {
-    isLocked
-      ? (document.body.style.overflow = 'hidden')
-      : (document.body.style.overflow = '');
+    document.querySelector('html').style.overflow = isLocked ? 'hidden' : 'visible';
     return () => {
-      document.body.style.overflow = '';
+      document.querySelector('html').style.overflow = 'visible';
     };
   }, [isLocked]);
-};
+}

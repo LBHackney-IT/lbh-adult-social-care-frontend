@@ -39,7 +39,7 @@ export const PayrunList = ({ searchTerm, data }) => {
                   {handleId(d.payRunId)}
                 </Container>
                 <Container display="flex" alignItems="center">
-                  <Heading size="s">Date: </Heading>
+                  <Heading size="s">Created: </Heading>
                   <VerticalSeparator width="10px" />
                   {format(new Date(d.dateCreated), 'dd/MM/yy')}
                 </Container>

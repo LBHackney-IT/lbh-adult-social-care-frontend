@@ -15,18 +15,27 @@ export const Container = ({
   flex,
   justifyContent,
   border,
+  borderTop,
   borderBottom,
   borderRight,
+  borderLeft,
   borderRadius,
+  overflow,
+  textOverflow,
+  whiteSpace,
   maxWidth,
   minWidth,
   margin,
   cursor,
+  title,
   gridTemplateColumns,
+  columnGap,
+  columnCount,
   textAlign,
   className = '',
 }) => (
   <div
+    title={title}
     onClick={onClick}
     className={className}
     style={{
@@ -42,13 +51,20 @@ export const Container = ({
       flex,
       justifyContent,
       border,
+      borderTop,
       borderBottom,
+      borderLeft,
       borderRight,
       borderRadius,
+      overflow,
+      textOverflow,
+      whiteSpace,
       maxWidth,
       minWidth,
       margin,
       gridTemplateColumns,
+      columnGap,
+      columnCount,
       textAlign,
       cursor,
     }}

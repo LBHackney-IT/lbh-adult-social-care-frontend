@@ -7,7 +7,7 @@ const PAYRUNS_URL = `${BASE_URL}/v1/payruns`;
 const sendPayRunsRequest = ({ url = '', data, method = requestMethods.post }) =>
   axiosRequest({ url: `${PAYRUNS_URL}${url ? `/${url}` : ''}`, data, method });
 
-export const createDraftPayRun = ({ type, paidUpToDate }) => sendPayRunsRequest({ data: { type, paidUpToDate } });
+export const createDraftPayRun = ({ data }) => sendPayRunsRequest({ data });
 
 const sendInvoiceRequest = ({ payRunId, invoiceId, params }) =>
   sendPayRunsRequest({ url: `${payRunId}/invoices/${invoiceId}/hold`, data: params });

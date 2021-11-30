@@ -1,6 +1,11 @@
 .new-care-charge {
-  .govuk-breadcrumbs {
-    margin-bottom: 40px;
+
+
+
+  .start-date-cell {
+    .title-subtitle {
+      margin-left: initial;
+    }
   }
 }
 
@@ -60,20 +65,6 @@
 
   .lbh-tag {
     margin-right: 8px;
-  }
-}
-
-.new-care-charge__header {
-  margin-bottom: 32px;
-  align-items: center;
-
-  button {
-    height: 50px;
-  }
-
-  h2 {
-    font-size: 48px;
-    font-weight: 700;
   }
 }
 

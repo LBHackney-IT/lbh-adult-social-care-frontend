@@ -14,17 +14,16 @@ import {
 } from 'components';
 import { useRouter } from 'next/router';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { BROKER_ASSISTANCE_ROUTE } from 'routes/RouteConstants';
+import { BROKER_REFERRAL_ROUTE } from 'routes/RouteConstants';
 import { getFormData } from 'service/getFormData';
-import { route } from 'next/dist/next-server/server/router';
 
 const breadcrumbs = [
-  { text: 'Home', href: BROKER_ASSISTANCE_ROUTE },
-  { text: 'Broker Assistance', href: BROKER_ASSISTANCE_ROUTE },
+  { text: 'Home', href: BROKER_REFERRAL_ROUTE },
+  { text: 'Broker Referral', href: BROKER_REFERRAL_ROUTE },
   { text: 'Assign and attach a care plan' },
 ];
 
@@ -69,7 +68,7 @@ const AssignPackage = () => {
     try {
       await assignToBroker({ data: formData });
       dispatch(addNotification({ text: 'Care plan assigned', className: 'success' }));
-      router.push(BROKER_ASSISTANCE_ROUTE);
+      router.push(BROKER_REFERRAL_ROUTE);
     } catch (error) {
       dispatch(addNotification({ text: error, className: 'error' }));
     }

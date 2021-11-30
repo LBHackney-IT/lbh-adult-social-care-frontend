@@ -32,7 +32,7 @@ export const Collapse = ({
       <Container
         width="fit-content"
         display="flex"
-        alignItems="flex-end"
+        alignItems="center"
         className={`collapse__button-container${isButtonClickOnlyClass}`}
         onClick={() => !isButtonClickOnly && changeCollapse()}
       >

@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { getNumberWithCommas } from 'service';
-import { Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
+import { Button, Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
 import { useDispatch } from 'react-redux';
-import { updatePayRunStatus } from 'api/PayRuns';
+import { releaseInvoice, updatePayRunStatus } from 'api/PayRuns';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/serviceSelect';
 import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
@@ -15,7 +15,7 @@ const statusOptions = [
   { text: 'Accepted', value: 5 },
 ];
 
-export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceId, update }) => {
+export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceId, update, isHeld }) => {
   const dispatch = useDispatch();
 
   const pushNotification = (text, className = 'error') => {
@@ -42,10 +42,22 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
   const color = useCallback(getStatusSelectTextColor(payRun.invoiceStatus), [payRun.invoiceStatus]);
 
   const handleServiceUserName = () => getHighlightedSearchQuery(payRun.serviceUserName, searchTerm);
+
+  const handleClick = async () => {
+    try {
+      await releaseInvoice(payRunId, payRun.id);
+      pushNotification(`Invoice released successfully`, 'success');
+      update();
+    } catch (e) {
+      pushNotification(e, 'error');
+    }
+  };
   return (
     <>
       <Container display="flex" alignItems="baseline">
-        <Heading size="m" color="#00664F">{handleServiceUserName()}</Heading>
+        <Heading size="m" color="#00664F">
+          {handleServiceUserName()}
+        </Heading>
         <VerticalSeparator width="24px" />
         <Heading size="s">Invoice ID:</Heading>
         <VerticalSeparator width="5px" />
@@ -66,16 +78,25 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
           {payRun.packageType}
         </Container>
         <Container>
-          <Heading size="s">Total Cost:</Heading>£{getNumberWithCommas(payRun.grossTotal)}
+          <Heading size="s">Total Cost:</Heading>
+          {payRun.netTotal >= 0
+            ? `£${getNumberWithCommas(payRun.netTotal)}`
+            : `-£${getNumberWithCommas(Math.abs(payRun.netTotal))}`}
         </Container>
-        <Select
-          style={{ background, color, border: 'none' }}
-          options={statusOptions}
-          disabled={!update}
-          IconComponent={!update ? null : undefined}
-          onChangeValue={handleChange}
-          value={payRun.invoiceStatus}
-        />
+        {!isHeld ? (
+          <Select
+            style={{ background, color, border: 'none' }}
+            options={statusOptions}
+            disabled={!update}
+            IconComponent={!update ? null : undefined}
+            onChangeValue={handleChange}
+            value={payRun.invoiceStatus}
+          />
+        ) : (
+          <Button onClick={handleClick} secondary color="yellow">
+            Release
+          </Button>
+        )}
       </Container>
     </>
   );

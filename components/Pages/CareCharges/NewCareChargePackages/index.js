@@ -1,7 +1,7 @@
 import React from 'react';
 import { getServiceUserCareChargesRoute, CARE_PACKAGE_ROUTE, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
-import { Breadcrumbs, Button, Container, Select, FormGroup } from '../../../HackneyDS';
+import { Breadcrumbs, Button, Container, Select, FormGroup, HorizontalSeparator, Heading } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 import AlternativePagination from '../../../AlternativePagination';
 import { CareChargesTable } from './CareChargesTable';
@@ -35,15 +35,20 @@ const NewCareChargePackages = ({
   const findServiceUser = () => router.push(SERVICE_USER_SEARCH_ROUTE);
 
   return (
-    <Container className="new-care-charge">
+    <Container>
       <Loading isLoading={isLoading} />
-      <Container background="#FAFAFA">
-        <Container padding="10px 60px 32px 60px" className="centered-container">
+      <Container background="#FAFAFA" padding="0 0 60px 0">
+        <Container padding="0 60px" margin="0 auto" maxWidth="1080px">
+          <HorizontalSeparator height="10px" />
           <Breadcrumbs values={breadcrumbs} />
-          <Container className="new-care-charge__header" display="flex" justifyContent="space-between">
-            <h2>New care charge packages</h2>
-            <Button onClick={findServiceUser}>Find a service user</Button>
+          <HorizontalSeparator height="30px" />
+          <Container display="flex" justifyContent="space-between">
+            <Heading size="xl">New care charge packages</Heading>
+            <Button largeButton onClick={findServiceUser}>
+              Find a service user
+            </Button>
           </Container>
+          <HorizontalSeparator height="46px" />
           <Container className="new-care-charge__selectors">
             <FormGroup label="Status">
               <Select options={userStatusOptions} onChangeValue={changeFilter('status')} value={filters.status} />
@@ -71,8 +76,8 @@ const NewCareChargePackages = ({
           data={data}
           onRowClick={({ serviceUserId }) => pushRoute(getServiceUserCareChargesRoute(serviceUserId))}
         />
+        <HorizontalSeparator height="20px" />
         <AlternativePagination
-          className="mt-6"
           totalPages={pagingMetaData?.totalPages}
           totalCount={pagingMetaData?.totalCount}
           currentPage={pageNumber}
