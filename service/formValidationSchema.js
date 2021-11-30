@@ -38,9 +38,9 @@ const carePackageFNCSchema = yup.object().shape({
     .min(1, 'Please select a claims collector'),
   hasAssessmentBeenCarried: yup
     .mixed()
-    .test('hasAssessmentBeenCarried', 'Please select one option', (value, { parent }) => {
-      return !(parent?.id && value === null);
-    })
+    .test('hasAssessmentBeenCarried', 'Please select an option', (value, { parent }) =>
+      !(parent?.id && value === null)
+    )
 });
 
 const carePackageBrokerCareChargesSchema = yup.object().shape({
