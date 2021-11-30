@@ -19,6 +19,7 @@ const ServiceUserSearch = ({ filters, inputs = defaultInputs, changeFilters, cle
           <DatePicker
             setDate={(value) => changeFilters('dateOfBirth', value)}
             date={filters.dateOfBirth}
+            calendarStylePosition={{ top: 42 }}
             label="Date of birth"
             floatingCalendar
           />

@@ -42,7 +42,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
   return { props: {} };
 });
 
-const CorePackage = () => {
+const BrokerPackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -205,4 +205,4 @@ const CorePackage = () => {
   );
 };
 
-export default CorePackage;
+export default BrokerPackage;

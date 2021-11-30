@@ -57,6 +57,7 @@ export const NewOneOffNeed = ({ createNeed }) => {
                   setDate={field.onChange}
                   {...field}
                   floatingCalendar
+                  calendarStylePosition={{ left: 32 }}
                   hasClearButton
                 />
               )}
@@ -73,6 +74,7 @@ export const NewOneOffNeed = ({ createNeed }) => {
                   setDate={field.onChange}
                   {...field}
                   floatingCalendar
+                  calendarStylePosition={{ left: 32 }}
                   hasClearButton
                 />
               )}
