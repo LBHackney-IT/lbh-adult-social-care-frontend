@@ -73,7 +73,7 @@ const SinglePayRun = () => {
   const updateData = () => {
     update();
     updateInsight();
-  }
+  };
   return (
     <Container>
       <Container background="#FAFAFA" padding="0 0 60px 0">
@@ -98,7 +98,7 @@ const SinglePayRun = () => {
         <HorizontalSeparator height="32px" />
         {insightData && (
           <HighLevelInsight
-            update={update}
+            update={updateData}
             payRunId={payRunId}
             holdCount={insightData?.holdsCount}
             holdValue={insightData?.totalHeldAmount}
@@ -106,6 +106,9 @@ const SinglePayRun = () => {
             serviceUsers={insightData?.serviceUserCount}
             suppliers={insightData?.supplierCount}
             total={insightData?.totalInvoiceAmount}
+            status={insightData?.payRunStatus}
+            isCedarFileDownloaded={insightData?.isCedarFileDownloaded}
+            insightDataLoading={insightsIsLoading}
           />
         )}
         <HorizontalSeparator height="32px" />
