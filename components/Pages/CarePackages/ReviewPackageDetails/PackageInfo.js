@@ -92,7 +92,7 @@ const PackageInfo = ({ lookups, fncDetails, headerTitle, items, containerId, car
                 )}
                 <HorizontalSeparator height={8} />
                 <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
-                <p className="mb-3">{collectingReasonLabel || 'Service user unable to manage finances'}</p>
+                <p className="mb-3">{collectingReasonLabel}</p>
               </>
             )}
             {description && (
