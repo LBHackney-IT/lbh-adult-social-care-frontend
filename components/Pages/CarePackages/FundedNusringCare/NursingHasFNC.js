@@ -2,7 +2,7 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import { FormGroup, HorizontalSeparator, RadioGroup } from '../../../HackneyDS';
 
-export const NursingHasFNC = ({ control }) => (
+export const NursingHasFNC = ({ control, errors }) => (
   <>
     <FormGroup label="Has a FNC assessment been carried out?">
       <Controller
@@ -10,6 +10,7 @@ export const NursingHasFNC = ({ control }) => (
           <RadioGroup
             inline
             value={field.value}
+            error={errors.hasAssessmentBeenCarried?.message}
             handle={field.onChange}
             name="hasAssessmentBeenCarried"
             items={[

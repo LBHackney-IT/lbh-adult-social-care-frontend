@@ -36,6 +36,11 @@ const carePackageFNCSchema = yup.object().shape({
     .typeError('Please select a claims collector')
     .required('Required field')
     .min(1, 'Please select a claims collector'),
+  hasAssessmentBeenCarried: yup
+    .mixed()
+    .test('hasAssessmentBeenCarried', 'Please select one option', (value, { parent }) => {
+      return !(parent?.id && value === null);
+    })
 });
 
 const carePackageBrokerCareChargesSchema = yup.object().shape({

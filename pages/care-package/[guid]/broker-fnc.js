@@ -159,7 +159,7 @@ const BrokerFNC = () => {
         <Loading isLoading={fncLoading} />
         {!fncLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
-            {fncData.id && <NursingHasFNC control={control} />}
+            {fncData.id && <NursingHasFNC errors={errors} control={control} />}
             <ClaimsCollector errors={errors} control={control} />
             <NursingSchedule errors={errors} control={control} isOngoing={isOngoing} />
             <NursingCareNotes errors={errors} control={control} />
