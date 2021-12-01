@@ -5,17 +5,16 @@ import {
   getFormDataWithFile,
   getLoggedInUser,
   useGetFile,
-  useRedirectIfPackageNotExist
 } from 'service';
 import {
   Button,
-  Container,
   DynamicBreadcrumbs,
-  HorizontalSeparator,
+  Container,
   Loading,
   TitleSubtitleHeader,
   UploadFile,
   VerticalSeparator,
+  HorizontalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -35,6 +34,7 @@ import {
   ClaimsCollector,
   FundingPerWeek,
   NursingCareNotes,
+  NursingHasFNC,
   NursingSchedule,
 } from 'components/Pages/CarePackages/FundedNusringCare';
 
@@ -57,7 +57,6 @@ const BrokerFNC = () => {
   const { guid: carePackageId } = router.query;
 
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
-  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
   const { data: details, isLoading: detailsLoading } = usePackageDetails(carePackageId);
 
   const { data: fncData, isLoading: fncLoading } = usePackageFnc(carePackageId);
@@ -83,6 +82,7 @@ const BrokerFNC = () => {
       assessmentFileName: null,
       assessmentFileId: null,
       assessmentFile: null,
+      hasAssessmentBeenCarried: false,
       isOngoing: false,
     },
   });
@@ -95,7 +95,7 @@ const BrokerFNC = () => {
     setter: (file) => setValue('assessmentFile', file)
   });
 
-  const isLoading = fncLoading || fileLoading || isRequestBeingSent || coreLoading || detailsLoading;
+  const isLoading = fncLoading || fileLoading || isRequestBeingSent || detailsLoading;
 
   useEffect(() => {
     if (activeFncPrice) {
@@ -109,6 +109,7 @@ const BrokerFNC = () => {
     setValue('startDate', fncData.startDate);
     setValue('claimCollector', fncData.claimCollector);
     if (fncData.id) setValue('id', fncData.id);
+    if (fncData.hasAssessmentBeenCarried || fncData.id) setValue('hasAssessmentBeenCarried', true);
     if (fncData.description) setValue('description', fncData.description);
     if (fncData.assessmentFileName) setValue('assessmentFileName', fncData.assessmentFileName);
     if (fncData.assessmentFileId) setValue('assessmentFileId', fncData.assessmentFileId);
@@ -140,6 +141,7 @@ const BrokerFNC = () => {
 
     omittedData.endDate = !isOngoing ? dateToIsoString(omittedData.endDate) : null;
     omittedData.startDate = dateToIsoString(omittedData.startDate);
+    omittedData.hasAssessmentBeenCarried =  Boolean(omittedData.hasAssessmentBeenCarried).toString();
 
     const formData = getFormDataWithFile(omittedData);
 
@@ -166,6 +168,8 @@ const BrokerFNC = () => {
         <Loading isLoading={isLoading} />
         {!fncLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
+            <NursingHasFNC errors={errors} control={control} />
+            <HorizontalSeparator height={20} />
             <ClaimsCollector errors={errors} control={control} />
             <NursingSchedule
               startDate={startDate}

@@ -2,5 +2,6 @@ import { ClaimsCollector } from './ClaimsCollector';
 import { FundingPerWeek } from './FundingPerWeek';
 import { NursingCareNotes } from './NursingCareNotes';
 import { NursingSchedule } from './NursingSchedule';
+import { NursingHasFNC } from './NursingHasFNC';
 
-export { ClaimsCollector, FundingPerWeek, NursingCareNotes, NursingSchedule };
+export { ClaimsCollector, NursingHasFNC, FundingPerWeek, NursingCareNotes, NursingSchedule };

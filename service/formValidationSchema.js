@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import { compareDescendingDMY } from './helpers';
-import { dateDescending, TEXT_FILE_EXTENSIONS } from '../constants/variables';
+import { dateDescending } from '../constants/variables';
 
 const carePackageCorePackageSchema = yup.object().shape({
   packageType: yup.number().typeError('Please select a package type').required().min(1, 'Please select a package type'),
@@ -38,6 +38,11 @@ const carePackageFNCSchema = yup.object().shape({
     .typeError('Please select a claims collector')
     .required('Required field')
     .min(1, 'Please select a claims collector'),
+  hasAssessmentBeenCarried: yup
+    .mixed()
+    .test('hasAssessmentBeenCarried', 'Please select an option', (value, { parent }) =>
+      !(parent?.id && value === null)
+    )
 });
 
 const carePackageBrokerCareChargesSchema = yup.object().shape({
@@ -102,16 +107,6 @@ export const getFNCDateValidationSchema = ({ detailsData }) =>
 
 export const fncClaimCollectorSchema = yup.object().shape({
   claimCollector: yup.number().typeError('Required field').required('Required field'),
-});
-
-export const assignPackageSchema = yup.object().shape({
-  brokerId: yup.string().typeError('Please choose a Broker').required().min(2, 'Please choose a Broker'),
-  packageType: yup.number().typeError('Please select a package type').required().min(1, 'Please select a package type'),
-  file: yup.mixed().test('fileInfo', '', (value) => {
-    if (!value?.size || (value?.size && TEXT_FILE_EXTENSIONS.some((fileType) => value.type.includes(fileType)))) {
-      return true;
-    }
-  }),
 });
 
 const newPayRunRegularCyclesSchema = yup.object().shape({

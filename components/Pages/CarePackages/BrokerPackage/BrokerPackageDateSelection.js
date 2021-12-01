@@ -14,6 +14,7 @@ export const BrokerPackageDateSelection = ({ control, isOngoing, errors }) => (
               day={{ label: 'From' }}
               date={field.value ? new Date(field.value) : null}
               setDate={field.onChange}
+              calendarStylePosition={{ top: 42 }}
               {...field}
               hasClearButton
             />
@@ -29,6 +30,7 @@ export const BrokerPackageDateSelection = ({ control, isOngoing, errors }) => (
               day={{ label: 'To' }}
               date={field.value ? new Date(field.value) : null}
               setDate={field.onChange}
+              calendarStylePosition={{ top: 42 }}
               {...field}
               hasClearButton
             />
