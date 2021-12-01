@@ -141,7 +141,7 @@ const BrokerFNC = () => {
 
     omittedData.endDate = !isOngoing ? dateToIsoString(omittedData.endDate) : null;
     omittedData.startDate = dateToIsoString(omittedData.startDate);
-    ommitedData.hasAssessmentBeenCarried =  Boolean(omittedData.hasAssessmentBeenCarried).toString();
+    omittedData.hasAssessmentBeenCarried =  Boolean(omittedData.hasAssessmentBeenCarried).toString();
 
     const formData = getFormDataWithFile(omittedData);
 
