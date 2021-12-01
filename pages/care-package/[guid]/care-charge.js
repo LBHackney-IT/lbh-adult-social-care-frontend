@@ -439,8 +439,6 @@ const CareCharge = () => {
           errors={errors[provisional]}
           onCancel={() => onCancel(provisional)}
           onEnd={() => onEnd(provisional)}
-          coreStartDate={coreStartDate}
-          coreEndDate={coreEndDate}
           control={control}
         />
 
@@ -484,6 +482,7 @@ const CareCharge = () => {
         isOpen={isOpenEdit}
         onClose={() => toggleEdit(false)}
         data={editData}
+        coreStartDate={coreStartDate}
       />
       <CancelElementModal isOpen={isOpenCancel} onClose={() => toggleCancel(false)} data={cancelData} />
       <EndElementModal isOpen={isOpenEnd} onClose={() => toggleEnd(false)} data={endData} control={control} />

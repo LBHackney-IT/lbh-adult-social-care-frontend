@@ -19,7 +19,7 @@ import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import Loading from '../../../../Loading';
 
-const EditElementContent = ({ data, onClose, fileInfo }) => {
+const EditElementContent = ({ data, coreStartDate, onClose, fileInfo }) => {
   const [isLoading, toggleLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -110,7 +110,7 @@ const EditElementContent = ({ data, onClose, fileInfo }) => {
 
     const getReclaimProps = (reclaim) => ({
       ...reclaim,
-      startDate: reclaim.startDate && new Date(reclaim.startDate).toJSON(),
+      startDate: (reclaim.startDate && new Date(reclaim.startDate).toJSON()) || coreStartDate?.toJSON?.(),
       claimCollector: getClaimCollectorId(reclaim.claimCollector),
       endDate: reclaim.isOngoing ? undefined : reclaim.endDate?.toJSON?.(),
     });
