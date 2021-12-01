@@ -20,7 +20,7 @@ import {
   useSingleCorePackageInfo,
 } from 'api';
 import withSession from 'lib/session';
-import { getBrokerPackageRoute, getCarePackageReviewRoute } from 'routes/RouteConstants';
+import { getCarePackageReviewRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
@@ -108,7 +108,7 @@ const CareCharge = () => {
     }
   }, [careChargeLoading]);
 
-  const clickBack = () => router.push(getBrokerPackageRoute(carePackageId));
+  const clickBack = () => router.push(getFundedNursingCareRoute(carePackageId));
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
