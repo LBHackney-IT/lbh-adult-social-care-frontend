@@ -3,6 +3,7 @@ export * from './HackneyDS';
 export { default as Loading } from './Loading';
 export { default as CustomNotification } from './CustomNotification';
 export { default as HackneyFooterInfo } from './HackneyFooterInfo';
+export { default as UploadFile } from './UploadFile';
 
 // pages
 export { default as TitleSubtitleHeader } from './Pages/CarePackages/TitleSubtitleHeader';

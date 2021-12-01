@@ -74,6 +74,8 @@ export const careChargeAPIKeys = {
   more12: 3,
 };
 
+export const TEXT_FILE_EXTENSIONS = ['pdf', 'doc', 'docx'];
+
 export const collectingReasonOptions = [
   { text: 'Service user unable to manage finances', value: '1' },
   { text: 'Agreement with provider to pay gross', value: '2' },
