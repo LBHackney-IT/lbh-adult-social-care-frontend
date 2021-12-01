@@ -14,6 +14,7 @@ export const CareChargeSchedule = ({ control, isOngoing, errors, isS117Client })
               day={{ label: 'From' }}
               date={field.value ? new Date(field.value) : null}
               setDate={field.onChange}
+              calendarStylePosition={{ top: 42 }}
               {...field}
               hasClearButton
             />
@@ -30,6 +31,7 @@ export const CareChargeSchedule = ({ control, isOngoing, errors, isS117Client })
               date={field.value ? new Date(field.value) : null}
               setDate={field.onChange}
               {...field}
+              calendarStylePosition={{ top: 42 }}
               hasClearButton
             />
           )}

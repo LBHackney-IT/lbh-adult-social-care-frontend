@@ -1,22 +1,37 @@
 import { useRouter } from 'next/router';
-import React, { memo } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import { usePackageHistory } from 'api';
-import { formatDate } from 'service';
+import { formatDate, useGetFile } from 'service';
+import UrlFromFile from '../../../UrlFromFile';
 
 const HistoryOverview = () => {
   const router = useRouter();
+  const [file, setFile] = useState();
   const { guid: packageId } = router.query;
 
   const { data } = usePackageHistory(packageId);
-  const { brokeredBy, assignedOn, approvedBy, approvedOn } = data;
+  const {
+    brokeredBy,
+    assignedOn,
+    approvedBy,
+    approvedOn,
+    socialWorkerCarePlanFileName,
+    socialWorkerCarePlanFileId
+  } = data;
 
-  const overviewData = [
+  const { isLoading: fileLoading } = useGetFile({
+    fileId: socialWorkerCarePlanFileId,
+    fileName: socialWorkerCarePlanFileName,
+    setter: (newFile) => setFile(newFile),
+  });
+
+  const overviewData = useMemo(() => [
     { value: brokeredBy ?? '-', label: 'Brokered by' },
     { value: formatDate(assignedOn) ?? '-', label: 'Assigned on' },
     { value: approvedBy ?? '-', label: 'Approved by' },
     { value: formatDate(approvedOn) ?? '-', label: 'Approved on' },
-    { value: '-', label: 'Care Plan' },
-  ];
+    { value: file ? <UrlFromFile isLoading={fileLoading} file={file} showOnlyLink /> : '-', label: 'Care Plan' },
+  ], [brokeredBy, assignedOn, file]);
 
   return (
     <div className="history__overview">

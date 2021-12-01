@@ -19,10 +19,10 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
   const changeApprover = (value) => {
     setApproverError('');
     setApproverId(value);
-  }
+  };
 
   const submit = async () => {
-    if(!approverId) {
+    if (!approverId) {
       setApproverError('Required field');
       return;
     }
@@ -41,25 +41,27 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
   };
 
   return (
-    <Dialog
-      className="brokerage__submit-for-approval"
-      onClose={closePopup}
-      isOpen
-    >
+    <Dialog className="brokerage__submit-for-approval" onClose={closePopup} isOpen>
       <Container>
         <h2>Submit for approval</h2>
         <FormGroup error={approverError} className="brokerage__approved-by-select" label="To be approved by">
-          <Select disabledEmptyComponent error={approverError} options={approverOptions} value={approverId} onChangeValue={changeApprover} />
+          <Select
+            disabledEmptyComponent
+            error={approverError}
+            options={approverOptions}
+            value={approverId}
+            onChangeValue={changeApprover}
+          />
         </FormGroup>
         <FormGroup className="brokerage__add-notes" label="Add notes">
           <Textarea value={notes} handler={setNotes} />
         </FormGroup>
         <Container className="brokerage__actions">
+          <Button onClick={closePopup} outline secondary color="red">
+            Cancel
+          </Button>
           <Button disabled={loading || isLoading} isLoading={loading || isLoading} onClick={submit}>
             Submit
-          </Button>
-          <Button onClick={closePopup} outline secondary color='red' className="link-button no-border">
-            Cancel
           </Button>
         </Container>
       </Container>

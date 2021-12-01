@@ -45,7 +45,7 @@ const CorePackage = () => {
   const [packageStatus, setPackageStatus] = useState();
 
   const { guid: packageId } = router.query;
-  const { data: packageInfo, singleCoreLoading } = useSingleCorePackageInfo(packageId);
+  const { data: packageInfo, isLoading: singleCoreLoading } = useSingleCorePackageInfo(packageId);
   const { settings } = packageInfo;
   const { data: schedulingOptionsData = [] } = usePackageSchedulingOptions();
 
@@ -138,7 +138,7 @@ const CorePackage = () => {
               />
             )}
             <form onSubmit={handleSubmit(onSubmit)}>
-              <PackageType errors={errors} control={control} />
+              <PackageType errors={errors} control={control} packageStatus={packageStatus} />
               <Container className="brokerage__container">
                 <Controller
                   name="packageScheduling"
