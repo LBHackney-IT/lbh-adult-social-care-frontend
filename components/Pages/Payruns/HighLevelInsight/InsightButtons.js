@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Container, HorizontalSeparator, Link, Loading, Select } from 'components';
 import { getPayrunCedarFile } from 'api';
 import { updatePayrunAsPaid } from 'api/PayRuns';
@@ -8,6 +8,7 @@ import { submitPayRun, approvePayRun, deletePayRun, rejectPayRun } from 'api/Pay
 
 export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update, isLoading }) => {
   const [isDownload, setDownload] = useState(false);
+  const [isFileDownloaded, setFileDownloaded] = useState(false);
   const { data, mutate, isLoading: isDownloading } = getPayrunCedarFile(isDownload ? payRunId : null);
 
   const dispatch = useDispatch();
@@ -48,10 +49,22 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
 
   const handleDownload = (e) => {
     e.preventDefault();
+    setFileDownloaded(false);
     setDownload(true);
     mutate();
     update();
   };
+
+  useEffect(() => {
+    if (data && isDownload && !isFileDownloaded) {
+      const blob = new Blob([data], { type: 'xlsx' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${payRunId}-${+new Date()}.xlsx`;
+      link.click();
+      setFileDownloaded(true);
+    }
+  }, [data, isDownload, isFileDownloaded]);
 
   const handleArchive = async (e) => {
     e.preventDefault();
@@ -107,9 +120,13 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
           </Container>
         </Container>
       )}
-      {status === 5 && !isCedarFileDownloaded && (
+      {status === 5 && !isDownload && (
         <Container display="flex" flexDirection="column" alignSelf="center">
-          <Button onClick={handleDownload} isLoading={isDownload && isDownloading} disabled={isDownload && isDownloading}>
+          <Button
+            onClick={handleDownload}
+            isLoading={isDownload && isDownloading}
+            disabled={isDownload && isDownloading}
+          >
             Download
           </Button>
           <HorizontalSeparator height="3px" />
@@ -122,7 +139,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
           </Container>
         </Container>
       )}
-      {status === 5 && isCedarFileDownloaded && (
+      {status === 5 && isDownload && (
         <Container display="flex" flexDirection="column" alignSelf="center">
           <Button onClick={handleMarkAsPaid}>Mark as paid</Button>
           <HorizontalSeparator height="10px" />
@@ -132,11 +149,6 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
             </Link>
           </Container>
           <HorizontalSeparator height="10px" />
-          <Container alignSelf="center">
-            <Link onClick={handleArchive} noVisited>
-              Archive
-            </Link>
-          </Container>
         </Container>
       )}
       {[6, 7].includes(status) && (
