@@ -38,3 +38,5 @@ export const useLatestPayRunToDate = (payRunTypeId) =>
 
 export const useReleasedInvoiceNumber = () =>
   useGetData(`${PAY_RUNS_URL}/released-invoice-count`, 'Cannot get released invoice count', null);
+
+export const getPayrunCedarFile = (payRunId) => useGetData(`${PAY_RUNS_URL}/${payRunId}/download`);

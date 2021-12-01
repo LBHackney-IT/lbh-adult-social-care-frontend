@@ -5,6 +5,7 @@ import DatePick from '../../DatePick';
 import Hint from '../lettering/Hint';
 import Label from '../lettering/Label';
 import { Container } from '../Layout/Container';
+import { COLORS } from '../../../constants/variables';
 
 const initialDateState = {
   value: '',
@@ -18,6 +19,7 @@ const DatePicker = ({
   formId,
   minDate,
   maxDate,
+  calendarStylePosition,
   floatingCalendar,
   hint,
   hasClearButton,
@@ -204,11 +206,12 @@ const DatePicker = ({
         })}
         {IconComponent && (
           <div className="date-picker__calendar-container">
-            <div className="date-picker__additional-action">
+            <div className="date-picker__additional-action" style={{ background: isOpenCalendar ? COLORS['light-blue'] : '' }}>
               <IconComponent onClick={clickIcon} className={iconClassName} />
             </div>
             {isOpenCalendar && (
               <DatePick
+                calendarStylePosition={calendarStylePosition}
                 className={`${floatingCalendar ? 'fixed-datepicker' : ''}`}
                 onClickOutside={() => {
                   if (isOpenCalendar) {

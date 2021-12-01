@@ -4,7 +4,7 @@ import { Checkbox, Container, DatePicker, FormGroup, VerticalSeparator } from 'c
 
 export const NursingSchedule = ({ control, isOngoing, errors }) => (
   <Container className="brokerage__container">
-    <FormGroup label="Funded Nursing Care Schedule..." error={errors.startDate?.message}>
+    <FormGroup required label="Funded Nursing Care Schedule" error={errors.startDate?.message}>
       <Container display="flex">
         <Controller
           name="startDate"
@@ -14,6 +14,7 @@ export const NursingSchedule = ({ control, isOngoing, errors }) => (
               day={{ label: 'From' }}
               date={field.value ? new Date(field.value) : null}
               setDate={field.onChange}
+              calendarStylePosition={{ top: 42 }}
               {...field}
               hasClearButton
             />
@@ -29,6 +30,7 @@ export const NursingSchedule = ({ control, isOngoing, errors }) => (
               day={{ label: 'To' }}
               date={field.value ? new Date(field.value) : null}
               setDate={field.onChange}
+              calendarStylePosition={{ top: 42 }}
               {...field}
               hasClearButton
             />
@@ -39,7 +41,7 @@ export const NursingSchedule = ({ control, isOngoing, errors }) => (
           name="isOngoing"
           control={control}
           render={({ field }) => (
-            <Checkbox label="Ongoing" value={field.value} onChangeValue={field.onChange} {...field} />
+            <Checkbox id='ongoing' label="Ongoing" value={field.value} onChangeValue={field.onChange} {...field} />
           )}
         />
       </Container>

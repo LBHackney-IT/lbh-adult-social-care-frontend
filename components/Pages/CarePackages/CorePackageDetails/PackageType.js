@@ -3,7 +3,7 @@ import { Container, HorizontalSeparator, Select, FormGroup } from 'components/Ha
 import { useLookups, optionsMapper, usePrimarySupportReason } from 'api';
 import { Controller } from 'react-hook-form';
 
-export const PackageType = ({ errors, control }) => {
+export const PackageType = ({ errors, control, packageStatus }) => {
   const { data: primarySupportReasons = [] } = usePrimarySupportReason();
 
   const { options: packageTypes = [] } = useLookups('packageType');
@@ -20,7 +20,13 @@ export const PackageType = ({ errors, control }) => {
         <Controller
           name="packageType"
           control={control}
-          render={({ field }) => <Select options={packageTypes} {...field} />}
+          render={({ field }) => (
+            <Select
+              disabled={packageStatus && packageStatus > 2}
+              options={packageTypes}
+              {...field}
+            />
+          )}
         />
       </FormGroup>
       <HorizontalSeparator height="20px" />

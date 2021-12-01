@@ -3,12 +3,12 @@ import { useForm } from 'react-hook-form';
 import { getLoggedInUser, removeEmpty } from 'service';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
+  DynamicBreadcrumbs,
+  HorizontalSeparator,
   Loading,
   TitleSubtitleHeader,
   VerticalSeparator,
-  HorizontalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -20,10 +20,11 @@ import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import {
-  NursingSchedule,
   ClaimsCollector,
   FundingPerWeek,
   NursingCareNotes,
+  NursingHasFNC,
+  NursingSchedule,
 } from 'components/Pages/CarePackages/FundedNusringCare';
 
 export const getServerSideProps = withSession(async ({ req }) => {
@@ -68,6 +69,7 @@ const BrokerFNC = () => {
       description: null,
       assessmentFileName: null,
       assessmentFileId: null,
+      hasAssessmentBeenCarried: false,
       isOngoing: false,
     },
   });
@@ -86,6 +88,7 @@ const BrokerFNC = () => {
       setValue('startDate', fncData.startDate);
       setValue('claimCollector', fncData.claimCollector);
       if (fncData.id) setValue('id', fncData.id);
+      if (fncData.hasAssessmentBeenCarried || fncData.id) setValue('hasAssessmentBeenCarried', true);
       if (fncData.description) setValue('description', fncData.description);
       if (fncData.assessmentFileName) setValue('assessmentFileName', fncData.assessmentFileName);
       if (fncData.assessmentFileId) setValue('assessmentFileId', fncData.assessmentFileId);
@@ -115,19 +118,21 @@ const BrokerFNC = () => {
   const handleFormSubmission = async () => {
     setIsRequestBeingSent(true);
     const data = getValues();
+
     const omittedData = removeEmpty(data);
     const formData =
       !omittedData.endDate || omittedData.isOngoing
         ? getFormData({
             ...omittedData,
             startDate: new Date(omittedData.startDate).toISOString(),
+            hasAssessmentBeenCarried: Boolean(omittedData.hasAssessmentBeenCarried).toString(),
           })
         : getFormData({
             ...omittedData,
             startDate: new Date(omittedData.startDate).toISOString(),
             endDate: new Date(omittedData.endDate).toISOString(),
+            hasAssessmentBeenCarried: Boolean(omittedData.hasAssessmentBeenCarried).toString(),
           });
-
     try {
       if (omittedData.id) {
         await updateCarePackageReclaimFnc(carePackageId, formData);
@@ -151,6 +156,8 @@ const BrokerFNC = () => {
         <Loading isLoading={fncLoading} />
         {!fncLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
+            <NursingHasFNC errors={errors} control={control} />
+            <HorizontalSeparator height={20} />
             <ClaimsCollector errors={errors} control={control} />
             <NursingSchedule errors={errors} control={control} isOngoing={isOngoing} />
             <NursingCareNotes errors={errors} control={control} />
