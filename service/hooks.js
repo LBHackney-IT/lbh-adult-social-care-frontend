@@ -17,7 +17,7 @@ export const useRedirectIfPackageNotExist = () => {
   return { isLoading, data };
 };
 
-export function useScrollLock (isLocked) {
+export function useScrollLock(isLocked) {
   useEffect(() => {
     document.querySelector('html').style.overflow = isLocked ? 'hidden' : 'visible';
     return () => {
