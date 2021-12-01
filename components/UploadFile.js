@@ -3,7 +3,7 @@ import { Container, FormGroup, Heading, HorizontalSeparator, UploadGreenButton }
 import { Controller } from 'react-hook-form';
 import { TEXT_FILE_EXTENSIONS } from 'constants/variables';
 
-const UploadFile = ({ control, title, name = 'assessmentFile' }) => (
+const UploadFile = ({ control, isLoading, title, name = 'assessmentFile' }) => (
     <div className="financial-assessment">
       <Container>
         <Heading size="m">{title}</Heading>
@@ -13,7 +13,7 @@ const UploadFile = ({ control, title, name = 'assessmentFile' }) => (
           control={control}
           render={({ field }) => (
             <FormGroup>
-              <UploadGreenButton extensions={TEXT_FILE_EXTENSIONS} fileInfo={field.value} setFile={field.onChange} />
+              <UploadGreenButton isLoading={isLoading} extensions={TEXT_FILE_EXTENSIONS} fileInfo={field.value} setFile={field.onChange} />
             </FormGroup>
           )}
         />
