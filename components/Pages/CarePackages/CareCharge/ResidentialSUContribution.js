@@ -48,7 +48,7 @@ const ResidentialSuContribution = ({
   const formKey = isMore12 ? more12 : less12;
   const description = `Without Property ${weeks} weeks`;
 
-  const isMore12MinStartDate = useMemo(() => isMore12 ? coreStartDate : null, [isMore12, coreStartDate]);
+  const isMore12MinStartDate = useMemo(() => (isMore12 ? coreStartDate : null), [isMore12, coreStartDate]);
 
   const status = useGetChargeStatus(isMore12 ? careChargeAPIKeys.more12 : careChargeAPIKeys.less12);
   const claimCollectorOptions = useClaimCollectorOptions(formKey);
@@ -80,7 +80,7 @@ const ResidentialSuContribution = ({
               id={`${weeks}-cost`}
               preSign={currency.euro}
               handler={field.onChange}
-              disabled={isDisabled}
+              // disabled={isDisabled}
               value={field.value}
             />
           )}
@@ -98,7 +98,7 @@ const ResidentialSuContribution = ({
               name={`${formKey}-claimCollector`}
               className="care-charge__radios"
               handle={field.onChange}
-              disabled={isDisabled}
+              // disabled={isDisabled}
               value={field.value}
             />
           )}
@@ -118,9 +118,9 @@ const ResidentialSuContribution = ({
                   calendarStylePosition={{ left: 0, top: 42 }}
                   date={field.value ? new Date(field.value) : null}
                   setDate={field.onChange}
-                  minDate={isMore12MinStartDate || coreStartDate || minFromDate}
-                  maxDate={coreEndDate}
-                  disabled={isDisabled}
+                  // minDate={isMore12MinStartDate || coreStartDate || minFromDate}
+                  // maxDate={coreEndDate}
+                  // disabled={isDisabled}
                 />
               )}
             />
@@ -139,9 +139,9 @@ const ResidentialSuContribution = ({
                 date={field.value}
                 calendarStylePosition={{ left: 0, top: 42 }}
                 setDate={field.onChange}
-                disabled={isDisabled || (isMore12 && isOngoing)}
-                minDate={startDate}
-                maxDate={isMore12 ? coreEndDate : less12MaxEndDate}
+                // disabled={isDisabled || (isMore12 && isOngoing)}
+                // minDate={startDate}
+                // maxDate={isMore12 ? coreEndDate : less12MaxEndDate}
               />
             )}
           />
@@ -157,7 +157,7 @@ const ResidentialSuContribution = ({
                 value={field.value}
                 onChangeValue={field.onChange}
                 label="Ongoing"
-                disabled={isDisabled}
+                // disabled={isDisabled}
               />
             )}
           />

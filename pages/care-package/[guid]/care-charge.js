@@ -48,7 +48,7 @@ const useBreadcrumbs = (serviceUserId) => {
   return useMemo(
     () => [
       { text: 'Home', href: '/' },
-      { text: 'Care charges', href: '/' },
+      { text: 'Care Charges', href: '/' },
       {
         text: 'Full Overview',
         href: getServiceUserPackagesRoute(serviceUserId),
@@ -410,12 +410,12 @@ const CareCharge = () => {
         );
       }
 
-      const hasErrors = await validateFields(fields);
+      // const hasErrors = await validateFields(fields);
 
-      if (hasErrors) {
-        dispatch(addNotification({ text: 'Some validation errors above' }));
-        return;
-      }
+      // if (hasErrors) {
+      //   dispatch(addNotification({ text: 'Some validation errors above' }));
+      //   return;
+      // }
 
       if (formState.isDirty) onEdit(form);
       else goToPackages();
