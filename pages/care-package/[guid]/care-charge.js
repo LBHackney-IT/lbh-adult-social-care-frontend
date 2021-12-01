@@ -142,7 +142,7 @@ const CareCharge = () => {
 
   const less12EndDate = less12EndDateString ? addDays(new Date(less12EndDateString), 1) : null;
 
-  const { isLoading: documentLoading } = useGetFile({
+  const { isLoading: fileLoading } = useGetFile({
     fileId: assessmentFileId,
     fileName: assessmentFileName,
     setter: (newFile) => setValue('assessmentFile', newFile),
@@ -423,7 +423,7 @@ const CareCharge = () => {
     [formState.isDirty, onEdit, goToPackages]
   );
 
-  const isLoading = documentLoading || packageInfoLoading || lookupsLoading || careChargeLoading || detailsLoading;
+  const isLoading = fileLoading || packageInfoLoading || lookupsLoading || careChargeLoading || detailsLoading;
 
   return (
     <div className="care-charge">
@@ -463,7 +463,7 @@ const CareCharge = () => {
           isMore12
         />
 
-        <UploadFile title="Upload FNC Assessment..." control={control} />
+        <UploadFile isLoading={fileLoading} title="Upload FNC Assessment..." control={control} />
 
         <Container className="brokerage__actions">
           <Button secondary color="gray" onClick={router.back}>
