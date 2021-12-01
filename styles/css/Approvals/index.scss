@@ -1,4 +1,8 @@
 .approvals {
+  .govuk-table__cell {
+    vertical-align: top;
+  }
+
   .govuk-form-group.lbh-search-box {
     width: 250px;
     margin-right: 14px;

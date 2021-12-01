@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { axiosRequest } from '../Utils/ApiUtils';
 import { BASE_URL } from '../BaseApi';
 import { requestMethods } from '../../constants/variables';

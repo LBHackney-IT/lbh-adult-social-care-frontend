@@ -1,14 +1,12 @@
 import React from 'react';
 import {
-  Loading,
   Container,
   CareDetails,
   PackageRequest,
-  BrokerageHeader,
   ServiceUserDetails,
   HorizontalSeparator,
   TitleSubtitleHeader,
-  CarePackageBreadcrumbs,
+  DynamicBreadcrumbs,
 } from 'components';
 import { useRouter } from 'next/router';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';
@@ -32,16 +30,14 @@ const Packages = () => {
   const router = useRouter();
 
   const { guid: serviceUserId } = router.query;
-  const { data } = useServiceUserApi.getServiceUserCarePackages(serviceUserId);
+  const { data, isLoading } = useServiceUserApi.getServiceUserCarePackages(serviceUserId);
   const { serviceUser, packages } = data;
 
   return (
     <>
-      <BrokerageHeader />
-      <CarePackageBreadcrumbs />
+      <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
         <TitleSubtitleHeader subTitle="All package details" title="Full overview" />
-        <Loading isLoading={data === undefined} />
         {serviceUser && (
           <ServiceUserDetails
             dateOfBirth={serviceUser.dateOfBirth}
@@ -73,6 +69,7 @@ const Packages = () => {
             )
             .map((p) => (
               <CareDetails
+                isLoading={isLoading}
                 packageId={p.packageId}
                 title={p.packageType}
                 data={p.packageItems}

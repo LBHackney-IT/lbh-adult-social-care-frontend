@@ -6,7 +6,7 @@ import { CrossIcon, SearchIcon } from '../../Icons';
 import { isFunction } from '../../../api';
 
 export default function SearchBox({
-  label = 'Search',
+  label = '',
   id = 'search',
   name = 'search',
   hint,
@@ -41,8 +41,11 @@ export default function SearchBox({
     return handler(e);
   };
 
-  const onEnterPress = ({ key }) => {
-    if (key === 'Enter' && search) search?.();
+  const onEnterPress = (e) => {
+    if (e.key === 'Enter' && search) {
+      e.preventDefault();
+      search?.();
+    }
   };
 
   return (
@@ -61,13 +64,13 @@ export default function SearchBox({
           value={value || ''}
           name={name}
           onChange={onChange}
-          onKeyPress={onEnterPress}
+          onKeyPress={(e) => onEnterPress(e)}
           ref={dataProvider}
           type="search"
           placeholder={placeholder}
         />
         <div role="presentation" onClick={buttonHandler} className="lbh-search-box__action">
-          <span className="govuk-visually-hidden">{value ? 'Clear master-search' : 'Search'}</span>
+          {searchIcon && <span className="govuk-visually-hidden">{value ? 'Clear master-search' : 'Search'}</span>}
           {value && clear ? clearIcon : searchIcon}
         </div>
       </div>

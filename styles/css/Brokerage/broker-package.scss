@@ -1,6 +1,10 @@
 .broker-package {
   .supplier-search-container {
     margin-bottom: 23px;
+
+    .lbh-search-box__action {
+      background: none;
+    }
   }
 
   .collapse__button-container {
@@ -37,7 +41,7 @@
     }
   }
   .with-sign {
-    font-size: 14px;
+    font-size: 1.1875rem;
 
     input {
       font-size: 14px;
@@ -51,6 +55,11 @@
     height: 38px;
     width: 100px;
     margin-bottom: 2px;
+  }
+
+  .supplier-clear-button {
+    height: 40px;
+    margin-top: auto;
   }
 
   .govuk-form-group.brokerage__package-dates {
@@ -112,5 +121,11 @@
 .broker-package__selected {
   .brokerage__supplier-card {
     margin-bottom: 32px;
+  }
+}
+.with-flex {
+  flex: 1;
+  input {
+    flex: 1;
   }
 }

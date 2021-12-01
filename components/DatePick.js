@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import BaseField from './BaseField';
 import ErrorField from './ErrorField';
@@ -20,18 +20,35 @@ const DatePick = ({
   label,
   minDate,
   maxDate,
+  checkMinDate,
   setDate,
+  calendarStylePosition = {},
   dateValue,
   useDefaultInput,
 }) => {
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button className="datepicker-custom-input" onClick={onClick} ref={ref}>
+    <button
+      className="datepicker-custom-input"
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(e);
+      }}
+      ref={ref}
+    >
       {value || <p className="datepicker-custom-input-placeholder">{placeholder}</p>}
     </button>
   ));
 
+  useEffect(() => {
+    if (checkMinDate && dateValue && minDate) {
+      if (dateValue < minDate) {
+        setDate(minDate);
+      }
+    }
+  }, [checkMinDate, minDate, dateValue]);
+
   return (
-    <BaseField className={`${className} react-date-picker`} label={label} noInputStyle>
+    <BaseField style={calendarStylePosition} className='react-date-picker' label={label} noInputStyle>
       {dateValue?.toString() === 'Invalid Date' ? (
         <p>Invalid Date</p>
       ) : (
@@ -55,6 +72,7 @@ const DatePick = ({
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
+          calendarClassName={className}
           className="react-date-picker__input"
         />
       )}

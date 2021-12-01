@@ -12,6 +12,7 @@ export const getHistoryRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/history`;
 export const getCarePackageDetailsRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/details`;
 export const getCarePackageApprovalRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/approval`;
 export const getCarePackageCareChargeRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/care-charge`;
+export const getPaymentHistoryRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/payment-history`;
 
 export const SERVICE_USER_ROUTE = '/service-user';
 export const SERVICE_USER_MASTER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/master-search`;
@@ -20,21 +21,25 @@ export const getPackageDetailRoute = (id) => `${SERVICE_USER_ROUTE}/${id}/packag
 export const getServiceUserPackagesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/packages`;
 export const getServiceUserCareChargesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/care-charges`;
 
-export const BROKER_ASSISTANCE_ROUTE = '/broker-assistance';
-export const getAssignPackageRoute = (id) => `${BROKER_ASSISTANCE_ROUTE}/${id}/assign-package`;
+export const BROKER_REFERRAL_ROUTE = '/broker-referral';
+export const getAssignPackageRoute = (id) => `${BROKER_REFERRAL_ROUTE}/${id}/assign-package`;
+
+export const getSinglePayrunRoute = (payrunId) => `${FINANCE_ROUTE}/${payrunId}`;
+
+export const getInvoiceRoute = (payRunId, invoiceId) => `${FINANCE_ROUTE}/${payRunId}/invoice/${invoiceId}`;
 
 export const CARE_CHARGES_ROUTE = '/care-charges';
 
 export const APPROVALS_ROUTE = '/approvals';
 
-export const FINANCE_ROUTE = '/finance';
+export const FINANCE_ROUTE = '/payruns';
 
 export const LOGOUT_ROUTE = '/logout';
 
 export const NOT_FOUND_ROUTE = '/404';
 
 const carePackageRoutes = [
-  { route: BROKER_ASSISTANCE_ROUTE, name: 'Broker Assistance' },
+  { route: BROKER_REFERRAL_ROUTE, name: 'Broker Referral' },
   { route: BROKER_PORTAL_ROUTE, name: 'Broker Portal' },
   { route: CARE_CHARGES_ROUTE, name: 'Care Charges' },
   { route: APPROVALS_ROUTE, name: 'Approvals' },
@@ -57,7 +62,7 @@ export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
 
   return [
     { text: 'Home', href: '/' },
-    { text: routeInfo.name || 'Broker Assistance', href: routeInfo.route || BROKER_ASSISTANCE_ROUTE },
+    { text: routeInfo.name || 'Broker Referral', href: routeInfo.route || BROKER_REFERRAL_ROUTE },
     ...additionalBreadcrumbs,
   ];
 };

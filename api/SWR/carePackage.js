@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { hasUrl } from '../../service';
 import fetcher from './fetcher';
 import { useLookups } from './lookups';
 import useGetData from './useGetData';
 import { useFetchWithParams } from './useFetchWithParams';
+import { getUrlOrNull } from '../Utils/FuncUtils';
 
 const CARE_PACKAGES_URL = '/care-packages';
 
-const getCarePackageUrl = (id, string = '') => hasUrl(id, `${CARE_PACKAGES_URL}${id ? `/${id}` : ''}${string}`);
+const getCarePackageUrl = (id, string = '') => getUrlOrNull(`${CARE_PACKAGES_URL}/${id}${string}`);
 
 export const useBrokerView = ({ params }) =>
   useFetchWithParams({
@@ -40,6 +40,13 @@ export const usePackageSummary = (packageId) => useGetData(getCarePackageUrl(pac
 export const useSingleCorePackageInfo = (packageId) =>
   useGetData(packageId ? `${CARE_PACKAGES_URL}/${packageId}/core` : null, '');
 
+export const usePaymentHistoryView = ({ params, packageId }) =>
+  useFetchWithParams({
+    params,
+    url: `${CARE_PACKAGES_URL}/${packageId}/payment-history`,
+    errorText: 'Cannot get payment history',
+  });
+
 export const usePackageHistory = (packageId) => useGetData(getCarePackageUrl(packageId, '/history'), '');
 
 export const usePackageFnc = (packageId) => useGetData(getCarePackageUrl(packageId, '/reclaims/fnc'));
@@ -48,10 +55,9 @@ export const usePackageActiveFncPrice = (packageId) =>
   useGetData(getCarePackageUrl(packageId, '/reclaims/fnc/active-price'));
 
 export const usePackageCalculatedCost = (packageId, serviceUserId) =>
-  useGetData(
-    getCarePackageUrl(packageId, `/reclaims/care-charges/${serviceUserId}/default`),
-    'Can not get calculated cost',
-    0
+  useGetData(getCarePackageUrl(packageId, `/reclaims/care-charges/${serviceUserId}/default`),
+    'Cannot get cost',
+    null
   );
 
 // helper for usePackageCareCharge

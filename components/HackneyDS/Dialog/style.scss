@@ -4,10 +4,15 @@
   width: 90%;
   max-width: 500px;
   margin: 7vh auto;
+
+  &.no-border {
+    border: none;
+  }
+
   &__close {
     position: absolute;
-    right: 7px;
-    top: 7px;
+    right: 24px;
+    top: 24px;
     border: none;
     background: none;
     padding: 0;
@@ -59,6 +64,7 @@
   }
 }
 [data-reach-dialog-overlay] {
+  display: flex;
   z-index: var(--ifm-z-index-overlay);
   background: rgba(0, 0, 0, 0.33);
   position: fixed;
@@ -70,8 +76,8 @@
 }
 [data-reach-dialog-content] {
   width: 50vw;
-  margin: 10vh auto;
+  margin: auto;
   background: #fff;
-  padding: 2rem;
+  padding: 32px;
   outline: 0;
 }

@@ -1,17 +1,33 @@
 import React from 'react';
+import { Container } from '../Layout/Container';
+import { VerticalSeparator } from '../Layout/VerticalSeparator';
 import { HorizontalSeparator } from '../Layout/HorizontalSeparator';
 
-export default function FormGroup({ children = [], label, required, hint, error, className = '' }) {
+export default function FormGroup({
+  children = [],
+  label,
+  required,
+  disabled,
+  hint,
+  error,
+  horizontalSeparator = 20,
+  className = '',
+  smallLabel = false,
+  inlineLabel = false,
+}) {
   const outerClassName = className ? ` ${className}` : '';
   const nodeList = Array.isArray(children) ? children : [children];
   const errorClassList = error ? ' govuk-form-group--error' : '';
-
+  const disabledClass = disabled ? ' disabled' : '';
+  const labelSize = smallLabel ? ' small-label' : '';
   return (
-    <div className={`govuk-form-group lbh-form-group${errorClassList}${outerClassName}`}>
+    <div className={`govuk-form-group lbh-form-group${errorClassList}${outerClassName}${disabledClass}`}>
       <fieldset className="govuk-fieldset lbh-fieldset">
-        {label && (
+        {label && !inlineLabel && (
           <>
-            <label className={`govuk-fieldset__legend${required ? ' text-required-after' : ''}`}>{label}</label>
+            <label className={`govuk-fieldset__legend${required ? ' text-required-after' : ''} ${labelSize}`}>
+              {label}
+            </label>
             <HorizontalSeparator />
           </>
         )}
@@ -22,13 +38,23 @@ export default function FormGroup({ children = [], label, required, hint, error,
           </>
         )}
         {error && (
-          <span className="govuk-error-message">
+          <span className={`govuk-error-message ${labelSize}`}>
             <span className="govuk-visually-hidden">Error:</span>
             {error}
           </span>
         )}
-        {(hint || error || label) && <HorizontalSeparator height="20px" />}
-        {nodeList}
+        {(hint || error || (label && !smallLabel)) && <HorizontalSeparator height={horizontalSeparator} />}
+        {inlineLabel && label ? (
+          <Container display="flex" alignItems="center">
+            <label className={`govuk-fieldset__legend${required ? ' text-required-after' : ''} ${labelSize}`}>
+              {label}
+            </label>
+            <VerticalSeparator width="8px" />
+            {nodeList}
+          </Container>
+        ) : (
+          nodeList
+        )}
       </fieldset>
     </div>
   );

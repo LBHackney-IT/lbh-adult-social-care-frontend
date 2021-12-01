@@ -3,7 +3,7 @@ import useErrorNotification from './useErrorNotification';
 
 // use for simple requests without any params
 const useGetData = (url, errorMessage, initialData = {}) => {
-  const response = useSWR(url, {
+  const response = useSWR(url !== undefined ? url : null, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
   });

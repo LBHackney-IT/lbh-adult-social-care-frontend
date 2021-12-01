@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import { useApproversOptions, useLookups } from 'api';
-import BrokerageHeader from '../CarePackages/BrokerageHeader';
 import {
   Breadcrumbs,
   Button,
@@ -34,12 +33,14 @@ const initialServiceUserFilters = {
 export const PackageApprovals = ({
   items,
   title,
+  searchTerm,
   pageNumber,
   setPageNumber,
   paginationData: { pageSize, totalPages, totalCount },
   filters,
   setFilters,
   clearFilter,
+  loading,
   onRowClick = () => {},
   breadcrumbs,
 }) => {
@@ -86,7 +87,8 @@ export const PackageApprovals = ({
     setServiceUserFilter({ ...initialServiceUserFilters });
   };
 
-  const getPackageTypeById = (packageTypeId) => packageOptions.find(packageType => packageType.value === packageTypeId)?.text;
+  const getPackageTypeById = (packageTypeId) =>
+    packageOptions.find((packageType) => packageType.value === packageTypeId)?.text;
 
   const onSearch = useCallback(() => {
     changeFilterField('serviceUserName', searchText);
@@ -94,7 +96,7 @@ export const PackageApprovals = ({
 
   const shouldShowClear = Object.values(filters).some((item) => item);
 
-  const isLoading = approverOptionsLoading || packageOptionsLoading;
+  const isLoading = loading || approverOptionsLoading || packageOptionsLoading;
 
   return (
     <div className="broker-portal approvals">
@@ -107,7 +109,6 @@ export const PackageApprovals = ({
           clearFilters={clearServiceUserSearch}
         />
       </Dialog>
-      <BrokerageHeader />
       <Container background="#FAFAFA" padding="0 0 60px">
         <Container maxWidth="1080px" margin="0 auto">
           <Container padding="10px 60px 0px">
@@ -116,21 +117,24 @@ export const PackageApprovals = ({
           <Container className="brokerage-portal__header">
             <h1>{title}</h1>
           </Container>
-
           <Container className="brokerage-portal__filters">
             <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label">
-                <SearchBox label="Search Packages" value={searchText} onChangeValue={setSearchText} search={onSearch} />
+                <SearchBox
+                  placeholder="Search service user"
+                  label="Search Packages"
+                  value={searchText}
+                  onChangeValue={setSearchText}
+                  search={onSearch}
+                />
               </FormGroup>
-
               <FormGroup className="form-group--inline-label brokerage-portal__form-status" label="Status">
                 <Select
                   options={statusOptions}
                   value={filters.status}
-                  onChange={({ target: { value } }) => changeFilterField('status', value)}
+                  onChangeValue={(value) => changeFilterField('status', value)}
                 />
               </FormGroup>
-
               <FormGroup className="form-group--inline-label" label="Approver">
                 <Select
                   value={filters.approverId}
@@ -139,7 +143,6 @@ export const PackageApprovals = ({
                 />
               </FormGroup>
             </div>
-
             <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label date-from" label="From">
                 <DatePick
@@ -159,7 +162,6 @@ export const PackageApprovals = ({
                   }}
                 />
               </FormGroup>
-
               <FormGroup className="form-group--inline-label" label="To">
                 <DatePick
                   placeholder="Select date"
@@ -189,7 +191,7 @@ export const PackageApprovals = ({
       </Container>
 
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
-        <PackageApprovalsTable getPackageTypeById={getPackageTypeById} onRowClick={onRowClick} data={items} />
+        <PackageApprovalsTable searchTerm={searchTerm} getPackageTypeById={getPackageTypeById} onRowClick={onRowClick} data={items} />
         <HorizontalSeparator height="20px" />
 
         <AlternativePagination

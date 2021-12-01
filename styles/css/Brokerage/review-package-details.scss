@@ -60,12 +60,33 @@
   }
 }
 
+.single-border-cost {
+  .brokerage__border-cost {
+    &:first-of-type {
+      margin-bottom: 16px;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    &:last-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+  }
+}
+
 .review-package-details__items-container {
-  & > h3 {
-    font-weight: bold;
-    color: black;
-    font-size: 30px;
+  .review-package-details__title {
     margin-bottom: 24px;
+    & > h3 {
+      font-weight: bold;
+      color: black;
+      font-size: 30px;
+    }
+
+    .review-package-details__items-actions {
+      margin-left: 20px;
+    }
   }
 }
 

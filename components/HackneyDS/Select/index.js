@@ -9,21 +9,24 @@ const Select = (props) => {
     className = '',
     disabledOptions = [],
     disabledEmptyComponent = false,
-    isDisabled = false,options = [],
+    options = [],
+    fields = { text: 'text', value: 'value' },
     emptyElement = { text: 'Select one', value: '' },
     id = 'select-id',
     error,
+    style = {},
     IconComponent = <SelectArrowTriangle />,
     disabled,
   } = props;
   const outerClass = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-select--error' : '';
+  const noIconClass = !IconComponent ? ' no-icon' : '';
   const errorDescribedBy = error ? { 'aria-describedby': ' govuk-select--error' } : {};
   const [isEmptyElementDisabled, setEmptyElementDisabled] = useState(disabledEmptyComponent && emptyElement?.text);
   return (
-    <div className="select-container">
+    <div className={`select-container${noIconClass}`}>
       <select
-        disabled={isDisabled}
+        style={style}
         id={id}
         {...errorDescribedBy}
         onChange={(e) => {
@@ -43,11 +46,11 @@ const Select = (props) => {
         )}
 
         {options.map((option) => {
-          const isDisabledOption = disabledOptions.some((disabledOption) => disabledOption === option.value);
+          const isDisabledOption = disabledOptions.some((disabledOption) => disabledOption === option[fields.value]);
 
           return (
-            <option disabled={isDisabledOption} key={`${option.text}${option.value}`} value={option.value}>
-              {option.text}
+            <option disabled={isDisabledOption} key={`${option[fields.text]}${option[fields.value]}`} value={option[fields.value]}>
+              {option[fields.text]}
             </option>
           );
         })}

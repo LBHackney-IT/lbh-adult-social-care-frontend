@@ -30,6 +30,10 @@
   -webkit-appearance: none;
   width: auto;
 
+  &.disable-shadow {
+    box-shadow: none;
+  }
+
   background-color: $lbh-primary;
   color: white;
 
@@ -205,6 +209,10 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
     transition: background-color 0.2s ease;
     border: 1px solid;
     box-shadow: none;
+
+    &.no-border {
+      border: none;
+    }
 
     &:hover {
       transform: scale(1.03);
@@ -390,6 +398,12 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
 .lbh-button--warning:hover[disabled],
 .lbh-button--warning[disabled] {
   background: #be3a34;
+}
+
+.large-button {
+  font-size: 19px;
+  height: 50px;
+  min-width: 200px;
 }
 
 @media (min-width: 48.0625em) {

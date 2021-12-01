@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Breadcrumbs,
-  BrokerageHeader,
   Button,
   CancelElementModal,
   Container,
   EditElementModal,
   EndElementModal,
   FinancialAssessment,
+  Loading,
   ProvisionalCareCharge,
   ResidentialSUContribution,
   TitleSubtitleHeader,
@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useToggle } from 'react-use';
-import { formatDate, getLoggedInUser } from 'service';
+import { formatDate, getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
 import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { useLookups, usePackageCareCharge, useSingleCorePackageInfo } from 'api';
@@ -89,6 +89,7 @@ const claimCollectorSchema = yup.string().required('Required field');
 const startDateSchema = yup.mixed().required('Required field');
 
 const CareCharge = () => {
+  const coreLoading = useRedirectIfPackageNotExist();
   const breadcrumbs = useBreadcrumbs();
 
   const [isOpenEdit, toggleEdit] = useModal();
@@ -118,15 +119,20 @@ const CareCharge = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const { guid: packageId } = router.query;
+  const { guid: routerPackageId } = router.query;
 
-  const { actualReclaims } = usePackageCareCharge(packageId);
-  const { data: claimCollectors } = useLookups('claimCollector');
-  const { data: packageInfo } = useSingleCorePackageInfo(packageId);
+  const [packageId, setPackageId] = useState(null);
+
+  const { actualReclaims, isLoading: careChargeLoading } = usePackageCareCharge(packageId);
+  const { data: claimCollectors, isLoading: lookupsLoading } = useLookups('claimCollector');
+  const { data: packageInfo, isLoading: packageInfoLoading } = useSingleCorePackageInfo(packageId);
 
   useEffect(() => {
-    if (packageInfo.settings?.isS117Client) router.replace(CARE_CHARGES_ROUTE);
-  }, [packageInfo]);
+    setPackageId(routerPackageId);
+    if (packageId && packageInfo.settings?.isS117Client && packageInfo.settings?.isS117ClientConfirmed === false) {
+      router.replace(CARE_CHARGES_ROUTE);
+    }
+  }, [packageInfo, routerPackageId]);
 
   const { handleSubmit, control, formState, setValue, getValues, reset } = useForm({ defaultValues });
 
@@ -377,7 +383,8 @@ const CareCharge = () => {
 
   return (
     <div className="care-charge">
-      <BrokerageHeader />
+
+      <Loading isLoading={coreLoading || packageInfoLoading || lookupsLoading || careChargeLoading} />
 
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
         <Breadcrumbs values={breadcrumbs} />
@@ -411,7 +418,7 @@ const CareCharge = () => {
         <FinancialAssessment />
 
         <Container className="brokerage__actions">
-          <Button className="brokerage__back-button" onClick={router.back}>
+          <Button secondary color="gray" onClick={router.back}>
             Back
           </Button>
           <Button onClick={handleSubmit(onSubmit)}>Save</Button>

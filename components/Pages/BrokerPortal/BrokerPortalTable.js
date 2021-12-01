@@ -1,8 +1,10 @@
 import React from 'react';
+import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
 import { Container, Table, Tag } from '../../HackneyDS';
 import { formatDate, getTagColorFromStatus } from '../../../service';
 
-export const BrokerPortalTable = ({ onRowClick, data }) => {
+export const BrokerPortalTable = ({ searchTerm, onRowClick, data }) => {
+  const handleServiceUserName = (name) => getHighlightedSearchQuery(name, searchTerm);
   const columns = [
     {
       accessor: 'packageStatus',
@@ -10,7 +12,7 @@ export const BrokerPortalTable = ({ onRowClick, data }) => {
         <Container>
           <Container className="status-info" display="flex">
             <p className="brokerage-portal--user-name font-size-19px font-weight-bold text-green">
-              {original.serviceUserName}
+              {searchTerm ? handleServiceUserName(original.serviceUserName) : original.serviceUserName}
             </p>
             <Tag className="text-capitalize" outline color={getTagColorFromStatus(value)}>
               {value}
@@ -25,7 +27,7 @@ export const BrokerPortalTable = ({ onRowClick, data }) => {
       accessor: 'hackneyId',
       Cell: ({ value }) => (
         <Container className="brokerage-portal__cell-with-title">
-          <h3>MosaicID</h3>
+          <h3>HackneyID</h3>
           <p>#{value}</p>
         </Container>
       ),

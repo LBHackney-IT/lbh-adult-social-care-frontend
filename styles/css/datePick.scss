@@ -47,6 +47,10 @@
   }
 }
 
+.fixed-datepicker {
+  position: fixed !important;
+  z-index: 100;
+}
 .datepicker-ongoing {
   opacity: 0.5;
   .react-datepicker-wrapper {
@@ -83,7 +87,7 @@
 
   &::placeholder {
     font-size: 16px;
-    font-family: "OpenSans", sans-serif;
+    font-family: 'OpenSans', sans-serif;
     color: $lbh-black1;
   }
 }
@@ -100,4 +104,8 @@
   background: white;
   min-width: 120px;
   border: 2px solid black;
+}
+
+.react-datepicker{
+  z-index: 100;
 }

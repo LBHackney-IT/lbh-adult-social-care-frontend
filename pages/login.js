@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useUser } from 'api';
-import { HackneyFooterInfo, Header } from 'components';
+import { HackneyFooterInfo, Header, Loading } from 'components';
 import { userLogin } from 'reducers/userReducer';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
+import { changeHeader, resetHeader } from '../reducers/headerReducer';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
@@ -30,16 +31,19 @@ const Login = () => {
   });
 
   const [origin, setOrigin] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setOrigin(window.location.origin);
 
     const login = async () => {
+      setLoading(true);
       try {
         mutateUser(await axios('/api/login'));
       } catch (error) {
         console.log(error);
       }
+      setLoading(false);
     };
 
     login().then(() => {
@@ -49,9 +53,16 @@ const Login = () => {
     });
   }, []);
 
+  useEffect(() => {
+    dispatch(changeHeader({ links: []}));
+
+    return () => {
+      dispatch(resetHeader());
+    }
+  }, [])
+
   return (
     <div className="login-page">
-      <Header />
       {!user?.isLoggedIn && (
         <div className="login-page__form-container">
           <div className="login-page__form">
@@ -59,12 +70,16 @@ const Login = () => {
             <p>Please sign in with your Hackney email account.</p>
             <p>Please contact your manager if you have issues signing in.</p>
             <a
-              className="button button-base"
+              className="button button-base is-relative"
               href={`${hackneyAuthLink}${origin}/login`}
               rel="noopener noreferrer"
               target="_self"
             >
-              <strong>Sign in with Google</strong>
+              {
+                loading ? (
+                  <Loading className="loading-blue loading-absolute-centered" isLoading={loading} />
+                ) : <strong>Sign in with Google</strong>
+              }
             </a>
           </div>
         </div>

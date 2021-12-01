@@ -2,7 +2,15 @@ import React from 'react';
 import { TooltipIcon } from './Icons';
 import Tip from './HackneyDS/Tip';
 
-const BaseField = ({ onClick = () => {}, tooltipText = '', className = '', label, noInputStyle = false, children }) => {
+const BaseField = ({
+  style,
+  onClick = () => {},
+  tooltipText = '',
+  className = '',
+  label,
+  noInputStyle = false,
+  children
+}) => {
   const hasLabel = label !== undefined;
   let innerClassName = `control field-container${hasLabel ? ' has-label' : ''}`;
 
@@ -11,7 +19,7 @@ const BaseField = ({ onClick = () => {}, tooltipText = '', className = '', label
   }
 
   return (
-    <div onClick={onClick} className={`${innerClassName} ${className}`}>
+    <div style={style} onClick={onClick} className={`${innerClassName} ${className}`}>
       {hasLabel ? (
         <label className="text-bold">
           <label>{label}</label>

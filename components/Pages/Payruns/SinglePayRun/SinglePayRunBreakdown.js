@@ -1,0 +1,89 @@
+import React from 'react';
+import { getNumberWithCommas } from 'service';
+import { Collapse, Container, Heading, HorizontalSeparator, VerticalSeparator } from 'components';
+import { format } from 'date-fns';
+
+export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }) => {
+  const { invoiceItems } = payRun;
+  return (
+    <>
+      {invoiceItems &&
+        invoiceItems?.map(
+          (invoice) =>
+            !invoice.isReclaim && (
+              <React.Fragment key={invoice.id}>
+                <HorizontalSeparator height="16px" />
+                {invoice.name}
+                <HorizontalSeparator height="8px" />
+                <Container display="grid" gridTemplateColumns="2fr 1fr 1.5fr 1fr">
+                  <Container>
+                    {`${format(new Date(invoice.fromDate), 'dd/MM/yyy')} - ${format(
+                      new Date(invoice.toDate),
+                      'dd/MM/yyy'
+                    )}`}
+                  </Container>
+                  <Container>£{invoice.cost}</Container>
+                  <Container>{`${invoice.quantity} (${invoice.period})`}</Container>
+                  <Container textAlign="right">£{getNumberWithCommas(invoice.totalCost)}</Container>
+                </Container>
+                <HorizontalSeparator height="16px" />
+                <Container borderBottom="1px solid #DEE0E2" />
+              </React.Fragment>
+            )
+        )}
+      <HorizontalSeparator height="16px" />
+      <Container display="grid" gridTemplateColumns="4fr 1fr">
+        <Heading size="m">{totalPayTitle}</Heading>
+        <Container textAlign="right">
+          <Heading size="m">£{getNumberWithCommas(payRun.grossTotal)}</Heading>
+        </Container>
+      </Container>
+      <HorizontalSeparator height="16px" />
+      <Container borderBottom="1px solid #DEE0E2" />
+      <HorizontalSeparator height="16px" />
+      <Collapse title={<Heading size="m">Reclaims</Heading>}>
+        <HorizontalSeparator height="16px" />
+        <Container borderBottom="1px solid #DEE0E2" />
+        {invoiceItems?.map(
+          (invoice) =>
+            invoice.isReclaim && (
+              <React.Fragment key={invoice.id}>
+                <HorizontalSeparator height="16px" />
+                {invoice.name}
+                <HorizontalSeparator height="8px" />
+                <Container display="grid" gridTemplateColumns="2fr 1fr 1.5fr 1fr">
+                  <Container>
+                    {`${format(new Date(invoice.fromDate), 'dd/MM/yyy')} - ${format(
+                      new Date(invoice.toDate),
+                      'dd/MM/yyy'
+                    )}`}
+                  </Container>
+                  <Container>£{invoice.cost}</Container>
+                  <Container>{`${invoice.quantity} (${invoice.period})`}</Container>
+                  <Container textAlign="right">£{getNumberWithCommas(Math.abs(invoice.totalCost))}</Container>
+                </Container>
+                <HorizontalSeparator height="16px" />
+                <Container borderBottom="1px solid #DEE0E2" />
+              </React.Fragment>
+            )
+        )}
+        <HorizontalSeparator height="16px" />
+        <Container display="grid" gridTemplateColumns="4fr 1fr">
+          <Heading size="m">Sub reclaimed by Hackney</Heading>
+          <Container textAlign="right">
+            <Heading size="m">£{getNumberWithCommas(Math.abs(payRun.hackneyReclaimsTotal))}</Heading>
+          </Container>
+        </Container>
+        <HorizontalSeparator height="16px" />
+        <Container borderBottom="1px solid #DEE0E2" />
+        <HorizontalSeparator height="16px" />
+        <Container display="grid" gridTemplateColumns="4fr 1fr">
+          <Heading size="m">Sub reclaimed by Supplier</Heading>
+          <Container textAlign="right">
+            <Heading size="m">£{getNumberWithCommas(Math.abs(payRun.supplierReclaimsTotal))}</Heading>
+          </Container>
+        </Container>
+      </Collapse>
+    </>
+  );
+};

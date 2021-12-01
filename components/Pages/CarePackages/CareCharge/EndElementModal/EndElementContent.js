@@ -4,15 +4,16 @@ import { addWeeks, intervalToDuration, parseISO } from 'date-fns';
 import { useWatch } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
-import { endCareChargeReclaim, useSingleCorePackageInfo } from '../../../../../api';
-import { addNotification } from '../../../../../reducers/notificationsReducer';
-import { getServiceUserCareChargesRoute } from '../../../../../routes/RouteConstants';
+import { endCareChargeReclaim, useSingleCorePackageInfo } from 'api';
+import { addNotification } from 'reducers/notificationsReducer';
+import { getServiceUserCareChargesRoute } from 'routes/RouteConstants';
 import { FormGroup } from '../../../../HackneyDS';
 import CareChargesInfoStatic from '../ModalComponents/CareChargesInfoStatic';
 import CareChargesModalActions from '../ModalComponents/CareChargesModalActions';
 import CareChargesInfoTitle from '../ModalComponents/CareChargesInfoTitle';
 import CareChargesModalTitle from '../ModalComponents/CareChargesModalTitle';
 import DatePick from '../../../../DatePick';
+import Loading from '../../../../Loading';
 
 const endDateSchema = yup.mixed().required();
 
@@ -72,6 +73,8 @@ const EndElementContent = ({ data, control, headerText, onClose }) => {
   return (
     <>
       <CareChargesModalTitle title={headerText} />
+
+      <Loading isLoading={isLoading} />
 
       <CareChargesInfoTitle title="Elements to be ended" />
 

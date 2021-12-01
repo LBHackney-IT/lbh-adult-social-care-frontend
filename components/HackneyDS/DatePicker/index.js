@@ -1,9 +1,11 @@
-import React, { useEffect, memo, useState } from 'react';
-import { lastDayOfMonth } from 'date-fns';
-import { DatePickerCalendarIcon, RestoreIcon, CrossIcon } from '../../Icons';
+import React, { memo, useEffect, useState } from 'react';
+import { lastDayOfMonth, setDate as dateFncSetDate } from 'date-fns';
+import { CrossIcon, DatePickerCalendarIcon, RestoreIcon } from '../../Icons';
 import DatePick from '../../DatePick';
 import Hint from '../lettering/Hint';
 import Label from '../lettering/Label';
+import { Container } from '../Layout/Container';
+import { COLORS } from '../../../constants/variables';
 
 const initialDateState = {
   value: '',
@@ -17,8 +19,11 @@ const DatePicker = ({
   formId,
   minDate,
   maxDate,
+  calendarStylePosition,
+  floatingCalendar,
   hint,
-  hasClear,
+  hasClearButton,
+  checkMinDate,
   date,
   setDate,
   IconComponent = DatePickerCalendarIcon,
@@ -57,15 +62,27 @@ const DatePicker = ({
   const getValidMonth = (monthValue) => {
     // if value more then 11 return 0 (date.getMonth() start from 0) 11 December and max number of month
     // get value 02 format to 2 and 2-1=1 February
-    const validMonth = replaceFirstZero(monthValue) - 1 > 11 ? 0 : replaceFirstZero(monthValue) - 1;
-    return Number(validMonth) < 0 ? 0 : Number(validMonth);
+    if (monthValue && Number(monthValue) !== 0) {
+      const monthNumber = monthValue - 1;
+      if (monthNumber > 11) {
+        if (monthValue[1] === '0') return 0;
+        return monthValue[1] - 1;
+      }
+      return monthNumber;
+    }
+    return 0;
   };
 
   const getValidDay = (dayValue) => {
     const formatDay = dayValue && replaceFirstZero(dayValue);
     const lastDayInMonth = date && lastDayOfMonth(date).getDate();
-    const validDay = formatDay && lastDayInMonth && lastDayInMonth < formatDay ? 1 : formatDay;
-    return Number(validDay) || 1;
+
+    if (lastDayInMonth < formatDay) {
+      if (formatDay[1] === '0') return '01';
+      return `0${dayValue[1]}`;
+    }
+    if (formatDay === '0' || formatDay === '') return '01';
+    return formatDay;
   };
 
   const getValidYear = (dayValue) => (dayValue ? `20${dayValue}` : 0);
@@ -75,13 +92,18 @@ const DatePicker = ({
   };
 
   const onChangeMonth = (value) => {
-    setDate(
-      new Date(
-        date?.getFullYear() || actualDate.getFullYear(),
-        getValidMonth(value),
-        date?.getDate() || actualDate.getDate()
-      )
+    const validatedMonth = getValidMonth(value);
+    let validatedDate = new Date(
+      date?.getFullYear() || actualDate.getFullYear(),
+      validatedMonth,
+      date?.getDate() || actualDate.getDate()
     );
+    if (validatedMonth < validatedDate.getMonth()) {
+      validatedDate = new Date(date?.getFullYear() || actualDate.getFullYear(), validatedMonth);
+      const lastDayInMonth = lastDayOfMonth(validatedDate).getDate();
+      validatedDate = dateFncSetDate(validatedDate, lastDayInMonth);
+    }
+    setDate(validatedDate);
   };
 
   const onChangeYear = (value) => {
@@ -105,11 +127,14 @@ const DatePicker = ({
   };
 
   const restoreDate = () => {
-    setDate(previousDate)
+    setDate(previousDate);
     setPreviousDate(null);
-  }
+  };
 
-  const changeCalendarInput = (newDate) => setDate(newDate);
+  const changeCalendarInput = (newDate) => {
+    setDate(newDate);
+    setIsOpenCalendar(false);
+  };
 
   useEffect(() => {
     if (date) {
@@ -129,73 +154,93 @@ const DatePicker = ({
     }
   }, [date]);
 
+  useEffect(() => {
+    if (checkMinDate && date && minDate) {
+      if (date < minDate) {
+        setDate(minDate);
+      }
+    }
+  }, [date, checkMinDate, minDate]);
+
   return (
-    <div className={`govuk-date-input lbh-date-input${outerClass}`} id={formId && `${formId}-errors`}>
+    <div className={`govuk-date-input lbh-date-input${outerClass}${disabledClass}`} id={formId && `${formId}-errors`}>
       {label && <Label className="govuk-date-input__label">{label}</Label>}
       {hint && <Hint className="govuk-date-input__hint">{hint}</Hint>}
-      {inputs.map((input) => {
-        if (!input.visible) return null;
-        const errorClass = input.error ? 'govuk-input--error ' : '';
+      <Container display="flex" alignItems="center">
+        {inputs.map((input) => {
+          if (!input.visible) return null;
+          const errorClass = input.error ? 'govuk-input--error ' : '';
 
-        return (
-          <div key={input.id} className="govuk-date-input__item">
-            {input.label && (
-              <label className="govuk-label govuk-date-input__label" htmlFor={input.id}>
-                {input.label}
-              </label>
+          return (
+            <div key={input.id} className="govuk-date-input__item">
+              {input.label && (
+                <label className="govuk-label govuk-date-input__label" htmlFor={input.id}>
+                  {input.label}
+                </label>
+              )}
+              <input
+                className={`${errorClass} govuk-input govuk-date-input__input ${input.className}`}
+                id={input.id}
+                disabled={disabled}
+                value={date === null ? '' : `00${input.value}`.slice(-2)}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  if (input.onChange) {
+                    return input.onChange(e);
+                  }
+                  if (input.onChangeValue) {
+                    let slicedValue = value.slice(1, 3);
+                    if (date === null) {
+                      slicedValue = `0${value}`;
+                    }
+                    input.onChangeValue(slicedValue);
+                  }
+                }}
+                min={1}
+                step={1}
+                name={input.name}
+                type="number"
+              />
+            </div>
+          );
+        })}
+        {IconComponent && (
+          <div className="date-picker__calendar-container">
+            <div className="date-picker__additional-action" style={{ background: isOpenCalendar ? COLORS['light-blue'] : '' }}>
+              <IconComponent onClick={clickIcon} className={iconClassName} />
+            </div>
+            {isOpenCalendar && (
+              <DatePick
+                calendarStylePosition={calendarStylePosition}
+                className={`${floatingCalendar ? 'fixed-datepicker' : ''}`}
+                onClickOutside={() => {
+                  if (isOpenCalendar) {
+                    setIsOpenCalendar(false);
+                  }
+                }}
+                startDate={date}
+                inline
+                minDate={minDate}
+                maxDate={maxDate}
+                dateValue={date}
+                setDate={changeCalendarInput}
+              />
             )}
-            <input
-              className={`${errorClass} govuk-input govuk-date-input__input ${input.className}`}
-              id={input.id}
-              disabled={disabled}
-              value={`00${input.value}`.slice(-2)}
-              onChange={(e) => {
-                if (input.onChange) {
-                  return input.onChange(e);
-                }
-                if (input.onChangeValue) {
-                  const slicedValue = e.target.value.slice(1, 3);
-                  input.onChangeValue(slicedValue);
-                }
-              }}
-              min={1}
-              step={1}
-              name={input.name}
-              type="number"
-            />
           </div>
-        );
-      })}
-      {IconComponent && (
-        <div className={`date-picker__calendar-container${disabledClass}`}>
-          <div className='date-picker__additional-action'>
-            <IconComponent onClick={clickIcon} className={iconClassName} />
+        )}
+        {hasClearButton && date && (
+          <div className="date-picker__additional-action clear-datepicker" onClick={clearDate}>
+            <CrossIcon />
           </div>
-          {isOpenCalendar && (
-            <DatePick
-              onClickOutside={() => {
-                if (isOpenCalendar) {
-                  setIsOpenCalendar(false);
-                }
-              }}
-              startDate={date}
-              inline
-              minDate={minDate}
-              maxDate={maxDate}
-              dateValue={date}
-              setDate={changeCalendarInput}
-            />
-          )}
-        </div>
-      )}
-      {hasClear && date && <div className='date-picker__additional-action clear-datepicker' onClick={clearDate}><CrossIcon /></div>}
-      {previousDate && (
-        <div onClick={restoreDate} className='date-picker__additional-action restore-date'>
-          <RestoreIcon />
-        </div>
-      )}
+        )}
+        {previousDate && (
+          <div onClick={restoreDate} className="date-picker__additional-action restore-date">
+            <RestoreIcon />
+          </div>
+        )}
+      </Container>
     </div>
   );
-}
+};
 
-export default memo(DatePicker)
+export default memo(DatePicker);

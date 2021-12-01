@@ -29,6 +29,12 @@ Default.args = {
   formId: 'date-picker',
 };
 
+export const CalendarStylePosition = Template.bind({});
+CalendarStylePosition.args = {
+  formId: 'date-picker',
+  calendarStylePosition: { left: 50 },
+};
+
 export const ErrorDay = Template.bind({});
 ErrorDay.args = {
   formId: 'error-day',
@@ -61,4 +67,27 @@ LabelHintError.args = {
   day: { label: 'Day' },
   month: { label: 'Month' },
   year: { error: 'Error year', label: 'Year' }
+};
+
+export const WithClearButton = Template.bind({});
+WithClearButton.args = {
+  formId: 'label-hint-error',
+  hint: 'Date picker hint',
+  label: 'Date picker label',
+  day: { label: 'Day' },
+  month: { label: 'Month' },
+  year: { error: 'Error year', label: 'Year' },
+  hasClearButton: true,
+};
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  formId: 'label-hint-error',
+  hint: 'Date picker hint',
+  label: 'Date picker label',
+  day: { label: 'Day' },
+  month: { label: 'Month' },
+  year: { error: 'Error year', label: 'Year' },
+  disabled: true,
+  hasClearButton: true,
 };
