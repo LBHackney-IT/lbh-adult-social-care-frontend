@@ -60,7 +60,7 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
                   </Container>
                   <Container>£{invoice.cost}</Container>
                   <Container>{`${invoice.quantity} (${invoice.period})`}</Container>
-                  <Container textAlign="right">£{getNumberWithCommas(invoice.totalCost)}</Container>
+                  <Container textAlign="right">£{getNumberWithCommas(Math.abs(invoice.totalCost))}</Container>
                 </Container>
                 <HorizontalSeparator height="16px" />
                 <Container borderBottom="1px solid #DEE0E2" />
@@ -71,7 +71,7 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
         <Container display="grid" gridTemplateColumns="4fr 1fr">
           <Heading size="m">Sub reclaimed by Hackney</Heading>
           <Container textAlign="right">
-            <Heading size="m">£{getNumberWithCommas(payRun.hackneyReclaimsTotal)}</Heading>
+            <Heading size="m">£{getNumberWithCommas(Math.abs(payRun.hackneyReclaimsTotal))}</Heading>
           </Container>
         </Container>
         <HorizontalSeparator height="16px" />
@@ -80,7 +80,7 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
         <Container display="grid" gridTemplateColumns="4fr 1fr">
           <Heading size="m">Sub reclaimed by Supplier</Heading>
           <Container textAlign="right">
-            <Heading size="m">£{getNumberWithCommas(payRun.supplierReclaimsTotal)}</Heading>
+            <Heading size="m">£{getNumberWithCommas(Math.abs(payRun.supplierReclaimsTotal))}</Heading>
           </Container>
         </Container>
       </Collapse>

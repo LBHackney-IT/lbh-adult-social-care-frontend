@@ -22,6 +22,7 @@ export const PayRunItem = ({
   payRunId,
   item,
   update,
+  updateData,
   totalPayTitle,
   padding = '24px 16px',
   isHeld,
@@ -83,7 +84,6 @@ export const PayRunItem = ({
         <Collapse>
           <HorizontalSeparator height="16px" />
           <Container
-            // margin="0 0 0 16px"
             padding="16px"
             borderTop="1px solid #DEE0E2"
             borderBottom="1px solid #DEE0E2"
@@ -93,7 +93,7 @@ export const PayRunItem = ({
             <Container display="grid" gridTemplateColumns="2fr 1fr 1.5fr 1fr">
               <Heading size="m">{item.packageType}</Heading>
               <Heading size="s">Weekly Cost</Heading>
-              <Heading size="s">Quantity (Days)</Heading>
+              <Heading size="s">Quantity (days)</Heading>
               <Container textAlign="right">
                 <Heading size="s">Total</Heading>
               </Container>
@@ -131,8 +131,8 @@ export const PayRunItem = ({
         <HoldPaymentDialog
           invoiceId={invoiceId}
           payRunId={payRunId}
+          update={updateData}
           isOpen={openedModal === 'Hold'}
-          update={update}
           setIsOpened={closeModal}
         />
       )}

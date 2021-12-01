@@ -74,7 +74,7 @@ const SinglePayRun = () => {
   const updateData = () => {
     update();
     updateInsight();
-  }
+  };
 
   const isLoading = invoiceLoading || insightsIsLoading || loading;
 
@@ -98,9 +98,10 @@ const SinglePayRun = () => {
               <PayRunItem
                 payRunId={payRunId}
                 searchTerm={searchTerm}
-                update={updateData}
+                updateData={updateData}
                 item={item}
                 index={index}
+                update={[1, 2, 3, 4].includes(payRun?.payRunStatus)}
                 setLoading={setLoading}
               />
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
@@ -109,7 +110,7 @@ const SinglePayRun = () => {
         <HorizontalSeparator height="32px" />
         {insightData && (
           <HighLevelInsight
-            update={update}
+            update={updateData}
             payRunId={payRunId}
             holdCount={insightData?.holdsCount}
             holdValue={insightData?.totalHeldAmount}
@@ -117,6 +118,9 @@ const SinglePayRun = () => {
             serviceUsers={insightData?.serviceUserCount}
             suppliers={insightData?.supplierCount}
             total={insightData?.totalInvoiceAmount}
+            status={insightData?.payRunStatus}
+            isCedarFileDownloaded={insightData?.isCedarFileDownloaded}
+            insightDataLoading={insightsIsLoading}
           />
         )}
         <HorizontalSeparator height="32px" />

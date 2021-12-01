@@ -9,7 +9,7 @@ export const ClaimsCollector = ({ control, errors }) => {
   ];
   return (
     <Container className="brokerage__container">
-      <FormGroup label="Claims are collected by" error={errors.claimCollector?.message}>
+      <FormGroup required label="Claims are collected by" error={errors.claimCollector?.message}>
         <Controller
           name="claimCollector"
           control={control}
