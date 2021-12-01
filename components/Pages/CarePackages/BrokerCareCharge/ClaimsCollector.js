@@ -16,8 +16,8 @@ export const ClaimsCollector = ({ control, errors, collectedBy, isS117Client }) 
             error={errors.claimCollector?.message}
             label="Collected by"
             items={[
-              { id: 1, label: 'Hackney council (gross)' },
-              { id: 2, label: 'Supplier (net)' },
+              { id: 1, label: 'Supplier (net)' },
+              { id: 2, label: 'Hackney council (gross)' },
             ]}
             {...field}
           />
