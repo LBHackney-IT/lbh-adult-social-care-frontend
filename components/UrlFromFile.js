@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { getUrlFromFile } from '../service';
 import { Container } from './HackneyDS/Layout/Container';
 import { VerticalSeparator } from './HackneyDS/Layout/VerticalSeparator';
+import Loading from './Loading';
 
-const UrlFromFile = ({ file, removeFile, linkText = 'View', showOnlyLink }) => {
+const UrlFromFile = ({ file, removeFile, isLoading, linkText = 'View', showOnlyLink }) => {
   if (!file && !showOnlyLink) return <></>;
+
+  if (isLoading) return <Loading className='centered-container' isLoading={isLoading} />
 
   const [isEdit, setIsEdit] = useState(false);
   const [link, setLink] = useState('');

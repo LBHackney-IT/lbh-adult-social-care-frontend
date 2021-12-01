@@ -28,7 +28,7 @@ export default function Button({
       ? ` secondary-${color}`
       : ' govuk-secondary lbh-button--secondary'
     : '';
-  const disabledClassList = disabled ? ' lbh-button--disabled govuk-button--disabled' : '';
+  const disabledClassList = disabled || isLoading ? ' lbh-button--disabled govuk-button--disabled' : '';
   const mainClass = clearClass ? '' : 'govuk-button lbh-button';
   const addItemClassList = addItem ? ' lbh-button--add' : '';
   const largeButtonClass = largeButton ? ' large-button' : '';
