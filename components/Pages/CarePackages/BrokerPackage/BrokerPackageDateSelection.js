@@ -41,7 +41,7 @@ export const BrokerPackageDateSelection = ({ control, isOngoing, errors }) => (
           name="isOngoing"
           control={control}
           render={({ field }) => (
-            <Checkbox id='isOngoing' label="Ongoing" value={field.value} onChangeValue={field.onChange} {...field} />
+            <Checkbox label="Ongoing" value={field.value} onChangeValue={field.onChange} {...field} />
           )}
         />
       </Container>
