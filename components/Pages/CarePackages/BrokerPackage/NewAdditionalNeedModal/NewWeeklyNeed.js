@@ -57,6 +57,7 @@ export const NewWeeklyNeed = ({ createNeed }) => {
                   {...field}
                   floatingCalendar
                   hasClearButton
+                  calendarStylePosition={{ left: 32, top: -110 }}
                 />
               )}
             />

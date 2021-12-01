@@ -15,7 +15,7 @@ const statusOptions = [
   { text: 'Accepted', value: 5 },
 ];
 
-export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceId, update, isHeld }) => {
+export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceId, update, updateData, isHeld }) => {
   const dispatch = useDispatch();
 
   const pushNotification = (text, className = 'error') => {
@@ -31,7 +31,7 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
       try {
         await updatePayRunStatus(payRunId, payRun.id, field);
         pushNotification(`Invoice status changed`, 'success');
-        update();
+        updateData();
       } catch (e) {
         pushNotification(e, 'error');
       }

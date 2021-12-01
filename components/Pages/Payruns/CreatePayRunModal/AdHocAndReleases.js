@@ -63,6 +63,7 @@ export const AdHocAndReleases = ({ createPayrun, isLoading, onClose }) => {
                 setDate={field.onChange}
                 {...field}
                 floatingCalendar
+                calendarStylePosition={{ top: -50, left: 32 }}
                 hasClearButton
               />
             )}
@@ -79,6 +80,7 @@ export const AdHocAndReleases = ({ createPayrun, isLoading, onClose }) => {
                 setDate={field.onChange}
                 {...field}
                 floatingCalendar
+                calendarStylePosition={{ top: -132, left: 32 }}
                 hasClearButton
               />
             )}

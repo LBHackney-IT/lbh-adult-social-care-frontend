@@ -41,6 +41,10 @@ export const tagColors = {
   active: 'green',
 };
 
+export const COLORS = {
+  'light-blue': 'rgb(216 234 251)',
+};
+
 export const userTagColors = {
   new: 'yellow',
   existing: 'gray',
@@ -70,6 +74,8 @@ export const careChargeAPIKeys = {
   more12: 3,
 };
 
+export const TEXT_FILE_EXTENSIONS = ['pdf', 'doc', 'docx'];
+
 export const COLLECTING_REASON_OPTIONS = [
   { text: 'Service user unable to manage finances', value: '1' },
   { text: 'Agreement with provider to pay gross', value: '2' },
@@ -77,7 +83,6 @@ export const COLLECTING_REASON_OPTIONS = [
   { text: 'Finance managed by CFAT', value: '4' },
   { text: 'Other', value: '5' },
 ];
-
 
 export const packageTypes = {
   residential: 2,

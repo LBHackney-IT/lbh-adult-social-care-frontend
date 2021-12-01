@@ -113,7 +113,9 @@
 }
 
 .date-picker__calendar-container {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
 
   .date-picker__additional-action {
@@ -130,7 +132,26 @@
 
   .react-date-picker {
     position: absolute;
-    top: 32px;
-    left: 0;
+    z-index: 3;
+    top: -140px;
+    left: -120px;
+
+    &.left {
+      left: -260px;
+    }
+
+    &.right {
+      left: initial;
+      right: 0;
+    }
+
+    &.bottom {
+      top: initial;
+      bottom: 0;
+    }
+
+    &.top {
+      top: -277px;
+    }
   }
 }

@@ -90,6 +90,7 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
                 {...field}
                 minDate={lastCycleDate && new Date(lastCycleDate)}
                 floatingCalendar
+                calendarStylePosition={{ top: -100, left: 32 }}
                 hasClearButton
               />
             )}
