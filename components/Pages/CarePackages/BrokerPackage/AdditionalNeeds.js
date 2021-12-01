@@ -32,13 +32,12 @@ export const AdditionalNeeds = ({ setValue, weeklyNeeds, setIsAddingNew }) => {
     <Container>
       <FormGroup label="Additional needs">
         <Container display="flex" justifyContent="stretch" flexDirection="column">
-          {!weeklyNeeds ||
-            (!weeklyNeeds.length && (
-              <>
-                <InsetText>No additional needs</InsetText>
-                <HorizontalSeparator height="20px" />
-              </>
-            ))}
+          {!weeklyNeeds?.length && (
+            <>
+              <InsetText>No additional needs</InsetText>
+              <HorizontalSeparator height="20px" />
+            </>
+          )}
           {weeklyNeeds?.map((need) => (
             <>
               <WeeklyNeed need={need} removeNeed={removeNeed} />

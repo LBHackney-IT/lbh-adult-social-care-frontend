@@ -41,6 +41,10 @@ export const tagColors = {
   active: 'green',
 };
 
+export const COLORS = {
+  'light-blue': 'rgb(216 234 251)',
+};
+
 export const userTagColors = {
   new: 'yellow',
   existing: 'gray',
@@ -79,7 +83,6 @@ export const collectingReasonOptions = [
   { text: 'Finance managed by CFAT', value: '4' },
   { text: 'Other', value: '5' },
 ];
-
 
 export const packageTypes = {
   residential: 2,

@@ -138,7 +138,7 @@ const CorePackage = () => {
               />
             )}
             <form onSubmit={handleSubmit(onSubmit)}>
-              <PackageType errors={errors} control={control} />
+              <PackageType errors={errors} control={control} packageStatus={packageStatus} />
               <Container className="brokerage__container">
                 <Controller
                   name="packageScheduling"
