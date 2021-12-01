@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 import { compareDescendingDMY } from './helpers';
 import { dateDescending } from '../constants/variables';
+import { TEXT_FILE_EXTENSIONS } from '../constants/variables';
 
 const carePackageCorePackageSchema = yup.object().shape({
   packageType: yup.number().typeError('Please select a package type').required().min(1, 'Please select a package type'),
@@ -64,6 +65,16 @@ const newOneOffAdditionalNeedSchema = yup.object().shape({
 const newWeeklyAdditionalNeedSchema = yup.object().shape({
   startDate: yup.string().typeError('Please select a start date').required('Please select a start date'),
   cost: yup.number().typeError('Please enter a cost').required('Please enter a cost').min(1, 'Please enter a cost'),
+});
+
+export const assignPackageSchema = yup.object().shape({
+  brokerId: yup.string().typeError('Please choose a Broker').required().min(2, 'Please choose a Broker'),
+  packageType: yup.number().typeError('Please select a package type').required().min(1, 'Please select a package type'),
+  file: yup.mixed().test('fileInfo', '', (value) => {
+    if (!value?.size || (value?.size && TEXT_FILE_EXTENSIONS.some((fileType) => value.type.includes(fileType)))) {
+      return true;
+    }
+  }),
 });
 
 export const getFNCDateValidationSchema = ({ detailsData }) =>
