@@ -137,7 +137,7 @@ jobs:
           name: deploy
           command: |
             yarn install --production --ignore-scripts --prefer-offline
-            rm -rf node_modules/'@babel' node_modules/webpack node_modules/sass
+            rm -rf node_modules/webpack node_modules/sass
             yarn autoclean --force
             sudo npm i -g serverless && sls deploy --stage production
 
