@@ -1,4 +1,6 @@
 import * as yup from 'yup';
+import { compareDescendingDMY } from './helpers';
+import { dateDescending } from '../constants/variables';
 import { TEXT_FILE_EXTENSIONS } from '../constants/variables';
 
 const carePackageCorePackageSchema = yup.object().shape({
@@ -73,6 +75,49 @@ export const assignPackageSchema = yup.object().shape({
       return true;
     }
   }),
+});
+
+export const getFNCDateValidationSchema = ({ detailsData }) =>
+  yup.object().shape({
+    detailsDateTo: null,
+    isOngoing: yup.boolean(),
+    dateFrom: yup
+      .date()
+      .typeError('Please select a date from')
+      .required()
+      .test(
+        'dateFrom',
+        'Date from less then core date start',
+        (dateFrom) => compareDescendingDMY(dateFrom, detailsData.startDate) !== dateDescending.asc
+      )
+      .test('dateFrom', 'Date from more then core date end', (dateFrom) => {
+        if (detailsData.endDate) {
+          return compareDescendingDMY(dateFrom, detailsData.endDate) !== dateDescending.desc;
+        }
+        return true;
+      }),
+    dateTo: yup.mixed().when('isOngoing', {
+      is: false,
+      then: yup
+        .date()
+        .typeError('Please select a date to')
+        .required()
+        .test(
+          'dateTo',
+          '(Date to) less then (date from)',
+          (dateTo, { parent }) => compareDescendingDMY(parent?.dateFrom, dateTo) !== dateDescending.desc
+        )
+        .test('dateTo', 'Date to should be less or equal then core end date', (value) => {
+          if (detailsData.endDate) {
+            return compareDescendingDMY(value, detailsData.endDate) !== dateDescending.desc;
+          }
+          return true;
+        }),
+    }),
+  });
+
+export const fncClaimCollectorSchema = yup.object().shape({
+  claimCollector: yup.number().typeError('Required field').required('Required field'),
 });
 
 const newPayRunRegularCyclesSchema = yup.object().shape({
