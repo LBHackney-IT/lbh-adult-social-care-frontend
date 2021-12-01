@@ -9,7 +9,6 @@ import {
   declineCarePackage,
   endCarePackage,
   stringIsNullOrEmpty,
-  useLookups
 } from 'api';
 import { useDispatch } from 'react-redux';
 import { Container, Link } from '../../../HackneyDS';
@@ -50,7 +49,6 @@ const ReviewPackageDetails = ({
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const { data: lookups } = useLookups('reclaimSubType');
 
   const isHide = () => !isNursingCarePackage(title);
 
@@ -214,7 +212,6 @@ const ReviewPackageDetails = ({
                 return (
                   <Container key={itemId} className="review-package-details__cost-info-item">
                     <PackageInfo
-                      lookups={lookups}
                       goToPackage={goToPackage}
                       fncDetails={fncDetails}
                       careChargeClaimCollector={careChargeClaimCollector}

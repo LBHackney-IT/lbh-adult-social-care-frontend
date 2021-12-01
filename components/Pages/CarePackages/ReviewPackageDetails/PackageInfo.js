@@ -10,7 +10,7 @@ const noContentText = {
   'Weekly Additional Need': 'weekly additional needs',
 };
 
-const PackageInfo = ({ lookups, fncDetails, headerTitle, items, containerId, careChargeClaimCollector }) => {
+const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeClaimCollector }) => {
   const [openedServiceUserNeed, setOpenedServiceUserNeed] = useState([]);
   const [openedDetails, setOpenedDetails] = useState([]);
 
@@ -35,7 +35,7 @@ const PackageInfo = ({ lookups, fncDetails, headerTitle, items, containerId, car
       <Container className="review-package-details__title" display="flex" alignItems="center">
         <h3 id={containerId}>{headerTitle || 'Care Package'}</h3>
       </Container>
-      {items?.map(({ startDate, endDate, claimReason, subType, cost, title, address, serviceUserNeed, place, id, description }) => {
+      {items?.map(({ startDate, endDate, claimReason, subTypeName, cost, title, address, serviceUserNeed, place, id, description }) => {
         const openedServiceUserId = openedServiceUserNeed.includes(id);
         const collectingReasonLabel = claimReason && COLLECTING_REASON_OPTIONS.find((el) => (
           el.value === claimReason
@@ -79,9 +79,7 @@ const PackageInfo = ({ lookups, fncDetails, headerTitle, items, containerId, car
             {careChargeClaimCollector && (
               <>
                 <p>
-                  <span className="font-weight-bold">{
-                    lookups.find(lookup => lookup.id === subType)?.name
-                  } care charge (pre-assessement)</span>
+                  <span className="font-weight-bold">{subTypeName} care charge (pre-assessement)</span>
                 </p>
                 <HorizontalSeparator height={8} />
                 {careChargeClaimCollector && (
@@ -91,8 +89,12 @@ const PackageInfo = ({ lookups, fncDetails, headerTitle, items, containerId, car
                   </p>
                 )}
                 <HorizontalSeparator height={8} />
-                <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
-                <p className="mb-3">{collectingReasonLabel}</p>
+                {collectingReasonLabel && (
+                  <>
+                    <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
+                    <p className="mb-3">{collectingReasonLabel}</p>
+                  </>
+                )}
               </>
             )}
             {description && (

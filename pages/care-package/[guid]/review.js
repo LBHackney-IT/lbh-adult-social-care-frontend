@@ -172,7 +172,7 @@ const ReviewPackageDetailsPage = () => {
       id: 'care-charges',
       goToPackage: () => router.push(getCareChargesRoute(carePackageId)),
       items: data?.careCharges,
-      careChargeClaimCollector: careChargesClaimCollector[data?.fundedNursingCare?.claimCollector],
+      careChargeClaimCollector: careChargesClaimCollector[data?.careCharges?.claimCollector],
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.careCharge,
         supplier: data?.supplierReclaims?.careCharge,
