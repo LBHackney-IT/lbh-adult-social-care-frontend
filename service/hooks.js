@@ -17,7 +17,7 @@ export const useRedirectIfPackageNotExist = () => {
   return isLoading;
 };
 
-export function useScrollLock(isLocked) {
+export function useScrollLock (isLocked) {
   useEffect(() => {
     document.querySelector('html').style.overflow = isLocked ? 'hidden' : 'visible';
     return () => {
@@ -40,4 +40,24 @@ export const useGetFile = ({ fileId, fileName, setter }) => {
   }, [href]);
 
   return { isLoading };
+};
+
+export const useGetFileWithRequest = ({ request, setLoading, dependence, setter }) => {
+  useEffect(() => {
+    if (!dependence) return;
+
+    (async () => {
+      if (setLoading) setLoading(true);
+
+      try {
+        const blob = await request();
+        setter(blob);
+        // const file = new File([blob], fileName, { type: blob.type });
+      } catch (e) {
+        console.log(e, e?.message);
+      }
+
+      setLoading(false);
+    })();
+  }, [dependence]);
 };

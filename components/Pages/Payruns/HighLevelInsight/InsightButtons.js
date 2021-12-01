@@ -4,11 +4,21 @@ import { getPayrunCedarFile } from 'api';
 import { updatePayrunAsPaid } from 'api/PayRuns';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { submitPayRun, approvePayRun, deletePayRun, rejectPayRun } from 'api/PayRun';
+import { approvePayRun, deletePayRun, rejectPayRun, submitPayRun } from 'api/PayRun';
+import { useGetFileWithRequest } from 'service';
+import UrlFromFile from '../../../UrlFromFile';
 
 export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update, isLoading }) => {
-  const [isDownload, setDownload] = useState(false);
-  const { data, mutate, isLoading: isDownloading } = getPayrunCedarFile(isDownload ? payRunId : null);
+  const [fileLoading, setFileLoading] = useState(false);
+  const [file, setFile] = useState(null);
+
+  useGetFileWithRequest({
+    request: () => getPayrunCedarFile(payRunId),
+    setter: setFile,
+    dependence: payRunId,
+    fileName: `Payrun${payRunId}.xlsx`,
+    setLoading: setFileLoading,
+  });
 
   const dispatch = useDispatch();
   const pushNotification = (text, className = 'error') => {
@@ -46,13 +56,6 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     }
   };
 
-  const handleDownload = (e) => {
-    e.preventDefault();
-    setDownload(true);
-    mutate();
-    update();
-  };
-
   const handleArchive = async (e) => {
     e.preventDefault();
     try {
@@ -73,7 +76,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     }
   };
 
-  return isLoading || (isDownload && isDownloading) ? (
+  return fileLoading || isLoading ? (
     <Container display="flex" flexDirection="column" alignSelf="center">
       <Loading className="loading" isLoading={isLoading} />
     </Container>
@@ -109,9 +112,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
       )}
       {status === 5 && !isCedarFileDownloaded && (
         <Container display="flex" flexDirection="column" alignSelf="center">
-          <Button onClick={handleDownload} isLoading={isDownload && isDownloading} disabled={isDownload && isDownloading}>
-            Download
-          </Button>
+          <UrlFromFile download={file?.name} file={file} linkText="Download" showOnlyLink />
           <HorizontalSeparator height="3px" />
           <p>CEDAR .dat file</p>
           <HorizontalSeparator height="10px" />
@@ -127,9 +128,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
           <Button onClick={handleMarkAsPaid}>Mark as paid</Button>
           <HorizontalSeparator height="10px" />
           <Container alignSelf="center">
-            <Link onClick={handleDownload} noVisited>
-              Download again
-            </Link>
+            <UrlFromFile download={file?.name} file={file} linkText="Download again" showOnlyLink />
           </Container>
           <HorizontalSeparator height="10px" />
           <Container alignSelf="center">
@@ -156,9 +155,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
           </p>
           <HorizontalSeparator height="10px" />
           <Container alignSelf="center">
-            <Link onClick={handleDownload} noVisited>
-              Download again
-            </Link>
+            <UrlFromFile download={file?.name} file={file} linkText="Download again" showOnlyLink />
           </Container>
         </Container>
       )}
@@ -179,9 +176,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
           </p>
           <HorizontalSeparator height="10px" />
           <Container alignSelf="center">
-            <Link onClick={handleDownload} noVisited>
-              Download again
-            </Link>
+            <UrlFromFile download={file?.name} file={file} linkText="Download again" showOnlyLink />
           </Container>
         </Container>
       )}
