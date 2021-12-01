@@ -180,7 +180,7 @@ const ReviewPackageDetailsPage = () => {
     },
   ];
 
-  const isNotApprovedStatus = data?.status !== getPackageStatusBy({ statusName: 'Approved' }).statusId
+  const isNotApprovedStatus = data?.status < 3
 
   return (
     <ReviewPackageDetails
