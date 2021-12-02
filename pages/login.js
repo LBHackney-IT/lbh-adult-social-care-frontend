@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useUser } from 'api';
-import { HackneyFooterInfo, Header, Loading } from 'components';
+import { HackneyFooterInfo, Loading } from 'components';
 import { userLogin } from 'reducers/userReducer';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
