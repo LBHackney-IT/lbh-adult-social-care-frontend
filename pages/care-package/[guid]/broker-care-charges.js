@@ -74,7 +74,7 @@ const CareCharge = () => {
 
   const { data: { careCharge = {} }, isLoading: careChargeLoading } = useProvisionalCareCharges(carePackageId);
 
-  const careChargeId = careChargeId;
+  const careChargeId = careCharge.id;
 
   const { data: packageInfo } = useSingleCorePackageInfo(carePackageId);
   const { serviceUser } = packageInfo;
