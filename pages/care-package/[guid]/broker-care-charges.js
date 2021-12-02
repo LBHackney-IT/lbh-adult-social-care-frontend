@@ -58,16 +58,23 @@ const initialValues = {
   id: null,
 };
 
+const formStatusInitial = {
+  previous: false,
+  additional: false,
+};
+
 const CareCharge = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
-  const [disabledCareCharge, setDisabledCareCharge] = useState(true);
+  const [formStatus, setFormStatus] = useState(formStatusInitial);
 
   const { guid: carePackageId } = router.query;
 
   const { data: { careCharge = {} }, isLoading: careChargeLoading } = useProvisionalCareCharges(carePackageId);
+
+  const careChargeId = careChargeId;
 
   const { data: packageInfo } = useSingleCorePackageInfo(carePackageId);
   const { serviceUser } = packageInfo;
@@ -93,14 +100,15 @@ const CareCharge = () => {
     if (calculatedCost) setValue('cost', calculatedCost);
   }, [calculatedCost]);
 
-  useEffect(() => {
-    if (careCharge.id) {
-      setDisabledCareCharge(true);
-    }
-  }, [careCharge.id]);
+  const changeFormStatus = (field) => {
+    setFormStatus({
+      ...initialValues,
+      [field]: true
+    });
+  };
 
   const usePreviousCareCharge = () => {
-    setDisabledCareCharge(true);
+    changeFormStatus('previous');
 
     const {
       id,
@@ -128,7 +136,7 @@ const CareCharge = () => {
   };
 
   const useNewCareCharge = () => {
-    setDisabledCareCharge(true);
+    changeFormStatus('additional');
     reset({
       carePackageId,
       ...initialValues,
@@ -154,7 +162,7 @@ const CareCharge = () => {
     const omittedData = getValues();
 
     try {
-      if (omittedData.id) {
+      if (omittedData.id || formStatus.previous) {
         await updateCareChargeBrokerage(carePackageId, omittedData.id, omittedData);
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
       } else {
@@ -162,7 +170,7 @@ const CareCharge = () => {
           ...omittedData,
           startDate: dateToIsoString(omittedData.startDate),
           endDate: dateToIsoString(!isOngoing && omittedData.endDate),
-        })
+        });
         await createCareChargeReclaim(carePackageId, formData);
         pushNotification(`Funded Nursing Care created successfully`, 'success');
       }
@@ -184,11 +192,11 @@ const CareCharge = () => {
 
   const buttonProps = useMemo(() => {
     if (isS117Client) return { text: 'Continue', onClick: skipPage };
-    if (disabledCareCharge) return { text: 'Review', onClick: skipPage };
+    if (careChargeId) return { text: 'Review', onClick: skipPage };
     return { text: 'Save and continue', type: 'submit', isLoading: isRequestBeingSent };
-  }, [isS117Client, disabledCareCharge, isRequestBeingSent]);
+  }, [isS117Client, careChargeId, isRequestBeingSent]);
 
-  const isDisabled = isS117Client || disabledCareCharge;
+  const isDisabled = isS117Client || careChargeId;
   const skipPage = () => router.push(getCarePackageReviewRoute(carePackageId));
   return (
     <>
@@ -196,7 +204,7 @@ const CareCharge = () => {
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Care Charges" title="Build a care package" />
         <PreviousCareCharges
-          careChargeId={careCharge.id}
+          careChargeId={careChargeId}
           useNewCareCharge={useNewCareCharge}
           usePreviousCareCharge={usePreviousCareCharge}
         />
