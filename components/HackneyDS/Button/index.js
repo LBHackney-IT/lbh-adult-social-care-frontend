@@ -47,12 +47,9 @@ export default function Button({
       target={target}
       download={download}
       aria-disabled={disabled}
-      onClick={(e) => {
-        if (disabled) e.preventDefault();
-
-        onClick?.(e);
-      }}
+      onClick={(e) => onClick?.(e)}
       href={link}
+      disabled={disabled}
       role="button"
       style={{ borderRadius, ...style }}
       draggable="false"

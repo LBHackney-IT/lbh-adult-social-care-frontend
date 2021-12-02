@@ -77,26 +77,29 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     }
   };
 
-  const downloadFileComponent = useMemo(() => (
-    <Button
-      link
-      download={`${payRunId} Cedar File.xlsx`}
-      isLoading={isDownloading}
-      style={isFileDownloaded && { background: 'none', boxShadow: 'none' }}
-      className={isFileDownloaded ? 'link-button blue' : ''}
-      onClick={(async (event) => {
-        setIsDownloading(true);
-        event.preventDefault();
-        const blob = await getPayrunCedarFile(payRunId);
-        event.target.href = window.URL.createObjectURL(blob);
-        event.target.click();
-        setIsDownloading(false);
-        setIsFileDownloaded(true);
-      })}
-    >
-      {isFileDownloaded ? 'Download again' : 'Download'}
-    </Button>
-  ), [isFileDownloaded, payRunId]);
+  const downloadFileComponent = useMemo(
+    () => (
+      <Button
+        link
+        download={`${payRunId} Cedar File.xlsx`}
+        isLoading={isDownloading}
+        style={isFileDownloaded && { background: 'none', boxShadow: 'none' }}
+        className={isFileDownloaded ? 'link-button blue' : ''}
+        onClick={async (event) => {
+          setIsDownloading(true);
+          event.preventDefault();
+          const blob = await getPayrunCedarFile(payRunId);
+          event.target.href = window.URL.createObjectURL(blob);
+          event.target.click();
+          setIsDownloading(false);
+          setIsFileDownloaded(true);
+        }}
+      >
+        {isFileDownloaded ? 'Download again' : 'Download'}
+      </Button>
+    ),
+    [isFileDownloaded, payRunId]
+  );
 
   const hasDownloadFile = status > 4 && hasInvoices;
 
@@ -136,13 +139,9 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
       )}
       {status === 5 && !isFileDownloaded && (
         <Container {...containerProps}>
-          {hasDownloadFile && (
-            <>
-              {downloadFileComponent}
-              <HorizontalSeparator height="3px" />
-            </>
-          )}
-          <p>CEDAR .dat file</p>
+          {downloadFileComponent}
+          <HorizontalSeparator height="3px" />
+          <p>CEDAR.xlsx file</p>
           <HorizontalSeparator height="10px" />
           <Container alignSelf="center">
             <Link onClick={handleArchive} noVisited>
