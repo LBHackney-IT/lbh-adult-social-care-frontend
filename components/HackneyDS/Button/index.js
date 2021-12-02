@@ -12,6 +12,7 @@ export default function Button({
   color,
   target,
   className,
+  style = {},
   outline,
   borderRadius = 4,
   addItem,
@@ -47,7 +48,7 @@ export default function Button({
       onClick={(e) => disabled && e.preventDefault()}
       href={link}
       role="button"
-      style={{ borderRadius }}
+      style={{ borderRadius, ...style }}
       draggable="false"
       className={`${mainClass}${allClasses}`}
       data-module="govuk-button"
@@ -58,7 +59,7 @@ export default function Button({
   ) : (
     <button
       type={type}
-      style={{ borderRadius }}
+      style={{ borderRadius, ...style }}
       className={`${mainClass}${allClasses}`}
       data-module="govuk-button"
       aria-disabled={disabled}
