@@ -1,21 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import withSession from 'lib/session';
 import { useBrokerView } from 'api';
-import { getLoggedInUser } from 'service';
 import { BrokerPortalPage } from 'components';
-import {
-  DEFAULT_REDIRECT_ROUTE_INFO,
-  getServiceUserPackagesRoute,
-  SERVICE_USER_SEARCH_ROUTE
-} from 'routes/RouteConstants';
+import { getServiceUserPackagesRoute, SERVICE_USER_SEARCH_ROUTE, useServerSideProps } from 'routes/RouteConstants';
 
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
-
-  return { props: {} };
-});
+export const getServerSideProps = useServerSideProps();
 
 const initialFilters = {
   status: '',
@@ -40,7 +29,7 @@ const BrokerPortal = () => {
     serviceUserName,
     pageNumber,
     status
-  }), [filters, pageNumber])
+  }), [filters, pageNumber]);
 
   const { data, isLoading: brokerViewLoading } = useBrokerView({ params });
 
@@ -65,7 +54,7 @@ const BrokerPortal = () => {
 
   return (
     <BrokerPortalPage
-      title='Broker Portal'
+      title="Broker Portal"
       breadcrumbs={breadcrumbs}
       searchTerm={serviceUserName}
       loading={brokerViewLoading}

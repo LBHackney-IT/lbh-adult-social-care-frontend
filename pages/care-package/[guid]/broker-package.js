@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
+import { useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
+  DynamicBreadcrumbs,
+  HorizontalSeparator,
   Loading,
   TitleSubtitleHeader,
-  HorizontalSeparator,
   VerticalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
@@ -17,29 +17,24 @@ import {
   getCareChargesRoute,
   getCorePackageRoute,
   getFundedNursingCareRoute,
-  DEFAULT_REDIRECT_ROUTE_INFO,
+  useServerSideProps,
 } from 'routes/RouteConstants';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { updateCarePackageCosts, usePackageDetails } from 'api';
-import withSession from 'lib/session';
 import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
 import { formValidationSchema } from 'service/formValidationSchema';
 import omit from 'lodash.omit';
 import { packageTypes } from 'constants/variables';
 import {
-  BrokerPackageDateSelection,
   AdditionalNeeds,
+  BrokerPackageDateSelection,
   CoreWeeklyCost,
   SupplierSelection,
 } from 'components/Pages/CarePackages/BrokerPackage/index';
-import NewAdditionalNeedModal from 'components/Pages/CarePackages/BrokerPackage/NewAdditionalNeedModal/NewAdditionalNeedModal';
+import NewAdditionalNeedModal
+  from 'components/Pages/CarePackages/BrokerPackage/NewAdditionalNeedModal/NewAdditionalNeedModal';
 
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
-
-  return { props: {} };
-});
+export const getServerSideProps = useServerSideProps();
 
 const BrokerPackage = () => {
   const router = useRouter();

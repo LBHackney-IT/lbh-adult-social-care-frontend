@@ -1,23 +1,17 @@
 import React, { useState } from 'react';
-import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
-import { getLoggedInUser, getPackageStatusBy, useRedirectIfPackageNotExist } from 'service';
+import { useRedirectIfPackageNotExist } from 'service';
 import { ReviewPackageDetails } from 'components';
 import {
-  DEFAULT_REDIRECT_ROUTE_INFO,
   getBrokerPackageRoute,
   getCareChargesRoute,
   getCorePackageRoute,
   getFundedNursingCareRoute,
+  useServerSideProps,
 } from 'routes/RouteConstants';
 
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
-
-  return { props: {} };
-});
+export const getServerSideProps = useServerSideProps();
 
 const settingsTypes = [
   { field: 'hasRespiteCare', text: 'Respite Care' },
@@ -175,7 +169,7 @@ const ReviewPackageDetailsPage = () => {
     },
   ];
 
-  const isNotApprovedStatus = data?.status < 3
+  const isNotApprovedStatus = data?.status < 3;
 
   return (
     <ReviewPackageDetails

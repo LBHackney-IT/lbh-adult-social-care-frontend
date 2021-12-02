@@ -1,18 +1,11 @@
 import React, { useMemo } from 'react';
-import withSession from 'lib/session';
-import { getLoggedInUser } from 'service';
-import { DynamicBreadcrumbs, Container, HorizontalSeparator, Loading, Heading, Hint } from 'components';
+import { Container, DynamicBreadcrumbs, Heading, Hint, HorizontalSeparator, Loading } from 'components';
 import { getEnGBFormattedDate, usePayRunInvoice } from 'api';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { useRouter } from 'next/router';
-import { DEFAULT_REDIRECT_ROUTE_INFO } from 'routes/RouteConstants';
+import { useServerSideProps } from 'routes/RouteConstants';
 
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
-
-  return { props: {} };
-});
+export const getServerSideProps = useServerSideProps();
 
 const InvoiceDetailPage = () => {
   const router = useRouter();

@@ -2,12 +2,15 @@ import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useCareCharge, useUsers } from 'api';
 import { NewCareChargePackages } from 'components';
+import { useServerSideProps } from 'routes/RouteConstants';
 
 const initialFilters = {
   orderByDate: '',
   status: '',
   modifiedBy: '',
 };
+
+export const getServerSideProps = useServerSideProps();
 
 const CareChargePackages = () => {
   const router = useRouter();
@@ -27,7 +30,7 @@ const CareChargePackages = () => {
 
   const clearFilters = () => setFilters({ ...initialFilters });
 
-  const pushRoute = (route) => router.push(route)
+  const pushRoute = (route) => router.push(route);
 
   return (
     <NewCareChargePackages

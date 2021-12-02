@@ -2,22 +2,13 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Loading } from 'components';
-import withSession from 'lib/session';
-import { getLoggedInUser } from 'service';
-import {
-  BROKER_REFERRAL_ROUTE,
-  DEFAULT_REDIRECT_ROUTE_INFO,
-  getPreviousPath
-} from 'routes/RouteConstants';
+import { BROKER_REFERRAL_ROUTE, getPreviousPath, useServerSideProps } from 'routes/RouteConstants';
 
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
-
-  return { props: {} };
+export const getServerSideProps = useServerSideProps({
+  permanent: false,
 });
 
-export default function IndexPage() {
+export default function IndexPage () {
   const router = useRouter();
 
   useEffect(() => {

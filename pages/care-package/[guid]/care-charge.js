@@ -13,17 +13,16 @@ import {
   UploadFile,
 } from 'components';
 import { currency } from 'constants/strings';
-import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useToggle } from 'react-use';
-import { formatDate, getLoggedInUser, useGetFile, useRedirectIfPackageNotExist } from 'service';
+import { formatDate, useGetFile, useRedirectIfPackageNotExist } from 'service';
 import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
 import {
   CARE_CHARGES_ROUTE,
   getServiceUserPackagesRoute,
-  DEFAULT_REDIRECT_ROUTE_INFO
+  useServerSideProps
 } from 'routes/RouteConstants';
 import { useLookups, usePackageCareCharge, usePackageDetails } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -32,12 +31,7 @@ import { addDays } from 'date-fns';
 
 const { provisional, more12, less12 } = careChargeFormKeys;
 
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
-
-  return { props: {} };
-});
+export const getServerSideProps = useServerSideProps();
 
 const useBreadcrumbs = (serviceUserId) => {
   const router = useRouter();

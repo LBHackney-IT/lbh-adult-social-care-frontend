@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser, removeEmpty, useRedirectIfPackageNotExist } from 'service';
+import { removeEmpty, useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
+  DynamicBreadcrumbs,
+  HorizontalSeparator,
   Loading,
   TitleSubtitleHeader,
   VerticalSeparator,
-  HorizontalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -18,12 +18,7 @@ import {
   usePackageCalculatedCost,
   usePackageCareCharge,
 } from 'api';
-import withSession from 'lib/session';
-import {
-  getCarePackageReviewRoute,
-  getFundedNursingCareRoute,
-  DEFAULT_REDIRECT_ROUTE_INFO
-} from 'routes/RouteConstants';
+import { getCarePackageReviewRoute, getFundedNursingCareRoute, useServerSideProps } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
@@ -36,11 +31,7 @@ import {
   FundingPerWeek,
 } from 'components/Pages/CarePackages/BrokerCareCharge';
 
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
-  return { props: {} };
-});
+export const getServerSideProps = useServerSideProps();
 
 const CareCharge = () => {
   const router = useRouter();
@@ -57,7 +48,10 @@ const CareCharge = () => {
 
   const { data: packageInfo, isLoading: coreLoading } = useRedirectIfPackageNotExist();
   const { serviceUser } = packageInfo;
-  const { data: calculatedCost, isLoading: calculatedCostLoading } = usePackageCalculatedCost(carePackageId, serviceUser?.id);
+  const {
+    data: calculatedCost,
+    isLoading: calculatedCostLoading
+  } = usePackageCalculatedCost(carePackageId, serviceUser?.id);
 
   const {
     handleSubmit,
@@ -125,14 +119,14 @@ const CareCharge = () => {
     const formData =
       !omittedData.endDate || omittedData.isOngoing
         ? getFormData({
-            ...omittedData,
-            startDate: new Date(omittedData.startDate).toISOString(),
-          })
+          ...omittedData,
+          startDate: new Date(omittedData.startDate).toISOString(),
+        })
         : getFormData({
-            ...omittedData,
-            startDate: new Date(omittedData.startDate).toISOString(),
-            endDate: new Date(omittedData.endDate).toISOString(),
-          });
+          ...omittedData,
+          startDate: new Date(omittedData.startDate).toISOString(),
+          endDate: new Date(omittedData.endDate).toISOString(),
+        });
 
     try {
       if (data.id) {

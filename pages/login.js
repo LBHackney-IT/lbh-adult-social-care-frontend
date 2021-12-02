@@ -4,24 +4,14 @@ import axios from 'axios';
 import { useUser } from 'api';
 import { HackneyFooterInfo, Loading } from 'components';
 import { userLogin } from 'reducers/userReducer';
-import { getLoggedInUser } from 'service';
-import withSession from 'lib/session';
 import { changeHeader, resetHeader } from '../reducers/headerReducer';
-import { getPreviousPath, setPreviousPath } from '../routes/RouteConstants';
+import { getPreviousPath, setPreviousPath, useServerSideProps } from '../routes/RouteConstants';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (user) {
-    return {
-      redirect: {
-        destination: getPreviousPath() || '/',
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
+export const getServerSideProps = useServerSideProps({
+  destination: getPreviousPath() || '/',
+  permanent: false,
 });
 
 const Login = () => {

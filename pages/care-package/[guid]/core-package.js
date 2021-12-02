@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { getLoggedInUser } from 'service';
+import { Controller, useForm } from 'react-hook-form';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
+  DynamicBreadcrumbs,
   FurtherDetails,
   HorizontalSeparator,
   Loading,
@@ -16,22 +15,13 @@ import {
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
-import {
-  getBrokerPackageRoute,
-  DEFAULT_REDIRECT_ROUTE_INFO,
-} from 'routes/RouteConstants';
+import { getBrokerPackageRoute, useServerSideProps, } from 'routes/RouteConstants';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
-import withSession from 'lib/session';
 import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
 import { formValidationSchema } from 'service/formValidationSchema';
 
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
-
-  return { props: {} };
-});
+export const getServerSideProps = useServerSideProps();
 
 const CorePackage = () => {
   const router = useRouter();

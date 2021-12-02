@@ -32,7 +32,7 @@ export default function App ({ Component, pageProps }) {
   }, [router.pathname]);
 
   useEffect(() => {
-    if (router.asPath && !APP_SERVICE_ROUTES_MAP.some(item => item.includes(router.asPath))) {
+    if (router.asPath && !APP_SERVICE_ROUTES_MAP.some(item => router.asPath.includes(item))) {
       setPreviousPath(router.asPath);
     }
   }, [router.asPath]);

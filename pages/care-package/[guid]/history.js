@@ -1,20 +1,11 @@
 import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { Loading, Container, HistoryList, HistoryOverview, TitleSubtitleHeader, DynamicBreadcrumbs } from 'components';
-import withSession from 'lib/session';
+import { Container, DynamicBreadcrumbs, HistoryList, HistoryOverview, Loading, TitleSubtitleHeader } from 'components';
 import { usePackageHistory } from 'api';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
-import {
-  getCarePackageReviewRoute,
-  DEFAULT_REDIRECT_ROUTE_INFO
-} from 'routes/RouteConstants';
+import { useRedirectIfPackageNotExist } from 'service';
+import { getCarePackageReviewRoute, useServerSideProps } from 'routes/RouteConstants';
 
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) return DEFAULT_REDIRECT_ROUTE_INFO;
-
-  return { props: {} };
-});
+export const getServerSideProps = useServerSideProps();
 
 const History = () => {
   const router = useRouter();
