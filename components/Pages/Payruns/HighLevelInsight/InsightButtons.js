@@ -8,7 +8,7 @@ import { approvePayRun, deletePayRun, rejectPayRun, submitPayRun } from 'api/Pay
 import { useGetFileWithRequest } from 'service';
 import UrlFromFile from '../../../UrlFromFile';
 
-export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update, isLoading }) => {
+export const InsightButtons = ({ payRunId, status, update, isLoading }) => {
   const [fileLoading, setFileLoading] = useState(false);
   const [file, setFile] = useState(null);
 
@@ -109,7 +109,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
           </Container>
         </Container>
       )}
-      {status === 5 && !isCedarFileDownloaded && (
+      {status === 5 && (
         <Container display="flex" flexDirection="column" alignSelf="center">
           <UrlFromFile download={file?.name} file={file} linkText="Download" showOnlyLink />
           <HorizontalSeparator height="3px" />
@@ -122,7 +122,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
           </Container>
         </Container>
       )}
-      {status === 5 && isCedarFileDownloaded && (
+      {status === 5 && (
         <Container display="flex" flexDirection="column" alignSelf="center">
           <Button onClick={handleMarkAsPaid}>Mark as paid</Button>
           <HorizontalSeparator height="10px" />
