@@ -73,9 +73,6 @@ const useGetActualReclaims = (reclaims) => {
   }, [reclaims, activeStatusId, pendingStatusId]);
 };
 
-export const useProvisionalCareCharge = (packageId) =>
-  useGetData(getCarePackageUrl(packageId, '/reclaims/care-charges/provisional'), '');
-
 export const usePackageCareCharge = (packageId, subType) => {
   const response = useSWR(
     packageId ? [getCarePackageUrl(packageId, '/reclaims/care-charges'), subType] : null,
