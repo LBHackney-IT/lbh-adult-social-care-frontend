@@ -24,10 +24,10 @@ const schema = yup.object().shape({
     .string()
     .typeError('Please enter a reason')
     .required('Please enter a reason')
-    .test('reasonForHolding', 'Please enter a reason', (value) => value?.trim?.())
+    .test('reasonForHolding', 'Please enter a reason', (value) => value?.trim?.()),
 });
 
-const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update }) => {
+const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, updateData }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const { data: holdPaymentOptions } = useDepartments();
@@ -46,7 +46,7 @@ const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update })
     try {
       await holdInvoice({ reasonForHolding, payRunId, actionRequiredFromId, invoiceId });
       pushNotification(`Invoice status changed`, 'success');
-      update();
+      updateData();
       setIsOpened(false);
     } catch (e) {
       pushNotification(e, 'error');
@@ -82,7 +82,10 @@ const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update })
                     text: 'name',
                   }}
                   value={field.value}
-                  onChangeValue={field.onChange}
+                  onChangeValue={() => {
+                    field.onChange();
+                    updateData();
+                  }}
                 />
               </FormGroup>
             )}
@@ -92,19 +95,20 @@ const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update })
             control={control}
             name="reasonForHolding"
             render={({ field }) => (
-              <FormGroup error={errors.reasonForHolding?.message} required label="Enter reason for hold And suggested remedial action">
-                <Textarea
-                  trimValue
-                  value={field.value}
-                  handler={field.onChange}
-                  rows={5}
-                />
+              <FormGroup
+                error={errors.reasonForHolding?.message}
+                required
+                label="Enter reason for hold And suggested remedial action"
+              >
+                <Textarea trimValue value={field.value} handler={field.onChange} rows={5} />
               </FormGroup>
             )}
           />
           <HorizontalSeparator height={32} />
           <Container className="create-pay-run__actions" display="flex">
-            <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
+            <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>
+              Cancel
+            </Button>
             <Button
               isLoading={isLoading}
               disabled={isLoading}

@@ -92,7 +92,7 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update,updateData, tota
           invoiceId={invoiceId}
           payRunId={payRunId}
           isOpen={invoiceId}
-          update={updateData}
+          updateData={updateData}
           setIsOpened={() => setInvoiceId('')}
         />
       )}
