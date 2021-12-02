@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser, removeEmpty } from 'service';
+import { dateToIsoString, getLoggedInUser } from 'service';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
+  DynamicBreadcrumbs,
+  HorizontalSeparator,
   Loading,
   TitleSubtitleHeader,
   VerticalSeparator,
-  HorizontalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -16,7 +16,7 @@ import {
   createCareChargeReclaim,
   updateCareChargeBrokerage,
   usePackageCalculatedCost,
-  usePackageCareCharge,
+  useProvisionalCareCharges,
   useSingleCorePackageInfo,
 } from 'api';
 import withSession from 'lib/session';
@@ -25,12 +25,12 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { reclaimType } from 'constants/variables';
 import {
   CareChargeCost,
   CareChargeSchedule,
   ClaimsCollector,
   FundingPerWeek,
+  PreviousCareCharges,
 } from 'components/Pages/CarePackages/BrokerCareCharge';
 
 export const getServerSideProps = withSession(async ({ req }) => {
@@ -46,18 +46,28 @@ export const getServerSideProps = withSession(async ({ req }) => {
   return { props: {} };
 });
 
+const initialValues = {
+  cost: null,
+  subType: 1,
+  claimCollector: 2,
+  claimReason: null,
+  startDate: null,
+  endDate: null,
+  isOngoing: false,
+  description: null,
+  id: null,
+};
+
 const CareCharge = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
+  const [disabledCareCharge, setDisabledCareCharge] = useState(true);
 
   const { guid: carePackageId } = router.query;
 
-  const { data: careChargeData, isLoading: careChargeLoading } = usePackageCareCharge(
-    carePackageId,
-    reclaimType.careCharge
-  );
+  const { data: { careCharge = {} }, isLoading: careChargeLoading } = useProvisionalCareCharges(carePackageId);
 
   const { data: packageInfo } = useSingleCorePackageInfo(carePackageId);
   const { serviceUser } = packageInfo;
@@ -69,20 +79,13 @@ const CareCharge = () => {
     watch,
     getValues,
     setValue,
+    reset,
     formState: { errors, isDirty },
   } = useForm({
     resolver: yupResolver(formValidationSchema.carePackageBrokerCareChargesSchema),
     defaultValues: {
       carePackageId,
-      cost: null,
-      subType: 1,
-      claimCollector: 2,
-      claimReason: null,
-      startDate: null,
-      endDate: null,
-      isOngoing: false,
-      description: null,
-      id: null,
+      ...initialValues,
     },
   });
 
@@ -91,22 +94,46 @@ const CareCharge = () => {
   }, [calculatedCost]);
 
   useEffect(() => {
-    if (careChargeData && careChargeData.length) {
-      const data = careChargeData[0];
-      setValue('id', data.id);
-      setValue('startDate', data.startDate);
-      setValue('claimCollector', data.claimCollector);
-      if (data.claimReason) setValue('claimReason', data.claimReason);
-      if (data.description) setValue('description', data.description);
-      if (data.assessmentFileName) setValue('assessmentFileName', data.assessmentFileName);
-      if (data.assessmentFileId) setValue('assessmentFileId', data.assessmentFileId);
-      if (!data.endDate && data.startDate) setValue('isOngoing', true);
-      if (data.endDate) {
-        setValue('endDate', data.endDate);
-        setValue('isOngoing', false);
-      }
+    if (careCharge.id) {
+      setDisabledCareCharge(true);
     }
-  }, [careChargeLoading]);
+  }, [careCharge.id]);
+
+  const usePreviousCareCharge = () => {
+    setDisabledCareCharge(true);
+
+    const {
+      id,
+      claimReason,
+      claimCollector,
+      description,
+      assessmentFileName,
+      assessmentFileId,
+      endDate,
+      startDate
+    } = careCharge;
+
+    setValue('id', id);
+    setValue('startDate', startDate);
+    setValue('claimCollector', claimCollector);
+    if (claimReason) setValue('claimReason', claimReason);
+    if (description) setValue('description', description);
+    if (assessmentFileName) setValue('assessmentFileName', assessmentFileName);
+    if (assessmentFileId) setValue('assessmentFileId', assessmentFileId);
+    if (!endDate && startDate) setValue('isOngoing', true);
+    if (endDate) {
+      setValue('endDate', endDate);
+      setValue('isOngoing', false);
+    }
+  };
+
+  const useNewCareCharge = () => {
+    setDisabledCareCharge(true);
+    reset({
+      carePackageId,
+      ...initialValues,
+    });
+  };
 
   const clickBack = () => router.push(getFundedNursingCareRoute(carePackageId));
 
@@ -124,25 +151,18 @@ const CareCharge = () => {
 
   const handleFormSubmission = async () => {
     setIsRequestBeingSent(true);
-    const data = getValues();
-    const omittedData = removeEmpty(data);
-    const formData =
-      !omittedData.endDate || omittedData.isOngoing
-        ? getFormData({
-            ...omittedData,
-            startDate: new Date(omittedData.startDate).toISOString(),
-          })
-        : getFormData({
-            ...omittedData,
-            startDate: new Date(omittedData.startDate).toISOString(),
-            endDate: new Date(omittedData.endDate).toISOString(),
-          });
+    const omittedData = getValues();
 
     try {
-      if (data.id) {
-        await updateCareChargeBrokerage(carePackageId, data.id, data);
+      if (omittedData.id) {
+        await updateCareChargeBrokerage(carePackageId, omittedData.id, omittedData);
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
       } else {
+        const formData = getFormData({
+          ...omittedData,
+          startDate: dateToIsoString(omittedData.startDate),
+          endDate: dateToIsoString(!isOngoing && omittedData.endDate),
+        })
         await createCareChargeReclaim(carePackageId, formData);
         pushNotification(`Funded Nursing Care created successfully`, 'success');
       }
@@ -161,20 +181,33 @@ const CareCharge = () => {
   const { data: coreInfo } = useSingleCorePackageInfo(carePackageId);
 
   const isS117Client = coreInfo?.settings?.isS117Client;
+
+  const buttonProps = useMemo(() => {
+    if (isS117Client) return { text: 'Continue', onClick: skipPage };
+    if (disabledCareCharge) return { text: 'Review', onClick: skipPage };
+    return { text: 'Save and continue', type: 'submit', isLoading: isRequestBeingSent };
+  }, [isS117Client, disabledCareCharge, isRequestBeingSent]);
+
+  const isDisabled = isS117Client || disabledCareCharge;
   const skipPage = () => router.push(getCarePackageReviewRoute(carePackageId));
   return (
     <>
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Care Charges" title="Build a care package" />
+        <PreviousCareCharges
+          careChargeId={careCharge.id}
+          useNewCareCharge={useNewCareCharge}
+          usePreviousCareCharge={usePreviousCareCharge}
+        />
         <Loading isLoading={careChargeLoading} />
         {!careChargeLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
-            <CareChargeCost control={control} errors={errors} isS117Client={isS117Client} />
-            <CareChargeSchedule control={control} errors={errors} isOngoing={isOngoing} isS117Client={isS117Client} />
-            <ClaimsCollector control={control} errors={errors} collectedBy={collectedBy} isS117Client={isS117Client} />
+            <CareChargeCost control={control} errors={errors} isS117Client={isDisabled} />
+            <CareChargeSchedule control={control} errors={errors} isOngoing={isOngoing} isS117Client={isDisabled} />
+            <ClaimsCollector control={control} errors={errors} collectedBy={collectedBy} isS117Client={isDisabled} />
             <HorizontalSeparator height="48px" />
-            <FundingPerWeek total={cost} isS117Client={isS117Client} />
+            <FundingPerWeek total={cost} isS117Client={isDisabled} />
             <HorizontalSeparator height="48px" />
             <Container display="flex">
               <Button onClick={clickBack} secondary color="gray">
@@ -182,15 +215,13 @@ const CareCharge = () => {
               </Button>
               <VerticalSeparator width="10px" />
               <VerticalSeparator width="10px" />
-              {isS117Client ? (
-                <Button type="button" onClick={skipPage}>
-                  Continue
-                </Button>
-              ) : (
-                <Button isLoading={isRequestBeingSent} type="submit">
-                  Save and continue
-                </Button>
-              )}
+              <Button
+                type={buttonProps.type || 'button'}
+                onClick={buttonProps.onClick}
+                isLoading={buttonProps.isLoading}
+              >
+                {buttonProps.text}
+              </Button>
             </Container>
           </form>
         )}
