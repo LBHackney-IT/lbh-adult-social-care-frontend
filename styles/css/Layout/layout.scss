@@ -276,6 +276,11 @@
 
   &:hover {
     cursor: pointer;
+
+    &.blue {
+      opacity: 0.8;
+      color: blue;
+    }
   }
 
   &.green {

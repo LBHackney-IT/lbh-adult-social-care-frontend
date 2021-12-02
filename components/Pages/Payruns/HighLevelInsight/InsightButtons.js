@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Container, HorizontalSeparator, Link, Loading, Select } from 'components';
 import { getPayrunCedarFile } from 'api';
 import { updatePayrunAsPaid } from 'api/PayRuns';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { submitPayRun, approvePayRun, deletePayRun, rejectPayRun } from 'api/PayRun';
+import { approvePayRun, deletePayRun, rejectPayRun, submitPayRun } from 'api/PayRun';
 
-export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update, isLoading }) => {
-  const [isDownload, setDownload] = useState(false);
-  const { data, mutate, isLoading: isDownloading } = getPayrunCedarFile(isDownload ? payRunId : null);
+const containerProps = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignSelf: 'center',
+  alignItems: 'center',
+};
+
+export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update, isLoading, hasInvoices }) => {
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
+
+  useEffect(() => {
+    if (isCedarFileDownloaded) setIsFileDownloaded(isCedarFileDownloaded);
+  }, [isCedarFileDownloaded]);
 
   const dispatch = useDispatch();
   const pushNotification = (text, className = 'error') => {
@@ -46,13 +57,6 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     }
   };
 
-  const handleDownload = (e) => {
-    e.preventDefault();
-    setDownload(true);
-    mutate();
-    update();
-  };
-
   const handleArchive = async (e) => {
     e.preventDefault();
     try {
@@ -73,14 +77,40 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     }
   };
 
-  return isLoading || (isDownload && isDownloading) ? (
+  const downloadFileComponent = useMemo(
+    () => (
+      <Button
+        link
+        download={`${payRunId} Cedar File.xlsx`}
+        isLoading={isDownloading}
+        style={isFileDownloaded && { background: 'none', boxShadow: 'none' }}
+        className={isFileDownloaded ? 'link-button blue' : ''}
+        onClick={async (event) => {
+          setIsDownloading(true);
+          event.preventDefault();
+          const blob = await getPayrunCedarFile(payRunId);
+          event.target.href = window.URL.createObjectURL(blob);
+          event.target.click();
+          setIsDownloading(false);
+          setIsFileDownloaded(true);
+        }}
+      >
+        {isFileDownloaded ? 'Download again' : 'Download'}
+      </Button>
+    ),
+    [isFileDownloaded, payRunId]
+  );
+
+  const hasDownloadFile = status > 4 && hasInvoices;
+
+  return isDownloading || isLoading ? (
     <Container display="flex" flexDirection="column" alignSelf="center">
-      <Loading className="loading" isLoading={isLoading} />
+      <Loading className="centered-container" isLoading={isLoading} />
     </Container>
   ) : (
     <>
       {[1, 2, 3].includes(status) && (
-        <Container display="flex" flexDirection="column" alignSelf="center">
+        <Container {...containerProps}>
           <Button onClick={handleSubmit}>Submit</Button>
           <HorizontalSeparator height="10px" />
           <Container alignSelf="center">
@@ -91,7 +121,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
         </Container>
       )}
       {status === 4 && (
-        <Container display="flex" flexDirection="column" alignSelf="center">
+        <Container {...containerProps}>
           <Button onClick={handleApprove}>Approve</Button>
           <HorizontalSeparator height="10px" />
           <Container alignSelf="center">
@@ -107,13 +137,11 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
           </Container>
         </Container>
       )}
-      {status === 5 && !isCedarFileDownloaded && (
-        <Container display="flex" flexDirection="column" alignSelf="center">
-          <Button onClick={handleDownload} isLoading={isDownload && isDownloading} disabled={isDownload && isDownloading}>
-            Download
-          </Button>
+      {status === 5 && !isFileDownloaded && (
+        <Container {...containerProps}>
+          {downloadFileComponent}
           <HorizontalSeparator height="3px" />
-          <p>CEDAR .dat file</p>
+          <p>CEDAR.xlsx file</p>
           <HorizontalSeparator height="10px" />
           <Container alignSelf="center">
             <Link onClick={handleArchive} noVisited>
@@ -122,25 +150,16 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
           </Container>
         </Container>
       )}
-      {status === 5 && isCedarFileDownloaded && (
-        <Container display="flex" flexDirection="column" alignSelf="center">
+      {status === 5 && isFileDownloaded && (
+        <Container {...containerProps}>
           <Button onClick={handleMarkAsPaid}>Mark as paid</Button>
           <HorizontalSeparator height="10px" />
-          <Container alignSelf="center">
-            <Link onClick={handleDownload} noVisited>
-              Download again
-            </Link>
-          </Container>
+          <Container alignSelf="center">{downloadFileComponent}</Container>
           <HorizontalSeparator height="10px" />
-          <Container alignSelf="center">
-            <Link onClick={handleArchive} noVisited>
-              Archive
-            </Link>
-          </Container>
         </Container>
       )}
       {[6, 7].includes(status) && (
-        <Container display="flex" flexDirection="column" alignSelf="center">
+        <Container {...containerProps}>
           <Select
             style={{ background: 'rgba(0, 102, 79, 0.1)', color: 'rgb(82, 90, 91)', border: 'none' }}
             IconComponent={null}
@@ -154,16 +173,16 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
             <br />
             12.01.2021
           </p>
-          <HorizontalSeparator height="10px" />
-          <Container alignSelf="center">
-            <Link onClick={handleDownload} noVisited>
-              Download again
-            </Link>
-          </Container>
+          {hasDownloadFile && (
+            <>
+              <HorizontalSeparator height="10px" />
+              <Container alignSelf="center">{downloadFileComponent}</Container>
+            </>
+          )}
         </Container>
       )}
       {status === 8 && (
-        <Container display="flex" flexDirection="column" alignSelf="center">
+        <Container {...containerProps}>
           <Select
             style={{ background: 'rgb(222, 224, 226)', color: 'rgb(82, 90, 91)', border: 'none' }}
             IconComponent={null}
@@ -177,12 +196,12 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
             <br />
             12.01.2021
           </p>
-          <HorizontalSeparator height="10px" />
-          <Container alignSelf="center">
-            <Link onClick={handleDownload} noVisited>
-              Download again
-            </Link>
-          </Container>
+          {hasDownloadFile && (
+            <>
+              <HorizontalSeparator height="10px" />
+              <Container alignSelf="center">{downloadFileComponent}</Container>
+            </>
+          )}
         </Container>
       )}
     </>
