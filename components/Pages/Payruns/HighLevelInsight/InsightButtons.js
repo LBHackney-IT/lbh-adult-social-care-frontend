@@ -130,11 +130,6 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
             <UrlFromFile download={file?.name} file={file} linkText="Download again" showOnlyLink />
           </Container>
           <HorizontalSeparator height="10px" />
-          <Container alignSelf="center">
-            <Link onClick={handleArchive} noVisited>
-              Archive
-            </Link>
-          </Container>
         </Container>
       )}
       {[6, 7].includes(status) && (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser, removeEmpty } from 'service';
+import { getLoggedInUser, removeEmpty, useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -17,7 +17,6 @@ import {
   updateCareChargeBrokerage,
   usePackageCalculatedCost,
   usePackageCareCharge,
-  useSingleCorePackageInfo,
 } from 'api';
 import withSession from 'lib/session';
 import { getCarePackageReviewRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
@@ -59,9 +58,9 @@ const CareCharge = () => {
     reclaimType.careCharge
   );
 
-  const { data: packageInfo } = useSingleCorePackageInfo(carePackageId);
+  const { data: packageInfo, isLoading: coreLoading } = useRedirectIfPackageNotExist();
   const { serviceUser } = packageInfo;
-  const { data: calculatedCost } = usePackageCalculatedCost(carePackageId, serviceUser?.id);
+  const { data: calculatedCost, isLoading: calculatedCostLoading } = usePackageCalculatedCost(carePackageId, serviceUser?.id);
 
   const {
     handleSubmit,
@@ -158,16 +157,15 @@ const CareCharge = () => {
   const isOngoing = watch('isOngoing');
   const cost = watch('cost');
 
-  const { data: coreInfo } = useSingleCorePackageInfo(carePackageId);
-
-  const isS117Client = coreInfo?.settings?.isS117Client;
+  const isLoading = coreLoading || calculatedCostLoading || careChargeLoading || isRequestBeingSent;
+  const isS117Client = packageInfo?.settings?.isS117Client;
   const skipPage = () => router.push(getCarePackageReviewRoute(carePackageId));
   return (
     <>
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Care Charges" title="Build a care package" />
-        <Loading isLoading={careChargeLoading} />
+        <Loading isLoading={isLoading} />
         {!careChargeLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
             <CareChargeCost control={control} errors={errors} isS117Client={isS117Client} />
@@ -187,7 +185,7 @@ const CareCharge = () => {
                   Continue
                 </Button>
               ) : (
-                <Button isLoading={isRequestBeingSent} type="submit">
+                <Button isLoading={isLoading} type="submit">
                   Save and continue
                 </Button>
               )}
