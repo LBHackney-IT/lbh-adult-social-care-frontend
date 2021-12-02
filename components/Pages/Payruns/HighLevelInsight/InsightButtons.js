@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button, Container, HorizontalSeparator, Link, Loading, Select } from 'components';
 import { getPayrunCedarFile } from 'api';
 import { updatePayrunAsPaid } from 'api/PayRuns';
@@ -8,7 +8,7 @@ import { approvePayRun, deletePayRun, rejectPayRun, submitPayRun } from 'api/Pay
 import { useGetFileWithRequest } from 'service';
 import UrlFromFile from '../../../UrlFromFile';
 
-export const InsightButtons = ({ payRunId, status, update, isLoading }) => {
+export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update, isLoading }) => {
   const [fileLoading, setFileLoading] = useState(false);
   const [file, setFile] = useState(null);
 
@@ -75,6 +75,15 @@ export const InsightButtons = ({ payRunId, status, update, isLoading }) => {
     }
   };
 
+  const downloadFileComponent = useMemo(() => (
+    <UrlFromFile
+      download={file?.name}
+      file={file}
+      linkText={isCedarFileDownloaded ? 'Download again' : 'Download'}
+      showOnlyLink
+    />
+  ), [isCedarFileDownloaded, file]);
+
   return fileLoading || isLoading ? (
     <Container display="flex" flexDirection="column" alignSelf="center">
       <Loading className="loading" isLoading={isLoading} />
@@ -109,10 +118,14 @@ export const InsightButtons = ({ payRunId, status, update, isLoading }) => {
           </Container>
         </Container>
       )}
-      {status === 5 && (
+      {status === 5 && !isCedarFileDownloaded && (
         <Container display="flex" flexDirection="column" alignSelf="center">
-          <UrlFromFile download={file?.name} file={file} linkText="Download" showOnlyLink />
-          <HorizontalSeparator height="3px" />
+          {file && (
+            <>
+              {downloadFileComponent}
+              <HorizontalSeparator height="3px" />
+            </>
+          )}
           <p>CEDAR .dat file</p>
           <HorizontalSeparator height="10px" />
           <Container alignSelf="center">
@@ -126,9 +139,7 @@ export const InsightButtons = ({ payRunId, status, update, isLoading }) => {
         <Container display="flex" flexDirection="column" alignSelf="center">
           <Button onClick={handleMarkAsPaid}>Mark as paid</Button>
           <HorizontalSeparator height="10px" />
-          <Container alignSelf="center">
-            <UrlFromFile download={file?.name} file={file} linkText="Download again" showOnlyLink />
-          </Container>
+          <Container alignSelf="center">{downloadFileComponent}</Container>
           <HorizontalSeparator height="10px" />
         </Container>
       )}
@@ -147,10 +158,12 @@ export const InsightButtons = ({ payRunId, status, update, isLoading }) => {
             <br />
             12.01.2021
           </p>
-          <HorizontalSeparator height="10px" />
-          <Container alignSelf="center">
-            <UrlFromFile download={file?.name} file={file} linkText="Download again" showOnlyLink />
-          </Container>
+          {file && (
+            <>
+              <HorizontalSeparator height="10px" />
+              <Container alignSelf="center">{downloadFileComponent}</Container>
+            </>
+          )}
         </Container>
       )}
       {status === 8 && (
@@ -168,10 +181,12 @@ export const InsightButtons = ({ payRunId, status, update, isLoading }) => {
             <br />
             12.01.2021
           </p>
-          <HorizontalSeparator height="10px" />
-          <Container alignSelf="center">
-            <UrlFromFile download={file?.name} file={file} linkText="Download again" showOnlyLink />
-          </Container>
+          {file && (
+            <>
+              <HorizontalSeparator height="10px" />
+              <Container alignSelf="center">{downloadFileComponent}</Container>
+            </>
+          )}
         </Container>
       )}
     </>
