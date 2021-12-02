@@ -52,7 +52,6 @@ export const useGetFileWithRequest = ({ request, setLoading, dependence, setter 
       try {
         const blob = await request();
         setter(blob);
-        // const file = new File([blob], fileName, { type: blob.type });
       } catch (e) {
         console.log(e, e?.message);
       }

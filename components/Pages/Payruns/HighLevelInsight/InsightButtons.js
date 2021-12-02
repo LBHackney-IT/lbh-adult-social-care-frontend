@@ -16,7 +16,6 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     request: () => getPayrunCedarFile(payRunId),
     setter: setFile,
     dependence: payRunId,
-    fileName: `Payrun${payRunId}.xlsx`,
     setLoading: setFileLoading,
   });
 
