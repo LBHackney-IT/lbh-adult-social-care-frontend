@@ -98,7 +98,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     </Button>
   ), [isFileDownloaded, payRunId]);
 
-  const hasDownloadFile = status > 3 && hasInvoices;
+  const hasDownloadFile = status > 4 && hasInvoices;
 
   return isDownloading || isLoading ? (
     <Container display="flex" flexDirection="column" alignSelf="center">
