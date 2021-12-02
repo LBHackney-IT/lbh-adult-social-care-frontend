@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { hasUrl } from '../../service/helpers';
 import fetcher from './fetcher';
 import { useLookups } from './lookups';
 import useGetData from './useGetData';
 import { useFetchWithParams } from './useFetchWithParams';
+import { getUrlOrNull } from '../Utils/FuncUtils';
 
 const CARE_PACKAGES_URL = '/care-packages';
 
-const getCarePackageUrl = (id, string = '') => hasUrl(id, `${CARE_PACKAGES_URL}${id ? `/${id}` : ''}${string}`);
+const getCarePackageUrl = (id, string = '') => getUrlOrNull(`${CARE_PACKAGES_URL}/${id}${string}`);
 
 export const useBrokerView = ({ params }) =>
   useFetchWithParams({
@@ -55,10 +55,9 @@ export const usePackageActiveFncPrice = (packageId) =>
   useGetData(getCarePackageUrl(packageId, '/reclaims/fnc/active-price'));
 
 export const usePackageCalculatedCost = (packageId, serviceUserId) =>
-  useGetData(
-    getCarePackageUrl(packageId, `/reclaims/care-charges/${serviceUserId}/default`),
-    'Can not get calculated cost',
-    0
+  useGetData(getCarePackageUrl(packageId, `/reclaims/care-charges/${serviceUserId}/default`),
+    'Cannot get cost',
+    null
   );
 
 // helper for usePackageCareCharge

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, getPackageStatusBy, useRedirectIfPackageNotExist } from 'service';
 import { ReviewPackageDetails } from 'components';
 import {
   DEFAULT_REDIRECT_ROUTE_INFO,
@@ -43,7 +43,7 @@ const ReviewPackageDetailsPage = () => {
   const { data, isLoading: summaryLoading } = usePackageSummary(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
 
-  const coreLoading = useRedirectIfPackageNotExist();
+  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
 
   const checkSettings = (settings) =>
     settings &&
@@ -175,6 +175,8 @@ const ReviewPackageDetailsPage = () => {
     },
   ];
 
+  const isNotApprovedStatus = data?.status < 3
+
   return (
     <ReviewPackageDetails
       isLoading={summaryLoading || coreLoading}
@@ -183,12 +185,11 @@ const ReviewPackageDetailsPage = () => {
       openedPopup={openedPopup}
       setOpenedPopup={setOpenedPopup}
       packageId={carePackageId}
-      packageStatus={data?.packageStatus}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
       buttons={[
         { title: 'Back', className: 'secondary-gray', onClick: router.back },
-        { title: 'Submit for approval', onClick: () => setOpenedPopup('submit') },
+        isNotApprovedStatus && { title: 'Submit for approval', onClick: () => setOpenedPopup('submit') },
       ]}
       goBack={router.back}
       summary={summary}

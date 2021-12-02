@@ -4,7 +4,11 @@ import Head from 'next/head';
 import { Loading } from 'components';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { BROKER_ASSISTANCE_ROUTE, DEFAULT_REDIRECT_ROUTE_INFO, getPreviousPath } from 'routes/RouteConstants';
+import {
+  BROKER_REFERRAL_ROUTE,
+  DEFAULT_REDIRECT_ROUTE_INFO,
+  getPreviousPath
+} from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -17,7 +21,7 @@ export default function IndexPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(getPreviousPath() || BROKER_ASSISTANCE_ROUTE);
+    router.replace(getPreviousPath() || BROKER_REFERRAL_ROUTE);
   }, []);
 
   return (

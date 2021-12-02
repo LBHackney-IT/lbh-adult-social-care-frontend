@@ -1,20 +1,13 @@
 import React from 'react';
-import { isAfter } from 'date-fns';
+import { isBefore } from 'date-fns';
 import { getTagColorFromStatus } from '../../../../service';
 import { Tag } from '../../../HackneyDS';
 
 export const CarePackageStatus = ({ status, packageData }) => {
-  const getApprovedStatus = (endDate) => {
-    if (endDate !== null && isAfter(new Date(), endDate)) {
-      return 'Future';
-    }
-    return 'Active';
-  };
-
   const getStatus = () => {
     switch (status) {
       case 'Approved':
-        return packageData.filter((d) => d.status === 'Approved').map((d) => getApprovedStatus(d.endDate));
+        return packageData?.includes((d) => isBefore(d.startDate, new Date())) ? 'Active' : 'Future';
       case 'Ended':
         return 'End';
       case 'Cancelled':
@@ -33,8 +26,7 @@ export const CarePackageStatus = ({ status, packageData }) => {
   };
 
   const activeStatus = getStatus(status, packageData);
-  const color = activeStatus === 'Active' ? '#00664F' : getTagColorFromStatus(status);
-
+  const color = getTagColorFromStatus(status);
   return (
     <Tag color={color} outline noBackground>
       {activeStatus}

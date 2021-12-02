@@ -18,9 +18,11 @@ const typeOptions = [
   { text: 'All', value: '' },
   { text: 'Residential Recurring', value: '1' },
   { text: 'Direct Payments', value: '2' },
+  { text: 'Residential Released Holds', value: '3' },
+  { text: 'Direct Payments Released Holds', value: '4' },
 ];
 
-export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
+export const PayrunFilters = ({ filters, setFilters, clearFilter, tabView }) => {
   const [searchText, setSearchText] = useState('');
   const changeFilterField = useCallback(
     (field, value) => {
@@ -38,6 +40,7 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
   };
 
   const onSearch = useCallback(() => {
+    changeFilterField('searchTerm', searchText);
     changeFilterField('payRunId', searchText);
   }, [changeFilterField, searchText]);
 
@@ -52,6 +55,7 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter }) => {
         <VerticalSeparator width="20px" />
         <FormGroup label="Status" inlineLabel smallLabel>
           <Select
+            disabled={(tabView && tabView === 'Awaiting Approval') || tabView === 'Approved'}
             emptyElement={null}
             options={statusOptions}
             value={filters.payRunStatus}

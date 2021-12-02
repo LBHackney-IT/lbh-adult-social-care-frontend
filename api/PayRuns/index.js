@@ -15,3 +15,27 @@ export const updatePayRunStatus = (payRunId, invoiceId, newStatus) => {
   };
   return axios(options).then(handleResponse).catch(handleError);
 };
+
+export const updatePayrunAsPaid = (payRunId) => {
+  const options = {
+    url: `${PAY_RUN_URL}/${payRunId}/pay`,
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+export const releaseInvoice = (payRunId, invoiceId) => {
+  const options = {
+    url: `${PAY_RUN_URL}/${payRunId}/invoices/${invoiceId}/release`,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};

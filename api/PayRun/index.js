@@ -7,7 +7,7 @@ const PAYRUNS_URL = `${BASE_URL}/v1/payruns`;
 const sendPayRunsRequest = ({ url = '', data, method = requestMethods.post }) =>
   axiosRequest({ url: `${PAYRUNS_URL}${url ? `/${url}` : ''}`, data, method });
 
-export const createDraftPayRun = ({ type, paidUpToDate }) => sendPayRunsRequest({ data: { type, paidUpToDate } });
+export const createDraftPayRun = ({ data }) => sendPayRunsRequest({ data });
 
 const sendInvoiceRequest = ({ payRunId, invoiceId, params }) =>
   sendPayRunsRequest({ url: `${payRunId}/invoices/${invoiceId}/hold`, data: params });
@@ -15,11 +15,14 @@ const sendInvoiceRequest = ({ payRunId, invoiceId, params }) =>
 export const holdInvoice = ({ reasonForHolding, invoiceId, actionRequiredFromId, payRunId }) =>
   sendInvoiceRequest({ invoiceId, payRunId, params: { reasonForHolding, actionRequiredFromId } });
 
+export const submitPayRun = (payRunId, notes) =>
+  axiosRequest({ url: `${PAYRUNS_URL}/${payRunId}/submit`, method: requestMethods.post, data: { notes: 'test' } });
+
 export const approvePayRun = (payRunId, notes) =>
-  axiosRequest({ url: `${PAYRUNS_URL}/${payRunId}/approve`, method: requestMethods.post, data: { notes } });
+  axiosRequest({ url: `${PAYRUNS_URL}/${payRunId}/approve`, method: requestMethods.post, data: { notes: 'test' } });
 
 export const rejectPayRun = (payRunId, notes) =>
-  axiosRequest({ url: `${PAYRUNS_URL}/${payRunId}/reject`, method: requestMethods.put, data: { notes } });
+  axiosRequest({ url: `${PAYRUNS_URL}/${payRunId}/reject`, method: requestMethods.put, data: { notes: 'test' } });
 
-export const deletePayRun = (payRunId, notes) =>
-  axiosRequest({ url: `${PAYRUNS_URL}/${payRunId}/delete`, method: requestMethods.put, data: { notes } });
+export const deletePayRun = (payRunId) =>
+  axiosRequest({ url: `${PAYRUNS_URL}/${payRunId}/delete`, method: requestMethods.put, data: { notes: 'test' } });

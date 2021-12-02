@@ -1,6 +1,10 @@
+import axios from 'axios';
 import { useFetchWithParams } from './useFetchWithParams';
 import useGetData from './useGetData';
 import { getUrlOrNull } from '../Utils/FuncUtils';
+import { BASE_URL } from '../BaseApi';
+import { requestMethods } from '../../constants/variables';
+import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const PAY_RUNS_URL = '/payruns';
 const getPayRunUrl = (payRunId, additionalString = '') =>
@@ -13,6 +17,13 @@ export const usePayrunView = ({ params }) =>
     errorText: 'Cannot get payrun list',
   });
 
+export const useHeldPaymentsView = ({ params }) =>
+  useFetchWithParams({
+    params,
+    url: `${PAY_RUNS_URL}/held-invoices`,
+    errorText: 'Cannot get held payments list',
+  });
+
 export const useInvoiceListView = ({ payRunId, params }) =>
   useFetchWithParams({
     params,
@@ -20,23 +31,22 @@ export const useInvoiceListView = ({ payRunId, params }) =>
     errorText: 'Cannot get invoice list',
   });
 
-export const usePayRunInvoice = (payRunId, invoiceId) =>
-  useGetData(getPayRunUrl(payRunId, `/invoices/${invoiceId}`))
+export const usePayRunInvoice = (payRunId, invoiceId) => useGetData(getPayRunUrl(payRunId, `/invoices/${invoiceId}`));
 
-export const getSinglePayrun = ({payRunId}) => useGetData(getPayRunUrl(payRunId));
+export const getSinglePayrun = ({ payRunId }) => useGetData(getPayRunUrl(payRunId));
 
 export const getPayrunInsight = ({ payRunId }) => useGetData(`${PAY_RUNS_URL}/${payRunId}/insights`);
 
-export const useLatestPayRunToDate = ({ payRunTypeId }) =>
-  useGetData(
-    getPayRunUrl(payRunTypeId, '/previous-pay-run-end-date'),
-    'Cannot get latest pay run to date',
-    null
-  );
+export const useLatestPayRunToDate = (payRunTypeId) =>
+  useGetData(getPayRunUrl(payRunTypeId, '/previous-pay-run-end-date'), 'Cannot get latest pay run to date', null);
 
 export const useReleasedInvoiceNumber = () =>
-  useGetData(
-    `${PAY_RUNS_URL}/released-invoice-count`,
-    'Cannot get released invoice count',
-    null
-  );
+  useGetData(`${PAY_RUNS_URL}/released-invoice-count`, 'Cannot get released invoice count', null);
+
+export const getPayrunCedarFile = (payRunId) => axios({
+  url: `${BASE_URL}/v1${PAY_RUNS_URL}/${payRunId}/download`,
+  method: requestMethods.get,
+  responseType: 'blob',
+})
+  .then(handleResponse)
+  .catch(handleError);

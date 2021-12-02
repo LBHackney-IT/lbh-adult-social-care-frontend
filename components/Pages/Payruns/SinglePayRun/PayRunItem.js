@@ -13,7 +13,7 @@ import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/Sin
 import { useRouter } from 'next/router';
 import { getCarePackageReviewRoute, getPaymentHistoryRoute } from 'routes/RouteConstants';
 
-export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }) => {
+export const PayRunItem = ({ searchTerm, payRunId, item, update,updateData, totalPayTitle, padding = '24px 16px', isHeld }) => {
   if (!item) return null;
 
   const [invoiceId, setInvoiceId] = useState('');
@@ -31,22 +31,29 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }
 
   return (
     <>
-      <Container background="#FAFAFA" padding="24px 16px">
+      <Container background="#FAFAFA" padding={padding}>
         <SinglePayRunOverview
           payRunId={payRunId}
           update={update}
           searchTerm={searchTerm}
           setInvoiceId={setInvoiceId}
           payRun={item}
+          isHeld={isHeld}
         />
         <HorizontalSeparator height="15px" />
         <Collapse>
-          <HorizontalSeparator height="40px" />
-          <Container margin="0 0 0 16px">
-            <Container display="grid" gridTemplateColumns="2fr 1fr 1fr 1fr">
+          <HorizontalSeparator height="16px" />
+          <Container
+            padding="16px"
+            borderTop="1px solid #DEE0E2"
+            borderBottom="1px solid #DEE0E2"
+            borderLeft="1px solid #DEE0E2"
+            borderRight="1px solid #DEE0E2"
+          >
+            <Container display="grid" gridTemplateColumns="2fr 1fr 1.5fr 1fr">
               <Heading size="m">{item.packageType}</Heading>
               <Heading size="s">Weekly Cost</Heading>
-              <Heading size="s">Quantity (Days)</Heading>
+              <Heading size="s">Quantity (days)</Heading>
               <Container textAlign="right">
                 <Heading size="s">Total</Heading>
               </Container>
@@ -61,22 +68,22 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }
             <HorizontalSeparator height="16px" />
             <Container borderBottom="1px solid #DEE0E2" />
             <HorizontalSeparator height="10px" />
-            <Container display="grid" gridTemplateColumns="4fr 1fr">
-              <Container display="flex">
-                {payRunId && (
+            {payRunId && (
+              <Container display="grid" gridTemplateColumns="4fr 1fr">
+                <Container display="flex">
                   <Link onClick={(e) => handleClick(e)} noVisited>
                     View package summary
                   </Link>
-                )}
-                {payRunId && <VerticalSeparator width="32px" />}
-                Assigned broker: {item.assignedBrokerName.toString()}
+                  <VerticalSeparator width="32px" />
+                  Assigned broker: {item?.assignedBrokerName?.toString()}
+                </Container>
+                <Container display="flex" justifyContent="flex-end">
+                  <Link onClick={(e) => handlePastPaymentsClick(e)} noVisited>
+                    Past payments
+                  </Link>
+                </Container>
               </Container>
-              {payRunId && (
-                <Link onClick={(e) => handlePastPaymentsClick(e)} noVisited>
-                  Past payments
-                </Link>
-              )}
-            </Container>
+            )}
           </Container>
         </Collapse>
       </Container>
@@ -85,7 +92,7 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update, totalPayTitle }
           invoiceId={invoiceId}
           payRunId={payRunId}
           isOpen={invoiceId}
-          update={update}
+          update={updateData}
           setIsOpened={() => setInvoiceId('')}
         />
       )}

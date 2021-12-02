@@ -5,6 +5,7 @@ import DatePick from '../../DatePick';
 import Hint from '../lettering/Hint';
 import Label from '../lettering/Label';
 import { Container } from '../Layout/Container';
+import { COLORS } from '../../../constants/variables';
 
 const initialDateState = {
   value: '',
@@ -18,6 +19,8 @@ const DatePicker = ({
   formId,
   minDate,
   maxDate,
+  calendarStylePosition,
+  floatingCalendar,
   hint,
   hasClearButton,
   checkMinDate,
@@ -96,10 +99,7 @@ const DatePicker = ({
       date?.getDate() || actualDate.getDate()
     );
     if (validatedMonth < validatedDate.getMonth()) {
-      validatedDate = new Date(
-        date?.getFullYear() || actualDate.getFullYear(),
-        validatedMonth,
-      );
+      validatedDate = new Date(date?.getFullYear() || actualDate.getFullYear(), validatedMonth);
       const lastDayInMonth = lastDayOfMonth(validatedDate).getDate();
       validatedDate = dateFncSetDate(validatedDate, lastDayInMonth);
     }
@@ -206,11 +206,13 @@ const DatePicker = ({
         })}
         {IconComponent && (
           <div className="date-picker__calendar-container">
-            <div className="date-picker__additional-action">
+            <div className="date-picker__additional-action" style={{ background: isOpenCalendar ? COLORS['light-blue'] : '' }}>
               <IconComponent onClick={clickIcon} className={iconClassName} />
             </div>
             {isOpenCalendar && (
               <DatePick
+                calendarStylePosition={calendarStylePosition}
+                className={`${floatingCalendar ? 'fixed-datepicker' : ''}`}
                 onClickOutside={() => {
                   if (isOpenCalendar) {
                     setIsOpenCalendar(false);

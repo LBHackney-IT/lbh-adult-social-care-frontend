@@ -20,7 +20,7 @@ export const getEnGBFormattedDate = (dateString, nullData = false) => {
   return new Date(dateString).toLocaleDateString('en-GB');
 };
 
-export const getUrlOrNull = (string) => string.includes('undefined') ? null : string;
+export const getUrlOrNull = (string) => string.includes('undefined') || string.includes('null') ? null : string;
 
 export const stringIsNullOrEmpty = (str) => {
   if (!str || str.length === 0) return true;

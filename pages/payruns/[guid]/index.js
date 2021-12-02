@@ -41,6 +41,7 @@ const SinglePayRun = () => {
       searchTerm,
       fromDate,
       toDate,
+      pageNumber,
     }),
     [filters, pageNumber]
   );
@@ -48,7 +49,7 @@ const SinglePayRun = () => {
   const { data: payRun, isLoading, mutate: update } = useInvoiceListView({ payRunId, params });
   const { payRunItems: payRunData } = payRun;
 
-  const { data: insightData, isLoading: insightsIsLoading } = getPayrunInsight({ payRunId });
+  const { data: insightData, isLoading: insightsIsLoading, mutate: updateInsight } = getPayrunInsight({ payRunId });
 
   useEffect(() => {
     if (payRunData) {
@@ -63,6 +64,10 @@ const SinglePayRun = () => {
     { text: `Pay Run ${payRun?.payRunNumber}` },
   ];
 
+  const updateData = () => {
+    update();
+    updateInsight();
+  };
   return (
     <Container>
       <Container background="#FAFAFA" padding="0 0 60px 0">
@@ -80,14 +85,21 @@ const SinglePayRun = () => {
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
-              <PayRunItem payRunId={payRunId} searchTerm={searchTerm} update={update} item={item} index={index} />
+              <PayRunItem
+                payRunId={payRunId}
+                searchTerm={searchTerm}
+                updateData={updateData}
+                item={item}
+                index={index}
+                update={[1, 2, 3, 4].includes(payRun?.payRunStatus)}
+              />
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
             </>
           ))}
         <HorizontalSeparator height="32px" />
         {insightData && (
           <HighLevelInsight
-            update={update}
+            update={updateData}
             payRunId={payRunId}
             holdCount={insightData?.holdsCount}
             holdValue={insightData?.totalHeldAmount}
@@ -95,6 +107,10 @@ const SinglePayRun = () => {
             serviceUsers={insightData?.serviceUserCount}
             suppliers={insightData?.supplierCount}
             total={insightData?.totalInvoiceAmount}
+            status={insightData?.payRunStatus}
+            hasInvoices={!!payRunItems?.length}
+            isCedarFileDownloaded={insightData?.isCedarFileDownloaded}
+            insightDataLoading={insightsIsLoading}
           />
         )}
         <HorizontalSeparator height="32px" />

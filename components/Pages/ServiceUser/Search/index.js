@@ -19,6 +19,7 @@ const ServiceUserSearch = ({ filters, inputs = defaultInputs, changeFilters, cle
           <DatePicker
             setDate={(value) => changeFilters('dateOfBirth', value)}
             date={filters.dateOfBirth}
+            calendarStylePosition={{ left: 32 }}
             label="Date of birth"
           />
         </FormGroup>
