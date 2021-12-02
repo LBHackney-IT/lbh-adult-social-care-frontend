@@ -45,7 +45,11 @@ export default function Button({
       rel={rel}
       target={target}
       aria-disabled={disabled}
-      onClick={(e) => disabled && e.preventDefault()}
+      onClick={(e) => {
+        if (disabled) return e.preventDefault();
+
+        onClick?.(e);
+      }}
       href={link}
       role="button"
       style={{ borderRadius, ...style }}
