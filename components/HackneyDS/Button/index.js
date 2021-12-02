@@ -9,10 +9,12 @@ export default function Button({
   disabled,
   link,
   rel,
+  download,
   color,
   target,
   className,
   outline,
+  style = {},
   borderRadius = 4,
   addItem,
   largeButton,
@@ -43,11 +45,16 @@ export default function Button({
     <a
       rel={rel}
       target={target}
+      download={download}
       aria-disabled={disabled}
-      onClick={(e) => disabled && e.preventDefault()}
+      onClick={(e) => {
+        if (disabled) e.preventDefault();
+
+        onClick?.(e);
+      }}
       href={link}
       role="button"
-      style={{ borderRadius }}
+      style={{ borderRadius, ...style }}
       draggable="false"
       className={`${mainClass}${allClasses}`}
       data-module="govuk-button"
