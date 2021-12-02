@@ -11,6 +11,7 @@ import UrlFromFile from '../../../UrlFromFile';
 export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update, isLoading }) => {
   const [fileLoading, setFileLoading] = useState(false);
   const [file, setFile] = useState(null);
+  const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
 
   useGetFileWithRequest({
     request: () => getPayrunCedarFile(payRunId),
@@ -79,10 +80,11 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     <UrlFromFile
       download={file?.name}
       file={file}
-      linkText={isCedarFileDownloaded ? 'Download again' : 'Download'}
+      onClick={() => setIsFileDownloaded(true)}
+      linkText={isFileDownloaded ? 'Download again' : 'Download'}
       showOnlyLink
     />
-  ), [isCedarFileDownloaded, file]);
+  ), [isFileDownloaded, file]);
 
   return fileLoading || isLoading ? (
     <Container display="flex" flexDirection="column" alignSelf="center">

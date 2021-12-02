@@ -4,7 +4,7 @@ import { Container } from './HackneyDS/Layout/Container';
 import { VerticalSeparator } from './HackneyDS/Layout/VerticalSeparator';
 import Loading from './Loading';
 
-const UrlFromFile = ({ file, download, removeFile, isLoading, linkText = 'View', showOnlyLink }) => {
+const UrlFromFile = ({ file, onClick = () => {}, download, removeFile, isLoading, linkText = 'View', showOnlyLink }) => {
   if (!file && !showOnlyLink) return <></>;
 
   if (isLoading) return <Loading className='centered-container' isLoading={isLoading} />
@@ -22,7 +22,7 @@ const UrlFromFile = ({ file, download, removeFile, isLoading, linkText = 'View',
   }, [file]);
 
   const linkFileComponent = (
-    <a target="_blank" download={download} href={link} className="link-button blue" rel="noreferrer">
+    <a target="_blank" onClick={onClick} download={download} href={link} className="link-button blue" rel="noreferrer">
       {linkText}
     </a>
   );
