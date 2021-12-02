@@ -5,19 +5,19 @@ import { useUser } from 'api';
 import { HackneyFooterInfo, Loading } from 'components';
 import { userLogin } from 'reducers/userReducer';
 import { changeHeader, resetHeader } from '../reducers/headerReducer';
-import { getPreviousPath, setPreviousPath, useServerSideProps } from '../routes/RouteConstants';
+import { useServerSideProps } from '../routes/RouteConstants';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
 export const getServerSideProps = useServerSideProps({
-  destination: getPreviousPath() || '/',
+  destination: '/',
   permanent: false,
 });
 
 const Login = () => {
   const dispatch = useDispatch();
   const { user, mutateUser } = useUser({
-    redirectTo: getPreviousPath() || '/',
+    redirectTo: '/',
     redirectIfFound: true,
   });
 
@@ -63,7 +63,6 @@ const Login = () => {
             <a
               className="button button-base is-relative"
               href={`${hackneyAuthLink}${origin}/login`}
-              onClick={() => setPreviousPath('')}
               rel="noopener noreferrer"
               target="_self"
             >

@@ -2,17 +2,17 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Loading } from 'components';
-import { BROKER_REFERRAL_ROUTE, getPreviousPath, useServerSideProps } from 'routes/RouteConstants';
+import { BROKER_REFERRAL_ROUTE, useServerSideProps } from 'routes/RouteConstants';
 
 export const getServerSideProps = useServerSideProps({
   permanent: false,
 });
 
-export default function IndexPage () {
+export default function IndexPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(getPreviousPath() || BROKER_REFERRAL_ROUTE);
+    router.replace(BROKER_REFERRAL_ROUTE);
   }, []);
 
   return (
