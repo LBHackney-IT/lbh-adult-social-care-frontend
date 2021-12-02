@@ -72,7 +72,7 @@ const PackageRequest = ({ packageRequest }) => {
         </Button>
       </Container>
       <HorizontalSeparator height="10px" />
-      {packageRequest?.notes && packageRequest.notes.length && (
+      {packageRequest?.notes && packageRequest?.notes.length > 0 && (
         <Collapse IconComponent={CaretDownIcon}>
           {packageRequest.notes.map((note) => (
             <>

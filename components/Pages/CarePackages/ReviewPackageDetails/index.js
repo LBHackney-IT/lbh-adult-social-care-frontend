@@ -52,7 +52,7 @@ const ReviewPackageDetails = ({
       { text: 'Weekly Additional Need', href: '#weekly-additional-need' },
       { text: 'One Off Additional Need', href: '#on-off-additional-need' },
       { text: 'Funded Nursing Care', href: '#funded-nursing-care', hide: isHide() },
-      { text: 'Care charges', href: '#care-charges' },
+      { text: 'Care Charges', href: '#care-charges' },
       { text: 'Summary', href: '#summary' },
     ],
     [title]

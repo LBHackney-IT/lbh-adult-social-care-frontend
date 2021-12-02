@@ -8,13 +8,13 @@ export const useRedirectIfPackageNotExist = () => {
   const router = useRouter();
   const { guid: packageId } = router.query;
 
-  const { error, isLoading } = useSingleCorePackageInfo(packageId);
+  const { error, isLoading, data } = useSingleCorePackageInfo(packageId);
 
   useEffect(() => {
     if (error) router.replace(NOT_FOUND_ROUTE);
   }, [error]);
 
-  return isLoading;
+  return { isLoading, data };
 };
 
 export function useScrollLock(isLocked) {

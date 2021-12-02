@@ -3,7 +3,7 @@ import { createDraftPayRun } from 'api/PayRun';
 import { Dialog, Heading, HorizontalSeparator, Tab, Tabs } from 'components';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { dateToISOString } from 'service';
+import { dateToIsoString } from 'service';
 import { AdHocAndReleases } from './AdHocAndReleases';
 import { RegularCycles } from './RegularCycles';
 
@@ -14,8 +14,8 @@ const CreatePayRunModal = ({ isOpen, onClose, update }) => {
   const handleSubmit = async (newPayRun) => {
     const data = {
       ...newPayRun,
-      paidUpToDate: dateToISOString(newPayRun.paidUpToDate),
-      paidFromDate: newPayRun.paidFromDate && !newPayRun.isOngoing ? dateToISOString(newPayRun.paidFromDate) : null,
+      paidUpToDate: dateToIsoString(newPayRun.paidUpToDate),
+      paidFromDate: newPayRun.paidFromDate && !newPayRun.isOngoing ? dateToIsoString(newPayRun.paidFromDate) : null,
     };
 
     setIsLoading(true);
