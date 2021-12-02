@@ -2576,10 +2576,10 @@
     util-deprecate "^1.0.2"
     webpack "4"
 
-"@storybook/core-common@6.4.0":
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/@storybook/core-common/-/core-common-6.4.0.tgz#2eb207f34baa81172ebacadd9d3a5b7ba8379950"
-  integrity sha512-Zs3OcJ4J3RwWBcpoaTJAEQHQJ75EP8iETstg9DrEwLJ3ct2GYpux58aP00P4UiVMZ0I6gayHvfHOvq/zG2orLQ==
+"@storybook/core-common@6.4.3":
+  version "6.4.3"
+  resolved "https://registry.yarnpkg.com/@storybook/core-common/-/core-common-6.4.3.tgz#a389a6c80ada48d8fe970e09767b0aa65b7b5b91"
+  integrity sha512-1bqg2dwo6FcarAwQjXQtmELLQp9FxPdFM9UpKZJuIfRWMOqaxPiRofI1nYxQcE59WHEbHEvg7KcOaJ5TUA2MhA==
   dependencies:
     "@babel/core" "^7.12.10"
     "@babel/plugin-proposal-class-properties" "^7.12.1"
@@ -2845,10 +2845,10 @@
     npmlog "^4.1.2"
     pretty-hrtime "^1.0.3"
 
-"@storybook/node-logger@6.4.0":
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/@storybook/node-logger/-/node-logger-6.4.0.tgz#170c2920878948cbb436f5186a3068060fe58c9c"
-  integrity sha512-TRon3dvTyIah3gAuQ6cbLUDlfScn0zFGr8duC3q5c6pyT9elYOvK1aPNHPQzaGKNasUBajSDJ75qWoVyCiiRsQ==
+"@storybook/node-logger@6.4.3":
+  version "6.4.3"
+  resolved "https://registry.yarnpkg.com/@storybook/node-logger/-/node-logger-6.4.3.tgz#5f9d94aab24a3f18ba03e2d3aafcb920bbfeb27d"
+  integrity sha512-kA3xevEIytm4RFtaBYTel6nhjeqMzxgXfIvgu7HEPtwNyOZr0acoQ7Q3d90r5EfcfVm+M4crp7AMpUnN2CY+CQ==
   dependencies:
     "@types/npmlog" "^4.1.2"
     chalk "^4.1.0"
@@ -5350,7 +5350,7 @@ core-js-compat@^3.18.0, core-js-compat@^3.19.1, core-js-compat@^3.6.2, core-js-c
     browserslist "^4.18.1"
     semver "7.0.0"
 
-core-js-pure@^3.19.0, core-js-pure@^3.8.1, core-js-pure@^3.8.2:
+core-js-pure@^3.19.0, core-js-pure@^3.8.2:
   version "3.19.2"
   resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.19.2.tgz#26b5bfb503178cff6e3e115bc2ba6c6419383680"
   integrity sha512-5LkcgQEy8pFeVnd/zomkUBSwnmIxuF1C8E9KrMAbOc8f34IBT9RGvTYeNDdp1PnvMJrrVhvk1hg/yVV5h/znlg==
