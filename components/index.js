@@ -25,10 +25,3 @@ export { PackageType } from './Pages/CarePackages/CorePackageDetails/PackageType
 // Package History
 export { default as HistoryList } from './Pages/CarePackages/History/HistoryList';
 export { default as HistoryOverview } from './Pages/CarePackages/History/HistoryOverview';
-
-// Care Charge
-export { default as ProvisionalCareCharge } from './Pages/CarePackages/CareCharge/ProvisionalCareCharge';
-export { default as ResidentialSUContribution } from './Pages/CarePackages/CareCharge/ResidentialSUContribution';
-export { default as EditElementModal } from './Pages/CarePackages/CareCharge/EditElementModal';
-export { default as CancelElementModal } from './Pages/CarePackages/CareCharge/CancelElementModal';
-export { default as EndElementModal } from './Pages/CarePackages/CareCharge/EndElementModal';
