@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -48,8 +48,6 @@ const CorePackage = () => {
   const { data: packageInfo, isLoading: singleCoreLoading } = useSingleCorePackageInfo(packageId);
   const { settings } = packageInfo;
   const { data: schedulingOptionsData = [] } = usePackageSchedulingOptions();
-
-  useRedirectIfPackageNotExist();
 
   const schedulingOptions = useMemo(
     () =>

@@ -88,7 +88,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd, errors }) => {
               <Textarea
                 className="provisional-care__textarea"
                 handler={field.onChange}
-                disabled={isDisabled}
+                // disabled={isDisabled}
                 value={field.value}
                 rows={3}
               />

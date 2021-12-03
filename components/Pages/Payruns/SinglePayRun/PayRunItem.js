@@ -74,6 +74,7 @@ export const PayRunItem = ({
         <SinglePayRunOverview
           payRunId={payRunId}
           update={update}
+          updateData={updateData}
           openModal={(field) => setOpenedModal(field === '4' ? 'Decline' : 'Hold')}
           searchTerm={searchTerm}
           setInvoiceId={setInvoiceId}

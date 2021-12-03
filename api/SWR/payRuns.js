@@ -1,6 +1,10 @@
+import axios from 'axios';
 import { useFetchWithParams } from './useFetchWithParams';
 import useGetData from './useGetData';
 import { getUrlOrNull } from '../Utils/FuncUtils';
+import { BASE_URL } from '../BaseApi';
+import { requestMethods } from '../../constants/variables';
+import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const PAY_RUNS_URL = '/payruns';
 const getPayRunUrl = (payRunId, additionalString = '') =>
@@ -39,4 +43,10 @@ export const useLatestPayRunToDate = (payRunTypeId) =>
 export const useReleasedInvoiceNumber = () =>
   useGetData(`${PAY_RUNS_URL}/released-invoice-count`, 'Cannot get released invoice count', null);
 
-export const getPayrunCedarFile = (payRunId) => useGetData(`${PAY_RUNS_URL}/${payRunId}/download`);
+export const getPayrunCedarFile = (payRunId) => axios({
+  url: `${BASE_URL}/v1${PAY_RUNS_URL}/${payRunId}/download`,
+  method: requestMethods.get,
+  responseType: 'blob',
+})
+  .then(handleResponse)
+  .catch(handleError);

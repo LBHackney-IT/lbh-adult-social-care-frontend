@@ -78,6 +78,10 @@ const Payruns = () => {
     },
   } = hData;
 
+  const updateAllPayruns = () => {
+    update();
+    updateHeldData();
+  };
   return (
     <Container>
       <CreatePayRunModal isOpen={isOpenedModal} onClose={() => setIsOpenedModal(false)} update={update} />
@@ -115,7 +119,7 @@ const Payruns = () => {
           </Tab>
           <Tab>
             <Loading className="loading" isLoading={isHeldLoading} />
-            <HeldPaymentsList data={heldData} searchTerm={payRunId} update={updateHeldData} />
+            <HeldPaymentsList data={heldData} searchTerm={payRunId} update={updateAllPayruns} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination

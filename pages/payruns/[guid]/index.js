@@ -119,6 +119,7 @@ const SinglePayRun = () => {
             suppliers={insightData?.supplierCount}
             total={insightData?.totalInvoiceAmount}
             status={insightData?.payRunStatus}
+            hasInvoices={!!payRunItems?.length}
             isCedarFileDownloaded={insightData?.isCedarFileDownloaded}
             insightDataLoading={insightsIsLoading}
           />
