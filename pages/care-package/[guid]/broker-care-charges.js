@@ -244,7 +244,6 @@ const CareCharge = () => {
               control={control}
               errors={errors}
               isS117Client={isS117Client}
-              isDisabled={isDisabled}
             />
             <CareChargeSchedule startDate={formStartDate} control={control} errors={errors} isOngoing={isOngoing} isS117Client={isDisabled} />
             <ClaimsCollector control={control} errors={errors} collectedBy={collectedBy} isS117Client={isDisabled} />

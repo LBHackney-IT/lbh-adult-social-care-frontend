@@ -16,14 +16,13 @@
   border-right: 1px solid $lbh-success-border;
   border-left: 6px solid #84bd00;
 
+  &--site {
+    background: rgba(164, 214, 94, 0.5);
+  }
 
   &--error {
     border-color: $lbh-red;
     background: $lbh-announcement-red;
-  }
-
-  &--site {
-    background: rgba(164, 214, 94, 0.5);
   }
 
   &__title {
@@ -33,6 +32,7 @@
     font-size: 1.25rem;
     color: #1c1e21;
   }
+
   &__content {
     color: #0b0c0c;
     font-size: 1rem;
@@ -48,10 +48,6 @@
 
 .lbh-phase-banner + .lbh-announcement {
   margin-top: -1px;
-}
-
-.lbh-announcement--site {
-  background: rgba(164, 214, 94, 0.5);
 }
 
 .lbh-announcement__title {

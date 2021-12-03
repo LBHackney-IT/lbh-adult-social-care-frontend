@@ -2,10 +2,10 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import { Container, HorizontalSeparator, FormGroup, Input, Announcement } from 'components';
 
-export const CareChargeCost = ({ control, isDisabled, errors, isS117Client }) => (
+export const CareChargeCost = ({ control, errors, isS117Client }) => (
   <Container className="brokerage__container">
     <HorizontalSeparator height="10px" />
-    {!isDisabled && isS117Client && (
+    {isS117Client && (
       <>
         <Announcement
           title="This client has been categorised as S117"
@@ -16,7 +16,7 @@ export const CareChargeCost = ({ control, isDisabled, errors, isS117Client }) =>
       </>
     )}
     <HorizontalSeparator height="20px" />
-    <FormGroup label="Cost per week" hint="Auto calculated on age" error={errors.cost?.message} disabled={isDisabled}>
+    <FormGroup label="Cost per week" hint="Auto calculated on age" error={errors.cost?.message} disabled={isS117Client}>
       <Controller
         name="cost"
         control={control}
