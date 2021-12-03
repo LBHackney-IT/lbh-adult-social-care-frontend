@@ -48,7 +48,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
 
 const initialValues = {
   cost: null,
-  subType: null,
+  subType: 1,
   claimCollector: 2,
   claimReason: '',
   startDate: null,
@@ -81,6 +81,7 @@ const CareCharge = () => {
       assessmentFileName,
       assessmentFileId,
       endDate,
+      subType,
       startDate,
       hasAssessmentBeenCarried
     },
@@ -121,6 +122,7 @@ const CareCharge = () => {
     setValue('id', careChargeId);
     setValue('startDate', startDate);
     setValue('claimCollector', claimCollector);
+    setValue('subType', subType);
     if (claimReason) setValue('claimReason', claimReason);
     if (description) setValue('description', description);
     if (assessmentFileName) setValue('assessmentFileName', assessmentFileName);
@@ -159,7 +161,7 @@ const CareCharge = () => {
       ...omittedData,
       startDate: dateToIsoString(omittedData.startDate),
       endDate: dateToIsoString(!isOngoing && omittedData.endDate),
-    }
+    };
 
     try {
       if (omittedData.id || isPrevious) {
@@ -195,8 +197,13 @@ const CareCharge = () => {
   const buttonProps = useMemo(() => {
     if (isS117Client) return { text: 'Continue', onClick: () => skipPage() };
     if (hasAssessmentBeenCarried) return { text: 'Review', onClick: () => skipPage() };
-    return { onClick: () => {}, text: 'Save and continue', type: 'submit', isLoading: isRequestBeingSent };
-  }, [isS117Client, hasAssessmentBeenCarried, isRequestBeingSent]);
+    return {
+      onClick: () => {},
+      text: isPrevious ? 'Update and continue' : 'Save and continue',
+      type: 'submit',
+      isLoading: isRequestBeingSent
+    };
+  }, [isS117Client, hasAssessmentBeenCarried, isPrevious, isRequestBeingSent]);
 
   const isDisabled = isS117Client || hasAssessmentBeenCarried;
 
