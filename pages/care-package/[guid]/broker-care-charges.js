@@ -73,21 +73,20 @@ const CareCharge = () => {
   const { isLoading: coreLoading, data: coreInfo } = useRedirectIfPackageNotExist();
   const { serviceUser } = coreInfo;
 
+  const { data: careCharge, isLoading: careChargeLoading } = useProvisionalCareCharges(carePackageId);
+
   const {
-    data: {
-      id: careChargeId,
-      claimReason,
-      claimCollector,
-      description,
-      assessmentFileName,
-      assessmentFileId,
-      endDate,
-      subType,
-      startDate,
-      hasAssessmentBeenCarried
-    },
-    isLoading: careChargeLoading
-  } = useProvisionalCareCharges(carePackageId);
+    id: careChargeId,
+    claimReason,
+    claimCollector,
+    description,
+    assessmentFileName,
+    assessmentFileId,
+    endDate,
+    subType,
+    startDate,
+    hasAssessmentBeenCarried
+  } = careCharge;
 
   const { data: calculatedCost } = usePackageCalculatedCost(carePackageId, serviceUser?.id);
 
@@ -113,7 +112,7 @@ const CareCharge = () => {
 
   useEffect(() => {
     getPreviousCareCharge();
-  }, [careChargeLoading]);
+  }, [careCharge]);
 
   const getPreviousCareCharge = () => {
     setIsPrevious(true);
@@ -244,8 +243,10 @@ const CareCharge = () => {
               control={control}
               errors={errors}
               isS117Client={isS117Client}
+              isDisabled={isDisabled}
             />
-            <CareChargeSchedule startDate={formStartDate} control={control} errors={errors} isOngoing={isOngoing} isS117Client={isDisabled} />
+            <CareChargeSchedule startDate={formStartDate} control={control} errors={errors} isOngoing={isOngoing}
+                                isS117Client={isDisabled} />
             <ClaimsCollector control={control} errors={errors} collectedBy={collectedBy} isS117Client={isDisabled} />
             <HorizontalSeparator height="48px" />
             <FundingPerWeek total={cost} isS117Client={isDisabled} />
