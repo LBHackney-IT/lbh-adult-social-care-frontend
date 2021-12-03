@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { dateToIsoString, getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import {
+  Announcement,
   Button,
   Container,
   DynamicBreadcrumbs,
@@ -9,6 +10,7 @@ import {
   Loading,
   TitleSubtitleHeader,
   VerticalSeparator,
+  WarningText,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -21,7 +23,6 @@ import {
 import withSession from 'lib/session';
 import { getCarePackageReviewRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import {
@@ -47,13 +48,13 @@ export const getServerSideProps = withSession(async ({ req }) => {
 
 const initialValues = {
   cost: null,
-  subType: 1,
+  subType: null,
   claimCollector: 2,
-  claimReason: null,
+  claimReason: '',
   startDate: null,
   endDate: null,
   isOngoing: false,
-  description: null,
+  description: '',
   assessmentFileId: null,
   assessmentFileName: null,
   id: null,
@@ -72,10 +73,19 @@ const CareCharge = () => {
   const { serviceUser } = coreInfo;
 
   const {
-    data: { careCharge = {}, hasAssessment },
+    data: {
+      id: careChargeId,
+      claimReason,
+      claimCollector,
+      description,
+      assessmentFileName,
+      assessmentFileId,
+      endDate,
+      startDate,
+      hasAssessmentBeenCarried
+    },
     isLoading: careChargeLoading
   } = useProvisionalCareCharges(carePackageId);
-  const careChargeId = careCharge.id;
 
   const { data: calculatedCost } = usePackageCalculatedCost(carePackageId, serviceUser?.id);
 
@@ -99,21 +109,16 @@ const CareCharge = () => {
     if (calculatedCost) setValue('cost', calculatedCost);
   }, [calculatedCost]);
 
-  const usePreviousCareCharge = () => {
+  useEffect(() => {
+    if (hasAssessmentBeenCarried) {
+      getPreviousCareCharge();
+    }
+  }, [hasAssessmentBeenCarried]);
+
+  const getPreviousCareCharge = () => {
     setIsPrevious(true);
 
-    const {
-      id,
-      claimReason,
-      claimCollector,
-      description,
-      assessmentFileName,
-      assessmentFileId,
-      endDate,
-      startDate
-    } = careCharge;
-
-    setValue('id', id);
+    setValue('id', careChargeId);
     setValue('startDate', startDate);
     setValue('claimCollector', claimCollector);
     if (claimReason) setValue('claimReason', claimReason);
@@ -129,6 +134,7 @@ const CareCharge = () => {
     reset({
       carePackageId,
       ...initialValues,
+      cost: calculatedCost,
     });
   };
 
@@ -149,18 +155,27 @@ const CareCharge = () => {
   const handleFormSubmission = async () => {
     setIsRequestBeingSent(true);
     const omittedData = getValues();
-    const formData = getFormData({
+    const formattedData = {
       ...omittedData,
       startDate: dateToIsoString(omittedData.startDate),
       endDate: dateToIsoString(!isOngoing && omittedData.endDate),
-    });
+    }
 
     try {
       if (omittedData.id || isPrevious) {
-        await updateCareChargeBrokerage(carePackageId, omittedData.id, formData);
+        await updateCareChargeBrokerage(carePackageId, omittedData.id, formattedData);
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
       } else {
-        await createProvisionalCareCharge(carePackageId, formData);
+        await createProvisionalCareCharge(carePackageId, {
+          carePackageId,
+          claimCollector: omittedData.claimCollector,
+          claimReason: omittedData.claimReason,
+          description: omittedData.description,
+          cost: omittedData.cost,
+          startDate: dateToIsoString(omittedData.startDate),
+          endDate: dateToIsoString(!isOngoing && omittedData.endDate),
+          subType: omittedData.subType,
+        });
         pushNotification(`Funded Nursing Care created successfully`, 'success');
       }
       router.push(getCarePackageReviewRoute(carePackageId));
@@ -178,12 +193,12 @@ const CareCharge = () => {
   const isS117Client = coreInfo?.settings?.isS117Client;
 
   const buttonProps = useMemo(() => {
-    if (isS117Client) return { text: 'Continue', onClick: skipPage };
-    if (careChargeId) return { text: 'Review', onClick: skipPage };
-    return { text: 'Save and continue', type: 'submit', isLoading: isRequestBeingSent };
-  }, [isS117Client, careChargeId, isRequestBeingSent]);
+    if (isS117Client) return { text: 'Continue', onClick: () => skipPage() };
+    if (hasAssessmentBeenCarried) return { text: 'Review', onClick: () => skipPage() };
+    return { onClick: () => {}, text: 'Save and continue', type: 'submit', isLoading: isRequestBeingSent };
+  }, [isS117Client, hasAssessmentBeenCarried, isRequestBeingSent]);
 
-  const isDisabled = isS117Client || careChargeId || hasAssessment;
+  const isDisabled = isS117Client || hasAssessmentBeenCarried;
 
   const skipPage = () => router.push(getCarePackageReviewRoute(carePackageId));
 
@@ -194,12 +209,21 @@ const CareCharge = () => {
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Care Charges" title="Build a care package" />
-        {careChargeId && !hasAssessment && !isS117Client && (
+        <WarningText>Provisional care charge (pre-assessement)</WarningText>
+        <HorizontalSeparator height={20} />
+        {careChargeId && !hasAssessmentBeenCarried && !isS117Client && (
           <PreviousCareCharges
             careChargeId={careChargeId}
             useNewCareCharge={useNewCareCharge}
-            usePreviousCareCharge={usePreviousCareCharge}
+            usePreviousCareCharge={getPreviousCareCharge}
           />
+        )}
+        {hasAssessmentBeenCarried && (
+          <>
+            <Announcement className="warning" title="Care charge assessment for this package already done.">
+              <p>Manage care charges for this package in the Care Charges menu</p>
+            </Announcement>
+          </>
         )}
         <Loading isLoading={isLoading} />
         {!careChargeLoading && !coreLoading && (

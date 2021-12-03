@@ -1,10 +1,9 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
-import { Container, HorizontalSeparator, FormGroup, Input, WarningText, Announcement } from 'components';
+import { Container, HorizontalSeparator, FormGroup, Input, Announcement } from 'components';
 
 export const CareChargeCost = ({ control, isDisabled, errors, isS117Client }) => (
   <Container className="brokerage__container">
-    <WarningText>Provisional care charge (pre-assessement)</WarningText>
     <HorizontalSeparator height="10px" />
     {!isDisabled && isS117Client && (
       <>
