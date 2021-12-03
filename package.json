@@ -51,7 +51,7 @@
     "prepare": "husky install",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "chromatic": "npx chromatic --project-token=97e4e3b73e5d"
+    "chromatic": "chromatic --project-token 97e4e3b73e5d"
   },
   "browserslist": {
     "production": [
@@ -73,11 +73,13 @@
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@next/bundle-analyzer": "^11.1.0",
-    "@storybook/addon-actions": "^6.3.7",
-    "@storybook/addon-essentials": "^6.3.7",
-    "@storybook/addon-links": "^6.3.7",
+    "@storybook/addon-actions": "6.3.12",
+    "@storybook/addon-essentials": "6.3.12",
+    "@storybook/addon-links": "6.3.12",
+    "@storybook/builder-webpack5": "6.3.12",
+    "@storybook/manager-webpack5": "6.3.12",
     "@storybook/preset-scss": "^1.0.3",
-    "@storybook/react": "^6.3.7",
+    "@storybook/react": "6.3.12",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",

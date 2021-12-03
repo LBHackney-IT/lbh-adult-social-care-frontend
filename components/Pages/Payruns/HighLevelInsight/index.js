@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, Heading, Hint, HorizontalSeparator, Link } from 'components';
+import { Container, Heading, Hint, HorizontalSeparator } from 'components';
 import { getNumberWithCommas } from 'service';
 import ApproveDeclineModal from '../ApproveDeclineModal';
 import { InsightButtons } from './InsightButtons';
@@ -13,6 +13,7 @@ export const HighLevelInsight = ({
   holdCount = 0,
   holdValue = 0,
   update,
+  hasInvoices,
   status,
   isCedarFileDownloaded,
   insightDataLoading,
@@ -67,6 +68,7 @@ export const HighLevelInsight = ({
             payRunId={payRunId}
             status={status}
             isCedarFileDownloaded={isCedarFileDownloaded}
+            hasInvoices={hasInvoices}
             update={update}
             isLoading={insightDataLoading}
           />
