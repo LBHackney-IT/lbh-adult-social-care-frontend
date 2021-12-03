@@ -155,10 +155,10 @@ const DatePicker = ({
   }, [date]);
 
   useEffect(() => {
-    if (checkMinDate && date && minDate) {
-      if (date < minDate) {
-        setDate(minDate);
-      }
+    if (!(checkMinDate && date && minDate)) return;
+
+    if (date < minDate) {
+      setDate(minDate);
     }
   }, [date, checkMinDate, minDate]);
 

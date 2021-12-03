@@ -3,6 +3,7 @@ import { Announcement, Button, Container, HorizontalSeparator, VerticalSeparator
 
 export const PreviousCareCharges = ({ usePreviousCareCharge, useNewCareCharge }) => (
   <Announcement
+    className='warning'
     title="Care charges have previously been added."
     children={(
       <Container>

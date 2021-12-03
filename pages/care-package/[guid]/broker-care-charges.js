@@ -66,6 +66,7 @@ const CareCharge = () => {
 
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
+  const [showPreviousAnnouncement, setShowPreviousAnnouncement] = useState(false);
 
   const { guid: carePackageId } = router.query;
 
@@ -111,16 +112,16 @@ const CareCharge = () => {
   }, [calculatedCost]);
 
   useEffect(() => {
-    if (hasAssessmentBeenCarried) {
-      getPreviousCareCharge();
-    }
-  }, [hasAssessmentBeenCarried]);
+    getPreviousCareCharge();
+  }, [careChargeLoading]);
 
   const getPreviousCareCharge = () => {
     setIsPrevious(true);
 
+    if (careChargeId && !hasAssessmentBeenCarried) setIsPrevious(true);
+
     setValue('id', careChargeId);
-    setValue('startDate', startDate);
+    setValue('startDate', startDate && new Date(startDate));
     setValue('claimCollector', claimCollector);
     setValue('subType', subType);
     if (claimReason) setValue('claimReason', claimReason);
@@ -128,7 +129,10 @@ const CareCharge = () => {
     if (assessmentFileName) setValue('assessmentFileName', assessmentFileName);
     if (assessmentFileId) setValue('assessmentFileId', assessmentFileId);
     if (!endDate && startDate) setValue('isOngoing', true);
-    if (endDate) setValue('endDate', endDate);
+    if (endDate) {
+      setValue('isOngoing', false);
+      setValue('endDate', endDate && new Date(endDate));
+    }
   };
 
   const useNewCareCharge = () => {
@@ -189,6 +193,7 @@ const CareCharge = () => {
   };
 
   const collectedBy = watch('claimCollector');
+  const formStartDate = watch('startDate');
   const isOngoing = watch('isOngoing');
   const cost = watch('cost');
 
@@ -218,7 +223,7 @@ const CareCharge = () => {
         <TitleSubtitleHeader subTitle="Care Charges" title="Build a care package" />
         <WarningText>Provisional care charge (pre-assessement)</WarningText>
         <HorizontalSeparator height={20} />
-        {careChargeId && !hasAssessmentBeenCarried && !isS117Client && (
+        {showPreviousAnnouncement && (
           <PreviousCareCharges
             careChargeId={careChargeId}
             useNewCareCharge={useNewCareCharge}
@@ -241,7 +246,7 @@ const CareCharge = () => {
               isS117Client={isS117Client}
               isDisabled={isDisabled}
             />
-            <CareChargeSchedule control={control} errors={errors} isOngoing={isOngoing} isS117Client={isDisabled} />
+            <CareChargeSchedule startDate={formStartDate} control={control} errors={errors} isOngoing={isOngoing} isS117Client={isDisabled} />
             <ClaimsCollector control={control} errors={errors} collectedBy={collectedBy} isS117Client={isDisabled} />
             <HorizontalSeparator height="48px" />
             <FundingPerWeek total={cost} isS117Client={isDisabled} />
