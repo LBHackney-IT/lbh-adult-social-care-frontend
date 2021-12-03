@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { BASE_URL, MULTIPART_FORM_DATA } from '../BaseApi';
-import { handleError, handleResponse } from '../Utils/ApiUtils';
+import { axiosRequest, handleError, handleResponse } from '../Utils/ApiUtils';
+import { requestMethods } from '../../constants/variables';
 
 const CARE_PACKAGE_URL = `${BASE_URL}/v1/care-packages`;
 
@@ -44,6 +45,13 @@ export const createCareChargeReclaim = (carePackageId, careChargeReclaimCreation
   };
   return axios(options).then(handleResponse).catch(handleError);
 };
+
+export const createProvisionalCareCharge = (carePackageId, data) =>
+  axiosRequest({
+    data,
+    method: requestMethods.post,
+    url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/provisional`
+  });
 
 export const updateCareChargeReclaim = (carePackageId, careChargeUpdateRequest) => {
   const options = {
