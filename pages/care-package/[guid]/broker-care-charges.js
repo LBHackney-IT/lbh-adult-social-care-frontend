@@ -74,6 +74,7 @@ const CareCharge = () => {
 
   const {
     id: careChargeId,
+    cost: careChargeCost,
     claimReason,
     claimCollector,
     description,
@@ -104,17 +105,28 @@ const CareCharge = () => {
   });
 
   useEffect(() => {
-    if (calculatedCost) setValue('cost', calculatedCost);
-  }, [calculatedCost]);
+    if (calculatedCost) setValue('cost', careChargeCost || calculatedCost);
+  }, [calculatedCost, careChargeCost]);
 
   useEffect(() => {
     getPreviousCareCharge();
-  }, [careCharge]);
+  }, [
+    careChargeId,
+    startDate,
+    endDate,
+    assessmentFileId,
+    assessmentFileName,
+    description,
+    claimReason,
+    claimCollector,
+    subType,
+  ]);
+
+  useEffect(() => {
+    if (careChargeId && !hasAssessmentBeenCarried) setIsPrevious(true);
+  }, [careChargeId, hasAssessmentBeenCarried]);
 
   const getPreviousCareCharge = () => {
-    setIsPrevious(true);
-
-    if (careChargeId && !hasAssessmentBeenCarried) setIsPrevious(true);
 
     setValue('id', careChargeId);
     setValue('startDate', startDate && new Date(startDate));
@@ -247,7 +259,7 @@ const CareCharge = () => {
                   {isS117Client ? 'Continue' : 'Review'}
                 </Button>
               )}
-              {isNewCareCharge && <Button type='submit'>Save and continue</Button>}
+              {isNewCareCharge && <Button type="submit">Save and continue</Button>}
             </Container>
           </form>
         )}
