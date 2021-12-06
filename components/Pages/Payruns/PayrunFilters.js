@@ -41,7 +41,7 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter, tabView }) => 
 
   const onSearch = useCallback(() => {
     changeFilterField('searchTerm', searchText);
-    changeFilterField('payRunId', searchText);
+    changeFilterField('payRunNumber', searchText);
   }, [changeFilterField, searchText]);
 
   const shouldShowClear = Object.values(filters).some((item) => item);
