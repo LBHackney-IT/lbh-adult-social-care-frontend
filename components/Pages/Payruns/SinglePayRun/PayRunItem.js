@@ -21,12 +21,11 @@ export const PayRunItem = ({
   searchTerm,
   payRunId,
   item,
-  update,
+  isActivePayRun,
   updateData,
   totalPayTitle,
   padding = '24px 16px',
   isHeld,
-  setLoading,
 }) => {
   if (!item) return null;
 
@@ -40,16 +39,14 @@ export const PayRunItem = ({
   };
 
   const rejectInvoiceStatus = async (notes) => {
-    setLoading(true);
     try {
       await updateInvoiceStatus(payRunId, invoiceId, 4, notes);
       pushNotification('Success', 'success');
-      await update();
-      setInvoiceId('');
+      await updateData();
+      closeModal()
     } catch (e) {
       pushNotification(e);
     }
-    setLoading(false);
   };
 
   const closeModal = () => {
@@ -73,7 +70,7 @@ export const PayRunItem = ({
       <Container background="#FAFAFA" padding={padding}>
         <SinglePayRunOverview
           payRunId={payRunId}
-          update={update}
+          isActivePayRun={isActivePayRun}
           updateData={updateData}
           openModal={(field) => setOpenedModal(field === '4' ? 'Decline' : 'Hold')}
           searchTerm={searchTerm}
@@ -132,18 +129,18 @@ export const PayRunItem = ({
         <HoldPaymentDialog
           invoiceId={invoiceId}
           payRunId={payRunId}
-          update={updateData}
+          updateData={updateData}
           isOpen={openedModal === 'Hold'}
-          setIsOpened={closeModal}
+          closeModal={closeModal}
         />
       )}
       <ApproveDeclineModal
-        setOpenedModal={closeModal}
+        closeModal={closeModal}
         openedModal={openedModal !== 'Hold' && openedModal}
         payRunId={payRunId}
         title="Invoice"
-        request={rejectInvoiceStatus}
-        update={update}
+        rejectRequest={rejectInvoiceStatus}
+        updateData={updateData}
       />
     </>
   );

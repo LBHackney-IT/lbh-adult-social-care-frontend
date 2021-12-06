@@ -13,7 +13,7 @@ const containerProps = {
   alignItems: 'center',
 };
 
-export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update, isLoading, hasInvoices }) => {
+export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, updateData, isLoading, hasInvoices }) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
 
@@ -30,7 +30,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     try {
       await submitPayRun(payRunId);
       pushNotification(`Payrun has been approved`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
@@ -40,7 +40,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     try {
       await approvePayRun(payRunId);
       pushNotification(`Payrun has been approved`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
@@ -51,7 +51,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     try {
       await rejectPayRun(payRunId);
       pushNotification(`Payrun has been rejected`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
@@ -62,7 +62,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     try {
       await deletePayRun(payRunId);
       pushNotification(`Payrun has been archived`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
@@ -71,7 +71,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     try {
       await updatePayrunAsPaid(payRunId);
       pushNotification(`Payrun successfully marked as paid`, 'success');
-      update();
+      updateData();
     } catch (e) {
       pushNotification(e, 'error');
     }

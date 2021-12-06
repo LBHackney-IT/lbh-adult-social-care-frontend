@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Container, Heading, Hint, HorizontalSeparator } from 'components';
 import { getNumberWithCommas } from 'service';
+import { useDispatch } from 'react-redux';
+import { rejectPayRun } from 'api/PayRun';
+import { addNotification } from 'reducers/notificationsReducer';
 import ApproveDeclineModal from '../ApproveDeclineModal';
 import { InsightButtons } from './InsightButtons';
 
@@ -12,25 +15,38 @@ export const HighLevelInsight = ({
   serviceUsers = 0,
   holdCount = 0,
   holdValue = 0,
-  update,
+  updateData,
   hasInvoices,
   status,
   isCedarFileDownloaded,
   insightDataLoading,
 }) => {
+  const dispatch = useDispatch();
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
   const [openedModal, setOpenedModal] = useState('');
 
-  // const openModal = (name) => () => setOpenedModal(name);
+  const closeModal = () => setOpenedModal('');
 
   const increaseOrDecrease = difference > 0 ? 'increase' : 'decrease';
+
+  const onRejectPayRun = async (notes) => {
+    await rejectPayRun(payRunId, notes);
+    pushNotification(`Pay run status changed`, 'success');
+    updateData();
+  };
 
   return (
     <>
       <ApproveDeclineModal
-        setOpenedModal={setOpenedModal}
+        rejectRequest={onRejectPayRun}
+        closeModal={closeModal}
         openedModal={openedModal}
         payRunId={payRunId}
-        update={update}
+        updateData={updateData}
       />
       <Container background="#FAFAFA" padding="24px 16px">
         <Container display="flex" justifyContent="space-between">
@@ -69,7 +85,7 @@ export const HighLevelInsight = ({
             status={status}
             isCedarFileDownloaded={isCedarFileDownloaded}
             hasInvoices={hasInvoices}
-            update={update}
+            updateData={updateData}
             isLoading={insightDataLoading}
           />
         </Container>

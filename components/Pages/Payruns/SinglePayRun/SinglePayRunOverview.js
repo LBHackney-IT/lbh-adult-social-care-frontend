@@ -15,7 +15,7 @@ const statusOptions = [
   { text: 'Accepted', value: 5 },
 ];
 
-export const SinglePayRunOverview = ({ payRunId, openModal, searchTerm, payRun, setInvoiceId, update, updateData, isHeld }) => {
+export const SinglePayRunOverview = ({ payRunId, openModal, searchTerm, payRun, setInvoiceId, isActivePayRun, updateData, isHeld }) => {
   const dispatch = useDispatch();
 
   const pushNotification = (text, className = 'error') => {
@@ -23,7 +23,7 @@ export const SinglePayRunOverview = ({ payRunId, openModal, searchTerm, payRun, 
   };
 
   const handleChange = async (field) => {
-    if (!update) return;
+    if (!isActivePayRun) return;
 
     if (field === '2' || field === '4') {
       setInvoiceId(payRun.id);
@@ -88,8 +88,8 @@ export const SinglePayRunOverview = ({ payRunId, openModal, searchTerm, payRun, 
           <Select
             style={{ background, color, border: 'none' }}
             options={statusOptions}
-            disabled={!update}
-            IconComponent={!update ? null : undefined}
+            disabled={!isActivePayRun}
+            IconComponent={!isActivePayRun ? null : undefined}
             onChangeValue={handleChange}
             value={payRun.invoiceStatus}
           />
