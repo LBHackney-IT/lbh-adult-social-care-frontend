@@ -16,13 +16,11 @@ import { currency } from 'constants/strings';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 import { useToggle } from 'react-use';
-import { formatDate, getLoggedInUser, useGetFile, useRedirectIfPackageNotExist } from 'service';
+import { formatDate, getLoggedInUser, useGetFile, usePushNotifications, useRedirectIfPackageNotExist } from 'service';
 import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
 import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { useLookups, usePackageCareCharge, usePackageDetails } from 'api';
-import { addNotification } from 'reducers/notificationsReducer';
 import * as yup from 'yup';
 import { addDays } from 'date-fns';
 
@@ -119,7 +117,7 @@ const CareCharge = () => {
     },
   });
 
-  const dispatch = useDispatch();
+  // const pushNotification = usePushNotifications();
   const router = useRouter();
   const { guid: routerPackageId } = router.query;
 
@@ -413,7 +411,7 @@ const CareCharge = () => {
       // const hasErrors = await validateFields(fields);
 
       // if (hasErrors) {
-      //   dispatch(addNotification({ text: 'Some validation errors above' }));
+      //   pushNotification('Some validation errors above');
       //   return;
       // }
 
