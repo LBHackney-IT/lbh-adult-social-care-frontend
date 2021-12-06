@@ -4,6 +4,10 @@ import Cookies from 'js-cookie';
 let baseUrl = '';
 
 switch (process.env.NEXT_PUBLIC_STAGE) {
+  case 'development': {
+    baseUrl = 'https://l3qbectgf1.execute-api.eu-west-2.amazonaws.com/development/api';
+    break;
+  }
   case 'staging': {
     baseUrl = 'https://zqf7j796y5.execute-api.eu-west-2.amazonaws.com/staging/api';
     break;
