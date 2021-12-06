@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser, useNotifications, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, usePushNotifications, useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
   Container,
@@ -43,7 +43,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
 
 const BrokerPackage = () => {
   const router = useRouter();
-  const pushNotification = useNotifications();
+  const pushNotification = usePushNotifications();
 
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);

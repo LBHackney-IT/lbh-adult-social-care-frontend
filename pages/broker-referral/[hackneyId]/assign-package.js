@@ -20,7 +20,7 @@ import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
 import { BROKER_REFERRAL_ROUTE } from 'routes/RouteConstants';
 import { getFormDataWithFile } from 'service/getFormData';
 import { assignPackageSchema } from 'service/formValidationSchema';
-import { useNotifications } from 'service';
+import { usePushNotifications } from 'service';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKER_REFERRAL_ROUTE },
@@ -30,7 +30,7 @@ const breadcrumbs = [
 
 const AssignPackage = () => {
   const router = useRouter();
-  const pushNotification = useNotifications();
+  const pushNotification = usePushNotifications();
   const { hackneyId } = router.query;
   const { data: serviceUser, isLoading: serviceUserLoading } = useServiceUser(hackneyId);
   const { options: packageTypeOptions, isLoading: lookupsLoading } = useLookups('packageType');

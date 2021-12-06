@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { getNumberWithCommas, useNotifications } from 'service';
+import { getNumberWithCommas, usePushNotifications } from 'service';
 import { Button, Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
 import { releaseInvoice, updatePayRunStatus } from 'api/PayRuns';
 import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/serviceSelect';
@@ -14,7 +14,7 @@ const statusOptions = [
 ];
 
 export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceId, update, updateData, isHeld }) => {
-  const pushNotification = useNotifications();
+  const pushNotification = usePushNotifications();
 
   const handleChange = async (field) => {
     if (!update) return;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser, removeEmpty, useNotifications, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, removeEmpty, usePushNotifications, useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
   Container,
@@ -46,7 +46,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
 const CareCharge = () => {
   const router = useRouter();
 
-  const pushNotification = useNotifications();
+  const pushNotification = usePushNotifications();
 
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
 

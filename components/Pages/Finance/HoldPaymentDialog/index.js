@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as yup from 'yup';
 import { holdInvoice } from 'api/PayRun';
 import { useDepartments } from 'api';
-import { useNotifications } from 'service';
+import { usePushNotifications } from 'service';
 import { Button, Container, Dialog, FormGroup, HorizontalSeparator, Select, Textarea } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 
@@ -35,7 +35,7 @@ const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update })
     setIsOpened();
   };
 
-  const pushNotification = useNotifications();
+  const pushNotification = usePushNotifications();
 
   const onHoldRequest = async ({ reasonForHolding, actionRequiredFromId }) => {
     setIsLoading(true);

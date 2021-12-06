@@ -19,14 +19,12 @@ export const useRedirectIfPackageNotExist = () => {
   return { isLoading, data };
 };
 
-export const useNotifications = () => {
+export const usePushNotifications = () => {
   const dispatch = useDispatch();
 
-  const pushNotification = (text, className = 'error') => {
+  return (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
   };
-
-  return pushNotification;
 };
 
 export function useScrollLock (isLocked) {

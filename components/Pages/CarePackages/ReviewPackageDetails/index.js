@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { currency } from 'constants/strings';
 import { APPROVALS_ROUTE, getHistoryRoute, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage, stringIsNullOrEmpty } from 'api';
-import { useNotifications } from 'service';
+import { usePushNotifications } from 'service';
 import { Container, Link } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
@@ -40,7 +40,7 @@ const ReviewPackageDetails = ({
   subTitle = 'Package details',
   isLoading,
 }) => {
-  const pushNotification = useNotifications();
+  const pushNotification = usePushNotifications();
   const [loading, setLoading] = useState(false);
 
   const isHide = () => !isNursingCarePackage(title);

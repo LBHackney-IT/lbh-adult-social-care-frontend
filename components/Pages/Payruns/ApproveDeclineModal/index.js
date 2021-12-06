@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as yup from 'yup';
 import { approvePayRun, rejectPayRun } from 'api/PayRun';
-import { useNotifications } from 'service';
+import { usePushNotifications } from 'service';
 import {
   Button,
   Container,
@@ -34,7 +34,7 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) 
         .test('notes', `Please put a reason for ${errorText[openedModal]}`, (value) => value.trim?.())
     })), [openedModal]);
 
-  const pushNotification = useNotifications();
+  const pushNotification = usePushNotifications();
 
   const handleApprove = async (notes) => {
     try {

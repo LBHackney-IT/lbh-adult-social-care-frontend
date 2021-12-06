@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { dateToIsoString, getFormDataWithFile, getLoggedInUser, useGetFile, useNotifications, } from 'service';
+import { dateToIsoString, getFormDataWithFile, getLoggedInUser, useGetFile, usePushNotifications, } from 'service';
 import {
   Button,
   Container,
@@ -46,7 +46,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
 
 const BrokerFNC = () => {
   const router = useRouter();
-  const pushNotification = useNotifications();
+  const pushNotification = usePushNotifications();
   const { guid: carePackageId } = router.query;
 
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);

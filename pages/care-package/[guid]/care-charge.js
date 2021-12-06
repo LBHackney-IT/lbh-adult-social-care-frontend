@@ -17,7 +17,7 @@ import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useToggle } from 'react-use';
-import { formatDate, getLoggedInUser, useGetFile, useNotifications, useRedirectIfPackageNotExist } from 'service';
+import { formatDate, getLoggedInUser, useGetFile, usePushNotifications, useRedirectIfPackageNotExist } from 'service';
 import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
 import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { useLookups, usePackageCareCharge, usePackageDetails } from 'api';
@@ -117,7 +117,7 @@ const CareCharge = () => {
     },
   });
 
-  // const pushNotification = useNotifications();
+  // const pushNotification = usePushNotifications();
   const router = useRouter();
   const { guid: routerPackageId } = router.query;
 

@@ -3,7 +3,7 @@ import { Button, Container, HorizontalSeparator, Link, Loading, Select } from 'c
 import { getPayrunCedarFile } from 'api';
 import { updatePayrunAsPaid } from 'api/PayRuns';
 import { approvePayRun, deletePayRun, rejectPayRun, submitPayRun } from 'api/PayRun';
-import { useNotifications } from 'service';
+import { usePushNotifications } from 'service';
 
 const containerProps = {
   display: 'flex',
@@ -20,7 +20,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     if (isCedarFileDownloaded) setIsFileDownloaded(isCedarFileDownloaded);
   }, [isCedarFileDownloaded]);
 
-  const pushNotification = useNotifications();
+  const pushNotification = usePushNotifications();
 
   const handleSubmit = async () => {
     try {
