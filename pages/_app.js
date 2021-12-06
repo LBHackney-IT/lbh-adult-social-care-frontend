@@ -7,13 +7,13 @@ import { Provider } from 'react-redux';
 import { fetcher } from 'api';
 import { CustomNotification, MainHeader } from 'components';
 import { useRouter } from 'next/router';
-import { useStore } from '../store';
 import {
   APP_SERVICE_ROUTES_MAP,
   getPrevRouteInfo,
   saveToStoragePrevRoute,
   setPreviousPath
-} from '../routes/RouteConstants';
+} from 'routes/RouteConstants';
+import { useStore } from '../store';
 
 const swrOptions = {
   errorRetryCount: 3,
@@ -32,8 +32,9 @@ export default function App ({ Component, pageProps }) {
   }, [router.pathname]);
 
   useEffect(() => {
-    if (router.asPath && !APP_SERVICE_ROUTES_MAP.some(item => router.asPath.includes(item))) {
-      setPreviousPath(router.asPath);
+    const { asPath: path } = router;
+    if (path && !APP_SERVICE_ROUTES_MAP.some(item => path.includes(item))) {
+      setPreviousPath(path);
     }
   }, [router.asPath]);
 

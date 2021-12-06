@@ -44,6 +44,7 @@ export const APP_SERVICE_ROUTES = {
 
 export const useServerSideProps = (redirect = {}) => withSession(({ req }) => {
   const user = getLoggedInUser({ req });
+
   if (!user) return {
     redirect: {
       destination: APP_SERVICE_ROUTES.login,

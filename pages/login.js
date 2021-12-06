@@ -5,14 +5,9 @@ import { useUser } from 'api';
 import { HackneyFooterInfo, Loading } from 'components';
 import { userLogin } from 'reducers/userReducer';
 import { changeHeader, resetHeader } from '../reducers/headerReducer';
-import { getPreviousPath, setPreviousPath, useServerSideProps } from '../routes/RouteConstants';
+import { getPreviousPath, setPreviousPath } from '../routes/RouteConstants';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
-
-export const getServerSideProps = useServerSideProps({
-  destination: getPreviousPath() || '/',
-  permanent: false,
-});
 
 const Login = () => {
   const dispatch = useDispatch();

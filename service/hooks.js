@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { NOT_FOUND_ROUTE } from '../routes/RouteConstants';
 import { useDocument, useSingleCorePackageInfo } from '../api';
 import { formatDocumentInfo } from './helpers';
+import { APP_SERVICE_ROUTES } from '../routes/RouteConstants';
 
 export const useRedirectIfPackageNotExist = () => {
   const router = useRouter();
@@ -11,7 +11,7 @@ export const useRedirectIfPackageNotExist = () => {
   const { error, isLoading, data } = useSingleCorePackageInfo(packageId);
 
   useEffect(() => {
-    if (error) router.replace(NOT_FOUND_ROUTE);
+    if (error) router.replace(APP_SERVICE_ROUTES.notFoundPage);
   }, [error]);
 
   return { isLoading, data };
