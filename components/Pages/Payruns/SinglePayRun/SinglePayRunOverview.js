@@ -47,7 +47,7 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
     try {
       await releaseInvoice(payRunId, payRun.id);
       pushNotification(`Invoice released successfully`, 'success');
-      update();
+      updateData();
     } catch (e) {
       pushNotification(e, 'error');
     }
