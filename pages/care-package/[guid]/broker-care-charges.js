@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser, removeEmpty, usePushNotifications, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, removeEmpty, useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
-  Container,
   DynamicBreadcrumbs,
-  HorizontalSeparator,
+  Container,
   Loading,
   TitleSubtitleHeader,
   VerticalSeparator,
+  HorizontalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import {
   createCareChargeReclaim,
   updateCareChargeBrokerage,
@@ -19,6 +20,7 @@ import {
 } from 'api';
 import withSession from 'lib/session';
 import { getCarePackageReviewRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
+import { addNotification } from 'reducers/notificationsReducer';
 import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -45,8 +47,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
 
 const CareCharge = () => {
   const router = useRouter();
-
-  const pushNotification = usePushNotifications();
+  const dispatch = useDispatch();
 
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
 
@@ -59,10 +60,7 @@ const CareCharge = () => {
 
   const { data: packageInfo, isLoading: coreLoading } = useRedirectIfPackageNotExist();
   const { serviceUser } = packageInfo;
-  const {
-    data: calculatedCost,
-    isLoading: calculatedCostLoading
-  } = usePackageCalculatedCost(carePackageId, serviceUser?.id);
+  const { data: calculatedCost, isLoading: calculatedCostLoading } = usePackageCalculatedCost(carePackageId, serviceUser?.id);
 
   const {
     handleSubmit,
@@ -111,6 +109,10 @@ const CareCharge = () => {
 
   const clickBack = () => router.push(getFundedNursingCareRoute(carePackageId));
 
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
   const updatePackage = async (data = {}) => {
     if (isDirty) {
       handleFormSubmission(data);
@@ -126,14 +128,14 @@ const CareCharge = () => {
     const formData =
       !omittedData.endDate || omittedData.isOngoing
         ? getFormData({
-          ...omittedData,
-          startDate: new Date(omittedData.startDate).toISOString(),
-        })
+            ...omittedData,
+            startDate: new Date(omittedData.startDate).toISOString(),
+          })
         : getFormData({
-          ...omittedData,
-          startDate: new Date(omittedData.startDate).toISOString(),
-          endDate: new Date(omittedData.endDate).toISOString(),
-        });
+            ...omittedData,
+            startDate: new Date(omittedData.startDate).toISOString(),
+            endDate: new Date(omittedData.endDate).toISOString(),
+          });
 
     try {
       if (data.id) {

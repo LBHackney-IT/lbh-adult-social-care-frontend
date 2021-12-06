@@ -17,10 +17,11 @@ import {
 import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
+import { useDispatch } from 'react-redux';
+import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_REFERRAL_ROUTE } from 'routes/RouteConstants';
 import { getFormDataWithFile } from 'service/getFormData';
 import { assignPackageSchema } from 'service/formValidationSchema';
-import { usePushNotifications } from 'service';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKER_REFERRAL_ROUTE },
@@ -30,7 +31,7 @@ const breadcrumbs = [
 
 const AssignPackage = () => {
   const router = useRouter();
-  const pushNotification = usePushNotifications();
+  const dispatch = useDispatch();
   const { hackneyId } = router.query;
   const { data: serviceUser, isLoading: serviceUserLoading } = useServiceUser(hackneyId);
   const { options: packageTypeOptions, isLoading: lookupsLoading } = useLookups('packageType');
@@ -65,10 +66,10 @@ const AssignPackage = () => {
     });
     try {
       await assignToBroker({ data: formData });
-      pushNotification('Care plan assigned', 'success');
+      dispatch(addNotification({ text: 'Care plan assigned', className: 'success' }));
       router.push(BROKER_REFERRAL_ROUTE);
     } catch (error) {
-      pushNotification('Care plan assigned');
+      dispatch(addNotification({ text: error, className: 'error' }));
     }
     setIsSubmitting(false);
   };
@@ -117,7 +118,7 @@ const AssignPackage = () => {
           <Container className="brokerage__container">
             <Heading size="xl">Support plan and care package</Heading>
             <HorizontalSeparator height={24} />
-            <UploadFile name="carePlanFile" control={control} title="Upload social worker care plan" />
+            <UploadFile name='carePlanFile' control={control} title="Upload social worker care plan" />
           </Container>
           <Container>
             <FormGroup label="Add notes" error={errors.notes?.message}>

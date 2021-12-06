@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react';
-import { getNumberWithCommas, usePushNotifications } from 'service';
+import { getNumberWithCommas } from 'service';
 import { Button, Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
+import { useDispatch } from 'react-redux';
 import { releaseInvoice, updatePayRunStatus } from 'api/PayRuns';
+import { addNotification } from 'reducers/notificationsReducer';
 import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/serviceSelect';
 import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
 
@@ -14,7 +16,11 @@ const statusOptions = [
 ];
 
 export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceId, update, updateData, isHeld }) => {
-  const pushNotification = usePushNotifications();
+  const dispatch = useDispatch();
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
 
   const handleChange = async (field) => {
     if (!update) return;

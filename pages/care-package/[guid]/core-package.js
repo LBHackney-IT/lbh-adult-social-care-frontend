@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { getLoggedInUser, usePushNotifications } from 'service';
+import { useForm, Controller } from 'react-hook-form';
+import { getLoggedInUser } from 'service';
 import {
   Button,
-  Container,
   DynamicBreadcrumbs,
+  Container,
   FurtherDetails,
   HorizontalSeparator,
   Loading,
@@ -14,6 +14,8 @@ import {
   TitleSubtitleHeader,
 } from 'components';
 import { useRouter } from 'next/router';
+import { addNotification } from 'reducers/notificationsReducer';
+import { useDispatch } from 'react-redux';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
@@ -36,7 +38,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
 
 const CorePackage = () => {
   const router = useRouter();
-  const pushNotification = usePushNotifications();
+  const dispatch = useDispatch();
 
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
@@ -105,9 +107,9 @@ const CorePackage = () => {
     try {
       const { id } = await updateCoreCarePackage({ data, packageId });
       router.push(getBrokerPackageRoute(id));
-      pushNotification('Package saved.', 'success');
+      dispatch(addNotification({ text: 'Package saved.', className: 'success' }));
     } catch (error) {
-      pushNotification(error);
+      dispatch(addNotification({ text: error, className: 'error' }));
     }
     setIsRequestBeingSent(false);
   };

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser, usePushNotifications, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
-  Container,
   DynamicBreadcrumbs,
-  HorizontalSeparator,
+  Container,
   Loading,
   TitleSubtitleHeader,
+  HorizontalSeparator,
   VerticalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
+import { addNotification } from 'reducers/notificationsReducer';
+import { useDispatch } from 'react-redux';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { updateCarePackageCosts, usePackageDetails } from 'api';
@@ -20,13 +22,12 @@ import { formValidationSchema } from 'service/formValidationSchema';
 import omit from 'lodash.omit';
 import { packageTypes } from 'constants/variables';
 import {
-  AdditionalNeeds,
   BrokerPackageDateSelection,
+  AdditionalNeeds,
   CoreWeeklyCost,
   SupplierSelection,
 } from 'components/Pages/CarePackages/BrokerPackage/index';
-import NewAdditionalNeedModal
-  from 'components/Pages/CarePackages/BrokerPackage/NewAdditionalNeedModal/NewAdditionalNeedModal';
+import NewAdditionalNeedModal from 'components/Pages/CarePackages/BrokerPackage/NewAdditionalNeedModal/NewAdditionalNeedModal';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -43,7 +44,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
 
 const BrokerPackage = () => {
   const router = useRouter();
-  const pushNotification = usePushNotifications();
+  const dispatch = useDispatch();
 
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
@@ -136,9 +137,9 @@ const BrokerPackage = () => {
       router.push(
         packageType === packageTypes.nursing ? getFundedNursingCareRoute(packageId) : getCareChargesRoute(packageId)
       );
-      pushNotification('Package saved.', 'success');
+      dispatch(addNotification({ text: 'Package saved.', className: 'success' }));
     } catch (error) {
-      pushNotification(error);
+      dispatch(addNotification({ text: error, className: 'error' }));
     }
     setIsRequestBeingSent(false);
   };
