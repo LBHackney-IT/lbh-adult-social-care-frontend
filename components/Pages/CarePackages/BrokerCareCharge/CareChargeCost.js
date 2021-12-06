@@ -25,7 +25,7 @@ export const CareChargeCost = ({
     {showPreviousAnnouncement && <PreviousCareCharges {...previousCareCharge} />}
     {hasAssessmentBeenCarried && (
       <>
-        <Announcement className="warning" title="Care charge assessment for this package already done.">
+        <Announcement isWarning title="Care charge assessment for this package already done.">
           <p>Manage care charges for this package in the Care Charges menu</p>
         </Announcement>
       </>
