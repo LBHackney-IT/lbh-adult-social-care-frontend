@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { dateToIsoString, getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import {
@@ -10,7 +10,6 @@ import {
   Loading,
   TitleSubtitleHeader,
   VerticalSeparator,
-  WarningText,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -198,29 +197,19 @@ const CareCharge = () => {
 
   const isS117Client = coreInfo?.settings?.isS117Client;
 
-  const buttonProps = useMemo(() => {
-    if (isS117Client) return { text: 'Continue', onClick: () => skipPage() };
-    if (hasAssessmentBeenCarried) return { text: 'Review', onClick: () => skipPage() };
-    return {
-      onClick: () => {},
-      text: isPrevious ? 'Update and continue' : 'Save and continue',
-      type: 'submit',
-      isLoading: isRequestBeingSent
-    };
-  }, [isS117Client, hasAssessmentBeenCarried, isPrevious, isRequestBeingSent]);
-
   const isDisabled = isS117Client || hasAssessmentBeenCarried;
 
   const skipPage = () => router.push(getCarePackageReviewRoute(carePackageId));
 
   const isLoading = coreLoading || careChargeLoading || isRequestBeingSent;
 
+  const isNewCareCharge = !(isS117Client || hasAssessmentBeenCarried);
+
   return (
     <>
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Care Charges" title="Build a care package" />
-        <WarningText>Provisional care charge (pre-assessement)</WarningText>
         <HorizontalSeparator height={20} />
         {showPreviousAnnouncement && (
           <PreviousCareCharges
@@ -234,6 +223,7 @@ const CareCharge = () => {
             <Announcement className="warning" title="Care charge assessment for this package already done.">
               <p>Manage care charges for this package in the Care Charges menu</p>
             </Announcement>
+            <HorizontalSeparator height={32} />
           </>
         )}
         <Loading isLoading={isLoading} />
@@ -245,8 +235,13 @@ const CareCharge = () => {
               isS117Client={isS117Client}
               isDisabled={isDisabled}
             />
-            <CareChargeSchedule startDate={formStartDate} control={control} errors={errors} isOngoing={isOngoing}
-                                isS117Client={isDisabled} />
+            <CareChargeSchedule
+              startDate={formStartDate}
+              control={control}
+              errors={errors}
+              isOngoing={isOngoing}
+              isS117Client={isDisabled}
+            />
             <ClaimsCollector control={control} errors={errors} collectedBy={collectedBy} isS117Client={isDisabled} />
             <HorizontalSeparator height="48px" />
             <FundingPerWeek total={cost} isS117Client={isDisabled} />
@@ -257,13 +252,12 @@ const CareCharge = () => {
               </Button>
               <VerticalSeparator width="10px" />
               <VerticalSeparator width="10px" />
-              <Button
-                type={buttonProps.type || 'button'}
-                onClick={buttonProps.onClick}
-                isLoading={buttonProps.isLoading}
-              >
-                {buttonProps.text}
-              </Button>
+              {!isNewCareCharge && (
+                <Button onClick={skipPage} type="button">
+                  {isS117Client ? 'Continue' : 'Review'}
+                </Button>
+              )}
+              {isNewCareCharge && <Button type='submit'>Save and continue</Button>}
             </Container>
           </form>
         )}
