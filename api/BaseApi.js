@@ -4,10 +4,6 @@ import Cookies from 'js-cookie';
 let baseUrl = '';
 
 switch (process.env.NEXT_PUBLIC_STAGE) {
-  case 'development': {
-    baseUrl = 'https://l3qbectgf1.execute-api.eu-west-2.amazonaws.com/development/api';
-    break;
-  }
   case 'staging': {
     baseUrl = 'https://zqf7j796y5.execute-api.eu-west-2.amazonaws.com/staging/api';
     break;
@@ -21,7 +17,7 @@ switch (process.env.NEXT_PUBLIC_STAGE) {
     break;
   }
   default: {
-    baseUrl = 'https://zqf7j796y5.execute-api.eu-west-2.amazonaws.com/staging/api';
+    baseUrl = 'https://l3qbectgf1.execute-api.eu-west-2.amazonaws.com/development/api';
     break;
   }
 }
@@ -29,7 +25,7 @@ switch (process.env.NEXT_PUBLIC_STAGE) {
 const BASE_URL = baseUrl;
 const HASC_TOKEN_ID = `hascToken`;
 
-export const MULTIPART_FORM_DATA = "multipart/form-data";
+export const MULTIPART_FORM_DATA = 'multipart/form-data';
 
 axios.interceptors.request.use((config) => {
   const token = Cookies.get(HASC_TOKEN_ID);
