@@ -1,8 +1,17 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import { Container, HorizontalSeparator, FormGroup, Input, Announcement, WarningText } from 'components';
+import { PreviousCareCharges } from './PreviousCareCharge';
 
-export const CareChargeCost = ({ control, errors, isS117Client, isDisabled }) => (
+export const CareChargeCost = ({
+  control,
+  showPreviousAnnouncement,
+  hasAssessmentBeenCarried,
+  errors,
+  isS117Client,
+  isDisabled,
+  previousCareCharge,
+}) => (
   <Container className="brokerage__container">
     <WarningText>Provisional care charge (pre-assessement)</WarningText>
     <HorizontalSeparator height="10px" />
@@ -11,7 +20,14 @@ export const CareChargeCost = ({ control, errors, isS117Client, isDisabled }) =>
         <Announcement title="This client has been categorised as S117" isError>
           No care charges need to be applied
         </Announcement>
-        <HorizontalSeparator height="28px" />
+      </>
+    )}
+    {showPreviousAnnouncement && <PreviousCareCharges {...previousCareCharge} />}
+    {hasAssessmentBeenCarried && (
+      <>
+        <Announcement className="warning" title="Care charge assessment for this package already done.">
+          <p>Manage care charges for this package in the Care Charges menu</p>
+        </Announcement>
       </>
     )}
     <HorizontalSeparator height="20px" />

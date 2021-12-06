@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { dateToIsoString, getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import {
-  Announcement,
   Button,
   Container,
   DynamicBreadcrumbs,
@@ -29,7 +28,6 @@ import {
   CareChargeSchedule,
   ClaimsCollector,
   FundingPerWeek,
-  PreviousCareCharges,
 } from 'components/Pages/CarePackages/BrokerCareCharge';
 
 export const getServerSideProps = withSession(async ({ req }) => {
@@ -211,21 +209,6 @@ const CareCharge = () => {
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Care Charges" title="Build a care package" />
         <HorizontalSeparator height={20} />
-        {showPreviousAnnouncement && (
-          <PreviousCareCharges
-            careChargeId={careChargeId}
-            useNewCareCharge={useNewCareCharge}
-            usePreviousCareCharge={getPreviousCareCharge}
-          />
-        )}
-        {hasAssessmentBeenCarried && (
-          <>
-            <Announcement className="warning" title="Care charge assessment for this package already done.">
-              <p>Manage care charges for this package in the Care Charges menu</p>
-            </Announcement>
-            <HorizontalSeparator height={32} />
-          </>
-        )}
         <Loading isLoading={isLoading} />
         {!careChargeLoading && !coreLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
@@ -234,6 +217,13 @@ const CareCharge = () => {
               errors={errors}
               isS117Client={isS117Client}
               isDisabled={isDisabled}
+              previousCareCharge={{
+                careChargeId,
+                useNewCareCharge,
+                usePreviousCareCharge: getPreviousCareCharge,
+              }}
+              showPreviousAnnouncement={showPreviousAnnouncement}
+              hasAssessmentBeenCarried={hasAssessmentBeenCarried}
             />
             <CareChargeSchedule
               startDate={formStartDate}
