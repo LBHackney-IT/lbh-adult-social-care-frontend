@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import { NOT_FOUND_ROUTE } from '../routes/RouteConstants';
 import { useDocument, useSingleCorePackageInfo } from '../api';
 import { formatDocumentInfo } from './helpers';
+import { addNotification } from '../reducers/notificationsReducer';
 
 export const useRedirectIfPackageNotExist = () => {
   const router = useRouter();
@@ -15,6 +17,16 @@ export const useRedirectIfPackageNotExist = () => {
   }, [error]);
 
   return { isLoading, data };
+};
+
+export const useNotifications = () => {
+  const dispatch = useDispatch();
+
+  const pushNotification = (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
+
+  return pushNotification;
 };
 
 export function useScrollLock (isLocked) {
