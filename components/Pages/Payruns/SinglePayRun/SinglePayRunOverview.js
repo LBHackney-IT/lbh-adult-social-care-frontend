@@ -59,7 +59,7 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
           {handleServiceUserName()}
         </Heading>
         <VerticalSeparator width="24px" />
-        <Heading size="s">Invoice ID:</Heading>
+        <Heading size="s">Invoice Number:</Heading>
         <VerticalSeparator width="5px" />
         {payRun.invoiceNumber}
       </Container>
