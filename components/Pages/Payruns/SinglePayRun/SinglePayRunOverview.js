@@ -61,7 +61,7 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
         <VerticalSeparator width="24px" />
         <Heading size="s">Invoice ID:</Heading>
         <VerticalSeparator width="5px" />
-        {payRun.invoiceId}
+        {payRun.invoiceNumber}
       </Container>
       <HorizontalSeparator height="15px" />
       <Container display="flex" alignItems="flex-end" justifyContent="space-between">

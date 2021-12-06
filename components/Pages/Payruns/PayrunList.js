@@ -36,7 +36,7 @@ export const PayrunList = ({ searchTerm, data }) => {
                 <Container display="flex" alignItems="center">
                   <Heading size="s">Payrun ID: </Heading>
                   <VerticalSeparator width="10px" />
-                  {handleId(d.payRunId)}
+                  {handleId(d.payRunNumber)}
                 </Container>
                 <Container display="flex" alignItems="center">
                   <Heading size="s">Created: </Heading>
