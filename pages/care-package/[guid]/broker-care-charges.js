@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser, removeEmpty, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -13,18 +13,16 @@ import {
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import {
-  createCareChargeReclaim,
+  createProvisionalCareCharge,
   updateCareChargeBrokerage,
   usePackageCalculatedCost,
-  usePackageCareCharge,
+  useProvisionalCareCharges,
 } from 'api';
 import withSession from 'lib/session';
 import { getCarePackageReviewRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
-import { getFormData } from 'service/getFormData';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { reclaimType } from 'constants/variables';
 import {
   CareChargeCost,
   CareChargeSchedule,
@@ -53,14 +51,14 @@ const CareCharge = () => {
 
   const { guid: carePackageId } = router.query;
 
-  const { data: careChargeData, isLoading: careChargeLoading } = usePackageCareCharge(
-    carePackageId,
-    reclaimType.careCharge
-  );
+  const { data: careChargeData, isLoading: careChargeLoading } = useProvisionalCareCharges(carePackageId);
 
   const { data: packageInfo, isLoading: coreLoading } = useRedirectIfPackageNotExist();
   const { serviceUser } = packageInfo;
-  const { data: calculatedCost, isLoading: calculatedCostLoading } = usePackageCalculatedCost(carePackageId, serviceUser?.id);
+  const { data: calculatedCost, isLoading: calculatedCostLoading } = usePackageCalculatedCost(
+    carePackageId,
+    serviceUser?.id
+  );
 
   const {
     handleSubmit,
@@ -86,22 +84,22 @@ const CareCharge = () => {
   });
 
   useEffect(() => {
-    if (calculatedCost) setValue('cost', calculatedCost);
-  }, [calculatedCost]);
+    if (calculatedCost && careChargeData && !careChargeData.cost) setValue('cost', calculatedCost);
+  }, [calculatedCost, careChargeData]);
 
   useEffect(() => {
-    if (careChargeData && careChargeData.length) {
-      const data = careChargeData[0];
-      setValue('id', data.id);
-      setValue('startDate', data.startDate);
-      setValue('claimCollector', data.claimCollector);
-      if (data.claimReason) setValue('claimReason', data.claimReason);
-      if (data.description) setValue('description', data.description);
-      if (data.assessmentFileName) setValue('assessmentFileName', data.assessmentFileName);
-      if (data.assessmentFileId) setValue('assessmentFileId', data.assessmentFileId);
-      if (!data.endDate && data.startDate) setValue('isOngoing', true);
-      if (data.endDate) {
-        setValue('endDate', data.endDate);
+    if (careChargeData) {
+      setValue('id', careChargeData.id);
+      setValue('startDate', careChargeData.startDate);
+      setValue('claimCollector', careChargeData.claimCollector);
+      setValue('cost', careChargeData.cost);
+      if (careChargeData.claimReason) setValue('claimReason', careChargeData.claimReason);
+      if (careChargeData.description) setValue('description', careChargeData.description);
+      if (careChargeData.assessmentFileName) setValue('assessmentFileName', careChargeData.assessmentFileName);
+      if (careChargeData.assessmentFileId) setValue('assessmentFileId', careChargeData.assessmentFileId);
+      if (!careChargeData.endDate && careChargeData.startDate) setValue('isOngoing', true);
+      if (careChargeData.endDate) {
+        setValue('endDate', careChargeData.endDate);
         setValue('isOngoing', false);
       }
     }
@@ -123,27 +121,17 @@ const CareCharge = () => {
 
   const handleFormSubmission = async () => {
     setIsRequestBeingSent(true);
-    const data = getValues();
-    const omittedData = removeEmpty(data);
-    const formData =
-      !omittedData.endDate || omittedData.isOngoing
-        ? getFormData({
-            ...omittedData,
-            startDate: new Date(omittedData.startDate).toISOString(),
-          })
-        : getFormData({
-            ...omittedData,
-            startDate: new Date(omittedData.startDate).toISOString(),
-            endDate: new Date(omittedData.endDate).toISOString(),
-          });
+    let data = getValues();
+
+    if (data.claimCollector === 1) data = { ...data, claimReason: null, description: null };
 
     try {
       if (data.id) {
         await updateCareChargeBrokerage(carePackageId, data.id, data);
-        pushNotification(`Funded Nursing Care updated successfully`, 'success');
+        pushNotification(`Care charge updated successfully`, 'success');
       } else {
-        await createCareChargeReclaim(carePackageId, formData);
-        pushNotification(`Funded Nursing Care created successfully`, 'success');
+        await createProvisionalCareCharge(carePackageId, data);
+        pushNotification(`Care charge created successfully`, 'success');
       }
       router.push(getCarePackageReviewRoute(carePackageId));
     } catch (e) {
