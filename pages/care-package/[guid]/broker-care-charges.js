@@ -131,7 +131,7 @@ const CareCharge = () => {
     setValue('id', careChargeId);
     setValue('startDate', startDate && new Date(startDate));
     setValue('claimCollector', claimCollector);
-    setValue('subType', subType);
+    if (subType) setValue('subType', subType);
     if (claimReason) setValue('claimReason', claimReason);
     if (description) setValue('description', description);
     if (assessmentFileName) setValue('assessmentFileName', assessmentFileName);
