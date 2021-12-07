@@ -60,7 +60,11 @@ export const getLoggedInUser = ({ req }) => {
   return user;
 };
 
-export const formatNumber = (x) => !Number.isNaN(x) && x ? x : 0;
+export const formatNumber = (x, options = { isAbsolute: false }) => {
+  if (!Number.isNaN(x) && x) return options.isAbsolute ? Math.abs(x) : x;
+
+  return 0;
+}
 
 export const getNumberWithCommas = (x) =>
   x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');

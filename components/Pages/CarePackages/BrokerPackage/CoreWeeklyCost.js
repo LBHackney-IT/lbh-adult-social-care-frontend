@@ -32,7 +32,7 @@ export const CoreWeeklyCost = ({ control, coreCost, errors }) => (
       justifyContent="space-between"
     >
       <Hint>Core weekly cost</Hint>
-      <Heading size="m">£{getNumberWithCommas(formatNumber(coreCost))}</Heading>
+      <Heading size="m">£{getNumberWithCommas(formatNumber(coreCost, { isAbsolute: true }))}</Heading>
     </Container>
   </Container>
 );

@@ -50,7 +50,7 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
                 <p className="text-lbh-f01">
                   {minusSign}
                   {currency.euro}
-                  {getNumberWithCommas(formatNumber(cost))}
+                  {getNumberWithCommas(formatNumber(cost, { isAbsolute: true }))}
                 </p>
               )}
             </Container>

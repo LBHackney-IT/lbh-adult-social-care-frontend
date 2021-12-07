@@ -9,7 +9,7 @@ const BrokerageTotalCost = ({ name, className, value }) => {
   return (
     <p className={className || ''}>
       {`${name}`}
-      <span className="text-lbh-f01">{minusSign}{currency.euro}{getNumberWithCommas(formatNumber(value))}</span>
+      <span className="text-lbh-f01">{minusSign}{currency.euro}{getNumberWithCommas(formatNumber(value, { isAbsolute: true }))}</span>
     </p>
   );
 }
