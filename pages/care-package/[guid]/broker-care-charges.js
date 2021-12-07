@@ -105,7 +105,7 @@ const CareCharge = () => {
   });
 
   useEffect(() => {
-    if (calculatedCost) setValue('cost', careChargeCost || calculatedCost);
+    if (calculatedCost && !careChargeCost) setValue('cost', calculatedCost);
   }, [calculatedCost, careChargeCost]);
 
   useEffect(() => {
@@ -120,6 +120,7 @@ const CareCharge = () => {
     claimReason,
     claimCollector,
     subType,
+    careChargeCost,
   ]);
 
   useEffect(() => {
@@ -127,11 +128,11 @@ const CareCharge = () => {
   }, [careChargeId, hasAssessmentBeenCarried]);
 
   const getPreviousCareCharge = () => {
-
     setValue('id', careChargeId);
     setValue('startDate', startDate && new Date(startDate));
     setValue('claimCollector', claimCollector);
     if (subType) setValue('subType', subType);
+    if (careChargeCost) setValue('cost', careChargeCost);
     if (claimReason) setValue('claimReason', claimReason);
     if (description) setValue('description', description);
     if (assessmentFileName) setValue('assessmentFileName', assessmentFileName);
