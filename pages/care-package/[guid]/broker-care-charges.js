@@ -8,7 +8,7 @@ import {
   HorizontalSeparator,
   Loading,
   TitleSubtitleHeader,
-  VerticalSeparator,
+  VerticalSeparator, WarningText,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -28,6 +28,9 @@ import {
   CareChargeSchedule,
   ClaimsCollector,
   FundingPerWeek,
+  PreviousCareChargesAnnouncement,
+  ProvisionalAnnouncement,
+  S117Announcement,
 } from 'components/Pages/CarePackages/BrokerCareCharge';
 
 export const getServerSideProps = withSession(async ({ req }) => {
@@ -223,21 +226,20 @@ const CareCharge = () => {
         <TitleSubtitleHeader subTitle="Care Charges" title="Build a care package" />
         <HorizontalSeparator height={20} />
         <Loading isLoading={isLoading} />
+        <WarningText>Provisional care charge (pre-assessement)</WarningText>
+        <HorizontalSeparator height="10px" />
+        <HorizontalSeparator height="20px" />
+        <S117Announcement visible={isS117Client} />
+        <PreviousCareChargesAnnouncement
+          visible={showPreviousAnnouncement}
+          useNewCareCharge={useNewCareCharge}
+          usePreviousCareCharge={getPreviousCareCharge}
+        />
+        <ProvisionalAnnouncement visible={hasAssessmentBeenCarried} />
+        {(isS117Client || showPreviousAnnouncement || hasAssessmentBeenCarried) && <HorizontalSeparator height={20} />}
         {!careChargeLoading && !coreLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
-            <CareChargeCost
-              control={control}
-              errors={errors}
-              isS117Client={isS117Client}
-              isDisabled={isDisabled}
-              previousCareCharge={{
-                careChargeId,
-                useNewCareCharge,
-                usePreviousCareCharge: getPreviousCareCharge,
-              }}
-              showPreviousAnnouncement={showPreviousAnnouncement}
-              hasAssessmentBeenCarried={hasAssessmentBeenCarried}
-            />
+            <CareChargeCost control={control} errors={errors} isDisabled={isDisabled} />
             <CareChargeSchedule
               startDate={formStartDate}
               control={control}
