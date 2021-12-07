@@ -259,7 +259,7 @@ const CareCharge = () => {
                   {isS117Client ? 'Continue' : 'Review'}
                 </Button>
               )}
-              {isNewCareCharge && <Button type="submit">Save and continue</Button>}
+              {isNewCareCharge && <Button isLoading={isLoading} type="submit">Save and continue</Button>}
             </Container>
           </form>
         )}
