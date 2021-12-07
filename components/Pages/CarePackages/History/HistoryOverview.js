@@ -14,11 +14,11 @@ const HistoryOverview = () => {
     assignedOn,
     approvedBy,
     approvedOn,
-    socialWorkerCarePlanFileName,
-    socialWorkerCarePlanFileId
+    socialWorkerCarePlanFileName: documentName,
+    socialWorkerCarePlanFileId: documentId,
   } = data;
 
-  const hasFile = socialWorkerCarePlanFileId && socialWorkerCarePlanFileName;
+  const hasFile = documentId && documentName;
 
   const overviewData = useMemo(() => [
     { value: brokeredBy ?? '-', label: 'Brokered by' },
@@ -29,12 +29,12 @@ const HistoryOverview = () => {
       value: hasFile ? (
         <ViewDocument
           noFile={!(hasFile)}
-          downloadFileName="Care Plan"
-          getDocumentRequest={() => getDocumentRequest(socialWorkerCarePlanFileId)}
+          downloadFileName={documentName}
+          getDocumentRequest={() => getDocumentRequest(documentId)}
         />
       ) : '-', label: 'Care Plan'
     },
-  ], [brokeredBy, assignedOn, hasFile]);
+  ], [brokeredBy, assignedOn, hasFile, documentId, documentName]);
 
   return (
     <div className="history__overview">

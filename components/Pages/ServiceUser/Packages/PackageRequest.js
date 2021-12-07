@@ -13,6 +13,7 @@ import { Button, Collapse, Container, Heading, HorizontalSeparator, Tag, Vertica
 import ViewDocument from '../../../ViewDocument';
 
 const PackageRequest = ({ packageRequest }) => {
+  const { socialWorkerCarePlanFileId: documentId, socialWorkerCarePlanFileName: documentName } = packageRequest;
   const router = useRouter();
   const buttonClass = `${getButtonColourFromPackageStatus(packageRequest.packageStatus)} package-request-button`;
   const handleClick = () => router.push(getCorePackageRoute(packageRequest.packageId));
@@ -44,9 +45,9 @@ const PackageRequest = ({ packageRequest }) => {
           <Container>
             <Heading size="m">Care Plan</Heading>
             <ViewDocument
-              noFile={!(packageRequest.socialWorkerCarePlanFileId && packageRequest.socialWorkerCarePlanFileName)}
-              downloadFileName="Care Plan"
-              getDocumentRequest={() => getDocumentRequest(packageRequest.socialWorkerCarePlanFileId)}
+              noFile={!(documentId && documentName)}
+              downloadFileName={documentName}
+              getDocumentRequest={() => getDocumentRequest(documentId)}
             />
           </Container>
           <VerticalSeparator width="20px" />
