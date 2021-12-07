@@ -1,13 +1,15 @@
 import React from 'react';
-import { isBefore } from 'date-fns';
+import { isBefore, isToday } from 'date-fns';
 import { getTagColorFromStatus } from '../../../../service';
 import { Tag } from '../../../HackneyDS';
 
 export const CarePackageStatus = ({ status, packageData }) => {
+  const daysToday = packageData.filter((d) => isToday(new Date(d.startDate))).length;
+  const daysBeforeToday = packageData.filter((d) => isBefore(new Date(d.startDate), new Date())).length;
   const getStatus = () => {
     switch (status) {
       case 'Approved':
-        return packageData?.includes((d) => isBefore(d.startDate, new Date())) ? 'Active' : 'Future';
+        return daysToday > 0 || daysBeforeToday > 0 ? 'Active' : 'Future';
       case 'Ended':
         return 'End';
       case 'Cancelled':
