@@ -26,7 +26,7 @@ export const PackageApprovalsTable = ({ searchTerm, getPackageTypeById, onRowCli
         return (
           <Container>
             <Container className="status-info" display="flex" alignItems='flex-start'>
-              <p className="brokerage-portal--user-name font-size-19px font-weight-bold text-green">
+              <p className="brokerage-portal--user-name font-size-19px font-weight-bold hackney-text-green">
                 {searchTerm ? handleName(fullName) : fullName}
               </p>
               <Tag className="text-capitalize outline" color={getPackageColorFromStatusId(value)}>
