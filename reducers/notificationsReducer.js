@@ -39,7 +39,7 @@ const notificationsSlice = createSlice({
       ...state,
       notifications: [...state.notifications, {
         // time: 'debugger',
-        time: payload?.className === 'success' ? 3000 : 6000,
+        time: 3000,
         className: 'error',
         text: 'Something went wrong',
         ...payload,

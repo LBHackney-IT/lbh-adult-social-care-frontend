@@ -36,9 +36,7 @@ export const ClaimsCollector = ({ control, errors, collectedBy, isS117Client }) 
         <Controller
           name="claimReason"
           control={control}
-          render={({ field }) => (
-            <Select options={collectingReasonOptions} {...field} />
-          )}
+          render={({ field }) => <Select options={collectingReasonOptions} {...field} />}
         />
         <HorizontalSeparator height="10px" />
         <Controller
