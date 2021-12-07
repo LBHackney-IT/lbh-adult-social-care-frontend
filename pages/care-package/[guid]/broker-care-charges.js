@@ -109,7 +109,7 @@ const CareCharge = () => {
   }, [calculatedCost, careChargeCost]);
 
   useEffect(() => {
-    getPreviousCareCharge();
+    if (careChargeId) getPreviousCareCharge();
   }, [
     careChargeId,
     startDate,
