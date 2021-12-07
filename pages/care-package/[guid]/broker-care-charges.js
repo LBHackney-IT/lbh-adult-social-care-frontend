@@ -85,7 +85,7 @@ const CareCharge = () => {
 
   useEffect(() => {
     if (calculatedCost && careChargeData && !careChargeData.cost) setValue('cost', calculatedCost);
-  }, [calculatedCost, careChargeData]);
+  }, [calculatedCost, careChargeLoading]);
 
   useEffect(() => {
     if (careChargeData) {
