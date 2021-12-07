@@ -66,8 +66,7 @@ export const formatNumber = (x, options = { isAbsolute: false }) => {
   return 0;
 }
 
-export const getNumberWithCommas = (x) =>
-  x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export const getNumberWithCommas = (x) => x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 export const removeEmpty = (obj) => {
   Object.keys(obj).forEach(k =>

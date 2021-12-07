@@ -16,6 +16,7 @@ import Loading from '../../../Loading';
 import ActionCarePackageModal from '../../BrokerPortal/ActionCarePackageModal';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
 import PackageDetailsButtons from './PackageDetailsButtons';
+import { getNumberWithCommas } from '../../../../service';
 
 const initialNotes = {
   endNotes: '',
@@ -218,7 +219,7 @@ const ReviewPackageDetails = ({
                         Cost of placement
                         <span className="text-lbh-f01 font-weight-bold">
                           {currency.euro}
-                          {costOfPlacement}
+                          {getNumberWithCommas(costOfPlacement)}
                         </span>
                       </p>
                     )}
