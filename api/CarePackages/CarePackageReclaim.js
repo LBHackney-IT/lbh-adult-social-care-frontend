@@ -99,3 +99,12 @@ export const endCareChargeReclaim = ({ carePackageId, reclaimId, endDate }) => {
 
   return axios(options).then(handleResponse).catch(handleError);
 };
+
+export const createProvisionalCareCharge = (carePackageId, careChargeReclaimCreationRequest) => {
+  const options = {
+    url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/provisional`,
+    method: 'POST',
+    data: careChargeReclaimCreationRequest,
+  };
+  return axios(options).then(handleResponse).catch(handleError);
+};
