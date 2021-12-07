@@ -96,15 +96,24 @@ custom:
         - eu-west-2
         - amazonaws.com
   aliases:
+    development: social-care-care-packages-development.hackney.gov.uk
     staging: social-care-care-packages-staging.hackney.gov.uk
     production: social-care-care-packages.hackney.gov.uk
   certificate-arn:
+    development: arn:aws:acm:us-east-1:212568553257:certificate/3aa8a315-dbb2-43a4-951a-aa4c6dad5092
     staging: arn:aws:acm:us-east-1:290114655000:certificate/1b48a5e9-70b5-4a14-ad3d-1eef9584dc5d
     production: arn:aws:acm:us-east-1:267112830674:certificate/dae4d0be-8f3a-4512-ba9c-fb80366e77f7
   securityGroups:
+    development:
+      - Ref: LambdaSecurityGroup
     staging:
       - Ref: LambdaSecurityGroup
+    production:
+      - Ref: LambdaSecurityGroup
   subnets:
+    development:
+      - subnet-0dffd9d5ee819aa51
+      - subnet-0e2457e93dbb5e396
     staging:
       - subnet-0d4086ab96db46047
       - subnet-0f5eeab6b619d5e1a
@@ -112,24 +121,6 @@ custom:
       - subnet-0c39cd286eeaff2b2
       - subnet-04c42d0aafb3738ad
   vpcs:
+    development: vpc-079fe71e310760c18
     staging: vpc-03dcc1af2c848b965
     production: vpc-0a267cb1b8474f75b
-    # production:
-  # development:
-  #   securityGroupIds:
-  #     - sg-
-  #   subnetIds:
-  #     - subnet-0d4086ab96db46047
-  #     - subnet-0f5eeab6b619d5e1a
-  # staging:
-  #   securityGroupIds:
-  #     - sg-0630857460fcc6b3e
-  #   subnetIds:
-  #     - subnet-0d4086ab96db46047
-  #     - subnet-0f5eeab6b619d5e1a
-  # production:
-  #   securityGroupIds:
-  #     - sg-
-  #   subnetIds:
-  #     - subnet-01d3657f97a243261
-  #     - subnet-0b7b8fea07efabf34
