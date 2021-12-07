@@ -256,40 +256,16 @@ workflows:
   version: 2
   continuous-delivery:
     jobs:
-      - install-dependencies:
-          filters:
-            branches:
-              only:
-                - develop
-                - staging
-                - main
+      - install-dependencies
       - build:
           requires:
             - install-dependencies
-          filters:
-            branches:
-              only:
-                - develop
-                - staging
-                - main
       - chromatic-deployment:
           requires:
             - build
-          filters:
-            branches:
-              only:
-                - develop
-                - staging
-                - main
       - owasp-zap-baseline-scan:
           requires:
             - build
-          filters:
-            branches:
-              only:
-                - develop
-                - staging
-                - main
       - assume-role-development:
           context: mosaic-development-context
           filters:
