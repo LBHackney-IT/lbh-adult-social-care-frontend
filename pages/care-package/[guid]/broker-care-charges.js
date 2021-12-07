@@ -227,8 +227,7 @@ const CareCharge = () => {
         <HorizontalSeparator height={20} />
         <Loading isLoading={isLoading} />
         <WarningText>Provisional care charge (pre-assessement)</WarningText>
-        <HorizontalSeparator height="10px" />
-        <HorizontalSeparator height="20px" />
+        <HorizontalSeparator height="30px" />
         <S117Announcement visible={isS117Client} />
         <PreviousCareChargesAnnouncement
           visible={showPreviousAnnouncement}
