@@ -23,7 +23,6 @@ export const getServerSideProps = withSession(({ req }) => {
 });
 
 const initialFilters = {
-  payRunId: '',
   searchTerm: '',
   dateFrom: null,
   dateTo: null,
@@ -41,12 +40,11 @@ const Payruns = () => {
   const [isOpenedModal, setIsOpenedModal] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
-  const { payRunId, searchTerm, dateTo, dateFrom, payRunType, payRunStatus } = filters;
+  const { searchTerm, dateTo, dateFrom, payRunType, payRunStatus } = filters;
   const params = useMemo(
     () => ({
       dateTo,
       dateFrom,
-      payRunId,
       searchTerm,
       pageNumber,
       heldPageNumber,
@@ -105,7 +103,7 @@ const Payruns = () => {
         <Tabs tabs={tabs} callback={(index) => setTabView(tabs[index])}>
           <Tab>
             <Loading className="loading" isLoading={isLoading} />
-            <PayrunList searchTerm={payRunId} data={payrunData} />
+            <PayrunList searchTerm={searchTerm} data={payrunData} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
@@ -119,7 +117,7 @@ const Payruns = () => {
           </Tab>
           <Tab>
             <Loading className="loading" isLoading={isHeldLoading} />
-            <HeldPaymentsList data={heldData} searchTerm={payRunId} update={updateAllPayruns} />
+            <HeldPaymentsList data={heldData} searchTerm={searchTerm} update={updateAllPayruns} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
@@ -133,7 +131,7 @@ const Payruns = () => {
           </Tab>
           <Tab>
             <Loading className="loading" isLoading={isLoading} />
-            <PayrunList searchTerm={payRunId} data={payrunData} />
+            <PayrunList searchTerm={searchTerm} data={payrunData} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
@@ -147,7 +145,7 @@ const Payruns = () => {
           </Tab>
           <Tab>
             <Loading className="loading" isLoading={isLoading} />
-            <PayrunList searchTerm={payRunId} data={payrunData} />
+            <PayrunList searchTerm={searchTerm} data={payrunData} />
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
