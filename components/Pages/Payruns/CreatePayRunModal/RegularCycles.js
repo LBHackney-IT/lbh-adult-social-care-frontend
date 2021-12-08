@@ -37,7 +37,7 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
 
   const daysLastCycle = useMemo(() => {
     if (paidUpToDate) {
-      const formattedCycleDate = addDays(new Date(lastCycleDate), 1);
+      const formattedCycleDate = new Date(lastCycleDate);
       return differenceInDays(
         new Date(paidUpToDate.getFullYear(), paidUpToDate.getMonth(), paidUpToDate.getDate()),
         new Date(formattedCycleDate.getFullYear(), formattedCycleDate.getMonth(), formattedCycleDate.getDate()),
