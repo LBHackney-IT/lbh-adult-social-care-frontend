@@ -45,7 +45,7 @@ const PackageRequest = ({ packageRequest }) => {
           <Container>
             <Heading size="m">Care Plan</Heading>
             <ViewDocument
-              noFile={!(documentId && documentName)}
+              hasFile={documentId && documentName}
               downloadFileName={documentName}
               getDocumentRequest={() => getDocumentRequest(documentId)}
             />

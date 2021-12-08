@@ -28,7 +28,7 @@ const HistoryOverview = () => {
     {
       value: hasFile ? (
         <ViewDocument
-          noFile={!(hasFile)}
+          hasFile
           downloadFileName={documentName}
           getDocumentRequest={() => getDocumentRequest(documentId)}
         />

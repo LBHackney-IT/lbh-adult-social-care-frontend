@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
-import { getLoggedInUser, getPackageStatusBy, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { ReviewPackageDetails } from 'components';
 import {
   getBrokerPackageRoute,
@@ -114,6 +114,9 @@ const ReviewPackageDetailsPage = () => {
     },
   ];
 
+  const documentName = data?.fundedNursingCare?.assessmentFileName;
+  const documentId = data?.fundedNursingCare?.assessmentFileId;
+
   const packageInfoItems = [
     {
       headerTitle: data?.packageType,
@@ -160,7 +163,9 @@ const ReviewPackageDetailsPage = () => {
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
       fncDetails: {
         funcClaimCollector: fundedNursingCareClaimCollector[data?.fundedNursingCare?.claimCollector],
-        assessmentFileUrl: data?.fundedNursingCare?.assessmentFileUrl ? 'Yes' : 'No',
+        assessmentFileUrl: documentName && documentId ? 'Yes' : 'No',
+        documentName,
+        documentId
       },
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.fnc,

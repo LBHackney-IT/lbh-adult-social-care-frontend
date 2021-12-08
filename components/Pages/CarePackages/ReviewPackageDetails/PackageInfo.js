@@ -1,7 +1,9 @@
 import React, { memo, useState } from 'react';
 import { currency, dateStringFormats } from 'constants/strings';
 import { formatDate } from 'service';
+import { getDocumentRequest } from 'api';
 import { Container, InsetText, HorizontalSeparator, SingleAccordion } from '../../../HackneyDS';
+import ViewDocument from '../../../ViewDocument';
 
 const noContentText = {
   'Care Charges': 'care charges',
@@ -66,7 +68,11 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
                 </p>
                 <p className="mb-3">
                   <span className="font-weight-bold">FNC assessment: </span>
-                  <span className="link-button lbh-color-blue">View</span>
+                  <ViewDocument
+                    hasFile={fncDetails.documentName && fncDetails.documentId}
+                    getDocumentRequest={() => getDocumentRequest(fncDetails.documentId)}
+                    downloadFileName={fncDetails.documentName}
+                  />
                 </p>
               </>
             )}

@@ -5,6 +5,7 @@ import { updatePayrunAsPaid } from 'api/PayRuns';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { approvePayRun, deletePayRun, rejectPayRun, submitPayRun } from 'api/PayRun';
+import ViewDocument from '../../../ViewDocument';
 
 const containerProps = {
   display: 'flex',
@@ -79,24 +80,14 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
 
   const downloadFileComponent = useMemo(
     () => (
-      <Button
-        link
-        download={`${payRunId} Cedar File.xlsx`}
+      <ViewDocument
+        getDocumentRequest={() => getPayrunCedarFile(payRunId)}
+        downloadFileName={`${payRunId} Cedar File.xlsx`}
+        text={isFileDownloaded ? 'Download again' : 'Download'}
+        setIsLoading={setIsDownloading}
         isLoading={isDownloading}
-        style={isFileDownloaded && { background: 'none', boxShadow: 'none' }}
-        className={isFileDownloaded ? 'link-button blue' : ''}
-        onClick={async (event) => {
-          setIsDownloading(true);
-          event.preventDefault();
-          const blob = await getPayrunCedarFile(payRunId);
-          event.target.href = window.URL.createObjectURL(blob);
-          event.target.click();
-          setIsDownloading(false);
-          setIsFileDownloaded(true);
-        }}
-      >
-        {isFileDownloaded ? 'Download again' : 'Download'}
-      </Button>
+        hasFile
+      />
     ),
     [isFileDownloaded, payRunId]
   );

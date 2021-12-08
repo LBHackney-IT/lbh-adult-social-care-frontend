@@ -107,6 +107,9 @@ const PackageDetailsPage = () => {
     { id: 12, key: 'Total one off payment', value: data?.additionalOneOffCost, className: 'brokerage__summary-cost' },
   ];
 
+  const documentName = data?.fundedNursingCare?.assessmentFileName;
+  const documentId = data?.fundedNursingCare?.assessmentFileId;
+
   const packageInfoItems = [
     {
       headerTitle: data?.packageType,
@@ -153,7 +156,9 @@ const PackageDetailsPage = () => {
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
       fncDetails: {
         funcClaimCollector: fundedNursingCareClaimCollector[data?.fundedNursingCare?.claimCollector],
-        assessmentFileUrl: data?.fundedNursingCare?.assessmentFileUrl ? 'Yes' : 'No',
+        assessmentFileUrl: documentName && documentId ? 'Yes' : 'No',
+        documentName,
+        documentId
       },
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.fnc,

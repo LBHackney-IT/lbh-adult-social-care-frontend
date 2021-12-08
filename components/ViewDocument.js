@@ -5,7 +5,7 @@ import { formatDocumentInfo } from '../service';
 const ViewDocument = ({
   downloadFileName = '',
   getDocumentRequest,
-  noFile = false,
+  hasFile = false,
   isLoading,
   setIsLoading,
   text = 'View',
@@ -17,14 +17,21 @@ const ViewDocument = ({
 
   const setMainLoading = setIsLoading || setLocalLoading;
 
-  if (noFile) return <p>N/A</p>;
+  if (!hasFile) return <p>N/A</p>;
 
   return useMemo(() => (
     <Button
       link
       download={downloadFileName}
       isLoading={mainLoading}
-      style={{ background: 'none', boxShadow: 'none', display: 'flex', justifyContent: 'flex-start', padding: 0 }}
+      style={{
+        background: 'none',
+        boxShadow: 'none',
+        display: 'flex',
+        width: 'fit-content',
+        justifyContent: 'flex-start',
+        padding: 0
+      }}
       className={className}
       onClick={async (event) => {
         setMainLoading(true);
