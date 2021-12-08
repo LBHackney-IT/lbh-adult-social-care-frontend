@@ -113,18 +113,7 @@ const CareCharge = () => {
 
   useEffect(() => {
     if (careChargeId) getPreviousCareCharge();
-  }, [
-    careChargeId,
-    startDate,
-    endDate,
-    assessmentFileId,
-    assessmentFileName,
-    description,
-    claimReason,
-    claimCollector,
-    subType,
-    careChargeCost,
-  ]);
+  }, [careCharge]);
 
   useEffect(() => {
     if (careChargeId && !hasAssessmentBeenCarried) setIsPrevious(true);
