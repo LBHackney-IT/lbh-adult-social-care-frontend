@@ -5,6 +5,7 @@ import { APPROVALS_ROUTE, getHistoryRoute, getServiceUserPackagesRoute } from 'r
 import { addNotification } from 'reducers/notificationsReducer';
 import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage, stringIsNullOrEmpty } from 'api';
 import { useDispatch } from 'react-redux';
+import { getNumberWithCommas } from 'service';
 import { Container, Link } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
@@ -16,7 +17,6 @@ import Loading from '../../../Loading';
 import ActionCarePackageModal from '../../BrokerPortal/ActionCarePackageModal';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
 import PackageDetailsButtons from './PackageDetailsButtons';
-import { getNumberWithCommas } from '../../../../service';
 
 const initialNotes = {
   endNotes: '',
