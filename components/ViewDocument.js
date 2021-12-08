@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from './HackneyDS';
 import { formatDocumentInfo } from '../service';
 
@@ -19,9 +19,9 @@ const ViewDocument = ({
 
   if (!hasFile) return <p>N/A</p>;
 
-  return useMemo(() => (
+  return (
     <Button
-      link=''
+      link=""
       download={downloadFileName}
       isLoading={mainLoading}
       style={{
@@ -53,7 +53,7 @@ const ViewDocument = ({
     >
       {text}
     </Button>
-  ), []);
+  );
 };
 
 export default ViewDocument;
