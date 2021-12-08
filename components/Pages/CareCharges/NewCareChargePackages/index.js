@@ -49,6 +49,8 @@ const NewCareChargePackages = ({
             </Button>
           </Container>
           <HorizontalSeparator height="46px" />
+          <Heading size='m'>Search</Heading>
+          <HorizontalSeparator height={20} />
           <Container className="new-care-charge__selectors">
             <FormGroup label="Status">
               <Select options={userStatusOptions} onChangeValue={changeFilter('status')} value={filters.status} />
