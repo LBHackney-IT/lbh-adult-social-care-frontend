@@ -21,7 +21,7 @@ const ViewDocument = ({
 
   return useMemo(() => (
     <Button
-      link
+      link=''
       download={downloadFileName}
       isLoading={mainLoading}
       style={{
