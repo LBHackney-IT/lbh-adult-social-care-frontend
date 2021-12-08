@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { currency } from 'constants/strings';
 import { FormGroup, Input, Label, RadioGroup, Select, Textarea } from 'components/HackneyDS';
-import { careChargeAPIKeys, careChargeFormKeys, COLLECTING_REASON_OPTIONS } from 'constants/variables';
+import { careChargeAPIKeys, careChargeFormKeys, CLAIM_REASON_OPTIONS } from 'constants/variables';
 import { useLookups } from 'api';
 import { checkIfActionsVisible, useClaimCollectorOptions, useGetChargeStatus, useIsDisabledByStatus } from './helpers';
 import ActionButtons from './ActionButtons';
@@ -72,7 +72,7 @@ const ProvisionalCareCharge = ({ control, onCancel, onEnd, errors }) => {
             control={control}
             render={({ field }) => (
               <Select
-                options={COLLECTING_REASON_OPTIONS}
+                options={CLAIM_REASON_OPTIONS}
                 value={field.value}
                 disabled={isDisabled}
                 id="claim-reason"

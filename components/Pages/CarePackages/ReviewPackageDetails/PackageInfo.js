@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react';
 import { currency, dateStringFormats } from 'constants/strings';
 import { formatDate } from 'service';
-import { COLLECTING_REASON_OPTIONS } from 'constants/variables';
+import { CLAIM_REASON_OPTIONS } from 'constants/variables';
 import { Container, InsetText, HorizontalSeparator, SingleAccordion } from '../../../HackneyDS';
 
 const noContentText = {
@@ -37,7 +37,7 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
       </Container>
       {items?.map(({ startDate, endDate, claimReason, subTypeName, cost, title, address, serviceUserNeed, place, id, description }) => {
         const openedServiceUserId = openedServiceUserNeed.includes(id);
-        const collectingReasonLabel = claimReason && COLLECTING_REASON_OPTIONS.find((el) => (
+        const collectingReasonLabel = claimReason && CLAIM_REASON_OPTIONS.find((el) => (
           el.value === claimReason
         ))?.text;
         const openedDetailsId = openedDetails.includes(id);

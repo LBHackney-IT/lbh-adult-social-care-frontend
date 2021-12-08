@@ -1,7 +1,7 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import { Container, FormGroup, HorizontalSeparator, RadioGroup, Select, Textarea } from 'components';
-import { COLLECTING_REASON_OPTIONS } from 'constants/variables';
+import { CLAIM_REASON_OPTIONS } from 'constants/variables';
 
 export const ClaimsCollector = ({ control, errors, collectedBy, isS117Client }) => (
   <Container>
@@ -29,7 +29,7 @@ export const ClaimsCollector = ({ control, errors, collectedBy, isS117Client }) 
       <Controller
         name="claimReason"
         control={control}
-        render={({ field }) => <Select options={COLLECTING_REASON_OPTIONS} {...field} />}
+        render={({ field }) => <Select options={CLAIM_REASON_OPTIONS} {...field} />}
       />
       <HorizontalSeparator height="10px" />
       <Controller
