@@ -4,7 +4,7 @@ import { getPayrunCedarFile } from 'api';
 import { updatePayrunAsPaid } from 'api/PayRuns';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { approvePayRun, deletePayRun, rejectPayRun, submitPayRun } from 'api/PayRun';
+import { approvePayRun, deletePayRun, submitPayRun } from 'api/PayRun';
 
 const containerProps = {
   display: 'flex',
@@ -13,7 +13,7 @@ const containerProps = {
   alignItems: 'center',
 };
 
-export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, updateData, isLoading, hasInvoices }) => {
+export const InsightButtons = ({ openRejectModal, payRunId, status, isCedarFileDownloaded, updateData, isLoading, hasInvoices }) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
 
@@ -46,15 +46,9 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     }
   };
 
-  const handleReject = async (e) => {
+  const handleReject = (e) => {
     e.preventDefault();
-    try {
-      await rejectPayRun(payRunId);
-      pushNotification(`Payrun has been rejected`, 'success');
-      updateData();
-    } catch (error) {
-      pushNotification(error, 'error');
-    }
+    openRejectModal();
   };
 
   const handleArchive = async (e) => {

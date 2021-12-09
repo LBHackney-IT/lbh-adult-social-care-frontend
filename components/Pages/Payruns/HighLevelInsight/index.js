@@ -35,7 +35,7 @@ export const HighLevelInsight = ({
 
   const onRejectPayRun = async (notes) => {
     await rejectPayRun(payRunId, notes);
-    pushNotification(`Pay run status changed`, 'success');
+    pushNotification(`Payrun has been rejected`, 'success');
     updateData();
   };
 
@@ -82,6 +82,7 @@ export const HighLevelInsight = ({
           </Container>
           <InsightButtons
             payRunId={payRunId}
+            openRejectModal={() => setOpenedModal('Reject')}
             status={status}
             isCedarFileDownloaded={isCedarFileDownloaded}
             hasInvoices={hasInvoices}
