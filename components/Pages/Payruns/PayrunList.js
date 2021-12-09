@@ -26,18 +26,18 @@ export const PayrunList = ({ searchTerm, data }) => {
         <>
           <Container
             background="#FAFAFA"
-            padding="32px 16px"
+            padding="24px 16px"
             key={d.payRunId}
             cursor="pointer"
             onClick={() => gotToPayrun(d.payRunId)}
           >
-            <Container display="flex" justifyContent="space-between" alignItems="flex-end">
-              <Container minWidth="320px">
-                <Container display="flex" alignItems="center">
-                  <Heading size="s">Pay Run Number: </Heading>
-                  <VerticalSeparator width="10px" />
-                  {handleId(d.payRunNumber)}
-                </Container>
+            <Container display="flex" alignItems="center">
+              <Heading size="s">Pay Run Number: </Heading>
+              <VerticalSeparator width="10px" />
+              {handleId(d.payRunNumber)}
+            </Container>
+            <Container display="grid" gridTemplateColumns="2.2fr 1fr 1fr 1.2fr">
+              <Container>
                 <Container display="flex" alignItems="center">
                   <Heading size="s">Created: </Heading>
                   <VerticalSeparator width="10px" />
@@ -56,7 +56,6 @@ export const PayrunList = ({ searchTerm, data }) => {
                 <Heading size="s">Held</Heading>£{getNumberWithCommas(d.totalAmountHeld)}
               </Container>
               <Container
-                width="200px"
                 padding="10px 0"
                 background={getPayrunStatusBackgroundColor(d.payRunStatusName)}
                 color={getPayrunStatusColor(d.payRunStatusName)}
