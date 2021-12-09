@@ -15,7 +15,7 @@ import { getCarePackageReviewRoute, getPaymentHistoryRoute } from 'routes/RouteC
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { updateInvoiceStatus } from 'api/PayRuns';
-import ApproveDeclineModal from '../ApproveDeclineModal';
+import ApproveRejectModal from '../ApproveRejectModal';
 
 export const PayRunItem = ({
   searchTerm,
@@ -41,7 +41,7 @@ export const PayRunItem = ({
   const rejectInvoiceStatus = async (notes) => {
     try {
       await updateInvoiceStatus(payRunId, invoiceId, 4, notes);
-      pushNotification('Success', 'success');
+      pushNotification('Invoice has been rejected', 'success');
       await updateData();
       closeModal()
     } catch (e) {
@@ -72,7 +72,7 @@ export const PayRunItem = ({
           payRunId={payRunId}
           isActivePayRun={isActivePayRun}
           updateData={updateData}
-          openModal={(field) => setOpenedModal(field === '4' ? 'Decline' : 'Hold')}
+          openModal={(field) => setOpenedModal(field === '4' ? 'Reject' : 'Hold')}
           searchTerm={searchTerm}
           setInvoiceId={setInvoiceId}
           payRun={item}
@@ -134,7 +134,7 @@ export const PayRunItem = ({
           closeModal={closeModal}
         />
       )}
-      <ApproveDeclineModal
+      <ApproveRejectModal
         closeModal={closeModal}
         openedModal={openedModal !== 'Hold' && openedModal}
         payRunId={payRunId}

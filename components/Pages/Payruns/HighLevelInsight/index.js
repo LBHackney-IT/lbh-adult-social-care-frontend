@@ -4,7 +4,7 @@ import { getNumberWithCommas } from 'service';
 import { useDispatch } from 'react-redux';
 import { rejectPayRun } from 'api/PayRun';
 import { addNotification } from 'reducers/notificationsReducer';
-import ApproveDeclineModal from '../ApproveDeclineModal';
+import ApproveRejectModal from '../ApproveRejectModal';
 import { InsightButtons } from './InsightButtons';
 
 export const HighLevelInsight = ({
@@ -41,7 +41,7 @@ export const HighLevelInsight = ({
 
   return (
     <>
-      <ApproveDeclineModal
+      <ApproveRejectModal
         rejectRequest={onRejectPayRun}
         closeModal={closeModal}
         openedModal={openedModal}

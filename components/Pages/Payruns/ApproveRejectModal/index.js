@@ -19,13 +19,13 @@ import Loading from '../../../Loading';
 
 const errorText = {
   Approve: 'approval',
-  Decline: 'decline'
+  Reject: 'reject'
 };
 
-const ApproveDeclineModal = ({ openedModal, title = 'Pay Run', closeModal, rejectRequest, updateData, payRunId }) => {
+const ApproveRejectModal = ({ openedModal, title = 'Pay Run', closeModal, rejectRequest, updateData, payRunId }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const isDeclineModal = openedModal === 'Decline';
+  const isRejectModal = openedModal === 'Reject';
   const isApproveModal = openedModal === 'Approve';
 
   const schema = useMemo(() => (
@@ -110,8 +110,8 @@ const ApproveDeclineModal = ({ openedModal, title = 'Pay Run', closeModal, rejec
           <Container display="flex" alignItems="center">
             <Button
               type="submit"
-              secondary={isDeclineModal}
-              color={isDeclineModal && 'red'}
+              secondary={isRejectModal}
+              color={isRejectModal && 'red'}
             >
               {openedModal} {title}
             </Button>
@@ -132,4 +132,4 @@ const ApproveDeclineModal = ({ openedModal, title = 'Pay Run', closeModal, rejec
   );
 };
 
-export default ApproveDeclineModal;
+export default ApproveRejectModal;
