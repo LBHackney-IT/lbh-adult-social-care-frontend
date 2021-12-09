@@ -120,20 +120,20 @@ const CareCharge = () => {
   }, [careChargeId, hasAssessmentBeenCarried]);
 
   const getPreviousCareCharge = () => {
-    setValue('id', careChargeId);
-    setValue('startDate', startDate && new Date(startDate));
-    setValue('claimCollector', claimCollector);
-    if (subType) setValue('subType', subType);
-    if (careChargeCost) setValue('cost', careChargeCost);
-    if (claimReason) setValue('claimReason', claimReason);
-    if (description) setValue('description', description);
-    if (assessmentFileName) setValue('assessmentFileName', assessmentFileName);
-    if (assessmentFileId) setValue('assessmentFileId', assessmentFileId);
-    if (!endDate && startDate) setValue('isOngoing', true);
-    if (endDate) {
-      setValue('isOngoing', false);
-      setValue('endDate', endDate && new Date(endDate));
-    }
+    reset({
+      cost: careChargeCost,
+      id: careChargeId,
+      startDate: startDate && new Date(startDate),
+      endDate: endDate && new Date(startDate),
+      subType,
+      careChargeCost,
+      claimReason,
+      claimCollector,
+      description,
+      assessmentFileName,
+      assessmentFileId,
+      isOngoing: endDate ? false : startDate,
+    })
   };
 
   const useNewCareCharge = () => {
@@ -170,6 +170,10 @@ const CareCharge = () => {
 
     try {
       if (omittedData.id || isPrevious) {
+        if (!(assessmentFileId && assessmentFileName)) {
+          delete formattedData.assessmentFileId;
+          delete formattedData.assessmentFileName;
+        }
         await updateCareChargeBrokerage(carePackageId, omittedData.id, formattedData);
         pushNotification(`Funded Nursing Care updated successfully`, 'success');
       } else {
