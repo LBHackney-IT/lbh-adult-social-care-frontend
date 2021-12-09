@@ -3,7 +3,6 @@ import { SWRConfig } from 'swr';
 // eslint-disable-next-line import/no-absolute-path,import/no-unresolved
 import '/styles/globals.scss';
 import { Provider } from 'react-redux';
-
 import { fetcher } from 'api';
 import { CustomNotification, MainHeader } from 'components';
 import { useRouter } from 'next/router';
@@ -26,12 +25,14 @@ export default function App ({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
+    // breadcrumbs route
     if (router?.pathname && getPrevRouteInfo(router.pathname)?.route) {
       saveToStoragePrevRoute(router.pathname);
     }
   }, [router.pathname]);
 
   useEffect(() => {
+    // refresh token redirect route
     const { asPath: path } = router;
     if (path && !APP_SERVICE_ROUTES_MAP.some(item => path.includes(item))) {
       setPreviousPath(path);

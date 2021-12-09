@@ -5,23 +5,13 @@ import { useUser } from 'api';
 import { HackneyFooterInfo, Loading } from 'components';
 import { userLogin } from 'reducers/userReducer';
 import { changeHeader, resetHeader } from 'reducers/headerReducer';
-import { getPreviousPath, setPreviousPath } from 'routes/RouteConstants';
-import { getLoggedInUser } from '../service';
-import withSession from '../lib/session';
+import { getPreviousPath, setPreviousPath, useServerSideProps } from 'routes/RouteConstants';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (user) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
+export const getServerSideProps = useServerSideProps({
+  redirect: { destination: '/', permanent: false },
+  isLogin: true
 });
 
 const Login = () => {

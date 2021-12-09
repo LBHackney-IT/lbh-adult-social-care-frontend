@@ -42,18 +42,22 @@ export const APP_SERVICE_ROUTES = {
   login: '/login',
 };
 
-export const useServerSideProps = (redirect = {}) => withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
+export const useServerSideProps = ({
+  redirect = {},
+  isLogin = false
+} = { redirect: {}, isLogin: false }) =>
+  withSession(({ req }) => {
+    const user = getLoggedInUser({ req });
 
-  if (!user) return {
-    redirect: {
-      destination: APP_SERVICE_ROUTES.login,
-      ...redirect,
-    }
-  };
+    if (isLogin ? user : !user) return {
+      redirect: {
+        destination: APP_SERVICE_ROUTES.login,
+        ...redirect,
+      }
+    };
 
-  return { props: {} };
-});
+    return { props: {} };
+  });
 
 const carePackageRoutes = [
   { route: BROKER_REFERRAL_ROUTE, name: 'Broker Referral' },

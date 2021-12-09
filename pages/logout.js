@@ -5,7 +5,7 @@ import React, { memo, useEffect } from 'react';
 import { useServerSideProps } from 'routes/RouteConstants';
 
 export const getServerSideProps = useServerSideProps({
-  permanent: false,
+  redirect: { permanent: false }
 });
 
 const Logout = () => {
