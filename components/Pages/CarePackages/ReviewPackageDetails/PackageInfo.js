@@ -2,7 +2,7 @@ import React, { memo, useState } from 'react';
 import { currency, dateStringFormats } from 'constants/strings';
 import { formatDate } from 'service';
 import { getDocumentRequest } from 'api';
-import { Container, InsetText, HorizontalSeparator, SingleAccordion } from '../../../HackneyDS';
+import { Container, InsetText, HorizontalSeparator, SingleAccordion, VerticalSeparator } from '../../../HackneyDS';
 import ViewDocument from '../../../ViewDocument';
 
 const noContentText = {
@@ -66,8 +66,9 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
                   <span className="font-weight-bold">Collected by: </span>
                   {fncDetails.funcClaimCollector}
                 </p>
-                <p className="mb-3">
+                <p className="mb-3 is-flex">
                   <span className="font-weight-bold">FNC assessment: </span>
+                  <VerticalSeparator width={8} />
                   <ViewDocument
                     hasFile={fncDetails.documentName && fncDetails.documentId}
                     getDocumentRequest={() => getDocumentRequest(fncDetails.documentId)}
