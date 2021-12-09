@@ -3,11 +3,12 @@ import { formatDate, getTagColorFromStatus } from 'service';
 import { userTagColors } from 'constants/variables';
 import { Container, Table, Tag } from '../../../HackneyDS'
 import TitleSubtitle from './TitleSubtitle';
+import { getHighlightedSearchQuery } from '../../../../service/getHighlightedSearchQuery';
 
-const rowHaveHeader = ({ serviceUser, status, isS117Client, address, dateOfBirth }) => (
+const rowHaveHeader = ({ serviceUser, status, searchTerm, isS117Client, address, dateOfBirth }) => (
   <Container className='new-care-charge__card'>
     <Container className="new-care-charge__card-title" display="flex">
-      <p>{serviceUser}</p>
+      <p>{searchTerm ? getHighlightedSearchQuery(serviceUser, searchTerm) : serviceUser}</p>
       <Tag outline color={getTagColorFromStatus(status, userTagColors)}>
         {status}
       </Tag>
@@ -26,7 +27,7 @@ const columnsRow = [
   { accessor: 'modifiedBy', title: 'by' },
 ];
 
-export const CareChargesTable = ({ onRowClick, data }) => {
+export const CareChargesTable = ({ onRowClick, data, searchTerm = '' }) => {
   if(!data) return null;
 
   const columns = useMemo(() => columnsRow.map(({
@@ -48,7 +49,7 @@ export const CareChargesTable = ({ onRowClick, data }) => {
   return (
     <div className="care-charges__table">
       <Table
-        rowsHaveHeader={rowHaveHeader}
+        rowsHaveHeader={(props) => rowHaveHeader({ ...props, searchTerm })}
         onRowClick={onRowClick}
         hasHeader={false}
         columns={columns}

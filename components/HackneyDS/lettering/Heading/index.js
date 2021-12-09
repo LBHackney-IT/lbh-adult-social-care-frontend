@@ -4,4 +4,5 @@ export const Heading = ({
   children,
   size = 'l',
   color,
-}) => <h1 style={{ color }} className={`govuk-heading-${size}`}>{children}</h1>;
+  lineHeight,
+}) => <h1 style={{ color, lineHeight }} className={`govuk-heading-${size}`}>{children}</h1>;
