@@ -32,11 +32,6 @@ const settingsTypes = [
   { field: 'isS117Client', text: 'S117' },
 ];
 
-const fundedNursingCareClaimCollector = {
-  2: 'Hackney Council (gross/net)',
-  1: 'Supplier (gross/net)',
-};
-
 const ApprovalPackageDetail = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
@@ -138,10 +133,6 @@ const ApprovalPackageDetail = () => {
       checkHide: true,
       items: data?.fundedNursingCare ? [data?.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
-      fncDetails: {
-        fncClaimCollector: fundedNursingCareClaimCollector[data?.fundedNursingCare?.claimCollector],
-        assessmentFileUrl: data?.fundedNursingCare?.assessmentFileName ? 'Yes' : 'No',
-      },
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.fnc,
         supplier: data?.supplierReclaims?.fnc,

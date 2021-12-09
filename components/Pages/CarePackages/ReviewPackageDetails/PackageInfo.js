@@ -1,8 +1,9 @@
 import React, { memo, useState } from 'react';
-import { currency, dateStringFormats } from 'constants/strings';
-import { formatDate } from 'service';
 import { CLAIM_REASON_OPTIONS } from 'constants/variables';
-import { Container, InsetText, HorizontalSeparator, SingleAccordion } from '../../../HackneyDS';
+import { Container, HorizontalSeparator, InsetText, SingleAccordion } from '../../../HackneyDS';
+import { CareChargesSummary } from './CareChargesSummary';
+import { FNCSummary } from './FNCSummary';
+import { DateCostInfo } from './DateCostInfo';
 
 const noContentText = {
   'Care Charges': 'care charges',
@@ -10,12 +11,7 @@ const noContentText = {
   'Weekly Additional Need': 'weekly additional needs',
 };
 
-const careChargesClaimCollector = {
-  2: 'Hackney Council (gross)',
-  1: 'Supplier (net)',
-};
-
-const PackageInfo = ({ fncDetails, headerTitle, items, containerId }) => {
+const PackageInfo = ({ headerTitle, items, containerId }) => {
   const [openedServiceUserNeed, setOpenedServiceUserNeed] = useState([]);
   const [openedDetails, setOpenedDetails] = useState([]);
 
@@ -45,76 +41,35 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId }) => {
         endDate,
         claimReason,
         claimCollector,
-        subTypeName, cost,
+        subTypeName,
+        cost,
         title,
         address,
         serviceUserNeed,
         place,
         id,
-        description
+        description,
+        assessmentFileName,
       }) => {
         const openedServiceUserId = openedServiceUserNeed.includes(id);
         const collectingReasonLabel = claimReason && CLAIM_REASON_OPTIONS.find((el) => (
           el.value === claimReason
         ))?.text;
         const openedDetailsId = openedDetails.includes(id);
-        const minusSign = cost < 0 ? '-' : '';
-        const careChargeClaimCollector = careChargesClaimCollector[claimCollector];
         return (
           <Container className="review-package-details__items" key={id}>
-            <Container className="review-package-details__items-date" display="flex" justifyContent="space-between">
-              <p>
-                {formatDate(startDate, dateStringFormats.dayMonthYearSlash)}
-                {endDate && ` - `}
-                {endDate && formatDate(endDate, dateStringFormats.dayMonthYearSlash)}
-              </p>
-              {cost && (
-                <p className="text-lbh-f01">
-                  {minusSign}
-                  {currency.euro}
-                  {cost ? Math.abs(cost).toFixed(2) : 0}
-                </p>
-              )}
-            </Container>
-            {fncDetails && (
-              <>
-                <p>
-                  <span className="font-weight-bold">FNC assessment been carried out: </span>
-                  {fncDetails.assessmentFileUrl}
-                </p>
-                <HorizontalSeparator height={8} />
-                <p>
-                  <span className="font-weight-bold">Collected by: </span>
-                  {fncDetails.fncClaimCollector}
-                </p>
-                <HorizontalSeparator height={8} />
-                <p className="mb-3">
-                  <span className="font-weight-bold">FNC assessment: </span>
-                  <span className="link-button">View</span>
-                </p>
-              </>
-            )}
-            {careChargeClaimCollector && (
-              <>
-                <p>
-                  <span className="font-weight-bold">{subTypeName} (pre-assessement)</span>
-                </p>
-                <HorizontalSeparator height={8} />
-                {careChargeClaimCollector && (
-                  <p>
-                    <span className="font-weight-bold">Collected by: </span>
-                    {careChargeClaimCollector}
-                  </p>
-                )}
-                <HorizontalSeparator height={8} />
-                {collectingReasonLabel && (
-                  <>
-                    <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
-                    <p className="mb-3">{collectingReasonLabel}</p>
-                  </>
-                )}
-              </>
-            )}
+            <DateCostInfo cost={cost} endDate={endDate} startDate={startDate} />
+            <FNCSummary
+              containerId={containerId}
+              claimCollector={claimCollector}
+              assessmentFileName={assessmentFileName}
+            />
+            <CareChargesSummary
+              containerId={containerId}
+              claimCollector={claimCollector}
+              collectingReasonLabel={collectingReasonLabel}
+              subTypeName={subTypeName}
+            />
             {description && (
               <SingleAccordion title="Notes" onClick={() => changeOpenedDetails(id)} isOpened={openedDetailsId}>
                 <p>{description}</p>
