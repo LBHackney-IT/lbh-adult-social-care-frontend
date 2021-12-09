@@ -81,15 +81,21 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
   const downloadFileComponent = useMemo(
     () => (
       <ViewDocument
-        getDocumentRequest={() => getPayrunCedarFile(payRunId)}
+        className='link-button green'
+        getDocumentRequest={async () => {
+          const file = await getPayrunCedarFile(payRunId);
+          update();
+          return file;
+        }}
         downloadFileName={`${payRunId} Cedar File.xlsx`}
         text={isFileDownloaded ? 'Download again' : 'Download'}
         setIsLoading={setIsDownloading}
         isLoading={isDownloading}
+        setIsFileDownloaded={setIsFileDownloaded}
         hasFile
       />
     ),
-    [isFileDownloaded, payRunId]
+    [isFileDownloaded, payRunId, isLoading]
   );
 
   const hasDownloadFile = status > 4 && hasInvoices;

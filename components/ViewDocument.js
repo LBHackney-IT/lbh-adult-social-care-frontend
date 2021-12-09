@@ -5,6 +5,7 @@ import { formatDocumentInfo } from '../service';
 const ViewDocument = ({
   downloadFileName = '',
   getDocumentRequest,
+  setIsFileDownloaded,
   hasFile = false,
   isLoading,
   setIsLoading,
@@ -21,7 +22,6 @@ const ViewDocument = ({
 
   return (
     <Button
-      link=""
       download={downloadFileName}
       isLoading={mainLoading}
       style={{
@@ -43,12 +43,13 @@ const ViewDocument = ({
         if (typeof file === 'string') {
           file = await formatDocumentInfo({ fileName: downloadFileName, href: file });
         }
+        setMainLoading(false);
         const newLink = window.document.createElement('a');
         newLink.href = window.URL.createObjectURL(file);
         newLink.target = '_blank';
         newLink.click();
         newLink.remove();
-        setMainLoading(false);
+        setIsFileDownloaded?.(true);
       }}
     >
       {text}
