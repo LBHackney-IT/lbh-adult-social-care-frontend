@@ -10,7 +10,7 @@ import { getPreviousPath, setPreviousPath, useServerSideProps } from 'routes/Rou
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
 export const getServerSideProps = useServerSideProps({
-  redirect: { destination: '/', permanent: false },
+  redirect: { destination: getPreviousPath() || '/', permanent: false },
   isLogin: true
 });
 
