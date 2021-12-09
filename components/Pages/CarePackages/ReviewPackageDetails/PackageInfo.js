@@ -10,7 +10,12 @@ const noContentText = {
   'Weekly Additional Need': 'weekly additional needs',
 };
 
-const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeClaimCollector }) => {
+const careChargesClaimCollector = {
+  2: 'Hackney Council (gross)',
+  1: 'Supplier (net)',
+};
+
+const PackageInfo = ({ fncDetails, headerTitle, items, containerId }) => {
   const [openedServiceUserNeed, setOpenedServiceUserNeed] = useState([]);
   const [openedDetails, setOpenedDetails] = useState([]);
 
@@ -35,13 +40,26 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
       <Container className="review-package-details__title" display="flex" alignItems="center">
         <h3 id={containerId}>{headerTitle || 'Care Package'}</h3>
       </Container>
-      {items?.map(({ startDate, endDate, claimReason, subTypeName, cost, title, address, serviceUserNeed, place, id, description }) => {
+      {items?.map(({
+        startDate,
+        endDate,
+        claimReason,
+        claimCollector,
+        subTypeName, cost,
+        title,
+        address,
+        serviceUserNeed,
+        place,
+        id,
+        description
+      }) => {
         const openedServiceUserId = openedServiceUserNeed.includes(id);
         const collectingReasonLabel = claimReason && CLAIM_REASON_OPTIONS.find((el) => (
           el.value === claimReason
         ))?.text;
         const openedDetailsId = openedDetails.includes(id);
         const minusSign = cost < 0 ? '-' : '';
+        const careChargeClaimCollector = careChargesClaimCollector[claimCollector];
         return (
           <Container className="review-package-details__items" key={id}>
             <Container className="review-package-details__items-date" display="flex" justifyContent="space-between">
@@ -79,7 +97,7 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
             {careChargeClaimCollector && (
               <>
                 <p>
-                  <span className="font-weight-bold">{subTypeName} care charge (pre-assessement)</span>
+                  <span className="font-weight-bold">{subTypeName} (pre-assessement)</span>
                 </p>
                 <HorizontalSeparator height={8} />
                 {careChargeClaimCollector && (

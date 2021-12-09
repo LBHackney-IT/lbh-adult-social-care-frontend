@@ -165,7 +165,7 @@ const PackageDetailsPage = () => {
       id: 'care-charges',
       items: data?.careCharges,
       goToPackage: editableStatus && !isApprovedStatus && pushRoute(getCareChargesRoute(carePackageId)),
-      careChargeClaimCollector: careChargesClaimCollector[data?.careCharges?.claimCollector],
+      careChargeClaimCollector: careChargesClaimCollector[data?.careCharges?.[0]?.claimCollector],
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.careCharge,
         supplier: data?.supplierReclaims?.careCharge,

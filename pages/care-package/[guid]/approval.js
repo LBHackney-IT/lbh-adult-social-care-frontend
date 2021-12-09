@@ -37,11 +37,6 @@ const fundedNursingCareClaimCollector = {
   1: 'Supplier (gross/net)',
 };
 
-const careChargesClaimCollector = {
-  2: 'Hackney Council (gross)',
-  1: 'Supplier (net)',
-};
-
 const ApprovalPackageDetail = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
@@ -157,7 +152,6 @@ const ApprovalPackageDetail = () => {
       headerTitle: 'Care Charges',
       id: 'care-charges',
       items: data?.careCharges,
-      careChargeClaimCollector: careChargesClaimCollector[data?.careCharges?.claimCollector],
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.careCharge,
         supplier: data?.supplierReclaims?.careCharge,

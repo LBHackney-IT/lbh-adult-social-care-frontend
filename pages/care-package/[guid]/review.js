@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
-import { getLoggedInUser, getPackageStatusBy, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { ReviewPackageDetails } from 'components';
 import {
   getBrokerPackageRoute,
@@ -35,11 +35,6 @@ const settingsTypes = [
 const fundedNursingCareClaimCollector = {
   2: 'Hackney Council (gross/net)',
   1: 'Supplier (gross/net)',
-};
-
-const careChargesClaimCollector = {
-  2: 'Hackney Council (gross)',
-  1: 'Supplier (net)',
 };
 
 const ReviewPackageDetailsPage = () => {
@@ -172,7 +167,6 @@ const ReviewPackageDetailsPage = () => {
       id: 'care-charges',
       goToPackage: () => router.push(getCareChargesRoute(carePackageId)),
       items: data?.careCharges,
-      careChargeClaimCollector: careChargesClaimCollector[data?.careCharges?.claimCollector],
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.careCharge,
         supplier: data?.supplierReclaims?.careCharge,

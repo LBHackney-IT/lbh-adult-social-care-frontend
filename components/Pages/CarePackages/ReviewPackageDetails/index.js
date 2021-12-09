@@ -204,7 +204,6 @@ const ReviewPackageDetails = ({
                 totalCostHeader,
                 costOfPlacement,
                 totalCostInfo,
-                careChargeClaimCollector,
                 fncDetails,
               }) => {
                 if (checkHide && isHide()) return null;
@@ -214,7 +213,6 @@ const ReviewPackageDetails = ({
                     <PackageInfo
                       goToPackage={goToPackage}
                       fncDetails={fncDetails}
-                      careChargeClaimCollector={careChargeClaimCollector}
                       containerId={itemId}
                       headerTitle={headerTitle}
                       items={items}
