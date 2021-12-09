@@ -22,6 +22,8 @@ export const CarePackageStatus = ({ status, packageData }) => {
         return 'Not Approved';
       case 'Pending':
         return 'Pending';
+      case 'Active':
+        return 'Active';
       default:
         return 'Waiting for Approval';
     }
