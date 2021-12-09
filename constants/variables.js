@@ -39,6 +39,7 @@ export const tagColors = {
   pending: 'blue',
   approved: 'gray',
   active: 'green',
+  rejected: 'red',
 };
 
 export const COLORS = {

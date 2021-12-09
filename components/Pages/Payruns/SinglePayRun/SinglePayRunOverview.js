@@ -42,6 +42,9 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
   const color = useCallback(getStatusSelectTextColor(payRun.invoiceStatus), [payRun.invoiceStatus]);
 
   const handleServiceUserName = () => getHighlightedSearchQuery(payRun.serviceUserName, searchTerm);
+  const handleInvoiceNumber = () => getHighlightedSearchQuery(payRun.invoiceNumber, searchTerm);
+  const handleSupplierId = () => getHighlightedSearchQuery(Number(payRun.supplierId).toString(), searchTerm);
+  const handleSupplierName = () => getHighlightedSearchQuery(payRun.supplierName, searchTerm);
 
   const handleClick = async () => {
     try {
@@ -59,19 +62,19 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
           {handleServiceUserName()}
         </Heading>
         <VerticalSeparator width="24px" />
-        <Heading size="s">Invoice ID:</Heading>
+        <Heading size="s">Invoice Number:</Heading>
         <VerticalSeparator width="5px" />
-        {payRun.invoiceId}
+        {handleInvoiceNumber()}
       </Container>
       <HorizontalSeparator height="15px" />
-      <Container display="flex" alignItems="flex-end" justifyContent="space-between">
+      <Container display="grid" gridTemplateColumns="2fr 1.5fr 1fr 0.5fr" columnGap="10px" columnCount="3">
         <Container>
           <Container display="flex" alignItems="center">
             <Heading size="s">Supplier:</Heading>
             <VerticalSeparator width="5px" />
-            {payRun.supplierId}
+            {handleSupplierId()}
           </Container>
-          {payRun.supplierName}
+          {handleSupplierName()}
         </Container>
         <Container>
           <Heading size="s">Package Type:</Heading>
@@ -84,18 +87,22 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
             : `-£${getNumberWithCommas(Math.abs(payRun.netTotal))}`}
         </Container>
         {!isHeld ? (
-          <Select
-            style={{ background, color, border: 'none' }}
-            options={statusOptions}
-            disabled={!update}
-            IconComponent={!update ? null : undefined}
-            onChangeValue={handleChange}
-            value={payRun.invoiceStatus}
-          />
+          <Container>
+            <Select
+              style={{ background, color, border: 'none' }}
+              options={statusOptions}
+              disabled={!update}
+              IconComponent={!update ? null : undefined}
+              onChangeValue={handleChange}
+              value={payRun.invoiceStatus}
+            />
+          </Container>
         ) : (
-          <Button onClick={handleClick} secondary color="yellow">
-            Release
-          </Button>
+          <Container>
+            <Button onClick={handleClick} secondary color="yellow">
+              Release
+            </Button>
+          </Container>
         )}
       </Container>
     </>

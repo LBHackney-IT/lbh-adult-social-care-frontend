@@ -11,7 +11,7 @@ import {
 } from 'components';
 import { Controller, useForm } from 'react-hook-form';
 import { formValidationSchema } from 'service/formValidationSchema';
-import { differenceInDays } from 'date-fns';
+import { addDays, differenceInDays } from 'date-fns';
 import { useLatestPayRunToDate, useReleasedInvoiceNumber } from 'api';
 import { Hint } from '../../../HackneyDS';
 
@@ -88,7 +88,7 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
                 date={field.value ? new Date(field.value) : null}
                 setDate={field.onChange}
                 {...field}
-                minDate={lastCycleDate && new Date(lastCycleDate)}
+                minDate={lastCycleDate && addDays(new Date(lastCycleDate), 1)}
                 floatingCalendar
                 calendarStylePosition={{ top: -100, left: 32 }}
                 hasClearButton
