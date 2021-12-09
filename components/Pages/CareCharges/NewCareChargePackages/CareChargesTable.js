@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { formatDate, getTagColorFromStatus } from 'service';
 import { userTagColors } from 'constants/variables';
+import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
 import { Container, Table, Tag } from '../../../HackneyDS'
 import TitleSubtitle from './TitleSubtitle';
-import { getHighlightedSearchQuery } from '../../../../service/getHighlightedSearchQuery';
 
 const rowHaveHeader = ({ serviceUser, status, searchTerm, isS117Client, address, dateOfBirth }) => (
   <Container className='new-care-charge__card'>
