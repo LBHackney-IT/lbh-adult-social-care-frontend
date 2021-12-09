@@ -107,6 +107,7 @@ const SinglePayRun = () => {
           <HighLevelInsight
             update={updateData}
             payRunId={payRunId}
+            payRunNumber={payRun?.payRunNumber}
             holdCount={insightData?.holdsCount}
             holdValue={insightData?.totalHeldAmount}
             difference={insightData?.totalDifferenceFromLastCycle}
