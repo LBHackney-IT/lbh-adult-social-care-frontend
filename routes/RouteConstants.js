@@ -42,10 +42,9 @@ export const APP_SERVICE_ROUTES = {
   login: '/login',
 };
 
-export const useServerSideProps = ({
-  redirect = {},
-  isLogin = false
-} = { redirect: {}, isLogin: false }) =>
+const defaultProps = { redirect: {}, isLogin: false };
+
+export const useServerSideProps = ({ redirect = {}, isLogin = false } = defaultProps) =>
   withSession(({ req }) => {
     const user = getLoggedInUser({ req });
 
