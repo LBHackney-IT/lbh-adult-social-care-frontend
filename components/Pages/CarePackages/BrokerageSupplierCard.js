@@ -8,7 +8,7 @@ const BrokerageSupplierCard = ({ cardInfo, setSelectedItem, actionsComponent, cl
     </p>
     <p className="brokerage__supplier-card-address">{cardInfo?.address}</p>
     {actionsComponent || (
-      <p role="presentation" onClick={() => setSelectedItem(cardInfo)} className="link-button hackney-btn-green">
+      <p role="presentation" onClick={() => setSelectedItem(cardInfo)} className="link-button green">
         Select
       </p>
     )}

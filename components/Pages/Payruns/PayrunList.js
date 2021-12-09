@@ -34,9 +34,9 @@ export const PayrunList = ({ searchTerm, data }) => {
             <Container display="flex" justifyContent="space-between" alignItems="flex-end">
               <Container minWidth="320px">
                 <Container display="flex" alignItems="center">
-                  <Heading size="s">Payrun ID: </Heading>
+                  <Heading size="s">Pay Run Number: </Heading>
                   <VerticalSeparator width="10px" />
-                  {handleId(d.payRunId)}
+                  {handleId(d.payRunNumber)}
                 </Container>
                 <Container display="flex" alignItems="center">
                   <Heading size="s">Created: </Heading>

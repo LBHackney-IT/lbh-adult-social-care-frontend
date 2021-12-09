@@ -55,10 +55,7 @@ export const usePackageActiveFncPrice = (packageId) =>
   useGetData(getCarePackageUrl(packageId, '/reclaims/fnc/active-price'));
 
 export const usePackageCalculatedCost = (packageId, serviceUserId) =>
-  useGetData(getCarePackageUrl(packageId, `/reclaims/care-charges/${serviceUserId}/default`),
-    'Cannot get cost',
-    null
-  );
+  useGetData(getCarePackageUrl(packageId, `/reclaims/care-charges/${serviceUserId}/default`), 'Cannot get cost', null);
 
 // helper for usePackageCareCharge
 const useGetActualReclaims = (reclaims) => {
@@ -72,6 +69,9 @@ const useGetActualReclaims = (reclaims) => {
     return reclaims.filter((reclaim) => [activeStatusId, pendingStatusId].includes(reclaim.status));
   }, [reclaims, activeStatusId, pendingStatusId]);
 };
+
+export const useProvisionalCareCharges = (packageId) =>
+  useGetData(getCarePackageUrl(packageId, '/reclaims/care-charges/provisional'));
 
 export const usePackageCareCharge = (packageId, subType) => {
   const response = useSWR(

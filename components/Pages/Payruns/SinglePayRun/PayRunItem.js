@@ -13,7 +13,16 @@ import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/Sin
 import { useRouter } from 'next/router';
 import { getCarePackageReviewRoute, getPaymentHistoryRoute } from 'routes/RouteConstants';
 
-export const PayRunItem = ({ searchTerm, payRunId, item, update,updateData, totalPayTitle, padding = '24px 16px', isHeld }) => {
+export const PayRunItem = ({
+  searchTerm,
+  payRunId,
+  item,
+  update,
+  updateData,
+  totalPayTitle,
+  padding = '24px 16px',
+  isHeld,
+}) => {
   if (!item) return null;
 
   const [invoiceId, setInvoiceId] = useState('');
@@ -35,6 +44,7 @@ export const PayRunItem = ({ searchTerm, payRunId, item, update,updateData, tota
         <SinglePayRunOverview
           payRunId={payRunId}
           update={update}
+          updateData={updateData}
           searchTerm={searchTerm}
           setInvoiceId={setInvoiceId}
           payRun={item}

@@ -71,7 +71,7 @@ const Login = () => {
             <p>Please sign in with your Hackney email account.</p>
             <p>Please contact your manager if you have issues signing in.</p>
             <a
-              className="button button-base is-relative"
+              className="lbh-button govuk-button is-relative"
               href={`${hackneyAuthLink}${origin}/login`}
               onClick={() => setPreviousPath('')}
               rel="noopener noreferrer"
