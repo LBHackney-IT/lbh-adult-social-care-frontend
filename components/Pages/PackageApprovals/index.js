@@ -115,7 +115,7 @@ export const PackageApprovals = ({
             <Breadcrumbs values={breadcrumbs} />
           </Container>
           <HorizontalSeparator height={30} />
-          <Container padding='0 60px'>
+          <Container height={50} padding='0 60px'>
             <Heading size="xl">{title}</Heading>
           </Container>
           <HorizontalSeparator height={16} />
