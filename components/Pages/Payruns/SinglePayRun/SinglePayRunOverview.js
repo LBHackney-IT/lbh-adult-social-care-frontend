@@ -67,7 +67,7 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
         {handleInvoiceNumber()}
       </Container>
       <HorizontalSeparator height="15px" />
-      <Container display="flex" alignItems="flex-end" justifyContent="space-between">
+      <Container display="grid" gridTemplateColumns="2fr 1.5fr 1fr 0.5fr" columnGap="10px" columnCount="3">
         <Container>
           <Container display="flex" alignItems="center">
             <Heading size="s">Supplier:</Heading>
@@ -87,18 +87,22 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
             : `-£${getNumberWithCommas(Math.abs(payRun.netTotal))}`}
         </Container>
         {!isHeld ? (
-          <Select
-            style={{ background, color, border: 'none' }}
-            options={statusOptions}
-            disabled={!update}
-            IconComponent={!update ? null : undefined}
-            onChangeValue={handleChange}
-            value={payRun.invoiceStatus}
-          />
+          <Container>
+            <Select
+              style={{ background, color, border: 'none' }}
+              options={statusOptions}
+              disabled={!update}
+              IconComponent={!update ? null : undefined}
+              onChangeValue={handleChange}
+              value={payRun.invoiceStatus}
+            />
+          </Container>
         ) : (
-          <Button onClick={handleClick} secondary color="yellow">
-            Release
-          </Button>
+          <Container>
+            <Button onClick={handleClick} secondary color="yellow">
+              Release
+            </Button>
+          </Container>
         )}
       </Container>
     </>
