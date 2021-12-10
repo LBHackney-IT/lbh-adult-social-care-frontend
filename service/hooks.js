@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useDocument, useSingleCorePackageInfo } from '../api';
+import { useDocument, useSingleCorePackageInfo } from 'api';
+import { APP_SERVICE_ROUTES } from 'routes/RouteConstants';
 import { formatDocumentInfo } from './helpers';
-import { APP_SERVICE_ROUTES } from '../routes/RouteConstants';
 
 export const useRedirectIfPackageNotExist = () => {
   const router = useRouter();
