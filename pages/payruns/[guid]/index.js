@@ -109,6 +109,7 @@ const SinglePayRun = () => {
             payRunId={payRunId}
             payRunNumber={payRun?.payRunNumber}
             holdCount={insightData?.holdsCount}
+            paidBy={insightData?.paidBy}
             holdValue={insightData?.totalHeldAmount}
             difference={insightData?.totalDifferenceFromLastCycle}
             serviceUsers={insightData?.serviceUserCount}
