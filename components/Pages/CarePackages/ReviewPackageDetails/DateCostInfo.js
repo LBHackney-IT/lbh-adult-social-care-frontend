@@ -1,6 +1,6 @@
 import React from 'react';
-import { formatDate } from '../../../../service';
-import { currency, dateStringFormats } from '../../../../constants/strings';
+import { formatDate } from 'service';
+import { currency, dateStringFormats } from 'constants/strings';
 import { Container } from '../../../HackneyDS';
 
 export const DateCostInfo = ({ cost, startDate, endDate }) => (
