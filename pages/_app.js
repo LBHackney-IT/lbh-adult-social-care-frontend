@@ -32,7 +32,7 @@ export default function App ({ Component, pageProps }) {
   }, [router.pathname]);
 
   useEffect(() => {
-    // refresh token redirect route
+    // save redirect route
     const { asPath: path } = router;
     if (path && !APP_SERVICE_ROUTES_MAP.some(item => path.includes(item))) {
       setPreviousPath(path);
