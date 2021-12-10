@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { getPreviousPath, setPreviousPath } from 'routes/RouteConstants';
 import axios from 'axios';
 import { useUser } from 'api';
 import { HackneyFooterInfo, Loading } from 'components';
 import { userLogin } from 'reducers/userReducer';
-import { changeHeader, resetHeader } from 'reducers/headerReducer';
-import { getPreviousPath, setPreviousPath, useServerSideProps } from 'routes/RouteConstants';
+import { getLoggedInUser } from 'service';
+import withSession from 'lib/session';
+import { changeHeader, resetHeader } from '../reducers/headerReducer';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
-export const getServerSideProps = useServerSideProps({
-  redirect: { destination: getPreviousPath() || '/', permanent: false },
-  isLogin: true
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (user) {
+    return {
+      redirect: {
+        destination: getPreviousPath() || '/',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
 });
 
 const Login = () => {

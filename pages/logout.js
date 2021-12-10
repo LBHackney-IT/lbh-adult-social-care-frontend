@@ -2,10 +2,20 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import React, { memo, useEffect } from 'react';
-import { useServerSideProps } from 'routes/RouteConstants';
+import { getLoggedInUser } from 'service';
+import withSession from 'lib/session';
 
-export const getServerSideProps = useServerSideProps({
-  redirect: { permanent: false }
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
 });
 
 const Logout = () => {

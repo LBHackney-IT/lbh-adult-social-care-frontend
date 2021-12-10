@@ -1,6 +1,4 @@
 import { isServer } from '../api/Utils/FuncUtils';
-import withSession from '../lib/session';
-import { getLoggedInUser } from '../service/helpers';
 
 export const BROKER_PORTAL_ROUTE = '/broker-portal';
 
@@ -41,22 +39,6 @@ export const APP_SERVICE_ROUTES = {
   notFoundPage: '/404',
   login: '/login',
 };
-
-const defaultProps = { redirect: {}, isLogin: false };
-
-export const useServerSideProps = ({ redirect = {}, isLogin = false } = defaultProps) =>
-  withSession(({ req }) => {
-    const user = getLoggedInUser({ req });
-
-    if (isLogin ? user : !user) return {
-      redirect: {
-        destination: APP_SERVICE_ROUTES.login,
-        ...redirect,
-      }
-    };
-
-    return { props: {} };
-  });
 
 const carePackageRoutes = [
   { route: BROKER_REFERRAL_ROUTE, name: 'Broker Referral' },
