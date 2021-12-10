@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
-
 import { APP_SERVICE_ROUTES, APP_SERVICE_ROUTES_MAP } from 'routes/RouteConstants';
 
-export async function middleware (req) {
+export function middleware (req) {
   const { pathname } = req.nextUrl;
   const { hackneyToken } = req.cookies;
 
