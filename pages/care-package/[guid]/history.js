@@ -3,9 +3,7 @@ import { useRouter } from 'next/router';
 import { Container, DynamicBreadcrumbs, HistoryList, HistoryOverview, Loading, TitleSubtitleHeader } from 'components';
 import { usePackageHistory } from 'api';
 import { useRedirectIfPackageNotExist } from 'service';
-import { getCarePackageReviewRoute, useServerSideProps } from 'routes/RouteConstants';
-
-export const getServerSideProps = useServerSideProps();
+import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 
 const History = () => {
   const router = useRouter();

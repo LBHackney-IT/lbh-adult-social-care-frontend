@@ -20,7 +20,7 @@ import {
   usePackageDetails,
   usePackageFnc
 } from 'api';
-import { getBrokerPackageRoute, getCareChargesRoute, useServerSideProps } from 'routes/RouteConstants';
+import { getBrokerPackageRoute, getCareChargesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -31,8 +31,6 @@ import {
   NursingHasFNC,
   NursingSchedule,
 } from 'components/Pages/CarePackages/FundedNusringCare';
-
-export const getServerSideProps = useServerSideProps();
 
 const BrokerFNC = () => {
   const router = useRouter();

@@ -15,13 +15,11 @@ import {
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
-import { getBrokerPackageRoute, useServerSideProps, } from 'routes/RouteConstants';
+import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
 import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
 import { formValidationSchema } from 'service/formValidationSchema';
-
-export const getServerSideProps = useServerSideProps();
 
 const CorePackage = () => {
   const router = useRouter();

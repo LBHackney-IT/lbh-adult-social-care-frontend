@@ -19,7 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { BROKER_REFERRAL_ROUTE, useServerSideProps } from 'routes/RouteConstants';
+import { BROKER_REFERRAL_ROUTE } from 'routes/RouteConstants';
 import { getFormDataWithFile } from 'service/getFormData';
 import { assignPackageSchema } from 'service/formValidationSchema';
 
@@ -29,7 +29,6 @@ const breadcrumbs = [
   { text: 'Assign and attach a care plan' },
 ];
 
-export const getServerSideProps = useServerSideProps();
 
 const AssignPackage = () => {
   const router = useRouter();

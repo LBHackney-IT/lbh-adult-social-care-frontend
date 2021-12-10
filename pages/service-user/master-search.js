@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { useServiceUserMasterSearch } from 'api';
 import { SearchServiceUser } from 'components';
 import { useRouter } from 'next/router';
-import { useServerSideProps } from 'routes/RouteConstants';
 
 const initialFilters = {
   postcode: '',
@@ -11,8 +10,6 @@ const initialFilters = {
   hackneyId: '',
   dateOfBirth: null,
 };
-
-export const getServerSideProps = useServerSideProps();
 
 const BrokerReferralSearch = () => {
   const router = useRouter();

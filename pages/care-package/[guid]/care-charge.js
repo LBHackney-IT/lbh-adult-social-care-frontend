@@ -19,19 +19,13 @@ import { useDispatch } from 'react-redux';
 import { useToggle } from 'react-use';
 import { formatDate, useGetFile, useRedirectIfPackageNotExist } from 'service';
 import { careChargeAPIKeys, careChargeFormKeys, collectingReasonOptions } from 'constants/variables';
-import {
-  CARE_CHARGES_ROUTE,
-  getServiceUserPackagesRoute,
-  useServerSideProps
-} from 'routes/RouteConstants';
+import { CARE_CHARGES_ROUTE, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { useLookups, usePackageCareCharge, usePackageDetails } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import * as yup from 'yup';
 import { addDays } from 'date-fns';
 
 const { provisional, more12, less12 } = careChargeFormKeys;
-
-export const getServerSideProps = useServerSideProps();
 
 const useBreadcrumbs = (serviceUserId) => {
   const router = useRouter();

@@ -2,9 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useBrokerView } from 'api';
 import { BrokerPortalPage } from 'components';
-import { getServiceUserPackagesRoute, SERVICE_USER_SEARCH_ROUTE, useServerSideProps } from 'routes/RouteConstants';
-
-export const getServerSideProps = useServerSideProps();
+import { getServiceUserPackagesRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 
 const initialFilters = {
   status: '',

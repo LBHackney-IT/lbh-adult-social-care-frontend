@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
-import { FINANCE_ROUTE, useServerSideProps } from 'routes/RouteConstants';
+import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { getPayrunInsight, useInvoiceListView } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
 import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
-
-export const getServerSideProps = useServerSideProps();
 
 const initialFilters = {
   packageType: '',

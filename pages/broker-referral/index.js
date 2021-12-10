@@ -4,11 +4,8 @@ import { useBrokerView } from 'api';
 import { BrokerPortalPage } from 'components';
 import {
   getServiceUserPackagesRoute,
-  SERVICE_USER_MASTER_SEARCH_ROUTE,
-  useServerSideProps
+  SERVICE_USER_MASTER_SEARCH_ROUTE
 } from 'routes/RouteConstants';
-
-export const getServerSideProps = useServerSideProps();
 
 const initialFilters = {
   status: '',

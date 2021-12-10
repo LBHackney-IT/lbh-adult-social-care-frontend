@@ -9,9 +9,6 @@ import {
 } from 'components';
 import { useRouter } from 'next/router';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';
-import { useServerSideProps } from 'routes/RouteConstants';
-
-export const getServerSideProps = useServerSideProps();
 
 const Packages = () => {
   const router = useRouter();

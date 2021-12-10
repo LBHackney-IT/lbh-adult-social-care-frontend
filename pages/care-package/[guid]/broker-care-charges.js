@@ -18,7 +18,7 @@ import {
   usePackageCalculatedCost,
   useProvisionalCareCharges,
 } from 'api';
-import { getCarePackageReviewRoute, getFundedNursingCareRoute, useServerSideProps } from 'routes/RouteConstants';
+import { getCarePackageReviewRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -28,8 +28,6 @@ import {
   ClaimsCollector,
   FundingPerWeek,
 } from 'components/Pages/CarePackages/BrokerCareCharge';
-
-export const getServerSideProps = useServerSideProps();
 
 const CareCharge = () => {
   const router = useRouter();

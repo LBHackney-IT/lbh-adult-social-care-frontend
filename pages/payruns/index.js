@@ -6,9 +6,6 @@ import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { useHeldPaymentsView, usePayrunView } from 'api/SWR/payRuns';
 import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
 import CreatePayRunModal from 'components/Pages/Payruns/CreatePayRunModal/CreatePayRunModal';
-import { useServerSideProps } from 'routes/RouteConstants';
-
-export const getServerSideProps = useServerSideProps();
 
 const initialFilters = {
   searchTerm: '',

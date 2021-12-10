@@ -7,11 +7,8 @@ import {
   getBrokerPackageRoute,
   getCareChargesRoute,
   getCorePackageRoute,
-  getFundedNursingCareRoute,
-  useServerSideProps
+  getFundedNursingCareRoute
 } from 'routes/RouteConstants';
-
-export const getServerSideProps = useServerSideProps();
 
 const settingsTypes = [
   { field: 'hasRespiteCare', text: 'Respite Care' },

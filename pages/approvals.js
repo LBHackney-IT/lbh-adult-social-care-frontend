@@ -1,10 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import { getCarePackageApprovalRoute, SERVICE_USER_SEARCH_ROUTE, useServerSideProps } from 'routes/RouteConstants';
+import { getCarePackageApprovalRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { PackageApprovals } from 'components';
 import { useApprovals } from 'api';
-
-export const getServerSideProps = useServerSideProps();
 
 const initialFilters = {
   status: '',

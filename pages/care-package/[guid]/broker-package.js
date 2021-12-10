@@ -16,8 +16,7 @@ import { useDispatch } from 'react-redux';
 import {
   getCareChargesRoute,
   getCorePackageRoute,
-  getFundedNursingCareRoute,
-  useServerSideProps,
+  getFundedNursingCareRoute
 } from 'routes/RouteConstants';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { updateCarePackageCosts, usePackageDetails } from 'api';
@@ -33,8 +32,6 @@ import {
 } from 'components/Pages/CarePackages/BrokerPackage/index';
 import NewAdditionalNeedModal
   from 'components/Pages/CarePackages/BrokerPackage/NewAdditionalNeedModal/NewAdditionalNeedModal';
-
-export const getServerSideProps = useServerSideProps();
 
 const BrokerPackage = () => {
   const router = useRouter();

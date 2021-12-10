@@ -3,9 +3,7 @@ import { Container, DynamicBreadcrumbs, Heading, Hint, HorizontalSeparator, Load
 import { getEnGBFormattedDate, usePayRunInvoice } from 'api';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { useRouter } from 'next/router';
-import { useServerSideProps } from 'routes/RouteConstants';
 
-export const getServerSideProps = useServerSideProps();
 
 const InvoiceDetailPage = () => {
   const router = useRouter();

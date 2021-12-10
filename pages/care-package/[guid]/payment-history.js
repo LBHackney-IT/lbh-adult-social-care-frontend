@@ -2,13 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getNumberWithCommas } from 'service';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading, VerticalSeparator } from 'components';
-import { FINANCE_ROUTE, useServerSideProps } from 'routes/RouteConstants';
+import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { format } from 'date-fns';
 import { usePaymentHistoryView } from 'api';
 import AlternativePagination from 'components/AlternativePagination';
 import { PaymentHistoryTable } from 'components/Pages/Payruns/PaymentHistory/PaymentHistoryTable';
-
-export const getServerSideProps = useServerSideProps();
 
 const breadcrumbs = [
   { text: 'Home', href: '/' },
