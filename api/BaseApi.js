@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { APP_SERVICE_ROUTES } from 'routes/RouteConstants';
+import { APP_SERVICE_ROUTES } from '../routes/RouteConstants';
 
 let baseUrl = '';
 
