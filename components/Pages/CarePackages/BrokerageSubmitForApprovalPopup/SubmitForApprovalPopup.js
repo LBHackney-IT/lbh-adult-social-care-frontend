@@ -57,7 +57,7 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
           <Textarea value={notes} handler={setNotes} />
         </FormGroup>
         <Container className="brokerage__actions">
-          <Button onClick={closePopup} outline secondary color="red">
+          <Button onClick={closePopup} outline secondary className='link-button no-border' color="red">
             Cancel
           </Button>
           <Button disabled={loading || isLoading} isLoading={loading || isLoading} onClick={submit}>

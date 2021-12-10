@@ -13,7 +13,15 @@ const containerProps = {
   alignItems: 'center',
 };
 
-export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update, isLoading, hasInvoices }) => {
+export const InsightButtons = ({
+  payRunId,
+  payRunNumber,
+  status,
+  isCedarFileDownloaded,
+  update,
+  isLoading,
+  hasInvoices,
+}) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
 
@@ -81,7 +89,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     () => (
       <Button
         link
-        download={`${payRunId} Cedar File.xlsx`}
+        download={`CEDAR_${payRunNumber}.xlsx`}
         isLoading={isDownloading}
         style={isFileDownloaded && { background: 'none', boxShadow: 'none' }}
         className={isFileDownloaded ? 'link-button blue' : ''}
@@ -98,7 +106,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
         {isFileDownloaded ? 'Download again' : 'Download'}
       </Button>
     ),
-    [isFileDownloaded, payRunId]
+    [isFileDownloaded, payRunId, payRunNumber]
   );
 
   const hasDownloadFile = status > 4 && hasInvoices;

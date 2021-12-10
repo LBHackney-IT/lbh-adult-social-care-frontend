@@ -7,6 +7,7 @@ export default function Button({
   secondary,
   clearClass,
   disabled,
+  download,
   link,
   rel,
   color,
@@ -42,6 +43,7 @@ export default function Button({
   );
   return link ? (
     <a
+      download={download}
       rel={rel}
       target={target}
       aria-disabled={disabled}
