@@ -13,9 +13,7 @@ export const hackneyGoogleLogin = (hackneyToken) => {
       Accept: 'application/json',
       'Content-Type': 'application/json;charset=UTF-8',
     },
-    data: {
-      hackneyToken,
-    },
+    data: { hackneyToken },
   };
   return axios(options).then(handleResponse).catch(handleError);
 };

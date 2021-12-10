@@ -28,7 +28,7 @@ export const useInvoiceListView = ({ payRunId, params }) =>
   useFetchWithParams({
     params,
     shouldFetch: !!payRunId,
-    url: `${PAY_RUNS_URL}${payRunId}`,
+    url: `${PAY_RUNS_URL}/${payRunId}`,
     errorText: 'Cannot get invoice list',
   });
 

@@ -1,58 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getPreviousPath, setPreviousPath } from 'routes/RouteConstants';
+import { BROKER_REFERRAL_ROUTE, getPreviousPath, setPreviousPath } from 'routes/RouteConstants';
 import axios from 'axios';
-import { useUser } from 'api';
+import { HACKNEY_TOKEN_ID, useUser } from 'api';
 import { HackneyFooterInfo, Loading } from 'components';
 import { userLogin } from 'reducers/userReducer';
-import { getLoggedInUser } from 'service';
-import withSession from 'lib/session';
-import { changeHeader, resetHeader } from '../reducers/headerReducer';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
+import { changeHeader, resetHeader } from 'reducers/headerReducer';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (user) {
-    return {
-      redirect: {
-        destination: getPreviousPath() || '/',
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
-});
-
 const Login = () => {
   const dispatch = useDispatch();
-  const { user, mutateUser } = useUser({
-    redirectTo: getPreviousPath() || '/',
-    redirectIfFound: true,
-  });
+  const router = useRouter();
+  const { user, mutateUser } = useUser();
 
   const [origin, setOrigin] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setOrigin(window.location.origin);
+    const hackneyToken = Cookies.get(HACKNEY_TOKEN_ID);
 
-    const login = async () => {
+    (async () => {
+      if (user?.isLoggedIn && !hackneyToken) {
+        await axios.get('/api/logout');
+      }
+
+      setOrigin(window.location.origin);
+
       setLoading(true);
       try {
-        mutateUser(await axios('/api/login'));
+        await mutateUser(await axios('/api/login'));
       } catch (error) {
         console.log(error);
       }
-      setLoading(false);
-    };
 
-    login().then(() => {
-      axios.get('/api/user').then((res) => {
-        dispatch(userLogin({ user: res.data }));
-      });
-    });
-  }, []);
+      const res = await axios.get('/api/user');
+      setLoading(false);
+      dispatch(userLogin({ user: res.data }));
+      router.replace(getPreviousPath() || BROKER_REFERRAL_ROUTE);
+    })();
+  }, [user]);
 
   useEffect(() => {
     dispatch(changeHeader({ links: [] }));
