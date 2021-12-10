@@ -35,7 +35,7 @@ const Payruns = () => {
       heldPageNumber,
       payRunType,
       payRunStatus:
-      // eslint-disable-next-line no-nested-ternary
+        // eslint-disable-next-line no-nested-ternary
         tabView === 'Awaiting Approval' ? 'WaitingForApproval' : tabView === 'Approved' ? 'Approved' : payRunStatus,
     }),
     [filters, pageNumber, heldPageNumber, tabView]
