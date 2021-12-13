@@ -1,23 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import withSession from 'lib/session';
 import { useBrokerView } from 'api';
-import { getLoggedInUser } from 'service';
 import { BrokerPortalPage } from 'components';
-import { getServiceUserPackagesRoute, SERVICE_USER_MASTER_SEARCH_ROUTE } from 'routes/RouteConstants';
-
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
-});
+import {
+  getServiceUserPackagesRoute,
+  SERVICE_USER_MASTER_SEARCH_ROUTE
+} from 'routes/RouteConstants';
 
 const initialFilters = {
   status: '',
@@ -44,7 +32,7 @@ const BrokerReferral = () => {
     pageNumber,
     status,
     brokerId,
-  }), [filters, pageNumber])
+  }), [filters, pageNumber]);
 
   const { data, isLoading: brokerViewLoading } = useBrokerView({ params });
 
@@ -69,7 +57,7 @@ const BrokerReferral = () => {
 
   return (
     <BrokerPortalPage
-      title='Broker Referral'
+      title="Broker Referral"
       breadcrumbs={breadcrumbs}
       loading={brokerViewLoading}
       goToSearch={goToBrokerReferralSearch}

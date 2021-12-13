@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
+import { useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
+  DynamicBreadcrumbs,
+  HorizontalSeparator,
   Loading,
   TitleSubtitleHeader,
   VerticalSeparator,
-  HorizontalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -18,7 +18,6 @@ import {
   usePackageCalculatedCost,
   useProvisionalCareCharges,
 } from 'api';
-import withSession from 'lib/session';
 import { getCarePackageReviewRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { formValidationSchema } from 'service/formValidationSchema';
@@ -29,19 +28,6 @@ import {
   ClaimsCollector,
   FundingPerWeek,
 } from 'components/Pages/CarePackages/BrokerCareCharge';
-
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
-});
 
 const CareCharge = () => {
   const router = useRouter();

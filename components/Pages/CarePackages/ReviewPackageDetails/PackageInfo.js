@@ -39,7 +39,7 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
         const openedDetailsId = openedDetails.includes(id);
         const minusSign = cost < 0 ? '-' : '';
         return (
-          <Container className="review-package-details__items" key={id}>
+          <Container className="review-package-details__items" key={`${startDate?.toString?.()} ${id}`}>
             <Container className="review-package-details__items-date" display="flex" justifyContent="space-between">
               <p>
                 {formatDate(startDate, dateStringFormats.dayMonthYearSlash)}
@@ -107,7 +107,7 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
               >
                 <p>{serviceUserNeed.term}</p>
                 {serviceUserNeed?.careType?.map((careType) => (
-                  <p>{careType}</p>
+                  <p key={careType}>{careType}</p>
                 ))}
               </SingleAccordion>
             )}
