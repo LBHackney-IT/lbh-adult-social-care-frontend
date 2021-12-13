@@ -5,6 +5,7 @@ import { APPROVALS_ROUTE, getHistoryRoute, getServiceUserPackagesRoute } from 'r
 import { addNotification } from 'reducers/notificationsReducer';
 import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage, stringIsNullOrEmpty } from 'api';
 import { useDispatch } from 'react-redux';
+import { getNumberWithCommas } from 'service';
 import { Container, Link } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
@@ -218,7 +219,7 @@ const ReviewPackageDetails = ({
                         Cost of placement
                         <span className="text-lbh-f01 font-weight-bold">
                           {currency.euro}
-                          {costOfPlacement.toFixed(2)}
+                          {getNumberWithCommas(costOfPlacement)}
                         </span>
                       </p>
                     )}
@@ -233,13 +234,13 @@ const ReviewPackageDetails = ({
                       >
                         {totalCostInfo?.hackney !== undefined && totalCostInfo?.hackney !== 0 && (
                           <BrokerageBorderCost
-                            totalCost={totalCostInfo?.hackney.toFixed(2)}
+                            totalCost={totalCostInfo?.hackney}
                             totalCostHeader="Total (Gross)"
                           />
                         )}
                         {totalCostInfo?.supplier !== undefined && totalCostInfo?.supplier !== 0 && (
                           <BrokerageBorderCost
-                            totalCost={totalCostInfo?.supplier.toFixed(2)}
+                            totalCost={totalCostInfo?.supplier}
                             totalCostHeader="Total (Net Off)"
                           />
                         )}

@@ -60,7 +60,14 @@ export const getLoggedInUser = ({ req }) => {
   return user;
 };
 
-export const getNumberWithCommas = (x) => x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export const formatNumber = (x, options = { isAbsolute: false }) => {
+  if (!Number.isNaN(x) && x) return options.isAbsolute ? Math.abs(x) : x;
+
+  return 0;
+}
+
+export const getNumberWithCommas = (x) =>
+  x === 0 ? x : x?.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 export const removeEmpty = (obj) => {
   Object.keys(obj).forEach(k =>
