@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { BROKER_REFERRAL_ROUTE, getPreviousPath, setPreviousPath } from 'routes/RouteConstants';
 import axios from 'axios';
-import { HASC_TOKEN_ID, useUser } from 'api';
+import { useUser } from 'api';
 import { HackneyFooterInfo, Loading } from 'components';
 import { userLogin } from 'reducers/userReducer';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { changeHeader, resetHeader } from 'reducers/headerReducer';
 
@@ -20,13 +19,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const hascToken = Cookies.get(HASC_TOKEN_ID);
-
     (async () => {
-      if (user?.isLoggedIn && !hascToken) {
-        await axios.get('/api/logout');
-      }
-
       setOrigin(window.location.origin);
 
       setLoading(true);
