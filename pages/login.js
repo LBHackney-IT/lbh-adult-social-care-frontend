@@ -5,44 +5,62 @@ import axios from 'axios';
 import { useUser } from 'api';
 import { HackneyFooterInfo, Loading } from 'components';
 import { userLogin } from 'reducers/userReducer';
-import { useRouter } from 'next/router';
-import { changeHeader, resetHeader } from 'reducers/headerReducer';
+import { getLoggedInUser } from 'service';
+import withSession from 'lib/session';
+import { changeHeader, resetHeader } from '../reducers/headerReducer';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (user) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
+
 const Login = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
-  const { user, mutateUser } = useUser();
+  const { user, mutateUser } = useUser({
+    redirectTo: getPreviousPath() || BROKER_REFERRAL_ROUTE,
+    redirectIfFound: true,
+  });
 
   const [origin, setOrigin] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      setOrigin(window.location.origin);
+    setOrigin(window.location.origin);
 
+    const login = async () => {
       setLoading(true);
       try {
-        await mutateUser(await axios('/api/login'));
+        mutateUser(await axios('/api/login'));
       } catch (error) {
         console.log(error);
       }
-
-      const res = await axios.get('/api/user');
       setLoading(false);
-      dispatch(userLogin({ user: res.data }));
-      router.replace(getPreviousPath() || BROKER_REFERRAL_ROUTE);
-    })();
-  }, [user]);
+    };
+
+    login().then(() => {
+      axios.get('/api/user').then((res) => {
+        dispatch(userLogin({ user: res.data }));
+      });
+    });
+  }, []);
 
   useEffect(() => {
-    dispatch(changeHeader({ links: [] }));
+    dispatch(changeHeader({ links: []}));
 
     return () => {
       dispatch(resetHeader());
-    };
-  }, []);
+    }
+  }, [])
 
   return (
     <div className="login-page">
