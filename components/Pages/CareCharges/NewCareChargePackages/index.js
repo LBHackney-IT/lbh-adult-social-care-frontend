@@ -9,7 +9,7 @@ import {
   FormGroup,
   HorizontalSeparator,
   Heading,
-  SearchBox
+  SearchBox,
 } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 import AlternativePagination from '../../../AlternativePagination';
@@ -57,17 +57,17 @@ const NewCareChargePackages = ({
           <Breadcrumbs values={breadcrumbs} />
           <HorizontalSeparator height={30} />
           <Container display="flex" justifyContent="space-between">
-            <Heading size="xl">New care charge packages</Heading>
+            <Heading size="xl">Care Charges</Heading>
             <Button largeButton onClick={findServiceUser}>
               Find a service user
             </Button>
           </Container>
           <HorizontalSeparator height={16} />
           <Container className="new-care-charge__selectors">
-            <Container display='flex' alignItems='flex-end'>
-              <FormGroup className='search' label="Search" smallLabel>
+            <Container display="flex" alignItems="flex-end">
+              <FormGroup className="search" label="Search" smallLabel>
                 <SearchBox
-                  className='broker-portal'
+                  className="broker-portal"
                   placeholder="Search by name..."
                   value={searchText}
                   onChangeValue={setSearchText}
@@ -82,7 +82,7 @@ const NewCareChargePackages = ({
               </FormGroup>
             </Container>
             <HorizontalSeparator height={25} />
-            <Container display='flex'>
+            <Container display="flex">
               <FormGroup label="Modified by" smallLabel>
                 <Select
                   options={modifiedByOptions}
