@@ -18,6 +18,14 @@
   }
 }
 
+.react-datepicker__day {
+  &.react-datepicker__day--keyboard-selected,
+  &.react-datepicker__day--selected {
+    background: rgb(247, 194, 66);
+    color: black;
+  }
+}
+
 .control .react-datepicker-popper {
   z-index: 4;
 }
