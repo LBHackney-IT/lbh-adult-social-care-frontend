@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
-import { getPayrunInsight, useInvoiceListView } from 'api/SWR/payRuns';
+import { formatDate } from 'service';
+import { useInvoiceListView, getPayrunInsight } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
@@ -74,19 +75,19 @@ const SinglePayRun = () => {
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px">
         <Loading isLoading={isLoading || insightsIsLoading} />
         {payRunItems &&
-        payRunItems.map((item, index) => (
-          <>
-            <PayRunItem
-              payRunId={payRunId}
-              searchTerm={searchTerm}
-              updateData={updateData}
-              item={item}
-              index={index}
-              update={[1, 2, 3, 4].includes(payRun?.payRunStatus)}
-            />
-            {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
-          </>
-        ))}
+          payRunItems.map((item, index) => (
+            <>
+              <PayRunItem
+                payRunId={payRunId}
+                searchTerm={searchTerm}
+                updateData={updateData}
+                item={item}
+                index={index}
+                update={[1, 2, 3, 4].includes(payRun?.payRunStatus)}
+              />
+              {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
+            </>
+          ))}
         <HorizontalSeparator height="32px" />
         {insightData && (
           <HighLevelInsight
@@ -94,6 +95,8 @@ const SinglePayRun = () => {
             payRunId={payRunId}
             payRunNumber={payRun?.payRunNumber}
             holdCount={insightData?.holdsCount}
+            paidBy={insightData?.paidBy}
+            paidOn={insightData?.paidOn && formatDate(insightData.paidOn)}
             holdValue={insightData?.totalHeldAmount}
             difference={insightData?.totalDifferenceFromLastCycle}
             serviceUsers={insightData?.serviceUserCount}
