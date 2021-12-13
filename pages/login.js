@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { BROKER_REFERRAL_ROUTE, getPreviousPath, setPreviousPath } from 'routes/RouteConstants';
 import axios from 'axios';
-import { HACKNEY_TOKEN_ID, useUser } from 'api';
+import { HASC_TOKEN_ID, useUser } from 'api';
 import { HackneyFooterInfo, Loading } from 'components';
 import { userLogin } from 'reducers/userReducer';
 import Cookies from 'js-cookie';
@@ -20,10 +20,10 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const hackneyToken = Cookies.get(HACKNEY_TOKEN_ID);
+    const hascToken = Cookies.get(HASC_TOKEN_ID);
 
     (async () => {
-      if (user?.isLoggedIn && !hackneyToken) {
+      if (user?.isLoggedIn && !hascToken) {
         await axios.get('/api/logout');
       }
 

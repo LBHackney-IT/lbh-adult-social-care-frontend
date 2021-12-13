@@ -24,24 +24,24 @@ switch (process.env.NEXT_PUBLIC_STAGE) {
 }
 
 const BASE_URL = baseUrl;
-const HACKNEY_TOKEN_ID = `hackneyToken`;
+const HASC_TOKEN_ID = `hascToken`;
 
 export const MULTIPART_FORM_DATA = 'multipart/form-data';
 
 axios.interceptors.request.use((config) => {
-  const token = Cookies.get(HACKNEY_TOKEN_ID);
+  const token = Cookies.get(HASC_TOKEN_ID);
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
 axios.interceptors.response.use(null, async (error) => {
-  // redirect to login to refresh hackneyToken since it is expired
+  // redirect to login to refresh hascToken since it is expired
   if (error?.response?.status === 401) {
-    Cookies.remove('hackneyToken');
+    Cookies.remove('hascToken');
     await axios.get('/api/logout');
     window.location.pathname = APP_SERVICE_ROUTES.login;
   }
   return Promise.reject(error);
 });
 
-export { BASE_URL, HACKNEY_TOKEN_ID };
+export { BASE_URL, HASC_TOKEN_ID };

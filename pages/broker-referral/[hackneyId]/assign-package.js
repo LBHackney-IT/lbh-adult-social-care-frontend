@@ -29,7 +29,6 @@ const breadcrumbs = [
   { text: 'Assign and attach a care plan' },
 ];
 
-
 const AssignPackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();

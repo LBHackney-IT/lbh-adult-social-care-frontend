@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import React, { memo, useEffect } from 'react';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
-import { HACKNEY_TOKEN_ID } from '../api';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -26,7 +25,7 @@ const Logout = () => {
     const logout = async () => {
       try {
         const isDev = process.env.NODE_ENV === 'development';
-        Cookies.remove(HACKNEY_TOKEN_ID, {
+        Cookies.remove('hackneyToken', {
           domain: isDev ? 'localhost' : '.hackney.gov.uk',
         });
 
@@ -37,7 +36,7 @@ const Logout = () => {
       }
     };
 
-    const hackneyToken = Cookies.get(HACKNEY_TOKEN_ID);
+    const hackneyToken = Cookies.get('hackneyToken');
 
     if (hackneyToken) logout();
     else router.push('/login');
