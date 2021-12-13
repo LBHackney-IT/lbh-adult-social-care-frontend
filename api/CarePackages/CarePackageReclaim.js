@@ -49,10 +49,6 @@ export const updateCareChargeReclaim = (carePackageId, careChargeUpdateRequest) 
   const options = {
     url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges`,
     method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': MULTIPART_FORM_DATA,
-    },
     data: careChargeUpdateRequest,
   };
 
