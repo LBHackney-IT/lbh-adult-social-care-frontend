@@ -19,6 +19,7 @@ export const HighLevelInsight = ({
   isCedarFileDownloaded,
   insightDataLoading,
   paidBy,
+  paidOn,
 }) => {
   const [openedModal, setOpenedModal] = useState('');
 
@@ -74,6 +75,7 @@ export const HighLevelInsight = ({
             hasInvoices={hasInvoices}
             update={update}
             paidBy={paidBy}
+            paidOn={paidOn}
             isLoading={insightDataLoading}
           />
         </Container>
