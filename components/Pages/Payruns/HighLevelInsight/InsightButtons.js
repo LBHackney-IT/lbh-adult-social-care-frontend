@@ -4,7 +4,7 @@ import { getPayrunCedarFile } from 'api';
 import { updatePayrunAsPaid } from 'api/PayRuns';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { approvePayRun, deletePayRun, rejectPayRun, submitPayRun } from 'api/PayRun';
+import { approvePayRun, deletePayRun, submitPayRun } from 'api/PayRun';
 import ViewDocument from '../../../ViewDocument';
 
 const containerProps = {
@@ -16,10 +16,11 @@ const containerProps = {
 
 export const InsightButtons = ({
   payRunId,
+  openRejectModal,
   payRunNumber,
   status,
   isCedarFileDownloaded,
-  update,
+  updateData,
   isLoading,
   hasInvoices,
   paidBy,
@@ -41,7 +42,7 @@ export const InsightButtons = ({
     try {
       await submitPayRun(payRunId);
       pushNotification(`Payrun has been approved`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
@@ -51,21 +52,15 @@ export const InsightButtons = ({
     try {
       await approvePayRun(payRunId);
       pushNotification(`Payrun has been approved`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
   };
 
-  const handleReject = async (e) => {
+  const handleReject = (e) => {
     e.preventDefault();
-    try {
-      await rejectPayRun(payRunId);
-      pushNotification(`Payrun has been rejected`, 'success');
-      update();
-    } catch (error) {
-      pushNotification(error, 'error');
-    }
+    openRejectModal();
   };
 
   const handleArchive = async (e) => {
@@ -73,7 +68,7 @@ export const InsightButtons = ({
     try {
       await deletePayRun(payRunId);
       pushNotification(`Payrun has been archived`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
@@ -82,7 +77,7 @@ export const InsightButtons = ({
     try {
       await updatePayrunAsPaid(payRunId);
       pushNotification(`Payrun successfully marked as paid`, 'success');
-      update();
+      updateData();
     } catch (e) {
       pushNotification(e, 'error');
     }
@@ -94,7 +89,7 @@ export const InsightButtons = ({
         className='link-button green'
         getDocumentRequest={async () => {
           const file = await getPayrunCedarFile(payRunId);
-          update();
+          updateData();
           return file;
         }}
         downloadFileName={`CEDAR_${payRunNumber}.xlsx`}
