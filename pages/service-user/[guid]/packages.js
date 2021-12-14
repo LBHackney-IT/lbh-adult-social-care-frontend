@@ -32,38 +32,43 @@ const Packages = () => {
           />
         )}
         {packages &&
-        packages
-          .filter(
-            (p) =>
-              p.packageStatus === 'New' ||
-              p.packageStatus === 'In Progress' ||
-              p.packageStatus === 'Waiting for approval' ||
-              p.packageStatus === 'Not Approved'
-          )
-          .map((p, index) => (
-            <>
-              <PackageRequest packageRequest={p} />
-              {index < packages.length - 1 && <HorizontalSeparator height="20px" />}
-            </>
-          ))}
+          packages
+            .filter(
+              (p) =>
+                p.packageStatus === 'New' ||
+                p.packageStatus === 'In Progress' ||
+                p.packageStatus === 'Waiting for approval' ||
+                p.packageStatus === 'Not Approved'
+            )
+            .map((p, index) => (
+              <>
+                <PackageRequest packageRequest={p} />
+                {index < packages.length - 1 && <HorizontalSeparator height="20px" />}
+              </>
+            ))}
         <HorizontalSeparator height="48px" />
         {packages &&
-        packages
-          .filter(
-            (p) => p.packageStatus === 'Approved' || p.packageStatus === 'Ended' || p.packageStatus === 'Cancelled'
-          )
-          .map((p) => (
-            <CareDetails
-              isLoading={isLoading}
-              packageId={p.packageId}
-              title={p.packageType}
-              data={p.packageItems}
-              isS117Client={p.isS117Client}
-              isS117ClientConfirmed={p.isS117ClientConfirmed}
-              netTotal={p.netTotal}
-              packageStatus={p.packageStatus}
-            />
-          ))}
+          packages
+            .filter(
+              (p) =>
+                p.packageStatus === 'Approved' ||
+                p.packageStatus === 'Ended' ||
+                p.packageStatus === 'Cancelled' ||
+                p.packageStatus === 'Active' ||
+                p.packageStatus === 'Future'
+            )
+            .map((p) => (
+              <CareDetails
+                isLoading={isLoading}
+                packageId={p.packageId}
+                title={p.packageType}
+                data={p.packageItems}
+                isS117Client={p.isS117Client}
+                isS117ClientConfirmed={p.isS117ClientConfirmed}
+                netTotal={p.netTotal}
+                packageStatus={p.packageStatus}
+              />
+            ))}
       </Container>
     </>
   );

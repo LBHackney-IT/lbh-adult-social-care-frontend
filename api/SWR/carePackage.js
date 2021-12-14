@@ -89,3 +89,6 @@ export const usePackageCareCharge = (packageId, subType) => {
     isLoading: !error && !data && packageId,
   };
 };
+
+export const useAssessmentCareCharges = (packageId) =>
+  useGetData(getCarePackageUrl(packageId, '/reclaims/care-charges/assessment-details'));

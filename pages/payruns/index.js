@@ -1,9 +1,19 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Breadcrumbs, Button, Container, Heading, HorizontalSeparator, Loading, Tab, Tabs } from 'components';
+import {
+  Breadcrumbs,
+  Button,
+  Container,
+  Heading,
+  Hint,
+  HorizontalSeparator,
+  Loading,
+  Tab,
+  Tabs,
+} from 'components';
 import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
-import { useHeldPaymentsView, usePayrunView } from 'api/SWR/payRuns';
+import { usePayrunView, useHeldPaymentsView } from 'api/SWR/payRuns';
 import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
 import CreatePayRunModal from 'components/Pages/Payruns/CreatePayRunModal/CreatePayRunModal';
 
@@ -88,7 +98,11 @@ const Payruns = () => {
         <Tabs tabs={tabs} callback={(index) => setTabView(tabs[index])}>
           <Tab>
             <Loading className="loading" isLoading={isLoading} />
-            <PayrunList searchTerm={searchTerm} data={payrunData} />
+            {payrunData.length > 0 || isLoading ? (
+              <PayrunList searchTerm={searchTerm} data={payrunData} />
+            ) : (
+              <Hint>No results found</Hint>
+            )}
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
@@ -102,7 +116,11 @@ const Payruns = () => {
           </Tab>
           <Tab>
             <Loading className="loading" isLoading={isHeldLoading} />
-            <HeldPaymentsList data={heldData} searchTerm={searchTerm} update={updateAllPayruns} />
+            {heldData.length > 0 || isHeldLoading ? (
+              <HeldPaymentsList data={heldData} searchTerm={searchTerm} update={updateAllPayruns} />
+            ) : (
+              <Hint>No results found</Hint>
+            )}
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
@@ -116,7 +134,11 @@ const Payruns = () => {
           </Tab>
           <Tab>
             <Loading className="loading" isLoading={isLoading} />
-            <PayrunList searchTerm={searchTerm} data={payrunData} />
+            {payrunData.length > 0 || isLoading ? (
+              <PayrunList searchTerm={searchTerm} data={payrunData} />
+            ) : (
+              <Hint>No results found</Hint>
+            )}
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
@@ -130,7 +152,11 @@ const Payruns = () => {
           </Tab>
           <Tab>
             <Loading className="loading" isLoading={isLoading} />
-            <PayrunList searchTerm={searchTerm} data={payrunData} />
+            {payrunData.length > 0 || isLoading ? (
+              <PayrunList searchTerm={searchTerm} data={payrunData} />
+            ) : (
+              <Hint>No results found</Hint>
+            )}
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
