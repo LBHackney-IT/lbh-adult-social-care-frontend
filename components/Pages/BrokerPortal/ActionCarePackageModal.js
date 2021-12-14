@@ -8,11 +8,23 @@ const ActionCarePackageModal = ({ close, title, actions, isOpened, notes, setNot
       <Textarea value={notes} handler={setNotes}/>
     </FormGroup>
     <Container className="brokerage__actions">
-      {actions.map(({ loading, title: actionTitle, onClick, className: actionClassName }) => (
-        <Button disabled={loading} isLoading={loading} className={actionClassName} key={actionTitle} onClick={onClick}>
-          {actionTitle}
-        </Button>
-      ))}
+      {actions.map(({ loading, color, title: actionTitle, onClick, className: actionClassName }) => {
+        const isLinkButton = actionClassName?.includes('link-button');
+        return (
+          <Button
+            outline={isLinkButton}
+            color={color}
+            secondary={isLinkButton}
+            disabled={loading}
+            isLoading={loading}
+            className={`${actionClassName}${isLinkButton ? ' no-border' : ''}`}
+            key={actionTitle}
+            onClick={onClick}
+          >
+            {actionTitle}
+          </Button>
+        )
+      })}
     </Container>
   </Dialog>
 );

@@ -122,7 +122,7 @@ export const PackageApprovals = ({
               <FormGroup className="form-group--inline-label">
                 <SearchBox
                   placeholder="Search service user"
-                  label="Search Packages"
+                  label="Search"
                   value={searchText}
                   onChangeValue={setSearchText}
                   search={onSearch}

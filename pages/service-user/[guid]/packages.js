@@ -65,7 +65,12 @@ const Packages = () => {
         {packages &&
           packages
             .filter(
-              (p) => p.packageStatus === 'Approved' || p.packageStatus === 'Ended' || p.packageStatus === 'Cancelled'
+              (p) =>
+                p.packageStatus === 'Approved' ||
+                p.packageStatus === 'Ended' ||
+                p.packageStatus === 'Cancelled' ||
+                p.packageStatus === 'Active' ||
+                p.packageStatus === 'Future'
             )
             .map((p) => (
               <CareDetails

@@ -49,10 +49,6 @@ export const updateCareChargeReclaim = (carePackageId, careChargeUpdateRequest) 
   const options = {
     url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges`,
     method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': MULTIPART_FORM_DATA,
-    },
     data: careChargeUpdateRequest,
   };
 
@@ -73,7 +69,7 @@ export const updateCareChargeBrokerage = (carePackageId, careChargeId, careCharg
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-export const cancelCareChargeReclaim = ({ carePackageId, reclaimId }) => {
+export const cancelCareChargeReclaim = (carePackageId, reclaimId) => {
   const options = {
     url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/${reclaimId}/cancel`,
     method: 'PUT',
@@ -82,12 +78,21 @@ export const cancelCareChargeReclaim = ({ carePackageId, reclaimId }) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-export const endCareChargeReclaim = ({ carePackageId, reclaimId, endDate }) => {
+export const endCareChargeReclaim = (carePackageId, reclaimId, endDate ) => {
   const options = {
     url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/${reclaimId}/end`,
     method: 'PUT',
     data: { endDate },
   };
 
+  return axios(options).then(handleResponse).catch(handleError);
+};
+
+export const createProvisionalCareCharge = (carePackageId, careChargeReclaimCreationRequest) => {
+  const options = {
+    url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/provisional`,
+    method: 'POST',
+    data: careChargeReclaimCreationRequest,
+  };
   return axios(options).then(handleResponse).catch(handleError);
 };

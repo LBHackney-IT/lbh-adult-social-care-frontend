@@ -44,7 +44,7 @@ export const InvoiceFilters = ({ filters, setFilters, clearFilter }) => {
     <Container>
       <Container display="flex" alignItems="flex-end">
         <FormGroup label="Search" smallLabel>
-          <SearchBox placeholder="Search by ID..." value={searchText} onChangeValue={setSearchText} search={onSearch} />
+          <SearchBox placeholder="Number, User, Supplier" value={searchText} onChangeValue={setSearchText} search={onSearch} />
         </FormGroup>
         <VerticalSeparator width="20px" />
         <FormGroup label="Status" inlineLabel smallLabel>
