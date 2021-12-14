@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { HorizontalSeparator, Heading, Collapse, Container, FormGroup } from 'components';
+import { cancelCareChargeReclaim } from 'api';
+import { addNotification } from 'reducers/notificationsReducer';
+import { useDispatch } from 'react-redux';
 import { CareChargeCost } from './CareChargeCost';
 import { ClaimCollector } from './ClaimCollector';
 import { CareChargeSchedule } from './CareChargeSchedule';
@@ -20,6 +23,7 @@ export const ProvisionalCareCharge = ({
   setValue,
   watch,
 }) => {
+  const dispatch = useDispatch();
   const [isExpanded, setExpanded] = useState(isOpen);
   const [disabled, setDisabled] = useState(!!originalValues);
 
@@ -42,6 +46,8 @@ export const ProvisionalCareCharge = ({
   const provClaimReason = watch('provisional.claimReason');
   const res12ClaimReason = watch('residential12.claimReason');
   const res13ClaimReason = watch('residential13.claimReason');
+
+  const reclaimId = watch('provisional.id');
 
   useEffect(() => {
     setValue('provisional.isOngoing', !endDate);
@@ -79,6 +85,17 @@ export const ProvisionalCareCharge = ({
       residential12: values[0],
       residential13: values[1],
     });
+  };
+
+  const handleCancel = async () => {
+    if (carePackageId && reclaimId) {
+      try {
+        await cancelCareChargeReclaim(carePackageId, reclaimId);
+        dispatch(addNotification({ text: 'Provisional Care Charge cancelled', className: 'success' }));
+      } catch (e) {
+        dispatch(addNotification({ text: e }));
+      }
+    }
   };
   return (
     <>
@@ -123,7 +140,8 @@ export const ProvisionalCareCharge = ({
         <ActionButtons
           isNew={!originalValues}
           onRevert={handleRevert}
-          onCancel={() => {}}
+          onCancel={handleCancel}
+          isCancelDisabled={!reclaimId}
           onEdit={() => setDisabled(false)}
           onEnd={() => {}}
         />

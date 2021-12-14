@@ -1,7 +1,7 @@
 import { Button, Container, VerticalSeparator } from 'components';
 import React, { useState } from 'react';
 
-export const ActionButtons = ({ onEdit, onRevert, onCancel, onEnd, isNew }) => {
+export const ActionButtons = ({ onEdit, onRevert, onCancel,isCancelDisabled, onEnd, isNew }) => {
   const [editMode, setEditMode] = useState(false);
 
   const handleEdit = () => {
@@ -19,7 +19,7 @@ export const ActionButtons = ({ onEdit, onRevert, onCancel, onEnd, isNew }) => {
         {isNew ? 'Cancel' : editMode ? 'Revert' : 'Edit'}
       </Button>
       <VerticalSeparator width="10px" />
-      <Button onClick={onCancel} secondary outline color="blue">
+      <Button disabled={isCancelDisabled} onClick={onCancel} secondary outline color="blue">
         Cancel Provisional
       </Button>
       <VerticalSeparator width="10px" />

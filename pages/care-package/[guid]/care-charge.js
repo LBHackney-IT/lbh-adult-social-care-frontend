@@ -22,6 +22,7 @@ import { CareCharge13 } from 'components/Pages/CarePackages/CareCharge/CareCharg
 import { addNotification } from 'reducers/notificationsReducer';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+import { CARE_CHARGES_ROUTE } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -170,6 +171,8 @@ const CareCharge = () => {
   const [show12, setShow12] = useState(false);
   const [show13, setShow13] = useState(false);
 
+  const handleBackClick = () => router.push(CARE_CHARGES_ROUTE);
+
   return (
     <>
       <DynamicBreadcrumbs />
@@ -255,7 +258,7 @@ const CareCharge = () => {
             )}
             <HorizontalSeparator height="48px" />
             <Container display="flex">
-              <Button secondary color="gray">
+              <Button secondary color="gray" onClick={handleBackClick}>
                 Back
               </Button>
               <VerticalSeparator width="10px" />

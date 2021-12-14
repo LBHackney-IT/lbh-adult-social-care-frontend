@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { HorizontalSeparator, Heading, Collapse, Container, Hint, FormGroup } from 'components';
 import { addDays, isSameDay } from 'date-fns';
+import { cancelCareChargeReclaim } from 'api';
+import { addNotification } from 'reducers/notificationsReducer';
+import { useDispatch } from 'react-redux';
 import { CareChargeCost } from './CareChargeCost';
 import { ClaimCollector } from './ClaimCollector';
 import { CareChargeSchedule } from './CareChargeSchedule';
@@ -22,6 +25,7 @@ export const CareCharge13 = ({
   setValue,
   watch,
 }) => {
+  const dispatch = useDispatch();
   const [isExpanded, setExpanded] = useState(isOpen);
   const [disabled, setDisabled] = useState(!!originalValues);
   const res12End = watch('residential12.endDate');
@@ -47,6 +51,8 @@ export const CareCharge13 = ({
   const provClaimReason = watch('provisional.claimReason');
   const res12ClaimReason = watch('residential12.claimReason');
   const res13ClaimReason = watch('residential13.claimReason');
+
+  const reclaimId = watch('residential13.id');
 
   useEffect(() => {
     if (!startDate) {
@@ -101,6 +107,16 @@ export const CareCharge13 = ({
     });
   };
 
+  const handleCancel = async () => {
+    if (carePackageId && reclaimId) {
+      try {
+        await cancelCareChargeReclaim(carePackageId, reclaimId);
+        dispatch(addNotification({ text: 'Residential 13+ weeks cancelled', className: 'success' }));
+      } catch (e) {
+        dispatch(addNotification({ text: e }));
+      }
+    }
+  };
   return (
     <>
       <HorizontalSeparator height="48px" />
@@ -150,7 +166,8 @@ export const CareCharge13 = ({
         <ActionButtons
           isNew={!originalValues}
           onRevert={handleRevert}
-          onCancel={() => {}}
+          onCancel={handleCancel}
+          isCancelDisabled={!reclaimId}
           onEdit={() => setDisabled(false)}
           onEnd={() => {}}
         />

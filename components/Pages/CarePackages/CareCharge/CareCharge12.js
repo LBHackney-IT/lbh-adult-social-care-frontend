@@ -10,6 +10,9 @@ import {
   VerticalSeparator,
 } from 'components';
 import { addDays, addWeeks, differenceInWeeks, isBefore, isSameDay } from 'date-fns';
+import { useDispatch } from 'react-redux';
+import { cancelCareChargeReclaim } from 'api';
+import { addNotification } from 'reducers/notificationsReducer';
 import { CareChargeCost } from './CareChargeCost';
 import { ClaimCollector } from './ClaimCollector';
 import { CareChargeSchedule } from './CareChargeSchedule';
@@ -31,6 +34,7 @@ export const CareCharge12 = ({
   setValue,
   watch,
 }) => {
+  const dispatch = useDispatch();
   const [isExpanded, setExpanded] = useState(isOpen);
   const [disabled, setDisabled] = useState(!!originalValues);
   const collectedBy = watch('residential12.claimCollector');
@@ -54,6 +58,9 @@ export const CareCharge12 = ({
 
   const startDate = watch('residential12.startDate');
   const endDate = watch('residential12.endDate');
+
+  const reclaimId = watch('residential12.id');
+
   useEffect(() => {
     if (provEnd && !startDate && !isSameDay(new Date(provEnd), new Date(packageEndDate))) {
       setValue('residential12.startDate', addDays(new Date(provEnd), 1));
@@ -131,6 +138,17 @@ export const CareCharge12 = ({
       residential13: values[1],
     });
   };
+
+  const handleCancel = async () => {
+    if (carePackageId && reclaimId) {
+      try {
+        await cancelCareChargeReclaim(carePackageId, reclaimId);
+        dispatch(addNotification({ text: 'Residential 1 - 12 weeks cancelled', className: 'success' }));
+      } catch (e) {
+        dispatch(addNotification({ text: e }));
+      }
+    }
+  };
   return (
     <>
       <HorizontalSeparator height="48px" />
@@ -193,7 +211,8 @@ export const CareCharge12 = ({
         <ActionButtons
           isNew={!originalValues}
           onRevert={handleRevert}
-          onCancel={() => {}}
+          onCancel={handleCancel}
+          isCancelDisabled={!reclaimId}
           onEdit={() => setDisabled(false)}
           onEnd={() => {}}
         />
