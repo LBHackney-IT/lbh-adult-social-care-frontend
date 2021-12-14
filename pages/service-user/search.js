@@ -1,7 +1,9 @@
-import React, { memo, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { assignToBroker, useServiceUserMasterSearch } from 'api';
 import { SearchServiceUser } from 'components';
-import { useServiceUserSearch } from 'api';
 import { useRouter } from 'next/router';
+import { getFormData } from '../../service';
+import { getCorePackageRoute } from '../../routes/RouteConstants';
 
 const initialFilters = {
   postcode: '',
@@ -11,28 +13,28 @@ const initialFilters = {
   dateOfBirth: null,
 };
 
-const BrokerPortalSearch = () => {
+const BrokerReferralSearch = () => {
   const router = useRouter();
-  const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState({ ...initialFilters });
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [isCreatingNewPackage, setIsCreatingNewPackage] = useState(false);
 
-  const searchParams = useMemo(
+  const params = useMemo(
     () => ({
-      pageNumber,
       firstName: filters.firstName,
       postcode: filters.postcode,
       lastName: filters.lastName,
       hackneyId: filters.hackneyId,
-      dateOfBirth: filters.dateOfBirth?.toJSON?.(),
+      dateOfBirth: filters?.dateOfBirth?.toJSON?.(),
     }),
-    [filters, pageNumber]
+    [filters]
   );
 
   const {
-    data: { pagingMetaData, data: searchResults },
+    data: { residents: searchResults },
     isLoading,
-  } = useServiceUserSearch({ params: searchParams, shouldFetch: showSearchResults });
+  } = useServiceUserMasterSearch({ params, shouldFetch: showSearchResults });
 
   const changeFilters = (field, value) => {
     setShowSearchResults(false);
@@ -49,25 +51,41 @@ const BrokerPortalSearch = () => {
 
   const onSearch = () => setShowSearchResults(true);
 
+  const createNewPackage = async ({ mosaicId }) => {
+    if (isCreatingNewPackage) return;
+
+    setIsCreatingNewPackage(true);
+
+    const formData = getFormData({
+      hackneyUserId: mosaicId,
+      // brokerId: loggedInUserId,
+      packageType: 2,
+
+    })
+    const newPackageId = await assignToBroker({ data: formData });
+
+    router.push(getCorePackageRoute(newPackageId));
+  }
+
   const pushRoute = (route) => router.push(route);
 
   return (
     <SearchServiceUser
-      className="broker-referral__search"
       isLoading={isLoading}
-      setPageNumber={setPageNumber}
-      changeFilters={changeFilters}
-      pageNumber={pageNumber}
-      totalCount={pagingMetaData?.totalCount}
+      createNewPackage={createNewPackage}
       filters={filters}
-      totalPages={pagingMetaData?.totalPages}
       pushRoute={pushRoute}
-      searchResults={searchResults}
-      onSearch={onSearch}
+      searchResults={searchResults?.slice((pageNumber - 1) * 10, pageNumber * 10)}
       clearFilters={clearFilters}
-      setFilters={setFilters}
+      changeFilters={changeFilters}
+      setPageNumber={setPageNumber}
+      className='master-search'
+      pageNumber={pageNumber}
+      totalCount={searchResults?.length}
+      totalPages={searchResults?.length && Math.ceil(searchResults.length / 10)}
+      onSearch={onSearch}
     />
   );
 };
 
-export default memo(BrokerPortalSearch);
+export default BrokerReferralSearch;

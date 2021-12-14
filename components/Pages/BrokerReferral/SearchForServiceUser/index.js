@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { getServiceUserPackagesRoute, getAssignPackageRoute } from 'routes/RouteConstants';
-import { Container } from '../../../HackneyDS';
+import { Container, Button } from '../../../HackneyDS';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
 import AlternativePagination from '../../../AlternativePagination';
 import SearchResult from '../../../SearchResult';
@@ -25,6 +25,7 @@ const SearchServiceUser = ({
   totalPages,
   pushRoute,
   filters,
+  createNewPackage,
   onSearch,
   className = '',
 }) => (
@@ -58,9 +59,12 @@ const SearchServiceUser = ({
               />
               {item.mosaicId && (
                 <Container className="actions">
-                  <p onClick={() => pushRoute(getAssignPackageRoute(item.mosaicId))} className="link-button green">
+                  <Button onClick={() => pushRoute(getAssignPackageRoute(item.mosaicId))} className="link-button green no-background">
                     Allocate to broker
-                  </p>
+                  </Button>
+                  <Button onClick={() => createNewPackage(item)} className="link-button green">
+                    Create new package
+                  </Button>
                 </Container>
               )}
             </Container>
