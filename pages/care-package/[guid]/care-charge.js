@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { dateToIsoString, formatDate, getLoggedInUser, useGetFile } from 'service';
+import { dateToIsoString, formatDate, getFormData, getLoggedInUser, useGetFile } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -14,7 +14,12 @@ import {
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { updateCareChargeReclaim, useAssessmentCareCharges, usePackageDetails } from 'api';
+import {
+  sendCareChargeAssessmentFile,
+  updateCareChargeReclaim,
+  useAssessmentCareCharges,
+  usePackageDetails
+} from 'api';
 import withSession from 'lib/session';
 import { ProvisionalCareCharge } from 'components/Pages/CarePackages/CareCharge/ProvisionalCareCharge';
 import { CareCharge12 } from 'components/Pages/CarePackages/CareCharge/CareCharge12';
@@ -57,7 +62,7 @@ const CareCharge = () => {
   const { guid: carePackageId } = router.query;
 
   const {
-    data: { careCharges },
+    data: { careCharges, resource },
     isLoading: careChargeLoading,
   } = useAssessmentCareCharges(carePackageId);
 
@@ -74,7 +79,7 @@ const CareCharge = () => {
     getValues,
     clearErrors,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     resolver: yupResolver(formValidationSchema.careChargeAssessmentSchema),
     defaultValues: {
@@ -114,28 +119,26 @@ const CareCharge = () => {
       if (residential12) setResidential12OriginalValues(residential12);
       if (residential13) setResidential13OriginalValues(residential13);
 
-      const someOfFileName = provisional?.assessmentFileName || residential12?.assessmentFileName || residential13?.assessmentFileName;
-      const someOfFileId = provisional?.assessmentFileId || residential12?.assessmentFileId || residential13?.assessmentFileId;
-
       reset({
         provisional: { ...provisional, isOngoing: !provisional?.endDate, subType: 1, carePackageId },
         residential12: { ...residential12, isOngoing: !residential12?.endDate, subType: 2, carePackageId },
         residential13: { ...residential13, isOngoing: !residential13?.endDate, subType: 3, carePackageId },
-        assessmentFile: null,
-        assessmentFileId: someOfFileId,
-        assessmentFileName: someOfFileName,
       });
     } else {
       reset({
         provisional: { ...defaultValues, subType: 1, carePackageId },
         residential12: { ...defaultValues, subType: 2, carePackageId },
         residential13: { ...defaultValues, subType: 3, carePackageId },
-        assessmentFile: null,
-        assessmentFileId: null,
-        assessmentFileName: null,
       });
     }
   }, [careCharges]);
+
+  useEffect(() => {
+    if (resource && resource?.fileId && resource?.name) {
+      setValue('assessmentFileName', resource.name);
+      setValue('assessmentFileId', resource.fileId);
+    }
+  }, [resource]);
 
   useEffect(() => {
     if (details) {
@@ -185,11 +188,15 @@ const CareCharge = () => {
 
     if (data.assessmentFile) {
       if (data.assessmentFile.name === data.assessmentFileName) {
-        await console.log('push', data.assessmentFileId)
+        const formData = getFormData({ assessmentFileId: data.assessmentFileId });
+        await sendCareChargeAssessmentFile({ data: formData, carePackageId });
+      } else {
+        const formData = getFormData({ assessmentFile: data.assessmentFile });
+        await sendCareChargeAssessmentFile({ data: formData, carePackageId });
       }
-      await console.log('push assessmentFile')
     } else if (data.assessmentFileId && data.assessmentFileName) {
-      await console.log('push', data.assessmentFileId);
+      const formData = getFormData({ assessmentFileId: data.assessmentFileId });
+      await sendCareChargeAssessmentFile({ data: formData, carePackageId });
     }
 
     try {
