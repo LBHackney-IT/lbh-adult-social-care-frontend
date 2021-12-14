@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { assignToBroker, useServiceUserMasterSearch } from 'api';
+import React, { useMemo, useState } from 'react';
+import { assignToBroker, useServiceUserSearch } from 'api';
 import { SearchServiceUser } from 'components';
 import { useRouter } from 'next/router';
-import { getFormData } from '../../service';
-import { getCorePackageRoute } from '../../routes/RouteConstants';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../reducers/userReducer';
+import { getFormData } from 'service';
+import { getCorePackageRoute } from 'routes/RouteConstants';
+import { selectUser } from 'reducers/userReducer';
 
 const initialFilters = {
   postcode: '',
@@ -15,7 +15,7 @@ const initialFilters = {
   dateOfBirth: null,
 };
 
-const BrokerReferralSearch = () => {
+const BrokerPortalSearch = () => {
   const router = useRouter();
   const user = useSelector(selectUser);
 
@@ -26,19 +26,20 @@ const BrokerReferralSearch = () => {
 
   const params = useMemo(
     () => ({
+      pageNumber,
       firstName: filters.firstName,
       postcode: filters.postcode,
       lastName: filters.lastName,
       hackneyId: filters.hackneyId,
       dateOfBirth: filters?.dateOfBirth?.toJSON?.(),
     }),
-    [filters]
+    [filters, pageNumber]
   );
 
   const {
     data: { residents: searchResults },
     isLoading,
-  } = useServiceUserMasterSearch({ params, shouldFetch: showSearchResults });
+  } = useServiceUserSearch({ params, shouldFetch: showSearchResults });
 
   const changeFilters = (field, value) => {
     setShowSearchResults(false);
@@ -56,19 +57,19 @@ const BrokerReferralSearch = () => {
   const onSearch = () => setShowSearchResults(true);
 
   const createNewPackage = async ({ mosaicId }) => {
-    if (isCreatingNewPackage) return;
+    if (!isCreatingNewPackage) {
+      setIsCreatingNewPackage(true);
 
-    setIsCreatingNewPackage(true);
+      const formData = getFormData({
+        hackneyUserId: mosaicId,
+        brokerId: user.userId,
+        packageType: 2,
 
-    const formData = getFormData({
-      hackneyUserId: mosaicId,
-      brokerId: user.userId,
-      packageType: 2,
+      })
+      const newPackageId = await assignToBroker({ data: formData });
 
-    })
-    const newPackageId = await assignToBroker({ data: formData });
-
-    router.push(getCorePackageRoute(newPackageId));
+      router.push(getCorePackageRoute(newPackageId));
+    }
   }
 
   const pushRoute = (route) => router.push(route);
@@ -83,7 +84,6 @@ const BrokerReferralSearch = () => {
       clearFilters={clearFilters}
       changeFilters={changeFilters}
       setPageNumber={setPageNumber}
-      className='master-search'
       pageNumber={pageNumber}
       totalCount={searchResults?.length}
       totalPages={searchResults?.length && Math.ceil(searchResults.length / 10)}
@@ -92,4 +92,4 @@ const BrokerReferralSearch = () => {
   );
 };
 
-export default BrokerReferralSearch;
+export default BrokerPortalSearch;

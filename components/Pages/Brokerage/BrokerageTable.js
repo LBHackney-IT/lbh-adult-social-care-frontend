@@ -3,7 +3,7 @@ import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
 import { Container, Table, Tag } from '../../HackneyDS';
 import { formatDate, getTagColorFromStatus } from '../../../service';
 
-export const BrokerPortalTable = ({ searchTerm, onRowClick, data }) => {
+export const BrokerageTable = ({ searchTerm, onRowClick, data }) => {
   const handleServiceUserName = (name) => getHighlightedSearchQuery(name, searchTerm);
   const columns = [
     {

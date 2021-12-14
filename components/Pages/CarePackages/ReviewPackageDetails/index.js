@@ -14,7 +14,7 @@ import BrokerageBorderCost from '../BrokerageBorderCost';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
 import Loading from '../../../Loading';
-import ActionCarePackageModal from '../../BrokerPortal/ActionCarePackageModal';
+import ActionCarePackageModal from '../../Brokerage/ActionCarePackageModal';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
 import PackageDetailsButtons from './PackageDetailsButtons';
 

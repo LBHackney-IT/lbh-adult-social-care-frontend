@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumbs, Container, HorizontalSeparator, Heading, Button } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
-import { BrokerPortalTable } from './BrokerPortalTable';
+import { BrokerageTable } from './BrokerageTable';
 import Loading from '../../Loading';
 import { BrokerPortalFilters } from './BrokerPortalFilters';
 
@@ -37,7 +37,7 @@ export const BrokerPortalPage = ({
     </Container>
 
     <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
-      {items && <BrokerPortalTable searchTerm={searchTerm} onRowClick={onRowClick} data={items} />}
+      {items && <BrokerageTable searchTerm={searchTerm} onRowClick={onRowClick} data={items} />}
       <HorizontalSeparator height="20px" />
       <AlternativePagination
         pageSize={pageSize}

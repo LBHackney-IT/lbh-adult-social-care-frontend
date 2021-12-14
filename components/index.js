@@ -7,13 +7,13 @@ export { default as UploadFile } from './UploadFile';
 
 // pages
 export { default as TitleSubtitleHeader } from './Pages/CarePackages/TitleSubtitleHeader';
-export { default as BrokerPortalPage } from './Pages/BrokerPortal';
-export { default as ServiceUserDetails } from './Pages/BrokerPortal/ServiceUserDetails';
+export { default as BrokerPortalPage } from './Pages/Brokerage';
+export { default as ServiceUserDetails } from './Pages/Brokerage/ServiceUserDetails';
 export { default as CareDetails } from './Pages/ServiceUser/Packages/CareDetails';
 export { default as PackageRequest } from './Pages/ServiceUser/Packages/PackageRequest';
 export { default as BrokerageBorderCost } from './Pages/CarePackages/BrokerageBorderCost';
 export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPackageDetails';
-export { default as SearchServiceUser } from './Pages/BrokerReferral/SearchForServiceUser';
+export { default as SearchServiceUser } from './Pages/Brokerage/SearchForServiceUser';
 export { default as NewCareChargePackages } from './Pages/CareCharges/NewCareChargePackages';
 export { default as PackageApprovals } from './Pages/PackageApprovals';
 export { default as DynamicBreadcrumbs } from './Pages/DynamicBreadcrumbs';

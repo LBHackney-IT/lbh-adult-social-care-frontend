@@ -27,9 +27,9 @@ const initialFilters = {
   serviceUserName: '',
 };
 
-const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Portal' }];
+const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Brokerage' }];
 
-const BrokerReferral = () => {
+const Brokerage = () => {
   const router = useRouter();
 
   const [pageNumber, setPageNumber] = useState(1);
@@ -63,14 +63,14 @@ const BrokerReferral = () => {
     router.push(getServiceUserPackagesRoute(rowInfo.serviceUserId));
   }, []);
 
-  const goToBrokerReferralSearch = useCallback(() => router.push(SERVICE_USER_SEARCH_ROUTE), []);
+  const goToServiceUserSearch = useCallback(() => router.push(SERVICE_USER_SEARCH_ROUTE), []);
 
   return (
     <BrokerPortalPage
       title='Brokerage'
       breadcrumbs={breadcrumbs}
       loading={brokerViewLoading}
-      goToSearch={goToBrokerReferralSearch}
+      goToSearch={goToServiceUserSearch}
       filters={filters}
       searchTerm={serviceUserName}
       clearFilter={clearFilters}
@@ -84,4 +84,4 @@ const BrokerReferral = () => {
   );
 };
 
-export default BrokerReferral;
+export default Brokerage;

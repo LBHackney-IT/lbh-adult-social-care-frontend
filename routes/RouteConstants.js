@@ -13,9 +13,7 @@ export const getCarePackageCareChargeRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id
 export const getPaymentHistoryRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/payment-history`;
 
 export const SERVICE_USER_ROUTE = '/service-user';
-export const SERVICE_USER_MASTER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/master-search`;
 export const SERVICE_USER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/search`;
-export const getPackageDetailRoute = (id) => `${SERVICE_USER_ROUTE}/${id}/package-details`;
 export const getServiceUserPackagesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/packages`;
 export const getServiceUserCareChargesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/care-charges`;
 
@@ -37,7 +35,7 @@ export const LOGOUT_ROUTE = '/logout';
 export const NOT_FOUND_ROUTE = '/404';
 
 const carePackageRoutes = [
-  { route: BROKERAGE_ROUTE, name: 'Broker Portal' },
+  { route: BROKERAGE_ROUTE, name: 'Brokerage' },
   { route: CARE_CHARGES_ROUTE, name: 'Care Charges' },
   { route: APPROVALS_ROUTE, name: 'Approvals' },
   { route: FINANCE_ROUTE, name: 'Finance' },
@@ -59,7 +57,7 @@ export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
 
   return [
     { text: 'Home', href: '/' },
-    { text: routeInfo.name || 'Broker Portal', href: routeInfo.route || BROKERAGE_ROUTE },
+    { text: routeInfo.name || 'Brokerage', href: routeInfo.route || BROKERAGE_ROUTE },
     ...additionalBreadcrumbs,
   ];
 };

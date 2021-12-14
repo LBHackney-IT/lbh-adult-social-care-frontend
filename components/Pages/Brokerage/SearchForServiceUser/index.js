@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { getServiceUserPackagesRoute, getAssignPackageRoute } from 'routes/RouteConstants';
 import { Container, Button } from '../../../HackneyDS';
-import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
+import ServiceUserDetails from '../ServiceUserDetails';
 import AlternativePagination from '../../../AlternativePagination';
 import SearchResult from '../../../SearchResult';
 import ServiceUserSearch from '../../ServiceUser/Search';
@@ -27,9 +27,8 @@ const SearchServiceUser = ({
   filters,
   createNewPackage,
   onSearch,
-  className = '',
 }) => (
-  <Container className={`search-service-user ${className}`}>
+  <Container className='search-service-user'>
     <Loading isLoading={isLoading} />
     <DynamicBreadcrumbs additionalBreadcrumbs={[{ text: 'Search for a service user' }]} />
     <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
