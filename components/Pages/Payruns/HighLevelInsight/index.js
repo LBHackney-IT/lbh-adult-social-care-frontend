@@ -9,6 +9,7 @@ import { InsightButtons } from './InsightButtons';
 
 export const HighLevelInsight = ({
   payRunId,
+  payRunNumber,
   total = 0,
   difference = 0,
   suppliers = 0,
@@ -20,6 +21,8 @@ export const HighLevelInsight = ({
   status,
   isCedarFileDownloaded,
   insightDataLoading,
+  paidBy,
+  paidOn,
 }) => {
   const dispatch = useDispatch();
 
@@ -83,10 +86,13 @@ export const HighLevelInsight = ({
           <InsightButtons
             payRunId={payRunId}
             openRejectModal={() => setOpenedModal('Reject')}
+            payRunNumber={payRunNumber}
             status={status}
             isCedarFileDownloaded={isCedarFileDownloaded}
             hasInvoices={hasInvoices}
             updateData={updateData}
+            paidBy={paidBy}
+            paidOn={paidOn}
             isLoading={insightDataLoading}
           />
         </Container>

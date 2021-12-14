@@ -13,7 +13,18 @@ const containerProps = {
   alignItems: 'center',
 };
 
-export const InsightButtons = ({ openRejectModal, payRunId, status, isCedarFileDownloaded, updateData, isLoading, hasInvoices }) => {
+export const InsightButtons = ({
+  payRunId,
+  openRejectModal,
+  payRunNumber,
+  status,
+  isCedarFileDownloaded,
+  updateData,
+  isLoading,
+  hasInvoices,
+  paidBy,
+  paidOn,
+}) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
 
@@ -75,7 +86,7 @@ export const InsightButtons = ({ openRejectModal, payRunId, status, isCedarFileD
     () => (
       <Button
         link
-        download={`${payRunId} Cedar File.xlsx`}
+        download={`CEDAR_${payRunNumber}.xlsx`}
         isLoading={isDownloading}
         style={isFileDownloaded && { background: 'none', boxShadow: 'none' }}
         className={isFileDownloaded ? 'link-button blue' : ''}
@@ -92,7 +103,7 @@ export const InsightButtons = ({ openRejectModal, payRunId, status, isCedarFileD
         {isFileDownloaded ? 'Download again' : 'Download'}
       </Button>
     ),
-    [isFileDownloaded, payRunId]
+    [isFileDownloaded, payRunId, payRunNumber]
   );
 
   const hasDownloadFile = status > 4 && hasInvoices;
@@ -163,9 +174,9 @@ export const InsightButtons = ({ openRejectModal, payRunId, status, isCedarFileD
             disabled
           />
           <p style={{ fontSize: '10px', textAlign: 'center', fontStyle: 'italic' }}>
-            Marked paid by John Smith
+            Marked paid by {paidBy}
             <br />
-            12.01.2021
+            {paidOn}
           </p>
           {hasDownloadFile && (
             <>
