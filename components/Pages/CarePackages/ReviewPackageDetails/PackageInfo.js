@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
 import { currency, dateStringFormats } from 'constants/strings';
-import { formatDate } from 'service';
+import { formatDate, formatNumber, getNumberWithCommas } from 'service';
 import { getDocumentRequest } from 'api';
 import { Container, InsetText, HorizontalSeparator, SingleAccordion, VerticalSeparator } from '../../../HackneyDS';
 import ViewDocument from '../../../ViewDocument';
@@ -52,7 +52,7 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
                 <p className="text-lbh-f01">
                   {minusSign}
                   {currency.euro}
-                  {cost ? Math.abs(cost).toFixed(2) : 0}
+                  {getNumberWithCommas(formatNumber(cost, { isAbsolute: true }))}
                 </p>
               )}
             </Container>

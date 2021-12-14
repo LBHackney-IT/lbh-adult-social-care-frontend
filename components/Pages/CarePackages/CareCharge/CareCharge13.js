@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { HorizontalSeparator, Heading, Collapse, Container, FormGroup } from 'components';
+import { HorizontalSeparator, Heading, Collapse, Container, Hint, FormGroup } from 'components';
+import { addDays, isSameDay } from 'date-fns';
 import { cancelCareChargeReclaim } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
@@ -8,8 +9,9 @@ import { ClaimCollector } from './ClaimCollector';
 import { CareChargeSchedule } from './CareChargeSchedule';
 import { ActionButtons } from './ActionButtons';
 
-export const ProvisionalCareCharge = ({
+export const CareCharge13 = ({
   carePackageId,
+  clearErrors,
   control,
   errors,
   getValues,
@@ -26,10 +28,13 @@ export const ProvisionalCareCharge = ({
   const dispatch = useDispatch();
   const [isExpanded, setExpanded] = useState(isOpen);
   const [disabled, setDisabled] = useState(!!originalValues);
+  const res12End = watch('residential12.endDate');
+  const provEnd = watch('provisional.endDate');
 
-  const collectedBy = watch('provisional.claimCollector');
-  const startDate = watch('provisional.startDate');
-  const endDate = watch('provisional.endDate');
+  const collectedBy = watch('residential13.claimCollector');
+  const isOngoing = watch('residential13.isOngoing');
+  const startDate = watch('residential13.startDate');
+  const endDate = watch('residential13.endDate');
 
   const provCost = watch('provisional.cost');
   const res12cost = watch('residential12.cost');
@@ -47,43 +52,58 @@ export const ProvisionalCareCharge = ({
   const res12ClaimReason = watch('residential12.claimReason');
   const res13ClaimReason = watch('residential13.claimReason');
 
-  const reclaimId = watch('provisional.id');
+  const reclaimId = watch('residential13.id');
 
   useEffect(() => {
-    setValue('provisional.isOngoing', !endDate);
-    // if no data exists then copy other care charge data...
-    if (!startDate) setValue('provisional.startDate', packageStartDate);
-    setValue('provisional.cost', provCost ?? res12cost ?? res13cost);
-    setValue('provisional.claimCollector', provCollector ?? res12Collector ?? res13Collector);
-    if (collectedBy !== 1) {
-      setValue('provisional.claimReason', provClaimReason ?? res12ClaimReason ?? res13ClaimReason);
-      setValue('provisional.description', provDescription ?? res12Description ?? res13Description);
+    if (!startDate) {
+      if (res12End && !isSameDay(new Date(res12End), new Date(packageEndDate))) {
+        setValue('residential13.startDate', addDays(new Date(res12End), 1));
+      } else if (provEnd && !isSameDay(new Date(provEnd), new Date(packageEndDate))) {
+        setValue('residential13.startDate', addDays(new Date(provEnd), 1));
+      }
     }
+  }, [res12End, startDate, provEnd]);
+
+  useEffect(() => {
+    if (startDate && !endDate && !isOngoing && packageEndDate) {
+      setValue('residential13.endDate', packageEndDate);
+    }
+  }, [startDate]);
+
+  useEffect(() => {
+    setValue('residential13.isOngoing', !endDate);
+    // if no data exists then copy other care charge data...
+    setValue('residential13.cost', res13cost ?? res12cost ?? provCost);
+    setValue('residential13.claimCollector', res13Collector ?? res12Collector ?? provCollector);
+    if (collectedBy !== 1) {
+      setValue('residential13.claimReason', res13ClaimReason ?? res12ClaimReason ?? provClaimReason);
+      setValue('residential13.description', res13Description ?? res12Description ?? provDescription);
+    }
+    return () => {
+      resetField('residential13');
+    };
   }, []);
 
   useEffect(() => {
-    setValue('provisional.checkValidation', !disabled);
-    return () => {
-      resetField('provisional');
-    };
+    setValue('residential13.checkValidation', !disabled);
   }, [disabled]);
 
   const handleRevert = () => {
-    const values = getValues(['residential12', 'residential13']);
+    const values = getValues(['provisional', 'residential12']);
     hideForm();
     setDisabled(true);
     reset({
       packageStart: packageStartDate,
       packageEnd: packageEndDate,
-      provisional: {
+      residential13: {
         ...originalValues,
         description: originalValues?.description ?? '',
         claimReason: originalValues?.claimReason ?? 0,
-        subType: 1,
+        subType: 3,
         carePackageId,
       },
-      residential12: values[0],
-      residential13: values[1],
+      provisional: values[0],
+      residential12: values[1],
     });
   };
 
@@ -91,7 +111,7 @@ export const ProvisionalCareCharge = ({
     if (carePackageId && reclaimId) {
       try {
         await cancelCareChargeReclaim(carePackageId, reclaimId);
-        dispatch(addNotification({ text: 'Provisional Care Charge cancelled', className: 'success' }));
+        dispatch(addNotification({ text: 'Residential 13+ weeks cancelled', className: 'success' }));
       } catch (e) {
         dispatch(addNotification({ text: e }));
       }
@@ -99,39 +119,45 @@ export const ProvisionalCareCharge = ({
   };
   return (
     <>
+      <HorizontalSeparator height="48px" />
       <Collapse
-        title={<Heading size="xl">Provisional care charge (pre-assessment)</Heading>}
+        title={
+          <Container display="flex" flexDirection="column">
+            <Heading size="xl">Residential SU contribution</Heading>
+            <Hint>Without Property 13+ weeks</Hint>
+          </Container>
+        }
         setExpanded={setExpanded}
         expanded={isExpanded}
       >
         <FormGroup>
           <HorizontalSeparator height="30px" />
           <CareChargeCost
-            disabled={disabled}
             control={control}
+            disabled={disabled}
             errors={errors}
-            name="provisional.cost"
+            name="residential13.cost"
             title="Cost per week"
             subtitle="Auto calculated on age"
           />
           <HorizontalSeparator height="24px" />
           <ClaimCollector
-            disabled={disabled}
             control={control}
             errors={errors}
+            disabled={disabled}
             collectedBy={collectedBy}
-            radioName="provisional.claimCollector"
-            selectName="provisional.claimReason"
-            textAreaName="provisional.description"
+            radioName="residential13.claimCollector"
+            selectName="residential13.claimReason"
+            textAreaName="residential13.description"
           />
           <HorizontalSeparator height="24px" />
           <CareChargeSchedule
             disabled={disabled}
             minDate={packageStartDate}
             maxDate={packageEndDate ?? null}
-            startDate="provisional.startDate"
-            endDate="provisional.endDate"
-            checkboxName="provisional.isOngoing"
+            startDate="residential13.startDate"
+            endDate="residential13.endDate"
+            checkboxName="residential13.isOngoing"
             control={control}
             errors={errors}
           />

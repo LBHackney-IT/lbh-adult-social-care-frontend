@@ -22,6 +22,8 @@ export const InsightButtons = ({
   update,
   isLoading,
   hasInvoices,
+  paidBy,
+  paidOn,
 }) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
@@ -174,9 +176,9 @@ export const InsightButtons = ({
             disabled
           />
           <p style={{ fontSize: '10px', textAlign: 'center', fontStyle: 'italic' }}>
-            Marked paid by John Smith
+            Marked paid by {paidBy}
             <br />
-            12.01.2021
+            {paidOn}
           </p>
           {hasDownloadFile && (
             <>
