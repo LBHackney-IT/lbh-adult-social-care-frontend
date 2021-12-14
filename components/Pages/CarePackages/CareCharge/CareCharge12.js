@@ -11,12 +11,13 @@ import {
 } from 'components';
 import { addDays, addWeeks, differenceInWeeks, isBefore, isSameDay } from 'date-fns';
 import { useDispatch } from 'react-redux';
-import { cancelCareChargeReclaim } from 'api';
+import { cancelCareChargeReclaim, endCareChargeReclaim } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { CareChargeCost } from './CareChargeCost';
 import { ClaimCollector } from './ClaimCollector';
 import { CareChargeSchedule } from './CareChargeSchedule';
 import { ActionButtons } from './ActionButtons';
+import EndCareChargeModal from './EndCareChargeModal';
 
 export const CareCharge12 = ({
   carePackageId,
@@ -29,6 +30,7 @@ export const CareCharge12 = ({
   originalValues,
   packageStartDate,
   packageEndDate,
+  refreshPage,
   reset,
   resetField,
   setValue,
@@ -143,7 +145,22 @@ export const CareCharge12 = ({
     if (carePackageId && reclaimId) {
       try {
         await cancelCareChargeReclaim(carePackageId, reclaimId);
+        refreshPage();
         dispatch(addNotification({ text: 'Residential 1 - 12 weeks cancelled', className: 'success' }));
+      } catch (e) {
+        dispatch(addNotification({ text: e }));
+      }
+    }
+  };
+
+  const [isEnding, setIsEnding] = useState(false);
+
+  const endCareCharge = async (end) => {
+    if (end && reclaimId) {
+      try {
+        await endCareChargeReclaim(carePackageId, reclaimId, end);
+        refreshPage();
+        dispatch(addNotification({ text: 'Residential 1 - 12 weeks ended', className: 'success' }));
       } catch (e) {
         dispatch(addNotification({ text: e }));
       }
@@ -151,6 +168,13 @@ export const CareCharge12 = ({
   };
   return (
     <>
+      <EndCareChargeModal
+        isOpen={isEnding}
+        onClose={() => setIsEnding(false)}
+        handleConfirmation={endCareCharge}
+        chargeType="Without Property 1-12 weeks"
+        careCharge={getValues(['residential12'])}
+      />
       <HorizontalSeparator height="48px" />
       <Collapse
         title={
@@ -214,7 +238,7 @@ export const CareCharge12 = ({
           onCancel={handleCancel}
           isCancelDisabled={!reclaimId}
           onEdit={() => setDisabled(false)}
-          onEnd={() => {}}
+          onEnd={() => setIsEnding(true)}
         />
       </Collapse>
       <HorizontalSeparator height="48px" />

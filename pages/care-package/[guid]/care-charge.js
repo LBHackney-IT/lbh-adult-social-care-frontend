@@ -64,6 +64,7 @@ const CareCharge = () => {
   const {
     data: { careCharges, resource },
     isLoading: careChargeLoading,
+    mutate,
   } = useAssessmentCareCharges(carePackageId);
 
   const { data: details } = usePackageDetails(carePackageId);
@@ -206,9 +207,15 @@ const CareCharge = () => {
     try {
       await updateCareChargeReclaim(carePackageId, { careCharges: cc });
       dispatch(addNotification({ text: 'Care charges updated', className: 'success' }));
+      refreshPage();
     } catch (error) {
       dispatch(addNotification({ text: error }));
     }
+  };
+
+  const refreshPage = () => {
+    mutate();
+    router.reload(window.location.pathname);
   };
 
   const [showProv, setShowProv] = useState(false);
@@ -238,6 +245,7 @@ const CareCharge = () => {
                 originalValues={provisionalOriginalValues}
                 packageStartDate={packageStartDate}
                 packageEndDate={packageEndDate}
+                refreshPage={refreshPage}
                 reset={reset}
                 resetField={resetField}
                 setValue={setValue}
@@ -262,6 +270,7 @@ const CareCharge = () => {
                 originalValues={residential12OriginalValues}
                 packageStartDate={packageStartDate}
                 packageEndDate={packageEndDate}
+                refreshPage={refreshPage}
                 reset={reset}
                 resetField={resetField}
                 setValue={setValue}
@@ -287,6 +296,7 @@ const CareCharge = () => {
                 originalValues={residential13OriginalValues}
                 packageStartDate={packageStartDate}
                 packageEndDate={packageEndDate}
+                refreshPage={refreshPage}
                 reset={reset}
                 resetField={resetField}
                 setValue={setValue}
