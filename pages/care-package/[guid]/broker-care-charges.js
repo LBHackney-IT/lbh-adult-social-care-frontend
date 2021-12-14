@@ -132,7 +132,7 @@ const CareCharge = () => {
       description,
       assessmentFileName,
       assessmentFileId,
-      isOngoing: endDate ? false : startDate,
+      isOngoing: !endDate,
     })
   };
 
