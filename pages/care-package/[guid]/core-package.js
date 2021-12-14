@@ -11,7 +11,7 @@ import {
   PackageType,
   RadioGroup,
   ServiceUserDetails,
-  TitleSubtitleHeader,
+  TitleSubtitleHeader, Heading,
 } from 'components';
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -127,13 +127,7 @@ const CorePackage = () => {
         file: 'socialWorkerCarePlanFile',
         fileId: 'socialWorkerCarePlanFileId',
         fileName: 'socialWorkerCarePlanFileName'
-      });
-
-      if (!data.isS117Client) formData.append('isS117Client', false);
-      if (!data.hasRespiteCare) formData.append('hasRespiteCare', false);
-      if (!data.hasDischargePackage) formData.append('hasDischargePackage', false);
-      if (!data.hospitalAvoidance) formData.append('hospitalAvoidance', false);
-      if (!data.isReEnablement) formData.append('isReEnablement', false);
+      }, true);
 
       const { id } = await updateCoreCarePackage({ data: formData, packageId });
       router.push(getBrokerPackageRoute(id));
@@ -186,9 +180,11 @@ const CorePackage = () => {
               <FurtherDetails settings={settings} control={control} setValue={setValue} />
               <HorizontalSeparator height={48} />
               <Container borderBottom='1px solid #bfc1c3' />
-              <HorizontalSeparator height={24} />
+              <HorizontalSeparator height={48} />
+              <Heading size='l'>Support plan and care package</Heading>
+              <HorizontalSeparator height={8} />
               <UploadFile isLoading={fileLoading} name='socialWorkerCarePlanFile' control={control} title='Upload social worker care plan' />
-              <HorizontalSeparator height={24} />
+              <HorizontalSeparator height={48} />
               <Container borderBottom='1px solid #bfc1c3' />
               <HorizontalSeparator height={48} />
               <Button isLoading={isRequestBeingSent} disabled={isRequestBeingSent} type="submit">

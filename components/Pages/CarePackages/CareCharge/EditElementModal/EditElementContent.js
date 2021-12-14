@@ -120,7 +120,7 @@ const EditElementContent = ({ data, coreStartDate, onClose, fileInfo }) => {
         for await (const reclaim of createData) {
           const mainData = { ...getReclaimProps(reclaim), carePackageId: packageId };
 
-          const createFormData = getFormData(mainData);
+          const createFormData = getFormData({ object: mainData });
           addFileToFormData(createFormData);
           await createCareChargeReclaim(packageId, createFormData);
         }
@@ -130,7 +130,11 @@ const EditElementContent = ({ data, coreStartDate, onClose, fileInfo }) => {
         editData.forEach((reclaim, index) => {
           const mainData = getReclaimProps(reclaim);
 
-          getFormData(mainData, editFormData, `reclaims[${index}]`);
+          getFormData({
+            object: mainData,
+            existingFormData: editFormData,
+            arrayKey: `reclaims[${index}]`
+          });
         });
         addFileToFormData(editFormData);
         await updateCareChargeReclaim(packageId, editFormData);
