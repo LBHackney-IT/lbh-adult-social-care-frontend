@@ -29,6 +29,7 @@ export const CareCharge12 = ({
   originalValues,
   packageStartDate,
   packageEndDate,
+  refreshPage,
   reset,
   resetField,
   setValue,
@@ -143,6 +144,7 @@ export const CareCharge12 = ({
     if (carePackageId && reclaimId) {
       try {
         await cancelCareChargeReclaim(carePackageId, reclaimId);
+        refreshPage();
         dispatch(addNotification({ text: 'Residential 1 - 12 weeks cancelled', className: 'success' }));
       } catch (e) {
         dispatch(addNotification({ text: e }));

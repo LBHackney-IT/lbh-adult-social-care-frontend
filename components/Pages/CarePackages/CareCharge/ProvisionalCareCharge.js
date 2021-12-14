@@ -18,6 +18,7 @@ export const ProvisionalCareCharge = ({
   originalValues,
   packageStartDate,
   packageEndDate,
+  refreshPage,
   reset,
   resetField,
   setValue,
@@ -91,6 +92,7 @@ export const ProvisionalCareCharge = ({
     if (carePackageId && reclaimId) {
       try {
         await cancelCareChargeReclaim(carePackageId, reclaimId);
+        refreshPage();
         dispatch(addNotification({ text: 'Provisional Care Charge cancelled', className: 'success' }));
       } catch (e) {
         dispatch(addNotification({ text: e }));
