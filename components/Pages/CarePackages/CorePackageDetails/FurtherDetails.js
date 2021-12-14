@@ -16,7 +16,7 @@ export const FurtherDetails = ({ settings, control, setValue }) => {
     if (settings) {
       // eslint-disable-next-line no-restricted-syntax
       for (const [key, value] of Object.entries(settings)) {
-        setValue(key, value);
+        if(key !== 'id') setValue(key, value);
       }
     }
   }, [settings]);
