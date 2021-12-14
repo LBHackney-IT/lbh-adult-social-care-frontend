@@ -80,7 +80,7 @@ const CorePackage = () => {
       isS117Client: false,
       socialWorkerCarePlanFileName: null,
       socialWorkerCarePlanFileId: null,
-      file: null,
+      socialWorkerCarePlanFile: null,
     },
   });
   const onSubmit = (data) => updatePackage(data);
@@ -90,7 +90,7 @@ const CorePackage = () => {
   const { isLoading: fileLoading } = useGetFile({
     fileId: socialWorkerCarePlanFileId,
     fileName: socialWorkerCarePlanFileName,
-    setter: (file) => setValue('file', file),
+    setter: (file) => setValue('socialWorkerCarePlanFile', file),
   });
 
   useEffect(() => {
@@ -124,10 +124,17 @@ const CorePackage = () => {
     setIsRequestBeingSent(true);
     try {
       const formData = getFormDataWithFile(data, {
-        file: 'file',
+        file: 'socialWorkerCarePlanFile',
         fileId: 'socialWorkerCarePlanFileId',
         fileName: 'socialWorkerCarePlanFileName'
       });
+
+      if (!data.isS117Client) formData.append('isS117Client', false);
+      if (!data.hasRespiteCare) formData.append('hasRespiteCare', false);
+      if (!data.hasDischargePackage) formData.append('hasDischargePackage', false);
+      if (!data.hospitalAvoidance) formData.append('hospitalAvoidance', false);
+      if (!data.isReEnablement) formData.append('isReEnablement', false);
+
       const { id } = await updateCoreCarePackage({ data: formData, packageId });
       router.push(getBrokerPackageRoute(id));
       dispatch(addNotification({ text: 'Package saved.', className: 'success' }));
@@ -180,7 +187,7 @@ const CorePackage = () => {
               <HorizontalSeparator height={48} />
               <Container borderBottom='1px solid #bfc1c3' />
               <HorizontalSeparator height={24} />
-              <UploadFile isLoading={fileLoading} name='file' control={control} title='Upload social worker care plan' />
+              <UploadFile isLoading={fileLoading} name='socialWorkerCarePlanFile' control={control} title='Upload social worker care plan' />
               <HorizontalSeparator height={24} />
               <Container borderBottom='1px solid #bfc1c3' />
               <HorizontalSeparator height={48} />
