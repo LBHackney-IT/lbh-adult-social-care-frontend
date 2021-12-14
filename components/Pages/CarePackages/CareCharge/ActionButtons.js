@@ -20,11 +20,11 @@ export const ActionButtons = ({ onEdit, onRevert, onCancel,isCancelDisabled, onE
       </Button>
       <VerticalSeparator width="10px" />
       <Button disabled={isCancelDisabled} onClick={onCancel} secondary outline color="blue">
-        Cancel Provisional
+        Cancel
       </Button>
       <VerticalSeparator width="10px" />
       <Button onClick={onEnd} secondary outline color="red">
-        End Provisional
+        End
       </Button>
     </Container>
   );
