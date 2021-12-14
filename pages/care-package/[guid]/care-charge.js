@@ -110,6 +110,21 @@ const CareCharge = () => {
   const [residential12OriginalValues, setResidential12OriginalValues] = useState();
   const [residential13OriginalValues, setResidential13OriginalValues] = useState();
 
+  const sendFileRequest = async ({ assessmentFile: file, assessmentFileName: fileName, assessmentFileId: fileId }) => {
+    if (file) {
+      if (file.name === fileName) {
+        const formData = getFormData({ assessmentFileId: fileId });
+        await sendCareChargeAssessmentFile({ data: formData, carePackageId });
+      } else {
+        const formData = getFormData({ assessmentFile: file });
+        await sendCareChargeAssessmentFile({ data: formData, carePackageId });
+      }
+    } else if (fileId && fileName) {
+      const formData = getFormData({ assessmentFileId: fileId });
+      await sendCareChargeAssessmentFile({ data: formData, carePackageId });
+    }
+  }
+
   useEffect(() => {
     if (careCharges && careCharges.length > 0) {
       const provisional = careCharges.find((careCharge) => careCharge.subType === 1);
@@ -186,18 +201,7 @@ const CareCharge = () => {
       cc.push({ ...formatted });
     }
 
-    if (data.assessmentFile) {
-      if (data.assessmentFile.name === data.assessmentFileName) {
-        const formData = getFormData({ assessmentFileId: data.assessmentFileId });
-        await sendCareChargeAssessmentFile({ data: formData, carePackageId });
-      } else {
-        const formData = getFormData({ assessmentFile: data.assessmentFile });
-        await sendCareChargeAssessmentFile({ data: formData, carePackageId });
-      }
-    } else if (data.assessmentFileId && data.assessmentFileName) {
-      const formData = getFormData({ assessmentFileId: data.assessmentFileId });
-      await sendCareChargeAssessmentFile({ data: formData, carePackageId });
-    }
+    await sendFileRequest(data);
 
     try {
       await updateCareChargeReclaim(carePackageId, { careCharges: cc });
