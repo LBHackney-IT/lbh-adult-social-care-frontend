@@ -20,7 +20,7 @@ export const getServiceUserPackagesRoute = (serviceUserId) => `${SERVICE_USER_RO
 export const getServiceUserCareChargesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/care-charges`;
 
 export const BROKERAGE_ROUTE = '/brokerage';
-export const getAssignPackageRoute = (id) => `${BROKERAGE_ROUTE}/${id}/assign-package`;
+export const getAssignPackageRoute = (id) => `/broker-referral/${id}/assign-package`;
 
 export const getSinglePayrunRoute = (payrunId) => `${FINANCE_ROUTE}/${payrunId}`;
 

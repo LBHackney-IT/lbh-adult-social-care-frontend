@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { getServiceUserPackagesRoute, getAssignPackageRoute, getHistoryRoute } from 'routes/RouteConstants';
-import { Container, Button } from '../../../HackneyDS';
+import { Container, VerticalSeparator } from '../../../HackneyDS';
 import ServiceUserDetails from '../../BrokerPortal/ServiceUserDetails';
 import AlternativePagination from '../../../AlternativePagination';
 import SearchResult from '../../../SearchResult';
@@ -55,26 +55,26 @@ const SearchServiceUser = ({
                 dateOfBirth={item.dateOfBirth}
                 serviceUserName={`${item.firstName} ${item.lastName}`}
                 address={item.postCode || item.address?.postcode}
+                activePackage={item.activePackage}
                 title=""
               />
-              {item.mosaicId && (
-                <Container className="actions">
-                  <Button
-                    disabled={item.activePackageId}
-                    onClick={() => pushRoute(getHistoryRoute(item.activePackageId))}
-                    secondary
-                    className="link-button"
-                  >
-                    View package history
-                  </Button>
-                  <Button secondary onClick={() => pushRoute(getAssignPackageRoute(item.mosaicId))} className="link-button no-border">
-                    Allocate to broker
-                  </Button>
-                  <Button secondary onClick={() => createNewPackage(item)} className="link-button">
-                    Create new package
-                  </Button>
-                </Container>
-              )}
+              <Container className="actions">
+                <p
+                  style={!item.activePackageId && { opacity: 0.2, pointerEvents: 'none' }}
+                  onClick={() => pushRoute(getHistoryRoute(item.activePackageId))}
+                  className="link-button green"
+                >
+                  View package history
+                </p>
+                <VerticalSeparator width={32} />
+                <p onClick={() => pushRoute(getAssignPackageRoute(item.mosaicId))} className="link-button green">
+                  Allocate to broker
+                </p>
+                <VerticalSeparator width={32} />
+                <p onClick={() => createNewPackage(item)} className="link-button green">
+                  Create new package
+                </p>
+              </Container>
             </Container>
           ))}
           {pageNumber && (

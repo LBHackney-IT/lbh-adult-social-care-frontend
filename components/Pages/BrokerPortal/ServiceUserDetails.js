@@ -4,7 +4,7 @@ import { formatDate } from 'service/helpers';
 import { Container, Heading, HorizontalSeparator, VerticalSeparator } from '../../HackneyDS';
 
 const placeHolderBirthDate = new Date(1990, 10, 10);
-const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address, title = 'Service user details' }) => (
+const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address, activePackage, title = 'Service user details' }) => (
   <>
     {title && <Heading size="l">{title}</Heading>}
     <HorizontalSeparator height="20px" />
@@ -31,6 +31,12 @@ const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address, 
         <Heading size="m">Postcode</Heading>
         <p>{address}</p>
       </Container>
+      {activePackage && (
+        <Container>
+          <Heading size="m">Active Package</Heading>
+          <p>{activePackage}</p>
+        </Container>
+      )}
     </Container>
   </>
 );
