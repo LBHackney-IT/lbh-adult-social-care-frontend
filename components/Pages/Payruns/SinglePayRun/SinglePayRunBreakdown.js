@@ -1,6 +1,6 @@
 import React from 'react';
 import { getNumberWithCommas } from 'service';
-import { Collapse, Container, Heading, HorizontalSeparator, VerticalSeparator } from 'components';
+import { Collapse, Container, Heading, HorizontalSeparator } from 'components';
 import { format } from 'date-fns';
 
 export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }) => {
