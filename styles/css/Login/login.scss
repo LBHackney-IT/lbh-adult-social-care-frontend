@@ -14,11 +14,16 @@
   border-radius: 5px;
   padding: 32px;
 
-  a.button-base {
+  a.lbh-button {
     width: 308px;
     height: 80px;
     margin-top: 16px;
     font-size: 19px;
+
+    .loading-blue {
+      width: 40px;
+      height: 40px;
+    }
 
     @include media-mobile {
       width: initial;

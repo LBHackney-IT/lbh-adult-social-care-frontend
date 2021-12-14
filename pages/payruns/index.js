@@ -1,7 +1,18 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { Breadcrumbs, Button, Container, Heading, HorizontalSeparator, Loading, Tab, Tabs } from 'components';
+import {
+  Breadcrumbs,
+  Button,
+  Container,
+  Heading,
+  Hint,
+  HorizontalSeparator,
+  InsetText,
+  Loading,
+  Tab,
+  Tabs,
+} from 'components';
 import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
@@ -23,7 +34,6 @@ export const getServerSideProps = withSession(({ req }) => {
 });
 
 const initialFilters = {
-  payRunId: '',
   searchTerm: '',
   dateFrom: null,
   dateTo: null,
@@ -41,12 +51,11 @@ const Payruns = () => {
   const [isOpenedModal, setIsOpenedModal] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
-  const { payRunId, searchTerm, dateTo, dateFrom, payRunType, payRunStatus } = filters;
+  const { searchTerm, dateTo, dateFrom, payRunType, payRunStatus } = filters;
   const params = useMemo(
     () => ({
       dateTo,
       dateFrom,
-      payRunId,
       searchTerm,
       pageNumber,
       heldPageNumber,
@@ -78,6 +87,10 @@ const Payruns = () => {
     },
   } = hData;
 
+  const updateAllPayruns = () => {
+    update();
+    updateHeldData();
+  };
   return (
     <Container>
       <CreatePayRunModal isOpen={isOpenedModal} onClose={() => setIsOpenedModal(false)} update={update} />
@@ -101,7 +114,11 @@ const Payruns = () => {
         <Tabs tabs={tabs} callback={(index) => setTabView(tabs[index])}>
           <Tab>
             <Loading className="loading" isLoading={isLoading} />
-            <PayrunList searchTerm={payRunId} data={payrunData} />
+            {payrunData.length > 0 || isLoading ? (
+              <PayrunList searchTerm={searchTerm} data={payrunData} />
+            ) : (
+              <Hint>No results found</Hint>
+            )}
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
@@ -115,7 +132,11 @@ const Payruns = () => {
           </Tab>
           <Tab>
             <Loading className="loading" isLoading={isHeldLoading} />
-            <HeldPaymentsList data={heldData} searchTerm={payRunId} update={updateHeldData} />
+            {heldData.length > 0 || isHeldLoading ? (
+              <HeldPaymentsList data={heldData} searchTerm={searchTerm} update={updateAllPayruns} />
+            ) : (
+              <Hint>No results found</Hint>
+            )}
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
@@ -129,7 +150,11 @@ const Payruns = () => {
           </Tab>
           <Tab>
             <Loading className="loading" isLoading={isLoading} />
-            <PayrunList searchTerm={payRunId} data={payrunData} />
+            {payrunData.length > 0 || isLoading ? (
+              <PayrunList searchTerm={searchTerm} data={payrunData} />
+            ) : (
+              <Hint>No results found</Hint>
+            )}
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination
@@ -143,7 +168,11 @@ const Payruns = () => {
           </Tab>
           <Tab>
             <Loading className="loading" isLoading={isLoading} />
-            <PayrunList searchTerm={payRunId} data={payrunData} />
+            {payrunData.length > 0 || isLoading ? (
+              <PayrunList searchTerm={searchTerm} data={payrunData} />
+            ) : (
+              <Hint>No results found</Hint>
+            )}
             <HorizontalSeparator height="30px" />
             {pageNumber && (
               <AlternativePagination

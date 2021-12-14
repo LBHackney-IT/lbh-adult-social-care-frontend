@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import withSession from 'lib/session';
-import { getLoggedInUser } from 'service';
+import { formatDate, getLoggedInUser } from 'service';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
@@ -107,7 +107,10 @@ const SinglePayRun = () => {
           <HighLevelInsight
             update={updateData}
             payRunId={payRunId}
+            payRunNumber={payRun?.payRunNumber}
             holdCount={insightData?.holdsCount}
+            paidBy={insightData?.paidBy}
+            paidOn={insightData?.paidOn && formatDate(insightData.paidOn)}
             holdValue={insightData?.totalHeldAmount}
             difference={insightData?.totalDifferenceFromLastCycle}
             serviceUsers={insightData?.serviceUserCount}
