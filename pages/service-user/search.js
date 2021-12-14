@@ -1,9 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { assignToBroker, useServiceUserMasterSearch } from 'api';
 import { SearchServiceUser } from 'components';
 import { useRouter } from 'next/router';
 import { getFormData } from '../../service';
 import { getCorePackageRoute } from '../../routes/RouteConstants';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../reducers/userReducer';
 
 const initialFilters = {
   postcode: '',
@@ -15,6 +17,8 @@ const initialFilters = {
 
 const BrokerReferralSearch = () => {
   const router = useRouter();
+  const user = useSelector(selectUser);
+
   const [filters, setFilters] = useState({ ...initialFilters });
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
@@ -58,7 +62,7 @@ const BrokerReferralSearch = () => {
 
     const formData = getFormData({
       hackneyUserId: mosaicId,
-      // brokerId: loggedInUserId,
+      brokerId: user.userId,
       packageType: 2,
 
     })
