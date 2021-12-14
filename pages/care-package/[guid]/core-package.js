@@ -98,10 +98,10 @@ const CorePackage = () => {
       setValue('packageType', packageInfo.packageType, 10);
       setValue('primarySupportReasonId', packageInfo.primarySupportReasonId);
       setValue('packageScheduling', packageInfo.packageScheduling);
-      if (packageInfo.assessmentFileId && packageInfo.assessmentFileName) {
-        const { assessmentFileId, assessmentFileName } = packageInfo;
-        setValue('socialWorkerCarePlanFileId', assessmentFileId);
-        setValue('socialWorkerCarePlanFileName', assessmentFileName);
+      if (packageInfo.socialWorkerCarePlanFileId && packageInfo.socialWorkerCarePlanFileName) {
+        const { socialWorkerCarePlanFileId: fileId, socialWorkerCarePlanFileName: fileName } = packageInfo;
+        setValue('socialWorkerCarePlanFileId', fileId);
+        setValue('socialWorkerCarePlanFileName', fileName);
       }
       setPackageStatus(packageInfo.status);
     }
