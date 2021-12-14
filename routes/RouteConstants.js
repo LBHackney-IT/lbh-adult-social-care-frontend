@@ -1,7 +1,5 @@
 import { isServer } from '../api/Utils/FuncUtils';
 
-export const BROKER_PORTAL_ROUTE = '/broker-portal';
-
 export const CARE_PACKAGE_ROUTE = '/care-package';
 export const getCarePackageReviewRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/review`;
 export const getCorePackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/core-package`;
@@ -21,8 +19,8 @@ export const getPackageDetailRoute = (id) => `${SERVICE_USER_ROUTE}/${id}/packag
 export const getServiceUserPackagesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/packages`;
 export const getServiceUserCareChargesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/care-charges`;
 
-export const BROKER_REFERRAL_ROUTE = '/broker-referral';
-export const getAssignPackageRoute = (id) => `${BROKER_REFERRAL_ROUTE}/${id}/assign-package`;
+export const BROKERAGE_ROUTE = '/brokerage';
+export const getAssignPackageRoute = (id) => `${BROKERAGE_ROUTE}/${id}/assign-package`;
 
 export const getSinglePayrunRoute = (payrunId) => `${FINANCE_ROUTE}/${payrunId}`;
 
@@ -39,8 +37,7 @@ export const LOGOUT_ROUTE = '/logout';
 export const NOT_FOUND_ROUTE = '/404';
 
 const carePackageRoutes = [
-  { route: BROKER_REFERRAL_ROUTE, name: 'Broker Referral' },
-  { route: BROKER_PORTAL_ROUTE, name: 'Broker Portal' },
+  { route: BROKERAGE_ROUTE, name: 'Broker Portal' },
   { route: CARE_CHARGES_ROUTE, name: 'Care Charges' },
   { route: APPROVALS_ROUTE, name: 'Approvals' },
   { route: FINANCE_ROUTE, name: 'Finance' },
@@ -62,7 +59,7 @@ export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
 
   return [
     { text: 'Home', href: '/' },
-    { text: routeInfo.name || 'Broker Referral', href: routeInfo.route || BROKER_REFERRAL_ROUTE },
+    { text: routeInfo.name || 'Broker Portal', href: routeInfo.route || BROKERAGE_ROUTE },
     ...additionalBreadcrumbs,
   ];
 };

@@ -19,13 +19,13 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { BROKER_REFERRAL_ROUTE } from 'routes/RouteConstants';
+import { BROKERAGE_ROUTE } from 'routes/RouteConstants';
 import { getFormDataWithFile } from 'service/getFormData';
 import { assignPackageSchema } from 'service/formValidationSchema';
 
 const breadcrumbs = [
-  { text: 'Home', href: BROKER_REFERRAL_ROUTE },
-  { text: 'Broker Referral', href: BROKER_REFERRAL_ROUTE },
+  { text: 'Home', href: BROKERAGE_ROUTE },
+  { text: 'Broker Referral', href: BROKERAGE_ROUTE },
   { text: 'Assign and attach a care plan' },
 ];
 
@@ -67,7 +67,7 @@ const AssignPackage = () => {
     try {
       await assignToBroker({ data: formData });
       dispatch(addNotification({ text: 'Care plan assigned', className: 'success' }));
-      router.push(BROKER_REFERRAL_ROUTE);
+      router.push(BROKERAGE_ROUTE);
     } catch (error) {
       dispatch(addNotification({ text: error, className: 'error' }));
     }
