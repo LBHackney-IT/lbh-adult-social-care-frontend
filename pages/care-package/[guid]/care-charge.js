@@ -75,7 +75,7 @@ const CareCharge = () => {
     getValues,
     clearErrors,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     resolver: yupResolver(formValidationSchema.careChargeAssessmentSchema),
     defaultValues: {
