@@ -85,7 +85,10 @@ const CorePackage = () => {
   });
   const onSubmit = (data) => updatePackage(data);
 
-  const [socialWorkerCarePlanFileId, socialWorkerCarePlanFileName] = watch(['socialWorkerCarePlanFileId', 'socialWorkerCarePlanFileName']);
+  const [socialWorkerCarePlanFileId, socialWorkerCarePlanFileName] = watch([
+    'socialWorkerCarePlanFileId',
+    'socialWorkerCarePlanFileName',
+  ]);
 
   const { isLoading: fileLoading } = useGetFile({
     fileId: socialWorkerCarePlanFileId,
@@ -181,9 +184,14 @@ const CorePackage = () => {
               <HorizontalSeparator height={48} />
               <Container borderBottom='1px solid #bfc1c3' />
               <HorizontalSeparator height={48} />
-              <Heading size='l'>Support plan and care package</Heading>
+              <Heading size='l'>Upload support plan/care package</Heading>
               <HorizontalSeparator height={8} />
-              <UploadFile isLoading={fileLoading} name='socialWorkerCarePlanFile' control={control} title='Upload social worker care plan' />
+              <UploadFile
+                isLoading={fileLoading}
+                name='socialWorkerCarePlanFile'
+                control={control}
+                title=''
+              />
               <HorizontalSeparator height={48} />
               <Container borderBottom='1px solid #bfc1c3' />
               <HorizontalSeparator height={48} />

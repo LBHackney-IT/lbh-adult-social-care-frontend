@@ -6,7 +6,7 @@ import { TEXT_FILE_EXTENSIONS } from 'constants/variables';
 const UploadFile = ({ control, isLoading, title, name = 'assessmentFile' }) => (
     <div className="financial-assessment">
       <Container>
-        <HorizontalSeparator height={24} />
+        {title && <HorizontalSeparator height={24} />}
         <Controller
           name={name}
           control={control}
