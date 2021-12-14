@@ -1,9 +1,23 @@
 import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { Container, DynamicBreadcrumbs, HistoryList, HistoryOverview, Loading, TitleSubtitleHeader } from 'components';
+import { Loading, Container, HistoryList, HistoryOverview, TitleSubtitleHeader, DynamicBreadcrumbs } from 'components';
+import withSession from 'lib/session';
 import { usePackageHistory } from 'api';
-import { useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { getCarePackageReviewRoute } from 'routes/RouteConstants';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const History = () => {
   const router = useRouter();

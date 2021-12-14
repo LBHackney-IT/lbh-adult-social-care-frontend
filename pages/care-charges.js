@@ -31,7 +31,7 @@ const CareChargePackages = () => {
     setFilters({ ...initialFilters });
   }
 
-  const pushRoute = (route) => router.push(route);
+  const pushRoute = (route) => router.push(route)
 
   return (
     <NewCareChargePackages

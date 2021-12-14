@@ -1,14 +1,29 @@
 import React from 'react';
 import {
   CareDetails,
-  Container,
   DynamicBreadcrumbs,
+  Container,
   HorizontalSeparator,
   ServiceUserDetails,
   TitleSubtitleHeader,
 } from 'components';
 import { useRouter } from 'next/router';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';
+import withSession from 'lib/session';
+import { getLoggedInUser } from 'service';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const Packages = () => {
   const router = useRouter();
@@ -32,19 +47,19 @@ const Packages = () => {
         )}
         <HorizontalSeparator height="48px" />
         {packages &&
-        packages
-          .map((p) => (
-            <CareDetails
-              isLoading={isLoading}
-              packageId={p.packageId}
-              title={p.packageType}
-              data={p.packageItems}
-              isS117Client={p.isS117Client}
-              isS117ClientConfirmed={p.isS117ClientConfirmed}
-              netTotal={p.netTotal}
-              packageStatus={p.packageStatus}
-            />
-          ))
+          packages
+            .map((p) => (
+              <CareDetails
+                isLoading={isLoading}
+                packageId={p.packageId}
+                title={p.packageType}
+                data={p.packageItems}
+                isS117Client={p.isS117Client}
+                isS117ClientConfirmed={p.isS117ClientConfirmed}
+                netTotal={p.netTotal}
+                packageStatus={p.packageStatus}
+              />
+            ))
         }
       </Container>
     </>

@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { getFormDataWithFile, useGetFile } from 'service';
+import { getFormDataWithFile, getLoggedInUser, useGetFile } from 'service';
 import {
   Button,
-  Container,
   DynamicBreadcrumbs,
+  Container,
   FurtherDetails,
   HorizontalSeparator,
   Loading,
@@ -19,9 +19,23 @@ import { useDispatch } from 'react-redux';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
+import withSession from 'lib/session';
 import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
 import { formValidationSchema } from 'service/formValidationSchema';
 import UploadFile from 'components/UploadFile';
+
+export const getServerSideProps = withSession(async ({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const CorePackage = () => {
   const router = useRouter();
