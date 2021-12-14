@@ -1,5 +1,5 @@
 import React from 'react';
-import { currency } from 'constants/strings';
+import { getNumberWithPreSign } from 'service';
 
 export const SummaryCostOfPlacement = ({ costOfPlacement }) => {
   if (!costOfPlacement) return null;
@@ -8,9 +8,8 @@ export const SummaryCostOfPlacement = ({ costOfPlacement }) => {
     <p className="brokerage__cost-of-placement">
       Cost of placement
       <span className="lbh-color-dark-red font-weight-bold">
-                          {currency.euro}
-        {costOfPlacement.toFixed(2)}
-                        </span>
+        {getNumberWithPreSign(costOfPlacement)}
+      </span>
     </p>
   );
 };

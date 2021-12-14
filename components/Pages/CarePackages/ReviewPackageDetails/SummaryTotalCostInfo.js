@@ -6,9 +6,7 @@ export const SummaryTotalCostInfo = ({ totalCostInfo }) => {
   if (!totalCostInfo) return null;
 
   return (
-    <Container
-      className={totalCostInfo?.supplier && totalCostInfo?.hackney ? 'single-border-cost' : ''}
-    >
+    <Container className={totalCostInfo?.supplier && totalCostInfo?.hackney ? 'single-border-cost' : ''}>
       {!!totalCostInfo?.hackney && (
         <BrokerageBorderCost
           totalCost={totalCostInfo?.hackney.toFixed(2)}

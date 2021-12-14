@@ -7,9 +7,10 @@ const careChargesClaimCollector = {
 };
 
 export const CareChargesSummary = ({ containerId, claimCollector, subTypeName, collectingReasonLabel }) => {
+  const careChargeClaimCollector = careChargesClaimCollector?.[claimCollector];
+
   if (!(containerId === 'care-charges' && careChargeClaimCollector)) return null;
 
-  const careChargeClaimCollector = careChargesClaimCollector[claimCollector];
 
   return (
     <>
