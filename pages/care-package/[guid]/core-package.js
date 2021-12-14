@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { getLoggedInUser } from 'service';
+import { getFormDataWithFile, getLoggedInUser } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -22,6 +22,7 @@ import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackag
 import withSession from 'lib/session';
 import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
 import { formValidationSchema } from 'service/formValidationSchema';
+import UploadFile from 'components/UploadFile';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -76,6 +77,9 @@ const CorePackage = () => {
       hasDischargePackage: false,
       isReEnablement: false,
       isS117Client: false,
+      socialWorkerCarePlanFileName: null,
+      socialWorkerCarePlanFileId: null,
+      file: null,
     },
   });
   const onSubmit = (data) => updatePackage(data);
@@ -85,6 +89,11 @@ const CorePackage = () => {
       setValue('packageType', packageInfo.packageType, 10);
       setValue('primarySupportReasonId', packageInfo.primarySupportReasonId);
       setValue('packageScheduling', packageInfo.packageScheduling);
+      if (packageInfo.assessmentFileId && packageInfo.assessmentFileName) {
+        const { assessmentFileId, assessmentFileName } = packageInfo;
+        setValue('socialWorkerCarePlanFileId', assessmentFileId);
+        setValue('socialWorkerCarePlanFileName', assessmentFileName);
+      }
       setPackageStatus(packageInfo.status);
     }
   }, [packageInfo]);
@@ -105,7 +114,12 @@ const CorePackage = () => {
     const data = getValues();
     setIsRequestBeingSent(true);
     try {
-      const { id } = await updateCoreCarePackage({ data, packageId });
+      const formData = getFormDataWithFile(data, {
+        file: 'file',
+        fileId: 'socialWorkerCarePlanFileId',
+        fileName: 'socialWorkerCarePlanFileName'
+      });
+      const { id } = await updateCoreCarePackage({ data: formData, packageId });
       router.push(getBrokerPackageRoute(id));
       dispatch(addNotification({ text: 'Package saved.', className: 'success' }));
     } catch (error) {
@@ -154,6 +168,7 @@ const CorePackage = () => {
                 />
               </Container>
               <FurtherDetails settings={settings} control={control} setValue={setValue} />
+              <UploadFile name='file' control={control} title='Upload social worker care plan' />
               <HorizontalSeparator height="20px" />
               <Button isLoading={isRequestBeingSent} disabled={isRequestBeingSent} type="submit">
                 Save and continue
