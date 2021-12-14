@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { getFormDataWithFile, getLoggedInUser } from 'service';
+import { getFormDataWithFile, getLoggedInUser, useGetFile } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -64,6 +64,7 @@ const CorePackage = () => {
     control,
     setValue,
     getValues,
+    watch,
     formState: { errors, isDirty },
   } = useForm({
     resolver: yupResolver(formValidationSchema.carePackageCorePackageSchema),
@@ -84,6 +85,14 @@ const CorePackage = () => {
   });
   const onSubmit = (data) => updatePackage(data);
 
+  const [socialWorkerCarePlanFileId, socialWorkerCarePlanFileName] = watch(['socialWorkerCarePlanFileId', 'socialWorkerCarePlanFileName']);
+
+  const { isLoading: fileLoading } = useGetFile({
+    fileId: socialWorkerCarePlanFileId,
+    fileName: socialWorkerCarePlanFileName,
+    setter: (file) => setValue('file', file),
+  });
+
   useEffect(() => {
     if (packageInfo) {
       setValue('packageType', packageInfo.packageType, 10);
@@ -98,7 +107,7 @@ const CorePackage = () => {
     }
   }, [packageInfo]);
 
-  const updatePackage = async (data = {}) => {
+  const updatePackage = (data = {}) => {
     if (isDirty) {
       if (packageStatus && parseInt(packageStatus, 10) === 3) {
         setDialogOpen(true);
@@ -168,8 +177,13 @@ const CorePackage = () => {
                 />
               </Container>
               <FurtherDetails settings={settings} control={control} setValue={setValue} />
-              <UploadFile name='file' control={control} title='Upload social worker care plan' />
-              <HorizontalSeparator height="20px" />
+              <HorizontalSeparator height={48} />
+              <Container borderBottom='1px solid #bfc1c3' />
+              <HorizontalSeparator height={24} />
+              <UploadFile isLoading={fileLoading} name='file' control={control} title='Upload social worker care plan' />
+              <HorizontalSeparator height={24} />
+              <Container borderBottom='1px solid #bfc1c3' />
+              <HorizontalSeparator height={48} />
               <Button isLoading={isRequestBeingSent} disabled={isRequestBeingSent} type="submit">
                 Save and continue
               </Button>
