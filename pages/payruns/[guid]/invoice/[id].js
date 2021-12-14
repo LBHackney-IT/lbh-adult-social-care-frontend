@@ -4,7 +4,6 @@ import { getEnGBFormattedDate, usePayRunInvoice } from 'api';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { useRouter } from 'next/router';
 
-
 const InvoiceDetailPage = () => {
   const router = useRouter();
   const { guid: payRunId, id: invoiceId } = router.query;
