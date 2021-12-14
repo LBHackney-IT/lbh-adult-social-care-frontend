@@ -6,7 +6,16 @@ import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { holdInvoice } from 'api/PayRun';
 import { useDepartments } from 'api';
-import { Button, Container, Dialog, FormGroup, HorizontalSeparator, Select, Textarea } from '../../../HackneyDS';
+import {
+  Button,
+  Container,
+  Dialog,
+  FormGroup,
+  HorizontalSeparator,
+  Select,
+  Textarea,
+  VerticalSeparator
+} from '../../../HackneyDS';
 import Loading from '../../../Loading';
 
 const defaultValues = {
@@ -27,14 +36,14 @@ const schema = yup.object().shape({
     .test('reasonForHolding', 'Please enter a reason', (value) => value?.trim?.())
 });
 
-const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update }) => {
+const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, closeModal, updateData }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const { data: holdPaymentOptions } = useDepartments();
 
-  const closeModal = () => {
+  const onCloseModal = () => {
     reset();
-    setIsOpened();
+    closeModal();
   };
 
   const pushNotification = (text, className = 'error') => {
@@ -46,8 +55,8 @@ const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update })
     try {
       await holdInvoice({ reasonForHolding, payRunId, actionRequiredFromId, invoiceId });
       pushNotification(`Invoice status changed`, 'success');
-      update();
-      setIsOpened(false);
+      updateData();
+      closeModal();
     } catch (e) {
       pushNotification(e, 'error');
     }
@@ -66,7 +75,7 @@ const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update })
 
   return (
     <>
-      <Dialog noBorder isOpen={isOpen} onClose={closeModal} className="hold-payment-modal">
+      <Dialog noBorder isOpen={isOpen} onClose={onCloseModal} className="hold-payment-modal">
         <Loading isLoading={isLoading} />
         <h3>Hold Payment</h3>
         <form onSubmit={handleSubmit(onHoldRequest)}>
@@ -103,8 +112,9 @@ const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, setIsOpened, update })
             )}
           />
           <HorizontalSeparator height={32} />
-          <Container className="create-pay-run__actions" display="flex">
-            <Button onClick={closeModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
+          <Container display="flex">
+            <Button onClick={onCloseModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
+            <VerticalSeparator width={8} />
             <Button
               isLoading={isLoading}
               disabled={isLoading}

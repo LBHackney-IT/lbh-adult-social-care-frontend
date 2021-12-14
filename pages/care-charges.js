@@ -7,6 +7,7 @@ const initialFilters = {
   orderByDate: '',
   status: '',
   modifiedBy: '',
+  searchTerm: '',
 };
 
 const CareChargePackages = () => {
@@ -19,13 +20,16 @@ const CareChargePackages = () => {
     orderByDate: filters.orderByDate,
     status: filters.status,
     modifiedBy: filters.modifiedBy,
+    searchTerm: filters.searchTerm,
   }), [filters, pageNumber]);
 
   const { data: searchResults, isLoading } = useCareCharge({ params });
 
   const { options: modifiedByOptions, isLoading: usersLoading } = useUsers();
 
-  const clearFilters = () => setFilters({ ...initialFilters });
+  const clearFilters = () => {
+    setFilters({ ...initialFilters });
+  }
 
   const pushRoute = (route) => router.push(route)
 

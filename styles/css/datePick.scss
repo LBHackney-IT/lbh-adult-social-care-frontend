@@ -22,6 +22,14 @@
   z-index: 4;
 }
 
+.react-datepicker__day {
+  &.react-datepicker__day--keyboard-selected,
+  &.react-datepicker__day--selected {
+    background: rgb(247, 194, 66);
+    color: black;
+  }
+}
+
 .datepicker-disabled {
   label {
     color: black;

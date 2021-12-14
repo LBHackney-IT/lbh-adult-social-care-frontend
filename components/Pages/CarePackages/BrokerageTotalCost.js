@@ -1,5 +1,6 @@
 import React from 'react';
 import { currency } from 'constants/strings';
+import { formatNumber, getNumberWithCommas } from 'service';
 
 const BrokerageTotalCost = ({ name, className, value }) => {
   if(!name) return <></>;
@@ -8,7 +9,7 @@ const BrokerageTotalCost = ({ name, className, value }) => {
   return (
     <p className={className || ''}>
       {`${name}`}
-      <span className="text-lbh-f01">{minusSign}{currency.euro}{value ? Math.abs(value).toFixed(2) : 0}</span>
+      <span className="text-lbh-f01">{minusSign}{currency.euro}{getNumberWithCommas(formatNumber(value, { isAbsolute: true }))}</span>
     </p>
   );
 }

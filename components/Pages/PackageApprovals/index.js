@@ -8,7 +8,7 @@ import {
   SearchBox,
   Select,
   FormGroup,
-  Dialog,
+  Dialog, Heading,
 } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
 import DatePick from '../../DatePick';
@@ -114,15 +114,17 @@ export const PackageApprovals = ({
           <Container padding="10px 60px 0px">
             <Breadcrumbs values={breadcrumbs} />
           </Container>
-          <Container className="brokerage-portal__header">
-            <h1>{title}</h1>
+          <HorizontalSeparator height={30} />
+          <Container height={50} padding='0 60px'>
+            <Heading size="xl">{title}</Heading>
           </Container>
+          <HorizontalSeparator height={16} />
           <Container className="brokerage-portal__filters">
             <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label">
                 <SearchBox
                   placeholder="Search service user"
-                  label="Search Packages"
+                  label="Search"
                   value={searchText}
                   onChangeValue={setSearchText}
                   search={onSearch}
