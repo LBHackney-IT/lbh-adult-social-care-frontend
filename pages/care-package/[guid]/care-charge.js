@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { dateToIsoString, formatDate, getLoggedInUser } from 'service';
+import { dateToIsoString, formatDate, getLoggedInUser, useGetFile } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -10,7 +10,7 @@ import {
   VerticalSeparator,
   HorizontalSeparator,
   InsetText,
-  Hint,
+  Hint, UploadFile, Heading,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -74,16 +74,31 @@ const CareCharge = () => {
     getValues,
     clearErrors,
     reset,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(formValidationSchema.careChargeAssessmentSchema),
     defaultValues: {
+      assessmentFileId: null,
+      assessmentFileName: null,
+      assessmentFile: null,
       packageStart: packageStartDate,
       packageEnd: packageEndDate,
       provisional: defaultValues,
       residential12: defaultValues,
       residential13: defaultValues,
     },
+  });
+
+  const [assessmentFileId, assessmentFileName] = watch([
+    'assessmentFileId',
+    'assessmentFileName',
+    'assessmentFile'
+  ]);
+
+  const { isLoading: fileLoading } = useGetFile({
+    fileId: assessmentFileId,
+    fileName: assessmentFileName,
+    setter: (newFile) => setValue('assessmentFile', newFile),
   });
 
   const [provisionalOriginalValues, setProvisionalOriginalValues] = useState();
@@ -99,16 +114,25 @@ const CareCharge = () => {
       if (residential12) setResidential12OriginalValues(residential12);
       if (residential13) setResidential13OriginalValues(residential13);
 
+      const someOfFileName = provisional?.assessmentFileName || residential12?.assessmentFileName || residential13?.assessmentFileName;
+      const someOfFileId = provisional?.assessmentFileId || residential12?.assessmentFileId || residential13?.assessmentFileId;
+
       reset({
         provisional: { ...provisional, isOngoing: !provisional?.endDate, subType: 1, carePackageId },
         residential12: { ...residential12, isOngoing: !residential12?.endDate, subType: 2, carePackageId },
         residential13: { ...residential13, isOngoing: !residential13?.endDate, subType: 3, carePackageId },
+        assessmentFile: null,
+        assessmentFileId: someOfFileId,
+        assessmentFileName: someOfFileName,
       });
     } else {
       reset({
         provisional: { ...defaultValues, subType: 1, carePackageId },
         residential12: { ...defaultValues, subType: 2, carePackageId },
         residential13: { ...defaultValues, subType: 3, carePackageId },
+        assessmentFile: null,
+        assessmentFileId: null,
+        assessmentFileName: null,
       });
     }
   }, [careCharges]);
@@ -157,6 +181,15 @@ const CareCharge = () => {
         claimReason: data?.residential13?.claimCollector === 1 ? null : data?.residential13?.claimReason,
       };
       cc.push({ ...formatted });
+    }
+
+    if (data.assessmentFile) {
+      if (data.assessmentFile.name === data.assessmentFileName) {
+        await console.log('push', data.assessmentFileId)
+      }
+      await console.log('push assessmentFile')
+    } else if (data.assessmentFileId && data.assessmentFileName) {
+      await console.log('push', data.assessmentFileId);
     }
 
     try {
@@ -256,6 +289,11 @@ const CareCharge = () => {
                 <Button onClick={() => setShow13(true)}>Add 13+ weeks</Button>
               </>
             )}
+            <HorizontalSeparator height={24} />
+            <Heading size='l'>Financial assessment</Heading>
+            <UploadFile isLoading={fileLoading} title="" control={control} />
+            <HorizontalSeparator height={24} />
+            <Container borderBottom='1px solid rgb(191,193,195)' />
             <HorizontalSeparator height="48px" />
             <Container display="flex">
               <Button secondary color="gray" onClick={handleBackClick}>
