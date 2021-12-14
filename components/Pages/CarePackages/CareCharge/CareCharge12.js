@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { HorizontalSeparator, Heading, Collapse, Container, FormGroup } from 'components';
+import {
+  HorizontalSeparator,
+  Heading,
+  Collapse,
+  Container,
+  Hint,
+  FormGroup,
+  Button,
+  VerticalSeparator,
+} from 'components';
+import { addDays, addWeeks, differenceInWeeks, isBefore, isSameDay } from 'date-fns';
+import { useDispatch } from 'react-redux';
 import { cancelCareChargeReclaim, endCareChargeReclaim } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
-import { useDispatch } from 'react-redux';
 import { CareChargeCost } from './CareChargeCost';
 import { ClaimCollector } from './ClaimCollector';
 import { CareChargeSchedule } from './CareChargeSchedule';
 import { ActionButtons } from './ActionButtons';
 import EndCareChargeModal from './EndCareChargeModal';
 
-export const ProvisionalCareCharge = ({
+export const CareCharge12 = ({
   carePackageId,
+  clearErrors,
   control,
   errors,
   getValues,
@@ -28,10 +39,8 @@ export const ProvisionalCareCharge = ({
   const dispatch = useDispatch();
   const [isExpanded, setExpanded] = useState(isOpen);
   const [disabled, setDisabled] = useState(!!originalValues);
-
-  const collectedBy = watch('provisional.claimCollector');
-  const startDate = watch('provisional.startDate');
-  const endDate = watch('provisional.endDate');
+  const collectedBy = watch('residential12.claimCollector');
+  const provEnd = watch('provisional.endDate');
 
   const provCost = watch('provisional.cost');
   const res12cost = watch('residential12.cost');
@@ -49,42 +58,85 @@ export const ProvisionalCareCharge = ({
   const res12ClaimReason = watch('residential12.claimReason');
   const res13ClaimReason = watch('residential13.claimReason');
 
-  const reclaimId = watch('provisional.id');
+  const startDate = watch('residential12.startDate');
+  const endDate = watch('residential12.endDate');
+
+  const reclaimId = watch('residential12.id');
 
   useEffect(() => {
-    setValue('provisional.isOngoing', !endDate);
+    if (provEnd && !startDate && !isSameDay(new Date(provEnd), new Date(packageEndDate))) {
+      setValue('residential12.startDate', addDays(new Date(provEnd), 1));
+    }
+  }, [provEnd, startDate]);
+
+  useEffect(() => {
+    if (startDate && !endDate) {
+      const correctEnd = addWeeks(new Date(startDate), 12);
+      if (packageEndDate) {
+        const packageEnd = new Date(packageEndDate);
+        if (isBefore(packageEnd, correctEnd)) {
+          setValue('residential12.endDate', packageEnd.toISOString());
+        } else {
+          setValue('residential12.endDate', correctEnd.toISOString());
+        }
+      } else {
+        setValue('residential12.endDate', correctEnd.toISOString());
+      }
+    }
+  }, [startDate]);
+
+  useEffect(() => {
     // if no data exists then copy other care charge data...
-    if (!startDate) setValue('provisional.startDate', packageStartDate);
-    setValue('provisional.cost', provCost ?? res12cost ?? res13cost);
-    setValue('provisional.claimCollector', provCollector ?? res12Collector ?? res13Collector);
+    setValue('residential12.cost', res12cost ?? provCost ?? res13cost);
+    setValue('residential12.claimCollector', res12Collector ?? provCollector ?? res13Collector);
     if (collectedBy !== 1) {
-      setValue('provisional.claimReason', provClaimReason ?? res12ClaimReason ?? res13ClaimReason);
-      setValue('provisional.description', provDescription ?? res12Description ?? res13Description);
+      setValue('residential12.claimReason', res12ClaimReason ?? provClaimReason ?? res13ClaimReason);
+      setValue('residential12.description', res12Description ?? provDescription ?? res13Description);
     }
   }, []);
 
   useEffect(() => {
-    setValue('provisional.checkValidation', !disabled);
+    setValue('residential12.checkValidation', !disabled);
     return () => {
-      resetField('provisional');
+      resetField('residential12');
     };
   }, [disabled]);
 
+  const adjustEnd = () => {
+    const newDate = addWeeks(new Date(startDate), 12);
+    if (packageEndDate) {
+      const packEnd = new Date(packageEndDate);
+      if (isBefore(packEnd, newDate)) {
+        setValue('residential12.endDate', packEnd.toISOString());
+      }
+    } else {
+      setValue('residential12.endDate', newDate.toISOString());
+    }
+    clearErrors('residential12.endDate');
+  };
+
+  const [difference, setDifference] = useState();
+  useEffect(() => {
+    if (startDate && endDate) {
+      setDifference(differenceInWeeks(new Date(endDate), new Date(startDate)));
+    }
+  }, [startDate, endDate]);
+
   const handleRevert = () => {
-    const values = getValues(['residential12', 'residential13']);
+    const values = getValues(['provisional', 'residential13']);
     hideForm();
     setDisabled(true);
     reset({
       packageStart: packageStartDate,
       packageEnd: packageEndDate,
-      provisional: {
+      residential12: {
         ...originalValues,
         description: originalValues?.description ?? '',
         claimReason: originalValues?.claimReason ?? 0,
-        subType: 1,
+        subType: 2,
         carePackageId,
       },
-      residential12: values[0],
+      provisional: values[0],
       residential13: values[1],
     });
   };
@@ -94,7 +146,7 @@ export const ProvisionalCareCharge = ({
       try {
         await cancelCareChargeReclaim(carePackageId, reclaimId);
         refreshPage();
-        dispatch(addNotification({ text: 'Provisional Care Charge cancelled', className: 'success' }));
+        dispatch(addNotification({ text: 'Residential 1 - 12 weeks cancelled', className: 'success' }));
       } catch (e) {
         dispatch(addNotification({ text: e }));
       }
@@ -108,59 +160,77 @@ export const ProvisionalCareCharge = ({
       try {
         await endCareChargeReclaim(carePackageId, reclaimId, end);
         refreshPage();
-        dispatch(addNotification({ text: 'Provisional Care Charge ended', className: 'success' }));
+        dispatch(addNotification({ text: 'Residential 1 - 12 weeks ended', className: 'success' }));
       } catch (e) {
         dispatch(addNotification({ text: e }));
       }
     }
   };
-
   return (
     <>
       <EndCareChargeModal
         isOpen={isEnding}
         onClose={() => setIsEnding(false)}
         handleConfirmation={endCareCharge}
-        chargeType="Provisional"
-        careCharge={getValues(['provisional'])}
+        chargeType="Without Property 1-12 weeks"
+        careCharge={getValues(['residential12'])}
       />
+      <HorizontalSeparator height="48px" />
       <Collapse
-        title={<Heading size="xl">Provisional care charge (pre-assessment)</Heading>}
+        title={
+          <Container display="flex" flexDirection="column">
+            <Heading size="xl">Residential SU contribution</Heading>
+            <Hint>Without Property 1-12 weeks</Hint>
+          </Container>
+        }
         setExpanded={setExpanded}
         expanded={isExpanded}
       >
         <FormGroup>
           <HorizontalSeparator height="30px" />
           <CareChargeCost
-            disabled={disabled}
             control={control}
+            disabled={disabled}
             errors={errors}
-            name="provisional.cost"
+            name="residential12.cost"
             title="Cost per week"
             subtitle="Auto calculated on age"
           />
           <HorizontalSeparator height="24px" />
           <ClaimCollector
-            disabled={disabled}
             control={control}
             errors={errors}
+            disabled={disabled}
             collectedBy={collectedBy}
-            radioName="provisional.claimCollector"
-            selectName="provisional.claimReason"
-            textAreaName="provisional.description"
+            radioName="residential12.claimCollector"
+            selectName="residential12.claimReason"
+            textAreaName="residential12.description"
           />
           <HorizontalSeparator height="24px" />
           <CareChargeSchedule
             disabled={disabled}
             minDate={packageStartDate}
             maxDate={packageEndDate ?? null}
-            startDate="provisional.startDate"
-            endDate="provisional.endDate"
-            checkboxName="provisional.isOngoing"
+            startDate="residential12.startDate"
+            endDate="residential12.endDate"
             control={control}
             errors={errors}
+            noOngoing
           />
         </FormGroup>
+        <HorizontalSeparator height="15px" />
+        <Container display="flex" alignItems="center">
+          <Button
+            onClick={adjustEnd}
+            disabled={
+              difference === 12 || !startDate || disabled || isSameDay(new Date(packageEndDate), new Date(endDate))
+            }
+          >
+            Adjust End Date
+          </Button>
+          <VerticalSeparator width="10px" />
+          <Hint>Difference in weeks: {difference}</Hint>
+        </Container>
         <HorizontalSeparator height="30px" />
         <ActionButtons
           isNew={!originalValues}

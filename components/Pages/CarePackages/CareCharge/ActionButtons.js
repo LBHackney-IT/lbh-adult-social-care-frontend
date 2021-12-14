@@ -1,20 +1,31 @@
-import React from 'react';
-import { Button } from '../../../HackneyDS';
+import { Button, Container, VerticalSeparator } from 'components';
+import React, { useState } from 'react';
 
-const ActionButtons = ({ onEdit, onCancel, onEnd }) => (
-  <div className="care-charge__buttons">
-    <Button onClick={onEdit} secondary outline color="blue">
-      Edit
-    </Button>
+export const ActionButtons = ({ onEdit, onRevert, onCancel,isCancelDisabled, onEnd, isNew }) => {
+  const [editMode, setEditMode] = useState(false);
 
-    <Button onClick={onCancel} secondary outline color="red">
-      Cancel
-    </Button>
+  const handleEdit = () => {
+    onEdit();
+    setEditMode(true);
+  };
 
-    <Button onClick={onEnd} secondary outline color="blue">
-      End
-    </Button>
-  </div>
-);
-
-export default ActionButtons;
+  const handleRevert = () => {
+    onRevert();
+    setEditMode(false);
+  };
+  return (
+    <Container display="flex">
+      <Button onClick={editMode || isNew ? handleRevert : handleEdit} secondary outline color="gray">
+        {isNew ? 'Cancel' : editMode ? 'Revert' : 'Edit'}
+      </Button>
+      <VerticalSeparator width="10px" />
+      <Button disabled={isCancelDisabled} onClick={onCancel} secondary outline color="blue">
+        Cancel
+      </Button>
+      <VerticalSeparator width="10px" />
+      <Button onClick={onEnd} secondary outline color="red">
+        End
+      </Button>
+    </Container>
+  );
+};

@@ -37,6 +37,7 @@ export const tagColors = {
   end: 'red',
   cancelled: 'red',
   pending: 'blue',
+  future:'blue',
   approved: 'gray',
   active: 'green',
   rejected: 'red',
