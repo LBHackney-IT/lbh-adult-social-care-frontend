@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import withSession from 'lib/session';
 import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
-import { getLoggedInUser, getPackageStatusBy, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { ReviewPackageDetails } from 'components';
 import {
   getBrokerPackageRoute,
@@ -31,16 +31,6 @@ const settingsTypes = [
   { field: 'isReEnablement', text: 'ReEnabled' },
   { field: 'isS117Client', text: 'S117' },
 ];
-
-const fundedNursingCareClaimCollector = {
-  2: 'Hackney Council (gross/net)',
-  1: 'Supplier (gross/net)',
-};
-
-const careChargesClaimCollector = {
-  2: 'Hackney Council (gross)',
-  1: 'Supplier (net)',
-};
 
 const ReviewPackageDetailsPage = () => {
   const router = useRouter();
@@ -158,10 +148,6 @@ const ReviewPackageDetailsPage = () => {
       items: data?.fundedNursingCare ? [data?.fundedNursingCare] : null,
       checkHide: true,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
-      fncDetails: {
-        funcClaimCollector: fundedNursingCareClaimCollector[data?.fundedNursingCare?.claimCollector],
-        assessmentFileUrl: data?.fundedNursingCare?.assessmentFileUrl ? 'Yes' : 'No',
-      },
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.fnc,
         supplier: data?.supplierReclaims?.fnc,
@@ -172,7 +158,6 @@ const ReviewPackageDetailsPage = () => {
       id: 'care-charges',
       goToPackage: () => router.push(getCareChargesRoute(carePackageId)),
       items: data?.careCharges,
-      careChargeClaimCollector: careChargesClaimCollector[data?.fundedNursingCare?.claimCollector],
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.careCharge,
         supplier: data?.supplierReclaims?.careCharge,

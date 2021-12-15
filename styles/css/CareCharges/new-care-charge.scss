@@ -69,26 +69,21 @@
 }
 
 .new-care-charge__selectors {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-
-  .govuk-fieldset {
+  & .govuk-form-group:not(.search) .govuk-fieldset {
     display: flex;
     align-items: center;
+
+    .horizontal-separator {
+      display: none;
+    }
   }
 
   .govuk-fieldset__legend {
     margin-right: 8px;
-    font-size: 16px;
   }
 
   .select-container {
     width: 200px;
-  }
-
-  .horizontal-separator {
-    display: none;
   }
 
   .lbh-form-group {

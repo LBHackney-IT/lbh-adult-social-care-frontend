@@ -4,7 +4,7 @@ import { getPayrunCedarFile } from 'api';
 import { updatePayrunAsPaid } from 'api/PayRuns';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { approvePayRun, deletePayRun, rejectPayRun, submitPayRun } from 'api/PayRun';
+import { approvePayRun, deletePayRun, submitPayRun } from 'api/PayRun';
 
 const containerProps = {
   display: 'flex',
@@ -13,7 +13,18 @@ const containerProps = {
   alignItems: 'center',
 };
 
-export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update, isLoading, hasInvoices }) => {
+export const InsightButtons = ({
+  payRunId,
+  openRejectModal,
+  payRunNumber,
+  status,
+  isCedarFileDownloaded,
+  updateData,
+  isLoading,
+  hasInvoices,
+  paidBy,
+  paidOn,
+}) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
 
@@ -30,7 +41,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     try {
       await submitPayRun(payRunId);
       pushNotification(`Payrun has been approved`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
@@ -40,21 +51,15 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     try {
       await approvePayRun(payRunId);
       pushNotification(`Payrun has been approved`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
   };
 
-  const handleReject = async (e) => {
+  const handleReject = (e) => {
     e.preventDefault();
-    try {
-      await rejectPayRun(payRunId);
-      pushNotification(`Payrun has been rejected`, 'success');
-      update();
-    } catch (error) {
-      pushNotification(error, 'error');
-    }
+    openRejectModal();
   };
 
   const handleArchive = async (e) => {
@@ -62,7 +67,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     try {
       await deletePayRun(payRunId);
       pushNotification(`Payrun has been archived`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
@@ -71,7 +76,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     try {
       await updatePayrunAsPaid(payRunId);
       pushNotification(`Payrun successfully marked as paid`, 'success');
-      update();
+      updateData();
     } catch (e) {
       pushNotification(e, 'error');
     }
@@ -81,7 +86,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
     () => (
       <Button
         link
-        download={`${payRunId} Cedar File.xlsx`}
+        download={`CEDAR_${payRunNumber}.xlsx`}
         isLoading={isDownloading}
         style={isFileDownloaded && { background: 'none', boxShadow: 'none' }}
         className={isFileDownloaded ? 'link-button blue' : ''}
@@ -98,7 +103,7 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
         {isFileDownloaded ? 'Download again' : 'Download'}
       </Button>
     ),
-    [isFileDownloaded, payRunId]
+    [isFileDownloaded, payRunId, payRunNumber]
   );
 
   const hasDownloadFile = status > 4 && hasInvoices;
@@ -169,9 +174,9 @@ export const InsightButtons = ({ payRunId, status, isCedarFileDownloaded, update
             disabled
           />
           <p style={{ fontSize: '10px', textAlign: 'center', fontStyle: 'italic' }}>
-            Marked paid by John Smith
+            Marked paid by {paidBy}
             <br />
-            12.01.2021
+            {paidOn}
           </p>
           {hasDownloadFile && (
             <>
