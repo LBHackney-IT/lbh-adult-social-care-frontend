@@ -13,7 +13,7 @@ const CreatePayRunModal = ({ isOpen, onClose, update }) => {
     const data = {
       ...newPayRun,
       paidUpToDate: dateToIsoString(newPayRun.paidUpToDate),
-      paidFromDate: newPayRun.paidFromDate && !newPayRun.isOngoing ? dateToIsoString(newPayRun.paidFromDate) : null,
+      paidFromDate: null,
     };
 
     setIsLoading(true);
