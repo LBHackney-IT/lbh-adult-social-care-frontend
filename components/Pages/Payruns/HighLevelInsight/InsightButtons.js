@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Container, HorizontalSeparator, Link, Loading, Select } from 'components';
+import { usePushNotification } from 'service';
 import { getPayrunCedarFile } from 'api';
 import { updatePayrunAsPaid } from 'api/PayRuns';
-import { useDispatch } from 'react-redux';
-import { addNotification } from 'reducers/notificationsReducer';
 import { approvePayRun, deletePayRun, submitPayRun } from 'api/PayRun';
 
 const containerProps = {
@@ -28,14 +27,11 @@ export const InsightButtons = ({
   const [isDownloading, setIsDownloading] = useState(false);
   const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
 
+  const pushNotification = usePushNotification();
+
   useEffect(() => {
     if (isCedarFileDownloaded) setIsFileDownloaded(isCedarFileDownloaded);
   }, [isCedarFileDownloaded]);
-
-  const dispatch = useDispatch();
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
-  };
 
   const handleSubmit = async () => {
     try {

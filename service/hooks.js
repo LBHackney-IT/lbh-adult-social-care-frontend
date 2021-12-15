@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import { NOT_FOUND_ROUTE } from '../routes/RouteConstants';
-import { useDocument, useSingleCorePackageInfo } from '../api';
+import { useDocument } from '../api/SWR/document';
+import { useSingleCorePackageInfo } from '../api/SWR/carePackage';
 import { formatDocumentInfo } from './helpers';
+import { addNotification } from '../reducers/notificationsReducer';
 
 export const useRedirectIfPackageNotExist = () => {
   const router = useRouter();
@@ -59,4 +62,12 @@ export const useGetFileWithRequest = ({ request, setLoading, dependence, setter 
       setLoading(false);
     })();
   }, [dependence]);
+};
+
+export const usePushNotification = () => {
+  const dispatch = useDispatch();
+
+  return (text, className = 'error') => {
+    dispatch(addNotification({ text, className }));
+  };
 };

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Heading, Hint, HorizontalSeparator } from 'components';
-import { getNumberWithCommas } from 'service';
-import { useDispatch } from 'react-redux';
+import { getNumberWithCommas, usePushNotification } from 'service';
 import { rejectPayRun } from 'api/PayRun';
-import { addNotification } from 'reducers/notificationsReducer';
 import ApproveRejectModal from '../ApproveRejectModal';
 import { InsightButtons } from './InsightButtons';
 
@@ -24,11 +22,7 @@ export const HighLevelInsight = ({
   paidBy,
   paidOn,
 }) => {
-  const dispatch = useDispatch();
-
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
-  };
+  const pushNotification = usePushNotification();
 
   const [openedModal, setOpenedModal] = useState('');
 

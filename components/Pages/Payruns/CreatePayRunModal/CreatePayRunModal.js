@@ -1,14 +1,12 @@
 import React, { memo, useState } from 'react';
 import { createDraftPayRun } from 'api/PayRun';
 import { Dialog, Heading, HorizontalSeparator, Tab, Tabs } from 'components';
-import { useDispatch } from 'react-redux';
-import { addNotification } from 'reducers/notificationsReducer';
-import { dateToIsoString } from 'service';
+import { dateToIsoString, usePushNotification } from 'service';
 import { AdHocAndReleases } from './AdHocAndReleases';
 import { RegularCycles } from './RegularCycles';
 
 const CreatePayRunModal = ({ isOpen, onClose, update }) => {
-  const dispatch = useDispatch();
+  const pushNotification = usePushNotification();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (newPayRun) => {
@@ -23,16 +21,16 @@ const CreatePayRunModal = ({ isOpen, onClose, update }) => {
       await createDraftPayRun({ data });
       update();
       onClose();
-      dispatch(addNotification({ text: 'Payrun successfully created', className: 'success' }));
+      pushNotification('Payrun successfully created', 'success');
     } catch (e) {
-      dispatch(addNotification({ text: e }));
+      pushNotification(e);
     }
     setIsLoading(false);
   };
 
   const tabs = ['Regular Cycles', 'Ad-Hoc/Releases'];
   return (
-    <Dialog className='create-pay-run__modal' isOpen={isOpen} onClose={onClose}>
+    <Dialog className="create-pay-run__modal" isOpen={isOpen} onClose={onClose}>
       <Heading size="l">New Additional Need</Heading>
       <HorizontalSeparator height="30px" />
       <Tabs tabs={tabs}>

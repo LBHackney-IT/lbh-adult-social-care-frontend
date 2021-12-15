@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
-import { formatDate, getNumberWithCommas } from 'service';
+import { formatDate, getNumberWithCommas, usePushNotification } from 'service';
 import { getCarePackageCareChargeRoute, getCarePackageDetailsRoute } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
 import { confirmS117 } from 'api';
-import { addNotification } from 'reducers/notificationsReducer';
-import { useDispatch } from 'react-redux';
 import {
+  Announcement,
   Checkbox,
+  Collapse,
   Container,
   Heading,
   HorizontalSeparator,
+  InsetText,
+  Link,
   Table,
   VerticalSeparator,
-  Link,
-  Announcement,
   WarningText,
-  InsetText,
-  Collapse,
 } from '../../../HackneyDS';
 import { CaretDownIcon } from '../../../Icons';
 import { CarePackageStatus } from './CarePackageStatus';
@@ -45,7 +43,7 @@ const CareDetails = ({
   netTotal,
   packageStatus,
 }) => {
-  const dispatch = useDispatch();
+  const pushNotification = usePushNotification();
   const router = useRouter();
   const filteredData = data.filter((d) => d.status === 'Active' || d.status === 'In Progress');
   const [loading, setLoading] = useState(false);
@@ -102,11 +100,11 @@ const CareDetails = ({
     setLoading(true);
     try {
       await confirmS117({ packageId });
-      dispatch(addNotification({ text: 'Success', className: 'success' }));
+      pushNotification('Success', 'success');
       setIsS117ClientConfirmed(true);
       router.push(getCarePackageCareChargeRoute(packageId));
     } catch (error) {
-      dispatch(addNotification({ text: error }));
+      pushNotification(error);
     }
     setLoading(false);
   };

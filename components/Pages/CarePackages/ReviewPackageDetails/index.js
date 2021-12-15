@@ -2,10 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { currency } from 'constants/strings';
 import { APPROVALS_ROUTE, getHistoryRoute, getServiceUserPackagesRoute } from 'routes/RouteConstants';
-import { addNotification } from 'reducers/notificationsReducer';
 import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage, stringIsNullOrEmpty } from 'api';
-import { useDispatch } from 'react-redux';
-import { getNumberWithCommas } from 'service';
+import { getNumberWithCommas, usePushNotification } from 'service';
 import { Container, Link } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
 import TitleSubtitleHeader from '../TitleSubtitleHeader';
@@ -42,7 +40,7 @@ const ReviewPackageDetails = ({
   subTitle = 'Package details',
   isLoading,
 }) => {
-  const dispatch = useDispatch();
+  const pushNotification = usePushNotification();
   const [loading, setLoading] = useState(false);
 
   const isHide = () => !isNursingCarePackage(title);
@@ -68,10 +66,6 @@ const ReviewPackageDetails = ({
   const closePopup = () => {
     setOpenedPopup('');
     setActionNotes({ ...initialNotes });
-  };
-
-  const pushNotification = (text, notificationClassName = 'error') => {
-    dispatch(addNotification({ text, notificationClassName }));
   };
 
   const makeActionPackage = async (action, notes, route = '/') => {

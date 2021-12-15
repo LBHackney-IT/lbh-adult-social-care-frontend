@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { submitCarePackage, useApproversOptions } from 'api';
-import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
+import { usePushNotification } from 'service';
 import { Button, Container, Dialog, Select, Textarea, FormGroup } from '../../../HackneyDS';
 
 const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const pushNotification = usePushNotification();
   const { options: approverOptions, isLoading } = useApproversOptions();
 
   const [approverId, setApproverId] = useState('');
@@ -32,10 +31,10 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
         packageId,
         data: { approverId, notes },
       });
-      dispatch(addNotification({ text: 'Success', className: 'success' }));
+      pushNotification('Success', 'success');
       router.push(BROKER_PORTAL_ROUTE);
     } catch (e) {
-      dispatch(addNotification({ text: e || 'Something went wrong' }));
+      pushNotification(e)
     }
     setLoading(false);
   };

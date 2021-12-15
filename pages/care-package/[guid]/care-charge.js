@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { dateToIsoString, formatDate, getLoggedInUser } from 'service';
+import { dateToIsoString, formatDate, getLoggedInUser, usePushNotification } from 'service';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
+  DynamicBreadcrumbs,
+  Hint,
+  HorizontalSeparator,
+  InsetText,
   Loading,
   TitleSubtitleHeader,
   VerticalSeparator,
-  HorizontalSeparator,
-  InsetText,
-  Hint,
 } from 'components';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
 import { updateCareChargeReclaim, useAssessmentCareCharges, usePackageDetails } from 'api';
 import withSession from 'lib/session';
 import { ProvisionalCareCharge } from 'components/Pages/CarePackages/CareCharge/ProvisionalCareCharge';
 import { CareCharge12 } from 'components/Pages/CarePackages/CareCharge/CareCharge12';
 import { CareCharge13 } from 'components/Pages/CarePackages/CareCharge/CareCharge13';
-import { addNotification } from 'reducers/notificationsReducer';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { CARE_CHARGES_ROUTE } from 'routes/RouteConstants';
@@ -53,7 +51,7 @@ const defaultValues = {
 
 const CareCharge = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const pushNotification = usePushNotification();
   const { guid: carePackageId } = router.query;
 
   const {
@@ -75,7 +73,7 @@ const CareCharge = () => {
     getValues,
     clearErrors,
     reset,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(formValidationSchema.careChargeAssessmentSchema),
     defaultValues: {
@@ -162,10 +160,10 @@ const CareCharge = () => {
 
     try {
       await updateCareChargeReclaim(carePackageId, { careCharges: cc });
-      dispatch(addNotification({ text: 'Care charges updated', className: 'success' }));
+      pushNotification('Care charges updated', 'success');
       refreshPage();
     } catch (error) {
-      dispatch(addNotification({ text: error }));
+      pushNotification(error);
     }
   };
 

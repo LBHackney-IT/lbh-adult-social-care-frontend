@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import {
-  HorizontalSeparator,
-  Heading,
+  Button,
   Collapse,
   Container,
-  Hint,
   FormGroup,
-  Button,
+  Heading,
+  Hint,
+  HorizontalSeparator,
   VerticalSeparator,
 } from 'components';
+import { usePushNotification } from 'service';
 import { addDays, addWeeks, differenceInWeeks, isBefore, isSameDay } from 'date-fns';
-import { useDispatch } from 'react-redux';
 import { cancelCareChargeReclaim, endCareChargeReclaim } from 'api';
-import { addNotification } from 'reducers/notificationsReducer';
 import { CareChargeCost } from './CareChargeCost';
 import { ClaimCollector } from './ClaimCollector';
 import { CareChargeSchedule } from './CareChargeSchedule';
@@ -36,7 +35,7 @@ export const CareCharge12 = ({
   setValue,
   watch,
 }) => {
-  const dispatch = useDispatch();
+  const pushNotification = usePushNotification();
   const [isExpanded, setExpanded] = useState(isOpen);
   const [disabled, setDisabled] = useState(!!originalValues);
   const collectedBy = watch('residential12.claimCollector');
@@ -146,9 +145,9 @@ export const CareCharge12 = ({
       try {
         await cancelCareChargeReclaim(carePackageId, reclaimId);
         refreshPage();
-        dispatch(addNotification({ text: 'Residential 1 - 12 weeks cancelled', className: 'success' }));
+        pushNotification('Residential 1 - 12 weeks cancelled', 'success');
       } catch (e) {
-        dispatch(addNotification({ text: e }));
+        pushNotification(e);
       }
     }
   };
@@ -160,9 +159,9 @@ export const CareCharge12 = ({
       try {
         await endCareChargeReclaim(carePackageId, reclaimId, end);
         refreshPage();
-        dispatch(addNotification({ text: 'Residential 1 - 12 weeks ended', className: 'success' }));
+        pushNotification('Residential 1 - 12 weeks ended', 'success');
       } catch (e) {
-        dispatch(addNotification({ text: e }));
+        pushNotification(e);
       }
     }
   };

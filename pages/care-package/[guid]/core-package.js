@@ -1,21 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { getFormDataWithFile, getLoggedInUser, useGetFile } from 'service';
+import { Controller, useForm } from 'react-hook-form';
+import { getFormDataWithFile, getLoggedInUser, useGetFile, usePushNotification } from 'service';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
+  DynamicBreadcrumbs,
   FurtherDetails,
+  Heading,
   HorizontalSeparator,
   Loading,
   PackageType,
   RadioGroup,
   ServiceUserDetails,
-  TitleSubtitleHeader, Heading,
+  TitleSubtitleHeader,
 } from 'components';
 import { useRouter } from 'next/router';
-import { addNotification } from 'reducers/notificationsReducer';
-import { useDispatch } from 'react-redux';
 import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { updateCoreCarePackage, usePackageSchedulingOptions, useSingleCorePackageInfo } from 'api';
@@ -39,7 +38,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
 
 const CorePackage = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const pushNotification = usePushNotification();
 
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
@@ -133,10 +132,10 @@ const CorePackage = () => {
       }, true);
 
       const { id } = await updateCoreCarePackage({ data: formData, packageId });
+      pushNotification('Package saved.', 'success');
       router.push(getBrokerPackageRoute(id));
-      dispatch(addNotification({ text: 'Package saved.', className: 'success' }));
     } catch (error) {
-      dispatch(addNotification({ text: error, className: 'error' }));
+      pushNotification(error);
     }
     setIsRequestBeingSent(false);
   };
@@ -182,18 +181,18 @@ const CorePackage = () => {
               </Container>
               <FurtherDetails settings={settings} control={control} setValue={setValue} />
               <HorizontalSeparator height={48} />
-              <Container borderBottom='1px solid #bfc1c3' />
+              <Container borderBottom="1px solid #bfc1c3" />
               <HorizontalSeparator height={48} />
-              <Heading size='l'>Upload support plan/care package</Heading>
+              <Heading size="l">Upload support plan/care package</Heading>
               <HorizontalSeparator height={8} />
               <UploadFile
                 isLoading={fileLoading}
-                name='socialWorkerCarePlanFile'
+                name="socialWorkerCarePlanFile"
                 control={control}
-                title=''
+                title=""
               />
               <HorizontalSeparator height={48} />
-              <Container borderBottom='1px solid #bfc1c3' />
+              <Container borderBottom="1px solid #bfc1c3" />
               <HorizontalSeparator height={48} />
               <Button isLoading={isRequestBeingSent} disabled={isRequestBeingSent} type="submit">
                 Save and continue

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { HorizontalSeparator, Heading, Collapse, Container, Hint, FormGroup } from 'components';
+import { Collapse, Container, FormGroup, Heading, Hint, HorizontalSeparator } from 'components';
 import { addDays, isSameDay } from 'date-fns';
 import { cancelCareChargeReclaim, endCareChargeReclaim } from 'api';
-import { addNotification } from 'reducers/notificationsReducer';
-import { useDispatch } from 'react-redux';
+import { usePushNotification } from 'service';
 import { CareChargeCost } from './CareChargeCost';
 import { ClaimCollector } from './ClaimCollector';
 import { CareChargeSchedule } from './CareChargeSchedule';
@@ -12,7 +11,6 @@ import EndCareChargeModal from './EndCareChargeModal';
 
 export const CareCharge13 = ({
   carePackageId,
-  clearErrors,
   control,
   errors,
   getValues,
@@ -27,7 +25,7 @@ export const CareCharge13 = ({
   setValue,
   watch,
 }) => {
-  const dispatch = useDispatch();
+  const pushNotification = usePushNotification();
   const [isExpanded, setExpanded] = useState(isOpen);
   const [disabled, setDisabled] = useState(!!originalValues);
   const res12End = watch('residential12.endDate');
@@ -114,9 +112,9 @@ export const CareCharge13 = ({
       try {
         await cancelCareChargeReclaim(carePackageId, reclaimId);
         refreshPage();
-        dispatch(addNotification({ text: 'Residential 13+ weeks cancelled', className: 'success' }));
+        pushNotification('Residential 13+ weeks cancelled', 'success');
       } catch (e) {
-        dispatch(addNotification({ text: e }));
+        pushNotification(e);
       }
     }
   };
@@ -128,9 +126,9 @@ export const CareCharge13 = ({
       try {
         await endCareChargeReclaim(carePackageId, reclaimId, end);
         refreshPage();
-        dispatch(addNotification({ text: 'Residential 13 + weeks ended', className: 'success' }));
+        pushNotification('Residential 13 + weeks ended', 'success');
       } catch (e) {
-        dispatch(addNotification({ text: e }));
+        pushNotification(e);
       }
     }
   };

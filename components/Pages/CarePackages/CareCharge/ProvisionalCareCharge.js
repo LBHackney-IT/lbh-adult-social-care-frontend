@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { HorizontalSeparator, Heading, Collapse, Container, FormGroup } from 'components';
 import { cancelCareChargeReclaim, endCareChargeReclaim } from 'api';
-import { addNotification } from 'reducers/notificationsReducer';
-import { useDispatch } from 'react-redux';
+import { usePushNotification } from 'service';
 import { CareChargeCost } from './CareChargeCost';
 import { ClaimCollector } from './ClaimCollector';
 import { CareChargeSchedule } from './CareChargeSchedule';
@@ -25,7 +24,7 @@ export const ProvisionalCareCharge = ({
   setValue,
   watch,
 }) => {
-  const dispatch = useDispatch();
+  const pushNotification = usePushNotification();
   const [isExpanded, setExpanded] = useState(isOpen);
   const [disabled, setDisabled] = useState(!!originalValues);
 
@@ -94,9 +93,9 @@ export const ProvisionalCareCharge = ({
       try {
         await cancelCareChargeReclaim(carePackageId, reclaimId);
         refreshPage();
-        dispatch(addNotification({ text: 'Provisional Care Charge cancelled', className: 'success' }));
+        pushNotification('Provisional Care Charge cancelled', 'success');
       } catch (e) {
-        dispatch(addNotification({ text: e }));
+        pushNotification(e);
       }
     }
   };
@@ -108,9 +107,9 @@ export const ProvisionalCareCharge = ({
       try {
         await endCareChargeReclaim(carePackageId, reclaimId, end);
         refreshPage();
-        dispatch(addNotification({ text: 'Provisional Care Charge ended', className: 'success' }));
+        pushNotification('Provisional Care Charge ended', 'success');
       } catch (e) {
-        dispatch(addNotification({ text: e }));
+        pushNotification(e);
       }
     }
   };

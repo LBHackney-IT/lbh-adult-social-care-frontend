@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
+import { getLoggedInUser, usePushNotification, useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
+  DynamicBreadcrumbs,
+  HorizontalSeparator,
   Loading,
   TitleSubtitleHeader,
   VerticalSeparator,
-  HorizontalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
 import {
   createProvisionalCareCharge,
   updateCareChargeBrokerage,
@@ -20,7 +19,6 @@ import {
 } from 'api';
 import withSession from 'lib/session';
 import { getCarePackageReviewRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
-import { addNotification } from 'reducers/notificationsReducer';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import {
@@ -45,7 +43,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
 
 const CareCharge = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const pushNotification = usePushNotification();
 
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
 
@@ -106,10 +104,6 @@ const CareCharge = () => {
   }, [careChargeLoading]);
 
   const clickBack = () => router.push(getFundedNursingCareRoute(carePackageId));
-
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
-  };
 
   const updatePackage = async (data = {}) => {
     if (isDirty) {

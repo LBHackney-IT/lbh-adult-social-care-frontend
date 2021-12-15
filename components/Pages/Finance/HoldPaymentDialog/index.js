@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as yup from 'yup';
-import { useDispatch } from 'react-redux';
-import { addNotification } from 'reducers/notificationsReducer';
 import { holdInvoice } from 'api/PayRun';
 import { useDepartments } from 'api';
+import { usePushNotification } from 'service';
 import {
   Button,
   Container,
@@ -37,17 +36,13 @@ const schema = yup.object().shape({
 });
 
 const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, closeModal, updateData }) => {
-  const dispatch = useDispatch();
+  const pushNotification = usePushNotification();
   const [isLoading, setIsLoading] = useState(false);
   const { data: holdPaymentOptions } = useDepartments();
 
   const onCloseModal = () => {
     reset();
     closeModal();
-  };
-
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
   };
 
   const onHoldRequest = async ({ reasonForHolding, actionRequiredFromId }) => {
@@ -101,7 +96,8 @@ const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, closeModal, updateData
             control={control}
             name="reasonForHolding"
             render={({ field }) => (
-              <FormGroup error={errors.reasonForHolding?.message} required label="Enter reason for hold And suggested remedial action">
+              <FormGroup error={errors.reasonForHolding?.message} required
+                         label="Enter reason for hold And suggested remedial action">
                 <Textarea
                   trimValue
                   value={field.value}

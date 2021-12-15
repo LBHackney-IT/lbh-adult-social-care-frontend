@@ -15,10 +15,9 @@ import {
   UploadFile,
 } from 'components';
 import { useRouter } from 'next/router';
+import { usePushNotification } from 'service';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
-import { useDispatch } from 'react-redux';
-import { addNotification } from 'reducers/notificationsReducer';
 import { BROKER_REFERRAL_ROUTE } from 'routes/RouteConstants';
 import { getFormDataWithFile } from 'service/getFormData';
 import { assignPackageSchema } from 'service/formValidationSchema';
@@ -31,7 +30,7 @@ const breadcrumbs = [
 
 const AssignPackage = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const pushNotification = usePushNotification();
   const { hackneyId } = router.query;
   const { data: serviceUser, isLoading: serviceUserLoading } = useServiceUser(hackneyId);
   const { options: packageTypeOptions, isLoading: lookupsLoading } = useLookups('packageType');
@@ -66,10 +65,10 @@ const AssignPackage = () => {
     });
     try {
       await assignToBroker({ data: formData });
-      dispatch(addNotification({ text: 'Care plan assigned', className: 'success' }));
+      pushNotification('Care plan assigned', 'success');
       router.push(BROKER_REFERRAL_ROUTE);
     } catch (error) {
-      dispatch(addNotification({ text: error, className: 'error' }));
+      pushNotification(error);
     }
     setIsSubmitting(false);
   };
@@ -118,7 +117,7 @@ const AssignPackage = () => {
           <Container className="brokerage__container">
             <Heading size="xl">Support plan and care package</Heading>
             <HorizontalSeparator height={24} />
-            <UploadFile name='carePlanFile' control={control} title="Upload social worker care plan" />
+            <UploadFile name="carePlanFile" control={control} title="Upload social worker care plan" />
           </Container>
           <Container>
             <FormGroup label="Add notes" error={errors.notes?.message}>

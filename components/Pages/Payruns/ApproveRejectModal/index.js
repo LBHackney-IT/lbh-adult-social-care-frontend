@@ -2,18 +2,17 @@ import { Controller, useForm } from 'react-hook-form';
 import React, { useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as yup from 'yup';
-import { useDispatch } from 'react-redux';
-import { addNotification } from 'reducers/notificationsReducer';
 import { approvePayRun } from 'api/PayRun';
+import { usePushNotification } from 'service';
 import {
   Button,
   Container,
   Dialog,
   FormGroup,
+  Heading,
   HorizontalSeparator,
   Textarea,
   VerticalSeparator,
-  Heading,
 } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 
@@ -24,9 +23,10 @@ const errorText = {
 
 const ApproveRejectModal = ({ openedModal, title = 'Pay Run', closeModal, rejectRequest, updateData, payRunId }) => {
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
   const isRejectModal = openedModal === 'Reject';
   const isApproveModal = openedModal === 'Approve';
+
+  const pushNotification = usePushNotification();
 
   const schema = useMemo(() => (
     yup.object().shape({
@@ -35,10 +35,6 @@ const ApproveRejectModal = ({ openedModal, title = 'Pay Run', closeModal, reject
         .required(`Please put a reason for ${errorText[openedModal]}`)
         .test('notes', `Please put a reason for ${errorText[openedModal]}`, (value) => value.trim?.())
     })), [openedModal]);
-
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
-  };
 
   const handleApprove = async (notes) => {
     try {
@@ -89,7 +85,7 @@ const ApproveRejectModal = ({ openedModal, title = 'Pay Run', closeModal, reject
     <>
       <Loading isLoading={loading} />
       <Dialog className="high-level-insight--dialog" isOpen={openedModal} noBorder closeIcon="" onClose={onCloseModal}>
-        <Heading size='xl'>{openedModal} {title}</Heading>
+        <Heading size="xl">{openedModal} {title}</Heading>
         <HorizontalSeparator height={32} />
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller

@@ -8,12 +8,11 @@ import {
   Link,
   VerticalSeparator,
 } from 'components';
+import { usePushNotification } from 'service';
 import { SinglePayRunOverview } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunOverview';
 import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunBreakdown';
 import { useRouter } from 'next/router';
 import { getCarePackageReviewRoute, getPaymentHistoryRoute } from 'routes/RouteConstants';
-import { useDispatch } from 'react-redux';
-import { addNotification } from 'reducers/notificationsReducer';
 import { updateInvoiceStatus } from 'api/PayRuns';
 import ApproveRejectModal from '../ApproveRejectModal';
 
@@ -29,21 +28,18 @@ export const PayRunItem = ({
 }) => {
   if (!item) return null;
 
-  const dispatch = useDispatch();
   const [invoiceId, setInvoiceId] = useState('');
 
   const [openedModal, setOpenedModal] = useState('');
 
-  const pushNotification = (text, className = 'error') => {
-    dispatch(addNotification({ text, className }));
-  };
+  const pushNotification = usePushNotification();
 
   const rejectInvoiceStatus = async (notes) => {
     try {
       await updateInvoiceStatus(payRunId, invoiceId, 4, notes);
       pushNotification('Invoice has been rejected', 'success');
       await updateData();
-      closeModal()
+      closeModal();
     } catch (e) {
       pushNotification(e);
     }
