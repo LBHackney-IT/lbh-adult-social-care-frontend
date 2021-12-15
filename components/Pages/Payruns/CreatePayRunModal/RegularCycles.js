@@ -78,7 +78,7 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
           />
         </FormGroup>
         <HorizontalSeparator height="10px" />
-        <FormGroup label="Paid up to" error={errors.paidUpToDate?.message} smallLabel>
+        <FormGroup label="Pay run to" error={errors.paidUpToDate?.message} smallLabel>
           <Controller
             name="paidUpToDate"
             control={control}
