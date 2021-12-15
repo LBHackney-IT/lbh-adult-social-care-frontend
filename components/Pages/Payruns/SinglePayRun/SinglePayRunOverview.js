@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { getNumberWithCommas } from 'service';
 import { Button, Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
 import { useDispatch } from 'react-redux';
-import { releaseInvoice, updatePayRunStatus } from 'api/PayRuns';
+import { releaseInvoice, updateInvoiceStatus } from 'api/PayRuns';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/serviceSelect';
 import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
@@ -15,7 +15,7 @@ const statusOptions = [
   { text: 'Accepted', value: 5 },
 ];
 
-export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceId, update, updateData, isHeld }) => {
+export const SinglePayRunOverview = ({ payRunId, openModal, searchTerm, payRun, setInvoiceId, isActivePayRun, updateData, isHeld }) => {
   const dispatch = useDispatch();
 
   const pushNotification = (text, className = 'error') => {
@@ -23,13 +23,14 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
   };
 
   const handleChange = async (field) => {
-    if (!update) return;
+    if (!isActivePayRun) return;
 
-    if (field === '2') {
+    if (field === '2' || field === '4') {
       setInvoiceId(payRun.id);
+      openModal(field);
     } else {
       try {
-        await updatePayRunStatus(payRunId, payRun.id, field);
+        await updateInvoiceStatus(payRunId, payRun.id, field);
         pushNotification(`Invoice status changed`, 'success');
         updateData();
       } catch (e) {
@@ -67,7 +68,7 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
         {handleInvoiceNumber()}
       </Container>
       <HorizontalSeparator height="15px" />
-      <Container display="flex" alignItems="flex-end" justifyContent="space-between">
+      <Container display="grid" gridTemplateColumns="2fr 1.5fr 1fr 0.5fr" columnGap="10px" columnCount="3">
         <Container>
           <Container display="flex" alignItems="center">
             <Heading size="s">Supplier:</Heading>
@@ -90,15 +91,17 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
           <Select
             style={{ background, color, border: 'none' }}
             options={statusOptions}
-            disabled={!update}
-            IconComponent={!update ? null : undefined}
+            disabled={!isActivePayRun}
+            IconComponent={!isActivePayRun ? null : undefined}
             onChangeValue={handleChange}
             value={payRun.invoiceStatus}
           />
         ) : (
-          <Button onClick={handleClick} secondary color="yellow">
-            Release
-          </Button>
+          <Container>
+            <Button onClick={handleClick} secondary color="yellow">
+              Release
+            </Button>
+          </Container>
         )}
       </Container>
     </>

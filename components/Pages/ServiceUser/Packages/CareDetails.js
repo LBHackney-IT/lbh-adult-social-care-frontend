@@ -15,7 +15,7 @@ import {
   Link,
   Announcement,
   WarningText,
-  Hint,
+  InsetText,
   Collapse,
 } from '../../../HackneyDS';
 import { CaretDownIcon } from '../../../Icons';
@@ -55,7 +55,7 @@ const CareDetails = ({
     {
       Header: 'Status',
       accessor: 'status',
-      Cell: ({ value }) => <p className={`lbh-color-${statusColors[value]}`}>{value}</p>
+      Cell: ({ value }) => <p className={`lbh-color-${statusColors[value]}`}>{value}</p>,
     },
     {
       Header: 'Element',
@@ -125,7 +125,7 @@ const CareDetails = ({
         }}
         className="care-details__package-collapse"
         IconComponent={CaretDownIcon}
-        title={(
+        title={
           <Container alignItems="baseline">
             <Container display="flex" alignItems="baseline">
               <Container display="flex" alignItems="center">
@@ -135,7 +135,7 @@ const CareDetails = ({
               </Container>
             </Container>
           </Container>
-        )}
+        }
       >
         <HorizontalSeparator height="10px" />
         {isS117Client && !isS117ClientConfirmed && (
@@ -163,15 +163,14 @@ const CareDetails = ({
               <Container display="flex" justifyContent="space-between" alignItems="center">
                 {!isS117Client && !isEndOrCancelled && (
                   <Link className="mr-5" onClick={goToCareCharge} noVisited>
-                    {
-                      data.some(({ type, status, name }) => (
+                    {data.some(
+                      ({ type, status, name }) =>
                         type === 'Package Reclaim - Care Charge' &&
-                        status === 'Active' && (
-                          name === 'Without Property 13+ Weeks' ||
-                          name === 'Without Property 1-12 Weeks'
-                        )
-                      )) ? 'Edit financial assessment' : 'Add financial assessment'
-                    }
+                        status === 'Active' &&
+                        (name === 'Without Property 13+ Weeks' || name === 'Without Property 1-12 Weeks')
+                    )
+                      ? 'Edit financial assessment'
+                      : 'Add financial assessment'}
                   </Link>
                 )}
 
@@ -201,7 +200,7 @@ const CareDetails = ({
         ) : (
           <>
             <HorizontalSeparator height="20px" />
-            <Hint>No package details</Hint>
+            <InsetText>No package details</InsetText>
           </>
         )}
       </Collapse>

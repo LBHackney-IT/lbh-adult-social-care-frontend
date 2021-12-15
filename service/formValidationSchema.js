@@ -2,6 +2,8 @@ import * as yup from 'yup';
 import { compareDescendingDMY } from './helpers';
 import { dateDescending } from '../constants/variables';
 import { TEXT_FILE_EXTENSIONS } from '../constants/variables';
+import { min } from 'lodash';
+import { addDays, differenceInWeeks, isAfter, isBefore, isSameDay, subDays } from 'date-fns';
 
 const carePackageCorePackageSchema = yup.object().shape({
   packageType: yup.number().typeError('Please select a package type').required().min(1, 'Please select a package type'),
@@ -41,9 +43,11 @@ const carePackageFNCSchema = yup.object().shape({
     .min(1, 'Please select a claims collector'),
   hasAssessmentBeenCarried: yup
     .mixed()
-    .test('hasAssessmentBeenCarried', 'Please select an option', (value, { parent }) =>
-      !(parent?.id && value === null)
-    )
+    .test(
+      'hasAssessmentBeenCarried',
+      'Please select an option',
+      (value, { parent }) => !(parent?.id && value === null)
+    ),
 });
 
 const carePackageBrokerCareChargesSchema = yup.object().shape({
@@ -116,6 +120,118 @@ export const getFNCDateValidationSchema = ({ detailsData }) =>
     }),
   });
 
+const careChargeAssessmentSchema = yup.object().shape({
+  provisional: yup.lazy((value) => {
+    if (value && value?.checkValidation) {
+      return yup.object().shape({
+        startDate: yup
+          .string()
+          .typeError('Please select a start date')
+          .required('Please select a start date')
+          .test('startDate', 'Provisional start date must be on or after package start date', (startDate, schema) => {
+            if (schema) {
+              const { from } = schema;
+              const entireSchema = from[1].value;
+              if (entireSchema?.packageStart && startDate) {
+                return isAfter(addDays(new Date(startDate), 1), new Date(entireSchema?.packageStart));
+              }
+            }
+            return true;
+          }),
+        claimCollector: yup
+          .number()
+          .typeError('Please select a claims collector')
+          .required('Please select a claims collector')
+          .min(1, 'Please select a claims collector'),
+        cost: yup
+          .number()
+          .typeError('Please enter a cost')
+          .required('Please enter a cost')
+          .min(1, 'Please enter a cost'),
+      });
+    }
+    return yup.mixed().notRequired();
+  }),
+  residential12: yup.lazy((value) => {
+    if (value && value?.checkValidation) {
+      return yup.object().shape({
+        startDate: yup
+          .string()
+          .typeError('Please select a start date')
+          .required('Please select a start date')
+          .test(
+            'startDate',
+            'Residential 1 - 12 Weeks start date must be on or after package start date',
+            (startDate, schema) => {
+              if (schema) {
+                const { from } = schema;
+                const entireSchema = from[1].value;
+                if (entireSchema?.packageStart && startDate) {
+                  return isAfter(addDays(new Date(startDate), 1), new Date(entireSchema?.packageStart));
+                }
+              }
+              return true;
+            }
+          )
+          .test('startDate', 'Residential 1-12 weeks and Provisional must not overlap', (startDate, schema) => {
+            if (schema) {
+              const { from } = schema;
+              const entireSchema = from[1].value;
+              if (entireSchema?.provisional && startDate) {
+                return !isBefore(subDays(new Date(startDate), 1), new Date(entireSchema?.provisional?.endDate));
+              }
+            }
+            return false;
+          }),
+        endDate: yup
+          .string()
+          .typeError('Please select an end date')
+          .required('Please select a end date')
+          .test('endDate', 'Start and End date are not 12 weeks apart', (endDate, schema) => {
+            if (schema) {
+              const { from } = schema;
+              const entireSchema = from[1].value;
+              if (entireSchema?.residential12?.startDate && endDate) {
+                const dif = differenceInWeeks(new Date(endDate), new Date(entireSchema?.residential12?.startDate));
+                return dif === 12 || isSameDay(new Date(entireSchema?.packageEnd), new Date(endDate));
+              }
+            }
+            return true;
+          }),
+        claimCollector: yup
+          .number()
+          .typeError('Please select a claims collector')
+          .required('Please select a claims collector')
+          .min(1, 'Please select a claims collector'),
+        cost: yup
+          .number()
+          .typeError('Please enter a cost')
+          .required('Please enter a cost')
+          .min(1, 'Please enter a cost'),
+      });
+    }
+    return yup.mixed().notRequired();
+  }),
+  residential13: yup.lazy((value) => {
+    if (value && value?.checkValidation) {
+      return yup.object().shape({
+        startDate: yup.string().typeError('Please select a start date').required('Please select a start date'),
+        claimCollector: yup
+          .number()
+          .typeError('Please select a claims collector')
+          .required('Please select a claims collector')
+          .min(1, 'Please select a claims collector'),
+        cost: yup
+          .number()
+          .typeError('Please enter a cost')
+          .required('Please enter a cost')
+          .min(1, 'Please enter a cost'),
+      });
+    }
+    return yup.mixed().notRequired();
+  }),
+});
+
 export const fncClaimCollectorSchema = yup.object().shape({
   claimCollector: yup.number().typeError('Required field').required('Required field'),
 });
@@ -126,7 +242,6 @@ const newPayRunRegularCyclesSchema = yup.object().shape({
 });
 
 const adHochAndReleasesSchema = yup.object().shape({
-  paidFromDate: yup.string().typeError('Please select a date').required('Please select a date'),
   paidUpToDate: yup.string().typeError('Please select a date').required('Please select a date'),
   type: yup.number().typeError('Please enter a cost').required('Please enter a cost').min(1, 'Please enter a cost'),
 });
@@ -140,4 +255,5 @@ export const formValidationSchema = {
   newWeeklyAdditionalNeedSchema,
   newPayRunRegularCyclesSchema,
   adHochAndReleasesSchema,
+  careChargeAssessmentSchema,
 };

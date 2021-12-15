@@ -1,5 +1,6 @@
 import React from 'react';
 import { currency } from 'constants/strings';
+import { formatNumber, getNumberWithCommas } from 'service';
 import { Container } from '../../HackneyDS';
 
 const BrokerageBorderCost = ({ totalCostHeader, totalCost, className = '' }) => {
@@ -8,7 +9,7 @@ const BrokerageBorderCost = ({ totalCostHeader, totalCost, className = '' }) => 
   return (
     <Container className={`brokerage__border-cost ${className}`} display='flex'>
       <p>{totalCostHeader}</p>
-      <p className='text-lbh-f01 font-weight-bold'>{minusSign}{currency.euro}{totalCost ? Math.abs(totalCost).toFixed(2) : 0}</p>
+      <p className='lbh-color-dark-red font-weight-bold'>{minusSign}{currency.euro}{getNumberWithCommas(formatNumber(totalCost, { isAbsolute: true }))}</p>
     </Container>
   );
 };

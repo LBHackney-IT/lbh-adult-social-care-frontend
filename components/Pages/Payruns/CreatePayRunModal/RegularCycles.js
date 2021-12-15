@@ -5,15 +5,15 @@ import {
   Container,
   DatePicker,
   FormGroup,
+  Hint,
   HorizontalSeparator,
   RadioGroup,
   VerticalSeparator,
 } from 'components';
 import { Controller, useForm } from 'react-hook-form';
 import { formValidationSchema } from 'service/formValidationSchema';
-import { differenceInDays } from 'date-fns';
+import { addDays, differenceInDays } from 'date-fns';
 import { useLatestPayRunToDate, useReleasedInvoiceNumber } from 'api';
-import { Hint } from '../../../HackneyDS';
 
 export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
   const {
@@ -54,8 +54,7 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
           Residential Recurring
           {invoiceNumber ? <span className="lbh-color-green font-size-14px"> ({invoiceNumber} releases)</span> : ''}
         </p>
-    },
-    { id: 2, label: 'Direct Payments' },
+    }
   ], [invoiceNumber]);
 
   const onSubmit = (data) => createPayrun(data);
@@ -79,7 +78,7 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
           />
         </FormGroup>
         <HorizontalSeparator height="10px" />
-        <FormGroup label="Paid up to" error={errors.paidUpToDate?.message} smallLabel>
+        <FormGroup label="Pay run to" error={errors.paidUpToDate?.message} smallLabel>
           <Controller
             name="paidUpToDate"
             control={control}
@@ -88,7 +87,7 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
                 date={field.value ? new Date(field.value) : null}
                 setDate={field.onChange}
                 {...field}
-                minDate={lastCycleDate && new Date(lastCycleDate)}
+                minDate={lastCycleDate && addDays(new Date(lastCycleDate), 1)}
                 floatingCalendar
                 calendarStylePosition={{ top: -100, left: 32 }}
                 hasClearButton
