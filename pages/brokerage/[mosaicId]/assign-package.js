@@ -22,6 +22,32 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { BROKERAGE_ROUTE } from 'routes/RouteConstants';
 import { getFormDataWithFile } from 'service/getFormData';
 import { assignPackageSchema } from 'service/formValidationSchema';
+import withSession from 'lib/session';
+import { getLoggedInUser } from 'service';
+import { handleRoleBasedAccess } from 'pages/api/handleRoleBasedAccess';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  console.log(req)
+  if (!handleRoleBasedAccess(user.roles, req.url)) {
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const breadcrumbs = [
   { text: 'Home', href: BROKERAGE_ROUTE },
@@ -118,7 +144,7 @@ const AssignPackage = () => {
           <Container className="brokerage__container">
             <Heading size="xl">Support plan and care package</Heading>
             <HorizontalSeparator height={24} />
-            <UploadFile name='carePlanFile' control={control} title="Upload social worker care plan" />
+            <UploadFile name="carePlanFile" control={control} title="Upload social worker care plan" />
           </Container>
           <Container>
             <FormGroup label="Add notes" error={errors.notes?.message}>
