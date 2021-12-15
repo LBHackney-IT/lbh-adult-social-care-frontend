@@ -12,7 +12,7 @@ import React, { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { addDays, differenceInDays } from 'date-fns';
-import { useLatestPayRunToDate } from '../../../../api';
+import { useLatestPayRunToDate } from 'api';
 
 
 const cycleOptions = [
