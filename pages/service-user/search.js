@@ -1,11 +1,17 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { assignToBroker, useServiceUserMasterSearch } from 'api';
-import { SearchServiceUser } from 'components';
+import { Container } from 'components';
 import { useRouter } from 'next/router';
-import { getFormData } from '../../service';
-import { getCorePackageRoute } from '../../routes/RouteConstants';
+import { getFormData } from 'service';
+import { getCorePackageRoute } from 'routes/RouteConstants';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../reducers/userReducer';
+import { selectUser } from 'reducers/userReducer';
+import Loading from 'components/Loading';
+import DynamicBreadcrumbs from 'components/Pages/DynamicBreadcrumbs';
+import ServiceUserSearch from 'components/Pages/ServiceUser/Search';
+import SearchResultCount from 'components/SearchResultCount';
+import AlternativePagination from 'components/AlternativePagination';
+import SearchResultList from 'components/Pages/Brokerage/SearchResultList';
 
 const initialFilters = {
   postcode: '',
@@ -14,6 +20,12 @@ const initialFilters = {
   hackneyId: '',
   dateOfBirth: null,
 };
+
+const inputs = [
+  { label: 'First name', key: 'firstName' },
+  { label: 'Last name', key: 'lastName' },
+  { label: 'Hackney ID', key: 'hackneyId' },
+];
 
 const BrokerReferralSearch = () => {
   const router = useRouter();
@@ -65,30 +77,42 @@ const BrokerReferralSearch = () => {
       brokerId: user.userId,
       packageType: 2,
 
-    })
+    });
     const newPackageId = await assignToBroker({ data: formData });
 
     router.push(getCorePackageRoute(newPackageId));
-  }
+  };
 
   const pushRoute = (route) => router.push(route);
 
   return (
-    <SearchServiceUser
-      isLoading={isLoading}
-      createNewPackage={createNewPackage}
-      filters={filters}
-      pushRoute={pushRoute}
-      searchResults={searchResults?.slice((pageNumber - 1) * 10, pageNumber * 10)}
-      clearFilters={clearFilters}
-      changeFilters={changeFilters}
-      setPageNumber={setPageNumber}
-      className='master-search'
-      pageNumber={pageNumber}
-      totalCount={searchResults?.length}
-      totalPages={searchResults?.length && Math.ceil(searchResults.length / 10)}
-      onSearch={onSearch}
-    />
+    <Container className="search-service-user">
+      <Loading isLoading={isLoading} />
+      <DynamicBreadcrumbs additionalBreadcrumbs={[{ text: 'Search for a service user' }]} />
+      <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
+        <ServiceUserSearch
+          onSearch={onSearch}
+          isLoading={isLoading}
+          clearFilters={clearFilters}
+          filters={filters}
+          changeFilters={changeFilters}
+          inputs={inputs}
+        />
+        {searchResults && (
+          <Container>
+            <SearchResultCount count={searchResults.length} />
+            <SearchResultList searchResults={searchResults} pushRoute={pushRoute} createNewPackage={createNewPackage} />
+            <AlternativePagination
+              totalPages={searchResults?.length && Math.ceil(searchResults.length / 10)}
+              totalCount={searchResults?.length}
+              pageSize={10}
+              currentPage={pageNumber}
+              changePagination={setPageNumber}
+            />
+          </Container>
+        )}
+      </Container>
+    </Container>
   );
 };
 
