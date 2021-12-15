@@ -43,10 +43,10 @@ const ViewDocument = ({
       }}
       className={className}
       onClick={async (event) => {
+        event.preventDefault();
         if (file) return openFile(file);
 
         setMainLoading(true);
-        event.preventDefault();
 
 
         let newFile = await getDocumentRequest();

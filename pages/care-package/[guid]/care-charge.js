@@ -144,13 +144,13 @@ const CareCharge = () => {
       if (residential12) setResidential12OriginalValues(residential12);
       if (residential13) setResidential13OriginalValues(residential13);
 
-      reset({
+      resetValues({
         provisional: { ...provisional, isOngoing: !provisional?.endDate, subType: 1, carePackageId },
         residential12: { ...residential12, isOngoing: !residential12?.endDate, subType: 2, carePackageId },
         residential13: { ...residential13, isOngoing: !residential13?.endDate, subType: 3, carePackageId },
       });
     } else {
-      reset({
+      resetValues({
         provisional: { ...defaultValues, subType: 1, carePackageId },
         residential12: { ...defaultValues, subType: 2, carePackageId },
         residential13: { ...defaultValues, subType: 3, carePackageId },
