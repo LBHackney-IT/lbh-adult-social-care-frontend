@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { getNumberWithCommas } from 'service';
 import { Button, Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
 import { useDispatch } from 'react-redux';
-import { releaseInvoice, updatePayRunStatus } from 'api/PayRuns';
+import { releaseInvoice, updateInvoiceStatus } from 'api/PayRuns';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/serviceSelect';
 import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
@@ -15,7 +15,7 @@ const statusOptions = [
   { text: 'Accepted', value: 5 },
 ];
 
-export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceId, update, updateData, isHeld }) => {
+export const SinglePayRunOverview = ({ payRunId, openModal, searchTerm, payRun, setInvoiceId, isActivePayRun, updateData, isHeld }) => {
   const dispatch = useDispatch();
 
   const pushNotification = (text, className = 'error') => {
@@ -23,13 +23,14 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
   };
 
   const handleChange = async (field) => {
-    if (!update) return;
+    if (!isActivePayRun) return;
 
-    if (field === '2') {
+    if (field === '2' || field === '4') {
       setInvoiceId(payRun.id);
+      openModal(field);
     } else {
       try {
-        await updatePayRunStatus(payRunId, payRun.id, field);
+        await updateInvoiceStatus(payRunId, payRun.id, field);
         pushNotification(`Invoice status changed`, 'success');
         updateData();
       } catch (e) {
@@ -87,16 +88,14 @@ export const SinglePayRunOverview = ({ payRunId, searchTerm, payRun, setInvoiceI
             : `-£${getNumberWithCommas(Math.abs(payRun.netTotal))}`}
         </Container>
         {!isHeld ? (
-          <Container>
-            <Select
-              style={{ background, color, border: 'none' }}
-              options={statusOptions}
-              disabled={!update}
-              IconComponent={!update ? null : undefined}
-              onChangeValue={handleChange}
-              value={payRun.invoiceStatus}
-            />
-          </Container>
+          <Select
+            style={{ background, color, border: 'none' }}
+            options={statusOptions}
+            disabled={!isActivePayRun}
+            IconComponent={!isActivePayRun ? null : undefined}
+            onChangeValue={handleChange}
+            value={payRun.invoiceStatus}
+          />
         ) : (
           <Container>
             <Button onClick={handleClick} secondary color="yellow">
