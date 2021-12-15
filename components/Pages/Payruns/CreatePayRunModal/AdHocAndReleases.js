@@ -16,7 +16,7 @@ import { useLatestPayRunToDate } from '../../../../api';
 
 
 const cycleOptions = [
-  { id: 3, label: 'Residential released holds' }
+  { id: 2, label: 'Residential released holds' }
 ];
 
 export const AdHocAndReleases = ({ createPayrun, isLoading, onClose }) => {
@@ -28,7 +28,7 @@ export const AdHocAndReleases = ({ createPayrun, isLoading, onClose }) => {
   } = useForm({
     resolver: yupResolver(formValidationSchema.adHochAndReleasesSchema),
     defaultValues: {
-      type: 3,
+      type: 2,
       paidUpToDate: null,
       paidFromDate: null,
     },
