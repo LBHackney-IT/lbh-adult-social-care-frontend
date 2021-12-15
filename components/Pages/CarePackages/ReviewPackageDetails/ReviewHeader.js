@@ -11,12 +11,16 @@ export const ReviewHeader = ({ title, subTitle, goToHistory, showEditActions, bu
         title={title}
         subTitle={subTitle}
         additionalComponent={additionalButtons &&
-          <Container className='package-actions' display="flex" alignItems='center' margin='30px 0 0 0'>
-            <PackageDetailsButtons className='ml-0' buttons={additionalButtons} />
-            <VerticalSeparator width={16} />
-            |
-            <VerticalSeparator width={16} />
-            {showEditActions && <PackageDetailsButtons className='ml-0' buttons={buttons} />}
+          <Container className="package-actions" display="flex" alignItems="center" margin="30px 0 0 0">
+            <PackageDetailsButtons className="ml-0" buttons={additionalButtons} />
+            {showEditActions &&
+              <>
+                <VerticalSeparator width={16} />
+                |
+                <VerticalSeparator width={16} />
+                <PackageDetailsButtons className="ml-0" buttons={buttons} />
+              </>
+            }
           </Container>
         }
         link={!additionalButtons && (
