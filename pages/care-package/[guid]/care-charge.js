@@ -24,6 +24,19 @@ import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { CARE_CHARGES_ROUTE } from 'routes/RouteConstants';
 
+export const getServerSideProps = withSession(async ({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
+
 const defaultValues = {
   carePackageId: null,
   cost: null,

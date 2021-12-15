@@ -34,11 +34,11 @@ export const APPROVALS_ROUTE = '/approvals';
 
 export const FINANCE_ROUTE = '/payruns';
 
-export const APP_SERVICE_ROUTES = {
-  logout: '/logout',
-  notFoundPage: '/404',
-  login: '/login',
-};
+export const LOGOUT_ROUTE = '/logout';
+
+export const LOGIN_ROUTE = '/login';
+
+export const NOT_FOUND_ROUTE = '/404';
 
 const carePackageRoutes = [
   { route: BROKER_REFERRAL_ROUTE, name: 'Broker Referral' },
@@ -80,4 +80,4 @@ export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
 };
 export const getPrevRouteInfo = (route) => carePackageRoutes.find((mainRoute) => route.includes(mainRoute.route)) || {};
 
-export const APP_SERVICE_ROUTES_MAP = Object.values(APP_SERVICE_ROUTES);
+export const APP_SERVICE_ROUTES_MAP = [LOGIN_ROUTE, LOGOUT_ROUTE, NOT_FOUND_ROUTE];

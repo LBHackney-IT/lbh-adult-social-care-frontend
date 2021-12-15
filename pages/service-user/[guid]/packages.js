@@ -1,15 +1,30 @@
 import React from 'react';
 import {
-  CareDetails,
   Container,
-  DynamicBreadcrumbs,
-  HorizontalSeparator,
+  CareDetails,
   PackageRequest,
   ServiceUserDetails,
+  HorizontalSeparator,
   TitleSubtitleHeader,
+  DynamicBreadcrumbs,
 } from 'components';
 import { useRouter } from 'next/router';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';
+import withSession from 'lib/session';
+import { getLoggedInUser } from 'service';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
 
 const Packages = () => {
   const router = useRouter();
