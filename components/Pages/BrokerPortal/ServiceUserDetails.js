@@ -32,10 +32,13 @@ const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address, 
         <p>{address}</p>
       </Container>
       {activePackage && (
-        <Container>
-          <Heading size="m">Active Package</Heading>
-          <p>{activePackage}</p>
-        </Container>
+        <>
+          <VerticalSeparator width={30} />
+          <Container>
+            <Heading size="m">Active Package</Heading>
+            <p>{activePackage}</p>
+          </Container>
+        </>
       )}
     </Container>
   </>
