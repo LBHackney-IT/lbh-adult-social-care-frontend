@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { formatDate, getNumberWithCommas } from 'service';
+import { formatDate, getNumberWithPreSign } from 'service';
 import { getCarePackageCareChargeRoute, getCarePackageDetailsRoute } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
 import { confirmS117 } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
 import {
+  Announcement,
   Checkbox,
+  Collapse,
   Container,
   Heading,
   HorizontalSeparator,
+  InsetText,
+  Link,
   Table,
   VerticalSeparator,
-  Link,
-  Announcement,
   WarningText,
-  InsetText,
-  Collapse,
 } from '../../../HackneyDS';
 import { CaretDownIcon } from '../../../Icons';
 import { CarePackageStatus } from './CarePackageStatus';
@@ -75,13 +75,7 @@ const CareDetails = ({
       Header: 'Weekly cost',
       accessor: 'weeklyCost',
       className: 'align-right',
-      Cell: ({ value }) => (
-        <span className="align-right">
-          {value < 0
-            ? `-£${getNumberWithCommas(Math.abs(value).toFixed(2))}`
-            : `£${getNumberWithCommas(Math.abs(value).toFixed(2))}`}
-        </span>
-      ),
+      Cell: ({ value }) => (<span className="align-right">{getNumberWithPreSign(value)}</span>),
     },
   ];
 
@@ -190,11 +184,7 @@ const CareDetails = ({
               Provider paid <VerticalSeparator width="10px" />
               <strong style={{ color: '#00664F' }}>NET OFF</strong>
               <VerticalSeparator width="30px" />
-              <strong>
-                {netTotal < 0
-                  ? `-£${getNumberWithCommas(Math.abs(netTotal).toFixed(2))}`
-                  : `£${getNumberWithCommas(Math.abs(netTotal).toFixed(2))}`}
-              </strong>
+              <strong>{getNumberWithPreSign(netTotal)}</strong>
             </Container>
           </Container>
         ) : (

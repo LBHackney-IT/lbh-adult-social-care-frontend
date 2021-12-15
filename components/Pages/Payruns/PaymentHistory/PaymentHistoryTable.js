@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Link, Table } from 'components';
-import { getNumberWithCommas } from 'service';
+import { getNumberWithPreSign } from 'service';
 import format from 'date-fns/format';
 import { getInvoiceRoute } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
@@ -41,7 +41,7 @@ export const PaymentHistoryTable = ({ data }) => {
     {
       Header: () => <Container textAlign="right">Paid</Container>,
       accessor: 'amountPaid',
-      Cell: ({ value }) => <Container textAlign="right">£{getNumberWithCommas(value)}</Container>,
+      Cell: ({ value }) => <Container textAlign="right">{getNumberWithPreSign(value)}</Container>,
     },
   ];
   return <Table columns={columns} data={data} />;
