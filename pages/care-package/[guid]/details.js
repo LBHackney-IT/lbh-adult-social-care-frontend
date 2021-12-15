@@ -32,16 +32,6 @@ const settingsTypes = [
   { field: 'isS117Client', text: 'S117' },
 ];
 
-const fundedNursingCareClaimCollector = {
-  2: 'Hackney Council (gross/net)',
-  1: 'Supplier (gross/net)',
-};
-
-const careChargesClaimCollector = {
-  2: 'Hackney Council (gross)',
-  1: 'Supplier (net)',
-};
-
 const PackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
@@ -107,9 +97,6 @@ const PackageDetailsPage = () => {
     { id: 12, key: 'Total one off payment', value: data?.additionalOneOffCost, className: 'brokerage__summary-cost' },
   ];
 
-  const documentName = data?.fundedNursingCare?.assessmentFileName;
-  const documentId = data?.fundedNursingCare?.assessmentFileId;
-
   const packageInfoItems = [
     {
       headerTitle: data?.packageType,
@@ -154,12 +141,6 @@ const PackageDetailsPage = () => {
       goToPackage: editableStatus && !isApprovedStatus && pushRoute(getFundedNursingCareRoute(carePackageId)),
       items: data?.fundedNursingCare ? [data.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
-      fncDetails: {
-        funcClaimCollector: fundedNursingCareClaimCollector[data?.fundedNursingCare?.claimCollector],
-        assessmentFileUrl: documentName && documentId ? 'Yes' : 'No',
-        documentName,
-        documentId
-      },
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.fnc,
         supplier: data?.supplierReclaims?.fnc,
@@ -170,7 +151,6 @@ const PackageDetailsPage = () => {
       id: 'care-charges',
       items: data?.careCharges,
       goToPackage: editableStatus && !isApprovedStatus && pushRoute(getCareChargesRoute(carePackageId)),
-      careChargeClaimCollector: careChargesClaimCollector[data?.fundedNursingCare?.claimCollector],
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.careCharge,
         supplier: data?.supplierReclaims?.careCharge,

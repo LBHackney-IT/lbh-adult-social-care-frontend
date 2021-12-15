@@ -1,9 +1,9 @@
 import React, { memo, useState } from 'react';
-import { currency, dateStringFormats } from 'constants/strings';
-import { formatDate, formatNumber, getNumberWithCommas } from 'service';
-import { getDocumentRequest } from 'api';
-import { Container, InsetText, HorizontalSeparator, SingleAccordion, VerticalSeparator } from '../../../HackneyDS';
-import ViewDocument from '../../../ViewDocument';
+import { CLAIM_REASON_OPTIONS } from 'constants/variables';
+import { Container, HorizontalSeparator, InsetText, SingleAccordion } from '../../../HackneyDS';
+import { CareChargesSummary } from './CareChargesSummary';
+import { FNCSummary } from './FNCSummary';
+import { DateCostInfo } from './DateCostInfo';
 
 const noContentText = {
   'Care Charges': 'care charges',
@@ -11,7 +11,7 @@ const noContentText = {
   'Weekly Additional Need': 'weekly additional needs',
 };
 
-const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeClaimCollector }) => {
+const PackageInfo = ({ headerTitle, items, containerId }) => {
   const [openedServiceUserNeed, setOpenedServiceUserNeed] = useState([]);
   const [openedDetails, setOpenedDetails] = useState([]);
 
@@ -36,62 +36,40 @@ const PackageInfo = ({ fncDetails, headerTitle, items, containerId, careChargeCl
       <Container className="review-package-details__title" display="flex" alignItems="center">
         <h3 id={containerId}>{headerTitle || 'Care Package'}</h3>
       </Container>
-      {items?.map(({ startDate, endDate, cost, title, address, serviceUserNeed, place, id, description }) => {
+      {items?.map(({
+        startDate,
+        endDate,
+        claimReason,
+        claimCollector,
+        subTypeName,
+        cost,
+        title,
+        address,
+        serviceUserNeed,
+        place,
+        id,
+        description,
+        assessmentFileName,
+      }) => {
         const openedServiceUserId = openedServiceUserNeed.includes(id);
+        const collectingReasonLabel = claimReason && CLAIM_REASON_OPTIONS.find((el) => (
+          el.value === claimReason
+        ))?.text;
         const openedDetailsId = openedDetails.includes(id);
-        const minusSign = cost < 0 ? '-' : '';
         return (
           <Container className="review-package-details__items" key={id}>
-            <Container className="review-package-details__items-date" display="flex" justifyContent="space-between">
-              <p>
-                {formatDate(startDate, dateStringFormats.dayMonthYearSlash)}
-                {endDate && ` - `}
-                {endDate && formatDate(endDate, dateStringFormats.dayMonthYearSlash)}
-              </p>
-              {cost && (
-                <p className="text-lbh-f01">
-                  {minusSign}
-                  {currency.euro}
-                  {getNumberWithCommas(formatNumber(cost, { isAbsolute: true }))}
-                </p>
-              )}
-            </Container>
-            {fncDetails && (
-              <>
-                <p>
-                  <span className="font-weight-bold">FNC assessment been carried out: </span>
-                  {fncDetails.assessmentFileUrl}
-                </p>
-                <p>
-                  <span className="font-weight-bold">Collected by: </span>
-                  {fncDetails.funcClaimCollector}
-                </p>
-                <p className="mb-3 is-flex">
-                  <span className="font-weight-bold">FNC assessment: </span>
-                  <VerticalSeparator width={8} />
-                  <ViewDocument
-                    hasFile={fncDetails.documentName && fncDetails.documentId}
-                    getDocumentRequest={() => getDocumentRequest(fncDetails.documentId)}
-                    downloadFileName={fncDetails.documentName}
-                  />
-                </p>
-              </>
-            )}
-            {careChargeClaimCollector && (
-              <>
-                <p>
-                  <span className="font-weight-bold">Provisional care charge (pre-assessement)</span>
-                </p>
-                {careChargeClaimCollector && (
-                  <p>
-                    <span className="font-weight-bold">Collected by: </span>
-                    {careChargeClaimCollector}
-                  </p>
-                )}
-                <p className="font-weight-bold">Why is Hackney collecting these care charges: </p>
-                <p className="mb-3">Service user unable to manage finances</p>
-              </>
-            )}
+            <DateCostInfo cost={cost} endDate={endDate} startDate={startDate} />
+            <FNCSummary
+              containerId={containerId}
+              claimCollector={claimCollector}
+              assessmentFileName={assessmentFileName}
+            />
+            <CareChargesSummary
+              containerId={containerId}
+              claimCollector={claimCollector}
+              collectingReasonLabel={collectingReasonLabel}
+              subTypeName={subTypeName}
+            />
             {description && (
               <SingleAccordion title="Notes" onClick={() => changeOpenedDetails(id)} isOpened={openedDetailsId}>
                 <p>{description}</p>

@@ -32,16 +32,6 @@ const settingsTypes = [
   { field: 'isS117Client', text: 'S117' },
 ];
 
-const fundedNursingCareClaimCollector = {
-  2: 'Hackney Council (gross/net)',
-  1: 'Supplier (gross/net)',
-};
-
-const careChargesClaimCollector = {
-  2: 'Hackney Council (gross)',
-  1: 'Supplier (net)',
-};
-
 const ReviewPackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
@@ -114,9 +104,6 @@ const ReviewPackageDetailsPage = () => {
     },
   ];
 
-  const documentName = data?.fundedNursingCare?.assessmentFileName;
-  const documentId = data?.fundedNursingCare?.assessmentFileId;
-
   const packageInfoItems = [
     {
       headerTitle: data?.packageType,
@@ -161,12 +148,6 @@ const ReviewPackageDetailsPage = () => {
       items: data?.fundedNursingCare ? [data?.fundedNursingCare] : null,
       checkHide: true,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
-      fncDetails: {
-        funcClaimCollector: fundedNursingCareClaimCollector[data?.fundedNursingCare?.claimCollector],
-        assessmentFileUrl: documentName && documentId ? 'Yes' : 'No',
-        documentName,
-        documentId
-      },
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.fnc,
         supplier: data?.supplierReclaims?.fnc,
@@ -177,7 +158,6 @@ const ReviewPackageDetailsPage = () => {
       id: 'care-charges',
       goToPackage: () => router.push(getCareChargesRoute(carePackageId)),
       items: data?.careCharges,
-      careChargeClaimCollector: careChargesClaimCollector[data?.fundedNursingCare?.claimCollector],
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.careCharge,
         supplier: data?.supplierReclaims?.careCharge,

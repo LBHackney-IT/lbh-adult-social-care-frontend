@@ -26,7 +26,12 @@ export const cancelCarePackage = (packageId, notes) => sendCarePackageRequest(`$
 export const createCoreCarePackage = ({ data }) => sendCarePackageRequest('', data);
 
 export const updateCoreCarePackage = ({ data, packageId }) =>
-  sendCarePackageRequest(`${packageId}`, data, requestMethods.put);
+  axiosRequest({
+    url: `${CARE_PACKAGE_URL}/${packageId}`,
+    data,
+    method: requestMethods.put,
+    'Content-Type': 'multipart/form-data',
+  });
 
 export const updateCarePackageCosts = ({ data, packageId }) =>
   sendCarePackageRequest(`${packageId}/details`, data, requestMethods.put);
