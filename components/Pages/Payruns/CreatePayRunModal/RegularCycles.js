@@ -54,8 +54,7 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
           Residential Recurring
           {invoiceNumber ? <span className="lbh-color-green font-size-14px"> ({invoiceNumber} releases)</span> : ''}
         </p>
-    },
-    { id: 2, label: 'Direct Payments' },
+    }
   ], [invoiceNumber]);
 
   const onSubmit = (data) => createPayrun(data);
