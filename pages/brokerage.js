@@ -3,8 +3,12 @@ import { useRouter } from 'next/router';
 import withSession from 'lib/session';
 import { useBrokerView } from 'api';
 import { getLoggedInUser } from 'service';
-import { BrokerPortalPage } from 'components';
+import { Breadcrumbs, Button, Container, Heading, HorizontalSeparator } from 'components';
 import { getServiceUserPackagesRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
+import Loading from 'components/Loading';
+import { BrokerPortalFilters } from 'components/Pages/Brokerage/BrokerPortalFilters';
+import { BrokerageTable } from 'components/Pages/Brokerage/BrokerageTable';
+import AlternativePagination from 'components/AlternativePagination';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -44,7 +48,7 @@ const Brokerage = () => {
     pageNumber,
     status,
     brokerId,
-  }), [filters, pageNumber])
+  }), [filters, pageNumber]);
 
   const { data, isLoading: brokerViewLoading } = useBrokerView({ params });
 
@@ -66,21 +70,34 @@ const Brokerage = () => {
   const goToServiceUserSearch = useCallback(() => router.push(SERVICE_USER_SEARCH_ROUTE), []);
 
   return (
-    <BrokerPortalPage
-      title='Brokerage'
-      breadcrumbs={breadcrumbs}
-      loading={brokerViewLoading}
-      goToSearch={goToServiceUserSearch}
-      filters={filters}
-      searchTerm={serviceUserName}
-      clearFilter={clearFilters}
-      setFilters={setFilters}
-      pageNumber={pageNumber}
-      setPageNumber={setPageNumber}
-      items={packages}
-      paginationData={pagingMetaData}
-      onRowClick={handleRowClick}
-    />
+    <div className="broker-portal">
+      <Loading isLoading={brokerViewLoading} />
+      <Container background="#FAFAFA" padding="0 0 60px">
+        <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
+          <HorizontalSeparator height="10px" />
+          <Breadcrumbs values={breadcrumbs} />
+          <HorizontalSeparator height="30px" />
+          <Container display="flex" justifyContent="space-between">
+            <Heading size="xl">Brokerage</Heading>
+            <Button onClick={goToServiceUserSearch} largeButton>Find a service user</Button>
+          </Container>
+          <HorizontalSeparator height="16px" />
+          <BrokerPortalFilters title="Brokerage" filters={filters} setFilters={setFilters} clearFilter={clearFilters} />
+        </Container>
+      </Container>
+
+      <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
+        {packages && <BrokerageTable searchTerm={serviceUserName} onRowClick={handleRowClick} data={packages} />}
+        <HorizontalSeparator height="20px" />
+        <AlternativePagination
+          pageSize={pagingMetaData.pageSize}
+          totalPages={pagingMetaData.totalPages}
+          currentPage={pageNumber}
+          totalCount={pagingMetaData.totalCount}
+          changePagination={setPageNumber}
+        />
+      </Container>
+    </div>
   );
 };
 

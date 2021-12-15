@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { getServiceUserPackagesRoute, getAssignPackageRoute } from 'routes/RouteConstants';
-import { Container, Button } from '../../../HackneyDS';
+import { Container } from '../../../HackneyDS';
 import ServiceUserDetails from '../ServiceUserDetails';
 import AlternativePagination from '../../../AlternativePagination';
 import SearchResult from '../../../SearchResult';
@@ -56,16 +56,14 @@ const SearchServiceUser = ({
                 address={item.postCode || item.address?.postcode}
                 title=""
               />
-              {item.mosaicId && (
-                <Container className="actions">
-                  <Button onClick={() => pushRoute(getAssignPackageRoute(item.mosaicId))} className="link-button green no-background">
-                    Allocate to broker
-                  </Button>
-                  <Button onClick={() => createNewPackage(item)} className="link-button green">
-                    Create new package
-                  </Button>
-                </Container>
-              )}
+              <Container className="actions">
+                <p onClick={() => pushRoute(getAssignPackageRoute(item.mosaicId))} className="link-button green">
+                  Allocate to broker
+                </p>
+                <p onClick={() => createNewPackage(item)} className="link-button green">
+                  Create new package
+                </p>
+              </Container>
             </Container>
           ))}
           {pageNumber && (

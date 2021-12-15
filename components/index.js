@@ -7,7 +7,6 @@ export { default as UploadFile } from './UploadFile';
 
 // pages
 export { default as TitleSubtitleHeader } from './Pages/CarePackages/TitleSubtitleHeader';
-export { default as BrokerPortalPage } from './Pages/Brokerage';
 export { default as ServiceUserDetails } from './Pages/Brokerage/ServiceUserDetails';
 export { default as CareDetails } from './Pages/ServiceUser/Packages/CareDetails';
 export { default as PackageRequest } from './Pages/ServiceUser/Packages/PackageRequest';

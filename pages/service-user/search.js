@@ -1,11 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { assignToBroker, useServiceUserSearch } from 'api';
 import { SearchServiceUser } from 'components';
+import { useServiceUserSearch } from 'api';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import { getFormData } from 'service';
-import { getCorePackageRoute } from 'routes/RouteConstants';
-import { selectUser } from 'reducers/userReducer';
 
 const initialFilters = {
   postcode: '',
@@ -15,31 +11,28 @@ const initialFilters = {
   dateOfBirth: null,
 };
 
-const BrokerPortalSearch = () => {
+const BrokerageSearch = () => {
   const router = useRouter();
-  const user = useSelector(selectUser);
-
+  const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState({ ...initialFilters });
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [isCreatingNewPackage, setIsCreatingNewPackage] = useState(false);
 
-  const params = useMemo(
+  const searchParams = useMemo(
     () => ({
       pageNumber,
       firstName: filters.firstName,
       postcode: filters.postcode,
       lastName: filters.lastName,
       hackneyId: filters.hackneyId,
-      dateOfBirth: filters?.dateOfBirth?.toJSON?.(),
+      dateOfBirth: filters.dateOfBirth?.toJSON?.(),
     }),
     [filters, pageNumber]
   );
 
   const {
-    data: { residents: searchResults },
+    data: { pagingMetaData, data: searchResults },
     isLoading,
-  } = useServiceUserSearch({ params, shouldFetch: showSearchResults });
+  } = useServiceUserSearch({ params: searchParams, shouldFetch: showSearchResults });
 
   const changeFilters = (field, value) => {
     setShowSearchResults(false);
@@ -56,40 +49,25 @@ const BrokerPortalSearch = () => {
 
   const onSearch = () => setShowSearchResults(true);
 
-  const createNewPackage = async ({ mosaicId }) => {
-    if (!isCreatingNewPackage) {
-      setIsCreatingNewPackage(true);
-
-      const formData = getFormData({
-        hackneyUserId: mosaicId,
-        brokerId: user.userId,
-        packageType: 2,
-
-      })
-      const newPackageId = await assignToBroker({ data: formData });
-
-      router.push(getCorePackageRoute(newPackageId));
-    }
-  }
-
   const pushRoute = (route) => router.push(route);
 
   return (
     <SearchServiceUser
+      className="broker-referral__search"
       isLoading={isLoading}
-      createNewPackage={createNewPackage}
-      filters={filters}
-      pushRoute={pushRoute}
-      searchResults={searchResults?.slice((pageNumber - 1) * 10, pageNumber * 10)}
-      clearFilters={clearFilters}
-      changeFilters={changeFilters}
       setPageNumber={setPageNumber}
+      changeFilters={changeFilters}
       pageNumber={pageNumber}
-      totalCount={searchResults?.length}
-      totalPages={searchResults?.length && Math.ceil(searchResults.length / 10)}
+      totalCount={pagingMetaData?.totalCount}
+      filters={filters}
+      totalPages={pagingMetaData?.totalPages}
+      pushRoute={pushRoute}
+      searchResults={searchResults}
       onSearch={onSearch}
+      clearFilters={clearFilters}
+      setFilters={setFilters}
     />
   );
 };
 
-export default BrokerPortalSearch;
+export default BrokerageSearch;
