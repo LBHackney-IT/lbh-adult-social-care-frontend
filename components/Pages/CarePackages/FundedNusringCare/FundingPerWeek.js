@@ -1,5 +1,5 @@
 import React from 'react';
-import { getNumberWithPreSign } from 'service';
+import { formatNumberToCurrency } from 'service';
 import { Container, Heading } from 'components';
 
 export const FundingPerWeek = ({ total }) => (
@@ -18,7 +18,7 @@ export const FundingPerWeek = ({ total }) => (
       padding="30px 0"
     >
       <Heading size="l">Funding per week</Heading>
-      <Heading size="l">{getNumberWithPreSign(total)}</Heading>
+      <Heading size="l">{formatNumberToCurrency(total)}</Heading>
     </Container>
   </Container>
 );

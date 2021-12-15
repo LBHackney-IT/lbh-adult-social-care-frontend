@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Heading, HorizontalSeparator, VerticalSeparator } from 'components';
-import { getNumberWithPreSign } from 'service';
+import { formatNumberToCurrency } from 'service';
 import { format } from 'date-fns';
 import { getPayrunStatusBackgroundColor, getPayrunStatusColor } from 'service/getPayrunStatusColor';
 import { useRouter } from 'next/router';
@@ -50,10 +50,10 @@ export const PayrunList = ({ searchTerm, data }) => {
                 </Container>
               </Container>
               <Container display="flex" flexDirection="column" justifyContent="flex-end" minWidth="80px">
-                <Heading size="s">Paid</Heading>{getNumberWithPreSign(d.totalAmountPaid)}
+                <Heading size="s">Paid</Heading>{formatNumberToCurrency(d.totalAmountPaid)}
               </Container>
               <Container display="flex" flexDirection="column" justifyContent="flex-end" minWidth="80px">
-                <Heading size="s">Held</Heading>{getNumberWithPreSign(d.totalAmountHeld)}
+                <Heading size="s">Held</Heading>{formatNumberToCurrency(d.totalAmountHeld)}
               </Container>
               <Container
                 padding="10px 0"

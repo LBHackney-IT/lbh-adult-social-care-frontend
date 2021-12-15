@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { getNumberWithPreSign } from 'service';
+import { formatNumberToCurrency } from 'service';
 import { Button, Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
 import { useDispatch } from 'react-redux';
 import { releaseInvoice, updateInvoiceStatus } from 'api/PayRuns';
@@ -83,7 +83,7 @@ export const SinglePayRunOverview = ({ payRunId, openModal, searchTerm, payRun, 
         </Container>
         <Container>
           <Heading size="s">Total Cost:</Heading>
-          {getNumberWithPreSign(payRun.netTotal)}
+          {formatNumberToCurrency(payRun.netTotal)}
         </Container>
         {!isHeld ? (
           <Select

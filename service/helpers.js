@@ -70,7 +70,7 @@ export const formatNumber = (x, options = { isAbsolute: false }) => {
 export const getNumberWithCommas = (x) =>
   x === 0 ? x : Number(x)?.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-export const getNumberWithPreSign = (number) => {
+export const formatNumberToCurrency = (number) => {
   const minusSign = number < 0 ? '-' : '';
   return `${minusSign}${currency.euro}${getNumberWithCommas(formatNumber(number, { isAbsolute: true }))}`;
 };

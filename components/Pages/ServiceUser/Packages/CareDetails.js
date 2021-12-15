@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { formatDate, getNumberWithPreSign } from 'service';
+import { formatDate, formatNumberToCurrency } from 'service';
 import { getCarePackageCareChargeRoute, getCarePackageDetailsRoute } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
 import { confirmS117 } from 'api';
@@ -75,7 +75,7 @@ const CareDetails = ({
       Header: 'Weekly cost',
       accessor: 'weeklyCost',
       className: 'align-right',
-      Cell: ({ value }) => (<span className="align-right">{getNumberWithPreSign(value)}</span>),
+      Cell: ({ value }) => (<span className="align-right">{formatNumberToCurrency(value)}</span>),
     },
   ];
 
@@ -184,7 +184,7 @@ const CareDetails = ({
               Provider paid <VerticalSeparator width="10px" />
               <strong style={{ color: '#00664F' }}>NET OFF</strong>
               <VerticalSeparator width="30px" />
-              <strong>{getNumberWithPreSign(netTotal)}</strong>
+              <strong>{formatNumberToCurrency(netTotal)}</strong>
             </Container>
           </Container>
         ) : (
