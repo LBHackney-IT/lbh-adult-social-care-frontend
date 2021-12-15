@@ -13,6 +13,15 @@ const ViewDocument = ({
   className = 'link-button blue',
 }) => {
   const [localLoading, setLocalLoading] = useState(false);
+  const [file, setFile] = useState(null);
+
+  const openFile = (document) => {
+    const newLink = window.document.createElement('a');
+    newLink.href = window.URL.createObjectURL(document);
+    newLink.target = '_blank';
+    newLink.click();
+    newLink.remove();
+  };
 
   const mainLoading = isLoading || localLoading;
 
@@ -34,21 +43,22 @@ const ViewDocument = ({
       }}
       className={className}
       onClick={async (event) => {
+        if (file) return openFile(file);
+
         setMainLoading(true);
         event.preventDefault();
 
-        let file = await getDocumentRequest();
+
+        let newFile = await getDocumentRequest();
 
         // if file is string, then create a file
-        if (typeof file === 'string') {
-          file = await formatDocumentInfo({ fileName: downloadFileName, href: file });
+        if (typeof newFile === 'string') {
+          newFile = await formatDocumentInfo({ fileName: downloadFileName, href: newFile });
         }
+        setFile(newFile)
         setMainLoading(false);
-        const newLink = window.document.createElement('a');
-        newLink.href = window.URL.createObjectURL(file);
-        newLink.target = '_blank';
-        newLink.click();
-        newLink.remove();
+        openFile(newFile);
+
         setIsFileDownloaded?.(true);
       }}
     >

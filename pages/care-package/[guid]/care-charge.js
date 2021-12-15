@@ -3,14 +3,16 @@ import { useForm } from 'react-hook-form';
 import { dateToIsoString, formatDate, getFormData, getLoggedInUser, useGetFile } from 'service';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
-  Loading,
-  TitleSubtitleHeader,
-  VerticalSeparator,
+  DynamicBreadcrumbs,
+  Heading,
+  Hint,
   HorizontalSeparator,
   InsetText,
-  Hint, UploadFile, Heading,
+  Loading,
+  TitleSubtitleHeader,
+  UploadFile,
+  VerticalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -80,7 +82,7 @@ const CareCharge = () => {
     getValues,
     clearErrors,
     reset,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(formValidationSchema.careChargeAssessmentSchema),
     defaultValues: {
@@ -95,7 +97,7 @@ const CareCharge = () => {
     },
   });
 
-  const [assessmentFileId, assessmentFileName] = watch([
+  const [assessmentFileId, assessmentFileName, assessmentFile] = watch([
     'assessmentFileId',
     'assessmentFileName',
     'assessmentFile'
@@ -105,6 +107,13 @@ const CareCharge = () => {
     fileId: assessmentFileId,
     fileName: assessmentFileName,
     setter: (newFile) => setValue('assessmentFile', newFile),
+  });
+
+  const resetValues = (data) => reset({
+    ...data,
+    assessmentFile,
+    assessmentFileName,
+    assessmentFileId
   });
 
   const [provisionalOriginalValues, setProvisionalOriginalValues] = useState();
@@ -124,7 +133,7 @@ const CareCharge = () => {
       const formData = getFormData({ assessmentFileId: fileId });
       await sendCareChargeAssessmentFile({ data: formData, carePackageId });
     }
-  }
+  };
 
   useEffect(() => {
     if (careCharges && careCharges.length > 0) {
@@ -246,7 +255,7 @@ const CareCharge = () => {
                 packageStartDate={packageStartDate}
                 packageEndDate={packageEndDate}
                 refreshPage={refreshPage}
-                reset={reset}
+                reset={resetValues}
                 resetField={resetField}
                 setValue={setValue}
                 watch={watch}
@@ -271,7 +280,7 @@ const CareCharge = () => {
                 packageStartDate={packageStartDate}
                 packageEndDate={packageEndDate}
                 refreshPage={refreshPage}
-                reset={reset}
+                reset={resetValues}
                 resetField={resetField}
                 setValue={setValue}
                 watch={watch}
@@ -297,7 +306,7 @@ const CareCharge = () => {
                 packageStartDate={packageStartDate}
                 packageEndDate={packageEndDate}
                 refreshPage={refreshPage}
-                reset={reset}
+                reset={resetValues}
                 resetField={resetField}
                 setValue={setValue}
                 watch={watch}
@@ -311,10 +320,10 @@ const CareCharge = () => {
               </>
             )}
             <HorizontalSeparator height={24} />
-            <Heading size='l'>Financial assessment</Heading>
+            <Heading size="l">Financial assessment</Heading>
             <UploadFile isLoading={fileLoading} title="" control={control} />
             <HorizontalSeparator height={24} />
-            <Container borderBottom='1px solid rgb(191,193,195)' />
+            <Container borderBottom="1px solid rgb(191,193,195)" />
             <HorizontalSeparator height="48px" />
             <Container display="flex">
               <Button secondary color="gray" onClick={handleBackClick}>
