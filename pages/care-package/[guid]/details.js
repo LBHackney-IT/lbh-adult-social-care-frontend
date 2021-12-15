@@ -7,8 +7,11 @@ import withSession from 'lib/session';
 import {
   getBrokerPackageRoute,
   getCareChargesRoute,
+  getCarePackageCareChargeRoute,
   getCorePackageRoute,
   getFundedNursingCareRoute,
+  getHistoryRoute,
+  getPaymentHistoryRoute,
 } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -168,6 +171,11 @@ const PackageDetailsPage = () => {
         { title: 'Edit', onClick: edit, secondary: true, outline: true, color: 'blue' },
         { title: 'Cancel', onClick: cancel, secondary: true, outline: true, color: 'red' },
         { title: 'End', onClick: end, secondary: true, outline: true, color: 'blue' },
+      ]}
+      additionalButtons={[
+        { title: 'Package history', onClick: pushRoute(getHistoryRoute(carePackageId)), secondary: true, outline: true, color: 'blue' },
+        { title: 'Care Plan', onClick: pushRoute(getCarePackageCareChargeRoute(carePackageId)), secondary: true, outline: true, color: 'blue' },
+        { title: 'Payment history', onClick: pushRoute(getPaymentHistoryRoute(carePackageId)), secondary: true, outline: true, color: 'blue' },
       ]}
       setOpenedPopup={setOpenedPopup}
       title={data?.packageType}
