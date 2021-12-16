@@ -1,4 +1,4 @@
-import { add, compareDesc, format } from 'date-fns';
+import { add, compareDesc, format, parseISO } from 'date-fns';
 import { isServer } from '../api/Utils/FuncUtils';
 import { currency } from '../constants/strings';
 
@@ -30,7 +30,23 @@ export const incrementDate = (incrementTime, date = new Date()) => {
   });
 };
 
-export const formatDate = (date, formatString = 'dd.MM.yy') => date && format(new Date(date), formatString);
+const adjustForUTCOffset = date => {
+  return new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+  );
+};
+
+export const formatDate = (date, formatString = 'dd.MM.yy') => {
+  if (!date) return date;
+
+  const newDate = adjustForUTCOffset(parseISO(date));
+  return format(newDate, formatString);
+}
 
 export const dateToIsoString = (date) => date && new Date(date).toISOString();
 
