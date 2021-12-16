@@ -37,8 +37,8 @@ const ViewDocument = ({
         background: 'none',
         boxShadow: 'none',
         display: 'flex',
-        width: 'fit-content',
-        justifyContent: 'flex-start',
+        width: mainLoading ? 'auto' : 'fit-content' ,
+        justifyContent: mainLoading ? 'center' : 'flex-start',
         padding: 0
       }}
       className={className}

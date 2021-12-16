@@ -26,7 +26,6 @@ export const InsightButtons = ({
   paidBy,
   paidOn,
 }) => {
-  const [isDownloading, setIsDownloading] = useState(false);
   const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
 
   useEffect(() => {
@@ -94,8 +93,6 @@ export const InsightButtons = ({
         }}
         downloadFileName={`CEDAR_${payRunNumber}.xlsx`}
         text={isFileDownloaded ? 'Download again' : 'Download'}
-        setIsLoading={setIsDownloading}
-        isLoading={isDownloading}
         setIsFileDownloaded={setIsFileDownloaded}
         hasFile
       />
@@ -105,7 +102,7 @@ export const InsightButtons = ({
 
   const hasDownloadFile = status > 4 && hasInvoices;
 
-  return isDownloading || isLoading ? (
+  return isLoading ? (
     <Container display="flex" flexDirection="column" alignSelf="center">
       <Loading className="centered-container" isLoading={isLoading} />
     </Container>
