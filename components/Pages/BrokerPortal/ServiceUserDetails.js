@@ -3,7 +3,6 @@ import { getAgeFromDateString } from 'api/Utils/FuncUtils';
 import { formatDate } from 'service/helpers';
 import { Container, Heading, HorizontalSeparator, VerticalSeparator } from '../../HackneyDS';
 
-const placeHolderBirthDate = new Date(1990, 10, 10);
 const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address, title = 'Service user details' }) => (
   <>
     {title && <Heading size="l">{title}</Heading>}
@@ -22,8 +21,12 @@ const ServiceUserDetails = ({ serviceUserName, hackneyId, dateOfBirth, address, 
       <Container>
         <Heading size="m">Age</Heading>
         <p>
-          {formatDate(dateOfBirth || placeHolderBirthDate, 'dd/MM/yy')}
-          {` (${getAgeFromDateString(dateOfBirth || placeHolderBirthDate)})`}
+          {dateOfBirth ?
+          <>
+            {formatDate(dateOfBirth)}
+            {` (${getAgeFromDateString(dateOfBirth)})`}
+          </> : '—'
+          }
         </p>
       </Container>
       <VerticalSeparator width="30px" />
