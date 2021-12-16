@@ -8,11 +8,14 @@ export const NewWeeklyNeed = ({ createNeed, defaultValues, onChangeValue }) => {
   const {
     handleSubmit,
     control,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(formValidationSchema.newWeeklyAdditionalNeedSchema),
     defaultValues,
   });
+
+  const startDate = watch('startDate')
 
   const onSubmit = (data) => createNeed(data);
 
@@ -46,6 +49,25 @@ export const NewWeeklyNeed = ({ createNeed, defaultValues, onChangeValue }) => {
               render={({ field }) => (
                 <DatePicker
                   date={field.value ? new Date(field.value) : null}
+                  setDate={(value) => onChangeValue({ field, value })}
+                  {...field}
+                  floatingCalendar
+                  hasClearButton
+                  calendarStylePosition={{ left: 32, top: -110 }}
+                />
+              )}
+            />
+          </FormGroup>
+          <HorizontalSeparator height="10px" />
+          <FormGroup label="End date" error={errors.startDate?.message} smallLabel>
+            <Controller
+              name="endDate"
+              control={control}
+              render={({ field }) => (
+                <DatePicker
+                  date={field.value ? new Date(field.value) : null}
+                  minDate={startDate}
+                  checkMinDate
                   setDate={(value) => onChangeValue({ field, value })}
                   {...field}
                   floatingCalendar

@@ -9,12 +9,12 @@ export const AdditionalNeeds = ({ setValue, weeklyNeeds, setIsAddingNew }) => {
 
   const ongoingTotal =
     weeklyNeeds
-      ?.filter((need) => !need.endDate)
+      ?.filter((need) => need.costPeriod === 2)
       ?.map((need) => need.cost)
       .reduce((partialSum, a) => parseFloat(partialSum) + parseFloat(a), 0) || 0;
   const oneOffTotal =
     weeklyNeeds
-      ?.filter((need) => need.endDate)
+      ?.filter((need) => need.costPeriod === 3)
       ?.map((need) => need.cost)
       .reduce((partialSum, a) => parseFloat(partialSum) + parseFloat(a), 0) || 0;
 
