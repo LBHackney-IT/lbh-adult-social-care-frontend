@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import withSession from 'lib/session';
-import { getLoggedInUser } from 'service';
+import { formatDate, getLoggedInUser } from 'service';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
@@ -52,7 +52,7 @@ const SinglePayRun = () => {
     [filters, pageNumber]
   );
 
-  const { data: payRun, isLoading, mutate: update } = useInvoiceListView({ payRunId, params });
+  const { data: payRun, isLoading: invoiceLoading, mutate: updateInvoices } = useInvoiceListView({ payRunId, params });
   const { payRunItems: payRunData } = payRun;
 
   const { data: insightData, isLoading: insightsIsLoading, mutate: updateInsight } = getPayrunInsight({ payRunId });
@@ -71,9 +71,12 @@ const SinglePayRun = () => {
   ];
 
   const updateData = () => {
-    update();
+    updateInvoices();
     updateInsight();
   };
+
+  const isLoading = invoiceLoading || insightsIsLoading;
+
   return (
     <Container>
       <Container background="#FAFAFA" padding="0 0 60px 0">
@@ -87,7 +90,7 @@ const SinglePayRun = () => {
         </Container>
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px">
-        <Loading isLoading={isLoading || insightsIsLoading} />
+        <Loading isLoading={isLoading} />
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
@@ -97,7 +100,7 @@ const SinglePayRun = () => {
                 updateData={updateData}
                 item={item}
                 index={index}
-                update={[1, 2, 3, 4].includes(payRun?.payRunStatus)}
+                isActivePayRun={[1, 2, 3, 4].includes(payRun?.payRunStatus)}
               />
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
             </>
@@ -105,9 +108,12 @@ const SinglePayRun = () => {
         <HorizontalSeparator height="32px" />
         {insightData && (
           <HighLevelInsight
-            update={updateData}
+            updateData={updateData}
             payRunId={payRunId}
+            payRunNumber={payRun?.payRunNumber}
             holdCount={insightData?.holdsCount}
+            paidBy={insightData?.paidBy}
+            paidOn={insightData?.paidOn && formatDate(insightData.paidOn)}
             holdValue={insightData?.totalHeldAmount}
             difference={insightData?.totalDifferenceFromLastCycle}
             serviceUsers={insightData?.serviceUserCount}

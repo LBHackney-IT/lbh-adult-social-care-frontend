@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, FormGroup, Heading, Hint, HorizontalSeparator, Input } from 'components';
 import { Controller } from 'react-hook-form';
-import { getNumberWithCommas } from 'service';
+import { formatNumber, getNumberWithCommas } from 'service';
 
 export const CoreWeeklyCost = ({ control, coreCost, errors }) => (
   <Container>
@@ -18,6 +18,7 @@ export const CoreWeeklyCost = ({ control, coreCost, errors }) => (
               value={field.value}
               onChangeValue={(text) => field.onChange(parseFloat(text))}
               flex
+              {...field}
             />
           )}
         />
@@ -32,7 +33,7 @@ export const CoreWeeklyCost = ({ control, coreCost, errors }) => (
       justifyContent="space-between"
     >
       <Hint>Core weekly cost</Hint>
-      <Heading size="m">£{getNumberWithCommas(!Number.isNaN(coreCost) && coreCost ? coreCost : 0)}</Heading>
+      <Heading size="m">£{getNumberWithCommas(formatNumber(coreCost, { isAbsolute: true }))}</Heading>
     </Container>
   </Container>
 );

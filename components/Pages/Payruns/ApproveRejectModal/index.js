@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { approvePayRun, rejectPayRun } from 'api/PayRun';
+import { approvePayRun } from 'api/PayRun';
 import {
   Button,
   Container,
@@ -19,13 +19,13 @@ import Loading from '../../../Loading';
 
 const errorText = {
   Approve: 'approval',
-  Decline: 'decline'
+  Reject: 'reject'
 };
 
-const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) => {
+const ApproveRejectModal = ({ openedModal, title = 'Pay Run', closeModal, rejectRequest, updateData, payRunId }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const isDeclineModal = openedModal === 'Decline';
+  const isRejectModal = openedModal === 'Reject';
   const isApproveModal = openedModal === 'Approve';
 
   const schema = useMemo(() => (
@@ -43,34 +43,32 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) 
   const handleApprove = async (notes) => {
     try {
       await approvePayRun(payRunId, notes);
-      pushNotification(`Invoice status changed`, 'success');
-      update();
+      pushNotification(`Pay run status changed`, 'success');
+      updateData();
     } catch (e) {
       pushNotification(e);
     }
   };
 
-  const closeModal = () => {
-    setOpenedModal('');
+  const onCloseModal = () => {
+    closeModal('');
     reset();
   };
 
-  const makePayRunAction = async ({ notes }) => {
+  const makeAction = async ({ notes }) => {
     setLoading(true);
     if (isApproveModal) {
       await handleApprove(notes);
     } else {
       await handleReject(notes);
     }
-    closeModal();
+    onCloseModal();
     setLoading(false);
   };
 
   const handleReject = async (notes) => {
     try {
-      await rejectPayRun(payRunId, notes);
-      pushNotification(`Invoice status changed`, 'success');
-      update();
+      if (rejectRequest) await rejectRequest(notes);
     } catch (e) {
       pushNotification(e);
     }
@@ -85,13 +83,13 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) 
     resolver: yupResolver(schema),
     defaultValues: { notes: '' },
   });
-  const onSubmit = (data) => makePayRunAction(data);
+  const onSubmit = (data) => makeAction(data);
 
   return (
     <>
       <Loading isLoading={loading} />
-      <Dialog className="high-level-insight--dialog" isOpen={openedModal} noBorder closeIcon="" onClose={closeModal}>
-        <Heading size='xl'>{openedModal} Pay Run</Heading>
+      <Dialog className="high-level-insight--dialog" isOpen={openedModal} noBorder closeIcon="" onClose={onCloseModal}>
+        <Heading size='xl'>{openedModal} {title}</Heading>
         <HorizontalSeparator height={32} />
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
@@ -112,14 +110,14 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) 
           <Container display="flex" alignItems="center">
             <Button
               type="submit"
-              secondary={isDeclineModal}
-              color={isDeclineModal && 'red'}
+              secondary={isRejectModal}
+              color={isRejectModal && 'red'}
             >
-              {openedModal} Pay Run
+              {openedModal} {title}
             </Button>
             <VerticalSeparator width={24} />
             <Button
-              onClick={closeModal}
+              onClick={onCloseModal}
               outline
               color="gray"
               secondary
@@ -134,4 +132,4 @@ const ApproveDeclineModal = ({ openedModal, setOpenedModal, update, payRunId }) 
   );
 };
 
-export default ApproveDeclineModal;
+export default ApproveRejectModal;
