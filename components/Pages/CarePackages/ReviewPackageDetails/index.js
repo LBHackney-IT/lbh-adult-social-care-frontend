@@ -87,35 +87,36 @@ const ReviewPackageDetails = ({
   };
 
   const endCarePackageActions = [
+    { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'red' },
     {
       loading,
       title: 'End package',
       onClick: () =>
         makeActionPackage(endCarePackage, actionNotes.endNotes, getServiceUserPackagesRoute(userDetails.id)),
     },
-    { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'red' },
   ];
 
   const approveCarePackageActions = [
+    { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'red' },
     {
       loading,
       title: 'Approve',
       onClick: () => makeActionPackage(approveCarePackage, actionNotes.approveNotes, APPROVALS_ROUTE),
     },
-    { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'red' },
   ];
 
   const declineCarePackageActions = [
+    { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'gray' },
     {
       loading,
       title: 'Decline',
       className: 'secondary-red',
       onClick: () => makeActionPackage(declineCarePackage, actionNotes.approveNotes, APPROVALS_ROUTE),
     },
-    { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'gray' },
   ];
 
   const cancelCarePackageActions = [
+    { title: 'Back', onClick: closePopup, className: 'link-button', color: 'gray' },
     {
       loading,
       title: 'Cancel package',
@@ -123,7 +124,6 @@ const ReviewPackageDetails = ({
       onClick: () =>
         makeActionPackage(cancelCarePackage, actionNotes.cancelNotes, getServiceUserPackagesRoute(userDetails.id)),
     },
-    { title: 'Back', onClick: closePopup, className: 'link-button', color: 'gray' },
   ];
 
   const modalActions = [
