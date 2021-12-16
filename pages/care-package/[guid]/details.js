@@ -2,27 +2,13 @@ import React, { useState } from 'react';
 import { usePackageSummary } from 'api';
 import { useRouter } from 'next/router';
 import { ReviewPackageDetails } from 'components';
-import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
-import withSession from 'lib/session';
+import { useRedirectIfPackageNotExist } from 'service';
 import {
   getBrokerPackageRoute,
   getCareChargesRoute,
   getCorePackageRoute,
   getFundedNursingCareRoute,
 } from 'routes/RouteConstants';
-
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
-});
 
 const settingsTypes = [
   { field: 'hasRespiteCare', text: 'Respite Care' },

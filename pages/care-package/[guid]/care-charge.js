@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { dateToIsoString, formatDate, getLoggedInUser } from 'service';
+import { dateToIsoString, formatDate } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -15,7 +15,6 @@ import {
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { updateCareChargeReclaim, useAssessmentCareCharges, usePackageDetails } from 'api';
-import withSession from 'lib/session';
 import { ProvisionalCareCharge } from 'components/Pages/CarePackages/CareCharge/ProvisionalCareCharge';
 import { CareCharge12 } from 'components/Pages/CarePackages/CareCharge/CareCharge12';
 import { CareCharge13 } from 'components/Pages/CarePackages/CareCharge/CareCharge13';
@@ -23,19 +22,6 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { CARE_CHARGES_ROUTE } from 'routes/RouteConstants';
-
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
-});
 
 const defaultValues = {
   carePackageId: null,

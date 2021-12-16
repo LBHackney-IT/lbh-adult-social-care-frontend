@@ -1,23 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import withSession from 'lib/session';
-import { getLoggedInUser } from 'service';
 import { getCarePackageApprovalRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { PackageApprovals } from 'components';
 import { useApprovals } from 'api';
-
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
-});
 
 const initialFilters = {
   status: '',
@@ -53,19 +38,19 @@ const Approvals = () => {
   } = filters;
 
   const params = useMemo(() => ({
-        fromDate: dateFrom ? dateFrom.toJSON() : null,
-        toDate: dateTo ? dateTo.toJSON() : null,
-        serviceUserName,
-        approverId,
-        packageType,
-        pageNumber,
-        packageStatus: status,
-        firstName,
-        lastName,
-        hackneyId,
-        dateOfBirth: dateOfBirth ? dateOfBirth.toJSON() : null,
-        postcode,
-      }), [filters, pageNumber]);
+    fromDate: dateFrom ? dateFrom.toJSON() : null,
+    toDate: dateTo ? dateTo.toJSON() : null,
+    serviceUserName,
+    approverId,
+    packageType,
+    pageNumber,
+    packageStatus: status,
+    firstName,
+    lastName,
+    hackneyId,
+    dateOfBirth: dateOfBirth ? dateOfBirth.toJSON() : null,
+    postcode,
+  }), [filters, pageNumber]);
 
   const { data, isLoading: approvalsLoading } = useApprovals({ params });
 
@@ -90,7 +75,7 @@ const Approvals = () => {
 
   return (
     <PackageApprovals
-      title='Approvals'
+      title="Approvals"
       breadcrumbs={breadcrumbs}
       loading={approvalsLoading}
       searchTerm={serviceUserName}

@@ -1,36 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import withSession from 'lib/session';
-import { getLoggedInUser } from 'service';
-import {
-  Breadcrumbs,
-  Button,
-  Container,
-  Heading,
-  Hint,
-  HorizontalSeparator,
-  Loading,
-  Tab,
-  Tabs,
-} from 'components';
+import { Breadcrumbs, Button, Container, Heading, Hint, HorizontalSeparator, Loading, Tab, Tabs, } from 'components';
 import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
-import { usePayrunView, useHeldPaymentsView } from 'api/SWR/payRuns';
+import { useHeldPaymentsView, usePayrunView } from 'api/SWR/payRuns';
 import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
 import CreatePayRunModal from 'components/Pages/Payruns/CreatePayRunModal/CreatePayRunModal';
-
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
-});
 
 const initialFilters = {
   searchTerm: '',
@@ -60,7 +35,7 @@ const Payruns = () => {
       heldPageNumber,
       payRunType,
       payRunStatus:
-        // eslint-disable-next-line no-nested-ternary
+      // eslint-disable-next-line no-nested-ternary
         tabView === 'Awaiting Approval' ? 'WaitingForApproval' : tabView === 'Approved' ? 'Approved' : payRunStatus,
     }),
     [filters, pageNumber, heldPageNumber, tabView]

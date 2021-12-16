@@ -1,18 +1,13 @@
 import React, { useEffect } from 'react';
 import { SWRConfig } from 'swr';
-// eslint-disable-next-line import/no-absolute-path,import/no-unresolved
 import '/styles/globals.scss';
 import { Provider } from 'react-redux';
+
 import { fetcher } from 'api';
 import { CustomNotification, MainHeader } from 'components';
 import { useRouter } from 'next/router';
-import {
-  APP_SERVICE_ROUTES_MAP,
-  getPrevRouteInfo,
-  saveToStoragePrevRoute,
-  setPreviousPath
-} from 'routes/RouteConstants';
 import { useStore } from '../store';
+import { getPrevRouteInfo, saveToStoragePrevRoute } from '../routes/RouteConstants';
 
 const swrOptions = {
   errorRetryCount: 3,
@@ -20,24 +15,15 @@ const swrOptions = {
   fetcher,
 };
 
-export default function App ({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState);
   const router = useRouter();
 
   useEffect(() => {
-    // breadcrumbs route
-    if (router?.pathname && getPrevRouteInfo(router.pathname)?.route) {
+    if(router?.pathname && getPrevRouteInfo(router.pathname)?.route) {
       saveToStoragePrevRoute(router.pathname);
     }
-  }, [router.pathname]);
-
-  useEffect(() => {
-    // save redirect route
-    const { asPath: path } = router;
-    if (path && !APP_SERVICE_ROUTES_MAP.some(item => path.includes(item))) {
-      setPreviousPath(path);
-    }
-  }, [router.asPath]);
+  }, [router.pathname])
 
   return (
     <Provider store={store}>

@@ -1,26 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import withSession from 'lib/session';
-import { getLoggedInUser, getNumberWithCommas } from 'service';
+import { getNumberWithCommas } from 'service';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading, VerticalSeparator } from 'components';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { format } from 'date-fns';
 import { usePaymentHistoryView } from 'api';
 import AlternativePagination from 'components/AlternativePagination';
 import { PaymentHistoryTable } from 'components/Pages/Payruns/PaymentHistory/PaymentHistoryTable';
-
-export const getServerSideProps = withSession(({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
-});
 
 const breadcrumbs = [
   { text: 'Home', href: '/' },

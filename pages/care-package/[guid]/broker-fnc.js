@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  dateToIsoString,
-  getFormDataWithFile,
-  getLoggedInUser,
-  useGetFile,
-} from 'service';
+import { dateToIsoString, getFormDataWithFile, useGetFile, } from 'service';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
+  DynamicBreadcrumbs,
+  HorizontalSeparator,
   Loading,
   TitleSubtitleHeader,
   UploadFile,
   VerticalSeparator,
-  HorizontalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -25,7 +20,6 @@ import {
   usePackageDetails,
   usePackageFnc
 } from 'api';
-import withSession from 'lib/session';
 import { getBrokerPackageRoute, getCareChargesRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { formValidationSchema } from 'service/formValidationSchema';
@@ -37,19 +31,6 @@ import {
   NursingHasFNC,
   NursingSchedule,
 } from 'components/Pages/CarePackages/FundedNusringCare';
-
-export const getServerSideProps = withSession(async ({ req }) => {
-  const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
-});
 
 const BrokerFNC = () => {
   const router = useRouter();
@@ -141,7 +122,7 @@ const BrokerFNC = () => {
 
     omittedData.endDate = !isOngoing ? dateToIsoString(omittedData.endDate) : null;
     omittedData.startDate = dateToIsoString(omittedData.startDate);
-    omittedData.hasAssessmentBeenCarried =  Boolean(omittedData.hasAssessmentBeenCarried).toString();
+    omittedData.hasAssessmentBeenCarried = Boolean(omittedData.hasAssessmentBeenCarried).toString();
 
     const formData = getFormDataWithFile(omittedData);
 

@@ -17,9 +17,7 @@ const statusOptions = [
 const typeOptions = [
   { text: 'All', value: '' },
   { text: 'Residential Recurring', value: '1' },
-  { text: 'Direct Payments', value: '2' },
-  { text: 'Residential Released Holds', value: '3' },
-  { text: 'Direct Payments Released Holds', value: '4' },
+  { text: 'Residential Released Holds', value: '2' }
 ];
 
 export const PayrunFilters = ({ filters, setFilters, clearFilter, tabView }) => {
