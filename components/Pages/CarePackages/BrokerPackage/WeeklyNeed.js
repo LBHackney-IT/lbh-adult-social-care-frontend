@@ -11,7 +11,7 @@ export const WeeklyNeed = ({ need, removeNeed }) => {
     <Container padding="24px 16px" background="#FAFAFA" display="flex" flexDirection="column" flex="1">
       <Container display="flex" alignItems="center" justifyContent="space-between">
         <Container display="flex" alignItems="center">
-          {need.endDate ? (
+          {need.costPeriod === 3 ? (
             <Tag outline color="green">
               One-off
             </Tag>
