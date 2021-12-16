@@ -46,7 +46,7 @@ export const BrokerPortalTable = ({ searchTerm, onRowClick, data }) => {
       Cell: ({ value }) => (
         <Container className="brokerage-portal__cell-with-title">
           <h3>Broker</h3>
-          <p>{value}</p>
+          <p>{value || '—'}</p>
         </Container>
       ),
     },
