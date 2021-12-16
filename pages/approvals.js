@@ -38,19 +38,19 @@ const Approvals = () => {
   } = filters;
 
   const params = useMemo(() => ({
-    fromDate: dateFrom ? dateFrom.toJSON() : null,
-    toDate: dateTo ? dateTo.toJSON() : null,
-    serviceUserName,
-    approverId,
-    packageType,
-    pageNumber,
-    packageStatus: status,
-    firstName,
-    lastName,
-    hackneyId,
-    dateOfBirth: dateOfBirth ? dateOfBirth.toJSON() : null,
-    postcode,
-  }), [filters, pageNumber]);
+        fromDate: dateFrom ? dateFrom.toJSON() : null,
+        toDate: dateTo ? dateTo.toJSON() : null,
+        serviceUserName,
+        approverId,
+        packageType,
+        pageNumber,
+        packageStatus: status,
+        firstName,
+        lastName,
+        hackneyId,
+        dateOfBirth: dateOfBirth ? dateOfBirth.toJSON() : null,
+        postcode,
+      }), [filters, pageNumber]);
 
   const { data, isLoading: approvalsLoading } = useApprovals({ params });
 
@@ -75,7 +75,7 @@ const Approvals = () => {
 
   return (
     <PackageApprovals
-      title="Approvals"
+      title='Approvals'
       breadcrumbs={breadcrumbs}
       loading={approvalsLoading}
       searchTerm={serviceUserName}

@@ -29,7 +29,7 @@ const BrokerReferral = () => {
     pageNumber,
     status,
     brokerId,
-  }), [filters, pageNumber]);
+  }), [filters, pageNumber])
 
   const { data, isLoading: brokerViewLoading } = useBrokerView({ params });
 
@@ -54,7 +54,7 @@ const BrokerReferral = () => {
 
   return (
     <BrokerPortalPage
-      title="Broker Referral"
+      title='Broker Referral'
       breadcrumbs={breadcrumbs}
       loading={brokerViewLoading}
       goToSearch={goToBrokerReferralSearch}

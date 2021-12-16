@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  CareDetails,
   Container,
-  DynamicBreadcrumbs,
-  HorizontalSeparator,
+  CareDetails,
   PackageRequest,
   ServiceUserDetails,
+  HorizontalSeparator,
   TitleSubtitleHeader,
+  DynamicBreadcrumbs,
 } from 'components';
 import { useRouter } from 'next/router';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';

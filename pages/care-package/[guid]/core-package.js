@@ -3,16 +3,15 @@ import { Controller, useForm } from 'react-hook-form';
 import { getFormDataWithFile, useGetFile } from 'service';
 import {
   Button,
-  Container,
   DynamicBreadcrumbs,
+  Container,
   FurtherDetails,
-  Heading,
   HorizontalSeparator,
   Loading,
   PackageType,
   RadioGroup,
   ServiceUserDetails,
-  TitleSubtitleHeader,
+  TitleSubtitleHeader, Heading,
 } from 'components';
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -169,18 +168,18 @@ const CorePackage = () => {
               </Container>
               <FurtherDetails settings={settings} control={control} setValue={setValue} />
               <HorizontalSeparator height={48} />
-              <Container borderBottom="1px solid #bfc1c3" />
+              <Container borderBottom='1px solid #bfc1c3' />
               <HorizontalSeparator height={48} />
-              <Heading size="l">Upload support plan/care package</Heading>
+              <Heading size='l'>Upload support plan/care package</Heading>
               <HorizontalSeparator height={8} />
               <UploadFile
                 isLoading={fileLoading}
-                name="socialWorkerCarePlanFile"
+                name='socialWorkerCarePlanFile'
                 control={control}
-                title=""
+                title=''
               />
               <HorizontalSeparator height={48} />
-              <Container borderBottom="1px solid #bfc1c3" />
+              <Container borderBottom='1px solid #bfc1c3' />
               <HorizontalSeparator height={48} />
               <Button isLoading={isRequestBeingSent} disabled={isRequestBeingSent} type="submit">
                 Save and continue

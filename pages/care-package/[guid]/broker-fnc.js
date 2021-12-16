@@ -3,13 +3,13 @@ import { useForm } from 'react-hook-form';
 import { dateToIsoString, getFormDataWithFile, useGetFile, } from 'service';
 import {
   Button,
-  Container,
   DynamicBreadcrumbs,
-  HorizontalSeparator,
+  Container,
   Loading,
   TitleSubtitleHeader,
   UploadFile,
   VerticalSeparator,
+  HorizontalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -122,7 +122,7 @@ const BrokerFNC = () => {
 
     omittedData.endDate = !isOngoing ? dateToIsoString(omittedData.endDate) : null;
     omittedData.startDate = dateToIsoString(omittedData.startDate);
-    omittedData.hasAssessmentBeenCarried = Boolean(omittedData.hasAssessmentBeenCarried).toString();
+    omittedData.hasAssessmentBeenCarried =  Boolean(omittedData.hasAssessmentBeenCarried).toString();
 
     const formData = getFormDataWithFile(omittedData);
 

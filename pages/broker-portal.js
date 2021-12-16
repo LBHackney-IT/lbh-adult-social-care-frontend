@@ -27,7 +27,7 @@ const BrokerPortal = () => {
     serviceUserName,
     pageNumber,
     status
-  }), [filters, pageNumber]);
+  }), [filters, pageNumber])
 
   const { data, isLoading: brokerViewLoading } = useBrokerView({ params });
 
@@ -52,7 +52,7 @@ const BrokerPortal = () => {
 
   return (
     <BrokerPortalPage
-      title="Broker Portal"
+      title='Broker Portal'
       breadcrumbs={breadcrumbs}
       searchTerm={serviceUserName}
       loading={brokerViewLoading}

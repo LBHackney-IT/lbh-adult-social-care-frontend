@@ -3,12 +3,12 @@ import { useForm } from 'react-hook-form';
 import { useRedirectIfPackageNotExist } from 'service';
 import {
   Button,
-  Container,
   DynamicBreadcrumbs,
-  HorizontalSeparator,
+  Container,
   Loading,
   TitleSubtitleHeader,
   VerticalSeparator,
+  HorizontalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
