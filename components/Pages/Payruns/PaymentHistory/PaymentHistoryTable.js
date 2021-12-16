@@ -25,15 +25,15 @@ export const PaymentHistoryTable = ({ data }) => {
       }) => <> {`${format(new Date(periodFrom), 'dd/MM/yyy')} - ${format(new Date(value), 'dd/MM/yyy')}`}</>,
     },
     {
-      Header: 'Invoice ID',
-      accessor: 'invoiceId',
+      Header: 'Invoice Number',
+      accessor: 'invoiceNumber',
       Cell: ({
         value,
         row: {
-          original: { payRunId },
+          original: { payRunId, invoiceId },
         },
       }) => (
-        <Link onClick={(e) => handleClick(e, value, payRunId)} noVisited>
+        <Link onClick={(e) => handleClick(e, invoiceId, payRunId)} noVisited>
           {value}
         </Link>
       ),
