@@ -1,8 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
-import { BROKER_REFERRAL_ROUTE } from '../../../routes/RouteConstants';
+import Cookies from 'js-cookie';
+import { BROKER_REFERRAL_ROUTE, LOGOUT_ROUTE } from '../../../routes/RouteConstants';
 import { getSlot } from '../helpers';
 import { Container } from '../Layout/Container';
+import { HASC_TOKEN_ID } from '../../../api';
 
 export default function Header({ children = [], links = [], bottomLines = false, fixed, purple, className }) {
   const bottomLinesClass = bottomLines ? ' bottom-lines' : '';
@@ -11,6 +13,12 @@ export default function Header({ children = [], links = [], bottomLines = false,
   const purpleSchemeNodeList = purple ? ' lbh-header--purple' : '';
   const nodeList = Array.isArray(children) ? children : [children];
   const outerClassName = className ? ` ${className}` : '';
+
+  const onLogout = (href) => () => {
+    if (href === LOGOUT_ROUTE) {
+      Cookies.remove(HASC_TOKEN_ID)
+    }
+  }
 
   return (
     <header className={`lbh-header${bottomLinesClass}${fixedClassList + purpleSchemeNodeList}${outerClassName}`}>
@@ -62,9 +70,9 @@ export default function Header({ children = [], links = [], bottomLines = false,
 
             <div className="lbh-header__links">
               {links.map(({ href, text }) => (
-                <Link key={href} href={href}>
+                <a onClick={onLogout(href)} key={href} href={href}>
                   {text}
-                </Link>
+                </a>
               ))}
             </div>
           </div>
