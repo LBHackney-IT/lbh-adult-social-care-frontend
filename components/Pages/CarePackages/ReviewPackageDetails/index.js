@@ -18,6 +18,8 @@ import { SummaryCostOfPlacement } from './SummaryCostOfPlacement';
 import { FluidLinks } from './FluidLinks';
 import { Summary } from './Summary';
 import { ReviewHeader } from './ReviewHeader';
+import EndDetailsModal from '../../Details/EndModal';
+import { dateToIsoString } from '../../../../service';
 
 const initialNotes = {
   endNotes: '',
@@ -31,6 +33,7 @@ const isNursingCarePackage = (packageType) =>
 
 const ReviewPackageDetails = ({
   userDetails,
+  packageData,
   packageId,
   packageInfoItems = [],
   showEditActions,
@@ -86,15 +89,16 @@ const ReviewPackageDetails = ({
     setLoading(false);
   };
 
-  const endCarePackageActions = [
-    { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'red' },
-    {
-      loading,
-      title: 'End package',
-      onClick: () =>
-        makeActionPackage(endCarePackage, actionNotes.endNotes, getServiceUserPackagesRoute(userDetails.id)),
-    },
-  ];
+  const endCarePackageAction = async ({ notes, endDate }) => {
+    setLoading(true);
+    try {
+      await endCarePackage({ packageId, notes, endDate: dateToIsoString(endDate) });
+      router.push(getServiceUserPackagesRoute(userDetails.id));
+    } catch (e) {
+      pushNotification(e);
+    }
+    setLoading(false);
+  };
 
   const approveCarePackageActions = [
     { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'red' },
@@ -127,7 +131,6 @@ const ReviewPackageDetails = ({
   ];
 
   const modalActions = [
-    { title: `End package`, field: 'end', actions: endCarePackageActions },
     { title: 'Approve package', field: 'approve', actions: approveCarePackageActions },
     { title: 'Decline package', field: 'decline', actions: declineCarePackageActions },
     { title: `Cancel package`, field: 'cancel', actions: cancelCarePackageActions },
@@ -143,6 +146,12 @@ const ReviewPackageDetails = ({
   return (
     <div className={`review-package-details ${className}`}>
       <Loading isLoading={isLoading || loading} />
+      <EndDetailsModal
+        onClose={closePopup}
+        packageData={packageData}
+        endPackage={endCarePackageAction}
+        isOpen={openedPopup === 'end'}
+      />
       {openedPopup === 'submit' && <SubmitForApprovalPopup packageId={packageId} closePopup={closePopup} />}
       {modalActions.map(({ title: modalTitle, field, actions }) => (
         <ActionCarePackageModal
