@@ -18,7 +18,7 @@ import {
   useProvisionalCareCharges,
 } from 'api';
 import withSession from 'lib/session';
-import { getCarePackageReviewRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
+import { getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import {
@@ -103,7 +103,7 @@ const CareCharge = () => {
     }
   }, [careChargeLoading]);
 
-  const clickBack = () => router.push(getFundedNursingCareRoute(carePackageId));
+  const clickBack = () => router.back();
 
   const updatePackage = async (data = {}) => {
     if (isDirty) {
