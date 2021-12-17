@@ -37,28 +37,27 @@ const ViewDocument = ({
         background: 'none',
         boxShadow: 'none',
         display: 'flex',
-        width: mainLoading ? 'auto' : 'fit-content' ,
+        width: mainLoading ? 'auto' : 'fit-content',
         justifyContent: mainLoading ? 'center' : 'flex-start',
         padding: 0
       }}
       className={className}
       onClick={async (event) => {
         event.preventDefault();
+
         if (file) return openFile(file);
 
         setMainLoading(true);
-
-
         let newFile = await getDocumentRequest();
 
         // if file is string, then create a file
         if (typeof newFile === 'string') {
           newFile = await formatDocumentInfo({ fileName: downloadFileName, href: newFile });
         }
-        setFile(newFile)
+
+        setFile(newFile);
         setMainLoading(false);
         openFile(newFile);
-
         setIsFileDownloaded?.(true);
       }}
     >

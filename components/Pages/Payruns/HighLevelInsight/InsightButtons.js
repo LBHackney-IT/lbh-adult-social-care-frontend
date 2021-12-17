@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, memo, useMemo, useState } from 'react';
 import { Button, Container, HorizontalSeparator, Link, Loading, Select } from 'components';
 import { getPayrunCedarFile } from 'api';
 import { updatePayrunAsPaid } from 'api/PayRuns';
@@ -14,7 +14,7 @@ const containerProps = {
   alignItems: 'center',
 };
 
-export const InsightButtons = ({
+const InsightButtons = ({
   payRunId,
   openRejectModal,
   payRunNumber,
@@ -206,3 +206,6 @@ export const InsightButtons = ({
     </>
   );
 };
+
+
+export default memo(InsightButtons);
