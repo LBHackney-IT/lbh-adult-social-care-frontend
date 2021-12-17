@@ -12,7 +12,7 @@ const History = () => {
 
   const { data, isLoading } = usePackageHistory(packageId);
   const breadcrumbs = useMemo(
-    () => [{ text: 'Full Overview', href: getCarePackageReviewRoute(packageId) }, { text: 'Package History' }],
+    () => [{ text: 'Full Overview', href: getCarePackageDetailsRoute(packageId) }, { text: 'Package History' }],
     [packageId]
   );
 
