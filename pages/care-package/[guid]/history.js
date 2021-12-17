@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Loading, Container, HistoryList, HistoryOverview, TitleSubtitleHeader, DynamicBreadcrumbs } from 'components';
 import { usePackageHistory } from 'api';
 import { useRedirectIfPackageNotExist } from 'service';
-import { getCarePackageReviewRoute } from 'routes/RouteConstants';
+import { getCarePackageDetailsRoute } from 'routes/RouteConstants';
 
 const History = () => {
   const router = useRouter();
