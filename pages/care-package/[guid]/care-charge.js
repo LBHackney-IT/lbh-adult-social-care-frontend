@@ -123,14 +123,14 @@ const CareCharge = () => {
   const sendFileRequest = async ({ assessmentFile: file, assessmentFileName: fileName, assessmentFileId: fileId }) => {
     if (file) {
       if (file.name === fileName) {
-        const formData = getFormData({ assessmentFileId: fileId });
+        const formData = getFormData({ object: { assessmentFileId: fileId } });
         await sendCareChargeAssessmentFile({ data: formData, carePackageId });
       } else {
-        const formData = getFormData({ assessmentFile: file });
+        const formData = getFormData({ object: { assessmentFile: file } });
         await sendCareChargeAssessmentFile({ data: formData, carePackageId });
       }
     } else if (fileId && fileName) {
-      const formData = getFormData({ assessmentFileId: fileId });
+      const formData = getFormData({ object: { assessmentFileId: fileId } });
       await sendCareChargeAssessmentFile({ data: formData, carePackageId });
     }
   };
