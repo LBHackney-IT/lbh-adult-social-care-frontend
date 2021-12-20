@@ -23,25 +23,27 @@ const initialFilters = {
   status: '',
   dateFrom: null,
   dateTo: null,
+  brokerId: '',
   serviceUserName: '',
 };
 
 const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Broker Portal' }];
 
-const BrokerPortal = () => {
+const BrokerReferral = () => {
   const router = useRouter();
 
   const [pageNumber, setPageNumber] = useState(1);
 
   const [filters, setFilters] = useState(initialFilters);
-  const { dateFrom, dateTo, status, serviceUserName } = filters;
+  const { brokerId, dateTo, dateFrom, status, serviceUserName } = filters;
 
   const params = useMemo(() => ({
     fromDate: dateFrom ? dateFrom.toJSON() : null,
     toDate: dateTo ? dateTo.toJSON() : null,
     serviceUserName,
     pageNumber,
-    status
+    status,
+    brokerId,
   }), [filters, pageNumber])
 
   const { data, isLoading: brokerViewLoading } = useBrokerView({ params });
@@ -55,24 +57,22 @@ const BrokerPortal = () => {
     },
   } = data;
 
-  const goToBrokerPortalSearch = useCallback(() => {
-    router.push(SERVICE_USER_SEARCH_ROUTE);
-  }, []);
-
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
   const handleRowClick = useCallback((rowInfo) => {
     router.push(getServiceUserPackagesRoute(rowInfo.serviceUserId));
   }, []);
 
+  const goToBrokerReferralSearch = useCallback(() => router.push(SERVICE_USER_SEARCH_ROUTE), []);
+
   return (
     <BrokerPortalPage
-      title='Broker Portal'
+      title='Brokerage'
       breadcrumbs={breadcrumbs}
-      searchTerm={serviceUserName}
       loading={brokerViewLoading}
-      goToSearch={goToBrokerPortalSearch}
+      goToSearch={goToBrokerReferralSearch}
       filters={filters}
+      searchTerm={serviceUserName}
       clearFilter={clearFilters}
       setFilters={setFilters}
       pageNumber={pageNumber}
@@ -84,4 +84,4 @@ const BrokerPortal = () => {
   );
 };
 
-export default BrokerPortal;
+export default BrokerReferral;
