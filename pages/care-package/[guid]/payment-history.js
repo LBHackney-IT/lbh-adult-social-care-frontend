@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import { getNumberWithCommas } from 'service';
+import { formatNumberToCurrency } from 'service';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading, VerticalSeparator } from 'components';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { format } from 'date-fns';
@@ -70,7 +70,7 @@ const PaymentHistory = () => {
                 <Container display="flex" alignItems="center">
                   Total paid up to {format(new Date(packagePayment.dateTo), 'dd/MM/yyy')}:
                   <VerticalSeparator width="10px" />
-                  <Heading size="m" color="#00664F">£{getNumberWithCommas(packagePayment.totalPaid)}</Heading>
+                  <Heading size="m" color="#00664F">{formatNumberToCurrency(packagePayment.totalPaid)}</Heading>
                 </Container>
               </>
             )}

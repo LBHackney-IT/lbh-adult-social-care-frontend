@@ -1,12 +1,14 @@
 import React from 'react';
-import { HorizontalSeparator } from '../../../HackneyDS';
+import { Container, HorizontalSeparator, VerticalSeparator } from '../../../HackneyDS';
+import ViewDocument from '../../../ViewDocument';
+import { getDocumentRequest } from '../../../../api';
 
 const fundedNursingCareClaimCollector = {
   2: 'Hackney Council (gross/net)',
   1: 'Supplier (gross/net)',
 };
 
-export const FNCSummary = ({ containerId, assessmentFileName, claimCollector }) => {
+export const FNCSummary = ({ containerId, assessmentFileName, assessmentFileId, claimCollector }) => {
   if (containerId !== 'funded-nursing-care') return null;
 
   return (
@@ -21,10 +23,15 @@ export const FNCSummary = ({ containerId, assessmentFileName, claimCollector }) 
         {fundedNursingCareClaimCollector[claimCollector]}
       </p>
       <HorizontalSeparator height={8} />
-      <p className="mb-3">
+      <Container display='flex' className="mb-3">
         <span className="font-weight-bold">FNC assessment: </span>
-        <span className="link-button">View</span>
-      </p>
+        <VerticalSeparator width={8} />
+        <ViewDocument
+          getDocumentRequest={() => getDocumentRequest(assessmentFileId)}
+          hasFile={assessmentFileName && assessmentFileId}
+          downloadFileName={assessmentFileName}
+        />
+      </Container>
     </>
   );
 };

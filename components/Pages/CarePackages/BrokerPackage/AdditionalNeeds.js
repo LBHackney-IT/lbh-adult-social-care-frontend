@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, FormGroup, Heading, Hint, HorizontalSeparator, InsetText, Link } from 'components';
-import { getNumberWithCommas } from 'service';
+import { formatNumberToCurrency } from 'service';
 import { WeeklyNeed } from './WeeklyNeed';
 
 export const AdditionalNeeds = ({ setValue, weeklyNeeds, setIsAddingNew }) => {
@@ -67,7 +67,7 @@ export const AdditionalNeeds = ({ setValue, weeklyNeeds, setIsAddingNew }) => {
               padding="10px 0"
             >
               <Hint>Weekly</Hint>
-              <Hint size="m">£{getNumberWithCommas(ongoingTotal)}</Hint>
+              <Hint size="m">{formatNumberToCurrency(ongoingTotal)}</Hint>
             </Container>
             <Container
               display="flex"
@@ -77,11 +77,11 @@ export const AdditionalNeeds = ({ setValue, weeklyNeeds, setIsAddingNew }) => {
               padding="10px 0"
             >
               <Hint>One-off</Hint>
-              <Hint size="m">£{getNumberWithCommas(oneOffTotal)}</Hint>
+              <Hint size="m">{formatNumberToCurrency(oneOffTotal)}</Hint>
             </Container>
             <Container display="flex" alignItems="center" justifyContent="space-between" padding="10px 0">
               <Heading size="m">Additional needs total</Heading>
-              <Heading size="m">£{getNumberWithCommas(total)}</Heading>
+              <Heading size="m">{formatNumberToCurrency(total)}</Heading>
             </Container>
           </Container>
         </Container>

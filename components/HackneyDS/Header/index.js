@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
-import { BROKER_REFERRAL_ROUTE, LOGOUT_ROUTE } from '../../../routes/RouteConstants';
+import { BROKERAGE_ROUTE, LOGOUT_ROUTE } from '../../../routes/RouteConstants';
 import { getSlot } from '../helpers';
 import { Container } from '../Layout/Container';
 import { HASC_TOKEN_ID } from '../../../api';
@@ -26,7 +26,7 @@ export default function Header({ children = [], links = [], bottomLines = false,
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <div className="lbh-header__wrapper">
             <h1 className="lbh-header__title">
-              <Link href={BROKER_REFERRAL_ROUTE}>
+              <Link href={BROKERAGE_ROUTE}>
                 <a className="lbh-header__title-link">
                   <svg
                     className="lbh-header__logo"

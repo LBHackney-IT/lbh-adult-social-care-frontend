@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { submitCarePackage, useApproversOptions } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
-import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
+import { BROKERAGE_ROUTE } from 'routes/RouteConstants';
 import { Button, Container, Dialog, Select, Textarea, FormGroup } from '../../../HackneyDS';
 
 const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
@@ -33,7 +33,7 @@ const SubmitForApprovalPopup = ({ closePopup, packageId }) => {
         data: { approverId, notes },
       });
       dispatch(addNotification({ text: 'Success', className: 'success' }));
-      router.push(BROKER_PORTAL_ROUTE);
+      router.push(BROKERAGE_ROUTE);
     } catch (e) {
       dispatch(addNotification({ text: e || 'Something went wrong' }));
     }

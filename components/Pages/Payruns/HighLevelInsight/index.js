@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Container, Heading, Hint, HorizontalSeparator } from 'components';
-import { getNumberWithCommas } from 'service';
+import { formatNumberToCurrency } from 'service';
 import { useDispatch } from 'react-redux';
 import { rejectPayRun } from 'api/PayRun';
 import { addNotification } from 'reducers/notificationsReducer';
 import ApproveRejectModal from '../ApproveRejectModal';
-import { InsightButtons } from './InsightButtons';
+import InsightButtons from './InsightButtons';
 
 export const HighLevelInsight = ({
   payRunId,
@@ -57,10 +57,10 @@ export const HighLevelInsight = ({
             <Hint>High Level Insight</Hint>
             <HorizontalSeparator height="5px" />
             <Heading size="xl" color="#00664F">
-              £{getNumberWithCommas(total)}
+              {formatNumberToCurrency(total)}
             </Heading>
             <HorizontalSeparator height="5px" />
-            {`£${getNumberWithCommas(Math.abs(difference))} ${increaseOrDecrease} from last cycle`}
+            {`${formatNumberToCurrency((difference))} ${increaseOrDecrease} from last cycle`}
           </Container>
           <Container borderRight="1px solid rgba(82, 90, 91, 0.25)" />
           <Container display="flex" flexDirection="column" textAlign="center" alignSelf="center">
@@ -81,7 +81,7 @@ export const HighLevelInsight = ({
             <Heading size="xl" color="#00664F">
               {holdCount}
             </Heading>
-            Holds worth £{getNumberWithCommas(holdValue)}
+            Holds worth {formatNumberToCurrency(holdValue)}
           </Container>
           <InsightButtons
             payRunId={payRunId}

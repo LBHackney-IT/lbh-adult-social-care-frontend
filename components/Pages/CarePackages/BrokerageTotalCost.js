@@ -1,13 +1,13 @@
 import React from 'react';
 import { getNumberWithPreSign } from 'service';
 
-const BrokerageTotalCost = ({ name, className, value }) => {
+const BrokerageTotalCost = ({ name, className, value, costColorClass = 'lbh-color-dark-red' }) => {
   if(!name) return <></>;
 
   return (
     <p className={className || ''}>
       {`${name}`}
-      <span className="lbh-color-dark-red">{getNumberWithPreSign(value)}</span>
+      <span className={costColorClass}>{getNumberWithPreSign(value)}</span>
     </p>
   );
 }
