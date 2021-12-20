@@ -8,7 +8,8 @@ import {
   HorizontalSeparator,
   Loading,
   TitleSubtitleHeader,
-  VerticalSeparator, WarningText,
+  VerticalSeparator,
+  WarningText,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -16,6 +17,7 @@ import {
   createProvisionalCareCharge,
   updateCareChargeBrokerage,
   usePackageCalculatedCost,
+  usePackageCareCharges,
   useProvisionalCareCharges,
 } from 'api';
 import withSession from 'lib/session';
@@ -67,6 +69,7 @@ const CareCharge = () => {
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
   const [showPreviousAnnouncement, setShowPreviousAnnouncement] = useState(false);
+  const [hasAssessmentBeenCarried, setHasAssessmentBeenCarried] = useState(false);
 
   const { guid: carePackageId } = router.query;
 
@@ -74,6 +77,8 @@ const CareCharge = () => {
   const { serviceUser } = coreInfo;
 
   const { data: careCharge, isLoading: careChargeLoading } = useProvisionalCareCharges(carePackageId);
+
+  const { data: packageCareCharges, isLoading: careChargesLoading } = usePackageCareCharges(carePackageId);
 
   const {
     id: careChargeId,
@@ -86,7 +91,6 @@ const CareCharge = () => {
     endDate,
     subType,
     startDate,
-    hasAssessmentBeenCarried
   } = careCharge;
 
   const { data: calculatedCost } = usePackageCalculatedCost(carePackageId, serviceUser?.id);
@@ -106,6 +110,13 @@ const CareCharge = () => {
       ...initialValues,
     },
   });
+
+  useEffect(() => {
+    if (packageCareCharges?.length) {
+      const someHasAssessment = packageCareCharges.some(item => item.hasAssessmentBeenCarried);
+      setHasAssessmentBeenCarried(someHasAssessment);
+    }
+  }, [packageCareCharges]);
 
   useEffect(() => {
     if (calculatedCost && !careChargeCost) setValue('cost', calculatedCost);
@@ -133,7 +144,7 @@ const CareCharge = () => {
       assessmentFileName,
       assessmentFileId,
       isOngoing: !endDate,
-    })
+    });
   };
 
   const useNewCareCharge = () => {
@@ -208,7 +219,7 @@ const CareCharge = () => {
 
   const skipPage = () => router.push(getCarePackageReviewRoute(carePackageId));
 
-  const isLoading = coreLoading || careChargeLoading || isRequestBeingSent;
+  const isLoading = coreLoading || careChargeLoading || isRequestBeingSent || careChargesLoading;
 
   const isNewCareCharge = !(isS117Client || hasAssessmentBeenCarried);
 
@@ -241,7 +252,7 @@ const CareCharge = () => {
             />
             <ClaimsCollector control={control} errors={errors} collectedBy={collectedBy} isS117Client={isDisabled} />
             <HorizontalSeparator height="48px" />
-            <FundingPerWeek total={cost} isS117Client={isDisabled} />
+            <FundingPerWeek total={cost} />
             <HorizontalSeparator height="48px" />
             <Container display="flex">
               <Button onClick={clickBack} secondary color="gray">
