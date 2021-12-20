@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { assignToBroker, useServiceUserNewSearch } from 'api';
+import { assignToBroker, useServiceUserSearch } from 'api';
 import { Container } from 'components';
-import { SearchServiceUser } from 'components';
-import { useServiceUserSearch } from 'api';
 import { useRouter } from 'next/router';
 import { getFormData } from 'service';
 import { getCorePackageRoute } from 'routes/RouteConstants';
@@ -15,7 +13,7 @@ import SearchResultCount from 'components/SearchResultCount';
 import AlternativePagination from 'components/AlternativePagination';
 import SearchResultList from 'components/Pages/Brokerage/SearchResultList';
 import axios from 'axios';
-import { addNotification } from '../../reducers/notificationsReducer';
+import { addNotification } from 'reducers/notificationsReducer';
 
 const initialFilters = {
   postcode: '',
@@ -59,7 +57,7 @@ const BrokerageSearch = () => {
   const {
     data: { residents: searchResults },
     isLoading: searchLoading,
-  } = useServiceUserNewSearch({ params, shouldFetch: showSearchResults });
+  } = useServiceUserSearch({ params, shouldFetch: showSearchResults });
 
   const changeFilters = (field, value) => {
     setShowSearchResults(false);
