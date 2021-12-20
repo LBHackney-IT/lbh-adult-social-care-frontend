@@ -33,7 +33,6 @@ const AssignPackage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { hackneyId } = router.query;
-  console.log(router.query);
   const { data: serviceUser, isLoading: serviceUserLoading } = useServiceUser(hackneyId);
   const { options: packageTypeOptions, isLoading: lookupsLoading } = useLookups('packageType');
   const { options: brokerOptions, isLoading: brokersLoading } = useBrokers();

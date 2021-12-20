@@ -31,9 +31,9 @@ const initialFilters = {
   serviceUserName: '',
 };
 
-const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Brokerage' }];
+const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Index' }];
 
-const Brokerage = () => {
+const Index = () => {
   const router = useRouter();
 
   const [pageNumber, setPageNumber] = useState(1);
@@ -78,11 +78,11 @@ const Brokerage = () => {
           <Breadcrumbs values={breadcrumbs} />
           <HorizontalSeparator height="30px" />
           <Container display="flex" justifyContent="space-between">
-            <Heading size="xl">Brokerage</Heading>
+            <Heading size="xl">Index</Heading>
             <Button onClick={goToServiceUserSearch} largeButton>Find a service user</Button>
           </Container>
           <HorizontalSeparator height="16px" />
-          <BrokerPortalFilters title="Brokerage" filters={filters} setFilters={setFilters} clearFilter={clearFilters} />
+          <BrokerPortalFilters title="Index" filters={filters} setFilters={setFilters} clearFilter={clearFilters} />
         </Container>
       </Container>
 
@@ -101,4 +101,4 @@ const Brokerage = () => {
   );
 };
 
-export default Brokerage;
+export default Index;

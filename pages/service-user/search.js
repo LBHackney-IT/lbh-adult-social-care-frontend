@@ -66,6 +66,7 @@ const BrokerageSearch = () => {
       onSearch={onSearch}
       clearFilters={clearFilters}
       setFilters={setFilters}
+      createNewPackage={() => console.log('create new package')}
     />
   );
 };
