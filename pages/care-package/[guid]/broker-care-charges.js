@@ -86,8 +86,6 @@ const CareCharge = () => {
     endDate,
     subType,
     startDate,
-    type,
-    status,
     hasAssessmentBeenCarried
   } = careCharge;
 
@@ -214,9 +212,6 @@ const CareCharge = () => {
 
   const isNewCareCharge = !(isS117Client || hasAssessmentBeenCarried);
 
-  const showProvisionalAnnouncement = hasAssessmentBeenCarried ||
-    (type === 2 && [2, 3].includes(subType) && [1, 4].includes(status));
-
   return (
     <>
       <DynamicBreadcrumbs />
@@ -232,8 +227,8 @@ const CareCharge = () => {
           useNewCareCharge={useNewCareCharge}
           usePreviousCareCharge={getPreviousCareCharge}
         />
-        <ProvisionalAnnouncement visible={showProvisionalAnnouncement} />
-        {(isS117Client || showPreviousAnnouncement || showProvisionalAnnouncement) && <HorizontalSeparator height={20} />}
+        <ProvisionalAnnouncement visible={hasAssessmentBeenCarried} />
+        {(isS117Client || showPreviousAnnouncement || hasAssessmentBeenCarried) && <HorizontalSeparator height={20} />}
         {!careChargeLoading && !coreLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
             <CareChargeCost control={control} errors={errors} isDisabled={isDisabled} />
