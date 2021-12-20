@@ -35,7 +35,7 @@ const BrokerReferralSearch = () => {
   const dispatch = useDispatch();
 
   const [filters, setFilters] = useState({ ...initialFilters });
-  const [showSearchResults, setShowSearchResults] = useState(true);
+  const [showSearchResults, setShowSearchResults] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 

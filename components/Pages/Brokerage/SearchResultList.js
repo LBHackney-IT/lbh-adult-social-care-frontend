@@ -1,6 +1,6 @@
 import React from 'react';
 import { getAssignPackageRoute, getHistoryRoute } from 'routes/RouteConstants';
-import { Container, VerticalSeparator } from '../../HackneyDS';
+import { Container, HorizontalSeparator, VerticalSeparator } from '../../HackneyDS';
 import ServiceUserDetails from '../BrokerPortal/ServiceUserDetails';
 
 const SearchResultList = ({ searchResults, createNewPackage }) => {
@@ -16,6 +16,7 @@ const SearchResultList = ({ searchResults, createNewPackage }) => {
       className="search-service-user__card"
     >
       <ServiceUserDetails
+        className=''
         hackneyId={item.mosaicId}
         dateOfBirth={item.dateOfBirth}
         serviceUserName={`${item.firstName} ${item.lastName}`}
@@ -23,6 +24,7 @@ const SearchResultList = ({ searchResults, createNewPackage }) => {
         activePackage={item.activePackage}
         title=""
       />
+      <HorizontalSeparator height={8} />
       <Container className="actions">
         <a
           style={(!item.activePackageId && { opacity: 0.2, pointerEvents: 'none' }) || {}}
