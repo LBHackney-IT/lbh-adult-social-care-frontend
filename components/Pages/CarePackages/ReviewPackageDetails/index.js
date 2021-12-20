@@ -43,6 +43,7 @@ const ReviewPackageDetails = ({
   buttons,
   setOpenedPopup,
   title,
+  additionalButtons,
   subTitle = 'Package details',
   isLoading,
 }) => {
@@ -170,6 +171,7 @@ const ReviewPackageDetails = ({
         <ReviewHeader
           buttons={buttons}
           goToHistory={goToHistory}
+          additionalButtons={additionalButtons}
           showEditActions={showEditActions}
           title={title}
           subTitle={subTitle}
