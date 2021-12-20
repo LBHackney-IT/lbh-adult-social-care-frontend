@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Loading } from 'components';
-import { BROKER_REFERRAL_ROUTE, getPreviousPath } from 'routes/RouteConstants';
+import { BROKERAGE_ROUTE, getPreviousPath } from 'routes/RouteConstants';
 
 export default function IndexPage () {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(getPreviousPath() || BROKER_REFERRAL_ROUTE);
+    router.replace(getPreviousPath() || BROKERAGE_ROUTE);
   }, []);
 
   return (

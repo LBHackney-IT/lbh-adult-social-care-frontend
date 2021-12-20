@@ -1,5 +1,5 @@
 import React from 'react';
-import { getNumberWithCommas } from 'service';
+import { formatNumberToCurrency } from 'service';
 import { Collapse, Container, Heading, HorizontalSeparator } from 'components';
 import { format } from 'date-fns';
 
@@ -22,9 +22,9 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
                       'dd/MM/yyy'
                     )}`}
                   </Container>
-                  <Container>£{invoice.cost}</Container>
+                  <Container>{formatNumberToCurrency(invoice.cost)}</Container>
                   <Container>{`${invoice.quantity} (${invoice.period})`}</Container>
-                  <Container textAlign="right">£{getNumberWithCommas(invoice.totalCost)}</Container>
+                  <Container textAlign="right">{formatNumberToCurrency(invoice.totalCost)}</Container>
                 </Container>
                 <HorizontalSeparator height="16px" />
                 <Container borderBottom="1px solid #DEE0E2" />
@@ -35,7 +35,7 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
       <Container display="grid" gridTemplateColumns="4fr 1fr">
         <Heading size="m">{totalPayTitle}</Heading>
         <Container textAlign="right">
-          <Heading size="m">£{getNumberWithCommas(payRun.grossTotal)}</Heading>
+          <Heading size="m">{formatNumberToCurrency(payRun.grossTotal)}</Heading>
         </Container>
       </Container>
       <HorizontalSeparator height="16px" />
@@ -60,7 +60,7 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
                   </Container>
                   <Container>£{invoice.cost}</Container>
                   <Container>{`${invoice.quantity} (${invoice.period})`}</Container>
-                  <Container textAlign="right">£{getNumberWithCommas(invoice.totalCost)}</Container>
+                  <Container textAlign="right">{formatNumberToCurrency(invoice.totalCost)}</Container>
                 </Container>
                 <HorizontalSeparator height="16px" />
                 <Container borderBottom="1px solid #DEE0E2" />
@@ -71,7 +71,7 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
         <Container display="grid" gridTemplateColumns="4fr 1fr">
           <Heading size="m">Sub reclaimed by Hackney</Heading>
           <Container textAlign="right">
-            <Heading size="m">£{getNumberWithCommas(payRun.hackneyReclaimsTotal)}</Heading>
+            <Heading size="m">{formatNumberToCurrency(payRun.hackneyReclaimsTotal)}</Heading>
           </Container>
         </Container>
         <HorizontalSeparator height="16px" />
@@ -80,7 +80,7 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
         <Container display="grid" gridTemplateColumns="4fr 1fr">
           <Heading size="m">Sub reclaimed by Supplier</Heading>
           <Container textAlign="right">
-            <Heading size="m">£{getNumberWithCommas(payRun.supplierReclaimsTotal)}</Heading>
+            <Heading size="m">{formatNumberToCurrency(payRun.supplierReclaimsTotal)}</Heading>
           </Container>
         </Container>
       </Collapse>

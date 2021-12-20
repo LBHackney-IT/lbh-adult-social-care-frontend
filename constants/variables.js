@@ -78,7 +78,7 @@ export const careChargeAPIKeys = {
 
 export const TEXT_FILE_EXTENSIONS = ['pdf', 'doc', 'docx'];
 
-export const collectingReasonOptions = [
+export const CLAIM_REASON_OPTIONS = [
   { text: 'Service user unable to manage finances', value: '1' },
   { text: 'Agreement with provider to pay gross', value: '2' },
   { text: 'Service user or family declining payment', value: '3' },
@@ -89,4 +89,9 @@ export const collectingReasonOptions = [
 export const packageTypes = {
   residential: 2,
   nursing: 4,
+};
+
+export const packageTypesByNumber = {
+  2: 'residential',
+  4: 'nursing',
 };

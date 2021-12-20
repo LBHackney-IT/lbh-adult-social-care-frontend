@@ -32,16 +32,6 @@ const settingsTypes = [
   { field: 'isS117Client', text: 'S117' },
 ];
 
-const fundedNursingCareClaimCollector = {
-  2: 'Hackney Council (gross/net)',
-  1: 'Supplier (gross/net)',
-};
-
-const careChargesClaimCollector = {
-  2: 'Hackney Council (gross)',
-  1: 'Supplier (net)',
-};
-
 const ApprovalPackageDetail = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
@@ -55,49 +45,6 @@ const ApprovalPackageDetail = () => {
     settingsTypes
       .filter((item) => settings[item.field])
       .map((item) => settingsTypes.find((setting) => setting[item])?.text);
-
-  const summary = [
-    { id: 1, key: 'Cost of placement', value: data?.costOfPlacement },
-    { id: 2, key: 'FNC payment', value: data?.fncPayment, checkHide: true },
-    { id: 3, key: 'Additional weekly cost', value: data?.additionalWeeklyCost },
-    { id: 4, key: 'Sub total cost of package', value: data?.subTotalCost, className: 'brokerage__summary-cost' },
-    {
-      id: 5,
-      key: data?.hackneyReclaims?.fnc && 'FNC (net collected at source)',
-      value: data?.hackneyReclaims?.fnc,
-      checkHide: true,
-    },
-    {
-      id: 6,
-      key: data?.hackneyReclaims?.careCharge && 'Care charges (gross collected from service user)',
-      value: data?.hackneyReclaims?.careCharge,
-    },
-    {
-      id: 7,
-      key: data?.hackneyReclaims?.subTotal && 'Sub reclaimed by Hackney',
-      value: data?.hackneyReclaims?.subTotal,
-      className: 'brokerage__summary-cost',
-    },
-    {
-      id: 8,
-      key: data?.supplierReclaims?.fnc && 'FNC (net collected at source)',
-      value: data?.supplierReclaims?.fnc,
-      checkHide: true,
-    },
-    {
-      id: 9,
-      key: data?.supplierReclaims?.careCharge && 'Care charges (Net collected at source)',
-      value: data?.supplierReclaims?.careCharge,
-    },
-    {
-      id: 10,
-      key: data?.supplierReclaims?.subTotal && 'Sub reclaimed by Supplier',
-      value: data?.supplierReclaims?.subTotal,
-      className: 'brokerage__summary-cost',
-    },
-    { id: 11, key: 'Total weekly cost', value: data?.totalWeeklyCost, className: 'brokerage__summary-cost' },
-    { id: 12, key: 'Total one off payment', value: data?.additionalOneOffCost, className: 'brokerage__summary-cost' },
-  ];
 
   const packageInfoItems = [
     {
@@ -143,10 +90,6 @@ const ApprovalPackageDetail = () => {
       checkHide: true,
       items: data?.fundedNursingCare ? [data?.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
-      fncDetails: {
-        funcClaimCollector: fundedNursingCareClaimCollector[data?.fundedNursingCare?.claimCollector],
-        assessmentFileUrl: data?.fundedNursingCare?.assessmentFileUrl ? 'Yes' : 'No',
-      },
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.fnc,
         supplier: data?.supplierReclaims?.fnc,
@@ -157,7 +100,6 @@ const ApprovalPackageDetail = () => {
       headerTitle: 'Care Charges',
       id: 'care-charges',
       items: data?.careCharges,
-      careChargeClaimCollector: careChargesClaimCollector[data?.fundedNursingCare?.claimCollector],
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.careCharge,
         supplier: data?.supplierReclaims?.careCharge,
@@ -194,7 +136,7 @@ const ApprovalPackageDetail = () => {
       ]}
       submitButtonText="Approve"
       goBack={router.back}
-      summary={summary}
+      summaryData={data}
     />
   );
 };
