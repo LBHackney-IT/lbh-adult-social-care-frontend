@@ -35,7 +35,7 @@ const ReviewPackageDetails = ({
   packageInfoItems = [],
   showEditActions,
   className = '',
-  summary = [],
+  summaryData = [],
   openedPopup,
   buttons,
   setOpenedPopup,
@@ -46,14 +46,14 @@ const ReviewPackageDetails = ({
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  const isHide = () => !isNursingCarePackage(title);
+  const onCheckHide = () => !isNursingCarePackage(title);
 
   const links = useMemo(
     () => [
       { text: 'Care Package', href: '#care-package' },
       { text: 'Weekly Additional Need', href: '#weekly-additional-need' },
       { text: 'One Off Additional Need', href: '#on-off-additional-need' },
-      { text: 'Funded Nursing Care', href: '#funded-nursing-care', hide: isHide() },
+      { text: 'Funded Nursing Care', href: '#funded-nursing-care', hide: onCheckHide },
       { text: 'Care Charges', href: '#care-charges' },
       { text: 'Summary', href: '#summary' },
     ],
@@ -181,7 +181,7 @@ const ReviewPackageDetails = ({
                 costOfPlacement,
                 totalCostInfo,
               }) => {
-                if (checkHide && isHide()) return null;
+                if (checkHide && onCheckHide()) return null;
 
                 return (
                   <Container key={itemId} className="review-package-details__cost-info-item">
@@ -205,7 +205,7 @@ const ReviewPackageDetails = ({
                 );
               }
             )}
-            <Summary isHide={isHide} summary={summary} />
+            <Summary summaryData={summaryData} />
             <PackageDetailsButtons buttons={buttons} />
           </Container>
         </Container>
