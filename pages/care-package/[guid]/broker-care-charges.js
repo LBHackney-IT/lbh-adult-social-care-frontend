@@ -21,7 +21,7 @@ import {
   useProvisionalCareCharges,
 } from 'api';
 import withSession from 'lib/session';
-import { getCarePackageReviewRoute } from 'routes/RouteConstants';
+import { getCarePackageCareChargeRoute, getCarePackageReviewRoute } from 'routes/RouteConstants';
 import { addNotification } from 'reducers/notificationsReducer';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -113,7 +113,7 @@ const CareCharge = () => {
 
   useEffect(() => {
     if (packageCareCharges?.length) {
-      const someHasAssessment = packageCareCharges.some(item => item.hasAssessmentBeenCarried);
+      const someHasAssessment = packageCareCharges.some((item) => item.hasAssessmentBeenCarried);
       setHasAssessmentBeenCarried(someHasAssessment);
     }
   }, [packageCareCharges]);
@@ -223,6 +223,8 @@ const CareCharge = () => {
 
   const isNewCareCharge = !(isS117Client || hasAssessmentBeenCarried);
 
+  const handleAssessmentClick = () => router.push(getCarePackageCareChargeRoute(carePackageId));
+
   return (
     <>
       <DynamicBreadcrumbs />
@@ -238,7 +240,7 @@ const CareCharge = () => {
           useNewCareCharge={useNewCareCharge}
           usePreviousCareCharge={getPreviousCareCharge}
         />
-        <ProvisionalAnnouncement visible={hasAssessmentBeenCarried} />
+        <ProvisionalAnnouncement visible={hasAssessmentBeenCarried} handleClick={handleAssessmentClick} />
         {(isS117Client || showPreviousAnnouncement || hasAssessmentBeenCarried) && <HorizontalSeparator height={20} />}
         {!careChargeLoading && !coreLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
@@ -265,7 +267,11 @@ const CareCharge = () => {
                   {isS117Client ? 'Continue' : 'Review'}
                 </Button>
               )}
-              {isNewCareCharge && <Button isLoading={isLoading} type="submit">Save and continue</Button>}
+              {isNewCareCharge && (
+                <Button isLoading={isLoading} type="submit">
+                  Save and continue
+                </Button>
+              )}
             </Container>
           </form>
         )}
