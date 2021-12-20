@@ -3,24 +3,15 @@ import { Button, Container, DatePicker, FormGroup, HorizontalSeparator, Input } 
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { formValidationSchema } from 'service/formValidationSchema';
-import { v4 as uuidv4 } from 'uuid';
 
-export const NewOneOffNeed = ({ createNeed }) => {
+export const NewOneOffNeed = ({ createNeed, defaultValues, onChangeValue }) => {
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(formValidationSchema.newOneOffAdditionalNeedSchema),
-    defaultValues: {
-      startDate: null,
-      endDate: null,
-      cost: null,
-      type: 2,
-      costPeriod: 3,
-      id: uuidv4(),
-      isNew: true,
-    },
+    defaultValues,
   });
 
   const onSubmit = (data) => createNeed(data);
@@ -39,7 +30,7 @@ export const NewOneOffNeed = ({ createNeed }) => {
                     step="any"
                     preSign="£"
                     value={field.value}
-                    onChangeValue={(text) => field.onChange(parseFloat(text))}
+                    onChangeValue={(text) => onChangeValue({ field, value: parseFloat(text) })}
                     flex
                   />
                 )}
@@ -54,7 +45,7 @@ export const NewOneOffNeed = ({ createNeed }) => {
               render={({ field }) => (
                 <DatePicker
                   date={field.value ? new Date(field.value) : null}
-                  setDate={field.onChange}
+                  setDate={(value) => onChangeValue({ field, value })}
                   {...field}
                   floatingCalendar
                   calendarStylePosition={{ left: 32 }}
@@ -71,7 +62,7 @@ export const NewOneOffNeed = ({ createNeed }) => {
               render={({ field }) => (
                 <DatePicker
                   date={field.value ? new Date(field.value) : null}
-                  setDate={field.onChange}
+                  setDate={(value) => onChangeValue({ field, value })}
                   {...field}
                   floatingCalendar
                   calendarStylePosition={{ left: 32 }}

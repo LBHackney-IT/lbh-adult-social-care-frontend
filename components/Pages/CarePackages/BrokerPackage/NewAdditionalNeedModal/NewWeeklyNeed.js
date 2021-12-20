@@ -3,9 +3,8 @@ import { Button, Container, DatePicker, FormGroup, HorizontalSeparator, Input } 
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { formValidationSchema } from 'service/formValidationSchema';
-import { v4 as uuidv4 } from 'uuid';
 
-export const NewWeeklyNeed = ({ createNeed }) => {
+export const NewWeeklyNeed = ({ createNeed, defaultValues, onChangeValue }) => {
   const {
     handleSubmit,
     control,
@@ -13,20 +12,13 @@ export const NewWeeklyNeed = ({ createNeed }) => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(formValidationSchema.newWeeklyAdditionalNeedSchema),
-    defaultValues: {
-      startDate: null,
-      endDate: null,
-      cost: null,
-      type: 2,
-      costPeriod: 2,
-      id: uuidv4(),
-      isNew: true,
-    },
+    defaultValues,
   });
 
   const startDate = watch('startDate')
 
   const onSubmit = (data) => createNeed(data);
+
   return (
     <Container display="flex">
       <form onSubmit={handleSubmit(onSubmit)} style={{ flex: '1' }}>
@@ -42,7 +34,7 @@ export const NewWeeklyNeed = ({ createNeed }) => {
                     step="any"
                     preSign="£"
                     value={field.value}
-                    onChangeValue={(text) => field.onChange(parseFloat(text))}
+                    onChangeValue={(text) => onChangeValue({ field, value: parseFloat(text) })}
                     flex
                   />
                 )}
@@ -57,7 +49,7 @@ export const NewWeeklyNeed = ({ createNeed }) => {
               render={({ field }) => (
                 <DatePicker
                   date={field.value ? new Date(field.value) : null}
-                  setDate={field.onChange}
+                  setDate={(value) => onChangeValue({ field, value })}
                   {...field}
                   floatingCalendar
                   hasClearButton
@@ -76,7 +68,7 @@ export const NewWeeklyNeed = ({ createNeed }) => {
                   date={field.value ? new Date(field.value) : null}
                   minDate={startDate}
                   checkMinDate
-                  setDate={field.onChange}
+                  setDate={(value) => onChangeValue({ field, value })}
                   {...field}
                   floatingCalendar
                   hasClearButton
