@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { rejectPayRun } from 'api/PayRun';
 import { addNotification } from 'reducers/notificationsReducer';
 import ApproveRejectModal from '../ApproveRejectModal';
-import { InsightButtons } from './InsightButtons';
+import InsightButtons from './InsightButtons';
 
 export const HighLevelInsight = ({
   payRunId,

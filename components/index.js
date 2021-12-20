@@ -4,6 +4,7 @@ export { default as Loading } from './Loading';
 export { default as CustomNotification } from './CustomNotification';
 export { default as HackneyFooterInfo } from './HackneyFooterInfo';
 export { default as UploadFile } from './UploadFile';
+export { default as ViewDocument } from './ViewDocument';
 
 // pages
 export { default as TitleSubtitleHeader } from './Pages/CarePackages/TitleSubtitleHeader';

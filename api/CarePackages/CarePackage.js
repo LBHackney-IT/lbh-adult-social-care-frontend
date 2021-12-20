@@ -44,5 +44,12 @@ export const assignToBroker = ({ data }) =>
     'Content-Type': 'multipart/form-data',
   });
 
+export const sendCareChargeAssessmentFile = ({ carePackageId, data }) => axiosRequest({
+  url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/assessment-file`,
+  data,
+  method: requestMethods.post,
+  'Content-Type': 'multipart/form-data',
+});
+
 export const confirmS117 = ({ packageId }) =>
   sendCarePackageRequestNoData(`${packageId}/confirm-s117`, requestMethods.put);
