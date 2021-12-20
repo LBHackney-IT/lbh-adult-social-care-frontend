@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { usePackageSummary } from 'api';
+import { usePackageDetails, usePackageSummary } from 'api';
 import { useRouter } from 'next/router';
 import { ReviewPackageDetails } from 'components';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
@@ -35,12 +35,13 @@ const settingsTypes = [
 const PackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
-  const { data, packageSummaryLoading } = usePackageSummary(carePackageId);
+  const { data, isLoading: packageSummaryLoading } = usePackageSummary(carePackageId);
+  const { data: { startDate, endDate }, isLoading: detailsLoading } = usePackageDetails(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
   const editableStatus = data?.status < 6;
   const isApprovedStatus = data?.status === 4;
 
-  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
+  const { isLoading: coreLoading, data: packageData } = useRedirectIfPackageNotExist();
 
   const checkSettings = (settings) =>
     settings &&
@@ -119,7 +120,7 @@ const PackageDetailsPage = () => {
     <ReviewPackageDetails
       className="package-details"
       showEditActions
-      isLoading={coreLoading || packageSummaryLoading}
+      isLoading={coreLoading || packageSummaryLoading || detailsLoading}
       openedPopup={openedPopup}
       buttons={editableStatus && [
         { title: 'Edit', onClick: edit, secondary: true, outline: true, color: 'blue' },
@@ -129,6 +130,7 @@ const PackageDetailsPage = () => {
       setOpenedPopup={setOpenedPopup}
       title={data?.packageType}
       subTitle="Package details"
+      packageData={{ ...packageData, startDate, endDate  }}
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}

@@ -19,7 +19,8 @@ export const approveCarePackage = (packageId, notes) => sendCarePackageRequest(`
 
 export const declineCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/decline`, { notes });
 
-export const endCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/end`, { notes });
+export const endCarePackage = ({ packageId, notes, endDate }) =>
+  sendCarePackageRequest(`${packageId}/end`, { notes, endDate });
 
 export const cancelCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/cancel`, { notes });
 
