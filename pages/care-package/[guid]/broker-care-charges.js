@@ -86,6 +86,8 @@ const CareCharge = () => {
     endDate,
     subType,
     startDate,
+    type,
+    status,
     hasAssessmentBeenCarried
   } = careCharge;
 
@@ -227,7 +229,9 @@ const CareCharge = () => {
           useNewCareCharge={useNewCareCharge}
           usePreviousCareCharge={getPreviousCareCharge}
         />
-        <ProvisionalAnnouncement visible={hasAssessmentBeenCarried} />
+        <ProvisionalAnnouncement
+          visible={hasAssessmentBeenCarried || (type === 2 && [2, 3].includes(subType) && [1, 4].includes(status))}
+        />
         {(isS117Client || showPreviousAnnouncement || hasAssessmentBeenCarried) && <HorizontalSeparator height={20} />}
         {!careChargeLoading && !coreLoading && (
           <form onSubmit={handleSubmit(updatePackage)}>
