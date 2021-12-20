@@ -31,7 +31,7 @@ const initialFilters = {
   serviceUserName: '',
 };
 
-const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Index' }];
+const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Brokerage' }];
 
 const Index = () => {
   const router = useRouter();
@@ -78,7 +78,7 @@ const Index = () => {
           <Breadcrumbs values={breadcrumbs} />
           <HorizontalSeparator height="30px" />
           <Container display="flex" justifyContent="space-between">
-            <Heading size="xl">Index</Heading>
+            <Heading size="xl">Brokerage</Heading>
             <Button onClick={goToServiceUserSearch} largeButton>Find a service user</Button>
           </Container>
           <HorizontalSeparator height="16px" />
