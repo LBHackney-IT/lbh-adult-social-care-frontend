@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import BrokerageTotalCost from '../BrokerageTotalCost';
 import { Container } from '../../../HackneyDS';
 
-export const Summary = ({ isHide, summaryData }) => {
+export const Summary = ({ summaryData }) => {
   if (!summaryData?.costOfPlacement) return null;
 
   const summary = useMemo(() => [
@@ -57,11 +57,15 @@ export const Summary = ({ isHide, summaryData }) => {
       <h3 id="summary" className="font-weight-bold">
         Summary
       </h3>
-      {summary.map(({ key, value, className: itemClassName, checkHide }) => {
-        if (checkHide && isHide()) return null;
-
-        return <BrokerageTotalCost costColorClass='lbh-color-black' key={key} value={value} name={key} className={itemClassName} />;
-      })}
+      {summary.map(({ key, value, className: itemClassName }) =>
+        <BrokerageTotalCost
+          costColorClass='lbh-color-black'
+          key={key}
+          value={value}
+          name={key}
+          className={itemClassName}
+        />
+      )}
     </Container>
   );
 }
