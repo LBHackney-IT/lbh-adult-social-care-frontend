@@ -129,10 +129,14 @@ export const ProvisionalCareCharge = ({
       <Collapse
         title={
           <Container display="flex">
-            <Tag outline color={getTagColorFromReclaimStatus(status)}>
-              {geTagTextFromReclaimStatus(status)}
-            </Tag>
-            <VerticalSeparator width="10px" />
+            {status && (
+              <>
+                <Tag outline color={getTagColorFromReclaimStatus(status)}>
+                  {geTagTextFromReclaimStatus(status)}
+                </Tag>
+                <VerticalSeparator width="10px" />
+              </>
+            )}
             <Heading size="xl">Provisional care charge (pre-assessment)</Heading>
           </Container>
         }
