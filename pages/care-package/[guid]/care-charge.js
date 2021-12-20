@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { dateToIsoString, formatDate, getLoggedInUser } from 'service';
+import { dateToIsoString, formatDate, getFormData, getLoggedInUser, useGetFile } from 'service';
 import {
   Button,
-  DynamicBreadcrumbs,
   Container,
-  Loading,
-  TitleSubtitleHeader,
-  VerticalSeparator,
+  DynamicBreadcrumbs,
+  Heading,
+  Hint,
   HorizontalSeparator,
   InsetText,
-  Hint,
+  Loading,
+  TitleSubtitleHeader,
+  UploadFile,
+  VerticalSeparator,
 } from 'components';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { updateCareChargeReclaim, useAssessmentCareCharges, usePackageDetails } from 'api';
+import {
+  sendCareChargeAssessmentFile,
+  updateCareChargeReclaim,
+  useAssessmentCareCharges,
+  usePackageDetails
+} from 'api';
 import withSession from 'lib/session';
 import { ProvisionalCareCharge } from 'components/Pages/CarePackages/CareCharge/ProvisionalCareCharge';
 import { CareCharge12 } from 'components/Pages/CarePackages/CareCharge/CareCharge12';
@@ -57,7 +64,7 @@ const CareCharge = () => {
   const { guid: carePackageId } = router.query;
 
   const {
-    data: { careCharges },
+    data: { careCharges, resource },
     isLoading: careChargeLoading,
     mutate,
   } = useAssessmentCareCharges(carePackageId);
@@ -75,10 +82,13 @@ const CareCharge = () => {
     getValues,
     clearErrors,
     reset,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(formValidationSchema.careChargeAssessmentSchema),
     defaultValues: {
+      assessmentFileId: null,
+      assessmentFileName: null,
+      assessmentFile: null,
       packageStart: packageStartDate,
       packageEnd: packageEndDate,
       provisional: defaultValues,
@@ -87,9 +97,43 @@ const CareCharge = () => {
     },
   });
 
+  const [assessmentFileId, assessmentFileName, assessmentFile] = watch([
+    'assessmentFileId',
+    'assessmentFileName',
+    'assessmentFile'
+  ]);
+
+  const { isLoading: fileLoading } = useGetFile({
+    fileId: assessmentFileId,
+    fileName: assessmentFileName,
+    setter: (newFile) => setValue('assessmentFile', newFile),
+  });
+
+  const resetValues = (data) => reset({
+    ...data,
+    assessmentFile,
+    assessmentFileName,
+    assessmentFileId
+  });
+
   const [provisionalOriginalValues, setProvisionalOriginalValues] = useState();
   const [residential12OriginalValues, setResidential12OriginalValues] = useState();
   const [residential13OriginalValues, setResidential13OriginalValues] = useState();
+
+  const sendFileRequest = async ({ assessmentFile: file, assessmentFileName: fileName, assessmentFileId: fileId }) => {
+    if (file) {
+      if (file.name === fileName) {
+        const formData = getFormData({ assessmentFileId: fileId });
+        await sendCareChargeAssessmentFile({ data: formData, carePackageId });
+      } else {
+        const formData = getFormData({ assessmentFile: file });
+        await sendCareChargeAssessmentFile({ data: formData, carePackageId });
+      }
+    } else if (fileId && fileName) {
+      const formData = getFormData({ assessmentFileId: fileId });
+      await sendCareChargeAssessmentFile({ data: formData, carePackageId });
+    }
+  };
 
   useEffect(() => {
     if (careCharges && careCharges.length > 0) {
@@ -100,19 +144,26 @@ const CareCharge = () => {
       if (residential12) setResidential12OriginalValues(residential12);
       if (residential13) setResidential13OriginalValues(residential13);
 
-      reset({
+      resetValues({
         provisional: { ...provisional, isOngoing: !provisional?.endDate, subType: 1, carePackageId },
         residential12: { ...residential12, isOngoing: !residential12?.endDate, subType: 2, carePackageId },
         residential13: { ...residential13, isOngoing: !residential13?.endDate, subType: 3, carePackageId },
       });
     } else {
-      reset({
+      resetValues({
         provisional: { ...defaultValues, subType: 1, carePackageId },
         residential12: { ...defaultValues, subType: 2, carePackageId },
         residential13: { ...defaultValues, subType: 3, carePackageId },
       });
     }
   }, [careCharges]);
+
+  useEffect(() => {
+    if (resource && resource?.fileId && resource?.name) {
+      setValue('assessmentFileName', resource.name);
+      setValue('assessmentFileId', resource.fileId);
+    }
+  }, [resource]);
 
   useEffect(() => {
     if (details) {
@@ -160,6 +211,8 @@ const CareCharge = () => {
       cc.push({ ...formatted });
     }
 
+    await sendFileRequest(data);
+
     try {
       await updateCareChargeReclaim(carePackageId, { careCharges: cc });
       dispatch(addNotification({ text: 'Care charges updated', className: 'success' }));
@@ -202,7 +255,7 @@ const CareCharge = () => {
                 packageStartDate={packageStartDate}
                 packageEndDate={packageEndDate}
                 refreshPage={refreshPage}
-                reset={reset}
+                reset={resetValues}
                 resetField={resetField}
                 setValue={setValue}
                 watch={watch}
@@ -227,7 +280,7 @@ const CareCharge = () => {
                 packageStartDate={packageStartDate}
                 packageEndDate={packageEndDate}
                 refreshPage={refreshPage}
-                reset={reset}
+                reset={resetValues}
                 resetField={resetField}
                 setValue={setValue}
                 watch={watch}
@@ -253,7 +306,7 @@ const CareCharge = () => {
                 packageStartDate={packageStartDate}
                 packageEndDate={packageEndDate}
                 refreshPage={refreshPage}
-                reset={reset}
+                reset={resetValues}
                 resetField={resetField}
                 setValue={setValue}
                 watch={watch}
@@ -266,6 +319,11 @@ const CareCharge = () => {
                 <Button onClick={() => setShow13(true)}>Add 13+ weeks</Button>
               </>
             )}
+            <HorizontalSeparator height={24} />
+            <Heading size="l">Financial assessment</Heading>
+            <UploadFile isLoading={fileLoading} title="" control={control} />
+            <HorizontalSeparator height={24} />
+            <Container borderBottom="1px solid rgb(191,193,195)" />
             <HorizontalSeparator height="48px" />
             <Container display="flex">
               <Button secondary color="gray" onClick={handleBackClick}>

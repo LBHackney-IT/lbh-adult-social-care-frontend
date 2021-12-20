@@ -287,6 +287,11 @@
 
   &.green {
     color: $lbh-primary;
+
+    &:hover {
+      opacity: 0.8;
+      color: green;
+    }
   }
   &.blue {
     color: $lbh-link;

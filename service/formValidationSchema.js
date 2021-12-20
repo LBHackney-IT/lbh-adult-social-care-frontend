@@ -1,9 +1,7 @@
 import * as yup from 'yup';
-import { compareDescendingDMY } from './helpers';
-import { dateDescending } from '../constants/variables';
-import { TEXT_FILE_EXTENSIONS } from '../constants/variables';
-import { min } from 'lodash';
 import { addDays, differenceInWeeks, isAfter, isBefore, isSameDay, subDays } from 'date-fns';
+import { compareDescendingDMY } from './helpers';
+import { dateDescending, TEXT_FILE_EXTENSIONS } from '../constants/variables';
 
 const carePackageCorePackageSchema = yup.object().shape({
   packageType: yup.number().typeError('Please select a package type').required().min(1, 'Please select a package type'),
@@ -241,6 +239,10 @@ const newPayRunRegularCyclesSchema = yup.object().shape({
   type: yup.number().typeError('Please enter a cost').required('Please enter a cost').min(1, 'Please enter a cost'),
 });
 
+const endPackageSchema = yup.object().shape({
+  endDate: yup.string().typeError('Please select a date').required('Please select a date'),
+});
+
 const adHochAndReleasesSchema = yup.object().shape({
   paidUpToDate: yup.string().typeError('Please select a date').required('Please select a date'),
   type: yup.number().typeError('Please enter a cost').required('Please enter a cost').min(1, 'Please enter a cost'),
@@ -256,4 +258,5 @@ export const formValidationSchema = {
   newPayRunRegularCyclesSchema,
   adHochAndReleasesSchema,
   careChargeAssessmentSchema,
+  endPackageSchema,
 };

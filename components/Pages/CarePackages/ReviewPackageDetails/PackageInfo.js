@@ -50,6 +50,7 @@ const PackageInfo = ({ headerTitle, items, containerId }) => {
         id,
         description,
         assessmentFileName,
+        assessmentFileId,
       }) => {
         const openedServiceUserId = openedServiceUserNeed.includes(id);
         const collectingReasonLabel = claimReason && CLAIM_REASON_OPTIONS.find((el) => (
@@ -63,6 +64,7 @@ const PackageInfo = ({ headerTitle, items, containerId }) => {
               containerId={containerId}
               claimCollector={claimCollector}
               assessmentFileName={assessmentFileName}
+              assessmentFileId={assessmentFileId}
             />
             <CareChargesSummary
               containerId={containerId}
