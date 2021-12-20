@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Heading } from 'components';
-import { getNumberWithCommas } from 'service';
+import { formatNumberToCurrency } from 'service';
 import { format } from 'date-fns';
 import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
 
@@ -40,7 +40,7 @@ export const HeldPaymentHeader = ({ payRun, searchTerm }) => {
         {payRunInvoice.packageType}
       </Container>
       <Container overflow="hidden" textOverflow="ellipsis" whiteSpace="noWrap" title={payRunInvoice.grossTotal}>
-        £{getNumberWithCommas(payRunInvoice.grossTotal)}
+        {formatNumberToCurrency(payRunInvoice.grossTotal)}
       </Container>
       <Container
         overflow="hidden"
@@ -48,7 +48,7 @@ export const HeldPaymentHeader = ({ payRun, searchTerm }) => {
         whiteSpace="noWrap"
         title={payRunInvoice.hackneyReclaimsTotal}
       >
-        £{getNumberWithCommas(payRunInvoice.hackneyReclaimsTotal)}
+        {formatNumberToCurrency(payRunInvoice.hackneyReclaimsTotal)}
       </Container>
     </Container>
   );
