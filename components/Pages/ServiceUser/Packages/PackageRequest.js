@@ -1,37 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   formatDate,
+  getButtonColourFromPackageStatus,
   getButtonTextFromPackageStatus,
   getTagColorFromStatus,
-  getButtonColourFromPackageStatus,
-  useGetFile,
 } from 'service';
 import { CaretDownIcon } from 'components/Icons';
 import { useRouter } from 'next/router';
 import { getCorePackageRoute } from 'routes/RouteConstants';
-import {
-  Button,
-  Container,
-  Collapse,
-  Heading,
-  HorizontalSeparator,
-  Tag,
-  VerticalSeparator,
-} from '../../../HackneyDS';
-import UrlFromFile from '../../../UrlFromFile';
+import { getDocumentRequest } from 'api';
+import { Button, Collapse, Container, Heading, HorizontalSeparator, Tag, VerticalSeparator, } from '../../../HackneyDS';
+import ViewDocument from '../../../ViewDocument';
 
 const PackageRequest = ({ packageRequest }) => {
+  const { socialWorkerCarePlanFileId: documentId, socialWorkerCarePlanFileName: documentName } = packageRequest;
   const router = useRouter();
   const buttonClass = `${getButtonColourFromPackageStatus(packageRequest.packageStatus)} package-request-button`;
   const handleClick = () => router.push(getCorePackageRoute(packageRequest.packageId));
-
-  const [file, setFile] = useState();
-
-  const { isLoading: fileLoading } = useGetFile({
-    fileId: packageRequest.socialWorkerCarePlanFileId,
-    fileName: packageRequest.socialWorkerCarePlanFileName,
-    setter: (newFile) => setFile(newFile),
-  });
 
   return (
     <Container
@@ -59,7 +44,11 @@ const PackageRequest = ({ packageRequest }) => {
           <VerticalSeparator width="20px" />
           <Container>
             <Heading size="m">Care Plan</Heading>
-            <UrlFromFile isLoading={fileLoading} showOnlyLink file={file} />
+            <ViewDocument
+              hasFile={documentId && documentName}
+              downloadFileName={documentName}
+              getDocumentRequest={() => getDocumentRequest(documentId)}
+            />
           </Container>
           <VerticalSeparator width="20px" />
           <Container>

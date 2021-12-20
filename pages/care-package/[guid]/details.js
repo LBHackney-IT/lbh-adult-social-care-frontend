@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { usePackageSummary } from 'api';
+import { usePackageDetails, usePackageSummary } from 'api';
 import { useRouter } from 'next/router';
 import { ReviewPackageDetails } from 'components';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
@@ -7,8 +7,11 @@ import withSession from 'lib/session';
 import {
   getBrokerPackageRoute,
   getCareChargesRoute,
+  getCarePackageCareChargeRoute,
   getCorePackageRoute,
   getFundedNursingCareRoute,
+  getHistoryRoute,
+  getPaymentHistoryRoute,
 } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
@@ -32,25 +35,16 @@ const settingsTypes = [
   { field: 'isS117Client', text: 'S117' },
 ];
 
-const fundedNursingCareClaimCollector = {
-  2: 'Hackney Council (gross/net)',
-  1: 'Supplier (gross/net)',
-};
-
-const careChargesClaimCollector = {
-  2: 'Hackney Council (gross)',
-  1: 'Supplier (net)',
-};
-
 const PackageDetailsPage = () => {
   const router = useRouter();
   const carePackageId = router.query.guid;
-  const { data, packageSummaryLoading } = usePackageSummary(carePackageId);
+  const { data, isLoading: packageSummaryLoading } = usePackageSummary(carePackageId);
+  const { data: { startDate, endDate }, isLoading: detailsLoading } = usePackageDetails(carePackageId);
   const [openedPopup, setOpenedPopup] = useState('');
   const editableStatus = data?.status < 6;
   const isApprovedStatus = data?.status === 4;
 
-  const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
+  const { isLoading: coreLoading, data: packageData } = useRedirectIfPackageNotExist();
 
   const checkSettings = (settings) =>
     settings &&
@@ -63,49 +57,6 @@ const PackageDetailsPage = () => {
   const edit = () => router.push(getCorePackageRoute(carePackageId));
 
   const pushRoute = (route) => () => router.push(route);
-
-  const summary = [
-    { id: 1, key: 'Cost of placement', value: data?.costOfPlacement },
-    { id: 2, key: 'FNC payment', value: data?.fncPayment, checkHide: true },
-    { id: 3, key: 'Additional weekly cost', value: data?.additionalWeeklyCost },
-    { id: 4, key: 'Sub total cost of package', value: data?.subTotalCost, className: 'brokerage__summary-cost' },
-    {
-      id: 5,
-      key: data?.hackneyReclaims?.fnc && 'FNC (net collected at source)',
-      value: data?.hackneyReclaims?.fnc,
-      checkHide: true,
-    },
-    {
-      id: 6,
-      key: data?.hackneyReclaims?.careCharge && 'Care charges (gross collected from service user)',
-      value: data?.hackneyReclaims?.careCharge,
-    },
-    {
-      id: 7,
-      key: data?.hackneyReclaims?.subTotal && 'Sub reclaimed by Hackney',
-      value: data?.hackneyReclaims?.subTotal,
-      className: 'brokerage__summary-cost',
-    },
-    {
-      id: 8,
-      key: data?.supplierReclaims?.fnc && 'FNC (net collected at source)',
-      value: data?.supplierReclaims?.fnc,
-      checkHide: true,
-    },
-    {
-      id: 9,
-      key: data?.supplierReclaims?.careCharge && 'Care charges (Net collected at source)',
-      value: data?.supplierReclaims?.careCharge,
-    },
-    {
-      id: 10,
-      key: data?.supplierReclaims?.subTotal && 'Sub reclaimed by Supplier',
-      value: data?.supplierReclaims?.subTotal,
-      className: 'brokerage__summary-cost',
-    },
-    { id: 11, key: 'Total weekly cost', value: data?.totalWeeklyCost, className: 'brokerage__summary-cost' },
-    { id: 12, key: 'Total one off payment', value: data?.additionalOneOffCost, className: 'brokerage__summary-cost' },
-  ];
 
   const packageInfoItems = [
     {
@@ -151,10 +102,6 @@ const PackageDetailsPage = () => {
       goToPackage: editableStatus && !isApprovedStatus && pushRoute(getFundedNursingCareRoute(carePackageId)),
       items: data?.fundedNursingCare ? [data.fundedNursingCare] : null,
       totalCostHeader: `Total (${data?.fundedNursingCare?.cost <= 0 ? 'Net Off' : 'Gross'})`,
-      fncDetails: {
-        funcClaimCollector: fundedNursingCareClaimCollector[data?.fundedNursingCare?.claimCollector],
-        assessmentFileUrl: data?.fundedNursingCare?.assessmentFileUrl ? 'Yes' : 'No',
-      },
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.fnc,
         supplier: data?.supplierReclaims?.fnc,
@@ -165,7 +112,6 @@ const PackageDetailsPage = () => {
       id: 'care-charges',
       items: data?.careCharges,
       goToPackage: editableStatus && !isApprovedStatus && pushRoute(getCareChargesRoute(carePackageId)),
-      careChargeClaimCollector: careChargesClaimCollector[data?.fundedNursingCare?.claimCollector],
       totalCostInfo: {
         hackney: data?.hackneyReclaims?.careCharge,
         supplier: data?.supplierReclaims?.careCharge,
@@ -177,21 +123,27 @@ const PackageDetailsPage = () => {
     <ReviewPackageDetails
       className="package-details"
       showEditActions
-      isLoading={coreLoading || packageSummaryLoading}
+      isLoading={coreLoading || packageSummaryLoading || detailsLoading}
       openedPopup={openedPopup}
       buttons={editableStatus && [
         { title: 'Edit', onClick: edit, secondary: true, outline: true, color: 'blue' },
         { title: 'Cancel', onClick: cancel, secondary: true, outline: true, color: 'red' },
         { title: 'End', onClick: end, secondary: true, outline: true, color: 'blue' },
       ]}
+      additionalButtons={[
+        { title: 'Package history', onClick: pushRoute(getHistoryRoute(carePackageId)), secondary: true, outline: true, color: 'blue' },
+        { title: 'Care Plan', onClick: pushRoute(getCarePackageCareChargeRoute(carePackageId)), secondary: true, outline: true, color: 'blue' },
+        { title: 'Payment history', onClick: pushRoute(getPaymentHistoryRoute(carePackageId)), secondary: true, outline: true, color: 'blue' },
+      ]}
       setOpenedPopup={setOpenedPopup}
       title={data?.packageType}
       subTitle="Package details"
+      packageData={{ ...packageData, startDate, endDate  }}
       packageId={carePackageId}
       packageInfoItems={packageInfoItems}
       userDetails={data?.serviceUser}
       goBack={router.back}
-      summary={summary}
+      summaryData={data}
     />
   );
 };

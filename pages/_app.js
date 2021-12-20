@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { SWRConfig } from 'swr';
 import '/styles/globals.scss';
 import { Provider } from 'react-redux';
-
 import { fetcher } from 'api';
 import { CustomNotification, MainHeader } from 'components';
 import { useRouter } from 'next/router';

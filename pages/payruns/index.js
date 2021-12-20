@@ -8,7 +8,6 @@ import {
   Heading,
   Hint,
   HorizontalSeparator,
-  InsetText,
   Loading,
   Tab,
   Tabs,

@@ -1,5 +1,6 @@
 import { add, compareDesc, format } from 'date-fns';
 import { isServer } from '../api/Utils/FuncUtils';
+import { currency } from '../constants/strings';
 
 const chr4 = () => Math.random().toString(16).slice(-4);
 
@@ -66,8 +67,18 @@ export const formatNumber = (x, options = { isAbsolute: false }) => {
   return 0;
 }
 
+export const getNumberWithPreSign = (number) => {
+  const minusSign = number < 0 ? '-' : '';
+  return `${minusSign}${currency.euro}${getNumberWithCommas(formatNumber(number, { isAbsolute: true }))}`;
+};
+
 export const getNumberWithCommas = (x) =>
   x === 0 ? x : Number(x)?.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+export const formatNumberToCurrency = (number) => {
+  const minusSign = number < 0 ? '-' : '';
+  return `${minusSign}${currency.euro}${getNumberWithCommas(formatNumber(number, { isAbsolute: true }))}`;
+};
 
 export const removeEmpty = (obj) => {
   Object.keys(obj).forEach(k =>
