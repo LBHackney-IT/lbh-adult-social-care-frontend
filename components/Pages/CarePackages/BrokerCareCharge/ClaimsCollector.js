@@ -1,7 +1,7 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import { Container, FormGroup, HorizontalSeparator, RadioGroup, Select, Textarea } from 'components';
-import { CLAIM_REASON_OPTIONS } from 'constants/variables';
+import { CLAIM_REASON_OPTIONS, claimCollector } from 'constants/variables';
 
 export const ClaimsCollector = ({ control, errors, collectedBy, isS117Client }) => (
   <Container>
@@ -25,7 +25,7 @@ export const ClaimsCollector = ({ control, errors, collectedBy, isS117Client }) 
       />
     </FormGroup>
     <HorizontalSeparator height="20px" />
-    <FormGroup label="Why is Hackney collecting these care charges?" disabled={collectedBy !== 1 || isS117Client}>
+    <FormGroup label="Why is Hackney collecting these care charges?" disabled={collectedBy === claimCollector.supplier || isS117Client}>
       <Controller
         name="claimReason"
         control={control}

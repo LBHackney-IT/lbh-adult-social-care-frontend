@@ -32,7 +32,7 @@ export const incrementDate = (incrementTime, date = new Date()) => {
 
 export const formatDate = (date, formatString = 'dd.MM.yy') => date && format(new Date(date), formatString);
 
-export const dateToIsoString = (date) => date && new Date(date).toISOString();
+export const dateToIsoString = (date) => date ? new Date(date).toISOString() : null;
 
 export const getUrlFromFile = async (file) => {
   if (isServer() || !file) return;
