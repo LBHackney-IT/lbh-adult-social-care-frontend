@@ -53,6 +53,7 @@ const defaultValues = {
   startDate: null,
   endDate: null,
   isOngoing: null,
+  status:null,
   description: '',
   id: null,
   checkValidation: false,

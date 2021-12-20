@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { HorizontalSeparator, Heading, Collapse, Container, Hint, FormGroup } from 'components';
+import { HorizontalSeparator, Heading, Collapse, Container, Hint, FormGroup, VerticalSeparator, Tag } from 'components';
 import { addDays, isSameDay } from 'date-fns';
 import { cancelCareChargeReclaim, endCareChargeReclaim } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -9,6 +9,7 @@ import { ClaimCollector } from './ClaimCollector';
 import { CareChargeSchedule } from './CareChargeSchedule';
 import { ActionButtons } from './ActionButtons';
 import EndCareChargeModal from './EndCareChargeModal';
+import { geTagTextFromReclaimStatus, getTagColorFromReclaimStatus } from 'service/getTagColorFromReclaimStatus';
 
 export const CareCharge13 = ({
   carePackageId,
@@ -55,6 +56,7 @@ export const CareCharge13 = ({
   const res13ClaimReason = watch('residential13.claimReason');
 
   const reclaimId = watch('residential13.id');
+  const status = watch('residential13.status');
 
   useEffect(() => {
     if (!startDate) {
@@ -147,8 +149,20 @@ export const CareCharge13 = ({
       <Collapse
         title={
           <Container display="flex" flexDirection="column">
-            <Heading size="xl">Residential SU contribution</Heading>
-            <Hint>Without Property 13+ weeks</Hint>
+            {status ? (
+              <Container display="flex" alignItems='flex-start'>
+                <Tag outline color={getTagColorFromReclaimStatus(status)}>
+                  {geTagTextFromReclaimStatus(status)}
+                </Tag>
+                <VerticalSeparator width="10px" />
+                <Container display="flex" flexDirection="column">
+                  <Heading size="xl">Residential SU contribution</Heading>
+                  <Hint>Without Property 13+ weeks</Hint>
+                </Container>
+              </Container>
+            ) : (
+              <Heading size="xl">Residential SU contribution</Heading>
+            )}
           </Container>
         }
         setExpanded={setExpanded}
