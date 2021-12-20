@@ -12,6 +12,8 @@
 @import "brokerage-weekly-cost";
 @import "approval-package-detail";
 @import "package-details";
+@import "styles/css/Brokerage/search-service-user";
+@import "styles/css/Brokerage/assign-care-plan";
 
 .brokerage__container-main {
   @include media-desktop {

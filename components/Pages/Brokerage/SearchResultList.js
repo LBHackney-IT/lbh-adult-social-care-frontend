@@ -1,7 +1,7 @@
 import React from 'react';
 import { getAssignPackageRoute, getHistoryRoute } from 'routes/RouteConstants';
 import { Container, HorizontalSeparator, VerticalSeparator } from '../../HackneyDS';
-import ServiceUserDetails from '../BrokerPortal/ServiceUserDetails';
+import ServiceUserDetails from './ServiceUserDetails';
 
 const SearchResultList = ({ searchResults, createNewPackage }) => {
 

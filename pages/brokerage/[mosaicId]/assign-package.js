@@ -25,7 +25,7 @@ import { assignPackageSchema } from 'service/formValidationSchema';
 
 const breadcrumbs = [
   { text: 'Home', href: BROKERAGE_ROUTE },
-  { text: 'Broker Referral', href: BROKERAGE_ROUTE },
+  { text: 'Brokerage', href: BROKERAGE_ROUTE },
   { text: 'Assign and attach a care plan' },
 ];
 
