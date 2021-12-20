@@ -90,3 +90,8 @@ export const packageTypes = {
   residential: 2,
   nursing: 4,
 };
+
+export const packageTypesByNumber = {
+  2: 'residential',
+  4: 'nursing',
+};

@@ -18,13 +18,13 @@ import { useRouter } from 'next/router';
 import { usePushNotification } from 'service';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { assignToBroker, useBrokers, useLookups, useServiceUser } from 'api';
-import { BROKER_REFERRAL_ROUTE } from 'routes/RouteConstants';
+import { BROKERAGE_ROUTE } from 'routes/RouteConstants';
 import { getFormDataWithFile } from 'service/getFormData';
 import { assignPackageSchema } from 'service/formValidationSchema';
 
 const breadcrumbs = [
-  { text: 'Home', href: BROKER_REFERRAL_ROUTE },
-  { text: 'Broker Referral', href: BROKER_REFERRAL_ROUTE },
+  { text: 'Home', href: BROKERAGE_ROUTE },
+  { text: 'Brokerage', href: BROKERAGE_ROUTE },
   { text: 'Assign and attach a care plan' },
 ];
 
@@ -66,7 +66,7 @@ const AssignPackage = () => {
     try {
       await assignToBroker({ data: formData });
       pushNotification('Care plan assigned', 'success');
-      router.push(BROKER_REFERRAL_ROUTE);
+      router.push(BROKERAGE_ROUTE);
     } catch (error) {
       pushNotification(error);
     }
@@ -117,7 +117,7 @@ const AssignPackage = () => {
           <Container className="brokerage__container">
             <Heading size="xl">Support plan and care package</Heading>
             <HorizontalSeparator height={24} />
-            <UploadFile name="carePlanFile" control={control} title="Upload social worker care plan" />
+            <UploadFile name='carePlanFile' control={control} title="Upload social worker care plan" />
           </Container>
           <Container>
             <FormGroup label="Add notes" error={errors.notes?.message}>

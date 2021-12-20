@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { BROKER_REFERRAL_ROUTE, getPreviousPath, setPreviousPath } from 'routes/RouteConstants';
 import axios from 'axios';
 import { useUser } from 'api';
 import { HackneyFooterInfo, Loading } from 'components';
@@ -26,7 +27,7 @@ export const getServerSideProps = withSession(({ req }) => {
 const Login = () => {
   const dispatch = useDispatch();
   const { user, mutateUser } = useUser({
-    redirectTo: '/',
+    redirectTo: getPreviousPath() || BROKER_REFERRAL_ROUTE,
     redirectIfFound: true,
   });
 
@@ -36,21 +37,18 @@ const Login = () => {
   useEffect(() => {
     setOrigin(window.location.origin);
 
-    const login = async () => {
+    (async () => {
       setLoading(true);
       try {
-        mutateUser(await axios('/api/login'));
+        await mutateUser(await axios('/api/login'));
+
+        const res = await axios.get('/api/user');
+        dispatch(userLogin({ user: res.data }));
       } catch (error) {
         console.log(error);
       }
       setLoading(false);
-    };
-
-    login().then(() => {
-      axios.get('/api/user').then((res) => {
-        dispatch(userLogin({ user: res.data }));
-      });
-    });
+    })();
   }, []);
 
   useEffect(() => {
@@ -72,6 +70,7 @@ const Login = () => {
             <a
               className="lbh-button govuk-button is-relative"
               href={`${hackneyAuthLink}${origin}/login`}
+              onClick={() => setPreviousPath('')}
               rel="noopener noreferrer"
               target="_self"
             >

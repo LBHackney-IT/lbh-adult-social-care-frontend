@@ -1,7 +1,5 @@
 import { isServer } from '../api/Utils/FuncUtils';
 
-export const BROKER_PORTAL_ROUTE = '/broker-portal';
-
 export const CARE_PACKAGE_ROUTE = '/care-package';
 export const getCarePackageReviewRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/review`;
 export const getCorePackageRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/core-package`;
@@ -15,14 +13,12 @@ export const getCarePackageCareChargeRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id
 export const getPaymentHistoryRoute = (id) => `${CARE_PACKAGE_ROUTE}/${id}/payment-history`;
 
 export const SERVICE_USER_ROUTE = '/service-user';
-export const SERVICE_USER_MASTER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/master-search`;
 export const SERVICE_USER_SEARCH_ROUTE = `${SERVICE_USER_ROUTE}/search`;
-export const getPackageDetailRoute = (id) => `${SERVICE_USER_ROUTE}/${id}/package-details`;
 export const getServiceUserPackagesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/packages`;
 export const getServiceUserCareChargesRoute = (serviceUserId) => `${SERVICE_USER_ROUTE}/${serviceUserId}/care-charges`;
 
-export const BROKER_REFERRAL_ROUTE = '/broker-referral';
-export const getAssignPackageRoute = (id) => `${BROKER_REFERRAL_ROUTE}/${id}/assign-package`;
+export const BROKERAGE_ROUTE = '/brokerage';
+export const getAssignPackageRoute = (id) => `${BROKERAGE_ROUTE}/${id}/assign-package`;
 
 export const getSinglePayrunRoute = (payrunId) => `${FINANCE_ROUTE}/${payrunId}`;
 
@@ -36,34 +32,47 @@ export const FINANCE_ROUTE = '/payruns';
 
 export const LOGOUT_ROUTE = '/logout';
 
+export const LOGIN_ROUTE = '/login';
+
 export const NOT_FOUND_ROUTE = '/404';
 
 const carePackageRoutes = [
-  { route: BROKER_REFERRAL_ROUTE, name: 'Broker Referral' },
-  { route: BROKER_PORTAL_ROUTE, name: 'Broker Portal' },
+  { route: BROKERAGE_ROUTE, name: 'Brokerage' },
   { route: CARE_CHARGES_ROUTE, name: 'Care Charges' },
   { route: APPROVALS_ROUTE, name: 'Approvals' },
   { route: FINANCE_ROUTE, name: 'Finance' },
 ];
 
-export const saveToStoragePrevRoute = (route) => {
-  if (isServer()) return;
-  window.localStorage.setItem('prevRoute', route);
-};
+export const saveToStoragePrevRoute = (route) => setStorageValue('prevRoute', route);
 
 export const getStoragePrevRoute = () => {
-  if (isServer()) return {};
-  const route = window.localStorage.getItem('prevRoute');
+  const route = getStorageValue('prevRoute');
   return route ? getPrevRouteInfo(route) : {};
 };
+
+export const setStorageValue = (key, value) => {
+  if (isServer()) return;
+  window.localStorage.setItem(key, value);
+};
+
+export const getStorageValue = (key) => {
+  if (isServer()) return;
+  // eslint-disable-next-line consistent-return
+  return window.localStorage.getItem(key);
+};
+
+export const setPreviousPath = (previousPath) => setStorageValue('previousPath', previousPath);
+export const getPreviousPath = () => getStorageValue('previousPath');
 
 export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
   const routeInfo = getStoragePrevRoute();
 
   return [
     { text: 'Home', href: '/' },
-    { text: routeInfo.name || 'Broker Referral', href: routeInfo.route || BROKER_REFERRAL_ROUTE },
+    { text: routeInfo.name || 'Brokerage', href: routeInfo.route || BROKERAGE_ROUTE },
     ...additionalBreadcrumbs,
   ];
 };
 export const getPrevRouteInfo = (route) => carePackageRoutes.find((mainRoute) => route.includes(mainRoute.route)) || {};
+
+export const APP_SERVICE_ROUTES_MAP = [LOGIN_ROUTE, LOGOUT_ROUTE, NOT_FOUND_ROUTE];

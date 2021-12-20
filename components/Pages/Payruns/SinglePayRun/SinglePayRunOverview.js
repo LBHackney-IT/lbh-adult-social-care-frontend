@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { getNumberWithCommas, usePushNotification } from 'service';
+import { formatNumberToCurrency, usePushNotification } from 'service';
 import { Button, Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
 import { releaseInvoice, updateInvoiceStatus } from 'api/PayRuns';
 import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/serviceSelect';
@@ -86,9 +86,7 @@ export const SinglePayRunOverview = ({
         </Container>
         <Container>
           <Heading size="s">Total Cost:</Heading>
-          {payRun.netTotal >= 0
-            ? `£${getNumberWithCommas(payRun.netTotal)}`
-            : `-£${getNumberWithCommas(Math.abs(payRun.netTotal))}`}
+          {formatNumberToCurrency(payRun.netTotal)}
         </Container>
         {!isHeld ? (
           <Select

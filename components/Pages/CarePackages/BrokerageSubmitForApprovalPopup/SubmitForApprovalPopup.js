@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { submitCarePackage, useApproversOptions } from 'api';
-import { BROKER_PORTAL_ROUTE } from 'routes/RouteConstants';
 import { usePushNotification } from 'service';
+import { BROKERAGE_ROUTE } from 'routes/RouteConstants';
 import { Button, Container, Dialog, Select, Textarea, FormGroup } from '../../../HackneyDS';
 
 const SubmitForApprovalPopup = ({ closePopup, packageId }) => {

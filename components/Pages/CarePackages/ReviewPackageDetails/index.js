@@ -9,7 +9,7 @@ import PackageInfo from './PackageInfo';
 import BrokerageBorderCost from '../BrokerageBorderCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
 import Loading from '../../../Loading';
-import ActionCarePackageModal from '../../BrokerPortal/ActionCarePackageModal';
+import ActionCarePackageModal from '../../Brokerage/ActionCarePackageModal';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
 import PackageDetailsButtons from './PackageDetailsButtons';
 import { SummaryTotalCostInfo } from './SummaryTotalCostInfo';
@@ -17,6 +17,8 @@ import { SummaryCostOfPlacement } from './SummaryCostOfPlacement';
 import { FluidLinks } from './FluidLinks';
 import { Summary } from './Summary';
 import { ReviewHeader } from './ReviewHeader';
+import EndDetailsModal from '../../Details/EndModal';
+import { dateToIsoString } from '../../../../service';
 
 const initialNotes = {
   endNotes: '',
@@ -30,29 +32,31 @@ const isNursingCarePackage = (packageType) =>
 
 const ReviewPackageDetails = ({
   userDetails,
+  packageData,
   packageId,
   packageInfoItems = [],
   showEditActions,
   className = '',
-  summary = [],
+  summaryData = [],
   openedPopup,
   buttons,
   setOpenedPopup,
   title,
+  additionalButtons,
   subTitle = 'Package details',
   isLoading,
 }) => {
   const pushNotification = usePushNotification();
   const [loading, setLoading] = useState(false);
 
-  const isHide = () => !isNursingCarePackage(title);
+  const onCheckHide = () => !isNursingCarePackage(title);
 
   const links = useMemo(
     () => [
       { text: 'Care Package', href: '#care-package' },
       { text: 'Weekly Additional Need', href: '#weekly-additional-need' },
       { text: 'One Off Additional Need', href: '#on-off-additional-need' },
-      { text: 'Funded Nursing Care', href: '#funded-nursing-care', hide: isHide() },
+      { text: 'Funded Nursing Care', href: '#funded-nursing-care', hide: onCheckHide },
       { text: 'Care Charges', href: '#care-charges' },
       { text: 'Summary', href: '#summary' },
     ],
@@ -81,36 +85,38 @@ const ReviewPackageDetails = ({
     setLoading(false);
   };
 
-  const endCarePackageActions = [
-    {
-      loading,
-      title: 'End package',
-      onClick: () =>
-        makeActionPackage(endCarePackage, actionNotes.endNotes, getServiceUserPackagesRoute(userDetails.id)),
-    },
-    { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'red' },
-  ];
+  const endCarePackageAction = async ({ notes, endDate }) => {
+    setLoading(true);
+    try {
+      await endCarePackage({ packageId, notes, endDate: dateToIsoString(endDate) });
+      router.push(getServiceUserPackagesRoute(userDetails.id));
+    } catch (e) {
+      pushNotification(e);
+    }
+    setLoading(false);
+  };
 
   const approveCarePackageActions = [
+    { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'red' },
     {
       loading,
       title: 'Approve',
       onClick: () => makeActionPackage(approveCarePackage, actionNotes.approveNotes, APPROVALS_ROUTE),
     },
-    { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'red' },
   ];
 
   const declineCarePackageActions = [
+    { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'gray' },
     {
       loading,
       title: 'Decline',
       className: 'secondary-red',
       onClick: () => makeActionPackage(declineCarePackage, actionNotes.approveNotes, APPROVALS_ROUTE),
     },
-    { title: 'Cancel', onClick: closePopup, className: 'link-button', color: 'gray' },
   ];
 
   const cancelCarePackageActions = [
+    { title: 'Back', onClick: closePopup, className: 'link-button', color: 'gray' },
     {
       loading,
       title: 'Cancel package',
@@ -118,11 +124,9 @@ const ReviewPackageDetails = ({
       onClick: () =>
         makeActionPackage(cancelCarePackage, actionNotes.cancelNotes, getServiceUserPackagesRoute(userDetails.id)),
     },
-    { title: 'Back', onClick: closePopup, className: 'link-button', color: 'gray' },
   ];
 
   const modalActions = [
-    { title: `End package`, field: 'end', actions: endCarePackageActions },
     { title: 'Approve package', field: 'approve', actions: approveCarePackageActions },
     { title: 'Decline package', field: 'decline', actions: declineCarePackageActions },
     { title: `Cancel package`, field: 'cancel', actions: cancelCarePackageActions },
@@ -138,6 +142,12 @@ const ReviewPackageDetails = ({
   return (
     <div className={`review-package-details ${className}`}>
       <Loading isLoading={isLoading || loading} />
+      <EndDetailsModal
+        onClose={closePopup}
+        packageData={packageData}
+        endPackage={endCarePackageAction}
+        isOpen={openedPopup === 'end'}
+      />
       {openedPopup === 'submit' && <SubmitForApprovalPopup packageId={packageId} closePopup={closePopup} />}
       {modalActions.map(({ title: modalTitle, field, actions }) => (
         <ActionCarePackageModal
@@ -156,6 +166,7 @@ const ReviewPackageDetails = ({
         <ReviewHeader
           buttons={buttons}
           goToHistory={goToHistory}
+          additionalButtons={additionalButtons}
           showEditActions={showEditActions}
           title={title}
           subTitle={subTitle}
@@ -176,7 +187,7 @@ const ReviewPackageDetails = ({
                 costOfPlacement,
                 totalCostInfo,
               }) => {
-                if (checkHide && isHide()) return null;
+                if (checkHide && onCheckHide()) return null;
 
                 return (
                   <Container key={itemId} className="review-package-details__cost-info-item">
@@ -200,7 +211,7 @@ const ReviewPackageDetails = ({
                 );
               }
             )}
-            <Summary isHide={isHide} summary={summary} />
+            <Summary summaryData={summaryData} />
             <PackageDetailsButtons buttons={buttons} />
           </Container>
         </Container>

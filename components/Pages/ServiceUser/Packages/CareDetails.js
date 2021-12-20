@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { formatDate, getNumberWithCommas, usePushNotification } from 'service';
+import { usePushNotification, formatDate, formatNumberToCurrency } from 'service';
 import { getCarePackageCareChargeRoute, getCarePackageDetailsRoute } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
 import { confirmS117 } from 'api';
@@ -73,13 +73,7 @@ const CareDetails = ({
       Header: 'Weekly cost',
       accessor: 'weeklyCost',
       className: 'align-right',
-      Cell: ({ value }) => (
-        <span className="align-right">
-          {value < 0
-            ? `-£${getNumberWithCommas(Math.abs(value).toFixed(2))}`
-            : `£${getNumberWithCommas(Math.abs(value).toFixed(2))}`}
-        </span>
-      ),
+      Cell: ({ value }) => (<span className="align-right">{formatNumberToCurrency(value)}</span>),
     },
   ];
 
@@ -188,11 +182,7 @@ const CareDetails = ({
               Provider paid <VerticalSeparator width="10px" />
               <strong style={{ color: '#00664F' }}>NET OFF</strong>
               <VerticalSeparator width="30px" />
-              <strong>
-                {netTotal < 0
-                  ? `-£${getNumberWithCommas(Math.abs(netTotal).toFixed(2))}`
-                  : `£${getNumberWithCommas(Math.abs(netTotal).toFixed(2))}`}
-              </strong>
+              <strong>{formatNumberToCurrency(netTotal)}</strong>
             </Container>
           </Container>
         ) : (
