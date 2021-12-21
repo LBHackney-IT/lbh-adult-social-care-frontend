@@ -17,7 +17,6 @@ import {
   createProvisionalCareCharge,
   updateCareChargeBrokerage,
   usePackageCalculatedCost,
-  usePackageCareCharges,
   useProvisionalCareCharges,
 } from 'api';
 import withSession from 'lib/session';
@@ -69,7 +68,6 @@ const CareCharge = () => {
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
   const [showPreviousAnnouncement, setShowPreviousAnnouncement] = useState(false);
-  const [hasAssessmentBeenCarried, setHasAssessmentBeenCarried] = useState(false);
 
   const { guid: carePackageId } = router.query;
 
@@ -77,8 +75,6 @@ const CareCharge = () => {
   const { serviceUser } = coreInfo;
 
   const { data: careCharge, isLoading: careChargeLoading } = useProvisionalCareCharges(carePackageId);
-
-  const { data: packageCareCharges, isLoading: careChargesLoading } = usePackageCareCharges(carePackageId);
 
   const {
     id: careChargeId,
@@ -88,6 +84,7 @@ const CareCharge = () => {
     description,
     assessmentFileName,
     assessmentFileId,
+    hasAssessmentBeenCarried,
     endDate,
     subType,
     startDate,
@@ -110,13 +107,6 @@ const CareCharge = () => {
       ...initialValues,
     },
   });
-
-  useEffect(() => {
-    if (packageCareCharges?.length) {
-      const someHasAssessment = packageCareCharges.some((item) => item.hasAssessmentBeenCarried);
-      setHasAssessmentBeenCarried(someHasAssessment);
-    }
-  }, [packageCareCharges]);
 
   useEffect(() => {
     if (calculatedCost && !careChargeCost) setValue('cost', calculatedCost);
@@ -219,7 +209,7 @@ const CareCharge = () => {
 
   const skipPage = () => router.push(getCarePackageReviewRoute(carePackageId));
 
-  const isLoading = coreLoading || careChargeLoading || isRequestBeingSent || careChargesLoading;
+  const isLoading = coreLoading || careChargeLoading || isRequestBeingSent;
 
   const isNewCareCharge = !(isS117Client || hasAssessmentBeenCarried);
 
