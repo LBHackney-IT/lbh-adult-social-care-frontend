@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
 const initialNotification = {
-  time: 3000,
+  time: 6000,
   className: 'error',
   text: 'Something went wrong',
 };
@@ -17,10 +17,10 @@ const notificationsSlice = createSlice({
   },
   reducers: {
     showNotification: (state, { payload }) => {
-      const cloneVisible = [...state.visibleNotifications, payload]
+      const cloneVisible = state.visibleNotifications.filter(item => item.id !== payload.id);
       return {
         ...state,
-        visibleNotifications: cloneVisible,
+        visibleNotifications: [...cloneVisible, payload],
         notifications: state.notifications.slice(1, state.notifications.length),
       };
     },
@@ -47,12 +47,14 @@ const notificationsSlice = createSlice({
         // time: 'debugger',
         ...initialNotification,
         id: uuidv4(),
+        time: payload.className === 'success' ? 3000 : 6000,
         ...payload,
       }];
 
       if (Array.isArray(payload.text)) {
         notificationsArray = payload.text.map((text) => ({
           ...initialNotification,
+          time: payload.className === 'success' ? 3000 : 6000,
           ...payload,
           id: uuidv4(),
           text,
