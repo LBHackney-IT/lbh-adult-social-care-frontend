@@ -19,6 +19,7 @@ export const HeldPaymentsList = ({ data, searchTerm, update }) => (
             <HorizontalSeparator height="40px" />
             <PayRunItem
               item={payRun.payRunInvoice}
+              payRunPeriods={{ startDate: payRun.startDate, endDate: payRun.endDate }}
               key={payRun.payRunId}
               searchTerm={searchTerm}
               padding="0"

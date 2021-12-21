@@ -8,10 +8,12 @@ import {
   FormGroup,
   Button,
   VerticalSeparator,
+  Tag,
 } from 'components';
 import { addDays, addWeeks, differenceInWeeks, isBefore, isSameDay } from 'date-fns';
 import { useDispatch } from 'react-redux';
 import { cancelCareChargeReclaim, endCareChargeReclaim } from 'api';
+import { geTagTextFromReclaimStatus, getTagColorFromReclaimStatus } from 'service/getTagColorFromReclaimStatus';
 import { addNotification } from 'reducers/notificationsReducer';
 import { CareChargeCost } from './CareChargeCost';
 import { ClaimCollector } from './ClaimCollector';
@@ -62,6 +64,7 @@ export const CareCharge12 = ({
   const endDate = watch('residential12.endDate');
 
   const reclaimId = watch('residential12.id');
+  const status = watch('residential12.status');
 
   useEffect(() => {
     if (provEnd && !startDate && !isSameDay(new Date(provEnd), new Date(packageEndDate))) {
@@ -179,8 +182,20 @@ export const CareCharge12 = ({
       <Collapse
         title={
           <Container display="flex" flexDirection="column">
-            <Heading size="xl">Residential SU contribution</Heading>
-            <Hint>Without Property 1-12 weeks</Hint>
+            {status ? (
+              <Container display="flex" alignItems="flex-start">
+                <Tag outline color={getTagColorFromReclaimStatus(status)}>
+                  {geTagTextFromReclaimStatus(status)}
+                </Tag>
+                <VerticalSeparator width="10px" />
+                <Container display="flex" flexDirection="column">
+                  <Heading size="xl">Residential SU contribution</Heading>
+                  <Hint>Without Property 1-12 weeks</Hint>
+                </Container>
+              </Container>
+            ) : (
+              <Heading size="xl">Residential SU contribution</Heading>
+            )}
           </Container>
         }
         setExpanded={setExpanded}

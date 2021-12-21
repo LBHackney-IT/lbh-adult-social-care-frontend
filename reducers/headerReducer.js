@@ -2,16 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import {
   APPROVALS_ROUTE,
-  BROKER_REFERRAL_ROUTE,
-  BROKER_PORTAL_ROUTE,
+  BROKERAGE_ROUTE,
   CARE_CHARGES_ROUTE,
   FINANCE_ROUTE,
   LOGOUT_ROUTE
 } from 'routes/RouteConstants';
 
 const initialLinks = [
-  { href: BROKER_REFERRAL_ROUTE, text: 'Broker Referral' },
-  { href: BROKER_PORTAL_ROUTE, text: 'Broker Portal' },
+  { href: BROKERAGE_ROUTE, text: 'Brokerage' },
   { href: CARE_CHARGES_ROUTE, text: 'Care Charges' },
   { href: APPROVALS_ROUTE, text: 'Approvals' },
   { href: FINANCE_ROUTE, text: 'Finance' },

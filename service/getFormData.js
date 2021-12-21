@@ -1,8 +1,8 @@
-export function getFormData (object, existingFormData, arrayKey) {
-  const formData = existingFormData || new FormData();
-  Object.keys(object).forEach((key) => {
-    if (!object[key]) return;
-    formData.append(arrayKey ? `${arrayKey}.${key}` : key, object[key]);
+export function getFormData (data, checkBoolean) {
+  const formData = new FormData();
+  Object.keys(data).forEach((key) => {
+    if (!checkBoolean && !data[key]) return;
+    formData.append(key, data[key]);
   });
   return formData;
 }
@@ -13,7 +13,8 @@ export const getFormDataWithFile = (
     file: 'assessmentFile',
     fileId: 'assessmentFileId',
     fileName: 'assessmentFileName',
-  }
+  },
+  checkBoolean,
 ) => {
   const deleteFileFields = (fields) => fields.forEach(field => delete data[fileFields[field]]);
 
@@ -26,5 +27,5 @@ export const getFormDataWithFile = (
   } else { // else we push only file
     deleteFileFields(['fileName', 'fileId']);
   }
-  return getFormData(data);
+  return getFormData(data, checkBoolean);
 };

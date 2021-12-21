@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Link, Table } from 'components';
-import { getNumberWithCommas } from 'service';
+import { formatNumberToCurrency } from 'service';
 import format from 'date-fns/format';
 import { getInvoiceRoute } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
@@ -25,15 +25,15 @@ export const PaymentHistoryTable = ({ data }) => {
       }) => <> {`${format(new Date(periodFrom), 'dd/MM/yyy')} - ${format(new Date(value), 'dd/MM/yyy')}`}</>,
     },
     {
-      Header: 'Invoice ID',
-      accessor: 'invoiceId',
+      Header: 'Invoice Number',
+      accessor: 'invoiceNumber',
       Cell: ({
         value,
         row: {
-          original: { payRunId },
+          original: { payRunId, invoiceId },
         },
       }) => (
-        <Link onClick={(e) => handleClick(e, value, payRunId)} noVisited>
+        <Link onClick={(e) => handleClick(e, invoiceId, payRunId)} noVisited>
           {value}
         </Link>
       ),
@@ -41,7 +41,7 @@ export const PaymentHistoryTable = ({ data }) => {
     {
       Header: () => <Container textAlign="right">Paid</Container>,
       accessor: 'amountPaid',
-      Cell: ({ value }) => <Container textAlign="right">£{getNumberWithCommas(value)}</Container>,
+      Cell: ({ value }) => <Container textAlign="right">{formatNumberToCurrency(value)}</Container>,
     },
   ];
   return <Table columns={columns} data={data} />;

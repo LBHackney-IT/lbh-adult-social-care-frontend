@@ -18,6 +18,7 @@ export const CoreWeeklyCost = ({ control, coreCost, errors }) => (
               value={field.value}
               onChangeValue={(text) => field.onChange(parseFloat(text))}
               flex
+              {...field}
             />
           )}
         />

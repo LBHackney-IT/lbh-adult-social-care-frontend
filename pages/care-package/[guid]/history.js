@@ -4,7 +4,7 @@ import { Loading, Container, HistoryList, HistoryOverview, TitleSubtitleHeader, 
 import withSession from 'lib/session';
 import { usePackageHistory } from 'api';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
-import { getCarePackageReviewRoute } from 'routes/RouteConstants';
+import { getCarePackageDetailsRoute } from 'routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -26,7 +26,7 @@ const History = () => {
 
   const { data, isLoading } = usePackageHistory(packageId);
   const breadcrumbs = useMemo(
-    () => [{ text: 'Full Overview', href: getCarePackageReviewRoute(packageId) }, { text: 'Package History' }],
+    () => [{ text: 'Full Overview', href: getCarePackageDetailsRoute(packageId) }, { text: 'Package History' }],
     [packageId]
   );
 
