@@ -5,7 +5,7 @@ import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
 
 export const HeldPaymentHeader = ({ payRun, searchTerm }) => {
   const { payRunInvoice } = payRun;
-  const handleId = () => getHighlightedSearchQuery(payRun.payRunNumber, searchTerm);
+  const handlePayRunNumber = () => getHighlightedSearchQuery(payRun.payRunNumber, searchTerm);
   return (
     <Container display="grid" gridTemplateColumns="1.5fr 1.5fr 2fr 1fr 1fr" columnCount={5} columnGap="24px">
       <Container overflow="hidden" textOverflow="ellipsis" whiteSpace="noWrap">
@@ -25,7 +25,7 @@ export const HeldPaymentHeader = ({ payRun, searchTerm }) => {
       </Container>
 
       <Container overflow="hidden" textOverflow="ellipsis" whiteSpace="noWrap" title={payRun.payRunId}>
-        {handleId()}
+        {handlePayRunNumber()}
       </Container>
       <Container overflow="hidden" textOverflow="ellipsis" whiteSpace="noWrap" title={payRunInvoice.supplierName}>
         {payRunInvoice.supplierName}
