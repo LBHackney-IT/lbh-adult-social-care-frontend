@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { assignToBroker, useServiceUserSearch } from 'api';
-import { Container, HorizontalSeparator } from 'components';
+import { Container, HorizontalSeparator, Pagination } from 'components';
 import { useRouter } from 'next/router';
 import { dateToIsoString, getFormData } from 'service';
 import { getCorePackageRoute } from 'routes/RouteConstants';
@@ -10,7 +10,6 @@ import Loading from 'components/Loading';
 import DynamicBreadcrumbs from 'components/Pages/DynamicBreadcrumbs';
 import ServiceUserSearch from 'components/Pages/ServiceUser/Search';
 import SearchResultCount from 'components/SearchResultCount';
-import AlternativePagination from 'components/AlternativePagination';
 import SearchResultList from 'components/Pages/Brokerage/SearchResultList';
 import axios from 'axios';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -34,11 +33,13 @@ const BrokerageSearch = () => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
-  const [filters, setFilters] = useState({ ...initialFilters });
+  const [filters, setFilters] = useState(initialFilters);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
-  const [nextCursor, setNextCursor] = useState('');
+  const [pageSize, setPageSize] = useState(20);
+  const [cursor, setCursor] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [requestFilters, setRequestFilters] = useState(initialFilters);
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
@@ -46,25 +47,27 @@ const BrokerageSearch = () => {
 
   const params = useMemo(
     () => ({
-      firstName: filters.firstName,
-      postcode: filters.postcode,
-      lastName: filters.lastName,
-      nextCursor,
-      pageSize: 20,
+      firstName: requestFilters.firstName,
+      postcode: requestFilters.postcode,
+      lastName: requestFilters.lastName,
+      cursor,
+      pageSize,
       pageNumber,
-      hackneyId: filters.hackneyId,
-      dateOfBirth: dateToIsoString(filters?.dateOfBirth),
+      hackneyId: requestFilters.hackneyId,
+      dateOfBirth: dateToIsoString(requestFilters.dateOfBirth),
     }),
-    [filters, pageNumber, nextCursor]
+    [requestFilters, pageNumber, pageSize, cursor]
   );
 
   const {
-    data: { residents: searchResults, nextCursor: responseCursor, totalCount },
+    data: { residents, nextCursor, previousCursor, totalCount = 0 },
     isLoading: searchLoading,
   } = useServiceUserSearch({ params, shouldFetch: showSearchResults });
 
+  const searchResults = residents?.data || [];
+  const pagingMetaData = residents?.pagingMetaData;
+
   const changeFilters = (field, value) => {
-    setShowSearchResults(false);
     setFilters((prevState) => ({
       ...prevState,
       [field]: value,
@@ -73,10 +76,13 @@ const BrokerageSearch = () => {
 
   const clearFilters = () => {
     setFilters({ ...initialFilters });
-    setShowSearchResults(false);
+    setRequestFilters({ ...initialFilters });
   };
 
-  const onSearch = () => setShowSearchResults(true);
+  const onSearch = () => {
+    if (!showSearchResults) setShowSearchResults(true);
+    setRequestFilters(filters);
+  };
 
   const createNewPackage = async ({ mosaicId }) => {
     if (isLoading) return;
@@ -108,10 +114,10 @@ const BrokerageSearch = () => {
   }, [user]);
 
   useEffect(() => {
-    if (responseCursor) {
-      setNextCursor(responseCursor);
+    if (pagingMetaData) {
+      setPageSize(pagingMetaData.pageSize);
     }
-  }, [responseCursor]);
+  }, [pagingMetaData]);
 
   const fullLoading = isLoading || searchLoading;
 
@@ -130,14 +136,22 @@ const BrokerageSearch = () => {
         />
         {searchResults && (
           <Container>
-            <SearchResultCount count={searchResults.length} />
+            {showSearchResults && <SearchResultCount count={searchResults.length} />}
             <SearchResultList searchResults={searchResults} createNewPackage={createNewPackage} />
-            <AlternativePagination
-              totalPages={totalCount > 0 && Math.ceil(totalCount / 10)}
+            <Pagination
+              showOnlyCurrentPage
+              totalPages={pagingMetaData?.totalPages}
               totalCount={totalCount}
-              pageSize={20}
+              pageSize={pageSize}
               currentPage={pageNumber}
-              changePagination={setPageNumber}
+              onPageChange={(page) => {
+                if (pageNumber < page) {
+                  setCursor(nextCursor);
+                } else {
+                  setCursor(previousCursor);
+                }
+                setPageNumber(page);
+              }}
             />
             <HorizontalSeparator height={20} />
           </Container>
