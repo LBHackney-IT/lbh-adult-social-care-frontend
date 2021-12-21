@@ -46,8 +46,8 @@ export const Summary = ({ summaryData }) => {
       value: summaryData.hackneyReclaims?.careCharge,
     },
     {
-      key: summaryData.hackneyReclaimssubTotal && 'Total reclaim',
-      value: summaryData.hackneyReclaimssubTotal,
+      key: summaryData.hackneyReclaims?.subTotal && 'Total reclaim',
+      value: summaryData.hackneyReclaims?.subTotal,
       className: 'brokerage__summary-cost',
     },
   ], [summaryData]);
