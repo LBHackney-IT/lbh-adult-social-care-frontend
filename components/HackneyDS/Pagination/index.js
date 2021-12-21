@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
-export const Pagination = ({ totalCount, currentPage, pageSize, onPageChange, siblingCount }) => {
+export const Pagination = ({ totalCount, currentPage, showOnlyCurrentPage, pageSize, onPageChange, siblingCount }) => {
+  if (!totalCount) return null;
+
   const [activePage, setActivePage] = useState(currentPage);
   const firstResultOnPage = activePage * pageSize - pageSize + 1;
   const lastResultOnPage = activePage * pageSize;
@@ -32,6 +34,13 @@ export const Pagination = ({ totalCount, currentPage, pageSize, onPageChange, si
             Previous
           </a>
         </li>
+        {showOnlyCurrentPage && (
+          <li role="button" className="lbh-pagination__item">
+            <a className='lbh-pagination__link--current' aria-label="Page 1">
+              {activePage}
+            </a>
+          </li>
+        )}
         {pageArray.map((p, index) => {
           if (index + 1 >= activePage - siblingCount && index + 1 <= activePage + siblingCount)
             return (
