@@ -35,9 +35,12 @@ const BrokerageSearch = () => {
 
   const [filters, setFilters] = useState(initialFilters);
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(20);
-  const [cursor, setCursor] = useState('');
+  const [paginationInfo, setPaginationInfo] = useState({
+    pageNumber: 1,
+    cursor: '',
+  });
+  const [previousCursors, setPreviousCursors] = useState(['']);
   const [isLoading, setIsLoading] = useState(false);
   const [requestFilters, setRequestFilters] = useState(initialFilters);
 
@@ -50,17 +53,17 @@ const BrokerageSearch = () => {
       firstName: requestFilters.firstName,
       postcode: requestFilters.postcode,
       lastName: requestFilters.lastName,
-      cursor,
+      cursor: paginationInfo.cursor,
       pageSize,
-      pageNumber,
+      pageNumber: paginationInfo.pageNumber,
       hackneyId: requestFilters.hackneyId,
       dateOfBirth: dateToIsoString(requestFilters.dateOfBirth),
     }),
-    [requestFilters, pageNumber, pageSize, cursor]
+    [requestFilters, paginationInfo, pageSize]
   );
 
   const {
-    data: { residents, nextCursor, previousCursor, totalCount = 0 },
+    data: { residents, nextCursor, totalCount = 0 },
     isLoading: searchLoading,
   } = useServiceUserSearch({ params, shouldFetch: showSearchResults });
 
@@ -143,14 +146,22 @@ const BrokerageSearch = () => {
               totalPages={pagingMetaData?.totalPages}
               totalCount={totalCount}
               pageSize={pageSize}
-              currentPage={pageNumber}
+              currentPage={paginationInfo.pageNumber}
               onPageChange={(page) => {
-                if (pageNumber < page) {
-                  setCursor(nextCursor);
+                let newCursor;
+                if (paginationInfo.pageNumber < page) {
+                  newCursor = nextCursor;
+                  const isNewPreviousCursor = !previousCursors.some(prevCursor => prevCursor === nextCursor);
+                  if (isNewPreviousCursor) {
+                    setPreviousCursors(prevState => [...prevState, nextCursor]);
+                  }
                 } else {
-                  setCursor(previousCursor);
+                  newCursor = previousCursors[page - 1];
                 }
-                setPageNumber(page);
+                setPaginationInfo({
+                  pageNumber: page,
+                  cursor: newCursor,
+                });
               }}
             />
             <HorizontalSeparator height={20} />
