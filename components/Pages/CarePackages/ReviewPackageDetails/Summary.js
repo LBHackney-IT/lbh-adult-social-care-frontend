@@ -10,7 +10,7 @@ export const Summary = ({ summaryData }) => {
     { key: summaryData.fncPayment && 'Cost of placement (FNC funded)', value: summaryData.fncPayment },
     {
       key: 'Total cost of placement',
-      value: summaryData.oneOffCost,
+      value: summaryData.totalCostOfPlacement,
       className: 'brokerage__summary-cost',
     },
     { id: 'additionalWeeklyCost', key: 'Additional weekly cost', value: summaryData.additionalWeeklyCost },
