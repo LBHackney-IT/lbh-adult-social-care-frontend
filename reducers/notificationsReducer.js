@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
 const initialNotification = {
-  time: 6000,
   className: 'error',
   text: 'Something went wrong',
 };
