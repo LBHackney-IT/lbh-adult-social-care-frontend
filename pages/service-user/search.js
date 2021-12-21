@@ -158,11 +158,10 @@ const BrokerageSearch = () => {
                 } else {
                   newCursor = previousCursors[page - 1];
                 }
-                setPaginationInfo(prevState => ({
-                  ...prevState,
+                setPaginationInfo({
                   pageNumber: page,
                   cursor: newCursor,
-                }));
+                });
               }}
             />
             <HorizontalSeparator height={20} />
