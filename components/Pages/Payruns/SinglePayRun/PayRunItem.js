@@ -21,6 +21,7 @@ export const PayRunItem = ({
   searchTerm,
   payRunId,
   item,
+  payRunPeriods,
   isActivePayRun,
   updateData,
   totalPayTitle,
@@ -76,6 +77,7 @@ export const PayRunItem = ({
           searchTerm={searchTerm}
           setInvoiceId={setInvoiceId}
           payRun={item}
+          payRunPeriods={payRunPeriods}
           isHeld={isHeld}
         />
         <HorizontalSeparator height="15px" />

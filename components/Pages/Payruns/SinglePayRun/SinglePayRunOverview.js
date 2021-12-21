@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { formatNumberToCurrency } from 'service';
+import { formatDate, formatNumberToCurrency } from 'service';
 import { Button, Container, Heading, HorizontalSeparator, Select, VerticalSeparator } from 'components';
 import { useDispatch } from 'react-redux';
 import { releaseInvoice, updateInvoiceStatus } from 'api/PayRuns';
@@ -15,7 +15,17 @@ const statusOptions = [
   { text: 'Accepted', value: 5 },
 ];
 
-export const SinglePayRunOverview = ({ payRunId, openModal, searchTerm, payRun, setInvoiceId, isActivePayRun, updateData, isHeld }) => {
+export const SinglePayRunOverview = ({
+  payRunPeriods,
+  payRunId,
+  openModal,
+  searchTerm,
+  payRun,
+  setInvoiceId,
+  isActivePayRun,
+  updateData,
+  isHeld
+}) => {
   const dispatch = useDispatch();
 
   const pushNotification = (text, className = 'error') => {
@@ -56,6 +66,7 @@ export const SinglePayRunOverview = ({ payRunId, openModal, searchTerm, payRun, 
       pushNotification(e, 'error');
     }
   };
+
   return (
     <>
       <Container display="flex" alignItems="baseline">
@@ -66,6 +77,16 @@ export const SinglePayRunOverview = ({ payRunId, openModal, searchTerm, payRun, 
         <Heading size="s">Invoice Number:</Heading>
         <VerticalSeparator width="5px" />
         {handleInvoiceNumber()}
+        <VerticalSeparator width={24} />
+        {payRunPeriods && <>
+          <Heading size="s">Pay Run Period:</Heading>
+          <VerticalSeparator width="5px" />
+          <p>
+            {formatDate(payRunPeriods.startDate, 'dd/MM/yy')}
+            {' - '}
+            {formatDate(payRunPeriods.endDate, 'dd/MM/yy')}
+          </p>
+        </>}
       </Container>
       <HorizontalSeparator height="15px" />
       <Container display="grid" gridTemplateColumns="2fr 1.5fr 1fr 0.5fr" columnGap="10px" columnCount="3">
