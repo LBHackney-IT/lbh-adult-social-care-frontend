@@ -19,14 +19,6 @@ export const handleError = (error) => {
   let errorMessage = '';
   if (error.response) {
     // Request made and server responded
-
-    // return array of messages from server response
-    if (Array.isArray(error.response.data.errors)) {
-      errorMessage = error.response.data.errors.map(item => item.message);
-      throw errorMessage;
-    }
-
-    // return string message from server response
     errorMessage = error.response.data.message;
     throw errorMessage;
   } else if (error.request) {

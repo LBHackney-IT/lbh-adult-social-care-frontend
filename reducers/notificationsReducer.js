@@ -1,11 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { v4 as uuidv4 } from 'uuid';
-
-const initialNotification = {
-  time: 6000,
-  className: 'error',
-  text: 'Something went wrong',
-};
 
 const notificationsSlice = createSlice({
   name: 'notifications',
@@ -17,7 +10,7 @@ const notificationsSlice = createSlice({
   },
   reducers: {
     showNotification: (state, { payload }) => {
-      const cloneVisible = state.visibleNotifications.filter(item => item.id !== payload.id);
+      const cloneVisible = state.visibleNotifications.filter((visible) => visible.text !== payload.text);
       return {
         ...state,
         visibleNotifications: [...cloneVisible, payload],
@@ -29,7 +22,7 @@ const notificationsSlice = createSlice({
       notificationsLimit: payload,
     }),
     removeNotification: (state, { payload }) => {
-      const cloneVisible = state.visibleNotifications.filter((visible) => visible.id !== payload.id);
+      const cloneVisible = state.visibleNotifications.filter((visible) => visible.text !== payload.text);
       return {
         ...state,
         visibleNotifications: cloneVisible,
@@ -40,33 +33,19 @@ const notificationsSlice = createSlice({
       return {
         ...state,
         visibleNotifications: cloneVisible,
-      };
-    },
-    addNotification: (state, { payload }) => {
-      let notificationsArray = [{
-        // time: 'debugger',
-        ...initialNotification,
-        id: uuidv4(),
-        time: payload.className === 'success' ? 3000 : 6000,
-        ...payload,
-      }];
-
-      if (Array.isArray(payload.text)) {
-        notificationsArray = payload.text.map((text) => ({
-          ...initialNotification,
-          time: payload.className === 'success' ? 3000 : 6000,
-          ...payload,
-          id: uuidv4(),
-          text,
-        }));
       }
-
-      return {
-        ...state,
-        notifications: [...state.notifications, ...notificationsArray],
-        logoutNotification: payload?.text === 'logout' ? 'logout' : '',
-      };
     },
+    addNotification: (state, { payload }) => ({
+      ...state,
+      notifications: [...state.notifications, {
+        // time: 'debugger',
+        time: 3000,
+        className: 'error',
+        text: 'Something went wrong',
+        ...payload,
+      }],
+      logoutNotification: payload?.text === 'logout' ? 'logout' : '',
+    }),
     removeNotifications: (state) => ({
       ...state,
       notifications: [],
