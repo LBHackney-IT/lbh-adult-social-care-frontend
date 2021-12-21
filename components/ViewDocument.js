@@ -18,6 +18,7 @@ const ViewDocument = ({
   const openFile = (document) => {
     const newLink = window.document.createElement('a');
     newLink.href = window.URL.createObjectURL(document);
+    newLink.download = downloadFileName;
     newLink.target = '_blank';
     newLink.click();
     newLink.remove();
