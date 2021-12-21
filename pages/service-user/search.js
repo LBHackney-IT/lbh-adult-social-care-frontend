@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { assignToBroker, useServiceUserSearch } from 'api';
 import { Container, HorizontalSeparator } from 'components';
 import { useRouter } from 'next/router';
-import { getFormData } from 'service';
+import { dateToIsoString, getFormData } from 'service';
 import { getCorePackageRoute } from 'routes/RouteConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, userLogin } from 'reducers/userReducer';
@@ -37,6 +37,7 @@ const BrokerageSearch = () => {
   const [filters, setFilters] = useState({ ...initialFilters });
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
+  const [nextCursor, setNextCursor] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const pushNotification = (text, className = 'error') => {
@@ -48,15 +49,17 @@ const BrokerageSearch = () => {
       firstName: filters.firstName,
       postcode: filters.postcode,
       lastName: filters.lastName,
+      nextCursor,
+      pageSize: 20,
       pageNumber,
       hackneyId: filters.hackneyId,
-      dateOfBirth: filters?.dateOfBirth?.toJSON?.(),
+      dateOfBirth: dateToIsoString(filters?.dateOfBirth),
     }),
-    [filters, pageNumber]
+    [filters, pageNumber, nextCursor]
   );
 
   const {
-    data: { residents: searchResults, totalCount },
+    data: { residents: searchResults, nextCursor: responseCursor, totalCount },
     isLoading: searchLoading,
   } = useServiceUserSearch({ params, shouldFetch: showSearchResults });
 
@@ -104,6 +107,12 @@ const BrokerageSearch = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (responseCursor) {
+      setNextCursor(responseCursor);
+    }
+  }, [responseCursor]);
+
   const fullLoading = isLoading || searchLoading;
 
   return (
@@ -126,7 +135,7 @@ const BrokerageSearch = () => {
             <AlternativePagination
               totalPages={totalCount > 0 && Math.ceil(totalCount / 10)}
               totalCount={totalCount}
-              pageSize={10}
+              pageSize={20}
               currentPage={pageNumber}
               changePagination={setPageNumber}
             />
