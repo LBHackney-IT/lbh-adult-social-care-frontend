@@ -50,7 +50,7 @@ const CustomNotification = ({ className = '' }) => {
         const allClasses = `notification ${item ? item.className || '' : ''} ${className}`;
 
         return (
-          <div key={item?.text?.toString() || 'error'} className={allClasses}>
+          <div key={item?.id} className={allClasses}>
             <div>
               <p>{item?.text?.toString() || 'Something went wrong'}</p>
               <span className="notification-close" onClick={() => closeNotification(item)}>
