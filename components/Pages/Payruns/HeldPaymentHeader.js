@@ -18,10 +18,10 @@ export const HeldPaymentHeader = ({ payRun, searchTerm }) => {
         <Heading size="s">Type</Heading>
       </Container>
       <Container overflow="hidden" textOverflow="ellipsis" whiteSpace="noWrap">
-        <Heading size="s">Paid</Heading>
+        <Heading size="s">Gross Total</Heading>
       </Container>
       <Container overflow="hidden" textOverflow="ellipsis" whiteSpace="noWrap">
-        <Heading size="s">Held</Heading>
+        <Heading size="s">Net Total</Heading>
       </Container>
 
       <Container overflow="hidden" textOverflow="ellipsis" whiteSpace="noWrap" title={payRun.payRunId}>
