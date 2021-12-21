@@ -4,8 +4,8 @@ import ViewDocument from '../../../ViewDocument';
 import { getDocumentRequest } from '../../../../api';
 
 const fundedNursingCareClaimCollector = {
-  2: 'Hackney Council (gross/net)',
-  1: 'Supplier (gross/net)',
+  2: 'Hackney Council (gross)',
+  1: 'Supplier (net)',
 };
 
 export const FNCSummary = ({ containerId, assessmentFileName, assessmentFileId, claimCollector }) => {

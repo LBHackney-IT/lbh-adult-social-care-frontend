@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Heading, HorizontalSeparator, VerticalSeparator } from 'components';
-import { formatNumberToCurrency } from 'service';
+import { formatDate, formatNumberToCurrency } from 'service';
 import { format } from 'date-fns';
 import { getPayrunStatusBackgroundColor, getPayrunStatusColor } from 'service/getPayrunStatusColor';
 import { useRouter } from 'next/router';
@@ -16,10 +16,13 @@ const statussName = {
 
 export const PayrunList = ({ searchTerm, data }) => {
   const router = useRouter();
-  const gotToPayrun = (payRunId) => {
+
+  const goToPayrun = (payRunId) => {
     router.push(getSinglePayrunRoute(payRunId));
   };
+
   const handleId = (id) => getHighlightedSearchQuery(id, searchTerm);
+
   return (
     <Container>
       {data.map((d, index) => (
@@ -29,12 +32,17 @@ export const PayrunList = ({ searchTerm, data }) => {
             padding="24px 16px"
             key={d.payRunId}
             cursor="pointer"
-            onClick={() => gotToPayrun(d.payRunId)}
+            onClick={() => goToPayrun(d.payRunId)}
           >
             <Container display="flex" alignItems="center">
               <Heading size="s">Pay Run Number: </Heading>
               <VerticalSeparator width="10px" />
               {handleId(d.payRunNumber)}
+            </Container>
+            <Container display="flex" alignItems="center">
+              <Heading size="s">Pay Run Period: </Heading>
+              <VerticalSeparator width="10px" />
+              {formatDate(d.dateFrom, 'dd/MM/yy')} - {formatDate(d.dateTo, 'dd/MM/yy')}
             </Container>
             <Container display="grid" gridTemplateColumns="2.2fr 1fr 1fr 1.2fr">
               <Container>
