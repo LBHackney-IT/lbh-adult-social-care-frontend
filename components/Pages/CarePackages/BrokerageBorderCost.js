@@ -9,7 +9,7 @@ const BrokerageBorderCost = ({ totalCostHeader, totalCost, className = '' }) => 
   return (
     <Container className={`brokerage__border-cost ${className}`} display='flex'>
       <p>{totalCostHeader}</p>
-      <p className='text-lbh-f01 font-weight-bold'>{minusSign}{currency.euro}{getNumberWithCommas(formatNumber(totalCost, { isAbsolute: true }))}</p>
+      <p className='lbh-color-dark-red font-weight-bold'>{minusSign}{currency.euro}{getNumberWithCommas(formatNumber(totalCost, { isAbsolute: true }))}</p>
     </Container>
   );
 };

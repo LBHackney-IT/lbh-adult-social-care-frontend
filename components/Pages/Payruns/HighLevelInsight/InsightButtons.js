@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, memo, useMemo, useState } from 'react';
 import { Button, Container, HorizontalSeparator, Link, Loading, Select } from 'components';
 import { getPayrunCedarFile } from 'api';
 import { updatePayrunAsPaid } from 'api/PayRuns';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
-import { approvePayRun, deletePayRun, rejectPayRun, submitPayRun } from 'api/PayRun';
+import { approvePayRun, deletePayRun, submitPayRun } from 'api/PayRun';
+import ViewDocument from '../../../ViewDocument';
 
 const containerProps = {
   display: 'flex',
@@ -13,18 +14,18 @@ const containerProps = {
   alignItems: 'center',
 };
 
-export const InsightButtons = ({
+const InsightButtons = ({
   payRunId,
+  openRejectModal,
   payRunNumber,
   status,
   isCedarFileDownloaded,
-  update,
+  updateData,
   isLoading,
   hasInvoices,
   paidBy,
   paidOn,
 }) => {
-  const [isDownloading, setIsDownloading] = useState(false);
   const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export const InsightButtons = ({
     try {
       await submitPayRun(payRunId);
       pushNotification(`Payrun has been approved`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
@@ -50,21 +51,15 @@ export const InsightButtons = ({
     try {
       await approvePayRun(payRunId);
       pushNotification(`Payrun has been approved`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
   };
 
-  const handleReject = async (e) => {
+  const handleReject = (e) => {
     e.preventDefault();
-    try {
-      await rejectPayRun(payRunId);
-      pushNotification(`Payrun has been rejected`, 'success');
-      update();
-    } catch (error) {
-      pushNotification(error, 'error');
-    }
+    openRejectModal();
   };
 
   const handleArchive = async (e) => {
@@ -72,7 +67,7 @@ export const InsightButtons = ({
     try {
       await deletePayRun(payRunId);
       pushNotification(`Payrun has been archived`, 'success');
-      update();
+      updateData();
     } catch (error) {
       pushNotification(error, 'error');
     }
@@ -81,7 +76,7 @@ export const InsightButtons = ({
     try {
       await updatePayrunAsPaid(payRunId);
       pushNotification(`Payrun successfully marked as paid`, 'success');
-      update();
+      updateData();
     } catch (e) {
       pushNotification(e, 'error');
     }
@@ -89,31 +84,25 @@ export const InsightButtons = ({
 
   const downloadFileComponent = useMemo(
     () => (
-      <Button
-        link
-        download={`CEDAR_${payRunNumber}.xlsx`}
-        isLoading={isDownloading}
-        style={isFileDownloaded && { background: 'none', boxShadow: 'none' }}
-        className={isFileDownloaded ? 'link-button blue' : ''}
-        onClick={async (event) => {
-          setIsDownloading(true);
-          event.preventDefault();
-          const blob = await getPayrunCedarFile(payRunId);
-          event.target.href = window.URL.createObjectURL(blob);
-          event.target.click();
-          setIsDownloading(false);
-          setIsFileDownloaded(true);
+      <ViewDocument
+        className='link-button green'
+        getDocumentRequest={async () => {
+          const file = await getPayrunCedarFile(payRunId);
+          updateData();
+          return file;
         }}
-      >
-        {isFileDownloaded ? 'Download again' : 'Download'}
-      </Button>
+        downloadFileName={`CEDAR_${payRunNumber}.xlsx`}
+        text={isFileDownloaded ? 'Download again' : 'Download'}
+        setIsFileDownloaded={setIsFileDownloaded}
+        hasFile
+      />
     ),
-    [isFileDownloaded, payRunId, payRunNumber]
+    [isFileDownloaded, payRunId, isLoading, payRunNumber]
   );
 
   const hasDownloadFile = status > 4 && hasInvoices;
 
-  return isDownloading || isLoading ? (
+  return isLoading ? (
     <Container display="flex" flexDirection="column" alignSelf="center">
       <Loading className="centered-container" isLoading={isLoading} />
     </Container>
@@ -217,3 +206,6 @@ export const InsightButtons = ({
     </>
   );
 };
+
+
+export default memo(InsightButtons);

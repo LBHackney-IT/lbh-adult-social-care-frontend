@@ -53,6 +53,7 @@ export const Input = ({
           value={value}
           onChange={onChange}
           disabled={disabled}
+          onWheel={(e) => e.target.blur()}
         />
       </div>
     </div>

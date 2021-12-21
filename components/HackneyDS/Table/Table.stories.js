@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import React from 'react';
 import faker from 'faker';
-import { getNumberWithCommas } from '../../../service';
+import { formatNumberToCurrency } from '../../../service';
 import { IndeterminateCheckbox } from './IndeterminateCheckbox';
 import { Table } from '.';
 
@@ -46,7 +46,7 @@ const columns = [
   {
     Header: 'Total',
     accessor: 'total',
-    Cell: ({ value }) => `£${getNumberWithCommas(value)}`,
+    Cell: ({ value }) => formatNumberToCurrency(value),
   },
 ];
 
@@ -106,7 +106,7 @@ const columns2 = [
   {
     Header: 'Total',
     accessor: 'total',
-    Cell: ({ value }) => `£${getNumberWithCommas(value)}`,
+    Cell: ({ value }) => formatNumberToCurrency(value),
   },
   {
     Header: () => null,
@@ -153,7 +153,7 @@ const columns3 = [
   {
     Header: 'Total',
     accessor: 'total',
-    Cell: ({ value }) => `£${getNumberWithCommas(value)}`,
+    Cell: ({ value }) => formatNumberToCurrency(value),
   },
 ];
 

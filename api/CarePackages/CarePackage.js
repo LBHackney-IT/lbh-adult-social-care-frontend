@@ -19,14 +19,20 @@ export const approveCarePackage = (packageId, notes) => sendCarePackageRequest(`
 
 export const declineCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/decline`, { notes });
 
-export const endCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/end`, { notes });
+export const endCarePackage = ({ packageId, notes, endDate }) =>
+  sendCarePackageRequest(`${packageId}/end`, { notes, endDate });
 
 export const cancelCarePackage = (packageId, notes) => sendCarePackageRequest(`${packageId}/cancel`, { notes });
 
 export const createCoreCarePackage = ({ data }) => sendCarePackageRequest('', data);
 
 export const updateCoreCarePackage = ({ data, packageId }) =>
-  sendCarePackageRequest(`${packageId}`, data, requestMethods.put);
+  axiosRequest({
+    url: `${CARE_PACKAGE_URL}/${packageId}`,
+    data,
+    method: requestMethods.put,
+    'Content-Type': 'multipart/form-data',
+  });
 
 export const updateCarePackageCosts = ({ data, packageId }) =>
   sendCarePackageRequest(`${packageId}/details`, data, requestMethods.put);
@@ -37,6 +43,13 @@ export const assignToBroker = ({ data }) =>
     data, method: requestMethods.post,
     'Content-Type': 'multipart/form-data',
   });
+
+export const sendCareChargeAssessmentFile = ({ carePackageId, data }) => axiosRequest({
+  url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/assessment-file`,
+  data,
+  method: requestMethods.post,
+  'Content-Type': 'multipart/form-data',
+});
 
 export const confirmS117 = ({ packageId }) =>
   sendCarePackageRequestNoData(`${packageId}/confirm-s117`, requestMethods.put);

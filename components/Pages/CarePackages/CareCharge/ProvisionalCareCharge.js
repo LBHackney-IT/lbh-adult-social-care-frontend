@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { HorizontalSeparator, Heading, Collapse, Container, FormGroup } from 'components';
+import { HorizontalSeparator, Heading, Collapse, Container, FormGroup, Tag, VerticalSeparator } from 'components';
 import { cancelCareChargeReclaim, endCareChargeReclaim } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
+import { geTagTextFromReclaimStatus, getTagColorFromReclaimStatus } from 'service/getTagColorFromReclaimStatus';
 import { CareChargeCost } from './CareChargeCost';
 import { ClaimCollector } from './ClaimCollector';
 import { CareChargeSchedule } from './CareChargeSchedule';
@@ -50,6 +51,7 @@ export const ProvisionalCareCharge = ({
   const res13ClaimReason = watch('residential13.claimReason');
 
   const reclaimId = watch('provisional.id');
+  const status = watch('provisional.status');
 
   useEffect(() => {
     setValue('provisional.isOngoing', !endDate);
@@ -125,7 +127,19 @@ export const ProvisionalCareCharge = ({
         careCharge={getValues(['provisional'])}
       />
       <Collapse
-        title={<Heading size="xl">Provisional care charge (pre-assessment)</Heading>}
+        title={
+          <Container display="flex">
+            {status && (
+              <>
+                <Tag outline color={getTagColorFromReclaimStatus(status)}>
+                  {geTagTextFromReclaimStatus(status)}
+                </Tag>
+                <VerticalSeparator width="10px" />
+              </>
+            )}
+            <Heading size="xl">Provisional care charge (pre-assessment)</Heading>
+          </Container>
+        }
         setExpanded={setExpanded}
         expanded={isExpanded}
       >
