@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { assignToBroker, useServiceUserSearch } from 'api';
-import { Container } from 'components';
+import { Container, HorizontalSeparator } from 'components';
 import { useRouter } from 'next/router';
 import { getFormData } from 'service';
 import { getCorePackageRoute } from 'routes/RouteConstants';
@@ -48,14 +48,15 @@ const BrokerageSearch = () => {
       firstName: filters.firstName,
       postcode: filters.postcode,
       lastName: filters.lastName,
+      pageNumber,
       hackneyId: filters.hackneyId,
       dateOfBirth: filters?.dateOfBirth?.toJSON?.(),
     }),
-    [filters]
+    [filters, pageNumber]
   );
 
   const {
-    data: { residents: searchResults },
+    data: { residents: searchResults, totalCount },
     isLoading: searchLoading,
   } = useServiceUserSearch({ params, shouldFetch: showSearchResults });
 
@@ -80,12 +81,11 @@ const BrokerageSearch = () => {
     setIsLoading(true);
 
     const formData = getFormData({
-      object: {
-        hackneyUserId: mosaicId,
-        brokerId: user.user.userId,
-        packageType: 2,
-      }
+      hackneyUserId: mosaicId,
+      brokerId: user.user.userId,
+      packageType: 2,
     });
+
     try {
       const newPackageId = await assignToBroker({ data: formData });
       pushNotification('Package created', 'success');
@@ -124,12 +124,13 @@ const BrokerageSearch = () => {
             <SearchResultCount count={searchResults.length} />
             <SearchResultList searchResults={searchResults} createNewPackage={createNewPackage} />
             <AlternativePagination
-              totalPages={searchResults?.length && Math.ceil(searchResults.length / 10)}
-              totalCount={searchResults?.length}
+              totalPages={totalCount > 0 && Math.ceil(totalCount / 10)}
+              totalCount={totalCount}
               pageSize={10}
               currentPage={pageNumber}
               changePagination={setPageNumber}
             />
+            <HorizontalSeparator height={20} />
           </Container>
         )}
       </Container>
