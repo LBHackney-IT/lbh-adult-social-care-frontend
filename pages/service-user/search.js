@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { assignToBroker, useServiceUserSearch } from 'api';
-import { Container } from 'components';
+import { Container, HorizontalSeparator } from 'components';
 import { useRouter } from 'next/router';
 import { getFormData } from 'service';
 import { getCorePackageRoute } from 'routes/RouteConstants';
@@ -130,6 +130,7 @@ const BrokerageSearch = () => {
               currentPage={pageNumber}
               changePagination={setPageNumber}
             />
+            <HorizontalSeparator height={20} />
           </Container>
         )}
       </Container>

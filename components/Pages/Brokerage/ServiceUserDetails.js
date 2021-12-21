@@ -37,7 +37,7 @@ const ServiceUserDetails = ({
       <VerticalSeparator width="30px" />
       <Container>
         <Heading size="m">Postcode</Heading>
-        <p>{address}</p>
+        <p>{address || '—'}</p>
       </Container>
       {activePackage && (
         <>
