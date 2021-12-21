@@ -7,10 +7,10 @@ export const Summary = ({ summaryData }) => {
 
   const summary = useMemo(() => [
     { key: 'Cost of placement (social care)', value: summaryData.costOfPlacement },
-    { key: summaryData.fncPayment && 'Cost of placement (FNC funded) ', value: summaryData.fncPayment },
+    { key: summaryData.fncPayment && 'Cost of placement (FNC funded)', value: summaryData.fncPayment },
     {
       key: 'Total cost of placement',
-      value: summaryData.subTotalCost,
+      value: summaryData.oneOffCost,
       className: 'brokerage__summary-cost',
     },
     { id: 'additionalWeeklyCost', key: 'Additional weekly cost', value: summaryData.additionalWeeklyCost },
@@ -28,12 +28,12 @@ export const Summary = ({ summaryData }) => {
       className: 'brokerage__summary-cost',
     },
     {
-      key: summaryData.additionalOneOffCost && 'One off cost',
-      value: summaryData.additionalOneOffCost,
+      key: summaryData.oneOffCost && 'One off cost',
+      value: summaryData.oneOffCost,
     },
     {
-      key: summaryData.additionalOneOffCost && 'Total one of cost',
-      value: summaryData.additionalOneOffCost,
+      key: summaryData.oneOffCost && 'Total one of cost',
+      value: summaryData.oneOffCost,
       className: 'brokerage__summary-cost',
     },
 
