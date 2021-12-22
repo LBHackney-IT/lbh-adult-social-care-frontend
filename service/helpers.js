@@ -1,4 +1,5 @@
 import { add, compareDesc, format } from 'date-fns';
+import React from 'react';
 import { isServer } from '../api/Utils/FuncUtils';
 import { currency } from '../constants/strings';
 
@@ -7,6 +8,19 @@ const chr4 = () => Math.random().toString(16).slice(-4);
 export const uniqueID = () => `${chr4() + chr4()}-${chr4()}-${chr4()}-${chr4()}-${chr4()}${chr4()}${chr4()}`;
 
 export const dateStringToDate = (dateString) => (dateString ? new Date(dateString) : null);
+
+export const addIndentToString = (string) => {
+  const arrayOfWords = string.split('\n');
+  const newArray = [];
+  arrayOfWords.forEach((item, index) => {
+    const newElement = [item];
+    if (index !== arrayOfWords.length - 1) newElement.push(<br/>);
+
+    newArray.push(...newElement);
+  });
+
+  return newArray;
+};
 
 export const compareDescendingDMY = (startDate, endDate) => {
   const resetStartDate = new Date(startDate);
