@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useBrokers } from 'api';
 import {
-  Button,
   Container,
   SearchBox,
   Select,
@@ -10,6 +9,7 @@ import {
   HorizontalSeparator,
 } from '../../HackneyDS';
 import DatePick from '../../DatePick';
+import ResetFilterButton from '../../ResetFilterButton';
 
 const statusOptions = [
   { text: 'All', value: '' },
@@ -45,7 +45,6 @@ export const BrokerPortalFilters = ({ filters, setFilters, clearFilter }) => {
     changeFilterField('serviceUserName', searchText);
   }, [changeFilterField, searchText]);
 
-  const shouldShowClear = Object.values(filters).some((item) => item);
   return (
     <Container>
       <Container display="flex" alignItems="flex-end">
@@ -105,14 +104,8 @@ export const BrokerPortalFilters = ({ filters, setFilters, clearFilter }) => {
             setDate={(value) => changeFilterField('dateTo', value)}
           />
         </FormGroup>
-        {shouldShowClear && (
-          <>
-            <VerticalSeparator width="20px" />
-            <Button outline secondary color="gray" className=" clear-filter-button" onClick={onClearFilters}>
-              Clear
-            </Button>
-          </>
-        )}
+        <VerticalSeparator width="20px" />
+        <ResetFilterButton filters={filters} onClearFilters={onClearFilters} />
       </Container>
     </Container>
   );

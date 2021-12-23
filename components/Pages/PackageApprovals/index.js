@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import { useApproversOptions, useLookups } from 'api';
 import {
   Breadcrumbs,
-  Button,
   Container,
   HorizontalSeparator,
   SearchBox,
@@ -15,6 +14,7 @@ import DatePick from '../../DatePick';
 import Loading from '../../Loading';
 import { PackageApprovalsTable } from './PackageApprovalsTable';
 import ServiceUserSearch from '../ServiceUser/Search';
+import ResetFilterButton from '../../ResetFilterButton';
 
 const statusOptions = [
   { text: 'Waiting For Approval', value: '3' },
@@ -93,8 +93,6 @@ export const PackageApprovals = ({
   const onSearch = useCallback(() => {
     changeFilterField('serviceUserName', searchText);
   }, [changeFilterField, searchText]);
-
-  const shouldShowClear = Object.values(filters).some((item) => item);
 
   const isLoading = loading || approverOptionsLoading || packageOptionsLoading;
 
@@ -182,11 +180,7 @@ export const PackageApprovals = ({
                 />
               </FormGroup>
 
-              {shouldShowClear && (
-                <Button className="outline gray clear-filter-button" onClick={onClearFilters}>
-                  Clear
-                </Button>
-              )}
+              <ResetFilterButton filters={filters} onClearFilters={onClearFilters} />
             </div>
           </Container>
         </Container>

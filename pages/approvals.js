@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import { getCarePackageApprovalRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
+import { getCarePackageApprovalRoute } from 'routes/RouteConstants';
 import { PackageApprovals } from 'components';
 import { useApprovals } from 'api';
 
@@ -63,10 +63,6 @@ const Approvals = () => {
     },
   } = data;
 
-  const goToBrokerPortalSearch = useCallback(() => {
-    router.push(SERVICE_USER_SEARCH_ROUTE);
-  }, []);
-
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
   const handleRowClick = useCallback((rowInfo) => {
@@ -79,7 +75,6 @@ const Approvals = () => {
       breadcrumbs={breadcrumbs}
       loading={approvalsLoading}
       searchTerm={serviceUserName}
-      goToSearch={goToBrokerPortalSearch}
       filters={filters}
       clearFilter={clearFilters}
       setFilters={setFilters}

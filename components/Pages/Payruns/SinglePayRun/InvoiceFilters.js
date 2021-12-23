@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import { Button, Container, FormGroup, HorizontalSeparator, SearchBox, Select, VerticalSeparator } from 'components';
+import { Container, FormGroup, HorizontalSeparator, SearchBox, Select, VerticalSeparator } from 'components';
 import DatePick from 'components/DatePick';
+import ResetFilterButton from '../../../ResetFilterButton';
 
 const statusOptions = [
   { text: 'All', value: '' },
@@ -38,13 +39,12 @@ export const InvoiceFilters = ({ filters, setFilters, clearFilter }) => {
     changeFilterField('searchTerm', searchText);
   }, [changeFilterField, searchText]);
 
-  const shouldShowClear = Object.values(filters).some((item) => item);
-
   return (
     <Container>
       <Container display="flex" alignItems="flex-end">
         <FormGroup label="Search" smallLabel>
-          <SearchBox placeholder="Number, User, Supplier" value={searchText} onChangeValue={setSearchText} search={onSearch} />
+          <SearchBox placeholder="Number, User, Supplier" value={searchText} onChangeValue={setSearchText}
+                     search={onSearch} />
         </FormGroup>
         <VerticalSeparator width="20px" />
         <FormGroup label="Status" inlineLabel smallLabel>
@@ -95,14 +95,8 @@ export const InvoiceFilters = ({ filters, setFilters, clearFilter }) => {
             setDate={(value) => changeFilterField('toDate', value)}
           />
         </FormGroup>
-        {shouldShowClear && (
-          <>
-            <VerticalSeparator width="20px" />
-            <Button outline secondary color="gray" className=" clear-filter-button" onClick={onClearFilters}>
-              Clear
-            </Button>
-          </>
-        )}
+        <VerticalSeparator width="20px" />
+        <ResetFilterButton filters={filters} onClearFilters={onClearFilters} />
       </Container>
     </Container>
   );

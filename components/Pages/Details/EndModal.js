@@ -1,11 +1,11 @@
-import { Button, Container, Dialog, Heading, HorizontalSeparator, Textarea } from 'components';
-import DatePick from 'components/DatePick';
+import { Button, Container, Dialog, Heading, HorizontalSeparator, Textarea } from 'components/HackneyDS';
 import React, { memo, useEffect } from 'react';
 import { formatDate } from 'service';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { packageTypesByNumber } from 'constants/variables';
+import DatePick from '../../DatePick';
 
 const EndDetailsModal = ({ isOpen, onClose, endPackage, packageData }) => {
   if (!isOpen) return null;
