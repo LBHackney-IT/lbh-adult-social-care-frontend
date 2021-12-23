@@ -148,6 +148,7 @@ export const PackageApprovals = ({
             <div className="brokerage-portal__filters-block">
               <FormGroup className="form-group--inline-label date-from" label="From">
                 <DatePick
+                  isRemoveIconVisible
                   placeholder="Select date"
                   startDate={filters.dateFrom}
                   dateValue={filters.dateFrom}
@@ -166,6 +167,7 @@ export const PackageApprovals = ({
               </FormGroup>
               <FormGroup className="form-group--inline-label" label="To">
                 <DatePick
+                  isRemoveIconVisible
                   placeholder="Select date"
                   startDate={filters.dateTo}
                   dateValue={filters.dateTo}

@@ -26,9 +26,9 @@ const DatePick = ({
   setDate,
   calendarStylePosition = {},
   dateValue,
+  isRemoveIconVisible,
   useDefaultInput,
 }) => {
-
   const clearDate = () => setDate(null);
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -43,7 +43,7 @@ const DatePick = ({
       >
         {value || <p className="datepicker-custom-input-placeholder">{placeholder}</p>}
       </button>
-      {!useDefaultInput && dateValue && (
+      {isRemoveIconVisible && !useDefaultInput && dateValue && (
         <div className="date-picker__additional-action clear-datepicker" onClick={clearDate}>
           <CrossIcon />
         </div>

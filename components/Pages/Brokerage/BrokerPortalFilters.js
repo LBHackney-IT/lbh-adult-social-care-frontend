@@ -79,6 +79,7 @@ export const BrokerPortalFilters = ({ filters, setFilters, clearFilter }) => {
       <Container display="flex" alignItems="flex-end">
         <FormGroup label="From" inlineLabel smallLabel>
           <DatePick
+            isRemoveIconVisible
             placeholder="Select date"
             startDate={filters.dateFrom}
             dateValue={filters.dateFrom}
@@ -98,6 +99,7 @@ export const BrokerPortalFilters = ({ filters, setFilters, clearFilter }) => {
         <VerticalSeparator width="20px" />
         <FormGroup label="To" inlineLabel smallLabel>
           <DatePick
+            isRemoveIconVisible
             placeholder="Select date"
             startDate={filters.dateTo}
             dateValue={filters.dateTo}
