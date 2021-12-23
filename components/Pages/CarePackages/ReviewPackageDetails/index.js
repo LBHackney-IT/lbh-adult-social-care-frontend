@@ -1,25 +1,26 @@
 import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { APPROVALS_ROUTE, getHistoryRoute, getServiceUserPackagesRoute } from 'routes/RouteConstants';
+import { dateToIsoString } from 'service';
 import { addNotification } from 'reducers/notificationsReducer';
 import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage, stringIsNullOrEmpty, } from 'api';
 import { useDispatch } from 'react-redux';
 import { Container } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
-import PackageInfo from './PackageInfo';
-import BrokerageBorderCost from '../BrokerageBorderCost';
 import SubmitForApprovalPopup from '../BrokerageSubmitForApprovalPopup/SubmitForApprovalPopup';
 import Loading from '../../../Loading';
 import ActionCarePackageModal from '../../Brokerage/ActionCarePackageModal';
 import DynamicBreadcrumbs from '../../DynamicBreadcrumbs';
 import PackageDetailsButtons from './PackageDetailsButtons';
-import { SummaryTotalCostInfo } from './SummaryTotalCostInfo';
-import { SummaryCostOfPlacement } from './SummaryCostOfPlacement';
 import { FluidLinks } from './FluidLinks';
 import { Summary } from './Summary';
 import { ReviewHeader } from './ReviewHeader';
 import EndDetailsModal from '../../Details/EndModal';
-import { dateToIsoString } from '../../../../service';
+import FncInfo from './FncInfo';
+import CarePackageInfo from './CarePackageInfo';
+import WeeklyAdditionalNeed from './WeeklyAdditionalNeed';
+import OneOffAdditionalNeed from './OneOffAdditionalNeed';
+import CareChargeReclaim from './CareChargeReclaim';
 
 const initialNotes = {
   endNotes: '',
@@ -32,10 +33,11 @@ const isNursingCarePackage = (packageType) =>
   !stringIsNullOrEmpty(packageType) && packageType.toLowerCase().includes('nursing');
 
 const ReviewPackageDetails = ({
+  data,
   userDetails,
   packageData,
   packageId,
-  packageInfoItems = [],
+  isVisibleLink = true,
   showEditActions,
   className = '',
   summaryData = [],
@@ -49,6 +51,9 @@ const ReviewPackageDetails = ({
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+
+  const pushRoute = (getRoute) => router.push(getRoute(packageId));
+  const goToPackage = isVisibleLink && pushRoute;
 
   const onCheckHide = () => !isNursingCarePackage(title);
 
@@ -121,11 +126,11 @@ const ReviewPackageDetails = ({
   ];
 
   const cancelCarePackageActions = [
-    { title: 'Back', onClick: closePopup, className: 'link-button', color: 'gray' },
+    { title: 'Back', onClick: closePopup, className: 'outline secondary-gray large-button' },
     {
       loading,
       title: 'Cancel package',
-      className: 'secondary-red',
+      className: 'secondary-red large-button',
       onClick: () =>
         makeActionPackage(cancelCarePackage, actionNotes.cancelNotes, getServiceUserPackagesRoute(userDetails.id)),
     },
@@ -180,42 +185,11 @@ const ReviewPackageDetails = ({
         <Container className="review-package-details__main-container">
           <FluidLinks links={links} />
           <Container className="review-package-details__cost-info">
-            {packageInfoItems.map(
-              ({
-                goToPackage,
-                id: itemId,
-                headerTitle,
-                items,
-                totalCost,
-                checkHide,
-                totalCostHeader,
-                costOfPlacement,
-                totalCostInfo,
-              }) => {
-                if (checkHide && onCheckHide()) return null;
-
-                return (
-                  <Container key={itemId} className="review-package-details__cost-info-item">
-                    <PackageInfo
-                      goToPackage={goToPackage}
-                      containerId={itemId}
-                      headerTitle={headerTitle}
-                      items={items}
-                    />
-                    <SummaryCostOfPlacement costOfPlacement={costOfPlacement} />
-                    {!!totalCost && <BrokerageBorderCost totalCost={totalCost} totalCostHeader={totalCostHeader} />}
-                    <SummaryTotalCostInfo totalCostInfo={totalCostInfo} />
-                    {goToPackage && (
-                      <Container className="review-package-details__items-actions" display="flex">
-                        <p onClick={goToPackage} className="link-button">
-                          Edit or Remove
-                        </p>
-                      </Container>
-                    )}
-                  </Container>
-                );
-              }
-            )}
+            <CarePackageInfo goToPackage={goToPackage} data={data} />
+            <WeeklyAdditionalNeed data={data} goToPackage={goToPackage} />
+            <OneOffAdditionalNeed data={data} goToPackage={goToPackage} />
+            <FncInfo data={data} goToPackage={goToPackage} onCheckHide={onCheckHide} />
+            <CareChargeReclaim data={data} goToPackage={goToPackage} />
             <Summary summaryData={summaryData} />
             <PackageDetailsButtons buttons={buttons} />
           </Container>
