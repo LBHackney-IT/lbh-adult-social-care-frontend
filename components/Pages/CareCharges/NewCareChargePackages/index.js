@@ -1,31 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import { getServiceUserCareChargesRoute, CARE_PACKAGE_ROUTE, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
+import { CARE_PACKAGE_ROUTE, getServiceUserCareChargesRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
-import {
-  Breadcrumbs,
-  Button,
-  Container,
-  Select,
-  FormGroup,
-  HorizontalSeparator,
-  Heading,
-  SearchBox,
-} from '../../../HackneyDS';
+import { Breadcrumbs, Button, Container, Heading, HorizontalSeparator, } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 import AlternativePagination from '../../../AlternativePagination';
 import { CareChargesTable } from './CareChargesTable';
+import CareChargesFilter from '../CareChargesFilter';
 
 const breadcrumbs = [{ text: 'Home', href: CARE_PACKAGE_ROUTE }, { text: 'Care Charges' }];
-
-const userStatusOptions = [
-  { text: 'New', value: 'New' },
-  { text: 'Existing', value: 'Existing' },
-];
-
-const dateOptions = [
-  { text: 'Newest first', value: 'desc' },
-  { text: 'Oldest First', value: 'asc' },
-];
 
 const NewCareChargePackages = ({
   isLoading,
@@ -63,40 +45,15 @@ const NewCareChargePackages = ({
             </Button>
           </Container>
           <HorizontalSeparator height={16} />
-          <Container className="new-care-charge__selectors">
-            <Container display="flex" alignItems="flex-end">
-              <FormGroup className="search" label="Search" smallLabel>
-                <SearchBox
-                  className="broker-portal"
-                  placeholder="Search by name..."
-                  value={searchText}
-                  onChangeValue={setSearchText}
-                  search={onSearch}
-                />
-              </FormGroup>
-              <FormGroup label="Status" smallLabel>
-                <Select options={userStatusOptions} onChangeValue={changeFilter('status')} value={filters.status} />
-              </FormGroup>
-              <FormGroup label="Date" smallLabel>
-                <Select options={dateOptions} onChangeValue={changeFilter('orderByDate')} value={filters.orderByDate} />
-              </FormGroup>
-            </Container>
-            <HorizontalSeparator height={25} />
-            <Container display="flex">
-              <FormGroup label="Modified by" smallLabel>
-                <Select
-                  options={modifiedByOptions}
-                  onChangeValue={changeFilter('modifiedBy')}
-                  value={filters.modifiedBy}
-                />
-              </FormGroup>
-              {Object.values(filters).some((item) => item) && (
-                <Button outline secondary color="gray" onClick={clearFilters}>
-                  Clear
-                </Button>
-              )}
-            </Container>
-          </Container>
+          <CareChargesFilter
+            filters={filters}
+            onSearch={onSearch}
+            searchText={searchText}
+            setSearchText={setSearchText}
+            changeFilter={changeFilter}
+            clearFilters={clearFilters}
+            modifiedByOptions={modifiedByOptions}
+          />
         </Container>
       </Container>
       <Container padding="30px 60px 60px 60px" className="centered-container">

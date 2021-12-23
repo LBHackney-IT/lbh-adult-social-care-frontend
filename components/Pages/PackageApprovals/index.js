@@ -1,26 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { useApproversOptions, useLookups } from 'api';
-import {
-  Breadcrumbs,
-  Container,
-  HorizontalSeparator,
-  SearchBox,
-  Select,
-  FormGroup,
-  Dialog, Heading,
-} from '../../HackneyDS';
+import { Breadcrumbs, Container, Dialog, Heading, HorizontalSeparator, } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
-import DatePick from '../../DatePick';
 import Loading from '../../Loading';
 import { PackageApprovalsTable } from './PackageApprovalsTable';
 import ServiceUserSearch from '../ServiceUser/Search';
-import ResetFilterButton from '../../ResetFilterButton';
-
-const statusOptions = [
-  { text: 'Waiting For Approval', value: '3' },
-  { text: 'Approved', value: '4' },
-  { text: 'Not Approved', value: '5' },
-];
+import ApprovalsFilter from '../Approvals/ApprovalsFilter';
 
 const initialServiceUserFilters = {
   firstName: '',
@@ -113,80 +98,27 @@ export const PackageApprovals = ({
             <Breadcrumbs values={breadcrumbs} />
           </Container>
           <HorizontalSeparator height={30} />
-          <Container height={50} padding='0 60px'>
+          <Container height={50} padding="0 60px">
             <Heading size="xl">{title}</Heading>
           </Container>
           <HorizontalSeparator height={16} />
-          <Container className="brokerage-portal__filters">
-            <div className="brokerage-portal__filters-block">
-              <FormGroup className="form-group--inline-label">
-                <SearchBox
-                  placeholder="Search service user"
-                  label="Search"
-                  value={searchText}
-                  onChangeValue={setSearchText}
-                  search={onSearch}
-                />
-              </FormGroup>
-              <FormGroup className="form-group--inline-label brokerage-portal__form-status" label="Status">
-                <Select
-                  options={statusOptions}
-                  value={filters.status}
-                  onChangeValue={(value) => changeFilterField('status', value)}
-                />
-              </FormGroup>
-              <FormGroup className="form-group--inline-label" label="Approver">
-                <Select
-                  value={filters.approverId}
-                  options={approverOptions}
-                  onChangeValue={(value) => changeFilterField('approverId', value)}
-                />
-              </FormGroup>
-            </div>
-            <div className="brokerage-portal__filters-block">
-              <FormGroup className="form-group--inline-label date-from" label="From">
-                <DatePick
-                  placeholder="Select date"
-                  startDate={filters.dateFrom}
-                  dateValue={filters.dateFrom}
-                  setDate={(value) => {
-                    if (filters.dateTo && value > filters.dateTo) {
-                      setFilters((prevState) => ({
-                        ...prevState,
-                        dateTo: value,
-                        dateFrom: value,
-                      }));
-                    } else {
-                      changeFilterField('dateFrom', value);
-                    }
-                  }}
-                />
-              </FormGroup>
-              <FormGroup className="form-group--inline-label" label="To">
-                <DatePick
-                  placeholder="Select date"
-                  startDate={filters.dateTo}
-                  dateValue={filters.dateTo}
-                  minDate={filters.dateFrom}
-                  setDate={(value) => changeFilterField('dateTo', value)}
-                />
-              </FormGroup>
-
-              <FormGroup className="form-group--inline-label" label="Package">
-                <Select
-                  value={filters.packageType}
-                  options={packageOptions}
-                  onChangeValue={(value) => changeFilterField('packageType', value)}
-                />
-              </FormGroup>
-              <ResetFilterButton filters={filters} onClearFilters={onClearFilters} />
-            </div>
-          </Container>
+          <ApprovalsFilter
+            onClearFilters={onClearFilters}
+            filters={filters}
+            setFilters={setFilters}
+            setSearchText={setSearchText}
+            searchText={searchText}
+            onSearch={onSearch}
+            packageOptions={packageOptions}
+            changeFilterField={changeFilterField}
+            approverOptions={approverOptions}
+          />
         </Container>
       </Container>
 
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px 60px 60px">
-        <PackageApprovalsTable searchTerm={searchTerm} getPackageTypeById={getPackageTypeById} onRowClick={onRowClick} data={items} />
+        <PackageApprovalsTable searchTerm={searchTerm} getPackageTypeById={getPackageTypeById} onRowClick={onRowClick}
+                               data={items} />
         <HorizontalSeparator height="20px" />
 
         <AlternativePagination
