@@ -18,6 +18,28 @@
   }
 }
 
+.react-date-picker__custom-input {
+  .react-datepicker-wrapper:after {
+    display: none;
+  }
+
+  .datepicker-custom-input {
+    display: flex;
+    align-items: center;
+
+    &::after {
+      content: '';
+      position: absolute;
+      pointer-events: none;
+      right: 11px;
+      width: 24px;
+      height: 24px;
+      background: url('../../public/images/icons/icon_hakcney_calendar.svg');
+      cursor: text;
+    }
+  }
+}
+
 .control .react-datepicker-popper {
   z-index: 4;
 }
@@ -107,6 +129,7 @@
 .datepicker-custom-input {
   width: 100%;
   padding: 8px;
+  position: relative;
   height: 40px;
   text-align: left;
   background: white;

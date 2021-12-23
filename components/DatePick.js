@@ -4,6 +4,8 @@ import BaseField from './BaseField';
 import ErrorField from './ErrorField';
 import 'react-datepicker/dist/react-datepicker.css';
 import { dateStringFormats } from '../constants/strings';
+import { CrossIcon } from './Icons';
+import { Container } from './HackneyDS/Layout/Container';
 
 const DatePick = ({
   selectsRange,
@@ -26,17 +28,27 @@ const DatePick = ({
   dateValue,
   useDefaultInput,
 }) => {
+
+  const clearDate = () => setDate(null);
+
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button
-      className="datepicker-custom-input"
-      onClick={(e) => {
-        e.preventDefault();
-        onClick(e);
-      }}
-      ref={ref}
-    >
-      {value || <p className="datepicker-custom-input-placeholder">{placeholder}</p>}
-    </button>
+    <Container display="flex" alignItems="center">
+      <button
+        className="datepicker-custom-input"
+        onClick={(e) => {
+          e.preventDefault();
+          onClick(e);
+        }}
+        ref={ref}
+      >
+        {value || <p className="datepicker-custom-input-placeholder">{placeholder}</p>}
+      </button>
+      {!useDefaultInput && dateValue && (
+        <div className="date-picker__additional-action clear-datepicker" onClick={clearDate}>
+          <CrossIcon />
+        </div>
+      )}
+    </Container>
   ));
 
   useEffect(() => {
@@ -48,7 +60,12 @@ const DatePick = ({
   }, [checkMinDate, minDate, dateValue]);
 
   return (
-    <BaseField style={calendarStylePosition} className='react-date-picker' label={label} noInputStyle>
+    <BaseField
+      noInputStyle
+      className={`${className} react-date-picker${!useDefaultInput ? ' react-date-picker__custom-input' : ''}`}
+      label={label}
+      style={calendarStylePosition}
+    >
       {dateValue?.toString() === 'Invalid Date' ? (
         <p>Invalid Date</p>
       ) : (
