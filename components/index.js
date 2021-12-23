@@ -12,7 +12,6 @@ export { default as ServiceUserDetails } from './Pages/Brokerage/ServiceUserDeta
 export { default as CareDetails } from './Pages/ServiceUser/Packages/CareDetails';
 export { default as PackageRequest } from './Pages/ServiceUser/Packages/PackageRequest';
 export { default as ReviewPackageDetails } from './Pages/CarePackages/ReviewPackageDetails';
-export { default as SearchServiceUser } from './Pages/Brokerage/SearchForServiceUser';
 export { default as NewCareChargePackages } from './Pages/CareCharges/NewCareChargePackages';
 export { default as PackageApprovals } from './Pages/PackageApprovals';
 export { default as DynamicBreadcrumbs } from './Pages/DynamicBreadcrumbs';
