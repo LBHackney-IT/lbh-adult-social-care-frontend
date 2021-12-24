@@ -22,7 +22,7 @@ export const FileUpload = ({
   return (
     <div className={`govuk-form-group lbh-form-group ${className}`}>
       {label && (
-        <label className="file-upload" htmlFor={id}>
+        <label tabIndex={0} onKeyPress={(e) => e.key === 'Enter' && e.target.click()} className="file-upload" htmlFor={id}>
           {label}
         </label>
       )}

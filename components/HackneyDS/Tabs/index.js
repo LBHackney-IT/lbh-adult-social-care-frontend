@@ -16,6 +16,9 @@ export const Tabs = ({ callback, initialTab = 0, children, title, tabs }) => {
             role="presentation"
             className={`govuk-tabs__list-item govuk-tabs__list-item${index === activeTab ? '--selected' : ''}`}
             onClick={() => handleClick(index)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter" ) handleClick(index)
+            }}
           >
             <a tabIndex="0" role="tab" className="govuk-tabs__tab">
               {tab}

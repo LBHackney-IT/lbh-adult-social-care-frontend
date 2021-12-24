@@ -18,6 +18,7 @@ import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { usePayrunView, useHeldPaymentsView } from 'api/SWR/payRuns';
 import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
 import CreatePayRunModal from 'components/Pages/Payruns/CreatePayRunModal/CreatePayRunModal';
+import { BROKERAGE_ROUTE } from '../../routes/RouteConstants';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -40,7 +41,7 @@ const initialFilters = {
   payRunStatus: '',
 };
 
-const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Finance' }];
+const breadcrumbs = [{ text: 'Home', href: BROKERAGE_ROUTE }, { text: 'Finance' }];
 const tabs = ['Pay Runs', 'Held Payments', 'Awaiting Approval', 'Approved'];
 
 const Payruns = () => {

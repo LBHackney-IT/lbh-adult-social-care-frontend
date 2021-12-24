@@ -3,6 +3,7 @@ import { getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { Container } from '../../../HackneyDS';
 import PackageInfo from './PackageInfo';
 import { SummaryTotalCostInfo } from './SummaryTotalCostInfo';
+import EditOrRemoveLink from './EditOrRemoveLink';
 
 const FncInfo = ({ goToPackage, onCheckHide, data }) => {
   if (onCheckHide()) return null;
@@ -20,13 +21,7 @@ const FncInfo = ({ goToPackage, onCheckHide, data }) => {
           supplier: data?.supplierReclaims?.fnc,
         }}
       />
-      {goToPackage && (
-        <Container className="review-package-details__items-actions" display="flex">
-          <p onClick={() => goToPackage(getFundedNursingCareRoute)} className="link-button">
-            Edit or Remove
-          </p>
-        </Container>
-      )}
+      <EditOrRemoveLink goToPackage={() => goToPackage(getFundedNursingCareRoute)} />
     </Container>
   );
 };

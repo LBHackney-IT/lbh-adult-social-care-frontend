@@ -207,10 +207,11 @@ const DatePicker = ({
         {IconComponent && (
           <div className="date-picker__calendar-container">
             <div className="date-picker__additional-action" style={{ background: isOpenCalendar ? COLORS['light-blue'] : '' }}>
-              <IconComponent onClick={clickIcon} className={iconClassName} />
+              <IconComponent disabled={disabled} onClick={clickIcon} className={iconClassName} />
             </div>
             {isOpenCalendar && (
               <DatePick
+                disabled={disabled}
                 calendarStylePosition={calendarStylePosition}
                 className={`${floatingCalendar ? 'fixed-datepicker' : ''}`}
                 onClickOutside={() => {
@@ -229,12 +230,22 @@ const DatePicker = ({
           </div>
         )}
         {hasClearButton && date && (
-          <div className="date-picker__additional-action clear-datepicker" onClick={clearDate}>
+          <div
+            tabIndex={disabled ? -1 : 0}
+            onKeyPress={(e) => e.key === 'Enter' && clearDate()}
+            className="date-picker__additional-action clear-datepicker"
+            onClick={clearDate}
+          >
             <CrossIcon />
           </div>
         )}
         {previousDate && (
-          <div onClick={restoreDate} className="date-picker__additional-action restore-date">
+          <div
+            onClick={restoreDate}
+            className="date-picker__additional-action restore-date"
+            tabIndex={disabled ? -1 : 0}
+            onKeyPress={(e) => e.key === 'Enter' && restoreDate()}
+          >
             <RestoreIcon />
           </div>
         )}

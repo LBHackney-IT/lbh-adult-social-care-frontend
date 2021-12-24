@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Container, FormGroup, Heading, HorizontalSeparator, UploadGreenButton } from 'components/HackneyDS';
+import { Container, FormGroup, HorizontalSeparator, UploadGreenButton } from 'components/HackneyDS';
 import { Controller } from 'react-hook-form';
 import { TEXT_FILE_EXTENSIONS } from 'constants/variables';
 

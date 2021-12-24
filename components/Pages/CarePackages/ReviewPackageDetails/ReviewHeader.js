@@ -25,6 +25,8 @@ export const ReviewHeader = ({ title, subTitle, goToHistory, showEditActions, bu
         }
         link={!additionalButtons && (
           <span
+            tabIndex={0}
+            onKeyPress={(e) => e.key === 'Enter' && goToHistory(e)}
             onClick={goToHistory}
             className="lbh-color-blue font-size-19px package-history-link"
           >

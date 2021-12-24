@@ -3,6 +3,7 @@ import { getBrokerPackageRoute } from 'routes/RouteConstants';
 import { Container } from '../../../HackneyDS';
 import PackageInfo from './PackageInfo';
 import BrokerageBorderCost from '../BrokerageBorderCost';
+import EditOrRemoveLink from './EditOrRemoveLink';
 
 const OneOffAdditionalNeed = ({ data, goToPackage }) => (
   <Container className="review-package-details__cost-info-item">
@@ -14,13 +15,7 @@ const OneOffAdditionalNeed = ({ data, goToPackage }) => (
     {data?.additionalOneOffCost > 0 && (
       <BrokerageBorderCost totalCost={data?.additionalOneOffCost} totalCostHeader="Total (Net Off)" />
     )}
-    {goToPackage && (
-      <Container className="review-package-details__items-actions" display="flex">
-        <p onClick={() => goToPackage(getBrokerPackageRoute)} className="link-button">
-          Edit or Remove
-        </p>
-      </Container>
-    )}
+    <EditOrRemoveLink goToPackage={() => goToPackage(getBrokerPackageRoute)} />
   </Container>
 );
 

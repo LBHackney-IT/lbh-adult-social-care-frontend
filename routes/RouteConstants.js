@@ -67,9 +67,11 @@ export const getPreviousPath = () => getStorageValue('previousPath');
 export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
   const routeInfo = getStoragePrevRoute();
 
+  const calculatedRoute = routeInfo.route || BROKERAGE_ROUTE;
+
   return [
-    { text: 'Home', href: '/' },
-    { text: routeInfo.name || 'Brokerage', href: routeInfo.route || BROKERAGE_ROUTE },
+    { text: 'Home', href: calculatedRoute },
+    { text: routeInfo.name || 'Brokerage', href: calculatedRoute },
     ...additionalBreadcrumbs,
   ];
 };

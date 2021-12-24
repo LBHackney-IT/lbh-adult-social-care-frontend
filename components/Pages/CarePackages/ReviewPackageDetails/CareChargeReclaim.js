@@ -3,6 +3,7 @@ import { getCareChargesRoute } from 'routes/RouteConstants';
 import { Container } from '../../../HackneyDS';
 import PackageInfo from './PackageInfo';
 import { SummaryTotalCostInfo } from './SummaryTotalCostInfo';
+import EditOrRemoveLink from './EditOrRemoveLink';
 
 const CareChargeReclaim = ({ data, goToPackage }) => (
   <Container className="review-package-details__cost-info-item">
@@ -17,13 +18,7 @@ const CareChargeReclaim = ({ data, goToPackage }) => (
         supplier: data?.supplierReclaims?.careCharge,
       }}
     />
-    {goToPackage && (
-      <Container className="review-package-details__items-actions" display="flex">
-        <p onClick={() => goToPackage(getCareChargesRoute)} className="link-button">
-          Edit or Remove
-        </p>
-      </Container>
-    )}
+    <EditOrRemoveLink goToPackage={() => goToPackage(getCareChargesRoute)} />
   </Container>
 );
 

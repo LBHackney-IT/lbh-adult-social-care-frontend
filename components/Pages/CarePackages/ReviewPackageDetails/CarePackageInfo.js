@@ -3,6 +3,7 @@ import { getCorePackageRoute } from 'routes/RouteConstants';
 import { Container } from '../../../HackneyDS';
 import PackageInfo from './PackageInfo';
 import { SummaryCostOfPlacement } from './SummaryCostOfPlacement';
+import EditOrRemoveLink from './EditOrRemoveLink';
 
 const settingsTypes = [
   { field: 'hasRespiteCare', text: 'Respite Care' },
@@ -39,13 +40,7 @@ const CarePackageInfo = ({ data, goToPackage }) => (
       ]}
     />
     <SummaryCostOfPlacement costOfPlacement={data?.costOfPlacement} />
-    {goToPackage && (
-      <Container className="review-package-details__items-actions" display="flex">
-        <p onClick={() => goToPackage(getCorePackageRoute)} className="link-button">
-          Edit or Remove
-        </p>
-      </Container>
-    )}
+    <EditOrRemoveLink goToPackage={() => goToPackage(getCorePackageRoute)} />
   </Container>
 );
 

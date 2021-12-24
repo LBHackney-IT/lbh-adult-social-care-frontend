@@ -30,6 +30,7 @@ export const Collapse = ({
   return (
     <Container className={className} {...style}>
       <Container
+        tabIndex={0}
         width="fit-content"
         display="flex"
         alignItems="center"

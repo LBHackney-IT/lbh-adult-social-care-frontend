@@ -4,6 +4,7 @@ export const Container = ({
   children,
   padding,
   color,
+  tabIndex,
   background,
   width = 'auto',
   height,
@@ -37,6 +38,8 @@ export const Container = ({
   <div
     title={title}
     onClick={onClick}
+    tabIndex={tabIndex}
+    onKeyPress={(e) => e.key === 'Enter' && onClick(e)}
     className={className}
     style={{
       padding,

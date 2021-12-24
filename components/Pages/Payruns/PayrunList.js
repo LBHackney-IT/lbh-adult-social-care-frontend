@@ -33,6 +33,7 @@ export const PayrunList = ({ searchTerm, data }) => {
             key={d.payRunId}
             cursor="pointer"
             onClick={() => goToPayrun(d.payRunId)}
+            tabIndex={0}
           >
             <Container display="flex" alignItems="center">
               <Heading size="s">Pay Run Number: </Heading>

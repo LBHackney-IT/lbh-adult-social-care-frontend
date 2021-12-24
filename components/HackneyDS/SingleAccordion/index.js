@@ -6,6 +6,8 @@ export const SingleAccordion = ({ buttonComponent, className = '', title, onClic
   <Container className={`review-package-details__accordion${className ? ` ${className}` : ''}`}>
     <div
       onClick={onClick}
+      tabIndex={0}
+      onKeyPress={(e) => e.key === 'Enter' && onClick(e)}
       className={`single-accordion-info${isOpened ? ' accordion-opened' : ''}`}
     >
       {title && <p className="link-button">{title}</p>}

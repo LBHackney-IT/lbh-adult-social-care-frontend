@@ -3,7 +3,7 @@ import withSession from 'lib/session';
 import { formatDate, getLoggedInUser } from 'service';
 import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
 import { useRouter } from 'next/router';
-import { FINANCE_ROUTE } from 'routes/RouteConstants';
+import { BROKERAGE_ROUTE, FINANCE_ROUTE } from 'routes/RouteConstants';
 import { useInvoiceListView, getPayrunInsight } from 'api/SWR/payRuns';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
@@ -65,7 +65,7 @@ const SinglePayRun = () => {
   }, [payRunData]);
 
   const breadcrumbs = [
-    { text: 'Home', href: '/' },
+    { text: 'Home', href: BROKERAGE_ROUTE },
     { text: 'Finance', href: FINANCE_ROUTE },
     { text: `Pay Run ${payRun?.payRunNumber}` },
   ];

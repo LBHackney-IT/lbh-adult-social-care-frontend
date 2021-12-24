@@ -74,6 +74,8 @@ export const Table = ({
           return (
             <React.Fragment key={index}>
               <tr
+                tabIndex={onRowClick ? 0 : -1}
+                onKeyPress={(e) => e.key === 'Enter' && onRowClick?.(row.original)}
                 onClick={onRowClick ? () => onRowClick(row.original) : () => {}}
                 className={`govuk-table__row${rowsHaveHeader ? ' with-row-header' : ''}`}
                 {...row.getRowProps()}
