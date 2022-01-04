@@ -9,7 +9,7 @@ import { usePayrunView, useHeldPaymentsView } from 'api/SWR/payRuns';
 import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
 import CreatePayRunModal from 'components/Pages/Payruns/CreatePayRunModal/CreatePayRunModal';
 import { handleRoleBasedAccess } from '../api/handleRoleBasedAccess';
-import { accessRoutes } from '../api/accessMatrix';
+import { accessRoutes, userRoles } from '../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -45,7 +45,7 @@ const tabs = ['Pay Runs', 'Held Payments', 'Awaiting Approval', 'Approved'];
 
 const Payruns = ({ roles }) => {
   const getTabs = () => {
-    if (roles.includes('Finance Approver')) {
+    if (roles.includes(userRoles.ROLE_FINANCE_APPROVER)) {
       return tabs;
     }
     return [tabs[0], tabs[1]];
