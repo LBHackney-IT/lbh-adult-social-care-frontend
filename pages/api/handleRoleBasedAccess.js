@@ -1,12 +1,9 @@
-export const handleRoleBasedAccess = (roles, url) => {
-  const roleAccessMatrix = {
-    '/broker-referral': ['Brokerage Approver', 'Brokerage', 'Care Charge Manager', 'Finance Approver', 'Finance'],
-    '/care-charges': ['Brokerage', 'Care Charge Manager'],
-  };
-  console.log(url);
-  // const rolesWithAccess = roleAccessMatrix[url];
-  // const intersection = rolesWithAccess.filter((value) => roles.includes(value));
-  // return intersection?.length > 0;
+import { roleAccessMatrix } from './accessMatrix';
 
-  return true;
+export const handleRoleBasedAccess = (roles, url) => {
+  const accessMatrix = roleAccessMatrix;
+  const rolesWithAccess = roleAccessMatrix[url];
+  const intersection = rolesWithAccess.filter((value) => roles.includes(value));
+  console.log('intersection', intersection);
+  return intersection?.length > 0;
 };

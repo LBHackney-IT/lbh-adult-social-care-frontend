@@ -24,7 +24,8 @@ import { getFormDataWithFile } from 'service/getFormData';
 import { assignPackageSchema } from 'service/formValidationSchema';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { handleRoleBasedAccess } from 'pages/api/handleRoleBasedAccess';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -36,8 +37,16 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.BROKERAGE_ASSIGN_PACKAGES)) {
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
 
-  console.log(req)
+  console.log(req);
   if (!handleRoleBasedAccess(user.roles, req.url)) {
     return {
       redirect: {

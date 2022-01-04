@@ -30,6 +30,8 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { CARE_CHARGES_ROUTE } from 'routes/RouteConstants';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -37,6 +39,14 @@ export const getServerSideProps = withSession(async ({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_CARE_CHARGE)) {
+    return {
+      redirect: {
+        destination: '/404',
         permanent: false,
       },
     };

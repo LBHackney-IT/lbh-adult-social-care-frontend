@@ -23,6 +23,8 @@ import withSession from 'lib/session';
 import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
 import { formValidationSchema } from 'service/formValidationSchema';
 import UploadFile from 'components/UploadFile';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -30,6 +32,14 @@ export const getServerSideProps = withSession(async ({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_CORE_PACKAGE)) {
+    return {
+      redirect: {
+        destination: '/404',
         permanent: false,
       },
     };

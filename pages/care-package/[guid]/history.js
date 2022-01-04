@@ -5,6 +5,8 @@ import withSession from 'lib/session';
 import { usePackageHistory } from 'api';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { getCarePackageDetailsRoute } from 'routes/RouteConstants';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -12,6 +14,14 @@ export const getServerSideProps = withSession(({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_HISTORY)) {
+    return {
+      redirect: {
+        destination: '/404',
         permanent: false,
       },
     };

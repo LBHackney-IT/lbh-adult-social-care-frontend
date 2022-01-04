@@ -18,6 +18,8 @@ import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { usePayrunView, useHeldPaymentsView } from 'api/SWR/payRuns';
 import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
 import CreatePayRunModal from 'components/Pages/Payruns/CreatePayRunModal/CreatePayRunModal';
+import { handleRoleBasedAccess } from '../api/handleRoleBasedAccess';
+import { accessRoutes } from '../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -25,6 +27,14 @@ export const getServerSideProps = withSession(({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.PAYRUNS)) {
+    return {
+      redirect: {
+        destination: '/404',
         permanent: false,
       },
     };

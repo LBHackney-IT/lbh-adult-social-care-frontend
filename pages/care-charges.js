@@ -2,9 +2,10 @@ import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useCareCharge, useUsers } from 'api';
 import { NewCareChargePackages } from 'components';
-import { handleRoleBasedAccess } from './api/handleRoleBasedAccess';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
+import { handleRoleBasedAccess } from './api/handleRoleBasedAccess';
+import { accessRoutes } from './api/accessMatrix';
 
 const initialFilters = {
   orderByDate: '',
@@ -23,7 +24,7 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  if (!handleRoleBasedAccess(user.roles ?? [], req.url)) {
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_CHARGES)) {
     return {
       redirect: {
         destination: '/404',
@@ -31,7 +32,6 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-
   return { props: {} };
 });
 

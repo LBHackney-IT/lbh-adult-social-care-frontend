@@ -12,6 +12,8 @@ import { useRouter } from 'next/router';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -19,6 +21,14 @@ export const getServerSideProps = withSession(({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.SERVICE_USER_GUID_PACKAGES)) {
+    return {
+      redirect: {
+        destination: '/404',
         permanent: false,
       },
     };

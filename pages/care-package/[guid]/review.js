@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { ReviewPackageDetails } from 'components';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -11,6 +13,14 @@ export const getServerSideProps = withSession(({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_REVIEW)) {
+    return {
+      redirect: {
+        destination: '/404',
         permanent: false,
       },
     };
@@ -26,7 +36,7 @@ const ReviewPackageDetailsPage = () => {
 
   const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
 
-  const isNotApprovedStatus = data?.status < 3
+  const isNotApprovedStatus = data?.status < 3;
 
   return (
     <ReviewPackageDetails

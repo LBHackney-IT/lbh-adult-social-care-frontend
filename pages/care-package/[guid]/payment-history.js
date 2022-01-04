@@ -8,6 +8,8 @@ import { format } from 'date-fns';
 import { usePaymentHistoryView } from 'api';
 import AlternativePagination from 'components/AlternativePagination';
 import { PaymentHistoryTable } from 'components/Pages/Payruns/PaymentHistory/PaymentHistoryTable';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -15,6 +17,14 @@ export const getServerSideProps = withSession(({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_PAYMENT_HISTORY)) {
+    return {
+      redirect: {
+        destination: '/404',
         permanent: false,
       },
     };
@@ -60,7 +70,9 @@ const PaymentHistory = () => {
           <Container background="#FAFAFA" padding="24px 16px">
             {data && (
               <>
-                <Heading size="m" color="#00664F">{data.serviceUserName}</Heading>
+                <Heading size="m" color="#00664F">
+                  {data.serviceUserName}
+                </Heading>
                 <HorizontalSeparator height="15px" />
                 <Container display="grid" gridTemplateColumns="1fr 1fr">
                   <Container display="flex" alignItems="center">
@@ -84,7 +96,9 @@ const PaymentHistory = () => {
                 <Container display="flex" alignItems="center">
                   Total paid up to {format(new Date(packagePayment.dateTo), 'dd/MM/yyy')}:
                   <VerticalSeparator width="10px" />
-                  <Heading size="m" color="#00664F">{formatNumberToCurrency(packagePayment.totalPaid)}</Heading>
+                  <Heading size="m" color="#00664F">
+                    {formatNumberToCurrency(packagePayment.totalPaid)}
+                  </Heading>
                 </Container>
               </>
             )}
