@@ -28,6 +28,7 @@ import {
   SupplierSelection,
 } from 'components/Pages/CarePackages/BrokerPackage/index';
 import NewAdditionalNeedModal from 'components/Pages/CarePackages/BrokerPackage/NewAdditionalNeedModal/NewAdditionalNeedModal';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
 import { accessRoutes } from '../../api/accessMatrix';
 
@@ -49,10 +50,10 @@ export const getServerSideProps = withSession(async ({ req }) => {
       },
     };
   }
-  return { props: {} };
+  return { props: { roles: user.roles } };
 });
 
-const BrokerPackage = () => {
+const BrokerPackage = ({ roles }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -170,6 +171,7 @@ const BrokerPackage = () => {
   const clickBack = () => router.push(getCorePackageRoute(packageId));
   return (
     <>
+      <NewHeader roles={roles ?? []} />
       <ResetApprovedPackageDialog
         isOpen={isDialogOpen}
         onClose={() => setDialogOpen(false)}

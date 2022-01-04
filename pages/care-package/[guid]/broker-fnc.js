@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  dateToIsoString,
-  getFormDataWithFile,
-  getLoggedInUser,
-  useGetFile,
-} from 'service';
+import { dateToIsoString, getFormDataWithFile, getLoggedInUser, useGetFile } from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -23,7 +18,7 @@ import {
   updateCarePackageReclaimFnc,
   usePackageActiveFncPrice,
   usePackageDetails,
-  usePackageFnc
+  usePackageFnc,
 } from 'api';
 import withSession from 'lib/session';
 import { getBrokerPackageRoute, getCareChargesRoute } from 'routes/RouteConstants';
@@ -37,6 +32,7 @@ import {
   NursingHasFNC,
   NursingSchedule,
 } from 'components/Pages/CarePackages/FundedNusringCare';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
 import { accessRoutes } from '../../api/accessMatrix';
 
@@ -58,10 +54,10 @@ export const getServerSideProps = withSession(async ({ req }) => {
       },
     };
   }
-  return { props: {} };
+  return { props: { roles: user.roles } };
 });
 
-const BrokerFNC = () => {
+const BrokerFNC = ({ roles }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { guid: carePackageId } = router.query;
@@ -102,7 +98,7 @@ const BrokerFNC = () => {
   const { isLoading: fileLoading } = useGetFile({
     fileId: fncData.assessmentFileId,
     fileName: fncData.assessmentFileName,
-    setter: (file) => setValue('assessmentFile', file)
+    setter: (file) => setValue('assessmentFile', file),
   });
 
   const isLoading = fncLoading || fileLoading || isRequestBeingSent || detailsLoading;
@@ -151,7 +147,7 @@ const BrokerFNC = () => {
 
     omittedData.endDate = !isOngoing ? dateToIsoString(omittedData.endDate) : null;
     omittedData.startDate = dateToIsoString(omittedData.startDate);
-    omittedData.hasAssessmentBeenCarried =  Boolean(omittedData.hasAssessmentBeenCarried).toString();
+    omittedData.hasAssessmentBeenCarried = Boolean(omittedData.hasAssessmentBeenCarried).toString();
 
     const formData = getFormDataWithFile(omittedData);
 
@@ -172,6 +168,7 @@ const BrokerFNC = () => {
 
   return (
     <>
+      <NewHeader roles={roles ?? []} />
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Funded Nursing Care" title="Build a care package" />

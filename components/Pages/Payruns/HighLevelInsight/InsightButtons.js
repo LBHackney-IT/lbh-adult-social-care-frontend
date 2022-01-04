@@ -25,6 +25,7 @@ const InsightButtons = ({
   hasInvoices,
   paidBy,
   paidOn,
+  isApprover
 }) => {
   const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
 
@@ -119,7 +120,7 @@ const InsightButtons = ({
           </Container>
         </Container>
       )}
-      {status === 4 && (
+      {status === 4 && isApprover && (
         <Container {...containerProps}>
           <Button onClick={handleApprove}>Approve</Button>
           <HorizontalSeparator height="10px" />

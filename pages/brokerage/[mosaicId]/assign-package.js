@@ -24,6 +24,7 @@ import { getFormDataWithFile } from 'service/getFormData';
 import { assignPackageSchema } from 'service/formValidationSchema';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
 import { accessRoutes } from '../../api/accessMatrix';
 
@@ -45,7 +46,7 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+  return { props: { roles: user.roles } };
 });
 
 const breadcrumbs = [
@@ -54,7 +55,7 @@ const breadcrumbs = [
   { text: 'Assign and attach a care plan' },
 ];
 
-const AssignPackage = () => {
+const AssignPackage = ({ roles }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { hackneyId } = router.query;
@@ -109,6 +110,7 @@ const AssignPackage = () => {
 
   return (
     <>
+      <NewHeader roles={roles ?? []} />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <HorizontalSeparator height="10px" />
         <Breadcrumbs values={breadcrumbs} />

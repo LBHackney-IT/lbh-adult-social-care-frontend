@@ -9,6 +9,7 @@ import Loading from 'components/Loading';
 import { BrokerPortalFilters } from 'components/Pages/Brokerage/BrokerPortalFilters';
 import { BrokerageTable } from 'components/Pages/Brokerage/BrokerageTable';
 import AlternativePagination from 'components/AlternativePagination';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../api/handleRoleBasedAccess';
 import { accessRoutes } from '../api/accessMatrix';
 
@@ -31,7 +32,7 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+  return { props: { roles: user.roles } };
 });
 
 const initialFilters = {
@@ -44,7 +45,7 @@ const initialFilters = {
 
 const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Brokerage' }];
 
-const Index = () => {
+const Index = ({roles}) => {
   const router = useRouter();
 
   const [pageNumber, setPageNumber] = useState(1);
@@ -85,6 +86,7 @@ const Index = () => {
 
   return (
     <div className="broker-portal">
+      <NewHeader roles={roles ?? []} />
       <Loading isLoading={brokerViewLoading} />
       <Container background="#FAFAFA" padding="0 0 60px">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
