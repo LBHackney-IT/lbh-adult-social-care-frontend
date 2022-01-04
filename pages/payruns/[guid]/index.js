@@ -11,7 +11,7 @@ import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFil
 import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
 import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
-import { accessRoutes } from '../../api/accessMatrix';
+import { accessRoutes, userRoles } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -45,6 +45,7 @@ const initialFilters = {
 const SinglePayRun = ({ roles }) => {
   const router = useRouter();
   const { guid: payRunId } = router.query;
+  const isApprover = roles.includes(userRoles.ROLE_FINANCE_APPROVER);
   const [payRunItems, setPayRunItems] = useState([]);
   const [pagingMetaData, setPagingMetaData] = useState({});
   const [pageNumber, setPageNumber] = useState(1);
@@ -135,6 +136,7 @@ const SinglePayRun = ({ roles }) => {
             hasInvoices={!!payRunItems?.length}
             isCedarFileDownloaded={insightData?.isCedarFileDownloaded}
             insightDataLoading={insightsIsLoading}
+            isApprover={isApprover}
           />
         )}
         <HorizontalSeparator height="32px" />

@@ -23,6 +23,7 @@ export const HighLevelInsight = ({
   insightDataLoading,
   paidBy,
   paidOn,
+  isApprover,
 }) => {
   const dispatch = useDispatch();
 
@@ -60,7 +61,7 @@ export const HighLevelInsight = ({
               {formatNumberToCurrency(total)}
             </Heading>
             <HorizontalSeparator height="5px" />
-            {`${formatNumberToCurrency((difference))} ${increaseOrDecrease} from last cycle`}
+            {`${formatNumberToCurrency(difference)} ${increaseOrDecrease} from last cycle`}
           </Container>
           <Container borderRight="1px solid rgba(82, 90, 91, 0.25)" />
           <Container display="flex" flexDirection="column" textAlign="center" alignSelf="center">
@@ -94,6 +95,7 @@ export const HighLevelInsight = ({
             paidBy={paidBy}
             paidOn={paidOn}
             isLoading={insightDataLoading}
+            isApprover={isApprover}
           />
         </Container>
       </Container>
