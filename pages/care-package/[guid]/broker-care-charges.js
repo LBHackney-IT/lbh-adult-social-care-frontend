@@ -242,6 +242,7 @@ const CareCharge = ({ roles }) => {
           useNewCareCharge={useNewCareCharge}
           usePreviousCareCharge={getPreviousCareCharge}
         />
+        {hasAssessmentBeenCarried && <HorizontalSeparator height="10px" />}
         <ProvisionalAnnouncement visible={hasAssessmentBeenCarried} handleClick={handleAssessmentClick} />
         {(isS117Client || showPreviousAnnouncement || hasAssessmentBeenCarried) && <HorizontalSeparator height={20} />}
         {!careChargeLoading && !coreLoading && (

@@ -44,18 +44,19 @@ const initialLinks = [
   },
 ];
 
-export const NewHeader = ({ roles }) => {
-  const links = roles.length ? initialLinks?.filter((ele) => ele.visibility?.filter((value) => roles?.includes(value))) : [];
+export const NewHeader = ({ roles, noLinks }) => {
+  const links = roles.length
+    ? initialLinks?.filter((ele) => ele.visibility?.filter((value) => roles?.includes(value)))
+    : [];
   console.log(links);
-  return (
-    <Header
-      links={[
+  const displayLinks = noLinks
+    ? []
+    : [
         ...links,
         {
           href: LOGOUT_ROUTE,
           text: 'Log out',
         },
-      ]}
-    />
-  );
+      ];
+  return <Header links={displayLinks} />;
 };

@@ -62,7 +62,7 @@ const Login = () => {
 
   return (
     <>
-      <NewHeader roles={[]} />
+      <NewHeader roles={[]} noLinks/>
       <div className="login-page">
         {!user?.isLoggedIn && (
           <div className="login-page__form-container">
