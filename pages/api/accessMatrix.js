@@ -44,26 +44,51 @@ export const accessRoutes = {
   INDEX,
 };
 
+const ROLE_BROKERAGE = 'Brokerage';
+const ROLE_BROKERAGE_APPROVER = 'Brokerage Approver';
+const ROLE_CARE_CHARGE_MANAGER = 'Care Charge Manager';
+const ROLE_FINANCE_APPROVER = 'Finance Approver';
+const ROLE_FINANCE = 'Finance';
+
+export const userRoles = {
+  ROLE_BROKERAGE,
+  ROLE_BROKERAGE_APPROVER,
+  ROLE_CARE_CHARGE_MANAGER,
+  ROLE_FINANCE_APPROVER,
+  ROLE_FINANCE,
+};
+
+const allRoles = [
+  userRoles.ROLE_BROKERAGE,
+  userRoles.ROLE_BROKERAGE_APPROVER,
+  userRoles.ROLE_CARE_CHARGE_MANAGER,
+  userRoles.ROLE_FINANCE_APPROVER,
+  userRoles.ROLE_FINANCE,
+];
+
 export const roleAccessMatrix = {
-  brokerage: ['Brokerage Approver', 'Brokerage', 'Care Charge Manager', 'Finance Approver', 'Finance'],
-  'brokerage_mosaicid_assign-packages': [],
-  'care-package_guid_approval': [],
-  'care-package_guid_broker-care-charges': [],
-  'care-package_guid_broker-fnc': [],
-  'care-package_guid_broker-package': [],
-  'care-package_guid_care-charge': [],
-  'care-package_guid_core-package': [],
-  'care-package_guid_details': [],
-  'care-package_guid_history': [],
-  'care-package_guid_payment-history': [],
-  'care-package_guid_review': [],
-  payruns: [],
-  payruns_guid: [],
-  payruns_guid_invoice_id: [],
-  'service-user_search': [],
-  'service-user_guid_care-charges': [],
-  'service-user_guid_packages': [],
-  approvals: [],
-  'care-charges': ['Brokerage', 'Care Charge Manager'],
-  index: [],
+  brokerage: allRoles,
+  'brokerage_mosaicid_assign-packages': [
+    userRoles.ROLE_BROKERAGE_APPROVER,
+    userRoles.ROLE_BROKERAGE,
+    userRoles.ROLE_CARE_CHARGE_MANAGER,
+  ],
+  'care-package_guid_approval': [userRoles.ROLE_BROKERAGE, userRoles.ROLE_BROKERAGE_APPROVER],
+  'care-package_guid_broker-care-charges': [userRoles.ROLE_CARE_CHARGE_MANAGER],
+  'care-package_guid_broker-fnc': [userRoles.ROLE_BROKERAGE, userRoles.ROLE_BROKERAGE_APPROVER],
+  'care-package_guid_broker-package': [userRoles.ROLE_BROKERAGE, userRoles.ROLE_BROKERAGE_APPROVER],
+  'care-package_guid_care-charge': [userRoles.ROLE_BROKERAGE, userRoles.ROLE_BROKERAGE_APPROVER],
+  'care-package_guid_core-package': [userRoles.ROLE_BROKERAGE, userRoles.ROLE_BROKERAGE_APPROVER],
+  'care-package_guid_details': allRoles,
+  'care-package_guid_history': allRoles,
+  'care-package_guid_payment-history': allRoles,
+  'care-package_guid_review': [userRoles.ROLE_BROKERAGE, userRoles.ROLE_BROKERAGE_APPROVER],
+  payruns: [userRoles.ROLE_FINANCE, userRoles.ROLE_FINANCE_APPROVER],
+  payruns_guid: [userRoles.ROLE_FINANCE, userRoles.ROLE_FINANCE_APPROVER],
+  payruns_guid_invoice_id: [userRoles.ROLE_FINANCE, userRoles.ROLE_FINANCE_APPROVER],
+  'service-user_search': allRoles,
+  'service-user_guid_care-charges': allRoles,
+  'service-user_guid_packages': allRoles,
+  approvals: allRoles,
+  'care-charges': [userRoles.ROLE_BROKERAGE, userRoles.ROLE_BROKERAGE_APPROVER, userRoles.ROLE_CARE_CHARGE_MANAGER],
 };
