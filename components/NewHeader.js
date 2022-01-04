@@ -45,7 +45,7 @@ const initialLinks = [
 ];
 
 export const NewHeader = ({ roles }) => {
-  const links = initialLinks?.filter((ele) => ele.visibility?.filter((value) => roles?.includes(value)));
+  const links = roles.length ? initialLinks?.filter((ele) => ele.visibility?.filter((value) => roles?.includes(value))) : [];
   console.log(links);
   return (
     <Header

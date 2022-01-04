@@ -20,7 +20,7 @@ import {
   sendCareChargeAssessmentFile,
   updateCareChargeReclaim,
   useAssessmentCareCharges,
-  usePackageDetails
+  usePackageDetails,
 } from 'api';
 import withSession from 'lib/session';
 import { ProvisionalCareCharge } from 'components/Pages/CarePackages/CareCharge/ProvisionalCareCharge';
@@ -30,6 +30,7 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { CARE_CHARGES_ROUTE } from 'routes/RouteConstants';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
 import { accessRoutes } from '../../api/accessMatrix';
 
@@ -51,7 +52,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
       },
     };
   }
-  return { props: {} };
+  return { props: { roles: user.roles } };
 });
 
 const defaultValues = {
@@ -63,13 +64,13 @@ const defaultValues = {
   startDate: null,
   endDate: null,
   isOngoing: null,
-  status:null,
+  status: null,
   description: '',
   id: null,
   checkValidation: false,
 };
 
-const CareCharge = () => {
+const CareCharge = ({ roles }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { guid: carePackageId } = router.query;
@@ -111,7 +112,7 @@ const CareCharge = () => {
   const [assessmentFileId, assessmentFileName, assessmentFile] = watch([
     'assessmentFileId',
     'assessmentFileName',
-    'assessmentFile'
+    'assessmentFile',
   ]);
 
   const { isLoading: fileLoading } = useGetFile({
@@ -120,12 +121,13 @@ const CareCharge = () => {
     setter: (newFile) => setValue('assessmentFile', newFile),
   });
 
-  const resetValues = (data) => reset({
-    ...data,
-    assessmentFile,
-    assessmentFileName,
-    assessmentFileId
-  });
+  const resetValues = (data) =>
+    reset({
+      ...data,
+      assessmentFile,
+      assessmentFileName,
+      assessmentFileId,
+    });
 
   const [provisionalOriginalValues, setProvisionalOriginalValues] = useState();
   const [residential12OriginalValues, setResidential12OriginalValues] = useState();
@@ -246,6 +248,7 @@ const CareCharge = () => {
 
   return (
     <>
+      <NewHeader roles={roles ?? []} />
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Care Charges" title="Add financial assessment">

@@ -8,6 +8,7 @@ import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { usePayrunView, useHeldPaymentsView } from 'api/SWR/payRuns';
 import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
 import CreatePayRunModal from 'components/Pages/Payruns/CreatePayRunModal/CreatePayRunModal';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../api/handleRoleBasedAccess';
 import { accessRoutes, userRoles } from '../api/accessMatrix';
 
@@ -98,6 +99,7 @@ const Payruns = ({ roles }) => {
   };
   return (
     <Container>
+      <NewHeader roles={roles ?? []} />
       <CreatePayRunModal isOpen={isOpenedModal} onClose={() => setIsOpenedModal(false)} update={update} />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">

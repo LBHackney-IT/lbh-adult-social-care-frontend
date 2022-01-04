@@ -4,6 +4,7 @@ import { useCareCharge, useUsers } from 'api';
 import { NewCareChargePackages } from 'components';
 import { getLoggedInUser } from 'service';
 import withSession from 'lib/session';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from './api/handleRoleBasedAccess';
 import { accessRoutes } from './api/accessMatrix';
 
@@ -32,10 +33,10 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+  return { props: { roles: user.roles } };
 });
 
-const CareChargePackages = () => {
+const CareChargePackages = ({ roles }) => {
   const router = useRouter();
   const [filters, setFilters] = useState(initialFilters);
   const [pageNumber, setPageNumber] = useState(1);
@@ -62,17 +63,20 @@ const CareChargePackages = () => {
   const pushRoute = (route) => router.push(route);
 
   return (
-    <NewCareChargePackages
-      isLoading={isLoading || usersLoading}
-      setPageNumber={setPageNumber}
-      clearFilters={clearFilters}
-      pageNumber={pageNumber}
-      filters={filters}
-      modifiedByOptions={modifiedByOptions}
-      pushRoute={pushRoute}
-      searchResults={searchResults}
-      setFilters={setFilters}
-    />
+    <>
+      <NewHeader roles={roles ?? []} />
+      <NewCareChargePackages
+        isLoading={isLoading || usersLoading}
+        setPageNumber={setPageNumber}
+        clearFilters={clearFilters}
+        pageNumber={pageNumber}
+        filters={filters}
+        modifiedByOptions={modifiedByOptions}
+        pushRoute={pushRoute}
+        searchResults={searchResults}
+        setFilters={setFilters}
+      />
+    </>
   );
 };
 

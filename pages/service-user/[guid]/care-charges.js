@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
 import { accessRoutes } from '../../api/accessMatrix';
 
@@ -32,10 +33,10 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+  return { props: { roles: user.roles } };
 });
 
-const Packages = () => {
+const Packages = ({ roles }) => {
   const router = useRouter();
 
   const { guid: serviceUserId } = router.query;
@@ -44,6 +45,7 @@ const Packages = () => {
 
   return (
     <>
+      <NewHeader roles={roles ?? []} />
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
         <TitleSubtitleHeader subTitle="All package details" title="Full overview" />
@@ -57,20 +59,18 @@ const Packages = () => {
         )}
         <HorizontalSeparator height="48px" />
         {packages &&
-          packages
-            .map((p) => (
-              <CareDetails
-                isLoading={isLoading}
-                packageId={p.packageId}
-                title={p.packageType}
-                data={p.packageItems}
-                isS117Client={p.isS117Client}
-                isS117ClientConfirmed={p.isS117ClientConfirmed}
-                netTotal={p.netTotal}
-                packageStatus={p.packageStatus}
-              />
-            ))
-        }
+          packages.map((p) => (
+            <CareDetails
+              isLoading={isLoading}
+              packageId={p.packageId}
+              title={p.packageType}
+              data={p.packageItems}
+              isS117Client={p.isS117Client}
+              isS117ClientConfirmed={p.isS117ClientConfirmed}
+              netTotal={p.netTotal}
+              packageStatus={p.packageStatus}
+            />
+          ))}
       </Container>
     </>
   );

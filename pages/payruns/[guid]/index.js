@@ -9,6 +9,7 @@ import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
 import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
 import { accessRoutes } from '../../api/accessMatrix';
 
@@ -30,7 +31,7 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+  return { props: { roles: user.roles } };
 });
 
 const initialFilters = {
@@ -41,7 +42,7 @@ const initialFilters = {
   toDate: null,
 };
 
-const SinglePayRun = () => {
+const SinglePayRun = ({ roles }) => {
   const router = useRouter();
   const { guid: payRunId } = router.query;
   const [payRunItems, setPayRunItems] = useState([]);
@@ -89,6 +90,7 @@ const SinglePayRun = () => {
 
   return (
     <Container>
+      <NewHeader roles={roles ?? []} />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <HorizontalSeparator height="10px" />

@@ -5,6 +5,7 @@ import { getLoggedInUser } from 'service';
 import { getCarePackageApprovalRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { PackageApprovals } from 'components';
 import { useApprovals } from 'api';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from './api/handleRoleBasedAccess';
 import { accessRoutes } from './api/accessMatrix';
 
@@ -26,7 +27,7 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+  return { props: { roles: user.roles } };
 });
 
 const initialFilters = {
@@ -44,7 +45,7 @@ const initialFilters = {
 
 const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Approvals' }];
 
-const Approvals = () => {
+const Approvals = ({ roles }) => {
   const router = useRouter();
   const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState(initialFilters);
@@ -59,23 +60,26 @@ const Approvals = () => {
     postcode,
     lastName,
     hackneyId,
-    firstName
+    firstName,
   } = filters;
 
-  const params = useMemo(() => ({
-        fromDate: dateFrom ? dateFrom.toJSON() : null,
-        toDate: dateTo ? dateTo.toJSON() : null,
-        serviceUserName,
-        approverId,
-        packageType,
-        pageNumber,
-        packageStatus: status,
-        firstName,
-        lastName,
-        hackneyId,
-        dateOfBirth: dateOfBirth ? dateOfBirth.toJSON() : null,
-        postcode,
-      }), [filters, pageNumber]);
+  const params = useMemo(
+    () => ({
+      fromDate: dateFrom ? dateFrom.toJSON() : null,
+      toDate: dateTo ? dateTo.toJSON() : null,
+      serviceUserName,
+      approverId,
+      packageType,
+      pageNumber,
+      packageStatus: status,
+      firstName,
+      lastName,
+      hackneyId,
+      dateOfBirth: dateOfBirth ? dateOfBirth.toJSON() : null,
+      postcode,
+    }),
+    [filters, pageNumber]
+  );
 
   const { data, isLoading: approvalsLoading } = useApprovals({ params });
 
@@ -99,21 +103,24 @@ const Approvals = () => {
   }, []);
 
   return (
-    <PackageApprovals
-      title='Approvals'
-      breadcrumbs={breadcrumbs}
-      loading={approvalsLoading}
-      searchTerm={serviceUserName}
-      goToSearch={goToBrokerPortalSearch}
-      filters={filters}
-      clearFilter={clearFilters}
-      setFilters={setFilters}
-      pageNumber={pageNumber}
-      setPageNumber={setPageNumber}
-      items={approvals}
-      paginationData={pagingMetaData}
-      onRowClick={handleRowClick}
-    />
+    <>
+      <NewHeader roles={roles ?? []} />
+      <PackageApprovals
+        title="Approvals"
+        breadcrumbs={breadcrumbs}
+        loading={approvalsLoading}
+        searchTerm={serviceUserName}
+        goToSearch={goToBrokerPortalSearch}
+        filters={filters}
+        clearFilter={clearFilters}
+        setFilters={setFilters}
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        items={approvals}
+        paginationData={pagingMetaData}
+        onRowClick={handleRowClick}
+      />
+    </>
   );
 };
 

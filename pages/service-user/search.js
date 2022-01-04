@@ -14,6 +14,7 @@ import SearchResultList from 'components/Pages/Brokerage/SearchResultList';
 import axios from 'axios';
 import { addNotification } from 'reducers/notificationsReducer';
 import withSession from 'lib/session';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../api/handleRoleBasedAccess';
 import { accessRoutes } from '../api/accessMatrix';
 
@@ -49,11 +50,10 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+  return { props: { roles: user.roles } };
 });
 
-
-const BrokerageSearch = () => {
+const BrokerageSearch = ({ roles }) => {
   const router = useRouter();
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -136,8 +136,7 @@ const BrokerageSearch = () => {
 
   useEffect(() => {
     if (!user) {
-      axios.get('/api/user')
-        .then(res => dispatch(userLogin({ user: res.data })));
+      axios.get('/api/user').then((res) => dispatch(userLogin({ user: res.data })));
     }
   }, [user]);
 
@@ -151,6 +150,7 @@ const BrokerageSearch = () => {
 
   return (
     <Container className="search-service-user">
+      <NewHeader roles={roles ?? []} />
       <Loading isLoading={fullLoading} />
       <DynamicBreadcrumbs additionalBreadcrumbs={[{ text: 'Search for a service user' }]} />
       <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
@@ -176,9 +176,9 @@ const BrokerageSearch = () => {
                 let newCursor;
                 if (paginationInfo.pageNumber < page) {
                   newCursor = nextCursor;
-                  const isNewPreviousCursor = !previousCursors.some(prevCursor => prevCursor === nextCursor);
+                  const isNewPreviousCursor = !previousCursors.some((prevCursor) => prevCursor === nextCursor);
                   if (isNewPreviousCursor) {
-                    setPreviousCursors(prevState => [...prevState, nextCursor]);
+                    setPreviousCursors((prevState) => [...prevState, nextCursor]);
                   }
                 } else {
                   newCursor = previousCursors[page - 1];

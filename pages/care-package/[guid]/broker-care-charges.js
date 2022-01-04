@@ -33,6 +33,7 @@ import {
   ProvisionalAnnouncement,
   S117Announcement,
 } from 'components/Pages/CarePackages/BrokerCareCharge';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
 import { accessRoutes } from '../../api/accessMatrix';
 
@@ -54,7 +55,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
       },
     };
   }
-  return { props: {} };
+  return { props: { roles: user.roles } };
 });
 
 const initialValues = {
@@ -71,7 +72,7 @@ const initialValues = {
   id: null,
 };
 
-const CareCharge = () => {
+const CareCharge = ({ roles }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -227,6 +228,7 @@ const CareCharge = () => {
 
   return (
     <>
+      <NewHeader roles={roles ?? []} />
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Care Charges" title="Build a care package" />

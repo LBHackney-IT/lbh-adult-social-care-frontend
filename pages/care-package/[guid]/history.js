@@ -5,6 +5,7 @@ import withSession from 'lib/session';
 import { usePackageHistory } from 'api';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { getCarePackageDetailsRoute } from 'routes/RouteConstants';
+import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
 import { accessRoutes } from '../../api/accessMatrix';
 
@@ -26,10 +27,10 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+  return { props: { roles: user.roles } };
 });
 
-const History = () => {
+const History = ({ roles }) => {
   const router = useRouter();
   const { guid: packageId } = router.query;
   const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
@@ -42,6 +43,7 @@ const History = () => {
 
   return (
     <div>
+      <NewHeader roles={roles ?? []} />
       <Loading isLoading={coreLoading || isLoading} />
       <DynamicBreadcrumbs additionalBreadcrumbs={breadcrumbs} />
       <Container maxWidth="1080px" margin="10px auto 60px" padding="0 60px">
