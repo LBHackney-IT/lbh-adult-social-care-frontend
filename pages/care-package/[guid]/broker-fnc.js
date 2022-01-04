@@ -37,6 +37,8 @@ import {
   NursingHasFNC,
   NursingSchedule,
 } from 'components/Pages/CarePackages/FundedNusringCare';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -44,6 +46,14 @@ export const getServerSideProps = withSession(async ({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_BROKER_FNC)) {
+    return {
+      redirect: {
+        destination: '/401',
         permanent: false,
       },
     };

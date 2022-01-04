@@ -28,6 +28,8 @@ import {
   SupplierSelection,
 } from 'components/Pages/CarePackages/BrokerPackage/index';
 import NewAdditionalNeedModal from 'components/Pages/CarePackages/BrokerPackage/NewAdditionalNeedModal/NewAdditionalNeedModal';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -35,6 +37,14 @@ export const getServerSideProps = withSession(async ({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_BROKER_PACKAGE)) {
+    return {
+      redirect: {
+        destination: '/401',
         permanent: false,
       },
     };

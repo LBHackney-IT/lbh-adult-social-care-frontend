@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { assignToBroker, useServiceUserSearch } from 'api';
 import { Container, HorizontalSeparator, Pagination } from 'components';
 import { useRouter } from 'next/router';
-import { dateToIsoString, getFormData } from 'service';
+import { dateToIsoString, getFormData, getLoggedInUser } from 'service';
 import { getCorePackageRoute } from 'routes/RouteConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, userLogin } from 'reducers/userReducer';
@@ -13,6 +13,9 @@ import SearchResultCount from 'components/SearchResultCount';
 import SearchResultList from 'components/Pages/Brokerage/SearchResultList';
 import axios from 'axios';
 import { addNotification } from 'reducers/notificationsReducer';
+import withSession from 'lib/session';
+import { handleRoleBasedAccess } from '../api/handleRoleBasedAccess';
+import { accessRoutes } from '../api/accessMatrix';
 
 const initialFilters = {
   postcode: '',
@@ -27,6 +30,28 @@ const inputs = [
   { label: 'Last name', key: 'lastName' },
   { label: 'Hackney ID', key: 'hackneyId' },
 ];
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.SERVICE_USER_SEARCH)) {
+    return {
+      redirect: {
+        destination: '/401',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+});
+
 
 const BrokerageSearch = () => {
   const router = useRouter();

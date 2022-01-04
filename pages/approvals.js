@@ -5,6 +5,8 @@ import { getLoggedInUser } from 'service';
 import { getCarePackageApprovalRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { PackageApprovals } from 'components';
 import { useApprovals } from 'api';
+import { handleRoleBasedAccess } from './api/handleRoleBasedAccess';
+import { accessRoutes } from './api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -12,6 +14,14 @@ export const getServerSideProps = withSession(({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.APPROVALS)) {
+    return {
+      redirect: {
+        destination: '/401',
         permanent: false,
       },
     };

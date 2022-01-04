@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import { usePackageSummary } from 'api';
 import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { ReviewPackageDetails } from 'components';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -11,6 +13,14 @@ export const getServerSideProps = withSession(({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_APPROVAL)) {
+    return {
+      redirect: {
+        destination: '/401',
         permanent: false,
       },
     };
@@ -39,20 +49,23 @@ const ApprovalPackageDetail = () => {
       setOpenedPopup={setOpenedPopup}
       openedPopup={openedPopup}
       showEditActions
-      buttons={data.status && data.status !== 4 && [
-        {
-          title: 'Decline',
-          onClick: () => setOpenedPopup('decline'),
-          secondary: true,
-          color: 'red',
-          outline: true,
-        },
-        {
-          title: 'Approve',
-          onClick: () => setOpenedPopup('approve'),
-          className: 'disable-shadow'
-        },
-      ]}
+      buttons={
+        data.status &&
+        data.status !== 4 && [
+          {
+            title: 'Decline',
+            onClick: () => setOpenedPopup('decline'),
+            secondary: true,
+            color: 'red',
+            outline: true,
+          },
+          {
+            title: 'Approve',
+            onClick: () => setOpenedPopup('approve'),
+            className: 'disable-shadow',
+          },
+        ]
+      }
       submitButtonText="Approve"
       goBack={router.back}
       summaryData={data}

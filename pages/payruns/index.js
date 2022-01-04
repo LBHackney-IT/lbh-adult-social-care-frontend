@@ -1,23 +1,15 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import {
-  Breadcrumbs,
-  Button,
-  Container,
-  Heading,
-  Hint,
-  HorizontalSeparator,
-  Loading,
-  Tab,
-  Tabs,
-} from 'components';
+import { Breadcrumbs, Button, Container, Heading, Hint, HorizontalSeparator, Loading, Tab, Tabs } from 'components';
 import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { usePayrunView, useHeldPaymentsView } from 'api/SWR/payRuns';
 import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
 import CreatePayRunModal from 'components/Pages/Payruns/CreatePayRunModal/CreatePayRunModal';
+import { handleRoleBasedAccess } from '../api/handleRoleBasedAccess';
+import { accessRoutes, userRoles } from '../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -29,7 +21,15 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.PAYRUNS)) {
+    return {
+      redirect: {
+        destination: '/401',
+        permanent: false,
+      },
+    };
+  }
+  return { props: { roles: user.roles } };
 });
 
 const initialFilters = {
@@ -43,7 +43,13 @@ const initialFilters = {
 const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Finance' }];
 const tabs = ['Pay Runs', 'Held Payments', 'Awaiting Approval', 'Approved'];
 
-const Payruns = () => {
+const Payruns = ({ roles }) => {
+  const getTabs = () => {
+    if (roles.includes(userRoles.ROLE_FINANCE_APPROVER)) {
+      return tabs;
+    }
+    return [tabs[0], tabs[1]];
+  };
   const [pageNumber, setPageNumber] = useState(1);
   const [heldPageNumber, setHeldPageNumber] = useState(1);
   const [tabView, setTabView] = useState(tabs[0]);
@@ -110,7 +116,7 @@ const Payruns = () => {
       </Container>
       <HorizontalSeparator height="30px" />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
-        <Tabs tabs={tabs} callback={(index) => setTabView(tabs[index])}>
+        <Tabs tabs={getTabs()} callback={(index) => setTabView(tabs[index])}>
           <Tab>
             <Loading className="loading" isLoading={isLoading} />
             {payrunData.length > 0 || isLoading ? (

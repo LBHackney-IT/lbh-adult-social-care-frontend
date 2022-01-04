@@ -5,6 +5,8 @@ import { DynamicBreadcrumbs, Container, HorizontalSeparator, Loading, Heading, H
 import { getEnGBFormattedDate, usePayRunInvoice } from 'api';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { useRouter } from 'next/router';
+import { handleRoleBasedAccess } from '../../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -12,6 +14,14 @@ export const getServerSideProps = withSession(({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.PAYRUNS_GUID_INVOICE_ID)) {
+    return {
+      redirect: {
+        destination: '/401',
         permanent: false,
       },
     };

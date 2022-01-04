@@ -33,6 +33,8 @@ import {
   ProvisionalAnnouncement,
   S117Announcement,
 } from 'components/Pages/CarePackages/BrokerCareCharge';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -40,6 +42,14 @@ export const getServerSideProps = withSession(async ({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_BROKER_CARE_CHARGES)) {
+    return {
+      redirect: {
+        destination: '/401',
         permanent: false,
       },
     };

@@ -10,6 +10,8 @@ import {
   getHistoryRoute,
   getPaymentHistoryRoute,
 } from 'routes/RouteConstants';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -17,6 +19,14 @@ export const getServerSideProps = withSession(({ req }) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_DETAILS)) {
+    return {
+      redirect: {
+        destination: '/401',
         permanent: false,
       },
     };
