@@ -4,7 +4,7 @@ import { SWRConfig } from 'swr';
 import '/styles/globals.scss';
 import { Provider } from 'react-redux';
 import { fetcher } from 'api';
-import { CustomNotification, MainHeader } from 'components';
+import { CustomNotification } from 'components';
 import { useRouter } from 'next/router';
 import {
   APP_SERVICE_ROUTES_MAP,
