@@ -45,10 +45,13 @@ const initialLinks = [
 ];
 
 export const NewHeader = ({ roles, noLinks }) => {
-  const links = roles.length
-    ? initialLinks?.filter((ele) => ele.visibility?.filter((value) => roles?.includes(value)))
-    : [];
-  console.log(links);
+  const links = [];
+  initialLinks.forEach((ele) => {
+    const intersection = ele.visibility.filter((value) => roles.includes(value));
+    if (intersection?.length > 0) {
+      links.push(ele);
+    }
+  });
   const displayLinks = noLinks
     ? []
     : [
