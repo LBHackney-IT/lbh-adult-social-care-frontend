@@ -8,7 +8,6 @@ import { userLogin } from 'reducers/userReducer';
 import { getLoggedInUser } from 'service';
 import { NewHeader } from 'components/NewHeader';
 import withSession from 'lib/session';
-import { changeHeader, resetHeader } from '../reducers/headerReducer';
 
 const hackneyAuthLink = 'https://auth.hackney.gov.uk/auth?redirect_uri=';
 
@@ -52,17 +51,9 @@ const Login = () => {
     })();
   }, []);
 
-  useEffect(() => {
-    dispatch(changeHeader({ links: [] }));
-
-    return () => {
-      dispatch(resetHeader());
-    };
-  }, []);
-
   return (
     <>
-      <NewHeader roles={[]} noLinks/>
+      <NewHeader roles={[]} noLinks />
       <div className="login-page">
         {!user?.isLoggedIn && (
           <div className="login-page__form-container">
