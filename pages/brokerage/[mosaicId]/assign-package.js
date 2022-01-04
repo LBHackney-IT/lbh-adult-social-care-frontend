@@ -45,16 +45,6 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-
-  console.log(req);
-  if (!handleRoleBasedAccess(user.roles, req.url)) {
-    return {
-      redirect: {
-        destination: '/404',
-        permanent: false,
-      },
-    };
-  }
   return { props: {} };
 });
 
