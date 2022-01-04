@@ -49,7 +49,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
   if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_BROKER_CARE_CHARGES)) {
     return {
       redirect: {
-        destination: '/404',
+        destination: '/401',
         permanent: false,
       },
     };

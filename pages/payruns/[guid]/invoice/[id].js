@@ -21,7 +21,7 @@ export const getServerSideProps = withSession(({ req }) => {
   if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.PAYRUNS_GUID_INVOICE_ID)) {
     return {
       redirect: {
-        destination: '/404',
+        destination: '/401',
         permanent: false,
       },
     };

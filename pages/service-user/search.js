@@ -44,7 +44,7 @@ export const getServerSideProps = withSession(({ req }) => {
   if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.SERVICE_USER_SEARCH)) {
     return {
       redirect: {
-        destination: '/404',
+        destination: '/401',
         permanent: false,
       },
     };

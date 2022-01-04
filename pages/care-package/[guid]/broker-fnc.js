@@ -53,7 +53,7 @@ export const getServerSideProps = withSession(async ({ req }) => {
   if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_BROKER_FNC)) {
     return {
       redirect: {
-        destination: '/404',
+        destination: '/401',
         permanent: false,
       },
     };
