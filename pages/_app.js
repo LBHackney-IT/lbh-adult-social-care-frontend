@@ -42,7 +42,6 @@ export default function App ({ Component, pageProps }) {
   return (
     <Provider store={store}>
       <SWRConfig value={swrOptions}>
-        <MainHeader />
         <CustomNotification />
         <Component {...pageProps} />
       </SWRConfig>
