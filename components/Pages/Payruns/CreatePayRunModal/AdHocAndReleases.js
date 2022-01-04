@@ -81,7 +81,7 @@ export const AdHocAndReleases = ({ createPayrun, isLoading, onClose }) => {
                 date={field.value ? new Date(field.value) : null}
                 setDate={field.onChange}
                 {...field}
-                minDate={lastCycleDate && addDays(new Date(lastCycleDate), 1)}
+                minDate={lastCycleDate && new Date(lastCycleDate)}
                 floatingCalendar
                 calendarStylePosition={{ top: -132, left: 32 }}
                 hasClearButton
