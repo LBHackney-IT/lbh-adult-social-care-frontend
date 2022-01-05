@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { dateToIsoString, getFormDataWithFile, getLoggedInUser, useGetFile } from 'service';
+import {
+  dateToIsoString,
+  getFormDataWithFile,
+  getLoggedInUser,
+  useGetFile,
+  useRedirectIfPackageNotExist,
+} from 'service';
 import {
   Button,
   DynamicBreadcrumbs,
@@ -33,6 +39,7 @@ import {
   NursingSchedule,
 } from 'components/Pages/CarePackages/FundedNusringCare';
 import { NewHeader } from 'components/NewHeader';
+import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
 import { accessRoutes } from '../../api/accessMatrix';
 
@@ -61,9 +68,11 @@ const BrokerFNC = ({ roles }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { guid: carePackageId } = router.query;
-
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [packageStatus, setPackageStatus] = useState();
   const [isRequestBeingSent, setIsRequestBeingSent] = useState(false);
   const { data: details, isLoading: detailsLoading } = usePackageDetails(carePackageId);
+  const { data: packageInfo } = useRedirectIfPackageNotExist();
 
   const { data: fncData, isLoading: fncLoading } = usePackageFnc(carePackageId);
   const { data: activeFncPrice } = usePackageActiveFncPrice(carePackageId);
@@ -110,6 +119,12 @@ const BrokerFNC = ({ roles }) => {
   }, [activeFncPrice]);
 
   useEffect(() => {
+    if (packageInfo) {
+      setPackageStatus(packageInfo.status);
+    }
+  }, [packageInfo]);
+
+  useEffect(() => {
     if (!fncData.startDate) return;
 
     setValue('startDate', fncData.startDate);
@@ -135,7 +150,11 @@ const BrokerFNC = ({ roles }) => {
 
   const updatePackage = async (data = {}) => {
     if (isDirty) {
-      handleFormSubmission(data);
+      if (packageStatus && parseInt(packageStatus, 10) === 3) {
+        setDialogOpen(true);
+      } else {
+        handleFormSubmission(data);
+      }
     } else {
       router.push(getCareChargesRoute(carePackageId));
     }
@@ -169,6 +188,11 @@ const BrokerFNC = ({ roles }) => {
   return (
     <>
       <NewHeader roles={roles ?? []} />
+      <ResetApprovedPackageDialog
+        isOpen={isDialogOpen}
+        onClose={() => setDialogOpen(false)}
+        handleConfirmation={handleFormSubmission}
+      />
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <TitleSubtitleHeader subTitle="Funded Nursing Care" title="Build a care package" />
