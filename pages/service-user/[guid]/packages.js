@@ -86,6 +86,7 @@ const Packages = ({ roles }) => {
             )
             .map((p) => (
               <CareDetails
+                key={p.packageId}
                 isLoading={isLoading}
                 packageId={p.packageId}
                 title={p.packageType}
