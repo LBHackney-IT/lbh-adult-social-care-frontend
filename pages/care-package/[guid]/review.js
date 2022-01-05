@@ -6,7 +6,9 @@ import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { ReviewPackageDetails } from 'components';
 import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
-import { accessRoutes } from '../../api/accessMatrix';
+import { accessRoutes, userRoles} from '../../api/accessMatrix';
+
+
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -37,7 +39,7 @@ const ReviewPackageDetailsPage = ({ roles }) => {
 
   const { isLoading: coreLoading } = useRedirectIfPackageNotExist();
 
-  const isNotApprovedStatus = data?.status < 3;
+  const isNotApprovedStatus = data?.status < 3 && roles.includes(userRoles.ROLE_BROKERAGE);
 
   return (
     <>
