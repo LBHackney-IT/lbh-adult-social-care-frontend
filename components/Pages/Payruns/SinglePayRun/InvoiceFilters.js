@@ -5,7 +5,6 @@ import ResetFilterButton from '../../../ResetFilterButton';
 
 const statusOptions = [
   { text: 'All', value: '' },
-  { text: 'Draft', value: '1' },
   { text: 'Held', value: '2' },
   { text: 'Released', value: '3' },
   { text: 'Rejected', value: '4' },
