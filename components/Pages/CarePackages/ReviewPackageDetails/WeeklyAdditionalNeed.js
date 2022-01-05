@@ -9,7 +9,7 @@ const WeeklyAdditionalNeed = ({ data, goToPackage }) => (
     <PackageInfo
       containerId='weekly-additional-need'
       headerTitle='Weekly Additional Need'
-      items={data?.additionalWeeklyNeeds1}
+      items={data?.additionalWeeklyNeeds}
     />
     {data?.additionalWeeklyCost > 0 && (
       <BrokerageBorderCost totalCost={data?.additionalWeeklyCost} totalCostHeader='Total (Net Off)' />
