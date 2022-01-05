@@ -6,6 +6,7 @@ import Hint from '../lettering/Hint';
 import Label from '../lettering/Label';
 import { Container } from '../Layout/Container';
 import { COLORS } from '../../../constants/variables';
+import { getDateWithoutTimezone } from '../../../api';
 
 const initialDateState = {
   value: '',
@@ -88,7 +89,7 @@ const DatePicker = ({
   const getValidYear = (dayValue) => (dayValue ? `20${dayValue}` : 0);
 
   const onChangeDay = (value) => {
-    setDate(new Date(date?.getFullYear() || 0, date?.getMonth() || 0, getValidDay(value)));
+    setDate(getDateWithoutTimezone(new Date(date?.getFullYear() || 0, date?.getMonth() || 0, getValidDay(value))));
   };
 
   const onChangeMonth = (value) => {
@@ -103,11 +104,11 @@ const DatePicker = ({
       const lastDayInMonth = lastDayOfMonth(validatedDate).getDate();
       validatedDate = dateFncSetDate(validatedDate, lastDayInMonth);
     }
-    setDate(validatedDate);
+    setDate(getDateWithoutTimezone(validatedDate));
   };
 
   const onChangeYear = (value) => {
-    setDate(new Date(getValidYear(value), date?.getMonth() || 0, date?.getDate() || 1));
+    setDate(getDateWithoutTimezone(new Date(getValidYear(value), date?.getMonth() || 0, date?.getDate() || 1)));
   };
 
   const inputs = [
@@ -206,7 +207,10 @@ const DatePicker = ({
         })}
         {IconComponent && (
           <div className="date-picker__calendar-container">
-            <div className="date-picker__additional-action" style={{ background: isOpenCalendar ? COLORS['light-blue'] : '' }}>
+            <div
+              className="date-picker__additional-action"
+              style={{ background: isOpenCalendar ? COLORS['light-blue'] : '' }}
+            >
               <IconComponent onClick={clickIcon} className={iconClassName} />
             </div>
             {isOpenCalendar && (

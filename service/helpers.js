@@ -1,5 +1,7 @@
+import React from 'react';
 import { add, compareDesc, format } from 'date-fns';
-import { isServer } from '../api/Utils/FuncUtils';
+import { getIsoDateWithoutTimezone, isServer } from '../api';
+
 import { currency } from '../constants/strings';
 
 const chr4 = () => Math.random().toString(16).slice(-4);
@@ -7,6 +9,19 @@ const chr4 = () => Math.random().toString(16).slice(-4);
 export const uniqueID = () => `${chr4() + chr4()}-${chr4()}-${chr4()}-${chr4()}-${chr4()}${chr4()}${chr4()}`;
 
 export const dateStringToDate = (dateString) => (dateString ? new Date(dateString) : null);
+
+export const addIndentToString = (string) => {
+  const arrayOfWords = string.split('\n');
+  const newArray = [];
+  arrayOfWords.forEach((item, index) => {
+    const newElement = [item];
+    if (index !== arrayOfWords.length - 1) newElement.push(<br />);
+
+    newArray.push(...newElement);
+  });
+
+  return newArray;
+};
 
 export const compareDescendingDMY = (startDate, endDate) => {
   const resetStartDate = new Date(startDate);
@@ -32,7 +47,7 @@ export const incrementDate = (incrementTime, date = new Date()) => {
 
 export const formatDate = (date, formatString = 'dd.MM.yy') => date && format(new Date(date), formatString);
 
-export const dateToIsoString = (date) => date ? new Date(date).toISOString() : null;
+export const dateToIsoString = (date) => (date ? getIsoDateWithoutTimezone(new Date(date)) : null);
 
 export const getUrlFromFile = async (file) => {
   if (isServer() || !file) return;
@@ -41,12 +56,10 @@ export const getUrlFromFile = async (file) => {
   return window.URL.createObjectURL(file);
 };
 
-export const urlToFile = (url, filename) => (
+export const urlToFile = (url, filename) =>
   fetch(url)
     .then((res) => res.arrayBuffer())
-    .then((buf) =>
-      new File([buf], filename, { type: (url.match(/^data:([^;]+);/) || '')[1] }))
-);
+    .then((buf) => new File([buf], filename, { type: (url.match(/^data:([^;]+);/) || '')[1] }));
 
 export const formatDocumentInfo = async ({ fileName, href }) => {
   if (!fileName) return;
@@ -65,7 +78,7 @@ export const formatNumber = (x, options = { isAbsolute: false }) => {
   if (!Number.isNaN(x) && x) return options.isAbsolute ? Math.abs(x) : x;
 
   return 0;
-}
+};
 
 export const getNumberWithPreSign = (number) => {
   const minusSign = number < 0 ? '-' : '';
@@ -73,7 +86,11 @@ export const getNumberWithPreSign = (number) => {
 };
 
 export const getNumberWithCommas = (x) =>
-  x === 0 ? x : Number(x)?.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  x === 0
+    ? x
+    : Number(x)
+        ?.toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 export const formatNumberToCurrency = (number) => {
   const minusSign = number < 0 ? '-' : '';
@@ -81,9 +98,10 @@ export const formatNumberToCurrency = (number) => {
 };
 
 export const removeEmpty = (obj) => {
-  Object.keys(obj).forEach(k =>
-    (obj[k] && typeof obj[k] === 'object') && removeEmpty(obj[k]) ||
-    (!obj[k] && obj[k] !== undefined) && delete obj[k]
+  Object.keys(obj).forEach(
+    (k) =>
+      (obj[k] && typeof obj[k] === 'object' && removeEmpty(obj[k])) ||
+      (!obj[k] && obj[k] !== undefined && delete obj[k])
   );
   return obj;
 };
