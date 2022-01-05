@@ -84,10 +84,12 @@ export const Table = ({
                 {rowsHaveHeader ? (
                   <td colSpan={row.cells.length}>
                     <table>
+                      <tbody>
                       <tr className="govuk-table__row-header">
                         <td colSpan={row.cells.length}>{rowsHaveHeader({ ...row.original })}</td>
                       </tr>
                       <tr>{rowElement}</tr>
+                      </tbody>
                     </table>
                   </td>
                 ) : (
