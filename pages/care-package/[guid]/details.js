@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePackageDetails, usePackageSummary } from 'api';
 import { useRouter } from 'next/router';
 import { ReviewPackageDetails } from 'components';
@@ -6,13 +6,14 @@ import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import withSession from 'lib/session';
 import {
   getCarePackageCareChargeRoute,
+  getCarePackageReviewRoute,
   getCorePackageRoute,
   getHistoryRoute,
   getPaymentHistoryRoute,
 } from 'routes/RouteConstants';
 import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
-import { accessRoutes } from '../../api/accessMatrix';
+import { accessRoutes, userRoles } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -38,6 +39,13 @@ export const getServerSideProps = withSession(({ req }) => {
 const PackageDetailsPage = ({ roles }) => {
   const router = useRouter();
   const carePackageId = router.query.guid;
+
+  useEffect(() => {
+    if (!roles.includes(userRoles.ROLE_BROKERAGE)) {
+      router.push(getCarePackageReviewRoute(carePackageId));
+    }
+  }, []);
+
   const { data, isLoading: packageSummaryLoading } = usePackageSummary(carePackageId);
   const {
     data: { startDate, endDate },

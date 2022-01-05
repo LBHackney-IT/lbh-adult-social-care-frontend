@@ -69,7 +69,7 @@ const Packages = ({ roles }) => {
             )
             .map((p, index) => (
               <>
-                <PackageRequest packageRequest={p} />
+                <PackageRequest packageRequest={p} roles={roles}/>
                 {index < packages.length - 1 && <HorizontalSeparator height="20px" />}
               </>
             ))}

@@ -46,6 +46,7 @@ const tabs = ['Pay Runs', 'Held Payments', 'Awaiting Approval', 'Approved'];
 
 const Payruns = ({ roles }) => {
   const [pageNumber, setPageNumber] = useState(1);
+  const isBrokerage = roles.includes(userRoles.ROLE_FINANCE);
   const [heldPageNumber, setHeldPageNumber] = useState(1);
   const [tabView, setTabView] = useState(tabs[0]);
   const [isOpenedModal, setIsOpenedModal] = useState(false);
@@ -102,9 +103,11 @@ const Payruns = ({ roles }) => {
           <HorizontalSeparator height="30px" />
           <Container display="flex" justifyContent="space-between">
             <Heading size="xl">Pay Runs</Heading>
-            <Button onClick={() => setIsOpenedModal(true)} largeButton>
-              New pay run
-            </Button>
+            {isBrokerage && (
+              <Button onClick={() => setIsOpenedModal(true)} largeButton>
+                New pay run
+              </Button>
+            )}
           </Container>
           <HorizontalSeparator height="16px" />
           <PayrunFilters filters={filters} setFilters={setFilters} clearFilter={clearFilters} tabView={tabView} />
