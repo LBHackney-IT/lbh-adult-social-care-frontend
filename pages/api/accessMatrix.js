@@ -78,7 +78,7 @@ export const roleAccessMatrix = {
   'care-package_guid_details': allRoles,
   'care-package_guid_history': allRoles,
   'care-package_guid_payment-history': allRoles,
-  'care-package_guid_review': [userRoles.ROLE_BROKERAGE, userRoles.ROLE_FINANCE, userRoles.ROLE_FINANCE_APPROVER],
+  'care-package_guid_review': allRoles,
   payruns: [userRoles.ROLE_FINANCE, userRoles.ROLE_FINANCE_APPROVER],
   payruns_guid: [userRoles.ROLE_FINANCE, userRoles.ROLE_FINANCE_APPROVER],
   payruns_guid_invoice_id: allRoles,
