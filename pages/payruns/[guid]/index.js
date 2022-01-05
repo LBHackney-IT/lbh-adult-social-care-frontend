@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import withSession from 'lib/session';
 import { formatDate, getLoggedInUser } from 'service';
-import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
+import { Breadcrumbs, Container, Heading, HorizontalSeparator, InsetText, Loading } from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { useInvoiceListView, getPayrunInsight } from 'api/SWR/payRuns';
@@ -104,6 +104,7 @@ const SinglePayRun = ({ roles }) => {
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px">
         <Loading isLoading={isLoading} />
+        {!payRunItems || (payRunItems.length === 0 && <InsetText>No invoices found</InsetText>)}
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
