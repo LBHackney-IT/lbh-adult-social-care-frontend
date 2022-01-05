@@ -58,7 +58,7 @@ const breadcrumbs = [
 const AssignPackage = ({ roles }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { hackneyId } = router.query;
+  const { mosaicId:hackneyId } = router.query;
   const { data: serviceUser, isLoading: serviceUserLoading } = useServiceUser(hackneyId);
   const { options: packageTypeOptions, isLoading: lookupsLoading } = useLookups('packageType');
   const { options: brokerOptions, isLoading: brokersLoading } = useBrokers();
