@@ -8,9 +8,7 @@ import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/ser
 import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
 
 const statusOptions = [
-  { text: 'Draft', value: 1 },
   { text: 'Held', value: 2 },
-  { text: 'Released', value: 3 },
   { text: 'Rejected', value: 4 },
   { text: 'Accepted', value: 5 },
 ];
