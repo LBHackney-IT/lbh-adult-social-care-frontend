@@ -63,7 +63,7 @@ export const Table = ({
         </thead>
       )}
       <tbody className={`govuk-table__body ${bodyClassName}`} {...getTableBodyProps()}>
-        {rows.map((row, index) => {
+        {rows.map((row) => {
           prepareRow(row);
 
           const rowElement = row.cells.map((cell) => (
@@ -71,8 +71,11 @@ export const Table = ({
               {cell.render('Cell')}
             </td>
           ));
+
+          const key = `${row.values.startDate}${row.id}`
+          
           return (
-            <React.Fragment key={index}>
+            <React.Fragment key={key}>
               <tr
                 onClick={onRowClick ? () => onRowClick(row.original) : () => {}}
                 className={`govuk-table__row${rowsHaveHeader ? ' with-row-header' : ''}`}
