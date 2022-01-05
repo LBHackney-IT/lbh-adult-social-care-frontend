@@ -25,7 +25,7 @@ const InsightButtons = ({
   hasInvoices,
   paidBy,
   paidOn,
-  isApprover
+  isApprover,
 }) => {
   const [isFileDownloaded, setIsFileDownloaded] = useState(isCedarFileDownloaded);
 
@@ -86,7 +86,7 @@ const InsightButtons = ({
   const downloadFileComponent = useMemo(
     () => (
       <ViewDocument
-        className='link-button green'
+        className="link-button green"
         getDocumentRequest={async () => {
           const file = await getPayrunCedarFile(payRunId);
           updateData();
@@ -111,7 +111,9 @@ const InsightButtons = ({
     <>
       {[1, 2, 3].includes(status) && (
         <Container {...containerProps}>
-          <Button onClick={handleSubmit}>Submit</Button>
+          <Button onClick={handleSubmit} disabled={!hasInvoices}>
+            Submit
+          </Button>
           <HorizontalSeparator height="10px" />
           <Container alignSelf="center">
             <Link onClick={handleArchive} noVisited>
@@ -207,6 +209,5 @@ const InsightButtons = ({
     </>
   );
 };
-
 
 export default memo(InsightButtons);
