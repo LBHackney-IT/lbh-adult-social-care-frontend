@@ -2,12 +2,16 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import { getCarePackageApprovalRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
+import {
+  getCarePackageApprovalRoute,
+  getCarePackageReviewRoute,
+  SERVICE_USER_SEARCH_ROUTE,
+} from 'routes/RouteConstants';
 import { PackageApprovals } from 'components';
 import { useApprovals } from 'api';
 import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from './api/handleRoleBasedAccess';
-import { accessRoutes } from './api/accessMatrix';
+import { accessRoutes, userRoles } from './api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -99,7 +103,11 @@ const Approvals = ({ roles }) => {
   const clearFilters = useCallback(() => setFilters(initialFilters), []);
 
   const handleRowClick = useCallback((rowInfo) => {
-    router.push(getCarePackageApprovalRoute(rowInfo.id));
+    if (roles.includes(userRoles.ROLE_BROKERAGE_APPROVER)) {
+      router.push(getCarePackageApprovalRoute(rowInfo.id));
+    } else {
+      router.push(getCarePackageReviewRoute(rowInfo.id));
+    }
   }, []);
 
   return (
