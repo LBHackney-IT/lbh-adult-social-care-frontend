@@ -150,7 +150,7 @@ const InsightButtons = ({
           </Container>
         </Container>
       )}
-      {status === 5 && isFileDownloaded && (
+      {status === 5 && isFileDownloaded && isApprover && (
         <Container {...containerProps}>
           <Button onClick={handleMarkAsPaid}>Mark as paid</Button>
           <HorizontalSeparator height="10px" />
