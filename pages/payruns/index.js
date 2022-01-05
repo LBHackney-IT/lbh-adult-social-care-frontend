@@ -92,7 +92,6 @@ const Payruns = ({ roles }) => {
     update();
     updateHeldData();
   };
-  console.log(roles);
   return (
     <Container>
       <NewHeader roles={roles ?? []} />
