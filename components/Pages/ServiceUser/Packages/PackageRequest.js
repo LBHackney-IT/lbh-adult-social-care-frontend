@@ -7,16 +7,21 @@ import {
 } from 'service';
 import { CaretDownIcon } from 'components/Icons';
 import { useRouter } from 'next/router';
-import { getCorePackageRoute } from 'routes/RouteConstants';
+import { getCarePackageReviewRoute, getCorePackageRoute } from 'routes/RouteConstants';
 import { getDocumentRequest } from 'api';
-import { Button, Collapse, Container, Heading, HorizontalSeparator, Tag, VerticalSeparator, } from '../../../HackneyDS';
+import { Button, Collapse, Container, Heading, HorizontalSeparator, Tag, VerticalSeparator } from '../../../HackneyDS';
+import { userRoles } from '../../../../pages/api/accessMatrix';
 import ViewDocument from '../../../ViewDocument';
 
-const PackageRequest = ({ packageRequest }) => {
+const PackageRequest = ({ packageRequest, roles }) => {
   const { socialWorkerCarePlanFileId: documentId, socialWorkerCarePlanFileName: documentName } = packageRequest;
   const router = useRouter();
   const buttonClass = `${getButtonColourFromPackageStatus(packageRequest.packageStatus)} package-request-button`;
-  const handleClick = () => router.push(getCorePackageRoute(packageRequest.packageId));
+
+  const handleClick = () =>
+    !roles.includes(userRoles.ROLE_BROKERAGE)
+      ? router.push(getCarePackageReviewRoute(packageRequest.packageId))
+      : router.push(getCorePackageRoute(packageRequest.packageId));
 
   return (
     <Container
