@@ -15,7 +15,7 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
 import { getCareChargesRoute, getCorePackageRoute, getFundedNursingCareRoute } from 'routes/RouteConstants';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { updateCarePackageCosts, usePackageDetails } from 'api';
+import { getIsoDateWithoutTimezone, updateCarePackageCosts, usePackageDetails } from 'api';
 import withSession from 'lib/session';
 import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
 import { formValidationSchema } from 'service/formValidationSchema';
@@ -96,6 +96,7 @@ const BrokerPackage = ({ roles }) => {
 
   useEffect(() => {
     if (detailsData) {
+      detailsData.details = updateWeeklyNeeds(detailsData?.details ?? []);
       setValue('startDate', detailsData.startDate);
       setValue('supplierId', detailsData.supplierId);
       setValue('coreCost', detailsData.coreCost);
@@ -129,6 +130,13 @@ const BrokerPackage = ({ roles }) => {
     }
   };
 
+  const updateWeeklyNeeds = (additionalNeeds = []) =>
+    additionalNeeds.map((detail) => ({
+      ...detail,
+      startDate: getIsoDateWithoutTimezone(new Date(detail.startDate)),
+      endDate: detail.endDate && !detail.isOngoing ? getIsoDateWithoutTimezone(new Date(detail.endDate)) : null,
+    }));
+
   const handleFormSubmission = async () => {
     const data = getValues();
     const { details } = data;
@@ -136,8 +144,8 @@ const BrokerPackage = ({ roles }) => {
     const newData = {
       ...data,
       details: newDetails,
-      startDate: new Date(data.startDate).toISOString(),
-      endDate: data.endDate && !data.isOngoing ? new Date(data.endDate).toISOString() : null,
+      startDate: getIsoDateWithoutTimezone(new Date(data.startDate)),
+      endDate: data.endDate && !data.isOngoing ? getIsoDateWithoutTimezone(new Date(data.endDate)) : null,
     };
     setIsRequestBeingSent(true);
     try {
@@ -158,8 +166,9 @@ const BrokerPackage = ({ roles }) => {
   const updateDetails = (newDetail) => {
     const formattedDetail = {
       ...newDetail,
-      startDate: new Date(newDetail.startDate).toISOString(),
-      endDate: newDetail.endDate && !newDetail.isOngoing ? new Date(newDetail.endDate).toISOString() : null,
+      startDate: getIsoDateWithoutTimezone(new Date(newDetail.startDate)),
+      endDate:
+        newDetail.endDate && !newDetail.isOngoing ? getIsoDateWithoutTimezone(new Date(newDetail.endDate)) : null,
     };
     if (weeklyNeeds) {
       setValue('details', [...weeklyNeeds, formattedDetail], { shouldDirty: true });
