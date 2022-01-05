@@ -45,12 +45,6 @@ const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Finance' }];
 const tabs = ['Pay Runs', 'Held Payments', 'Awaiting Approval', 'Approved'];
 
 const Payruns = ({ roles }) => {
-  const getTabs = () => {
-    if (roles.includes(userRoles.ROLE_FINANCE_APPROVER)) {
-      return tabs;
-    }
-    return [tabs[0], tabs[1]];
-  };
   const [pageNumber, setPageNumber] = useState(1);
   const [heldPageNumber, setHeldPageNumber] = useState(1);
   const [tabView, setTabView] = useState(tabs[0]);
@@ -118,7 +112,7 @@ const Payruns = ({ roles }) => {
       </Container>
       <HorizontalSeparator height="30px" />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
-        <Tabs tabs={getTabs()} callback={(index) => setTabView(tabs[index])}>
+        <Tabs tabs={tabs} callback={(index) => setTabView(tabs[index])}>
           <Tab>
             <Loading className="loading" isLoading={isLoading} />
             {payrunData.length > 0 || isLoading ? (
