@@ -26,7 +26,7 @@ export const PayrunList = ({ searchTerm, data }) => {
   return (
     <Container>
       {data.map((d, index) => (
-        <>
+        <React.Fragment key={d.payRunId}>
           <Container
             background="#FAFAFA"
             padding="24px 16px"
@@ -77,7 +77,7 @@ export const PayrunList = ({ searchTerm, data }) => {
             </Container>
           </Container>
           {index < data.length - 1 && <HorizontalSeparator height="16px" />}
-        </>
+        </React.Fragment>
       ))}
     </Container>
   );
