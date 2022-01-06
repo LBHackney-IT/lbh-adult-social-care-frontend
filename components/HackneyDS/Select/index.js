@@ -35,7 +35,7 @@ const Select = React.forwardRef((props, ref) => {
           if (onChangeValue) return onChangeValue(e.target.value);
           return onChange(e);
         }}
-        value={value}
+        value={value ?? ""}
         className={`govuk-select lbh-select${outerClass}${errorClass}`}
         disabled={disabled}
         ref={ref}
