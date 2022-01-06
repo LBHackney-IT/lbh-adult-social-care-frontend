@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Textarea({
+const Textarea = React.forwardRef(({
   maxCount,
   rows = 5,
   id,
@@ -9,7 +9,7 @@ export default function Textarea({
   className = '',
   handler = () => {},
   disabled,
-}) {
+}, ref) => {
   const getCount = () => maxCount - value.length;
   return (
     <div className={`govuk-form-group lbh-form-group ${className}`}>
@@ -18,9 +18,10 @@ export default function Textarea({
         id={id}
         name={name}
         rows={rows}
-        value={value}
+        value={value ?? ""}
         onChange={(e) => handler(e.target.value)}
         disabled={disabled}
+        ref={ref}
       />
       {!!maxCount && (
         <span
@@ -30,4 +31,6 @@ export default function Textarea({
       )}
     </div>
   );
-}
+})
+
+export default Textarea

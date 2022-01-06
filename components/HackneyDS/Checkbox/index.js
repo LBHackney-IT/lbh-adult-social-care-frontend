@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Checkbox ({
+const Checkbox = React.forwardRef(({
   label,
   onChangeValue,
   small,
@@ -10,7 +10,7 @@ export default function Checkbox ({
   value,
   handler = () => {},
   className,
-}) {
+}, ref) => {
   const smallClassList = small ? ' govuk-checkboxes--small' : '';
   const outerClassName = className ? ` ${className}` : '';
 
@@ -19,6 +19,7 @@ export default function Checkbox ({
       <input
         className="govuk-checkboxes__input"
         id={id}
+        ref={ref}
         name={name}
         type="checkbox"
         value={value}
@@ -36,4 +37,6 @@ export default function Checkbox ({
       </label>
     </div>
   );
-}
+});
+
+export default Checkbox;
