@@ -15,17 +15,20 @@ export const Collapse = ({
   IconComponent = SelectArrowTriangle,
   setExpanded,
   style = {},
+  isExpanded = false,
 }) => {
-  const [localExpanded, setLocalExpanded] = useState(false);
+  const [localExpanded, setLocalExpanded] = useState(isExpanded);
 
   const mainExpanded = expanded !== undefined ? expanded : localExpanded;
 
   const mainSetExpanded = setExpanded !== undefined ? setExpanded : setLocalExpanded;
 
-  const iconAnimationClass = ` ${isNegativeRotationAnimation ? 'icon-animation-rotation-negative' : 'icon-animation-rotation'}`;
+  const iconAnimationClass = ` ${
+    isNegativeRotationAnimation ? 'icon-animation-rotation-negative' : 'icon-animation-rotation'
+  }`;
   const isButtonClickOnlyClass = isButtonClickOnly ? ' trigger-only-button' : '';
 
-  const changeCollapse = () => mainSetExpanded(prevState => !prevState);
+  const changeCollapse = () => mainSetExpanded((prevState) => !prevState);
 
   return (
     <Container className={className} {...style}>
@@ -48,4 +51,3 @@ export const Collapse = ({
     </Container>
   );
 };
-

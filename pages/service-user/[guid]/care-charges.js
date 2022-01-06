@@ -59,8 +59,9 @@ const Packages = ({ roles }) => {
         )}
         <HorizontalSeparator height="48px" />
         {packages &&
-          packages.map((p) => (
+          packages.map((p, index) => (
             <CareDetails
+              isExpanded={index === 0}
               isLoading={isLoading}
               packageId={p.packageId}
               title={p.packageType}

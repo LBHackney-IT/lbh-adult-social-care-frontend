@@ -46,7 +46,7 @@ const tabs = ['Pay Runs', 'Held Payments', 'Awaiting Approval', 'Approved'];
 
 const Payruns = ({ roles }) => {
   const [pageNumber, setPageNumber] = useState(1);
-  const isBrokerage = roles.includes(userRoles.ROLE_FINANCE);
+  const isBrokerage = roles?.includes(userRoles.ROLE_FINANCE);
   const [heldPageNumber, setHeldPageNumber] = useState(1);
   const [tabView, setTabView] = useState(tabs[0]);
   const [isOpenedModal, setIsOpenedModal] = useState(false);
