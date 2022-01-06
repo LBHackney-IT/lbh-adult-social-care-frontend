@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Input = ({
+export const Input = React.forwardRef(({
   label,
   id = 'lbh-input',
   name,
@@ -9,7 +9,6 @@ export const Input = ({
   hint,
   placeholder = '',
   error,
-  ref,
   className,
   preSign = '',
   value,
@@ -19,7 +18,7 @@ export const Input = ({
   required,
   disabled,
   flex,
-}) => {
+}, ref) => {
   const outerClassName = className ? ` ${className}` : '';
   const errorClass = error ? ' govuk-form-group--error' : '';
   const signClass = preSign ? ' with-sign' : '';
@@ -50,7 +49,7 @@ export const Input = ({
           type={type}
           step={step}
           ref={ref}
-          value={value}
+          value={value || ""}
           onChange={onChange}
           disabled={disabled}
           onWheel={(e) => e.target.blur()}
@@ -58,4 +57,4 @@ export const Input = ({
       </div>
     </div>
   );
-};
+});

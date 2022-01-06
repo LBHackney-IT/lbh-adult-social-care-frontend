@@ -13,7 +13,7 @@ const initialDateState = {
   error: '',
 };
 
-const DatePicker = ({
+const DatePicker = React.forwardRef(({
   disabled,
   className = '',
   label,
@@ -33,7 +33,7 @@ const DatePicker = ({
   month = {},
   year = {},
   onClickIcon = () => {},
-}) => {
+}, _) => {
   const [localDay, setLocalDay] = useState({
     value: '',
     error: '',
@@ -245,6 +245,6 @@ const DatePicker = ({
       </Container>
     </div>
   );
-};
+});
 
 export default memo(DatePicker);
