@@ -10,7 +10,7 @@ import {
   VerticalSeparator,
   Tag,
 } from 'components';
-import { addDays, addWeeks, differenceInWeeks, isBefore, isSameDay } from 'date-fns';
+import { addDays, addWeeks, differenceInWeeks, endOfDay, isBefore, isSameDay } from 'date-fns';
 import { useDispatch } from 'react-redux';
 import { cancelCareChargeReclaim, endCareChargeReclaim, getIsoDateWithoutTimezone } from 'api';
 import { geTagTextFromReclaimStatus, getTagColorFromReclaimStatus } from 'service/getTagColorFromReclaimStatus';
@@ -121,7 +121,7 @@ export const CareCharge12 = ({
   const [difference, setDifference] = useState();
   useEffect(() => {
     if (startDate && endDate) {
-      setDifference(differenceInWeeks(new Date(endDate), new Date(startDate)));
+      setDifference(differenceInWeeks(endOfDay(new Date(endDate)), endOfDay(new Date(startDate))));
     }
   }, [startDate, endDate]);
 
