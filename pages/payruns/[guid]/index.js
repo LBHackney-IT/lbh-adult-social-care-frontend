@@ -107,7 +107,7 @@ const SinglePayRun = ({ roles }) => {
         {!payRunItems || (payRunItems.length === 0 && <InsetText>No invoices found</InsetText>)}
         {payRunItems &&
           payRunItems.map((item, index) => (
-            <>
+            <React.Fragment key={item.id}>
               <PayRunItem
                 payRunId={payRunId}
                 searchTerm={searchTerm}
@@ -117,7 +117,7 @@ const SinglePayRun = ({ roles }) => {
                 isActivePayRun={[1, 2, 3, 4].includes(payRun?.payRunStatus)}
               />
               {index < payRunItems.length - 1 && <HorizontalSeparator height="32px" />}
-            </>
+            </React.Fragment>
           ))}
         <HorizontalSeparator height="32px" />
         {insightData && (
