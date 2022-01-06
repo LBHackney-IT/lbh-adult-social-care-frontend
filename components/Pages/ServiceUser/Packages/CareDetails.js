@@ -36,6 +36,7 @@ const statusColors = {
 };
 
 const CareDetails = ({
+  isExpanded,
   packageId,
   isLoading,
   title,
@@ -75,7 +76,7 @@ const CareDetails = ({
       Header: 'Weekly cost',
       accessor: 'weeklyCost',
       className: 'align-right',
-      Cell: ({ value }) => (<span className="align-right">{formatNumberToCurrency(value)}</span>),
+      Cell: ({ value }) => <span className="align-right">{formatNumberToCurrency(value)}</span>,
     },
   ];
 
@@ -119,6 +120,7 @@ const CareDetails = ({
         }}
         className="care-details__package-collapse"
         IconComponent={CaretDownIcon}
+        isExpanded={isExpanded}
         title={
           <Container alignItems="baseline">
             <Container display="flex" alignItems="baseline">
