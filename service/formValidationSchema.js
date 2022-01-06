@@ -170,17 +170,7 @@ const careChargeAssessmentSchema = yup.object().shape({
               }
               return true;
             }
-          )
-          .test('startDate', 'Residential 1-12 weeks and Provisional must not overlap', (startDate, schema) => {
-            if (schema) {
-              const { from } = schema;
-              const entireSchema = from[1].value;
-              if (entireSchema?.provisional && startDate) {
-                return !isBefore(subDays(new Date(startDate), 1), new Date(entireSchema?.provisional?.endDate));
-              }
-            }
-            return false;
-          }),
+          ),
         endDate: yup
           .string()
           .typeError('Please select an end date')
