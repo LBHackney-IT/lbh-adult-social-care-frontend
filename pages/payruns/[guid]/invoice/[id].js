@@ -34,8 +34,9 @@ const InvoiceDetailPage = ({ roles }) => {
   const router = useRouter();
   const { guid: payRunId, id: invoiceId } = router.query;
   const { data: invoice, isLoading } = usePayRunInvoice(payRunId, invoiceId);
+  console.log(invoice);
 
-  const breadcrumbs = useMemo(() => [{ text: `Pay Run ${payRunId}` }], [payRunId]);
+  const breadcrumbs = useMemo(() => [{ text: `Pay Run ${invoice?.payRunNumber ?? payRunId}` }], [payRunId]);
 
   return (
     <>
