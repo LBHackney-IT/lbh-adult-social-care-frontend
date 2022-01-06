@@ -1,9 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import { APPROVALS_ROUTE, getHistoryRoute, getServiceUserPackagesRoute } from 'routes/RouteConstants';
+import {
+  APPROVALS_ROUTE,
+  getHistoryRoute,
+  getPaymentHistoryRoute,
+  getServiceUserPackagesRoute,
+} from 'routes/RouteConstants';
 import { dateToIsoString } from 'service';
 import { addNotification } from 'reducers/notificationsReducer';
-import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage, stringIsNullOrEmpty, } from 'api';
+import { approveCarePackage, cancelCarePackage, declineCarePackage, endCarePackage, stringIsNullOrEmpty } from 'api';
 import { useDispatch } from 'react-redux';
 import { Container } from '../../../HackneyDS';
 import PackageUserDetails from '../PackageUserDetails';
@@ -74,6 +79,7 @@ const ReviewPackageDetails = ({
   const [actionNotes, setActionNotes] = useState(initialNotes);
 
   const goToHistory = () => router.push(getHistoryRoute(packageId));
+  const goToPaymentHistory = () => router.push(getPaymentHistoryRoute(packageId));
 
   const closePopup = () => {
     setOpenedPopup('');
@@ -176,6 +182,7 @@ const ReviewPackageDetails = ({
         <ReviewHeader
           buttons={buttons}
           goToHistory={goToHistory}
+          goToPaymentHistory={goToPaymentHistory}
           additionalButtons={additionalButtons}
           showEditActions={showEditActions}
           title={title}
