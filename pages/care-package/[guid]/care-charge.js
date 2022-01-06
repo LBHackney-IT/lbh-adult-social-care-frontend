@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { dateToIsoString, formatDate, getFormData, getLoggedInUser, useGetFile } from 'service';
+import {
+  dateToIsoString,
+  formatDate,
+  getFormData,
+  getLoggedInUser,
+  useGetFile,
+  useRedirectIfPackageNotExist,
+} from 'service';
 import {
   Button,
   Container,
@@ -29,7 +36,7 @@ import { CareCharge13 } from 'components/Pages/CarePackages/CareCharge/CareCharg
 import { addNotification } from 'reducers/notificationsReducer';
 import { formValidationSchema } from 'service/formValidationSchema';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { CARE_CHARGES_ROUTE } from 'routes/RouteConstants';
+import { CARE_CHARGES_ROUTE, getServiceUserCareChargesRoute } from 'routes/RouteConstants';
 import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
 import { accessRoutes } from '../../api/accessMatrix';
@@ -82,6 +89,9 @@ const CareCharge = ({ roles }) => {
   } = useAssessmentCareCharges(carePackageId);
 
   const { data: details } = usePackageDetails(carePackageId);
+  const {
+    data: { serviceUser },
+  } = useRedirectIfPackageNotExist();
   const packageStartDate = details?.startDate;
   const packageEndDate = details?.endDate;
 
@@ -229,7 +239,11 @@ const CareCharge = ({ roles }) => {
     try {
       await updateCareChargeReclaim(carePackageId, { careCharges: cc });
       dispatch(addNotification({ text: 'Care charges updated', className: 'success' }));
-      refreshPage();
+      if (serviceUser) {
+        router.push(getServiceUserCareChargesRoute(serviceUser?.id));
+      } else {
+        refreshPage();
+      }
     } catch (error) {
       dispatch(addNotification({ text: error }));
     }
