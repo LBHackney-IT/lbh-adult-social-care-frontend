@@ -31,10 +31,10 @@ export const SupplierList = ({ searchTerm, newSearch, setNewSearch, setValue }) 
           <Container display="flex" flexDirection="column">
             {searchResults.data.length ? (
               searchResults.data?.map((result, index) => (
-                <>
+                <React.Fragment key={result?.id}>
                   <SupplierListItem supplier={result} setValue={setValue} searchTerm={resultsFor} />
                   {index < searchResults.data.length - 1 && <HorizontalSeparator height="10px" />}
-                </>
+                </React.Fragment>
               ))
             ) : (
               <InsetText>
