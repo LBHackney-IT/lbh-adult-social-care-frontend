@@ -2,13 +2,28 @@ import React from 'react';
 import { Button } from 'components';
 import { useRouter } from 'next/router';
 import { NewHeader } from 'components/NewHeader';
+import withSession from 'lib/session';
+import { getLoggedInUser } from 'service';
 
-export default function Custom401() {
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return { props: { roles: user.roles } };
+});
+
+export default function Custom401({ roles }) {
   const router = useRouter();
 
   return (
     <>
-      <NewHeader roles={[]} />
+      <NewHeader roles={roles ?? []} />
       <div className="not-fount-page">
         <h1 className="mb-5">401 - Unauthorised Access</h1>
         <Button onClick={router.back}>Go Back</Button>
