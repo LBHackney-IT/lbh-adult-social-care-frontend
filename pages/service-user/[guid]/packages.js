@@ -68,10 +68,10 @@ const Packages = ({ roles }) => {
                 p.packageStatus === 'Not Approved'
             )
             .map((p, index) => (
-              <>
+              <React.Fragment key={p.packageId}>
                 <PackageRequest packageRequest={p} roles={roles}/>
                 {index < packages.length - 1 && <HorizontalSeparator height="20px" />}
-              </>
+              </React.Fragment>
             ))}
         <HorizontalSeparator height="48px" />
         {packages &&
@@ -86,6 +86,7 @@ const Packages = ({ roles }) => {
             )
             .map((p) => (
               <CareDetails
+                key={p.packageId}
                 isLoading={isLoading}
                 packageId={p.packageId}
                 title={p.packageType}

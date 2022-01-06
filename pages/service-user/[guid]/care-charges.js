@@ -62,6 +62,7 @@ const Packages = ({ roles }) => {
           packages.map((p, index) => (
             <CareDetails
               isExpanded={index === 0}
+              key={p.packageId}
               isLoading={isLoading}
               packageId={p.packageId}
               title={p.packageType}
