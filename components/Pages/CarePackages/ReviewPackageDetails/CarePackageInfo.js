@@ -29,7 +29,8 @@ const CarePackageInfo = ({ data, goToPackage }) => (
           endDate: data?.endDate,
           title: 'Supplier',
           place: data?.supplier?.place,
-          id: data?.supplier?.creatorId,
+          // NOTE id is being used as a key here, and undefined id will cause React throw key error
+          id: data?.supplier?.creatorId ?? null,
           address: `${data?.supplier?.supplierName}, ${data?.supplier?.address}`,
           serviceUserNeed: {
             term: data?.primarySupportReason,

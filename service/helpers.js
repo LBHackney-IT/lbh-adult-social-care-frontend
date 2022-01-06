@@ -13,8 +13,8 @@ export const addIndentToString = (string) => {
   const arrayOfWords = string.split('\n');
   const newArray = [];
   arrayOfWords.forEach((item, index) => {
-    const newElement = [item];
-    if (index !== arrayOfWords.length - 1) newElement.push(<br />);
+    const newElement = [<span key={item}>{item}</span>];
+    if (index !== arrayOfWords.length - 1) newElement.push(<br key={`after-${item}`}/>);
 
     newArray.push(...newElement);
   });
