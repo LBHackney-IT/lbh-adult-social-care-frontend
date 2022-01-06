@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SelectArrowTriangle } from '../../Icons';
 
-const Select = (props) => {
+const Select = React.forwardRef((props, ref) => {
   const {
     onChange = () => {},
     onChangeValue,
@@ -38,6 +38,7 @@ const Select = (props) => {
         value={value}
         className={`govuk-select lbh-select${outerClass}${errorClass}`}
         disabled={disabled}
+        ref={ref}
       >
         {emptyElement && (
           <option disabled={isEmptyElementDisabled} value={emptyElement.value}>
@@ -59,6 +60,6 @@ const Select = (props) => {
       {IconComponent && <div className="select-icon">{IconComponent}</div>}
     </div>
   );
-};
+});
 
 export default Select;
