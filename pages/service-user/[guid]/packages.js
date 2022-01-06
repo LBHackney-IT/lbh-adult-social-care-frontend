@@ -12,6 +12,9 @@ import { useRouter } from 'next/router';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
+import { NewHeader } from 'components/NewHeader';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -23,10 +26,18 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.SERVICE_USER_GUID_PACKAGES)) {
+    return {
+      redirect: {
+        destination: '/401',
+        permanent: false,
+      },
+    };
+  }
+  return { props: { roles: user.roles } };
 });
 
-const Packages = () => {
+const Packages = ({ roles }) => {
   const router = useRouter();
 
   const { guid: serviceUserId } = router.query;
@@ -35,6 +46,7 @@ const Packages = () => {
 
   return (
     <>
+      <NewHeader roles={roles ?? []} />
       <DynamicBreadcrumbs />
       <Container maxWidth="1080px" margin="0 auto 60px" padding="10px 60px 0">
         <TitleSubtitleHeader subTitle="All package details" title="Full overview" />
@@ -57,7 +69,7 @@ const Packages = () => {
             )
             .map((p, index) => (
               <>
-                <PackageRequest packageRequest={p} />
+                <PackageRequest packageRequest={p} roles={roles}/>
                 {index < packages.length - 1 && <HorizontalSeparator height="20px" />}
               </>
             ))}

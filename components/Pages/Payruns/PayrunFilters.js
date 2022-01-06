@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import { Button, Container, FormGroup, HorizontalSeparator, SearchBox, Select, VerticalSeparator } from 'components';
+import { Container, FormGroup, HorizontalSeparator, SearchBox, Select, VerticalSeparator } from 'components';
 import DatePick from 'components/DatePick';
+import ResetFilterButton from '../../ResetFilterButton';
 
 const statusOptions = [
   { text: 'All', value: '' },
@@ -40,8 +41,6 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter, tabView }) => 
   const onSearch = useCallback(() => {
     changeFilterField('searchTerm', searchText);
   }, [changeFilterField, searchText]);
-
-  const shouldShowClear = Object.values(filters).some((item) => item);
 
   return (
     <Container>
@@ -99,14 +98,8 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter, tabView }) => 
             setDate={(value) => changeFilterField('dateTo', value)}
           />
         </FormGroup>
-        {shouldShowClear && (
-          <>
-            <VerticalSeparator width="20px" />
-            <Button outline secondary color="gray" className=" clear-filter-button" onClick={onClearFilters}>
-              Clear
-            </Button>
-          </>
-        )}
+        <VerticalSeparator width={20} />
+        <ResetFilterButton filters={filters} onClearFilters={onClearFilters} />
       </Container>
     </Container>
   );

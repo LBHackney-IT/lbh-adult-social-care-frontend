@@ -12,7 +12,7 @@ import {
 } from 'components';
 import { addDays, addWeeks, differenceInWeeks, isBefore, isSameDay } from 'date-fns';
 import { useDispatch } from 'react-redux';
-import { cancelCareChargeReclaim, endCareChargeReclaim } from 'api';
+import { cancelCareChargeReclaim, endCareChargeReclaim, getIsoDateWithoutTimezone } from 'api';
 import { geTagTextFromReclaimStatus, getTagColorFromReclaimStatus } from 'service/getTagColorFromReclaimStatus';
 import { addNotification } from 'reducers/notificationsReducer';
 import { CareChargeCost } from './CareChargeCost';
@@ -78,12 +78,12 @@ export const CareCharge12 = ({
       if (packageEndDate) {
         const packageEnd = new Date(packageEndDate);
         if (isBefore(packageEnd, correctEnd)) {
-          setValue('residential12.endDate', packageEnd.toISOString());
+          setValue('residential12.endDate', getIsoDateWithoutTimezone(packageEnd));
         } else {
-          setValue('residential12.endDate', correctEnd.toISOString());
+          setValue('residential12.endDate', getIsoDateWithoutTimezone(correctEnd));
         }
       } else {
-        setValue('residential12.endDate', correctEnd.toISOString());
+        setValue('residential12.endDate', getIsoDateWithoutTimezone(correctEnd));
       }
     }
   }, [startDate]);
@@ -110,10 +110,10 @@ export const CareCharge12 = ({
     if (packageEndDate) {
       const packEnd = new Date(packageEndDate);
       if (isBefore(packEnd, newDate)) {
-        setValue('residential12.endDate', packEnd.toISOString());
+        setValue('residential12.endDate', getIsoDateWithoutTimezone(packEnd));
       }
     } else {
-      setValue('residential12.endDate', newDate.toISOString());
+      setValue('residential12.endDate', getIsoDateWithoutTimezone(newDate));
     }
     clearErrors('residential12.endDate');
   };

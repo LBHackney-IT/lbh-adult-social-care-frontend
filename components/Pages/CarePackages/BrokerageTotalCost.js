@@ -2,7 +2,7 @@ import React from 'react';
 import { getNumberWithPreSign } from 'service';
 
 const BrokerageTotalCost = ({ name, className, value, costColorClass = 'lbh-color-dark-red' }) => {
-  if(!name) return <></>;
+  if(!name) return null;
 
   return (
     <p className={className || ''}>

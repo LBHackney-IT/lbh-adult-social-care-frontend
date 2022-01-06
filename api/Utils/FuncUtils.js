@@ -20,7 +20,24 @@ export const getEnGBFormattedDate = (dateString, nullData = false) => {
   return new Date(dateString).toLocaleDateString('en-GB');
 };
 
-export const getUrlOrNull = (string) => string.includes('undefined') || string.includes('null') ? null : string;
+export const getDateWithoutTimezone = (dateValue) => {
+  if (dateValue == null) return dateValue;
+  const timestamp = dateValue.getTime() - dateValue.getTimezoneOffset() * 60000;
+  const transformedDate = new Date(timestamp);
+  transformedDate.setUTCHours(0, 0, 0, 0);
+  return transformedDate;
+};
+
+export const getIsoDateWithoutTimezone = (dateValue) => {
+  if (dateValue == null) return dateValue;
+  const dateParam = new Date(dateValue);
+  const timestamp = dateParam.getTime() - dateParam.getTimezoneOffset() * 60000;
+  const transformedDate = new Date(timestamp);
+  transformedDate.setUTCHours(0, 0, 0, 0); // comment this line to get iso with timezone
+  return transformedDate.toISOString();
+};
+
+export const getUrlOrNull = (string) => (string.includes('undefined') || string.includes('null') ? null : string);
 
 export const stringIsNullOrEmpty = (str) => {
   if (!str || str.length === 0) return true;

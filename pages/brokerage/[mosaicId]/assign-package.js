@@ -22,6 +22,32 @@ import { addNotification } from 'reducers/notificationsReducer';
 import { BROKERAGE_ROUTE } from 'routes/RouteConstants';
 import { getFormDataWithFile } from 'service/getFormData';
 import { assignPackageSchema } from 'service/formValidationSchema';
+import withSession from 'lib/session';
+import { getLoggedInUser } from 'service';
+import { NewHeader } from 'components/NewHeader';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
+
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.BROKERAGE_ASSIGN_PACKAGES)) {
+    return {
+      redirect: {
+        destination: '/401',
+        permanent: false,
+      },
+    };
+  }
+  return { props: { roles: user.roles } };
+});
 
 const breadcrumbs = [
   { text: 'Home', href: BROKERAGE_ROUTE },
@@ -29,7 +55,7 @@ const breadcrumbs = [
   { text: 'Assign and attach a care plan' },
 ];
 
-const AssignPackage = () => {
+const AssignPackage = ({ roles }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { mosaicId:hackneyId } = router.query;
@@ -84,6 +110,7 @@ const AssignPackage = () => {
 
   return (
     <>
+      <NewHeader roles={roles ?? []} />
       <Container maxWidth="1080px" margin="0 auto" padding="0 60px 60px">
         <HorizontalSeparator height="10px" />
         <Breadcrumbs values={breadcrumbs} />
@@ -118,7 +145,7 @@ const AssignPackage = () => {
           <Container className="brokerage__container">
             <Heading size="xl">Support plan and care package</Heading>
             <HorizontalSeparator height={24} />
-            <UploadFile name='carePlanFile' control={control} title="Upload social worker care plan" />
+            <UploadFile name="carePlanFile" control={control} title="Upload social worker care plan" />
           </Container>
           <Container>
             <FormGroup label="Add notes" error={errors.notes?.message}>
