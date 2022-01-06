@@ -69,7 +69,7 @@ const PackageRequest = ({ packageRequest, roles }) => {
       {packageRequest?.notes && packageRequest?.notes.length > 0 && (
         <Collapse IconComponent={CaretDownIcon}>
           {packageRequest.notes.map((note) => (
-            <>
+            <React.Fragment key={note.id}>
               <HorizontalSeparator height="10px" />
               <Container display="flex" alignItems="center">
                 <Heading size="m">{note.creatorName}</Heading>
@@ -81,7 +81,7 @@ const PackageRequest = ({ packageRequest, roles }) => {
               <p>
                 {note.requestMoreInformation ? note.requestMoreInformation : 'No additional information submitted.'}
               </p>
-            </>
+            </React.Fragment>
           ))}
         </Collapse>
       )}
