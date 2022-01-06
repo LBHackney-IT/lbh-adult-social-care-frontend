@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { assignToBroker, useServiceUserSearch } from 'api';
 import { Container, HorizontalSeparator, Pagination } from 'components';
 import { useRouter } from 'next/router';
-import { dateToIsoString, getFormData } from 'service';
+import { dateToIsoString, getFormData, getLoggedInUser } from 'service';
 import { getCorePackageRoute } from 'routes/RouteConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, userLogin } from 'reducers/userReducer';
@@ -13,6 +13,10 @@ import SearchResultCount from 'components/SearchResultCount';
 import SearchResultList from 'components/Pages/Brokerage/SearchResultList';
 import axios from 'axios';
 import { addNotification } from 'reducers/notificationsReducer';
+import withSession from 'lib/session';
+import { NewHeader } from 'components/NewHeader';
+import { handleRoleBasedAccess } from '../api/handleRoleBasedAccess';
+import { accessRoutes } from '../api/accessMatrix';
 
 const initialFilters = {
   postcode: '',
@@ -28,7 +32,28 @@ const inputs = [
   { label: 'Hackney ID', key: 'hackneyId' },
 ];
 
-const BrokerageSearch = () => {
+export const getServerSideProps = withSession(({ req }) => {
+  const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.SERVICE_USER_SEARCH)) {
+    return {
+      redirect: {
+        destination: '/401',
+        permanent: false,
+      },
+    };
+  }
+  return { props: { roles: user.roles } };
+});
+
+const BrokerageSearch = ({ roles }) => {
   const router = useRouter();
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -111,8 +136,7 @@ const BrokerageSearch = () => {
 
   useEffect(() => {
     if (!user) {
-      axios.get('/api/user')
-        .then(res => dispatch(userLogin({ user: res.data })));
+      axios.get('/api/user').then((res) => dispatch(userLogin({ user: res.data })));
     }
   }, [user]);
 
@@ -126,6 +150,7 @@ const BrokerageSearch = () => {
 
   return (
     <Container className="search-service-user">
+      <NewHeader roles={roles ?? []} />
       <Loading isLoading={fullLoading} />
       <DynamicBreadcrumbs additionalBreadcrumbs={[{ text: 'Search for a service user' }]} />
       <Container maxWidth="1080px" margin="0 auto" padding="10px 60px 0">
@@ -151,9 +176,9 @@ const BrokerageSearch = () => {
                 let newCursor;
                 if (paginationInfo.pageNumber < page) {
                   newCursor = nextCursor;
-                  const isNewPreviousCursor = !previousCursors.some(prevCursor => prevCursor === nextCursor);
+                  const isNewPreviousCursor = !previousCursors.some((prevCursor) => prevCursor === nextCursor);
                   if (isNewPreviousCursor) {
-                    setPreviousCursors(prevState => [...prevState, nextCursor]);
+                    setPreviousCursors((prevState) => [...prevState, nextCursor]);
                   }
                 } else {
                   newCursor = previousCursors[page - 1];

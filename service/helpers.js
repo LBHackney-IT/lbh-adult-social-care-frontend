@@ -1,7 +1,6 @@
 import React from 'react';
 import { add, compareDesc, format } from 'date-fns';
 import { getIsoDateWithoutTimezone, isServer } from '../api';
-
 import { currency } from '../constants/strings';
 
 const chr4 = () => Math.random().toString(16).slice(-4);

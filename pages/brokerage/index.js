@@ -9,6 +9,9 @@ import Loading from 'components/Loading';
 import { BrokerPortalFilters } from 'components/Pages/Brokerage/BrokerPortalFilters';
 import { BrokerageTable } from 'components/Pages/Brokerage/BrokerageTable';
 import AlternativePagination from 'components/AlternativePagination';
+import { NewHeader } from 'components/NewHeader';
+import { handleRoleBasedAccess } from '../api/handleRoleBasedAccess';
+import { accessRoutes } from '../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -20,7 +23,16 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.BROKERAGE)) {
+    return {
+      redirect: {
+        destination: '/401',
+        permanent: false,
+      },
+    };
+  }
+  return { props: { roles: user.roles } };
 });
 
 const initialFilters = {
@@ -33,7 +45,7 @@ const initialFilters = {
 
 const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Brokerage' }];
 
-const Index = () => {
+const Index = ({roles}) => {
   const router = useRouter();
 
   const [pageNumber, setPageNumber] = useState(1);
@@ -41,14 +53,17 @@ const Index = () => {
   const [filters, setFilters] = useState(initialFilters);
   const { brokerId, dateTo, dateFrom, status, serviceUserName } = filters;
 
-  const params = useMemo(() => ({
-    fromDate: dateFrom ? dateFrom.toJSON() : null,
-    toDate: dateTo ? dateTo.toJSON() : null,
-    serviceUserName,
-    pageNumber,
-    status,
-    brokerId,
-  }), [filters, pageNumber]);
+  const params = useMemo(
+    () => ({
+      fromDate: dateFrom ? dateFrom.toJSON() : null,
+      toDate: dateTo ? dateTo.toJSON() : null,
+      serviceUserName,
+      pageNumber,
+      status,
+      brokerId,
+    }),
+    [filters, pageNumber]
+  );
 
   const { data, isLoading: brokerViewLoading } = useBrokerView({ params });
 
@@ -71,6 +86,7 @@ const Index = () => {
 
   return (
     <div className="broker-portal">
+      <NewHeader roles={roles ?? []} />
       <Loading isLoading={brokerViewLoading} />
       <Container background="#FAFAFA" padding="0 0 60px">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
@@ -79,7 +95,9 @@ const Index = () => {
           <HorizontalSeparator height="30px" />
           <Container display="flex" justifyContent="space-between">
             <Heading size="xl">Brokerage</Heading>
-            <Button onClick={goToServiceUserSearch} largeButton>Find a service user</Button>
+            <Button onClick={goToServiceUserSearch} largeButton>
+              Find a service user
+            </Button>
           </Container>
           <HorizontalSeparator height="16px" />
           <BrokerPortalFilters title="Index" filters={filters} setFilters={setFilters} clearFilter={clearFilters} />

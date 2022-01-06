@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatNumberToCurrency } from 'service';
+import { formatNumberToCurrency, addIndentToString } from 'service';
 import { Collapse, Container, Heading, HorizontalSeparator } from 'components';
 import { format } from 'date-fns';
 
@@ -13,7 +13,7 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
             !invoice.isReclaim && (
               <React.Fragment key={invoice.id}>
                 <HorizontalSeparator height="16px" />
-                {invoice.name}
+                {addIndentToString(invoice.name)}
                 <HorizontalSeparator height="8px" />
                 <Container display="grid" gridTemplateColumns="2fr 1fr 1.5fr 1fr">
                   <Container>
@@ -49,7 +49,7 @@ export const SinglePayRunBreakdown = ({ payRun, totalPayTitle = 'Total to pay' }
             invoice.isReclaim && (
               <React.Fragment key={invoice.id}>
                 <HorizontalSeparator height="16px" />
-                {invoice.name}
+                {addIndentToString(invoice.name)}
                 <HorizontalSeparator height="8px" />
                 <Container display="grid" gridTemplateColumns="2fr 1fr 1.5fr 1fr">
                   <Container>

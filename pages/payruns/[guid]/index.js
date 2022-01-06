@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import withSession from 'lib/session';
 import { formatDate, getLoggedInUser } from 'service';
-import { Breadcrumbs, Container, Heading, HorizontalSeparator, Loading } from 'components';
+import { Breadcrumbs, Container, Heading, HorizontalSeparator, InsetText, Loading } from 'components';
 import { useRouter } from 'next/router';
 import { FINANCE_ROUTE } from 'routes/RouteConstants';
 import { useInvoiceListView, getPayrunInsight } from 'api/SWR/payRuns';
@@ -9,6 +9,9 @@ import AlternativePagination from 'components/AlternativePagination';
 import { PayRunItem } from 'components/Pages/Payruns/SinglePayRun/PayRunItem';
 import { InvoiceFilters } from 'components/Pages/Payruns/SinglePayRun/InvoiceFilters';
 import { HighLevelInsight } from 'components/Pages/Payruns/HighLevelInsight';
+import { NewHeader } from 'components/NewHeader';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes, userRoles } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -20,7 +23,15 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.PAYRUNS_GUID)) {
+    return {
+      redirect: {
+        destination: '/401',
+        permanent: false,
+      },
+    };
+  }
+  return { props: { roles: user.roles } };
 });
 
 const initialFilters = {
@@ -31,9 +42,10 @@ const initialFilters = {
   toDate: null,
 };
 
-const SinglePayRun = () => {
+const SinglePayRun = ({ roles }) => {
   const router = useRouter();
   const { guid: payRunId } = router.query;
+  const isApprover = roles.includes(userRoles.ROLE_FINANCE_APPROVER);
   const [payRunItems, setPayRunItems] = useState([]);
   const [pagingMetaData, setPagingMetaData] = useState({});
   const [pageNumber, setPageNumber] = useState(1);
@@ -79,6 +91,7 @@ const SinglePayRun = () => {
 
   return (
     <Container>
+      <NewHeader roles={roles ?? []} />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
           <HorizontalSeparator height="10px" />
@@ -91,6 +104,7 @@ const SinglePayRun = () => {
       </Container>
       <Container maxWidth="1080px" margin="0 auto" padding="30px 60px">
         <Loading isLoading={isLoading} />
+        {!payRunItems || (payRunItems.length === 0 && <InsetText>No invoices found</InsetText>)}
         {payRunItems &&
           payRunItems.map((item, index) => (
             <>
@@ -123,6 +137,7 @@ const SinglePayRun = () => {
             hasInvoices={!!payRunItems?.length}
             isCedarFileDownloaded={insightData?.isCedarFileDownloaded}
             insightDataLoading={insightsIsLoading}
+            isApprover={isApprover}
           />
         )}
         <HorizontalSeparator height="32px" />

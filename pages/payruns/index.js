@@ -1,23 +1,16 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import withSession from 'lib/session';
 import { getLoggedInUser } from 'service';
-import {
-  Breadcrumbs,
-  Button,
-  Container,
-  Heading,
-  Hint,
-  HorizontalSeparator,
-  Loading,
-  Tab,
-  Tabs,
-} from 'components';
+import { Breadcrumbs, Button, Container, Heading, Hint, HorizontalSeparator, Loading, Tab, Tabs } from 'components';
 import { PayrunFilters } from 'components/Pages/Payruns/PayrunFilters';
 import AlternativePagination from 'components/AlternativePagination';
 import { PayrunList } from 'components/Pages/Payruns/PayrunList';
 import { usePayrunView, useHeldPaymentsView } from 'api/SWR/payRuns';
 import { HeldPaymentsList } from 'components/Pages/Payruns/HeldPaymentsList';
 import CreatePayRunModal from 'components/Pages/Payruns/CreatePayRunModal/CreatePayRunModal';
+import { NewHeader } from 'components/NewHeader';
+import { handleRoleBasedAccess } from '../api/handleRoleBasedAccess';
+import { accessRoutes, userRoles } from '../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
@@ -29,7 +22,15 @@ export const getServerSideProps = withSession(({ req }) => {
       },
     };
   }
-  return { props: {} };
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.PAYRUNS)) {
+    return {
+      redirect: {
+        destination: '/401',
+        permanent: false,
+      },
+    };
+  }
+  return { props: { roles: user.roles } };
 });
 
 const initialFilters = {
@@ -43,8 +44,9 @@ const initialFilters = {
 const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Finance' }];
 const tabs = ['Pay Runs', 'Held Payments', 'Awaiting Approval', 'Approved'];
 
-const Payruns = () => {
+const Payruns = ({ roles }) => {
   const [pageNumber, setPageNumber] = useState(1);
+  const isBrokerage = roles.includes(userRoles.ROLE_FINANCE);
   const [heldPageNumber, setHeldPageNumber] = useState(1);
   const [tabView, setTabView] = useState(tabs[0]);
   const [isOpenedModal, setIsOpenedModal] = useState(false);
@@ -92,6 +94,7 @@ const Payruns = () => {
   };
   return (
     <Container>
+      <NewHeader roles={roles ?? []} />
       <CreatePayRunModal isOpen={isOpenedModal} onClose={() => setIsOpenedModal(false)} update={update} />
       <Container background="#FAFAFA" padding="0 0 60px 0">
         <Container maxWidth="1080px" margin="0 auto" padding="0 60px">
@@ -100,9 +103,11 @@ const Payruns = () => {
           <HorizontalSeparator height="30px" />
           <Container display="flex" justifyContent="space-between">
             <Heading size="xl">Pay Runs</Heading>
-            <Button onClick={() => setIsOpenedModal(true)} largeButton>
-              New pay run
-            </Button>
+            {isBrokerage && (
+              <Button onClick={() => setIsOpenedModal(true)} largeButton>
+                New pay run
+              </Button>
+            )}
           </Container>
           <HorizontalSeparator height="16px" />
           <PayrunFilters filters={filters} setFilters={setFilters} clearFilter={clearFilters} tabView={tabView} />

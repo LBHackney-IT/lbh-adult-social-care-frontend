@@ -11,7 +11,8 @@ import {
   PackageType,
   RadioGroup,
   ServiceUserDetails,
-  TitleSubtitleHeader, Heading,
+  TitleSubtitleHeader,
+  Heading,
 } from 'components';
 import { useRouter } from 'next/router';
 import { addNotification } from 'reducers/notificationsReducer';
@@ -23,6 +24,9 @@ import withSession from 'lib/session';
 import ResetApprovedPackageDialog from 'components/Pages/CarePackages/ResetApprovedPackageDialog';
 import { formValidationSchema } from 'service/formValidationSchema';
 import UploadFile from 'components/UploadFile';
+import { NewHeader } from 'components/NewHeader';
+import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
+import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(async ({ req }) => {
   const user = getLoggedInUser({ req });
@@ -34,10 +38,18 @@ export const getServerSideProps = withSession(async ({ req }) => {
       },
     };
   }
-  return { props: {} };
+  if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_CORE_PACKAGE)) {
+    return {
+      redirect: {
+        destination: '/401',
+        permanent: false,
+      },
+    };
+  }
+  return { props: { roles: user.roles } };
 });
 
-const CorePackage = () => {
+const CorePackage = ({ roles }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -126,11 +138,15 @@ const CorePackage = () => {
     const data = getValues();
     setIsRequestBeingSent(true);
     try {
-      const formData = getFormDataWithFile(data, {
-        file: 'socialWorkerCarePlanFile',
-        fileId: 'socialWorkerCarePlanFileId',
-        fileName: 'socialWorkerCarePlanFileName'
-      }, true);
+      const formData = getFormDataWithFile(
+        data,
+        {
+          file: 'socialWorkerCarePlanFile',
+          fileId: 'socialWorkerCarePlanFileId',
+          fileName: 'socialWorkerCarePlanFileName',
+        },
+        true
+      );
 
       const { id } = await updateCoreCarePackage({ data: formData, packageId });
       router.push(getBrokerPackageRoute(id));
@@ -143,6 +159,7 @@ const CorePackage = () => {
 
   return (
     <>
+      <NewHeader roles={roles ?? []} />
       <ResetApprovedPackageDialog
         isOpen={isDialogOpen}
         onClose={() => setDialogOpen(false)}
@@ -182,18 +199,13 @@ const CorePackage = () => {
               </Container>
               <FurtherDetails settings={settings} control={control} setValue={setValue} />
               <HorizontalSeparator height={48} />
-              <Container borderBottom='1px solid #bfc1c3' />
+              <Container borderBottom="1px solid #bfc1c3" />
               <HorizontalSeparator height={48} />
-              <Heading size='l'>Upload support plan/care package</Heading>
+              <Heading size="l">Upload support plan/care package</Heading>
               <HorizontalSeparator height={8} />
-              <UploadFile
-                isLoading={fileLoading}
-                name='socialWorkerCarePlanFile'
-                control={control}
-                title=''
-              />
+              <UploadFile isLoading={fileLoading} name="socialWorkerCarePlanFile" control={control} title="" />
               <HorizontalSeparator height={48} />
-              <Container borderBottom='1px solid #bfc1c3' />
+              <Container borderBottom="1px solid #bfc1c3" />
               <HorizontalSeparator height={48} />
               <Button isLoading={isRequestBeingSent} disabled={isRequestBeingSent} type="submit">
                 Save and continue
