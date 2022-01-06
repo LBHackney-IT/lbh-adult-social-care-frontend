@@ -5,11 +5,11 @@ const TitleSubtitleHeader = ({ title, subTitle, link, children, width, additiona
   <Container width={width} className="title-subtitle-header">
     <p>{title}</p>
 
-    <div className='main-container'>
+    <div className="main-container">
       <h2>{subTitle}</h2>
-      {link}
       {children}
     </div>
+    {link}
     {additionalComponent}
   </Container>
 );
