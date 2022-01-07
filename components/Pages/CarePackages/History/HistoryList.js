@@ -18,9 +18,12 @@ const HistoryList = () => {
         x.push({
           header: {
             text: `${formatDate(element.dateCreated)} - ${element.description}`,
-            rewriteClass: 'lbh-heading-h4',
+            rewriteClass: 'govuk-heading-m',
           },
-          innerElements: [{ text: `by ${element.creatorName}`, rewriteClass: 'lbh-body-s' }],
+          innerElements: [
+            { text: element?.requestMoreInformation, rewriteClass: 'lbh-body-s' },
+            { text: `by ${element.creatorName}`, rewriteClass: 'lbh-body-s' },
+          ],
         });
       });
       setHistory(x);
