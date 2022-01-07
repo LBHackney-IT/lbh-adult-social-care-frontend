@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import { CARE_PACKAGE_ROUTE, getServiceUserCareChargesRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
+import { getServiceUserCareChargesRoute, SERVICE_USER_SEARCH_ROUTE } from 'routes/RouteConstants';
 import { useRouter } from 'next/router';
-import { Breadcrumbs, Button, Container, Heading, HorizontalSeparator, } from '../../../HackneyDS';
+import { Breadcrumbs, Button, Container, Heading, HorizontalSeparator } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 import AlternativePagination from '../../../AlternativePagination';
 import { CareChargesTable } from './CareChargesTable';
 import CareChargesFilter from '../CareChargesFilter';
 
-const breadcrumbs = [{ text: 'Home', href: CARE_PACKAGE_ROUTE }, { text: 'Care Charges' }];
+const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Care Charges' }];
 
 const NewCareChargePackages = ({
   isLoading,
