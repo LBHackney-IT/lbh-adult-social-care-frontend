@@ -17,7 +17,7 @@ export default function Timeline({ timelines = [] }) {
                 {header.link ? <Link text={header.text} noVisited /> : header.text}
               </h3>
             )}
-            {innerElements.map((element) => {
+            {innerElements?.map((element) => {
               if (element.text) {
                 return (
                   <p className={element.rewriteClass || 'lbh-body'}>
