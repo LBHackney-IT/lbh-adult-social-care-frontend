@@ -29,6 +29,7 @@ module.exports = {
     'arrow-body-style': ['error', 'as-needed'],
     // 'no-param-reassign': [2, { props: false }],
     'no-console': 'off',
+    'no-unused-vars': 'off',
   },
   settings: {
     'import/resolver': {
