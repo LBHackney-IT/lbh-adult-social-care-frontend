@@ -299,7 +299,7 @@ export const ChatIcon = () => (
 );
 
 export const ChatSettingsIcon = ({ onClick = () => {} }) => (
-  <div onClick={onClick} className="chat-settings-icon">
+  <button onClick={onClick} className="chat-settings-icon" type="button">
     <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="3" cy="3" r="3" fill="#525A5B" />
     </svg>
@@ -309,7 +309,7 @@ export const ChatSettingsIcon = ({ onClick = () => {} }) => (
     <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="3" cy="3" r="3" fill="#525A5B" />
     </svg>
-  </div>
+  </button>
 );
 
 export const UploadFilesIcon = ({ onClick = () => {}, className = '' }) => (
