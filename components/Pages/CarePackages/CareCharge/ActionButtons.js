@@ -13,10 +13,14 @@ export const ActionButtons = ({ onEdit, onRevert, onCancel, isCancelDisabled, on
     onRevert();
     setEditMode(false);
   };
+
+  const editButtonText = editMode ? 'Revert' : 'Edit'
+  const generalButtonText = isNew ? 'Cancel' : editButtonText
+  
   return (
     <Container display="flex">
       <Button onClick={editMode || isNew ? handleRevert : handleEdit} secondary outline color="gray">
-        {isNew ? 'Cancel' : editMode ? 'Revert' : 'Edit'}
+        {generalButtonText}
       </Button>
       <VerticalSeparator width="10px" />
       <Button disabled={isCancelDisabled} onClick={onCancel} secondary outline color="blue">

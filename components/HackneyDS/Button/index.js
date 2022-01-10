@@ -25,11 +25,8 @@ export default function Button({
 }) {
   const outerClassName = className ? ` ${className}` : '';
   const outlineClass = outline ? ' outline' : '';
-  const secondaryClassList = secondary
-    ? color
-      ? ` secondary-${color}`
-      : ' govuk-secondary lbh-button--secondary'
-    : '';
+  const secondaryColorClass = color ? ` secondary-${color}` : ' govuk-secondary lbh-button--secondary'
+  const secondaryClassList = secondary ? secondaryColorClass : '';
   const disabledClassList = disabled || isLoading ? ' lbh-button--disabled govuk-button--disabled' : '';
   const mainClass = clearClass ? '' : 'govuk-button lbh-button';
   const addItemClassList = addItem ? ' lbh-button--add' : '';
