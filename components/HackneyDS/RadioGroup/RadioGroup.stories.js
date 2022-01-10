@@ -8,6 +8,7 @@ export default {
 };
 
 const Template = (args) => {
+  //  eslint-disable-next-line react/destructuring-assignment
   const [value, setValue] = useState(args.value || 'item1');
   const [conditions, setConditions] = useState({
     phone: '8-800',
@@ -21,6 +22,7 @@ const Template = (args) => {
     }));
   };
 
+  //  eslint-disable-next-line react/destructuring-assignment
   const items = args.items[0]?.condition
     ? [
         {
@@ -48,12 +50,14 @@ const Template = (args) => {
         },
         { id: 'item3', label: 'Item 3' },
       ]
+    //  eslint-disable-next-line react/destructuring-assignment
     : args.items;
 
   const handle = (name) => {
     setValue(name);
   };
 
+  //  eslint-disable-next-line react/destructuring-assignment
   return <RadioGroup {...args} handle={handle} value={value} items={items} />;
 };
 

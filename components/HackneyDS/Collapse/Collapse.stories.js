@@ -7,6 +7,7 @@ export default {
   component: Collapse,
 };
 
+//  eslint-disable-next-line react/destructuring-assignment
 const Template = (args) => <Collapse {...args}>{args.children}</Collapse>;
 
 export const Default = Template.bind({});

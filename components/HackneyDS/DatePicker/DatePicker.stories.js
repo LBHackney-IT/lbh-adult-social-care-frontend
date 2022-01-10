@@ -12,9 +12,12 @@ const Template = (args) => {
   const [date, setDate] = useState(null);
 
   useEffect(() => {
+    //  eslint-disable-next-line react/destructuring-assignment
     setDate(args.date);
+    //  eslint-disable-next-line react/destructuring-assignment
   }, [args.date]);
 
+  //  eslint-disable-next-line react/destructuring-assignment
   const error = args.day?.error || args.month?.error || args.year?.error;
 
   return (

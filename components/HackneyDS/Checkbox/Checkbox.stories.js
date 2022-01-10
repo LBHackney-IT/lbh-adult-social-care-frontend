@@ -23,7 +23,9 @@ const Template = (args) => {
   };
 
   useEffect(() => {
+    //  eslint-disable-next-line react/destructuring-assignment
     setChecked(args.value);
+    //  eslint-disable-next-line react/destructuring-assignment
   }, [args.value]);
 
   return <Checkbox id="stories-checkbox" {...args} value={checked} onChangeValue={onChangeValue} />;

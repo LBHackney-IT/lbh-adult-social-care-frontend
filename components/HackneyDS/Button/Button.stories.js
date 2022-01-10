@@ -12,6 +12,7 @@ export default {
 };
 
 const Template = (args) => {
+  //  eslint-disable-next-line react/destructuring-assignment
   if (args.coloredButtons) return args.coloredButtons;
 
   return <Button {...args} />;

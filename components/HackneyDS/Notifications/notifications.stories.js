@@ -86,6 +86,7 @@ const Template = (args) => {
       showNotification(notifications[0]);
     }
 
+    //  eslint-disable-next-line react/destructuring-assignment
     if (notifications.length && visibleNotifications.length < args.notificationsLimit) {
       showNotification(notifications[0]);
     }
