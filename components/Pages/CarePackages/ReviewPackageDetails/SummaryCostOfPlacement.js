@@ -7,9 +7,7 @@ export const SummaryCostOfPlacement = ({ costOfPlacement }) => {
   return (
     <p className="brokerage__cost-of-placement">
       Cost of placement
-      <span className="lbh-color-dark-red font-weight-bold">
-        {getNumberWithPreSign(costOfPlacement)}
-      </span>
+      <span className="lbh-color-dark-red font-weight-bold">{getNumberWithPreSign(costOfPlacement)}</span>
     </p>
   );
 };

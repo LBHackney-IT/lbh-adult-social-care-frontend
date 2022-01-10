@@ -12,7 +12,7 @@ export const updateInvoiceStatus = (payRunId, invoiceId, newStatus, notes) => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    params: notes
+    params: notes,
   };
   return axios(options).then(handleResponse).catch(handleError);
 };

@@ -3,7 +3,8 @@ import {
   Button,
   Container,
   DatePicker,
-  FormGroup, Hint,
+  FormGroup,
+  Hint,
   HorizontalSeparator,
   RadioGroup,
   VerticalSeparator,
@@ -14,10 +15,7 @@ import { formValidationSchema } from 'service/formValidationSchema';
 import { addDays, differenceInDays } from 'date-fns';
 import { useLatestPayRunToDate } from 'api';
 
-
-const cycleOptions = [
-  { id: 2, label: 'Residential released holds' }
-];
+const cycleOptions = [{ id: 2, label: 'Residential released holds' }];
 
 export const AdHocAndReleases = ({ createPayrun, isLoading, onClose }) => {
   const {
@@ -44,7 +42,7 @@ export const AdHocAndReleases = ({ createPayrun, isLoading, onClose }) => {
       const formattedCycleDate = new Date(lastCycleDate);
       return differenceInDays(
         new Date(paidUpToDate.getFullYear(), paidUpToDate.getMonth(), paidUpToDate.getDate()),
-        new Date(formattedCycleDate.getFullYear(), formattedCycleDate.getMonth(), formattedCycleDate.getDate()),
+        new Date(formattedCycleDate.getFullYear(), formattedCycleDate.getMonth(), formattedCycleDate.getDate())
       );
     }
     return 0;
@@ -92,8 +90,10 @@ export const AdHocAndReleases = ({ createPayrun, isLoading, onClose }) => {
         {daysLastCycle !== null && (
           <>
             <HorizontalSeparator height={10} />
-            <Hint className="font-size-14px">{daysLastCycle}{daysLastCycle === 1 ? ' day' : ' days'} since last
-              cycle</Hint>
+            <Hint className="font-size-14px">
+              {daysLastCycle}
+              {daysLastCycle === 1 ? ' day' : ' days'} since last cycle
+            </Hint>
           </>
         )}
         <HorizontalSeparator height="20px" />

@@ -18,14 +18,6 @@ import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
   if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.SERVICE_USER_GUID_PACKAGES)) {
     return {
       redirect: {
@@ -69,7 +61,7 @@ const Packages = ({ roles }) => {
             )
             .map((p, index) => (
               <React.Fragment key={p.packageId}>
-                <PackageRequest packageRequest={p} roles={roles}/>
+                <PackageRequest packageRequest={p} roles={roles} />
                 {index < packages.length - 1 && <HorizontalSeparator height="20px" />}
               </React.Fragment>
             ))}

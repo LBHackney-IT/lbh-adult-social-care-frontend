@@ -18,7 +18,7 @@ const statusOptions = [
 const typeOptions = [
   { text: 'All', value: '' },
   { text: 'Residential Recurring', value: '1' },
-  { text: 'Residential Released Holds', value: '2' }
+  { text: 'Residential Released Holds', value: '2' },
 ];
 
 export const PayrunFilters = ({ filters, setFilters, clearFilter, tabView }) => {
@@ -46,7 +46,12 @@ export const PayrunFilters = ({ filters, setFilters, clearFilter, tabView }) => 
     <Container>
       <Container display="flex" alignItems="flex-end">
         <FormGroup label="Search" smallLabel>
-          <SearchBox placeholder="Pay Run Number..." value={searchText} onChangeValue={setSearchText} search={onSearch} />
+          <SearchBox
+            placeholder="Pay Run Number..."
+            value={searchText}
+            onChangeValue={setSearchText}
+            search={onSearch}
+          />
         </FormGroup>
         <VerticalSeparator width="20px" />
         <FormGroup label="Status" inlineLabel smallLabel>

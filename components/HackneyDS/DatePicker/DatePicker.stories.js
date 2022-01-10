@@ -12,13 +12,16 @@ const Template = (args) => {
   const [date, setDate] = useState(null);
 
   useEffect(() => {
+    //  eslint-disable-next-line react/destructuring-assignment
     setDate(args.date);
+    //  eslint-disable-next-line react/destructuring-assignment
   }, [args.date]);
 
+  //  eslint-disable-next-line react/destructuring-assignment
   const error = args.day?.error || args.month?.error || args.year?.error;
 
   return (
-    <FormGroup label='Form label' hint='Form hint' error={error}>
+    <FormGroup label="Form label" hint="Form hint" error={error}>
       <DatePicker {...args} date={date} setDate={setDate} />
     </FormGroup>
   );
@@ -40,7 +43,7 @@ ErrorDay.args = {
   formId: 'error-day',
   day: { error: 'Error day' },
   month: { error: 'Error month' },
-  year: { error: 'Error year' }
+  year: { error: 'Error year' },
 };
 
 export const ErrorMonth = Template.bind({});
@@ -48,7 +51,7 @@ ErrorMonth.args = {
   formId: 'error-month',
   day: { label: 'Day' },
   month: { error: 'Error month' },
-  year: { error: 'Error year' }
+  year: { error: 'Error year' },
 };
 
 export const ErrorYear = Template.bind({});
@@ -56,7 +59,7 @@ ErrorYear.args = {
   formId: 'error-year',
   day: { label: 'Day' },
   month: { label: 'Month' },
-  year: { error: 'Error year' }
+  year: { error: 'Error year' },
 };
 
 export const LabelHintError = Template.bind({});
@@ -66,7 +69,7 @@ LabelHintError.args = {
   label: 'Date picker label',
   day: { label: 'Day' },
   month: { label: 'Month' },
-  year: { error: 'Error year', label: 'Year' }
+  year: { error: 'Error year', label: 'Year' },
 };
 
 export const WithClearButton = Template.bind({});

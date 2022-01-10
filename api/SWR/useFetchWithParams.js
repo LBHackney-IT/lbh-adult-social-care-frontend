@@ -12,7 +12,7 @@ export const useFetchWithParams = ({
   initialData = {
     data: [],
     pagingMetaData: {},
-  }
+  },
 }) => {
   const response = useSWR(shouldFetch ? [url, params] : null, fetchWithParams);
   const { error, data } = response;

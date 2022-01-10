@@ -22,7 +22,7 @@ export const SinglePayRunOverview = ({
   setInvoiceId,
   isActivePayRun,
   updateData,
-  isHeld
+  isHeld,
 }) => {
   const dispatch = useDispatch();
 
@@ -76,15 +76,17 @@ export const SinglePayRunOverview = ({
         <VerticalSeparator width="5px" />
         {handleInvoiceNumber()}
         <VerticalSeparator width={24} />
-        {payRunPeriods && <>
-          <Heading size="s">Pay Run Period:</Heading>
-          <VerticalSeparator width="5px" />
-          <p>
-            {formatDate(payRunPeriods.startDate, 'dd/MM/yy')}
-            {' - '}
-            {formatDate(payRunPeriods.endDate, 'dd/MM/yy')}
-          </p>
-        </>}
+        {payRunPeriods && (
+          <>
+            <Heading size="s">Pay Run Period:</Heading>
+            <VerticalSeparator width="5px" />
+            <p>
+              {formatDate(payRunPeriods.startDate, 'dd/MM/yy')}
+              {' - '}
+              {formatDate(payRunPeriods.endDate, 'dd/MM/yy')}
+            </p>
+          </>
+        )}
       </Container>
       <HorizontalSeparator height="15px" />
       <Container display="grid" gridTemplateColumns="2fr 1.5fr 1fr 0.5fr" columnGap="10px" columnCount="3">

@@ -1,6 +1,6 @@
-import { add, compareDesc, format } from 'date-fns';
 import React from 'react';
-import { getIsoDateWithoutTimezone, isServer } from '../api/Utils/FuncUtils';
+import { add, compareDesc, format } from 'date-fns';
+import { getIsoDateWithoutTimezone, isServer } from '../api';
 import { currency } from '../constants/strings';
 
 const chr4 = () => Math.random().toString(16).slice(-4);
@@ -14,7 +14,7 @@ export const addIndentToString = (string) => {
   const newArray = [];
   arrayOfWords.forEach((item, index) => {
     const newElement = [<span key={item}>{item}</span>];
-    if (index !== arrayOfWords.length - 1) newElement.push(<br key={`after-${item}`}/>);
+    if (index !== arrayOfWords.length - 1) newElement.push(<br key={`after-${item}`} />);
 
     newArray.push(...newElement);
   });
@@ -62,7 +62,7 @@ export const urlToFile = (url, filename) =>
 
 export const formatDocumentInfo = async ({ fileName, href }) => {
   if (!fileName) return;
-  if (href) return await urlToFile(href, fileName);
+  if (href) return urlToFile(href, fileName);
 
   return null;
 };

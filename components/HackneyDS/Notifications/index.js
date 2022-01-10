@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 
 const Notifications = ({ className = '', notifications = [], closeNotification }) => (
   <div className="notifications">
-    {notifications.map(item => {
+    {notifications.map((item) => {
       const allClasses = `notification ${item ? item.className || '' : ''} ${className}`;
 
       return (
@@ -10,7 +10,9 @@ const Notifications = ({ className = '', notifications = [], closeNotification }
           <div>
             <p>{item?.text?.toString() || 'Something went wrong'}</p>
             {closeNotification && (
-              <span className="notification-close" onClick={() => closeNotification(item)}>+</span>
+              <span className="notification-close" onClick={() => closeNotification(item)}>
+                +
+              </span>
             )}
           </div>
         </div>

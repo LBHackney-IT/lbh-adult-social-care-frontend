@@ -1,19 +1,19 @@
-@import "brokerage-container-header";
-@import "user-details";
-@import "core-package-details";
-@import "review-package-details";
-@import "broker-package";
-@import "brokerage-action-card";
-@import "brokerage-cost";
-@import "funded-nursing-care";
-@import "brokerage-submit-for-approval-popup";
-@import "care-charges";
-@import "broker-portal";
-@import "brokerage-weekly-cost";
-@import "approval-package-detail";
-@import "package-details";
-@import "styles/css/Brokerage/search-service-user";
-@import "styles/css/Brokerage/assign-care-plan";
+@import 'brokerage-container-header';
+@import 'user-details';
+@import 'core-package-details';
+@import 'review-package-details';
+@import 'broker-package';
+@import 'brokerage-action-card';
+@import 'brokerage-cost';
+@import 'funded-nursing-care';
+@import 'brokerage-submit-for-approval-popup';
+@import 'care-charges';
+@import 'broker-portal';
+@import 'brokerage-weekly-cost';
+@import 'approval-package-detail';
+@import 'package-details';
+@import 'styles/css/Brokerage/search-service-user';
+@import 'styles/css/Brokerage/assign-care-plan';
 
 .brokerage__container-main {
   @include media-desktop {
@@ -43,7 +43,7 @@
   font-size: 30px;
   margin-bottom: 28px;
   font-weight: bold;
-  color: $lbh-text-colour,
+  color: $lbh-text-colour;
 }
 
 .brokerage__package-dates {

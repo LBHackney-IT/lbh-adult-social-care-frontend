@@ -6,18 +6,14 @@ const mobileMenuSlice = createSlice({
     isOpened: false,
   },
   reducers: {
-    openMobileMenu: (state) => {
-      return {
-        ...state,
-        isOpened: true,
-      };
-    },
-    closeMobileMenu: (state) => {
-      return {
-        ...state,
-        isOpened: false,
-      };
-    },
+    openMobileMenu: (state) => ({
+      ...state,
+      isOpened: true,
+    }),
+    closeMobileMenu: (state) => ({
+      ...state,
+      isOpened: false,
+    }),
   },
 });
 
@@ -25,9 +21,7 @@ const mobileMenuSlice = createSlice({
 export const { openMobileMenu, closeMobileMenu } = mobileMenuSlice.actions;
 
 // Selectors
-const selectMobileMenu = (state) => {
-  return state.mobileMenu;
-};
+const selectMobileMenu = (state) => state.mobileMenu;
 export { selectMobileMenu, mobileMenuSlice };
 
 // Reducer

@@ -29,11 +29,11 @@ $option-hover-color: #176e4f4b;
       box-shadow: none;
       border-color: inherit;
       &:hover {
-          border-color: inherit;
+        border-color: inherit;
       }
     }
     & &__control {
-        cursor: pointer;
+      cursor: pointer;
     }
 
     &__control &__value-container {

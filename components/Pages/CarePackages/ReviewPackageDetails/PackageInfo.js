@@ -36,71 +36,72 @@ const PackageInfo = ({ headerTitle, items, containerId }) => {
       <Container className="review-package-details__title" display="flex" alignItems="center">
         <h3 id={containerId}>{headerTitle || 'Care Package'}</h3>
       </Container>
-      {items?.map(({
-        startDate,
-        endDate,
-        claimReason,
-        claimCollector,
-        subTypeName,
-        cost,
-        title,
-        address,
-        serviceUserNeed,
-        place,
-        id,
-        description,
-        assessmentFileName,
-        assessmentFileId,
-      }) => {
-        const openedServiceUserId = openedServiceUserNeed.includes(id);
-        const collectingReasonLabel = claimReason && CLAIM_REASON_OPTIONS.find((el) => (
-          el.value === claimReason
-        ))?.text;
-        const openedDetailsId = openedDetails.includes(id);
-        return (
-          <Container className="review-package-details__items" key={id}>
-            <DateCostInfo cost={cost} endDate={endDate} startDate={startDate} />
-            <FNCSummary
-              containerId={containerId}
-              claimCollector={claimCollector}
-              assessmentFileName={assessmentFileName}
-              assessmentFileId={assessmentFileId}
-            />
-            <CareChargesSummary
-              containerId={containerId}
-              claimCollector={claimCollector}
-              collectingReasonLabel={collectingReasonLabel}
-              subTypeName={subTypeName}
-            />
-            {description && (
-              <SingleAccordion title="Notes" onClick={() => changeOpenedDetails(id)} isOpened={openedDetailsId}>
-                <p>{description}</p>
-              </SingleAccordion>
-            )}
-            {title && <p className="review-package-details__items-title font-weight-bold">{title}</p>}
-            {address && (
-              <Container>
-                <p className="review-package-details__items-place">
-                  {place} {id}
-                </p>
-                <p className="review-package-details__items-address">{address}</p>
-              </Container>
-            )}
-            {serviceUserNeed && (
-              <SingleAccordion
-                title="Core package details"
-                onClick={() => changeOpenedService(id)}
-                isOpened={openedServiceUserId}
-              >
-                <p>{serviceUserNeed.term}</p>
-                {serviceUserNeed?.careType?.map((careType) => (
-                  <p>{careType}</p>
-                ))}
-              </SingleAccordion>
-            )}
-          </Container>
-        );
-      })}
+      {items?.map(
+        ({
+          startDate,
+          endDate,
+          claimReason,
+          claimCollector,
+          subTypeName,
+          cost,
+          title,
+          address,
+          serviceUserNeed,
+          place,
+          id,
+          description,
+          assessmentFileName,
+          assessmentFileId,
+        }) => {
+          const openedServiceUserId = openedServiceUserNeed.includes(id);
+          const collectingReasonLabel =
+            claimReason && CLAIM_REASON_OPTIONS.find((el) => el.value === claimReason)?.text;
+          const openedDetailsId = openedDetails.includes(id);
+          return (
+            <Container className="review-package-details__items" key={id}>
+              <DateCostInfo cost={cost} endDate={endDate} startDate={startDate} />
+              <FNCSummary
+                containerId={containerId}
+                claimCollector={claimCollector}
+                assessmentFileName={assessmentFileName}
+                assessmentFileId={assessmentFileId}
+              />
+              <CareChargesSummary
+                containerId={containerId}
+                claimCollector={claimCollector}
+                collectingReasonLabel={collectingReasonLabel}
+                subTypeName={subTypeName}
+              />
+              {description && (
+                <SingleAccordion title="Notes" onClick={() => changeOpenedDetails(id)} isOpened={openedDetailsId}>
+                  <p>{description}</p>
+                </SingleAccordion>
+              )}
+              {title && <p className="review-package-details__items-title font-weight-bold">{title}</p>}
+              {address && (
+                <Container>
+                  <p className="review-package-details__items-place">
+                    {place} {id}
+                  </p>
+                  <p className="review-package-details__items-address">{address}</p>
+                </Container>
+              )}
+              {serviceUserNeed && (
+                <SingleAccordion
+                  title="Core package details"
+                  onClick={() => changeOpenedService(id)}
+                  isOpened={openedServiceUserId}
+                >
+                  <p>{serviceUserNeed.term}</p>
+                  {serviceUserNeed?.careType?.map((careType) => (
+                    <p>{careType}</p>
+                  ))}
+                </SingleAccordion>
+              )}
+            </Container>
+          );
+        }
+      )}
       {!items?.length && (
         <>
           <InsetText>No {noContentText[headerTitle]}</InsetText>

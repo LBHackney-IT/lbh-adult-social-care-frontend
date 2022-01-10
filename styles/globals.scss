@@ -3,7 +3,7 @@
 @import 'css/media-breakpoints';
 @import 'css/borders';
 @import 'css/typography';
-@import "css/icons";
+@import 'css/icons';
 @import 'css/table.scss';
 @import 'css/checkbox';
 @import 'css/clientSummary';
@@ -14,21 +14,21 @@
 @import '../public/fonts/fonts';
 @import 'css/dropdown';
 @import 'css/field';
-@import "css/Brokerage";
-@import "css/Approvals";
-@import "css/Header/title-subtitle-header";
-@import "css/file-upload";
+@import 'css/Brokerage';
+@import 'css/Approvals';
+@import 'css/Header/title-subtitle-header';
+@import 'css/file-upload';
 @import 'css/ErrorField/error-field';
 @import 'css/CarePackages';
-@import "css/search-result-count";
+@import 'css/search-result-count';
 @import 'css/Layout/layout';
-@import "css/url-from-file";
+@import 'css/url-from-file';
 @import 'css/Login/login';
 @import 'css/sectionHeading';
-@import "css/title-subtitle";
-@import "css/Finance";
+@import 'css/title-subtitle';
+@import 'css/Finance';
 @import 'css/not-found-page';
-@import "css/pagination";
+@import 'css/pagination';
 @import 'css/inputs';
 @import 'css/notifications';
 @import 'css/loading';
@@ -39,9 +39,9 @@
 @import 'css/CareCharges';
 @import '../components/Pages/CareCharges/SingleCareCharge/styles.scss';
 @import '../components/Pages/ServiceUser/Packages/style.scss';
-@import "css/container";
-@import "css/ServiceUserSearch";
-@import "css/colors";
+@import 'css/container';
+@import 'css/ServiceUserSearch';
+@import 'css/colors';
 
 * {
   font-family: 'OpenSans', sans-serif !important;
@@ -95,4 +95,4 @@ button {
   pointer-events: none !important;
 }
 
-@import "~bulma/css/bulma.min.css";
+@import '~bulma/css/bulma.min.css';

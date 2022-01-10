@@ -10,14 +10,6 @@ import { accessRoutes } from './api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
   if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.APPROVALS)) {
     return {
       redirect: {

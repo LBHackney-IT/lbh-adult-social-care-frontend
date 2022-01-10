@@ -40,7 +40,7 @@ const ViewDocument = ({
         display: 'flex',
         width: mainLoading ? 'auto' : 'fit-content',
         justifyContent: mainLoading ? 'center' : 'flex-start',
-        padding: 0
+        padding: 0,
       }}
       className={className}
       onClick={async (event) => {

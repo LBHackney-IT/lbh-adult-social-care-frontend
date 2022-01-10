@@ -58,21 +58,29 @@ const EndDetailsModal = ({ isOpen, onClose, endPackage, packageData }) => {
             </Container>
             <HorizontalSeparator height="15px" />
 
-            <Controller control={control} name='endDate' render={({ field }) => (
-              <Container>
-                <Heading size="s">Select an end date for this package</Heading>
-                <HorizontalSeparator height={8} />
-                <DatePick error={errors.endDate?.message} dateValue={field.value} setDate={field.onChange} />
-              </Container>
-            )} />
+            <Controller
+              control={control}
+              name="endDate"
+              render={({ field }) => (
+                <Container>
+                  <Heading size="s">Select an end date for this package</Heading>
+                  <HorizontalSeparator height={8} />
+                  <DatePick error={errors.endDate?.message} dateValue={field.value} setDate={field.onChange} />
+                </Container>
+              )}
+            />
             <HorizontalSeparator height={20} />
-            <Controller control={control} name='notes' render={({ field }) => (
-              <Container>
-                <Heading size="s">Add notes</Heading>
-                <HorizontalSeparator height={8} />
-                <Textarea value={field.value} handler={field.onChange} />
-              </Container>
-            )} />
+            <Controller
+              control={control}
+              name="notes"
+              render={({ field }) => (
+                <Container>
+                  <Heading size="s">Add notes</Heading>
+                  <HorizontalSeparator height={8} />
+                  <Textarea value={field.value} handler={field.onChange} />
+                </Container>
+              )}
+            />
           </Container>
           <HorizontalSeparator height={24} />
           <Container display="flex" justifyContent="space-between">

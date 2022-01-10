@@ -22,7 +22,7 @@ export const handleError = (error) => {
 
     // return array of messages from server response
     if (Array.isArray(error.response.data.errors)) {
-      errorMessage = error.response.data.errors.map(item => item.message);
+      errorMessage = error.response.data.errors.map((item) => item.message);
       throw errorMessage;
     }
 

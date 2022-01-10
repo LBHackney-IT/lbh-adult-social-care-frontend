@@ -73,8 +73,7 @@ const useGetActualReclaims = (reclaims) => {
 export const useProvisionalCareCharges = (packageId) =>
   useGetData(getCarePackageUrl(packageId, '/reclaims/care-charges/provisional'));
 
-export const usePackageCareCharges = (packageId) =>
-  useGetData(getCarePackageUrl(packageId, '/reclaims/care-charges'));
+export const usePackageCareCharges = (packageId) => useGetData(getCarePackageUrl(packageId, '/reclaims/care-charges'));
 
 export const usePackageCareCharge = (packageId, subType) => {
   const response = useSWR(

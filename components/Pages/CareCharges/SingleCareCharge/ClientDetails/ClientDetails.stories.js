@@ -20,5 +20,5 @@ Default.args = {
     address: faker.address.streetAddress(),
     mosaicId: faker.random.alphaNumeric(6),
     cederId: faker.random.alphaNumeric(7),
-  }
+  },
 };

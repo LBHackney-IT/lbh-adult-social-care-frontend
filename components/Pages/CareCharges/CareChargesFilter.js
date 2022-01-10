@@ -19,8 +19,8 @@ const CareChargesFilter = ({
   filters,
   changeFilter,
   modifiedByOptions,
-  clearFilters
-}) =>
+  clearFilters,
+}) => (
   <Container className="new-care-charge__selectors">
     <Container display="flex" alignItems="flex-end">
       <FormGroup className="search" label="Search" smallLabel>
@@ -42,14 +42,11 @@ const CareChargesFilter = ({
     <HorizontalSeparator height={25} />
     <Container display="flex">
       <FormGroup label="Modified by" smallLabel>
-        <Select
-          options={modifiedByOptions}
-          onChangeValue={changeFilter('modifiedBy')}
-          value={filters.modifiedBy}
-        />
+        <Select options={modifiedByOptions} onChangeValue={changeFilter('modifiedBy')} value={filters.modifiedBy} />
       </FormGroup>
       <ResetFilterButton filters={filters} onClearFilters={clearFilters} />
     </Container>
-  </Container>;
+  </Container>
+);
 
 export default CareChargesFilter;

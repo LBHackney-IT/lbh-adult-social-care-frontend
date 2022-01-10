@@ -5,7 +5,7 @@ export const useSuppliers = ({ params, shouldFetch }) =>
   useFetchWithParams({
     params,
     shouldFetch,
-    url: '/suppliers'
+    url: '/suppliers',
   });
 
 export const useSingleSupplier = (supplierId) =>

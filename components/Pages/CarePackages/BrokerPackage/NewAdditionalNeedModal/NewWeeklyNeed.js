@@ -15,7 +15,7 @@ export const NewWeeklyNeed = ({ createNeed, defaultValues, onChangeValue }) => {
     defaultValues,
   });
 
-  const startDate = watch('startDate')
+  const startDate = watch('startDate');
 
   const onSubmit = (data) => createNeed(data);
 

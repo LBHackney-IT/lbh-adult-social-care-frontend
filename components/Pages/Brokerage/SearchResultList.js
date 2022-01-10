@@ -4,19 +4,15 @@ import { Container, HorizontalSeparator, VerticalSeparator } from '../../Hackney
 import ServiceUserDetails from './ServiceUserDetails';
 
 const SearchResultList = ({ searchResults, createNewPackage }) => {
-
   const onCreateNewPackage = (item) => (e) => {
     e.preventDefault();
     createNewPackage(item);
   };
 
   return searchResults.map((item) => (
-    <Container
-      key={`${item.mosaicId}${item.firstName}${item.lastName}`}
-      className="search-service-user__card"
-    >
+    <Container key={`${item.mosaicId}${item.firstName}${item.lastName}`} className="search-service-user__card">
       <ServiceUserDetails
-        className=''
+        className=""
         hackneyId={item.mosaicId}
         dateOfBirth={item.dateOfBirth}
         serviceUserName={`${item.firstName} ${item.lastName}`}
