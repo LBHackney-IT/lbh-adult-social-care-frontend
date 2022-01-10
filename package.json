@@ -96,7 +96,8 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "faker": "^5.5.3",
-    "husky": "^7.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.7",
     "prettier": "2.3.2",
     "resolve-url-loader": "^4.0.0",
     "sass": "^1.38.0",
@@ -104,5 +105,16 @@
     "sb": "^6.3.7",
     "style-loader": "2.0.0",
     "webpack": "^5.51.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ]
   }
 }
