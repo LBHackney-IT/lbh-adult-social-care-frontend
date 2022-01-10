@@ -45,11 +45,14 @@
 .funded-nursing-care__table {
   margin-bottom: 20px;
 
-  .govuk-table__cell, .govuk-table__header, .govuk-table__footer {
+  .govuk-table__cell,
+  .govuk-table__header,
+  .govuk-table__footer {
     border-bottom: none;
   }
 
-  th, td {
+  th,
+  td {
     font-size: 14px;
   }
 }

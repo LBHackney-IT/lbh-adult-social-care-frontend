@@ -20,13 +20,13 @@ const Template = (args) => {
 
   const onChangeValue = (value) => {
     setChecked(value);
-  }
+  };
 
   useEffect(() => {
     setChecked(args.value);
   }, [args.value]);
 
-  return <Checkbox id='stories-checkbox' {...args} value={checked} onChangeValue={onChangeValue} />;
+  return <Checkbox id="stories-checkbox" {...args} value={checked} onChangeValue={onChangeValue} />;
 };
 
 export const Default = Template.bind({});
@@ -36,7 +36,7 @@ Default.args = {
   value: false,
   small: false,
   disabled: false,
-  handler () {},
+  handler() {},
 };
 
 export const Disabled = Template.bind({});
@@ -46,7 +46,7 @@ Disabled.args = {
   value: false,
   small: false,
   disabled: true,
-  handler () {},
+  handler() {},
 };
 
 export const Small = Template.bind({});
@@ -56,5 +56,5 @@ Small.args = {
   value: false,
   small: true,
   disabled: false,
-  handler () {},
+  handler() {},
 };

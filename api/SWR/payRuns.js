@@ -44,10 +44,11 @@ export const useLatestPayRunToDate = (payRunTypeId) =>
 export const useReleasedInvoiceNumber = () =>
   useGetData(`${PAY_RUNS_URL}/released-invoice-count`, 'Cannot get released invoice count', null);
 
-export const getPayrunCedarFile = (payRunId) => axios({
-  url: `${BASE_URL}/v1${PAY_RUNS_URL}/${payRunId}/download`,
-  method: requestMethods.get,
-  responseType: 'blob',
-})
-  .then(handleResponse)
-  .catch(handleError);
+export const getPayrunCedarFile = (payRunId) =>
+  axios({
+    url: `${BASE_URL}/v1${PAY_RUNS_URL}/${payRunId}/download`,
+    method: requestMethods.get,
+    responseType: 'blob',
+  })
+    .then(handleResponse)
+    .catch(handleError);

@@ -16,7 +16,7 @@ export const FurtherDetails = ({ settings, control, setValue }) => {
     if (settings) {
       // eslint-disable-next-line no-restricted-syntax
       for (const [key, value] of Object.entries(settings)) {
-        if(key !== 'id') setValue(key, value);
+        if (key !== 'id') setValue(key, value);
       }
     }
   }, [settings]);
@@ -24,14 +24,12 @@ export const FurtherDetails = ({ settings, control, setValue }) => {
   return (
     <>
       <FormGroup label="Further details" hint="select all that apply">
-        {checkboxOptions.map(({ id, label}) => (
+        {checkboxOptions.map(({ id, label }) => (
           <Controller
             key={id}
             name={id}
             control={control}
-            render={({ field }) => (
-              <Checkbox id={id} handler={field.onChange} label={label} {...field} />
-            )}
+            render={({ field }) => <Checkbox id={id} handler={field.onChange} label={label} {...field} />}
           />
         ))}
       </FormGroup>

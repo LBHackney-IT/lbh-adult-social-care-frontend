@@ -13,7 +13,7 @@ export const Default = Template.bind({});
 
 Default.args = {
   children: <p>children content</p>,
-  title: <p>Title Content</p>
+  title: <p>Title Content</p>,
 };
 
 export const Expanded = Template.bind({});

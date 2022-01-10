@@ -14,7 +14,7 @@ import {
   HorizontalSeparator,
   Select,
   Textarea,
-  VerticalSeparator
+  VerticalSeparator,
 } from '../../../HackneyDS';
 import Loading from '../../../Loading';
 
@@ -33,7 +33,7 @@ const schema = yup.object().shape({
     .string()
     .typeError('Please enter a reason')
     .required('Please enter a reason')
-    .test('reasonForHolding', 'Please enter a reason', (value) => value?.trim?.())
+    .test('reasonForHolding', 'Please enter a reason', (value) => value?.trim?.()),
 });
 
 const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, closeModal, updateData }) => {
@@ -101,19 +101,20 @@ const HoldPaymentDialog = ({ invoiceId, payRunId, isOpen, closeModal, updateData
             control={control}
             name="reasonForHolding"
             render={({ field }) => (
-              <FormGroup error={errors.reasonForHolding?.message} required label="Enter reason for hold And suggested remedial action">
-                <Textarea
-                  trimValue
-                  value={field.value}
-                  handler={field.onChange}
-                  rows={5}
-                />
+              <FormGroup
+                error={errors.reasonForHolding?.message}
+                required
+                label="Enter reason for hold And suggested remedial action"
+              >
+                <Textarea trimValue value={field.value} handler={field.onChange} rows={5} />
               </FormGroup>
             )}
           />
           <HorizontalSeparator height={32} />
           <Container display="flex">
-            <Button onClick={onCloseModal} borderRadius={0} outline color="gray" secondary>Cancel</Button>
+            <Button onClick={onCloseModal} borderRadius={0} outline color="gray" secondary>
+              Cancel
+            </Button>
             <VerticalSeparator width={8} />
             <Button
               isLoading={isLoading}

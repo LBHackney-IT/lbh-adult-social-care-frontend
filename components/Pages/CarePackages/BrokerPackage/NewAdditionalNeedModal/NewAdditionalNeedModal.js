@@ -28,8 +28,8 @@ const NewAdditionalNeedModal = ({ isOpen, onClose, handleConfirmation }) => {
   const [oneOfNeed, setOneOfNeed] = useState(initialOneOfNeed);
 
   const handleClose = () => {
-    setOneOfNeed({ ...initialOneOfNeed});
-    setWeeklyNeed({ ...initialWeeklyNeed});
+    setOneOfNeed({ ...initialOneOfNeed });
+    setWeeklyNeed({ ...initialWeeklyNeed });
     onClose();
   };
 
@@ -38,13 +38,15 @@ const NewAdditionalNeedModal = ({ isOpen, onClose, handleConfirmation }) => {
     handleClose();
   };
 
-  const onChangeValue = (setter) => ({ field, value }) => {
-    setter(prevState => ({
-      ...prevState,
-      [field.name]: value
-    }));
-    field.onChange(value);
-  };
+  const onChangeValue =
+    (setter) =>
+    ({ field, value }) => {
+      setter((prevState) => ({
+        ...prevState,
+        [field.name]: value,
+      }));
+      field.onChange(value);
+    };
 
   const tabs = ['Weekly', 'One-Off'];
 

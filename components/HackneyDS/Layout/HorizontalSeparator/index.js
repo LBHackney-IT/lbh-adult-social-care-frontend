@@ -1,3 +1,3 @@
 import React from 'react';
 
-export const HorizontalSeparator = ({height}) => <div style={{height}} className="horizontal-separator" />
+export const HorizontalSeparator = ({ height }) => <div style={{ height }} className="horizontal-separator" />;

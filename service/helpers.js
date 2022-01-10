@@ -14,7 +14,7 @@ export const addIndentToString = (string) => {
   const newArray = [];
   arrayOfWords.forEach((item, index) => {
     const newElement = [<span key={item}>{item}</span>];
-    if (index !== arrayOfWords.length - 1) newElement.push(<br key={`after-${item}`}/>);
+    if (index !== arrayOfWords.length - 1) newElement.push(<br key={`after-${item}`} />);
 
     newArray.push(...newElement);
   });

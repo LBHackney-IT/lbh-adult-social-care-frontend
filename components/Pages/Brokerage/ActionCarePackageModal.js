@@ -5,7 +5,7 @@ const ActionCarePackageModal = ({ close, title, actions, isOpened, notes, setNot
   <Dialog isOpen={isOpened} onClose={close} className={className}>
     <h2>{title}</h2>
     <FormGroup className="brokerage__add-notes" label="Add Notes">
-      <Textarea value={notes} handler={setNotes}/>
+      <Textarea value={notes} handler={setNotes} />
     </FormGroup>
     <Container className="brokerage__actions">
       {actions.map(({ loading, color, title: actionTitle, onClick, className: actionClassName }) => {
@@ -23,7 +23,7 @@ const ActionCarePackageModal = ({ close, title, actions, isOpened, notes, setNot
           >
             {actionTitle}
           </Button>
-        )
+        );
       })}
     </Container>
   </Dialog>

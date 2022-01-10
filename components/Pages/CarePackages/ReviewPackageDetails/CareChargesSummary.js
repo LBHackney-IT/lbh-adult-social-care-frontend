@@ -11,7 +11,6 @@ export const CareChargesSummary = ({ containerId, claimCollector, subTypeName, c
 
   if (!(containerId === 'care-charges' && careChargeClaimCollector)) return null;
 
-
   return (
     <>
       <p>
@@ -32,5 +31,5 @@ export const CareChargesSummary = ({ containerId, claimCollector, subTypeName, c
         </>
       )}
     </>
-  )
-}
+  );
+};

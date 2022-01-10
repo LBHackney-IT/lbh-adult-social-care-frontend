@@ -2,18 +2,21 @@ import React from 'react';
 import Label from '../lettering/Label';
 
 const RadioItem = React.forwardRef(
-  ({
-    label = '',
-    className = '',
-    value,
-    name = 'radioItem',
-    id = 'radioItem',
-    checked = false,
-    disabled = false,
-    labelHeading,
-    handle,
-    hint,
-  }, inputRef) => {
+  (
+    {
+      label = '',
+      className = '',
+      value,
+      name = 'radioItem',
+      id = 'radioItem',
+      checked = false,
+      disabled = false,
+      labelHeading,
+      handle,
+      hint,
+    },
+    inputRef
+  ) => {
     const outerClass = className ? ` ${className}` : '';
 
     return (

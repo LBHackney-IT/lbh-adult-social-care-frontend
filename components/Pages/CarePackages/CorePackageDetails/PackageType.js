@@ -21,11 +21,7 @@ export const PackageType = ({ errors, control, packageStatus }) => {
           name="packageType"
           control={control}
           render={({ field }) => (
-            <Select
-              disabled={packageStatus && packageStatus > 2}
-              options={packageTypes}
-              {...field}
-            />
+            <Select disabled={packageStatus && packageStatus > 2} options={packageTypes} {...field} />
           )}
         />
       </FormGroup>

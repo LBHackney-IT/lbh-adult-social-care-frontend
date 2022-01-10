@@ -68,7 +68,7 @@
 }
 .govuk-table__cell--numeric,
 .govuk-table__header--numeric,
-.govuk-table__footer--numeric{
+.govuk-table__footer--numeric {
   text-align: right;
 }
 .govuk-table__caption {
@@ -119,7 +119,15 @@
   table-layout: fixed;
 }
 
-$storybook-fixed-table: (1: 20px, 2: 100px, 3: 100px, 4: 100px, 5: 100px, 6: 100px, 7: 100px);
+$storybook-fixed-table: (
+  1: 20px,
+  2: 100px,
+  3: 100px,
+  4: 100px,
+  5: 100px,
+  6: 100px,
+  7: 100px,
+);
 
 .stories-table-body {
   @each $index, $size in $storybook-fixed-table {
@@ -154,8 +162,8 @@ $storybook-fixed-table: (1: 20px, 2: 100px, 3: 100px, 4: 100px, 5: 100px, 6: 100
   line-height: 1.3157894737;
 }
 
-.govuk-table__footer{
-  border:none;
+.govuk-table__footer {
+  border: none;
 }
 
 @media print {

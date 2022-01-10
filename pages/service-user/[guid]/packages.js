@@ -61,7 +61,7 @@ const Packages = ({ roles }) => {
             )
             .map((p, index) => (
               <React.Fragment key={p.packageId}>
-                <PackageRequest packageRequest={p} roles={roles}/>
+                <PackageRequest packageRequest={p} roles={roles} />
                 {index < packages.length - 1 && <HorizontalSeparator height="20px" />}
               </React.Fragment>
             ))}

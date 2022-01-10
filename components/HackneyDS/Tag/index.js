@@ -8,7 +8,10 @@ export default function Tag({ children, color, border, outline, noBackground, cl
   const noBackgroundClass = noBackground ? ' no-background' : '';
 
   return (
-    <span style={{ border }} className={`lbh-tag govuk-tag${outlineClass}${tagColorClass}${outerClass}${noBackgroundClass}`}>
+    <span
+      style={{ border }}
+      className={`lbh-tag govuk-tag${outlineClass}${tagColorClass}${outerClass}${noBackgroundClass}`}
+    >
       {children}
     </span>
   );

@@ -37,7 +37,7 @@ const initialFilters = {
 
 const breadcrumbs = [{ text: 'Home', href: '/' }, { text: 'Brokerage' }];
 
-const Index = ({roles}) => {
+const Index = ({ roles }) => {
   const router = useRouter();
 
   const [pageNumber, setPageNumber] = useState(1);

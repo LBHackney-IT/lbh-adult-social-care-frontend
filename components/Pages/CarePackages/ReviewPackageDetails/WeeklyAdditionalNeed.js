@@ -7,12 +7,12 @@ import BrokerageBorderCost from '../BrokerageBorderCost';
 const WeeklyAdditionalNeed = ({ data, goToPackage }) => (
   <Container className="review-package-details__cost-info-item">
     <PackageInfo
-      containerId='weekly-additional-need'
-      headerTitle='Weekly Additional Need'
+      containerId="weekly-additional-need"
+      headerTitle="Weekly Additional Need"
       items={data?.additionalWeeklyNeeds}
     />
     {data?.additionalWeeklyCost > 0 && (
-      <BrokerageBorderCost totalCost={data?.additionalWeeklyCost} totalCostHeader='Total (Net Off)' />
+      <BrokerageBorderCost totalCost={data?.additionalWeeklyCost} totalCostHeader="Total (Net Off)" />
     )}
     {goToPackage && (
       <Container className="review-package-details__items-actions" display="flex">

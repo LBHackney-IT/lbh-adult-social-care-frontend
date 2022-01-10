@@ -12,9 +12,9 @@ export default {
 };
 
 const Template = (args) => {
-  if(args.coloredButtons) return args.coloredButtons;
+  if (args.coloredButtons) return args.coloredButtons;
 
-  return <Button {...args} />
+  return <Button {...args} />;
 };
 
 export const Default = Template.bind({});
@@ -99,31 +99,46 @@ OutlineButton.args = {
 export const ColoredButtons = Template.bind({});
 ColoredButtons.args = {
   coloredButtons: (
-    <Container className='storybook-buttons' display='flex'>
+    <Container className="storybook-buttons" display="flex">
       <Container>
         <Button>Primary</Button>
         <HorizontalSeparator height={10} />
-        <Button secondary color='red'>Secondary red</Button>
+        <Button secondary color="red">
+          Secondary red
+        </Button>
         <HorizontalSeparator height={10} />
-        <Button secondary color='yellow'>Secondary yellow</Button>
+        <Button secondary color="yellow">
+          Secondary yellow
+        </Button>
         <HorizontalSeparator height={10} />
-        <Button secondary color='gray'>Secondary gray</Button>
+        <Button secondary color="gray">
+          Secondary gray
+        </Button>
         <HorizontalSeparator height={10} />
-        <Button secondary color='blue'>Secondary blue</Button>
+        <Button secondary color="blue">
+          Secondary blue
+        </Button>
       </Container>
       <VerticalSeparator width={10} />
       <Container>
         <Button outline>Primary</Button>
         <HorizontalSeparator height={10} />
-        <Button outline secondary color='red'>Secondary red</Button>
+        <Button outline secondary color="red">
+          Secondary red
+        </Button>
         <HorizontalSeparator height={10} />
-        <Button outline secondary color='yellow'>Secondary yellow</Button>
+        <Button outline secondary color="yellow">
+          Secondary yellow
+        </Button>
         <HorizontalSeparator height={10} />
-        <Button outline secondary color='gray'>Secondary gray</Button>
+        <Button outline secondary color="gray">
+          Secondary gray
+        </Button>
         <HorizontalSeparator height={10} />
-        <Button outline secondary color='blue'>Secondary blue</Button>
+        <Button outline secondary color="blue">
+          Secondary blue
+        </Button>
       </Container>
-
     </Container>
-  )
+  ),
 };

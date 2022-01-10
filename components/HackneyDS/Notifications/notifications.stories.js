@@ -36,7 +36,7 @@ const Template = (args) => {
   const addNotification = () => {
     setNotifications([
       ...notifications,
-      { ...newNotification, text: `${newNotification.text} ${Math.random().toString().slice(2, 4)}` }
+      { ...newNotification, text: `${newNotification.text} ${Math.random().toString().slice(2, 4)}` },
     ]);
   };
 
@@ -47,7 +47,7 @@ const Template = (args) => {
   };
 
   const onChangeNewNotification = (field, value) => {
-    setNewNotification(prevState => ({
+    setNewNotification((prevState) => ({
       ...prevState,
       [field]: value,
     }));
@@ -61,20 +61,22 @@ const Template = (args) => {
   useEffect(() => {
     if (!visibleNotifications.length) return;
 
-    const newTimers = visibleNotifications.filter(item => !item.activeTimer).map(visibleNotification => (
-      setTimeout(() => {
-        removeNotification(visibleNotification);
-      }, visibleNotification.time)
-    ));
+    const newTimers = visibleNotifications
+      .filter((item) => !item.activeTimer)
+      .map((visibleNotification) =>
+        setTimeout(() => {
+          removeNotification(visibleNotification);
+        }, visibleNotification.time)
+      );
 
     if (!newTimers.length) return;
 
-    setTimers(prevState => [...prevState, ...newTimers]);
+    setTimers((prevState) => [...prevState, ...newTimers]);
   }, [visibleNotifications]);
 
   useEffect(() => {
     if (timers.length) {
-      const activatedNotifications = visibleNotifications.map(item => ({ ...item, activeTimer: true }));
+      const activatedNotifications = visibleNotifications.map((item) => ({ ...item, activeTimer: true }));
       setVisibleNotifications(activatedNotifications);
     }
   }, [timers]);
@@ -127,11 +129,11 @@ const Template = (args) => {
 export const Default = Template.bind({});
 
 Default.args = {
-  notificationsLimit: 1
+  notificationsLimit: 1,
 };
 
 export const MultipleNotifications = Template.bind({});
 
 MultipleNotifications.args = {
-  notificationsLimit: 2
+  notificationsLimit: 2,
 };

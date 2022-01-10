@@ -44,7 +44,7 @@ export const PayRunItem = ({
       await updateInvoiceStatus(payRunId, invoiceId, 4, notes);
       pushNotification('Invoice has been rejected', 'success');
       await updateData();
-      closeModal()
+      closeModal();
     } catch (e) {
       pushNotification(e);
     }

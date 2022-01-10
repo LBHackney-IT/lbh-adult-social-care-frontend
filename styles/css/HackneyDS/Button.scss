@@ -37,7 +37,8 @@
   background-color: $lbh-primary;
   color: white;
 
-  &:hover, &:target {
+  &:hover,
+  &:target {
     background-color: $button-primary-hover;
   }
 
@@ -49,11 +50,13 @@
     color: $lbh-green1;
     border-color: $lbh-green1;
 
-    &[disabled], &.lbh-button--disabled {
+    &[disabled],
+    &.lbh-button--disabled {
       color: white;
     }
 
-    &:hover, &:target {
+    &:hover,
+    &:target {
       background: $button-primary-hover;
       color: white;
     }
@@ -86,11 +89,12 @@
   }
 
   &.warning-button {
-    background-color: #81312F;
+    background-color: #81312f;
   }
 }
 
-button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):not([disabled]) {
+button:not(.lbh-button--disabled):not([disabled]),
+a:not(.lbh-button--disabled):not([disabled]) {
   &[disabled] {
     cursor: initial;
   }
@@ -99,7 +103,8 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
     background-color: $button-secondary-red;
     color: white;
 
-    &:hover, &:target {
+    &:hover,
+    &:target {
       background-color: $button-secondary-red-hover;
       color: white;
     }
@@ -112,7 +117,8 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
       color: $lbh-f01;
       border-color: $lbh-f01;
 
-      &:hover, &:target {
+      &:hover,
+      &:target {
         background: $button-secondary-red-hover;
         color: white;
       }
@@ -127,7 +133,8 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
     background-color: $button-secondary-blue;
     color: white;
 
-    &:hover, &:target {
+    &:hover,
+    &:target {
       background-color: $lbh-hover-link;
       color: white;
     }
@@ -140,7 +147,8 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
       color: $button-secondary-blue;
       border-color: $button-secondary-blue;
 
-      &:hover, &:target {
+      &:hover,
+      &:target {
         background: $lbh-hover-link;
         color: white;
       }
@@ -155,7 +163,8 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
     background-color: $button-secondary-yellow;
     color: $button-secondary-gray-text;
 
-    &:hover, &:target {
+    &:hover,
+    &:target {
       background-color: $button-secondary-yellow-hover;
     }
 
@@ -167,7 +176,8 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
       border-color: $button-secondary-yellow;
       color: $button-secondary-yellow;
 
-      &:hover, &:target {
+      &:hover,
+      &:target {
         background-color: $button-secondary-yellow-hover;
         color: white;
       }
@@ -182,7 +192,8 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
     background-color: $lbh-secondary-text-colour;
     color: white;
 
-    &:hover, &:target {
+    &:hover,
+    &:target {
       background-color: $lbh-gray1;
     }
 
@@ -194,7 +205,8 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
       color: $lbh-gray-text;
       border-color: $lbh-gray-text;
 
-      &:hover, &:target {
+      &:hover,
+      &:target {
         background: $lbh-gray1;
         color: white;
       }
@@ -204,7 +216,8 @@ button:not(.lbh-button--disabled):not([disabled]), a:not(.lbh-button--disabled):
       }
     }
   }
-  &.outline, .lbh-button {
+  &.outline,
+  .lbh-button {
     background-color: transparent;
     transition: background-color 0.2s ease;
     border: 1px solid;

@@ -43,7 +43,7 @@ export const CareChargeSchedule = ({ control, isOngoing, errors, startDate, isS1
           name="isOngoing"
           control={control}
           render={({ field }) => (
-            <Checkbox id='isOngoing' label="Ongoing" value={field.value} onChangeValue={field.onChange} {...field} />
+            <Checkbox id="isOngoing" label="Ongoing" value={field.value} onChangeValue={field.onChange} {...field} />
           )}
         />
       </Container>

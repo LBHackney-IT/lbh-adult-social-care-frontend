@@ -7,9 +7,8 @@ export const FileUpload = ({
   setFile,
   setFiles,
   id = 'file-upload',
-  label = 'Choose File'
+  label = 'Choose File',
 }) => {
-
   const changeInput = (e) => {
     if (setFile) return setFile(e.target.files[0]);
     if (setFiles) return setFiles(e.target.files);
@@ -17,7 +16,7 @@ export const FileUpload = ({
     return onChange(e);
   };
 
-  const accept = extensions ? extensions.map(extension => `.${extension}`).join(', ') : '';
+  const accept = extensions ? extensions.map((extension) => `.${extension}`).join(', ') : '';
 
   return (
     <div className={`govuk-form-group lbh-form-group ${className}`}>

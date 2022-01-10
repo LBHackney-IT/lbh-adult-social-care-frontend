@@ -36,7 +36,7 @@ export const Pagination = ({ totalCount, currentPage, showOnlyCurrentPage, pageS
         </li>
         {showOnlyCurrentPage && (
           <li role="button" className="lbh-pagination__item">
-            <a className='lbh-pagination__link--current' aria-label="Page 1">
+            <a className="lbh-pagination__link--current" aria-label="Page 1">
               {activePage}
             </a>
           </li>

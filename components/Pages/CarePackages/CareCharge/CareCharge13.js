@@ -150,7 +150,7 @@ export const CareCharge13 = ({
         title={
           <Container display="flex" flexDirection="column">
             {status ? (
-              <Container display="flex" alignItems='flex-start'>
+              <Container display="flex" alignItems="flex-start">
                 <Tag outline color={getTagColorFromReclaimStatus(status)}>
                   {geTagTextFromReclaimStatus(status)}
                 </Tag>

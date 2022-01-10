@@ -18,7 +18,7 @@ Default.args = {
   conversation: [
     {
       createdAt: new Date(),
-      message: 'Hello. It\'s time to schedule a review of your plan. Is some time in the next week good?',
+      message: "Hello. It's time to schedule a review of your plan. Is some time in the next week good?",
       messageFromId: null,
       userName: 'User 1',
     },
@@ -34,7 +34,7 @@ Default.args = {
       message: "That's great. I'll give you a call then.",
       messageFromId: null,
       userName: 'User 1',
-    }
+    },
   ],
   className: '',
 };
@@ -46,7 +46,7 @@ WithoutDetails.args = {
   conversation: [
     {
       createdAt: new Date(),
-      message: 'Hello. It\'s time to schedule a review of your plan. Is some time in the next week good?',
+      message: "Hello. It's time to schedule a review of your plan. Is some time in the next week good?",
       messageFromId: null,
       userName: 'User 1',
     },
@@ -62,7 +62,7 @@ WithoutDetails.args = {
       message: "That's great. I'll give you a call then.",
       messageFromId: null,
       userName: 'User 1',
-    }
+    },
   ],
   className: '',
 };

@@ -24,8 +24,8 @@
   margin: 0;
 }
 
-.lbh-pagination__list{
-    margin:0;
+.lbh-pagination__list {
+  margin: 0;
 }
 .lbh-pagination__item--disabled,
 .lbh-pagination__item:first-of-type a,
@@ -33,7 +33,8 @@
 .lbh-pagination__list {
   padding: 0;
 }
-.lbh-pagination__item, .lbh-pagination__item--disabled {
+.lbh-pagination__item,
+.lbh-pagination__item--disabled {
   padding: 0;
   display: inline-block;
   margin-right: 7px;

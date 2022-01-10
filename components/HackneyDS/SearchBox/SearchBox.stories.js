@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { SearchBox } from '../index';
 
 export default {
@@ -17,7 +17,7 @@ const Template = (args) => {
   }, [args?.value]);
 
   return <SearchBox {...args} clear={localClear} value={value} onChangeValue={setValue} />;
-}
+};
 
 export const Default = Template.bind({});
 Default.args = {

@@ -1,7 +1,7 @@
 import { Button, Container, VerticalSeparator } from 'components';
 import React, { useState } from 'react';
 
-export const ActionButtons = ({ onEdit, onRevert, onCancel,isCancelDisabled, onEnd, isNew }) => {
+export const ActionButtons = ({ onEdit, onRevert, onCancel, isCancelDisabled, onEnd, isNew }) => {
   const [editMode, setEditMode] = useState(false);
 
   const handleEdit = () => {
