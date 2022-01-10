@@ -8,6 +8,7 @@ export default {
 };
 
 const Template = (args) => {
+  //  eslint-disable-next-line react/destructuring-assignment
   const [value, setValue] = useState(args.value || 'item1');
   const [conditions, setConditions] = useState({
     phone: '8-800',
@@ -15,45 +16,50 @@ const Template = (args) => {
   });
 
   const changeConditions = (field, newValue) => {
-    setConditions(prevState => ({
+    setConditions((prevState) => ({
       ...prevState,
       [field]: newValue,
-    }))
-  }
-
-  const items = args.items[0]?.condition ? [
-    {
-      id: 'item1',
-      label: 'Email',
-      condition: {
-        id: 'condition1',
-        label: 'Email',
-        type: 'email',
-        value: conditions.email,
-        handle: (newValue) => changeConditions('email', newValue),
-      },
-    },
-    {
-      id: 'item2',
-      label: 'Phone',
-      condition: {
-        id: 'condition2',
-        label: 'Phone Number',
-        error: 'Wrong phone number',
-        type: 'tel',
-        value: conditions.phone,
-        handle: (newValue) => changeConditions('phone', newValue),
-      },
-    },
-    { id: 'item3', label: 'Item 3' },
-  ] : args.items;
-
-  const handle = (name) => {
-    setValue(name)
+    }));
   };
 
+  //  eslint-disable-next-line react/destructuring-assignment
+  const items = args.items[0]?.condition
+    ? [
+        {
+          id: 'item1',
+          label: 'Email',
+          condition: {
+            id: 'condition1',
+            label: 'Email',
+            type: 'email',
+            value: conditions.email,
+            handle: (newValue) => changeConditions('email', newValue),
+          },
+        },
+        {
+          id: 'item2',
+          label: 'Phone',
+          condition: {
+            id: 'condition2',
+            label: 'Phone Number',
+            error: 'Wrong phone number',
+            type: 'tel',
+            value: conditions.phone,
+            handle: (newValue) => changeConditions('phone', newValue),
+          },
+        },
+        { id: 'item3', label: 'Item 3' },
+      ]
+    //  eslint-disable-next-line react/destructuring-assignment
+    : args.items;
+
+  const handle = (name) => {
+    setValue(name);
+  };
+
+  //  eslint-disable-next-line react/destructuring-assignment
   return <RadioGroup {...args} handle={handle} value={value} items={items} />;
-}
+};
 
 export const Default = Template.bind({});
 Default.args = {

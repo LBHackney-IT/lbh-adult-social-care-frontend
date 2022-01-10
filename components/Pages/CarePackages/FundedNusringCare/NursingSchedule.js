@@ -44,7 +44,7 @@ export const NursingSchedule = ({ control, minStartDate, isOngoing, errors, star
           name="isOngoing"
           control={control}
           render={({ field }) => (
-            <Checkbox id='ongoing' label="Ongoing" value={field.value} onChangeValue={field.onChange} {...field} />
+            <Checkbox id="ongoing" label="Ongoing" value={field.value} onChangeValue={field.onChange} {...field} />
           )}
         />
       </Container>

@@ -23,7 +23,7 @@ export const FNCSummary = ({ containerId, assessmentFileName, assessmentFileId, 
         {fundedNursingCareClaimCollector[claimCollector]}
       </p>
       <HorizontalSeparator height={8} />
-      <Container display='flex' className="mb-3">
+      <Container display="flex" className="mb-3">
         <span className="font-weight-bold">FNC assessment: </span>
         <VerticalSeparator width={8} />
         <ViewDocument

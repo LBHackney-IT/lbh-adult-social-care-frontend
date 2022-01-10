@@ -16,7 +16,7 @@ export const Table = ({
   cellClassName = '',
   onRowClick,
 }) => {
-  if(!data?.length) return <p className='lbh-table__no-results'>No results found</p>;
+  if (!data?.length) return <p className="lbh-table__no-results">No results found</p>;
 
   const {
     getTableProps,
@@ -72,8 +72,8 @@ export const Table = ({
             </td>
           ));
 
-          const key = `${row.values.startDate}${row.id}`
-          
+          const key = `${row.values.startDate}${row.id}`;
+
           return (
             <React.Fragment key={key}>
               <tr
@@ -85,10 +85,10 @@ export const Table = ({
                   <td colSpan={row.cells.length}>
                     <table>
                       <tbody>
-                      <tr className="govuk-table__row-header">
-                        <td colSpan={row.cells.length}>{rowsHaveHeader({ ...row.original })}</td>
-                      </tr>
-                      <tr>{rowElement}</tr>
+                        <tr className="govuk-table__row-header">
+                          <td colSpan={row.cells.length}>{rowsHaveHeader({ ...row.original })}</td>
+                        </tr>
+                        <tr>{rowElement}</tr>
                       </tbody>
                     </table>
                   </td>

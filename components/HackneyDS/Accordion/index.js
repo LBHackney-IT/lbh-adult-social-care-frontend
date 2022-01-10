@@ -46,7 +46,7 @@ const Accordion = ({ expandAll, children = [] }) => {
         >
           <div className="govuk-accordion__section-header">
             <h5 className="govuk-accordion__section-heading">
-              <button className="js-enabled govuk-accordion__section-button" onClick={() => changeOpen(el)}>
+              <button type="button" className="js-enabled govuk-accordion__section-button" onClick={() => changeOpen(el)}>
                 {el.getHeader()}
                 <span className="govuk-accordion__icon" />
               </button>

@@ -16,6 +16,7 @@ const Template = (args) => {
   return (
     <>
       <Button onClick={() => setOpen(true)}>Emit Dialog</Button>
+      {/* eslint-disable-next-line react/destructuring-assignment */}
       <Dialog noBorder={args.noBorder} isOpen={isOpen} onClose={() => setOpen(false)}>
         <DialogLayout
           {...args}

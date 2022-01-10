@@ -11,9 +11,7 @@ const Template = (args) => <Stat {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  stats: [
-    { value: 48, caption: 'Cases handled this month' }
-  ],
+  stats: [{ value: 48, caption: 'Cases handled this month' }],
 };
 
 export const RowOfTwo = Template.bind({});
@@ -31,6 +29,16 @@ RowOfThree.args = {
   stats: [
     { value: 12, caption: 'Cases awaiting review' },
     { value: 48, caption: 'Cases handled this month' },
-    { value: 275, caption: <>Cases handled this month <a href="#" className="lbh-link">62 staff</a></> },
-  ]
+    {
+      value: 275,
+      caption: (
+        <>
+          Cases handled this month{' '}
+          <a href="#" className="lbh-link">
+            62 staff
+          </a>
+        </>
+      ),
+    },
+  ],
 };

@@ -16,7 +16,7 @@ const notificationsSlice = createSlice({
   },
   reducers: {
     showNotification: (state, { payload }) => {
-      const cloneVisible = state.visibleNotifications.filter(item => item.id !== payload.id);
+      const cloneVisible = state.visibleNotifications.filter((item) => item.id !== payload.id);
       return {
         ...state,
         visibleNotifications: [...cloneVisible, payload],
@@ -42,13 +42,15 @@ const notificationsSlice = createSlice({
       };
     },
     addNotification: (state, { payload }) => {
-      let notificationsArray = [{
-        // time: 'debugger',
-        ...initialNotification,
-        id: uuidv4(),
-        time: payload.className === 'success' ? 3000 : 6000,
-        ...payload,
-      }];
+      let notificationsArray = [
+        {
+          // time: 'debugger',
+          ...initialNotification,
+          id: uuidv4(),
+          time: payload.className === 'success' ? 3000 : 6000,
+          ...payload,
+        },
+      ];
 
       if (Array.isArray(payload.text)) {
         notificationsArray = payload.text.map((text) => ({

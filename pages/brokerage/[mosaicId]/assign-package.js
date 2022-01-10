@@ -30,14 +30,6 @@ import { accessRoutes } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
   if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.BROKERAGE_ASSIGN_PACKAGES)) {
     return {
       redirect: {
@@ -58,7 +50,7 @@ const breadcrumbs = [
 const AssignPackage = ({ roles }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { mosaicId:hackneyId } = router.query;
+  const { mosaicId: hackneyId } = router.query;
   const { data: serviceUser, isLoading: serviceUserLoading } = useServiceUser(hackneyId);
   const { options: packageTypeOptions, isLoading: lookupsLoading } = useLookups('packageType');
   const { options: brokerOptions, isLoading: brokersLoading } = useBrokers();

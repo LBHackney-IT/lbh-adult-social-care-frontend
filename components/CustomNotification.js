@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeNotification, selectNotifications, showNotification, activateTimers } from '../reducers/notificationsReducer';
+import {
+  removeNotification,
+  selectNotifications,
+  showNotification,
+  activateTimers,
+} from '../reducers/notificationsReducer';
 
 const CustomNotification = ({ className = '' }) => {
   const { notifications, visibleNotifications, notificationsLimit } = useSelector(selectNotifications);
@@ -17,20 +22,22 @@ const CustomNotification = ({ className = '' }) => {
   useEffect(() => {
     if (!visibleNotifications.length) return;
 
-    const newTimers = visibleNotifications.filter(item => !item.activeTimer).map(visibleNotification => (
-      setTimeout(() => {
-        dispatch(removeNotification(visibleNotification));
-      }, visibleNotification.time)
-    ));
+    const newTimers = visibleNotifications
+      .filter((item) => !item.activeTimer)
+      .map((visibleNotification) =>
+        setTimeout(() => {
+          dispatch(removeNotification(visibleNotification));
+        }, visibleNotification.time)
+      );
 
-    setTimers(prevState => ({ ...prevState, ...newTimers }));
+    setTimers((prevState) => ({ ...prevState, ...newTimers }));
   }, [visibleNotifications]);
 
   useEffect(() => {
-    if(timers.length) {
+    if (timers.length) {
       dispatch(activateTimers());
     }
-  }, [timers])
+  }, [timers]);
 
   useEffect(() => {
     if (notifications.length && !visibleNotifications.length) {
@@ -42,11 +49,11 @@ const CustomNotification = ({ className = '' }) => {
     }
   }, [notifications, visibleNotifications, dispatch]);
 
-  if(!visibleNotifications?.length) return <></>;
+  if (!visibleNotifications?.length) return <></>;
 
   return (
     <div className="notifications">
-      {visibleNotifications.map(item => {
+      {visibleNotifications.map((item) => {
         const allClasses = `notification ${item ? item.className || '' : ''} ${className}`;
 
         return (

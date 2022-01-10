@@ -28,6 +28,7 @@ const DatePick = ({
 }) => {
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
     <button
+      type="button"
       className="datepicker-custom-input"
       onClick={(e) => {
         e.preventDefault();
@@ -48,7 +49,7 @@ const DatePick = ({
   }, [checkMinDate, minDate, dateValue]);
 
   return (
-    <BaseField style={calendarStylePosition} className='react-date-picker' label={label} noInputStyle>
+    <BaseField style={calendarStylePosition} className="react-date-picker" label={label} noInputStyle>
       {dateValue?.toString() === 'Invalid Date' ? (
         <p>Invalid Date</p>
       ) : (

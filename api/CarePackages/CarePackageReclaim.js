@@ -78,7 +78,7 @@ export const cancelCareChargeReclaim = (carePackageId, reclaimId) => {
   return axios(options).then(handleResponse).catch(handleError);
 };
 
-export const endCareChargeReclaim = (carePackageId, reclaimId, endDate ) => {
+export const endCareChargeReclaim = (carePackageId, reclaimId, endDate) => {
   const options = {
     url: `${CARE_PACKAGE_URL}/${carePackageId}/reclaims/care-charges/${reclaimId}/end`,
     method: 'PUT',

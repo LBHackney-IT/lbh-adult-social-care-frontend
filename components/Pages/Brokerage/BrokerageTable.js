@@ -10,7 +10,7 @@ export const BrokerageTable = ({ searchTerm, onRowClick, data }) => {
       accessor: 'packageStatus',
       Cell: ({ value, row: { original } }) => (
         <Container>
-          <Container className="status-info" display="flex" alignItems='flex-start'>
+          <Container className="status-info" display="flex" alignItems="flex-start">
             <p className="brokerage-portal--user-name font-size-19px font-weight-bold hackney-text-green">
               {searchTerm ? handleServiceUserName(original.serviceUserName) : original.serviceUserName}
             </p>

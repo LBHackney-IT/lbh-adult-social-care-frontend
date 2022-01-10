@@ -4,8 +4,7 @@ import Accordion from '.';
 export default {
   title: 'Hackney Design System/Accordion',
   component: Accordion,
-  argTypes: {
-  },
+  argTypes: {},
 };
 
 const Template = (args) => <Accordion {...args} />;
@@ -25,7 +24,6 @@ Default.args = {
     </>
   ).props.children,
 };
-
 
 export const ExpandAllButtonEnabled = Template.bind({});
 ExpandAllButtonEnabled.args = {

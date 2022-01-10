@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { SearchBox } from '../index';
 
 export default {
@@ -10,14 +10,17 @@ export default {
 const Template = (args) => {
   const [value, setValue] = useState('');
   const clearFunc = () => setValue('');
+  //  eslint-disable-next-line react/destructuring-assignment
   const localClear = args.clear && clearFunc;
 
   useEffect(() => {
+    //  eslint-disable-next-line react/destructuring-assignment
     setValue(args.value);
+    //  eslint-disable-next-line react/destructuring-assignment
   }, [args?.value]);
 
   return <SearchBox {...args} clear={localClear} value={value} onChangeValue={setValue} />;
-}
+};
 
 export const Default = Template.bind({});
 Default.args = {

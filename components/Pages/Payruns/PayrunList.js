@@ -58,10 +58,12 @@ export const PayrunList = ({ searchTerm, data }) => {
                 </Container>
               </Container>
               <Container display="flex" flexDirection="column" justifyContent="flex-end" minWidth="80px">
-                <Heading size="s">Paid</Heading>{formatNumberToCurrency(d.totalAmountPaid)}
+                <Heading size="s">Paid</Heading>
+                {formatNumberToCurrency(d.totalAmountPaid)}
               </Container>
               <Container display="flex" flexDirection="column" justifyContent="flex-end" minWidth="80px">
-                <Heading size="s">Held</Heading>{formatNumberToCurrency(d.totalAmountHeld)}
+                <Heading size="s">Held</Heading>
+                {formatNumberToCurrency(d.totalAmountHeld)}
               </Container>
               <Container
                 padding="10px 0"

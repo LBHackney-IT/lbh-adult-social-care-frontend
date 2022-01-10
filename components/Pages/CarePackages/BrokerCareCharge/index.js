@@ -13,5 +13,5 @@ export {
   CareChargeSchedule,
   ClaimsCollector,
   FundingPerWeek,
-  PreviousCareChargesAnnouncement
+  PreviousCareChargesAnnouncement,
 };

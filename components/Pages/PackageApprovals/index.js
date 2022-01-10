@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useApproversOptions, useLookups } from 'api';
-import { Breadcrumbs, Container, Dialog, Heading, HorizontalSeparator, } from '../../HackneyDS';
+import { Breadcrumbs, Container, Dialog, Heading, HorizontalSeparator } from '../../HackneyDS';
 import AlternativePagination from '../../AlternativePagination';
 import Loading from '../../Loading';
 import { PackageApprovalsTable } from './PackageApprovalsTable';

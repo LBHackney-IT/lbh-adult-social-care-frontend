@@ -9,11 +9,11 @@ const defaultInputs = [
 
 const ServiceUserSearch = ({ filters, inputs = defaultInputs, changeFilters, clearFilters, isLoading, onSearch }) => (
   <Container className="service-user-search">
-    <Container className='service-user-search__inputs'>
+    <Container className="service-user-search__inputs">
       <h3 className="search-service-user__title">Search for a service user</h3>
       <Container className="search-service-user__filters">
         {inputs.map(({ key, label }) => (
-          <Input key={key} value={filters[key]} onChangeValue={(value) => changeFilters(key, value)} label={label}/>
+          <Input key={key} value={filters[key]} onChangeValue={(value) => changeFilters(key, value)} label={label} />
         ))}
         <FormGroup>
           <DatePicker
@@ -23,13 +23,9 @@ const ServiceUserSearch = ({ filters, inputs = defaultInputs, changeFilters, cle
             label="Date of birth"
           />
         </FormGroup>
-        <Input
-          label="Postcode"
-          value={filters.postcode}
-          onChangeValue={(value) => changeFilters('postcode', value)}
-        />
+        <Input label="Postcode" value={filters.postcode} onChangeValue={(value) => changeFilters('postcode', value)} />
         {Object.values(filters).some((value) => value) && (
-          <Button onClick={clearFilters} outline color='gray' className="clear-button">
+          <Button onClick={clearFilters} outline color="gray" className="clear-button">
             Clear
           </Button>
         )}

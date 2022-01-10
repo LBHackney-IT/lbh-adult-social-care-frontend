@@ -36,7 +36,7 @@ module.exports = {
 };
 
 function maintenanceMode() {
-  let maintenance_array = [];
+  let maintenanceArray = [];
 
   if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE === '1') {
     const pages = [
@@ -56,8 +56,8 @@ function maintenanceMode() {
     ];
 
     pages.forEach((elm) => {
-      maintenance_array = [
-        ...maintenance_array,
+      maintenanceArray = [
+        ...maintenanceArray,
         {
           source: elm,
           basePath: false,
@@ -67,8 +67,8 @@ function maintenanceMode() {
       ];
     });
   } else {
-    maintenance_array = [
-      ...maintenance_array,
+    maintenanceArray = [
+      ...maintenanceArray,
       {
         source: '/maintenance',
         destination: '/',
@@ -77,5 +77,5 @@ function maintenanceMode() {
       },
     ];
   }
-  return maintenance_array;
+  return maintenanceArray;
 }
