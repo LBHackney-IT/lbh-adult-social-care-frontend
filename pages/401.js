@@ -7,14 +7,6 @@ import { getLoggedInUser } from 'service';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
   return { props: { roles: user.roles } };
 });
 

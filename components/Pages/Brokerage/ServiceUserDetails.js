@@ -11,7 +11,7 @@ const ServiceUserDetails = ({
   dateOfBirth,
   address,
   activePackage,
-  title = 'Service user details'
+  title = 'Service user details',
 }) => (
   <>
     {title && <Heading size="l">{title}</Heading>}

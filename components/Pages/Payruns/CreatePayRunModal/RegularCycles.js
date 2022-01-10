@@ -40,22 +40,26 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
       const formattedCycleDate = new Date(lastCycleDate);
       return differenceInDays(
         new Date(paidUpToDate.getFullYear(), paidUpToDate.getMonth(), paidUpToDate.getDate()),
-        new Date(formattedCycleDate.getFullYear(), formattedCycleDate.getMonth(), formattedCycleDate.getDate()),
+        new Date(formattedCycleDate.getFullYear(), formattedCycleDate.getMonth(), formattedCycleDate.getDate())
       );
     }
     return 0;
   }, [paidUpToDate, lastCycleDate]);
 
-  const cycleOptions = useMemo(() => [
-    {
-      id: 1,
-      label:
-        <p>
-          Residential Recurring
-          {invoiceNumber ? <span className="lbh-color-green font-size-14px"> ({invoiceNumber} releases)</span> : ''}
-        </p>
-    }
-  ], [invoiceNumber]);
+  const cycleOptions = useMemo(
+    () => [
+      {
+        id: 1,
+        label: (
+          <p>
+            Residential Recurring
+            {invoiceNumber ? <span className="lbh-color-green font-size-14px"> ({invoiceNumber} releases)</span> : ''}
+          </p>
+        ),
+      },
+    ],
+    [invoiceNumber]
+  );
 
   const onSubmit = (data) => createPayrun(data);
 
@@ -67,13 +71,7 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
             name="type"
             control={control}
             render={({ field }) => (
-              <RadioGroup
-                error={errors.type?.message}
-                small
-                handle={field.onChange}
-                items={cycleOptions}
-                {...field}
-              />
+              <RadioGroup error={errors.type?.message} small handle={field.onChange} items={cycleOptions} {...field} />
             )}
           />
         </FormGroup>
@@ -98,8 +96,10 @@ export const RegularCycles = ({ createPayrun, isLoading, onClose }) => {
         {daysLastCycle !== null && (
           <>
             <HorizontalSeparator height={10} />
-            <Hint className="font-size-14px">{daysLastCycle}{daysLastCycle === 1 ? ' day' : ' days'} since last
-              cycle</Hint>
+            <Hint className="font-size-14px">
+              {daysLastCycle}
+              {daysLastCycle === 1 ? ' day' : ' days'} since last cycle
+            </Hint>
           </>
         )}
         <HorizontalSeparator height="24px" />

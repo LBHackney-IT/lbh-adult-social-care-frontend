@@ -9,7 +9,7 @@ const BaseField = ({
   className = '',
   label,
   noInputStyle = false,
-  children
+  children,
 }) => {
   const hasLabel = label !== undefined;
   let innerClassName = `control field-container${hasLabel ? ' has-label' : ''}`;

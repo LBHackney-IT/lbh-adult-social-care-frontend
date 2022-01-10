@@ -7,14 +7,14 @@ export const SimplePagination = ({
   currentPage,
   showPageNumber,
   changePage,
-  titles
+  titles,
 }) => {
   const previousTitleIndex = currentPage > totalCount ? totalCount - 2 : currentPage - 2;
   const previousCount = currentPage - 1 > totalCount ? totalCount : currentPage - 1;
   const nextCount = currentPage + 1 >= totalCount ? totalCount - 1 : currentPage + 1;
 
   const onChangePage = (e, page) => {
-    if(changePage) {
+    if (changePage) {
       e.preventDefault();
       changePage(page);
     }
@@ -22,8 +22,7 @@ export const SimplePagination = ({
 
   return (
     <nav className="lbh-simple-pagination">
-      {
-        currentPage > 1 &&
+      {currentPage > 1 && (
         <a
           onClick={(e) => onChangePage(e, currentPage - 1)}
           className="lbh-simple-pagination__link"
@@ -34,12 +33,11 @@ export const SimplePagination = ({
           </svg>
           {previousText}
           <span className="lbh-simple-pagination__title">
-          {showPageNumber ? `${previousCount} of ${totalCount}` : titles[previousTitleIndex] || titles[0]}
-        </span>
+            {showPageNumber ? `${previousCount} of ${totalCount}` : titles[previousTitleIndex] || titles[0]}
+          </span>
         </a>
-      }
-      {
-        currentPage < totalCount &&
+      )}
+      {currentPage < totalCount && (
         <a
           onClick={(e) => onChangePage(e, currentPage + 1)}
           className="lbh-simple-pagination__link lbh-simple-pagination__link--next"
@@ -47,13 +45,13 @@ export const SimplePagination = ({
         >
           {nextText}
           <span className="lbh-simple-pagination__title">
-          {showPageNumber ? `${nextCount} of ${totalCount}` : titles[currentPage] || titles[0]}
-        </span>
+            {showPageNumber ? `${nextCount} of ${totalCount}` : titles[currentPage] || titles[0]}
+          </span>
           <svg width="11" height="19" viewBox="0 0 11 19" fill="none">
             <path d="M1 18L9 9.5L1 1" strokeWidth="2" />
           </svg>
         </a>
-      }
+      )}
     </nav>
-  )
+  );
 };

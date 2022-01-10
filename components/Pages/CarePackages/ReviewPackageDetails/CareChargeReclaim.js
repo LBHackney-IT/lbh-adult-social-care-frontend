@@ -6,11 +6,7 @@ import { SummaryTotalCostInfo } from './SummaryTotalCostInfo';
 
 const CareChargeReclaim = ({ data, goToPackage }) => (
   <Container className="review-package-details__cost-info-item">
-    <PackageInfo
-      containerId="care-charges"
-      headerTitle="Care Charges"
-      items={data?.careCharges}
-    />
+    <PackageInfo containerId="care-charges" headerTitle="Care Charges" items={data?.careCharges} />
     <SummaryTotalCostInfo
       totalCostInfo={{
         hackney: data?.hackneyReclaims?.careCharge,

@@ -7,15 +7,12 @@ import { handleError, handleResponse } from '../Utils/ApiUtils';
 
 const DOCUMENT_URL = '/documents';
 export const useDocument = (documentId) =>
-  useGetData(getUrlOrNull(
-    `${DOCUMENT_URL}${documentId && `/${documentId}`}`),
-    'Cannot get document',
-    null
-  );
+  useGetData(getUrlOrNull(`${DOCUMENT_URL}${documentId && `/${documentId}`}`), 'Cannot get document', null);
 
-export const getDocumentRequest = (documentId) => axios({
-  url: `${BASE_URL}/v1${DOCUMENT_URL}/${documentId}`,
-  method: requestMethods.get,
-})
-  .then(handleResponse)
-  .catch(handleError);
+export const getDocumentRequest = (documentId) =>
+  axios({
+    url: `${BASE_URL}/v1${DOCUMENT_URL}/${documentId}`,
+    method: requestMethods.get,
+  })
+    .then(handleResponse)
+    .catch(handleError);

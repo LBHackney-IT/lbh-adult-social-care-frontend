@@ -16,7 +16,9 @@
   display: flex;
   flex-direction: column;
 
-  & > label, & > .lbh-hint, & > .lbh-error-message {
+  & > label,
+  & > .lbh-hint,
+  & > .lbh-error-message {
     flex-basis: 100%;
   }
 }

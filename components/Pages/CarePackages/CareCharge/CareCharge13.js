@@ -4,12 +4,12 @@ import { addDays, isSameDay } from 'date-fns';
 import { cancelCareChargeReclaim, endCareChargeReclaim } from 'api';
 import { addNotification } from 'reducers/notificationsReducer';
 import { useDispatch } from 'react-redux';
+import { geTagTextFromReclaimStatus, getTagColorFromReclaimStatus } from 'service/getTagColorFromReclaimStatus';
 import { CareChargeCost } from './CareChargeCost';
 import { ClaimCollector } from './ClaimCollector';
 import { CareChargeSchedule } from './CareChargeSchedule';
 import { ActionButtons } from './ActionButtons';
 import EndCareChargeModal from './EndCareChargeModal';
-import { geTagTextFromReclaimStatus, getTagColorFromReclaimStatus } from 'service/getTagColorFromReclaimStatus';
 
 export const CareCharge13 = ({
   carePackageId,
@@ -150,7 +150,7 @@ export const CareCharge13 = ({
         title={
           <Container display="flex" flexDirection="column">
             {status ? (
-              <Container display="flex" alignItems='flex-start'>
+              <Container display="flex" alignItems="flex-start">
                 <Tag outline color={getTagColorFromReclaimStatus(status)}>
                   {geTagTextFromReclaimStatus(status)}
                 </Tag>

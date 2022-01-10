@@ -10,7 +10,7 @@ import {
   APP_SERVICE_ROUTES_MAP,
   getPrevRouteInfo,
   saveToStoragePrevRoute,
-  setPreviousPath
+  setPreviousPath,
 } from 'routes/RouteConstants';
 import { useStore } from '../store';
 
@@ -20,7 +20,7 @@ const swrOptions = {
   fetcher,
 };
 
-export default function App ({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState);
   const router = useRouter();
 
@@ -34,7 +34,7 @@ export default function App ({ Component, pageProps }) {
   useEffect(() => {
     // save redirect route
     const { asPath: path } = router;
-    if (path && !APP_SERVICE_ROUTES_MAP.some(item => path.includes(item))) {
+    if (path && !APP_SERVICE_ROUTES_MAP.some((item) => path.includes(item))) {
       setPreviousPath(path);
     }
   }, [router.asPath]);

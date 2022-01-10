@@ -15,7 +15,7 @@ export const getPackageStatusBy = ({ statusName, statusId }) =>
 export const getPackageStatusTextFromStatusId = (statusId) => {
   const packageInfo = getPackageStatusBy({ statusId });
   return packageInfo?.statusName || 'Unknown';
-}
+};
 
 export const getPackageColorFromStatusId = (statusId) => {
   const packageInfo = getPackageStatusBy({ statusId });

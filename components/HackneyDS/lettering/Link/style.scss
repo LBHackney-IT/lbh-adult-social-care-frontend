@@ -16,7 +16,6 @@
   }
 
   &--muted {
-
     &:focus {
       color: #0b0c0c;
     }
@@ -72,7 +71,8 @@
   @media print {
     &[href^="/"]:after,
     &[href^="http://"]:after,
-    &[href^="https://"]:after {
+    &[href^="https://"]:after
+    {
       content: ' (' attr(href) ')';
       font-size: 90%;
       word-wrap: break-word;

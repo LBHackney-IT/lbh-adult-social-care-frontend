@@ -25,7 +25,10 @@ export const ClaimsCollector = ({ control, errors, collectedBy, isS117Client }) 
       />
     </FormGroup>
     <HorizontalSeparator height="20px" />
-    <FormGroup label="Why is Hackney collecting these care charges?" disabled={collectedBy === claimCollector.supplier || isS117Client}>
+    <FormGroup
+      label="Why is Hackney collecting these care charges?"
+      disabled={collectedBy === claimCollector.supplier || isS117Client}
+    >
       <Controller
         name="claimReason"
         control={control}

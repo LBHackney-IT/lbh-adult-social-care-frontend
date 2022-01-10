@@ -13,8 +13,8 @@ export const NursingHasFNC = ({ control, errors }) => (
           handle={field.onChange}
           name="hasAssessmentBeenCarried"
           items={[
-            { label: 'Yes', id: "true" },
-            { label: 'No', id: "false" },
+            { label: 'Yes', id: 'true' },
+            { label: 'No', id: 'false' },
           ]}
         />
       )}

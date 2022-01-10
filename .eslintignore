@@ -1,6 +1,6 @@
 .next
 next-env.d.ts
-node_modules
+node_modules/
 yarn.lock
 package-lock.json
 public
@@ -9,3 +9,5 @@ terraform
 .vs
 .idea
 .circleci
+storybook-static
+.storybook/

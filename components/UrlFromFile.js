@@ -4,10 +4,18 @@ import { Container } from './HackneyDS/Layout/Container';
 import { VerticalSeparator } from './HackneyDS/Layout/VerticalSeparator';
 import Loading from './Loading';
 
-const UrlFromFile = ({ file, onClick = () => {}, download, removeFile, isLoading, linkText = 'View', showOnlyLink }) => {
+const UrlFromFile = ({
+  file,
+  onClick = () => {},
+  download,
+  removeFile,
+  isLoading,
+  linkText = 'View',
+  showOnlyLink,
+}) => {
   if (!file && !showOnlyLink) return <></>;
 
-  if (isLoading) return <Loading className='centered-container' isLoading={isLoading} />
+  if (isLoading) return <Loading className="centered-container" isLoading={isLoading} />;
 
   const [isEdit, setIsEdit] = useState(false);
   const [link, setLink] = useState('');
@@ -35,20 +43,21 @@ const UrlFromFile = ({ file, onClick = () => {}, download, removeFile, isLoading
       <VerticalSeparator width={8} />
       {linkFileComponent}
       <VerticalSeparator width={8} />
-      {
-        isEdit ? (
-          <>
-            <p className="link-button" onClick={() => setIsEdit(false)}>
-              Cancel
-            </p>
-            <VerticalSeparator width={8} />
-            <p className="link-button red" onClick={() => removeFile()}>
-              Remove
-            </p>
-          </>
-        ) : <p onClick={() => setIsEdit(true)} className="link-button green">Edit</p>
-      }
-
+      {isEdit ? (
+        <>
+          <p className="link-button" onClick={() => setIsEdit(false)}>
+            Cancel
+          </p>
+          <VerticalSeparator width={8} />
+          <p className="link-button red" onClick={() => removeFile()}>
+            Remove
+          </p>
+        </>
+      ) : (
+        <p onClick={() => setIsEdit(true)} className="link-button green">
+          Edit
+        </p>
+      )}
     </Container>
   );
 };

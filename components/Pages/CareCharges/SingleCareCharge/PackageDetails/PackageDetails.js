@@ -1,5 +1,13 @@
 import React from 'react';
-import { Heading, Label, HorizontalSeparator, VerticalSeparator, Link, FileUpload, Container } from '../../../../HackneyDS';
+import {
+  Heading,
+  Label,
+  HorizontalSeparator,
+  VerticalSeparator,
+  Link,
+  FileUpload,
+  Container,
+} from '../../../../HackneyDS';
 
 export const PackageDetails = ({ packageDetails }) =>
   packageDetails ? (
@@ -7,14 +15,14 @@ export const PackageDetails = ({ packageDetails }) =>
       <div>
         <Heading size="s">Sourcing care</Heading>
         <HorizontalSeparator height="8px" />
-        <Container display='flex'>
+        <Container display="flex">
           <Label>{packageDetails.careSource} </Label>
           <VerticalSeparator width="5px" />
           <Link>Supplier</Link>
         </Container>
       </div>
       <HorizontalSeparator height="16px" />
-      <Container display='flex'>
+      <Container display="flex">
         <div>
           <Heading size="s">Start date</Heading>
           <HorizontalSeparator height="8px" />

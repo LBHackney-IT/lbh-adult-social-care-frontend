@@ -23,7 +23,6 @@ export const Pagination = ({ totalCount, currentPage, showOnlyCurrentPage, pageS
       } of ${totalCount} results`}</div>
       <ul className="lbh-pagination__list">
         <li
-          role="button"
           className={`lbh-pagination__item${activePage - 1 === 0 ? '--disabled' : ''}`}
           onClick={() => handlePageChange(activePage - 1)}
         >
@@ -35,8 +34,8 @@ export const Pagination = ({ totalCount, currentPage, showOnlyCurrentPage, pageS
           </a>
         </li>
         {showOnlyCurrentPage && (
-          <li role="button" className="lbh-pagination__item">
-            <a className='lbh-pagination__link--current' aria-label="Page 1">
+          <li className="lbh-pagination__item">
+            <a className="lbh-pagination__link--current" aria-label="Page 1">
               {activePage}
             </a>
           </li>
@@ -44,12 +43,7 @@ export const Pagination = ({ totalCount, currentPage, showOnlyCurrentPage, pageS
         {pageArray.map((p, index) => {
           if (index + 1 >= activePage - siblingCount && index + 1 <= activePage + siblingCount)
             return (
-              <li
-                key={index}
-                role="button"
-                className="lbh-pagination__item"
-                onClick={() => handlePageChange(index + 1)}
-              >
+              <li key={`${p}`} className="lbh-pagination__item" onClick={() => handlePageChange(index + 1)}>
                 <a className={`lbh-pagination__link${activePage === index + 1 ? '--current' : ''}`} aria-label="Page 1">
                   {index + 1}
                 </a>
@@ -60,7 +54,6 @@ export const Pagination = ({ totalCount, currentPage, showOnlyCurrentPage, pageS
         <li
           className={`lbh-pagination__item${activePage === pageCount ? '--disabled' : ''}`}
           onClick={() => handlePageChange(activePage + 1)}
-          role="button"
         >
           <a className="lbh-pagination__link" aria-label="Next page">
             Next

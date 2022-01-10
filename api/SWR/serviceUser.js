@@ -9,13 +9,13 @@ export const useServiceUserSearch = ({ params, shouldFetch }) =>
     params,
     shouldFetch,
     url: '/service-user/search',
-    errorText: 'Can not get service user'
-  })
+    errorText: 'Can not get service user',
+  });
 
 export const useServiceUserMasterSearch = ({ params, shouldFetch }) =>
   useFetchWithParams({
     params,
     shouldFetch,
     url: '/service-user/master-search',
-    errorText: 'Can not get service user'
-  })
+    errorText: 'Can not get service user',
+  });

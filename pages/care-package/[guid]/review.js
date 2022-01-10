@@ -6,20 +6,10 @@ import { getLoggedInUser, useRedirectIfPackageNotExist } from 'service';
 import { ReviewPackageDetails } from 'components';
 import { NewHeader } from 'components/NewHeader';
 import { handleRoleBasedAccess } from '../../api/handleRoleBasedAccess';
-import { accessRoutes, userRoles} from '../../api/accessMatrix';
-
-
+import { accessRoutes, userRoles } from '../../api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
   if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.CARE_PACKAGE_REVIEW)) {
     return {
       redirect: {

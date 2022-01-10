@@ -19,7 +19,7 @@ import Loading from '../../../Loading';
 
 const errorText = {
   Approve: 'approval',
-  Reject: 'reject'
+  Reject: 'reject',
 };
 
 const ApproveRejectModal = ({ openedModal, title = 'Pay Run', closeModal, rejectRequest, updateData, payRunId }) => {
@@ -28,13 +28,16 @@ const ApproveRejectModal = ({ openedModal, title = 'Pay Run', closeModal, reject
   const isRejectModal = openedModal === 'Reject';
   const isApproveModal = openedModal === 'Approve';
 
-  const schema = useMemo(() => (
-    yup.object().shape({
-      notes: yup
-        .string()
-        .required(`Please put a reason for ${errorText[openedModal]}`)
-        .test('notes', `Please put a reason for ${errorText[openedModal]}`, (value) => value.trim?.())
-    })), [openedModal]);
+  const schema = useMemo(
+    () =>
+      yup.object().shape({
+        notes: yup
+          .string()
+          .required(`Please put a reason for ${errorText[openedModal]}`)
+          .test('notes', `Please put a reason for ${errorText[openedModal]}`, (value) => value.trim?.()),
+      }),
+    [openedModal]
+  );
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
@@ -89,7 +92,9 @@ const ApproveRejectModal = ({ openedModal, title = 'Pay Run', closeModal, reject
     <>
       <Loading isLoading={loading} />
       <Dialog className="high-level-insight--dialog" isOpen={openedModal} noBorder closeIcon="" onClose={onCloseModal}>
-        <Heading size='xl'>{openedModal} {title}</Heading>
+        <Heading size="xl">
+          {openedModal} {title}
+        </Heading>
         <HorizontalSeparator height={32} />
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
@@ -97,32 +102,17 @@ const ApproveRejectModal = ({ openedModal, title = 'Pay Run', closeModal, reject
             name="notes"
             render={({ field }) => (
               <FormGroup horizontalSeparator={8} error={errors.notes?.message} required label="Add Notes">
-                <Textarea
-                  value={field.value}
-                  handler={field.onChange}
-                  rows={5}
-                  {...field}
-                />
+                <Textarea value={field.value} handler={field.onChange} rows={5} {...field} />
               </FormGroup>
             )}
           />
           <HorizontalSeparator height={32} />
           <Container display="flex" alignItems="center">
-            <Button
-              type="submit"
-              secondary={isRejectModal}
-              color={isRejectModal && 'red'}
-            >
+            <Button type="submit" secondary={isRejectModal} color={isRejectModal && 'red'}>
               {openedModal} {title}
             </Button>
             <VerticalSeparator width={24} />
-            <Button
-              onClick={onCloseModal}
-              outline
-              color="gray"
-              secondary
-              className="no-border link-button"
-            >
+            <Button onClick={onCloseModal} outline color="gray" secondary className="no-border link-button">
               Cancel
             </Button>
           </Container>

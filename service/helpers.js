@@ -14,7 +14,7 @@ export const addIndentToString = (string) => {
   const newArray = [];
   arrayOfWords.forEach((item, index) => {
     const newElement = [<span key={item}>{item}</span>];
-    if (index !== arrayOfWords.length - 1) newElement.push(<br key={`after-${item}`}/>);
+    if (index !== arrayOfWords.length - 1) newElement.push(<br key={`after-${item}`} />);
 
     newArray.push(...newElement);
   });
@@ -62,7 +62,7 @@ export const urlToFile = (url, filename) =>
 
 export const formatDocumentInfo = async ({ fileName, href }) => {
   if (!fileName) return;
-  if (href) return await urlToFile(href, fileName);
+  if (href) return urlToFile(href, fileName);
 
   return null;
 };

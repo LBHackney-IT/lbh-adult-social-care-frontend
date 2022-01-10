@@ -5,7 +5,7 @@ export default {
   title: 'Hackney Design System/Layout/HorizontalSeparator',
   component: HorizontalSeparator,
   argTypes: {
-    height: {}
+    height: {},
   },
 };
 
@@ -19,5 +19,5 @@ const Template = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
-  height: '40px'
+  height: '40px',
 };

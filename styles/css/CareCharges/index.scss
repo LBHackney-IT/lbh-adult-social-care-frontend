@@ -1,6 +1,6 @@
-@import "cancel-element-modal";
-@import "options-element-modal";
-@import "new-care-charge";
+@import 'cancel-element-modal';
+@import 'options-element-modal';
+@import 'new-care-charge';
 
 .care-charges-modal {
   * {
@@ -147,7 +147,8 @@
     padding: 24px;
     margin-bottom: 32px;
 
-    .govuk-form-group, .radio-button {
+    .govuk-form-group,
+    .radio-button {
       &:not(&:last-of-type) {
         margin-bottom: 16px;
       }

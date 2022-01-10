@@ -13,9 +13,9 @@ const Template = (args) => {
   const [file, setFile] = useState(null);
 
   return <UploadGreenButton {...args} setFile={setFile} file={file} />;
-}
+};
 
 export const Default = Template.bind({});
 Default.args = {
-  label: 'Upload green button'
+  label: 'Upload green button',
 };

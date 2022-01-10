@@ -1,12 +1,6 @@
 import React from 'react';
 
-export default function DialogLayout({
-  title,
-  body,
-  submitLabel,
-  declineLabel,
-  action = {},
-}) {
+export default function DialogLayout({ title, body, submitLabel, declineLabel, action = {} }) {
   const { submit, decline } = action;
   return (
     <div>
