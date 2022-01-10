@@ -29,6 +29,8 @@ export const formValidator = ({
 }) => {
   const validFields = {};
   let hasErrors = false;
+  // TODO Fix the error
+  // eslint-disable-next-line no-restricted-syntax
   for (const name in form) {
     if (!ignoreInputs.includes(name)) {
       validFields[name] = '';
@@ -45,6 +47,7 @@ export const formValidator = ({
         }
       }
 
+      // eslint-disable-next-line no-loop-func
       customRules.forEach((rule) => {
         if (inputRules[name]?.includes(rule.name)) {
           const additionalRuleValid = rule.valid(form[name]);

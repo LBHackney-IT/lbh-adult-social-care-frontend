@@ -35,7 +35,9 @@ module.exports = {
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/no-noninteractive-element-interactions': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
-    'jsx-a11y/label-has-associated-control': 'off'
+    'jsx-a11y/label-has-associated-control': 'off',
+    // NOTE Ignore as circular dependencies will be handled by webpack
+    'import/no-cycle': 'off'
   },
   settings: {
     'import/resolver': {
