@@ -62,7 +62,7 @@ export const urlToFile = (url, filename) =>
 
 export const formatDocumentInfo = async ({ fileName, href }) => {
   if (!fileName) return;
-  if (href) return await urlToFile(href, fileName);
+  if (href) return urlToFile(href, fileName);
 
   return null;
 };

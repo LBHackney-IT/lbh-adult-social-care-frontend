@@ -30,6 +30,7 @@ module.exports = {
     // 'no-param-reassign': [2, { props: false }],
     'no-console': 'off',
     'no-unused-vars': 'off',
+    'consistent-return': 'off'
   },
   settings: {
     'import/resolver': {
