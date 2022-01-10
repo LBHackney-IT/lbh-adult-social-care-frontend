@@ -33,7 +33,7 @@ const CreatePayRunModal = ({ isOpen, onClose, update }) => {
   const tabs = ['Regular Cycles', 'Ad-Hoc/Releases'];
   return (
     <Dialog className="create-pay-run__modal" isOpen={isOpen} onClose={onClose}>
-      <Heading size="l">New Additional Need</Heading>
+      <Heading size="l">New Pay Run</Heading>
       <HorizontalSeparator height="30px" />
       <Tabs tabs={tabs}>
         <Tab>
