@@ -64,6 +64,7 @@ export default function Button({
     </a>
   ) : (
     <button
+      // eslint-disable-next-line react/button-has-type
       type={type}
       style={{ borderRadius, ...style }}
       className={`${mainClass}${allClasses}`}
