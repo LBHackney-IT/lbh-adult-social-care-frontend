@@ -6,7 +6,7 @@ export const getHighlightedSearchQuery = (text, highlightText = '') => {
     <>
       {results?.map((result, i) => (
         <span
-          key={`${result}`}
+          key={`${i}`}
           style={
             result.toLowerCase() === highlightText.toLowerCase()
               ? { fontWeight: '800', background: '#f7c242', color: '#000' }
