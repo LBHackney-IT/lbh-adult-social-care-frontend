@@ -44,7 +44,7 @@ export const PayRunItem = ({
       await updateInvoiceStatus(payRunId, invoiceId, 4, notes);
       pushNotification('Invoice has been rejected', 'success');
       await updateData();
-      closeModal()
+      closeModal();
     } catch (e) {
       pushNotification(e);
     }
@@ -115,7 +115,7 @@ export const PayRunItem = ({
                     View package summary
                   </Link>
                   <VerticalSeparator width="32px" />
-                  Assigned broker: {item?.assignedBrokerName?.toString()}
+                  Assigned broker: {item?.assignedBrokerName?.toString() ?? 'N/A'}
                 </Container>
                 <Container display="flex" justifyContent="flex-end">
                   <Link onClick={(e) => handlePastPaymentsClick(e)} noVisited>
