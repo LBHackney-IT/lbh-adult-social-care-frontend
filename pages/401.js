@@ -17,7 +17,7 @@ export default function Custom401({ roles }) {
     <>
       <NewHeader roles={roles ?? []} />
       <div className="not-fount-page">
-        <h1 className="mb-5">401 - Unauthorised Access</h1>
+        <h1 className="mb-5">401 - Unauthorised Access test</h1>
         <Button onClick={router.back}>Go Back</Button>
       </div>
     </>
