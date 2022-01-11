@@ -115,6 +115,9 @@
     "**/*.js": [
       "eslint --fix --max-warnings=2",
       "prettier --write"
+    ],
+    "**/*.scss": [
+      "prettier --write"
     ]
   }
 }
