@@ -257,9 +257,13 @@ workflows:
   continuous-delivery:
     jobs:
       - install-dependencies
+      - tests:
+          requires:
+            - install-dependencies
       - build:
           requires:
             - install-dependencies
+            - tests
       - chromatic-deployment:
           requires:
             - build
