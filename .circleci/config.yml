@@ -42,7 +42,7 @@ jobs:
           root: *workspace_root
           paths: .
 
-  tests:
+  linting:
     executor: node-executor
     steps:
       - *attach_workspace
@@ -258,13 +258,13 @@ workflows:
   continuous-delivery:
     jobs:
       - install-dependencies
-      - tests:
+      - linting:
           requires:
             - install-dependencies
       - build:
           requires:
             - install-dependencies
-            - tests
+            - linting
       - chromatic-deployment:
           requires:
             - build
