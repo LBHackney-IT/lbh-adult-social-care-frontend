@@ -48,7 +48,7 @@ jobs:
       - *attach_workspace
       - run:
           name: Run linter
-          command: yarn lint
+          command: yarn lint-staged
       - run:
           name: Run typecheck
           command: yarn type-check
