@@ -49,12 +49,13 @@ jobs:
       - run:
           name: Run linter
           command: yarn lint-staged
-      - run:
-          name: Run typecheck
-          command: yarn type-check
-      - run:
-          name: Run tests
-          command: yarn test -w 2
+      # NOTE Re-enabled after project is converted into Typescript or has tests
+      #  - run:
+          #  name: Run typecheck
+          #  command: yarn type-check
+      #  - run:
+          #  name: Run tests
+          #  command: yarn test -w 2
 
   e2e:
     executor: node-executor
