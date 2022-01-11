@@ -47,7 +47,7 @@ jobs:
     steps:
       - *attach_workspace
       - run:
-          name: Run linter
+          name: Run linter and formatter
           command: yarn lint-staged
       # NOTE Re-enabled after project is converted into Typescript or has tests
       #  - run:
