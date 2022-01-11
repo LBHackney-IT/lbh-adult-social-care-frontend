@@ -42,7 +42,7 @@ jobs:
           root: *workspace_root
           paths: .
 
-  tests:
+  linting:
     executor: node-executor
     steps:
       - *attach_workspace
@@ -50,11 +50,15 @@ jobs:
           name: Run linter
           command: yarn lint
       - run:
-          name: Run typecheck
-          command: yarn type-check
-      - run:
-          name: Run tests
-          command: yarn test -w 2
+          name: Run formatter
+          command: yarn check-format
+      # NOTE Re-enabled after project is converted into Typescript or has tests
+      #  - run:
+          #  name: Run typecheck
+          #  command: yarn type-check
+      #  - run:
+          #  name: Run tests
+          #  command: yarn test -w 2
 
   e2e:
     executor: node-executor
@@ -257,9 +261,13 @@ workflows:
   continuous-delivery:
     jobs:
       - install-dependencies
+      - linting:
+          requires:
+            - install-dependencies
       - build:
           requires:
             - install-dependencies
+            - linting
       - chromatic-deployment:
           requires:
             - build
