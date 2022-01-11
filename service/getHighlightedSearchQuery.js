@@ -1,7 +1,11 @@
 import React from 'react';
 
+const removeExcessiveWhitespace = (str) => str.replace(/\s+/g, ' ');
+
 export const getHighlightedSearchQuery = (text, highlightText = '') => {
-  const results = text?.split(new RegExp(`(${highlightText})`, 'gi'));
+  const results = removeExcessiveWhitespace(text)?.split(
+    new RegExp(`(${removeExcessiveWhitespace(highlightText)})`, 'gi')
+  );
   return (
     <>
       {results?.map((result, i) => (
