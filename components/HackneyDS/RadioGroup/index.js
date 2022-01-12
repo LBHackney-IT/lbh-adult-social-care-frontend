@@ -33,7 +33,6 @@ const RadioGroup = React.forwardRef(
                   labelHeading={item.labelHeading}
                   className={item.className}
                   handle={() => (handle ? handle(item.id) : {})}
-                  id={item.id}
                   hint={item.hint}
                   label={item.label}
                   name={name}
@@ -43,7 +42,7 @@ const RadioGroup = React.forwardRef(
 
                 {condition && (
                   <div className="govuk-radios__conditional govuk-radios__conditional--hidden">
-                    {condition.label && <Label htmlFor={condition.id}>{condition.label}</Label>}
+                    {condition.label && <Label>{condition.label}</Label>}
                     {condition.error && <ErrorMessage>{condition.error}</ErrorMessage>}
 
                     <HorizontalSeparator height="10px" />
