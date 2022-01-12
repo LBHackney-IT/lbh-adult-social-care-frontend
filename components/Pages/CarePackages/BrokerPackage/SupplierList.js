@@ -21,7 +21,14 @@ export const SupplierList = ({ searchTerm, newSearch, setNewSearch, setValue }) 
     }
   }, [newSearch]);
 
-  const renderSupplyItem = (item) => <SupplierListItem supplier={item} setValue={setValue} searchTerm={resultsFor} />;
+  const renderSupplyItem = (item) => (
+    <SupplierListItem
+      supplier={item}
+      setValue={setValue}
+      searchTerm={resultsFor}
+      isParent={item?.children?.length > 0}
+    />
+  );
 
   return (
     <Container display="flex" flexDirection="column" alignSelf="stretch">
