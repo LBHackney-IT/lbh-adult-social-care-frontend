@@ -28,7 +28,7 @@ export const TreeView = ({ items, renderItem }) => {
             <>
               <HorizontalSeparator height={10} />
               <Link noVisited onClick={(e) => handleClick(e, item.id)}>
-                Collapse
+                {openIds.includes(item.id) ? 'Collapse' : 'Expand'}
               </Link>
             </>
           )}
