@@ -97,7 +97,7 @@ const DatePicker = React.forwardRef(
       if (localDay.value === '' || localMonth.value === '' || localYear.value === '') return;
 
       const gmtDate = getDateWithoutTimezone(
-        new Date(localYear.value, getValidMonth(localMonth.value), getValidDay(localDay.value))
+        new Date(getValidYear(localYear.value), getValidMonth(localMonth.value), getValidDay(localDay.value))
       );
       setDate(gmtDate);
     }, [localDay, localMonth, localYear]);
