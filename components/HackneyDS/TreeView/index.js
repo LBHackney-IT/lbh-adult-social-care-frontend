@@ -3,14 +3,14 @@ import { Container, HorizontalSeparator, Link } from '..';
 import { TreeViewItem } from './TreeViewItem';
 
 export const TreeView = ({ items, renderItem }) => {
-  const [openIds, modifyOpenIds] = useState([]);
+  const [openIds, setOpenIds] = useState([]);
   const handleClick = (e, id) => {
     e.preventDefault();
     if (openIds.includes(id)) {
-      modifyOpenIds(openIds.filter((x) => x !== id));
+      setOpenIds(openIds.filter((x) => x !== id));
     } else {
       // eslint-disable-next-line no-shadow
-      modifyOpenIds((openIds) => [...openIds, id]);
+      setOpenIds((openIds) => [...openIds, id]);
     }
   };
   return items.map((item, index) => (
