@@ -39,10 +39,10 @@ export const AdditionalNeeds = ({ setValue, weeklyNeeds, setIsAddingNew }) => {
             </>
           )}
           {weeklyNeeds?.map((need) => (
-            <>
+            <React.Fragment key={need.id}>
               <WeeklyNeed need={need} removeNeed={removeNeed} />
               <HorizontalSeparator height="10px" />
-            </>
+            </React.Fragment>
           ))}
 
           <Container alignSelf="flex-start">
