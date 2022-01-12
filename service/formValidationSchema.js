@@ -177,11 +177,17 @@ const careChargeAssessmentSchema = yup.object().shape({
           .required('Please select a end date')
           .test('endDate', 'Start and End date are not 12 weeks apart', (endDate, schema) => {
             if (schema) {
-              const { from } = schema;
-              const entireSchema = from[1].value;
-              if (entireSchema?.residential12?.startDate && endDate) {
-                const dif = differenceInWeeks(new Date(endDate), new Date(entireSchema?.residential12?.startDate));
-                return dif === 12 || isSameDay(new Date(entireSchema?.packageEnd), new Date(endDate));
+              const { from, parent } = schema;
+              if (parent?.endDate) {
+                const packageLength = differenceInWeeks(new Date(parent.endDate), new Date(parent.startDate));
+                if (packageLength < 12) {
+                  return true;
+                }
+                const entireSchema = from[1].value;
+                if (entireSchema?.residential12?.startDate && endDate) {
+                  const dif = differenceInWeeks(new Date(endDate), new Date(entireSchema?.residential12?.startDate));
+                  return dif === 12 || isSameDay(new Date(entireSchema?.packageEnd), new Date(endDate));
+                }
               }
             }
             return true;
