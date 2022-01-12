@@ -158,32 +158,6 @@ const DatePicker = React.forwardRef(
       setIsOpenCalendar(false);
     };
 
-    //  useEffect(() => {
-    //  if (date) {
-    //  setPreviousDate(null);
-    //  const formatDate = new Date(date);
-    //  setLocalDay((prevState) => ({ ...prevState, value: formatDate.getDate(), error: '' }));
-    //  setLocalMonth((prevState) => ({ ...prevState, value: formatDate.getMonth() + 1, error: '' }));
-    //  setLocalYear((prevState) => ({
-    //  ...prevState,
-    //  value: formatDate.getFullYear().toString().slice(2, 4),
-    //  error: '',
-    //  }));
-    //  } else {
-    //  setLocalDay({ ...initialDateState });
-    //  setLocalMonth({ ...initialDateState });
-    //  setLocalYear({ ...initialDateState });
-    //  }
-    //  }, [date]);
-
-    //  useEffect(() => {
-    //  if (checkMinDate && date && minDate) {
-    //  if (date < minDate) {
-    //  setDate(minDate);
-    //  }
-    //  }
-    //  }, [date, checkMinDate, minDate]);
-
     return (
       <div className={`govuk-date-input lbh-date-input${outerClass}${disabledClass}`} id={formId && `${formId}-errors`}>
         {label && <Label className="govuk-date-input__label">{label}</Label>}
