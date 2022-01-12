@@ -33,7 +33,7 @@ const RadioItem = React.forwardRef(
           aria-describedby={hint}
           ref={inputRef}
         />
-        <Label htmlFor={id} className="govuk-radios__label">
+        <Label className="govuk-radios__label">
           {labelHeading && <span className="govuk-heading-s mb-1">{labelHeading}</span>}
           {label}
         </Label>
