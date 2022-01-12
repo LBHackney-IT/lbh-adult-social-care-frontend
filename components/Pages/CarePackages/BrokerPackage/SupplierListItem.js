@@ -2,7 +2,7 @@ import { Container, Heading, HorizontalSeparator, Link } from 'components';
 import React from 'react';
 import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
 
-export const SupplierListItem = ({ supplier, searchTerm, setValue }) => {
+export const SupplierListItem = ({ supplier, searchTerm, setValue, isParent }) => {
   const handleClick = (e, supplierId) => {
     e.preventDefault();
     setValue('supplierId', supplierId, { shouldDirty: true, shouldValidate: true });
@@ -10,14 +10,16 @@ export const SupplierListItem = ({ supplier, searchTerm, setValue }) => {
 
   const supplierName = (name) => getHighlightedSearchQuery(name, searchTerm);
   return (
-    <Container padding="24px 16px" background="#FAFAFA" display="flex" flexDirection="column" alignItems="flex-start">
+    <Container>
       <Heading size="m">{supplierName(supplier.supplierName)}</Heading>
       <HorizontalSeparator height="5px" />
       {supplier.address}
       <HorizontalSeparator height="10px" />
-      <Link onClick={(e) => handleClick(e, supplier.id)} noVisited>
-        Select
-      </Link>
+      {!isParent && (
+        <Link onClick={(e) => handleClick(e, supplier.id)} noVisited>
+          Select
+        </Link>
+      )}
     </Container>
   );
 };
