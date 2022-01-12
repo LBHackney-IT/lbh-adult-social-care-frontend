@@ -22,7 +22,7 @@ After setup, simply use `yarn dev` to run the project locally. This project has 
 - Prettier
 - Husky
 - Lint-Staged
-- Scopes SCSS
+- SCSS
 
 ## Code quality control
 This project uses husky and lint-staged to setup pre-commit hooks which check code quality and prevent linting errors from getting commited to the project. Whenever a user attempts to commit to the project, `lint-staged` scripts will run. These are:
