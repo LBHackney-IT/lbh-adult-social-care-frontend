@@ -1,4 +1,4 @@
-## Hackney Adult Social Care (HASC) Frontend
+# Hackney Adult Social Care (HASC) Frontend
 
 This is the frontend repo for HASC. To start the project please use the command _yarn dev_. The other half of this application, i.e. the backend/api section can be found [here](https://github.com/LBHackney-IT/lbh-adult-social-care-api).
 
