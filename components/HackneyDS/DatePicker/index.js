@@ -116,9 +116,9 @@ const DatePicker = React.forwardRef(
     };
 
     const inputs = [
-      { name: 'day', id: `${formId}-day`, visible: true, ...localDay, ...day, onChangeValue: onChangeDay },
-      { name: 'month', id: `${formId}-month`, visible: true, ...localMonth, ...month, onChangeValue: onChangeMonth },
-      { name: 'year', id: `${formId}-year`, visible: true, ...localYear, ...year, onChangeValue: onChangeYear },
+      { name: 'day', id: `${formId}-day`, visible: true, ...localDay, ...day, onChangeValue: onChangeDay, max: 31 },
+      { name: 'month', id: `${formId}-month`, visible: true, ...localMonth, ...month, onChangeValue: onChangeMonth, max: 12 },
+      { name: 'year', id: `${formId}-year`, visible: true, ...localYear, ...year, onChangeValue: onChangeYear, max: 99 },
     ];
 
     const clickIcon = () => {
@@ -194,7 +194,7 @@ const DatePicker = React.forwardRef(
                       return input.onChange(e);
                     }
                     if (input.onChangeValue) {
-                      let slicedValue = value.slice(1, 3);
+                      let slicedValue = value.slice(-2);
                       if (date === null) {
                         slicedValue = `0${value}`;
                       }
@@ -202,6 +202,7 @@ const DatePicker = React.forwardRef(
                     }
                   }}
                   min={1}
+                  max={input.max}
                   step={1}
                   name={input.name}
                   type="number"
