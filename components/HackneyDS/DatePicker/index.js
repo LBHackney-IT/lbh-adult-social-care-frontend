@@ -102,14 +102,19 @@ const DatePicker = React.forwardRef(
       setDate(gmtDate);
     }, [localDay, localMonth, localYear]);
 
+    // NOTE Need to decide which error handling approach to use
     const onChangeDay = (value) => {
       const hasError = parseInt(value, 10) > 31;
-      setLocalDay({ value, error: hasError ? 'Invalid Date' : '' });
+      //  setLocalDay({ value, error: hasError ? 'Invalid Date' : '' });
+      setLocalDay({ value: hasError ? '31' : value, error: '' });
     };
 
     const onChangeMonth = (value) => {
       const hasError = parseInt(value, 10) > 12;
-      setLocalMonth({ value, error: hasError ? 'Invalid Month' : '' });
+      // NOTE Option 1: Allow invalid value, return error
+      //  setLocalMonth({ value, error: hasError ? 'Invalid Month' : '' });
+      // NOTE Option 2: Does not allow invalid value, default to the max, no error
+      setLocalMonth({ value: hasError ? '12' : value, error: '' });
     };
 
     const onChangeYear = (value) => {
