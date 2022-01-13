@@ -132,6 +132,7 @@ const DatePicker = React.forwardRef(
         onChangeValue: onChangeYear,
         max: 9999,
         fourDigit: true,
+        className: 'govuk-date-input__input-year',
       },
     ];
 
@@ -184,7 +185,7 @@ const DatePicker = React.forwardRef(
                   </label>
                 )}
                 <input
-                  className={`${errorClass} govuk-input govuk-date-input__input ${input.className}`}
+                  className={`${errorClass} govuk-input govuk-date-input__input ${input.className ?? ''}`}
                   id={input.id}
                   disabled={disabled}
                   value={input.fourDigit ? `0000${input.value}`.slice(-4) : `00${input.value}`.slice(-2)}
