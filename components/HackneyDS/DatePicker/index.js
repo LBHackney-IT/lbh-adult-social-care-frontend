@@ -80,14 +80,12 @@ const DatePicker = React.forwardRef(
       return formatDay;
     };
 
-    const getValidYear = (dayValue) => (dayValue ? `20${dayValue}` : 0);
-
     useEffect(() => {
       if (localDay.error !== '' || localMonth.error !== '' || localYear.error !== '') return;
       if (localDay.value === '' || localMonth.value === '' || localYear.value === '') return;
 
       const gmtDate = getDateWithoutTimezone(
-        new Date(getValidYear(localYear.value), getValidMonth(localMonth.value), getValidDay(localDay.value))
+        new Date(localYear.value, getValidMonth(localMonth.value), getValidDay(localDay.value))
       );
       setDate(gmtDate);
     }, [localDay, localMonth, localYear]);
@@ -129,7 +127,8 @@ const DatePicker = React.forwardRef(
         ...localYear,
         ...year,
         onChangeValue: onChangeYear,
-        max: 99,
+        max: 9999,
+        fourDigit: true,
       },
     ];
 
@@ -173,14 +172,14 @@ const DatePicker = React.forwardRef(
                   className={`${errorClass} govuk-input govuk-date-input__input ${input.className}`}
                   id={input.id}
                   disabled={disabled}
-                  value={`00${input.value}`.slice(-2)}
+                  value={input.fourDigit ? `0000${input.value}`.slice(-4) : `00${input.value}`.slice(-2)}
                   onChange={(e) => {
                     const { value } = e.target;
                     if (input.onChange) {
                       return input.onChange(e);
                     }
                     if (input.onChangeValue) {
-                      let slicedValue = value.slice(-2);
+                      let slicedValue = value.slice(input.fourDigit ? -4 : -2);
                       if (date === null) {
                         slicedValue = `0${value}`;
                       }
