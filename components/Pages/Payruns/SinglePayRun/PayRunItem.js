@@ -11,7 +11,7 @@ import {
 import { SinglePayRunOverview } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunOverview';
 import { SinglePayRunBreakdown } from 'components/Pages/Payruns/SinglePayRun/SinglePayRunBreakdown';
 import { useRouter } from 'next/router';
-import { getCarePackageReviewRoute, getPaymentHistoryRoute } from 'routes/RouteConstants';
+import { getCarePackageReviewRoute, getPaymentHistoryRoute, getServiceUserPackagesRoute } from 'routes/RouteConstants';
 import { useDispatch } from 'react-redux';
 import { addNotification } from 'reducers/notificationsReducer';
 import { updateInvoiceStatus } from 'api/PayRuns';
@@ -79,6 +79,7 @@ export const PayRunItem = ({
           payRun={item}
           payRunPeriods={payRunPeriods}
           isHeld={isHeld}
+          serviceUserId={item.serviceUserId}
         />
         <HorizontalSeparator height="15px" />
         <Collapse>
@@ -97,12 +98,6 @@ export const PayRunItem = ({
               <Container textAlign="right">
                 <Heading size="s">Total</Heading>
               </Container>
-            </Container>
-            <HorizontalSeparator height="10px" />
-            <Container display="flex" alignItems="baseline">
-              <Heading size="s">Package ID</Heading>
-              <VerticalSeparator width="10px" />
-              {item.carePackageId}
             </Container>
             <SinglePayRunBreakdown totalPayTitle={totalPayTitle} payRun={item} />
             <HorizontalSeparator height="16px" />
