@@ -73,7 +73,7 @@ export const roleAccessMatrix = {
   'care-package_guid_broker-care-charges': [userRoles.ROLE_BROKERAGE],
   'care-package_guid_broker-fnc': [userRoles.ROLE_BROKERAGE],
   'care-package_guid_broker-package': [userRoles.ROLE_BROKERAGE],
-  'care-package_guid_care-charge': [userRoles.ROLE_CARE_CHARGE_MANAGER],
+  'care-package_guid_care-charge': [userRoles.ROLE_CARE_CHARGE_MANAGER, userRoles.ROLE_BROKERAGE],
   'care-package_guid_core-package': [userRoles.ROLE_BROKERAGE],
   'care-package_guid_details': allRoles,
   'care-package_guid_history': allRoles,
