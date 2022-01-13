@@ -41,7 +41,11 @@ export const SupplierList = ({ searchTerm, newSearch, setNewSearch, setValue }) 
           <HorizontalSeparator height="10px" />
           <Container display="flex" flexDirection="column">
             {searchResults.data.length ? (
-              <TreeView items={searchResults.data} renderItem={renderSupplyItem} />
+              <TreeView
+                items={searchResults.data}
+                renderItem={renderSupplyItem}
+                renderChildren={(item) => item?.subSuppliers ?? []}
+              />
             ) : (
               <InsetText>
                 No results for <strong>{resultsFor}</strong> found

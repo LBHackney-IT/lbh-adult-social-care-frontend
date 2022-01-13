@@ -28,7 +28,7 @@ const testData = [
     cedarName: 'ABBEY CARE COMPLEX',
     cedarReferenceNumber: '0',
     cedarId: 820656,
-    children: [
+    subSuppliers: [
       {
         id: 3,
         supplierName: 'Abbeyfield Society (The)',
@@ -109,7 +109,8 @@ const testData = [
 export const Default = Template.bind({});
 Default.args = {
   items: testData,
-  renderItem: (item) => <SupplierItem item={item} isParent={item.children?.length > 0} />,
+  renderItem: (item) => <SupplierItem item={item} isParent={item?.subSuppliers?.length > 0} />,
+  renderChildren: (item) => item?.subSuppliers || [],
 };
 
 const SupplierItem = ({ item, isParent }) => (

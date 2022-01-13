@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, HorizontalSeparator, Link } from '..';
 import { TreeViewItem } from './TreeViewItem';
 
-export const TreeView = ({ items, renderItem }) => {
+export const TreeView = ({ items, renderItem, renderChildren }) => {
   const [openIds, setOpenIds] = useState([]);
   const handleClick = (e, id) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ export const TreeView = ({ items, renderItem }) => {
           alignItems="flex-start"
         >
           {renderItem(item)}
-          {item?.children?.length > 0 && (
+          {renderChildren(item)?.length > 0 && (
             <>
               <HorizontalSeparator height={10} />
               <Link noVisited onClick={(e) => handleClick(e, item.id)}>
@@ -34,9 +34,9 @@ export const TreeView = ({ items, renderItem }) => {
           )}
         </Container>
         <HorizontalSeparator height={10} />
-        {item?.children?.length > 0 && openIds.includes(item.id) && (
+        {renderChildren(item)?.length > 0 && openIds.includes(item.id) && (
           <Container margin="0 0 0 20px">
-            <TreeView items={item.children} renderItem={renderItem} />
+            <TreeView items={renderChildren(item)} renderItem={renderItem} renderChildren={renderChildren} />
           </Container>
         )}
       </TreeViewItem>
