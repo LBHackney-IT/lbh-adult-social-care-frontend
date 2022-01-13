@@ -183,7 +183,7 @@ const DatePicker = React.forwardRef(
                   className={`${errorClass} govuk-input govuk-date-input__input ${input.className}`}
                   id={input.id}
                   disabled={disabled}
-                  value={date === null ? '' : `00${input.value}`.slice(-2)}
+                  value={`00${input.value}`.slice(-2)}
                   onChange={(e) => {
                     const { value } = e.target;
                     if (input.onChange) {
