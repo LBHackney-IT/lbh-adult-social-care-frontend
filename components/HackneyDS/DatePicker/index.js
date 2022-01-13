@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { lastDayOfMonth, setDate as dateFncSetDate } from 'date-fns';
+import { lastDayOfMonth, setDate as dateFncSetDate, getMonth, getDate, getYear, isEqual } from 'date-fns';
 import { CrossIcon, DatePickerCalendarIcon, RestoreIcon } from '../../Icons';
 import DatePick from '../../DatePick';
 import Hint from '../lettering/Hint';
@@ -87,7 +87,10 @@ const DatePicker = React.forwardRef(
       const gmtDate = getDateWithoutTimezone(
         new Date(localYear.value, getValidMonth(localMonth.value), getValidDay(localDay.value))
       );
-      setDate(gmtDate);
+
+      if (!isEqual(gmtDate, getDateWithoutTimezone(date))) {
+        setDate(gmtDate);
+      }
     }, [localDay, localMonth, localYear]);
 
     // NOTE Need to decide which error handling approach to use
@@ -151,6 +154,18 @@ const DatePicker = React.forwardRef(
       setDate(newDate);
       setIsOpenCalendar(false);
     };
+
+    useEffect(() => {
+      if (!date) return;
+
+      const parsedMonth = getMonth(date);
+      const parsedDate = getDate(date);
+      const parsedYear = getYear(date);
+
+      setLocalDay({ value: `${parsedDate}`, error: '' });
+      setLocalMonth({ value: `${parsedMonth + 1}`, error: '' });
+      setLocalYear({ value: `${parsedYear}`, error: '' });
+    }, [date]);
 
     return (
       <div className={`govuk-date-input lbh-date-input${outerClass}${disabledClass}`} id={formId && `${formId}-errors`}>
