@@ -10,7 +10,7 @@ import {
   VerticalSeparator,
   Tag,
 } from 'components';
-import { addDays, addWeeks, differenceInWeeks, endOfDay, isBefore, isSameDay } from 'date-fns';
+import { addDays, addWeeks, differenceInWeeks, endOfDay, isBefore, isSameDay, subDays } from 'date-fns';
 import { useDispatch } from 'react-redux';
 import { cancelCareChargeReclaim, endCareChargeReclaim, getIsoDateWithoutTimezone } from 'api';
 import { geTagTextFromReclaimStatus, getTagColorFromReclaimStatus } from 'service/getTagColorFromReclaimStatus';
@@ -74,7 +74,7 @@ export const CareCharge12 = ({
 
   useEffect(() => {
     if (startDate && !endDate) {
-      const correctEnd = addWeeks(new Date(startDate), 12);
+      const correctEnd = addDays(new Date(startDate), 83);
       if (packageEndDate) {
         const packageEnd = new Date(packageEndDate);
         if (isBefore(packageEnd, correctEnd)) {
@@ -106,7 +106,7 @@ export const CareCharge12 = ({
   }, [disabled]);
 
   const adjustEnd = () => {
-    const newDate = addWeeks(new Date(startDate), 12);
+    const newDate = addDays(new Date(startDate), 83);
     if (packageEndDate) {
       const packEnd = new Date(packageEndDate);
       if (isBefore(packEnd, newDate)) {
@@ -238,13 +238,13 @@ export const CareCharge12 = ({
           <Button
             onClick={adjustEnd}
             disabled={
-              difference === 12 || !startDate || disabled || isSameDay(new Date(packageEndDate), new Date(endDate))
+              difference + 1 === 12 || !startDate || disabled || isSameDay(new Date(packageEndDate), new Date(endDate))
             }
           >
             Adjust End Date
           </Button>
           <VerticalSeparator width="10px" />
-          <Hint>Difference in weeks: {difference}</Hint>
+          <Hint>Difference in weeks: {difference + 1}</Hint>
         </Container>
         <HorizontalSeparator height="30px" />
         <ActionButtons
