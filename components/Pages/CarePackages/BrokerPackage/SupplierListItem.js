@@ -2,7 +2,7 @@ import { Container, Heading, HorizontalSeparator, Link } from 'components';
 import React from 'react';
 import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
 
-export const SupplierListItem = ({ supplier, searchTerm, setValue, isParent }) => {
+export const SupplierListItem = ({ supplier, searchTerm, setValue, isParent, childrenCount }) => {
   const handleClick = (e, supplierId) => {
     e.preventDefault();
     setValue('supplierId', supplierId, { shouldDirty: true, shouldValidate: true });
@@ -20,6 +20,7 @@ export const SupplierListItem = ({ supplier, searchTerm, setValue, isParent }) =
           Select
         </Link>
       )}
+      {isParent && <p>{`${childrenCount} sites`}</p>}
     </Container>
   );
 };

@@ -26,7 +26,8 @@ export const SupplierList = ({ searchTerm, newSearch, setNewSearch, setValue }) 
       supplier={item}
       setValue={setValue}
       searchTerm={resultsFor}
-      isParent={item?.children?.length > 0}
+      isParent={item?.subSuppliers?.length > 0}
+      childrenCount={item?.subSuppliers?.length || undefined}
     />
   );
 
