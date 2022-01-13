@@ -99,12 +99,6 @@ export const PayRunItem = ({
                 <Heading size="s">Total</Heading>
               </Container>
             </Container>
-            <HorizontalSeparator height="10px" />
-            <Container display="flex" alignItems="baseline">
-              <Heading size="s">Package ID</Heading>
-              <VerticalSeparator width="10px" />
-              {item.carePackageId}
-            </Container>
             <SinglePayRunBreakdown totalPayTitle={totalPayTitle} payRun={item} />
             <HorizontalSeparator height="16px" />
             <Container borderBottom="1px solid #DEE0E2" />
