@@ -38,28 +38,18 @@ const DatePicker = React.forwardRef(
     },
     _
   ) => {
-    const [localDay, setLocalDay] = useState({
-      value: '',
-      error: '',
-    });
+    const [localDay, setLocalDay] = useState({ ...initialDateState });
 
     const [previousDate, setPreviousDate] = useState(null);
 
-    const [localMonth, setLocalMonth] = useState({
-      value: '',
-      error: '',
-    });
+    const [localMonth, setLocalMonth] = useState({ ...initialDateState });
 
-    const [localYear, setLocalYear] = useState({
-      value: '',
-      error: '',
-    });
+    const [localYear, setLocalYear] = useState({ ...initialDateState });
 
     const [isOpenCalendar, setIsOpenCalendar] = useState(false);
 
     const outerClass = className ? ` ${className}` : '';
     const disabledClass = disabled ? ' disabled' : '';
-    const actualDate = new Date();
 
     // get value 01 return 1, get value 10 return 10
     const replaceFirstZero = (string) => string && (string[0] === '0' ? string.replace('0', '') : string);
