@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { lastDayOfMonth, setDate as dateFncSetDate } from 'date-fns';
+import { lastDayOfMonth, setDate as dateFncSetDate, getMonth, getDate, getYear, isEqual } from 'date-fns';
 import { CrossIcon, DatePickerCalendarIcon, RestoreIcon } from '../../Icons';
 import DatePick from '../../DatePick';
 import Hint from '../lettering/Hint';
@@ -38,28 +38,18 @@ const DatePicker = React.forwardRef(
     },
     _
   ) => {
-    const [localDay, setLocalDay] = useState({
-      value: '',
-      error: '',
-    });
+    const [localDay, setLocalDay] = useState({ ...initialDateState });
 
     const [previousDate, setPreviousDate] = useState(null);
 
-    const [localMonth, setLocalMonth] = useState({
-      value: '',
-      error: '',
-    });
+    const [localMonth, setLocalMonth] = useState({ ...initialDateState });
 
-    const [localYear, setLocalYear] = useState({
-      value: '',
-      error: '',
-    });
+    const [localYear, setLocalYear] = useState({ ...initialDateState });
 
     const [isOpenCalendar, setIsOpenCalendar] = useState(false);
 
     const outerClass = className ? ` ${className}` : '';
     const disabledClass = disabled ? ' disabled' : '';
-    const actualDate = new Date();
 
     // get value 01 return 1, get value 10 return 10
     const replaceFirstZero = (string) => string && (string[0] === '0' ? string.replace('0', '') : string);
@@ -90,35 +80,60 @@ const DatePicker = React.forwardRef(
       return formatDay;
     };
 
-    const getValidYear = (dayValue) => (dayValue ? `20${dayValue}` : 0);
+    useEffect(() => {
+      if (localDay.error !== '' || localMonth.error !== '' || localYear.error !== '') return;
+      if (localDay.value === '' || localMonth.value === '' || localYear.value === '') return;
 
+      const gmtDate = getDateWithoutTimezone(
+        new Date(localYear.value, getValidMonth(localMonth.value), getValidDay(localDay.value))
+      );
+
+      if (!isEqual(gmtDate, getDateWithoutTimezone(date))) {
+        setDate(gmtDate);
+      }
+    }, [localDay, localMonth, localYear]);
+
+    // NOTE Need to decide which error handling approach to use
     const onChangeDay = (value) => {
-      setDate(getDateWithoutTimezone(new Date(date?.getFullYear() || 0, date?.getMonth() || 0, getValidDay(value))));
+      const hasError = parseInt(value, 10) > 31;
+      //  setLocalDay({ value, error: hasError ? 'Invalid Date' : '' });
+      setLocalDay({ value: hasError ? '31' : value, error: '' });
     };
 
     const onChangeMonth = (value) => {
-      const validatedMonth = getValidMonth(value);
-      let validatedDate = new Date(
-        date?.getFullYear() || actualDate.getFullYear(),
-        validatedMonth,
-        date?.getDate() || actualDate.getDate()
-      );
-      if (validatedMonth < validatedDate.getMonth()) {
-        validatedDate = new Date(date?.getFullYear() || actualDate.getFullYear(), validatedMonth);
-        const lastDayInMonth = lastDayOfMonth(validatedDate).getDate();
-        validatedDate = dateFncSetDate(validatedDate, lastDayInMonth);
-      }
-      setDate(getDateWithoutTimezone(validatedDate));
+      const hasError = parseInt(value, 10) > 12;
+      // NOTE Option 1: Allow invalid value, return error
+      //  setLocalMonth({ value, error: hasError ? 'Invalid Month' : '' });
+      // NOTE Option 2: Does not allow invalid value, default to the max, no error
+      setLocalMonth({ value: hasError ? '12' : value, error: '' });
     };
 
     const onChangeYear = (value) => {
-      setDate(getDateWithoutTimezone(new Date(getValidYear(value), date?.getMonth() || 0, date?.getDate() || 1)));
+      setLocalYear({ value, error: '' });
     };
 
     const inputs = [
-      { name: 'day', id: `${formId}-day`, visible: true, ...localDay, ...day, onChangeValue: onChangeDay },
-      { name: 'month', id: `${formId}-month`, visible: true, ...localMonth, ...month, onChangeValue: onChangeMonth },
-      { name: 'year', id: `${formId}-year`, visible: true, ...localYear, ...year, onChangeValue: onChangeYear },
+      { name: 'day', id: `${formId}-day`, visible: true, ...localDay, ...day, onChangeValue: onChangeDay, max: 31 },
+      {
+        name: 'month',
+        id: `${formId}-month`,
+        visible: true,
+        ...localMonth,
+        ...month,
+        onChangeValue: onChangeMonth,
+        max: 12,
+      },
+      {
+        name: 'year',
+        id: `${formId}-year`,
+        visible: true,
+        ...localYear,
+        ...year,
+        onChangeValue: onChangeYear,
+        max: 9999,
+        fourDigit: true,
+        className: 'govuk-date-input__input-year',
+      },
     ];
 
     const clickIcon = () => {
@@ -128,6 +143,9 @@ const DatePicker = React.forwardRef(
 
     const clearDate = () => {
       setDate(null);
+      setLocalDay({ value: '', error: '' });
+      setLocalMonth({ value: '', error: '' });
+      setLocalYear({ value: '', error: '' });
       setPreviousDate(date);
     };
 
@@ -142,30 +160,16 @@ const DatePicker = React.forwardRef(
     };
 
     useEffect(() => {
-      if (date) {
-        setPreviousDate(null);
-        const formatDate = new Date(date);
-        setLocalDay((prevState) => ({ ...prevState, value: formatDate.getDate(), error: '' }));
-        setLocalMonth((prevState) => ({ ...prevState, value: formatDate.getMonth() + 1, error: '' }));
-        setLocalYear((prevState) => ({
-          ...prevState,
-          value: formatDate.getFullYear().toString().slice(2, 4),
-          error: '',
-        }));
-      } else {
-        setLocalDay({ ...initialDateState });
-        setLocalMonth({ ...initialDateState });
-        setLocalYear({ ...initialDateState });
-      }
-    }, [date]);
+      if (!date) return;
 
-    useEffect(() => {
-      if (checkMinDate && date && minDate) {
-        if (date < minDate) {
-          setDate(minDate);
-        }
-      }
-    }, [date, checkMinDate, minDate]);
+      const parsedMonth = getMonth(date);
+      const parsedDate = getDate(date);
+      const parsedYear = getYear(date);
+
+      setLocalDay({ value: `${parsedDate}`, error: '' });
+      setLocalMonth({ value: `${parsedMonth + 1}`, error: '' });
+      setLocalYear({ value: `${parsedYear}`, error: '' });
+    }, [date]);
 
     return (
       <div className={`govuk-date-input lbh-date-input${outerClass}${disabledClass}`} id={formId && `${formId}-errors`}>
@@ -184,17 +188,17 @@ const DatePicker = React.forwardRef(
                   </label>
                 )}
                 <input
-                  className={`${errorClass} govuk-input govuk-date-input__input ${input.className}`}
+                  className={`${errorClass} govuk-input govuk-date-input__input ${input.className ?? ''}`}
                   id={input.id}
                   disabled={disabled}
-                  value={date === null ? '' : `00${input.value}`.slice(-2)}
+                  value={input.fourDigit ? `0000${input.value}`.slice(-4) : `00${input.value}`.slice(-2)}
                   onChange={(e) => {
                     const { value } = e.target;
                     if (input.onChange) {
                       return input.onChange(e);
                     }
                     if (input.onChangeValue) {
-                      let slicedValue = value.slice(1, 3);
+                      let slicedValue = value.slice(input.fourDigit ? -4 : -2);
                       if (date === null) {
                         slicedValue = `0${value}`;
                       }
@@ -202,6 +206,7 @@ const DatePicker = React.forwardRef(
                     }
                   }}
                   min={1}
+                  max={input.max}
                   step={1}
                   name={input.name}
                   type="number"
