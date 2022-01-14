@@ -80,6 +80,7 @@ export const PayRunItem = ({
           payRunPeriods={payRunPeriods}
           isHeld={isHeld}
           serviceUserId={item.serviceUserId}
+          hackneyId={item.hackneyId}
         />
         <HorizontalSeparator height="15px" />
         <Collapse>
