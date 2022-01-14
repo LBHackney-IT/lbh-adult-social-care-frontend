@@ -23,6 +23,7 @@ const CarePackageInfo = ({ data, goToPackage }) => (
     <PackageInfo
       containerId="care-package"
       headerTitle={data?.packageType}
+      subTitle={data?.schedulingPeriod}
       items={[
         {
           startDate: data?.startDate,

@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
 import { CLAIM_REASON_OPTIONS } from 'constants/variables';
-import { Container, HorizontalSeparator, InsetText, SingleAccordion } from '../../../HackneyDS';
+import { Container, Hint, HorizontalSeparator, InsetText, SingleAccordion } from '../../../HackneyDS';
 import { CareChargesSummary } from './CareChargesSummary';
 import { FNCSummary } from './FNCSummary';
 import { DateCostInfo } from './DateCostInfo';
@@ -11,7 +11,7 @@ const noContentText = {
   'Weekly Additional Need': 'weekly additional needs',
 };
 
-const PackageInfo = ({ headerTitle, items, containerId }) => {
+const PackageInfo = ({ headerTitle, subTitle, items, containerId }) => {
   const [openedServiceUserNeed, setOpenedServiceUserNeed] = useState([]);
   const [openedDetails, setOpenedDetails] = useState([]);
 
@@ -33,8 +33,9 @@ const PackageInfo = ({ headerTitle, items, containerId }) => {
 
   return (
     <Container className="review-package-details__items-container">
-      <Container className="review-package-details__title" display="flex" alignItems="center">
+      <Container className="review-package-details__title" display="flex" flexDirection="column">
         <h3 id={containerId}>{headerTitle || 'Care Package'}</h3>
+        {subTitle && <Hint>{subTitle}</Hint>}
       </Container>
       {items?.map(
         ({

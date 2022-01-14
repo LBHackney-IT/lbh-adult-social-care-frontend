@@ -7,6 +7,7 @@ import {
   HorizontalSeparator,
   TitleSubtitleHeader,
   DynamicBreadcrumbs,
+  Button,
 } from 'components';
 import { useRouter } from 'next/router';
 import useServiceUserApi from 'api/ServiceUser/ServiceUser';
@@ -36,6 +37,7 @@ const Packages = ({ roles }) => {
   const { data, isLoading } = useServiceUserApi.getServiceUserCarePackages(serviceUserId);
   const { serviceUser, packages } = data;
 
+  const handleBack = () => router.back();
   return (
     <>
       <NewHeader roles={roles ?? []} />
@@ -76,7 +78,7 @@ const Packages = ({ roles }) => {
                 p.packageStatus === 'Active' ||
                 p.packageStatus === 'Future'
             )
-            .map((p) => (
+            .map((p, index) => (
               <CareDetails
                 key={p.packageId}
                 isLoading={isLoading}
@@ -87,8 +89,13 @@ const Packages = ({ roles }) => {
                 isS117ClientConfirmed={p.isS117ClientConfirmed}
                 netTotal={p.netTotal}
                 packageStatus={p.packageStatus}
+                isExpanded={index === 0}
               />
             ))}
+        <HorizontalSeparator height={10} />
+        <Button secondary color="gray" onClick={handleBack}>
+          Back
+        </Button>
       </Container>
     </>
   );

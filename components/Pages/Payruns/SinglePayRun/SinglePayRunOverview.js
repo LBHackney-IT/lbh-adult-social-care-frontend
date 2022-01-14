@@ -6,6 +6,8 @@ import { releaseInvoice, updateInvoiceStatus } from 'api/PayRuns';
 import { addNotification } from 'reducers/notificationsReducer';
 import { getStatusSelectBackground, getStatusSelectTextColor } from 'service/serviceSelect';
 import { getHighlightedSearchQuery } from 'service/getHighlightedSearchQuery';
+import { useRouter } from 'next/router';
+import { getServiceUserPackagesRoute } from 'routes/RouteConstants';
 
 const statusOptions = [
   { text: 'Held', value: 2 },
@@ -19,12 +21,15 @@ export const SinglePayRunOverview = ({
   openModal,
   searchTerm,
   payRun,
+  serviceUserId,
   setInvoiceId,
   isActivePayRun,
   updateData,
   isHeld,
+  hackneyId,
 }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const pushNotification = (text, className = 'error') => {
     dispatch(addNotification({ text, className }));
@@ -52,6 +57,7 @@ export const SinglePayRunOverview = ({
 
   const handleServiceUserName = () => getHighlightedSearchQuery(payRun.serviceUserName, searchTerm);
   const handleInvoiceNumber = () => getHighlightedSearchQuery(payRun.invoiceNumber, searchTerm);
+  const handleHackneyId = () => getHighlightedSearchQuery(hackneyId.toString(), searchTerm);
   const handleSupplierId = () => getHighlightedSearchQuery(Number(payRun.supplierId).toString(), searchTerm);
   const handleSupplierName = () => getHighlightedSearchQuery(payRun.supplierName, searchTerm);
 
@@ -65,12 +71,23 @@ export const SinglePayRunOverview = ({
     }
   };
 
+  const handleServiceUserSummaryClick = (e) => {
+    e.preventDefault();
+    router.push(getServiceUserPackagesRoute(serviceUserId));
+  };
+
   return (
     <>
       <Container display="flex" alignItems="baseline">
-        <Heading size="m" color="#00664F">
-          {handleServiceUserName()}
-        </Heading>
+        <Container onClick={handleServiceUserSummaryClick} cursor="pointer">
+          <Heading size="m" color="#00664F">
+            {handleServiceUserName()}
+          </Heading>
+        </Container>
+        <VerticalSeparator width="24px" />
+        <Heading size="s">Hackney ID:</Heading>
+        <VerticalSeparator width="5px" />
+        {handleHackneyId()}
         <VerticalSeparator width="24px" />
         <Heading size="s">Invoice Number:</Heading>
         <VerticalSeparator width="5px" />

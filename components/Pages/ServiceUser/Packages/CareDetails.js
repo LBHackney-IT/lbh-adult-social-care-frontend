@@ -183,9 +183,6 @@ const CareDetails = ({
               cellClassName="care-details__table-cell"
             />
             <Container background="#f8f8f8" padding="20px" display="flex" justifyContent="flex-end">
-              Provider paid <VerticalSeparator width="10px" />
-              <strong style={{ color: '#00664F' }}>NET OFF</strong>
-              <VerticalSeparator width="30px" />
               <strong>{formatNumberToCurrency(netTotal)}</strong>
             </Container>
           </Container>

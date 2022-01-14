@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Container, Loading, HorizontalSeparator, InsetText } from 'components';
 import { useSuppliers } from 'api';
 import AlternativePagination from 'components/AlternativePagination';
+import { TreeView } from 'components/HackneyDS/TreeView';
 import { SupplierListItem } from './SupplierListItem';
 
 export const SupplierList = ({ searchTerm, newSearch, setNewSearch, setValue }) => {
@@ -19,6 +20,17 @@ export const SupplierList = ({ searchTerm, newSearch, setNewSearch, setValue }) 
       setNewSearch(false);
     }
   }, [newSearch]);
+
+  const renderSupplyItem = (item) => (
+    <SupplierListItem
+      supplier={item}
+      setValue={setValue}
+      searchTerm={resultsFor}
+      isParent={item?.subSuppliers?.length > 0}
+      childrenCount={item?.subSuppliers?.length || undefined}
+    />
+  );
+
   return (
     <Container display="flex" flexDirection="column" alignSelf="stretch">
       <Loading className="loading" isLoading={suppliersLoading} />
@@ -30,12 +42,11 @@ export const SupplierList = ({ searchTerm, newSearch, setNewSearch, setValue }) 
           <HorizontalSeparator height="10px" />
           <Container display="flex" flexDirection="column">
             {searchResults.data.length ? (
-              searchResults.data?.map((result, index) => (
-                <React.Fragment key={result?.id}>
-                  <SupplierListItem supplier={result} setValue={setValue} searchTerm={resultsFor} />
-                  {index < searchResults.data.length - 1 && <HorizontalSeparator height="10px" />}
-                </React.Fragment>
-              ))
+              <TreeView
+                items={searchResults.data}
+                renderItem={renderSupplyItem}
+                renderChildren={(item) => item?.subSuppliers ?? []}
+              />
             ) : (
               <InsetText>
                 No results for <strong>{resultsFor}</strong> found

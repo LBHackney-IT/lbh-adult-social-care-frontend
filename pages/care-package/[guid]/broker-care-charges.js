@@ -257,16 +257,14 @@ const CareCharge = ({ roles }) => {
               </Button>
               <VerticalSeparator width="10px" />
               <VerticalSeparator width="10px" />
-              {!isNewCareCharge && (
-                <Button onClick={skipPage} type="button">
-                  {isS117Client ? 'Continue' : 'Review'}
-                </Button>
-              )}
-              {isNewCareCharge && (
-                <Button isLoading={isLoading} type="submit">
-                  Save and continue
-                </Button>
-              )}
+
+              <Button onClick={skipPage} className="secondary-yellow" type="button">
+                Skip and continue
+              </Button>
+              <VerticalSeparator width="10px" />
+              <Button isLoading={isLoading} type="submit">
+                Save and continue
+              </Button>
             </Container>
           </form>
         )}
