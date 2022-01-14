@@ -26,6 +26,7 @@ export const SinglePayRunOverview = ({
   isActivePayRun,
   updateData,
   isHeld,
+  hackneyId,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -56,6 +57,7 @@ export const SinglePayRunOverview = ({
 
   const handleServiceUserName = () => getHighlightedSearchQuery(payRun.serviceUserName, searchTerm);
   const handleInvoiceNumber = () => getHighlightedSearchQuery(payRun.invoiceNumber, searchTerm);
+  const handleHackneyId = () => getHighlightedSearchQuery(hackneyId.toString(), searchTerm);
   const handleSupplierId = () => getHighlightedSearchQuery(Number(payRun.supplierId).toString(), searchTerm);
   const handleSupplierName = () => getHighlightedSearchQuery(payRun.supplierName, searchTerm);
 
@@ -82,6 +84,10 @@ export const SinglePayRunOverview = ({
             {handleServiceUserName()}
           </Heading>
         </Container>
+        <VerticalSeparator width="24px" />
+        <Heading size="s">Hackney ID:</Heading>
+        <VerticalSeparator width="5px" />
+        {handleHackneyId()}
         <VerticalSeparator width="24px" />
         <Heading size="s">Invoice Number:</Heading>
         <VerticalSeparator width="5px" />
