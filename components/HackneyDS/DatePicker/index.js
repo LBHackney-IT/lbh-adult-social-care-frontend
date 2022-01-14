@@ -143,6 +143,9 @@ const DatePicker = React.forwardRef(
 
     const clearDate = () => {
       setDate(null);
+      setLocalDay({ value: '', error: '' });
+      setLocalMonth({ value: '', error: '' });
+      setLocalYear({ value: '', error: '' });
       setPreviousDate(date);
     };
 
