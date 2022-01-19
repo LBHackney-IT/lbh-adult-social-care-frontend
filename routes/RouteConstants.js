@@ -61,7 +61,8 @@ export const getStorageValue = (key) => {
   return window.localStorage.getItem(key);
 };
 
-export const setPreviousPath = (previousPath) => setStorageValue('previousPath', previousPath);
+export const setPreviousPath = (previousPath) =>
+  previousPath !== '/' && previousPath !== '' ? setStorageValue('previousPath', previousPath) : null;
 export const getPreviousPath = () => getStorageValue('previousPath');
 
 export const getCarePackageMainRoute = (additionalBreadcrumbs) => {

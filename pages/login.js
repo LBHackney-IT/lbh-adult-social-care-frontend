@@ -40,7 +40,7 @@ const Login = () => {
     (async () => {
       setLoading(true);
       try {
-        await mutateUser(await axios('/api/login'));
+        await mutateUser(await axios('/api/login'), true);
 
         const res = await axios.get('/api/user');
         dispatch(userLogin({ user: res.data }));
@@ -49,7 +49,7 @@ const Login = () => {
       }
       setLoading(false);
     })();
-  }, []);
+  }, [user]);
 
   return (
     <>
@@ -64,7 +64,7 @@ const Login = () => {
               <a
                 className="lbh-button govuk-button is-relative"
                 href={`${hackneyAuthLink}${origin}/login`}
-                onClick={() => setPreviousPath('')}
+                onClick={() => setPreviousPath('/brokerage')}
                 rel="noopener noreferrer"
                 target="_self"
               >
