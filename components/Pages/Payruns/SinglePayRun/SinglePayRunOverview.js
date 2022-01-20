@@ -57,7 +57,7 @@ export const SinglePayRunOverview = ({
 
   const handleServiceUserName = () => getHighlightedSearchQuery(payRun.serviceUserName, searchTerm);
   const handleInvoiceNumber = () => getHighlightedSearchQuery(payRun.invoiceNumber, searchTerm);
-  const handleHackneyId = () => getHighlightedSearchQuery(hackneyId.toString(), searchTerm);
+  const handleHackneyId = () => getHighlightedSearchQuery(hackneyId?.toString(), searchTerm);
   const handleSupplierId = () => getHighlightedSearchQuery(Number(payRun.supplierId).toString(), searchTerm);
   const handleSupplierName = () => getHighlightedSearchQuery(payRun.supplierName, searchTerm);
 
