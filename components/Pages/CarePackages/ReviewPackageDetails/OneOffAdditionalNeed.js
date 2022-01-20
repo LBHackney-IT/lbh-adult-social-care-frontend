@@ -11,9 +11,6 @@ const OneOffAdditionalNeed = ({ data, goToPackage }) => (
       headerTitle="One Off Additional Need"
       items={data?.additionalOneOffNeeds}
     />
-    {data?.additionalOneOffCost > 0 && (
-      <BrokerageBorderCost totalCost={data?.additionalOneOffCost} totalCostHeader="Total (Net Off)" />
-    )}
     {goToPackage && (
       <Container className="review-package-details__items-actions" display="flex">
         <p onClick={() => goToPackage(getBrokerPackageRoute)} className="link-button">

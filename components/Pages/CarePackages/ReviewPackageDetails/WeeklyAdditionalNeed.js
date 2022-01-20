@@ -11,9 +11,6 @@ const WeeklyAdditionalNeed = ({ data, goToPackage }) => (
       headerTitle="Weekly Additional Need"
       items={data?.additionalWeeklyNeeds}
     />
-    {data?.additionalWeeklyCost > 0 && (
-      <BrokerageBorderCost totalCost={data?.additionalWeeklyCost} totalCostHeader="Total (Net Off)" />
-    )}
     {goToPackage && (
       <Container className="review-package-details__items-actions" display="flex">
         <p onClick={() => goToPackage(getBrokerPackageRoute)} className="link-button">
