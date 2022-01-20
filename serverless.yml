@@ -20,12 +20,12 @@ functions:
     package:
       include:
         - lambda.js
-        - next.config.js
-        - src/**
-        - pages/**
-        - public/**
+        #  - next.config.js
+        #  - src/**
+        #  - pages/**
+        #  - public/**
         - build/**
-        - node_modules/**
+        #  - node_modules/**
 
     events:
       - http: ANY /
