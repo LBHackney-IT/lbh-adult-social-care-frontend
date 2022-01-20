@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { SWRConfig } from 'swr';
+import Head from 'next/head';
+import Loading from 'components/Loading';
 // eslint-disable-next-line import/no-absolute-path,import/no-unresolved
 import '/styles/globals.scss';
 import { Provider } from 'react-redux';
@@ -41,9 +43,14 @@ export default function App({ Component, pageProps }) {
 
   return (
     <Provider store={store}>
+      <Head>
+        <link href="/fonts/style.css" rel="stylesheet" />
+      </Head>
       <SWRConfig value={swrOptions}>
         <CustomNotification />
         <Component {...pageProps} />
+        <div id="modal" />
+        <Loading />
       </SWRConfig>
     </Provider>
   );

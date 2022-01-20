@@ -62,7 +62,9 @@ export const getStorageValue = (key) => {
 };
 
 export const setPreviousPath = (previousPath) =>
-  previousPath !== '/' && previousPath !== '' ? setStorageValue('previousPath', previousPath) : null;
+  previousPath !== '/' && previousPath !== '' && previousPath !== '/401' && previousPath !== '/404'
+    ? setStorageValue('previousPath', previousPath)
+    : null;
 export const getPreviousPath = () => getStorageValue('previousPath');
 
 export const getCarePackageMainRoute = (additionalBreadcrumbs) => {
