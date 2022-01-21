@@ -32,12 +32,14 @@
     "serverless-http": "^2.7.0",
     "swr": "^0.5.6",
     "uuid": "^8.3.2",
-    "yup": "^0.32.9"
+    "webpack-cli": "^4.9.1",
+    "yup": "^0.32.9",
+    "zip-webpack-plugin": "^4.0.1"
   },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:lambda": "node esbuild.lambda.js",
+    "build:lambda": "webpack build --config ./esbuild.lambda.js",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && echo 'Lint complete.'",
     "lint-fix-dry": "eslint --fix-dry-run",
