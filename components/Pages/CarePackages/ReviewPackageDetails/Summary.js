@@ -8,7 +8,7 @@ export const Summary = ({ summaryData }) => {
 
   const summary = useMemo(
     () => [
-      { id: uniqueID(), key: 'Cost of placement (social care)', value: summaryData.costOfPlacement },
+      { id: uniqueID(), key: 'Cost of placement (social care)', value: summaryData.activeCostOfPlacement },
       {
         id: uniqueID(),
         key: summaryData.fncPayment && 'Cost of placement (FNC funded)',

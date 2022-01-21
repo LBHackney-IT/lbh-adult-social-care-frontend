@@ -10,6 +10,14 @@ import { accessRoutes } from './api/accessMatrix';
 
 export const getServerSideProps = withSession(({ req }) => {
   const user = getLoggedInUser({ req });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
   if (!handleRoleBasedAccess(user.roles ?? [], accessRoutes.APPROVALS)) {
     return {
       redirect: {
@@ -25,7 +33,8 @@ export default function IndexPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(getPreviousPath() ?? BROKERAGE_ROUTE);
+    const prevPath = getPreviousPath();
+    router.push(prevPath === '/' || prevPath === '' ? BROKERAGE_ROUTE : prevPath);
   }, []);
 
   return (
