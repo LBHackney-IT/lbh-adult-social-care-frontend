@@ -37,6 +37,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:lambda": "node esbuild.lambda.js",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && echo 'Lint complete.'",
     "lint-fix-dry": "eslint --fix-dry-run",
@@ -76,12 +77,14 @@
     "@storybook/manager-webpack5": "6.3.12",
     "@storybook/preset-scss": "^1.0.3",
     "@storybook/react": "6.3.12",
+    "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "babel-loader": "^8.2.2",
     "babel-preset-react-app": "^10.0.0",
     "chromatic": "^6.0.4",
     "css-loader": "5.2.6",
+    "esbuild": "^0.14.12",
     "eslint": "^7.30.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -90,17 +93,17 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "@testing-library/jest-dom": "^4.2.4",
     "faker": "^5.5.3",
     "husky": "^7.0.4",
     "lint-staged": "^12.1.7",
+    "pnpapi": "^0.0.0",
     "prettier": "2.3.2",
     "resolve-url-loader": "^4.0.0",
     "sass": "^1.38.0",
     "sass-loader": "10.1.1",
     "sb": "^6.3.7",
     "style-loader": "2.0.0",
-    "webpack": "^5.51.1"
+    "webpack": "^5.66.0"
   },
   "husky": {
     "hooks": {
