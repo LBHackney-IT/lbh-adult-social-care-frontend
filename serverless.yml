@@ -18,14 +18,7 @@ functions:
     handler: lambda.handler
     timeout: 30
     package:
-      include:
-        - lambda.js
-        - next.config.js
-        - src/**
-        - pages/**
-        - public/**
-        - build/**
-        - node_modules/**
+      artifact: "./dist/handler.zip"
 
     events:
       - http: ANY /
