@@ -39,7 +39,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:lambda": "webpack build --config ./esbuild.lambda.js",
+    "build:lambda": "webpack build --config ./webpack.lambda.js",
+    "build:lambda:esbuild": "node ./esbuild.lambda.js",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && echo 'Lint complete.'",
     "lint-fix-dry": "eslint --fix-dry-run",
@@ -79,12 +80,17 @@
     "@storybook/manager-webpack5": "6.3.12",
     "@storybook/preset-scss": "^1.0.3",
     "@storybook/react": "6.3.12",
+    "@swc/core": "^1.2.133",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@zeit/next-less": "^1.0.1",
+    "@zeit/next-sass": "^1.0.1",
+    "@zeit/next-stylus": "^1.0.1",
     "babel-loader": "^8.2.2",
     "babel-preset-react-app": "^10.0.0",
     "chromatic": "^6.0.4",
+    "critters": "^0.0.16",
     "css-loader": "5.2.6",
     "esbuild": "^0.14.12",
     "eslint": "^7.30.0",
@@ -105,7 +111,11 @@
     "sass-loader": "10.1.1",
     "sb": "^6.3.7",
     "style-loader": "2.0.0",
-    "webpack": "^5.66.0"
+    "terser-webpack-plugin": "^5.3.0",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.5",
+    "webpack": "^5.66.0",
+    "webpack5": "link:./node_modules/webpack"
   },
   "husky": {
     "hooks": {
