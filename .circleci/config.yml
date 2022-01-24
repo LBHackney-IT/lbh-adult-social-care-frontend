@@ -42,18 +42,6 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths: .
-
-  # NOTE Will be removed after debugging
-  debug:
-    executor: node-executor
-    steps:
-      - *attach_workspace
-      - run:
-          name: List files
-          command: ls -al
-      - run:
-          name: List dist file
-          command: ls -al ./dist
   linting:
     executor: node-executor
     steps:
@@ -296,10 +284,6 @@ workflows:
       - build-lambda:
           requires:
             - build
-      # NOTE Will be removed after debug
-      - debug:
-          requires:
-            - build-lambda
       - chromatic-deployment:
           requires:
             - build
