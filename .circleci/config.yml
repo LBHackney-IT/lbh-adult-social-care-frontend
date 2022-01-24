@@ -241,6 +241,16 @@ jobs:
           paths:
             - project/build
 
+  build:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: Build app for lambda
+          command: yarn build:lambda
+      - persist_to_workspace:
+          root: *workspace_root
+
   chromatic-deployment:
     docker:
       - image: circleci/node:12
@@ -268,6 +278,9 @@ workflows:
           requires:
             - install-dependencies
             - linting
+      - build-lambda:
+          requires:
+            - build
       - chromatic-deployment:
           requires:
             - build
@@ -316,6 +329,7 @@ workflows:
           requires:
             - assume-role-production
             - build
+            - build-lambda
           filters:
             branches:
               only: main
