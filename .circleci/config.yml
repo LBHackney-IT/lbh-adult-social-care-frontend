@@ -241,7 +241,7 @@ jobs:
           paths:
             - project/build
 
-  build:
+  build-lambda:
     executor: node-executor
     steps:
       - *attach_workspace
