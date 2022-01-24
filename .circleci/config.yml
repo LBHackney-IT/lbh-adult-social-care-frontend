@@ -51,6 +51,9 @@ jobs:
       - run:
           name: List files
           command: ls -al
+      - run:
+          name: List dist file
+          command: ls -al ./dist
   linting:
     executor: node-executor
     steps:
