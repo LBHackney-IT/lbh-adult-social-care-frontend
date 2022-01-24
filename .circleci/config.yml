@@ -1,3 +1,4 @@
+---
 version: 2.1
 
 orbs:
@@ -54,11 +55,11 @@ jobs:
           command: yarn check-format
       # NOTE Re-enabled after project is converted into Typescript or has tests
       #  - run:
-          #  name: Run typecheck
-          #  command: yarn type-check
+      #  name: Run typecheck
+      #  command: yarn type-check
       #  - run:
-          #  name: Run tests
-          #  command: yarn test -w 2
+      #  name: Run tests
+      #  command: yarn test -w 2
 
   e2e:
     executor: node-executor
@@ -97,13 +98,13 @@ jobs:
           # 3: Any other failure
           # Link to above:https://github.com/zaproxy/zaproxy/blob/main/docker/zap-baseline.py#L31-L35
           command: |
-              (
-                docker run -t owasp/zap2docker-stable:2.10.0 zap-baseline.py \
-                -j \
-                -u https://raw.githubusercontent.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}/zap-baseline.conf \
-                -t http://$(ip -f inet -o addr show docker0 | awk '{print $4}' | cut -d '/' -f 1):3000 || \
-                if [[ $? == 0 || $? == 2 ]]; then exit 0; else exit 1; fi;
-              )
+            (
+              docker run -t owasp/zap2docker-stable:2.10.0 zap-baseline.py \
+              -j \
+              -u https://raw.githubusercontent.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}/zap-baseline.conf \
+              -t http://$(ip -f inet -o addr show docker0 | awk '{print $4}' | cut -d '/' -f 1):3000 || \
+              if [[ $? == 0 || $? == 2 ]]; then exit 0; else exit 1; fi;
+            )
 
   build-deploy-development:
     executor: aws-cli/default
@@ -250,6 +251,8 @@ jobs:
           command: yarn build:lambda
       - persist_to_workspace:
           root: *workspace_root
+          paths:
+            - project/dist
 
   chromatic-deployment:
     docker:
@@ -263,8 +266,6 @@ jobs:
             - v1-dependencies-
       - run: yarn install
       - run: yarn chromatic --project-token=${CHROMATIC_PROJECT_TOKEN} --exit-zero-on-changes --exit-once-uploaded
-
-
 
 workflows:
   version: 2
@@ -292,7 +293,7 @@ workflows:
           filters:
             branches:
               only:
-                - develop                
+                - develop
 
       - assume-role-staging:
           context: mosaic-staging-context
@@ -306,7 +307,7 @@ workflows:
           filters:
             branches:
               only: main
-      
+
       - build-deploy-development:
           requires:
             - assume-role-development
@@ -324,11 +325,10 @@ workflows:
             branches:
               only:
                 - staging
-      
+
       - build-deploy-production:
           requires:
             - assume-role-production
-            - build
             - build-lambda
           filters:
             branches:
