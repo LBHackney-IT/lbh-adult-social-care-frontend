@@ -129,6 +129,7 @@ jobs:
             echo "SECRET_COOKIE_PASSWORD=\"$SECRET_COOKIE_PASSWORD\"" > .env.production
             echo "NEXT_PUBLIC_STAGE=\"development\"" >> .env.production
             yarn build
+            yarn build:lambda
       - run:
           name: deploy
           command: |
@@ -149,6 +150,7 @@ jobs:
             echo "SECRET_COOKIE_PASSWORD=\"$SECRET_COOKIE_PASSWORD\"" > .env.production
             echo "NEXT_PUBLIC_STAGE=\"staging\"" >> .env.production
             yarn build
+            yarn build:lambda
       - run:
           name: deploy
           command: |
@@ -169,6 +171,7 @@ jobs:
             echo "SECRET_COOKIE_PASSWORD=\"$SECRET_COOKIE_PASSWORD\"" > .env.production
             echo "NEXT_PUBLIC_STAGE=\"production\"" >> .env.production
             yarn build
+            yarn build:lambda
       - run:
           name: deploy
           command: |
