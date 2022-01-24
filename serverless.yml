@@ -18,7 +18,7 @@ functions:
     handler: lambda.handler
     timeout: 30
     package:
-      artifact: "./dist/handler.zip"
+      artifact: './dist/handler.zip'
 
     events:
       - http: ANY /
