@@ -120,6 +120,7 @@ jobs:
       - run:
           name: deploy
           command: |
+            rm -rf node_modules
             yarn install --production --ignore-scripts --prefer-offline
             rm -rf node_modules/webpack node_modules/sass
             yarn autoclean --force
@@ -140,6 +141,7 @@ jobs:
       - run:
           name: deploy
           command: |
+            rm -rf node_modules
             yarn install --production --ignore-scripts --prefer-offline
             rm -rf node_modules/webpack node_modules/sass
             yarn autoclean --force
@@ -160,6 +162,7 @@ jobs:
       - run:
           name: deploy
           command: |
+            rm -rf node_modules
             yarn install --production --ignore-scripts --prefer-offline
             rm -rf node_modules/webpack node_modules/sass
             yarn autoclean --force
