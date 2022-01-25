@@ -34,9 +34,9 @@ export default function App({ Component, pageProps }) {
 
   useEffect(() => {
     // save redirect route
-    const { asPath: path } = router;
+    const { asPath: path, pathname } = router;
     if (path && !APP_SERVICE_ROUTES_MAP.some((item) => path.includes(item))) {
-      if (path !== '/') setPreviousPath(path);
+      if (path !== '/' && pathname !== '/404' && pathname !== '/401') setPreviousPath(path);
     }
   }, [router.asPath]);
 
