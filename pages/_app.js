@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { SWRConfig } from 'swr';
+import Head from 'next/head';
 // eslint-disable-next-line import/no-absolute-path,import/no-unresolved
 import '/styles/globals.scss';
 import { Provider } from 'react-redux';
@@ -33,18 +34,22 @@ export default function App({ Component, pageProps }) {
 
   useEffect(() => {
     // save redirect route
-    const { asPath: path } = router;
+    const { asPath: path, pathname } = router;
     if (path && !APP_SERVICE_ROUTES_MAP.some((item) => path.includes(item))) {
-      if (path !== '/') setPreviousPath(path);
+      if (path !== '/' && pathname !== '/404' && pathname !== '/401') setPreviousPath(path);
     }
   }, [router.asPath]);
 
   return (
     <Provider store={store}>
+      <Head>
+        <link href="/fonts/style.css" rel="stylesheet" />
+      </Head>
       <SWRConfig value={swrOptions}>
         <CustomNotification />
         <Component {...pageProps} />
       </SWRConfig>
+      <div id="modal" />
     </Provider>
   );
 }
