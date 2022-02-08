@@ -100,9 +100,9 @@ custom:
     staging: social-care-care-packages-staging.hackney.gov.uk
     production: social-care-care-packages.hackney.gov.uk
   certificate-arn:
-    development: arn:aws:acm:us-east-1:212568553257:certificate/3aa8a315-dbb2-43a4-951a-aa4c6dad5092
-    staging: arn:aws:acm:us-east-1:290114655000:certificate/1b48a5e9-70b5-4a14-ad3d-1eef9584dc5d
-    production: arn:aws:acm:us-east-1:267112830674:certificate/dae4d0be-8f3a-4512-ba9c-fb80366e77f7
+    development: arn:aws:acm:us-east-1:212568553257:certificate/f1f5d932-727f-4286-9a86-2944dfc83df5
+    staging: arn:aws:acm:us-east-1:290114655000:certificate/84f8ba38-b04b-4462-8376-ac5c139cf9d2
+    production: arn:aws:acm:us-east-1:267112830674:certificate/2f226dbe-a634-4429-871c-aa1ad7d83245
   securityGroups:
     development:
       - Ref: LambdaSecurityGroup
